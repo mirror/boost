@@ -66,7 +66,7 @@ namespace  // Concrete FSM implementation
             void on_exit(Event const&,FSM& ) {std::cout << "leaving: Empty" << std::endl;}
         };
         struct Open : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Open" << std::endl;}
             template <class Event,class FSM>
@@ -74,7 +74,7 @@ namespace  // Concrete FSM implementation
         };
 
         struct Stopped : public msm::front::state<> 
-        {	 
+        { 
             // when stopped, the CD is loaded
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Stopped" << std::endl;}
@@ -223,7 +223,7 @@ namespace  // Concrete FSM implementation
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				       Guard
+            //    Start     Event         Next      Action                     Guard
             //  +---------+-------------+---------+---------------------------+----------------------+
             Row < Stopped , play        , Playing , ActionSequence_
                                                      <mpl::vector<

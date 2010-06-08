@@ -216,7 +216,7 @@ namespace test_fsm // Concrete FSM implementation
 
         // Transition table for parsing_
         struct transition_table : mpl::vector<
-            //    Start         Event                Next      Action				Guard
+            //    Start         Event                Next      Action                Guard
             //    +-------------+-------------------+---------+---------------------+----------------------+
               Row < Waiting     , digit             , Digit1                                                >,
               Row < Digit1      , digit             , Digit2                                                >,

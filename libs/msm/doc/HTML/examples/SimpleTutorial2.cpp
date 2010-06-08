@@ -66,7 +66,7 @@ namespace
             }
         };
         struct Open : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Open" << std::endl;}
             template <class Event,class FSM>
@@ -77,7 +77,7 @@ namespace
 
         // sm_ptr still supported but deprecated as functors are a much better way to do the same thing
         struct Stopped : public msm::front::state<msm::front::default_base_state,msm::front::sm_ptr> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Stopped" << std::endl;}
             template <class Event,class FSM>
@@ -132,7 +132,7 @@ namespace
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action/Guard				 
+            //    Start     Event         Next      Action/Guard
             //  +---------+-------------+---------+---------------------+----------------------+
          a_row2 < Stopped , play        , Playing , Stopped , &Stopped::start_playback         >,
          a_row2 < Stopped , open_close  , Open    , Empty   , &Empty::open_drawer              >,

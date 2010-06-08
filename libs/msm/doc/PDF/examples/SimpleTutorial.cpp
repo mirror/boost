@@ -56,7 +56,7 @@ namespace
             void on_exit(Event const&,FSM& ) {std::cout << "leaving: Empty" << std::endl;}
         };
         struct Open : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Open" << std::endl;}
             template <class Event,class FSM>
@@ -65,7 +65,7 @@ namespace
 
         // sm_ptr still supported but deprecated as functors are a much better way to do the same thing
         struct Stopped : public msm::front::state<msm::front::default_base_state,msm::front::sm_ptr> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Stopped" << std::endl;}
             template <class Event,class FSM>
@@ -102,7 +102,7 @@ namespace
         void pause_playback(pause const&)      { std::cout << "player::pause_playback\n"; }
         void resume_playback(end_pause const&)      { std::cout << "player::resume_playback\n"; }
         void stop_and_open(open_close const&)  { std::cout << "player::stop_and_open\n"; }
-        void stopped_again(stop const&)	{std::cout << "player::stopped_again\n";}
+        void stopped_again(stop const&){std::cout << "player::stopped_again\n";}
         // guard conditions
         bool good_disk_format(cd_detected const& evt)
         {
@@ -125,7 +125,7 @@ namespace
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				 Guard
+            //    Start     Event         Next      Action               Guard
             //  +---------+-------------+---------+---------------------+----------------------+
           a_row < Stopped , play        , Playing , &p::start_playback                         >,
           a_row < Stopped , open_close  , Open    , &p::open_drawer                            >,

@@ -26,7 +26,7 @@ namespace mpl = boost::mpl;
 using namespace msm::front;
 
 struct Open : public msm::front::state<> 
-{	 
+{ 
     template <class Event,class FSM>
     void on_entry(Event const& ,FSM&) {std::cout << "entering: Open" << std::endl;}
     template <class Event,class FSM>
@@ -34,7 +34,7 @@ struct Open : public msm::front::state<>
     void close_drawer(open_close const&);
 
     struct internal_transition_table : mpl::vector<
-        //               Start     Event         Next      Action				       Guard
+        //               Start     Event         Next      Action                      Guard
         //+-------------+---------+-------------+---------+---------------------------+----------------------+
     msm::front::a_row2  < Open    , open_close  , Empty   , Open,&Open::close_drawer                         >
         //+-------------+---------+-------------+---------+---------------------------+----------------------+

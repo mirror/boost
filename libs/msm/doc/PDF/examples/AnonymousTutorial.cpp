@@ -37,7 +37,7 @@ namespace
             void on_exit(Event const&,FSM& ) {std::cout << "leaving: State1" << std::endl;}
         };
         struct State2 : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: State2" << std::endl;}
             template <class Event,class FSM>
@@ -45,7 +45,7 @@ namespace
         };
 
         struct State3 : public msm::front::state<> 
-        {	 
+        { 
             // when stopped, the CD is loaded
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: State3" << std::endl;}
@@ -83,7 +83,7 @@ namespace
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				 Guard
+            //    Start     Event         Next      Action               Guard
             //  +---------+-------------+---------+---------------------+----------------------+
            _row < State1  , none        , State2                                               >,
           a_row < State2  , none        , State3  , &p::State2ToState3                         >,

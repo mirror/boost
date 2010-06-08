@@ -133,7 +133,7 @@ namespace  // Concrete FSM implementation
 
         // Transition table for player
         struct transition_table : mpl::vector4<
-            //     Start       Event              Next         Action				Guard
+            //     Start       Event              Next         Action                Guard
             //    +-----------+------------------+------------+---------------------+----------------------+
             _row < MyForeach  , OneSong          , MyFind                                                  >,
             _row < MyFind     , NotFound<string> , MyForeach                                               >,

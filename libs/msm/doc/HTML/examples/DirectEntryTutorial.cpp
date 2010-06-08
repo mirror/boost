@@ -130,7 +130,7 @@ namespace
 
             // Transition table for SubFsm2
             struct transition_table : mpl::vector<
-                //      Start          Event         Next         Action				   Guard
+                //      Start          Event         Next         Action                  Guard
                 //    +--------------+-------------+------------+------------------------+----------------------+
                 a_row < PseudoEntry1 , event4      , SubState3  ,&SubFsm2_::entry_action                        >,
                 _row  < SubState2    , event6      , SubState1                                                  >,

@@ -64,7 +64,7 @@ namespace
         void pause_playback(pause const&)      { std::cout << "player::pause_playback\n"; }
         void resume_playback(end_pause const&)      { std::cout << "player::resume_playback\n"; }
         void stop_and_open(open_close const&)  { std::cout << "player::stop_and_open\n"; }
-        void stopped_again(stop const&)	       {std::cout << "player::stopped_again\n";}
+        void stopped_again(stop const&)        {std::cout << "player::stopped_again\n";}
         // guard conditions
         bool good_disk_format(cd_detected const& evt)
         {
@@ -119,7 +119,7 @@ namespace
             void internal_action(to_ignore const&)       { std::cout << "Empty::(almost)ignoring event\n"; }
             // Transition table for Empty
             struct internal_transition_table : mpl::vector<
-                //    Start     Event         Next      Action				 Guard
+                //    Start     Event         Next      Action                   Guard
                 Row  < Empty   , cd_detected , none    , internal_action_fct    ,internal_guard_fct    >,
            Internal  <           cd_detected           , internal_action_fct    ,internal_guard_fct    >,
            a_internal<           to_ignore             , Empty,&Empty::internal_action                 >
@@ -127,7 +127,7 @@ namespace
             > {};        
         };
         struct Open : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Open" << std::endl;}
             template <class Event,class FSM>
@@ -135,7 +135,7 @@ namespace
         };
 
         struct Stopped : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Stopped" << std::endl;}
             template <class Event,class FSM>
@@ -160,14 +160,14 @@ namespace
 
             };
             struct Song2 : public msm::front::state<>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: Second song" << std::endl;}
                 template <class Event,class FSM>
                 void on_exit(Event const&,FSM& ) {std::cout << "finishing: Second Song" << std::endl;}
             };
             struct Song3 : public msm::front::state<>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: Third song" << std::endl;}
                 template <class Event,class FSM>
@@ -208,7 +208,7 @@ namespace
             typedef Playing_ pl; // makes transition table cleaner
             // Transition table for Playing
             struct transition_table : mpl::vector4<
-                //      Start     Event          Next      Action				 Guard
+                //      Start     Event          Next      Action                Guard
                 //    +---------+---------------+---------+---------------------+----------------------+
                 a_row < Song1   , NextSong      , Song2   , &pl::start_next_song                       >,
                 a_row < Song2   , PreviousSong  , Song1   , &pl::start_prev_song                       >,
@@ -220,7 +220,7 @@ namespace
                 //  +---------+----------------+---------+---------------------+-----------------------+
             struct internal_transition_table : mpl::vector<
                 // normal internal transition
-                //    Start     Event            Next      Action				 Guard
+                //    Start     Event            Next      Action                Guard
              Internal <         internal_event           , playing_internal_fct,playing_internal_guard >,
                 // conflict between internal and the external defined above
              Internal <         PreviousSong             , playing_internal_fct,playing_false_guard    >,
@@ -252,7 +252,7 @@ namespace
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				 Guard
+            //    Start     Event         Next      Action               Guard
             //  +---------+-------------+---------+---------------------+----------------------+
           a_row < Stopped , play        , Playing , &p::start_playback                         >,
           a_row < Stopped , open_close  , Open    , &p::open_drawer                            >,

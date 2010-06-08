@@ -51,7 +51,7 @@ namespace  // Concrete FSM implementation
             void on_exit(Event const&,FSM& ) {std::cout << "leaving: Empty" << std::endl;}
         };
         struct Open : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {std::cout << "entering: Open" << std::endl;}
             template <class Event,class FSM>
@@ -59,7 +59,7 @@ namespace  // Concrete FSM implementation
         };
 
         struct Stopped : public msm::front::state<> 
-        {	 
+        { 
             // when stopped, the CD is loaded
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {std::cout << "entering: Stopped" << std::endl;}
@@ -88,14 +88,14 @@ namespace  // Concrete FSM implementation
 
             };
             struct Song2 : public msm::front::state<>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: Second song" << std::endl;}
                 template <class Event,class FSM>
                 void on_exit(Event const&,FSM& ) {std::cout << "finishing: Second Song" << std::endl;}
             };
             struct Song3 : public msm::front::state<>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: Third song" << std::endl;}
                 template <class Event,class FSM>
@@ -111,7 +111,7 @@ namespace  // Concrete FSM implementation
             typedef Playing_ pl; // makes transition table cleaner
             // Transition table for Playing
             struct transition_table : mpl::vector4<
-                //      Start     Event         Next      Action				Guard
+                //      Start     Event         Next      Action               Guard
                 //    +---------+-------------+---------+---------------------+----------------------+
                 a_row < Song1   , NextSong    , Song2   , &pl::start_next_song                       >,
                 a_row < Song2   , PreviousSong, Song1   , &pl::start_prev_song                       >,
@@ -148,14 +148,14 @@ namespace  // Concrete FSM implementation
         void pause_playback(pause const&)      { std::cout << "player::pause_playback\n"; }
         void resume_playback(end_pause const&)      { std::cout << "player::resume_playback\n"; }
         void stop_and_open(open_close const&)  { std::cout << "player::stop_and_open\n"; }
-        void stopped_again(stop const&)	{std::cout << "player::stopped_again\n";}
+        void stopped_again(stop const&){std::cout << "player::stopped_again\n";}
         // guard conditions
 
         typedef player_ p; // makes transition table cleaner
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //      Start     Event         Next      Action				Guard
+            //      Start     Event         Next      Action               Guard
             //    +---------+-------------+---------+---------------------+----------------------+
             a_row < Stopped , play        , Playing , &p::start_playback                         >,
             a_row < Stopped , open_close  , Open    , &p::open_drawer                            >,

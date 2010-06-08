@@ -110,7 +110,7 @@ struct PlayingMode_ : public msm::front::state_machine_def<PlayingMode_>
     };
     struct SetPosition : public msm::front::state<>
     {
-        typedef mpl::vector1<NoFastFwd>		flag_list;
+        typedef mpl::vector1<NoFastFwd>     flag_list;
         template <class Event,class FSM>
         void on_entry(Event const&,FSM& ) {std::cout << "starting: PlayingMode::SetPosition" << std::endl;}
         template <class Event,class FSM>
@@ -209,7 +209,7 @@ struct PlayingMode_ : public msm::front::state_machine_def<PlayingMode_>
     typedef PlayingMode_ fsm; // makes transition table cleaner
     // Transition table for player
     struct transition_table : mpl::vector19<
-            //    Start                 Event                Next                 Action				      Guard
+            //    Start                 Event                Next                 Action                     Guard
             //   +--------------------+---------------------+--------------------+--------------------------+----------------------+
             _row < Playing            , PlayPause           , Paused                                                               >,
             _row < Playing            , Off                 , Paused                                                               >,
@@ -223,7 +223,7 @@ struct PlayingMode_ : public msm::front::state_machine_def<PlayingMode_>
             //   +--------------------+---------------------+--------------------+--------------------------+----------------------+
             _row < WaitingForEnd      , EndPlay             , PlayingExit                                                          >,
             //   +--------------------+---------------------+--------------------+--------------------------+----------------------+
- msm::front::Row < NoForward          , EastPressed         , ForwardPressed      , msm::front::none        , fast_fwd_ok		   >,
+ msm::front::Row < NoForward          , EastPressed         , ForwardPressed      , msm::front::none        , fast_fwd_ok          >,
  msm::front::Row < ForwardPressed     , EastReleased        , NoForward           , send_NextSong           , msm::front::none     >,
            a_row < ForwardPressed     , ForwardTimer        , FastForward         , &fsm::do_fast_forward                          >,
            a_row < FastForward        , ForwardTimer        , FastForward         , &fsm::do_fast_forward                          >,

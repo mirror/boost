@@ -33,7 +33,7 @@ struct Empty : public msm::front::state<>
     void open_drawer(open_close const&);
 
     struct internal_transition_table : mpl::vector<
-        //              Start     Event         Next      Action				       Guard
+        //              Start     Event         Next      Action                       Guard
         //+-------------+---------+-------------+---------+---------------------------+----------------------+
     msm::front::a_row2  < Empty   , open_close  , Open    , Empty,&Empty::open_drawer                        >
     //+-------------+---------+-------------+---------+---------------------------+----------------------+

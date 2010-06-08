@@ -91,8 +91,8 @@ namespace  // Concrete FSM implementation
             }
         };
         struct Open : public msm::front::state<my_visitable_state> 
-        {	
-            typedef mpl::vector1<CDLoaded>		flag_list;
+        {
+            typedef mpl::vector1<CDLoaded>      flag_list;
             typedef mpl::vector<play> deferred_events;
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {std::cout << "entering: Open" << std::endl;}
@@ -107,9 +107,9 @@ namespace  // Concrete FSM implementation
         // and using for this the non-default policy
         // if policy used, set_sm_ptr is needed
         struct Stopped : public msm::front::state<my_visitable_state> 
-        {	     
+        {     
             // when stopped, the CD is loaded
-            typedef mpl::vector1<CDLoaded>		flag_list;
+            typedef mpl::vector1<CDLoaded>      flag_list;
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {std::cout << "entering: Stopped" << std::endl;}
             template <class Event,class FSM>
@@ -123,7 +123,7 @@ namespace  // Concrete FSM implementation
         struct Playing_ : public msm::front::state_machine_def<Playing_,my_visitable_state >
         {
             // when playing, the CD is loaded and we are in either pause or playing (duh)
-            typedef mpl::vector2<PlayingPaused,CDLoaded>		flag_list;
+            typedef mpl::vector2<PlayingPaused,CDLoaded>        flag_list;
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {std::cout << "entering: Playing" << std::endl;}
             template <class Event,class FSM>
@@ -138,7 +138,7 @@ namespace  // Concrete FSM implementation
             // so we have a SM containing a SM containing a SM
             struct Song1_ : public msm::front::state_machine_def<Song1_,my_visitable_state>
             {
-                typedef mpl::vector1<FirstSongPlaying>		flag_list;
+                typedef mpl::vector1<FirstSongPlaying>      flag_list;
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: First song" << std::endl;}
                 template <class Event,class FSM>
@@ -148,14 +148,14 @@ namespace  // Concrete FSM implementation
                     vis.visit_state(this,i);
                 }
                 struct LightOn : public msm::front::state<my_visitable_state>
-                {	 
+                { 
                     template <class Event,class FSM>
                     void on_entry(Event const&,FSM& ) {std::cout << "starting: LightOn" << std::endl;}
                     template <class Event,class FSM>
                     void on_exit(Event const&,FSM& ) {std::cout << "finishing: LightOn" << std::endl;}
                 };
                 struct LightOff : public msm::front::state<my_visitable_state>
-                {	 
+                { 
                     template <class Event,class FSM>
                     void on_entry(Event const&,FSM& ) {std::cout << "starting: LightOff" << std::endl;}
                     template <class Event,class FSM>
@@ -170,7 +170,7 @@ namespace  // Concrete FSM implementation
                 typedef Song1_ s; // makes transition table cleaner
                 // Transition table for Song1
                 struct transition_table : mpl::vector1<
-                    //    Start     Event         Next      Action				Guard
+                    //    Start     Event         Next      Action               Guard
                     //  +---------+-------------+---------+---------------------+----------------------+
                   a_row < LightOn , ThreeSec    , LightOff, &s::turn_light_off                        >
                     //  +---------+-------------+---------+---------------------+----------------------+
@@ -186,14 +186,14 @@ namespace  // Concrete FSM implementation
             typedef msm::back::state_machine<Song1_> Song1;
 
             struct Song2 : public msm::front::state<my_visitable_state>
-            {	
+            {
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: Second song" << std::endl;}
                 template <class Event,class FSM>
                 void on_exit(Event const&,FSM& ) {std::cout << "finishing: Second Song" << std::endl;}
             };
             struct Song3 : public msm::front::state<my_visitable_state>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: Third song" << std::endl;}
                 template <class Event,class FSM>
@@ -209,7 +209,7 @@ namespace  // Concrete FSM implementation
             typedef Playing_ pl; // makes transition table cleaner
             // Transition table for Playing
             struct transition_table : mpl::vector4<
-                //    Start     Event         Next      Action				Guard
+                //    Start     Event         Next      Action               Guard
                 //  +---------+-------------+---------+---------------------+----------------------+
                 a_row < Song1   , NextSong    , Song2   , &pl::start_next_song                      >,
                 a_row < Song2   , PreviousSong, Song1   , &pl::start_prev_song                      >,
@@ -230,7 +230,7 @@ namespace  // Concrete FSM implementation
         // the player state machine contains a state which is himself a state machine (2 of them, Playing and Paused)
         struct Paused_ : public msm::front::state_machine_def<Paused_,my_visitable_state>
         {
-            typedef mpl::vector2<PlayingPaused,CDLoaded>		flag_list;
+            typedef mpl::vector2<PlayingPaused,CDLoaded>    flag_list;
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {std::cout << "entering: Paused" << std::endl;}
             template <class Event,class FSM>
@@ -238,14 +238,14 @@ namespace  // Concrete FSM implementation
 
             // The list of FSM states
             struct StartBlinking : public msm::front::state<my_visitable_state>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: StartBlinking" << std::endl;}
                 template <class Event,class FSM>
                 void on_exit(Event const&,FSM& ) {std::cout << "finishing: StartBlinking" << std::endl;}
             };
             struct StopBlinking : public msm::front::state<my_visitable_state>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {std::cout << "starting: StopBlinking" << std::endl;}
                 template <class Event,class FSM>
@@ -261,7 +261,7 @@ namespace  // Concrete FSM implementation
             typedef Paused_ pa; // makes transition table cleaner
             // Transition table
             struct transition_table : mpl::vector2<
-                //    Start			Event         Next				Action				Guard
+                //    Start          Event         Next           Action                Guard
                 //  +---------------+-------------+--------------+---------------------+----------------------+
                 a_row < StartBlinking , TenSec      , StopBlinking  , &pa::stop_blinking                        >,
                 a_row < StopBlinking  , TenSec      , StartBlinking , &pa::start_blinking                       >
@@ -315,7 +315,7 @@ namespace  // Concrete FSM implementation
         void pause_playback(pause const&)      { std::cout << "player::pause_playback\n"; }
         void resume_playback(end_pause const&)      { std::cout << "player::resume_playback\n"; }
         void stop_and_open(open_close const&)  { std::cout << "player::stop_and_open\n"; }
-        void stopped_again(stop const&)	{std::cout << "player::stopped_again\n";}
+        void stopped_again(stop const&){std::cout << "player::stopped_again\n";}
         void start_sleep(go_sleep const&)  {  }
         void report_error(error_found const&) {std::cout << "player::report_error\n";}
         void report_end_error(end_error const&) {std::cout << "player::report_end_error\n";}
@@ -326,7 +326,7 @@ namespace  // Concrete FSM implementation
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				Guard
+            //    Start     Event         Next      Action               Guard
             //  +---------+-------------+---------+---------------------+----------------------+
           a_row < Stopped , play        , Playing , &p::start_playback                        >,
           a_row < Stopped , open_close  , Open    , &p::open_drawer                           >,

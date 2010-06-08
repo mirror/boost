@@ -51,7 +51,7 @@ namespace test_sc
         void store_cd_info(cd_detected const& cd)   {/*std::cout << "player::store_cd_info\n";*/ }
         void close_drawer(open_close const&)        { /*std::cout << "player::close_drawer\n";*/ }
         void start_playback(play const&)            { /*std::cout << "player::start_playback\n";*/ }
-        void stopped_again(stop const&)	            {/*std::cout << "player::stopped_again\n";*/}
+        void stopped_again(stop const&)             {/*std::cout << "player::stopped_again\n";*/}
         void stop_playback(stop const&)             { /*std::cout << "player::stop_playback\n";*/ }
         void pause_playback(pause const&)           { /*std::cout << "player::pause_playback\n"; */}
         void stop_and_open(open_close const&)       { /*std::cout << "player::stop_and_open\n";*/ }

@@ -81,13 +81,13 @@ namespace
             };
             // Transition table for Empty
             struct internal_transition_table : mpl::vector<
-                //    Start     Event         Next      Action				 Guard
+                //    Start     Event         Next      Action               Guard
            Internal <           cd_detected           , internal_action_fct ,internal_guard_fct    >
                 //  +---------+-------------+---------+---------------------+----------------------+
             > {};        
         };
         struct Open : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Open" << std::endl;}
             template <class Event,class FSM>
@@ -95,7 +95,7 @@ namespace
         };
 
         struct Stopped : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Stopped" << std::endl;}
             template <class Event,class FSM>
@@ -244,7 +244,7 @@ namespace
         };
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				       Guard
+            //    Start     Event         Next      Action                     Guard
             //  +---------+-------------+---------+---------------------------+----------------------+
             Row < Stopped , play        , Playing , ActionSequence_
                                                      <mpl::vector<

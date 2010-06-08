@@ -229,7 +229,7 @@ namespace  // Concrete FSM implementation
 
     // Transition table for player
     struct player_transition_table : mpl::vector<
-        //    Start     Event         Next      Action				       Guard
+        //    Start     Event         Next      Action                     Guard
         //  +---------+-------------+---------+---------------------------+----------------------+
         Row < Stopped , play        , Playing , ActionSequence_
                                                  <mpl::vector<
