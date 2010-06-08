@@ -459,7 +459,7 @@ indices will remain zero-based.
 <blockquote>
 <pre>
   typedef boost::multi_array&lt;double,3&gt; array_type;
-  array_type A(boost::extents[3][4][2],boost::fortran_storage_order); 
+  array_type A(boost::extents[3][4][2],boost::fortran_storage_order()); 
   call_fortran_function(A.data());
 </pre>
 </blockquote>
