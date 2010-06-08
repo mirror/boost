@@ -77,10 +77,10 @@ namespace
     // Playing has a transition table 
    BOOST_MSM_EUML_TRANSITION_TABLE((
         //  +------------------------------------------------------------------------------+
-            Song2         == Song1          + next_song															,
-            Song1         == Song2          + previous_song	  [True_()] / ++fsm_(start_prev_song_guard_counter)	,
-            Song3         == Song2          + next_song       / ++fsm_(start_next_song_counter)					,
-            Song2         == Song3          + previous_song	  [True_()] / ++fsm_(start_prev_song_guard_counter)	
+            Song2         == Song1          + next_song                                                         ,
+            Song1         == Song2          + previous_song   [True_()] / ++fsm_(start_prev_song_guard_counter) ,
+            Song3         == Song2          + next_song       / ++fsm_(start_next_song_counter)                 ,
+            Song2         == Song3          + previous_song   [True_()] / ++fsm_(start_prev_song_guard_counter)
         //  +------------------------------------------------------------------------------+
         ),playing_transition_table )
 

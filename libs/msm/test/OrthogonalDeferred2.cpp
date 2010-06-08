@@ -80,8 +80,8 @@ namespace
             int exit_counter;
         };
         struct Open : public msm::front::state<> 
-        {	 
-            typedef mpl::vector1<CDLoaded>		flag_list;
+        { 
+            typedef mpl::vector1<CDLoaded>      flag_list;
             
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
@@ -92,8 +92,8 @@ namespace
         };
 
         struct Stopped : public msm::front::state<> 
-        {	 
-            typedef mpl::vector1<CDLoaded>		flag_list;
+        { 
+            typedef mpl::vector1<CDLoaded>      flag_list;
 
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
@@ -109,7 +109,7 @@ namespace
         struct Playing_ : public msm::front::state_machine_def<Playing_>
         {
             // when playing, the CD is loaded and we are in either pause or playing (duh)
-            typedef mpl::vector2<PlayingPaused,CDLoaded>		flag_list;
+            typedef mpl::vector2<PlayingPaused,CDLoaded>        flag_list;
 
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
@@ -128,7 +128,7 @@ namespace
             // The list of FSM states
             struct Song1 : public msm::front::state<>
             {
-                typedef mpl::vector1<FirstSongPlaying>		flag_list;
+                typedef mpl::vector1<FirstSongPlaying>      flag_list;
 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {++entry_counter;}
@@ -138,7 +138,7 @@ namespace
                 int exit_counter;
             };
             struct Song2 : public msm::front::state<>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {++entry_counter;}
                 template <class Event,class FSM>
@@ -147,7 +147,7 @@ namespace
                 int exit_counter;
             };
             struct Song3 : public msm::front::state<>
-            {	 
+            { 
                 template <class Event,class FSM>
                 void on_entry(Event const&,FSM& ) {++entry_counter;}
                 template <class Event,class FSM>
@@ -166,7 +166,7 @@ namespace
             typedef Playing_ pl; // makes transition table cleaner
             // Transition table for Playing
             struct transition_table : mpl::vector4<
-                //      Start     Event         Next      Action				Guard
+                //      Start     Event         Next      Action               Guard
                 //    +---------+-------------+---------+---------------------+----------------------+
                  _row < Song1   , NextSong    , Song2                                                >,
                   row < Song2   , PreviousSong, Song1   , &pl::start_prev_song,&pl::start_prev_song_guard>,
@@ -187,7 +187,7 @@ namespace
         // state not defining any entry or exit
         struct Paused : public msm::front::state<>
         {
-            typedef mpl::vector2<PlayingPaused,CDLoaded>		flag_list;
+            typedef mpl::vector2<PlayingPaused,CDLoaded>        flag_list;
 
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
@@ -237,7 +237,7 @@ namespace
         void pause_playback(pause const&)      {  }
         void resume_playback(end_pause const&)      {  }
         void stop_and_open(open_close const&)  {  }
-        void stopped_again(stop const&)	{}
+        void stopped_again(stop const&){}
         void report_error(error_found const&) {++report_error_counter;}
         void report_end_error(end_error const&) {report_end_error_counter;}
 
@@ -251,7 +251,7 @@ namespace
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //      Start     Event         Next      Action				Guard
+            //      Start     Event         Next      Action               Guard
             //    +---------+-------------+---------+---------------------+----------------------+
             a_row < Stopped , play        , Playing , &p::start_playback                         >,
             a_row < Stopped , open_close  , Open    , &p::open_drawer                            >,
