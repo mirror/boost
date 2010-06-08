@@ -193,7 +193,15 @@ public:
   operator>>(std::basic_istream<CharT,Traits>& is,
              linear_congruential& lcg)
   {
-    return is >> lcg._x;
+    IntType x;
+    if(is >> x) {
+      if(x >= (lcg.min)() && x <= (lcg.max)()) {
+        lcg._x = x;
+      } else {
+        is.setstate(std::ios_base::failbit);
+      }
+    }
+    return is;
   }
  
 private:
