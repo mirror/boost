@@ -110,6 +110,14 @@ are stored contiguously) or by column (i.e., the elements of each
 column are stored contiguously).
 </para>
 
+<para>
+Two concept checking classes for the MultiArray concepts
+(<literal>ConstMultiArrayConcept</literal> and
+<literal>MutableMultiArrayConcept</literal>) are in the namespace
+<literal>boost::multi_array_concepts</literal> in
+<literal>&lt;boost/multi_array/concept_checks.hpp&gt;</literal>.
+</para>
+
 
 <sect2><title>Notation</title>
 <para>What follows are the descriptions of symbols that will be used

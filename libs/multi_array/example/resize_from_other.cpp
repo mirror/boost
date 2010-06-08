@@ -26,7 +26,7 @@ resize_from_MultiArray(boost::multi_array<T,N>& marray, U& other) {
 
   // U must be a model of MultiArray
   boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<U,U::dimensionality> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<U,U::dimensionality> >();
   // U better have U::dimensionality == N
   BOOST_STATIC_ASSERT(U::dimensionality == N);
 
