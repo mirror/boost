@@ -540,7 +540,7 @@ of values at each level of the nested container hierarchy may
 change.</p><p><b><code class="literal">SizeList</code> Requirements. </b><code class="literal">SizeList</code> must model
 <a href="../../utility/Collection.html" target="_top">Collection</a>.</p><p><b>Preconditions. </b>
 </p><pre class="programlisting">
-std::accumulate(sizes.begin(),sizes.end(),size_type(1),std::times&lt;size_type&gt;()) == this-&gt;num_elements();
+std::accumulate(sizes.begin(),sizes.end(),size_type(1),std::multiplies&lt;size_type&gt;()) == this-&gt;num_elements();
 sizes.size() == NumDims;
 </pre><p><b>Postconditions. </b>
 <code class="literal">std::equal(sizes.begin(),sizes.end(),this-&gt;shape) == true;</code>
