@@ -90,7 +90,7 @@ public:
             return;
         }
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::stream_error)
+            archive_exception(archive_exception::input_stream_error)
         );
     }
 

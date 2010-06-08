@@ -139,11 +139,11 @@ inline void load_collection(Archive & ar, Container &s)
 {
     s.clear();
     collection_size_type count;
-    item_version_type item_version;
     const boost::archive::library_version_type library_version(
         ar.get_library_version()
     );
     // retrieve number of elements
+    item_version_type item_version(0);
     ar >> BOOST_SERIALIZATION_NVP(count);
     if(boost::archive::library_version_type(3) < library_version){
         ar >> BOOST_SERIALIZATION_NVP(item_version);

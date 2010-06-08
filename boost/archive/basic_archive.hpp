@@ -26,40 +26,6 @@
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-#define BOOST_ARCHIVE_STRONG_TYPEDEF(T, D)        \
-namespace boost {                                 \
-namespace archive {                               \
-BOOST_STRONG_TYPEDEF(T, D)                        \
-} /* archive */                                   \
-template<>                                        \
-class integer_traits<boost::archive::D>  :        \
-    public integer_traits<boost::T>               \
-{};                                               \
-} /* boost */                                     \
-/**/
-
-/* NOTE : Warning  : Warning : Warning : Warning : Warning
- * Don't ever changes this.  If you do, they previously created
- * binary archives won't be readable !!!
- */
-BOOST_ARCHIVE_STRONG_TYPEDEF(uint_least16_t, library_version_type)
-
-/* NOTE : Warning  : Warning : Warning : Warning : Warning
- * If any of these are changed to different sized types, 
- * binary_iarchive won't be able to read older archives
- * unless you rev the library version and include conditional
- * code based on the library version.  There is nothing
- * inherently wrong in doing this - but you have to be super
- * careful because it's easy to get wrong and start breaking
- * old archives !!!
- */
-//BOOST_ARCHIVE_STRONG_TYPEDEF(uint_least8_t, version_type)
-//BOOST_ARCHIVE_STRONG_TYPEDEF(int_least16_t, class_id_type)
-BOOST_ARCHIVE_STRONG_TYPEDEF(int_least16_t, class_id_optional_type)
-BOOST_ARCHIVE_STRONG_TYPEDEF(int_least16_t, class_id_reference_type)
-BOOST_ARCHIVE_STRONG_TYPEDEF(uint_least32_t, object_id_type)
-BOOST_ARCHIVE_STRONG_TYPEDEF(uint_least32_t, object_reference_type)
-
 namespace boost {
 namespace archive {
 
@@ -68,28 +34,65 @@ namespace archive {
 #pragma warning( disable : 4244 4267 )
 #endif
 
-struct version_type
-    : boost::totally_ordered1< version_type
-    , boost::totally_ordered2< version_type, uint_least8_t                             
-    > >                                                         
-{                                                               
+/* NOTE : Warning  : Warning : Warning : Warning : Warning
+ * Don't ever changes this.  If you do, they previously created
+ * binary archives won't be readable !!!
+ */
+class library_version_type {
+private:
+    typedef uint_least16_t base_type;
+    base_type t;
+public:
+    library_version_type(): t(0) {};
+    explicit library_version_type(const unsigned int & t_) : t(t_){
+        assert(t_ <= boost::integer_traits<base_type>::const_max);
+    }
+    library_version_type(const library_version_type & t_) : 
+        t(t_.t)
+    {}
+    library_version_type & operator=(const library_version_type & rhs){
+        t = rhs.t; 
+        return *this;
+    }
+    // used for text output
+    operator const unsigned int () const {
+        return t;
+    }                
+    // used for text output
+    operator uint_least16_t & (){
+        return t;
+    }                
+    bool operator==(const library_version_type & rhs) const {
+        return t == rhs.t;
+    } 
+    bool operator<(const library_version_type & rhs) const {
+        return t < rhs.t;
+    }   
+};
+
+BOOST_ARCHIVE_DECL(library_version_type)
+BOOST_ARCHIVE_VERSION();
+
+class version_type {
+private:
     typedef uint_least8_t base_type;
     base_type t;
-    version_type(){};
-    version_type(const version_type & t_) : t(t_.t){}
+    version_type(): t(0) {};
+public:
     explicit version_type(const unsigned int & t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
+    version_type(const version_type & t_) : 
+        t(t_.t)
+    {}
     version_type & operator=(const version_type & rhs){
         t = rhs.t; 
         return *this;
     }
-    operator const base_type () const {
+    // used for text output
+    operator const unsigned int () const {
         return t;
     }                
-    operator base_type & (){
-        return t;
-    }
     bool operator==(const version_type & rhs) const {
         return t == rhs.t;
     } 
@@ -98,31 +101,34 @@ struct version_type
     }   
 };
 
-struct class_id_type
-    : boost::totally_ordered1< class_id_type
-    , boost::totally_ordered2< class_id_type, int_least16_t                             
-    > >                                                         
-{
+class class_id_type {
+private:
     typedef int_least16_t base_type;
     base_type t;
-    class_id_type(){};
-    class_id_type(const class_id_type & t_) : t(t_.t){}
-    explicit class_id_type(const std::size_t & t_) : t(t_){
-        //assert(t_ <= boost::integer_traits<base_type>::const_max);
+public:
+    class_id_type() : t(0) {};
+    explicit class_id_type(const int t_) : t(t_){
+        assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
-    explicit class_id_type(const int & t_) : t(t_){}
+    explicit class_id_type(const std::size_t t_) : t(t_){
+        assert(t_ <= boost::integer_traits<base_type>::const_max);
+    }
+    class_id_type(const class_id_type & t_) : 
+        t(t_.t)
+    {}
     class_id_type & operator=(const class_id_type & rhs){
         t = rhs.t; 
         return *this;
     }
 
-    // used for standard i/o
-    operator const base_type () const {
+    // used for text output
+    operator const int () const {
         return t;
     }                
-    operator base_type & (){
+    // used for text input
+    operator int_least16_t &() {
         return t;
-    }
+    }                
     bool operator==(const class_id_type & rhs) const {
         return t == rhs.t;
     } 
@@ -132,6 +138,38 @@ struct class_id_type
 };
 
 #define NULL_POINTER_TAG boost::archive::class_id_type(-1)
+
+class object_id_type {
+private:
+    typedef uint_least32_t base_type;
+    base_type t;
+public:
+    object_id_type(): t(0) {};
+    explicit object_id_type(const unsigned int & t_) : t(t_){
+        assert(t_ <= boost::integer_traits<base_type>::const_max);
+    }
+    object_id_type(const object_id_type & t_) : 
+        t(t_.t)
+    {}
+    object_id_type & operator=(const object_id_type & rhs){
+        t = rhs.t; 
+        return *this;
+    }
+    // used for text output
+    operator const unsigned int () const {
+        return t;
+    }                
+    // used for text input
+    operator uint_least32_t & () {
+        return t;
+    }                
+    bool operator==(const object_id_type & rhs) const {
+        return t == rhs.t;
+    } 
+    bool operator<(const object_id_type & rhs) const {
+        return t < rhs.t;
+    }   
+};
 
 #if defined(_MSC_VER)
 #pragma warning( pop )
@@ -198,20 +236,40 @@ enum archive_flags {
 BOOST_ARCHIVE_DECL(const char *)
 BOOST_ARCHIVE_SIGNATURE();
 
-BOOST_ARCHIVE_DECL(library_version_type)
-BOOST_ARCHIVE_VERSION();
+/* NOTE : Warning  : Warning : Warning : Warning : Warning
+ * If any of these are changed to different sized types, 
+ * binary_iarchive won't be able to read older archives
+ * unless you rev the library version and include conditional
+ * code based on the library version.  There is nothing
+ * inherently wrong in doing this - but you have to be super
+ * careful because it's easy to get wrong and start breaking
+ * old archives !!!
+ */
+
+#define BOOST_ARCHIVE_STRONG_TYPEDEF(T, D)         \
+    class D : public T {                           \
+    public:                                        \
+        explicit D(const T t) : T(t){}             \
+    };                                             \
+/**/
+
+
+BOOST_ARCHIVE_STRONG_TYPEDEF(class_id_type, class_id_reference_type)
+BOOST_ARCHIVE_STRONG_TYPEDEF(class_id_type, class_id_optional_type)
+BOOST_ARCHIVE_STRONG_TYPEDEF(object_id_type, object_reference_type)
 
 }// namespace archive
 }// namespace boost
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
+#if 0
 namespace boost {
 template<>
 class integer_traits<boost::archive::class_id_type> : 
     public integer_traits<boost::archive::class_id_type::base_type>
 {};
-} // namespace boost
+#endif
 
 #include <boost/serialization/level.hpp>
 

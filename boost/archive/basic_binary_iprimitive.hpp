@@ -162,7 +162,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
     );
     if(scount != s)
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::stream_error)
+            archive_exception(archive_exception::input_stream_error)
         );
     // note: an optimizer should eliminate the following for char files
     assert(count % sizeof(Elem) <= boost::integer_traits<std::streamsize>::const_max);
@@ -176,7 +176,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
         scount = m_sb.sgetn(& t, 1);
         if(scount != 1)
             boost::serialization::throw_exception(
-                archive_exception(archive_exception::stream_error)
+                archive_exception(archive_exception::input_stream_error)
             );
         std::memcpy(static_cast<char*>(address) + (count - s), &t, s);
     }

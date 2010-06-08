@@ -30,14 +30,6 @@ namespace archive {
 
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
-basic_text_iarchive<Archive>::load_override(version_type & t, int){
-    unsigned int v;
-    load_override(v, 0);
-    t = version_type(v);
-}
-
-template<class Archive>
-BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_iarchive<Archive>::load_override(class_name_type & t, int){
     std::string cn;
     cn.reserve(BOOST_SERIALIZATION_MAX_KEY_SIZE);

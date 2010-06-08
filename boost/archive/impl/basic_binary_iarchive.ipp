@@ -87,8 +87,7 @@ basic_binary_iarchive<Archive>::init(){
     basic_iarchive::set_library_version(input_library_version);
     #endif
     
-    // extra little .t is to get around borland quirk
-    if(BOOST_ARCHIVE_VERSION() < input_library_version.t)
+    if(BOOST_ARCHIVE_VERSION() < input_library_version)
         boost::serialization::throw_exception(
             archive_exception(archive_exception::unsupported_version)
         );
