@@ -514,7 +514,7 @@ namespace boost {
           if (f) {
             // should be a reinterpret cast, but some compilers insist
             // on giving cv-qualifiers to free functions
-            functor.func_ptr = (void (*)())(f);
+            functor.func_ptr = reinterpret_cast<void (*)()>(f);
             return true;
           } else {
             return false;
@@ -563,7 +563,7 @@ namespace boost {
         void 
         assign_functor(FunctionObj f, function_buffer& functor, mpl::true_)
         {
-          new ((void*)&functor.data) FunctionObj(f);
+          new (reinterpret_cast<void*>(&functor.data)) FunctionObj(f);
         }
         template<typename FunctionObj,typename Allocator>
         void 
@@ -625,7 +625,7 @@ namespace boost {
         assign_to(const reference_wrapper<FunctionObj>& f, 
                   function_buffer& functor, function_obj_ref_tag)
         {
-          functor.obj_ref.obj_ptr = (void *)f.get_pointer();
+          functor.obj_ref.obj_ptr = (void *)(f.get_pointer());
           functor.obj_ref.is_const_qualified = is_const<FunctionObj>::value;
           functor.obj_ref.is_volatile_qualified = is_volatile<FunctionObj>::value;
           return true;
@@ -677,7 +677,7 @@ namespace boost {
 
     vtable_type* get_vtable() const {
       return reinterpret_cast<vtable_type*>(
-               reinterpret_cast<std::size_t>(vtable) & ~(std::size_t)0x01);
+               reinterpret_cast<std::size_t>(vtable) & ~static_cast<size_t>(0x01));
     }
 
     struct clear_type {};
@@ -917,7 +917,7 @@ namespace boost {
         if (boost::has_trivial_copy_constructor<Functor>::value &&
             boost::has_trivial_destructor<Functor>::value &&
             detail::function::function_allows_small_object_optimization<Functor>::value)
-          value |= (std::size_t)0x01;
+          value |= static_cast<size_t>(0x01);
         vtable = reinterpret_cast<detail::function::vtable_base *>(value);
       } else 
         vtable = 0;
@@ -951,7 +951,7 @@ namespace boost {
         if (boost::has_trivial_copy_constructor<Functor>::value &&
             boost::has_trivial_destructor<Functor>::value &&
             detail::function::function_allows_small_object_optimization<Functor>::value)
-          value |= (std::size_t)0x01;
+          value |= static_cast<std::size_t>(0x01);
         vtable = reinterpret_cast<detail::function::vtable_base *>(value);
       } else 
         vtable = 0;

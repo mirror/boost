@@ -315,7 +315,7 @@ namespace boost {
           if (op == clone_functor_tag || op == move_functor_tag) {
             const functor_type* in_functor = 
               reinterpret_cast<const functor_type*>(&in_buffer.data);
-            new ((void*)&out_buffer.data) functor_type(*in_functor);
+            new (reinterpret_cast<void*>(&out_buffer.data)) functor_type(*in_functor);
 
             if (op == move_functor_tag) {
               reinterpret_cast<functor_type*>(&in_buffer.data)->~Functor();
@@ -369,8 +369,10 @@ namespace boost {
             // Clone the functor
             // GCC 2.95.3 gets the CV qualifiers wrong here, so we
             // can't do the static_cast that we should do.
+            // jewillco: Changing this to static_cast because GCC 2.95.3 is
+            // obsolete.
             const functor_type* f =
-              (const functor_type*)(in_buffer.obj_ptr);
+              static_cast<const functor_type*>(in_buffer.obj_ptr);
             functor_type* new_f = new functor_type(*f);
             out_buffer.obj_ptr = new_f;
           } else if (op == move_functor_tag) {
@@ -474,7 +476,7 @@ namespace boost {
             // GCC 2.95.3 gets the CV qualifiers wrong here, so we
             // can't do the static_cast that we should do.
             const functor_wrapper_type* f =
-              (const functor_wrapper_type*)(in_buffer.obj_ptr);
+              static_cast<const functor_wrapper_type*>(in_buffer.obj_ptr);
             wrapper_allocator_type wrapper_allocator(static_cast<Allocator const &>(*f));
             wrapper_allocator_pointer_type copy = wrapper_allocator.allocate(1);
             wrapper_allocator.construct(copy, *f);
@@ -671,7 +673,7 @@ public:
                       detail::function::check_functor_type_tag);
       // GCC 2.95.3 gets the CV qualifiers wrong here, so we
       // can't do the static_cast that we should do.
-      return (const Functor*)(type_result.obj_ptr);
+      return static_cast<const Functor*>(type_result.obj_ptr);
     }
 
   template<typename F>
@@ -715,7 +717,7 @@ public:
 public: // should be protected, but GCC 2.95.3 will fail to allow access
   detail::function::vtable_base* get_vtable() const {
     return reinterpret_cast<detail::function::vtable_base*>(
-             reinterpret_cast<std::size_t>(vtable) & ~(std::size_t)0x01);
+             reinterpret_cast<std::size_t>(vtable) & ~static_cast<std::size_t>(0x01));
   }
 
   bool has_trivial_copy_and_destroy() const {
