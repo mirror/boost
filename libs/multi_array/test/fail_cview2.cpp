@@ -22,6 +22,7 @@
 
 #include "boost/array.hpp"
 #include "boost/type.hpp"
+#include "boost/cstdlib.hpp"
 
 int
 test_main(int,char*[])
