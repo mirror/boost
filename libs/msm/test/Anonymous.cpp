@@ -124,14 +124,14 @@ namespace
         template <class Event,class FSM>
         void on_entry(Event const&,FSM& fsm) 
         {
-            fsm.get_state<my_machine_::State1&>().entry_counter=0;
-            fsm.get_state<my_machine_::State1&>().exit_counter=0;
-            fsm.get_state<my_machine_::State2&>().entry_counter=0;
-            fsm.get_state<my_machine_::State2&>().exit_counter=0;
-            fsm.get_state<my_machine_::State3&>().entry_counter=0;
-            fsm.get_state<my_machine_::State3&>().exit_counter=0;
-            fsm.get_state<my_machine_::State4&>().entry_counter=0;
-            fsm.get_state<my_machine_::State4&>().exit_counter=0;
+            fsm.template get_state<my_machine_::State1&>().entry_counter=0;
+            fsm.template get_state<my_machine_::State1&>().exit_counter=0;
+            fsm.template get_state<my_machine_::State2&>().entry_counter=0;
+            fsm.template get_state<my_machine_::State2&>().exit_counter=0;
+            fsm.template get_state<my_machine_::State3&>().entry_counter=0;
+            fsm.template get_state<my_machine_::State3&>().exit_counter=0;
+            fsm.template get_state<my_machine_::State4&>().entry_counter=0;
+            fsm.template get_state<my_machine_::State4&>().exit_counter=0;
         }
     };
     // Pick a back-end

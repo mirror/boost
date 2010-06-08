@@ -173,16 +173,16 @@ namespace
         template <class Event,class FSM>
         void on_entry(Event const&,FSM& fsm) 
         {
-            fsm.get_state<player_::Stopped&>().entry_counter=0;
-            fsm.get_state<player_::Stopped&>().exit_counter=0;
-            fsm.get_state<player_::Open&>().entry_counter=0;
-            fsm.get_state<player_::Open&>().exit_counter=0;
-            fsm.get_state<player_::Empty&>().entry_counter=0;
-            fsm.get_state<player_::Empty&>().exit_counter=0;
-            fsm.get_state<player_::Playing&>().entry_counter=0;
-            fsm.get_state<player_::Playing&>().exit_counter=0;
-            fsm.get_state<player_::Paused&>().entry_counter=0;
-            fsm.get_state<player_::Paused&>().exit_counter=0;
+            fsm.template get_state<player_::Stopped&>().entry_counter=0;
+            fsm.template get_state<player_::Stopped&>().exit_counter=0;
+            fsm.template get_state<player_::Open&>().entry_counter=0;
+            fsm.template get_state<player_::Open&>().exit_counter=0;
+            fsm.template get_state<player_::Empty&>().entry_counter=0;
+            fsm.template get_state<player_::Empty&>().exit_counter=0;
+            fsm.template get_state<player_::Playing&>().entry_counter=0;
+            fsm.template get_state<player_::Playing&>().exit_counter=0;
+            fsm.template get_state<player_::Paused&>().entry_counter=0;
+            fsm.template get_state<player_::Paused&>().exit_counter=0;
             fsm.context_ = 20;
         }
 
