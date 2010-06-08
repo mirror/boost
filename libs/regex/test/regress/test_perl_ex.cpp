@@ -132,6 +132,8 @@ void test_conditionals()
    TEST_INVALID_REGEX("(?<!*|A)", perl);
    TEST_INVALID_REGEX("(?<=?|A)", perl);
    TEST_INVALID_REGEX("(?<=*|\\B)", perl);
+   TEST_INVALID_REGEX("(?<!a|bc)de", perl);
+   TEST_INVALID_REGEX("(?<=a|bc)de", perl);
 }
 
 void test_options()
@@ -278,8 +280,8 @@ void test_options2()
    TEST_REGEX_SEARCH("(?<=^[[:alpha:]]{4})(?:bar|cat)", perl, "aaaacat", match_default, make_array(4, 7, -2, -2));
    TEST_REGEX_SEARCH("(?<=^[[:alpha:]]{4})(?:bar|cat)", perl, "aaacat", match_default, make_array(-2, -2));
 
-   TEST_REGEX_SEARCH("(?<=ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "abxyZZ", match_default, make_array(4, 6, -2, -2));
-   TEST_REGEX_SEARCH("(?<=ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "abXyZZ", match_default, make_array(4, 6, -2, -2));
+   //TEST_REGEX_SEARCH("(?<=ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "abxyZZ", match_default, make_array(4, 6, -2, -2));
+   //TEST_REGEX_SEARCH("(?<=ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "abXyZZ", match_default, make_array(4, 6, -2, -2));
    TEST_REGEX_SEARCH("(?:ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "ZZZ", match_default, make_array(0, 3, -2, -2));
    TEST_REGEX_SEARCH("(?:ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "zZZ", match_default, make_array(0, 3, -2, -2));
    TEST_REGEX_SEARCH("(?:ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "bZZ", match_default, make_array(0, 3, -2, -2));

@@ -1039,6 +1039,14 @@ int basic_regex_creator<charT, traits>::calculate_backstep(re_syntax_base* state
       case syntax_element_jump:
          state = static_cast<re_jump*>(state)->alt.p;
          continue;
+      case syntax_element_alt:
+         {
+            int r1 = calculate_backstep(state->next.p);
+            int r2 = calculate_backstep(static_cast<re_alt*>(state)->alt.p);
+            if((r1 < 0) || (r1 != r2))
+               return -1;
+            return result + r1;
+         }
       default:
          break;
       }
