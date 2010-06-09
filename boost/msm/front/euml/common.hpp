@@ -974,7 +974,7 @@ struct True_ : euml::euml_action<True_>
     {
         return true;
     }
-};	
+};
 True_ const true_;
 
 struct False_ : euml::euml_action<False_>
@@ -2066,7 +2066,7 @@ Exit_Pt_Helper const exit_pt_;
         struct function_name ## tag{};                                                                  \
         struct functor ## Helper : proto::extends< proto::terminal< function_name ## tag >::type,       \
         functor ## Helper , sm_domain> { template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5> \
-        struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5> type;}; };                           		\
+        struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5> type;}; };                                \
         functor ## Helper const function_name ;
 
 #define BOOST_MSM_EUML_METHOD(functor,function,function_name,result_trans,result_state)                 \
@@ -2191,7 +2191,7 @@ Exit_Pt_Helper const exit_pt_;
         struct function_name ## tag{};                                                                  \
         struct functor ## Helper : proto::extends< proto::terminal< function_name ## tag >::type,       \
         functor ## Helper , sm_domain> { template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5> \
-        struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5> type;}; };                           		\
+        struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5> type;}; };                                \
         functor ## Helper const function_name ;
 
 #endif
