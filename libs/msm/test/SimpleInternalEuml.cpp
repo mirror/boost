@@ -50,6 +50,9 @@ namespace
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Playing)
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Paused)
 
+    BOOST_MSM_EUML_DECLARE_ATTRIBUTE(unsigned int,empty_internal_guard_counter)
+    BOOST_MSM_EUML_DECLARE_ATTRIBUTE(unsigned int,empty_internal_action_counter)
+
     BOOST_MSM_EUML_ACTION(internal_guard_fct)
     {
         template <class FSM,class EVT,class SourceState,class TargetState>
@@ -59,8 +62,6 @@ namespace
             return false;
         }
     };
-    BOOST_MSM_EUML_DECLARE_ATTRIBUTE(unsigned int,empty_internal_guard_counter)
-    BOOST_MSM_EUML_DECLARE_ATTRIBUTE(unsigned int,empty_internal_action_counter)
     BOOST_MSM_EUML_DECLARE_STATE((++state_(entry_counter),++state_(exit_counter),
                                   attributes_ << entry_counter << exit_counter 
                                               << empty_internal_guard_counter << empty_internal_action_counter),Empty_def)
