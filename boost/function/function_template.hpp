@@ -536,7 +536,7 @@ namespace boost {
           // objects, so we invoke through mem_fn() but we retain the
           // right target_type() values.
           if (f) {
-            this->assign_to(mem_fn(f), functor);
+            this->assign_to(boost::mem_fn(f), functor);
             return true;
           } else {
             return false;
@@ -549,7 +549,7 @@ namespace boost {
           // objects, so we invoke through mem_fn() but we retain the
           // right target_type() values.
           if (f) {
-            this->assign_to_a(mem_fn(f), functor, a);
+            this->assign_to_a(boost::mem_fn(f), functor, a);
             return true;
           } else {
             return false;
