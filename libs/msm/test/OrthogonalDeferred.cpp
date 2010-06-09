@@ -234,7 +234,7 @@ namespace
         void stop_and_open(open_close const&)  {  }
         void stopped_again(stop const&){}
         void report_error(error_found const&) {++report_error_counter;}
-        void report_end_error(end_error const&) {report_end_error_counter;}
+        void report_end_error(end_error const&) {++report_end_error_counter;}
 
         //guards
         bool can_close_drawer(open_close const&)   
