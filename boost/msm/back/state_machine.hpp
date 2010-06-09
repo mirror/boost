@@ -1445,7 +1445,7 @@ private:
         {
             for (int i=0; i<nr_regions::value;++i)
             {
-                no_transition(evt,*this,this->m_states[i]);
+                this->no_transition(evt,*this,this->m_states[i]);
             }
         }
         return handled;
@@ -1530,7 +1530,7 @@ private:
         }
         static bool forward(library_sm& fsm)
         {
-            return ::boost::fusion::at_key<StateType>(fsm.m_substate_list).is_flag_active<Flag>();
+            return ::boost::fusion::at_key<StateType>(fsm.m_substate_list).template is_flag_active<Flag>();
         }
     };
     template <class Flag>
