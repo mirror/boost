@@ -445,6 +445,26 @@ void tuple_length_test()
 
 }
 
+// ----------------------------------------------------------------------------
+// - testing swap -----------------------------------------------------------
+// ----------------------------------------------------------------------------
+void tuple_swap_test()
+{
+  tuple<int, float, double> t1(1, 2.0f, 3.0), t2(4, 5.0f, 6.0);
+  swap(t1, t2);
+  BOOST_CHECK(get<0>(t1) == 4);
+  BOOST_CHECK(get<1>(t1) == 5.0f);
+  BOOST_CHECK(get<2>(t1) == 6.0);
+  BOOST_CHECK(get<0>(t2) == 1);
+  BOOST_CHECK(get<1>(t2) == 2.0f);
+  BOOST_CHECK(get<2>(t2) == 3.0);
+
+  int i = 1,j = 2;
+  boost::tuple<int&> t3(i), t4(j);
+  swap(t3, t4);
+  BOOST_CHECK(i == 2);
+  BOOST_CHECK(j == 1);
+}
 
 
 
@@ -465,6 +485,7 @@ int test_main(int, char *[]) {
   cons_test();
   const_tuple_test();
   tuple_length_test();
+  tuple_swap_test();
   return 0;
 }
 
