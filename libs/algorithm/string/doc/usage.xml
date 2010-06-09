@@ -169,7 +169,7 @@
         <programlisting>
     string str1="     hello world!     ";
     string str2=trim_left_copy(str1);   // str2 == "hello world!     "
-    string str3=trim_right_copy(str2);  // str3 == "     hello world!"
+    string str3=trim_right_copy(str1);  // str3 == "     hello world!"
     trim(str1);                         // str1 == "hello world!"
 
     string phone="00423333444";
