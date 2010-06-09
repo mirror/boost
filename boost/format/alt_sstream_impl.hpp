@@ -140,7 +140,7 @@ namespace boost {
         typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type 
         basic_altstringbuf<Ch, Tr, Alloc>:: 
         seekpos (pos_type pos, ::std::ios_base::openmode which) {
-            off_type off = off_type(pos); // operation guaranteed by §27.4.3.2 table 88
+            off_type off = off_type(pos); // operation guaranteed by 27.4.3.2 table 88
             if(pptr() != NULL && putend_ < pptr())
                 putend_ = pptr();
             if(off != off_type(-1)) {
