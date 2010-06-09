@@ -34,14 +34,14 @@ public:
     }
     out << std::endl;
   }
-private:  
+private:
   TestStats() : testcount_(0), passcount_(0) {}
   unsigned int testcount_;
   unsigned int passcount_;
 };
 
 
-bool check(const std::string& testname, bool testcond) 
+inline bool check(const std::string& testname, bool testcond) 
 {
   TestStats& stat = TestStats::instance();
   if (testcond) {
@@ -79,7 +79,7 @@ inline bool check_equal(const std::string& testname, std::wstring const& left, s
 }
 #endif
 
-int printTestStats() 
+inline int printTestStats()
 {
   TestStats& stat = TestStats::instance();
   stat.print();
