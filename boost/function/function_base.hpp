@@ -318,11 +318,15 @@ namespace boost {
             new (reinterpret_cast<void*>(&out_buffer.data)) functor_type(*in_functor);
 
             if (op == move_functor_tag) {
-              reinterpret_cast<functor_type*>(&in_buffer.data)->~Functor();
+              functor_type* f = reinterpret_cast<functor_type*>(&in_buffer.data);
+              (void)f; // suppress warning about the value of f not being used (MSVC)
+              f->~Functor();
             }
           } else if (op == destroy_functor_tag) {
             // Some compilers (Borland, vc6, ...) are unhappy with ~functor_type.
-            reinterpret_cast<functor_type*>(&out_buffer.data)->~Functor();
+             functor_type* f = reinterpret_cast<functor_type*>(&out_buffer.data);
+             (void)f; // suppress warning about the value of f not being used (MSVC)
+             f->~Functor();
           } else if (op == check_functor_type_tag) {
             const detail::sp_typeinfo& check_type 
               = *out_buffer.type.type;
