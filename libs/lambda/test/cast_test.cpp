@@ -29,7 +29,7 @@ class base {
 public:
   virtual std::string class_name() const { return "const base"; }
   virtual std::string class_name() { return "base"; }
-
+  virtual ~base() {}
 };
 
 class derived : public base {
