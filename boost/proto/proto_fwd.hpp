@@ -166,21 +166,12 @@ namespace boost { namespace proto
 
     typedef detail::ignore const ignore;
 
-    namespace argsns_
-    {
-        template<typename Arg0>
-        struct term;
+    template<typename Arg0>
+    struct term;
 
-        #define M0(Z, N, DATA)                                                                      \
-        template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename Arg)> struct BOOST_PP_CAT(list, N);          \
-        /**/
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M0, ~)
-        #undef M0
-    }
-
-    using argsns_::term;
-
-    #define M0(Z, N, DATA) using argsns_::BOOST_PP_CAT(list, N);
+    #define M0(Z, N, DATA)                                                                      \
+    template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename Arg)> struct BOOST_PP_CAT(list, N);          \
+    /**/
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M0, ~)
     #undef M0
 
