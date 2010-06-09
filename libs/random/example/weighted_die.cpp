@@ -18,6 +18,7 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#include <iterator>
 
 boost::mt19937 gen;
 
