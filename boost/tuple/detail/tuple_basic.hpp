@@ -599,18 +599,21 @@ public:
 // Swallows any assignment   (by Doug Gregor)
 namespace detail {
 
+struct swallow_assign;
+typedef void (detail::swallow_assign::*ignore_t)();
 struct swallow_assign {
-
+  swallow_assign(ignore_t(*)(ignore_t)) {}
   template<typename T>
   swallow_assign const& operator=(const T&) const {
     return *this;
   }
 };
 
+
 } // namespace detail
 
 // "ignore" allows tuple positions to be ignored when using "tie".
-detail::swallow_assign const ignore = detail::swallow_assign();
+inline detail::ignore_t ignore(detail::ignore_t) { return 0; }
 
 // ---------------------------------------------------------------------------
 // The call_traits for make_tuple
@@ -692,6 +695,10 @@ struct make_tuple_traits<const reference_wrapper<T> >{
   typedef T& type;
 };
 
+template<>
+struct make_tuple_traits<detail::ignore_t(detail::ignore_t)> {
+  typedef detail::swallow_assign type;
+};
 
 
 
@@ -813,71 +820,131 @@ make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
   return t(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
 }
 
+namespace detail {
 
+template<class T>
+struct tie_traits {
+  typedef T& type;
+};
+
+template<>
+struct tie_traits<ignore_t(ignore_t)> {
+  typedef swallow_assign type;
+};
+
+template<>
+struct tie_traits<void> {
+  typedef null_type type;
+};
+
+template <
+  class T0 = void, class T1 = void, class T2 = void,
+  class T3 = void, class T4 = void, class T5 = void,
+  class T6 = void, class T7 = void, class T8 = void,
+  class T9 = void
+>
+struct tie_mapper {
+  typedef
+    tuple<typename tie_traits<T0>::type,
+          typename tie_traits<T1>::type,
+          typename tie_traits<T2>::type,
+          typename tie_traits<T3>::type,
+          typename tie_traits<T4>::type,
+          typename tie_traits<T5>::type,
+          typename tie_traits<T6>::type,
+          typename tie_traits<T7>::type,
+          typename tie_traits<T8>::type,
+          typename tie_traits<T9>::type> type;
+};
+
+}
 
 // Tie function templates -------------------------------------------------
-template<class T1>
-inline tuple<T1&> tie(T1& t1) {
-  return tuple<T1&> (t1);
+template<class T0>
+inline typename detail::tie_mapper<T0>::type
+tie(T0& t0) {
+  typedef typename detail::tie_mapper<T0>::type t;
+  return t(t0);
 }
 
-template<class T1, class T2>
-inline tuple<T1&, T2&> tie(T1& t1, T2& t2) {
-  return tuple<T1&, T2&> (t1, t2);
+template<class T0, class T1>
+inline typename detail::tie_mapper<T0, T1>::type
+tie(T0& t0, T1& t1) {
+  typedef typename detail::tie_mapper<T0, T1>::type t;
+  return t(t0, t1);
 }
 
-template<class T1, class T2, class T3>
-inline tuple<T1&, T2&, T3&> tie(T1& t1, T2& t2, T3& t3) {
-  return tuple<T1&, T2&, T3&> (t1, t2, t3);
+template<class T0, class T1, class T2>
+inline typename detail::tie_mapper<T0, T1, T2>::type
+tie(T0& t0, T1& t1, T2& t2) {
+  typedef typename detail::tie_mapper<T0, T1, T2>::type t;
+  return t(t0, t1, t2);
 }
 
-template<class T1, class T2, class T3, class T4>
-inline tuple<T1&, T2&, T3&, T4&> tie(T1& t1, T2& t2, T3& t3, T4& t4) {
-  return tuple<T1&, T2&, T3&, T4&> (t1, t2, t3, t4);
+template<class T0, class T1, class T2, class T3>
+inline typename detail::tie_mapper<T0, T1, T2, T3>::type
+tie(T0& t0, T1& t1, T2& t2, T3& t3) {
+  typedef typename detail::tie_mapper<T0, T1, T2, T3>::type t;
+  return t(t0, t1, t2, t3);
 }
 
-template<class T1, class T2, class T3, class T4, class T5>
-inline tuple<T1&, T2&, T3&, T4&, T5&>
-tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5) {
-  return tuple<T1&, T2&, T3&, T4&, T5&> (t1, t2, t3, t4, t5);
+template<class T0, class T1, class T2, class T3, class T4>
+inline typename detail::tie_mapper<T0, T1, T2, T3, T4>::type
+tie(T0& t0, T1& t1, T2& t2, T3& t3,
+                  T4& t4) {
+  typedef typename detail::tie_mapper<T0, T1, T2, T3, T4>::type t;
+  return t(t0, t1, t2, t3, t4);
 }
 
-template<class T1, class T2, class T3, class T4, class T5, class T6>
-inline tuple<T1&, T2&, T3&, T4&, T5&, T6&>
-tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6) {
-  return tuple<T1&, T2&, T3&, T4&, T5&, T6&> (t1, t2, t3, t4, t5, t6);
+template<class T0, class T1, class T2, class T3, class T4, class T5>
+inline typename detail::tie_mapper<T0, T1, T2, T3, T4, T5>::type
+tie(T0& t0, T1& t1, T2& t2, T3& t3,
+                  T4& t4, T5& t5) {
+  typedef typename detail::tie_mapper<T0, T1, T2, T3, T4, T5>::type t;
+  return t(t0, t1, t2, t3, t4, t5);
 }
 
-template<class T1, class T2, class T3, class T4, class T5, class T6, class T7>
-inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&>
-tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7) {
-  return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&> (t1, t2, t3, t4, t5, t6, t7);
+template<class T0, class T1, class T2, class T3, class T4, class T5, class T6>
+inline typename detail::tie_mapper<T0, T1, T2, T3, T4, T5, T6>::type
+tie(T0& t0, T1& t1, T2& t2, T3& t3,
+                  T4& t4, T5& t5, T6& t6) {
+  typedef typename detail::tie_mapper
+           <T0, T1, T2, T3, T4, T5, T6>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6);
 }
 
-template<class T1, class T2, class T3, class T4, class T5, class T6, class T7,
-         class T8>
-inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&>
-tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8) {
-  return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&>
-           (t1, t2, t3, t4, t5, t6, t7, t8);
+template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
+         class T7>
+inline typename detail::tie_mapper<T0, T1, T2, T3, T4, T5, T6, T7>::type
+tie(T0& t0, T1& t1, T2& t2, T3& t3,
+                  T4& t4, T5& t5, T6& t6, T7& t7) {
+  typedef typename detail::tie_mapper
+           <T0, T1, T2, T3, T4, T5, T6, T7>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6, t7);
 }
 
-template<class T1, class T2, class T3, class T4, class T5, class T6, class T7,
-         class T8, class T9>
-inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&>
-tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8,
-           T9& t9) {
-  return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&>
-            (t1, t2, t3, t4, t5, t6, t7, t8, t9);
+template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
+         class T7, class T8>
+inline typename detail::tie_mapper
+  <T0, T1, T2, T3, T4, T5, T6, T7, T8>::type
+tie(T0& t0, T1& t1, T2& t2, T3& t3,
+                  T4& t4, T5& t5, T6& t6, T7& t7,
+                  T8& t8) {
+  typedef typename detail::tie_mapper
+           <T0, T1, T2, T3, T4, T5, T6, T7, T8>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6, t7, t8);
 }
 
-template<class T1, class T2, class T3, class T4, class T5, class T6, class T7,
-         class T8, class T9, class T10>
-inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&, T10&>
-tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8,
-           T9& t9, T10& t10) {
-  return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&, T10&>
-           (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
+         class T7, class T8, class T9>
+inline typename detail::tie_mapper
+  <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>::type
+tie(T0& t0, T1& t1, T2& t2, T3& t3,
+                  T4& t4, T5& t5, T6& t6, T7& t7,
+                  T8& t8, T9& t9) {
+  typedef typename detail::tie_mapper
+           <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
 }
 
 } // end of namespace tuples
