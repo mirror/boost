@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
 <!-- Copyright (c) 2001-2006 CrystalClear Software, Inc.
-     Subject to the Boost Software License, Version 1.0. 
+     Subject to the Boost Software License, Version 1.0.
      (See accompanying file LICENSE_1_0.txt or  http://www.boost.org/LICENSE_1_0.txt)
 -->
 
@@ -11,6 +11,30 @@
   <title>Change History</title>
 
   <!-- if each new change tgroup has a "Bug Fix" as the first "Type", the columns will line up nicely -->
+
+  <bridgehead renderas="sect3">Changes from Boost 1.41 to 1.44 (date_time 1.08 to 1.09)</bridgehead>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+        <row>
+          <entry>Type</entry>
+          <entry>Description</entry>
+        </row>
+      </thead>
+      <tbody>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            The "%T" and "%R" format specifiers are now processed by the library rather than underlying standard facet.
+            This fixes the cases when the placeholders are not supported by the facet
+            (<ulink url="https://svn.boost.org/trac/boost/ticket/3876">#3876</ulink>).
+          </entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
 
   <bridgehead renderas="sect3">Changes from Boost 1.40 to 1.41 (date_time 1.07 to 1.08)</bridgehead>
   <informaltable frame="all">
@@ -214,12 +238,12 @@
         <row>
           <entry>Feature</entry>
           <entry>
-             Updated the data in the date_time_zonespec.csv file to reflect new US/Canada 
+             Updated the data in the date_time_zonespec.csv file to reflect new US/Canada
              daylight savings time rules for 2007.  If you upgrade to the new file, be aware
              that the library will only give correct answers for current/future date
-             conversions.  So if you are converting dates from earlier years the answers 
-             will reflect current time zone rules not past rules.  The library doesn't support 
-             historic timezone rules presently. 
+             conversions.  So if you are converting dates from earlier years the answers
+             will reflect current time zone rules not past rules.  The library doesn't support
+             historic timezone rules presently.
           </entry>
         </row>
         <row>
@@ -263,15 +287,15 @@
         </row>
         <row>
           <entry>Bug Fix</entry>
-          <entry>Fix regression errors that showed up under FreeBSD with GCC and the 
-                 LANG environment set to russian -- changed parser to use classic 
+          <entry>Fix regression errors that showed up under FreeBSD with GCC and the
+                 LANG environment set to russian -- changed parser to use classic
                  locale instead of blank locale.
           </entry>
         </row>
 
         <row>
           <entry>Bug Fix</entry>
-          <entry>Changes for tracker issue 1178092 -- change in convert_to_lower to make 
+          <entry>Changes for tracker issue 1178092 -- change in convert_to_lower to make
                  local a const static and speed up parsing.
           </entry>
         </row>
@@ -284,9 +308,9 @@
 
         <row>
           <entry>Feature</entry>
-          <entry>Reduce the usage of basic_stringstream as much a possible to work around 
-                 a bug in the VC8 standard library. See 
-                 <ulink url="http://lists.boost.org/Archives/boost/2006/02/101122.php">mailing list archive</ulink> 
+          <entry>Reduce the usage of basic_stringstream as much a possible to work around
+                 a bug in the VC8 standard library. See
+                 <ulink url="http://lists.boost.org/Archives/boost/2006/02/101122.php">mailing list archive</ulink>
                  for more information.
           </entry>
         </row>
@@ -355,7 +379,7 @@
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>Input and output facets have been re-written to support format-based 
+          <entry>Input and output facets have been re-written to support format-based
             redefinition of formats (see <link linkend="date_time.date_time_io">Date Time IO</link> for complete details).
           </entry>
         </row>
@@ -382,16 +406,16 @@
         <row>
           <entry>Feature</entry>
           <entry>Date-time now uses reentrant POSIX functions on those platforms that
-                 support them when BOOST_HAS_THREADS is defined. 
+                 support them when BOOST_HAS_THREADS is defined.
           </entry>
         </row>
         <row>
           <entry>Bug Fix</entry>
-          <entry>Fixed a bug in serialization code where special values 
+          <entry>Fixed a bug in serialization code where special values
                 (not-a-date-time, infinities, etc) for
-                ptime, time_duration would not read back correctly from an archive.  
+                ptime, time_duration would not read back correctly from an archive.
                 The output serialization code wrote subfields such
-                as time_duration.seconds() which are invalid for special values and 
+                as time_duration.seconds() which are invalid for special values and
                 thus undefined values.  Thus when read back the values could cause
                 strange behavior including execeptions on construction.
           </entry>
@@ -449,16 +473,16 @@ void save_to(archive_type&amp; ar,
       <tbody>
         <row>
           <entry>Bug Fix</entry>
-          <entry>Snap to end of month behavior corrected for year_functor. Previously, starting 
-                 from 2000-Feb-28 (leap year and not end of month) and iterating through the next 
-                 leap year would result in 2004-Feb-29 instead of 2004-Feb-28. This behavior has 
-                 been corrected to produce the correct result of 2004-Feb-28. Thanks to Bart Garst 
+          <entry>Snap to end of month behavior corrected for year_functor. Previously, starting
+                 from 2000-Feb-28 (leap year and not end of month) and iterating through the next
+                 leap year would result in 2004-Feb-29 instead of 2004-Feb-28. This behavior has
+                 been corrected to produce the correct result of 2004-Feb-28. Thanks to Bart Garst
                  for this change.
           </entry>
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>Free function for creating a ptime object from a FILETIME struct. This function 
+          <entry>Free function for creating a ptime object from a FILETIME struct. This function
                  is only available on platforms that define BOOST_HAS_FTIME.
           </entry>
         </row>
@@ -470,24 +494,24 @@ void save_to(archive_type&amp; ar,
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>Use of the boost::serialization library is now available with most of the 
-                 date_time classes. Classes capable of serialization are: date_generator classes, 
+          <entry>Use of the boost::serialization library is now available with most of the
+                 date_time classes. Classes capable of serialization are: date_generator classes,
                  date, days, date_period, greg_month, greg_weekday, greg_day, ptime, time_duration,
                  and time_period. Thanks to Bart Garst for this change.
           </entry>
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>Functions added to convert date and time classes to wstring. The library now 
-                 provides to_*_wstring as well as to_*_string functions for: simple, iso, 
-                 iso_extended, and sql for dates and compilers that support wstrings. Thanks to 
+          <entry>Functions added to convert date and time classes to wstring. The library now
+                 provides to_*_wstring as well as to_*_string functions for: simple, iso,
+                 iso_extended, and sql for dates and compilers that support wstrings. Thanks to
                  Bart Garst for this change.
           </entry>
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>Period classes now handle zero length and NULL periods correctly. A NULL period 
-                 is a period with a negative length. Thanks to Frank Wolf and Bart Garst for this 
+          <entry>Period classes now handle zero length and NULL periods correctly. A NULL period
+                 is a period with a negative length. Thanks to Frank Wolf and Bart Garst for this
                  change.
           </entry>
         </row>
@@ -505,7 +529,7 @@ void save_to(archive_type&amp; ar,
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>New names added for some date classes. Original names are still valid but may 
+          <entry>New names added for some date classes. Original names are still valid but may
                  some day be deprecated. Changes are:
             <simplelist type='horiz' columns='3'>
               <member>date_duration</member>
@@ -541,13 +565,13 @@ date previous_weekday(date, greg_weekday);</screen>
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>New experimental duration types added for months, years, and weeks. These classes 
+          <entry>New experimental duration types added for months, years, and weeks. These classes
                  also provide mathematical operators for use with date and time classes.  Be aware
-                 that adding of months or years a time or date past the 28th of a month may show 
-                 non-normal mathematical properties.  This is a result of 'end-of-month' 
-                 snapping used in the calculation.  The last example below illustrates the    
-                 issue.  
-           
+                 that adding of months or years a time or date past the 28th of a month may show
+                 non-normal mathematical properties.  This is a result of 'end-of-month'
+                 snapping used in the calculation.  The last example below illustrates the
+                 issue.
+
             <screen>months m(12);
 years y(1);
 m == y; // true
@@ -559,7 +583,7 @@ t += months(3);
 date d(2004,Jan,30);
 d += months(1); //2004-Feb-29
 d -= months(1); //2004-Jan-29</screen>
-            Input  streaming is not yet implemented for these types.              
+            Input  streaming is not yet implemented for these types.
 	    Thanks to Bart Garst for this change.
           </entry>
         </row>
@@ -570,8 +594,8 @@ d -= months(1); //2004-Jan-29</screen>
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>Added constructors for date and ptime that allow for default construction (both) 
-                 and special values construction (ptime, both now support this). Default 
+          <entry>Added constructors for date and ptime that allow for default construction (both)
+                 and special values construction (ptime, both now support this). Default
                  constructors initialize the objects to not_a_date_time (NADT).
                  <screen>ptime p_nadt(not_a_date_time);
 ptime p_posinf(pos_infin);
@@ -605,21 +629,21 @@ ws &gt;&gt; d; //Feb 29th, 2000</screen>
 	  <entry> Fixed bug in duration_from_string() where a string formatted with
                   less than full amount of fractional digits created an incorrect
                   time_duration.  With microsecond resolution for time durations
-                  the string "1:01:01.010" created a time duration of 
+                  the string "1:01:01.010" created a time duration of
                   01:01:01.000010 instead of 01:01:01.010000
           </entry>
 	</row>
 	<row>
 	  <entry>Bug Fix</entry>
-	  <entry>Fixed the special value constructor for gregorian::date and posix_time::ptime 
-                 when constructing with min_date_time or max_date_time.  The wrong value was 
+	  <entry>Fixed the special value constructor for gregorian::date and posix_time::ptime
+                 when constructing with min_date_time or max_date_time.  The wrong value was
                  constructed for these.
           </entry>
 	</row>
       </tbody>
     </tgroup>
   </informaltable>
-  
+
   <bridgehead renderas="sect3">Changes from Boost 1.30 to 1.31 (date_time 1.01 to 1.02)</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
@@ -672,8 +696,8 @@ ws &gt;&gt; d; //Feb 29th, 2000</screen>
 	</row>
 	<row>
 	  <entry>Feature</entry>
-	  <entry>Added a function to time_duration to get the total number of seconds in a 
-                 duration truncating any fractional seconds. In addition, other resolutions 
+	  <entry>Added a function to time_duration to get the total number of seconds in a
+                 duration truncating any fractional seconds. In addition, other resolutions
                  were added to allow for easy conversions. For example
 	    <screen>seconds(1).total_milliseconds() == 1000
 seconds(1).total_microseconds() == 1000000
@@ -708,10 +732,10 @@ td = -td; //-5 hours</screen>
       </tbody>
     </tgroup>
   </informaltable>
-  
+
   <bridgehead renderas="sect3">Changes from Boost 1.29 to 1.30 (date_time 1.00 to 1.01)</bridgehead>
   <para>
-    Notice: The interface to the partial_date class (see <link linkend="date_time.gregorian.date_algorithms">date_algorithms</link>) was changed. The order of construction parameters was changed which will cause some code to fail execution. This change was made to facilitate more generic local time adjustment code. Thus instead of specifying partial_date pd(Dec,25) the code needs to be changed to partial_date pd(25, Dec); 
+    Notice: The interface to the partial_date class (see <link linkend="date_time.gregorian.date_algorithms">date_algorithms</link>) was changed. The order of construction parameters was changed which will cause some code to fail execution. This change was made to facilitate more generic local time adjustment code. Thus instead of specifying partial_date pd(Dec,25) the code needs to be changed to partial_date pd(25, Dec);
   </para>
   <informaltable frame="all">
     <tgroup cols="2">
