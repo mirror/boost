@@ -30,5 +30,6 @@ test-suite lambda
     [ run operator_tests_simple.cpp ]
     [ run phoenix_control_structures.cpp ]
     [ run switch_construct.cpp ]
+    [ run result_of_tests.cpp ]
     [ run ret_test.cpp ]
   ;      

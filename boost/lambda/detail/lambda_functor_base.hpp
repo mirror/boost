@@ -383,7 +383,7 @@ public:                                                                \
                                                                        \
   template<class SigArgs> struct sig {                                 \
     typedef typename                                                   \
-    detail::deduce_non_ref_argument_types<Args, SigArgs>::type rets_t; \
+    detail::deduce_argument_types<Args, SigArgs>::type rets_t;         \
   public:                                                              \
     typedef typename                                                   \
       return_type_N_prot<Act, rets_t>::type type;                      \
