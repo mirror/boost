@@ -57,9 +57,9 @@ namespace boost {
                 while( M )
                 {
                     // Copy the beginning of the sequence
-                    std::copy( LastMatch, M.begin(), Output );
+                    Output = std::copy( LastMatch, M.begin(), Output );
                     // Copy formated result
-                    std::copy( ::boost::begin(M.format_result()), ::boost::end(M.format_result()), Output );
+                    Output = std::copy( ::boost::begin(M.format_result()), ::boost::end(M.format_result()), Output );
 
                     // Proceed to the next match
                     LastMatch=M.end();
@@ -67,7 +67,7 @@ namespace boost {
                 }
 
                 // Copy the rest of the sequence
-                std::copy( LastMatch, ::boost::end(Input), Output );
+                Output = std::copy( LastMatch, ::boost::end(Input), Output );
 
                 return Output;
             }
