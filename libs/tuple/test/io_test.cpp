@@ -120,6 +120,13 @@ int test_main(int argc, char * argv[] ) {
   is3 >> set_close(']');
   BOOST_CHECK(bool(is3 >> ti2));
 
+  // Make sure that whitespace between elements
+  // is skipped.
+  useThisIStringStream is4("(100 200 300)"); 
+   
+  BOOST_CHECK(bool(is4 >> std::noskipws >> ti1));
+  BOOST_CHECK(ti1 == make_tuple(100, 200, 300));
+
   // Note that strings are problematic:
   // writing a tuple on a stream and reading it back doesn't work in
   // general. If this is wanted, some kind of a parseable string class
