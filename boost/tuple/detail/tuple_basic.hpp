@@ -86,45 +86,28 @@ namespace detail {
 template<class T>
 class generate_error;
 
-// - cons getters --------------------------------------------------------
-// called: get_class<N>::get<RETURN_TYPE>(aTuple)
-
-template< int N >
-struct get_class {
-  template<class RET, class HT, class TT >
-  inline static RET get(const cons<HT, TT>& t)
-  {
-#if BOOST_WORKAROUND(__IBMCPP__,==600)
-    // vacpp 6.0 is not very consistent regarding the member template keyword
-    // Here it generates an error when the template keyword is used.
-    return get_class<N-1>::get<RET>(t.tail);
-#else
-    return get_class<N-1>::BOOST_NESTED_TEMPLATE get<RET>(t.tail);
-#endif
-  }
-  template<class RET, class HT, class TT >
-  inline static RET get(cons<HT, TT>& t)
-  {
-#if BOOST_WORKAROUND(__IBMCPP__,==600)
-    return get_class<N-1>::get<RET>(t.tail);
-#else
-    return get_class<N-1>::BOOST_NESTED_TEMPLATE get<RET>(t.tail);
-#endif
-  }
+template<int N>
+struct drop_front {
+    template<class Tuple>
+    struct apply {
+        typedef BOOST_DEDUCED_TYPENAME drop_front<N-1>::BOOST_NESTED_TEMPLATE
+            apply<Tuple> next;
+        typedef BOOST_DEDUCED_TYPENAME next::type::tail_type type;
+        static const type& call(const Tuple& tup) {
+            return next::call(tup).tail;
+        }
+    };
 };
 
 template<>
-struct get_class<0> {
-  template<class RET, class HT, class TT>
-  inline static RET get(const cons<HT, TT>& t)
-  {
-    return t.head;
-  }
-  template<class RET, class HT, class TT>
-  inline static RET get(cons<HT, TT>& t)
-  {
-    return t.head;
-  }
+struct drop_front<0> {
+    template<class Tuple>
+    struct apply {
+        typedef Tuple type;
+        static const type& call(const Tuple& tup) {
+            return tup;
+        }
+    };
 };
 
 } // end of namespace detail
@@ -140,41 +123,23 @@ struct get_class<0> {
 template<int N, class T>
 struct element
 {
-private:
-  typedef typename T::tail_type Next;
-public:
-  typedef typename element<N-1, Next>::type type;
-};
-template<class T>
-struct element<0,T>
-{
-  typedef typename T::head_type type;
+  typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+      apply<T>::type::head_type type;
 };
 
 template<int N, class T>
 struct element<N, const T>
 {
 private:
-  typedef typename T::tail_type Next;
-  typedef typename element<N-1, Next>::type unqualified_type;
+  typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+      apply<T>::type::head_type unqualified_type;
 public:
 #if BOOST_WORKAROUND(__BORLANDC__,<0x600)
   typedef const unqualified_type type;
 #else
-  typedef typename boost::add_const<unqualified_type>::type type;
-#endif
-
-};
-template<class T>
-struct element<0,const T>
-{
-#if BOOST_WORKAROUND(__BORLANDC__,<0x600)
-  typedef const typename T::head_type type;
-#else
-  typedef typename boost::add_const<typename T::head_type>::type type;
+  typedef BOOST_DEDUCED_TYPENAME boost::add_const<unqualified_type>::type type;
 #endif
 };
-
 #else // def BOOST_NO_CV_SPECIALIZATIONS
 
 namespace detail {
@@ -182,31 +147,16 @@ namespace detail {
 template<int N, class T, bool IsConst>
 struct element_impl
 {
-private:
-  typedef typename T::tail_type Next;
-public:
-  typedef typename element_impl<N-1, Next, IsConst>::type type;
+  typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+      apply<T>::type::head_type type;
 };
 
 template<int N, class T>
 struct element_impl<N, T, true /* IsConst */>
 {
-private:
-  typedef typename T::tail_type Next;
-public:
-  typedef const typename element_impl<N-1, Next, true>::type type;
-};
-
-template<class T>
-struct element_impl<0, T, false /* IsConst */>
-{
-  typedef typename T::head_type type;
-};
-
-template<class T>
-struct element_impl<0, T, true /* IsConst */>
-{
-  typedef const typename T::head_type type;
+  typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+      apply<T>::type::head_type unqualified_type;
+  typedef const unqualified_type type;
 };
 
 } // end of namespace detail
@@ -258,17 +208,10 @@ inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::non_const_type
 get(cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
-#if BOOST_WORKAROUND(__IBMCPP__,==600 )
-  return detail::get_class<N>::
-#else
-  return detail::get_class<N>::BOOST_NESTED_TEMPLATE
-#endif
-         get<
-           typename access_traits<
-             typename element<N, cons<HT, TT> >::type
-           >::non_const_type,
-           HT,TT
-         >(c);
+  typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+      apply<cons<HT, TT> > impl;
+  typedef BOOST_DEDUCED_TYPENAME impl::type cons_element;
+  return const_cast<cons_element&>(impl::call(c)).head;
 }
 
 // get function for const cons-lists, returns a const reference to
@@ -279,17 +222,10 @@ inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::const_type
 get(const cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
-#if BOOST_WORKAROUND(__IBMCPP__,==600)
-  return detail::get_class<N>::
-#else
-  return detail::get_class<N>::BOOST_NESTED_TEMPLATE
-#endif
-         get<
-           typename access_traits<
-             typename element<N, cons<HT, TT> >::type
-           >::const_type,
-           HT,TT
-         >(c);
+  typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+      apply<cons<HT, TT> > impl;
+  typedef BOOST_DEDUCED_TYPENAME impl::type cons_element;
+  return impl::call(c).head;
 }
 
 // -- the cons template  --------------------------------------------------
