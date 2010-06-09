@@ -81,6 +81,7 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/utility/addressof.hpp>
+#include <boost/foreach_fwd.hpp>
 
 #ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 # include <new>
@@ -88,12 +89,6 @@
 # include <boost/utility/enable_if.hpp>
 # include <boost/type_traits/remove_const.hpp>
 #endif
-
-// This must be at global scope, hence the uglified name
-enum boost_foreach_argument_dependent_lookup_hack
-{
-    boost_foreach_argument_dependent_lookup_hack_value
-};
 
 namespace boost
 {
@@ -116,11 +111,6 @@ namespace foreach
     {
         return std::make_pair(begin, end);
     }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // boost::foreach::tag
-    //
-    typedef boost_foreach_argument_dependent_lookup_hack tag;
 
     ///////////////////////////////////////////////////////////////////////////////
     // boost::foreach::is_lightweight_proxy
