@@ -203,11 +203,11 @@ namespace boost {
         {
           switch (op) {
           case clone_functor_tag: 
-            out_buffer.obj_ref.obj_ptr = in_buffer.obj_ref.obj_ptr;
+            out_buffer.obj_ref = in_buffer.obj_ref;
             return;
 
           case move_functor_tag:
-            out_buffer.obj_ref.obj_ptr = in_buffer.obj_ref.obj_ptr;
+            out_buffer.obj_ref = in_buffer.obj_ref;
             in_buffer.obj_ref.obj_ptr = 0;
             return;
 
