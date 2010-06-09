@@ -71,7 +71,7 @@ namespace
             int exit_counter;
         };
         struct Open : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
             template <class Event,class FSM>
@@ -82,7 +82,7 @@ namespace
 
         // sm_ptr still supported but deprecated as functors are a much better way to do the same thing
         struct Stopped : public msm::front::state<> 
-        {	 
+        { 
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
             template <class Event,class FSM>
@@ -123,7 +123,7 @@ namespace
         void pause_playback(pause const&)      {  }
         void resume_playback(end_pause const&)      {  }
         void stop_and_open(open_close const&)  {  }
-        void stopped_again(stop const&)	{}
+        void stopped_again(stop const&){}
         // guard conditions
         bool good_disk_format(cd_detected const& evt)
         {
@@ -143,7 +143,7 @@ namespace
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				 Guard
+            //    Start     Event         Next      Action               Guard
             //  +---------+-------------+---------+---------------------+----------------------+
           a_row < Stopped , play        , Playing , &p::start_playback                         >,
           a_row < Stopped , open_close  , Open    , &p::open_drawer                            >,

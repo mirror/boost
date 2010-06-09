@@ -53,7 +53,7 @@ namespace
             int exit_counter;
         };
         struct State2 : public msm::front::state<> 
-        {	 
+        {
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
             template <class Event,class FSM>
@@ -63,7 +63,7 @@ namespace
         };
 
         struct State3 : public msm::front::state<> 
-        {	 
+        {
             template <class Event,class FSM>
             void on_entry(Event const&,FSM& ) {++entry_counter;}
             template <class Event,class FSM>
@@ -104,7 +104,7 @@ namespace
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action				 Guard
+            //    Start     Event         Next      Action               Guard
             //  +---------+-------------+---------+---------------------+----------------------+
            _row < State1  , none        , State2                                               >,
           a_row < State2  , none        , State3  , &p::State2ToState3                         >,
