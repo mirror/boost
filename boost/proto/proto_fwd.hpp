@@ -272,10 +272,19 @@ namespace boost { namespace proto
 
     struct deduce_domain;
 
+    template<typename Domain, typename Void = void>
+    struct wants_basic_expr;
+
+    template<typename Domain, typename Tag, typename Args, typename Void = void>
+    struct base_expr;
+
+    template<typename Domain>
+    struct use_basic_expr;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     namespace exprns_
     {
-        template<typename Tag, typename Args, long Arity>
+        template<typename Tag, typename Args, long Arity = Args::arity>
         struct basic_expr;
 
         template<typename Tag, typename Args, long Arity = Args::arity>
@@ -646,6 +655,7 @@ namespace boost { namespace proto
     #define BOOST_PROTO_UNEXPR() typedef int proto_is_expr_;
     #define BOOST_PROTO_CALLABLE() typedef void proto_is_callable_;
     #define BOOST_PROTO_AGGREGATE() typedef void proto_is_aggregate_;
+    #define BOOST_PROTO_USE_BASIC_EXPR() typedef void proto_use_basic_expr_;
 
     struct callable
     {

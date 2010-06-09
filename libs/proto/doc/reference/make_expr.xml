@@ -209,15 +209,15 @@
                 If <computeroutput>Tag</computeroutput> is
                 <computeroutput><classname>proto::tag::terminal</classname></computeroutput>, then
                 <computeroutput>type</computeroutput> is a typedef for
-                <computeroutput>boost::result_of&lt;Domain(<classname>proto::expr</classname>&lt;
-                <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;
-                A<subscript>0</subscript> &gt; &gt;)&gt;::type</computeroutput>.
+                <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;
+                Domain, <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;
+                A<subscript>0</subscript> &gt; &gt;::type)&gt;::type</computeroutput>.
               </para>
               <para>
                 Otherwise, <computeroutput>type</computeroutput> is a typedef for
-                <computeroutput>boost::result_of&lt;Domain(<classname>proto::expr</classname>&lt;
-                Tag, <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;
-                typename <classname>proto::result_of::as_child</classname>&lt;A&gt;::type...&gt; &gt;)&gt;::type</computeroutput>
+                <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;
+                Domain, Tag, <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;
+                typename <classname>proto::result_of::as_child</classname>&lt;A&gt;::type...&gt; &gt;::type)&gt;::type</computeroutput>
               </para>
             </description>
             <type><emphasis>see-below</emphasis></type>
@@ -352,7 +352,7 @@
               </listitem>
             </itemizedlist>
             Let <computeroutput><replaceable>MAKE</replaceable>&lt;Tag&gt;(a...)</computeroutput> be defined as
-            <computeroutput><classname>proto::expr</classname>&lt;Tag,
+            <computeroutput><classname>proto::base_expr</classname>&lt;Domain, Tag,
             <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;A...&gt; &gt;::make(a...)</computeroutput>
             where
             <computeroutput>A<subscript>x</subscript></computeroutput> is the type of 
@@ -426,7 +426,7 @@
               </listitem>
             </itemizedlist>
             Let <computeroutput><replaceable>MAKE</replaceable>&lt;Tag&gt;(a...)</computeroutput> be defined as
-            <computeroutput><classname>proto::expr</classname>&lt;Tag,
+            <computeroutput><classname>proto::base_expr</classname>&lt;Domain, Tag,
             <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;A...&gt; &gt;::make(a...)</computeroutput>
             where
             <computeroutput>A<subscript>x</subscript></computeroutput> is the type of 

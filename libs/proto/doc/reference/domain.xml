@@ -132,6 +132,69 @@
         </typedef>
       </struct>
 
+      <!-- proto::use_basic_expr -->
+      <struct name="use_basic_expr">
+        <template>
+          <template-type-parameter name="Domain"/>
+        </template>
+        <description>
+          <para>
+            Annotate a domain to indicate that its generator would
+            prefer to be passed instances of
+            <computeroutput><classname>proto::basic_expr</classname>&lt;&gt;</computeroutput> rather than
+            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>.
+            <computeroutput>use_basic_expr&lt; Domain &gt;</computeroutput> is itself a domain.
+          </para>
+        </description>
+      </struct>
+
+      <!-- proto::wants_basic_expr -->
+      <struct name="wants_basic_expr">
+        <template>
+          <template-type-parameter name="Domain"/>
+        </template>
+        <description>
+          <para>
+            A Boolean metafunction that tests a domain to see whether
+            its generator would prefer to be passed instances of
+            <computeroutput><classname>proto::basic_expr</classname>&lt;&gt;</computeroutput> rather than
+            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>.
+          </para>
+        </description>
+        <inherit>
+          <type>mpl::bool_&lt; <replaceable>true-or-false</replaceable> &gt;</type>
+        </inherit>
+      </struct>
+
+      <!-- proto::wants_basic_expr -->
+      <struct name="base_expr">
+        <template>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Args"/>
+        </template>
+        <description>
+          <para>
+            Given a domain, a tag type and an argument list,
+            compute the type of the expression to generate. This is
+            either an instance of 
+            <computeroutput><classname>proto::basic_expr</classname>&lt;&gt;</computeroutput> or
+            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>.
+            </para>
+        </description>
+        <typedef name="A">
+          <purpose>For exposition only</purpose>
+          <type><classname>proto::basic_expr</classname>&lt; Tag, Args &gt;</type>
+        </typedef>
+        <typedef name="B">
+          <purpose>For exposition only</purpose>
+          <type><classname>proto::expr</classname>&lt; Tag, Args &gt;</type>
+        </typedef>
+        <typedef name="type">
+          <type>typename mpl::if_&lt;<classname>proto::wants_basic_expr</classname>&lt; Domain &gt;, A, B&gt;::type</type>
+        </typedef>
+      </struct>
+
     </namespace>
   </namespace>
 </header>

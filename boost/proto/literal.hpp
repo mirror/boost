@@ -25,7 +25,7 @@ namespace boost { namespace proto
         ///
         /// A simple wrapper for a terminal, provided for
         /// ease of use. In all cases, <tt>literal\<X\> l(x);</tt>
-        /// is equivalent to <tt>terminal\<X\>::::type l = {x};</tt>.
+        /// is equivalent to <tt>terminal\<X\>::type l = {x};</tt>.
         ///
         /// The \c Domain template parameter defaults to
         /// \c proto::default_domain.

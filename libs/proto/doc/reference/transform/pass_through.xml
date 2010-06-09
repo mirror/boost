@@ -106,7 +106,7 @@ struct Promote :
           </typedef>
           <typedef name="expr_type">
             <purpose>For exposition only</purpose>
-            <type><classname>proto::expr</classname>&lt;T, <classname>proto::listN</classname>&lt;R0,...RN&gt; &gt;</type>
+            <type>typename <classname>proto::base_expr</classname>&lt;D, T, <classname>proto::listN</classname>&lt;R0,...RN&gt; &gt;::type</type>
           </typedef>
           <typedef name="result_type">
             <type>typename boost::result_of&lt;D(expr_type)&gt;::type</type>

@@ -28,6 +28,12 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::expr<boost::proto::t
     return sout << boost::proto::value(*op);
 }
 
+template<typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<boost::proto::tag::terminal, Args, 0> const *op)
+{
+    return sout << boost::proto::value(*op);
+}
+
 template<typename Tag, typename Args>
 std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 1> const *op)
 {
@@ -35,7 +41,19 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 1> c
 }
 
 template<typename Tag, typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<Tag, Args, 1> const *op)
+{
+    return sout << Tag() << boost::addressof(boost::proto::child(*op).proto_base());
+}
+
+template<typename Tag, typename Args>
 std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 2> const *op)
+{
+    return sout << boost::addressof(boost::proto::left(*op).proto_base()) << Tag() << boost::addressof(boost::proto::right(*op).proto_base());
+}
+
+template<typename Tag, typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<Tag, Args, 2> const *op)
 {
     return sout << boost::addressof(boost::proto::left(*op).proto_base()) << Tag() << boost::addressof(boost::proto::right(*op).proto_base());
 }

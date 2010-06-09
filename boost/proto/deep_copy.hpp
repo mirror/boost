@@ -40,14 +40,21 @@
                     >::type
                 actual_terminal_type;
 
-                typedef typename terminal<actual_terminal_type>::type expr_type;
+                typedef
+                    typename base_expr<
+                        typename Expr::proto_domain
+                      , tag::terminal
+                      , term<actual_terminal_type>
+                    >::type
+                expr_;
+
                 typedef typename Expr::proto_generator proto_generator;
-                typedef typename proto_generator::template result<proto_generator(expr_type)>::type result_type;
+                typedef typename proto_generator::template result<proto_generator(expr_)>::type result_type;
 
                 template<typename Expr2, typename S, typename D>
                 result_type operator()(Expr2 const &e, S const &, D const &) const
                 {
-                    return proto_generator()(expr_type::make(e.proto_base().child0));
+                    return proto_generator()(expr_::make(e.proto_base().child0));
                 }
             };
         }
@@ -161,7 +168,7 @@
         #define BOOST_PROTO_DEFINE_DEEP_COPY_TYPE(Z, N, DATA)                                       \
             typename deep_copy_impl<                                                                \
                 typename remove_reference<                                                          \
-                  typename Expr::BOOST_PP_CAT(proto_child, N)                                       \
+                    typename Expr::BOOST_PP_CAT(proto_child, N)                                     \
                 >::type::proto_derived_expr                                                         \
             >::result_type                                                                          \
             /**/
@@ -189,22 +196,22 @@
             struct deep_copy_impl<Expr, N>
             {
                 typedef
-                    proto::expr<
-                        typename Expr::proto_tag
+                    typename base_expr<
+                        typename Expr::proto_domain
+                      , typename Expr::proto_tag
                       , BOOST_PP_CAT(list, N)<
                             BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
                         >
-                      , N
-                    >
-                expr_type;
+                    >::type
+                expr_;
 
                 typedef typename Expr::proto_generator proto_generator;
-                typedef typename proto_generator::template result<proto_generator(expr_type)>::type result_type;
+                typedef typename proto_generator::template result<proto_generator(expr_)>::type result_type;
 
                 template<typename Expr2, typename S, typename D>
                 result_type operator()(Expr2 const &e, S const &, D const &) const
                 {
-                    expr_type const that = {
+                    expr_ const that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
 

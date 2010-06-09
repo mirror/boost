@@ -464,9 +464,9 @@
         /// \li An expression \c E matches <tt>and_\<B0,B1,...Bn\></tt> if \c E
         ///     matches all \c Bx for \c x in <tt>[0,n)</tt>.
         /// \li An expression \c E matches <tt>if_\<T,U,V\></tt> if
-        ///     <tt>boost::result_of\<when\<_,T\>(E,int,int)\>::::type::value</tt>
+        ///     <tt>boost::result_of\<when\<_,T\>(E,int,int)\>::type::value</tt>
         ///     is \c true and \c E matches \c U; or, if
-        ///     <tt>boost::result_of\<when\<_,T\>(E,int,int)\>::::type::value</tt>
+        ///     <tt>boost::result_of\<when\<_,T\>(E,int,int)\>::type::value</tt>
         ///     is \c false and \c E matches \c V. (Note: \c U defaults to \c _
         ///     and \c V defaults to \c not_\<_\>.)
         /// \li An expression \c E matches <tt>not_\<T\></tt> if \c E does
@@ -484,7 +484,7 @@
         /// \li \c A is <tt>B const &</tt>
         /// \li \c B is <tt>exact\<A\></tt>
         /// \li \c B is <tt>convertible_to\<X\></tt> and
-        ///     <tt>is_convertible\<A,X\>::::value</tt> is \c true.
+        ///     <tt>is_convertible\<A,X\>::value</tt> is \c true.
         /// \li \c A is <tt>X[M]</tt> or <tt>X(&)[M]</tt> and
         ///     \c B is <tt>X[proto::N]</tt>.
         /// \li \c A is <tt>X(&)[M]</tt> and \c B is <tt>X(&)[proto::N]</tt>.
@@ -522,7 +522,7 @@
         /// and a transform that returns the current expression unchanged.
         ///
         /// The wildcard type, \c _, is a grammar element such that
-        /// <tt>matches\<E,_\>::::value</tt> is \c true for any expression
+        /// <tt>matches\<E,_\>::value</tt> is \c true for any expression
         /// type \c E.
         ///
         /// The wildcard can also be used as a stand-in for a template
@@ -617,7 +617,7 @@
                 typedef Expr result_type;
 
                 /// \param e An expression
-                /// \pre <tt>matches\<Expr,not_\>::::value</tt> is \c true.
+                /// \pre <tt>matches\<Expr,not_\>::value</tt> is \c true.
                 /// \return \c e
                 #ifdef BOOST_PROTO_STRICT_RESULT_OF
                 result_type
@@ -642,15 +642,15 @@
         /// When <tt>if_\<If,Then,Else\></tt> is used as a grammar, \c If
         /// must be a Proto transform and \c Then and \c Else must be grammars.
         /// An expression type \c E matches <tt>if_\<If,Then,Else\></tt> if
-        /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::::type::value</tt>
+        /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::type::value</tt>
         /// is \c true and \c E matches \c U; or, if
-        /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::::type::value</tt>
+        /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::type::value</tt>
         /// is \c false and \c E matches \c V.
         ///
         /// The template parameter \c Then defaults to \c _
         /// and \c Else defaults to \c not\<_\>, so an expression type \c E
         /// will match <tt>if_\<If\></tt> if and only if
-        /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::::type::value</tt>
+        /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::type::value</tt>
         /// is \c true.
         ///
         /// \code
@@ -667,7 +667,7 @@
         /// When <tt>if_\<If,Then,Else\></tt> is used as a transform, \c If,
         /// \c Then and \c Else must be Proto transforms. When applying
         /// the transform to an expression \c E, state \c S and data \c V,
-        /// if <tt>boost::result_of\<when\<_,If\>(E,S,V)\>::::type::value</tt>
+        /// if <tt>boost::result_of\<when\<_,If\>(E,S,V)\>::type::value</tt>
         /// is \c true then the \c Then transform is applied; otherwise
         /// the \c Else transform is applied.
         ///
@@ -737,7 +737,7 @@
         /// When applying <tt>or_\<B0,B1,...Bn\></tt> as a transform with an
         /// expression \c e of type \c E, state \c s and data \c d, it is
         /// equivalent to <tt>Bx()(e, s, d)</tt>, where \c x is the lowest
-        /// number such that <tt>matches\<E,Bx\>::::value</tt> is \c true.
+        /// number such that <tt>matches\<E,Bx\>::value</tt> is \c true.
         template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
         struct or_ : transform<or_<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, G)> >
         {
@@ -746,7 +746,7 @@
             /// \param e An expression
             /// \param s The current state
             /// \param d A data of arbitrary type
-            /// \pre <tt>matches\<Expr,or_\>::::value</tt> is \c true.
+            /// \pre <tt>matches\<Expr,or_\>::value</tt> is \c true.
             /// \return <tt>which()(e, s, d)</tt>, where <tt>which</tt> is the
             /// sub-grammar that matched <tt>Expr</tt>.
 
@@ -808,7 +808,7 @@
             /// \param e An expression
             /// \param s The current state
             /// \param d A data of arbitrary type
-            /// \pre <tt>matches\<Expr,switch_\>::::value</tt> is \c true.
+            /// \pre <tt>matches\<Expr,switch_\>::value</tt> is \c true.
             /// \return <tt>which()(e, s, d)</tt>, where <tt>which</tt> is
             /// <tt>Cases::case_<typename Expr::proto_tag></tt>
 
@@ -827,7 +827,7 @@
         ///
         /// By default, matching terminals ignores references and
         /// cv-qualifiers. For instance, a terminal expression of
-        /// type <tt>terminal\<int const &\>::::type</tt> will match
+        /// type <tt>terminal\<int const &\>::type</tt> will match
         /// the grammar <tt>terminal\<int\></tt>. If that is not
         /// desired, you can force an exact match with
         /// <tt>terminal\<exact\<int\> \></tt>. This will only

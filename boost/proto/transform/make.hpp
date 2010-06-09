@@ -89,6 +89,14 @@
                 typedef proto::expr<Tag, Args, N> type;
                 typedef void not_applied_;
             };
+
+            // work around GCC bug
+            template<typename Tag, typename Args, long N, typename Expr, typename State, typename Data>
+            struct make_if_<proto::basic_expr<Tag, Args, N>, Expr, State, Data, false>
+            {
+                typedef proto::basic_expr<Tag, Args, N> type;
+                typedef void not_applied_;
+            };
             #endif
 
             // TODO could optimize this if R is a transform
@@ -207,23 +215,23 @@
         ///
         /// \li Function types
         /// \li Function pointer types
-        /// \li Types for which <tt>proto::is_callable\< type \>::::value</tt> is \c true
+        /// \li Types for which <tt>proto::is_callable\< type \>::value</tt> is \c true
         ///
-        /// <tt>boost::result_of\<make\<T\<X0,X1,...\> \>(Expr, State, Data)\>::::type</tt>
+        /// <tt>boost::result_of\<make\<T\<X0,X1,...\> \>(Expr, State, Data)\>::type</tt>
         /// is evaluated as follows. For each \c X in <tt>X0,X1,...</tt>, do:
         ///
         /// \li If \c X is a template like <tt>U\<Y0,Y1,...\></tt>, then let <tt>X'</tt>
-        ///     be <tt>boost::result_of\<make\<U\<Y0,Y1,...\> \>(Expr, State, Data)\>::::type</tt>
+        ///     be <tt>boost::result_of\<make\<U\<Y0,Y1,...\> \>(Expr, State, Data)\>::type</tt>
         ///     (which evaluates this procedure recursively). Note whether any
         ///     substitutions took place during this operation.
         /// \li Otherwise, if \c X is a transform, then let <tt>X'</tt> be
-        ///     <tt>boost::result_of\<when\<_, X\>(Expr, State, Data)\>::::type</tt>.
+        ///     <tt>boost::result_of\<when\<_, X\>(Expr, State, Data)\>::type</tt>.
         ///     Note that a substitution took place.
         /// \li Otherwise, let <tt>X'</tt> be \c X, and note that no substitution
         ///     took place.
         /// \li If any substitutions took place in any of the above steps and
         ///     <tt>T\<X0',X1',...\></tt> has a nested <tt>::type</tt> typedef,
-        ///     the result type is <tt>T\<X0',X1',...\>::::type</tt>.
+        ///     the result type is <tt>T\<X0',X1',...\>::type</tt>.
         /// \li Otherwise, the result type is <tt>T\<X0',X1',...\></tt>.
         ///
         /// Note that <tt>when\<\></tt> is implemented in terms of <tt>call\<\></tt>
@@ -362,6 +370,18 @@
                     return result_type::make(BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), a));
                 }
             };
+
+            template<typename T, typename A>
+            struct construct_<proto::basic_expr<T, A, N>, true>
+            {
+                typedef proto::basic_expr<T, A, N> result_type;
+
+                template<BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), typename A)>
+                result_type operator ()(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_MAX(N, 1), A, &a)) const
+                {
+                    return result_type::make(BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), a));
+                }
+            };
         }
 
         /// \brief A PrimitiveTransform which computes a type by evaluating any
@@ -375,7 +395,7 @@
             template<typename Expr, typename State, typename Data>
             struct impl : transform_impl<Expr, State, Data>
             {
-                /// \brief <tt>boost::result_of\<make\<Object\>(Expr, State, Data)\>::::type</tt>
+                /// \brief <tt>boost::result_of\<make\<Object\>(Expr, State, Data)\>::type</tt>
                 typedef typename detail::make_if_<Object, Expr, State, Data>::type result_type;
                 //typedef typename detail::make_<Object, Expr, State, Data>::type result_type;
 
@@ -430,6 +450,34 @@
                             detail::as_lvalue(                                                      \
                                 typename when<_, BOOST_PP_CAT(A, M)>                                \
                                     ::template impl<Expr, State, Data>()(e, s, d)         \
+                            )
+                        BOOST_PP_ENUM(N, TMP, DATA)
+                        #undef TMP
+                    );
+                }
+            };
+        };
+
+        template<typename Tag, typename Args, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct make<proto::basic_expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))>
+          : transform<make<proto::basic_expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))> >
+        {
+            template<typename Expr, typename State, typename Data>
+            struct impl : transform_impl<Expr, State, Data>
+            {
+                typedef proto::basic_expr<Tag, Args, Arity> result_type;
+
+                result_type operator ()(
+                    typename impl::expr_param   e
+                  , typename impl::state_param  s
+                  , typename impl::data_param   d
+                ) const
+                {
+                    return proto::basic_expr<Tag, Args, Arity>::make(
+                        #define TMP(Z, M, DATA)                                                     \
+                            detail::as_lvalue(                                                      \
+                                typename when<_, BOOST_PP_CAT(A, M)>                                \
+                                    ::template impl<Expr, State, Data>()(e, s, d)                   \
                             )
                         BOOST_PP_ENUM(N, TMP, DATA)
                         #undef TMP

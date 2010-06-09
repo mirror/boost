@@ -11,9 +11,8 @@
 #ifndef BOOST_PROTO_DOMAIN_HPP_EAN_02_13_2007
 #define BOOST_PROTO_DOMAIN_HPP_EAN_02_13_2007
 
-#include <boost/config.hpp>
 #include <boost/ref.hpp>
-#include <boost/proto/generate.hpp>
+#include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/detail/deduce_domain.hpp>
 
 namespace boost { namespace proto
@@ -173,6 +172,52 @@ namespace boost { namespace proto
     {
         typedef typename domain_of<T>::type type;
     };
+
+    /// \brief Tests a domain to see whether its generator would prefer
+    /// to be passed instances of \c proto::basic_expr\<\> rather than
+    /// \c proto::expr\<\>.
+    ///
+    template<typename Domain, typename Void>
+    struct wants_basic_expr
+      : mpl::false_
+    {};
+
+    template<typename Domain>
+    struct wants_basic_expr<Domain, typename Domain::proto_use_basic_expr_>
+      : mpl::true_
+    {};
+
+    /// \brief Given a domain, a tag type and an argument list,
+    /// compute the type of the expression to generate. This is
+    /// either an instance of \c proto::expr\<\> or
+    /// \c proto::basic_expr\<\>.
+    ///
+    template<typename Domain, typename Tag, typename Args, typename Void>
+    struct base_expr
+    {
+        typedef proto::expr<Tag, Args, Args::arity> type;
+    };
+
+    /// INTERNAL ONLY
+    ///
+    template<typename Domain, typename Tag, typename Args>
+    struct base_expr<Domain, Tag, Args, typename Domain::proto_use_basic_expr_>
+    {
+        typedef proto::basic_expr<Tag, Args, Args::arity> type;
+    };
+
+    /// \brief Annotate a domain to indicate that its generator would
+    /// prefer to be passed instances of \c proto::basic_expr\<\> rather
+    /// than \c proto::expr\<\>. <tt>use_basic_expr\<Domain\></tt> is
+    /// itself a domain.
+    ///
+    template<typename Domain>
+    struct use_basic_expr
+      : Domain
+    {
+        BOOST_PROTO_USE_BASIC_EXPR()
+    };
+
 }}
 
 #endif

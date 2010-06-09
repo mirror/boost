@@ -204,31 +204,33 @@ namespace boost { namespace proto
         BOOST_PROTO_DISABLE_MSVC_C4522                                                              \
         Typename() boost::tr1_result_of<                                                            \
             Typename() This::proto_generator(                                                       \
-                boost::proto::expr<                                                                 \
-                    boost::proto::tag::assign                                                       \
+                Typename() boost::proto::base_expr<                                         \
+                    Typename() This::proto_domain                                                   \
+                  , boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
                         This &                                                                      \
                       , This Const() &                                                              \
                     >                                                                               \
-                  , 2                                                                               \
-                >                                                                                   \
+                >::type                                                                             \
             )                                                                                       \
         >::type const                                                                               \
         operator =(This Const() &a)                                                                 \
         {                                                                                           \
-            typedef boost::proto::expr<                                                             \
-                boost::proto::tag::assign                                                           \
-              , boost::proto::list2<                                                                \
-                    This &                                                                          \
-                  , This Const() &                                                                  \
-                >                                                                                   \
-              , 2                                                                                   \
-            > that_type;                                                                            \
+            typedef                                                                                 \
+                Typename() boost::proto::base_expr<                                         \
+                    Typename() This::proto_domain                                                   \
+                  , boost::proto::tag::assign                                                       \
+                  , boost::proto::list2<                                                            \
+                        This &                                                                      \
+                      , This Const() &                                                              \
+                    >                                                                               \
+                >::type                                                                             \
+            that_type;                                                                              \
             that_type const that = {                                                                \
                 *this                                                                               \
               , a                                                                                   \
             };                                                                                      \
-            return Typename() This::proto_generator()(that);                                           \
+            return Typename() This::proto_generator()(that);                                        \
         }                                                                                           \
         /**/
 
@@ -251,26 +253,28 @@ namespace boost { namespace proto
         template<typename A>                                                                        \
         typename boost::tr1_result_of<                                                              \
             proto_generator(                                                                        \
-                boost::proto::expr<                                                                 \
-                    boost::proto::tag::assign                                                       \
+                typename boost::proto::base_expr<                                           \
+                    proto_domain                                                                    \
+                  , boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
                         proto_derived_expr ThisConst() &                                            \
                       , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type \
                     >                                                                               \
-                  , 2                                                                               \
-                >                                                                                   \
+                >::type                                                                             \
             )                                                                                       \
         >::type const                                                                               \
         operator =(A ThatConst() &a) ThisConst()                                                    \
         {                                                                                           \
-            typedef boost::proto::expr<                                                             \
-                boost::proto::tag::assign                                                           \
-              , boost::proto::list2<                                                                \
-                    proto_derived_expr ThisConst() &                                                \
-                  , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type   \
-                >                                                                                   \
-              , 2                                                                                   \
-            > that_type;                                                                            \
+            typedef                                                                                 \
+                typename boost::proto::base_expr<                                           \
+                    proto_domain                                                                    \
+                  , boost::proto::tag::assign                                                       \
+                  , boost::proto::list2<                                                            \
+                        proto_derived_expr ThisConst() &                                            \
+                      , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type \
+                    >                                                                               \
+                >::type                                                                             \
+            that_type;                                                                            \
             that_type const that = {                                                                \
                 *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
@@ -315,26 +319,28 @@ namespace boost { namespace proto
         template<typename A>                                                                        \
         typename boost::tr1_result_of<                                                              \
             proto_generator(                                                                        \
-                boost::proto::expr<                                                                 \
-                    boost::proto::tag::subscript                                                    \
+                typename boost::proto::base_expr<                                           \
+                    proto_domain                                                                    \
+                  , boost::proto::tag::subscript                                                    \
                   , boost::proto::list2<                                                            \
                         proto_derived_expr ThisConst() &                                            \
                       , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type \
                     >                                                                               \
-                  , 2                                                                               \
-                >                                                                                   \
+                >::type                                                                             \
             )                                                                                       \
         >::type const                                                                               \
         operator [](A ThatConst() &a) ThisConst()                                                   \
         {                                                                                           \
-            typedef boost::proto::expr<                                                             \
-                boost::proto::tag::subscript                                                        \
-              , boost::proto::list2<                                                                \
-                    proto_derived_expr ThisConst() &                                                \
-                  , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type   \
-                >                                                                                   \
-              , 2                                                                                   \
-            > that_type;                                                                            \
+            typedef                                                                                 \
+                typename boost::proto::base_expr<                                           \
+                    proto_domain                                                                    \
+                  , boost::proto::tag::subscript                                                    \
+                  , boost::proto::list2<                                                            \
+                        proto_derived_expr ThisConst() &                                            \
+                      , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type \
+                    >                                                                               \
+                >::type                                                                             \
+            that_type;                                                                              \
             that_type const that = {                                                                \
                 *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
