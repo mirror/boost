@@ -56,6 +56,7 @@
 #include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
+#include "boost/mpl/not.hpp"
 #include "boost/mpl/empty.hpp"
 #include "boost/mpl/find_if.hpp"
 #include "boost/mpl/front.hpp"
