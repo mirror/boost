@@ -198,6 +198,12 @@ Features include:
 * Warn about invalid doc_info members.
 * Support multiple categories in library doc_info.
 * Use the cygwin 1.7 API for better path handling.
+* Fix some corner cases for paragraph detection:
+  * A line containing only a comment is no longer interpreted as a
+    paragraph break.
+  * If a line starts with a comment, interpret it as a paragraph even if it's
+    followed by whitespace or a list character.
+  * Don't treat 4+ consecutive blank lines as multiple paragraph breaks.
 
 [endsect]
 
