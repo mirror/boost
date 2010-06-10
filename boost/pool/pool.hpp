@@ -63,7 +63,7 @@ struct default_user_allocator_malloc_free
   typedef std::ptrdiff_t difference_type;
 
   static char * malloc(const size_type bytes)
-  { return reinterpret_cast<char *>(std::malloc(bytes)); }
+  { return static_cast<char *>(std::malloc(bytes)); }
   static void free(char * const block)
   { std::free(block); }
 };
@@ -113,9 +113,11 @@ class PODptr
     }
 
     size_type & next_size() const
-    { return *(reinterpret_cast<size_type *>(ptr_next_size())); }
+    {
+      return *(static_cast<size_type *>(static_cast<void*>((ptr_next_size()))));
+    }
     char * & next_ptr() const
-    { return *(reinterpret_cast<char **>(ptr_next_ptr())); }
+    { return *(static_cast<char **>(static_cast<void*>(ptr_next_ptr()))); }
 
     PODptr next() const
     { return PODptr<size_type>(next_ptr(), next_size()); }
