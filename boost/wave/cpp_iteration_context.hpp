@@ -149,7 +149,7 @@ struct iteration_context
     iteration_context(ContextT& ctx, BOOST_WAVE_STRINGTYPE const &fname, 
             position_type const &act_pos, 
             boost::wave::language_support language_,
-            base_type::file_type type = base_type::main_file) 
+            typename base_type::file_type type = base_type::main_file) 
     :   base_iteration_context<ContextT, IteratorT>(ctx, fname, type)
     {
         InputPolicyT::template inner<self_type>::init_iterators(
