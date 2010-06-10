@@ -41,6 +41,8 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/if.hpp>
 
+#include <ctype.h>	// required for wide version of character checkers
+
 //
 // the following must not be macros if we are to prefix them
 // with std:: (they shouldn't be macros anyway...)
@@ -48,8 +50,14 @@
 #ifdef ispunct
 #  undef ispunct
 #endif
+#ifdef iswpunct
+#  undef iswpunct
+#endif
 #ifdef isspace
 #  undef isspace
+#endif
+#ifdef iswspace
+#  undef iswspace
 #endif
 //
 // fix namespace problems:
@@ -58,11 +66,12 @@
 namespace std{
  using ::ispunct;
  using ::isspace;
+ using ::iswpunct;
+ using ::iswspace;
 }
 #endif
 
 namespace boost{
-
   //===========================================================================
   // The escaped_list_separator class. Which is a model of TokenizerFunction
   // An escaped list is a super-set of what is commonly known as a comma 
@@ -195,6 +204,24 @@ namespace boost{
   // faster assigning of tokens using assign instead of +=
   
   namespace tokenizer_detail {
+  //===========================================================================
+  // Tokenizer was broken for wide character separators, at least on Windows, since
+  // CRT functions isspace etc are only expect values in [0, 0xFF]. Debug build asserts
+  // if higher values are passed in. The traits extension class should take care of this.
+  // Assuming that the conditional will always get optimized out in the function
+  // implementations, argument types are not a problem since both forms of character classifiers
+  // expect an int.
+  template<typename traits>
+  struct traits_extension : public traits {
+    typedef typename traits::char_type char_type;
+    static bool isspace(char_type c) {
+      return sizeof(char_type) == 1 ? std::isspace(c) : std::iswspace(c);
+    }
+
+    static bool ispunct(char_type c) {
+      return sizeof(char_type) == 1 ? std::ispunct(c) : std::iswpunct(c);
+    }
+  };
 
   // The assign_or_plus_equal struct contains functions that implement
   // assign, +=, and clearing based on the iterator type.  The
@@ -380,13 +407,14 @@ namespace boost{
   // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <typename Char, 
-    typename Traits = typename std::basic_string<Char>::traits_type >
+    typename Tr = typename std::basic_string<Char>::traits_type >
 #else
   template <typename Char, 
-    typename Traits = std::basic_string<Char>::traits_type >
+    typename Tr = std::basic_string<Char>::traits_type >
 #endif
   class char_separator
   {
+	typedef tokenizer_detail::traits_extension<Tr> Traits;
     typedef std::basic_string<Char,Traits> string_type;
   public:
     explicit 
@@ -499,7 +527,7 @@ namespace boost{
       if (m_kept_delims.length())
         return m_kept_delims.find(E) != string_type::npos;
       else if (m_use_ispunct) {
-        return std::ispunct(E) != 0;
+        return Traits::ispunct(E) != 0;
       } else
         return false;
     }
@@ -508,7 +536,7 @@ namespace boost{
       if (m_dropped_delims.length())
         return m_dropped_delims.find(E) != string_type::npos;
       else if (m_use_isspace) {
-        return std::isspace(E) != 0;
+        return Traits::isspace(E) != 0;
       } else
         return false;
     }
@@ -527,14 +555,15 @@ namespace boost{
   // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <class Char, 
-    class Traits = typename std::basic_string<Char>::traits_type >
+    class Tr = typename std::basic_string<Char>::traits_type >
 #else
   template <class Char, 
-    class Traits = std::basic_string<Char>::traits_type >
+    class Tr = std::basic_string<Char>::traits_type >
 #endif
   class char_delimiters_separator {
   private:  
 
+	typedef tokenizer_detail::traits_extension<Tr> Traits;
     typedef std::basic_string<Char,Traits> string_type;
     string_type returnable_;
     string_type nonreturnable_;
@@ -549,7 +578,7 @@ namespace boost{
       else{
         if (no_ispunct_) {return false;}
         else{
-          int r = std::ispunct(E);
+          int r = Traits::ispunct(E);
           return r != 0;
         }
       }
@@ -561,7 +590,7 @@ namespace boost{
       else{
         if (no_isspace_) {return false;}
         else{
-          int r = std::isspace(E);
+          int r = Traits::isspace(E);
           return r != 0;
         }
       }
