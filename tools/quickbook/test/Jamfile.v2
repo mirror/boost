@@ -30,6 +30,7 @@ test-suite quickbook.test :
     [ quickbook-test section_1_4 ]
     [ quickbook-test section_1_5 ]
     [ quickbook-test heading ]
+    [ quickbook-test para-test ]
     [ quickbook-test table_1_5 ]
     [ quickbook-test image_1_5 ]
     [ quickbook-test list_test ]
