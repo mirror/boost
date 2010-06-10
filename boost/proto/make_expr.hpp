@@ -71,19 +71,19 @@
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_AS_CHILD_TYPE(Z, N, DATA)                                                   \
-        typename boost::proto::detail::protoify_<                                                   \
+        typename boost::proto::detail::protoify<                                                    \
             BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 0, DATA), N)                                        \
           , BOOST_PP_TUPLE_ELEM(3, 2, DATA)                                                         \
-        >::type                                                                                     \
+        >::result_type                                                                              \
         /**/
 
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_AS_CHILD(Z, N, DATA)                                                        \
-        boost::proto::detail::protoify_<                                                            \
+        boost::proto::detail::protoify<                                                             \
             BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 0, DATA), N)                                        \
           , BOOST_PP_TUPLE_ELEM(3, 2, DATA)                                                         \
-        >::call(BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 1, DATA), N))                                   \
+        >()(BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 1, DATA), N))                                       \
         /**/
 
     /// INTERNAL ONLY
@@ -136,41 +136,41 @@
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_FUSION_AS_CHILD_AT_TYPE(Z, N, DATA)                                         \
-        typename detail::protoify_<                                                                 \
+        typename detail::protoify<                                                                  \
             BOOST_PROTO_FUSION_AT_TYPE(Z, N, DATA)                                                  \
           , Domain                                                                                  \
-        >::type                                                                                     \
+        >::result_type                                                                              \
         /**/
 
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_FUSION_AS_CHILD_AT(Z, N, DATA)                                              \
-        detail::protoify_<                                                                          \
+        detail::protoify<                                                                           \
             BOOST_PROTO_FUSION_AT_TYPE(Z, N, DATA)                                                  \
           , Domain                                                                                  \
-        >::call(BOOST_PROTO_FUSION_AT(Z, N, DATA))                                                  \
+        >()(BOOST_PROTO_FUSION_AT(Z, N, DATA))                                                      \
         /**/
 
         namespace detail
         {
             template<typename T, typename Domain>
-            struct protoify_
-              : result_of::as_expr<T, Domain>
+            struct protoify
+              : Domain::template as_expr<T>
             {};
 
             template<typename T, typename Domain>
-            struct protoify_<T &, Domain>
-              : result_of::as_child<T, Domain>
+            struct protoify<T &, Domain>
+              : Domain::template as_child<T>
             {};
 
             template<typename T, typename Domain>
-            struct protoify_<boost::reference_wrapper<T>, Domain>
-              : result_of::as_child<T, Domain>
+            struct protoify<boost::reference_wrapper<T>, Domain>
+              : Domain::template as_child<T>
             {};
 
             template<typename T, typename Domain>
-            struct protoify_<boost::reference_wrapper<T> const, Domain>
-              : result_of::as_child<T, Domain>
+            struct protoify<boost::reference_wrapper<T> const, Domain>
+              : Domain::template as_child<T>
             {};
 
             template<typename Tag, typename Domain, typename Sequence, std::size_t Size>
@@ -189,15 +189,15 @@
                 terminal_type;
 
                 typedef
-                    typename proto::detail::protoify_<
+                    typename proto::detail::protoify<
                         terminal_type
                       , Domain
-                    >::type
+                    >::result_type
                 type;
 
                 static type const call(Sequence const &sequence)
                 {
-                    return proto::detail::protoify_<terminal_type, Domain>::call(fusion::at_c<0>(sequence));
+                    return proto::detail::protoify<terminal_type, Domain>()(fusion::at_c<0>(sequence));
                 }
             };
 
@@ -223,11 +223,11 @@
             struct make_expr_<tag::terminal, Domain, A
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, void BOOST_PP_INTERCEPT)>
             {
-                typedef typename proto::detail::protoify_<A, Domain>::type result_type;
+                typedef typename proto::detail::protoify<A, Domain>::result_type result_type;
 
                 result_type operator()(typename add_reference<A>::type a) const
                 {
-                    return proto::detail::protoify_<A, Domain>::call(a);
+                    return proto::detail::protoify<A, Domain>()(a);
                 }
             };
 

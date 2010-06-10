@@ -18,6 +18,7 @@
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/mpl/bool.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/utility/result_of.hpp>
     #include <boost/proto/proto_fwd.hpp>
@@ -87,6 +88,8 @@
         {
             BOOST_PROTO_CALLABLE()
 
+            typedef default_generator proto_base_generator;
+
             template<typename Sig>
             struct result;
 
@@ -123,6 +126,8 @@
         {
             BOOST_PROTO_CALLABLE()
             BOOST_PROTO_USE_BASIC_EXPR()
+
+            typedef generator proto_base_generator;
 
             template<typename Sig>
             struct result;
@@ -170,6 +175,8 @@
             BOOST_PROTO_CALLABLE()
             BOOST_PROTO_USE_BASIC_EXPR()
 
+            typedef pod_generator proto_base_generator;
+
             template<typename Sig>
             struct result;
 
@@ -216,6 +223,8 @@
         struct by_value_generator
         {
             BOOST_PROTO_CALLABLE()
+
+            typedef by_value_generator proto_base_generator;
 
             template<typename Sig>
             struct result;
@@ -268,6 +277,8 @@
         {
             BOOST_PROTO_CALLABLE()
 
+            typedef compose_generators proto_base_generator;
+
             template<typename Sig>
             struct result;
 
@@ -309,6 +320,32 @@
                 return Second()(First()(e));
             }
         };
+
+        /// \brief Annotate a generator to indicate that it would
+        /// prefer to be passed instances of \c proto::basic_expr\<\> rather
+        /// than \c proto::expr\<\>. <tt>use_basic_expr\<Generator\></tt> is
+        /// itself a generator.
+        ///
+        template<typename Generator>
+        struct use_basic_expr
+          : Generator
+        {
+            BOOST_PROTO_USE_BASIC_EXPR()
+        };
+
+        /// \brief Tests a generator to see whether it would prefer
+        /// to be passed instances of \c proto::basic_expr\<\> rather than
+        /// \c proto::expr\<\>.
+        ///
+        template<typename Generator, typename Void>
+        struct wants_basic_expr
+          : mpl::false_
+        {};
+
+        template<typename Generator>
+        struct wants_basic_expr<Generator, typename Generator::proto_use_basic_expr_>
+          : mpl::true_
+        {};
 
         /// INTERNAL ONLY
         template<>

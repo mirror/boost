@@ -122,17 +122,6 @@ namespace boost { namespace proto
         #include BOOST_PP_ITERATE()
     }
 
-    // TODO consider adding a basic_expr<> that doesn't have operator=,
-    // operator[] or operator() for use by BOOST_PROTO_BASIC_EXTENDS().
-    // Those member functions are unused in that case, and only slow
-    // down instantiations. basic_expr::proto_base_expr can still be
-    // expr<> because uses of proto_base_expr in proto::matches<> shouldn't
-    // cause the expr<> type to be instantiated. (<-- Check that assumtion!)
-    // OR, should expr<>::proto_base_expr be a typedef for basic_expr<>?
-    // It should, and proto_base() can return *this reinterpret_cast to
-    // a basic_expr because they should be layout compatible. Or not, because
-    // that would incur an extra template instantiation. :-(
-
     namespace exprns_
     {
         // The expr<> specializations are actually defined here.

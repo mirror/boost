@@ -14,9 +14,9 @@
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/mpl/if.hpp>
-    #include <boost/type_traits/is_function.hpp>
     #include <boost/type_traits/remove_reference.hpp>
     #include <boost/proto/proto_fwd.hpp>
+    #include <boost/proto/args.hpp>
     #include <boost/proto/expr.hpp>
 
     namespace boost { namespace proto
@@ -29,32 +29,21 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, 0>
             {
-                typedef BOOST_PROTO_UNCVREF(typename Expr::proto_child0) raw_terminal_type;
-
-                // can't store a function type in a terminal.
-                typedef
-                    typename mpl::if_c<
-                        is_function<raw_terminal_type>::value
-                      , typename Expr::proto_child0
-                      , raw_terminal_type
-                    >::type
-                actual_terminal_type;
-
                 typedef
                     typename base_expr<
                         typename Expr::proto_domain
                       , tag::terminal
-                      , term<actual_terminal_type>
+                      , term<typename term_traits<typename Expr::proto_child0>::value_type>
                     >::type
-                expr_;
+                expr_type;
 
                 typedef typename Expr::proto_generator proto_generator;
-                typedef typename proto_generator::template result<proto_generator(expr_)>::type result_type;
+                typedef typename proto_generator::template result<proto_generator(expr_type)>::type result_type;
 
                 template<typename Expr2, typename S, typename D>
                 result_type operator()(Expr2 const &e, S const &, D const &) const
                 {
-                    return proto_generator()(expr_::make(e.proto_base().child0));
+                    return proto_generator()(expr_type::make(e.proto_base().child0));
                 }
             };
         }
@@ -203,15 +192,15 @@
                             BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
                         >
                     >::type
-                expr_;
+                expr_type;
 
                 typedef typename Expr::proto_generator proto_generator;
-                typedef typename proto_generator::template result<proto_generator(expr_)>::type result_type;
+                typedef typename proto_generator::template result<proto_generator(expr_type)>::type result_type;
 
                 template<typename Expr2, typename S, typename D>
                 result_type operator()(Expr2 const &e, S const &, D const &) const
                 {
-                    expr_ const that = {
+                    expr_type const that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
 

@@ -13,6 +13,8 @@
 
 #include <boost/ref.hpp>
 #include <boost/proto/proto_fwd.hpp>
+#include <boost/proto/generate.hpp>
+#include <boost/proto/detail/as_expr.hpp>
 #include <boost/proto/detail/deduce_domain.hpp>
 
 namespace boost { namespace proto
@@ -89,9 +91,66 @@ namespace boost { namespace proto
         typedef Generator proto_generator;
         typedef Grammar   proto_grammar;
         typedef Super     proto_super_domain;
+        typedef domain    proto_base_domain;
 
         /// INTERNAL ONLY
         typedef void proto_is_domain_;
+
+        /// \brief A monomorphic unary function object that turns objects into Proto
+        /// expression objects in this domain.
+        ///
+        /// The <tt>as_expr\<\></tt> function object turns objects into Proto expressions, if
+        /// they are not already, by making them Proto terminals held by value if
+        /// possible. Objects that are already Proto expressions are left alone.
+        ///
+        /// If <tt>wants_basic_expr\<Generator\>::value</tt> is true, then let \c E be \c basic_expr;
+        /// otherwise, let \t E be \c expr. Given an lvalue \c t of type \c T:
+        ///
+        /// If \c T is not a Proto expression type the resulting terminal is
+        /// calculated as follows:
+        ///
+        ///   If \c T is a function type, an abstract type, or a type derived from
+        ///   \c std::ios_base, let \c A be <tt>T &</tt>.
+        ///   Otherwise, let \c A be the type \c T stripped of cv-qualifiers.
+        ///   Then, the result of applying <tt>as_expr\<T\>()(t)</tt> is
+        ///   <tt>Generator()(E\<tag::terminal, term\<A\> \>::make(t))</tt>.
+        ///
+        /// If \c T is a Proto expression type and its generator type is different from
+        /// \c Generator, the result is <tt>Generator()(t)</tt>.
+        ///
+        /// Otherwise, the result is \c t converted to an (un-const) rvalue.
+        ///
+        template<typename T, typename Callable = proto::callable>
+        struct as_expr
+          : detail::as_expr<T, Generator>
+        {
+            BOOST_PROTO_CALLABLE()
+        };
+
+        /// \brief A monomorphic unary function object that turns objects into Proto
+        /// expression objects in this domain.
+        ///
+        /// The <tt>as_child\<\></tt> function object turns objects into Proto expressions, if
+        /// they are not already, by making them Proto terminals held by reference.
+        /// Objects that are already Proto expressions are simply returned by reference.
+        ///
+        /// If <tt>wants_basic_expr\<Generator\>::value</tt> is true, then let \c E be \c basic_expr;
+        /// otherwise, let \t E be \c expr. Given an lvalue \c t of type \c T:
+        ///
+        /// If \c T is not a Proto expression type the resulting terminal is
+        /// <tt>Generator()(E\<tag::terminal, term\<T &\> \>::make(t))</tt>.
+        ///
+        /// If \c T is a Proto expression type and its generator type is different from
+        /// \c Generator, the result is <tt>Generator()(t)</tt>.
+        ///
+        /// Otherwise, the result is the lvalue \c t.
+        ///
+        template<typename T, typename Callable = proto::callable>
+        struct as_child
+          : detail::as_child<T, Generator>
+        {
+            BOOST_PROTO_CALLABLE()
+        };
     };
 
     /// \brief The domain expressions have by default, if
@@ -173,26 +232,12 @@ namespace boost { namespace proto
         typedef typename domain_of<T>::type type;
     };
 
-    /// \brief Tests a domain to see whether its generator would prefer
-    /// to be passed instances of \c proto::basic_expr\<\> rather than
-    /// \c proto::expr\<\>.
-    ///
-    template<typename Domain, typename Void>
-    struct wants_basic_expr
-      : mpl::false_
-    {};
-
-    template<typename Domain>
-    struct wants_basic_expr<Domain, typename Domain::proto_use_basic_expr_>
-      : mpl::true_
-    {};
-
     /// \brief Given a domain, a tag type and an argument list,
     /// compute the type of the expression to generate. This is
     /// either an instance of \c proto::expr\<\> or
     /// \c proto::basic_expr\<\>.
     ///
-    template<typename Domain, typename Tag, typename Args, typename Void>
+    template<typename Domain, typename Tag, typename Args, typename Void /*= void*/>
     struct base_expr
     {
         typedef proto::expr<Tag, Args, Args::arity> type;
@@ -201,21 +246,9 @@ namespace boost { namespace proto
     /// INTERNAL ONLY
     ///
     template<typename Domain, typename Tag, typename Args>
-    struct base_expr<Domain, Tag, Args, typename Domain::proto_use_basic_expr_>
+    struct base_expr<Domain, Tag, Args, typename Domain::proto_generator::proto_use_basic_expr_>
     {
         typedef proto::basic_expr<Tag, Args, Args::arity> type;
-    };
-
-    /// \brief Annotate a domain to indicate that its generator would
-    /// prefer to be passed instances of \c proto::basic_expr\<\> rather
-    /// than \c proto::expr\<\>. <tt>use_basic_expr\<Domain\></tt> is
-    /// itself a domain.
-    ///
-    template<typename Domain>
-    struct use_basic_expr
-      : Domain
-    {
-        BOOST_PROTO_USE_BASIC_EXPR()
     };
 
 }}
