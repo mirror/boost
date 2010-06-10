@@ -41,7 +41,7 @@
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)                                                      \
   || BOOST_WORKAROUND(__BORLANDC__, < 0x593)                                                    \
   || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                   \
-  || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))                                      \
+  || BOOST_WORKAROUND(__SUNPRO_CC, < 0x5100)                                                    \
   || BOOST_WORKAROUND(__DECCXX_VER, <= 60590042)
 #  define BOOST_FOREACH_NO_RVALUE_DETECTION
 # endif
@@ -56,6 +56,7 @@
   || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 3) && defined(__APPLE_CC__))       \
   || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))                                         \
   || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))                                      \
+  || BOOST_WORKAROUND(__SUNPRO_CC, >= 0x5100)                                                   \
   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590))
 #  define BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
 # else
@@ -80,6 +81,7 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/utility/addressof.hpp>
+#include <boost/foreach_fwd.hpp>
 
 #ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 # include <new>
@@ -87,12 +89,6 @@
 # include <boost/utility/enable_if.hpp>
 # include <boost/type_traits/remove_const.hpp>
 #endif
-
-// This must be at global scope, hence the uglified name
-enum boost_foreach_argument_dependent_lookup_hack
-{
-    boost_foreach_argument_dependent_lookup_hack_value
-};
 
 namespace boost
 {
@@ -115,11 +111,6 @@ namespace foreach
     {
         return std::make_pair(begin, end);
     }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // boost::foreach::tag
-    //
-    typedef boost_foreach_argument_dependent_lookup_hack tag;
 
     ///////////////////////////////////////////////////////////////////////////////
     // boost::foreach::is_lightweight_proxy
