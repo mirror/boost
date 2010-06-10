@@ -92,13 +92,8 @@ namespace boost{
 
 // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
 // MSVC does not like the following typename
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <class Char,
-    class Traits = typename std::basic_string<Char>::traits_type >
-#else
-  template <class Char,
-    class Traits = std::basic_string<Char>::traits_type >
-#endif
+    class Traits = BOOST_DEDUCED_TYPENAME std::basic_string<Char>::traits_type >
   class escaped_list_separator {
 
   private:
@@ -642,6 +637,5 @@ namespace boost{
 
 
 } //namespace boost
-
 
 #endif
