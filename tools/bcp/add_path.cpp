@@ -71,10 +71,11 @@ void bcp_implementation::add_directory(const fs::path& p)
       std::string s(i->string());
       if(m_boost_path.string().size())
          s.erase(0, m_boost_path.string().size() + 1);
-      if(!m_dependencies.count(fs::path(s))) 
+      fs::path np = s;
+      if(!m_dependencies.count(np)) 
       {
-         m_dependencies[fs::path(s)] = p; // set up dependency tree
-         add_path(fs::path(s));
+         m_dependencies[np] = p; // set up dependency tree
+         add_path(np);
       }
       ++i;
    }
