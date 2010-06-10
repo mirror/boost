@@ -47,6 +47,8 @@
   [@../../libs/typeof/index.html Boost.Typeof]]
 [def _expr_                 
   [classref  boost::proto::expr `proto::expr<>`]]
+[def _basic_expr_                 
+  [classref  boost::proto::basic_expr `proto::basic_expr<>`]]
 [def _deep_copy_            
   [funcref   boost::proto::deep_copy `proto::deep_copy()`]]
 [def _domain_              

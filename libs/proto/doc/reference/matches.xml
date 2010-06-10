@@ -82,7 +82,7 @@
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>_</type>
         </typedef>
       </struct>
@@ -144,7 +144,7 @@
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>not_</type>
         </typedef>
       </struct>
@@ -262,7 +262,7 @@ struct IsIntegral2 :
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>if_</type>
         </typedef>
       </struct>
@@ -345,7 +345,7 @@ struct IsIntegral2 :
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>or_</type>
         </typedef>
       </struct>
@@ -418,7 +418,7 @@ struct IsIntegral2 :
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>and_</type>
         </typedef>
       </struct>
@@ -457,7 +457,7 @@ struct IsIntegral2 :
           <inherit><type>
     Cases::template case_&lt;typename Expr::tag_type&gt;::template impl&lt;Expr, State, Data&gt;</type></inherit>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>switch_</type>
         </typedef>
       </struct>
@@ -503,9 +503,9 @@ struct IsIntegral2 :
         <purpose>For matching a Grammar to a variable number of sub-expressions.</purpose>
         <description>
           <para>
-            An expression type <computeroutput><classname>proto::expr</classname>&lt;AT,
+            An expression type <computeroutput><classname>proto::basic_expr</classname>&lt;AT,
             <classname alt="proto::listN">proto::list<replaceable>N</replaceable></classname>&lt;A<subscript>0</subscript>,...A<subscript>n</subscript>,U<subscript>0</subscript>,...U<subscript>m</subscript>&gt; &gt;</computeroutput>
-            matches a grammar <computeroutput><classname>proto::expr</classname>&lt;BT,
+            matches a grammar <computeroutput><classname>proto::basic_expr</classname>&lt;BT,
             <classname alt="proto::listN">proto::list<replaceable>M</replaceable></classname>&lt;B<subscript>0</subscript>,...B<subscript>n</subscript>,proto::vararg&lt;V&gt; &gt; &gt;</computeroutput>
             if <computeroutput>BT</computeroutput> is <computeroutput><classname>proto::_</classname></computeroutput>
             or <computeroutput>AT</computeroutput>, and if
@@ -541,8 +541,8 @@ struct Function :
           <para>
             <computeroutput>proto::matches&lt;Expr, Grammar&gt;</computeroutput> inherits from
             <computeroutput>mpl::true_</computeroutput> if
-            <computeroutput>Expr::proto_base_expr</computeroutput> matches
-            <computeroutput>Grammar::proto_base_expr</computeroutput>, and from
+            <computeroutput>Expr::proto_grammar</computeroutput> matches
+            <computeroutput>Grammar::proto_grammar</computeroutput>, and from
             <computeroutput>mpl::false_</computeroutput> otherwise.
           </para>
           <para>
@@ -559,7 +559,7 @@ struct Function :
                 <para>
                   An expression
                   <computeroutput>
-                    <classname>proto::expr</classname>&lt;AT,
+                    <classname>proto::basic_expr</classname>&lt;AT,
                     <classname alt="proto::listN">
                       proto::list<replaceable>N</replaceable>
                     </classname>&lt;A<subscript>0</subscript>,...A<subscript>n</subscript>&gt;
@@ -567,7 +567,7 @@ struct Function :
                   </computeroutput>
                   matches a grammar
                   <computeroutput>
-                    <classname>proto::expr</classname>&lt;BT,
+                    <classname>proto::basic_expr</classname>&lt;BT,
                     <classname alt="proto::listN">
                       proto::list<replaceable>N</replaceable>
                     </classname>&lt;B<subscript>0</subscript>,...B<subscript>n</subscript>&gt;
@@ -588,14 +588,14 @@ struct Function :
                 <para>
                   An expression
                   <computeroutput>
-                    <classname>proto::expr</classname>&lt;AT,
+                    <classname>proto::basic_expr</classname>&lt;AT,
                     <classname alt="proto::listN">
                       proto::list<replaceable>N</replaceable>
                     </classname>&lt;A<subscript>0</subscript>,...A<subscript>n</subscript>,U<subscript>0</subscript>,...U<subscript>m</subscript>&gt;
                     &gt;
                   </computeroutput> matches a grammar
                   <computeroutput>
-                    <classname>proto::expr</classname>&lt;BT,
+                    <classname>proto::basic_expr</classname>&lt;BT,
                     <classname alt="proto::listN">
                       proto::list<replaceable>M</replaceable>
                     </classname>&lt;B<subscript>0</subscript>,...B<subscript>n</subscript>,<classname>proto::vararg</classname>&lt;V&gt;
@@ -700,11 +700,11 @@ struct Function :
           <para>
             A terminal expression
             <computeroutput>
-              <classname>proto::expr</classname>&lt;AT,
+              <classname>proto::basic_expr</classname>&lt;AT,
               <classname>proto::term</classname>&lt;A&gt; &gt;
             </computeroutput> matches a grammar
             <computeroutput>
-              <classname>proto::expr</classname>&lt;BT, <classname>proto::term</classname>&lt;B&gt; &gt;
+              <classname>proto::basic_expr</classname>&lt;BT, <classname>proto::term</classname>&lt;B&gt; &gt;
             </computeroutput>
             if <computeroutput>BT</computeroutput> is <computeroutput><classname>proto::_</classname></computeroutput>
             or <computeroutput>AT</computeroutput> and one of the following is true:

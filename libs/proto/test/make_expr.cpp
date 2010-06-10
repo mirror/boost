@@ -38,13 +38,31 @@ void test_make_expr()
     unary_plus<terminal<int>::type>::type p2 = make_expr<tag::unary_plus>(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
-    ewrap<unary_plus<ewrap<terminal<int>::type> >::type> p3 = make_expr<tag::unary_plus, mydomain>(i);
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::unary_plus
+              , proto::list1<
+                    ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p3_type;
+    p3_type p3 = make_expr<tag::unary_plus, mydomain>(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
-    ewrap<plus<
-        ewrap<unary_plus<ewrap<terminal<int>::type> >::type>
-      , ewrap<terminal<int>::type>
-    >::type> p4 = make_expr<tag::plus>(p3, 0);
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::plus
+              , proto::list2<
+                    p3_type
+                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p4_type;
+    p4_type p4 = make_expr<tag::plus>(p3, 0);
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
@@ -58,13 +76,31 @@ void test_make_expr_ref()
     unary_plus<terminal<int &>::type>::type p2 = make_expr<tag::unary_plus>(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
-    ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> p3 = make_expr<tag::unary_plus, mydomain>(boost::ref(i));
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::unary_plus
+              , proto::list1<
+                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                >
+            >
+        >
+    p3_type;
+    p3_type p3 = make_expr<tag::unary_plus, mydomain>(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
-    ewrap<plus<
-        ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> &
-      , ewrap<terminal<int>::type>
-    >::type> p4 = make_expr<tag::plus>(boost::ref(p3), 0);
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::plus
+              , proto::list2<
+                    p3_type &
+                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p4_type;
+    p4_type p4 = make_expr<tag::plus>(boost::ref(p3), 0);
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
@@ -77,14 +113,31 @@ void test_make_expr_functional()
     unary_plus<terminal<int>::type>::type p2 = functional::make_expr<tag::unary_plus>()(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
-    ewrap<unary_plus<ewrap<terminal<int>::type> >::type> p3 = functional::make_expr<tag::unary_plus, mydomain>()(i);
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::unary_plus
+              , proto::list1<
+                    ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p3_type;
+    p3_type p3 = functional::make_expr<tag::unary_plus, mydomain>()(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
-    ewrap<plus<
-        ewrap<unary_plus<ewrap<terminal<int>::type> >::type>
-      , ewrap<terminal<int>::type>
-    >::type> p4 = functional::make_expr<tag::plus, mydomain>()(p3, 0);
-    BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::plus
+              , proto::list2<
+                    p3_type
+                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p4_type;
+    p4_type p4 = functional::make_expr<tag::plus>()(p3, 0);
 }
 
 void test_make_expr_functional_ref()
@@ -97,13 +150,31 @@ void test_make_expr_functional_ref()
     unary_plus<terminal<int &>::type>::type p2 = functional::make_expr<tag::unary_plus>()(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
-    ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> p3 = functional::make_expr<tag::unary_plus, mydomain>()(boost::ref(i));
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::unary_plus
+              , proto::list1<
+                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                >
+            >
+        >
+    p3_type;
+    p3_type p3 = functional::make_expr<tag::unary_plus, mydomain>()(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
-    ewrap<plus<
-        ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> &
-      , ewrap<terminal<int>::type>
-    >::type> p4 = functional::make_expr<tag::plus, mydomain>()(boost::ref(p3), 0);
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::plus
+              , proto::list2<
+                    p3_type &
+                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p4_type;
+    p4_type p4 = functional::make_expr<tag::plus>()(boost::ref(p3), 0);
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
@@ -116,13 +187,31 @@ void test_unpack_expr()
     unary_plus<terminal<int &>::type>::type p2 = unpack_expr<tag::unary_plus>(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
-    ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> p3 = unpack_expr<tag::unary_plus, mydomain>(fusion::make_tuple(boost::ref(i)));
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::unary_plus
+              , proto::list1<
+                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                >
+            >
+        >
+    p3_type;
+    p3_type p3 = unpack_expr<tag::unary_plus, mydomain>(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
-    ewrap<plus<
-        ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> &
-      , ewrap<terminal<int>::type>
-    >::type> p4 = unpack_expr<tag::plus>(fusion::make_tuple(boost::ref(p3), 0));
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::plus
+              , proto::list2<
+                    p3_type &
+                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p4_type;
+    p4_type p4 = unpack_expr<tag::plus>(fusion::make_tuple(boost::ref(p3), 0));
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
@@ -135,13 +224,31 @@ void test_unpack_expr_functional()
     unary_plus<terminal<int &>::type>::type p2 = functional::unpack_expr<tag::unary_plus>()(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
-    ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> p3 = functional::unpack_expr<tag::unary_plus, mydomain>()(fusion::make_tuple(boost::ref(i)));
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::unary_plus
+              , proto::list1<
+                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                >
+            >
+        >
+    p3_type;
+    p3_type p3 = functional::unpack_expr<tag::unary_plus, mydomain>()(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
-    ewrap<plus<
-        ewrap<unary_plus<ewrap<terminal<int &>::type> >::type> &
-      , ewrap<terminal<int>::type>
-    >::type> p4 = functional::unpack_expr<tag::plus>()(fusion::make_tuple(boost::ref(p3), 0));
+    typedef
+        ewrap<
+            proto::basic_expr<
+                tag::plus
+              , proto::list2<
+                    p3_type &
+                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                >
+            >
+        >
+    p4_type;
+    p4_type p4 = functional::unpack_expr<tag::plus>()(fusion::make_tuple(boost::ref(p3), 0));
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 

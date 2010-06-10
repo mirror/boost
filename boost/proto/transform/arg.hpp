@@ -150,7 +150,7 @@ namespace boost { namespace proto
             result_type;
 
             /// Returns the N-th child of \c e
-            /// \pre <tt>arity_of\<Expr\>::::value \> N</tt> 
+            /// \pre <tt>arity_of\<Expr\>::value \> N</tt> 
             /// \param e The current expression.
             /// \return <tt>proto::child_c\<N\>(e)</tt>
             /// \throw nothrow
@@ -190,7 +190,7 @@ namespace boost { namespace proto
             result_type;
 
             /// Returns the value of the specified terminal expression.
-            /// \pre <tt>arity_of\<Expr\>::::value == 0</tt>.
+            /// \pre <tt>arity_of\<Expr\>::value == 0</tt>.
             /// \param e The current expression.
             /// \return <tt>proto::value(e)</tt>
             /// \throw nothrow

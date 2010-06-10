@@ -91,7 +91,7 @@
         /// a Grammar.
         ///
         /// Given a Grammar such as <tt>plus\<T0, T1\></tt>, an expression type
-        /// that matches the grammar such as <tt>plus\<E0, E1\>::::type</tt>, a
+        /// that matches the grammar such as <tt>plus\<E0, E1\>::type</tt>, a
         /// state \c S and a data \c V, the result of applying the
         /// <tt>pass_through\<plus\<T0, T1\> \></tt> transform is:
         ///
@@ -167,13 +167,15 @@
             {
                 typedef typename pass_through_impl::expr unref_expr;
 
-                typedef proto::expr<
-                    typename unref_expr::proto_tag
-                  , BOOST_PP_CAT(list, N)<
-                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM_TYPE, ~)
-                    >
-                  , N
-                > expr_type;
+                typedef
+                    typename base_expr<
+                        typename unref_expr::proto_domain
+                      , typename unref_expr::proto_tag
+                      , BOOST_PP_CAT(list, N)<
+                            BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM_TYPE, ~)
+                        >
+                    >::type
+                expr_type;
 
                 typedef typename unref_expr::proto_generator proto_generator;
                 typedef typename boost::tr1_result_of<proto_generator(expr_type)>::type result_type;

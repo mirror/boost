@@ -45,9 +45,9 @@
        within that problem space.]]
   [ [ [anchor expression] expression]
       [In Proto, an /expression/ is a heterogeneous tree where each node is either 
-       an instantiation of `boost::proto::expr<>` or some type that is an extension 
-       (via `boost::proto::extends<>` or `BOOST_PROTO_EXTENDS()`) of such an 
-       instantiation.]]
+       an instantiation of `boost::proto::expr<>`, `boost::proto::basic_expr<>` or
+	   some type that is an extension  (via `boost::proto::extends<>` or 
+	   `BOOST_PROTO_EXTENDS()`) of such an instantiation.]]
   [ [ [anchor expression_template] expression template]
       [A C++ technique using templates and operator overloading to cause 
        expressions to build trees that represent the expression for lazy evaluation 

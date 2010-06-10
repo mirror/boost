@@ -72,6 +72,22 @@
     </description>
   </associated-type>
 
+  <associated-type name="proto_grammar">
+    <get-member-type name="proto_grammar">
+      <type name="Expr"/>
+    </get-member-type>
+    <description>
+      <simpara>
+        A typedef for an instantiation of
+        <classname alt="boost::proto::basic_expr">
+          <code>proto::basic_expr&lt;&gt;</code>
+        </classname>
+        that is equivalent to Expr. Expression types are equivalent if they have the
+        same <code>proto_tag</code>, <code>proto_args</code>, and <code>proto_arity</code>.
+      </simpara>
+    </description>
+  </associated-type>
+
   <associated-type name="proto_base_expr">
     <get-member-type name="proto_base_expr">
       <type name="Expr"/>
@@ -79,7 +95,8 @@
     <description>
       <simpara>
         A typedef for an instantiation of
-        <classname alt="boost::proto::expr"><code>proto::expr&lt;&gt;</code></classname>
+        <classname alt="boost::proto::expr"><code>proto::expr&lt;&gt;</code></classname> or
+        <classname alt="boost::proto::basic_expr"><code>proto::basic_expr&lt;&gt;</code></classname>
         that is equivalent to Expr. Expression types are equivalent if they have the
         same <code>proto_tag</code>, <code>proto_args</code>, and <code>proto_arity</code>.
       </simpara>
@@ -164,7 +181,8 @@
     </return-type>
     <semantics>
         Returns an object of type
-        <classname alt="boost::proto::expr"><code>proto::expr&lt;&gt;</code></classname>
+        <classname alt="boost::proto::expr"><code>proto::expr&lt;&gt;</code></classname> or
+        <classname alt="boost::proto::basic_expr"><code>proto::basic_expr&lt;&gt;</code></classname>
         that is equivalent to <code>e</code>.
     </semantics>
   </valid-expression>

@@ -71,7 +71,8 @@
             <computeroutput>T t(a<subscript>0</subscript>,...a<subscript>n</subscript>)</computeroutput>.
           </para>
           <para>
-            Note: <computeroutput><classname>proto::expr&lt;&gt;</classname> is an aggregate.</computeroutput>
+            Note: <computeroutput><classname>proto::expr&lt;&gt;</classname></computeroutput> and
+            <computeroutput><classname>proto::basic_expr&lt;&gt;</classname></computeroutput>are aggregates.
           </para>
         </description>
         <inherit><type>mpl::bool_&lt;<replaceable>true-or-false</replaceable>&gt;</type></inherit>
@@ -595,8 +596,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -626,8 +627,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::if_else_</classname>, <classname alt="proto::listN">proto::list3</classname>&lt; T, U, V &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::if_else_</classname>, <classname alt="proto::listN">proto::list3</classname>&lt; T, U, V &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -654,8 +655,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::unary_plus</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::unary_plus</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -682,8 +683,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::negate</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::negate</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -710,8 +711,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::dereference</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::dereference</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -738,8 +739,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::complement</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::complement</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -766,8 +767,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::address_of</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::address_of</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -794,8 +795,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::logical_not</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::logical_not</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -822,8 +823,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::pre_inc</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::pre_inc</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -850,8 +851,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::pre_dec</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::pre_dec</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -878,8 +879,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::post_inc</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::post_inc</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -906,8 +907,10 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::post_dec</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type>
+            <classname>proto::basic_expr</classname>&lt; <classname>proto::tag::post_dec</classname>, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;
+          </type>
         </typedef>
       </struct>
 
@@ -935,8 +938,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::shift_left</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::shift_left</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -964,8 +967,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::shift_right</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::shift_right</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -993,8 +996,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::multiplies</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::multiplies</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -1022,8 +1025,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::divides</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::divides</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1051,8 +1054,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::modulus</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::modulus</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1080,8 +1083,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::plus</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::plus</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1109,8 +1112,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::minus</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::minus</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1138,8 +1141,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::less</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::less</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1167,8 +1170,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::greater</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::greater</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1196,8 +1199,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::less_equal</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::less_equal</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1225,8 +1228,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::greater_equal</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::greater_equal</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1254,8 +1257,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::equal_to</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::equal_to</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1283,8 +1286,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::not_equal_to</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::not_equal_to</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1312,8 +1315,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::logical_or</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::logical_or</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1341,8 +1344,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::logical_and</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::logical_and</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1370,8 +1373,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::bitwise_and</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::bitwise_and</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1399,8 +1402,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::bitwise_or</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::bitwise_or</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1428,8 +1431,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::bitwise_xor</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::bitwise_xor</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1457,8 +1460,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::comma</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::comma</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1481,8 +1484,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::mem_ptr</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::mem_ptr</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1510,8 +1513,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1539,8 +1542,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::shift_left_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::shift_left_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1568,8 +1571,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::shift_right_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::shift_right_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1597,8 +1600,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::multiplies_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::multiplies_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1626,8 +1629,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::divides_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::divides_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1655,8 +1658,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::modulus_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::modulus_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1684,8 +1687,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::plus_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::plus_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1713,8 +1716,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::minus_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::minus_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1742,8 +1745,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::bitwise_and_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::bitwise_and_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1771,8 +1774,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::bitwise_or_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::bitwise_or_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1800,8 +1803,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::bitwise_xor_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::bitwise_xor_assign</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1829,8 +1832,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::subscript</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::subscript</classname>, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -1858,8 +1861,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; <classname>proto::tag::function</classname>, <classname alt="proto::listN">proto::list<replaceable>N</replaceable></classname>&lt; A... &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; <classname>proto::tag::function</classname>, <classname alt="proto::listN">proto::list<replaceable>N</replaceable></classname>&lt; A... &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -1922,8 +1925,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; Tag, <classname>proto::term</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; Tag, <classname>proto::term</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -1958,8 +1961,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list1</classname>&lt; T &gt; &gt;</type>
         </typedef>
       </struct>
       
@@ -1994,8 +1997,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list2</classname>&lt; T, U &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -2030,8 +2033,8 @@
         <typedef name="type">
           <type><classname>proto::expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list<replaceable>N</replaceable></classname>&lt; A... &gt; &gt;</type>
         </typedef>
-        <typedef name="proto_base_expr">
-          <type>type</type>
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list<replaceable>N</replaceable></classname>&lt; A... &gt; &gt;</type>
         </typedef>
       </struct>
 
@@ -2044,8 +2047,9 @@
           is a Proto expression type.</purpose>
         <description>
           <para>
-            If <computeroutput>T</computeroutput> is an instantiation of <computeroutput>
-            <classname alt="proto::expr">proto::expr&lt;&gt;</classname></computeroutput> or is an extension
+            If <computeroutput>T</computeroutput> is an instantiation of 
+            <computeroutput><classname alt="proto::expr">proto::expr&lt;&gt;</classname></computeroutput> or
+            <computeroutput><classname alt="proto::basic_expr">proto::basic_expr&lt;&gt;</classname></computeroutput> or is an extension
             (via <classname alt="proto::extends">proto::extends&lt;&gt;</classname> or
             <macroname>BOOST_PROTO_EXTENDS</macroname>()) of such an instantiation, 
             <computeroutput><classname>proto::is_expr</classname>&lt;T&gt;::value</computeroutput>
@@ -2099,7 +2103,7 @@
               <computeroutput>A</computeroutput> be <computeroutput>T &amp;</computeroutput>. Otherwise, let
               <computeroutput>A</computeroutput> be the type <computeroutput>T</computeroutput> stripped of
               cv-qualifiers. Then, the result type <computeroutput>proto::result_of::as_expr&lt;T, Domain&gt;::type</computeroutput>
-              is <computeroutput>boost::result_of&lt;Domain(<classname>proto::expr</classname>&lt; <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;A&gt; &gt;)&gt;::type</computeroutput>.
+              is <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;Domain, <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;A&gt; &gt;::type)&gt;::type</computeroutput>.
             </para>
           </description>
           <typedef name="type">
@@ -2125,7 +2129,7 @@
             <para>
               When <computeroutput>T</computeroutput> is not yet a Proto type,
               the result type <computeroutput>proto::result_of::as_child&lt;T, Domain&gt;::type</computeroutput> is
-              <computeroutput>boost::result_of&lt;Domain(<classname>proto::expr</classname>&lt; <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;T &amp;&gt; &gt;)&gt;::type</computeroutput>.
+              <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;Domain, <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;T &amp;&gt; &gt;::type)&gt;::type</computeroutput>.
             </para>
             <para>
               When <computeroutput>T</computeroutput> is already a Proto type

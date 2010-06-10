@@ -69,17 +69,17 @@ namespace boost { namespace proto
             typedef Expr *type;
         };
 
-        template<typename T, typename Tag, typename Arg0>
-        proto::expr<Tag, proto::term<Arg0>, 0> make_terminal(T &t, proto::expr<Tag, proto::term<Arg0>, 0> *)
+        template<typename T, typename Expr, typename Arg0>
+        Expr make_terminal(T &t, Expr *, proto::term<Arg0> *)
         {
-            proto::expr<Tag, proto::term<Arg0>, 0> that = {t};
+            Expr that = {t};
             return that;
         }
 
-        template<typename T, typename Tag, typename Arg0, std::size_t N>
-        proto::expr<Tag, proto::term<Arg0[N]>, 0> make_terminal(T (&t)[N], proto::expr<Tag, proto::term<Arg0[N]>, 0> *)
+        template<typename T, typename Expr, typename Arg0, std::size_t N>
+        Expr make_terminal(T (&t)[N], Expr *, proto::term<Arg0[N]> *)
         {
-            expr<Tag, proto::term<Arg0[N]>, 0> that;
+            Expr that;
             for(std::size_t i = 0; i < N; ++i)
             {
                 that.child0[i] = t[i];
@@ -87,10 +87,10 @@ namespace boost { namespace proto
             return that;
         }
 
-        template<typename T, typename Tag, typename Arg0, std::size_t N>
-        proto::expr<Tag, proto::term<Arg0[N]>, 0> make_terminal(T const(&t)[N], proto::expr<Tag, proto::term<Arg0[N]>, 0> *)
+        template<typename T, typename Expr, typename Arg0, std::size_t N>
+        Expr make_terminal(T const(&t)[N], Expr *, proto::term<Arg0[N]> *)
         {
-            expr<Tag, proto::term<Arg0[N]>, 0> that;
+            Expr that;
             for(std::size_t i = 0; i < N; ++i)
             {
                 that.child0[i] = t[i];
