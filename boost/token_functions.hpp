@@ -35,13 +35,12 @@
 #include <stdexcept>
 #include <string>
 #include <cctype>
+#include <cwctype>
 #include <algorithm> // for find_if
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/if.hpp>
-
-#include <ctype.h>	// required for wide version of character checkers
 
 //
 // the following must not be macros if we are to prefix them
