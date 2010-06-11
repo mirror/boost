@@ -68,7 +68,7 @@ namespace boost {
             { return io::detail::feed<CharT, Tr, Alloc, T&>(*this,x); }
 #endif
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
         // GCC can't handle anonymous enums without some help
         // ** arguments passing ** //
         basic_format&   operator%(const int& x)
