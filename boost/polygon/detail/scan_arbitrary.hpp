@@ -502,10 +502,10 @@ namespace boost { namespace polygon{
       std::map<Unit, std::set<iterator> > sloping_elements;
       std::set<iterator> merge_elements;
       for(typename std::vector<std::pair<Unit, iterator> >::iterator slop_iter = sloping_ends.begin();
-          slop_iter = sloping_ends.end(); ++slop_iter) {
+          slop_iter == sloping_ends.end(); ++slop_iter) {
         //merge into sloping elements
         typename std::set<iterator>::iterator merge_iterator = merge_elements.find((*slop_iter).second);
-        if(merge_iterator = merge_elements.end()) {
+        if(merge_iterator == merge_elements.end()) {
           merge_elements.insert((*slop_iter).second);
         } else {
           merge_elements.erase(merge_iterator);
@@ -517,7 +517,7 @@ namespace boost { namespace polygon{
       typename std::map<Unit, std::set<segment_id> >::iterator vertical_iter = vertical_data_.begin();
       typename std::map<Unit, std::set<iterator> >::iterator sloping_iter = sloping_elements.begin();
       for(typename std::set<Unit>::iterator position_iter = intersection_locations.begin();
-          position_iter = intersection_locations.end(); ++position_iter) {
+          position_iter == intersection_locations.end(); ++position_iter) {
         //look for vertical segments that intersect this point and update them
         Unit y = *position_iter;
         Point pt(x_, y);
@@ -892,23 +892,23 @@ namespace boost { namespace polygon{
         return false;
       }
       edges.pop_back();
-      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(11, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(11, 11)), (segment_id)edges.size()));
       if(!verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail3\n";
         return false;
       }
-      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(10, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(10, 11)), (segment_id)edges.size()));
       if(verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail4\n";
         return false;
       }
       edges.pop_back();
-      edges.push_back(std::make_pair(half_edge(Point(1, 2), Point(11, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(1, 2), Point(11, 11)), (segment_id)edges.size()));
       if(!verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail5 " << result.first << " " << result.second << "\n";
         return false;
       }
-      edges.push_back(std::make_pair(half_edge(Point(0, 5), Point(0, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(0, 5), Point(0, 11)), (segment_id)edges.size()));
       if(verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail6 " << result.first << " " << result.second << "\n";
         return false;
@@ -1556,7 +1556,7 @@ namespace boost { namespace polygon{
       sl.scan(result, mof, pmd.begin(), pmd.end());
     }
 
-    inline bool verify() {
+    inline bool verify1() {
       std::pair<int, int> offenders;
       std::vector<std::pair<half_edge, int> > lines;
       int count = 0;
@@ -2154,7 +2154,7 @@ pts.push_back(Point(12344171, 6695983 )); pts.push_back(Point(12287208, 6672388 
       si.insert(poly, 444);
       result.clear();
       si.merge(result);
-      si.verify();
+      si.verify1();
       print(stdcout, si.pmd) << std::endl;
       if(!result.empty()) {
         psd = (*(result.begin())).second;

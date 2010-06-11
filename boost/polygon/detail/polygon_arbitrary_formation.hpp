@@ -388,7 +388,8 @@ namespace boost { namespace polygon{
     struct compute_intersection_pack {
       typedef typename high_precision_type<Unit>::type high_precision;
       high_precision y_high, dx1, dy1, dx2, dy2, x11, x21, y11, y21, x_num, y_num, x_den, y_den, x, y;
-      static inline bool compute_lazy_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, bool projected = false) {
+      static inline bool compute_lazy_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, 
+                                                   bool projected = false, bool round_closest = false) {
         long double y_high, dx1, dy1, dx2, dy2, x11, x21, y11, y21, x_num, y_num, x_den, y_den, x, y;
         typedef rectangle_data<Unit> Rectangle;
         Rectangle rect1, rect2;
@@ -445,6 +446,10 @@ namespace boost { namespace polygon{
         //std::cout << "cross2 " << dy2 << " " << dx1 << " " << dy2 * dx1 << std::endl;
         //Unit exp_x = compute_x_intercept<at>(x11, x21, y11, y21, dy1, dy2, dx1, dx2);
         //Unit exp_y = compute_x_intercept<at>(y11, y21, x11, x21, dx1, dx2, dy1, dy2);
+        if(round_closest) {
+          x = x + 0.5;
+          y = y + 0.5;
+        }
         Unit x_unit = (Unit)(x);
         Unit y_unit = (Unit)(y);
         //truncate downward if it went up due to negative number
@@ -463,12 +468,17 @@ namespace boost { namespace polygon{
                                                (long double) (std::numeric_limits<Unit>::min)(), 
                                                (long double)(std::numeric_limits<Unit>::max)(), 
                                                (long double) (std::numeric_limits<Unit>::max)() );
-          return contains(inf_rect, intersection, true);
+          if(contains(inf_rect, intersection, true)) {
+            intersection = result;
+            return true;
+          } else
+            return false;
         }
         intersection = result;
         return true;
       }
-      inline bool compute_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, bool projected = false) {
+      inline bool compute_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, 
+                                       bool projected = false, bool round_closest = false) {
         if(!projected && !intersects(he1, he2))
            return false;
         bool lazy_success = compute_lazy_intersection(intersection, he1, he2, projected); 
@@ -536,6 +546,10 @@ namespace boost { namespace polygon{
         //std::cout << "cross2 " << dy2 << " " << dx1 << " " << dy2 * dx1 << std::endl;
         //Unit exp_x = compute_x_intercept<at>(x11, x21, y11, y21, dy1, dy2, dx1, dx2);
         //Unit exp_y = compute_x_intercept<at>(y11, y21, x11, x21, dx1, dx2, dy1, dy2);
+        if(round_closest) {
+          x = x + (high_precision)0.5;
+          y = y + (high_precision)0.5;
+        }
         Unit x_unit = convert_high_precision_type<Unit>(x);
         Unit y_unit = convert_high_precision_type<Unit>(y);
         //truncate downward if it went up due to negative number
@@ -549,6 +563,17 @@ namespace boost { namespace polygon{
         Point result(x_unit, y_unit);
         if(!contains(rect1, result, true)) return false;
         if(!contains(rect2, result, true)) return false;
+        if(projected) {
+          rectangle_data<long double> inf_rect((long double)(std::numeric_limits<Unit>::min)(), 
+                                               (long double) (std::numeric_limits<Unit>::min)(), 
+                                               (long double)(std::numeric_limits<Unit>::max)(), 
+                                               (long double) (std::numeric_limits<Unit>::max)() );
+          if(contains(inf_rect, intersection, true)) {
+            intersection = result;
+            return true;
+          } else
+            return false;
+        }
         intersection = result;
         return true;
       }
