@@ -291,11 +291,6 @@ inline class_id_type
 basic_iarchive_impl::register_type(
     const basic_iserializer & bis
 ){
-    assert(
-        cobject_info_set.size() 
-        <= 
-        boost::integer_traits<class_id_type>::const_max
-    );
     class_id_type cid(cobject_info_set.size());
     cobject_type co(cid, bis);
     std::pair<cobject_info_set_type::const_iterator, bool>
@@ -320,7 +315,7 @@ basic_iarchive_impl::load_preamble(
 ){
     if(! co.initialized){
         if(co.bis_ptr->class_info()){
-            class_id_optional_type cid;
+            class_id_optional_type cid(class_id_type(0));
             load(ar, cid);    // to be thrown away
             load(ar, co.tracking_level);
             load(ar, co.file_version);
@@ -380,7 +375,7 @@ basic_iarchive_impl::load_object(
 
     object_id_type this_id;
     moveable_objects_start =
-    this_id = object_id_vector.size();
+    this_id = object_id_type(object_id_vector.size());
 
     // if we tracked this object when the archive was saved
     if(tracking){ 
@@ -391,7 +386,7 @@ basic_iarchive_impl::load_object(
         // add a new enty into the tracking list
         object_id_vector.push_back(aobject(t, cid));
         // and add an entry for this object
-        moveable_objects_end = object_id_vector.size();
+        moveable_objects_end = object_id_type(object_id_vector.size());
     }
     // read data
     (bis.load_object_data)(ar, t, co.file_version);
@@ -416,11 +411,6 @@ basic_iarchive_impl::load_pointer(
         return bpis_ptr;
     }
 
-    assert(
-        cobject_info_set.size() 
-        <= 
-        boost::integer_traits<class_id_type>::const_max
-    );
     // if its a new class type - i.e. never been registered
     if(class_id_type(cobject_info_set.size()) <= cid){
         // if its either abstract
