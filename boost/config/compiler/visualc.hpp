@@ -80,6 +80,8 @@
 // although a conforming signature for swprint exists in VC7.1
 // it appears not to actually work:
 #  define BOOST_NO_SWPRINTF
+// Our extern template tests also fail for this compiler:
+#  define BOOST_NO_EXTERN_TEMPLATE
 #endif
 
 #if defined(UNDER_CE)
