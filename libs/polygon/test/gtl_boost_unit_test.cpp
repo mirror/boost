@@ -3364,6 +3364,89 @@ int main() {
     return 1;
   }
 
+  {
+    polygon_set_data<int> ps;
+    polygon_90_set_data<int> ps90;
+    rectangle_data<int> rect(0, 1, 10, 100);
+    ps.insert(rect);
+    ps90.insert(rect);
+    ps.bloat(10);
+    ps90.bloat(10, 10, 10, 10);
+    if(!equivalence(ps, ps90)) {
+      std::cout << "test manhattan vs general resize up failed\n";
+      return 1;
+    }
+    ps.shrink(10);
+    ps90.shrink(10, 10, 10, 10);
+    if(!equivalence(ps, rect)) {
+      std::cout << "test manhattan vs general resize down failed\n";
+      return 1;
+    }
+    rectangle_data<int> rect2(3, 4, 6, 80);
+    ps -= rect2;
+    ps90 -= rect2;
+    ps.bloat(1);
+    ps90.bloat(1, 1, 1, 1);
+    if(!equivalence(ps, ps90)) {
+      std::cout << "test manhattan vs general with hole resize up failed\n";
+      return 1;
+    }
+    ps.shrink(1);
+    ps90.shrink(1, 1, 1, 1);
+    if(!equivalence(ps, ps90)) {
+      std::cout << "test manhattan vs general with hole resize down failed\n";
+      return 1;
+    }
+    ps.clear();
+    polygon_45_data<int> poly;
+    std::vector<point_data<int> > pts;
+    pts.push_back(point_data<int>(0, 0));
+    pts.push_back(point_data<int>(10, 0));
+    pts.push_back(point_data<int>(0, 10));
+    polygon_45_set_data<int> ps45;
+    set_points(poly, pts.begin(), pts.end());
+    ps.insert(poly);
+    ps45.insert(poly);
+    ps.bloat(9);
+    ps45.resize(9);
+    if(!equivalence(ps, ps45)) {
+      std::cout << "test 45 vs general resize up failed\n";
+      return 1;
+    }    
+    ps.shrink(9);
+    ps45.resize(-9);
+    if(!equivalence(ps, ps45)) {
+      std::cout << "test 45 vs general resize down failed\n";
+      return 1;
+    }
+    pts.clear();
+    pts.push_back(point_data<int>(1, 1));
+    pts.push_back(point_data<int>(7, 1));
+    pts.push_back(point_data<int>(1, 7));
+    set_points(poly, pts.begin(), pts.end());
+    ps.insert(poly, true);
+    ps45.insert(poly, true);
+    ps.bloat(1);
+    ps45.resize(1);
+    if(!equivalence(ps, ps45)) {
+      std::cout << "test 45 vs general resize up with holes failed\n";
+      return 1;
+    }    
+    ps.shrink(1);
+    ps45.resize(-1);
+    if(!equivalence(ps, ps45)) {
+      std::cout << "test 45 vs general resize down with holes failed\n";
+      return 1;
+    }    
+    ps.shrink(10);
+    ps45.resize(-10);
+    if(!equivalence(ps, ps45)) {
+      std::cout << "test 45 vs general resize down 2 with holes failed\n";
+      return 1;
+    }    
+  }
+
+
   std::cout << "ALL TESTS COMPLETE\n";
   return 0;
 }
