@@ -546,6 +546,7 @@ that are not yet supported by a particular compiler or library.
 [[`BOOST_NO_0X_HDR_SYSTEM_ERROR`][The standard library does not provide header <system_error>.]]
 [[`BOOST_NO_0X_HDR_THREAD`][The standard library does not provide header <thread>.]]
 [[`BOOST_NO_0X_HDR_TUPLE`][The standard library does not provide header <tuple>.]]
+[[`BOOST_NO_0X_HDR_TYPEINDEX`][The standard library does not provide header <typeindex>.]]
 [[`BOOST_NO_0X_HDR_TYPE_TRAITS`][The standard library does not provide header <type_traits>.]]
 [[`BOOST_NO_0X_HDR_UNORDERED_MAP`][The standard library does not provide header <unordered_map>.]]
 [[`BOOST_NO_0X_HDR_UNORDERED_SET`][The standard library does not provide header <unordered_set>.]]
