@@ -12,6 +12,7 @@
 #define BOOST_PROTO_DOMAIN_HPP_EAN_02_13_2007
 
 #include <boost/ref.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/generate.hpp>
 #include <boost/proto/detail/as_expr.hpp>
@@ -96,7 +97,7 @@ namespace boost { namespace proto
         /// INTERNAL ONLY
         typedef void proto_is_domain_;
 
-        /// \brief A monomorphic unary function object that turns objects into Proto
+        /// \brief A unary MonomorphicFunctionObject that turns objects into Proto
         /// expression objects in this domain.
         ///
         /// The <tt>as_expr\<\></tt> function object turns objects into Proto expressions, if
@@ -120,19 +121,34 @@ namespace boost { namespace proto
         ///
         /// Otherwise, the result is \c t converted to an (un-const) rvalue.
         ///
-        template<typename T, typename Callable = proto::callable>
+        template<typename T, typename IsExpr = void, typename Callable = proto::callable>
         struct as_expr
           : detail::as_expr<
                 T
               , typename detail::base_generator<Generator>::type
-              , is_expr<T>::value
               , wants_basic_expr<Generator>::value
             >
         {
             BOOST_PROTO_CALLABLE()
         };
 
-        /// \brief A monomorphic unary function object that turns objects into Proto
+        /// INTERNAL ONLY
+        ///
+        template<typename T>
+        struct as_expr<T, typename T::proto_is_expr_, proto::callable>
+          : detail::already_expr<
+                T
+              , typename detail::base_generator<Generator>::type
+              , is_same<
+                    typename detail::base_generator<Generator>::type
+                  , typename detail::base_generator<typename T::proto_generator>::type
+                >::value
+            >
+        {
+            BOOST_PROTO_CALLABLE()
+        };
+
+        /// \brief A unary MonomorphicFunctionObject that turns objects into Proto
         /// expression objects in this domain.
         ///
         /// The <tt>as_child\<\></tt> function object turns objects into Proto expressions, if
@@ -150,13 +166,28 @@ namespace boost { namespace proto
         ///
         /// Otherwise, the result is the lvalue \c t.
         ///
-        template<typename T, typename Callable = proto::callable>
+        template<typename T, typename IsExpr = void, typename Callable = proto::callable>
         struct as_child
           : detail::as_child<
                 T
               , typename detail::base_generator<Generator>::type
-              , is_expr<T>::value
               , wants_basic_expr<Generator>::value
+            >
+        {
+            BOOST_PROTO_CALLABLE()
+        };
+
+        /// INTERNAL ONLY
+        ///
+        template<typename T>
+        struct as_child<T, typename T::proto_is_expr_, proto::callable>
+          : detail::already_child<
+                T
+              , typename detail::base_generator<Generator>::type
+              , is_same<
+                    typename detail::base_generator<Generator>::type
+                  , typename detail::base_generator<typename T::proto_generator>::type
+                >::value
             >
         {
             BOOST_PROTO_CALLABLE()
