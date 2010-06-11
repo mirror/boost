@@ -12,6 +12,8 @@
 #pragma warning(push,1)
 #endif
 
+#include <boost/detail/workaround.hpp>
+
 namespace
 boost
     {
@@ -219,7 +221,8 @@ boost
 #endif
             ;
 
-#if (defined(__MWERKS__) && __MWERKS__<=0x3207) || (defined(_MSC_VER) && _MSC_VER<=1310)
+#if (defined(__MWERKS__) && __MWERKS__<=0x3207) || (defined(_MSC_VER) && _MSC_VER<=1310) || \
+  BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x621))
         public:
 #else
         private:
