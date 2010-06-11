@@ -136,7 +136,7 @@ boost
 
     class exception;
 
-    template <class>
+    template <class T>
     class shared_ptr;
 
     namespace
