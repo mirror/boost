@@ -31,7 +31,6 @@
 
 #include <boost/archive/detail/common_oarchive.hpp>
 #include <boost/serialization/string.hpp>
-#include <boost/serialization/item_version_type.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -87,14 +86,6 @@ public:
         this->detail_common_oarchive::save_override(t, 0);
     }
 
-    void save_override(const version_type & t, int){
-        const unsigned int x = t;
-        * this->This() << x;
-    }
-    void save_override(const boost::serialization::item_version_type & t, int){
-        const unsigned int x = t;
-        * this->This() << x;
-    }
     // text file don't include the optional information 
     void save_override(const class_id_optional_type & /* t */, int){}
 

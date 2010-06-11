@@ -32,6 +32,10 @@ public:
         t = rhs.t; 
         return *this;
     }
+    collection_size_type & operator=(const unsigned int & rhs){
+        t = rhs; 
+        return *this;
+    }
     // used for text output
     operator const base_type () const {
         return t;

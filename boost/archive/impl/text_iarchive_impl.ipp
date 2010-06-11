@@ -71,6 +71,7 @@ text_iarchive_impl<Archive>::load(wchar_t *ws)
     ws[size] = L'\0';
 }
 #endif // BOOST_NO_INTRINSIC_WCHAR_T
+#endif // BOOST_NO_CWCHAR
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
@@ -90,7 +91,6 @@ text_iarchive_impl<Archive>::load(std::wstring &ws)
 }
 
 #endif // BOOST_NO_STD_WSTRING
-#endif // BOOST_NO_CWCHAR
 
 template<class Archive>
 BOOST_ARCHIVE_DECL(void)

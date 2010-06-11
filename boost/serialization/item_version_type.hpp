@@ -7,7 +7,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/cstdint.hpp> // uint_least8_t
-#include <boost/operators.hpp>
+#include <boost/integer_traits.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/is_bitwise_serializable.hpp>
 
@@ -25,26 +25,30 @@ private:
     base_type t;
     item_version_type(): t(0) {};
 public:
-    explicit item_version_type(const unsigned int & t_) : t(t_){
+    explicit item_version_type(const unsigned int t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
     item_version_type(const item_version_type & t_) : 
         t(t_.t)
     {}
-    item_version_type & operator=(const item_version_type & rhs){
+    item_version_type & operator=(item_version_type rhs){
         t = rhs.t; 
         return *this;
     }
     // used for text output
-    operator const unsigned int () const {
+    operator const base_type () const {
         return t;
     }                
+    // used for text output
+    operator base_type & () {
+        return t;
+    }
     bool operator==(const item_version_type & rhs) const {
         return t == rhs.t;
     } 
     bool operator<(const item_version_type & rhs) const {
         return t < rhs.t;
-    }   
+    }
 };
 
 #if defined(_MSC_VER)

@@ -55,11 +55,11 @@ public:
         return *this;
     }
     // used for text output
-    operator const unsigned int () const {
+    operator const base_type () const {
         return t;
     }                
-    // used for text output
-    operator uint_least16_t & (){
+    // used for text input
+    operator base_type & (){
         return t;
     }                
     bool operator==(const library_version_type & rhs) const {
@@ -90,7 +90,11 @@ public:
         return *this;
     }
     // used for text output
-    operator const unsigned int () const {
+    operator const base_type () const {
+        return t;
+    }                
+    // used for text intput
+    operator base_type  & (){
         return t;
     }                
     bool operator==(const version_type & rhs) const {
@@ -111,7 +115,7 @@ public:
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
     explicit class_id_type(const std::size_t t_) : t(t_){
-        assert(t_ <= boost::integer_traits<base_type>::const_max);
+ //       assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
     class_id_type(const class_id_type & t_) : 
         t(t_.t)
@@ -156,7 +160,7 @@ public:
         return *this;
     }
     // used for text output
-    operator const unsigned int () const {
+    operator const uint_least32_t () const {
         return t;
     }                
     // used for text input

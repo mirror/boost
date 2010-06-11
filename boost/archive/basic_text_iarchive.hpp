@@ -30,8 +30,6 @@
 
 #include <boost/archive/detail/common_iarchive.hpp>
 
-#include <boost/serialization/item_version_type.hpp>
-
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 #ifdef BOOST_MSVC
@@ -68,20 +66,6 @@ public:
     }
     // text file don't include the optional information 
     void load_override(class_id_optional_type & /*t*/, int){}
-
-    void load_override(version_type & t, int){
-        unsigned int v;
-        load_override(v, 0);
-        t = version_type(v);
-    }
-    void load_override(
-        boost::serialization::item_version_type & t, 
-        int
-    ){
-        unsigned int v;
-        load_override(v, 0);
-        t = boost::serialization::item_version_type(v);
-    }
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(class_name_type & t, int);

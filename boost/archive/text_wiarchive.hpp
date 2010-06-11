@@ -27,7 +27,6 @@
 #include <boost/archive/basic_text_iprimitive.hpp>
 #include <boost/archive/basic_text_iarchive.hpp>
 #include <boost/archive/detail/register_archive.hpp>
-
 #include <boost/serialization/item_version_type.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
@@ -57,10 +56,15 @@ protected:
     void load(T & t){
         basic_text_iprimitive<std::wistream>::load(t);
     }
+    void load(version_type & t){
+        unsigned int v;
+        load(v);
+        t = version_type(v);
+    }
     void load(boost::serialization::item_version_type & t){
-        unsigned int x;
-        basic_text_iprimitive<std::wistream>::load(x);
-        t = boost::serialization::item_version_type(x);
+        unsigned int v;
+        load(v);
+        t = boost::serialization::item_version_type(v);
     }
     BOOST_WARCHIVE_DECL(void)
     load(char * t);

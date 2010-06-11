@@ -48,7 +48,6 @@ namespace archive {
 
 // wide char stuff used by char archives
 
-#ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
 BOOST_ARCHIVE_DECL(void)
@@ -83,6 +82,7 @@ xml_iarchive_impl<Archive>::load(std::wstring &ws){
 }
 #endif // BOOST_NO_STD_WSTRING
 
+#ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
 BOOST_ARCHIVE_DECL(void)
