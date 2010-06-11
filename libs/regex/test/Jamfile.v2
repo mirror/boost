@@ -18,6 +18,9 @@ project
       <toolset>gcc:<cxxflags>-Wextra
       <toolset>gcc:<cxxflags>-Wshadow
       <define>U_USING_ICU_NAMESPACE=0
+      <toolset>gcc-mw:<link>static
+      <toolset>gcc-mingw:<link>static
+      <toolset>gcc-cygwin:<link>static
     ;
 
 #
