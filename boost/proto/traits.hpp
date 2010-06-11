@@ -22,6 +22,7 @@
     #include <boost/preprocessor/repetition/repeat_from_to.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
+    #include <boost/static_assert.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/aux_/template_arity.hpp>
     #include <boost/mpl/aux_/lambda_arity_param.hpp>
@@ -255,6 +256,9 @@
             template<typename Expr>
             struct value
             {
+                /// Verify that we are actually operating on a terminal
+                BOOST_STATIC_ASSERT(0 == Expr::proto_arity_c);
+
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::proto_child0 value_type;
@@ -274,6 +278,9 @@
             template<typename Expr>
             struct value<Expr &>
             {
+                /// Verify that we are actually operating on a terminal
+                BOOST_STATIC_ASSERT(0 == Expr::proto_arity_c);
+
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::proto_child0 value_type;
@@ -293,6 +300,9 @@
             template<typename Expr>
             struct value<Expr const &>
             {
+                /// Verify that we are actually operating on a terminal
+                BOOST_STATIC_ASSERT(0 == Expr::proto_arity_c);
+
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::proto_child0 value_type;
@@ -1301,6 +1311,9 @@
             template<typename Expr>
             struct child_c<Expr, N>
             {
+                /// Verify that we are not operating on a terminal
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
+
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::BOOST_PP_CAT(proto_child, N) value_type;
@@ -1316,6 +1329,9 @@
             template<typename Expr>
             struct child_c<Expr &, N>
             {
+                /// Verify that we are not operating on a terminal
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
+
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::BOOST_PP_CAT(proto_child, N) value_type;
@@ -1338,6 +1354,9 @@
             template<typename Expr>
             struct child_c<Expr const &, N>
             {
+                /// Verify that we are not operating on a terminal
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
+
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::BOOST_PP_CAT(proto_child, N) value_type;

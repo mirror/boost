@@ -83,7 +83,7 @@ namespace boost { namespace proto
     template<
         typename Generator // = default_generator
       , typename Grammar   // = proto::_
-      , typename Super     // = detail::not_a_domain
+      , typename Super     // = no_super_domain
     >
     struct domain
       : Generator
@@ -122,7 +122,12 @@ namespace boost { namespace proto
         ///
         template<typename T, typename Callable = proto::callable>
         struct as_expr
-          : detail::as_expr<T, Generator>
+          : detail::as_expr<
+                T
+              , typename detail::base_generator<Generator>::type
+              , is_expr<T>::value
+              , wants_basic_expr<Generator>::value
+            >
         {
             BOOST_PROTO_CALLABLE()
         };
@@ -147,7 +152,12 @@ namespace boost { namespace proto
         ///
         template<typename T, typename Callable = proto::callable>
         struct as_child
-          : detail::as_child<T, Generator>
+          : detail::as_child<
+                T
+              , typename detail::base_generator<Generator>::type
+              , is_expr<T>::value
+              , wants_basic_expr<Generator>::value
+            >
         {
             BOOST_PROTO_CALLABLE()
         };

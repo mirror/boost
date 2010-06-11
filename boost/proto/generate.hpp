@@ -88,8 +88,6 @@
         {
             BOOST_PROTO_CALLABLE()
 
-            typedef default_generator proto_base_generator;
-
             template<typename Sig>
             struct result;
 
@@ -126,8 +124,6 @@
         {
             BOOST_PROTO_CALLABLE()
             BOOST_PROTO_USE_BASIC_EXPR()
-
-            typedef generator proto_base_generator;
 
             template<typename Sig>
             struct result;
@@ -175,8 +171,6 @@
             BOOST_PROTO_CALLABLE()
             BOOST_PROTO_USE_BASIC_EXPR()
 
-            typedef pod_generator proto_base_generator;
-
             template<typename Sig>
             struct result;
 
@@ -223,8 +217,6 @@
         struct by_value_generator
         {
             BOOST_PROTO_CALLABLE()
-
-            typedef by_value_generator proto_base_generator;
 
             template<typename Sig>
             struct result;
@@ -276,8 +268,6 @@
         struct compose_generators
         {
             BOOST_PROTO_CALLABLE()
-
-            typedef compose_generators proto_base_generator;
 
             template<typename Sig>
             struct result;

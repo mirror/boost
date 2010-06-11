@@ -258,10 +258,12 @@ namespace boost { namespace proto
     struct use_basic_expr;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    typedef detail::not_a_domain no_super_domain;
+
     template<
         typename Generator  = default_generator
       , typename Grammar    = proto::_
-      , typename Super      = detail::not_a_domain
+      , typename Super      = no_super_domain
     >
     struct domain;
 
