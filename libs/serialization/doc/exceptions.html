@@ -33,7 +33,8 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#pointer_conflict"><code style="white-space: normal">pointer_conflict</code></a>
   <dt><a href="#incompatible_native_format"><code style="white-space: normal">incompatible_native_format</code></a>
   <dt><a href="#array_size_too_short"><code style="white-space: normal">array_size_too_short</code></a>
-  <dt><a href="#stream_error"><code style="white-space: normal">stream_error</code></a>
+  <dt><a href="#input_stream_error"><code style="white-space: normal">input_stream_error</code></a>
+  <dt><a href="#output_stream_error"><code style="white-space: normal">output_stream_error</code></a>
   <dt><a href="#invalid_class_name"><code style="white-space: normal">invalid_class_name</code></a>
   <dt><a href="#unregistered_class"><code style="white-space: normal">unregistered_class</code></a>
   <dt><a href="#multiple_code_instantiation"><code style="white-space: normal">multiple_code_instantiation</code></a>
@@ -70,7 +71,7 @@ public:
         incompatible_native_format, // attempt to read native binary format
                                 // on incompatible platform
         array_size_too_short,   // array being loaded doesn't fit in array allocated
-        stream_error            // i/o error on stream
+        input_stream_error      // error on stream input
         invalid_class_name,     // class name greater than the maximum permitted.
                                 // most likely a corrupted archive or an attempt
                                 // to insert virus via buffer overrun method.
@@ -79,8 +80,9 @@ public:
         unsupported_class_version, // type saved with a version # greater than the 
                             // one used by the program.  This indicates that the proggram
                             // needs to be rebuilt.
-        multiple_code_instantiation // code for implementing serialization for some
+        multiple_code_instantiation, // code for implementing serialization for some
                             // type has been instantiated in more than one module.
+        output_stream_error     // error on stream output
     } exception_code;
     exception_code code;
     archive_exception(exception_code c) : code(c) {}
@@ -177,7 +179,11 @@ An attempt has been made to read an array that is larger than the array size.
 This should only occur when the size of an array in code is reduced after an
 archive has already been created.
 
-<h3><a name="stream_error"><code style="white-space: normal">stream_error</code></a></h3>
+<h3>
+<a name="input_stream_error"><code style="white-space: normal">input_stream_error</code></a>
+<br>
+<a name="output_stream_error"><code style="white-space: normal">output_stream_error</code></a>
+</h3>
 An error has occured during stream input or ouput.  Aside from the common 
 situations such as a corrupted or truncated input file, there are 
 several less obvious ones that sometimes occur.
