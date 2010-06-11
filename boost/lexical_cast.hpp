@@ -1126,6 +1126,7 @@ namespace boost
 # pragma warning( push )
 # pragma warning( disable : 4701 ) // possible use of ... before initialization
 # pragma warning( disable : 4702 ) // unreachable code
+# pragma warning( disable : 4267 ) // conversion from 'size_t' to 'unsigned int'
 #endif
 
         template< typename Target
