@@ -94,7 +94,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    std::copy(u32to16type(v.begin()), u32to16type(v.end()), std::back_inserter(v16));
 #endif
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(u32to16type(v.begin()), u32to16type(v.end())), v16.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(u32to16type(v.begin()), u32to16type(v.end())), v16.size());
 #endif
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
    v32.assign(u16to32type(v16.begin()), u16to32type(v16.end()));
@@ -103,7 +103,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    std::copy(u16to32type(v16.begin()), u16to32type(v16.end()), std::back_inserter(v32));
 #endif
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(u16to32type(v16.begin()), u16to32type(v16.end())), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(u16to32type(v16.begin()), u16to32type(v16.end())), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    i = v.begin();
@@ -117,12 +117,12 @@ void test(const std::vector< ::boost::uint32_t>& v)
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR) && !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
    v16.assign(ru32to16type(u32to16type(v.end())), ru32to16type(u32to16type(v.begin())));
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(ru32to16type(u32to16type(v.end())), ru32to16type(u32to16type(v.begin()))), v16.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru32to16type(u32to16type(v.end())), ru32to16type(u32to16type(v.begin()))), v16.size());
 #endif
    std::reverse(v16.begin(), v16.end());
    v32.assign(ru16to32type(u16to32type(v16.end())), ru16to32type(u16to32type(v16.begin())));
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(ru16to32type(u16to32type(v16.end())), ru16to32type(u16to32type(v16.begin()))), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru16to32type(u16to32type(v16.end())), ru16to32type(u16to32type(v16.begin()))), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    std::reverse(v32.begin(), v32.end());
@@ -142,7 +142,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    std::copy(u32to8type(v.begin()), u32to8type(v.end()), std::back_inserter(v8));
 #endif
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(u32to8type(v.begin()), u32to8type(v.end())), v8.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(u32to8type(v.begin()), u32to8type(v.end())), v8.size());
 #endif
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
    v32.assign(u8to32type(v8.begin()), u8to32type(v8.end()));
@@ -151,7 +151,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    std::copy(u8to32type(v8.begin()), u8to32type(v8.end()), std::back_inserter(v32));
 #endif
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(u8to32type(v8.begin()), u8to32type(v8.end())), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(u8to32type(v8.begin()), u8to32type(v8.end())), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    i = v.begin();
@@ -165,12 +165,12 @@ void test(const std::vector< ::boost::uint32_t>& v)
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR) && !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
    v8.assign(ru32to8type(u32to8type(v.end())), ru32to8type(u32to8type(v.begin())));
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(ru32to8type(u32to8type(v.end())), ru32to8type(u32to8type(v.begin()))), v8.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru32to8type(u32to8type(v.end())), ru32to8type(u32to8type(v.begin()))), v8.size());
 #endif
    std::reverse(v8.begin(), v8.end());
    v32.assign(ru8to32type(u8to32type(v8.end())), ru8to32type(u8to32type(v8.begin())));
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL(std::distance(ru8to32type(u8to32type(v8.end())), ru8to32type(u8to32type(v8.begin()))), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru8to32type(u8to32type(v8.end())), ru8to32type(u8to32type(v8.begin()))), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    std::reverse(v32.begin(), v32.end());

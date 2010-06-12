@@ -145,9 +145,9 @@ consume as little input as possible while still producing a match.
    
 [h4 Pocessive repeats]
 
-By default when a repeated patten does not match then the engine will backtrack until
+By default when a repeated pattern does not match then the engine will backtrack until
 a match is found.  However, this behaviour can sometime be undesireable so there are
-also "pocessive" repeats: these match as much as possible and do not then allow
+also "possessive" repeats: these match as much as possible and do not then allow
 backtracking if the rest of the expression fails to match.
 
 =*+= Matches the previous atom zero or more times, while giving nothing back.
@@ -376,12 +376,13 @@ context is the whole of the input text that is being matched against
 
 \\' 	Matches at the end of a buffer only.
 
-\\A 	Matches at the start of a buffer only (the same as \\\`).
+\\A 	Matches at the start of a buffer only (the same as =\\\`=).
 
-\\z 	Matches at the end of a buffer only (the same as \\').
+\\z 	Matches at the end of a buffer only (the same as =\\'=).
 
-\\Z 	Matches an optional sequence of newlines at the end of a buffer: 
-equivalent to the regular expression =\n*\z=
+\\Z 	Matches a zero-width assertion consisting of an optional sequence of newlines at the end of a buffer: 
+equivalent to the regular expression [^(?=\\v*\\z)].  Note that this is subtly different from Perl which
+behaves as if matching [^(?=\\n?\\z)].
 
 [h5 Continuation Escape]
 

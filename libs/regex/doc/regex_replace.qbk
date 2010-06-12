@@ -69,7 +69,10 @@ that computes the replacement string from a function call: either
 replacement text, or either `fmt(what, out)` or `fmt(what, out, flags)`, both of
 which write the replacement text to `*out`, and then return the new
 OutputIterator position.  In each case `what` is the [match_results] object
-that represents the match found.
+that represents the match found.  Note that if the formatter is a functor, then it is
+['passed by value]: users that want to pass function objects with internal state
+might want to use [@../../../../doc/html/ref.html Boost.Ref] to wrap the object so 
+that it's passed by reference.
 
 [*Effects]: Constructs an [regex_iterator] object:
 

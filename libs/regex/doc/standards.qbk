@@ -27,6 +27,13 @@ Almost all Perl features are supported, except for:
 
 (??{code}) 	Not implementable in a compiled strongly typed language.
 
+(*VERB) The [@http://perldoc.perl.org/perlre.html#Special-Backtracking-Control-Verbs 
+backtracking control verbs] are not recognised or implemented at this time.
+
+In addition the following features behave slightly differently from Perl:
+
+^ $ \Z  These recognise any line termination sequence, and not just \\n: see the Unicode requirements below.
+
 [h4 POSIX]
 
 All the POSIX basic and extended regular expression features are supported, 

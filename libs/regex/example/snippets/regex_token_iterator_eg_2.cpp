@@ -32,7 +32,7 @@ void load_file(std::string& s, std::istream& is)
    //
    // attempt to grow string buffer to match file size,
    // this doesn't always work...
-   s.reserve(is.rdbuf()->in_avail());
+   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
    char c;
    while(is.get(c))
    {

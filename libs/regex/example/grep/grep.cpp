@@ -13,8 +13,13 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <boost/program_options.hpp>
 #include <boost/regex.hpp>
+
+#ifdef BOOST_MSVC
+#pragma warning(disable:4512 4244)
+#endif
+
+#include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
 

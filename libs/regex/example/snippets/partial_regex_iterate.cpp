@@ -51,7 +51,7 @@ void search(std::istream& is)
       std::memmove(buf, next_pos, leftover);
       // fill the rest from the stream:
       is.read(buf + leftover, size);
-      unsigned read = is.gcount();
+      std::streamsize read = is.gcount();
       // check to see if we've run out of text:
       have_more = read == size;
       // reset next_pos:

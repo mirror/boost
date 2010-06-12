@@ -152,9 +152,15 @@ int main()
    assert(file == "d.h");
 
    // Greek text extraction with u32regex_search:
-   U_NAMESPACE_QUALIFIER UnicodeString text = L"Some where in \x0391\x039D\x0395\x0398\x0391 2004";
+   const UChar t[] = {
+      'S', 'o', 'm', 'e', ' ', 'w', 'h', 'e', 'r', 'e', ' ', 'i', 'n', 0x0391, 0x039D, 0x0395, 0x0398, 0x0391, 0
+   };
+   const UChar g[] = {
+      0x0391, 0x039D, 0x0395, 0x0398, 0x0391, 0
+   };
+   U_NAMESPACE_QUALIFIER UnicodeString text = t;
    U_NAMESPACE_QUALIFIER UnicodeString greek = extract_greek(text);
-   assert(greek == L"\x0391\x039D\x0395\x0398\x0391 2004");
+   assert(greek == g);
 
    // extract currency symbols with associated value, use iterator interface:
    std::string text2 = " $100.23 or \xC2\xA3""198.12 "; // \xC2\xA3 is the pound sign encoded in UTF-8

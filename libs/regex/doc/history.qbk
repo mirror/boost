@@ -15,6 +15,21 @@ Currently open issues can be viewed [@https://svn.boost.org/trac/boost/query?sta
 
 All issues including closed ones can be viewed [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=regex&order=priority&col=id&col=summary&col=status&col=type&col=milestone&col=component here].
 
+[h4 Boost 1.44]
+
+Fixed issues: 
+[@https://svn.boost.org/trac/boost/ticket/4215 #4215],
+[@https://svn.boost.org/trac/boost/ticket/4212 #4212],
+[@https://svn.boost.org/trac/boost/ticket/4191 #4191],
+[@https://svn.boost.org/trac/boost/ticket/4132 #4132],
+[@https://svn.boost.org/trac/boost/ticket/4123 #4123],
+[@https://svn.boost.org/trac/boost/ticket/4114 #4114],
+[@https://svn.boost.org/trac/boost/ticket/4036 #4036],
+[@https://svn.boost.org/trac/boost/ticket/4020 #4020],
+[@https://svn.boost.org/trac/boost/ticket/3941 #3941],
+[@https://svn.boost.org/trac/boost/ticket/3902 #3902],
+[@https://svn.boost.org/trac/boost/ticket/3890 #3890]
+
 [h4 Boost 1.42]
 
 * Added support for Functors rather than strings as format expressions.

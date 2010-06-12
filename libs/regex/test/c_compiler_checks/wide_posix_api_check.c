@@ -45,11 +45,11 @@ int main()
    char nbuf[256];
    int i;
    result = regcomp(&re, expression, REG_AWK);
-   if(result > REG_NOERROR)
+   if(result > (int)REG_NOERROR)
    {
       regerror(result, &re, buf, sizeof(buf));
       for(i = 0; i < 256; ++i)
-         nbuf[i] = buf[i];
+         nbuf[i] = (char)(buf[i]);
       printf(nbuf);
       return result;
    }
@@ -61,11 +61,11 @@ int main()
    matches[0].rm_so = 0;
    matches[0].rm_eo = wcslen(text);
    result = regexec(&re, text, 1, matches, REG_NOTBOL | REG_NOTEOL | REG_STARTEND);
-   if(result > REG_NOERROR)
+   if(result > (int)REG_NOERROR)
    {
       regerror(result, &re, buf, sizeof(buf));
       for(i = 0; i < 256; ++i)
-         nbuf[i] = buf[i];
+         nbuf[i] = (char)(buf[i]);
       printf(nbuf);
       regfree(&re);
       return result;
