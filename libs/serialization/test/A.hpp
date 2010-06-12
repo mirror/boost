@@ -145,6 +145,7 @@ private:
     #endif
 public:
     A();
+    bool check_equal(const A &rhs) const;
     bool operator==(const A &rhs) const;
     bool operator!=(const A &rhs) const;
     bool operator<(const A &rhs) const; // used by less
