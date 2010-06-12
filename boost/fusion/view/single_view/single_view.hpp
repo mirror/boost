@@ -41,8 +41,8 @@ namespace boost { namespace fusion
         single_view()
             : val() {}
 
-        explicit single_view(typename detail::call_param<T>::type val)
-            : val(val) {}
+        explicit single_view(typename detail::call_param<T>::type in_val)
+            : val(in_val) {}
 
         value_type val;
     };

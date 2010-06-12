@@ -117,7 +117,7 @@
             static type                                                         \
             call(Seq& seq)                                                      \
             {                                                                   \
-                return seq.PREFIX                                               \
+                return seq.PREFIX()                                             \
                     BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 1, ATTRIBUTE);    \
             }                                                                   \
         };                                                                      \

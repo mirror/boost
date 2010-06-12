@@ -55,10 +55,10 @@ namespace boost { namespace fusion
         typedef Sequence2 sequence2_type;
         typedef F transform_type;
 
-        transform_view(Sequence1& seq1, Sequence2& seq2, F const& binop)
+        transform_view(Sequence1& in_seq1, Sequence2& in_seq2, F const& binop)
             : f(binop)
-            , seq1(seq1)
-            , seq2(seq2)
+            , seq1(in_seq1)
+            , seq2(in_seq2)
         {}
 
         first1_type first1() const { return fusion::begin(seq1); }
@@ -94,9 +94,9 @@ namespace boost { namespace fusion
         typedef Sequence sequence_type;
         typedef F transform_type;
 
-        transform_view(Sequence& seq, F const& f)
-            : seq(seq)
-            , f(f)
+        transform_view(Sequence& in_seq, F const& in_f)
+            : seq(in_seq)
+            , f(in_f)
         {}
 
         first_type first() const { return fusion::begin(seq); }

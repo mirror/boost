@@ -50,8 +50,8 @@ namespace boost { namespace fusion { namespace detail
     struct count_compare
     {
         typedef typename detail::call_param<T1>::type param;
-        count_compare(param x)
-            : x(x) {}
+        count_compare(param in_x)
+            : x(in_x) {}
 
         template <typename T2>
         bool

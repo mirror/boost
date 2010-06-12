@@ -81,8 +81,8 @@ struct count_ints
     typename result<count_ints(CountT, T)>::type
     operator()(CountT const&, T const&) const
     {
-        typedef typename result<count_ints(CountT, T)>::type result;
-        return result();
+        typedef typename result<count_ints(CountT, T)>::type result_;
+        return result_();
     }
 };
 

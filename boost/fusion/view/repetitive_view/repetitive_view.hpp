@@ -37,8 +37,8 @@ namespace boost { namespace fusion
             mpl::if_<traits::is_view<Sequence>, Sequence, sequence_type&>::type
         stored_seq_type;
 
-        repetitive_view(Sequence& seq)
-            : seq(seq) {}
+        repetitive_view(Sequence& in_seq)
+            : seq(in_seq) {}
 
         stored_seq_type seq;
 

@@ -45,8 +45,8 @@ namespace boost { namespace fusion
         typedef typename result_of::end<Sequence>::type last_type;
         typedef Pred pred_type;
 
-        filter_view(Sequence& seq)
-            : seq(seq)
+        filter_view(Sequence& in_seq)
+            : seq(in_seq)
         {}
 
         first_type first() const { return fusion::begin(seq); }

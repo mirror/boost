@@ -40,9 +40,9 @@ namespace boost { namespace fusion
         typedef Category category;
         BOOST_STATIC_ASSERT((!result_of::equal_to<first_type, last_type>::value));
 
-        joint_view_iterator(First const& first, Concat const& concat)
-            : first(first_converter::call(first))
-            , concat(concat_converter::call(concat))
+        joint_view_iterator(First const& in_first, Concat const& in_concat)
+            : first(first_converter::call(in_first))
+            , concat(concat_converter::call(in_concat))
         {}
 
         first_type first;

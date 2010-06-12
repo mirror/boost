@@ -47,8 +47,8 @@ namespace boost { namespace fusion
     {
         typedef Cons cons_type;
 
-        explicit boost_tuple_iterator(Cons& cons)
-            : cons(cons) {}
+        explicit boost_tuple_iterator(Cons& in_cons)
+            : cons(in_cons) {}
         Cons& cons;
 
         template <typename Iterator>

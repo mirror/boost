@@ -31,7 +31,7 @@ namespace ns
     public:
     
         point() : x(0), y(0) {}
-        point(int x, int y) : x(x), y(y) {}
+        point(int in_x, int in_y) : x(in_x), y(in_y) {}
             
         int get_x() const { return x; }
         int get_y() const { return y; }

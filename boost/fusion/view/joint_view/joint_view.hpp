@@ -52,9 +52,9 @@ namespace boost { namespace fusion
         typedef typename result_of::end<Sequence2>::type concat_last_type;
         typedef typename mpl::plus<result_of::size<Sequence1>, result_of::size<Sequence2> >::type size;
 
-        joint_view(Sequence1& seq1, Sequence2& seq2)
-            : seq1(seq1)
-            , seq2(seq2)
+        joint_view(Sequence1& in_seq1, Sequence2& in_seq2)
+            : seq1(in_seq1)
+            , seq2(in_seq2)
         {}
 
         first_type first() const { return fusion::begin(seq1); }

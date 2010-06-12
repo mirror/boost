@@ -49,8 +49,8 @@ namespace boost { namespace fusion
                 bidirectional_traversal_tag
               , typename traits::category_of<first_type>::type>::value));
 
-        reverse_view(Sequence& seq)
-            : seq(seq)
+        reverse_view(Sequence& in_seq)
+            : seq(in_seq)
         {}
 
         first_type first() const { return fusion::begin(seq); }

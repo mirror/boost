@@ -40,7 +40,7 @@ namespace ns
     public:
     
         point() : x(0), y(0) {}
-        point(X x, Y y) : x(x), y(y) {}
+        point(X x_, Y y_) : x(x_), y(y_) {}
             
         X get_x() const { return x; }
         Y get_y() const { return y; }

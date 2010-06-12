@@ -32,7 +32,7 @@ namespace ns
     public:
     
         point() : x(0), y(0) {}
-        point(X x, Y y) : x(x), y(y) {}
+        point(X in_x, Y in_y) : x(in_x), y(in_y) {}
             
         X get_x() const { return x; }
         Y get_y() const { return y; }

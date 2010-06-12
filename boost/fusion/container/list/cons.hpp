@@ -69,13 +69,13 @@ namespace boost { namespace fusion
         cons()
             : car(), cdr() {}
 
-        explicit cons(typename detail::call_param<Car>::type car)
-            : car(car), cdr() {}
+        explicit cons(typename detail::call_param<Car>::type in_car)
+            : car(in_car), cdr() {}
 
         cons(
-            typename detail::call_param<Car>::type car
-          , typename detail::call_param<Cdr>::type cdr)
-            : car(car), cdr(cdr) {}
+            typename detail::call_param<Car>::type in_car
+          , typename detail::call_param<Cdr>::type in_cdr)
+            : car(in_car), cdr(in_cdr) {}
         
         template <typename Car2, typename Cdr2>
         cons(cons<Car2, Cdr2> const& rhs)

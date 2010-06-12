@@ -36,8 +36,8 @@ namespace boost { namespace fusion
         typedef vector_iterator_identity<
             typename add_const<Vector>::type, N> identity;
 
-        vector_iterator(Vector& vec)
-            : vec(vec) {}
+        vector_iterator(Vector& in_vec)
+            : vec(in_vec) {}
         Vector& vec;
 
     private:

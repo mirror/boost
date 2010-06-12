@@ -59,7 +59,7 @@
     TEMPLATE_PARAMS_SEQ,NAME_SEQ, I, ATTRIBUTE)                                 \
                                                                                 \
     BOOST_FUSION_ADAPT_ASSOC_STRUCT_C_BASE(                                     \
-        TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,BOOST_PP_EMPTY(),ATTRIBUTE)
+        TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,BOOST_PP_EMPTY,ATTRIBUTE)
 
 #define BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT(                                    \
     TEMPLATE_PARAMS_SEQ, NAME_SEQ, ATTRIBUTES)                                  \
