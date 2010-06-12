@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/domain.hpp">
   <para>
-    Contains definition of <computeroutput><classname alt="boost::proto::domain">proto::domain&lt;&gt;</classname>
-    </computeroutput> class template and helpers for defining domains with a generator and a grammar for controlling
-    operator overloading.
+    Contains definition of the <computeroutput><classname alt="boost::proto::domain">proto::domain&lt;&gt;</classname>
+    </computeroutput> class template and helpers for defining domains with a generator for customizing expression
+    construction and a grammar for controlling operator overloading.
   </para>
   <namespace name="boost">
     <namespace name="proto">
@@ -27,22 +27,25 @@
           <computeroutput><macroname>BOOST_PROTO_EXTENDS</macroname>()</computeroutput> and
           <computeroutput><macroname>BOOST_PROTO_DEFINE_OPERATORS</macroname>()</computeroutput>.
           A <emphasis>domain</emphasis> associates an expression type with a <emphasis>generator</emphasis>,
-          and optionally a <emphasis>grammar</emphasis>.
+          and optionally a <emphasis>grammar</emphasis>. It may also have a super-domain. Expressions
+          in a sub-domain are interoperable (i.e. can be combined freely with) expressions in a
+          super-domain. Finally, domains control how non-Proto objects are turned into Proto
+          expressions and how they are combined to form larger Proto expressions.
         </purpose>
         <description>
           <para>
-            The Generator determines how new expressions in the domain are constructed. Typically, a generator
+            The Generator parameter determines how new expressions in the domain are post-processed. Typically, a generator
             wraps all new expressions in a wrapper that imparts domain-specific behaviors to expressions within
             its domain. (See <computeroutput><classname alt="proto::extends">proto::extends&lt;&gt;</classname></computeroutput>.)
           </para>
           <para>
-            The Grammar determines whether a given expression is valid within the domain, and automatically
+            The Grammar parameter determines whether a given expression is valid within the domain, and automatically
             disables any operator overloads which would cause an invalid expression to be created. By default,
             the Grammar parameter defaults to the wildcard, <computeroutput><classname>proto::_</classname>
             </computeroutput>, which makes all expressions valid within the domain.
           </para>
           <para>
-            The Super declares the domain currently being defined to be a sub-domain of Super. An expression in
+            The Super parameter declares the domain currently being defined to be a sub-domain of Super. An expression in
             a sub-domain can be freely combined with expressions in its super-domain (and <emphasis>its</emphasis>
             super-domain, etc.).
           </para>
@@ -70,6 +73,14 @@
  };
             </programlisting>
           </para>
+          <para>
+            The <computeroutput><classname>domain::as_expr</classname>&lt;&gt;</computeroutput> and
+            <computeroutput><classname>domain::as_child</classname>&lt;&gt;</computeroutput> member
+            templates define how non-Proto objects are turned into Proto terminals and how Proto
+            expressions should be processed before they are combined to form larger expressions. 
+            They can be overridden in a derived domain for customization. See their descriptions to
+            understand how Proto uses these two templates and what their default behavior is.
+          </para>
         </description>
         <typedef name="proto_grammar">
           <type>Grammar</type>
@@ -80,6 +91,151 @@
         <typedef name="proto_super_domain">
           <type>Super</type>
         </typedef>
+
+        <struct name="as_expr">
+          <template>
+            <template-type-parameter name="T"/>
+          </template>
+          <inherit><type><classname>proto::callable</classname></type></inherit>
+          <purpose>
+            A callable unary MonomorphicFunctionObject that specifies how objects are turned into
+            Proto expressions in this domain. The resulting expression object is suitable for storage
+            in a local variable.
+          </purpose>
+          <description>
+            <para>
+              A unary MonomorphicFunctionObject that specifies how objects are turned into Proto
+              expressions in this domain. The resulting expression object is suitable for storage
+              in a local variable. In that scenario, it is usually preferable to return
+              expressions by value; and, in the case of objects that are not yet Proto expressions,
+              to wrap they by value (if possible) in a new Proto terminal expression. (Contrast
+              this description with the description for
+              <computeroutput><classname>proto::domain::as_child</classname></computeroutput>.)
+            </para>
+            <para>
+              The <computeroutput>as_expr</computeroutput> function object turns objects into
+              Proto expressions, if  they are not already, by making them Proto terminals held by
+              value if possible. Objects that are already Proto expressions are simply returned
+              by value. If
+              <computeroutput>wants_basic_expr&lt;Generator&gt;::value</computeroutput> is true,
+              then let <emphasis>E</emphasis> be
+              <computeroutput><classname>proto::basic_expr</classname></computeroutput>;
+              otherwise, let <emphasis>E</emphasis> be
+              <computeroutput><classname>proto::expr</classname></computeroutput>.
+              Given an lvalue <computeroutput>t</computeroutput> of type
+              <computeroutput>T</computeroutput>:
+              <itemizedlist>
+                <listitem>
+                  If <computeroutput>T</computeroutput> is not a Proto expression type the resulting
+                  terminal is calculated as follows:
+                  <itemizedlist>
+                    <listitem>
+                      If <computeroutput>T</computeroutput> is a function type, an abstract type, or
+                      a type derived from <computeroutput>std::ios_base</computeroutput>, let 
+                      <replaceable>A</replaceable> be <computeroutput>T &amp;</computeroutput>.
+                    </listitem>
+                    <listitem>
+                      Otherwise, let <replaceable>A</replaceable> be the type
+                      <computeroutput>T</computeroutput> stripped of cv-qualifiers.
+                    </listitem>
+                  </itemizedlist>
+                  Then, the result of <computeroutput>as_expr&lt;T&gt;()(t)</computeroutput> is
+                  <computeroutput>Generator()(<replaceable>E</replaceable>&lt;tag::terminal, 
+                  term&lt; <replaceable>A</replaceable> &gt; &gt;::make(t))</computeroutput>.
+                </listitem>
+                <listitem>
+                  If <computeroutput>T</computeroutput> is a Proto expression type and its generator 
+                  type is different from <computeroutput>Generator</computeroutput>, the result is
+                  <computeroutput>Generator()(t)</computeroutput>.
+                </listitem>
+                <listitem>
+                  Otherwise, the result is <computeroutput>t</computeroutput> converted to an
+                  (un-const) rvalue.
+                </listitem>
+              </itemizedlist>
+            </para>
+          </description>
+          <typedef name="result_type">
+            <type><replaceable>see-below</replaceable></type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="operator()" cv="const">
+              <type>result_type</type>
+              <parameter name="t">
+                <paramtype>T &amp;</paramtype>
+                <description>
+                  <para>The object to wrap.</para>
+                </description>
+              </parameter>
+            </method>
+          </method-group>
+        </struct>
+
+        <struct name="as_child">
+          <template>
+            <template-type-parameter name="T"/>
+          </template>
+          <inherit><type><classname>proto::callable</classname></type></inherit>
+          <purpose>
+            A callable unary MonomorphicFunctionObject that specifies how objects are turned into
+            Proto expressions in this domain, for use in scenarios where the resulting expression is
+            intended to be made a child of another expression.
+          </purpose>
+          <description>
+            <para>
+              A unary MonomorphicFunctionObject that specifies how objects are turned into Proto
+              expressions in this domain. The resulting expression object is suitable for storage
+              as a child of another expression. In that scenario, it is usually
+              preferable to store child expressions by reference; or, in the case of objects that
+              are not yet Proto expressions, to wrap them by reference in a new Proto terminal
+              expression. (Contrast this description with the description for
+              <computeroutput><classname>proto::domain::as_expr</classname></computeroutput>.)
+            </para>
+            <para>
+              The <computeroutput>as_child</computeroutput> function object turns objects into
+              Proto expressions, if  they are not already, by making them Proto terminals held by
+              reference. Objects that are already Proto expressions are simply returned by
+              reference. If
+              <computeroutput>wants_basic_expr&lt;Generator&gt;::value</computeroutput> is true,
+              then let <emphasis>E</emphasis> be
+              <computeroutput><classname>proto::basic_expr</classname></computeroutput>;
+              otherwise, let <emphasis>E</emphasis> be
+              <computeroutput><classname>proto::expr</classname></computeroutput>.
+              Given an lvalue <computeroutput>t</computeroutput> of type
+              <computeroutput>T</computeroutput>:
+              <itemizedlist>
+                <listitem>
+                  If <computeroutput>T</computeroutput> is not a Proto expression type the resulting
+                  terminal is
+                  <computeroutput>Generator()(<replaceable>E</replaceable>&lt;tag::terminal, 
+                  term&lt; <computeroutput>T &amp;</computeroutput> &gt; &gt;::make(t))</computeroutput>.
+                </listitem>
+                <listitem>
+                  If <computeroutput>T</computeroutput> is a Proto expression type and its generator 
+                  type is different from <computeroutput>Generator</computeroutput>, the result is
+                  <computeroutput>Generator()(t)</computeroutput>.
+                </listitem>
+                <listitem>
+                  Otherwise, the result is the lvalue <computeroutput>t</computeroutput>.
+                </listitem>
+              </itemizedlist>
+            </para>
+          </description>
+          <typedef name="result_type">
+            <type><replaceable>see-below</replaceable></type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="operator()" cv="const">
+              <type>result_type</type>
+              <parameter name="t">
+                <paramtype>T &amp;</paramtype>
+                <description>
+                  <para>The object to wrap.</para>
+                </description>
+              </parameter>
+            </method>
+          </method-group>
+        </struct>
       </struct>
 
       <!-- proto::default_domain -->
@@ -132,41 +288,7 @@
         </typedef>
       </struct>
 
-      <!-- proto::use_basic_expr -->
-      <struct name="use_basic_expr">
-        <template>
-          <template-type-parameter name="Domain"/>
-        </template>
-        <description>
-          <para>
-            Annotate a domain to indicate that its generator would
-            prefer to be passed instances of
-            <computeroutput><classname>proto::basic_expr</classname>&lt;&gt;</computeroutput> rather than
-            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>.
-            <computeroutput>use_basic_expr&lt; Domain &gt;</computeroutput> is itself a domain.
-          </para>
-        </description>
-      </struct>
-
-      <!-- proto::wants_basic_expr -->
-      <struct name="wants_basic_expr">
-        <template>
-          <template-type-parameter name="Domain"/>
-        </template>
-        <description>
-          <para>
-            A Boolean metafunction that tests a domain to see whether
-            its generator would prefer to be passed instances of
-            <computeroutput><classname>proto::basic_expr</classname>&lt;&gt;</computeroutput> rather than
-            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>.
-          </para>
-        </description>
-        <inherit>
-          <type>mpl::bool_&lt; <replaceable>true-or-false</replaceable> &gt;</type>
-        </inherit>
-      </struct>
-
-      <!-- proto::wants_basic_expr -->
+      <!-- proto::base_expr -->
       <struct name="base_expr">
         <template>
           <template-type-parameter name="Domain"/>

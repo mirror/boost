@@ -251,11 +251,19 @@ namespace boost { namespace proto
     template<typename First, typename Second>
     struct compose_generators;
 
+    template<typename Generator, typename Void = void>
+    struct wants_basic_expr;
+
+    template<typename Generator>
+    struct use_basic_expr;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    typedef detail::not_a_domain no_super_domain;
+
     template<
         typename Generator  = default_generator
       , typename Grammar    = proto::_
-      , typename Super      = detail::not_a_domain
+      , typename Super      = no_super_domain
     >
     struct domain;
 
@@ -263,14 +271,8 @@ namespace boost { namespace proto
 
     struct deduce_domain;
 
-    template<typename Domain, typename Void = void>
-    struct wants_basic_expr;
-
     template<typename Domain, typename Tag, typename Args, typename Void = void>
     struct base_expr;
-
-    template<typename Domain>
-    struct use_basic_expr;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     namespace exprns_
@@ -363,24 +365,10 @@ namespace boost { namespace proto
 
     namespace result_of
     {
-        template<
-            typename T
-          , typename Domain = default_domain
-          , typename Void = void
-          #ifdef BOOST_PROTO_BROKEN_PTS
-          , typename Void2 = void
-          #endif
-        >
+        template<typename T, typename Domain = default_domain>
         struct as_expr;
 
-        template<
-            typename T
-          , typename Domain = default_domain
-          , typename Void = void
-          #ifdef BOOST_PROTO_BROKEN_PTS
-          , typename Void2 = void
-          #endif
-        >
+        template<typename T, typename Domain = default_domain>
         struct as_child;
 
         template<typename Expr, typename N = mpl::long_<0> >

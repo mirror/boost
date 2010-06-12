@@ -1,6 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/traits.hpp">
-  <para>Contains definitions for child&lt;&gt;, child_c&lt;&gt;, left&lt;&gt;, right&lt;&gt;, tag_of&lt;&gt;, and the helper functions child(), child_c(), value(), left() and right(). </para>
+  <para>
+    Contains definitions for various expression traits and utilities like
+    <computeroutput><classname alt="boost::proto::tag_of">proto::tag_of</classname>&lt;&gt;</computeroutput> and
+    <computeroutput><classname alt="boost::proto::arity_of">proto::arity_of</classname>&lt;&gt;</computeroutput>;
+    the functions
+    <computeroutput><functionname alt="boost::proto::value">proto::value</functionname>()</computeroutput>,
+    <computeroutput><functionname alt="boost::proto::left">proto::left</functionname>()</computeroutput> and
+    <computeroutput><functionname alt="boost::proto::right">proto::right</functionname>()</computeroutput>;
+    <computeroutput><functionname alt="boost::proto::child">proto::child</functionname>()</computeroutput>,
+    <computeroutput><functionname alt="boost::proto::child_c">proto::child_c</functionname>()</computeroutput>,
+    <computeroutput><functionname alt="boost::proto::as_expr">proto::as_expr</functionname>()</computeroutput>,
+    <computeroutput><functionname alt="boost::proto::as_child">proto::as_child</functionname>()</computeroutput>,
+    and assorted helpers.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="is_callable">
@@ -97,7 +110,7 @@
             <specialization>
               <template-arg>This(T)</template-arg>
             </specialization>
-            <inherit><type><classname>proto::result_of::as_expr</classname>&lt; T, Domain &gt;</type></inherit>
+            <inherit><type><classname>proto::result_of::as_expr</classname>&lt; typename remove_reference&lt; T &gt;::type, Domain &gt;</type></inherit>
           </struct-specialization>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
@@ -156,7 +169,7 @@
             <specialization>
               <template-arg>This(T)</template-arg>
             </specialization>
-            <inherit><type><classname>proto::result_of::as_child</classname>&lt; T, Domain &gt;</type></inherit>
+            <inherit><type><classname>proto::result_of::as_child</classname>&lt; typename remove_reference&lt; T &gt;::type, Domain &gt;</type></inherit>
           </struct-specialization>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
@@ -2087,27 +2100,21 @@
             </template-type-parameter>
           </template>
           <purpose>A metafunction that computes the return type of the
-            <computeroutput><functionname alt="proto::as_expr">proto::as_expr()</functionname></computeroutput> function.</purpose>
+            <computeroutput><functionname>proto::as_expr</functionname>()</computeroutput> function.</purpose>
           <description>
             <para>
-              The <computeroutput>proto::result_of::as_expr&lt;&gt;</computeroutput> metafunction turns types into Proto types if they are
-              not already, by making them Proto terminals held by value if possible. Types which are already Proto types are
-              left alone.
+              The <computeroutput>proto::result_of::as_expr&lt;&gt;</computeroutput> metafunction turns types
+              into Proto expression types, if they are not already, in a domain-specific way. It is intended
+              for use to compute the type of a local variable that can hold the result of the
+              <computeroutput><functionname>proto::as_expr</functionname>()</computeroutput> function.
             </para>
             <para>
-              If <computeroutput>T</computeroutput> is not yet a Proto type, the resulting terminal type is calculated
-              as follows:
-            </para>
-            <para>
-              If <computeroutput>T</computeroutput> is a function type, let
-              <computeroutput>A</computeroutput> be <computeroutput>T &amp;</computeroutput>. Otherwise, let
-              <computeroutput>A</computeroutput> be the type <computeroutput>T</computeroutput> stripped of
-              cv-qualifiers. Then, the result type <computeroutput>proto::result_of::as_expr&lt;T, Domain&gt;::type</computeroutput>
-              is <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;Domain, <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;A&gt; &gt;::type)&gt;::type</computeroutput>.
+              See <computeroutput><classname>proto::domain::as_expr</classname>&lt;&gt;</computeroutput>
+              for a complete description of the default behavior.
             </para>
           </description>
           <typedef name="type">
-            <type><replaceable>see-below</replaceable></type>
+            <type>typename Domain::template as_expr&lt; T &gt;::result_type</type>
           </typedef>
         </struct>
 
@@ -2119,26 +2126,20 @@
             </template-type-parameter>
           </template>
           <purpose>A metafunction that computes the return type of the
-            <computeroutput><functionname alt="proto::as_child">proto::as_child()</functionname></computeroutput> function.</purpose>
+            <computeroutput><functionname>proto::as_child</functionname>()</computeroutput> function.</purpose>
           <description>
             <para>
-              The <computeroutput>proto::result_of::as_child&lt;&gt;</computeroutput> metafunction turns types into Proto types
-              if they are not already by making them Proto terminals held by reference. Types which are already Proto
-              types are left alone.
+              The <computeroutput>proto::result_of::as_child&lt;&gt;</computeroutput> metafunction turns types
+              into Proto expression types, if they are not already, in a domain-specific way. It is used by Proto
+              to compute the type of an object to store as a child in another expression node.
             </para>
             <para>
-              When <computeroutput>T</computeroutput> is not yet a Proto type,
-              the result type <computeroutput>proto::result_of::as_child&lt;T, Domain&gt;::type</computeroutput> is
-              <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;Domain, <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;T &amp;&gt; &gt;::type)&gt;::type</computeroutput>.
-            </para>
-            <para>
-              When <computeroutput>T</computeroutput> is already a Proto type
-              The result type <computeroutput>proto::result_of::as_child&lt;T, Domain&gt;::type</computeroutput> is
-              <computeroutput>T &amp;</computeroutput>.
+              See <computeroutput><classname>proto::domain::as_child</classname>&lt;&gt;</computeroutput>
+              for a complete description of the default behavior.
             </para>
           </description>
           <typedef name="type">
-            <type><replaceable>see-below</replaceable></type>
+            <type>typename Domain::template as_child&lt; T &gt;::result_type</type>
           </typedef>
         </struct>
 
@@ -2472,28 +2473,24 @@
           expression types alone.</purpose>
         <description>
           <para>
-            The <computeroutput>proto::as_expr()</computeroutput> function turns objects into Proto terminals if they
-            are not Proto expression types already. Non-Proto types are held by value, if possible. Types which are
-            already Proto types are left alone.
+            The <computeroutput>proto::as_expr()</computeroutput> function returns Proto expression
+            objects that are suitable for storage in a local variable. It turns non-Proto objects
+            into Proto terminals. Its behavior is domain-specific. By default, 
+            non-Proto types are wrapped by value (if possible) in a new Proto terminal expression,
+            and objects that are already Proto expressions are returned by value.
           </para>
           <para>
-            This function can be called either with an explicitly specified
-            <computeroutput>Domain</computeroutput> parameter
-            (i.e., <computeroutput>proto::as_expr&lt;Domain&gt;(t)</computeroutput>), or without
-            (i.e., <computeroutput>proto::as_expr(t)</computeroutput>). If no domain is specified,
-            <computeroutput><classname>proto::default_domain</classname></computeroutput> is assumed.
+            If <computeroutput>Domain</computeroutput> is not explicitly specified, it is assumed to
+            be <computeroutput><classname>proto::default_domain</classname></computeroutput>.
           </para>
           <para>
-            If <computeroutput><classname>proto::is_expr</classname>&lt;T&gt;::value</computeroutput> is
-            <computeroutput>true</computeroutput>, then the argument is returned unmodified. Otherwise,
-            the argument is wrapped in a Proto terminal expression node according to the following rules.
-            If <computeroutput>T</computeroutput> is a function type, let
-            <computeroutput>A</computeroutput> be <computeroutput>T &amp;</computeroutput>. Otherwise, let
-            <computeroutput>A</computeroutput> be the type <computeroutput>T</computeroutput> stripped of
-            cv-qualifiers. Then, <computeroutput>proto::as_expr()</computeroutput> returns
-            <computeroutput>Domain()(<classname>proto::terminal</classname>&lt;A&gt;::type::make(t))</computeroutput>.
+            See <computeroutput><classname>proto::domain::as_expr</classname>&lt;&gt;</computeroutput>
+            for a complete description of this function's default behavior.
           </para>
         </description>
+        <returns>
+          <computeroutput>typename Domain::template as_expr&lt; T &gt;()(t)</computeroutput>
+        </returns>
       </overloaded-function>
       
       <overloaded-function name="as_child">
@@ -2535,28 +2532,28 @@
             <paramtype>T const &amp;</paramtype>
           </parameter>
         </signature>
-        <purpose>A function that wraps non-Proto expression types in Proto terminals (by reference) and leaves
+        <purpose>A function that wraps non-Proto objects in Proto terminals (by reference) and leaves
           Proto expression types alone.</purpose>
         <description>
           <para>
-            The <computeroutput>proto::as_child()</computeroutput> function turns objects into Proto terminals
-            if they are not Proto expression types already. Non-Proto types are held by reference. Types which
-            are already Proto types are simply returned as-is.
+            The <computeroutput>proto::as_child()</computeroutput> function returns Proto expression
+            objects that are suitable for storage as child nodes in an expression tree. It turns
+            non-Proto objects into Proto terminals. Its behavior is domain-specific. By default,
+            non-Proto types are held wrapped by reference in a new Proto terminal expression, and
+            objects that are already Proto expressions are simply returned by reference.
           </para>
           <para>
-            This function can be called either with an explicitly specified
-            <computeroutput>Domain</computeroutput> parameter
-            (i.e., <computeroutput>proto::as_child&lt;Domain&gt;(t)</computeroutput>), or without
-            (i.e., <computeroutput>proto::as_child(t)</computeroutput>). If no domain is specified,
-            <computeroutput><classname>proto::default_domain</classname></computeroutput> is assumed.
+            If <computeroutput>Domain</computeroutput> is not explicitly specified, it is assumed to
+            be <computeroutput><classname>proto::default_domain</classname></computeroutput>.
           </para>
           <para>
-            If <computeroutput><classname>proto::is_expr</classname>&lt;T&gt;::value</computeroutput> is
-            <computeroutput>true</computeroutput>, then the argument is returned as-is. Otherwise,
-            <computeroutput>proto::as_child()</computeroutput> returns
-            <computeroutput>Domain()(<classname>proto::terminal</classname>&lt;T &amp;&gt;::type::make(t))</computeroutput>.
+            See <computeroutput><classname>proto::domain::as_child</classname>&lt;&gt;</computeroutput>
+            for a complete description of this function's default behavior.
           </para>
         </description>
+        <returns>
+          <computeroutput>typename Domain::template as_child&lt; T &gt;()(t)</computeroutput>
+        </returns>
       </overloaded-function>
 
       <overloaded-function name="child">

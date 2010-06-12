@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/generate.hpp">
-  <para>Contains definition of <computeroutput><classname alt="boost::proto::generator">proto::generator&lt;&gt;</classname></computeroutput>
-    class template and friends that end users can use to generate domain-specific expression wrappers.</para>
+  <para>Contains definition of
+    <computeroutput><classname alt="boost::proto::default_generator">proto::default_generator</classname></computeroutput>,
+    <computeroutput><classname alt="boost::proto::generator">proto::generator</classname>&lt;&gt;</computeroutput>,
+    <computeroutput><classname alt="boost::proto::pod_generator">proto::pod_generator</classname>&lt;&gt;</computeroutput>
+    and other utilities that users can use to post-process new expression objects that
+    Proto creates.</para>
   <namespace name="boost">
     <namespace name="proto">
       <!-- proto::default_generator -->
@@ -259,6 +263,46 @@
           </method>
         </method-group>
       </struct>
+
+      <!-- proto::use_basic_expr -->
+      <struct name="use_basic_expr">
+        <template>
+          <template-type-parameter name="Generator"/>
+        </template>
+        <inherit>
+          <type>Generator</type>
+        </inherit>
+        <description>
+          <para>
+            Annotate a generator to indicate that it would
+            prefer to be passed instances of
+            <computeroutput><classname>proto::basic_expr</classname>&lt;&gt;</computeroutput> rather than
+            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>.
+          </para>
+          <para>
+            <computeroutput>use_basic_expr&lt; Generator &gt;</computeroutput> is itself a generator.
+          </para>
+        </description>
+      </struct>
+
+      <!-- proto::wants_basic_expr -->
+      <struct name="wants_basic_expr">
+        <template>
+          <template-type-parameter name="Generator"/>
+        </template>
+        <inherit>
+          <type>mpl::bool_&lt; <replaceable>true-or-false</replaceable> &gt;</type>
+        </inherit>
+        <description>
+          <para>
+            A Boolean metafunction that tests a generator to see whether
+            it would prefer to be passed instances of
+            <computeroutput><classname>proto::basic_expr</classname>&lt;&gt;</computeroutput> rather than
+            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>.
+          </para>
+        </description>
+      </struct>
+
     </namespace>
   </namespace>
 </header>
