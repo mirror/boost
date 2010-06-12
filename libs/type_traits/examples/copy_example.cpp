@@ -52,7 +52,7 @@ I2 copy_imp(I1 first, I1 last, I2 out, const boost::integral_constant<bool, b>&)
 template<typename T>
 T* copy_imp(const T* first, const T* last, T* out, const boost::true_type&)
 {
-   memcpy(out, first, (last-first)*sizeof(T));
+   memmove(out, first, (last-first)*sizeof(T));
    return out+(last-first);
 }
 
@@ -71,7 +71,18 @@ inline I2 copy(I1 first, I1 last, I2 out)
    return detail::copy_imp(first, last, out, boost::has_trivial_assign<value_type>());
 }
 
-};   // namespace opt
+}   // namespace opt
+
+namespace non_opt
+{
+
+template<typename I1, typename I2>
+inline I2 copy(I1 first, I1 last, I2 out)
+{
+   return opt::detail::copy_imp(first, last, out, boost::false_type());
+}
+
+}
 
 //
 // define some global data:
@@ -115,6 +126,18 @@ int cpp_main(int argc, char* argv[])
    cout << "opt::copy<const int*, int*>: " << result << endl;
 
    // cache load:
+   non_opt::copy(ci_array, ci_array + array_size, i_array);
+
+   // time non-optimised version:
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      non_opt::copy(ci_array, ci_array + array_size, i_array);
+   }
+   result = t.elapsed();
+   cout << "non_opt::copy<const int*, int*>: " << result << endl;
+
+   // cache load:
    std::copy(ci_array, ci_array + array_size, i_array);
 
    // time standard version:
@@ -137,6 +160,18 @@ int cpp_main(int argc, char* argv[])
    }
    result = t.elapsed();
    cout << "opt::copy<const char*, char*>: " << result << endl;
+
+   // cache load:
+   non_opt::copy(cc_array, cc_array + array_size, c_array);
+
+   // time optimised version:
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      non_opt::copy(cc_array, cc_array + array_size, c_array);
+   }
+   result = t.elapsed();
+   cout << "non_opt::copy<const char*, char*>: " << result << endl;
 
    // cache load:
    std::copy(cc_array, cc_array + array_size, c_array);

@@ -69,7 +69,17 @@ inline void fill(I first, I last, const T& val)
    detail::do_fill(first, last, val, truth_type());
 }
 
-};   // namespace opt
+}   // namespace opt
+
+namespace non_opt{
+
+template <class I, class T>
+inline void fill(I first, I last, const T& val)
+{
+   opt::detail::do_fill(first, last, val, boost::false_type());
+}
+
+}
 
 //
 // define some global data:
@@ -119,6 +129,18 @@ int cpp_main(int argc, char* argv[])
    cout << "opt::fill<char*, char>: " << result << endl;
 
    // cache load:
+   non_opt::fill(c_array, c_array + array_size, (char)3);
+
+   // time optimised version:
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      non_opt::fill(c_array, c_array + array_size, (char)3);
+   }
+   result = t.elapsed();
+   cout << "non_opt::fill<char*, char>: " << result << endl;
+
+   // cache load:
    std::fill(c_array, c_array + array_size, (char)3);
 
    // time standard version:
@@ -143,6 +165,18 @@ int cpp_main(int argc, char* argv[])
    }
    result = t.elapsed();
    cout << "opt::fill<int*, int>: " << result << endl;
+
+   // cache load:
+   non_opt::fill(i_array, i_array + array_size, 3);
+
+   // timer optimised version:
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      non_opt::fill(i_array, i_array + array_size, 3);
+   }
+   result = t.elapsed();
+   cout << "non_opt::fill<int*, int>: " << result << endl;
 
    // cache load:
    std::fill(i_array, i_array + array_size, 3);
