@@ -34,7 +34,7 @@
 //
 
 template <class T, class U>
-void check(const T& t, const U& u)
+void do_check(const T& t, const U& u)
 {
    static const T two = 2;
    static const T factor = std::pow(two, 1-std::numeric_limits<T>::digits) * 200;
@@ -43,11 +43,11 @@ void check(const T& t, const U& u)
 }
 
 template <class T, class U>
-void check(const std::complex<T>& t, const std::complex<U>& u)
+void do_check(const std::complex<T>& t, const std::complex<U>& u)
 {
    BOOST_STATIC_ASSERT((::boost::is_same<T,U>::value));
-   check(t.real(), u.real());
-   check(t.imag(), u.imag());
+   do_check(t.real(), u.real());
+   do_check(t.imag(), u.imag());
 }
 
 template <class T>
@@ -62,26 +62,26 @@ void check_val(const T& val)
    if(val)
    {
       std::cout << "    Testing std::arg.\n";
-      check(std::arg(cval), std::arg(rval));
-      check(std::arg(cval), std::arg(val));
+      do_check(std::arg(cval), std::arg(rval));
+      do_check(std::arg(cval), std::arg(val));
    }
    std::cout << "    Testing std::norm.\n";
-   check(std::norm(cval), std::norm(rval));
-   check(std::norm(cval), std::norm(val));
+   do_check(std::norm(cval), std::norm(rval));
+   do_check(std::norm(cval), std::norm(val));
    std::cout << "    Testing std::conj.\n";
-   check(std::conj(cval), std::conj(rval));
-   check(std::conj(cval), std::conj(val));
+   do_check(std::conj(cval), std::conj(rval));
+   do_check(std::conj(cval), std::conj(val));
    std::cout << "    Testing std::polar.\n";
-   check(std::polar(val), std::polar(rval));
-   check(std::polar(val, 0), std::polar(rval, 0));
-   check(std::polar(val, val), std::polar(rval, rval));
-   check(std::polar(val, rval), std::polar(rval, val));
+   do_check(std::polar(val), std::polar(rval));
+   do_check(std::polar(val, 0), std::polar(rval, 0));
+   do_check(std::polar(val, val), std::polar(rval, rval));
+   do_check(std::polar(val, rval), std::polar(rval, val));
    std::cout << "    Testing std::real.\n";
-   check(std::real(cval), std::real(rval));
-   check(std::real(cval), std::real(val));
+   do_check(std::real(cval), std::real(rval));
+   do_check(std::real(cval), std::real(val));
    std::cout << "    Testing std::imaj.\n";
-   check(std::imag(cval), std::imag(rval));
-   check(std::imag(cval), std::imag(val));
+   do_check(std::imag(cval), std::imag(rval));
+   do_check(std::imag(cval), std::imag(val));
    if(val && !boost::is_floating_point<T>::value)
    {
       //
@@ -92,14 +92,14 @@ void check_val(const T& val)
       // Darwin is a particularly bad example !
       //
       std::cout << "    Testing std::pow.\n";
-      check(std::pow(cval, cval), std::pow(cval, val));
-      check(std::pow(cval, cval), std::pow(cval, rval));
-      check(std::pow(cval, cval), std::pow(val, cval));
-      check(std::pow(cval, cval), std::pow(rval, cval));
+      do_check(std::pow(cval, cval), std::pow(cval, val));
+      do_check(std::pow(cval, cval), std::pow(cval, rval));
+      do_check(std::pow(cval, cval), std::pow(val, cval));
+      do_check(std::pow(cval, cval), std::pow(rval, cval));
    }
 }
 
-void check(double i)
+void do_check(double i)
 {
    std::cout << "Checking type double with value " << i << std::endl;
    check_val(i);
@@ -109,7 +109,7 @@ void check(double i)
    check_val(static_cast<long double>(i));
 }
 
-void check(int i)
+void do_check(int i)
 {
    std::cout << "Checking type char with value " << i << std::endl;
    check_val(static_cast<char>(i));
@@ -140,16 +140,16 @@ void check(int i)
    std::cout << "Checking type unsigned __int64 with value " << i << std::endl;
    check_val(static_cast<unsigned __int64>(i));
 #endif
-   check(static_cast<double>(i));
+   do_check(static_cast<double>(i));
 }
 
 int test_main(int, char*[])
 {
-   check(0);
-   check(0.0);
-   check(1);
-   check(1.5);
-   check(0.5);
+   do_check(0);
+   do_check(0.0);
+   do_check(1);
+   do_check(1.5);
+   do_check(0.5);
    return 0;
 }
 

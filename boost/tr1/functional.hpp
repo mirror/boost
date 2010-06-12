@@ -14,7 +14,7 @@
    || defined(BOOST_HAS_TR1_BIND)\
    || defined(BOOST_HAS_TR1_FUNCTION)\
    || defined(BOOST_HAS_TR1_HASH)
-#  ifdef BOOST_HAS_INCLUDE_NEXT
+#  if defined(BOOST_HAS_INCLUDE_NEXT) && !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT)
 #     include_next BOOST_TR1_HEADER(functional)
 #  else
 #     include <boost/tr1/detail/config_all.hpp>
