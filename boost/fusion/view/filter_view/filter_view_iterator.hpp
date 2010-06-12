@@ -58,6 +58,10 @@ namespace boost { namespace fusion
             : first(filter::call(first_converter::call(first))) {}
 
         first_type first;
+
+    private:
+        // silence MSVC warning C4512: assignment operator could not be generated
+        filter_iterator& operator= (filter_iterator const&);
     };
 }}
 

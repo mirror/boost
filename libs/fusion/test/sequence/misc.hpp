@@ -151,7 +151,7 @@ test()
     {   // testing front & back
 
         typedef FUSION_SEQUENCE<int, float, std::string> tup;
-        tup t(1, 2.2, "Kimpo");
+        tup t(1, 2.2f, "Kimpo");
 
         BOOST_TEST(front(t) == 1);
 #if !defined(FUSION_FORWARD_ONLY) // list has no back

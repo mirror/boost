@@ -21,7 +21,6 @@
 #include <boost/mpl/inherit.hpp>
 #include <boost/mpl/identity.hpp>
 
-
 namespace boost { namespace fusion
 {
     struct filter_view_tag;

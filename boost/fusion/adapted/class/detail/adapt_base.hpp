@@ -63,6 +63,9 @@
         }                                                                       \
                                                                                 \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& obj;                   \
+                                                                                \
+    private:                                                                    \
+        class_member_proxy& operator= (class_member_proxy const&);              \
     };                                                                          \
                                                                                 \
     template<                                                                   \

@@ -41,6 +41,10 @@ namespace boost { namespace fusion
             : seq(seq) {}
 
         stored_seq_type seq;
+
+    private:
+        // silence MSVC warning C4512: assignment operator could not be generated
+        repetitive_view& operator= (repetitive_view const&);
     };
 
 }}

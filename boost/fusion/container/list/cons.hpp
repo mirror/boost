@@ -46,11 +46,11 @@ namespace boost { namespace fusion
         nil() {}
 
         template <typename Iterator>
-        nil(Iterator const& iter, mpl::true_ /*this_is_an_iterator*/)
+        nil(Iterator const& /*iter*/, mpl::true_ /*this_is_an_iterator*/)
         {}
 
         template <typename Iterator>
-        void assign_from_iter(Iterator const& iter)
+        void assign_from_iter(Iterator const& /*iter*/)
         {
         }
     };
@@ -92,7 +92,7 @@ namespace boost { namespace fusion
                     is_convertible<Sequence, cons> // use copy ctor instead
                   , is_convertible<Sequence, Car>  // use copy to car instead
                 > 
-            >::type* dummy = 0
+            >::type* /*dummy*/ = 0
         )
             : car(*fusion::begin(seq))
             , cdr(fusion::next(fusion::begin(seq)), mpl::true_()) {}

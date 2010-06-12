@@ -127,6 +127,10 @@ namespace boost { namespace fusion
                 return type();
             }
         };
+
+    private:
+        // silence MSVC warning C4512: assignment operator could not be generated
+        boost_tuple_iterator& operator= (boost_tuple_iterator const&);
     };
 
     template <typename Null>

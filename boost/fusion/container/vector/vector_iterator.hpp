@@ -7,11 +7,6 @@
 #if !defined(FUSION_VECTOR_ITERATOR_05042005_0635)
 #define FUSION_VECTOR_ITERATOR_05042005_0635
 
-#if defined (BOOST_MSVC)
-#  pragma warning(push)
-#  pragma warning (disable: 4512) // assignment operator could not be generated.
-#endif
-
 #include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/container/vector/detail/deref_impl.hpp>
 #include <boost/fusion/container/vector/detail/value_of_impl.hpp>
@@ -44,12 +39,12 @@ namespace boost { namespace fusion
         vector_iterator(Vector& vec)
             : vec(vec) {}
         Vector& vec;
+
+    private:
+        // silence MSVC warning C4512: assignment operator could not be generated
+        vector_iterator& operator= (vector_iterator const&);
     };
 }}
-
-#if defined (BOOST_MSVC)
-#  pragma warning(pop)
-#endif
 
 #endif
 

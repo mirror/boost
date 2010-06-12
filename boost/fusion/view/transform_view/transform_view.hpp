@@ -69,6 +69,10 @@ namespace boost { namespace fusion
         transform_type f;
         typename mpl::if_<traits::is_view<Sequence1>, Sequence1, Sequence1&>::type seq1;
         typename mpl::if_<traits::is_view<Sequence2>, Sequence2, Sequence2&>::type seq2;
+
+    private:
+        // silence MSVC warning C4512: assignment operator could not be generated
+        transform_view& operator= (transform_view const&);
     };
 
     // Unary Version

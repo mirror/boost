@@ -43,7 +43,7 @@ struct add_ints_only
 
     template <typename State, typename T>
     State
-    operator()(State const& state, T const& x) const
+    operator()(State const& state, T const& /*x*/) const
     {
         return state;
     }

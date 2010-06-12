@@ -98,14 +98,14 @@ main()
     {
         // conversion from ns::point to vector
         ns::point p(5, 3);
-        boost::fusion::vector<int, short> v(p);
+        boost::fusion::vector<int, long> v(p);
         v = p;
     }
 
     {
         // conversion from ns::point to list
         ns::point p(5, 3);
-        boost::fusion::list<int, short> l(p);
+        boost::fusion::list<int, long> l(p);
         l = p;
     }
 

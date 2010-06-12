@@ -88,7 +88,7 @@ main()
         // conversion from adapted::point to vector
         ns::point basep = {5, 3};
         adapted::point p(basep);
-        vector<int, short> v(p);
+        vector<int, long> v(p);
         v = p;
     }
 
@@ -96,7 +96,7 @@ main()
         // conversion from adapted::point to list
         ns::point basep = {5, 3};
         adapted::point p(basep);
-        list<int, short> l(p);
+        list<int, long> l(p);
         l = p;
     }
 

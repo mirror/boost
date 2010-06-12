@@ -17,6 +17,12 @@
 #include <boost/fusion/view/iterator_range/detail/at_impl.hpp>
 #include <boost/fusion/view/iterator_range/detail/value_at_impl.hpp>
 #include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
+#include <boost/config.hpp>
+
+#if defined (BOOST_MSVC)
+#  pragma warning(push)
+#  pragma warning (disable: 4512) // assignment operator could not be generated.
+#endif
 
 namespace boost { namespace fusion
 {
@@ -43,6 +49,10 @@ namespace boost { namespace fusion
         end_type last;
     };
 }}
+
+#if defined (BOOST_MSVC)
+#  pragma warning(pop)
+#endif
 
 #endif
 

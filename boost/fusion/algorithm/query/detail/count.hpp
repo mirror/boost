@@ -7,9 +7,15 @@
 #if !defined(FUSION_COUNT_09162005_0158)
 #define FUSION_COUNT_09162005_0158
 
+#include <boost/config.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/fusion/support/detail/access.hpp>
+
+#if defined (BOOST_MSVC)
+#  pragma warning(push)
+#  pragma warning (disable: 4512) // assignment operator could not be generated.
+#endif
 
 namespace boost { namespace fusion { namespace detail
 { 
@@ -63,6 +69,10 @@ namespace boost { namespace fusion { namespace detail
         param x;
     };
 }}}
+
+#if defined (BOOST_MSVC)
+#  pragma warning(pop)
+#endif
 
 #endif
 
