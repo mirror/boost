@@ -670,7 +670,7 @@ resize(size_type num_bits, bool value) // strong guarantee
 
   if (value && (num_bits > m_num_bits)) {
 
-    const size_type extra_bits = count_extra_bits();
+    const block_width_type extra_bits = count_extra_bits();
     if (extra_bits) {
         assert(old_num_blocks >= 1 && old_num_blocks <= m_bits.size());
 
