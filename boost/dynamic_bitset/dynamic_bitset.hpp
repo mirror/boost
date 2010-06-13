@@ -54,7 +54,7 @@ class dynamic_bitset
   // of VC++ are likely able to digest a more drinking form of the
   // code; but changing it now is probably not worth the risks...]
 
-  BOOST_STATIC_ASSERT(detail::dynamic_bitset_impl::allowed_block_type<Block>::value);
+  BOOST_STATIC_ASSERT((bool)detail::dynamic_bitset_impl::allowed_block_type<Block>::value);
 
 public:
     typedef Block block_type;
