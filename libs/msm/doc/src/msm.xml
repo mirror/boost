@@ -1396,8 +1396,13 @@ g_row &lt; Empty , play , Playing , &amp;player_::condition2 ></programlisting>
                             region id (the region id starts with 0 and corresponds to the first
                             initial state of the initial_state type sequence).</para>
                         <para>
-                            <programlisting>struct SubState2 : public msm::front::state&lt;> , 
-                   public msm::front::explicit_entry&lt;0></programlisting>
+                            <programlisting>struct SubFsm2_ : public msm::front::state_machine_def&lt;SubFsm2_> 
+{
+   struct SubState2 : public msm::front::state&lt;> , 
+                      public msm::front::explicit_entry&lt;0> 
+   {...};
+...
+};</programlisting>
                         </para>
                         <para>And define the submachine as:</para>
                         <para>
@@ -1406,7 +1411,7 @@ g_row &lt; Empty , play , Playing , &amp;player_::condition2 ></programlisting>
                         <para>You can then use it as target in a transition with State1 as
                             source:</para>
                         <para>
-                            <programlisting>_row &lt; State1, Event2, SubFsm2::direct&lt; SubFsm2_::SubState2> ></programlisting>
+                            <programlisting>_row &lt; State1, Event2, SubFsm2::direct&lt; SubFsm2_::SubState2> > //SubFsm2_::SubState2: complete name of SubState2 (defined within SubFsm2_)</programlisting>
                         </para>
                         <para>The syntax deserves some explanation. SubFsm2_ is a front end.
                             SubState2 is a nested state, therefore the SubFsm2_::SubState2 syntax.
@@ -1424,6 +1429,10 @@ g_row &lt; Empty , play , Playing , &amp;player_::condition2 ></programlisting>
                         <para>
                             <programlisting>typedef mpl::vector&lt;SubState2,SubState2b> explicit_creation;</programlisting>
                         </para>
+                        <para><emphasis role="underline">Note (also valid for forks)</emphasis>: At
+                            the moment, it is not possible to use a submachine as the target of an
+                            explicit entry. Please use entry pseudo states for an almost identical
+                            effect.</para>
                     </sect3>
                     <sect3>
                         <title>Fork</title>
@@ -1643,7 +1652,11 @@ struct char_0 : public digit {}; </programlisting>
    // also manually enable deferred events
    typedef int activate_deferred_events
    ...// rest of implementation
-};</programlisting>
+   };</programlisting>
+                    <para><emphasis role="underline">Important note</emphasis>: As exit pseudo
+                        states are using the message queue to forward events out of a submachine,
+                        the <code>no_message_queue</code> option cannot be used with state machines
+                        containing an exit pseudo state.</para>
                 </sect2>
                 <sect2>
                     <title>Choosing the initial event</title>
@@ -2661,6 +2674,10 @@ BOOST_MSM_EUML_DECLARE_ATTRIBUTE(DiskTypeEnum,cd_type)</programlisting>
                         needed greatly improves the event dispatching speed of your state machine.
                         Our <link xlink:href="examples/EumlSimple.cpp">speed testing</link> example
                         with eUML does this for the best performance.</para>
+                    <para><emphasis role="underline">Important note</emphasis>: As exit pseudo
+                        states are using the message queue to forward events out of a submachine,
+                        the <code>no_message_queue</code> option cannot be used with state machines
+                        containing an exit pseudo state.</para>
                 </sect2>
                 <sect2>
                     <title>Completion / Anonymous transitions</title>
@@ -3156,8 +3173,13 @@ my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR>()</programlisting>
                         creation.</para>
                     <para>You can pass arguments up to the value of the
                         BOOST_MSM_CONSTRUCTOR_ARG_SIZE macro (currently 5) arguments. Change this
-                        value before including any header if you need to overwrite the default.
-                    </para>
+                        value before including any header if you need to overwrite the default. </para>
+                    <para>You can also pass arguments by reference (or const-reference) using
+                        boost::ref (or boost::cref):</para>
+                    <para>struct player_ : public msm::front::state_machine_def&lt;player_>  {
+                        player_(SomeType&amp; t, int some_value){…}  }; </para>
+                    <para>typedef msm::back::state_machine&lt;player_ > player; SomeType data;
+                        player p(boost::ref(data),3);</para>
                 </sect2>
                 <sect2>
                     <title><command xml:id="backend-tradeof-rt-ct"/>Trading run-time speed for
