@@ -764,26 +764,28 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:call-template name="indent">
         <xsl:with-param name="indentation" select="$indentation + 2"/>
       </xsl:call-template>
-      <emphasis>
-        <xsl:text>// </xsl:text>
-        <!-- True if there are any non-compacted typedefs -->
-        <xsl:variable name="have-typedef-references"
-          select="typedef and ((typedef/para|typedef/description) or ($boost.compact.typedef='0'))"/>
-        <xsl:choose>
-          <xsl:when test="$have-typedef-references">
-            <xsl:call-template name="internal-link">
-              <xsl:with-param name="to">
-                <xsl:call-template name="generate.id"/>
-                <xsl:text>types</xsl:text>
-              </xsl:with-param>
-              <xsl:with-param name="text" select="'types'"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>types</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </emphasis>
+      <xsl:call-template name="highlight-comment">
+        <xsl:with-param name="text">
+          <xsl:text>// </xsl:text>
+          <!-- True if there are any non-compacted typedefs -->
+          <xsl:variable name="have-typedef-references"
+            select="typedef and ((typedef/para|typedef/description) or ($boost.compact.typedef='0'))"/>
+          <xsl:choose>
+            <xsl:when test="$have-typedef-references">
+              <xsl:call-template name="internal-link">
+                <xsl:with-param name="to">
+                  <xsl:call-template name="generate.id"/>
+                  <xsl:text>types</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="text" select="'types'"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>types</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+      </xsl:call-template>
 
       <xsl:variable name="max-type-length">
         <xsl:call-template name="find-max-type-length"/>
@@ -912,15 +914,22 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
            comment. -->
       <xsl:if test="purpose">
         <xsl:text>&#10;</xsl:text>
-        <xsl:call-template name="indent">
-          <xsl:with-param name="indentation" select="$indentation"/>
-        </xsl:call-template>
+        <xsl:variable name="spaces">
+          <xsl:call-template name="indent">
+            <xsl:with-param name="indentation" select="$indentation"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:copy-of select="$spaces"/>
         <xsl:call-template name="highlight-comment">
           <xsl:with-param name="text">
             <xsl:text>// </xsl:text>
-            <xsl:apply-templates select="purpose" mode="comment"/>
+            <xsl:apply-templates select="purpose" mode="comment">
+              <xsl:with-param name="wrap" select="true()"/>
+              <xsl:with-param name="prefix" select="concat($spaces, '// ')"/>
+            </xsl:apply-templates>
           </xsl:with-param>
         </xsl:call-template>
+        <xsl:text>&#10;</xsl:text>
       </xsl:if>
     </xsl:if>
 

@@ -75,11 +75,11 @@
     <xsl:choose>
       <xsl:when test="$boost.syntax.highlight='1'">
         <phrase role="comment">
-          <xsl:value-of select="$text"/>
+          <xsl:copy-of select="$text"/>
         </phrase>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$text"/>
+        <xsl:copy-of select="$text"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

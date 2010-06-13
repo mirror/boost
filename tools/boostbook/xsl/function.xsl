@@ -654,16 +654,18 @@
       <xsl:call-template name="indent">
         <xsl:with-param name="indentation" select="$indentation"/>
       </xsl:call-template>
-      <emphasis>
-        <xsl:text>// </xsl:text>
-        <xsl:call-template name="internal-link">
-          <xsl:with-param name="to">
-            <xsl:call-template name="generate.id"/>
-            <xsl:text>construct-copy-destruct</xsl:text>
-          </xsl:with-param>
-          <xsl:with-param name="text" select="'construct/copy/destruct'"/>
-        </xsl:call-template>
-      </emphasis>
+      <xsl:call-template name="highlight-comment">
+        <xsl:with-param name="text">
+          <xsl:text>// </xsl:text>
+          <xsl:call-template name="internal-link">
+            <xsl:with-param name="to">
+              <xsl:call-template name="generate.id"/>
+              <xsl:text>construct-copy-destruct</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="text" select="'construct/copy/destruct'"/>
+          </xsl:call-template>
+        </xsl:with-param>
+      </xsl:call-template>
       <xsl:apply-templates select="constructor" mode="synopsis">
         <xsl:with-param name="indentation" select="$indentation"/>
       </xsl:apply-templates>
@@ -1083,15 +1085,17 @@
       <xsl:call-template name="indent">
         <xsl:with-param name="indentation" select="$indentation"/>
       </xsl:call-template>
-      <emphasis>
-        <xsl:text>// </xsl:text>
-        <xsl:call-template name="internal-link">
-          <xsl:with-param name="to">
-            <xsl:call-template name="generate.id"/>
-          </xsl:with-param>
-          <xsl:with-param name="text" select="string(@name)"/>
-        </xsl:call-template>
-      </emphasis>
+      <xsl:call-template name="highlight-comment">
+        <xsl:with-param name="text">
+          <xsl:text>// </xsl:text>
+          <xsl:call-template name="internal-link">
+            <xsl:with-param name="to">
+              <xsl:call-template name="generate.id"/>
+            </xsl:with-param>
+            <xsl:with-param name="text" select="string(@name)"/>
+          </xsl:call-template>
+        </xsl:with-param>
+      </xsl:call-template>
       <xsl:apply-templates select="method|overloaded-method"
         mode="synopsis">
         <xsl:with-param name="indentation" select="$indentation"/>
@@ -1137,15 +1141,17 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="indentation" select="$indentation"/>
     </xsl:call-template>
-    <emphasis>
-      <xsl:text>// </xsl:text>
-      <xsl:call-template name="internal-link">
-        <xsl:with-param name="to">
-          <xsl:call-template name="generate.id"/>
-        </xsl:with-param>
-        <xsl:with-param name="text" select="string(@name)"/>
-      </xsl:call-template>
-    </emphasis>
+    <xsl:call-template name="highlight-comment">
+      <xsl:with-param name="text">
+        <xsl:text>// </xsl:text>
+        <xsl:call-template name="internal-link">
+          <xsl:with-param name="to">
+            <xsl:call-template name="generate.id"/>
+          </xsl:with-param>
+          <xsl:with-param name="text" select="string(@name)"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="function|overloaded-function" mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation"/>
     </xsl:apply-templates>
