@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Bidirectional Iterator</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0-pre">
 <link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="forward_iterator.html" title="Forward Iterator">
@@ -28,7 +28,7 @@
         Iterator</a>
 </h4></div></div></div>
 <a name="fusion.iterator.concepts.bidirectional_iterator.description"></a><h6>
-<a name="id880808"></a>
+<a name="id763036"></a>
           <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.description">Description</a>
         </h6>
 <p>
@@ -58,7 +58,7 @@
 </dl>
 </div>
 <a name="fusion.iterator.concepts.bidirectional_iterator.refinement_of"></a><h6>
-<a name="id880925"></a>
+<a name="id763185"></a>
           <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.refinement_of">Refinement
           of</a>
         </h6>
@@ -66,7 +66,7 @@
           <a class="link" href="forward_iterator.html" title="Forward Iterator">Forward Iterator</a>
         </p>
 <a name="fusion.iterator.concepts.bidirectional_iterator.expression_requirements"></a><h6>
-<a name="id880949"></a>
+<a name="id763222"></a>
           <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.expression_requirements">Expression
           requirements</a>
         </h6>
@@ -173,7 +173,7 @@
 </tbody>
 </table></div>
 <a name="fusion.iterator.concepts.bidirectional_iterator.meta_expressions"></a><h6>
-<a name="id881240"></a>
+<a name="id763617"></a>
           <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.meta_expressions">Meta
           Expressions</a>
         </h6>
@@ -208,7 +208,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.iterator.concepts.bidirectional_iterator.expression_semantics"></a><h6>
-<a name="id881342"></a>
+<a name="id763753"></a>
           <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.expression_semantics">Expression
           Semantics</a>
         </h6>
@@ -248,7 +248,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.iterator.concepts.bidirectional_iterator.invariants"></a><h6>
-<a name="id881450"></a>
+<a name="id763898"></a>
           <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.invariants">Invariants</a>
         </h6>
 <p>
@@ -256,41 +256,48 @@
           Iterator</a>, the following invariants always hold:
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">i</span> <span class="special">&amp;&amp;</span> <a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span></code></li>
-<li class="listitem"><code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a class="link" href="../functions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">advance_c</span></code></a><span class="special">&lt;-</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code></li>
 <li class="listitem">
-            Using <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a></code> to traverse a sequence
-            will never return a previously seen position
-          </li>
+              <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">i</span> <span class="special">&amp;&amp;</span>
+              <a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span></code>
+            </li>
+<li class="listitem">
+              <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a class="link" href="../functions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">advance_c</span></code></a><span class="special">&lt;-</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code>
+            </li>
+<li class="listitem">
+              Using <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a></code> to traverse a
+              sequence will never return a previously seen position
+            </li>
 </ul></div>
 <a name="fusion.iterator.concepts.bidirectional_iterator.models"></a><h6>
-<a name="id881674"></a>
+<a name="id764246"></a>
           <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<a class="link" href="../../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a>
-            iterator
-          </li>
+              <a class="link" href="../../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a>
+              iterator
+            </li>
 <li class="listitem">
-<a class="link" href="../../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a>
-            iterator
-          </li>
+              <a class="link" href="../../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a>
+              iterator
+            </li>
 <li class="listitem">
-<a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
-            iterator
-          </li>
+              <a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
+              iterator
+            </li>
 <li class="listitem">
-<a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
-            (where adapted sequence is a <a class="link" href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
-            Sequence</a>)
-          </li>
+              <a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
+              (where adapted sequence is a <a class="link" href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+              Sequence</a>)
+            </li>
 <li class="listitem">
-<a class="link" href="../../view/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a>
-            (where adapted sequence is a <a class="link" href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
-            Sequence</a>)
-          </li>
-<li class="listitem"><a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a></li>
+              <a class="link" href="../../view/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a>
+              (where adapted sequence is a <a class="link" href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+              Sequence</a>)
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a>
+            </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>insert_range</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0-pre">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="insert.html" title="insert">
@@ -27,7 +27,7 @@
 <a name="fusion.algorithm.transformation.functions.insert_range"></a><a class="link" href="insert_range.html" title="insert_range">insert_range</a>
 </h5></div></div></div>
 <a name="fusion.algorithm.transformation.functions.insert_range.description"></a><h6>
-<a name="id1045783"></a>
+<a name="id930296"></a>
             <a class="link" href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.description">Description</a>
           </h6>
 <p>
@@ -35,7 +35,7 @@
             iterator.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert_range.synposis"></a><h6>
-<a name="id1045802"></a>
+<a name="id930326"></a>
             <a class="link" href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.synposis">Synposis</a>
           </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
@@ -47,7 +47,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">Pos</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">pos</span><span class="special">,</span> <span class="identifier">Range</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">range</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id1046000"></a><p class="title"><b>Table&#160;1.70.&#160;Parameters</b></p>
+<a name="id930595"></a><p class="title"><b>Table&#160;1.70.&#160;Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -130,7 +130,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.algorithm.transformation.functions.insert_range.expression_semantics"></a><h6>
-<a name="id1046162"></a>
+<a name="id930798"></a>
             <a class="link" href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -141,15 +141,15 @@
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-              A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-              Sequence</a>.
-            </li>
+                A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                Sequence</a>.
+              </li>
 <li class="listitem">
-              A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-              Sequence</a> if <code class="computeroutput"><span class="identifier">seq</span></code>
-              implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-              Sequence</a> model.
-            </li>
+                A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+                Sequence</a> if <code class="computeroutput"><span class="identifier">seq</span></code>
+                implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+                Sequence</a> model.
+              </li>
 </ul></div>
 <p>
             <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, containing
@@ -159,21 +159,21 @@
             All elements retaining their ordering from the orignal sequences.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert_range.complexity"></a><h6>
-<a name="id1046287"></a>
+<a name="id931005"></a>
             <a class="link" href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert_range.header"></a><h6>
-<a name="id1046306"></a>
+<a name="id931033"></a>
             <a class="link" href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">insert_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">insert_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.transformation.functions.insert_range.example"></a><h6>
-<a name="id1046426"></a>
+<a name="id931200"></a>
             <a class="link" href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.example">Example</a>
           </h6>
 <pre class="programlisting"><span class="keyword">const</span> <a class="link" href="../../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>

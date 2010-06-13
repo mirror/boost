@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>The Full Extension Mechanism</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0-pre">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../extension.html" title="Extension">
 <link rel="prev" href="../extension.html" title="Extension">
@@ -37,19 +37,20 @@
       </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-          Enable the <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag dispatching</em></span></a>
-          mechanism used by Fusion for your sequence type
-        </li>
+            Enable the <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
+            dispatching</em></span></a> mechanism used by Fusion for your sequence
+            type
+          </li>
 <li class="listitem">
-          Design an iterator type for the sequence
-        </li>
+            Design an iterator type for the sequence
+          </li>
 <li class="listitem">
-          Provide specialized behaviour for the intrinsic operations of the new Fusion
-          sequence
-        </li>
+            Provide specialized behaviour for the intrinsic operations of the new
+            Fusion sequence
+          </li>
 </ol></div>
 <a name="fusion.extension.ext_full.our_example"></a><h5>
-<a name="id1076701"></a>
+<a name="id960308"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.our_example">Our example</a>
       </h5>
 <p>
@@ -79,7 +80,7 @@
         Start</a> guide.
       </p>
 <a name="fusion.extension.ext_full.enabling_tag_dispatching"></a><h5>
-<a name="id1076905"></a>
+<a name="id960598"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.enabling_tag_dispatching">Enabling
         Tag Dispatching</a>
       </h5>
@@ -120,7 +121,7 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.extension.ext_full.designing_a_suitable_iterator"></a><h5>
-<a name="id1077341"></a>
+<a name="id961218"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.designing_a_suitable_iterator">Designing
         a suitable iterator</a>
       </h5>
@@ -154,23 +155,23 @@
       </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-          The iterator is parameterized by the type it is iterating over, and the
-          index of the current element.
-        </li>
+            The iterator is parameterized by the type it is iterating over, and the
+            index of the current element.
+          </li>
 <li class="listitem">
-          The typedefs <code class="computeroutput"><span class="identifier">struct_type</span></code>
-          and <code class="computeroutput"><span class="identifier">index</span></code> provide convenient
-          access to information we will need later in the implementation.
-        </li>
+            The typedefs <code class="computeroutput"><span class="identifier">struct_type</span></code>
+            and <code class="computeroutput"><span class="identifier">index</span></code> provide convenient
+            access to information we will need later in the implementation.
+          </li>
 <li class="listitem">
-          The typedef <code class="computeroutput"><span class="identifier">category</span></code> allows
-          the <code class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><a class="link" href="../support/category_of.html" title="category_of"><code class="computeroutput"><span class="identifier">category_of</span></code></a></code>
-          metafunction to establish the traversal category of the iterator.
-        </li>
+            The typedef <code class="computeroutput"><span class="identifier">category</span></code>
+            allows the <code class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><a class="link" href="../support/category_of.html" title="category_of"><code class="computeroutput"><span class="identifier">category_of</span></code></a></code>
+            metafunction to establish the traversal category of the iterator.
+          </li>
 <li class="listitem">
-          The constructor stores a reference to the <code class="computeroutput"><span class="identifier">example_struct</span></code>
-          being iterated over.
-        </li>
+            The constructor stores a reference to the <code class="computeroutput"><span class="identifier">example_struct</span></code>
+            being iterated over.
+          </li>
 </ol></div>
 <p>
         We also need to enable <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
@@ -182,7 +183,7 @@
         clearer as we add features to our implementation.
       </p>
 <a name="fusion.extension.ext_full.a_first_couple_of_instructive_features"></a><h5>
-<a name="id1077799"></a>
+<a name="id961890"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.a_first_couple_of_instructive_features">A
         first couple of instructive features</a>
       </h5>
@@ -322,7 +323,7 @@
         </p></td></tr>
 </table></div>
 <a name="fusion.extension.ext_full.implementing_the_remaining_iterator_functionality"></a><h5>
-<a name="id1079984"></a>
+<a name="id964227"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.implementing_the_remaining_iterator_functionality">Implementing
         the remaining iterator functionality</a>
       </h5>
@@ -373,7 +374,7 @@
         are provided in the example code.
       </p>
 <a name="fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence"></a><h5>
-<a name="id1080428"></a>
+<a name="id964885"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence">Implementing
         the intrinsic functions of the sequence</a>
       </h5>
@@ -429,7 +430,7 @@
         <code class="computeroutput"><span class="identifier">value_at_impl</span></code> and <code class="computeroutput"><span class="identifier">at_impl</span></code>.
       </p>
 <a name="fusion.extension.ext_full.enabling_our_type_as_an_associative_sequence"></a><h5>
-<a name="id1080840"></a>
+<a name="id965488"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.enabling_our_type_as_an_associative_sequence">Enabling
         our type as an associative sequence</a>
       </h5>
@@ -493,7 +494,7 @@
         are provided in the example code.
       </p>
 <a name="fusion.extension.ext_full.summary"></a><h5>
-<a name="id1081554"></a>
+<a name="id966521"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.summary">Summary</a>
       </h5>
 <p>

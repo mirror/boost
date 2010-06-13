@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Quick Start</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0-pre">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="prev" href="introduction.html" title="Introduction">
@@ -34,16 +34,13 @@
     </p>
 <p>
       For starters, we shall include all of Fusion's <a class="link" href="sequence.html" title="Sequence">Sequence</a>(s)
-      <sup>[<a name="id864210" href="#ftn.id864210" class="footnote">2</a>]</sup>
-      :
+      <sup>[<a name="id748752" href="#ftn.id748752" class="footnote">2</a>]</sup>:
     </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-      Let's begin with a <code class="computeroutput"><a class="link" href="container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a></code>
-      <sup>[<a name="id864325" href="#ftn.id864325" class="footnote">3</a>]</sup>
-      :
+      Let's begin with a <code class="computeroutput"><a class="link" href="container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a></code> <sup>[<a name="id748896" href="#ftn.id748896" class="footnote">3</a>]</sup>:
     </p>
 <pre class="programlisting"><a class="link" href="container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">stuff</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="string">"howdy"</span><span class="special">);</span>
 <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <a class="link" href="sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">stuff</span><span class="special">);</span>
@@ -59,7 +56,7 @@
       Let's see some examples.
     </p>
 <a name="fusion.quick_start.print_the_vector_as_xml"></a><h4>
-<a name="id864641"></a>
+<a name="id749309"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.print_the_vector_as_xml">Print the vector
       as XML</a>
     </h4>
@@ -114,7 +111,7 @@
       print just about any Fusion <a class="link" href="sequence.html" title="Sequence">Sequence</a>.
     </p>
 <a name="fusion.quick_start.print_only_pointers"></a><h4>
-<a name="id868385"></a>
+<a name="id749902"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.print_only_pointers">Print only pointers</a>
     </h4>
 <p>
@@ -146,7 +143,7 @@
       Easy, right?
     </p>
 <a name="fusion.quick_start.associative_tuples"></a><h4>
-<a name="id868659"></a>
+<a name="id750262"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.associative_tuples">Associative tuples</a>
     </h4>
 <p>
@@ -218,7 +215,7 @@
       a <code class="computeroutput"><span class="identifier">dog</span></code> or a whole <code class="computeroutput"><span class="identifier">alternate_universe</span></code>.
     </p>
 <a name="fusion.quick_start.tip_of_the_iceberg"></a><h4>
-<a name="id869369"></a>
+<a name="id751176"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.tip_of_the_iceberg">Tip of the Iceberg</a>
     </h4>
 <p>
@@ -229,16 +226,16 @@
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id864210" href="#id864210" class="para">2</a>] </sup>
-          There are finer grained header files available if you wish to have more
-          control over which components to include (see section <a class="link" href="organization.html" title="Organization">Orgainization</a>
-          for details).
-        </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id864325" href="#id864325" class="para">3</a>] </sup>
-          Unless otherwise noted, components are in namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span></code>.
-          For the sake of simplicity, code in this quick start implies <code class="computeroutput"><span class="keyword">using</span></code> directives for the fusion components
-          we will be using.
-        </p></div>
+<div class="footnote"><p><sup>[<a id="ftn.id748752" href="#id748752" class="para">2</a>] </sup>
+        There are finer grained header files available if you wish to have more control
+        over which components to include (see section <a class="link" href="organization.html" title="Organization">Orgainization</a>
+        for details).
+      </p></div>
+<div class="footnote"><p><sup>[<a id="ftn.id748896" href="#id748896" class="para">3</a>] </sup>
+        Unless otherwise noted, components are in namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span></code>.
+        For the sake of simplicity, code in this quick start implies <code class="computeroutput"><span class="keyword">using</span></code> directives for the fusion components
+        we will be using.
+      </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
