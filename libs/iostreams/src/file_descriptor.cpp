@@ -113,18 +113,26 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
         dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
         dwCreationDisposition =
             (mode & BOOST_IOS::trunc) ?
-                OPEN_ALWAYS :
+                CREATE_ALWAYS :
                 OPEN_EXISTING;
     } else if (mode & BOOST_IOS::in) {
-        if (mode & (BOOST_IOS::app |BOOST_IOS::trunc))
+        if (mode & (BOOST_IOS::app | BOOST_IOS::trunc))
             boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         dwDesiredAccess = GENERIC_READ;
         dwCreationDisposition = OPEN_EXISTING;
     } else if (mode & BOOST_IOS::out) {
+        if ( (mode & (BOOST_IOS::app | BOOST_IOS::trunc))
+                 ==
+              (BOOST_IOS::app | BOOST_IOS::trunc) )
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         dwDesiredAccess = GENERIC_WRITE;
         dwCreationDisposition = OPEN_ALWAYS;
-        if (mode & BOOST_IOS::app)
+        if (mode & BOOST_IOS::app) {
+            dwCreationDisposition = OPEN_ALWAYS;
             flags_ |= append;
+        } else {
+            dwCreationDisposition = CREATE_ALWAYS;
+        }
     } else {
         boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
     }
@@ -160,19 +168,30 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
              ==
          (BOOST_IOS::in | BOOST_IOS::out) )
     {
-        assert(!(mode & BOOST_IOS::app));
+        if( mode & BOOST_IOS::app )
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         oflag |= O_RDWR;
+        if( mode & BOOST_IOS::trunc ) {
+            oflag |= O_TRUNC;
+            oflag |= O_CREAT;
+        }
     } else if (mode & BOOST_IOS::in) {
-        assert(!(mode & (BOOST_IOS::app |BOOST_IOS::trunc)));
+        if( mode & (BOOST_IOS::app | BOOST_IOS::trunc) )
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         oflag |= O_RDONLY;
     } else if (mode & BOOST_IOS::out) {
+        if( mode & (BOOST_IOS::app | BOOST_IOS::trunc)
+               ==
+            (BOOST_IOS::app | BOOST_IOS::trunc) )
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         oflag |= O_WRONLY;
-        mode |= BOOST_IOS::trunc;
         if (mode & BOOST_IOS::app)
             oflag |= O_APPEND;
+        else {
+            oflag |= O_CREAT;
+            oflag |= O_TRUNC; 
+        }
     }
-    if (mode & BOOST_IOS::trunc)
-        oflag |= O_CREAT;
     #ifdef _LARGEFILE64_SOURCE
         oflag |= O_LARGEFILE;
     #endif

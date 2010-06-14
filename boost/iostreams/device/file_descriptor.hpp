@@ -115,7 +115,7 @@ private:
     // open overload taking a detail::path
     void open( const detail::path& path, 
                BOOST_IOS::openmode, 
-               BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
+               BOOST_IOS::openmode = BOOST_IOS::openmode(0) );
 
     typedef detail::file_descriptor_impl impl_type;
     shared_ptr<impl_type> pimpl_;
