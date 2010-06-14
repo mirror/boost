@@ -894,7 +894,7 @@ namespace boost { namespace polygon {
          ps += 2.0 * our_pi;
       if (pe <= 0.0) 
          pe += 2.0 * our_pi;
-      if (ps >= 2.0 * M_PI) 
+      if (ps >= 2.0 * our_pi) 
          ps -= 2.0 * our_pi;
       while (pe <= ps)  
          pe += 2.0 * our_pi;
