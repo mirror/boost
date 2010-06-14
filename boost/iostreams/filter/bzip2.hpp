@@ -201,6 +201,7 @@ public:
     void close();
 private:
     void init();
+    bool eof_; // Guard to make sure filter() isn't called after it returns false.
 };
 
 //
@@ -305,7 +306,7 @@ void bzip2_allocator<Alloc, Base>::deallocate(void* self, void* address)
 
 template<typename Alloc>
 bzip2_compressor_impl<Alloc>::bzip2_compressor_impl(const bzip2_params& p)
-    : bzip2_base(p) { }
+    : bzip2_base(p), eof_(false) { }
 
 template<typename Alloc>
 bool bzip2_compressor_impl<Alloc>::filter
@@ -313,17 +314,24 @@ bool bzip2_compressor_impl<Alloc>::filter
       char*& dest_begin, char* dest_end, bool flush )
 {
     if (!ready()) init();
+    if (eof_) return false;
     before(src_begin, src_end, dest_begin, dest_end);
     int result = compress(flush ? bzip2::finish : bzip2::run);
     after(src_begin, dest_begin);
     bzip2_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(result);
-    return result != bzip2::stream_end;
+    return !(eof_ = result == bzip2::stream_end);
 }
 
 template<typename Alloc>
 void bzip2_compressor_impl<Alloc>::close() 
 { 
-    end(true); 
+    try {
+        end(true);
+    } catch (...) { 
+        eof_ = false; 
+        throw;
+    }
+    eof_ = false;
 }
 
 template<typename Alloc>
