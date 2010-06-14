@@ -62,8 +62,7 @@ struct file_descriptor_impl {
     std::streampos seek(stream_offset off, BOOST_IOS::seekdir way);
     static file_handle invalid_handle();
     enum flags {
-        close_on_exit = 1,
-        append = 4
+        close_on_exit = 1
     };
     file_handle  handle_;
     int          flags_;
@@ -125,12 +124,16 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
                  ==
               (BOOST_IOS::app | BOOST_IOS::trunc) )
             boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
-        dwDesiredAccess = GENERIC_WRITE;
-        dwCreationDisposition = OPEN_ALWAYS;
         if (mode & BOOST_IOS::app) {
             dwCreationDisposition = OPEN_ALWAYS;
-            flags_ |= append;
+            dwDesiredAccess = 
+                FILE_APPEND_DATA |
+                FILE_WRITE_ATTRIBUTES |
+                FILE_WRITE_EA |
+                STANDARD_RIGHTS_WRITE |
+                SYNCHRONIZE;
         } else {
+            dwDesiredAccess = GENERIC_WRITE;
             dwCreationDisposition = CREATE_ALWAYS;
         }
     } else {
@@ -252,15 +255,6 @@ std::streamsize file_descriptor_impl::read(char* s, std::streamsize n)
 std::streamsize file_descriptor_impl::write(const char* s, std::streamsize n)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    if (flags_ & append) {
-        DWORD const dwResult =
-            ::SetFilePointer(handle_, 0, NULL, FILE_END);
-        if ( dwResult == INVALID_SET_FILE_POINTER &&
-             ::GetLastError() != NO_ERROR )
-        {
-            throw_system_failure("failed seeking within file");
-        }
-    }
     DWORD ignore;
     if (!::WriteFile(handle_, s, n, &ignore, NULL))
         throw_system_failure("failed writing");
