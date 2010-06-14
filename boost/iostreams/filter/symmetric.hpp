@@ -202,7 +202,7 @@ private:
             return f_eof;
         }
         buf().set(0, amt);
-        return amt == buf().size() ? f_good : f_would_block;
+        return amt != 0 ? f_good : f_would_block;
     }
 
     // Attempts to write the contents of the buffer the given Sink.
