@@ -138,16 +138,14 @@ namespace boost { namespace proto
             ///
             template<typename T>
             struct as_expr<T, typename T::proto_is_expr_, proto::callable>
-              : detail::already_expr<
-                    T
-                  , typename detail::base_generator<Generator>::type
-                  , is_same<
-                        typename detail::base_generator<Generator>::type
-                      , typename detail::base_generator<typename T::proto_generator>::type
-                    >::value
-                >
             {
                 BOOST_PROTO_CALLABLE()
+                typedef typename remove_const<T>::type result_type;
+
+                result_type operator()(T &e) const
+                {
+                    return e;
+                }
             };
 
             /// \brief A unary MonomorphicFunctionObject that turns objects into Proto
@@ -183,16 +181,14 @@ namespace boost { namespace proto
             ///
             template<typename T>
             struct as_child<T, typename T::proto_is_expr_, proto::callable>
-              : detail::already_child<
-                    T
-                  , typename detail::base_generator<Generator>::type
-                  , is_same<
-                        typename detail::base_generator<Generator>::type
-                      , typename detail::base_generator<typename T::proto_generator>::type
-                    >::value
-                >
             {
                 BOOST_PROTO_CALLABLE()
+                typedef T &result_type;
+
+                result_type operator()(T &e) const
+                {
+                    return e;
+                }
             };
         };
 
