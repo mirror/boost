@@ -28,6 +28,7 @@
     #include <boost/mpl/aux_/lambda_arity_param.hpp>
     #include <boost/type_traits/is_pod.hpp>
     #include <boost/type_traits/is_same.hpp>
+    #include <boost/type_traits/add_const.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/args.hpp>
     #include <boost/proto/domain.hpp>
@@ -630,7 +631,7 @@
                 /// \param t The object to wrap.
                 /// \return <tt>proto::as_expr\<Domain\>(t)</tt>
                 template<typename T>
-                typename result<as_expr(T &)>::type
+                typename add_const<typename result<as_expr(T &)>::type>::type
                 operator ()(T &t) const
                 {
                     return typename Domain::template as_expr<T>()(t);
@@ -639,7 +640,7 @@
                 /// \overload
                 ///
                 template<typename T>
-                typename result<as_expr(T const &)>::type
+                typename add_const<typename result<as_expr(T const &)>::type>::type
                 operator ()(T const &t) const
                 {
                     return typename Domain::template as_expr<T const>()(t);
@@ -647,14 +648,14 @@
 
                 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
                 template<typename T, std::size_t N_>
-                typename result<as_expr(T (&)[N_])>::type
+                typename add_const<typename result<as_expr(T (&)[N_])>::type>::type
                 operator ()(T (&t)[N_]) const
                 {
                     return typename Domain::template as_expr<T[N_]>()(t);
                 }
 
                 template<typename T, std::size_t N_>
-                typename result<as_expr(T const (&)[N_])>::type
+                typename add_const<typename result<as_expr(T const (&)[N_])>::type>::type
                 operator ()(T const (&t)[N_]) const
                 {
                     return typename Domain::template as_expr<T const[N_]>()(t);
@@ -689,7 +690,7 @@
                 /// \param t The object to wrap.
                 /// \return <tt>proto::as_child\<Domain\>(t)</tt>
                 template<typename T>
-                typename result<as_child(T &)>::type
+                typename add_const<typename result<as_child(T &)>::type>::type
                 operator ()(T &t) const
                 {
                     return typename Domain::template as_child<T>()(t);
@@ -698,7 +699,7 @@
                 /// \overload
                 ///
                 template<typename T>
-                typename result<as_child(T const &)>::type
+                typename add_const<typename result<as_child(T const &)>::type>::type
                 operator ()(T const &t) const
                 {
                     return typename Domain::template as_child<T const>()(t);
@@ -923,7 +924,7 @@
         ///
         /// \param t The object to wrap.
         template<typename T>
-        typename result_of::as_expr<T, default_domain>::type
+        typename add_const<typename result_of::as_expr<T, default_domain>::type>::type
         as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return default_domain::as_expr<T>()(t);
@@ -932,7 +933,7 @@
         /// \overload
         ///
         template<typename T>
-        typename result_of::as_expr<T const, default_domain>::type
+        typename add_const<typename result_of::as_expr<T const, default_domain>::type>::type
         as_expr(T const &t)
         {
             return default_domain::as_expr<T const>()(t);
@@ -941,7 +942,7 @@
         /// \overload
         ///
         template<typename Domain, typename T>
-        typename result_of::as_expr<T, Domain>::type
+        typename add_const<typename result_of::as_expr<T, Domain>::type>::type
         as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return typename Domain::template as_expr<T>()(t);
@@ -950,7 +951,7 @@
         /// \overload
         ///
         template<typename Domain, typename T>
-        typename result_of::as_expr<T const, Domain>::type
+        typename add_const<typename result_of::as_expr<T const, Domain>::type>::type
         as_expr(T const &t)
         {
             return typename Domain::template as_expr<T const>()(t);
@@ -976,7 +977,7 @@
         ///
         /// \param t The object to wrap.
         template<typename T>
-        typename result_of::as_child<T, default_domain>::type
+        typename add_const<typename result_of::as_child<T, default_domain>::type>::type
         as_child(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return default_domain::as_child<T>()(t);
@@ -985,7 +986,7 @@
         /// \overload
         ///
         template<typename T>
-        typename result_of::as_child<T const, default_domain>::type
+        typename add_const<typename result_of::as_child<T const, default_domain>::type>::type
         as_child(T const &t)
         {
             return default_domain::as_child<T const>()(t);
@@ -994,7 +995,7 @@
         /// \overload
         ///
         template<typename Domain, typename T>
-        typename result_of::as_child<T, Domain>::type
+        typename add_const<typename result_of::as_child<T, Domain>::type>::type
         as_child(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return typename Domain::template as_child<T>()(t);
@@ -1003,7 +1004,7 @@
         /// \overload
         ///
         template<typename Domain, typename T>
-        typename result_of::as_child<T const, Domain>::type
+        typename add_const<typename result_of::as_child<T const, Domain>::type>::type
         as_child(T const &t)
         {
             return typename Domain::template as_child<T const>()(t);
