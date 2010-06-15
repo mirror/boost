@@ -111,7 +111,7 @@ void close_symmetric_filter()
         chain<input>        ch;
         ch.push(
             io::symmetric_filter<closable_symmetric_filter>
-                (0, seq.new_operation(2))
+                (1, seq.new_operation(2))
         );
         ch.push(closable_device<input>(seq.new_operation(1)));
         BOOST_CHECK_NO_THROW(ch.reset());
@@ -124,7 +124,7 @@ void close_symmetric_filter()
         chain<output>       ch;
         ch.push(
             io::symmetric_filter<closable_symmetric_filter>
-                (0, seq.new_operation(1))
+                (1, seq.new_operation(1))
         );
         ch.push(closable_device<output>(seq.new_operation(2)));
         BOOST_CHECK_NO_THROW(ch.reset());
