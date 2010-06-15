@@ -153,9 +153,12 @@ public:
     }
 
     template<typename Sink>
-    void close(Sink& snk, BOOST_IOS::openmode)
+    void close(Sink& snk, BOOST_IOS::openmode mode)
     {
-        if ((state() & f_write) != 0) {
+        if (mode == BOOST_IOS::out) {
+
+            if (!(state() & f_write))
+                begin_write();
 
             // Repeatedly invoke filter() with no input.
             try {

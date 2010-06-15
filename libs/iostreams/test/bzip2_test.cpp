@@ -33,6 +33,11 @@ void bzip2_test()
                           basic_bzip2_decompressor<bzip2_alloc>(), 
                           std::string(data.begin(), data.end()) )
     );
+    BOOST_CHECK(
+        test_filter_pair( bzip2_compressor(), 
+                          bzip2_decompressor(), 
+                          std::string() )
+    );
 }    
 
 test_suite* init_unit_test_suite(int, char* []) 
