@@ -210,6 +210,7 @@ private:
     void*        stream_;         // Actual type: z_stream*.
     bool         calculate_crc_;
     zlib::ulong  crc_;
+    zlib::ulong  crc_imp_;
     int          total_in_;
     int          total_out_;
 };
