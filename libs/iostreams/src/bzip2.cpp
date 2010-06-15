@@ -101,6 +101,7 @@ void bzip2_base::after(const char*& src_begin, char*& dest_begin)
 
 void bzip2_base::end(bool compress)
 {
+    if(!ready_) return;
     ready_ = false;
     bz_stream* s = static_cast<bz_stream*>(stream_);
     bzip2_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(

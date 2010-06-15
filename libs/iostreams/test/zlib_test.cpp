@@ -8,6 +8,7 @@
 #include <string>
 #include <boost/iostreams/filter/test.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/sequence.hpp"
@@ -34,6 +35,21 @@ void zlib_test()
                           basic_zlib_decompressor<zlib_alloc>(), 
                           std::string(data.begin(), data.end()) )
     );
+    BOOST_CHECK(
+        test_filter_pair( zlib_compressor(), 
+                          zlib_decompressor(), 
+                          std::string() )
+    );
+    {
+        filtering_istream strm;
+        strm.push( zlib_compressor() );
+        strm.push( null_source() );
+    }
+    {
+        filtering_istream strm;
+        strm.push( zlib_decompressor() );
+        strm.push( null_source() );
+    }
 }
 
 test_suite* init_unit_test_suite(int, char* []) 

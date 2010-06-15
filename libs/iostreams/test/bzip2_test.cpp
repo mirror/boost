@@ -8,6 +8,7 @@
 #include <string>
 #include <boost/iostreams/filter/bzip2.hpp>
 #include <boost/iostreams/filter/test.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/sequence.hpp"
@@ -38,6 +39,16 @@ void bzip2_test()
                           bzip2_decompressor(), 
                           std::string() )
     );
+    {
+        filtering_istream strm;
+        strm.push( bzip2_compressor() );
+        strm.push( null_source() );
+    }
+    {
+        filtering_istream strm;
+        strm.push( bzip2_decompressor() );
+        strm.push( null_source() );
+    }
 }    
 
 test_suite* init_unit_test_suite(int, char* []) 
