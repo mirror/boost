@@ -108,7 +108,7 @@
               expressions in this domain. The resulting expression object is suitable for storage
               in a local variable. In that scenario, it is usually preferable to return
               expressions by value; and, in the case of objects that are not yet Proto expressions,
-              to wrap they by value (if possible) in a new Proto terminal expression. (Contrast
+              to wrap them by value (if possible) in a new Proto terminal expression. (Contrast
               this description with the description for
               <computeroutput><classname>proto::domain::as_child</classname></computeroutput>.)
             </para>
@@ -126,7 +126,7 @@
               <computeroutput>T</computeroutput>:
               <itemizedlist>
                 <listitem>
-                  If <computeroutput>T</computeroutput> is not a Proto expression type the resulting
+                  If <computeroutput>T</computeroutput> is not a Proto expression type, the resulting
                   terminal is calculated as follows:
                   <itemizedlist>
                     <listitem>
@@ -142,11 +142,6 @@
                   Then, the result of <computeroutput>as_expr&lt;T&gt;()(t)</computeroutput> is
                   <computeroutput>Generator()(<replaceable>E</replaceable>&lt;tag::terminal, 
                   term&lt; <replaceable>A</replaceable> &gt; &gt;::make(t))</computeroutput>.
-                </listitem>
-                <listitem>
-                  If <computeroutput>T</computeroutput> is a Proto expression type and its generator 
-                  type is different from <computeroutput>Generator</computeroutput>, the result is
-                  <computeroutput>Generator()(t)</computeroutput>.
                 </listitem>
                 <listitem>
                   Otherwise, the result is <computeroutput>t</computeroutput> converted to an
@@ -205,15 +200,10 @@
               <computeroutput>T</computeroutput>:
               <itemizedlist>
                 <listitem>
-                  If <computeroutput>T</computeroutput> is not a Proto expression type the resulting
+                  If <computeroutput>T</computeroutput> is not a Proto expression type, the resulting
                   terminal is
                   <computeroutput>Generator()(<replaceable>E</replaceable>&lt;tag::terminal, 
                   term&lt; <computeroutput>T &amp;</computeroutput> &gt; &gt;::make(t))</computeroutput>.
-                </listitem>
-                <listitem>
-                  If <computeroutput>T</computeroutput> is a Proto expression type and its generator 
-                  type is different from <computeroutput>Generator</computeroutput>, the result is
-                  <computeroutput>Generator()(t)</computeroutput>.
                 </listitem>
                 <listitem>
                   Otherwise, the result is the lvalue <computeroutput>t</computeroutput>.
