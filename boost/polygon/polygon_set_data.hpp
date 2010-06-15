@@ -618,7 +618,7 @@ namespace boost { namespace polygon {
       bool sizing_sign = resizing>0;
       bool prev_concave = true;
       point_data<T> prev_point;
-      int iCtr=0;
+      //int iCtr=0;
 
 
       //insert minkofski shapes on edges and corners
@@ -713,7 +713,7 @@ namespace boost { namespace polygon {
 
       //insert original shape
       tmp.insert(poly, false, polygon_concept());
-      if(resizing < 0 ^ hole) tmp -= sizingSet;
+      if((resizing < 0) ^ hole) tmp -= sizingSet;
       else tmp += sizingSet;
       //tmp.clean();
       insert(tmp, hole);
@@ -802,13 +802,13 @@ namespace boost { namespace polygon {
     typedef polygon_set_concept type;
   };
 
-  template <typename  T>
-  inline double compute_area(point_data<T>& a, point_data<T>& b, point_data<T>& c) {
+//   template <typename  T>
+//   inline double compute_area(point_data<T>& a, point_data<T>& b, point_data<T>& c) {
 
-     return (double)(b.x()-a.x())*(double)(c.y()-a.y())- (double)(c.x()-a.x())*(double)(b.y()-a.y());
+//      return (double)(b.x()-a.x())*(double)(c.y()-a.y())- (double)(c.x()-a.x())*(double)(b.y()-a.y());
 
 
-  }
+//   }
 
   template <typename  T>
   inline int make_resizing_vertex_list(std::vector<std::vector<point_data< T> > >& return_points, 
@@ -863,8 +863,8 @@ namespace boost { namespace polygon {
          return_points_back.push_back(start);
          return_points_back.push_back(curr_prev);
 
-         double d1= compute_area(intersect,middle,start);
-         double d2= compute_area(start,curr_prev,intersect);
+         //double d1= compute_area(intersect,middle,start);
+         //double d2= compute_area(start,curr_prev,intersect);
 
          curr_prev = intersect;
 

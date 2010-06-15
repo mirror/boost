@@ -897,7 +897,7 @@ namespace boost { namespace polygon{
       inline active_tail_arbitrary(const vertex_half_edge& vertex, active_tail_arbitrary* otherTailp = 0) : tailp_(), otherTailp_(), holesList_(), head_() {
         tailp_ = new poly_line_arbitrary;
         tailp_->points.push_back(vertex.pt);
-        bool headArray[4] = {false, true, true, true};
+        //bool headArray[4] = {false, true, true, true};
         bool inverted = vertex.count == -1;
         head_ = (!vertex.is_vertical) ^ inverted;
         otherTailp_ = otherTailp;
@@ -1381,7 +1381,7 @@ namespace boost { namespace polygon{
 
       bool have_vertical_tail_from_below = false;
       if(c_size &&
-         is_vertical(counts_from_scanline.back().first.first)) {
+         scanline_base<Unit>::is_vertical(counts_from_scanline.back().first.first)) {
         have_vertical_tail_from_below = true;
       }
       //assert size = size_less_1 + 1
@@ -1729,7 +1729,7 @@ namespace boost { namespace polygon{
           //std::cout << "checking whether ot handle hole\n";
           if(currentIter == inputEnd || 
              currentIter->pt.get(HORIZONTAL) != x_ ||
-             on_above_or_below(currentIter->pt, half_edge(iter->first.pt, iter->first.other_pt)) != -1) {
+             scanline_base<Unit>::on_above_or_below(currentIter->pt, half_edge(iter->first.pt, iter->first.other_pt)) != -1) {
             //(high_precision)(currentIter->pt.get(VERTICAL)) >= iter->first.evalAtX(x_)) {
 
             //std::cout << "handle hole here\n";
@@ -2326,7 +2326,7 @@ namespace boost { namespace polygon{
 
       bool have_vertical_tail_from_below = false;
       if(c_size &&
-         is_vertical(counts_from_scanline.back().first.first)) {
+         scanline_base<Unit>::is_vertical(counts_from_scanline.back().first.first)) {
         have_vertical_tail_from_below = true;
       }
       //assert size = size_less_1 + 1
