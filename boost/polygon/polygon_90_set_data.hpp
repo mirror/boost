@@ -387,17 +387,17 @@ namespace boost { namespace polygon{
                                coordinate_type east_bloating,
                                coordinate_type south_bloating,
                                coordinate_type north_bloating) {
-      point_data<int> first_pt = poly[0];
-      point_data<int> second_pt = poly[1];
-      point_data<int> prev_pt = poly[0];
-      point_data<int> current_pt = poly[1];
-      for(int i = 2; i < poly.size(); ++i) {
-        point_data<int> next_pt = poly[i];
+      point_data<coordinate_type> first_pt = poly[0];
+      point_data<coordinate_type> second_pt = poly[1];
+      point_data<coordinate_type> prev_pt = poly[0];
+      point_data<coordinate_type> current_pt = poly[1];
+      for(std::size_t i = 2; i < poly.size(); ++i) {
+        point_data<coordinate_type> next_pt = poly[i];
         modify_pt(poly[i-1], prev_pt, current_pt, next_pt, west_bloating, east_bloating, south_bloating, north_bloating);
         prev_pt = current_pt;
         current_pt = next_pt;
       }
-      point_data<int> next_pt = first_pt;
+      point_data<coordinate_type> next_pt = first_pt;
       modify_pt(poly.back(), prev_pt, current_pt, next_pt, west_bloating, east_bloating, south_bloating, north_bloating);
       prev_pt = current_pt;
       current_pt = next_pt;
@@ -412,13 +412,13 @@ namespace boost { namespace polygon{
                                  coordinate_type north_shrinking) {
       rectangle_data<coordinate_type> extents_rectangle;
       set_points(extents_rectangle, poly[0], poly[0]);
-      point_data<int> first_pt = poly[0];
-      point_data<int> second_pt = poly[1];
-      point_data<int> prev_pt = poly[0];
-      point_data<int> current_pt = poly[1];
+      point_data<coordinate_type> first_pt = poly[0];
+      point_data<coordinate_type> second_pt = poly[1];
+      point_data<coordinate_type> prev_pt = poly[0];
+      point_data<coordinate_type> current_pt = poly[1];
       encompass(extents_rectangle, current_pt);
       for(int i = 2; i < poly.size(); ++i) {
-        point_data<int> next_pt = poly[i];
+        point_data<coordinate_type> next_pt = poly[i];
         encompass(extents_rectangle, next_pt);
         modify_pt(poly[i-1], prev_pt, current_pt, next_pt, west_shrinking, east_shrinking, south_shrinking, north_shrinking);
         prev_pt = current_pt;
@@ -428,7 +428,7 @@ namespace boost { namespace polygon{
         return false;
       if(delta(extents_rectangle, VERTICAL) < std::abs(north_shrinking + south_shrinking))
         return false;
-      point_data<int> next_pt = first_pt;
+      point_data<coordinate_type> next_pt = first_pt;
       modify_pt(poly.back(), prev_pt, current_pt, next_pt, west_shrinking, east_shrinking, south_shrinking, north_shrinking);
       prev_pt = current_pt;
       current_pt = next_pt;
