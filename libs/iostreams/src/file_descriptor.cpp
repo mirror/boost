@@ -183,7 +183,7 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
             boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         oflag |= O_RDONLY;
     } else if (mode & BOOST_IOS::out) {
-        if( mode & (BOOST_IOS::app | BOOST_IOS::trunc)
+        if( (mode & (BOOST_IOS::app | BOOST_IOS::trunc))
                ==
             (BOOST_IOS::app | BOOST_IOS::trunc) )
             boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
@@ -194,6 +194,8 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
             oflag |= O_CREAT;
             oflag |= O_TRUNC; 
         }
+    } else {
+        boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
     }
     #ifdef _LARGEFILE64_SOURCE
         oflag |= O_LARGEFILE;
