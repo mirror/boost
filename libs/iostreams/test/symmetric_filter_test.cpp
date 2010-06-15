@@ -132,12 +132,50 @@ void close_symmetric_filter()
     }
 }
 
+#ifndef BOOST_IOSTREAMS_NO_WIDE_STREAMS
+
+struct wcopy_filter_impl {
+    typedef wchar_t char_type;
+    bool filter( const wchar_t*& src_begin, const wchar_t* src_end,
+                 wchar_t*& dest_begin, wchar_t* dest_end, bool /* flush */ )
+    {
+        if(src_begin != src_end && dest_begin != dest_end) {
+            *dest_begin++ = *src_begin++;
+        }
+        return false;
+    }
+    void close() {}
+};
+
+typedef symmetric_filter<wcopy_filter_impl> wcopy_filter;
+
+void wide_symmetric_filter()
+{
+    {
+        warray_source  src(wide_data(), wide_data() + data_length());
+        std::wstring   dest;
+        io::copy(src, io::compose(wcopy_filter(16), io::back_inserter(dest)));
+        BOOST_CHECK(dest == wide_data());
+    }
+    {
+        warray_source  src(wide_data(), wide_data() + data_length());
+        std::wstring   dest;
+        io::copy(io::compose(wcopy_filter(16), src), io::back_inserter(dest));
+        BOOST_CHECK(dest == wide_data());
+    }
+}
+
+#endif
+
 test_suite* init_unit_test_suite(int, char* []) 
 {
     test_suite* test = BOOST_TEST_SUITE("symmetric_filter test");
     test->add(BOOST_TEST_CASE(&read_symmetric_filter));
     test->add(BOOST_TEST_CASE(&write_symmetric_filter));
     test->add(BOOST_TEST_CASE(&close_symmetric_filter));
+#ifndef BOOST_IOSTREAMS_NO_WIDE_STREAMS
+    test->add(BOOST_TEST_CASE(&wide_symmetric_filter));
+#endif
     return test;
 }
 

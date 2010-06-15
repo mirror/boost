@@ -162,10 +162,10 @@ public:
 
             // Repeatedly invoke filter() with no input.
             try {
-                buffer_type&   buf = pimpl_->buf_;
-                char           dummy;
-                const char*    end = &dummy;
-                bool           again = true;
+                buffer_type&     buf = pimpl_->buf_;
+                char_type        dummy;
+                const char_type* end = &dummy;
+                bool             again = true;
                 while (again) {
                     if (buf.ptr() != buf.eptr())
                         again = filter().filter( end, end, buf.ptr(),
