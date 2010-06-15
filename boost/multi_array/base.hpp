@@ -431,29 +431,52 @@ protected:
     index offset = 0;
     size_type dim = 0;
     for (size_type n = 0; n != NumDims; ++n) {
+
+      // Use array specs and input specs to produce real specs.
       const index default_start = index_bases[n];
       const index default_finish = default_start+extents[n];
       const index_range& current_range = indices.ranges_[n];
       index start = current_range.get_start(default_start);
       index finish = current_range.get_finish(default_finish);
-      index factor = current_range.stride();
+      index stride = current_range.stride();
+      BOOST_ASSERT(stride != 0);
 
-      // integral trick for ceiling((finish-start) / factor) 
-      index shrinkage = factor > 0 ? 1 : -1;
-      index len = (finish - start + (factor - shrinkage)) / factor;
+      // An index range indicates a half-open strided interval 
+      // [start,finish) (with stride) which faces upward when stride 
+      // is positive and downward when stride is negative, 
 
+      // RG: The following code for calculating length suffers from 
+      // some representation issues: if finish-start cannot be represented as
+      // by type index, then overflow may result.
+
+      index len;
+      if ((finish - start) / stride < 0) {
+        // [start,finish) is empty according to the direction imposed by 
+        // the stride.
+        len = 0;
+      } else {
+        // integral trick for ceiling((finish-start) / stride) 
+        // taking into account signs.
+        index shrinkage = stride > 0 ? 1 : -1;
+        len = (finish - start + (stride - shrinkage)) / stride;
+      }
+
+      // start marks the closed side of the range, so it must lie
+      // exactly in the set of legal indices
+      // with a special case for empty arrays
       BOOST_ASSERT(index_bases[n] <= start &&
-                   start < index_bases[n]+index(extents[n]));
+                   ((start <= index_bases[n]+index(extents[n])) ||
+                     (start == index_bases[n] && extents[n] == 0)));
 
 #ifndef BOOST_DISABLE_ASSERTS
-      // The legal values of finish depends on the sign of the factor
-      index lb_adjustment = factor < 0 ? 1 : 0;
-      index ub_adjustment = factor > 0 ? 1 : 0;
-      BOOST_ASSERT(index_bases[n] - lb_adjustment <= finish &&
-                   finish < index_bases[n]+index(extents[n]) + ub_adjustment);
+      // finish marks the open side of the range, so it can go one past
+      // the "far side" of the range (the top if stride is positive, the bottom
+      // if stride is negative).
+      index bound_adjustment = stride < 0 ? 1 : 0;
+      BOOST_ASSERT(((index_bases[n] - bound_adjustment) <= finish) &&
+        (finish <= (index_bases[n] + index(extents[n]) - bound_adjustment)));
 #endif // BOOST_DISABLE_ASSERTS
 
-      BOOST_ASSERT(factor != 0);
 
       // the array data pointer is modified to account for non-zero
       // bases during slicing (see [Garcia] for the math involved)
@@ -461,9 +484,9 @@ protected:
 
       if (!current_range.is_degenerate()) {
 
-        // The factor for each dimension is included into the
+        // The stride for each dimension is included into the
         // strides for the array_view (see [Garcia] for the math involved).
-        new_strides[dim] = factor * strides[n];
+        new_strides[dim] = stride * strides[n];
         
         // calculate new extents
         new_extents[dim] = len;
