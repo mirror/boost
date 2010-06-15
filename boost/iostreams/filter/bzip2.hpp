@@ -166,6 +166,7 @@ protected:
     void before( const char*& src_begin, const char* src_end,
                  char*& dest_begin, char* dest_end );
     void after(const char*& src_begin, char*& dest_begin);
+    int check_end(const char* src_begin, const char* dest_begin);
     int compress(int action);
     int decompress();
     void end(bool compress);
@@ -347,7 +348,7 @@ bzip2_decompressor_impl<Alloc>::bzip2_decompressor_impl(bool small)
 template<typename Alloc>
 bool bzip2_decompressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
-      char*& dest_begin, char* dest_end, bool /* flush */ )
+      char*& dest_begin, char* dest_end, bool flush )
 {
     if (!ready()) 
         init();
@@ -355,6 +356,8 @@ bool bzip2_decompressor_impl<Alloc>::filter
         return false;
     before(src_begin, src_end, dest_begin, dest_end);
     int result = decompress();
+    if(result == bzip2::ok && flush)
+        result = check_end(src_begin, dest_begin);
     after(src_begin, dest_begin);
     bzip2_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(result);
     return !(eof_ = result == bzip2::stream_end); 

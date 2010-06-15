@@ -99,6 +99,18 @@ void bzip2_base::after(const char*& src_begin, char*& dest_begin)
     dest_begin = s->next_out;
 }
 
+int bzip2_base::check_end(const char* src_begin, const char* dest_begin)
+{
+    bz_stream* s = static_cast<bz_stream*>(stream_);
+    if( src_begin == s->next_in &&
+        s->avail_in == 0 &&
+        dest_begin == s->next_out) {
+        return bzip2::unexpected_eof;
+    } else {
+        return bzip2::ok;
+    }
+}
+
 void bzip2_base::end(bool compress)
 {
     if(!ready_) return;
