@@ -142,30 +142,32 @@
             typedef mpl::void_ BOOST_PP_CAT(child, n);                                              \
             /**< INTERNAL ONLY */
 
-        /// \brief A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
-        ///
-        /// A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
-        /// The types in the sequence correspond to the children of a node in an expression tree.
-        template< typename Arg0 >
-        struct term
+        namespace argsns_
         {
-            BOOST_STATIC_CONSTANT(long, arity = 0);
-            typedef Arg0 child0;
-
-            #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500))
-            BOOST_PP_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
-            #endif
-
-            /// INTERNAL ONLY
+            /// \brief A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
             ///
-            typedef Arg0 back_;
-        };
+            /// A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
+            /// The types in the sequence correspond to the children of a node in an expression tree.
+            template< typename Arg0 >
+            struct term
+            {
+                BOOST_STATIC_CONSTANT(long, arity = 0);
+                typedef Arg0 child0;
 
-        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/proto/args.hpp>))
-        #include BOOST_PP_ITERATE()
+                #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500))
+                BOOST_PP_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
+                #endif
 
-        #undef BOOST_PROTO_DEFINE_CHILD_N
+                /// INTERNAL ONLY
+                ///
+                typedef Arg0 back_;
+            };
 
+            #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/proto/args.hpp>))
+            #include BOOST_PP_ITERATE()
+
+            #undef BOOST_PROTO_DEFINE_CHILD_N
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////
     }}
     #endif

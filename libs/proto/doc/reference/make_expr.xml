@@ -167,14 +167,10 @@
             <type><replaceable>domain-deduced-from-child-types</replaceable></type>
             <description>
               <para>
-                For each <computeroutput>x</computeroutput> in <computeroutput>[0,N)</computeroutput>
-                (proceeding in order beginning with <computeroutput>x=0</computeroutput>), if
-                <computeroutput><classname>proto::domain_of</classname>&lt;A<subscript>x</subscript>&gt;::type</computeroutput> is not
-                <computeroutput><classname>proto::default_domain</classname></computeroutput>, then
-                <computeroutput>D</computeroutput> is
-                <computeroutput><classname>proto::domain_of</classname>&lt;A<subscript>x</subscript>&gt;::type</computeroutput>. 
-                Otherwise, <computeroutput>D</computeroutput> is
-                <computeroutput><classname>proto::default_domain</classname></computeroutput>.
+                In this specialization, Proto uses the domains of the child expressions to compute the
+                domain of the parent. See
+                <computeroutput><classname>proto::deduce_domain</classname></computeroutput> for a full
+                description of the procedure used.
               </para>
             </description>
           </typedef>
@@ -206,18 +202,42 @@
           <typedef name="type">
             <description>
               <para>
+                Let <computeroutput><replaceable>WRAP&lt;X&gt;</replaceable></computeroutput> be defined such that:
+                <itemizedlist>
+                  <listitem>
+                    <para>
+                      If <computeroutput>X</computeroutput> is <computeroutput>Y &amp;</computeroutput>
+                      or (possibly cv-qualified) <computeroutput>boost::reference_wrapper&lt;Y&gt;</computeroutput>,
+                      then <computeroutput><replaceable>WRAP&lt;X&gt;</replaceable></computeroutput> is equivalent to
+                      <computeroutput><classname>proto::result_of::as_child</classname>&lt;Y, Domain&gt;</computeroutput>.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para>
+                      Otherwise, <computeroutput><replaceable>WRAP&lt;X&gt;</replaceable></computeroutput> is equivalent to
+                      <computeroutput><classname>proto::result_of::as_expr</classname>&lt;X, Domain&gt;</computeroutput>.
+                    </para>
+                  </listitem>
+                </itemizedlist>
+              </para>
+              <para>
+                If <computeroutput><classname>proto::wants_basic_expr</classname>&lt;typename Domain::proto_generator&gt;::value</computeroutput>
+                is true, then let <computeroutput><replaceable>E</replaceable></computeroutput> be
+                <computeroutput><classname>proto::basic_expr</classname></computeroutput>; otherwise,
+                let <computeroutput><replaceable>E</replaceable></computeroutput> be
+                <computeroutput><classname>proto::expr</classname></computeroutput>.
+              </para>
+              <para>
                 If <computeroutput>Tag</computeroutput> is
                 <computeroutput><classname>proto::tag::terminal</classname></computeroutput>, then
                 <computeroutput>type</computeroutput> is a typedef for
-                <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;
-                Domain, <classname>proto::tag::terminal</classname>, <classname>proto::term</classname>&lt;
-                A<subscript>0</subscript> &gt; &gt;::type)&gt;::type</computeroutput>.
+                <computeroutput>typename <replaceable>WRAP&lt;A<subscript>0</subscript>&gt;</replaceable>::type</computeroutput>.
               </para>
               <para>
                 Otherwise, <computeroutput>type</computeroutput> is a typedef for
-                <computeroutput>boost::result_of&lt;Domain(typename <classname>proto::base_expr</classname>&lt;
-                Domain, Tag, <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;
-                typename <classname>proto::result_of::as_child</classname>&lt;A&gt;::type...&gt; &gt;::type)&gt;::type</computeroutput>
+                <computeroutput>boost::result_of&lt;Domain(<replaceable>E</replaceable>&lt;
+                Tag, <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;
+                typename <replaceable>WRAP&lt;A&gt;</replaceable>::type...&gt; &gt;)&gt;::type</computeroutput>
               </para>
             </description>
             <type><emphasis>see-below</emphasis></type>
@@ -252,7 +272,7 @@
             </para>
           </description>
           <typedef name="type">
-            <purpose>Where S is a RandomAccessSequence equivalent to Sequence, and N is the size of S.</purpose>
+            <purpose>Where S is a Fusion RandomAccessSequence equivalent to Sequence, and N is the size of S.</purpose>
             <type>
     typename <classname>proto::result_of::make_expr</classname>&lt;
       Tag,
@@ -329,10 +349,9 @@
           <para>
             This function template may be invoked either with or without specifying a
             <computeroutput>Domain</computeroutput> template parameter. If no domain is specified, the domain
-            is deduced by examining in order the domains of the given arguments and taking the first that is
-            not <computeroutput><classname>proto::default_domain</classname></computeroutput>, if any such
-            domain exists, or <computeroutput><classname>proto::default_domain</classname></computeroutput>
-            otherwise.
+            is deduced by examining domains of the given arguments. See
+            <computeroutput><classname>proto::deduce_domain</classname></computeroutput> for a full
+            description of the procedure used.
           </para>
           <para>
             Let <computeroutput><replaceable>WRAP</replaceable>(x)</computeroutput> be defined such that:
@@ -351,21 +370,29 @@
                 </para>
               </listitem>
             </itemizedlist>
-            Let <computeroutput><replaceable>MAKE</replaceable>&lt;Tag&gt;(a...)</computeroutput> be defined as
-            <computeroutput><classname>proto::base_expr</classname>&lt;Domain, Tag,
-            <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;A...&gt; &gt;::make(a...)</computeroutput>
-            where
-            <computeroutput>A<subscript>x</subscript></computeroutput> is the type of 
-            <computeroutput>a<subscript>x</subscript></computeroutput>.
           </para>
           <para>
+            If <computeroutput><classname>proto::wants_basic_expr</classname>&lt;typename Domain::proto_generator&gt;::value</computeroutput>
+            is true, then let <computeroutput><replaceable>E</replaceable></computeroutput> be
+            <computeroutput><classname>proto::basic_expr</classname></computeroutput>; otherwise,
+            let <computeroutput><replaceable>E</replaceable></computeroutput> be
+            <computeroutput><classname>proto::expr</classname></computeroutput>.
+          </para>
+          <para>
+            Let <computeroutput><replaceable>MAKE</replaceable>(Tag, b...)</computeroutput> be defined as
+            <computeroutput><replaceable>E</replaceable>&lt;Tag,
+            <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;decltype(b)...&gt; &gt;::make(b...)</computeroutput>.
+          </para>
+          <para>
+            If <computeroutput>Tag</computeroutput> is
+            <computeroutput><classname>proto::tag::terminal</classname></computeroutput>, then return
+            <computeroutput><replaceable>WRAP</replaceable>(a<subscript>0</subscript>)</computeroutput>.
+          </para>
+          <para>
+            Otherwise, return
+            <computeroutput>Domain()(<replaceable>MAKE</replaceable>(Tag, <replaceable>WRAP</replaceable>(a)...))</computeroutput>.
           </para>
         </description>
-        <returns>
-          <para>
-            <computeroutput>Domain()(<replaceable>MAKE</replaceable>&lt;Tag&gt;(<replaceable>WRAP</replaceable>(a)...))</computeroutput>.
-          </para>
-        </returns>
       </overloaded-function>
 
       <!-- proto::unpack_expr() -->
@@ -399,47 +426,56 @@
         <description>
           <para>
             This function template may be invoked either with or without specifying a
-            <computeroutput>Domain</computeroutput> argument. If no domain is specified, the domain is
-            deduced by examining in order the domains of the elements of <computeroutput>sequence</computeroutput>
-            and taking the first that is not
-            <computeroutput><classname>proto::default_domain</classname></computeroutput>, if any such domain
-            exists, or <computeroutput><classname>proto::default_domain</classname></computeroutput> otherwise.
+            <computeroutput>Domain</computeroutput> argument. If no domain is specified, the domain
+            is deduced by examining domains of each element of the sequence. See
+            <computeroutput><classname>proto::deduce_domain</classname></computeroutput> for a full
+            description of the procedure used.
           </para>
           <para>
-            Let <computeroutput>s</computeroutput> be a Fusion Random Access Sequence equivalent to
+            Let <computeroutput>s</computeroutput> be a Fusion RandomAccessSequence equivalent to
             <computeroutput>sequence</computeroutput>.
-            Let <computeroutput><replaceable>WRAP</replaceable>&lt;N&gt;(s)</computeroutput>, where
-            <computeroutput>s</computeroutput> has type <computeroutput>S</computeroutput>, be defined such that:
+            Let <computeroutput><replaceable>WRAP</replaceable>(N, s)</computeroutput> be defined such that:
             <itemizedlist>
               <listitem>
                 <para>
-                  If <computeroutput>fusion::result_of::value_at_c&lt;S,N&gt;::type</computeroutput> is a reference,
-                  <computeroutput><replaceable>WRAP</replaceable>&lt;N&gt;(s)</computeroutput> is equivalent to
+                  If <computeroutput>fusion::result_of::value_at_c&lt;decltype(s),N&gt;::type</computeroutput> is a reference type
+                  or an instantiation of <computeroutput>boost::reference_wrapper&lt;&gt;</computeroutput>,
+                  <computeroutput><replaceable>WRAP</replaceable>(N, s)</computeroutput> is equivalent to
                   <computeroutput><functionname>proto::as_child</functionname>&lt;Domain&gt;(fusion::at_c&lt;N&gt;(s))</computeroutput>.
                 </para>
               </listitem>
               <listitem>
                 <para>
-                  Otherwise, <computeroutput><replaceable>WRAP</replaceable>&lt;N&gt;(s)</computeroutput> is equivalent to
+                  Otherwise, <computeroutput><replaceable>WRAP</replaceable>(N, s)</computeroutput> is equivalent to
                   <computeroutput><functionname>proto::as_expr</functionname>&lt;Domain&gt;(fusion::at_c&lt;N&gt;(s))</computeroutput>.
                 </para>
               </listitem>
             </itemizedlist>
-            Let <computeroutput><replaceable>MAKE</replaceable>&lt;Tag&gt;(a...)</computeroutput> be defined as
-            <computeroutput><classname>proto::base_expr</classname>&lt;Domain, Tag,
-            <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;A...&gt; &gt;::make(a...)</computeroutput>
-            where
-            <computeroutput>A<subscript>x</subscript></computeroutput> is the type of 
-            <computeroutput>a<subscript>x</subscript></computeroutput>.
           </para>
-        </description>
-        <returns>
           <para>
-            <computeroutput>Domain()(<replaceable>MAKE</replaceable>&lt;Tag&gt;(<replaceable>WRAP</replaceable>&lt;0&gt;(s),...
-            <replaceable>WRAP</replaceable>&lt;<replaceable>N</replaceable>-1&gt;(s)))</computeroutput>, where
+            If <computeroutput><classname>proto::wants_basic_expr</classname>&lt;typename Domain::proto_generator&gt;::value</computeroutput>
+            is true, then let <computeroutput><replaceable>E</replaceable></computeroutput> be
+            <computeroutput><classname>proto::basic_expr</classname></computeroutput>; otherwise,
+            let <computeroutput><replaceable>E</replaceable></computeroutput> be
+            <computeroutput><classname>proto::expr</classname></computeroutput>.
+          </para>
+          <para>
+            Let <computeroutput><replaceable>MAKE</replaceable>(Tag, b...)</computeroutput> be defined as
+            <computeroutput><replaceable>E</replaceable>&lt;Tag,
+            <classname alt="proto::listN">proto::list<emphasis>N</emphasis></classname>&lt;decltype(b)...&gt; &gt;::make(b...)</computeroutput>.
+          </para>
+          <para>
+            If <computeroutput>Tag</computeroutput> is
+            <computeroutput><classname>proto::tag::terminal</classname></computeroutput>, then return
+            <computeroutput><replaceable>WRAP</replaceable>(0, s)</computeroutput>.
+          </para>
+          <para>
+            Otherwise, return
+            <computeroutput>Domain()(<replaceable>MAKE</replaceable>(Tag, <replaceable>WRAP</replaceable>(0, s),...
+            <replaceable>WRAP</replaceable>(<replaceable>N</replaceable>-1, s)))</computeroutput>, where
             <replaceable>N</replaceable> is the size of <computeroutput>Sequence</computeroutput>.
           </para>
-        </returns>
+        </description>
       </overloaded-function>
     </namespace>
   </namespace>

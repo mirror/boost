@@ -166,14 +166,19 @@ namespace boost { namespace proto
 
     typedef detail::ignore const ignore;
 
-    template<typename Arg0>
-    struct term;
+    namespace argsns_
+    {
+        template<typename Arg0>
+        struct term;
 
-    #define M0(Z, N, DATA)                                                                      \
-    template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename Arg)> struct BOOST_PP_CAT(list, N);          \
-    /**/
-    BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M0, ~)
-    #undef M0
+        #define M0(Z, N, DATA)                                                                      \
+        template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename Arg)> struct BOOST_PP_CAT(list, N);          \
+        /**/
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M0, ~)
+        #undef M0
+    }
+
+    using namespace argsns_;
 
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
@@ -258,21 +263,26 @@ namespace boost { namespace proto
     struct use_basic_expr;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    typedef detail::not_a_domain no_super_domain;
+    namespace domainns_
+    {
+        typedef detail::not_a_domain no_super_domain;
 
-    template<
-        typename Generator  = default_generator
-      , typename Grammar    = proto::_
-      , typename Super      = no_super_domain
-    >
-    struct domain;
+        template<
+            typename Generator  = default_generator
+          , typename Grammar    = proto::_
+          , typename Super      = no_super_domain
+        >
+        struct domain;
 
-    struct default_domain;
+        struct default_domain;
 
-    struct deduce_domain;
+        struct deduce_domain;
 
-    template<typename Domain, typename Tag, typename Args, typename Void = void>
-    struct base_expr;
+        template<typename Domain, typename Tag, typename Args, typename Void = void>
+        struct base_expr;
+    }
+
+    using namespace domainns_;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     namespace exprns_

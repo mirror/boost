@@ -11,6 +11,7 @@
 #ifndef BOOST_PROTO_DETAIL_AS_EXPR_HPP_EAN_06_09_2010
 #define BOOST_PROTO_DETAIL_AS_EXPR_HPP_EAN_06_09_2010
 
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/args.hpp>
 
@@ -89,55 +90,6 @@ namespace boost { namespace proto { namespace detail
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr, typename Generator, bool SameGenerator>
-    struct already_expr
-    {
-        typedef typename Expr::proto_derived_expr uncv_expr_type;
-        typedef typename Generator::template result<Generator(uncv_expr_type)>::type result_type;
-
-        result_type operator()(Expr &e) const
-        {
-            return Generator()(e);
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr, typename Generator>
-    struct already_expr<Expr, Generator, true>
-    {
-        typedef typename Expr::proto_derived_expr result_type; // remove cv
-
-        result_type operator()(Expr &e) const
-        {
-            return e;
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr>
-    struct already_expr<Expr, default_generator, false>
-    {
-        typedef typename Expr::proto_derived_expr result_type; // remove cv
-
-        result_type operator()(Expr &e) const
-        {
-            return e;
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr>
-    struct already_expr<Expr, default_generator, true>
-    {
-        typedef typename Expr::proto_derived_expr result_type; // remove cv
-
-        result_type operator()(Expr &e) const
-        {
-            return e;
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     template<typename T, typename Generator, bool WantsBasicExpr>
     struct as_child;
 
@@ -188,55 +140,6 @@ namespace boost { namespace proto { namespace detail
         result_type operator()(T &t) const
         {
             return result_type::make(t);
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr, typename Generator, bool SameGenerator>
-    struct already_child
-    {
-        typedef typename Expr::proto_derived_expr uncv_expr_type;
-        typedef typename Generator::template result<Generator(uncv_expr_type)>::type result_type;
-
-        result_type operator()(Expr &e) const
-        {
-            return Generator()(e);
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr, typename Generator>
-    struct already_child<Expr, Generator, true>
-    {
-        typedef Expr &result_type;
-
-        result_type operator()(Expr &e) const
-        {
-            return e;
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr>
-    struct already_child<Expr, default_generator, false>
-    {
-        typedef Expr &result_type;
-
-        result_type operator()(Expr &e) const
-        {
-            return e;
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename Expr>
-    struct already_child<Expr, default_generator, true>
-    {
-        typedef Expr &result_type;
-
-        result_type operator()(Expr &e) const
-        {
-            return e;
         }
     };
 
