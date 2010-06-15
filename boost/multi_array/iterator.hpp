@@ -33,6 +33,17 @@ namespace multi_array {
 // iterator components
 /////////////////////////////////////////////////////////////////////////
 
+template <class T>
+struct operator_arrow_proxy
+{
+  operator_arrow_proxy(T const& px) : value_(px) {}
+  T* operator->() const { return &value_; }
+  // This function is needed for MWCW and BCC, which won't call operator->
+  // again automatically per 13.3.1.2 para 8
+  operator T*() const { return &value_; }
+  mutable T value_;
+};
+
 template <typename T, typename TPtr, typename NumDims, typename Reference>
 class array_iterator;
 
@@ -102,6 +113,14 @@ public:
     : idx_(rhs.idx_), base_(rhs.base_), extents_(rhs.extents_),
     strides_(rhs.strides_), index_base_(rhs.index_base_) { }
 
+
+  // RG - we make our own operator->
+  operator_arrow_proxy<reference>
+  operator->() const
+  {
+    return operator_arrow_proxy<reference>(this->dereference());
+  }
+  
 
   reference dereference() const
   {
