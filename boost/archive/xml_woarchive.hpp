@@ -72,7 +72,7 @@ protected:
         save(static_cast<const unsigned int>(t));
     }
     void 
-    save(const boost::serialization::version_type & t){
+    save(const boost::serialization::item_version_type & t){
         save(static_cast<const unsigned int>(t));
     }
     BOOST_WARCHIVE_DECL(void)
