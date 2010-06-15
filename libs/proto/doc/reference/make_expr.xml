@@ -168,34 +168,9 @@
             <description>
               <para>
                 In this specialization, Proto uses the domains of the child expressions to compute the
-                domain of the parent. It is done in such a way that (A) expressions in domains
-                that share a common super-domain are interoperable, and (B) expressions that are in
-                the default domain (or a sub-domain thereof) are interoperable with <emphasis>all</emphasis>
-                expressions. The rules are thus:
-                <itemizedlist>
-                  <listitem>
-                    A sub-domain is <emphasis>stronger</emphasis> than its super-domain.
-                  </listitem>
-                  <listitem>
-                    For each child, define a set of domains <emphasis>S<subscript>N</subscript></emphasis>
-                    that includes the child's domain and all its super-domains.
-                  </listitem>
-                  <listitem>
-                    Define a set <emphasis>I</emphasis> that is the intersection of all the individual sets
-                    <emphasis>S<subscript>N</subscript></emphasis>. If <emphasis>I</emphasis> is empty,
-                    it is an error.
-                  </listitem>
-                  <listitem>
-                    If any elements in <emphasis>I</emphasis> are <emphasis>not</emphasis> sub-domains of
-                    <computeroutput><classname>proto::default_domain</classname></computeroutput>,
-                    then remove from <emphasis>I</emphasis> all the elements that <emphasis>are</emphasis>
-                    sub-domains of <computeroutput><classname>proto::default_domain</classname></computeroutput>.
-                  </listitem>
-                  <listitem>
-                    The common domain <computeroutput>D</computeroutput> is the strongest domain in set
-                    <emphasis>I</emphasis>.
-                  </listitem>
-                </itemizedlist>
+                domain of the parent. See
+                <computeroutput><classname>proto::deduce_domain</classname></computeroutput> for a full
+                description of the procedure used.
               </para>
             </description>
           </typedef>
@@ -297,7 +272,7 @@
             </para>
           </description>
           <typedef name="type">
-            <purpose>Where S is a RandomAccessSequence equivalent to Sequence, and N is the size of S.</purpose>
+            <purpose>Where S is a Fusion RandomAccessSequence equivalent to Sequence, and N is the size of S.</purpose>
             <type>
     typename <classname>proto::result_of::make_expr</classname>&lt;
       Tag,
@@ -374,8 +349,9 @@
           <para>
             This function template may be invoked either with or without specifying a
             <computeroutput>Domain</computeroutput> template parameter. If no domain is specified, the domain
-            is deduced by examining domains of the given arguments. The procedure used is described in the
-            reference for <computeroutput><classname>proto::result_of::make_expr</classname>&lt;&gt;</computeroutput>.
+            is deduced by examining domains of the given arguments. See
+            <computeroutput><classname>proto::deduce_domain</classname></computeroutput> for a full
+            description of the procedure used.
           </para>
           <para>
             Let <computeroutput><replaceable>WRAP</replaceable>(x)</computeroutput> be defined such that:
@@ -451,12 +427,12 @@
           <para>
             This function template may be invoked either with or without specifying a
             <computeroutput>Domain</computeroutput> argument. If no domain is specified, the domain
-            is deduced by examining domains of each element of the sequence. The procedure used is
-            described in the reference for
-            <computeroutput><classname>proto::result_of::make_expr</classname>&lt;&gt;</computeroutput>.
+            is deduced by examining domains of each element of the sequence. See
+            <computeroutput><classname>proto::deduce_domain</classname></computeroutput> for a full
+            description of the procedure used.
           </para>
           <para>
-            Let <computeroutput>s</computeroutput> be a Fusion Random Access Sequence equivalent to
+            Let <computeroutput>s</computeroutput> be a Fusion RandomAccessSequence equivalent to
             <computeroutput>sequence</computeroutput>.
             Let <computeroutput><replaceable>WRAP</replaceable>(N, s)</computeroutput> be defined such that:
             <itemizedlist>
