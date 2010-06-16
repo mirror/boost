@@ -13,8 +13,6 @@
 
 /// \file
 /// \brief A heterogeneous system is a sorted list of base unit/exponent pairs.
-/// \details As long as we don't need to convert heterogeneous systems
-///   directly everything is cool.
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/plus.hpp>

@@ -8,10 +8,6 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-/// \file
-/// \brief Boost units library configuration and Doxygen mainpage.
-/// \details BOOST_UNITS_HAS_BOOST_TYPEOF, BOOST_UNITS_REQUIRE_LAYOUT_COMPATIBILITY
-
 #ifndef BOOST_UNITS_CONFIG_HPP
 #define BOOST_UNITS_CONFIG_HPP
 

@@ -15,7 +15,7 @@
 /// \brief Stream input and output for rationals, units and quantities.
 /// \details Functions and manipulators for output and input of units and quantities.
 ///   symbol and name format, and engineering and binary autoprefix.
-///   Serialisation output is also supported.
+///   Serialization output is also supported.
 
 #include <cassert>
 #include <cmath>
@@ -157,14 +157,13 @@ xalloc_key_initializer_t xalloc_key_initializer;
 
 } // namespace detail
 
-/// \return flags controlling output.
+/// returns flags controlling output.
 inline long get_flags(std::ios_base& ios, long mask) 
 {
     return(ios.iword(detail::xalloc_key_holder<true>::value) & mask);
 }
 
 /// Set new flags controlling output format.
-/// \return previous flags.
 inline void set_flags(std::ios_base& ios, long new_flags, long mask) 
 {
     assert((~mask & new_flags) == 0);
@@ -172,7 +171,7 @@ inline void set_flags(std::ios_base& ios, long new_flags, long mask)
     flags = (flags & ~mask) | new_flags;
 }
 
-/// \return flags controlling output format.
+/// returns flags controlling output format.
 inline format_mode get_format(std::ios_base& ios) 
 {
     return(static_cast<format_mode>((get_flags)(ios, fmt_mask)));
@@ -185,7 +184,6 @@ inline void set_format(std::ios_base& ios, format_mode new_mode)
 }
 
 /// Set new flags for type_name output format.
-/// \return previous format flags.
 inline std::ios_base& typename_format(std::ios_base& ios) 
 {
     (set_format)(ios, typename_fmt);
@@ -193,15 +191,13 @@ inline std::ios_base& typename_format(std::ios_base& ios)
 }
 
 /// set new flag for raw format output, for example "m".
-/// \return previous format flags.
 inline std::ios_base& raw_format(std::ios_base& ios) 
 {
     (set_format)(ios, raw_fmt);
     return(ios);
 }
 
-// set new format flag for symbol output, for example "m".
-/// \return previous format flags.
+/// set new format flag for symbol output, for example "m".
 inline std::ios_base& symbol_format(std::ios_base& ios) 
 {
     (set_format)(ios, symbol_fmt);
@@ -209,7 +205,6 @@ inline std::ios_base& symbol_format(std::ios_base& ios)
 }
 
 /// set new format for name output, for example "meter".
-/// \return previous format flags.
 inline std::ios_base& name_format(std::ios_base& ios) 
 {
     (set_format)(ios, name_fmt);
@@ -229,7 +224,6 @@ inline void set_autoprefix(std::ios_base& ios, autoprefix_mode new_mode)
 }
 
 /// Clear autoprefix flags.
-/// \return previous prefix flags.
 inline std::ios_base& no_prefix(std::ios_base& ios)
 {
     (set_autoprefix)(ios, autoprefix_none);
@@ -237,7 +231,6 @@ inline std::ios_base& no_prefix(std::ios_base& ios)
 }
 
 /// Set flag for engineering prefix, so 1234.5 m displays as "1.2345 km".
-/// \return previous prefix flags.
 inline std::ios_base& engineering_prefix(std::ios_base& ios)
 {
     (set_autoprefix)(ios, autoprefix_engineering);
@@ -245,7 +238,6 @@ inline std::ios_base& engineering_prefix(std::ios_base& ios)
 }
 
 /// Set flag for binary prefix, so 1024 byte displays as "1 Kib".
-/// \return previous prefix flags.
 inline std::ios_base& binary_prefix(std::ios_base& ios)
 {
     (set_autoprefix)(ios, autoprefix_binary);

@@ -168,10 +168,7 @@ rule generate-qbk ( target : sources * : properties * )
             local dir-name = [ path.basename [ path.parent $(file) ] ] ;
             base_unit = "$(base_unit) ($(dir-name))" ;
         }
-        # this looks better, but it won't work until my boostbook patch for
-        # annotation.xsl gets applied.
-        # print.text "[headerref $(output_filename) $(base_unit)]\\n" : overwrite ;
-        print.text "[headerref $(output_filename)]\\n" : overwrite ;
+        print.text "[headerref $(output_filename) $(base_unit)]\\n" : overwrite ;
     }
 }
 
