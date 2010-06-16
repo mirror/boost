@@ -158,18 +158,18 @@ xalloc_key_initializer_t xalloc_key_initializer;
 } // namespace detail
 
 /// \return flags controlling output.
-inline int get_flags(std::ios_base& ios, int mask) 
+inline long get_flags(std::ios_base& ios, long mask) 
 {
     return(ios.iword(detail::xalloc_key_holder<true>::value) & mask);
 }
 
 /// Set new flags controlling output format.
 /// \return previous flags.
-inline void set_flags(std::ios_base& ios, int new_flags, int mask) 
+inline void set_flags(std::ios_base& ios, long new_flags, long mask) 
 {
     assert((~mask & new_flags) == 0);
     long& flags = ios.iword(detail::xalloc_key_holder<true>::value);
-    flags = (flags & ~mask) | static_cast<long>(new_flags);
+    flags = (flags & ~mask) | new_flags;
 }
 
 /// \return flags controlling output format.
