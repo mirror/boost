@@ -96,7 +96,7 @@ class simple_segregated_storage
     bool empty() const { return (first == 0); }
 
     // pre: !empty()
-    void * malloc()
+    void * malloc BOOST_PREVENT_MACRO_SUBSTITUTION()
     {
       void * const ret = first;
 
@@ -108,7 +108,7 @@ class simple_segregated_storage
     // pre: chunk was previously returned from a malloc() referring to the
     //  same free list
     // post: !empty()
-    void free(void * const chunk)
+    void free BOOST_PREVENT_MACRO_SUBSTITUTION(void * const chunk)
     {
       nextof(chunk) = first;
       first = chunk;
@@ -127,7 +127,7 @@ class simple_segregated_storage
 
       // Place either at beginning or in middle/end
       if (loc == 0)
-        free(chunk);
+        (free)(chunk);
       else
       {
         nextof(chunk) = nextof(loc);

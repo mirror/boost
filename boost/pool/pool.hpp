@@ -51,9 +51,9 @@ struct default_user_allocator_new_delete
   typedef std::size_t size_type;
   typedef std::ptrdiff_t difference_type;
 
-  static char * malloc(const size_type bytes)
+  static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes)
   { return new (std::nothrow) char[bytes]; }
-  static void free(char * const block)
+  static void free BOOST_PREVENT_MACRO_SUBSTITUTION(char * const block)
   { delete [] block; }
 };
 
@@ -62,9 +62,9 @@ struct default_user_allocator_malloc_free
   typedef std::size_t size_type;
   typedef std::ptrdiff_t difference_type;
 
-  static char * malloc(const size_type bytes)
+  static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes)
   { return static_cast<char *>(std::malloc(bytes)); }
-  static void free(char * const block)
+  static void free BOOST_PREVENT_MACRO_SUBSTITUTION(char * const block)
   { std::free(block); }
 };
 
@@ -218,11 +218,11 @@ class pool: protected simple_segregated_storage<
     //  free chunks.  Only if we need to get another memory block do we call
     //  the non-inlined *_need_resize() functions.
     // Returns 0 if out-of-memory
-    void * malloc()
+    void * malloc BOOST_PREVENT_MACRO_SUBSTITUTION()
     {
       // Look for a non-empty storage
       if (!store().empty())
-        return store().malloc();
+        return (store().malloc)();
       return malloc_need_resize();
     }
 
@@ -230,7 +230,7 @@ class pool: protected simple_segregated_storage<
     {
       // Look for a non-empty storage
       if (!store().empty())
-        return store().malloc();
+        return (store().malloc)();
       return ordered_malloc_need_resize();
     }
 
@@ -240,8 +240,8 @@ class pool: protected simple_segregated_storage<
 
     // pre: 'chunk' must have been previously
     //        returned by *this.malloc().
-    void free(void * const chunk)
-    { store().free(chunk); }
+    void free BOOST_PREVENT_MACRO_SUBSTITUTION(void * const chunk)
+    { (store().free)(chunk); }
 
     // pre: 'chunk' must have been previously
     //        returned by *this.malloc().
@@ -250,7 +250,7 @@ class pool: protected simple_segregated_storage<
 
     // pre: 'chunk' must have been previously
     //        returned by *this.malloc(n).
-    void free(void * const chunks, const size_type n)
+    void free BOOST_PREVENT_MACRO_SUBSTITUTION(void * const chunks, const size_type n)
     {
       const size_type partition_size = alloc_size();
       const size_type total_req_size = n * requested_size;
@@ -390,7 +390,7 @@ bool pool<UserAllocator>::release_memory()
         this->first = free_p;
 
       // And release memory
-      UserAllocator::free(ptr.begin());
+      (UserAllocator::free)(ptr.begin());
       ret = true;
     }
 
@@ -416,7 +416,7 @@ bool pool<UserAllocator>::purge_memory()
     const details::PODptr<size_type> next = iter.next();
 
     // delete the storage
-    UserAllocator::free(iter.begin());
+    (UserAllocator::free)(iter.begin());
 
     // increment iter
     iter = next;
@@ -436,7 +436,7 @@ void * pool<UserAllocator>::malloc_need_resize()
   const size_type partition_size = alloc_size();
   const size_type POD_size = next_size * partition_size +
       details::pool::ct_lcm<sizeof(size_type), sizeof(void *)>::value + sizeof(size_type);
-  char * const ptr = UserAllocator::malloc(POD_size);
+  char * const ptr = (UserAllocator::malloc)(POD_size);
   if (ptr == 0)
     return 0;
   const details::PODptr<size_type> node(ptr, POD_size);
@@ -450,7 +450,7 @@ void * pool<UserAllocator>::malloc_need_resize()
   list = node;
 
   //  and return a chunk from it.
-  return store().malloc();
+  return (store().malloc)();
 }
 
 template <typename UserAllocator>
@@ -460,7 +460,7 @@ void * pool<UserAllocator>::ordered_malloc_need_resize()
   const size_type partition_size = alloc_size();
   const size_type POD_size = next_size * partition_size +
       details::pool::ct_lcm<sizeof(size_type), sizeof(void *)>::value + sizeof(size_type);
-  char * const ptr = UserAllocator::malloc(POD_size);
+  char * const ptr = (UserAllocator::malloc)(POD_size);
   if (ptr == 0)
     return 0;
   const details::PODptr<size_type> node(ptr, POD_size);
@@ -499,7 +499,7 @@ void * pool<UserAllocator>::ordered_malloc_need_resize()
   }
 
   //  and return a chunk from it.
-  return store().malloc();
+  return (store().malloc)();
 }
 
 template <typename UserAllocator>
@@ -520,7 +520,7 @@ void * pool<UserAllocator>::ordered_malloc(const size_type n)
   next_size = max BOOST_PREVENT_MACRO_SUBSTITUTION(next_size, num_chunks);
   const size_type POD_size = next_size * partition_size +
       details::pool::ct_lcm<sizeof(size_type), sizeof(void *)>::value + sizeof(size_type);
-  char * const ptr = UserAllocator::malloc(POD_size);
+  char * const ptr = (UserAllocator::malloc)(POD_size);
   if (ptr == 0)
     return 0;
   const details::PODptr<size_type> node(ptr, POD_size);

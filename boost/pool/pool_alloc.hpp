@@ -222,8 +222,8 @@ class fast_pool_allocator
     {
       const pointer ret = (n == 1) ? 
           static_cast<pointer>(
-              singleton_pool<fast_pool_allocator_tag, sizeof(T),
-                  UserAllocator, Mutex, NextSize>::malloc() ) :
+              (singleton_pool<fast_pool_allocator_tag, sizeof(T),
+                  UserAllocator, Mutex, NextSize>::malloc)() ) :
           static_cast<pointer>(
               singleton_pool<fast_pool_allocator_tag, sizeof(T),
                   UserAllocator, Mutex, NextSize>::ordered_malloc(n) );
@@ -236,8 +236,8 @@ class fast_pool_allocator
     static pointer allocate()
     {
       const pointer ret = static_cast<pointer>(
-          singleton_pool<fast_pool_allocator_tag, sizeof(T),
-              UserAllocator, Mutex, NextSize>::malloc() );
+          (singleton_pool<fast_pool_allocator_tag, sizeof(T),
+              UserAllocator, Mutex, NextSize>::malloc)() );
       if (ret == 0)
         boost::throw_exception(std::bad_alloc());
       return ret;
@@ -249,16 +249,16 @@ class fast_pool_allocator
         return;
 #endif
       if (n == 1)
-        singleton_pool<fast_pool_allocator_tag, sizeof(T),
-            UserAllocator, Mutex, NextSize>::free(ptr);
+        (singleton_pool<fast_pool_allocator_tag, sizeof(T),
+            UserAllocator, Mutex, NextSize>::free)(ptr);
       else
-        singleton_pool<fast_pool_allocator_tag, sizeof(T),
-            UserAllocator, Mutex, NextSize>::free(ptr, n);
+        (singleton_pool<fast_pool_allocator_tag, sizeof(T),
+            UserAllocator, Mutex, NextSize>::free)(ptr, n);
     }
     static void deallocate(const pointer ptr)
     {
-      singleton_pool<fast_pool_allocator_tag, sizeof(T),
-          UserAllocator, Mutex, NextSize>::free(ptr);
+      (singleton_pool<fast_pool_allocator_tag, sizeof(T),
+          UserAllocator, Mutex, NextSize>::free)(ptr);
     }
 };
 
