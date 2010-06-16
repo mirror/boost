@@ -75,11 +75,11 @@
           <classname alt="boost::proto::assign">proto::assign</classname>
         </computeroutput>
       </listitem>
-      <listitem>
+      <!--<listitem>
         <computeroutput>
           <classname alt="boost::proto::base_expr">proto::base_expr</classname>
         </computeroutput>
-      </listitem>
+      </listitem>-->
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::basic_expr">proto::basic_expr</classname>

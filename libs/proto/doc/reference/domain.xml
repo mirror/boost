@@ -332,7 +332,7 @@
         </typedef>
       </struct>
 
-      <!-- proto::base_expr -->
+      <!-- proto::base_expr --><!--
       <struct name="base_expr">
         <template>
           <template-type-parameter name="Domain"/>
@@ -359,7 +359,7 @@
         <typedef name="type">
           <type>typename mpl::if_&lt;<classname>proto::wants_basic_expr</classname>&lt; Domain &gt;, A, B&gt;::type</type>
         </typedef>
-      </struct>
+      </struct>-->
 
     </namespace>
   </namespace>
