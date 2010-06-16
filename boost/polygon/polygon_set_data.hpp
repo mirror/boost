@@ -849,7 +849,7 @@ namespace boost { namespace polygon {
 
       std::pair<point_data<double>,point_data<double> > he1(start_offset,mid1_offset);
       std::pair<point_data<double>,point_data<double> > he2(mid2_offset ,end_offset);
-      typedef typename high_precision_type<double>::type high_precision;
+      //typedef typename high_precision_type<double>::type high_precision;
 
       point_data<T> intersect;
       typename scanline_base<T>::compute_intersection_pack pack;

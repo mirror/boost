@@ -1197,7 +1197,7 @@ namespace boost { namespace polygon{
       inline less_half_edge_count() : pt_() {}
       inline less_half_edge_count(Point point) : pt_(point) {}
       inline bool operator () (const std::pair<Point, int>& elm1, const std::pair<Point, int>& elm2) const {
-        return less_slope(pt_.get(HORIZONTAL), pt_.get(VERTICAL), elm1.first, elm2.first);
+        return scanline_base<Unit>::less_slope(pt_.get(HORIZONTAL), pt_.get(VERTICAL), elm1.first, elm2.first);
       }
     };
 
@@ -1221,7 +1221,7 @@ namespace boost { namespace polygon{
         Unit dx2 = elm2.first.first.first.get(HORIZONTAL) - elm2.first.first.second.get(HORIZONTAL);
         Unit dy1 = elm1.first.first.first.get(VERTICAL) - elm1.first.first.second.get(VERTICAL);
         Unit dy2 = elm2.first.first.first.get(VERTICAL) - elm2.first.first.second.get(VERTICAL);
-        return less_slope(dx1, dy1, dx2, dy2);
+        return scanline_base<Unit>::less_slope(dx1, dy1, dx2, dy2);
       }
     };
 
@@ -2066,26 +2066,26 @@ namespace boost { namespace polygon{
       he2.first = Point(0, 0);
       he2.second = Point(10, 20);
       Point result;
-      bool b = compute_intersection(result, he1, he2);
+      bool b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(0, 0)) return false;
       he1.first = Point(0, 10);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(5, 10)) return false;
       he1.first = Point(0, 11);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(5, 10)) return false;
       he1.first = Point(0, 0);
       he1.second = Point(1, 9);
       he2.first = Point(0, 9);
       he2.second = Point(1, 0);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(0, 4)) return false;
 
       he1.first = Point(0, -10);
       he1.second = Point(1, -1);
       he2.first = Point(0, -1);
       he2.second = Point(1, -10);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(0, -5)) return false;
       he1.first = Point((std::numeric_limits<int>::max)(), (std::numeric_limits<int>::max)()-1);
       he1.second = Point((std::numeric_limits<int>::min)(), (std::numeric_limits<int>::max)());
@@ -2093,13 +2093,13 @@ namespace boost { namespace polygon{
       he2.first = Point((std::numeric_limits<int>::max)()-1, (std::numeric_limits<int>::max)());
       he2.second = Point((std::numeric_limits<int>::max)(), (std::numeric_limits<int>::min)());
       //he2.second = Point((std::numeric_limits<int>::max)(), 0);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       //b is false because of overflow error
       he1.first = Point(1000, 2000);
       he1.second = Point(1010, 2010);
       he2.first = Point(1000, 2000);
       he2.second = Point(1010, 2020);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(1000, 2000)) return false;
 
       return b;
@@ -2632,7 +2632,7 @@ namespace boost { namespace polygon{
         //std::cout << "current Y " << currentY << std::endl;
         //std::cout << "scanline size " << scanData_.size() << std::endl;
         //print(scanData_);
-        iterator iter = lookUp_(currentY);
+        iterator iter = this->lookUp_(currentY);
         //std::cout << "found element in scanline " << (iter != scanData_.end()) << std::endl;
         //int counts[4] = {0, 0, 0, 0};
         incoming_count counts_from_scanline;
@@ -2659,7 +2659,7 @@ namespace boost { namespace polygon{
         }
         Point currentPoint(polygon_arbitrary_formation<Unit>::x_, currentY);
         //std::cout << "counts_from_scanline size " << counts_from_scanline.size() << std::endl;
-        sort_incoming_count(counts_from_scanline, currentPoint);
+        this->sort_incoming_count(counts_from_scanline, currentPoint);
 
         vertex_arbitrary_count incoming;
         //std::cout << "aggregating\n";
@@ -2671,7 +2671,7 @@ namespace boost { namespace polygon{
         } while(currentIter != inputEnd && currentIter->pt.get(VERTICAL) == currentY &&
                 currentIter->pt.get(HORIZONTAL) == polygon_arbitrary_formation<Unit>::x_);
         //print(incoming);
-        sort_vertex_arbitrary_count(incoming, currentPoint);
+        this->sort_vertex_arbitrary_count(incoming, currentPoint);
         //std::cout << currentPoint.get(HORIZONTAL) << "," << currentPoint.get(VERTICAL) << std::endl;
         //print(incoming);
         //std::cout << "incoming counts from input size " << incoming.size() << std::endl;
