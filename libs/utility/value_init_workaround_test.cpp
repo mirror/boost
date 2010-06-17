@@ -6,7 +6,7 @@
 //
 // Test program for the boost::value_initialized<T> workaround.
 //
-// 30 May 2010 (Created) Niels Dekker
+// 17 June 2010 (Created) Niels Dekker
 
 // Switch the workaround off, before inluding "value_init.hpp".
 #define BOOST_DETAIL_VALUE_INIT_WORKAROUND 0
@@ -49,6 +49,30 @@ namespace
   bool is_value_initialized(const virtual_destructor_holder& arg)
   {
     return arg.i == 0;
+  }
+
+  // Equivalent to the Stats class from GCC Bug 33916,
+  // "Default constructor fails to initialize array members", reported in 2007 by
+  // Michael Elizabeth Chastain: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
+  // and fixed for GCC 4.2.4.
+  class private_int_array_pair
+  {
+    friend bool is_value_initialized(const private_int_array_pair& arg);
+  private:
+    int first[12];
+    int second[12];
+  };
+
+  bool is_value_initialized(const private_int_array_pair& arg)
+  {
+    for ( unsigned i = 0; i < 12; ++i)
+    {
+      if ( (arg.first[i] != 0) || (arg.second[i] != 0) )
+      {
+        return false;
+      }
+    }
+    return true;
   }
 
   template <typename T>
@@ -107,7 +131,8 @@ int main()
   // TODO More types may be added later.
   const unsigned num_failures =
     FAILED_TO_VALUE_INITIALIZE(boost::value_initialized<derived_struct>()) +
-    FAILED_TO_VALUE_INITIALIZE(boost::value_initialized<virtual_destructor_holder[2]>());
+    FAILED_TO_VALUE_INITIALIZE(boost::value_initialized<virtual_destructor_holder[2]>()) +
+	FAILED_TO_VALUE_INITIALIZE(boost::value_initialized<private_int_array_pair>());
 
 #ifdef BOOST_DETAIL_VALUE_INIT_WORKAROUND_SUGGESTED
   // One or more failures are expected.
