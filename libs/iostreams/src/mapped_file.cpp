@@ -166,7 +166,10 @@ void mapped_file_impl::open_file(param_type p)
 #ifdef BOOST_IOSTREAMS_WINDOWS
 
     // Open file
-    DWORD dwDesiredAccess = readonly ? GENERIC_READ : GENERIC_ALL;
+    DWORD dwDesiredAccess =
+        readonly ?
+            GENERIC_READ :
+            (GENERIC_READ | GENERIC_WRITE);
     DWORD dwCreationDisposition = (p.new_file_size != 0 && !readonly) ? 
         CREATE_ALWAYS : 
         OPEN_EXISTING;
