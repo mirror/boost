@@ -15,6 +15,7 @@
 #include <boost/utility/result_of.hpp>
 
 #include <boost/mpl/identity.hpp>
+#include <boost/mpl/placeholders.hpp>
 
 #include <boost/utility/result_of.hpp>
 
