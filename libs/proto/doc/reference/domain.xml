@@ -264,26 +264,29 @@
                 that includes the child's domain and all its super-domains.
               </listitem>
               <listitem>
-                Define a set <emphasis>I</emphasis> that is the intersection of all the individual sets
-                <emphasis>S<subscript>N</subscript></emphasis>.
+                Define a set <emphasis>I<subscript>S</subscript></emphasis> that is the intersection of
+                all the individual sets <emphasis>S<subscript>N</subscript></emphasis> that don't contain
+                <computeroutput><classname>proto::default_domain</classname></computeroutput>.
               </listitem>
               <listitem>
-                Define a set <emphasis>I<subscript>D</subscript></emphasis> that is the intersection of
+                Define a set <emphasis>I<subscript>W</subscript></emphasis> that is the intersection of
                 all the individual sets <emphasis>S<subscript>N</subscript></emphasis> that contain
                 <computeroutput><classname>proto::default_domain</classname></computeroutput>.
               </listitem>
               <listitem>
-                Define a set <emphasis>P</emphasis> that is the union of <emphasis>I</emphasis>
-                and <emphasis>I<subscript>D</subscript></emphasis>.
+                Define a set <emphasis>P</emphasis> that is the union of
+                <emphasis>I<subscript>S</subscript></emphasis> and
+                <emphasis>I<subscript>W</subscript></emphasis>.
               </listitem>
               <listitem>
                 The common domain is the strongest domain in set <emphasis>P</emphasis>, with the
                 following caveat.
               </listitem>
               <listitem>
-                If the result is 
+                Let <emphasis>U</emphasis> be the union of all sets
+                <emphasis>S<subscript>N</subscript></emphasis>. If the result is 
                 <computeroutput><classname>proto::default_domain</classname></computeroutput>
-                and <emphasis>P</emphasis> contains an element that is <emphasis>not </emphasis>
+                and <emphasis>U</emphasis> contains an element that is <emphasis>not </emphasis>
                 <computeroutput><classname>proto::default_domain</classname></computeroutput>,
                 it is an error.
               </listitem>
