@@ -46,6 +46,7 @@ template<class StateNameTag,
 struct func_state :  public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
                      euml_state<func_state<StateNameTag,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
+    func_state(){}
     // grammar testing
     BOOST_MPL_ASSERT_NOT(( boost::is_same<EntryFunctor,invalid_type> ));
     BOOST_MPL_ASSERT_NOT(( boost::is_same<ExitFunctor,invalid_type> ));
@@ -80,6 +81,7 @@ template<class StateNameTag,
 struct entry_func_state :  public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
                            euml_state<entry_func_state<StateNameTag,ZoneIndex,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
+    entry_func_state(){}
     // grammar testing
     BOOST_MPL_ASSERT_NOT(( boost::is_same<EntryFunctor,invalid_type> ));
     BOOST_MPL_ASSERT_NOT(( boost::is_same<ExitFunctor,invalid_type> ));
@@ -120,6 +122,7 @@ struct explicit_entry_func_state :  public ::boost::msm::front::detail::state_ba
                                     euml_state<explicit_entry_func_state<StateNameTag,
                                         ZoneIndex,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
+    explicit_entry_func_state(){}
     // grammar testing
     BOOST_MPL_ASSERT_NOT(( boost::is_same<EntryFunctor,invalid_type> ));
     BOOST_MPL_ASSERT_NOT(( boost::is_same<ExitFunctor,invalid_type> ));
@@ -154,6 +157,7 @@ template<class StateNameTag,
 struct exit_func_state :   public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
                            euml_state<exit_func_state<StateNameTag,Event,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
+    exit_func_state(){}
     // grammar testing
     BOOST_MPL_ASSERT_NOT(( boost::is_same<EntryFunctor,invalid_type> ));
     BOOST_MPL_ASSERT_NOT(( boost::is_same<ExitFunctor,invalid_type> ));
@@ -507,8 +511,9 @@ struct BuildActions
 #define BOOST_MSM_EUML_DECLARE_ATTRIBUTE(attr_type,attr_name)                                           \
 struct attr_name ## _                                                                                   \
     : proto::extends< proto::terminal<msm::front::action_tag>::type, attr_name ## _, sm_domain>         \
-    {typedef  attr_name ## _ action_name;                                                       \
+    {typedef  attr_name ## _ action_name;                                                               \
         typedef ::boost::fusion::pair<attr_name ## _,attr_type> attribute_type;                         \
+        attr_name ## _ (){}                                                                             \
     };                                                                                                  \
 attr_name ## _ const attr_name;
 
@@ -797,6 +802,7 @@ struct func_state_machine :  public ::boost::msm::front::detail::state_base<BASE
                              euml_state<func_state_machine<StateNameTag,STT,Init,EntryFunctor,ExitFunctor,Attributes,Flags,
                                                         Defer,NoTransitionFunctor,OnExceptionFunctor,BASE> >
 {
+    func_state_machine(){}
     // grammar testing
     BOOST_MPL_ASSERT_NOT(( boost::is_same<EntryFunctor,invalid_type> ));
     BOOST_MPL_ASSERT_NOT(( boost::is_same<ExitFunctor,invalid_type> ));
