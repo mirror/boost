@@ -147,7 +147,10 @@ public:
         for (next_s = s, end_s = s + n; next_s != end_s; ) {
             if (buf.ptr() == buf.eptr() && !flush(snk))
                 break;
-            filter().filter(next_s, end_s, buf.ptr(), buf.eptr(), false);
+            if(!filter().filter(next_s, end_s, buf.ptr(), buf.eptr(), false)) {
+                flush(snk);
+                break;
+            }
         }
         return static_cast<std::streamsize>(next_s - s);
     }
