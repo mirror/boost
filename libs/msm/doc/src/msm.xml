@@ -3176,10 +3176,15 @@ my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR>()</programlisting>
                         value before including any header if you need to overwrite the default. </para>
                     <para>You can also pass arguments by reference (or const-reference) using
                         boost::ref (or boost::cref):</para>
-                    <para>struct player_ : public msm::front::state_machine_def&lt;player_>  {
-                        player_(SomeType&amp; t, int some_value){…}  }; </para>
-                    <para>typedef msm::back::state_machine&lt;player_ > player; SomeType data;
-                        player p(boost::ref(data),3);</para>
+                    <programlisting>struct player_ : public msm::front::state_machine_def&lt;player_>  
+{
+   player_(SomeType&amp; t, int some_value){…}  
+}; 
+
+typedef msm::back::state_machine&lt;player_ > player; 
+SomeType data;
+player p(boost::ref(data),3);
+                        </programlisting>
                 </sect2>
                 <sect2>
                     <title><command xml:id="backend-tradeof-rt-ct"/>Trading run-time speed for
@@ -3270,8 +3275,8 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</programlisting>
             <para>Tests were made on different PCs running Windows XP and Vista and compiled with
                 VC9 SP1 or Ubuntu and compiled with g++ 4.2 and 4.3. For these tests, the same
                 player state machine was written using Boost.Statechart, as a <link
-                    xlink:href="examples/SC Simple.cpp">state machine with only simple states</link>
-                and as a <link xlink:href="examples/SC Composite.cpp">state machine with a composite
+                    xlink:href="examples/SCSimple.cpp">state machine with only simple states</link>
+                and as a <link xlink:href="examples/SCComposite.cpp">state machine with a composite
                     state</link>. The same simple and composite state machines are implemented with
                 MSM with a standard frontend <link xlink:href="examples/MsmSimple.cpp"
                     >(simple)</link><link xlink:href="examples/MsmComposite.cpp">(composite)</link>,
