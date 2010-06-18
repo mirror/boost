@@ -13,6 +13,7 @@
 #include <cstddef> // NULL
 #include <cstdio> // remove
 #include <fstream>
+#include <cmath>
 
 #include <boost/config.hpp>
 
