@@ -21,7 +21,6 @@
 #include <boost/cstdint.hpp> // size_t
 #include <boost/noncopyable.hpp>
 #include <boost/integer_traits.hpp>
-#include <boost/serialization/strong_typedef.hpp>
 
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
@@ -257,7 +256,6 @@ BOOST_ARCHIVE_SIGNATURE();
     };                                             \
 /**/
 
-
 BOOST_ARCHIVE_STRONG_TYPEDEF(class_id_type, class_id_reference_type)
 BOOST_ARCHIVE_STRONG_TYPEDEF(class_id_type, class_id_optional_type)
 BOOST_ARCHIVE_STRONG_TYPEDEF(object_id_type, object_reference_type)
@@ -266,14 +264,6 @@ BOOST_ARCHIVE_STRONG_TYPEDEF(object_id_type, object_reference_type)
 }// namespace boost
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
-
-#if 0
-namespace boost {
-template<>
-class integer_traits<boost::archive::class_id_type> : 
-    public integer_traits<boost::archive::class_id_type::base_type>
-{};
-#endif
 
 #include <boost/serialization/level.hpp>
 

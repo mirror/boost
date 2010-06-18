@@ -44,9 +44,9 @@ namespace std{
 #endif
 
 #include <boost/limits.hpp>
-#include <boost/integer.hpp>
 #include <boost/io/ios_state.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/static_assert.hpp>
 
 #include <boost/serialization/throw_exception.hpp>
 #include <boost/archive/archive_exception.hpp>
@@ -117,7 +117,8 @@ public:
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
     void load(wchar_t & t)
     {
-        typename int_t<sizeof(wchar_t) * CHAR_BIT>::exact i;
+        BOOST_STATIC_ASSERT(sizeof(wchar_t) <= sizeof(int));
+        int i;
         load(i);
         t = i;
     }

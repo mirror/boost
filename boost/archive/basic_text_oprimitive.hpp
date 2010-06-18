@@ -31,6 +31,7 @@
 #include <cstddef> // size_t
 
 #include <boost/config.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/detail/workaround.hpp>
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
 #include <boost/archive/dinkumware.hpp>
@@ -118,8 +119,8 @@ public:
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
     void save(const wchar_t t)
     {
-        typedef typename int_t<sizeof(wchar_t) * CHAR_BIT>::exact int_type;
-        save(static_cast<int_type>(t));
+        BOOST_STATIC_ASSERT(sizeof(wchar_t) <= sizeof(int));
+        save(static_cast<int>(t));
     }
     #endif
     void save(const float t)

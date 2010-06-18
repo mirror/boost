@@ -48,16 +48,6 @@ void save_iterator(std::ostream &os, InputIterator begin, InputIterator end){
     );
 }
 
-#ifndef BOOST_NO_INTRINSIC_WCHAR_T
-template<class Archive>
-BOOST_ARCHIVE_DECL(void)
-xml_oarchive_impl<Archive>::save(const wchar_t * ws){
-    save_iterator(os, ws, ws + std::wcslen(ws));
-}
-#endif
-
-#endif // BOOST_NO_CWCHAR
-
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
 BOOST_ARCHIVE_DECL(void)
@@ -68,6 +58,16 @@ xml_oarchive_impl<Archive>::save(const std::wstring & ws){
     save_iterator(os, ws.data(), ws.data() + ws.size());
 }
 #endif
+
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+template<class Archive>
+BOOST_ARCHIVE_DECL(void)
+xml_oarchive_impl<Archive>::save(const wchar_t * ws){
+    save_iterator(os, ws, ws + std::wcslen(ws));
+}
+#endif
+
+#endif // BOOST_NO_CWCHAR
 
 template<class Archive>
 BOOST_ARCHIVE_DECL(void)

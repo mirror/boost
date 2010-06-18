@@ -69,7 +69,6 @@ text_oarchive_impl<Archive>::save(const wchar_t * ws)
     os.write((const char *)ws, l * sizeof(wchar_t)/sizeof(char));
 }
 #endif
-#endif // BOOST_NO_CWCHAR
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
@@ -82,6 +81,7 @@ text_oarchive_impl<Archive>::save(const std::wstring &ws)
     os.write((const char *)(ws.data()), l * sizeof(wchar_t)/sizeof(char));
 }
 #endif
+#endif // BOOST_NO_CWCHAR
 
 template<class Archive>
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 

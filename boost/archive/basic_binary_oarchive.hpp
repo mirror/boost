@@ -87,7 +87,7 @@ public:
     // binary files don't include the optional information 
     void save_override(const class_id_optional_type & /* t */, int){}
 
-    #if 0
+    #if 0 // enable this if we decide to support generation of previous versions
     void save_override(const boost::archive::version_type & t, int version){
         if(this->get_library_version() < boost::archive::library_version_type(7)){
             * this->This() << static_cast<int_least16_t >(t);

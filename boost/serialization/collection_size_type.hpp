@@ -22,9 +22,9 @@ private:
     base_type t;
 public:
     collection_size_type(): t(0) {};
-    explicit collection_size_type(const unsigned int & t_) : t(t_){
-        assert(t_ <= boost::integer_traits<base_type>::const_max);
-    }
+    explicit collection_size_type(const std::size_t & t_) : 
+        t(t_)
+    {}
     collection_size_type(const collection_size_type & t_) : 
         t(t_.t)
     {}
