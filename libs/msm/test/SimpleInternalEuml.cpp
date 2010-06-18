@@ -68,6 +68,7 @@ namespace
     // derive to be able to add an internal transition table
     struct Empty_impl : public Empty_def
     {
+        Empty_impl(){}
         BOOST_MSM_EUML_DECLARE_INTERNAL_TRANSITION_TABLE((
             internal_evt [internal_guard_fct] / ++source_(empty_internal_action_counter)
             ))
