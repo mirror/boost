@@ -35,9 +35,7 @@ algorithm simply returns a __joint_view__: a view that holds a reference to
 the original sequence `s` and the value `x`. Functions that were once
 sequence specific and need to be implemented N times over N different
 sequences are now implemented only once. That is to say that Fusion
-sequences are cheaply extensible. However, an important caveat is that the
-result of a sequence extending operation like __push_back__ does not retain
-the properties of the original sequence such as associativity of __set__(s).
+sequences are cheaply extensible.
 To regain the original sequence, __conversion__ functions are provided. You
 may use one of the __conversion__ functions to convert back to the original
 sequence type.
@@ -59,42 +57,59 @@ a sequence repeatedly applying an operation to its elements.
 
 [section Functions]
 
-[section fold]
-
+[template fold_desc[name result_of_name arg_desc arg_id arg_type_id invoke_desc semantics_elements_desc example_arg_transform example_result I0 I1 IN]
 [heading Description]
-For a sequence `seq`, initial state `initial_state`, and binary function object or function pointer `f`, fold returns the result of the repeated application of binary `f` to the result of the previous `f` invocation (`inital_state` if it is the first call) and each element of `seq`.
+For a sequence `seq`, initial state `initial_state`, and binary function object
+or function pointer `f`, [^[name]] returns the result of the repeated application of
+binary `f` to the result of the previous `f` invocation (`inital_state` if it is
+the first call) and [arg_desc] of `seq`.
 
+[def name_macro [name]]
+[def result_of_name_macro [result_of_name]]
 [heading Synopsis]
     template<
         typename Sequence,
         typename State,
         typename F
         >
-    typename __result_of_fold__<Sequence, State, F>::type fold(
-        Sequence& seq, State const& initial_state, F const& f);
+    typename result_of_name_macro<Sequence, State const, F>::type name_macro(
+        Sequence& seq, State const& initial_state, F f);
+        
+    template<
+        typename Sequence,
+        typename State,
+        typename F
+        >
+    typename result_of_name_macro<Sequence const, State const, F>::type name_macro(
+        Sequence const& seq, State const& initial_state, F f);
 
+[def arg_type_id_macro [arg_type_id]]
+[def arg_id_macro [arg_id]]
+[def invoke_desc_macro [invoke_desc]]
 [table Parameters
     [[Parameter][Requirement][Description]]
-    [[`seq`][A model of __forward_sequence__, `f(s,e)` must be a valid expression for current state `s`, and each element `e` in `seq`][Operation's argument]]
+    [[`seq`][A model of __forward_sequence__][Operation's argument]]
     [[`initial_state`][Any type][Initial state]]
-    [[`f`][`__boost_result_of_call__<F(S,E)>::type` is the return type of `f(s,e)` current state `s` of type `S`, and for each element `e` of type `E` in `seq`][Operation's argument]]
+    [[`f`][`f(s,arg_id_macro)` with return type `__boost_result_of_call__<F(S,arg_type_id_macro)>::type` must be a valid expression for current state `s` of type `S`, and for each invoke_desc_macro][Operation's argument]]
 ]
 
 [heading Expression Semantics]
-    fold(seq, initial_state, f);
+    name_macro(seq, initial_state, f);
 
 [*Return type]: Any type
 
-[*Semantics]: Equivalent to `f(... f(f(initial_state,e1),e2) ...eN)` where `e1 ...eN` are the elements of `seq`.
+[*Semantics]: Equivalent to [^f(... f(f(initial_state,[arg_id][I0]),[arg_id][I1]) ...[arg_id][IN])] where [^[arg_id]1 ...[arg_id]N] are [semantics_elements_desc].
 
 [heading Complexity]
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 
 [heading Header]
 
-    #include <boost/fusion/algorithm/iteration/fold.hpp>
-    #include <boost/fusion/include/fold.hpp>
+    #include <boost/fusion/algorithm/iteration/name_macro.hpp>
+    #include <boost/fusion/include/name_macro.hpp>
 
+[def example_result_macro [example_result]]
+[def example_arg_transform_macro [example_arg_transform]]
 [heading Example]
     struct make_string
     {
@@ -103,66 +118,32 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
         template<typename T>
         std::string operator()(const std::string& str, const T& t) const
         {
-            return str + boost::lexical_cast<std::string>(t);
+            return str + boost::lexical_cast<std::string>(example_arg_transform_macro);
         }
     };
     ...
     const __vector__<int,int> vec(1,2);
-    assert(__fold__(vec,std::string(""), make_string()) == "12");
+    assert(name_macro(vec,std::string(""), make_string()) == example_result_macro);
+]
 
+[section fold]
+[fold_desc fold..__result_of_fold__..each element..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."12"..1..2..N]
+[endsect]
+
+[section reverse_fold]
+[fold_desc reverse_fold..__result_of_reverse_fold__..each element..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."21"..N..N-1..1]
+[endsect]
+
+[section iter_fold]
+[fold_desc iter_fold..__result_of_iter_fold__..iterators on each element..it..It..iterator `it` of type `It` on an element of `seq`..consecutive iterators on the elements of `seq`..__deref__(t).."12"..1..2..N]
+[endsect]
+
+[section reverse_iter_fold]
+[fold_desc reverse_iter_fold..__result_of_reverse_iter_fold__..iterators on each element..it..It..iterator `it` of type `It` on an element of `seq`..consecutive iterators on the elements of `seq`..__deref__(t).."21"..N..N-1..1]
 [endsect]
 
 [section accumulate]
-
-[heading Description]
-For a sequence `seq`, initial state `initial_state`, and binary function object or function pointer `f`, accumulate returns the result of the repeated application of binary `f` to the result of the previous `f` invocation (`inital_state` if it is the first call) and each element of `seq`.
-
-[heading Synopsis]
-    template<
-        typename Sequence,
-        typename State,
-        typename F
-        >
-    typename __result_of_accumulate__<Sequence, State, F>::type accumulate(
-        Sequence& seq, State const& initial_state, F const& f);
-
-[table Parameters
-    [[Parameter][Requirement][Description]]
-    [[`seq`][A model of __forward_sequence__, `f(s,e)` must be a valid expression for current state `s`, and each element `e` in `seq`][Operation's argument]]
-    [[`initial_state`][Any type][Initial state]]
-    [[`f`][`__boost_result_of_call__<F(S,E)>::type` is the return type of `f(s,e)` current state `s` of type `S`, and for each element `e` of type `E` in `seq`][Operation's argument]]
-]
-
-[heading Expression Semantics]
-    accumulate(seq, initial_state, f);
-
-[*Return type]: Any type
-
-[*Semantics]: Equivalent to `f(... f(f(initial_state,e1),e2) ...eN)` where `e1 ...eN` are the elements of `seq`.
-
-[heading Complexity]
-Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
-
-[heading Header]
-
-    #include <boost/fusion/algorithm/iteration/accumulate.hpp>
-    #include <boost/fusion/include/accumulate.hpp>
-
-[heading Example]
-    struct make_string
-    {
-        typedef std::string result_type;
-
-        template<typename T>
-        std::string operator()(const std::string& str, const T& t) const
-        {
-            return str + boost::lexical_cast<std::string>(t);
-        }
-    };
-    ...
-    const __vector__<int,int> vec(1,2);
-    assert(__accumulate__(vec,std::string(""), make_string()) == "12");
-
+[fold_desc accumulate..__result_of_accumulate__..each element..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."12"..1..2..N]
 [endsect]
 
 [section for_each]
@@ -176,7 +157,7 @@ Applies a unary function object to each element of a sequence.
         typename F
         >
     typename __result_of_for_each__<Sequence, F>::type for_each(
-        Sequence& seq, F const& f);
+        Sequence& seq, F f);
 
 [table Parameters
     [[Parameter][Requirement][Description]]
@@ -219,84 +200,67 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 
 [section Metafunctions]
 
-[section fold]
-
+[template meta_fold_desc[name name_func arg_id arg_type_id invoke_meta_desc]
 [heading Description]
-Returns the result type of __fold__.
+Returns the result type of [name_func].
 
+[def name_macro [name]]
 [heading Synopsis]
     template<
         typename Sequence,
         typename State,
         typename F>
-    struct fold
+    struct name_macro
     {
         typedef __unspecified__ type;
     };
 
+[def arg_type_id_macro [arg_type_id]]
+[def arg_id_macro [arg_id]]
+[def invoke_meta_desc_macro [invoke_meta_desc]]
 [table Parameters
-    [[Parameter] [Requirement] [Description]]
+    [[Parameter]  [Requirement] [Description]]
     [[`Sequence`] [A model of __forward_sequence__] [The sequence to iterate]]
     [[`State`]    [Any type]                        [The initial state for the first application of `F`]]
-    [[`F`]    [`__boost_result_of_call__<F(S,E)>::type` is the return type of `f(s,e)` for current state `s` of type `S`, and for each element `e` of type `E` in `seq`] [The operation to be applied on forward traversal]]
+    [[`F`]        [`__boost_result_of_call__<F(S,arg_type_id_macro)>::type` is the return type of `f(s,arg_id_macro)` with current state `s` of type `S`, and an invoke_meta_desc_macro][The operation to be applied on traversal]]
 ]
 
 [heading Expression Semantics]
-    __result_of_fold__<Sequence, State, F>::type
+    name_macro<Sequence, State, F>::type
 
 [*Return type]: Any type
 
-[*Semantics]: Returns the result of applying `fold` to a sequence of type `Sequence`, with an initial state of
-type `State` and binary function object or function pointer of type `F`.
+[*Semantics]: Returns the result of applying [name_func] to a sequence of type
+`Sequence`, with an initial state of type `State` and binary function object or
+function pointer of type `F`.
 
 [heading Complexity]
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `F`.
 
 [heading Header]
 
-    #include <boost/fusion/algorithm/iteration/fold.hpp>
-    #include <boost/fusion/include/fold.hpp>
+    #include <boost/fusion/algorithm/iteration/name_macro.hpp>
+    #include <boost/fusion/include/name_macro.hpp>
+]
 
+[section fold]
+[meta_fold_desc fold..__fold__..e..E..element `e` of type `E` in `seq`]
+[endsect]
+
+[section reverse_fold]
+[meta_fold_desc reverse_fold..__reverse_fold__..e..E..element `e` of type `E` in `seq`]
+[endsect]
+
+[section iter_fold]
+[meta_fold_desc iter_fold..__iter_fold__..it..It..iterator `it` of type `It` on an element of `seq`]
+[endsect]
+
+[section reverse_iter_fold]
+[meta_fold_desc reverse_iter_fold..__reverse_iter_fold__..it..It..iterator `it` of type `It` on an element of `seq`]
 [endsect]
 
 [section accumulate]
-
-[heading Description]
-Returns the result type of __accumulate__.
-
-[heading Synopsis]
-    template<
-        typename Sequence,
-        typename State,
-        typename F>
-    struct accumulate
-    {
-        typedef __unspecified__ type;
-    };
-
-[table Parameters
-    [[Parameter] [Requirement] [Description]]
-    [[`Sequence`] [A model of __forward_sequence__] [The sequence to iterate]]
-    [[`State`]    [Any type]                                 [The initial state for the first application of `F`]]
-    [[`F`]    [`__boost_result_of_call__<F(S,E)>::type` is the return type of `f(s,e)` for current state `s` of type `S`, and for each element `e` of type `E` in `seq`] [The operation to be applied on forward traversal]]
-]
-
-[heading Expression Semantics]
-    __result_of_accumulate__<Sequence, State, F>::type
-
-[*Return type]: Any type
-
-[*Semantics]: Returns the result of applying `accumulate` to a sequence of type `Sequence`, with an initial state of
-type `State` and binary function object or function pointer of type `F`.
-
-[heading Complexity]
-Linear, exactly `__result_of_size__<Sequence>::value` applications of `F`.
-
-[heading Header]
-
-    #include <boost/fusion/algorithm/iteration/accumulate.hpp>
-    #include <boost/fusion/include/accumulate.hpp>
-
+[meta_fold_desc accumulate..__accumulate__..e..E..element `e` of type `E` in `seq`]
 [endsect]
 
 [section for_each]

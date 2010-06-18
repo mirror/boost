@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Algorithm</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.0-pre">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="prev" href="adapted/define_assoc_tpl_struct.html" title="BOOST_FUSION_DEFINE_ASSOC_TPL_STRUCT">
@@ -44,7 +44,7 @@
 </dl></dd>
 </dl></div>
 <a name="fusion.algorithm.lazy_evaluation"></a><h4>
-<a name="id894343"></a>
+<a name="id1001595"></a>
       <a class="link" href="algorithm.html#fusion.algorithm.lazy_evaluation">Lazy Evaluation</a>
     </h4>
 <p>
@@ -67,7 +67,7 @@
       as we want without incurring a high runtime penalty.
     </p>
 <a name="fusion.algorithm.sequence_extension"></a><h4>
-<a name="id894484"></a>
+<a name="id1001672"></a>
       <a class="link" href="algorithm.html#fusion.algorithm.sequence_extension">Sequence Extension</a>
     </h4>
 <p>
@@ -82,15 +82,12 @@
       and the value <code class="computeroutput"><span class="identifier">x</span></code>. Functions
       that were once sequence specific and need to be implemented N times over N
       different sequences are now implemented only once. That is to say that Fusion
-      sequences are cheaply extensible. However, an important caveat is that the
-      result of a sequence extending operation like <a class="link" href="algorithm/transformation/functions/push_back.html" title="push_back"><code class="computeroutput"><span class="identifier">push_back</span></code></a> does not retain the properties
-      of the original sequence such as associativity of <a class="link" href="container/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a>(s). To regain the original sequence,
-      <a class="link" href="container/conversion/functions.html" title="Functions">Conversion</a> functions
-      are provided. You may use one of the <a class="link" href="container/conversion/functions.html" title="Functions">Conversion</a>
+      sequences are cheaply extensible. To regain the original sequence, <a class="link" href="container/conversion/functions.html" title="Functions">Conversion</a>
+      functions are provided. You may use one of the <a class="link" href="container/conversion/functions.html" title="Functions">Conversion</a>
       functions to convert back to the original sequence type.
     </p>
 <a name="fusion.algorithm.header"></a><h4>
-<a name="id894711"></a>
+<a name="id1001780"></a>
       <a class="link" href="algorithm.html#fusion.algorithm.header">Header</a>
     </h4>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
