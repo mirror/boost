@@ -46,6 +46,7 @@ namespace std{
 #endif
 
 #include <boost/limits.hpp>
+#include <boost/integer.hpp>
 #include <boost/io/ios_state.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/serialization/throw_exception.hpp>
@@ -117,7 +118,8 @@ public:
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
     void save(const wchar_t t)
     {
-        save(static_cast<short int>(t));
+        typedef typename int_t<sizeof(wchar_t) * CHAR_BIT>::exact int_type;
+        save(static_cast<int_type>(t));
     }
     #endif
     void save(const float t)

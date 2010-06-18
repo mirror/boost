@@ -44,6 +44,7 @@ namespace std{
 #endif
 
 #include <boost/limits.hpp>
+#include <boost/integer.hpp>
 #include <boost/io/ios_state.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -116,7 +117,7 @@ public:
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
     void load(wchar_t & t)
     {
-        short int i;
+        typename int_t<sizeof(wchar_t) * CHAR_BIT>::exact i;
         load(i);
         t = i;
     }
