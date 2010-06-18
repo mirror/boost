@@ -62,7 +62,7 @@
 [def __uniform_01 [classref boost::uniform_01 uniform_01]]
 [def __uniform_real [classref boost::uniform_real uniform_real]]
 [def __bernoulli_distribution [classref boost::bernoulli_distribution bernoulli_distribution]]
-[def __binomial_distribution [classref boost::binomial_distribution binomial_distribution]]
+[def __binomial_distribution [classref boost::random::binomial_distribution binomial_distribution]]
 [def __cauchy_distribution [classref boost::cauchy_distribution cauchy_distribution]]
 [def __gamma_distribution [classref boost::gamma_distribution gamma_distribution]]
 [def __poisson_distribution [classref boost::poisson_distribution poisson_distribution]]

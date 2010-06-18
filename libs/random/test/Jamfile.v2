@@ -41,6 +41,9 @@ for urng in $(all-urngs)
     run instantiate.cpp : : : <define>BOOST_RANDOM_URNG_TEST=$(urng) : test_$(urng) ;
 }
 
+run test_binomial.cpp ;
+run test_binomial_distribution.cpp /boost//unit_test_framework ;
+
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
 # run random_speed.cpp ;
