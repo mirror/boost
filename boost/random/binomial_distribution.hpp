@@ -244,10 +244,8 @@ private:
 
     bool use_inversion() const
     {
-        // According to the paper, 11 should be safe,
-        // but I was having undiagnosed accuracy problems.
-        // A value of 20 should be safe
-        return m < 20;
+        // BTRD is safe when np >= 10
+        return m < 11;
     }
 
     // computes the correction factor for the Stirling approximation
@@ -295,8 +293,8 @@ private:
             RealType v = uniform_01<RealType>()(urng);
             if(v <= btrd.u_rv_r) {
                 RealType u = v/btrd.v_r - 0.43;
-                return static_cast<IntType>(
-                    (2*btrd.a/(0.5 - abs(u)) + btrd.b)*u + btrd.c);
+                return static_cast<IntType>(floor(
+                    (2*btrd.a/(0.5 - abs(u)) + btrd.b)*u + btrd.c));
             }
 
             if(v >= btrd.v_r) {
@@ -308,7 +306,7 @@ private:
             }
 
             RealType us = 0.5 - abs(u);
-            IntType k = static_cast<IntType>((2*btrd.a/us + btrd.b)*u + btrd.c);
+            IntType k = static_cast<IntType>(floor((2*btrd.a/us + btrd.b)*u + btrd.c));
             if(k < 0 || k > _t) continue;
             v = v*btrd.alpha/(btrd.a/(us*us) + btrd.b);
             IntType km = abs(k - m);
