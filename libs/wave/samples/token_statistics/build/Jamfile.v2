@@ -9,10 +9,10 @@
 # LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 SOURCES = 
-        ../token_statistics.cpp 
-        ../instantiate_xlex_lexer.cpp
-        ../instantiate_cpp_grammar.cpp
-        ../instantiate_defined_grammar.cpp
+        ../token_statistics 
+        ../instantiate_xlex_lexer
+        ../instantiate_cpp_grammar
+        ../instantiate_defined_grammar
     ;
 
 exe token_statistics
