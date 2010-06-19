@@ -24,6 +24,11 @@ struct pick_left
     typedef L type;
 };
 
+// Work-arounds for Microsoft Visual C++ 7.1
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+#define FutureGroup(x) proto::call<FutureGroup(x)>
+#endif
+
 // Define the grammar of future group expression, as well as a
 // transform to turn them into a Fusion sequence of the correct
 // type.
@@ -39,8 +44,8 @@ struct FutureGroup
       , proto::when<
             proto::logical_and<FutureGroup, FutureGroup>
           , fusion::joint_view<
-                boost::add_const<FutureGroup(proto::_left)>
-              , boost::add_const<FutureGroup(proto::_right)>
+                boost::add_const<FutureGroup(proto::_left) >
+              , boost::add_const<FutureGroup(proto::_right) >
             >(FutureGroup(proto::_left), FutureGroup(proto::_right))
         >
         // (a || b) becomes the sequence for 'a', so long
@@ -54,6 +59,10 @@ struct FutureGroup
         >
     >
 {};
+
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+#undef FutureGroup
+#endif
 
 template<class E>
 struct future_expr;

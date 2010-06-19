@@ -11,6 +11,8 @@
 #ifndef BOOST_PROTO_DETAIL_AS_EXPR_HPP_EAN_06_09_2010
 #define BOOST_PROTO_DETAIL_AS_EXPR_HPP_EAN_06_09_2010
 
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/args.hpp>
@@ -97,7 +99,12 @@ namespace boost { namespace proto { namespace detail
     template<typename T, typename Generator>
     struct as_child<T, Generator, false>
     {
-        typedef proto::expr<proto::tag::terminal, term<T &>, 0> expr_type;
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+        typedef typename term_traits<T &>::reference reference;
+    #else
+        typedef T &reference;
+    #endif
+        typedef proto::expr<proto::tag::terminal, term<reference>, 0> expr_type;
         typedef typename Generator::template result<Generator(expr_type)>::type result_type;
 
         result_type operator()(T &t) const
@@ -110,7 +117,12 @@ namespace boost { namespace proto { namespace detail
     template<typename T, typename Generator>
     struct as_child<T, Generator, true>
     {
-        typedef proto::basic_expr<proto::tag::terminal, term<T &>, 0> expr_type;
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+        typedef typename term_traits<T &>::reference reference;
+    #else
+        typedef T &reference;
+    #endif
+        typedef proto::basic_expr<proto::tag::terminal, term<reference>, 0> expr_type;
         typedef typename Generator::template result<Generator(expr_type)>::type result_type;
 
         result_type operator()(T &t) const
@@ -123,7 +135,12 @@ namespace boost { namespace proto { namespace detail
     template<typename T>
     struct as_child<T, proto::default_generator, false>
     {
-        typedef proto::expr<proto::tag::terminal, term<T &>, 0> result_type;
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+        typedef typename term_traits<T &>::reference reference;
+    #else
+        typedef T &reference;
+    #endif
+        typedef proto::expr<proto::tag::terminal, term<reference>, 0> result_type;
 
         result_type operator()(T &t) const
         {
@@ -135,7 +152,12 @@ namespace boost { namespace proto { namespace detail
     template<typename T>
     struct as_child<T, proto::default_generator, true>
     {
-        typedef proto::basic_expr<proto::tag::terminal, term<T &>, 0> result_type;
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+        typedef typename term_traits<T &>::reference reference;
+    #else
+        typedef T &reference;
+    #endif
+        typedef proto::basic_expr<proto::tag::terminal, term<reference>, 0> result_type;
 
         result_type operator()(T &t) const
         {

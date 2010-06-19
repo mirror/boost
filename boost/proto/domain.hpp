@@ -216,7 +216,7 @@ namespace boost { namespace proto
         /// either an instance of \c proto::expr\<\> or
         /// \c proto::basic_expr\<\>.
         ///
-        template<typename Domain, typename Tag, typename Args, typename Void /*= void*/>
+        template<typename Domain, typename Tag, typename Args, bool WantsBasicExpr>
         struct base_expr
         {
             typedef proto::expr<Tag, Args, Args::arity> type;
@@ -225,7 +225,7 @@ namespace boost { namespace proto
         /// INTERNAL ONLY
         ///
         template<typename Domain, typename Tag, typename Args>
-        struct base_expr<Domain, Tag, Args, typename Domain::proto_generator::proto_use_basic_expr_>
+        struct base_expr<Domain, Tag, Args, true>
         {
             typedef proto::basic_expr<Tag, Args, Args::arity> type;
         };
