@@ -38,7 +38,7 @@ struct chi_squared_collector {
         current_actual += actual;
         current_expected += expected;
 
-        if(expected >= cutoff) {
+        if(current_expected >= cutoff) {
             if(prev_expected != 0) {
                 update(prev_actual, prev_expected);
             }
