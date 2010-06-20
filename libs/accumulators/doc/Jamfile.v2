@@ -234,6 +234,7 @@ boostbook standalone
     :
         accumulators
     :
+        <xsl:param>boost.root=../../../..
         <xsl:param>boost.max.id.length=1024
         <xsl:param>toc.max.depth=4
         <xsl:param>toc.section.depth=4

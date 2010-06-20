@@ -12,6 +12,7 @@ toolset.using doxygen ;
 
 boostbook string_algo : string_algo.xml autodoc 
 	:
+        <xsl:param>boost.root=../../../../..
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
 	;
 

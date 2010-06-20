@@ -13,6 +13,7 @@ boostbook standalone
   : 
     iterator 
   :
+    <xsl:param>boost.root=../../../..
     <xsl:param>toc.max.depth=3
     <xsl:param>toc.section.depth=3
     <xsl:param>chunk.section.depth=4

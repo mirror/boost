@@ -8,9 +8,7 @@ boostbook standalone : signals.xml :
     <dependency>hello_world_def_code_snippet.xml
     <implicit-dependency>hello_world_def_code_snippet.xml
 
-    <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
     <xsl:param>boost.root=../../../..
-    <xsl:param>boost.libraries=../../../libraries.htm
 #    <xsl:param>navig.graphics=1
 
 #    <xsl:param>chunk.first.sections=1

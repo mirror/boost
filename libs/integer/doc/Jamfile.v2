@@ -26,10 +26,6 @@ boostbook standalone
         <xsl:param>generate.section.toc.level=4
         # Path for links to Boost:
         <xsl:param>boost.root=../../../..
-        # Path for libraries index:
-        <xsl:param>boost.libraries=../../../../libs/libraries.htm
-        # Use the main Boost stylesheet:
-        <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
         
         # PDF Options:
         # TOC Generation: this is needed for FOP-0.9 and later:

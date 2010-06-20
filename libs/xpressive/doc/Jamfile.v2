@@ -34,6 +34,7 @@ boostbook standalone
     :
         xpressive
     :
+        <xsl:param>boost.root=../../../..
         <xsl:param>toc.max.depth=3
         <xsl:param>toc.section.depth=3
         <xsl:param>chunk.section.depth=3

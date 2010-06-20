@@ -42,6 +42,7 @@ xml mpi : mpi.qbk ;
 
 boostbook standalone : mpi mpi_autodoc 
               :
+              <xsl:param>boost.root=../../../..
               <format>pdf:<xsl:param>max-columns=66
               <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
               ;

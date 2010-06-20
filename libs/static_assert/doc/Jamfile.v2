@@ -12,6 +12,7 @@ boostbook standalone
     :
         static_assert
     :
+        <xsl:param>boost.root=../../../..
         <xsl:param>nav.layout=none
         <xsl:param>navig.graphics=0
         # PDF Options:
@@ -36,9 +37,3 @@ boostbook standalone
         <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
     ;
-
-install html : ../../../doc/html/boostbook.css ;
-install ../ : ../../../boost.png ;
-
-
-

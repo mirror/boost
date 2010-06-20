@@ -10,6 +10,7 @@ boostbook function-doc
 	: 
 	function.xml 
 	:
+	    <xsl:param>boost.root=../../../..
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
 	;
 
