@@ -278,7 +278,7 @@ namespace boost { namespace proto
 
         struct deduce_domain;
 
-        template<typename Domain, typename Tag, typename Args, typename Void = void>
+        template<typename Domain, typename Tag, typename Args, bool WantsBasicExpr = wants_basic_expr<typename Domain::proto_generator>::value>
         struct base_expr;
     }
 
