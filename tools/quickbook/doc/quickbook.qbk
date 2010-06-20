@@ -19,10 +19,7 @@
 
 [/ Some links]
 
-[def __note__       [$images/note.png]]
-[def __alert__      [$images/alert.png]]
-[def __tip__        [$images/tip.png]]
-[def :-)            [$images/smiley.png]]
+[def :-)            [$../src/images/smiley.png]]
 [def __spirit__     [@http://spirit.sourceforge.net Spirit]]
 [def __boostbook__  [@http://www.boost.org/doc/html/boostbook.html BoostBook]]
 [def __docbook__    [@http://www.docbook.org/ DocBook]]
@@ -2087,7 +2084,7 @@ Editing quickbook files is usually done with text editors both simple and
 powerful. The following sections list the settings for some editors which can
 help make editing quickbook files a bit easier.
 
-[blurb __note__ You may submit your settings, tips, and suggestions to the
+[note You may submit your settings, tips, and suggestions to the
 authors, or through the [@https://lists.sourceforge.net/lists/listinfo/boost-
 docs Boost Docs mailing list].]
 
@@ -2098,7 +2095,7 @@ docs Boost Docs mailing list].]
 The Scintilla Text Editor (SciTE) is a free source code editor for Win32 and X.
 It uses the SCIntilla source code editing component.
 
-[blurb __tip__ SciTE can be downloaded from [@http://www.scintilla.org/SciTE.html]]
+[tip SciTE can be downloaded from [@http://www.scintilla.org/SciTE.html]]
 
 You can use the following settings to highlight quickbook tags when
 editing quickbook files.
@@ -2117,7 +2114,7 @@ comment.box.middle.props=
 comment.box.end.props=]
 ''']
 
-[blurb __note__ Thanks to Rene Rivera for the above SciTE settings.]
+[note Thanks to Rene Rivera for the above SciTE settings.]
 
 [endsect] [/scite]
 
