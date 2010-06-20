@@ -71,7 +71,7 @@ namespace example
      * Embedded docbook list:
      *
      * \xmlonly
-     * <orderedlist><listitem>1</listitem><listitem>2</listitem></orderedlist>
+     * <orderedlist><listitem><simpara>1</simpara></listitem><listitem><simpara>2</simpara></listitem></orderedlist>
      * \endxmlonly
      *
      * \a Special \b Bold \c Typewriter \e Italics \em emphasis \p parameter
