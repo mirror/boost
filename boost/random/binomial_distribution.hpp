@@ -253,7 +253,12 @@ private:
     static RealType fc(IntType k)
     {
         if(k < 10) return detail::binomial_table<RealType>::table[k];
-        else return (1./12 - (1./360 - 1./1260/((k+1)*(k+1)))/((k+1)*(k+1)))/(k+1);
+        else {
+            RealType ikp1 = RealType(1) / (k + 1);
+            return (RealType(1)/12
+                 - (RealType(1)/360
+                 - (RealType(1)/1260)*(ikp1*ikp1))*(ikp1*ikp1))*ikp1;
+        }
     }
 
     void init()
