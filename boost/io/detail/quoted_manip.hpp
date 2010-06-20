@@ -57,6 +57,9 @@ namespace boost
 
         quoted_proxy(String s_, Char escape_, Char delim_)
           : string(s_), escape(escape_), delim(delim_) {}
+      private:
+        // String may be a const type, so disable the assignment operator
+        quoted_proxy& operator=(const quoted_proxy&);  // = deleted
       };
 
       //  abstract away difference between proxies with const or non-const basic_strings
