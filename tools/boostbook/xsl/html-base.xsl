@@ -40,9 +40,9 @@
   <xsl:param name="toc.max.depth">2</xsl:param>
   <xsl:param name="callout.graphics.number.limit">15</xsl:param>
   <xsl:param name = "admon.graphics.path"
-            select = "concat($boost.root, '/doc/html/images/')"/>
+            select = "concat($boost.root, '/doc/src/images/')"/>
   <xsl:param name = "navig.graphics.path"
-            select = "concat($boost.root, '/doc/html/images/')"/>
+            select = "concat($boost.root, '/doc/src/images/')"/>
   <xsl:param name = "callout.graphics.path"
             select = "concat($boost.root, '/doc/src/images/callouts/')"/>
 
