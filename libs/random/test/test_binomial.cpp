@@ -15,6 +15,7 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/math/distributions/binomial.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 #include <vector>
 #include <iostream>
 #include <numeric>
@@ -108,9 +109,14 @@ int main(int argc, char** argv) {
         ++argv;
     }
 
-    if(do_tests(repeat, max_n, trials)) {
-        return 0;
-    } else {
+    try {
+        if(do_tests(repeat, max_n, trials)) {
+            return 0;
+        } else {
+            return EXIT_FAILURE;
+        }
+    } catch(...) {
+        std::cerr << boost::current_exception_diagnostic_information() << std::endl;
         return EXIT_FAILURE;
     }
 }
