@@ -398,6 +398,10 @@
     <xsl:apply-templates mode="annotation"/>
   </xsl:template>
 
+  <xsl:template match="type" mode="annotation">
+    <xsl:apply-templates mode="annotation"/>
+  </xsl:template>
+
   <xsl:template match="comment()" mode="annotation">
     <xsl:copy/>
   </xsl:template>
