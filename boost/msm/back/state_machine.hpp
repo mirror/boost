@@ -1402,7 +1402,7 @@ private:
                     table::instance.entries[self_->m_states[region_id::value]](
                     *self_, region_id::value , self_->m_states[region_id::value], evt);
                 result_ = (HandledEnum)((int)result_ | (int)res);
-                In< ::boost::mpl::int_<region_id::value+1> >::template process(evt,self_,result_);
+                In< ::boost::mpl::int_<region_id::value+1> >::process(evt,self_,result_);
             }
         };
         template <int Dummy>
@@ -1420,7 +1420,7 @@ private:
         {
             // use this table as if it came directly from the user
             typedef dispatch_table<library_sm,complete_table,Event,CompilePolicy> table;
-            In< ::boost::mpl::int_<0> >::template process(evt,self,result);
+            In< ::boost::mpl::int_<0> >::process(evt,self,result);
         }
 
         library_sm*     self;
@@ -1844,7 +1844,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              ::boost::mpl::for_each<state_list, ::boost::msm::wrap< ::boost::mpl::placeholders::_1> >
                  (entry_exit_helper<Event,true>(self_->m_states[region_id::value],incomingEvent,self_));
              region_start_helper
-                 < ::boost::mpl::int_<region_id::value+1> >::template do_start(self_,incomingEvent);
+                 < ::boost::mpl::int_<region_id::value+1> >::do_start(self_,incomingEvent);
          }
      };
      template <int Dummy>
@@ -1858,7 +1858,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      template <class Event>
      void start(Event const& incomingEvent)
      {
-         region_start_helper< ::boost::mpl::int_<0> >::template do_start(this,incomingEvent);
+         region_start_helper< ::boost::mpl::int_<0> >::do_start(this,incomingEvent);
      }
 
      // helper used to set the correct state as active state upon entry into a fsm
@@ -1966,7 +1966,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              self_->m_states[region_id::value] = 
                  self_->m_history.history_entry(incomingEvent)[region_id::value];
              region_entry_exit_helper
-                 < ::boost::mpl::int_<region_id::value+1> >::template do_entry(self_,incomingEvent);
+                 < ::boost::mpl::int_<region_id::value+1> >::do_entry(self_,incomingEvent);
          }
          template<class Event>
          static void do_exit(library_sm* self_,Event const& incomingEvent)
@@ -1974,7 +1974,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              ::boost::mpl::for_each<state_list, ::boost::msm::wrap< ::boost::mpl::placeholders::_1> >
                  (entry_exit_helper<Event,false>(self_->m_states[region_id::value],incomingEvent,self_));
              region_entry_exit_helper
-                 < ::boost::mpl::int_<region_id::value+1> >::template do_exit(self_,incomingEvent);
+                 < ::boost::mpl::int_<region_id::value+1> >::do_exit(self_,incomingEvent);
          }
      };
      template <int Dummy>
@@ -1991,7 +1991,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      void do_entry(Event const& incomingEvent,FsmType& fsm)
      {
         // by default we activate the history/init states, can be overwritten by direct_event_start_helper
-        region_entry_exit_helper< ::boost::mpl::int_<0> >::template do_entry(this,incomingEvent);
+        region_entry_exit_helper< ::boost::mpl::int_<0> >::do_entry(this,incomingEvent);
         // block immediate handling of events
         m_event_processing = true;
         // if the event is generating a direct entry/fork, set the current state(s) to the direct state(s)
@@ -2005,7 +2005,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      {
         // first recursively exit the sub machines
         // forward the event for handling by sub state machines
-        region_entry_exit_helper< ::boost::mpl::int_<0> >::template do_exit(this,incomingEvent);
+        region_entry_exit_helper< ::boost::mpl::int_<0> >::do_exit(this,incomingEvent);
         // then call our own exit
         (static_cast<Derived*>(this))->on_exit(incomingEvent,fsm);
         // give the history a chance to handle this (or not).
