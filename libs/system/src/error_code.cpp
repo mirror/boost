@@ -29,8 +29,9 @@ using namespace boost::system::errc;
 
 # if defined( BOOST_WINDOWS_API )
 #   include <windows.h>
+#   include "local_free_on_destruction.hpp"
 #   ifndef ERROR_INCORRECT_SIZE
-#    define ERROR_INCORRECT_SIZE ERROR_BAD_ARGUMENTS
+#     define ERROR_INCORRECT_SIZE ERROR_BAD_ARGUMENTS
 #   endif
 # endif
 
@@ -340,25 +341,11 @@ namespace
     return generic_category().message( ev );
   }
 # else
-// TODO:
-  
-//Some quick notes on the implementation (sorry for the noise if
-//someone has already mentioned them):
-//
-//- The ::LocalFree() usage isn't exception safe.
-//
-//See:
-//
-//<http://boost.cvs.sourceforge.net/boost/boost/boost/asio/system_exception.hpp?revision=1.1&view=markup>
-//
-//in the implementation of what() for an example.
-//
-//Cheers,
-//Chris
+
   std::string system_error_category::message( int ev ) const
   {
 # ifndef BOOST_NO_ANSI_APIS  
-    LPVOID lpMsgBuf;
+    LPVOID lpMsgBuf = 0;
     DWORD retval = ::FormatMessageA( 
         FORMAT_MESSAGE_ALLOCATE_BUFFER | 
         FORMAT_MESSAGE_FROM_SYSTEM | 
@@ -370,13 +357,13 @@ namespace
         0,
         NULL 
     );
+    detail::local_free_on_destruction lfod(lpMsgBuf);
     if (retval == 0)
         return std::string("Unknown error");
         
     std::string str( static_cast<LPCSTR>(lpMsgBuf) );
-    ::LocalFree( lpMsgBuf ); // free the buffer
 # else  // WinCE workaround
-    LPVOID lpMsgBuf;
+    LPVOID lpMsgBuf = 0;
     DWORD retval = ::FormatMessageW( 
         FORMAT_MESSAGE_ALLOCATE_BUFFER | 
         FORMAT_MESSAGE_FROM_SYSTEM | 
@@ -388,6 +375,7 @@ namespace
         0,
         NULL 
     );
+    detail::local_free_on_destruction lfod(lpMsgBuf);
     if (retval == 0)
         return std::string("Unknown error");
     
@@ -397,7 +385,6 @@ namespace
         return std::string("Unknown error");
 
     std::string str( narrow_buffer );
-    ::LocalFree( lpMsgBuf ); // free the buffer
 # endif
     while ( str.size()
       && (str[str.size()-1] == '\n' || str[str.size()-1] == '\r') )
