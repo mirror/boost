@@ -203,7 +203,7 @@ public:
     friend std::basic_istream<CharT,Traits>&
     operator>>(std::basic_istream<CharT,Traits>& is, poisson_distribution& pd)
     {
-        param_type parm;
+        typename poisson_distribution::param_type parm;
         if(is >> parm) {
             pd.param(parm);
         }

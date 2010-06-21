@@ -390,7 +390,7 @@ public:
     friend std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, discrete_distribution& dd)
     {
-        param_type parm;
+        typename discrete_distribution::param_type parm;
         if(is >> parm) {
             dd.param(parm);
         }

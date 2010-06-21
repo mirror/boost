@@ -215,7 +215,7 @@ public:
     friend std::basic_istream<CharT,Traits>&
     operator>>(std::basic_istream<CharT,Traits>& is, binomial_distribution& bd)
     {
-        param_type parm;
+        typename binomial_distribution::param_type parm;
         if(is >> parm) {
             bd.param(parm);
         }
