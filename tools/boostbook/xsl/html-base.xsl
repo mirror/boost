@@ -21,6 +21,17 @@
     </xsl:choose>
   </xsl:param>
 
+  <xsl:param name="boost.graphics.root">
+    <xsl:choose>
+      <xsl:when test = "$boost.defaults = 'Boost'">
+        <xsl:value-of select = "concat($boost.root, '/doc/src/images/')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select = "'images/'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
   <xsl:param name="admon.style"/>
   <xsl:param name="admon.graphics">1</xsl:param>
   <xsl:param name="boostbook.verbose" select="0"/>
@@ -39,12 +50,10 @@
   <xsl:param name="chunk.quietly" select="not(number($boostbook.verbose))"/>
   <xsl:param name="toc.max.depth">2</xsl:param>
   <xsl:param name="callout.graphics.number.limit">15</xsl:param>
-  <xsl:param name = "admon.graphics.path"
-            select = "concat($boost.root, '/doc/src/images/')"/>
-  <xsl:param name = "navig.graphics.path"
-            select = "concat($boost.root, '/doc/src/images/')"/>
+  <xsl:param name = "admon.graphics.path" select="$boost.graphics.root" />
+  <xsl:param name = "navig.graphics.path" select="$boost.graphics.root" />
   <xsl:param name = "callout.graphics.path"
-            select = "concat($boost.root, '/doc/src/images/callouts/')"/>
+            select = "concat($boost.graphics.root, 'callouts/')"/>
 
 
   <xsl:param name="admon.style">
