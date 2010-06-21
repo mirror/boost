@@ -45,6 +45,8 @@ run test_binomial.cpp ;
 run test_binomial_distribution.cpp /boost//unit_test_framework ;
 run test_poisson.cpp ;
 run test_poisson_distribution.cpp /boost//unit_test_framework ;
+run test_discrete.cpp ;
+run test_discrete_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;

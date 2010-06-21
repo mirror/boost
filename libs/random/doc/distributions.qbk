@@ -44,6 +44,7 @@ statistically to it are not acceptable.
                              [tossing a coin 20 times and counting how many
                                 front sides are shown]]
   [[__cauchy_distribution][cauchy distribution][-]]
+  [[__discrete_distribution][discrete distribution with specific probabilities][rolling an unfair die]]
   [[__gamma_distribution][gamma distribution][-]]
   [[__poisson_distribution][poisson distribution]
                            [counting the number of alpha particles emitted

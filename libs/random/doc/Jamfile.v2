@@ -20,6 +20,7 @@ doxygen_files =
     binomial_distribution
     cauchy_distribution
     discard_block
+    discrete_distribution
     exponential_distribution
     gamma_distribution
     geometric_distribution

@@ -64,6 +64,7 @@
 [def __bernoulli_distribution [classref boost::bernoulli_distribution bernoulli_distribution]]
 [def __binomial_distribution [classref boost::random::binomial_distribution binomial_distribution]]
 [def __cauchy_distribution [classref boost::cauchy_distribution cauchy_distribution]]
+[def __discrete_distribution [classref boost::random::discrete_distribution discrete_distribution]]
 [def __gamma_distribution [classref boost::gamma_distribution gamma_distribution]]
 [def __poisson_distribution [classref boost::random::poisson_distribution poisson_distribution]]
 [def __geometric_distribution [classref boost::geometric_distribution geometric_distribution]]
