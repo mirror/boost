@@ -30,7 +30,7 @@ class log_archive :
     // give serialization implementation access to this clas
     friend class boost::archive::detail::interface_oarchive<log_archive>;
     friend class boost::archive::basic_xml_oarchive<log_archive>;
-    friend boost::archive::save_access;
+    friend class boost::archive::save_access;
 
     /////////////////////////////////////////////////////////////////////
     // Override functions defined in basic_xml_oarchive

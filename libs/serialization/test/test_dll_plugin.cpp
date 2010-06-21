@@ -168,7 +168,8 @@ test_main( int /* argc */, char* /* argv */[] )
     hDLL = LoadLibrary(_T("plugin_polymorphic_derived2.dll"));
     BOOST_CHECK_MESSAGE(
         (0 != hDLL), 
-        _T("Failed to find/load plugin_polymorphic_derived2"));
+        "Failed to find/load plugin_polymorphic_derived2"
+    );
     if(0 == hDLL)
         return EXIT_FAILURE;
 

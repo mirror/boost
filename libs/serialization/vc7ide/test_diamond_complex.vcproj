@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_polymorphic"
+	Name="test_diamond_complex"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="test_polymorphic"
+	RootNamespace="test_diamond_complex"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -79,7 +79,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1;BOOST_ARCHIVE_TEST=polymorphic_xml_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1;BOOST_ARCHIVE_TEST=xml_warchive.hpp"
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
@@ -185,22 +185,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\A.cpp">
-		</File>
-		<File
-			RelativePath="..\test\A.hpp">
-		</File>
-		<File
-			RelativePath="..\test\A.ipp">
-		</File>
-		<File
-			RelativePath="..\test\test_polymorphic.cpp">
-		</File>
-		<File
-			RelativePath="..\test\test_polymorphic_A.cpp">
-		</File>
-		<File
-			RelativePath="..\test\test_polymorphic_A.hpp">
+			RelativePath="..\test\test_diamond_complex.cpp">
 		</File>
 	</Files>
 	<Globals>

@@ -20,7 +20,7 @@ public:
     // serialization library
     typedef boost::mpl::bool_<true> is_saving; 
     typedef boost::mpl::bool_<false> is_loading;
-    template<class T> register_type(){}
+    template<class T> void register_type(){}
     template<class T> trivial_oarchive & operator<<(const T & t){
         return *this;
     }

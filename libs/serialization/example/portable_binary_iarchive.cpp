@@ -88,7 +88,7 @@ portable_binary_iarchive::init(unsigned int flags){
         * this >> input_library_version;
 
         // extra little .t is to get around borland quirk
-        if(boost::archive::BOOST_ARCHIVE_VERSION() < input_library_version.t)
+        if(boost::archive::BOOST_ARCHIVE_VERSION() < input_library_version)
             boost::serialization::throw_exception(
                 boost::archive::archive_exception(
                     boost::archive::archive_exception::unsupported_version

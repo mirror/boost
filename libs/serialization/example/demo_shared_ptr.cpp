@@ -82,7 +82,7 @@ void display(boost::shared_ptr<A> &spa, boost::shared_ptr<A> &spa1)
     std::cout << "unique element count = " << A::count << std::endl;
 }
 
-int main(int /* argc */, char /* *argv[] */)
+int main(int /* argc */, char * /*argv*/[])
 {
     std::string filename(boost::archive::tmpdir());
     filename += "/testfile";
