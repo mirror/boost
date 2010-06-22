@@ -31,7 +31,7 @@ namespace boost
         const std::string & contents );
 
       virtual ~apple_macro_check()
-        { std::cout << "  " << m_files_with_errors << " files with apple macros" << line_break(); }
+        { std::cout << "  " << m_files_with_errors << " files with Apple macros" << line_break(); }
     };
   }
 }

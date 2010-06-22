@@ -368,7 +368,7 @@ namespace boost
             // since some browsers do a case-sensitive match.
             && bookmarks.find(decode_percents(fragment)) == bookmarks.end() )
           {
-            ++m_bookmark_errors;
+            ++m_broken_errors;
             int ln = std::count( contents_begin, url_start, '\n' ) + 1;
             error( library_name, source_path, "Unknown bookmark: " + decoded_url, ln );
           }

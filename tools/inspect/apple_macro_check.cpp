@@ -61,6 +61,8 @@ namespace boost
 
       boost::sregex_iterator cur(contents.begin(), contents.end(), apple_macro_regex), end;
 
+      long errors = 0;
+
       for( ; cur != end; ++cur /*, ++m_files_with_errors*/ )
       {
 
@@ -79,11 +81,14 @@ namespace boost
               }
           }
 
-          ++m_files_with_errors;
+          ++errors;
           error( library_name, full_path, 
             "Apple macro clash: " + std::string((*cur)[0].first, (*cur)[0].second-1),
             line_number );
         }
+      }
+      if(errors > 0) {
+        ++m_files_with_errors;
       }
     }
   } // namespace inspect
