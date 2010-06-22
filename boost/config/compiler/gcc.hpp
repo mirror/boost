@@ -80,7 +80,12 @@
 // reported by Michael Elizabeth Chastain in 2007,
 // http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916 (fixed for GCC 4.2.4)
 // See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
-#define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+// Note that these issues also appear to be fixed in Apple's g++, according to
+// test results from the minion-clang/darwin-4.2.1 toolset, GNU 4.2.1 Apple
+// build 5659, ran by Christopher Jefferson. (Niels Dekker, LKEB, June 2010.) 
+#  if !defined(__APPLE_CC__) || (__APPLE_CC__ < 5659)
+#    define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+#  endif
 #endif
 
 #if !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
