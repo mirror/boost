@@ -251,12 +251,14 @@ namespace boost { namespace polygon{
             return;
           }
           Unit firstY = (*iter).y();
+          Unit firstX = (*iter).x();
           ++iter;
           if(iter == tailp_->points.end()) {
             tailp_->points.push_front(point);
             return;
           }
-          if(iter->y() == point.y() && firstY == point.y()) {
+          if((iter->y() == point.y() && firstY == point.y()) ||
+             (iter->x() == point.x() && firstX == point.x())){
             --iter;
             *iter = point;
           } else {
@@ -274,12 +276,14 @@ namespace boost { namespace polygon{
           return;
         }
         Unit firstY = (*iter).y();
+        Unit firstX = (*iter).x();
         ++iter;
         if(iter == tailp_->points.rend()) {
           tailp_->points.push_back(point);
           return;
         }
-        if(iter->y() == point.y() && firstY == point.y()) {
+        if((iter->y() == point.y() && firstY == point.y()) ||
+           (iter->x() == point.x() && firstX == point.x())){
           --iter;
           *iter = point;
         } else {
