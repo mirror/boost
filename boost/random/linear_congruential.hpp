@@ -202,20 +202,25 @@ public:
   operator>>(std::basic_istream<CharT,Traits>& is,
              linear_congruential& lcg)
   {
-    typename linear_congruential::result_type x;
-    if(is >> x) {
-      if(x >= (lcg.min)() && x <= (lcg.max)()) {
-        lcg._x = x;
-      } else {
-        is.setstate(std::ios_base::failbit);
-      }
-    }
+    lcg.read(is);
     return is;
   }
  
 private:
 #endif
 #endif
+
+  template<class CharT, class Traits>
+  void read(std::basic_istream<CharT, Traits>& is) {
+    IntType x;
+    if(is >> x) {
+      if(x >= (min)() && x <= (max)()) {
+        _x = x;
+      } else {
+        is.setstate(std::ios_base::failbit);
+      }
+    }
+  }
 
   IntType _x;
 };

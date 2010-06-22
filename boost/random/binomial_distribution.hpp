@@ -215,10 +215,7 @@ public:
     friend std::basic_istream<CharT,Traits>&
     operator>>(std::basic_istream<CharT,Traits>& is, binomial_distribution& bd)
     {
-        typename binomial_distribution::param_type parm;
-        if(is >> parm) {
-            bd.param(parm);
-        }
+        bd.read(is);
         return is;
     }
 #endif
@@ -241,6 +238,14 @@ public:
 private:
 
     /// @cond
+
+    template<class CharT, class Traits>
+    void read(std::basic_istream<CharT, Traits>& is) {
+        param_type parm;
+        if(is >> parm) {
+            param(parm);
+        }
+    }
 
     bool use_inversion() const
     {

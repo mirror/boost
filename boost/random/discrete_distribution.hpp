@@ -390,10 +390,7 @@ public:
     friend std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, discrete_distribution& dd)
     {
-        typename discrete_distribution::param_type parm;
-        if(is >> parm) {
-            dd.param(parm);
-        }
+        dd.read(is);
         return is;
     }
 #endif
@@ -420,6 +417,14 @@ public:
 private:
 
     /// @cond
+
+    template<class CharT, class Traits>
+    void read(std::basic_istream<CharT, Traits>& is) {
+        param_type parm;
+        if(is >> parm) {
+            param(parm);
+        }
+    }
 
     template<class Iter>
     void init(Iter first, Iter last, std::input_iterator_tag)
