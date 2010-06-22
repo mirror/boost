@@ -83,8 +83,8 @@ doxygen reference :
         minstd_rand=\"@xmlonly <classname alt=\\\"boost::minstd_rand\\\">minstd_rand</classname> @endxmlonly\" \\
         minstd_rand0=\"@xmlonly <classname alt=\\\"boost::minstd_rand0\\\">minstd_rand0</classname> @endxmlonly\" \\
         rand48=\"@xmlonly <classname alt=\\\"boost::rand48\\\">rand48</classname> @endxmlonly\" \\
-        mt11213b=\"@xmlonly <classname alt=\\\"boost::mt11213b\\\">mt11213b</classname> @endxmlonly\" \\
-        mt19937=\"@xmlonly <classname alt=\\\"boost::mt19937\\\">mt19937</classname> @endxmlonly\" \\
+        mt11213b=\"@xmlonly <classname alt=\\\"boost::random::mt11213b\\\">mt11213b</classname> @endxmlonly\" \\
+        mt19937=\"@xmlonly <classname alt=\\\"boost::random::mt19937\\\">mt19937</classname> @endxmlonly\" \\
         ecuyer1988=\"@xmlonly <classname alt=\\\"boost::ecuyer1988\\\">ecuyer1988</classname> @endxmlonly\" \\
         lagged_fibonacci607=\"@xmlonly <classname alt=\\\"boost::lagged_fibonacci607\\\">lagged_fibonacci607</classname> @endxmlonly\" \\
         lagged_fibonacci44497=\"@xmlonly <classname alt=\\\"boost::lagged_fibonacci44497\\\">lagged_fibonacci44497</classname> @endxmlonly\" \\

@@ -37,8 +37,9 @@
 [def __kreutzer1986 [classref boost::kreutzer1986 kreutzer1986]]
 [def __taus88 [classref boost::taus88 taus88]]
 [def __hellekalek1995 [classref boost::hellekalek1995 hellekalek1995]]
-[def __mt11213b [classref boost::mt11213b mt11213b]]
-[def __mt19937 [classref boost::mt19937 mt19937]]
+[def __mt11213b [classref boost::random::mt11213b mt11213b]]
+[def __mt19937 [classref boost::random::mt19937 mt19937]]
+[def __mt19937_64 [classref boost::random::mt19937_64 mt19937_64]]
 [def __lagged_fibonacci607 [classref boost::lagged_fibonacci607 lagged_fibonacci607]]
 [def __lagged_fibonacci1279 [classref boost::lagged_fibonacci1279 lagged_fibonacci1279]]
 [def __lagged_fibonacci2281 [classref boost::lagged_fibonacci2281 lagged_fibonacci2281]]
@@ -65,7 +66,7 @@
 [def __binomial_distribution [classref boost::random::binomial_distribution binomial_distribution]]
 [def __cauchy_distribution [classref boost::cauchy_distribution cauchy_distribution]]
 [def __discrete_distribution [classref boost::random::discrete_distribution discrete_distribution]]
-[def __gamma_distribution [classref boost::gamma_distribution gamma_distribution]]
+[def __gamma_distribution [classref boost::random::gamma_distribution gamma_distribution]]
 [def __poisson_distribution [classref boost::random::poisson_distribution poisson_distribution]]
 [def __geometric_distribution [classref boost::geometric_distribution geometric_distribution]]
 [def __triangle_distribution [classref boost::triangle_distribution triangle_distribution]]
@@ -89,11 +90,11 @@ to have a look at [@boost:/libs/random/example/random_demo.cpp random_demo.cpp].
 
 For a very quick start, here's an example:
 
-  ``[classref boost::mt19937]`` rng;                 // produces randomness out of thin air
+  ``[classref boost::random::mt19937]`` rng;         // produces randomness out of thin air
                                       // see pseudo-random number generators
   ``[classref boost::uniform_int]<>`` six(1,6);      // distribution that maps to 1..6
                                       // see random number distributions
-  ``[classref boost::variate_generator]``<``[classref boost::mt19937]``&, ``[classref boost::uniform_int]``<> >
+  ``[classref boost::variate_generator]``<``[classref boost::random::mt19937]``&, ``[classref boost::uniform_int]``<> >
            die(rng, six);             // glues randomness with mapping
   int x = die();                      // simulate rolling a die
 

@@ -25,7 +25,7 @@
   change this is to seed with the current time (`std::time(0)`
   defined in ctime).
 */
-boost::mt19937 gen;
+boost::random::mt19937 gen;
 /*`
   [note We are using a /global/ generator object here.  This
   is important because we don't want to create a new [prng
@@ -46,14 +46,14 @@ int roll_die() {
     >>*/
     boost::uniform_int<> dist(1, 6);
     /*<< __variate_generator combines a generator with a distribution.
-        [important We pass [classref boost::mt19937 boost::mt19937&] to
-        __variate_generator instead of just [classref boost::mt19937]
+        [important We pass [classref boost::random::mt19937 boost::mt19937&] to
+        __variate_generator instead of just [classref boost::random::mt19937]
         (note the reference).  Without the reference, __variate_generator
         would make a copy of the generator and would leave the global
         `gen` unchanged.  Consequently, `roll_die` would produce *the same value*
         every time it was called.]
     >>*/
-    boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
+    boost::variate_generator<boost::random::mt19937&, boost::uniform_int<> > die(gen, dist);
     /*<< A __variate_generator is a function object. >>*/
     return die();
 }

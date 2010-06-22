@@ -52,6 +52,7 @@ numbers mean faster random number generation.
   [[__hellekalek1995] [2[sup 31]-1] [`sizeof(int32_t)`] [[hellekalek1995__inversive__speed]] [good uniform distribution in several dimensions]]
   [[__mt11213b] [2[sup 11213]-1] [`352*sizeof(uint32_t)`] [[mt11213b_speed]] [good uniform distribution in up to 350 dimensions]]
   [[__mt19937] [2[sup 19937]-1] [`625*sizeof(uint32_t)`] [[mt19937_speed]] [good uniform distribution in up to 623 dimensions]]
+  [[__mt19937_64] [2[sup 19937]-1] [`312*sizeof(uint64_t)`] [] [good uniform distribution in up to 311 dimensions]]
   [[__lagged_fibonacci607] [~2[sup 32000]] [`607*sizeof(double)`] [[lagged_fibonacci607_speed]] [-]] 
   [[__lagged_fibonacci1279] [~2[sup 67000]] [`1279*sizeof(double)`] [[lagged_fibonacci1279_speed]] [-]]
   [[__lagged_fibonacci2281] [~2[sup 120000]] [`2281*sizeof(double)`] [[lagged_fibonacci2281_speed]] [-]]

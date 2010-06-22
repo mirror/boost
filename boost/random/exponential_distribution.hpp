@@ -22,6 +22,7 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/config.hpp>
+#include <boost/random/uniform_01.hpp>
 
 namespace boost {
 
@@ -56,7 +57,8 @@ public:
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::log;
 #endif
-    return -result_type(1) / _lambda * log(result_type(1)-eng());
+    return -result_type(1) /
+        _lambda * log(result_type(1)-uniform_01<RealType>()(eng));
   }
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
@@ -76,6 +78,12 @@ public:
     return is;
   }
 #endif
+
+  friend bool operator==(const exponential_distribution& lhs,
+                         const exponential_distribution& rhs)
+  {
+    return lhs._lambda == rhs._lambda;
+  }
 
 private:
   result_type _lambda;
