@@ -127,8 +127,8 @@ int test_main(int argc, char** argv)
 
   // Check the in-degree and out-degree of each vertex
   graph_traits<Graph>::vertex_iterator vfirst1, vlast1, vfirst2, vlast2;
-  tie(vfirst1, vlast1) = vertices(g1);
-  tie(vfirst2, vlast2) = vertices(g2);
+  boost::tie(vfirst1, vlast1) = vertices(g1);
+  boost::tie(vfirst2, vlast2) = vertices(g2);
   for(; vfirst1 != vlast1 && vfirst2 != vlast2; ++vfirst1, ++vfirst2) {
     if (out_degree(*vfirst1, g1) != out_degree(*vfirst2, g2)) {
       std::cerr << g1.processor() << ": out-degree mismatch ("
@@ -216,8 +216,8 @@ int test_main(int argc, char** argv)
   }
 
   // Check the in-degree and out-degree of each vertex
-  tie(vfirst1, vlast1) = vertices(g1);
-  tie(vfirst2, vlast2) = vertices(g3);
+  boost::tie(vfirst1, vlast1) = vertices(g1);
+  boost::tie(vfirst2, vlast2) = vertices(g3);
   for(; vfirst1 != vlast1 && vfirst2 != vlast2; ++vfirst1, ++vfirst2) {
     if (out_degree(*vfirst1, g1) != out_degree(*vfirst2, g3)) {
       std::cerr << g1.processor() << ": out-degree mismatch ("

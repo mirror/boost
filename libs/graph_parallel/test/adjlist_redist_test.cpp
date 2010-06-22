@@ -149,7 +149,7 @@ void test_redistribution(int n, double p, int iterations, bool debug_output)
 
     // Randomly assign a new distribution
     typename graph_traits<Graph>::vertex_iterator vi, vi_end;
-    for (tie(vi, vi_end) = vertices(g); vi != vi_end; ++vi)
+    for (boost::tie(vi, vi_end) = vertices(g); vi != vi_end; ++vi)
       put(to_processor_map, *vi, gen() % num_processes(pg));
 
     if (process_id(pg) == 0)
