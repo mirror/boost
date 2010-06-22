@@ -588,7 +588,7 @@ printing a `repetitive_view` to `std::cout` is not.
 
 [table
     [[Expression]           [Return Type]          [Semantics]]
-    [[`RV(s)`]              []                     [Creates an `repetitive_view` given a sequence and a list of indicies.]]
+    [[`RV(s)`]              []                     [Creates an `repetitive_view` given the underlying sequence.]]
     [[`RV(rv1)`]            []                     [Copy constructs an `repetitive_view` from another `repetitive_view`, `rv1`.]]
     [[`rv1 = rv2`]          []                     [Assigns to a `repetitive_view`, `rv1`, from another `repetitive_view`, `rv2`.]]
     [[`__begin__(rv)`]      [__forward_iterator__] []]
