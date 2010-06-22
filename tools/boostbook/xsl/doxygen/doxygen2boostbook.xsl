@@ -1363,8 +1363,13 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates mode="type"/>
+        <xsl:apply-templates select="../argsstring"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="argsstring">
+    <xsl:apply-templates mode="type"/>
   </xsl:template>
 
   <xsl:template match="ref" mode="type">
