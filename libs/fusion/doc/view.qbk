@@ -548,4 +548,70 @@ of the original Fusion __sequence__
 
 [endsect]
 
+
+[section repetitive_view]
+
+[heading Description]
+
+`repetitive_view` presents a view which iterates over a given
+__sequence__ repeatedly.  Because a `repetitive_view`
+has infinite length, it can only be used when some external
+condition determines the end.  Thus, initializing a fixed
+length sequence with a `repetitive_view` is okay, but
+printing a `repetitive_view` to `std::cout` is not.
+
+[heading Header]
+
+    #include <boost/fusion/view/repetitive_view.hpp>
+    #include <boost/fusion/include/repetitive_view.hpp>
+
+[heading Synopsis]
+
+    template <typename Sequence>
+    struct repetitive_view;
+
+[heading Template parameters]
+
+[table
+    [[Parameter]            [Description]                   [Default]]
+    [[`Sequence`]           [An arbitrary Fusion __forward_sequence__]
+                                                            []]
+]
+
+[variablelist Notation
+    [[`RV`]            [A `repetitive_view` type]]
+    [[`s`]             [An instance of `Sequences`]]
+    [[`rv`, `rv1`, `rv2`]    [Instances of `RV`]]
+]
+
+[heading Expression Semantics]
+
+[table
+    [[Expression]           [Return Type]          [Semantics]]
+    [[`RV(s)`]              []                     [Creates an `repetitive_view` given a sequence and a list of indicies.]]
+    [[`RV(rv1)`]            []                     [Copy constructs an `repetitive_view` from another `repetitive_view`, `rv1`.]]
+    [[`rv1 = rv2`]          []                     [Assigns to a `repetitive_view`, `rv1`, from another `repetitive_view`, `rv2`.]]
+    [[`__begin__(rv)`]      [__forward_iterator__] []]
+    [[`__end__(rv)`]       [__forward_iterator__] [Creates an unreachable iterator (since the sequnce is infinite)]]
+]
+
+[heading Result Type Expressions]
+
+[table
+    [[Expression]]
+    [[`__result_of_begin__<RV>::type`]]
+    [[`__result_of_end__<RV>::type`]]
+]
+
+[heading Example]
+    typedef __vector__<int, char, double> vec1;
+    typedef __vector__<int, char, double, int, char> vec2;
+
+    vec1 v1(1, 'c', 2.0);
+    vec2 v2(repetitive_view<vec1>(v1));
+
+    std::cout << v2 << std::endl; // 1, 'c', 2.0, 1, 'c'
+
+[endsect]
+
 [endsect]
