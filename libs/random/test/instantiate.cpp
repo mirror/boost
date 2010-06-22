@@ -8,8 +8,17 @@
  * $Id$
  */
 
+#include <boost/config.hpp>
+
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 #pragma warning( disable : 4786 )
+#endif
+
+#ifdef BOOST_MSVC
+// conversion warnings.  These are unavoidable, since we're
+// testing all possible implicit conversions.
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4305 )
 #endif
 
 #include <iostream>

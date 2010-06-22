@@ -160,6 +160,15 @@ public:
     _x = const_mod<IntType, m>::mult_add(a, _x, c);
     return _x;
   }
+  
+  /** Fills a range with random values */
+  template<class Iter>
+  void generate(Iter first, Iter last)
+  {
+    for(; first != last; ++first) {
+      *first = (*this)();
+    }
+  }
 
   static bool validation(IntType x) { return val == x; }
 

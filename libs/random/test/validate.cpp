@@ -49,6 +49,10 @@ bool check_(unsigned long x, const boost::mt11213b&) { return x == 3809585648U; 
 // validation by experiment from mt19937.c
 bool check_(unsigned long x, const boost::mt19937&) { return x == 4123659995U; }
 
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+bool check_(boost::uint64_t x, const boost::mt19937_64&) { return x == UINT64_C(9981545732273789042); }
+#endif
+
 // validation values from the publications
 bool check_(int x, const boost::minstd_rand0&) { return x == 1043618065; }
 
@@ -113,6 +117,9 @@ void validate_all()
   validate("ecuyer combined", ecuyer1988());
   validate("mt11213b", mt11213b());
   validate("mt19937", mt19937());
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+  validate("mt19937_64", mt19937_64());
+#endif
   validate("kreutzer1986", kreutzer1986());
   validate("ranlux3", ranlux3());
   validate("ranlux4", ranlux4());
