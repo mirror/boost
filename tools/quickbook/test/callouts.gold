@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <article id="callout_tests" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Callout Tests</title>
@@ -15,7 +15,7 @@
     <para>
       
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">roll_die</phrase><phrase role="special">()</phrase> <phrase role="special">{</phrase>
-  <phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="identifier">dist</phrase><phrase role="special">(</phrase><phrase role="number">1</phrase><phrase role="special">,</phrase> <phrase role="number">6</phrase><phrase role="special">);</phrase> <!--quickbook-escape-prefix--><phrase role="callout_bug"><co id="callout_tests0co" linkends="callout_tests0" /></phrase><!--quickbook-escape-postfix-->
+  <phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="identifier">dist</phrase><phrase role="special">(</phrase><phrase role="number">1</phrase><phrase role="special">,</phrase> <phrase role="number">6</phrase><phrase role="special">);</phrase> <!--quickbook-escape-prefix--><co id="callout_tests0co" linkends="callout_tests0" /><!--quickbook-escape-postfix-->
 <phrase role="special">}</phrase>
 
 </programlisting>
@@ -31,7 +31,7 @@
     <para>
       
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">roll_die</phrase><phrase role="special">()</phrase> <phrase role="special">{</phrase>
-  <!--quickbook-escape-prefix--><phrase role="line_callout_bug"><co id="callout_tests1co" linkends="callout_tests1" /></phrase><!--quickbook-escape-postfix--><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">variate_generator</phrase><phrase role="special">&lt;</phrase><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">mt19937</phrase><phrase role="special">&amp;,</phrase> <phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="special">&gt;</phrase> <phrase role="identifier">die</phrase><phrase role="special">(</phrase><phrase role="identifier">gen</phrase><phrase role="special">,</phrase> <phrase role="identifier">dist</phrase><phrase role="special">);</phrase>
+  <!--quickbook-escape-prefix--><co id="callout_tests1co" linkends="callout_tests1" /><!--quickbook-escape-postfix--><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">variate_generator</phrase><phrase role="special">&lt;</phrase><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">mt19937</phrase><phrase role="special">&amp;,</phrase> <phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="special">&gt;</phrase> <phrase role="identifier">die</phrase><phrase role="special">(</phrase><phrase role="identifier">gen</phrase><phrase role="special">,</phrase> <phrase role="identifier">dist</phrase><phrase role="special">);</phrase>
 <phrase role="special">}</phrase>
 
 </programlisting>
@@ -55,7 +55,7 @@
     <para>
       
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">roll_die</phrase><phrase role="special">()</phrase> <phrase role="special">{</phrase>
-  <!--quickbook-escape-prefix--><phrase role="line_callout_bug"><co id="callout_tests2co" linkends="callout_tests2" /></phrase><!--quickbook-escape-postfix--><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">variate_generator</phrase><phrase role="special">&lt;</phrase><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">mt19937</phrase><phrase role="special">&amp;,</phrase> <phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="special">&gt;</phrase> <phrase role="identifier">die</phrase><phrase role="special">(</phrase><phrase role="identifier">gen</phrase><phrase role="special">,</phrase> <phrase role="identifier">dist</phrase><phrase role="special">);</phrase>
+  <!--quickbook-escape-prefix--><co id="callout_tests2co" linkends="callout_tests2" /><!--quickbook-escape-postfix--><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">variate_generator</phrase><phrase role="special">&lt;</phrase><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">mt19937</phrase><phrase role="special">&amp;,</phrase> <phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="special">&gt;</phrase> <phrase role="identifier">die</phrase><phrase role="special">(</phrase><phrase role="identifier">gen</phrase><phrase role="special">,</phrase> <phrase role="identifier">dist</phrase><phrase role="special">);</phrase>
 <phrase role="special">}</phrase>
 
 </programlisting>

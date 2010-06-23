@@ -211,9 +211,9 @@ namespace quickbook { namespace detail
     {
         if(begin == end) return "";
 
-        const char utf8[] = {0xef, 0xbb, 0xbf};
-        const char utf32be[] = {0, 0, 0xfe, 0xff};
-        const char utf32le[] = {0xff, 0xfe, 0, 0};
+        const char* utf8 = "\xef\xbb\xbf" ;
+        const char* utf32be = "\0\0\xfe\xff";
+        const char* utf32le = "\xff\xfe\0\0";
 
         unsigned char c = *begin;
         switch(c)

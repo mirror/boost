@@ -1,0 +1,9 @@
+[library Document Information 1
+[quickbook 1.5]
+[source-mode teletype]
+[purpose Inline code test: `1 + 2`]
+[category tests]
+[category irrelevance]
+]
+
+The body is largely irrelevant.

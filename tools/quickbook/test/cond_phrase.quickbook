@@ -1,0 +1,8 @@
+[article Coniditional Phrase Test
+    [quickbook 1.5]
+]
+
+[def defined]
+
+[?defined This should show]
+[?undefined This should not show]

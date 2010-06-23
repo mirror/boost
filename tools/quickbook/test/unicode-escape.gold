@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <article id="utf_8_test" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>UTF-8 test</title>
   <articleinfo>
@@ -10,76 +10,124 @@
   </bridgehead>
   <itemizedlist>
     <listitem>
-      &#x391;&#x3B1; Alpha
+      <simpara>
+        &#x391;&#x3B1; Alpha
+      </simpara>
     </listitem>
     <listitem>
-      &#x392;&#x3B2; Beta
+      <simpara>
+        &#x392;&#x3B2; Beta
+      </simpara>
     </listitem>
     <listitem>
-      &#x393;&#x3B3; Gamma
+      <simpara>
+        &#x393;&#x3B3; Gamma
+      </simpara>
     </listitem>
     <listitem>
-      &#x394;&#x3B4; Delta
+      <simpara>
+        &#x394;&#x3B4; Delta
+      </simpara>
     </listitem>
     <listitem>
-      &#x395;&#x3B5; Epsilon
+      <simpara>
+        &#x395;&#x3B5; Epsilon
+      </simpara>
     </listitem>
     <listitem>
-      &#x396;&#x3B6; Zeta
+      <simpara>
+        &#x396;&#x3B6; Zeta
+      </simpara>
     </listitem>
     <listitem>
-      &#x397;&#x3B7; Eta
+      <simpara>
+        &#x397;&#x3B7; Eta
+      </simpara>
     </listitem>
     <listitem>
-      &#x398;&#x3B8; Theta
+      <simpara>
+        &#x398;&#x3B8; Theta
+      </simpara>
     </listitem>
     <listitem>
-      &#x399;&#x3B9; Iota
+      <simpara>
+        &#x399;&#x3B9; Iota
+      </simpara>
     </listitem>
     <listitem>
-      &#x39A;&#x3BA; Kappa
+      <simpara>
+        &#x39A;&#x3BA; Kappa
+      </simpara>
     </listitem>
     <listitem>
-      &#x39B;&#x3BB; Lambda
+      <simpara>
+        &#x39B;&#x3BB; Lambda
+      </simpara>
     </listitem>
     <listitem>
-      &#x39C;&#x3BC; Mu
+      <simpara>
+        &#x39C;&#x3BC; Mu
+      </simpara>
     </listitem>
     <listitem>
-      &#x39D;&#x3BD; Nu
+      <simpara>
+        &#x39D;&#x3BD; Nu
+      </simpara>
     </listitem>
     <listitem>
-      &#x39E;&#x3BE; Xi
+      <simpara>
+        &#x39E;&#x3BE; Xi
+      </simpara>
     </listitem>
     <listitem>
-      &#x39F;&#x3BF; Omicron
+      <simpara>
+        &#x39F;&#x3BF; Omicron
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A0;&#x3C0; Pi
+      <simpara>
+        &#x3A0;&#x3C0; Pi
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A1;&#x3C1; Rho
+      <simpara>
+        &#x3A1;&#x3C1; Rho
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A3;&#x3C3;&#x3C2; Sigma
+      <simpara>
+        &#x3A3;&#x3C3;&#x3C2; Sigma
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A4;&#x3C4; Tau
+      <simpara>
+        &#x3A4;&#x3C4; Tau
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A5;&#x3C5; Upsilon
+      <simpara>
+        &#x3A5;&#x3C5; Upsilon
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A6;&#x3C6; Phi
+      <simpara>
+        &#x3A6;&#x3C6; Phi
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A7;&#x3C7; Chi
+      <simpara>
+        &#x3A7;&#x3C7; Chi
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A8;&#x3C8; Psi
+      <simpara>
+        &#x3A8;&#x3C8; Psi
+      </simpara>
     </listitem>
     <listitem>
-      &#x3A9;&#x3C9; Omega
+      <simpara>
+        &#x3A9;&#x3C9; Omega
+      </simpara>
     </listitem>
   </itemizedlist>
   <para>
@@ -87,16 +135,24 @@
   </para>
   <itemizedlist>
     <listitem>
-      &#x1F000; East Wind
+      <simpara>
+        &#x1F000; East Wind
+      </simpara>
     </listitem>
     <listitem>
-      &#x1F001; South Wind
+      <simpara>
+        &#x1F001; South Wind
+      </simpara>
     </listitem>
     <listitem>
-      &#x1F002; West Wind
+      <simpara>
+        &#x1F002; West Wind
+      </simpara>
     </listitem>
     <listitem>
-      &#x1F003; North Wind
+      <simpara>
+        &#x1F003; North Wind
+      </simpara>
     </listitem>
   </itemizedlist>
 </article>

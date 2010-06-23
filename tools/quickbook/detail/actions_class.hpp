@@ -40,7 +40,7 @@ namespace quickbook
         std::string             doc_dirname;
         copyright_list          doc_copyrights;
         std::string             doc_purpose;
-        std::string             doc_category;
+        string_list             doc_categories;
         author_list             doc_authors;
         std::string             doc_license;
         std::string             doc_last_revision;

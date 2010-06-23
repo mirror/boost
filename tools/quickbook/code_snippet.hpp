@@ -30,9 +30,7 @@ namespace quickbook
         void pass_thru(iterator first, iterator last);
         void escaped_comment(iterator first, iterator last);
         void compile(iterator first, iterator last);
-        void callout(iterator first, iterator last, char const* role);
-        void inline_callout(iterator first, iterator last);
-        void line_callout(iterator first, iterator last);
+        void callout(iterator first, iterator last);
 
         std::string code;
         std::string snippet;
@@ -109,7 +107,7 @@ namespace quickbook
 
             rule<Scanner>
                 start_, snippet, identifier, code_elements, escaped_comment,
-                inline_callout, line_callout, ignore;
+                ignore;
 
             rule<Scanner> const&
             start() const { return start_; }
@@ -168,13 +166,13 @@ namespace quickbook
 
                 inline_callout =
                     "/*<"
-                    >> (*(anychar_p - ">*/"))       [boost::bind(&actions_type::inline_callout, &actions, _1, _2)]
+                    >> (*(anychar_p - ">*/"))       [boost::bind(&actions_type::callout, &actions, _1, _2)]
                     >> ">*/"
                     ;
 
                 line_callout =
                     "/*<<"
-                    >> (*(anychar_p - ">>*/"))      [boost::bind(&actions_type::line_callout, &actions, _1, _2)]
+                    >> (*(anychar_p - ">>*/"))      [boost::bind(&actions_type::callout, &actions, _1, _2)]
                     >> ">>*/"
                     >> *space_p
                     ;

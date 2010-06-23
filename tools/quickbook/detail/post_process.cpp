@@ -184,7 +184,6 @@ namespace quickbook
         , "caution"
         , "copyright"
         , "entry"
-        , "footnote"
         , "important"
         , "informaltable"
         , "itemizedlist"
@@ -195,6 +194,7 @@ namespace quickbook
         , "para"
         , "row"
         , "section"
+        , "simpara"
         , "table"
         , "tbody"
         , "textobject"
@@ -266,7 +266,7 @@ namespace quickbook
         {
             definition(tidy_grammar const& self)
             {
-                tag = (lexeme_d[+(alpha_p | '_' | ':')])  [bind(&tidy_grammar::do_tag, &self, _1, _2)];
+                tag = (lexeme_d[+(alpha_p | '_' | ':')])  [boost::bind(&tidy_grammar::do_tag, &self, _1, _2)];
 
                 code =
                         "<programlisting>"
@@ -282,14 +282,14 @@ namespace quickbook
                     str_p("<!--quickbook-escape-prefix-->") >>
                     (*(anychar_p - str_p("<!--quickbook-escape-postfix-->")))
                     [
-                        bind(&tidy_grammar::do_escape, &self, _1, _2)
+                        boost::bind(&tidy_grammar::do_escape, &self, _1, _2)
                     ]
                     >>  lexeme_d
                         [
                             str_p("<!--quickbook-escape-postfix-->") >>
                             (*space_p)
                             [
-                                bind(&tidy_grammar::do_escape_post, &self, _1, _2)
+                                boost::bind(&tidy_grammar::do_escape_post, &self, _1, _2)
                             ]
                         ]
                     ;
@@ -306,11 +306,11 @@ namespace quickbook
 
                 markup =
                         escape
-                    |   code            [bind(&tidy_grammar::do_code, &self, _1, _2)]
-                    |   start_end_tag   [bind(&tidy_grammar::do_start_end_tag, &self, _1, _2)]
-                    |   start_tag       [bind(&tidy_grammar::do_start_tag, &self, _1, _2)]
-                    |   end_tag         [bind(&tidy_grammar::do_end_tag, &self, _1, _2)]
-                    |   content         [bind(&tidy_grammar::do_content, &self, _1, _2)]
+                    |   code            [boost::bind(&tidy_grammar::do_code, &self, _1, _2)]
+                    |   start_end_tag   [boost::bind(&tidy_grammar::do_start_end_tag, &self, _1, _2)]
+                    |   start_tag       [boost::bind(&tidy_grammar::do_start_tag, &self, _1, _2)]
+                    |   end_tag         [boost::bind(&tidy_grammar::do_end_tag, &self, _1, _2)]
+                    |   content         [boost::bind(&tidy_grammar::do_content, &self, _1, _2)]
                     ;
 
                 tidy = +markup;

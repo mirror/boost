@@ -14,6 +14,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include "./quickbook.hpp"
 #include "./actions.hpp"
 #include "./utils.hpp"
@@ -171,7 +172,7 @@ namespace quickbook
             list_marks.pop();
             out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
             if (list_marks.size() >= 1)
-                out << std::string("\n</listitem>");
+                out << list_item_post;
         }
 
         list_indent = -1; // reset
@@ -211,12 +212,12 @@ namespace quickbook
             {
                 // Make this new list a child of the previous list.
                 // The previous listelem has already ended so we erase
-                // </listitem> to accomodate this sub-list. We'll close
+                // list_item_post to accomodate this sub-list. We'll close
                 // the listelem later.
 
                 std::string str;
                 out.swap(str);
-                std::string::size_type pos = str.rfind("\n</listitem>");
+                std::string::size_type pos = str.rfind(list_item_post);
                 BOOST_ASSERT(pos <= str.size());
                 str.erase(str.begin()+pos, str.end());
                 out << str;
@@ -235,7 +236,7 @@ namespace quickbook
                 list_marks.pop();
                 out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
                 if (list_marks.size() >= 1)
-                    out << std::string("\n</listitem>");
+                    out << list_item_post;
             }
         }
 
@@ -452,12 +453,12 @@ namespace quickbook
         fs::path const img_path(image_fileref);
         
         attribute_map::iterator it = attributes.find("alt");
-        std::string alt_text = it != attributes.end() ? it->second : fs::basename(img_path);
+        std::string alt_text = it != attributes.end() ? it->second : img_path.stem();
         attributes.erase("alt");
 
         attributes.insert(attribute_map::value_type("fileref", image_fileref));
 
-        if(fs::extension(img_path) == ".svg")
+        if(img_path.extension() == ".svg")
         {
            //
            // SVG's need special handling:
@@ -754,7 +755,7 @@ namespace quickbook
             else if (!is_block)
             {
                 //  do a phrase level parse
-                iterator first(body.begin(), body.end(), actions.filename.native_file_string().c_str());
+                iterator first(body.begin(), body.end(), actions.filename.file_string().c_str());
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
                 r = boost::spirit::classic::parse(first, last, phrase_p).full;
@@ -769,7 +770,7 @@ namespace quickbook
                 body.push_back('\n');
                 while (iter != body.end() && ((*iter == '\r') || (*iter == '\n')))
                     ++iter; // skip initial newlines
-                iterator first(iter, body.end(), actions.filename.native_file_string().c_str());
+                iterator first(iter, body.end(), actions.filename.file_string().c_str());
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
                 r = boost::spirit::classic::parse(first, last, block_p).full;
@@ -1111,7 +1112,6 @@ namespace quickbook
         {
             std::string::size_type const n =
                 qualified_section_id.find_last_of('.');
-            if(std::string::npos != n);
             qualified_section_id.erase(n, std::string::npos);
         }
     }
@@ -1149,7 +1149,7 @@ namespace quickbook
         if (!path.is_complete())
         {
             fs::path infile = fs::complete(actions.filename).normalize();
-            path = (infile.branch_path() / path).normalize();
+            path = (infile.parent_path() / path).normalize();
             fs::path outdir = fs::complete(actions.outdir).normalize();
             path = path_difference(outdir, path);
         }
@@ -1174,29 +1174,17 @@ namespace quickbook
         int callout_id = 0;
     }
 
-    void code_snippet_actions::callout(iterator first, iterator last, char const* role)
+    void code_snippet_actions::callout(iterator first, iterator last)
     {
         using detail::callout_id;
         code += "``'''";
-        code += std::string("<phrase role=\"") + role + "\">";
         code += "<co id=\"";
         code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "co\" ";
         code += "linkends=\"";
         code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "\" />";
-        code += "</phrase>";
         code += "'''``";
 
         callouts.push_back(std::string(first, last));
-    }
-
-    void code_snippet_actions::inline_callout(iterator first, iterator last)
-    {
-        callout(first, last, "callout_bug");
-    }
-
-    void code_snippet_actions::line_callout(iterator first, iterator last)
-    {
-        callout(first, last, "line_callout_bug");
     }
 
     void code_snippet_actions::escaped_comment(iterator first, iterator last)
@@ -1301,7 +1289,7 @@ namespace quickbook
     {
         fs::path include_search(fs::path const & current, std::string const & name)
         {
-            fs::path path(name,fs::native);
+            fs::path path(name);
 
             // If the path is relative, try and resolve it.
             if (!path.is_complete())
@@ -1315,7 +1303,7 @@ namespace quickbook
                 // Search in each of the include path locations.
                 BOOST_FOREACH(std::string const & p, include_path)
                 {
-                    fs::path full(p,fs::native);
+                    fs::path full(p);
                     full /= path;
                     if (fs::exists(full))
                     {
@@ -1330,8 +1318,8 @@ namespace quickbook
 
     void import_action::operator()(iterator first, iterator last) const
     {
-        fs::path path = include_search(actions.filename.branch_path(), std::string(first,last));
-        std::string ext = fs::extension(path);
+        fs::path path = include_search(actions.filename.parent_path(), std::string(first,last));
+        std::string ext = path.extension();
         std::vector<template_symbol> storage;
         actions.error_count +=
             load_snippets(path.string(), storage, ext, actions.doc_id);
@@ -1355,7 +1343,7 @@ namespace quickbook
 
     void include_action::operator()(iterator first, iterator last) const
     {
-        fs::path filein = include_search(actions.filename.branch_path(), std::string(first,last));
+        fs::path filein = include_search(actions.filename.parent_path(), std::string(first,last));
         std::string doc_type, doc_id, doc_dirname, doc_last_revision;
 
         // swap the filenames
@@ -1381,10 +1369,10 @@ namespace quickbook
         }
 
         // update the __FILENAME__ macro
-        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.native_file_string();
+        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.file_string();
 
         // parse the file
-        quickbook::parse(actions.filename.native_file_string().c_str(), actions, true);
+        quickbook::parse(actions.filename.file_string().c_str(), actions, true);
 
         // restore the values
         std::swap(actions.filename, filein);
@@ -1470,7 +1458,7 @@ namespace quickbook
             qbk_major_version = 1;
             qbk_minor_version = 1;
             qbk_version_n = 101;
-            detail::outwarn(actions.filename.native_file_string(),1)
+            detail::outwarn(actions.filename.file_string(),1)
                 << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
@@ -1480,7 +1468,9 @@ namespace quickbook
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            << "<!DOCTYPE library PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
+            << "<!DOCTYPE "
+            << actions.doc_type
+            << " PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
             << "     \"http://www.boost.org/tools/boostbook/dtd/boostbook.dtd\">\n"
             << '<' << actions.doc_type << "\n"
             << "    id=\"" << actions.doc_id << "\"\n";
@@ -1534,6 +1524,8 @@ namespace quickbook
 
     void write_document_info(collector& out, quickbook::actions& actions)
     {
+        std::vector<std::string> invalid_attributes;
+
         out << "  <" << actions.doc_type << "info>\n";
 
         if(!actions.doc_authors.empty())
@@ -1574,25 +1566,56 @@ namespace quickbook
 
         if (!actions.doc_purpose.empty())
         {
-            out << "    <" << actions.doc_type << "purpose>\n"
-                << "      " << actions.doc_purpose
-                << "    </" << actions.doc_type << "purpose>\n"
-                << "\n"
-            ;
+            if (actions.doc_type == "library")
+            {
+                out << "    <" << actions.doc_type << "purpose>\n"
+                    << "      " << actions.doc_purpose
+                    << "    </" << actions.doc_type << "purpose>\n"
+                    << "\n"
+                ;
+            }
+            else
+            {
+                invalid_attributes.push_back("purpose");
+            }
         }
 
-        if (!actions.doc_category.empty())
+        if (!actions.doc_categories.empty())
         {
-            out << "    <" << actions.doc_type << "category name=\"category:"
-                << actions.doc_category
-                << "\"></" << actions.doc_type << "category>\n"
-                << "\n"
-            ;
+            if (actions.doc_type == "library")
+            {
+                for(actions::string_list::const_iterator
+                    it = actions.doc_categories.begin(),
+                    end = actions.doc_categories.end();
+                    it != end; ++it)
+                {
+                    out << "    <" << actions.doc_type << "category name=\"category:"
+                        << *it
+                        << "\"></" << actions.doc_type << "category>\n"
+                        << "\n"
+                    ;
+                }
+            }
+            else
+            {
+                invalid_attributes.push_back("category");
+            }
         }
 
         out << "  </" << actions.doc_type << "info>\n"
             << "\n"
         ;
+        
+        if(!invalid_attributes.empty())
+        {
+            detail::outwarn(actions.filename.file_string(),1)
+                << (invalid_attributes.size() > 1 ?
+                    "Invalid attributes" : "Invalid attribute")
+                << " for '" << actions.doc_type << "': "
+                << boost::algorithm::join(invalid_attributes, ", ")
+                << "\n"
+                ;
+        }
     }
 
     void phrase_to_string_action::operator()(iterator first, iterator last) const

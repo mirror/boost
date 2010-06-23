@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <article id="import" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Import</title>
   <articleinfo>
@@ -13,10 +13,14 @@
     </para>
     <itemizedlist>
       <listitem>
-        lists
+        <simpara>
+          lists
+        </simpara>
       </listitem>
       <listitem>
-        etc.
+        <simpara>
+          etc.
+        </simpara>
       </listitem>
     </itemizedlist>
     <para>
@@ -42,10 +46,14 @@
     </para>
     <itemizedlist>
       <listitem>
-        lists
+        <simpara>
+          lists
+        </simpara>
       </listitem>
       <listitem>
-        etc.
+        <simpara>
+          etc.
+        </simpara>
       </listitem>
     </itemizedlist>
     <para>
@@ -69,10 +77,14 @@
     </para>
     <itemizedlist>
       <listitem>
-        lists
+        <simpara>
+          lists
+        </simpara>
       </listitem>
       <listitem>
-        etc.
+        <simpara>
+          etc.
+        </simpara>
       </listitem>
     </itemizedlist>
     <para>
