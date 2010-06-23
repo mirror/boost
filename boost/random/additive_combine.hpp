@@ -29,7 +29,7 @@ namespace random {
 /**
  * An instantiation of class template \additive_combine model a
  * \pseudo_random_number_generator. It combines two multiplicative
- * \linear_congruential number generators, i.e. those with @c c = 0.
+ * \linear_congruential_engine number generators, i.e. those with @c c = 0.
  * It is described in
  *
  *  @blockquote
@@ -38,7 +38,7 @@ namespace random {
  *  @endblockquote
  *
  * The template parameters MLCG1 and MLCG2 shall denote two different
- * \linear_congruential number generators, each with c = 0. Each invocation
+ * \linear_congruential_engine number generators, each with c = 0. Each invocation
  * returns a random number X(n) := (MLCG1(n) - MLCG2(n)) mod (m1 - 1), where
  * m1 denotes the modulus of MLCG1. 
  *
@@ -57,13 +57,9 @@ public:
   typedef MLCG1 first_base;
   typedef MLCG2 second_base;
   typedef typename MLCG1::result_type result_type;
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = true;
-  static const result_type min_value = 1;
-  static const result_type max_value = MLCG1::max_value-1;
-#else
-  enum { has_fixed_range = false };
-#endif
+
+  // Required by old Boost.Random concept
+  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
   /**
    * Returns: The smallest value that the generator can produce
    */
@@ -225,8 +221,8 @@ private:
  *  @endblockquote
  */
 typedef random::additive_combine<
-    random::linear_congruential<int32_t, 40014, 0, 2147483563, 0>,
-    random::linear_congruential<int32_t, 40692, 0, 2147483399, 0>,
+    random::linear_congruential_engine<int32_t, 40014, 0, 2147483563>,
+    random::linear_congruential_engine<int32_t, 40692, 0, 2147483399>,
   2060321752> ecuyer1988;
 
 } // namespace boost

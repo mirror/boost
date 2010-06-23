@@ -79,10 +79,10 @@ doxygen reference :
         additive_combine=\"@xmlonly <classname alt=\\\"boost::random::additive_combine\\\">additive_combine</classname> @endxmlonly\" \\
         discard_block=\"@xmlonly <classname alt=\\\"boost::random::discard_block\\\">discard_block</classname> @endxmlonly\" \\
         lagged_fibonacci=\"@xmlonly<classname alt=\\\"boost::random::lagged_fibonacci\\\">lagged_fibonacci</classname>@endxmlonly\" \\
-        linear_congruential=\"@xmlonly<classname alt=\\\"boost::random::linear_congruential\\\">linear_congruential</classname>@endxmlonly\" \\
-        minstd_rand=\"@xmlonly <classname alt=\\\"boost::minstd_rand\\\">minstd_rand</classname> @endxmlonly\" \\
-        minstd_rand0=\"@xmlonly <classname alt=\\\"boost::minstd_rand0\\\">minstd_rand0</classname> @endxmlonly\" \\
-        rand48=\"@xmlonly <classname alt=\\\"boost::rand48\\\">rand48</classname> @endxmlonly\" \\
+        linear_congruential_engine=\"@xmlonly<classname alt=\\\"boost::random::linear_congruential_engine\\\">linear_congruential_engine</classname>@endxmlonly\" \\
+        minstd_rand=\"@xmlonly <classname alt=\\\"boost::random::minstd_rand\\\">minstd_rand</classname> @endxmlonly\" \\
+        minstd_rand0=\"@xmlonly <classname alt=\\\"boost::random::minstd_rand0\\\">minstd_rand0</classname> @endxmlonly\" \\
+        rand48=\"@xmlonly <classname alt=\\\"boost::random::rand48\\\">rand48</classname> @endxmlonly\" \\
         mt11213b=\"@xmlonly <classname alt=\\\"boost::random::mt11213b\\\">mt11213b</classname> @endxmlonly\" \\
         mt19937=\"@xmlonly <classname alt=\\\"boost::random::mt19937\\\">mt19937</classname> @endxmlonly\" \\
         ecuyer1988=\"@xmlonly <classname alt=\\\"boost::ecuyer1988\\\">ecuyer1988</classname> @endxmlonly\" \\
@@ -106,8 +106,10 @@ doxygen reference :
         \"BOOST_STATIC_CONSTANT(type,value)=static const type value\" \\
         \"BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(Self,T,t)=explicit Self(T t)\" \\
         \"BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(Self,T,t)=template<class T> explicit Self(T& t)\" \\
+        \"BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(Self,T,t)=template<class T> explicit Self(T& t)\" \\
         \"BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(Self,T,t)=void seed(T t)\" \\
-        \"BOOST_RANDOM_DETAIL_GENERATOR_SEED(Self,T,t)=template<class T> void seed(T& t)\""
+        \"BOOST_RANDOM_DETAIL_GENERATOR_SEED(Self,T,t)=template<class T> void seed(T& t)\" \\
+        \"BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(Self,T,t)=template<class T> void seed(T& t)\""
     <reftitle>"Headers"
     <doxygen:xml-imagedir>images/random
 ;

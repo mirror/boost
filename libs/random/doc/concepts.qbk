@@ -158,7 +158,8 @@ to explicitly clear any temporary storage as soon as it is no longer needed.]
 
 A pseudo-random number generator is a __UniformRandomNumberGenerator which
 provides a deterministic sequence of pseudo-random numbers, based on some
-algorithm and internal state. [classref boost::random::linear_congruential
+algorithm and internal state.
+[classref boost::random::linear_congruential_engine
 Linear congruential] and [classref boost::random::inversive_congruential
 inversive congruential] generators are examples of such [prng pseudo-random
 number generators]. Often, these generators are very sensitive to their

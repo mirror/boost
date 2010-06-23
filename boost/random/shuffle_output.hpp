@@ -31,8 +31,8 @@ namespace random {
 /**
  * Instatiations of class template shuffle_output model a
  * \pseudo_random_number_generator. It mixes the output
- * of some (usually \linear_congruential) \uniform_random_number_generator
- * to get better statistical properties.
+ * of some (usually \linear_congruential_engine)
+ * \uniform_random_number_generator to get better statistical properties.
  * The algorithm is described in
  *
  *  @blockquote
@@ -225,7 +225,7 @@ const int shuffle_output<UniformRandomNumberGenerator, k, val>::buffer_size;
  * @endblockquote
  */
 typedef random::shuffle_output<
-    random::linear_congruential<uint32_t, 1366, 150889, 714025, 0>,
+    random::linear_congruential_engine<uint32_t, 1366, 150889, 714025>,
   97, 139726> kreutzer1986;
 
 

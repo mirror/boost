@@ -363,7 +363,7 @@ public:
    * value and calls seed with it. Distinct seeds in the range
    * [1, 2147483647) will produce generators with different states. Other
    * seeds will be equivalent to some seed within this range. See
-   * \linear_congruential for details.
+   * \linear_congruential_engine for details.
    */
   BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(lagged_fibonacci_01, uint32_t, value)
   {
