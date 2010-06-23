@@ -297,6 +297,7 @@ private:
     {
         using std::floor;
         using std::abs;
+        using std::log;
 
         while(true) {
             RealType u;
