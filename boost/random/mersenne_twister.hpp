@@ -18,6 +18,7 @@
 #define BOOST_RANDOM_MERSENNE_TWISTER_HPP
 
 #include <iosfwd>
+#include <istream>
 #include <stdexcept>
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
@@ -101,7 +102,8 @@ public:
     /**
      * Constructs a @c mersenne_twister_engine and calls @c seed(value).
      */
-    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(mersenne_twister_engine, UIntType, value)
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(mersenne_twister_engine,
+                                               UIntType, value)
     { seed(value); }
     template<class It> mersenne_twister_engine(It& first, It last)
     { seed(first,last); }
@@ -114,7 +116,8 @@ public:
      * the templated constructor.
      * @endxmlnote
      */
-    BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(mersenne_twister_engine, SeedSeq, seq)
+    BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(mersenne_twister_engine,
+                                             SeedSeq, seq)
     { seed(seq); }
 
     // compiler-generated copy ctor and assignment operator are fine
@@ -137,7 +140,8 @@ public:
         const UIntType mask = (max)();
         x[0] = value & mask;
         for (i = 1; i < n; i++) {
-            // See Knuth "The Art of Computer Programming" Vol. 2, 3rd ed., page 106
+            // See Knuth "The Art of Computer Programming"
+            // Vol. 2, 3rd ed., page 106
             x[i] = (f * (x[i-1] ^ (x[i-1] >> (w-2))) + i) & mask;
         }
     }
@@ -229,15 +233,15 @@ public:
     operator<<(std::basic_ostream<CharT,Traits>& os,
                const mersenne_twister_engine& mt)
     {
-        for(std::size_t j = 0; j < mt.state_size; ++j)
-            os << mt.compute(j) << " ";
+        mt.print(os);
         return os;
     }
     
     /** Reads a mersenne_twister_engine from a @c std::istream */
     template<class CharT, class Traits>
     friend std::basic_istream<CharT,Traits>&
-    operator>>(std::basic_istream<CharT,Traits>& is, mersenne_twister_engine& mt)
+    operator>>(std::basic_istream<CharT,Traits>& is,
+               mersenne_twister_engine& mt)
     {
         for(std::size_t j = 0; j < mt.state_size; ++j)
             is >> mt.x[j] >> std::ws;
@@ -253,38 +257,117 @@ public:
      * Returns true if the two generators are in the same state,
      * and will thus produce identical sequences.
      */
-    friend bool operator==(const mersenne_twister_engine& x, const mersenne_twister_engine& y)
+    friend bool operator==(const mersenne_twister_engine& x,
+                           const mersenne_twister_engine& y)
     {
-        for(std::size_t j = 0; j < state_size; ++j)
-            if(x.compute(j) != y.compute(j))
-                return false;
-        return true;
+        if(x.i < y.i) return x.equal_imp(y);
+        else return y.equal_imp(x);
     }
     
     /**
      * Returns true if the two generators are in different states.
      */
-    friend bool operator!=(const mersenne_twister_engine& x, const mersenne_twister_engine& y)
+    friend bool operator!=(const mersenne_twister_engine& x,
+                           const mersenne_twister_engine& y)
     { return !(x == y); }
 
 private:
     /// \cond hide_private_members
-    // returns x(i-n+index), where index is in 0..n-1
-    UIntType compute(unsigned int index) const
+
+    void twist();
+
+    /**
+     * Does the work of operator==.  This is in a member function
+     * for portability.  Some compilers, such as msvc 7.1 and
+     * Sun CC 5.10 can't access template parameters or static
+     * members of the class from inline friend functions.
+     *
+     * requires i <= other.i
+     */
+    bool equal_imp(const mersenne_twister_engine& other) const
     {
-        // equivalent to (i-n+index) % 2n, but doesn't produce negative numbers
-        return x[ (i + n + index) % (2*n) ];
+        UIntType back[n];
+        std::size_t offset = other.i - i;
+        for(std::size_t j = 0; j + offset < n; ++j)
+            if(x[j] != other.x[j+offset])
+                return false;
+        rewind(&back[n-1], offset);
+        for(std::size_t j = 0; j < offset; ++j)
+            if(back[j + n - offset] != other.x[j])
+                return false;
+        return true;
     }
-    void twist(int block);
+
+    /**
+     * Does the work of operator<<.  This is in a member function
+     * for portability.
+     */
+    template<class CharT, class Traits>
+    void print(std::basic_ostream<CharT, Traits>& os) const
+    {
+        UIntType data[n];
+        for(std::size_t j = 0; j < i; ++j) {
+            data[j + n - i] = x[j];
+        }
+        if(i != n) {
+            rewind(&data[n - i - 1], n - i);
+        }
+        os << data[0];
+        for(std::size_t j = 1; j < n; ++j) {
+            os << ' ' << data[j];
+        }
+    }
+
+    /**
+     * Copies z elements of the state preceding x[0] into
+     * the array whose last element is last.
+     */
+    void rewind(UIntType* last, std::size_t z) const
+    {
+        const UIntType upper_mask = (~static_cast<UIntType>(0)) << r;
+        const UIntType lower_mask = ~upper_mask;
+        UIntType y0 = x[m-1] ^ x[n-1];
+        if(y0 & (static_cast<UIntType>(1) << (w-1))) {
+            y0 = ((y0 ^ a) << 1) | 1;
+        } else {
+            y0 = y0 << 1;
+        }
+        for(std::size_t sz = 0; sz < z; ++sz) {
+            UIntType y1 =
+                rewind_find(last, sz, m-1) ^ rewind_find(last, sz, n-1);
+            if(y1 & (static_cast<UIntType>(1) << (w-1))) {
+                y1 = ((y1 ^ a) << 1) | 1;
+            } else {
+                y1 = y1 << 1;
+            }
+            *(last - sz) = (y0 & upper_mask) | (y1 & lower_mask);
+            y0 = y1;
+        }
+    }
+
+    /**
+     * Given a pointer to the last element of the rewind array,
+     * and the current size of the rewind array, finds an element
+     * relative to the next available slot in the rewind array.
+     */
+    UIntType
+    rewind_find(UIntType* last, std::size_t size, std::size_t j) const
+    {
+        std::size_t index = (j + n - size + n - 1) % n;
+        if(index < n - size) {
+            return x[index];
+        } else {
+            return *(last - (n - 1 - index));
+        }
+    }
+
     /// \endcond
 
     // state representation: next output is o(x(i))
-    //   x[0]  ... x[k] x[k+1] ... x[n-1]     x[n]     ... x[2*n-1]   represents
-    //  x(i-k) ... x(i) x(i+1) ... x(i-k+n-1) x(i-k-n) ... x[i(i-k-1)]
-    // The goal is to always have x(i-n) ... x(i-1) available for
-    // operator== and save/restore.
+    //   x[0]  ... x[k] x[k+1] ... x[n-1]   represents
+    //  x(i-k) ... x(i) x(i+1) ... x(i-k+n-1)
 
-    UIntType x[2*n]; 
+    UIntType x[n]; 
     std::size_t i;
 };
 
@@ -327,34 +410,44 @@ template<class UIntType,
          UIntType b, std::size_t t,
          UIntType c, std::size_t l, UIntType f>
 void
-mersenne_twister_engine<UIntType,w,n,m,r,a,u,d,s,b,t,c,l,f>::twist(int block)
+mersenne_twister_engine<UIntType,w,n,m,r,a,u,d,s,b,t,c,l,f>::twist()
 {
     const UIntType upper_mask = (~static_cast<UIntType>(0)) << r;
     const UIntType lower_mask = ~upper_mask;
 
-    if(block == 0) {
-        for(std::size_t j = n; j < 2*n; j++) {
-            UIntType y = (x[j-n] & upper_mask) | (x[j-(n-1)] & lower_mask);
-            x[j] = x[j-(n-m)] ^ (y >> 1) ^ (y&1 ? a : 0);
+    const std::size_t unroll_factor = 6;
+    const std::size_t unroll_extra1 = (n-m) % unroll_factor;
+    const std::size_t unroll_extra2 = (m-1) % unroll_factor;
+
+    // split loop to avoid costly modulo operations
+    {  // extra scope for MSVC brokenness w.r.t. for scope
+        for(std::size_t j = 0; j < n-m-unroll_extra1; j++) {
+            UIntType y = (x[j] & upper_mask) | (x[j+1] & lower_mask);
+            x[j] = x[j+m] ^ (y >> 1) ^ ((x[j+1]&1) * a);
         }
-    } else if (block == 1) {
-        // split loop to avoid costly modulo operations
-        {  // extra scope for MSVC brokenness w.r.t. for scope
-            for(std::size_t j = 0; j < n-m; j++) {
-                UIntType y = (x[j+n] & upper_mask) | (x[j+n+1] & lower_mask);
-                x[j] = x[j+n+m] ^ (y >> 1) ^ (y&1 ? a : 0);
-            }
-        }
-    
-        for(std::size_t j = n-m; j < n-1; j++) {
-            UIntType y = (x[j+n] & upper_mask) | (x[j+n+1] & lower_mask);
-            x[j] = x[j-(n-m)] ^ (y >> 1) ^ (y&1 ? a : 0);
-        }
-        // last iteration
-        UIntType y = (x[2*n-1] & upper_mask) | (x[0] & lower_mask);
-        x[n-1] = x[m-1] ^ (y >> 1) ^ (y&1 ? a : 0);
-        i = 0;
     }
+    {
+        for(std::size_t j = n-m-unroll_extra1; j < n-m; j++) {
+            UIntType y = (x[j] & upper_mask) | (x[j+1] & lower_mask);
+            x[j] = x[j+m] ^ (y >> 1) ^ ((x[j+1]&1) * a);
+        }
+    }
+    {
+        for(std::size_t j = n-m; j < n-1-unroll_extra2; j++) {
+            UIntType y = (x[j] & upper_mask) | (x[j+1] & lower_mask);
+            x[j] = x[j-(n-m)] ^ (y >> 1) ^ ((x[j+1]&1) * a);
+        }
+    }
+    {
+        for(std::size_t j = n-1-unroll_extra2; j < n-1; j++) {
+            UIntType y = (x[j] & upper_mask) | (x[j+1] & lower_mask);
+            x[j] = x[j-(n-m)] ^ (y >> 1) ^ ((x[j+1]&1) * a);
+        }
+    }
+    // last iteration
+    UIntType y = (x[n-1] & upper_mask) | (x[0] & lower_mask);
+    x[n-1] = x[m-1] ^ (y >> 1) ^ ((x[0]&1) * a);
+    i = 0;
 }
 /// \endcond
 
@@ -363,13 +456,12 @@ template<class UIntType,
          UIntType a, std::size_t u, UIntType d, std::size_t s,
          UIntType b, std::size_t t,
          UIntType c, std::size_t l, UIntType f>
-inline typename mersenne_twister_engine<UIntType,w,n,m,r,a,u,d,s,b,t,c,l,f>::result_type
+inline typename
+mersenne_twister_engine<UIntType,w,n,m,r,a,u,d,s,b,t,c,l,f>::result_type
 mersenne_twister_engine<UIntType,w,n,m,r,a,u,d,s,b,t,c,l,f>::operator()()
 {
     if(i == n)
-        twist(0);
-    else if(i >= 2*n)
-        twist(1);
+        twist();
     // Step 4
     UIntType z = x[i];
     ++i;
@@ -391,7 +483,7 @@ mersenne_twister_engine<UIntType,w,n,m,r,a,u,d,s,b,t,c,l,f>::operator()()
  *  Generation, Vol. 8, No. 1, January 1998, pp. 3-30. 
  *  @endblockquote
  */
-typedef random::mersenne_twister_engine<uint_fast32_t,32,351,175,19,0xccab8ee7,
+typedef random::mersenne_twister_engine<uint32_t,32,351,175,19,0xccab8ee7,
     11,0xffffffff,7,0x31b6ab00,15,0xffe50000,17,1812433253> mt11213b;
 
 /**
@@ -405,11 +497,11 @@ typedef random::mersenne_twister_engine<uint_fast32_t,32,351,175,19,0xccab8ee7,
  *  Generation, Vol. 8, No. 1, January 1998, pp. 3-30. 
  *  @endblockquote
  */
-typedef random::mersenne_twister_engine<uint_fast32_t,32,624,397,31,0x9908b0df,
+typedef random::mersenne_twister_engine<uint32_t,32,624,397,31,0x9908b0df,
     11,0xffffffff,7,0x9d2c5680,15,0xefc60000,18,1812433253> mt19937;
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-typedef random::mersenne_twister_engine<uint_fast64_t,64,312,156,31,
+typedef random::mersenne_twister_engine<uint64_t,64,312,156,31,
     UINT64_C(0xb5026f5aa96619e9),29,UINT64_C(0x5555555555555555),17,
     UINT64_C(0x71d67fffeda60000),37,UINT64_C(0xfff7eee000000000),43,
     UINT64_C(6364136223846793005)> mt19937_64;
