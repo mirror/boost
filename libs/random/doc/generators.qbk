@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2009 Steven Watanabe
+ / Copyright (c) 2009-2010 Steven Watanabe
  /
  / Distributed under the Boost Software License, Version 1.0. (See
  / accompanying file LICENSE_1_0.txt or copy at
@@ -70,6 +70,8 @@ numbers mean faster random number generation.
   [[__ranlux4_01] [~10[sup 171]] [`24*sizeof(float)`] [[ranlux4_speed]] [-]]
   [[__ranlux64_3_01] [~10[sup 171]] [`24*sizeof(double)`] [[ranlux64_3_speed]] [-]]
   [[__ranlux64_4_01] [~10[sup 171]] [`24*sizeof(double)`] [[ranlux64_4_speed]] [-]]
+  [[__ranlux24] [~10[sup 171]] [`24*sizeof(uint32_t)`] [] [-]]
+  [[__ranlux48] [~10[sup 171]] [`12*sizeof(uint64_t)`] [] [-]]
 ]
 
 As observable from the table, there is generally a quality/performance/memory

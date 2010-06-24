@@ -34,6 +34,8 @@ local all-urngs =
     ranlux4_01
     ranlux64_3_01
     ranlux64_4_01
+    ranlux24
+    ranlux48
     taus88
 ;
 

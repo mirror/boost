@@ -406,6 +406,8 @@ void extra_tests(boost::mt19937*)
 void instantiate_all()
 {
   using namespace boost;
+  using boost::random::ranlux24;
+  using boost::random::ranlux48;
   
   typedef boost::random::lagged_fibonacci<boost::uint32_t, 24, 607, 273> lagged_fibonacci;
 

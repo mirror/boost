@@ -89,6 +89,11 @@ bool check_(double x, const boost::ranlux64_3_01&)
 bool check_(double x, const boost::ranlux64_4_01&)
 { return std::abs(x-0.59839) < 1e-6; }
 
+bool check_(boost::uint32_t x, const boost::random::ranlux24&) { return x == 9901578; }
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+bool check_(boost::uint64_t x, const boost::random::ranlux48&) { return x == UINT64_C(249142670248501); }
+#endif
+
 template<class PRNG>
 void validate(const std::string & name, const PRNG &)
 {
@@ -127,6 +132,10 @@ void validate_all()
   validate("ranlux4_01", ranlux4_01());
   validate("ranlux64_3_01", ranlux64_3_01());
   validate("ranlux64_4_01", ranlux64_4_01());
+  validate("ranlux24", random::ranlux24());
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+  validate("ranlux48", random::ranlux48());
+#endif
   validate("taus88", taus88());
   validate("lagged_fibonacci607", lagged_fibonacci607());
 }

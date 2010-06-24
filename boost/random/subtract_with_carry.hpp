@@ -109,7 +109,9 @@ public:
         for(std::size_t j = 0; j < long_lag; j++) {
             IntType val = 0;
             for(std::size_t k = 0; k < (w+31)/32; ++k) {
-                val += storage[(w+31)/32*j + k] << 32*k;
+                result_type inc =
+                    static_cast<result_type>(storage[(w+31)/32*j + k]);
+                val += inc << 32*k;
             }
             x[j] = val % modulus;
         }

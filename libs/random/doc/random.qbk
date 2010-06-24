@@ -1,7 +1,7 @@
 [library Boost.Random
   [quickbook 1.5]
   [authors [Maurer, Jens]]
-  [copyright 2000-2005 Jens Maurer, 2009 Steven Watanabe]
+  [copyright 2000-2005 Jens Maurer, 2009-2010 Steven Watanabe]
   [license
       Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENSE_1_0.txt or copy at
@@ -49,14 +49,16 @@
 [def __lagged_fibonacci19937 [classref boost::lagged_fibonacci19937 lagged_fibonacci19937]]
 [def __lagged_fibonacci23209 [classref boost::lagged_fibonacci23209 lagged_fibonacci23209]]
 [def __lagged_fibonacci44497 [classref boost::lagged_fibonacci44497 lagged_fibonacci44497]]
-[def __ranlux3 [classref boost::ranlux3 ranlux3]]
-[def __ranlux4 [classref boost::ranlux4 ranlux4]]
-[def __ranlux64_3 [classref boost::ranlux64_3 ranlux64_3]]
-[def __ranlux64_4 [classref boost::ranlux64_4 ranlux64_4]]
-[def __ranlux3_01 [classref boost::ranlux3_01 ranlux3_01]]
-[def __ranlux4_01 [classref boost::ranlux4_01 ranlux4_01]]
-[def __ranlux64_3_01 [classref boost::ranlux64_3_01 ranlux64_3_01]]
-[def __ranlux64_4_01 [classref boost::ranlux64_4_01 ranlux64_4_01]]
+[def __ranlux3 [classref boost::random::ranlux3 ranlux3]]
+[def __ranlux4 [classref boost::random::ranlux4 ranlux4]]
+[def __ranlux64_3 [classref boost::random::ranlux64_3 ranlux64_3]]
+[def __ranlux64_4 [classref boost::random::ranlux64_4 ranlux64_4]]
+[def __ranlux3_01 [classref boost::random::ranlux3_01 ranlux3_01]]
+[def __ranlux4_01 [classref boost::random::ranlux4_01 ranlux4_01]]
+[def __ranlux64_3_01 [classref boost::random::ranlux64_3_01 ranlux64_3_01]]
+[def __ranlux64_4_01 [classref boost::random::ranlux64_4_01 ranlux64_4_01]]
+[def __ranlux24 [classref boost::random::ranlux24 ranlux24]]
+[def __ranlux48 [classref boost::random::ranlux48 ranlux48]]
 
 [def __uniform_smallint [classref boost::uniform_smallint uniform_smallint]]
 [def __uniform_int [classref boost::uniform_int uniform_int]]
