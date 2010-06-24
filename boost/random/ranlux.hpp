@@ -23,9 +23,9 @@
 namespace boost {
 
 namespace random {
-  typedef subtract_with_carry<int, (1<<24), 10, 24, 0> ranlux_base;
-  typedef subtract_with_carry_01<float, 24, 10, 24> ranlux_base_01;
-  typedef subtract_with_carry_01<double, 48, 10, 24> ranlux64_base_01;
+  typedef subtract_with_carry_engine<int, 24, 10, 24> ranlux_base;
+  typedef subtract_with_carry_01_engine<float, 24, 10, 24> ranlux_base_01;
+  typedef subtract_with_carry_01_engine<double, 48, 10, 24> ranlux64_base_01;
 }
 
 namespace random {
@@ -68,7 +68,7 @@ typedef random::discard_block<random::ranlux64_base_01, 389, 24> ranlux64_4_01;
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
 namespace random {
-  typedef random::subtract_with_carry<int64_t, (int64_t(1)<<48), 10, 24, 0> ranlux64_base;
+  typedef random::subtract_with_carry_engine<int64_t, 48, 10, 24> ranlux64_base;
 }
 /** @copydoc boost::random::detail::ranlux_documentation */
 typedef random::discard_block<random::ranlux64_base, 223, 24> ranlux64_3;

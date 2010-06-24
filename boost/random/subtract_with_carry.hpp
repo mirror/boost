@@ -16,11 +16,10 @@
 #ifndef BOOST_RANDOM_SUBTRACT_WITH_CARRY_HPP
 #define BOOST_RANDOM_SUBTRACT_WITH_CARRY_HPP
 
-#include <boost/config/no_tr1/cmath.hpp>
+#include <boost/config/no_tr1/cmath.hpp>         // std::pow
 #include <iostream>
 #include <algorithm>     // std::equal
 #include <stdexcept>
-#include <boost/config/no_tr1/cmath.hpp>         // std::pow
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
@@ -34,38 +33,8 @@
 namespace boost {
 namespace random {
 
-#if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
-#  define BOOST_RANDOM_EXTRACT_SWC_01
-#endif
-
-#if defined(__APPLE_CC__) && defined(__GNUC__) && (__GNUC__ == 3) && (__GNUC_MINOR__ <= 3)
-#  define BOOST_RANDOM_EXTRACT_SWC_01
-#endif
-
-# ifdef BOOST_RANDOM_EXTRACT_SWC_01
-namespace detail
-{
-  template <class IStream, class SubtractWithCarry, class RealType>
-  void extract_subtract_with_carry_01(
-      IStream& is
-      , SubtractWithCarry& f
-      , RealType& carry
-      , RealType* x
-      , RealType modulus)
-  {
-    RealType value;
-    for(unsigned int j = 0; j < f.long_lag; ++j) {
-      is >> value >> std::ws;
-      x[j] = value / modulus;
-    }
-    is >> value >> std::ws;
-    carry = value / modulus;
-  }
-}
-# endif
-
 /**
- * Instantiations of @c subtract_with_carry model a
+ * Instantiations of @c subtract_with_carry_engine model a
  * \pseudo_random_number_generator.  The algorithm is
  * described in
  *
@@ -75,389 +44,478 @@ namespace detail
  *  Volume 1, Number 3 (1991), 462-480.
  *  @endblockquote
  */
-template<class IntType, IntType m, unsigned int s, unsigned int r,
-  IntType val>
-class subtract_with_carry
+template<class IntType, std::size_t w, std::size_t s, std::size_t r>
+class subtract_with_carry_engine
 {
 public:
-  typedef IntType result_type;
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = true);
-  BOOST_STATIC_CONSTANT(result_type, min_value = 0);
-  BOOST_STATIC_CONSTANT(result_type, max_value = m-1);
-  BOOST_STATIC_CONSTANT(result_type, modulus = m);
-  BOOST_STATIC_CONSTANT(unsigned int, long_lag = r);
-  BOOST_STATIC_CONSTANT(unsigned int, short_lag = s);
+    typedef IntType result_type;
+    BOOST_STATIC_CONSTANT(std::size_t, word_size = w);
+    BOOST_STATIC_CONSTANT(std::size_t, long_lag = r);
+    BOOST_STATIC_CONSTANT(std::size_t, short_lag = s);
+    BOOST_STATIC_CONSTANT(uint32_t, default_seed = 19780503u);
 
-  subtract_with_carry() {
-    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_signed);
+    // Required by the old Boost.Random concepts
+    BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+    // Backwards compatibility
+    BOOST_STATIC_CONSTANT(result_type, modulus = (result_type(1) << w));
+    
     BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_integer);
-#endif
-    seed();
-  }
-  BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(subtract_with_carry, uint32_t, value)
-  { seed(value); }
-  BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(subtract_with_carry, Generator, gen)
-  { seed(gen); }
-  template<class It> subtract_with_carry(It& first, It last) { seed(first,last); }
 
-  // compiler-generated copy ctor and assignment operator are fine
+    /**
+     * Constructs a new @c subtract_with_carry_engine and seeds
+     * it with the default seed.
+     */
+    subtract_with_carry_engine() { seed(); }
+    /**
+     * Constructs a new @c subtract_with_carry_engine and seeds
+     * it with @c value.
+     */
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(subtract_with_carry_engine,
+                                               uint32_t, value)
+    { seed(value); }
+    /**
+     * Constructs a new @c subtract_with_carry_engine and seeds
+     * it with values produced by @c seq.generate().
+     */
+    BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(subtract_with_carry_engine,
+                                             SeedSeq, seq)
+    { seed(seq); }
+    /**
+     * Constructs a new @c subtract_with_carry_engine and seeds
+     * it with values from a range.  first is updated to point
+     * one past the last value consumed.  If there are not
+     * enough elements in the range to fill the entire state of
+     * the generator, throws @c std::invalid_argument.
+     */
+    template<class It> subtract_with_carry_engine(It& first, It last)
+    { seed(first,last); }
 
-  void seed() { seed(19780503u); }
-  BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry, uint32_t, value)
-  {
-    random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> intgen(value);
-    seed(intgen);
-  }
+    // compiler-generated copy ctor and assignment operator are fine
 
-  // For GCC, moving this function out-of-line prevents inlining, which may
-  // reduce overall object code size.  However, MSVC does not grok
-  // out-of-line template member functions.
-  BOOST_RANDOM_DETAIL_GENERATOR_SEED(subtract_with_carry, Generator, gen)
-  {
-    // I could have used std::generate_n, but it takes "gen" by value
-    for(unsigned int j = 0; j < long_lag; ++j)
-      x[j] = gen() % modulus;
-    carry = (x[long_lag-1] == 0);
-    k = 0;
-  }
-
-  template<class It>
-  void seed(It& first, It last)
-  {
-    unsigned int j;
-    for(j = 0; j < long_lag && first != last; ++j, ++first)
-      x[j] = *first % modulus;
-    if(first == last && j < long_lag)
-      throw std::invalid_argument("subtract_with_carry::seed");
-    carry = (x[long_lag-1] == 0);
-    k = 0;
-   }
-
-  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return min_value; }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return max_value; }
-
-  result_type operator()()
-  {
-    int short_index = k - short_lag;
-    if(short_index < 0)
-      short_index += long_lag;
-    IntType delta;
-    if (x[short_index] >= x[k] + carry) {
-      // x(n) >= 0
-      delta =  x[short_index] - (x[k] + carry);
-      carry = 0;
-    } else {
-      // x(n) < 0
-      delta = modulus - x[k] - carry + x[short_index];
-      carry = 1;
+    /** Seeds the generator with the default seed. */
+    void seed() { seed(default_seed); }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry_engine,
+                                        uint32_t, value)
+    {
+        linear_congruential_engine<int32_t,40014,0,2147483563> intgen(value);
+        seed(intgen);
     }
-    x[k] = delta;
-    ++k;
-    if(k >= long_lag)
-      k = 0;
-    return delta;
-  }
 
-public:
-  static bool validation(result_type x) { return x == val; }
-  
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+    /** Seeds the generator with values produced by @c seq.generate(). */
+    BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(subtract_with_carry, SeedSeq, seq)
+    {
+        uint32_t storage[((w+31)/32) * long_lag];
+        seq.generate(&storage[0], &storage[0] + ((w+31)/32) * long_lag);
+        for(std::size_t j = 0; j < long_lag; j++) {
+            IntType val = 0;
+            for(std::size_t k = 0; k < (w+31)/32; ++k) {
+                val += storage[(w+31)/32*j + k] << 32*k;
+            }
+            x[j] = val % modulus;
+        }
+        carry = (x[long_lag-1] == 0);
+        k = 0;
+    }
 
+    /**
+     * Seeds the generator with values from a range.  Updates @c first to
+     * point one past the last consumed value.  If the range does not
+     * contain enough elements to fill the entire state of the generator,
+     * throws @c std::invalid_argument.
+     */
+    template<class It>
+    void seed(It& first, It last)
+    {
+        unsigned int j;
+        for(j = 0; j < long_lag && first != last; ++j, ++first)
+            x[j] = *first % modulus;
+        if(first == last && j < long_lag)
+            throw std::invalid_argument("subtract_with_carry::seed");
+        carry = (x[long_lag-1] == 0);
+        k = 0;
+    }
+
+    /** Returns the smallest value that the generator can produce. */
+    static result_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    { return 0; }
+    /** Returns the largest value that the generator can produce. */
+    static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    {
+        // avoid "left shift count >= width of type" warning
+        result_type res = 0;
+        for(std::size_t j = 0; j < w; ++j)
+            res |= (static_cast<result_type>(1) << j);
+        return res;
+    }
+
+    /** Returns the next value of the generator. */
+    result_type operator()()
+    {
+        std::size_t short_index =
+            (k < short_lag)?
+                (k + long_lag - short_lag) :
+                (k - short_lag);
+        if(short_index < 0)
+            short_index += long_lag;
+        IntType delta;
+        if (x[short_index] >= x[k] + carry) {
+            // x(n) >= 0
+            delta =  x[short_index] - (x[k] + carry);
+            carry = 0;
+        } else {
+            // x(n) < 0
+            delta = modulus - x[k] - carry + x[short_index];
+            carry = 1;
+        }
+        x[k] = delta;
+        ++k;
+        if(k >= long_lag)
+            k = 0;
+        return delta;
+    }
+
+#ifndef BOOST_NO_LONG_LONG
+    /** Advances the state of the generator by @c z. */
+    void discard(boost::ulong_long_type z)
+    {
+        for(boost::ulong_long_type j = 0; j < z; ++j) {
+            (*this)();
+        }
+    }
+#endif
+
+    /** Fills a range with random values. */
+    template<class It>
+    void generate(It first, It last)
+    {
+        for(; first != last; ++first) {
+            *first = (*this)();
+        }
+    }
+ 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os,
-             const subtract_with_carry& f)
-  {
-    for(unsigned int j = 0; j < f.long_lag; ++j)
-      os << f.compute(j) << " ";
-    os << f.carry << " ";
-    return os;
-  }
+    /** Writes a @c subtract_with_carry_engine to a @c std::ostream. */
+    template<class CharT, class Traits>
+    friend std::basic_ostream<CharT,Traits>&
+    operator<<(std::basic_ostream<CharT,Traits>& os,
+               const subtract_with_carry_engine& f)
+    {
+        for(unsigned int j = 0; j < f.long_lag; ++j)
+            os << f.compute(j) << " ";
+        os << f.carry << " ";
+        return os;
+    }
 
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, subtract_with_carry& f)
-  {
-    for(unsigned int j = 0; j < f.long_lag; ++j)
-      is >> f.x[j] >> std::ws;
-    is >> f.carry >> std::ws;
-    f.k = 0;
-    return is;
-  }
+    /** Reads a @c subtract_with_carry_engine from a @c std::istream. */
+    template<class CharT, class Traits>
+    friend std::basic_istream<CharT,Traits>&
+    operator>>(std::basic_istream<CharT,Traits>& is,
+               subtract_with_carry_engine& f)
+    {
+        for(unsigned int j = 0; j < f.long_lag; ++j)
+            is >> f.x[j] >> std::ws;
+        is >> f.carry;
+        f.k = 0;
+        return is;
+    }
 #endif
 
-  friend bool operator==(const subtract_with_carry& x, const subtract_with_carry& y)
-  {
-    for(unsigned int j = 0; j < r; ++j)
-      if(x.compute(j) != y.compute(j))
-        return false;
-    return true;
-  }
+    /**
+     * Returns true if the two generators will produce identical
+     * sequences of values.
+     */
+    friend bool operator==(const subtract_with_carry_engine& x,
+                           const subtract_with_carry_engine& y)
+    {
+        for(unsigned int j = 0; j < r; ++j)
+            if(x.compute(j) != y.compute(j))
+                return false;
+        return true;
+    }
 
-  friend bool operator!=(const subtract_with_carry& x, const subtract_with_carry& y)
-  { return !(x == y); }
-#else
-  // Use a member function; Streamable concept not supported.
-  bool operator==(const subtract_with_carry& rhs) const
-  {
-    for(unsigned int j = 0; j < r; ++j)
-      if(compute(j) != rhs.compute(j))
-        return false;
-    return true;
-  }
-
-  bool operator!=(const subtract_with_carry& rhs) const
-  { return !(*this == rhs); }
-#endif
+    /**
+     * Returns true if the two generators will produce different
+     * sequences of values.
+     */
+    friend bool operator!=(const subtract_with_carry_engine& x,
+                           const subtract_with_carry_engine& y)
+    { return !(x == y); }
 
 private:
-  /// \cond hide_private_members
-  // returns x(i-r+index), where index is in 0..r-1
-  IntType compute(unsigned int index) const
-  {
-    return x[(k+index) % long_lag];
-  }
-  /// \endcond
+    /// \cond
+    // returns x(i-r+index), where index is in 0..r-1
+    IntType compute(unsigned int index) const
+    {
+        return x[(k+index) % long_lag];
+    }
+    /// \endcond
 
-  // state representation; next output (state) is x(i)
-  //   x[0]  ... x[k] x[k+1] ... x[long_lag-1]     represents
-  //  x(i-k) ... x(i) x(i+1) ... x(i-k+long_lag-1)
-  // speed: base: 20-25 nsec
-  // ranlux_4: 230 nsec, ranlux_7: 430 nsec, ranlux_14: 810 nsec
-  // This state representation makes operator== and save/restore more
-  // difficult, because we've already computed "too much" and thus
-  // have to undo some steps to get at x(i-r) etc.
+    // state representation; next output (state) is x(i)
+    //   x[0]  ... x[k] x[k+1] ... x[long_lag-1]     represents
+    //  x(i-k) ... x(i) x(i+1) ... x(i-k+long_lag-1)
+    // speed: base: 20-25 nsec
+    // ranlux_4: 230 nsec, ranlux_7: 430 nsec, ranlux_14: 810 nsec
+    // This state representation makes operator== and save/restore more
+    // difficult, because we've already computed "too much" and thus
+    // have to undo some steps to get at x(i-r) etc.
 
-  // state representation: next output (state) is x(i)
-  //   x[0]  ... x[k] x[k+1]          ... x[long_lag-1]     represents
-  //  x(i-k) ... x(i) x(i-long_lag+1) ... x(i-k-1)
-  // speed: base 28 nsec
-  // ranlux_4: 370 nsec, ranlux_7: 688 nsec, ranlux_14: 1343 nsec
-  IntType x[long_lag];
-  unsigned int k;
-  int carry;
+    // state representation: next output (state) is x(i)
+    //   x[0]  ... x[k] x[k+1]          ... x[long_lag-1]     represents
+    //  x(i-k) ... x(i) x(i-long_lag+1) ... x(i-k-1)
+    // speed: base 28 nsec
+    // ranlux_4: 370 nsec, ranlux_7: 688 nsec, ranlux_14: 1343 nsec
+    IntType x[long_lag];
+    std::size_t k;
+    IntType carry;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
-template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-const bool subtract_with_carry<IntType, m, s, r, val>::has_fixed_range;
-template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-const IntType subtract_with_carry<IntType, m, s, r, val>::min_value;
-template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-const IntType subtract_with_carry<IntType, m, s, r, val>::max_value;
-template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-const IntType subtract_with_carry<IntType, m, s, r, val>::modulus;
-template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-const unsigned int subtract_with_carry<IntType, m, s, r, val>::long_lag;
-template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-const unsigned int subtract_with_carry<IntType, m, s, r, val>::short_lag;
+template<class IntType, std::size_t w, std::size_t s, std::size_t r>
+const bool subtract_with_carry_engine<IntType, w, s, r>::has_fixed_range;
+template<class IntType, std::size_t w, std::size_t s, std::size_t r>
+const IntType subtract_with_carry_engine<IntType, w, s, r>::modulus;
+template<class IntType, std::size_t w, std::size_t s, std::size_t r>
+const std::size_t subtract_with_carry_engine<IntType, w, s, r>::word_size;
+template<class IntType, std::size_t w, std::size_t s, std::size_t r>
+const std::size_t subtract_with_carry_engine<IntType, w, s, r>::long_lag;
+template<class IntType, std::size_t w, std::size_t s, std::size_t r>
+const std::size_t subtract_with_carry_engine<IntType, w, s, r>::short_lag;
+template<class IntType, std::size_t w, std::size_t s, std::size_t r>
+const uint32_t subtract_with_carry_engine<IntType, w, s, r>::default_seed;
 #endif
 
 
 // use a floating-point representation to produce values in [0..1)
-/** @copydoc boost::random::subtract_with_carry */
-template<class RealType, int w, unsigned int s, unsigned int r, int val=0>
-class subtract_with_carry_01
+/** @copydoc boost::random::subtract_with_carry_engine */
+template<class RealType, std::size_t w, std::size_t s, std::size_t r>
+class subtract_with_carry_01_engine
 {
 public:
-  typedef RealType result_type;
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
-  BOOST_STATIC_CONSTANT(int, word_size = w);
-  BOOST_STATIC_CONSTANT(unsigned int, long_lag = r);
-  BOOST_STATIC_CONSTANT(unsigned int, short_lag = s);
+    typedef RealType result_type;
+    BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+    BOOST_STATIC_CONSTANT(std::size_t, word_size = w);
+    BOOST_STATIC_CONSTANT(std::size_t, long_lag = r);
+    BOOST_STATIC_CONSTANT(std::size_t, short_lag = s);
+    BOOST_STATIC_CONSTANT(uint32_t, default_seed = 19780503u);
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(!std::numeric_limits<result_type>::is_integer);
-#endif
+    BOOST_STATIC_ASSERT(!std::numeric_limits<result_type>::is_integer);
 
-  subtract_with_carry_01() { init_modulus(); seed(); }
-  explicit subtract_with_carry_01(uint32_t value)
-  { init_modulus(); seed(value);   }
-  template<class It> subtract_with_carry_01(It& first, It last)
-  { init_modulus(); seed(first,last); }
+    /** Creates a new subtract_with_carry_01_engine using the default seed. */
+    subtract_with_carry_01_engine() { init_modulus(); seed(); }
+    /** Creates a new subtract_with_carry_01_engine and seeds it with value. */
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(subtract_with_carry_01_engine,
+                                               uint32_t, value)
+    { init_modulus(); seed(value); }
+    /**
+     * Creates a new subtract_with_carry_01_engine and seeds with with values
+     * produced by seq.generate().
+     */
+    BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(subtract_with_carry_01_engine,
+                                             SeedSeq, seq)
+    { init_modulus(); seed(seq); }
+    /**
+     * Creates a new subtract_with_carry_01_engine and seeds it with values
+     * from a range.  Advances first to point one past the last consumed
+     * value.  If the range does not contain enough elements to fill the
+     * entire state, throws @c std::invalid_argument.
+     */
+    template<class It> subtract_with_carry_01_engine(It& first, It last)
+    { init_modulus(); seed(first,last); }
 
 private:
-  /// \cond hide_private_members
-  void init_modulus()
-  {
+    /// \cond
+    void init_modulus()
+    {
 #ifndef BOOST_NO_STDC_NAMESPACE
-    // allow for Koenig lookup
-    using std::pow;
+        // allow for Koenig lookup
+        using std::pow;
 #endif
-    _modulus = pow(RealType(2), word_size);
-  }
-  /// \endcond hide_private_members
+        _modulus = pow(RealType(2), RealType(word_size));
+    }
+    /// \endcond
 
 public:
-  // compiler-generated copy ctor and assignment operator are fine
+    // compiler-generated copy ctor and assignment operator are fine
 
-  void seed(uint32_t value = 19780503u)
-  {
-#ifndef BOOST_NO_STDC_NAMESPACE
-    // allow for Koenig lookup
-    using std::fmod;
-#endif
-    random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> gen(value);
-    unsigned long array[(w+31)/32 * long_lag];
-    for(unsigned int j = 0; j < sizeof(array)/sizeof(unsigned long); ++j)
-      array[j] = gen();
-    unsigned long * start = array;
-    seed(start, array + sizeof(array)/sizeof(unsigned long));
-  }
+    /** Seeds the generator with the default seed. */
+    void seed() { seed(default_seed); }
 
-  template<class It>
-  void seed(It& first, It last)
-  {
-#ifndef BOOST_NO_STDC_NAMESPACE
-    // allow for Koenig lookup
-    using std::fmod;
-    using std::pow;
-#endif
-    unsigned long mask = ~((~0u) << (w%32));   // now lowest (w%32) bits set
-    RealType two32 = pow(RealType(2), 32);
-    unsigned int j;
-    for(j = 0; j < long_lag && first != last; ++j) {
-      x[j] = RealType(0);
-      for(int i = 0; i < w/32 && first != last; ++i, ++first)
-        x[j] += *first / pow(two32,i+1);
-      if(first != last && mask != 0) {
-        x[j] += fmod((*first & mask) / _modulus, RealType(1));
-        ++first;
-      }
+    /** Seeds the generator with @c value. */
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry_01_engine,
+                                        uint32_t, value)
+    {
+        random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> gen(value);
+        seed(gen);
     }
-    if(first == last && j < long_lag)
-      throw std::invalid_argument("subtract_with_carry_01::seed");
-    carry = (x[long_lag-1] ? 0 : 1 / _modulus);
-    k = 0;
-  }
 
-  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(0); }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(1); }
+    /** Seeds the generator with values produced by @c seq.generate(). */
+    BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(subtract_with_carry_01_engine,
+                                      SeedSeq, seq)
+    {
+        uint32_t array[(w+31)/32 * long_lag];
 
-  result_type operator()()
-  {
-    int short_index = k - short_lag;
-    if(short_index < 0)
-      short_index += long_lag;
-    RealType delta = x[short_index] - x[k] - carry;
-    if(delta < 0) {
-      delta += RealType(1);
-      carry = RealType(1)/_modulus;
-    } else {
-      carry = 0;
+        seq.generate(&array[0], &array[0] + sizeof(array)/sizeof(array[0]));
+
+        uint32_t* start = &array[0];
+        seed(start, &array[0] + sizeof(array)/sizeof(array[0]));
     }
-    x[k] = delta;
-    ++k;
-    if(k >= long_lag)
-      k = 0;
-    return delta;
-  }
 
-  static bool validation(result_type x)
-  { return x == val/pow(RealType(2), word_size); }
-  
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+    /**
+     * Seeds the generator with values from a range.  Updates first to
+     * point one past the last consumed element.  If there are not
+     * enough elements in the range to fill the entire state, throws
+     * @c std::invalid_argument.
+     */
+    template<class It>
+    void seed(It& first, It last)
+    {
+#ifndef BOOST_NO_STDC_NAMESPACE
+        // allow for Koenig lookup
+        using std::fmod;
+        using std::pow;
+#endif
+        uint32_t mask = ~((~0u) << (w%32));   // now lowest (w%32) bits set
+        RealType two32 = pow(RealType(2), 32);
+        std::size_t j;
+        for(j = 0; j < long_lag && first != last; ++j) {
+            x[j] = RealType(0);
+            for(std::size_t i = 0; i < w/32 && first != last; ++i, ++first)
+                x[j] += *first / pow(two32,RealType(i+1));
+            if(first != last && mask != 0) {
+                x[j] += fmod((*first & mask) / _modulus, RealType(1));
+                ++first;
+            }
+        }
+        if(first == last && j < long_lag)
+            throw std::invalid_argument("subtract_with_carry_01::seed");
+        carry = (x[long_lag-1] ? 0 : 1 / _modulus);
+        k = 0;
+    }
+
+    /** Returns the smallest value that the generator can produce. */
+    static result_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    { return result_type(0); }
+    /** Returns the largest value that the generator can produce. */
+    static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    { return result_type(1); }
+
+    /** Returns the next value of the generator. */
+    result_type operator()()
+    {
+        std::size_t short_index =
+            (k < short_lag) ?
+                (k + long_lag - short_lag) :
+                (k - short_lag);
+        RealType delta = x[short_index] - x[k] - carry;
+        if(delta < 0) {
+            delta += RealType(1);
+            carry = RealType(1)/_modulus;
+        } else {
+            carry = 0;
+        }
+        x[k] = delta;
+        ++k;
+        if(k >= long_lag)
+            k = 0;
+        return delta;
+    }
+
+#ifndef BOOST_NO_LONG_LONG
+    /** Advances the state of the generator by @c z. */
+    void discard(boost::ulong_long_type z)
+    {
+        for(boost::ulong_long_type j = 0; j < z; ++j) {
+            (*this)();
+        }
+    }
+#endif
+
+    /** Fills a range with random values. */
+    template<class Iter>
+    void generate(Iter first, Iter last)
+    {
+        for(; first != last; ++first) {
+            *first = (*this)();
+        }
+    }
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os,
-             const subtract_with_carry_01& f)
-  {
-#ifndef BOOST_NO_STDC_NAMESPACE
-    // allow for Koenig lookup
-    using std::pow;
-#endif
-    std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
-    for(unsigned int j = 0; j < f.long_lag; ++j)
-      os << (f.compute(j) * f._modulus) << " ";
-    os << (f.carry * f._modulus);
-    os.flags(oldflags);
-    return os;
-  }
-
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, subtract_with_carry_01& f)
-  {
-# ifdef BOOST_RANDOM_EXTRACT_SWC_01
-      detail::extract_subtract_with_carry_01(is, f, f.carry, f.x, f._modulus);
-# else
-    // MSVC (up to 7.1) and Borland (up to 5.64) don't handle the template type
-    // parameter "RealType" available from the class template scope, so use
-    // the member typedef
-    typename subtract_with_carry_01::result_type value;
-    for(unsigned int j = 0; j < long_lag; ++j) {
-      is >> value >> std::ws;
-      f.x[j] = value / f._modulus;
+    template<class CharT, class Traits>
+    friend std::basic_ostream<CharT,Traits>&
+    operator<<(std::basic_ostream<CharT,Traits>& os,
+               const subtract_with_carry_01_engine& f)
+    {
+        std::ios_base::fmtflags oldflags =
+            os.flags(os.dec | os.fixed | os.left); 
+        for(unsigned int j = 0; j < f.long_lag; ++j)
+            os << (f.compute(j) * f._modulus) << " ";
+        os << (f.carry * f._modulus);
+        os.flags(oldflags);
+        return os;
     }
-    is >> value >> std::ws;
-    f.carry = value / f._modulus;
-# endif 
-    f.k = 0;
-    return is;
-  }
+
+    template<class CharT, class Traits>
+    friend std::basic_istream<CharT,Traits>&
+    operator>>(std::basic_istream<CharT,Traits>& is,
+               subtract_with_carry_01_engine& f)
+    {
+        // MSVC (up to 7.1) and Borland (up to 5.64) don't handle the template
+        // type parameter "RealType" available from the class template scope,
+        // so use the member typedef
+        typename subtract_with_carry_01_engine::result_type value;
+        for(unsigned int j = 0; j < long_lag; ++j) {
+            is >> value >> std::ws;
+            f.x[j] = value / f._modulus;
+        }
+        is >> value;
+        f.carry = value / f._modulus;
+        f.k = 0;
+        return is;
+    }
 #endif
 
-  friend bool operator==(const subtract_with_carry_01& x,
-                         const subtract_with_carry_01& y)
-  {
-    for(unsigned int j = 0; j < r; ++j)
-      if(x.compute(j) != y.compute(j))
-        return false;
-    return true;
-  }
+    /** Returns true if the two generators will produce identical sequences. */
+    friend bool operator==(const subtract_with_carry_01_engine& x,
+                           const subtract_with_carry_01_engine& y)
+    {
+        for(unsigned int j = 0; j < r; ++j)
+            if(x.compute(j) != y.compute(j))
+                return false;
+        return true;
+    }
 
-  friend bool operator!=(const subtract_with_carry_01& x,
-                         const subtract_with_carry_01& y)
-  { return !(x == y); }
-#else
-  // Use a member function; Streamable concept not supported.
-  bool operator==(const subtract_with_carry_01& rhs) const
-  { 
-    for(unsigned int j = 0; j < r; ++j)
-      if(compute(j) != rhs.compute(j))
-        return false;
-    return true;
-  }
-
-  bool operator!=(const subtract_with_carry_01& rhs) const
-  { return !(*this == rhs); }
-#endif
+    /** Returns true if the two generators will produce different sequences. */
+    friend bool operator!=(const subtract_with_carry_01_engine& x,
+                           const subtract_with_carry_01_engine& y)
+    { return !(x == y); }
 
 private:
-  /// \cond hide_private_members
-  RealType compute(unsigned int index) const;
-  /// \endcond
-  unsigned int k;
-  RealType carry;
-  RealType x[long_lag];
-  RealType _modulus;
+    /// \cond
+    RealType compute(unsigned int index) const
+    {
+        return x[(k+index) % long_lag];
+    }
+    /// \endcond
+    std::size_t k;
+    RealType carry;
+    RealType x[long_lag];
+    RealType _modulus;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
-template<class RealType, int w, unsigned int s, unsigned int r, int val>
-const bool subtract_with_carry_01<RealType, w, s, r, val>::has_fixed_range;
-template<class RealType, int w, unsigned int s, unsigned int r, int val>
-const int subtract_with_carry_01<RealType, w, s, r, val>::word_size;
-template<class RealType, int w, unsigned int s, unsigned int r, int val>
-const unsigned int subtract_with_carry_01<RealType, w, s, r, val>::long_lag;
-template<class RealType, int w, unsigned int s, unsigned int r, int val>
-const unsigned int subtract_with_carry_01<RealType, w, s, r, val>::short_lag;
+template<class RealType, std::size_t w, std::size_t s, std::size_t r>
+const bool subtract_with_carry_01_engine<RealType, w, s, r>::has_fixed_range;
+template<class RealType, std::size_t w, std::size_t s, std::size_t r>
+const std::size_t subtract_with_carry_01_engine<RealType, w, s, r>::word_size;
+template<class RealType, std::size_t w, std::size_t s, std::size_t r>
+const std::size_t subtract_with_carry_01_engine<RealType, w, s, r>::long_lag;
+template<class RealType, std::size_t w, std::size_t s, std::size_t r>
+const std::size_t subtract_with_carry_01_engine<RealType, w, s, r>::short_lag;
+template<class RealType, std::size_t w, std::size_t s, std::size_t r>
+const uint32_t subtract_with_carry_01_engine<RealType, w, s, r>::default_seed;
 #endif
-
-/// \cond hide_private_members
-template<class RealType, int w, unsigned int s, unsigned int r, int val>
-RealType subtract_with_carry_01<RealType, w, s, r, val>::compute(unsigned int index) const
-{
-  return x[(k+index) % long_lag];
-}
-/// \endcond
 
 } // namespace random
 } // namespace boost
