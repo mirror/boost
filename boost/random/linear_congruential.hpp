@@ -23,6 +23,8 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/integer/static_log2.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/const_mod.hpp>
 #include <boost/random/detail/seed.hpp>
@@ -437,21 +439,43 @@ private:
         uint64_t(0xDEECE66DUL) | (uint64_t(0x5) << 32),
         0xB, uint64_t(1)<<48> lcf_t;
     lcf_t lcf;
+
     template<class T>
-    static uint64_t cnv(T x,
-        typename boost::enable_if<boost::is_arithmetic<T> >::type* = 0) 
-    {
-        if(sizeof(T) < sizeof(uint64_t)) {
-            return (static_cast<uint64_t>(x) << 16) | 0x330e;
-        } else {
-            return(static_cast<uint64_t>(x));
+    struct cnv_impl_arithmetic {
+        typedef uint64_t type;
+        static type call(T x)
+        {
+            if(sizeof(T) < sizeof(uint64_t)) {
+                return (static_cast<uint64_t>(x) << 16) | 0x330e;
+            } else {
+                return(static_cast<uint64_t>(x));
+            }
         }
-    }
-    template<class SeedSeq>
-    static SeedSeq& cnv(SeedSeq& seq,
-        typename boost::disable_if<boost::is_arithmetic<SeedSeq> >::type* = 0) 
+    };
+
+    template<class T>
+    struct cnv_impl_seed_seq
     {
-        return seq;
+        typedef T& type;
+        static type call(T& seq) { return seq; }
+    };
+
+    template<class T, class CV_T>
+    struct cnv_impl :
+        mpl::if_<is_arithmetic<T>,
+            cnv_impl_arithmetic<T>,
+            cnv_impl_seed_seq<CV_T> >::type
+    {};
+
+    template<class T>
+    static typename cnv_impl<T, T>::type cnv(T& x) 
+    {
+        return cnv_impl<T, T>::call(x);
+    }
+    template<class T>
+    static typename cnv_impl<T, const T>::type cnv(const T& x) 
+    {
+        return cnv_impl<T, const T>::call(x);
     }
     static lcf_t& cnv(rand48& x) { return x.lcf; }
     static uint64_t cnv(float x) { return(static_cast<uint64_t>(x)); }
