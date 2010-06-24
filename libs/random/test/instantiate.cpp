@@ -203,6 +203,8 @@ void instantiate_seed(const URNG & urng, const ResultType &) {
     test_seed(urng, static_cast<ResultType>(~0u));
 }
 
+#if 0
+
 // ranlux uses int32_t for seeding instead of result_type
 template<class ResultType>
 void instantiate_seed(const boost::ranlux3 & urng, const ResultType &) {
@@ -239,6 +241,7 @@ void instantiate_seed(const boost::ranlux64_4_01 & urng, const ResultType &) {
     instantiate_seed<boost::ranlux64_4_01, boost::uint32_t>(urng, ResultType());
 }
 
+#endif
 
 template<class URNG, class ResultType>
 void instantiate_urng(const std::string & s, const URNG & u, const ResultType & r)

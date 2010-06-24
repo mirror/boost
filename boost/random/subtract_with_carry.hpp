@@ -155,8 +155,6 @@ public:
             (k < short_lag)?
                 (k + long_lag - short_lag) :
                 (k - short_lag);
-        if(short_index < 0)
-            short_index += long_lag;
         IntType delta;
         if (x[short_index] >= x[k] + carry) {
             // x(n) >= 0

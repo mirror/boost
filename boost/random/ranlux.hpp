@@ -52,28 +52,28 @@ class ranlux_documentation {};
 }
 
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux_base, 223, 24> ranlux3;
+typedef random::discard_block_engine<random::ranlux_base, 223, 24> ranlux3;
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux_base, 389, 24> ranlux4;
+typedef random::discard_block_engine<random::ranlux_base, 389, 24> ranlux4;
 
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux_base_01, 223, 24> ranlux3_01;
+typedef random::discard_block_engine<random::ranlux_base_01, 223, 24> ranlux3_01;
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux_base_01, 389, 24> ranlux4_01;
+typedef random::discard_block_engine<random::ranlux_base_01, 389, 24> ranlux4_01;
 
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux64_base_01, 223, 24> ranlux64_3_01;
+typedef random::discard_block_engine<random::ranlux64_base_01, 223, 24> ranlux64_3_01;
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux64_base_01, 389, 24> ranlux64_4_01;
+typedef random::discard_block_engine<random::ranlux64_base_01, 389, 24> ranlux64_4_01;
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
 namespace random {
   typedef random::subtract_with_carry_engine<int64_t, 48, 10, 24> ranlux64_base;
 }
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux64_base, 223, 24> ranlux64_3;
+typedef random::discard_block_engine<random::ranlux64_base, 223, 24> ranlux64_3;
 /** @copydoc boost::random::detail::ranlux_documentation */
-typedef random::discard_block<random::ranlux64_base, 389, 24> ranlux64_4;
+typedef random::discard_block_engine<random::ranlux64_base, 389, 24> ranlux64_4;
 #endif /* !BOOST_NO_INT64_T && !BOOST_NO_INTEGRAL_INT64_T */
 
 } // namespace boost
