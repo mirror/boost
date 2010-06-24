@@ -132,9 +132,9 @@ void validate_all()
   validate("ranlux4_01", ranlux4_01());
   validate("ranlux64_3_01", ranlux64_3_01());
   validate("ranlux64_4_01", ranlux64_4_01());
-  validate("ranlux24", random::ranlux24());
+  validate("ranlux24", boost::random::ranlux24());
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-  validate("ranlux48", random::ranlux48());
+  validate("ranlux48", boost::random::ranlux48());
 #endif
   validate("taus88", taus88());
   validate("lagged_fibonacci607", lagged_fibonacci607());
