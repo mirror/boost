@@ -27,6 +27,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/seed.hpp>
+#include <boost/random/detail/operators.hpp>
 #include <boost/random/linear_congruential.hpp>
 
 
@@ -193,12 +194,8 @@ public:
         }
     }
  
-#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
     /** Writes a @c subtract_with_carry_engine to a @c std::ostream. */
-    template<class CharT, class Traits>
-    friend std::basic_ostream<CharT,Traits>&
-    operator<<(std::basic_ostream<CharT,Traits>& os,
-               const subtract_with_carry_engine& f)
+    BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, subtract_with_carry_engine, f)
     {
         for(unsigned int j = 0; j < f.long_lag; ++j)
             os << f.compute(j) << " ";
@@ -207,10 +204,7 @@ public:
     }
 
     /** Reads a @c subtract_with_carry_engine from a @c std::istream. */
-    template<class CharT, class Traits>
-    friend std::basic_istream<CharT,Traits>&
-    operator>>(std::basic_istream<CharT,Traits>& is,
-               subtract_with_carry_engine& f)
+    BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, subtract_with_carry_engine, f)
     {
         for(unsigned int j = 0; j < f.long_lag; ++j)
             is >> f.x[j] >> std::ws;
@@ -218,14 +212,12 @@ public:
         f.k = 0;
         return is;
     }
-#endif
 
     /**
      * Returns true if the two generators will produce identical
      * sequences of values.
      */
-    friend bool operator==(const subtract_with_carry_engine& x,
-                           const subtract_with_carry_engine& y)
+    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(subtract_with_carry_engine, x, y)
     {
         for(unsigned int j = 0; j < r; ++j)
             if(x.compute(j) != y.compute(j))
@@ -237,9 +229,7 @@ public:
      * Returns true if the two generators will produce different
      * sequences of values.
      */
-    friend bool operator!=(const subtract_with_carry_engine& x,
-                           const subtract_with_carry_engine& y)
-    { return !(x == y); }
+    BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(subtract_with_carry_engine)
 
 private:
     /// \cond
@@ -440,11 +430,8 @@ public:
         }
     }
 
-#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-    template<class CharT, class Traits>
-    friend std::basic_ostream<CharT,Traits>&
-    operator<<(std::basic_ostream<CharT,Traits>& os,
-               const subtract_with_carry_01_engine& f)
+    /** Writes a subtract_with_carry_01_engine to a @c std::ostream. */
+    BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, subtract_with_carry_01_engine, f)
     {
         std::ios_base::fmtflags oldflags =
             os.flags(os.dec | os.fixed | os.left); 
@@ -454,16 +441,11 @@ public:
         os.flags(oldflags);
         return os;
     }
-
-    template<class CharT, class Traits>
-    friend std::basic_istream<CharT,Traits>&
-    operator>>(std::basic_istream<CharT,Traits>& is,
-               subtract_with_carry_01_engine& f)
+    
+    /** Reads a subtract_with_carry_01_engine from a @c std::istream. */
+    BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, subtract_with_carry_01_engine, f)
     {
-        // MSVC (up to 7.1) and Borland (up to 5.64) don't handle the template
-        // type parameter "RealType" available from the class template scope,
-        // so use the member typedef
-        typename subtract_with_carry_01_engine::result_type value;
+        RealType value;
         for(unsigned int j = 0; j < long_lag; ++j) {
             is >> value >> std::ws;
             f.x[j] = value / f._modulus;
@@ -473,11 +455,9 @@ public:
         f.k = 0;
         return is;
     }
-#endif
 
     /** Returns true if the two generators will produce identical sequences. */
-    friend bool operator==(const subtract_with_carry_01_engine& x,
-                           const subtract_with_carry_01_engine& y)
+    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(subtract_with_carry_01_engine, x, y)
     {
         for(unsigned int j = 0; j < r; ++j)
             if(x.compute(j) != y.compute(j))
@@ -486,9 +466,7 @@ public:
     }
 
     /** Returns true if the two generators will produce different sequences. */
-    friend bool operator!=(const subtract_with_carry_01_engine& x,
-                           const subtract_with_carry_01_engine& y)
-    { return !(x == y); }
+    BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(subtract_with_carry_01_engine)
 
 private:
     /// \cond
