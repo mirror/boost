@@ -119,19 +119,7 @@ public:
         operator<<(std::basic_ostream<CharT, Traits>& os,
                    const param_type& parm)
         {
-            typename std::vector<WeightType>::const_iterator
-                iter = parm._probabilities.begin(),
-                end =  parm._probabilities.end();
-            os << '[';
-            if(iter != end) {
-                os << *iter;
-                ++iter;
-                for(; iter != end; ++iter)
-                {
-                    os << ' ' << *iter;
-                }
-            }
-            os << ']';
+            parm.print(os);
             return os;
         }
         
@@ -140,31 +128,7 @@ public:
         friend std::basic_istream<CharT, Traits>&
         operator>>(std::basic_istream<CharT, Traits>& is, param_type& parm)
         {
-            std::vector<WeightType> result;
-            char ch;
-            if(!(is >> ch)) {
-                return is;
-            }
-            if(ch != '[') {
-                is.putback(ch);
-                is.setstate(std::ios_base::failbit);
-                return is;
-            }
-            WeightType val;
-            while(is >> std::ws >> val) {
-                result.push_back(val);
-            }
-            if(is.fail()) {
-                is.clear();
-                if(!(is >> ch)) {
-                    return is;
-                }
-                if(ch != ']') {
-                    is.putback(ch);
-                    is.setstate(std::ios_base::failbit);
-                }
-            }
-            parm._probabilities.swap(result);
+            parm.read(is);
             return is;
         }
 #endif
@@ -197,6 +161,52 @@ public:
             {
                 *iter /= sum;
             }
+        }
+        template<class CharT, class Traits>
+        void print(std::basic_ostream<CharT, Traits>& os) const
+        {
+            typename std::vector<WeightType>::const_iterator
+                iter = _probabilities.begin(),
+                end =  _probabilities.end();
+            os << '[';
+            if(iter != end) {
+                os << *iter;
+                ++iter;
+                for(; iter != end; ++iter)
+                {
+                    os << ' ' << *iter;
+                }
+            }
+            os << ']';
+        }
+        template<class CharT, class Traits>
+        void read(std::basic_istream<CharT, Traits>& is)
+        {
+            std::vector<WeightType> result;
+            char ch;
+            if(!(is >> ch)) {
+                return;
+            }
+            if(ch != '[') {
+                is.putback(ch);
+                is.setstate(std::ios_base::failbit);
+                return;
+            }
+            WeightType val;
+            while(is >> std::ws >> val) {
+                result.push_back(val);
+            }
+            if(is.fail()) {
+                is.clear();
+                if(!(is >> ch)) {
+                    return;
+                }
+                if(ch != ']') {
+                    is.putback(ch);
+                    is.setstate(std::ios_base::failbit);
+                }
+            }
+            _probabilities.swap(result);
         }
         std::vector<WeightType> _probabilities;
         /// @endcond

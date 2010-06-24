@@ -344,10 +344,12 @@ public:
   double probability(unsigned int r) const
   {
     if(r == classes()-1)
-      return 1-fac<double>(d)/std::pow(d, static_cast<double>(d+classes()-2))* 
+      return 1-fac<double>(d)/
+        std::pow(static_cast<double>(d), static_cast<double>(d+classes()-2)) *
         stirling2<double>(d+classes()-2, d);
     else
-      return fac<double>(d)/std::pow(d, static_cast<double>(d+r)) * 
+      return fac<double>(d)/
+        std::pow(static_cast<double>(d), static_cast<double>(d+r)) * 
         stirling2<double>(d+r-1, d-1);
   }
 private:
