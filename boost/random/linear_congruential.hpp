@@ -148,12 +148,12 @@ public:
         static const int log = ::boost::static_log2<m>::value;
         static const int k =
             (log + ((~(static_cast<IntType>(1) << log) & m)? 32 : 31)) / 32;
-        boost::uint32_t a[k + 3];
-        seq.generate(&a[0], &a[0] + k + 3);
+        boost::uint32_t array[k + 3];
+        seq.generate(&array[0], &array[0] + k + 3);
         IntType s = 0;
         IntType mul = 1;
         for(int j = 0; j < k; ++j) {
-            s = const_mod<IntType, m>::mult_add(a[j + 3], mul, s);
+            s = const_mod<IntType, m>::mult_add(array[j + 3], mul, s);
             mul <<= 32;
         }
         seed(s);
