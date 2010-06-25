@@ -22,6 +22,7 @@ doxygen_files =
     discard_block
     discrete_distribution
     exponential_distribution
+    extreme_value_distribution
     gamma_distribution
     geometric_distribution
     inversive_congruential

@@ -78,6 +78,7 @@
 [def __lognormal_distribution [classref boost::lognormal_distribution lognormal_distribution]]
 [def __uniform_on_sphere [classref boost::uniform_on_sphere uniform_on_sphere]]
 [def __weibull_distribution [classref boost::random::weibull_distribution weibull_distribution]]
+[def __extreme_value_distribution [classref boost::random::extreme_value_distribution extreme_value_distribution]]
 
 [include performance_data.qbk]
 

@@ -56,6 +56,8 @@ run test_gamma.cpp ;
 run test_gamma_distribution.cpp /boost//unit_test_framework ;
 run test_weibull.cpp ;
 run test_weibull_distribution.cpp /boost//unit_test_framework ;
+run test_extreme_value.cpp ;
+run test_extreme_value_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
