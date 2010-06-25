@@ -47,6 +47,7 @@ numbers mean faster random number generation.
   [[__minstd_rand] [2[sup 31]-2] [`sizeof(int32_t)`] [[minstd_rand_speed]] [-]]
   [[__rand48][2[sup 48]-1] [`sizeof(uint64_t)`] [[rand48_speed]] [-]]
   [[__ecuyer1988] [approx. 2[sup 61]] [`2*sizeof(int32_t)`] [[ecuyer_combined_speed]] [-]]
+  [[__knuth_b] [?] [`257*sizeof(uint32_t)`] [] [-]]
   [[__kreutzer1986] [?] [`1368*sizeof(uint32_t)`] [[kreutzer1986_speed]] [-]]
   [[__taus88] [~2[sup 88]] [`3*sizeof(uint32_t)`] [[taus88_speed]] [-]]
   [[__hellekalek1995] [2[sup 31]-1] [`sizeof(int32_t)`] [[hellekalek1995__inversive__speed]] [good uniform distribution in several dimensions]]

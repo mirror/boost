@@ -34,7 +34,8 @@ doxygen_files =
     poisson_distribution
     random_number_generator
     ranlux
-    shuffle_output
+    shuffle_order
+    # shuffle_output
     subtract_with_carry
     triangle_distribution
     uniform_01
