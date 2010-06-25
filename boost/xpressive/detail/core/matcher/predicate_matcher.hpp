@@ -114,7 +114,6 @@ namespace boost { namespace xpressive { namespace detail
         {};
         #endif
 
-    private:
         int sub_;
         sub_match_impl<BidiIter> const *sub_matches_;
         action_args_type *action_args_;
