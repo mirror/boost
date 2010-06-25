@@ -91,8 +91,11 @@ struct dispatch_table < Fsm, Stt, Event, ::boost::msm::back::favor_compile_time>
             while (it != one_state.end() && res != HANDLED_TRUE)
             {
                 HandledEnum handled = (*it)(fsm,region,state,evt);
-                res = ((HANDLED_GUARD_REJECT==handled) || (HANDLED_GUARD_REJECT==res))?
-                      HANDLED_GUARD_REJECT:handled;
+                // reject is considered as erasing an error (HANDLED_FALSE)
+                if ((HANDLED_FALSE==handled) && (HANDLED_GUARD_REJECT==res) )
+                    res = HANDLED_GUARD_REJECT;
+                else
+                    res = handled;
                 ++it;
             }
             return res;
