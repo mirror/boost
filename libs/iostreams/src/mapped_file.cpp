@@ -2,6 +2,8 @@
 // (C) Copyright Jonathan Turkanis 2004.
 // (C) Copyright Jonathan Graehl 2004.
 // (C) Copyright Jorge Lodos 2008.
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
 // Define BOOST_IOSTREAMS_SOURCE so that <boost/iostreams/detail/config.hpp>
 // knows that we are building the library (possibly exporting code), rather
@@ -166,7 +168,10 @@ void mapped_file_impl::open_file(param_type p)
 #ifdef BOOST_IOSTREAMS_WINDOWS
 
     // Open file
-    DWORD dwDesiredAccess = readonly ? GENERIC_READ : GENERIC_ALL;
+    DWORD dwDesiredAccess =
+        readonly ?
+            GENERIC_READ :
+            (GENERIC_READ | GENERIC_WRITE);
     DWORD dwCreationDisposition = (p.new_file_size != 0 && !readonly) ? 
         CREATE_ALWAYS : 
         OPEN_EXISTING;

@@ -115,13 +115,13 @@ private:
     // open overload taking a detail::path
     void open( const detail::path& path, 
                BOOST_IOS::openmode, 
-               BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
+               BOOST_IOS::openmode = BOOST_IOS::openmode(0) );
 
     typedef detail::file_descriptor_impl impl_type;
     shared_ptr<impl_type> pimpl_;
 };
 
-class file_descriptor_source : private file_descriptor {
+class BOOST_IOSTREAMS_DECL file_descriptor_source : private file_descriptor {
 public:
 #ifdef BOOST_IOSTREAMS_WINDOWS
     typedef void*  handle_type;  // A.k.a HANDLE
@@ -187,7 +187,7 @@ private:
     void open(const detail::path& path, BOOST_IOS::openmode);
 };
 
-class file_descriptor_sink : private file_descriptor {
+class BOOST_IOSTREAMS_DECL file_descriptor_sink : private file_descriptor {
 public:
 #ifdef BOOST_IOSTREAMS_WINDOWS
     typedef void*  handle_type;  // A.k.a HANDLE

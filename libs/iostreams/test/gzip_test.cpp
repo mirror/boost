@@ -79,6 +79,17 @@ void multiple_member_test()
     io::copy(in, io::back_inserter(dest));
 
     // Check that dest consists of two copies of data
+    BOOST_REQUIRE_EQUAL(data.size() * 2, dest.size());
+    BOOST_CHECK(std::equal(data.begin(), data.end(), dest.begin()));
+    BOOST_CHECK(std::equal(data.begin(), data.end(), dest.begin() + dest.size() / 2));
+
+    dest.clear();
+    io::copy(
+        array_source(&temp[0], temp.size()),
+        io::compose(gzip_decompressor(), io::back_inserter(dest)));
+
+    // Check that dest consists of two copies of data
+    BOOST_REQUIRE_EQUAL(data.size() * 2, dest.size());
     BOOST_CHECK(std::equal(data.begin(), data.end(), dest.begin()));
     BOOST_CHECK(std::equal(data.begin(), data.end(), dest.begin() + dest.size() / 2));
 }

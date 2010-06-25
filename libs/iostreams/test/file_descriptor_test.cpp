@@ -80,9 +80,41 @@ void file_descriptor_test()
         first->close();
         BOOST_CHECK(!first->is_open());
     }
+    
+    // test illegal flag combinations
+    {
+        BOOST_CHECK_THROW(
+            file_descriptor_source(test1.name(),
+                BOOST_IOS::app),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor_source(test1.name(),
+                BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor_source(test1.name(),
+                BOOST_IOS::app | BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor_source(test1.name(),
+                BOOST_IOS::out),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor_source(test1.name(),
+                BOOST_IOS::out | BOOST_IOS::app),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor_source(test1.name(),
+                BOOST_IOS::out | BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor_source(test1.name(),
+                BOOST_IOS::out | BOOST_IOS::app | BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+    }
 
     //--------------Test file_descriptor_sink---------------------------------//
-                                                    
+
     {
         temp_file             temp;
         file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
@@ -142,11 +174,78 @@ void file_descriptor_test()
         file.close();
         BOOST_CHECK(!file.is_open());
     }
+                                                    
+    {
+        temp_file             temp;
+        // set up the tests
+        {
+            file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
+            fdostream             out(file);
+            write_data_in_chunks(out);
+            out.close();
+            file.close();
+        }
+        // test std::ios_base::app
+        {
+            file_descriptor_sink  file(temp.name(), BOOST_IOS::app);
+            fdostream             out(file);
+            BOOST_CHECK(out->is_open());
+            write_data_in_chars(out);
+            out.close();
+            std::string expected(narrow_data());
+            expected += narrow_data();
+            BOOST_CHECK_MESSAGE(
+                compare_container_and_file(expected, temp.name()),
+                "failed writing to file_descriptor_sink in append mode"
+            );
+            file.close();
+            BOOST_CHECK(!file.is_open());
+        }
+        // test std::ios_base::trunc
+        {
+            file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
+            fdostream             out(file);
+            BOOST_CHECK(out->is_open());
+            write_data_in_chars(out);
+            out.close();
+            BOOST_CHECK_MESSAGE(
+                compare_files(test1.name(), temp.name()),
+                "failed writing to file_descriptor_sink in trunc mode"
+            );
+            file.close();
+            BOOST_CHECK(!file.is_open());
+        }
+        
+        // test illegal flag combinations
+        {
+            BOOST_CHECK_THROW(
+                file_descriptor_sink(temp.name(),
+                    BOOST_IOS::trunc | BOOST_IOS::app),
+                BOOST_IOSTREAMS_FAILURE);
+            BOOST_CHECK_THROW(
+                file_descriptor_sink(temp.name(),
+                    BOOST_IOS::in),
+                BOOST_IOSTREAMS_FAILURE);
+            BOOST_CHECK_THROW(
+                file_descriptor_sink(temp.name(),
+                    BOOST_IOS::in | BOOST_IOS::app),
+                BOOST_IOSTREAMS_FAILURE);
+            BOOST_CHECK_THROW(
+                file_descriptor_sink(temp.name(),
+                    BOOST_IOS::in | BOOST_IOS::trunc),
+                BOOST_IOSTREAMS_FAILURE);
+            BOOST_CHECK_THROW(
+                file_descriptor_sink(temp.name(),
+                    BOOST_IOS::in | BOOST_IOS::trunc | BOOST_IOS::app),
+                BOOST_IOSTREAMS_FAILURE);
+        }
+    }
 
     //--Test seeking with file_descriptor_source and file_descriptor_sink-----//
 
+    test_file test3;
     {
-        file_descriptor_sink  sink(test1.name());
+        file_descriptor_sink  sink(test3.name());
         fdostream             out(sink);
         BOOST_CHECK(out->is_open());
         BOOST_CHECK_MESSAGE(
@@ -156,7 +255,7 @@ void file_descriptor_test()
         out->close();
         BOOST_CHECK(!out->is_open());
 
-        file_descriptor_source  source(test1.name());
+        file_descriptor_source  source(test3.name());
         fdistream               in(source);
         BOOST_CHECK(in->is_open());
         BOOST_CHECK_MESSAGE(
@@ -195,6 +294,216 @@ void file_descriptor_test()
             test_seekable_in_chunks(io),
             "failed seeking within a file_descriptor, in chunks"
         );
+    }
+    
+    //--------------Test read-only file_descriptor----------------------------//
+    
+    {
+        fdstream   first(file_descriptor(test1.name(), BOOST_IOS::in), 0);
+        ifstream   second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
+        write_data_in_chars(first);
+        BOOST_CHECK(first.fail());
+        first.clear();
+        BOOST_CHECK_MESSAGE(
+            compare_streams_in_chars(first, second),
+            "failed reading from file_descriptor in chars with no buffer"
+        );
+        first->close();
+        BOOST_CHECK(!first->is_open());
+    }
+
+    {
+        fdstream   first(file_descriptor(test1.name(), BOOST_IOS::in), 0);
+        ifstream   second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
+        write_data_in_chunks(first);
+        BOOST_CHECK(first.fail());
+        first.clear();
+        BOOST_CHECK_MESSAGE(
+            compare_streams_in_chunks(first, second),
+            "failed reading from file_descriptor in chunks with no buffer"
+        );
+        first->close();
+        BOOST_CHECK(!first->is_open());
+    }
+
+    {
+        file_descriptor         file(test1.name(), BOOST_IOS::in);
+        fdstream                first(file);
+        ifstream                second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
+        write_data_in_chars(first);
+        BOOST_CHECK(first.fail());
+        first.clear();
+        first.seekg(0, BOOST_IOS::beg);
+        BOOST_CHECK_MESSAGE(
+            compare_streams_in_chars(first, second),
+            "failed reading from file_descriptor in chars with buffer"
+        );
+        first->close();
+        BOOST_CHECK(!first->is_open());
+    }
+
+    {
+        file_descriptor         file(test1.name(), BOOST_IOS::in);
+        fdstream                first(file);
+        ifstream                second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
+        write_data_in_chunks(first);
+        BOOST_CHECK(first.fail());
+        first.clear();
+        first.seekg(0, BOOST_IOS::beg);
+        BOOST_CHECK_MESSAGE(
+            compare_streams_in_chunks(first, second),
+            "failed reading from file_descriptor in chunks with buffer"
+        );
+        first->close();
+        BOOST_CHECK(!first->is_open());
+    }
+
+    //--------------Test write-only file_descriptor---------------------------//
+    {
+        temp_file             temp;
+        file_descriptor       file( temp.name(),
+                                    BOOST_IOS::out |
+                                    BOOST_IOS::trunc );
+        fdstream              out(file, 0);
+        BOOST_CHECK(out->is_open());
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        write_data_in_chars(out);
+        out.seekg(0, BOOST_IOS::beg);
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        out.close();
+        BOOST_CHECK_MESSAGE(
+            compare_files(test1.name(), temp.name()),
+            "failed writing to file_descriptor in chars with no buffer"
+        );
+        file.close();
+        BOOST_CHECK(!file.is_open());
+    }
+
+    {
+        temp_file             temp;
+        file_descriptor       file( temp.name(),
+                                    BOOST_IOS::out |
+                                    BOOST_IOS::trunc );
+        fdstream              out(file, 0);
+        BOOST_CHECK(out->is_open());
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        write_data_in_chunks(out);
+        out.seekg(0, BOOST_IOS::beg);
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        out.close();
+        BOOST_CHECK_MESSAGE(
+            compare_files(test1.name(), temp.name()),
+            "failed writing to file_descriptor_sink in chunks with no buffer"
+        );
+        file.close();
+        BOOST_CHECK(!file.is_open());
+    }
+
+    {
+        temp_file             temp;
+        file_descriptor       file( temp.name(),
+                                    BOOST_IOS::out |
+                                    BOOST_IOS::trunc );
+        fdstream              out(file);
+        BOOST_CHECK(out->is_open());
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        write_data_in_chars(out);
+        out.seekg(0, BOOST_IOS::beg);
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        out.close();
+        BOOST_CHECK_MESSAGE(
+            compare_files(test1.name(), temp.name()),
+            "failed writing to file_descriptor_sink in chars with buffer"
+        );
+        file.close();
+        BOOST_CHECK(!file.is_open());
+    }
+
+    {
+        temp_file             temp;
+        file_descriptor       file( temp.name(),
+                                    BOOST_IOS::out |
+                                    BOOST_IOS::trunc );
+        fdstream              out(file);
+        BOOST_CHECK(out->is_open());
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        write_data_in_chunks(out);
+        out.seekg(0, BOOST_IOS::beg);
+        out.get();
+        BOOST_CHECK(out.fail());
+        out.clear();
+        out.close();
+        BOOST_CHECK_MESSAGE(
+            compare_files(test1.name(), temp.name()),
+            "failed writing to file_descriptor_sink in chunks with buffer"
+        );
+        file.close();
+        BOOST_CHECK(!file.is_open());
+    }
+
+    // test illegal flag combinations
+    {
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::openmode(0)),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::app),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::app | BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::in | BOOST_IOS::app),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::in | BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::in | BOOST_IOS::app | BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::out | BOOST_IOS::app | BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::in | BOOST_IOS::out | BOOST_IOS::app),
+            BOOST_IOSTREAMS_FAILURE);
+        BOOST_CHECK_THROW(
+            file_descriptor(test1.name(),
+                BOOST_IOS::in |
+                BOOST_IOS::out |
+                BOOST_IOS::app |
+                BOOST_IOS::trunc),
+            BOOST_IOSTREAMS_FAILURE);
     }
 }
 

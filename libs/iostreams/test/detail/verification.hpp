@@ -100,6 +100,13 @@ bool compare_container_and_stream(Container& cnt, BOOST_ISTREAM& is)
     return true;
 }
 
+template<typename Container>
+bool compare_container_and_file(Container& cnt, const std::string& file)
+{
+    std::ifstream fstrm(file.c_str(), BOOST_IOS::in | BOOST_IOS::binary);
+    return compare_container_and_stream(cnt, fstrm);
+}
+
 BOOST_TEMPLATE_DECL
 void write_data_in_chars(BOOST_OSTREAM& os)
 {

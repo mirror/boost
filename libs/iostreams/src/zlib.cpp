@@ -91,7 +91,7 @@ void zlib_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(int error)
 namespace detail {
 
 zlib_base::zlib_base()
-    : stream_(new z_stream), calculate_crc_(false), crc_(0)
+    : stream_(new z_stream), calculate_crc_(false), crc_(0), crc_imp_(0)
     { }
 
 zlib_base::~zlib_base() { delete static_cast<z_stream*>(stream_); }
@@ -121,7 +121,7 @@ void zlib_base::after(const char*& src_begin, char*& dest_begin, bool compress)
             static_cast<zlib::uint>(next_in - src_begin) :
             static_cast<zlib::uint>(next_out - dest_begin);
         if (length > 0)
-            crc_ = crc32(crc_, buf, length);
+            crc_ = crc_imp_ = crc32(crc_imp_, buf, length);
     }
     total_in_ = s->total_in;
     total_out_ = s->total_out;
@@ -150,6 +150,7 @@ void zlib_base::reset(bool compress, bool realloc)
             (compress ? deflateEnd(s) : inflateEnd(s))
                 ;
     //);
+    crc_imp_ = 0;
 }
 
 void zlib_base::do_init

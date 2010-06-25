@@ -19,6 +19,7 @@ project /boost/iostreams : source-location ../src ;
 
 import modules ;
 import os ;
+import path ;
 local debug = [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ] ;
 
 for local v in NO_COMPRESSION 
@@ -89,7 +90,7 @@ rule create-library ( library-name : windows-name unix-name : sources + : requir
         if $($(LIB)_SOURCE)
         {
             return [ lib boost_$(library-name) 
-              : $($(LIB)_SOURCE)/$(sources).c
+              : [ path.glob $($(LIB)_SOURCE) : $(sources).c ]
               : <include>$($(LIB)_INCLUDE)
 	        <location-prefix>$(LIB:L)
 	        $(requirements)
@@ -133,7 +134,8 @@ rule create-library ( library-name : windows-name unix-name : sources + : requir
 
 local sources = file_descriptor.cpp mapped_file.cpp ;
 local z = [ create-library zlib : zll z : adler32 compress 
-     crc32 deflate gzio infback inffast inflate inftrees trees uncompr zutil :
+     crc32 deflate gzclose gzio gzlib gzread gzwrite
+     infback inffast inflate inftrees trees uncompr zutil :
      <link>shared:<define>ZLIB_DLL ] ;
 
 if $(z)

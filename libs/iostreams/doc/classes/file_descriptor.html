@@ -91,7 +91,7 @@
 
 <H4>Description</H4>
 
-<P>Model of <A HREF="../concepts/source.html">Source</A> providing read-only access to a file through an operating system file descriptor.</P>
+<P>Model of <A HREF="../concepts/device.html">SeekableSource</A> and <A HREF="../concepts/closable.html">Closable</A> providing read-only access to a file through an operating system file descriptor.</P>
 
 <H4>Synopsis</H4>
 
@@ -100,8 +100,11 @@
 <SPAN CLASS="keyword">class</SPAN> file_descriptor_source {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='keyword'>char</SPAN>                      char_type;
+    <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  handle_type;
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  category;
-    <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+    <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>();
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                             std::ios_base::open_mode mode = 
                                 std::ios_base::in );
     <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
@@ -109,7 +112,18 @@
     <SPAN CLASS='comment'>// Windows-only</SPAN>
     <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_source_open">open</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
+                     std::ios_base::open_mode mode = 
+                         std::ios_base::in );
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_source_open">open</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );   
+
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_source_open">open</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#file_descriptor_source_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
+
+    handle_type <A CLASS="documented" HREF="#file_descriptor_source_handle">handle</A>() <SPAN CLASS="keyword">const</SPAN>;
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -117,24 +131,46 @@
 <A NAME="file_descriptor_source_ctor"></A>
 <H4><CODE>file_descriptor_source::file_descriptor_source</CODE></H4>
 
-<PRE CLASS="broken_ie">    file_descriptor_source( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+<PRE CLASS="broken_ie">    file_descriptor_source();
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    file_descriptor_source( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                             std::ios_base::open_mode mode = 
                                 std::ios_base::in );
     file_descriptor_source( <SPAN CLASS="keyword">int </SPAN>fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
     <SPAN CLASS='comment'>// Windows-only</SPAN>
     file_descriptor_source( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
-    
+
 <P>
-    The first member constructs a <CODE>file_descriptor_source</CODE> to access the file with the given pathname. The parameter <CODE>mode</CODE> has the same interpretation as <CODE>(mode | std::ios_base::in)</CODE> in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
+    The first member constructs an empty <CODE>file_descriptor_source</CODE>.
 </P>
 
 <P>
-    The second member constructs a <CODE>file_descriptor_source</CODE> to access the file with the given operating system or runtime-library file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the <CODE>file_descriptor_source</CODE> being constructed &#8212; or one of its copies &#8212; is closed. 
+    The second member constructs a <CODE>file_descriptor_source</CODE> to access the file with the given pathname. <CODE>Path</CODE> should be either a string or a Boost.Filesystem path. The parameter <CODE>mode</CODE> has the same interpretation as <CODE>(mode | std::ios_base::in)</CODE> in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 
 <P>
-    The third member is the same as the second, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the <CODE>file_descriptor_source</CODE> being constructed &#8212; or one of its copies &#8212; is closed.
+    The third member constructs a <CODE>file_descriptor_source</CODE> to access the file with the given operating system or runtime-library file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the <CODE>file_descriptor_source</CODE> being constructed &#8212; or one of its copies &#8212; is closed. 
+</P>
+
+<P>
+    The fourth member is the same as the third, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the <CODE>file_descriptor_source</CODE> being constructed &#8212; or one of its copies &#8212; is closed.
+</P>
+
+<A NAME="file_descriptor_source_open"></A>
+<H4><CODE>file_descriptor_source::open</CODE></H4>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <SPAN CLASS="keyword">void</SPAN> open( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
+                     std::ios_base::open_mode mode = 
+                         std::ios_base::in );
+    <SPAN CLASS="keyword">void</SPAN> open( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
+    <SPAN CLASS="keyword">void</SPAN> open( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
+
+<P>
+    The parameters of <CODE>open</CODE> the same as those of the corresponding constructors.
 </P>
 
 <A NAME="file_descriptor_source_is_open"></A>
@@ -144,12 +180,19 @@
     
 <P>Returns <CODE>true</CODE> if the underlying file was opened successfully.</P>
 
+<A NAME="file_descriptor_source_handle"></A>
+<H4><CODE>file_descriptor_source::handle</CODE></H4>
+
+<PRE CLASS="broken_ie">    handle_type handle() <SPAN CLASS="keyword">const</SPAN>;</PRE>
+    
+<P>Returns the underlying OS file descriptor.  On Windows, this is a <CODE>HANDLE</CODE>.  On other systems, it is an <CODE><SPAN CLASS="keyword">int</SPAN></CODE>.</P>
+
 <A NAME="file_descriptor_sink"></A>
 <H3>Class <CODE>file_descriptor_sink</CODE></H3>
 
 <H4>Description</H4>
 
-<P>Model of <A HREF="../concepts/sink.html">Sink</A> providing write-only access to a file through an operating system file descriptor.
+<P>Model of <A HREF="../concepts/device.html">SeekableSink</A> and <A HREF="../concepts/closable.html">Closable</A> providing write-only access to a file through an operating system file descriptor.
 
 <H4>Synopsis</H4>
 
@@ -158,8 +201,11 @@
 <SPAN CLASS="keyword">class</SPAN> file_descriptor_sink {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='keyword'>char</SPAN>                      char_type;
+    <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  handle_type;
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  category;
-    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>();
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                           std::ios_base::open_mode mode = 
                               std::ios_base::out );
     <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
@@ -167,7 +213,18 @@
     <SPAN CLASS='comment'>// Windows-only</SPAN>
     <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_sink_open">open</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
+                     std::ios_base::open_mode mode = 
+                         std::ios_base::out );
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_sink_open">open</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );   
+
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_sink_open">open</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#file_descriptor_sink_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
+
+    handle_type <A CLASS="documented" HREF="#file_descriptor_sink_handle">handle</A>() <SPAN CLASS="keyword">const</SPAN>;
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -175,24 +232,46 @@
 <A NAME="file_descriptor_sink_ctor"></A>
 <H4><CODE>file_descriptor_sink::file_descriptor_sink</CODE></H4>
 
-<PRE CLASS="broken_ie">    file_descriptor_sink( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+<PRE CLASS="broken_ie">    file_descriptor_sink();
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    file_descriptor_sink( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                           std::ios_base::open_mode mode = 
                               std::ios_base::out );
     file_descriptor_sink( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
     <SPAN CLASS='comment'>// Windows-only</SPAN>
     file_descriptor_sink( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
-    
+
 <P>
-    The first member constructs a <CODE>file_descriptor_sink</CODE> to access the file with the given pathname. The parameter <CODE>mode</CODE> has the same interpretation as <CODE>(mode | std::ios_base::out)</CODE> in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref2" HREF="#note_1"><SUP>[1]</SUP></A>
+    The first member constructs an empty <CODE>file_descriptor_sink</CODE>.
 </P>
 
 <P>
-    The second member constructs a <CODE>file_descriptor_sink</CODE> to access the file with the given operating system or runtime-library file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor_sink</CODE> &#8212; or one of its copies &#8212; is closed. 
+    The second member constructs a <CODE>file_descriptor_sink</CODE> to access the file with the given pathname. <CODE>Path</CODE> should be either a string or a Boost.Filesystem path. The parameter <CODE>mode</CODE> has the same interpretation as <CODE>(mode | std::ios_base::out)</CODE> in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref2" HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 
 <P>
-    The third member is the same as the second, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor_sink</CODE> &#8212; or one of its copies &#8212; is closed. 
+    The third member constructs a <CODE>file_descriptor_sink</CODE> to access the file with the given operating system or runtime-library file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor_sink</CODE> &#8212; or one of its copies &#8212; is closed. 
+</P>
+
+<P>
+    The fourth member is the same as the third, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor_sink</CODE> &#8212; or one of its copies &#8212; is closed. 
+</P>
+
+<A NAME="file_descriptor_sink_open"></A>
+<H4><CODE>file_descriptor_sink::open</CODE></H4>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <SPAN CLASS="keyword">void</SPAN> open( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
+                     std::ios_base::open_mode mode = 
+                         std::ios_base::out );
+    <SPAN CLASS="keyword">void</SPAN> open( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
+    <SPAN CLASS="keyword">void</SPAN> open( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
+
+<P>
+    The parameters of <CODE>open</CODE> the same as those of the corresponding constructors.
 </P>
 
 <A NAME="file_descriptor_sink_is_open"></A>
@@ -202,12 +281,19 @@
     
 <P>Returns <CODE>true</CODE> if the underlying file was opened successfully.</P>
 
+<A NAME="file_descriptor_sink_handle"></A>
+<H4><CODE>file_descriptor_sink::handle</CODE></H4>
+
+<PRE CLASS="broken_ie">    handle_type handle() <SPAN CLASS="keyword">const</SPAN>;</PRE>
+    
+<P>Returns the underlying OS file descriptor.  On Windows, this is a <CODE>HANDLE</CODE>.  On other systems, it is an <CODE><SPAN CLASS="keyword">int</SPAN></CODE>.</P>
+
 <A NAME="file_descriptor"></A>
 <H3>Class <CODE>file_descriptor</CODE></H3>
 
 <H4>Description</H4>
 
-<P>Model of <A HREF="../concepts/seekable_device.html">SeekableDevice</A> providing read-write access to a file through an operating system file descriptor.
+<P>Model of <A HREF="../concepts/seekable_device.html">SeekableDevice</A> and <A HREF="../concepts/closable.html">Closable</A> providing read-write access to a file through an operating system file descriptor.
 
 <H4>Synopsis</H4>
 
@@ -216,8 +302,11 @@
 <SPAN CLASS="keyword">class</SPAN> file_descriptor {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='keyword'>char</SPAN>                      char_type;
+    <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  handle_type;
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  category;
-    <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+    <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>();
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                      std::ios_base::open_mode mode = 
                          std::ios_base::in | std::ios_base::out );
     <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );   
@@ -225,7 +314,18 @@
     <SPAN CLASS='comment'>// Windows-only</SPAN>
     <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_open">open</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
+                     std::ios_base::open_mode mode = 
+                         std::ios_base::in | std::ios_base::out );
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_open">open</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );   
+
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_open">open</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#file_descriptor_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
+
+    handle_type <A CLASS="documented" HREF="#file_descriptor_handle">handle</A>() <SPAN CLASS="keyword">const</SPAN>;
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -233,7 +333,9 @@
 <A NAME="file_descriptor_constructor"></A>
 <H4><CODE>file_descriptor::file_descriptor</CODE></H4>
 
-<PRE CLASS="broken_ie">    file_descriptor( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+<PRE CLASS="broken_ie">    file_descriptor();
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    file_descriptor( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                      std::ios_base::open_mode mode = 
                          std::ios_base::in | std::ios_base::out );
     file_descriptor( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
@@ -242,15 +344,35 @@
     file_descriptor( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
 
 <P>
-    The first member constructs a <CODE>file_descriptor</CODE> to access the file with the given pathname. The parameter <CODE>mode</CODE> has the same interpretation as in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref3" HREF="#note_1"><SUP>[1]</SUP></A>
+    The first member constructs an empty <CODE>file_descriptor</CODE>.
 </P>
 
 <P>
-    The second member constructs a <CODE>file_descriptor</CODE> to access the file with the given operating system or runtime-library file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor</CODE> &#8212; or one of its copies &#8212; is closed.
+    The second member constructs a <CODE>file_descriptor</CODE> to access the file with the given pathname. <CODE>Path</CODE> should be either a string or a Boost.Filesystem path. The parameter <CODE>mode</CODE> has the same interpretation as in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref3" HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 
 <P>
-    The third member is the same as the second, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor</CODE> &#8212; or one of its copies &#8212; is closed.
+    The third member constructs a <CODE>file_descriptor</CODE> to access the file with the given operating system or runtime-library file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor</CODE> &#8212; or one of its copies &#8212; is closed.
+</P>
+
+<P>
+    The fourth member is the same as the third, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor</CODE> &#8212; or one of its copies &#8212; is closed.
+</P>
+
+<A NAME="file_descriptor_open"></A>
+<H4><CODE>file_descriptor::open</CODE></H4>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
+    <SPAN CLASS="keyword">void</SPAN> open( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
+                     std::ios_base::open_mode mode = 
+                         std::ios_base::in | std::ios_base::out );
+    <SPAN CLASS="keyword">void</SPAN> open( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
+    <SPAN CLASS="keyword">void</SPAN> open( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
+
+<P>
+    The parameters of <CODE>open</CODE> the same as those of the corresponding constructors.
 </P>
 
 <A NAME="file_descriptor_is_open"></A>
@@ -258,7 +380,14 @@
 
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">bool</SPAN> is_open() <SPAN CLASS="keyword">const</SPAN>;</PRE>
     
-<P>Returns <CODE>true</CODE> if the underlying file was opened successfully.</P>
+<P>Returns <CODE><SPAN CLASS="keyword">true</SPAN></CODE> if the underlying file was opened successfully.</P>
+
+<A NAME="file_descriptor_handle"></A>
+<H4><CODE>file_descriptor::handle</CODE></H4>
+
+<PRE CLASS="broken_ie">    handle_type handle() <SPAN CLASS="keyword">const</SPAN>;</PRE>
+    
+<P>Returns the underlying OS file descriptor.  On Windows, this is a <CODE>HANDLE</CODE>.  On other systems, it is an <CODE><SPAN CLASS="keyword">int</SPAN></CODE>.</P>
 
 <!-- Begin Footnotes -->
 
