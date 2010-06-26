@@ -1,4 +1,4 @@
-/* test_gamma.cpp
+/* test_weibull.cpp
  *
  * Copyright Steven Watanabe 2010
  * Distributed under the Boost Software License, Version 1.0. (See
@@ -22,12 +22,12 @@
 
 #include "statistic_tests.hpp"
 
-bool do_test(double alpha, double beta, int max) {
-    std::cout << "running gamma(" << alpha << ", " << beta << ")" << " " << max << " times: " << std::flush;
+bool do_test(double a, double b, int max) {
+    std::cout << "running weibull(" << a << ", " << b << ")" << " " << max << " times: " << std::flush;
 
-    boost::math::weibull_distribution<> expected(alpha, beta);
+    boost::math::weibull_distribution<> expected(a, b);
     
-    boost::random::weibull_distribution<> dist(alpha, beta);
+    boost::random::weibull_distribution<> dist(a, b);
     boost::mt19937 gen;
     kolmogorov_experiment test(max);
     boost::variate_generator<boost::mt19937&, boost::random::weibull_distribution<> > vgen(gen, dist);

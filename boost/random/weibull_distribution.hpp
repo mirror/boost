@@ -83,7 +83,7 @@ public:
     explicit weibull_distribution(RealType a_arg = 1.0, RealType b_arg = 1.0)
       : _a(a_arg), _b(b_arg)
     {}
-    /** Constructs a @c weilbull_distribution from its parameters. */
+    /** Constructs a @c weibull_distribution from its parameters. */
     explicit weibull_distribution(const param_type& parm)
       : _a(parm.a()), _b(parm.b())
     {}

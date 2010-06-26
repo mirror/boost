@@ -60,7 +60,7 @@ bool do_tests(int repeat, double max_alpha, double max_beta, int trials) {
 }
 
 int usage() {
-    std::cerr << "Usage: test_gamma -r <repeat> -n <max n> -t <trials>" << std::endl;
+    std::cerr << "Usage: test_gamma -r <repeat> -a <max alpha> -b <max beta> -t <trials>" << std::endl;
     return 2;
 }
 
