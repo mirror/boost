@@ -383,6 +383,14 @@ Redefine if you want the Typeof Library to handle functions with more parameters
    
 [endsect]
 
+[section:silent SILENT]
+
+Define `BOOST_TYPEOF_SILENT` before including boost/typeof/typeof.hpp to 
+supress the messages "using typeof emulation" and "using native typeof".
+By default, these messages will be displayed when compiling a file including boost/typeof/typeof.hpp.
+
+[endsect]
+
 [section:limit_size LIMIT_SIZE]
 
 The `BOOST_TYPEOF_LIMIT_SIZE` macro defines the size of the compile-time sequence
