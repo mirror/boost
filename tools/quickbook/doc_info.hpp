@@ -121,8 +121,7 @@ namespace quickbook
                     ;
 
                 doc_author =
-                        space
-                    >>  '[' >> space
+                        '[' >> space
                     >>  (*(anychar_p - ','))        [assign_a(name.second)] // surname
                     >>  ',' >> space
                     >>  (*(anychar_p - ']'))        [assign_a(name.first)] // firstname
@@ -131,9 +130,8 @@ namespace quickbook
 
                 doc_authors =
                         "authors" >> hard_space
-                    >> doc_author                   [push_back_a(actions.doc_authors, name)]
-                    >> *(   ','
-                            >>  doc_author          [push_back_a(actions.doc_authors, name)]
+                    >>  *(  doc_author              [push_back_a(actions.doc_authors, name)]
+                            >> space >> !ch_p(',') >> space
                         )
                     ;
 

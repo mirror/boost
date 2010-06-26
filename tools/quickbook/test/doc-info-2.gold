@@ -3,6 +3,14 @@
 <library id="document_information_1" name="Document Information 1" dirname="document_information_1"
 last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <libraryinfo>
+    <authorgroup>
+    <author>
+      <firstname>Joe</firstname> <surname>Blow</surname>
+    </author>
+    <author>
+      <firstname>Jane</firstname> <surname>Doe</surname>
+    </author>
+    </authorgroup>
     <librarypurpose>
       Inline code test: <code>1 + 2</code>
     </librarypurpose>

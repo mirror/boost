@@ -1,7 +1,7 @@
 [article Quickbook
     [quickbook 1.5]
     [version 1.5]
-    [authors [de Guzman, Joel], [Niebler, Eric]]
+    [authors [de Guzman, Joel] [Niebler, Eric]]
     [copyright 2002 2004 2006 Joel de Guzman, Eric Niebler]
     [purpose /WikiWiki/ style documentation tool]
     [license
@@ -201,6 +201,7 @@ Features include:
   * If a line starts with a comment, interpret it as a paragraph even if it's
     followed by whitespace or a list character.
   * Don't treat 4+ consecutive blank lines as multiple paragraph breaks.
+* Don't require commas between authors in docinfo.
 
 [endsect]
 
@@ -757,7 +758,7 @@ like this:
     [copyright 2000 2002 2003 Joe Blow, Jane Doe]
     [purpose The document's reason for being]
     [category The document's category]
-    [authors [Blow, Joe], [Doe, Jane]]
+    [authors [Blow, Joe] [Doe, Jane]]
     [license The document's license]
     [source-mode source-type]
 ]

@@ -1,5 +1,6 @@
 [library Document Information 1
 [quickbook 1.5]
+[authors [Blow, Joe] [Doe, Jane]]
 [source-mode teletype]
 [purpose Inline code test: `1 + 2`]
 [category tests]
