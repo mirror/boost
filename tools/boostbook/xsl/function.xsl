@@ -499,9 +499,9 @@
                 mode="annotation">
                 <xsl:with-param name="highlight" select="true()"/>
               </xsl:apply-templates>
-              <xsl:value-of select="$pack"/>
+              <xsl:copy-of select="$pack"/>
               <xsl:value-of select="$name"/>
-              <xsl:value-of select="$default"/>
+              <xsl:copy-of select="$default"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="concat($prefix, $text)"/>
