@@ -6,9 +6,9 @@ using quickbook ;
 
 xml foreach : foreach.qbk ;
 boostbook standalone 
-	: 
-	foreach 
-	:
-	    <xsl:param>boost.root=../../../..
+    : 
+    foreach 
+    :
+        <xsl:param>boost.root=../../../..
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
-	;
+    ;
