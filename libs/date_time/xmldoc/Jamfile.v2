@@ -16,6 +16,7 @@ boostbook date_time : date_time.xml
         <dependency>gregorian_autodoc
         <dependency>posix_time_autodoc
         <dependency>local_time_autodoc
+        <xsl:param>boost.root=../../../..
 	;
 
 # boostbook date_time_doc : exclusive_date_time.xml ;

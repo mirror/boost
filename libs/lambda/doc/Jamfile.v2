@@ -6,6 +6,7 @@ path-constant images : ../../spirit/phoenix/doc/html ;
 
 boostbook lambda-doc : lambda.xml 
 :
+   <xsl:param>boost.root=../../../..
    <format>pdf:<xsl:param>img.src.path=$(images)/
 ;
 

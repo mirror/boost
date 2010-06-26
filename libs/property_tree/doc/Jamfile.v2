@@ -37,9 +37,7 @@ xml property_tree : property_tree.qbk ;
 
 boostbook standalone
     : property_tree
-    : <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
-      <xsl:param>boost.root=../../../..
-      <xsl:param>boost.libraries=../../../libraries.htm
+    : <xsl:param>boost.root=../../../..
       <xsl:param>toc.max.depth=3
       <xsl:param>toc.section.depth=2
       <xsl:param>chunk.section.depth=3

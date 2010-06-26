@@ -31,6 +31,7 @@ boostbook standalone
     :
         proto
     :
+        <xsl:param>boost.root=../../../..
         # HTML options first:
         # Use graphics not text for navigation:
         <xsl:param>navig.graphics=1

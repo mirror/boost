@@ -8,7 +8,7 @@
 
 [section:history History]
 
-New issues should be submitted at [@http:svn.boost.org svn.boost.org] - don't forget to include your
+New issues should be submitted at [@http://svn.boost.org svn.boost.org] - don't forget to include your
 email address in the ticket!
 
 Currently open issues can be viewed [@https://svn.boost.org/trac/boost/query?status=assigned&status=new&status=reopened&component=regex&order=priority&col=id&col=summary&col=status&col=type&col=milestone&col=component here].

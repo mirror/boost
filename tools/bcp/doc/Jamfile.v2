@@ -14,9 +14,5 @@ boostbook standalone
         <xsl:param>chunk.section.depth=0
         # Path for links to Boost:
         <xsl:param>boost.root=../../../..
-        # Path for libraries index:
-        <xsl:param>boost.libraries=../../../../libs/libraries.htm
-        # Use the main Boost stylesheet:
-        <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
    ;
 

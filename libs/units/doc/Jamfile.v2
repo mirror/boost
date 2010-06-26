@@ -193,8 +193,6 @@ xml units
     <dependency>abstract_reference
 ;
 
-path-constant images_location : ../../../doc/html ;
-
 boostbook standalone
   :
     units
@@ -203,7 +201,6 @@ boostbook standalone
     <xsl:param>toc.section.depth=8
     <xsl:param>chunk.section.depth=8
     <xsl:param>boost.root="../../../.."
-    <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
     <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
 ;
 
