@@ -1,7 +1,7 @@
 [article Quickbook
     [quickbook 1.5]
     [version 1.5]
-    [authors [de Guzman, Joel] [Niebler, Eric]]
+    [authors [de Guzman, Joel], [Niebler, Eric]]
     [copyright 2002 2004 2006 Joel de Guzman, Eric Niebler]
     [purpose /WikiWiki/ style documentation tool]
     [license
