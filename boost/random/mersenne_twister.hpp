@@ -371,6 +371,8 @@ private:
     std::size_t i;
 };
 
+/// \cond
+
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
 #define BOOST_RANDOM_MT_DEFINE_CONSTANT(type, name)                         \
@@ -403,7 +405,6 @@ BOOST_RANDOM_MT_DEFINE_CONSTANT(bool, has_fixed_range);
 #undef BOOST_RANDOM_MT_DEFINE_CONSTANT
 #endif
 
-/// \cond hide_private_members
 template<class UIntType,
          std::size_t w, std::size_t n, std::size_t m, std::size_t r,
          UIntType a, std::size_t u, UIntType d, std::size_t s,
@@ -483,7 +484,7 @@ mersenne_twister_engine<UIntType,w,n,m,r,a,u,d,s,b,t,c,l,f>::operator()()
  *  Generation, Vol. 8, No. 1, January 1998, pp. 3-30. 
  *  @endblockquote
  */
-typedef random::mersenne_twister_engine<uint32_t,32,351,175,19,0xccab8ee7,
+typedef mersenne_twister_engine<uint32_t,32,351,175,19,0xccab8ee7,
     11,0xffffffff,7,0x31b6ab00,15,0xffe50000,17,1812433253> mt11213b;
 
 /**
@@ -497,11 +498,11 @@ typedef random::mersenne_twister_engine<uint32_t,32,351,175,19,0xccab8ee7,
  *  Generation, Vol. 8, No. 1, January 1998, pp. 3-30. 
  *  @endblockquote
  */
-typedef random::mersenne_twister_engine<uint32_t,32,624,397,31,0x9908b0df,
+typedef mersenne_twister_engine<uint32_t,32,624,397,31,0x9908b0df,
     11,0xffffffff,7,0x9d2c5680,15,0xefc60000,18,1812433253> mt19937;
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-typedef random::mersenne_twister_engine<uint64_t,64,312,156,31,
+typedef mersenne_twister_engine<uint64_t,64,312,156,31,
     UINT64_C(0xb5026f5aa96619e9),29,UINT64_C(0x5555555555555555),17,
     UINT64_C(0x71d67fffeda60000),37,UINT64_C(0xfff7eee000000000),43,
     UINT64_C(6364136223846793005)> mt19937_64;

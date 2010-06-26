@@ -32,7 +32,7 @@ namespace random {
  * parameters alpha and beta.  It produces values > 0.
  *
  * It has
- * \f$p(x) = x^{\alpha-1}\frac{e^{-x/\beta}}{\beta^\alpha\Gamma(\alpha)}\f$.
+ * \f$\displaystyle p(x) = x^{\alpha-1}\frac{e^{-x/\beta}}{\beta^\alpha\Gamma(\alpha)}\f$.
  */
 template<class RealType = double>
 class gamma_distribution
@@ -52,8 +52,8 @@ public:
          *
          * Requires: alpha > 0 && beta > 0
          */
-        param_type(const RealType& alpha_arg = RealType(1),
-                   const RealType& beta_arg = RealType(1))
+        param_type(const RealType& alpha_arg = RealType(1.0),
+                   const RealType& beta_arg = RealType(1.0))
           : _alpha(alpha_arg), _beta(beta_arg)
         {
         }
@@ -108,8 +108,8 @@ public:
      *
      * Requires: alpha > 0 && beta > 0
      */
-    explicit gamma_distribution(const result_type& alpha_arg = result_type(1),
-                                const result_type& beta_arg = result_type(1))
+    explicit gamma_distribution(const result_type& alpha_arg = result_type(1.0),
+                                const result_type& beta_arg = result_type(1.0))
       : _exp(result_type(1)), _alpha(alpha_arg), _beta(beta_arg)
     {
         assert(_alpha > result_type(0));

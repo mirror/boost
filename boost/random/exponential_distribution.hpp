@@ -29,7 +29,7 @@ namespace boost {
 /**
  * The exponential distribution has a single parameter lambda.
  *
- * It has \f$p(x) = \lambda e^{-\lambda x}\f$
+ * It has \f$\displaystyle p(x) = \lambda e^{-\lambda x}\f$
  */
 template<class RealType = double>
 class exponential_distribution
@@ -42,7 +42,7 @@ public:
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  explicit exponential_distribution(result_type lambda_arg = result_type(1))
+  explicit exponential_distribution(result_type lambda_arg = result_type(1.0))
     : _lambda(lambda_arg) { assert(_lambda > result_type(0)); }
 
   // compiler-generated copy ctor and assignment operator are fine

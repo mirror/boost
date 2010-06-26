@@ -51,7 +51,8 @@ const RealType binomial_table<RealType>::table[10] = {
  * two parameters, @c t and @c p.  The values of the distribution
  * are within the range [0,t].
  *
- * The distribution function is \f$P(k) = {t \choose k}p^k(1-p)^{t-k}\f$.
+ * The distribution function is
+ * \f$\displaystyle P(k) = {t \choose k}p^k(1-p)^{t-k}\f$.
  *
  * The algorithm used is the BTRD algorithm described in
  *
@@ -76,8 +77,8 @@ public:
          *
          * Requires: t >=0 && 0 <= p <= 1
          */
-        explicit param_type(IntType t = 1, RealType p = RealType (0.5))
-          : _t(t), _p(p)
+        explicit param_type(IntType t_arg = 1, RealType p_arg = RealType (0.5))
+          : _t(t_arg), _p(p_arg)
         {}
         /** Returns the @c t parameter of the distribution. */
         IntType t() const { return _t; }
@@ -124,8 +125,9 @@ public:
      *
      * Requires: t >=0 && 0 <= p <= 1
      */
-    explicit binomial_distribution(IntType t = 1, RealType p = RealType(0.5))
-      : _t(t), _p(p)
+    explicit binomial_distribution(IntType t_arg = 1,
+                                   RealType p_arg = RealType(0.5))
+      : _t(t_arg), _p(p_arg)
     {
         init();
     }
@@ -133,9 +135,6 @@ public:
     /**
      * Construct an @c binomial_distribution object from the
      * parameters.
-     *
-     * Requires: @c parm is the result of calling @c param() on
-     * another @c binomial_distribution object.
      */
     explicit binomial_distribution(const param_type& parm)
       : _t(parm.t()), _p(parm.p())
@@ -165,7 +164,7 @@ public:
     
     /**
      * Returns a random variate distributed according to the
-     * binomial distribution with parameters specified by parm.
+     * binomial distribution with parameters specified by @c param.
      */
     template<class URNG>
     IntType operator()(URNG& urng, const param_type& parm) const

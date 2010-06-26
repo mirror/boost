@@ -75,7 +75,7 @@ public:
    */
   additive_combine() : _mlcg1(), _mlcg2() { }
   /**
-   * Constructs an \additive_combine generator, using aseed as
+   * Constructs an \additive_combine generator, using seed as
    * the constructor argument for both base generators.
    */
   explicit additive_combine(result_type aseed)
@@ -112,7 +112,7 @@ public:
   }
 
   /**
-   * Seeds an \additive_combine generator, using @c aseed as the
+   * Seeds an \additive_combine generator, using @c seed as the
    * seed for both base generators.
    */
   void seed(result_type aseed)

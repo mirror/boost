@@ -102,11 +102,31 @@ doxygen reference :
     <doxygen:param>ENABLE_PREPROCESSING=YES
     <doxygen:param>MACRO_EXPANSION=YES
     <doxygen:param>SEARCH_INCLUDES=NO
+    # Expand macros and clean up a bunch of ugly names
     <doxygen:param>"PREDEFINED= \\
         \"BOOST_RANDOM_DOXYGEN=1\" \\
         \"BOOST_PREVENT_MACRO_SUBSTITUTION=\" \\
         \"BOOST_STATIC_ASSERT(x)=\" \\
         \"BOOST_STATIC_CONSTANT(type,value)=static const type value\" \\
+        \"UINT64_C(value)=value ## ull\" \\
+        \"BOOST_RANDOM_DECL=\" \\
+        \"RealType(x)=x\" \\
+        \"result_type(x)=x\" \\
+        \"p_arg=p\" \\
+        \"median_arg=median\" \\
+        \"mean_arg=mean\" \\
+        \"sigma_arg=sigma\" \\
+        \"lambda_arg=lambda\" \\
+        \"alpha_arg=alpha\" \\
+        \"beta_arg=beta\" \\
+        \"a_arg=a\" \\
+        \"b_arg=b\" \\
+        \"c_arg=c\" \\
+        \"t_arg=t\" \\
+        \"min_arg=min\" \\
+        \"max_arg=max\" \\
+        \"parm=param\" \\
+        \"aseed=seed\" \\
         \"BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os,T,t)=template<class CharT, class Traits> friend std::basic_ostream<CharT,Traits>& operator<<(std::basic_ostream<CharT,Traits>& os, const T& t)\" \\
         \"BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is,T,t)=template<class CharT, class Traits> friend std::basic_istream<CharT,Traits>& operator>>(std::basic_istream<CharT,Traits>& is, const T& t)\" \\
         \"BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(T,lhs,rhs)=friend bool operator==(const T& rhs, const T& rhs)\" \\

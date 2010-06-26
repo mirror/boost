@@ -29,7 +29,7 @@ namespace boost {
  * Instantiations of class template normal_distribution model a
  * \random_distribution. Such a distribution produces random numbers
  * @c x distributed with probability density function
- * \f$p(x) = \frac{1}{\sqrt{2\pi\sigma}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}\f$,
+ * \f$\displaystyle p(x) = \frac{1}{\sqrt{2\pi\sigma}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}\f$,
  * where mean and sigma are the parameters of the distribution.
  */
 // deterministic Box-Muller method, uses trigonometric functions
@@ -50,8 +50,8 @@ public:
    *
    * Requires: sigma > 0
    */
-  explicit normal_distribution(const result_type& mean_arg = result_type(0),
-                               const result_type& sigma_arg = result_type(1))
+  explicit normal_distribution(const result_type& mean_arg = result_type(0.0),
+                               const result_type& sigma_arg = result_type(1.0))
     : _mean(mean_arg), _sigma(sigma_arg),
       _r1(0), _r2(0), _cached_rho(0), _valid(false)
   {

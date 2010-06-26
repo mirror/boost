@@ -101,7 +101,7 @@ public:
 
     /**
      * Returns a random variate distributed accordint to the extreme
-     * value distribution with parameters specified by @c parm.
+     * value distribution with parameters specified by @c param.
      */
     template<class URNG>
     RealType operator()(URNG& urng, const param_type& parm) const

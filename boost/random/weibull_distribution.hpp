@@ -102,7 +102,7 @@ public:
 
     /**
      * Returns a random variate distributed accordint to the Weibull
-     * distribution with parameters specified by @c parm.
+     * distribution with parameters specified by @c param.
      */
     template<class URNG>
     RealType operator()(URNG& urng, const param_type& parm) const

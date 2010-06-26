@@ -43,9 +43,9 @@ namespace boost {
 /**
  * Instantiations of class template lognormal_distribution model a
  * \random_distribution. Such a distribution produces random numbers
- * with \f$p(x) = \frac{1}{x \sigma_N \sqrt{2\pi}} e^{\frac{-\left(\log(x)-\mu_N\right)^2}{2\sigma_N^2}}\f$
- * for x > 0, where \f$\mu_N = \log\left(\frac{\mu^2}{\sqrt{\sigma^2 + \mu^2}}\right)\f$ and
- * \f$\sigma_N = \sqrt{\log\left(1 + \frac{\sigma^2}{\mu^2}\right)}\f$.
+ * with \f$\displaystyle p(x) = \frac{1}{x \sigma_N \sqrt{2\pi}} e^{\frac{-\left(\log(x)-\mu_N\right)^2}{2\sigma_N^2}}\f$
+ * for x > 0, where \f$\displaystyle \mu_N = \log\left(\frac{\mu^2}{\sqrt{\sigma^2 + \mu^2}}\right)\f$ and
+ * \f$\displaystyle \sigma_N = \sqrt{\log\left(1 + \frac{\sigma^2}{\mu^2}\right)}\f$.
  */
 template<class RealType = double>
 class lognormal_distribution
@@ -62,8 +62,8 @@ public:
    * Constructs a lognormal_distribution. @c mean and @c sigma are the
    * mean and standard deviation of the lognormal distribution.
    */
-  explicit lognormal_distribution(result_type mean_arg = result_type(1),
-                                  result_type sigma_arg = result_type(1))
+  explicit lognormal_distribution(result_type mean_arg = result_type(1.0),
+                                  result_type sigma_arg = result_type(1.0))
     : _mean(mean_arg), _sigma(sigma_arg)
   { 
     assert(_mean > result_type(0));

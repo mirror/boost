@@ -155,7 +155,7 @@ public:
 
     /**
      * Returns a random variate distributed according to the
-     * poisson distribution with parameters specified by parm.
+     * poisson distribution with parameters specified by param.
      */
     template<class URNG>
     IntType operator()(URNG& urng, const param_type& parm) const

@@ -50,8 +50,8 @@ public:
    *
    * Requires: min <= max
    */
-  explicit uniform_real(RealType min_arg = RealType(0),
-                        RealType max_arg = RealType(1))
+  explicit uniform_real(RealType min_arg = RealType(0.0),
+                        RealType max_arg = RealType(1.0))
     : _min(min_arg), _max(max_arg)
   {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS

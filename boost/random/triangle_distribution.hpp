@@ -42,9 +42,9 @@ public:
    *
    * Preconditions: a <= b <= c.
    */
-  explicit triangle_distribution(result_type a_arg = result_type(0),
+  explicit triangle_distribution(result_type a_arg = result_type(0.0),
                                  result_type b_arg = result_type(0.5),
-                                 result_type c_arg = result_type(1))
+                                 result_type c_arg = result_type(1.0))
     : _a(a_arg), _b(b_arg), _c(c_arg)
   {
     assert(_a <= _b && _b <= _c);

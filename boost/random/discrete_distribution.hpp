@@ -310,7 +310,7 @@ public:
     
     /**
      * Returns a value distributed according to the parameters
-     * specified by parm.
+     * specified by param.
      */
     template<class URNG>
     IntType operator()(URNG& urng, const param_type& parm) const

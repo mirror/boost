@@ -36,7 +36,7 @@ namespace boost {
  * The cauchy distribution is a continuous distribution with two
  * parameters, sigma and median.
  *
- * It has \f$p(x) = \frac{\sigma}{\pi(\sigma^2 + (x-m)^2)}\f$
+ * It has \f$\displaystyle p(x) = \frac{\sigma}{\pi(\sigma^2 + (x-m)^2)}\f$
  */
 template<class RealType = double>
 class cauchy_distribution
@@ -53,8 +53,8 @@ public:
    * Constructs a \cauchy_distribution with the paramters @c median
    * and @c sigma.
    */
-  explicit cauchy_distribution(result_type median_arg = result_type(0), 
-                               result_type sigma_arg = result_type(1))
+  explicit cauchy_distribution(result_type median_arg = result_type(0.0), 
+                               result_type sigma_arg = result_type(1.0))
     : _median(median_arg), _sigma(sigma_arg) { }
 
   // compiler-generated copy ctor and assignment operator are fine
