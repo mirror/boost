@@ -20,6 +20,7 @@
 #include <boost/serialization/singleton.hpp>
 
 #define BOOST_SERIALIZATION_SOURCE
+#include <boost/serialization/config.hpp>
 #include <boost/serialization/extended_type_info_typeid.hpp>
 
 namespace boost { 
