@@ -17,7 +17,7 @@ namespace
   boost::regex apple_macro_regex(
     "("
     "^\\s*#\\s*undef\\s*" // # undef
-    "\\b(min|max)\\b"     // followed by min or max, whole word
+    "\\b(check|verify|require|check_error)\\b"     // followed by apple macro name, whole word
     ")"
     "|"                   // or (ignored)
     "("
@@ -29,7 +29,7 @@ namespace
     ")"
     "|"                   // or
     "("
-    "\\b(check|verify|require|check_error)\\b" // min or max, whole word
+    "\\b(check|verify|require|check_error)\\b" // apple macro name, whole word
     "\\s*\\("         // followed by 0 or more spaces and an opening paren
     ")"
     , boost::regex::normal);
