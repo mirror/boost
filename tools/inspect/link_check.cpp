@@ -20,7 +20,7 @@ namespace fs = boost::filesystem;
 namespace
 {
   boost::regex html_bookmark_regex(
-    "<([^\\s<>]*)\\s*[^<>]*\\s+(?:NAME|ID)\\s*=\\s*(['\"])(.*?)\\2"
+    "<([^\\s<>]*)\\s*[^<>]*\\s+(NAME|ID)\\s*=\\s*(['\"])(.*?)\\3"
     "|<!--.*?-->",
     boost::regbase::normal | boost::regbase::icase);
   boost::regex html_url_regex(
@@ -149,20 +149,29 @@ namespace boost
 
       if(!is_css(full_path))
       {
+        string previous_id;
+
         while( boost::regex_search( a_start, a_end, a_what, html_bookmark_regex, a_flags) )
         {
           // a_what[0] contains the whole string iterators.
           // a_what[1] contains the tag iterators.
-          // a_what[3] contains the bookmark iterators.
+          // a_what[2] contains the attribute name.
+          // a_what[4] contains the bookmark iterators.
 
-          if (a_what[3].matched)
+          if (a_what[4].matched)
           {
             string tag( a_what[1].first, a_what[1].second );
             boost::algorithm::to_lower(tag);
+            string attribute( a_what[2].first, a_what[2].second );
+            boost::algorithm::to_lower(attribute);
+            string bookmark( a_what[4].first, a_what[4].second );
 
-            if ( tag != "meta" )
+            bool name_following_id = ( attribute == "name" && previous_id == bookmark );
+            if ( tag != "meta" && attribute == "id" ) previous_id = bookmark;
+            else previous_id.clear();
+
+            if ( tag != "meta" && !name_following_id )
             {
-              string bookmark( a_what[3].first, a_what[3].second );
               bookmarks.insert( bookmark );
 //              std::cout << "******************* " << bookmark << '\n';
 
