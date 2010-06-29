@@ -6,16 +6,19 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #include <fstream>
+#include <fcntl.h>
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
+#include "detail/file_handle.hpp"
 
 using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
+namespace boost_ios = boost::iostreams;
 using std::ifstream;
 using boost::unit_test::test_suite;   
 
@@ -80,7 +83,7 @@ void file_descriptor_test()
         first->close();
         BOOST_CHECK(!first->is_open());
     }
-    
+
     // test illegal flag combinations
     {
         BOOST_CHECK_THROW(
@@ -507,9 +510,125 @@ void file_descriptor_test()
     }
 }
 
+void file_handle_test()
+{
+    test_file  test1;       
+    test_file  test2;       
+
+    {
+        boost_ios::detail::file_handle handle = open_file_handle(test1.name());
+        {
+            boost_ios::file_descriptor_source source1(handle, boost_ios::never_close_handle);
+            BOOST_CHECK(source1.handle() == handle);
+        }
+        BOOST_CHECK_HANDLE_OPEN(handle);
+        close_file_handle(handle);
+    }
+
+    {
+        boost_ios::detail::file_handle handle = open_file_handle(test1.name());
+        {
+            boost_ios::file_descriptor_source source1(handle, boost_ios::close_handle);
+            BOOST_CHECK(source1.handle() == handle);
+        }
+        BOOST_CHECK_HANDLE_CLOSED(handle);
+    }
+
+    {
+        boost_ios::detail::file_handle handle = open_file_handle(test1.name());
+        boost_ios::file_descriptor_source source1(handle, boost_ios::never_close_handle);
+        BOOST_CHECK(source1.handle() == handle);
+        source1.close();
+        BOOST_CHECK(!source1.is_open());
+        BOOST_CHECK_HANDLE_OPEN(handle);
+        close_file_handle(handle);
+    }
+
+    {
+        boost_ios::detail::file_handle handle = open_file_handle(test1.name());
+        boost_ios::file_descriptor_source source1(handle, boost_ios::close_handle);
+        BOOST_CHECK(source1.handle() == handle);
+        source1.close();
+        BOOST_CHECK(!source1.is_open());
+        BOOST_CHECK_HANDLE_CLOSED(handle);
+    }
+
+    {
+        boost_ios::detail::file_handle handle1 = open_file_handle(test1.name());
+        boost_ios::detail::file_handle handle2 = open_file_handle(test2.name());
+        {
+            boost_ios::file_descriptor_source source1(handle1, boost_ios::never_close_handle);
+            BOOST_CHECK(source1.handle() == handle1);
+            source1.open(handle2, boost_ios::never_close_handle);
+            BOOST_CHECK(source1.handle() == handle2);
+        }
+        BOOST_CHECK_HANDLE_OPEN(handle1);
+        BOOST_CHECK_HANDLE_OPEN(handle2);
+        close_file_handle(handle1);
+        close_file_handle(handle2);
+    }
+
+    {
+        boost_ios::detail::file_handle handle1 = open_file_handle(test1.name());
+        boost_ios::detail::file_handle handle2 = open_file_handle(test2.name());
+        {
+            boost_ios::file_descriptor_source source1(handle1, boost_ios::close_handle);
+            BOOST_CHECK(source1.handle() == handle1);
+            source1.open(handle2, boost_ios::close_handle);
+            BOOST_CHECK(source1.handle() == handle2);
+            BOOST_CHECK_HANDLE_CLOSED(handle1);
+            BOOST_CHECK_HANDLE_OPEN(handle2);
+        }
+        BOOST_CHECK_HANDLE_CLOSED(handle1);
+        BOOST_CHECK_HANDLE_CLOSED(handle2);
+    }
+
+    {
+        boost_ios::detail::file_handle handle1 = open_file_handle(test1.name());
+        boost_ios::detail::file_handle handle2 = open_file_handle(test2.name());
+        {
+            boost_ios::file_descriptor_source source1(handle1, boost_ios::close_handle);
+            BOOST_CHECK(source1.handle() == handle1);
+            source1.open(handle2, boost_ios::never_close_handle);
+            BOOST_CHECK(source1.handle() == handle2);
+            BOOST_CHECK_HANDLE_CLOSED(handle1);
+            BOOST_CHECK_HANDLE_OPEN(handle2);
+        }
+        BOOST_CHECK_HANDLE_CLOSED(handle1);
+        BOOST_CHECK_HANDLE_OPEN(handle2);
+        close_file_handle(handle2);
+    }
+
+    {
+        boost_ios::detail::file_handle handle = open_handle(test1.name());
+        {
+            boost_ios::file_descriptor_source source1;
+            BOOST_CHECK(!source1.is_open());
+            source1.open(handle, boost_ios::never_close_handle);
+            BOOST_CHECK(source1.handle() == handle);
+            BOOST_CHECK_HANDLE_OPEN(handle);
+        }
+        BOOST_CHECK_HANDLE_OPEN(handle);
+        close_file_handle(handle);
+    }
+
+    {
+        boost_ios::detail::file_handle handle = open_handle(test1.name());
+        {
+            boost_ios::file_descriptor_source source1;
+            BOOST_CHECK(!source1.is_open());
+            source1.open(handle, boost_ios::close_handle);
+            BOOST_CHECK(source1.handle() == handle);
+            BOOST_CHECK_HANDLE_OPEN(handle);
+        }
+        BOOST_CHECK_HANDLE_CLOSED(handle);
+    }
+}
+
 test_suite* init_unit_test_suite(int, char* []) 
 {
     test_suite* test = BOOST_TEST_SUITE("file_descriptor test");
     test->add(BOOST_TEST_CASE(&file_descriptor_test));
+    test->add(BOOST_TEST_CASE(&file_handle_test));
     return test;
 }
