@@ -12,6 +12,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/next_prior.hpp>
+#include <boost/type_traits/make_unsigned.hpp>
 #include <string>
 #include <ostream>
 #include <iomanip>
@@ -31,19 +32,22 @@ namespace boost { namespace property_tree { namespace json_parser
             // This assumes an ASCII superset. But so does everything in PTree.
             // We escape everything outside ASCII, because this code can't
             // handle high unicode characters.
-            if (*b == 0x20 || *b == 0x21 ||
-                (*b >= 0x23 && *b <= 0x5B) || (*b >= 0x5D && *b <= 0xFF))
+            if (*b == 0x20 || *b == 0x21 || (*b >= 0x23 && *b <= 0x2E) ||
+                (*b >= 0x30 && *b <= 0x5B) || (*b >= 0x5D && *b <= 0xFF))
                 result += *b;
             else if (*b == Ch('\b')) result += Ch('\\'), result += Ch('b');
             else if (*b == Ch('\f')) result += Ch('\\'), result += Ch('f');
             else if (*b == Ch('\n')) result += Ch('\\'), result += Ch('n');
             else if (*b == Ch('\r')) result += Ch('\\'), result += Ch('r');
+            else if (*b == Ch('/')) result += Ch('\\'), result += Ch('/');
             else if (*b == Ch('"'))  result += Ch('\\'), result += Ch('"');
             else if (*b == Ch('\\')) result += Ch('\\'), result += Ch('\\');
             else
             {
                 const char *hexdigits = "0123456789ABCDEF";
-                unsigned long u = (std::min)(static_cast<unsigned long>(*b),
+                typedef typename make_unsigned<Ch>::type UCh;
+                unsigned long u = (std::min)(static_cast<unsigned long>(
+                                                 static_cast<UCh>(*b)),
                                              0xFFFFul);
                 int d1 = u / 4096; u -= d1 * 4096;
                 int d2 = u / 256; u -= d2 * 256;
