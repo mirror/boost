@@ -370,8 +370,8 @@ this subclause.</p>
 <blockquote>
   <p><i>Returns:</i>&nbsp; <code>error_condition( ev, *this )</code>.</p>
   <blockquote>
-    <p>&nbsp;[<i>--Note:</i> Derived classes will typically convert <code>ev</code> 
-    to some portable <code>error_category</code>, such as <code>generic_category</code>, 
+    <p dir="ltr">&nbsp;[<i>--Note:</i> Derived classes will typically convert <code>ev</code> 
+    to some portable <code>error_category</code>, such as <code>generic_category()</code>, 
     and return it as an <code>error_condition</code> for that category. <i>--end 
     note</i>]</p>
   </blockquote>
@@ -422,10 +422,6 @@ non-member functions</a></h3>
   identifying portable error conditions.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-<h3><a name="Class-error_category-predefined-objects">Class <code>error_category</code> 
-predefined objects</a></h3>
-<p>Predefined objects <code>system_category</code> 
-and <code>generic_category</code> identify system specific error codes and portable error conditions, respectively.</p>
 <h2><a name="Class-error_code">Class <code>
 error_code</code></a></h2>
 <p>The class <code>error_code</code> describes an object used to hold error code 
@@ -447,14 +443,12 @@ error_code</code> synopsis</a></h3>
       error_code();
       error_code( val, const error_category &amp; cat );
       template &lt;class <code>ErrorCodeEnum</code>&gt;
-        error_code(<code> ErrorCodeEnum</code> e,
-         typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt; &gt;::type* = 0);
+        error_code(<code> ErrorCodeEnum</code> e );
 
       // modifiers:
       void assign( int val, const error_category &amp; cat );
       template&lt;typename <code>ErrorCodeEnum</code>&gt;
-        typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt;, error_code&gt;::type &amp;
-          operator=( <code>ErrorCodeEnum</code> val );;
+        error_code &amp; operator=( <code>ErrorCodeEnum</code> val );;
       void clear();
 
       // observers:
@@ -476,7 +470,7 @@ error_code</code> constructors</a></h3>
 <pre>error_code();</pre>
 <blockquote>
   <p><i>Effects: </i>Constructs an object of type <code>error_code</code>.</p>
-  <p><i>Postconditions:</i> <code>val_ == 0 &amp;&amp; cat_ == &amp;system_category</code>.</p>
+  <p><i>Postconditions:</i> <code>val_ == 0 &amp;&amp; cat_ == &amp;system_category()</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>error_code( int val, const error_category &amp; cat );</pre>
@@ -486,12 +480,14 @@ error_code</code> constructors</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template &lt;class <code>ErrorCodeEnum</code>&gt;
-  error_code(<code> errorCodeEnum</code> val,
-    typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt; &gt;::type* = 0);</pre>
+  error_code(<code> ErrorCodeEnum</code> val );</pre>
 <blockquote>
   <p><i>Effects: </i>Constructs an object of type <code>error_code</code>.</p>
   <p><i>Postconditions:</i> <code>*this == make_error_code( val )</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This constructor shall not participate in overload 
+  resolution unless <code>is_error_code_enum&lt;ErrorCodeEnum&gt;::value</code> is
+  <code>true</code>.</p>
 </blockquote>
 <h3><a name="Class-error_code-modifiers">Class <code>
 error_code</code> modifiers</a></h3>
@@ -501,15 +497,17 @@ error_code</code> modifiers</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template&lt;typename <code>ErrorCodeEnum</code>&gt;
-  typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt;, error_code&gt;::type &amp;
-    operator=( <code>ErrorCodeEnum</code> val );</pre>
+  error_code &amp; operator=( <code>ErrorCodeEnum</code> val );</pre>
 <blockquote>
   <p><i>Postconditions:</i> <code>*this == make_error_code( val )</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This operator shall not participate in overload resolution 
+  unless <code>is_error_code_enum&lt;ErrorCodeEnum&gt;::value</code> is <code>true</code>.</p>
 </blockquote>
 <p><code>void clear();</code></p>
 <blockquote>
-  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == generic_category</code></p>
+  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == 
+  system_category()</code></p>
 </blockquote>
   <h3><a name="Class-error_code-observers">Class <code>
 error_code</code> observers</a></h3>
@@ -565,14 +563,12 @@ implementation specific. <i>--end note ]</i></p>
       error_condition();
       error_condition( int val, const error_category &amp; cat );
       template &lt;class ErrorConditionEnum&gt;
-        error_condition( errorConditionEnum val,
-          typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt; &gt;::type* = 0 );
+        error_condition( errorConditionEnum val );
 
       // modifiers:
       void assign( int val, const error_category &amp; cat );
       template&lt;typename ErrorConditionEnum&gt;
-        typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt;, error_code&gt;::type &amp;
-          operator=( ErrorConditionEnum val );
+        error_condition &amp; operator=( ErrorConditionEnum val );
       void clear();
 
       // observers:
@@ -593,7 +589,7 @@ constructors</a></h3>
 <pre>error_condition(); </pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>error_condition</code>.</p>
-  <p><i>Postconditions:</i> <code>val_ == 0 and cat_ == &amp;generic_category</code>.</p>
+  <p><i>Postconditions:</i> <code>val_ == 0 and cat_ == &amp;generic_category()</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>error_condition( int val, const error_category &amp; cat );</pre>
@@ -603,12 +599,14 @@ constructors</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template &lt;class ErrorConditionEnum&gt;
-  error_condition( errorConditionEnum val,
-    typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt; &gt;::type* = 0 );</pre>
+  error_condition( ErrorConditionEnum e );</pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>error_condition</code>.</p>
-  <p><i>Postconditions:</i> <code>*this == make_error_condition( val )</code>.</p>
+  <p><i>Postconditions:</i> <code>*this == make_error_condition(e)</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This constructor shall not participate in overload 
+  resolution unless <code>is_error_condition_enum&lt;ErrorConditionEnum&gt;::value</code> 
+  is <code>true</code>.</p>
 </blockquote>
 <h3><a name="Class-error_condition-modifiers">Class <code>error_condition</code> 
 modifiers</a></h3>
@@ -618,15 +616,18 @@ modifiers</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template&lt;typename ErrorConditionEnum&gt;
-  typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt;, error_code&gt;::type &amp;
-    operator=( ErrorConditionEnum val );</pre>
+  error_condition &amp; operator=( ErrorConditionEnum e );</pre>
 <blockquote>
-  <p><i>Postconditions:</i> <code>*this == make_error_condition( val )</code>.</p>
+  <p><i>Postconditions:</i> <code>*this == make_error_condition( e )</code>.</p>
+  <p><i>Returns:</i> <code>*this</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This operator shall not participate in overload resolution 
+  unless <code>is_error_condition_enum&lt;ErrorConditionEnum&gt;::value</code> is
+  <code>true</code>.</p>
 </blockquote>
 <p><code>void clear();</code></p>
 <blockquote>
-  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == generic_category</code></p>
+  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == generic_category()</code></p>
 </blockquote>
 <h3><a name="Class-error_condition-observers">Class <code>error_condition</code> 
 observers</a></h3>
@@ -738,11 +739,11 @@ bool operator!=( const error_condition &amp; condition, const error_code &amp; c
 </blockquote>
 <pre>error_code make_error_code( errc::errc_t e );</pre>
 <blockquote>
-  <p><i>Returns:</i> <code>error_code( e, generic_category)</code>.</p>
+  <p><i>Returns:</i> <code>error_code( e, generic_category())</code>.</p>
 </blockquote>
 <pre>error_condition make_error_condition( errc::errc_t e );</pre>
 <blockquote>
-  <p><i>Returns:</i> <code>error_condition( static_cast&lt;int&gt;( e ), generic_category)</code>.</p>
+  <p><i>Returns:</i> <code>error_condition( static_cast&lt;int&gt;( e ), generic_category())</code>.</p>
 </blockquote>
 
 <pre>template &lt;class charT, class traits&gt;
@@ -839,7 +840,7 @@ application program interfaces.</p>
 <hr>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->May 31, 2010<!--webbot bot="Timestamp" endspan i-checksum="11033" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->June 29, 2010<!--webbot bot="Timestamp" endspan i-checksum="14432" --> </font>
 </p>
 
 <p>© Copyright Beman Dawes, 2006, 2007, 2008</p>
