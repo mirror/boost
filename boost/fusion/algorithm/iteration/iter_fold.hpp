@@ -12,6 +12,6 @@
 
 #include <boost/fusion/algorithm/iteration/detail/fold.hpp>
 
-#undef BOOST_FUSION_REVERSE_FOLD
+#undef BOOST_FUSION_ITER_FOLD
 
 #endif
