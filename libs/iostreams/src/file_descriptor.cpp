@@ -493,13 +493,11 @@ void file_descriptor_source::open(handle_type fd, bool close_on_exit)
 #ifdef BOOST_IOSTREAMS_WINDOWS //---------------------------------------------//
 
 void file_descriptor_source::open(int fd, file_descriptor_flags f)
-{ file_descriptor::open(fd, static_cast<detail::file_descriptor_impl::flags>(f)); }
+{ file_descriptor::open(fd, f); }
 
 #if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
 void file_descriptor_source::open(int fd, bool close_on_exit)
-{ file_descriptor::open(fd, close_on_exit ?
-    detail::file_descriptor_impl::close_always :
-    detail::file_descriptor_impl::close_on_close); }
+{ file_descriptor::open(fd, close_on_exit); }
 #endif
 
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS //-----------------------------------//
@@ -535,13 +533,11 @@ file_descriptor_sink::file_descriptor_sink(
 #ifdef BOOST_IOSTREAMS_WINDOWS //---------------------------------------------//
 
 file_descriptor_sink::file_descriptor_sink(int fd, file_descriptor_flags f)
-{ open(fd, static_cast<detail::file_descriptor_impl::flags>(f)); }
+{ open(fd, f); }
 
 #if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
 file_descriptor_sink::file_descriptor_sink(int fd, bool close_on_exit)
-{ open(fd, close_on_exit ?
-    detail::file_descriptor_impl::close_always :
-    detail::file_descriptor_impl::close_on_close); }
+{ open(fd, close_on_exit); }
 #endif
 
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS //-----------------------------------//
@@ -569,13 +565,11 @@ void file_descriptor_sink::open(handle_type fd, bool close_on_exit)
 #ifdef BOOST_IOSTREAMS_WINDOWS //---------------------------------------------//
 
 void file_descriptor_sink::open(int fd, file_descriptor_flags f)
-{ file_descriptor::open(fd, static_cast<detail::file_descriptor_impl::flags>(f)); }
+{ file_descriptor::open(fd, f); }
 
 #if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
 void file_descriptor_sink::open(int fd, bool close_on_exit)
-{ file_descriptor::open(fd, close_on_exit ?
-    detail::file_descriptor_impl::close_always :
-    detail::file_descriptor_impl::close_on_close); }
+{ file_descriptor::open(fd, close_on_exit); }
 #endif
 
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS //-----------------------------------//

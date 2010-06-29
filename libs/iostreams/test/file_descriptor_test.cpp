@@ -600,7 +600,7 @@ void file_handle_test()
     }
 
     {
-        boost_ios::detail::file_handle handle = open_handle(test1.name());
+        boost_ios::detail::file_handle handle = open_file_handle(test1.name());
         {
             boost_ios::file_descriptor_source source1;
             BOOST_CHECK(!source1.is_open());
@@ -613,7 +613,7 @@ void file_handle_test()
     }
 
     {
-        boost_ios::detail::file_handle handle = open_handle(test1.name());
+        boost_ios::detail::file_handle handle = open_file_handle(test1.name());
         {
             boost_ios::file_descriptor_source source1;
             BOOST_CHECK(!source1.is_open());

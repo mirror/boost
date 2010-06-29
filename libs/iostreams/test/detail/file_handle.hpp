@@ -15,6 +15,12 @@
 #include <fcntl.h>
 #include <string>
 
+#ifdef BOOST_IOSTREAMS_WINDOWS
+# include <io.h>         // low-level file i/o.
+# define WINDOWS_LEAN_AND_MEAN
+# include <windows.h>
+#endif
+
 namespace boost { namespace iostreams { namespace test {
 
 #ifdef BOOST_IOSTREAMS_WINDOWS
@@ -33,7 +39,7 @@ boost::iostreams::detail::file_handle open_file_handle(std::string const& name)
                        NULL );                 // hTemplateFile
 
     BOOST_REQUIRE (handle != INVALID_HANDLE_VALUE);
-    return HANDLE;
+    return handle;
 }
 
 void close_file_handle(boost::iostreams::detail::file_handle handle)
