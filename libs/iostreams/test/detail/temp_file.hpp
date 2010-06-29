@@ -39,7 +39,7 @@ public:
     operator const ::std::string() const { return name_; }
 private:
     void set_name() {
-        name_ = boost::filesystem3::unique_path().native();
+        name_ = boost::filesystem3::unique_path().string();
     }
 
     ::std::string name_;
