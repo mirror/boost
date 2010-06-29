@@ -135,8 +135,12 @@
 //
 #if __GNUC__ * 100 + __GNUC_MINOR__ >= 403
 #  ifndef __GXX_RTTI
-#     define BOOST_NO_TYPEID
-#     define BOOST_NO_RTTI
+#     ifndef BOOST_NO_TYPEID
+#        define BOOST_NO_TYPEID
+#     endif
+#     ifndef BOOST_NO_RTTI
+#        define BOOST_NO_RTTI
+#     endif
 #  endif
 #endif
 
