@@ -12,13 +12,15 @@
 #include <boost/iostreams/detail/file_handle.hpp>
 #include <boost/iostreams/detail/config/rtl.hpp>
 #include <boost/test/test_tools.hpp>
-#include <fcntl.h>
 #include <string>
 
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # include <io.h>         // low-level file i/o.
 # define WINDOWS_LEAN_AND_MEAN
 # include <windows.h>
+#else
+# include <sys/stat.h>
+# include <fcntl.h>
 #endif
 
 namespace boost { namespace iostreams { namespace test {
