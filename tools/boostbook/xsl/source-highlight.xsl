@@ -162,4 +162,9 @@
                        conceptname|macroname|globalname" mode="highlight">
     <xsl:apply-templates select="." mode="annotation"/>
   </xsl:template>
+
+  <xsl:template match="type" mode="highlight">
+    <xsl:apply-templates mode="highlight"/>
+  </xsl:template>
+
 </xsl:stylesheet>

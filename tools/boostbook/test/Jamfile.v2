@@ -8,9 +8,6 @@ project boost/test ;
 import boostbook : boostbook ;
 
 boostbook alt : alt.xml :
-    <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
     <xsl:param>boost.root=../../../..
-    <xsl:param>boost.libraries=../../../../libs/libraries.htm
-    <xsl:param>navig.graphics=1
     ;
 

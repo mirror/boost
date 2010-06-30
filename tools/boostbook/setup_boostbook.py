@@ -11,12 +11,12 @@
 
 # User configuration
 # (MAINTANERS: please, keep in synch with setup_boostbook.sh)
-DOCBOOK_XSL_VERSION = "1.73.2"
+DOCBOOK_XSL_VERSION = "1.75.2"
 DOCBOOK_DTD_VERSION = "4.2"
 FOP_VERSION = "0.94"
 FOP_JDK_VERSION="1.4"
 FOP_MIRROR = "http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries"
-SOURCEFORGE_MIRROR = "http://dl.sourceforge.net"
+SOURCEFORGE_DOWNLOAD = "http://sourceforge.net/projects/docbook/files"
 
 # No user configuration below this point-------------------------------------
 
@@ -150,7 +150,7 @@ def adjust_user_config( config_file
 def setup_docbook_xsl( tools_directory ):
     print "DocBook XSLT Stylesheets ..."
     DOCBOOK_XSL_TARBALL = os.path.join( tools_directory, "docbook-xsl-%s.tar.gz" % DOCBOOK_XSL_VERSION )
-    DOCBOOK_XSL_URL     = "%s/sourceforge/docbook/%s" % ( SOURCEFORGE_MIRROR, os.path.basename( DOCBOOK_XSL_TARBALL ) )
+    DOCBOOK_XSL_URL     = "%s/docbook-xsl/%s/%s/download" % (SOURCEFORGE_DOWNLOAD, DOCBOOK_XSL_VERSION, os.path.basename( DOCBOOK_XSL_TARBALL ) )
 
     if os.path.exists( DOCBOOK_XSL_TARBALL ):
         print "    Using existing DocBook XSLT Stylesheets (version %s)." % DOCBOOK_XSL_VERSION

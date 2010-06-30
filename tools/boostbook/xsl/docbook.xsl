@@ -98,14 +98,14 @@
 
               <itemizedlist>
                 <xsl:for-each select="concept">
-                  <listitem>
+                  <listitem><simpara>
                     <xsl:call-template name="internal-link">
                       <xsl:with-param name="to">
                         <xsl:call-template name="generate.id"/>
                       </xsl:with-param>
                       <xsl:with-param name="text" select="@name"/>
                     </xsl:call-template>
-                  </listitem>
+                  </simpara></listitem>
                 </xsl:for-each>
               </itemizedlist>
             </section>

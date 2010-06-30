@@ -7,19 +7,19 @@
 
 # User configuration
 # (MAINTANERS: please, keep in synch with setup_boostbook.py)
-DOCBOOK_XSL_VERSION=1.73.2
+DOCBOOK_XSL_VERSION=1.75.2
 DOCBOOK_DTD_VERSION=4.2
 FOP_VERSION=0.94
 FOP_JDK_VERSION=1.4
 FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries
-SOURCEFORGE_MIRROR=http://dl.sourceforge.net
+SOURCEFORGE_DOWNLOAD=http://sourceforge.net/projects/docbook/files/
 HTTP_GET_CMD="curl -O -L"
 
 # No user configuration below this point-------------------------------------
 
 # Get the DocBook XSLT Stylesheets
 DOCBOOK_XSL_TARBALL=docbook-xsl-$DOCBOOK_XSL_VERSION.tar.gz
-DOCBOOK_XSL_URL=$SOURCEFORGE_MIRROR/sourceforge/docbook/$DOCBOOK_XSL_TARBALL
+DOCBOOK_XSL_URL=$SOURCEFORGE_DOWNLOAD/docbook-xsl/$DOCBOOK_XSL_VERSION/$DOCBOOK_XSL_TARBALL/download
 if test -f $DOCBOOK_XSL_TARBALL; then
   echo "Using existing DocBook XSLT Stylesheets (version $DOCBOOK_XSL_VERSION)."
 else
