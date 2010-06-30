@@ -11,17 +11,26 @@
 #include "boost/filesystem/operations.hpp"
 #include <boost/algorithm/string/case_conv.hpp>
 #include <cstdlib>
+#include <set>
+
+// #include <iostream>
 
 namespace fs = boost::filesystem;
 
 namespace
 {
+  boost::regex html_bookmark_regex(
+    "<([^\\s<>]*)\\s*[^<>]*\\s+(NAME|ID)\\s*=\\s*(['\"])(.*?)\\3"
+    "|<!--.*?-->",
+    boost::regbase::normal | boost::regbase::icase);
   boost::regex html_url_regex(
     "<([^\\s<>]*)\\s*[^<>]*\\s+(?:HREF|SRC)" // HREF or SRC
-    "\\s*=\\s*(['\"])(.*?)\\2",
+    "\\s*=\\s*(['\"])\\s*(.*?)\\s*\\2"
+    "|<!--.*?-->",
     boost::regbase::normal | boost::regbase::icase);
   boost::regex css_url_regex(
-    "(\\@import\\s*[\"']|url\\s*\\(\\s*[\"']?)([^\"')]*)",
+    "(\\@import\\s*[\"']|url\\s*\\(\\s*[\"']?)([^\"')]*)"
+    "|/\\*.*?\\*/",
     boost::regbase::normal | boost::regbase::icase);
 
   // Regular expression for parsing URLS from:
@@ -29,6 +38,10 @@ namespace
   boost::regex url_decompose_regex(
     "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$",
     boost::regbase::normal);
+
+    typedef std::set<std::string> bookmark_set;
+    bookmark_set bookmarks;
+    bookmark_set bookmarks_lowercase; // duplicate check needs case insensitive
 
   // Decode html escapsed ampersands, returns an empty string if there's an error.
   std::string decode_ampersands(std::string const& url_path) {
@@ -95,7 +108,7 @@ namespace boost
 
    link_check::link_check()
      : m_broken_errors(0), m_unlinked_errors(0), m_invalid_errors(0),
-       m_bookmark_errors(0)
+       m_bookmark_errors(0), m_duplicate_bookmark_errors(0)
    {
        // HTML signatures are already registered by the base class,
        // 'hypertext_inspector' 
@@ -126,6 +139,65 @@ namespace boost
       bool no_link_errors =
           (contents.find( "boostinspect:" "nolink" ) != string::npos);
 
+      // build bookmarks databases
+      bookmarks.clear();
+      bookmarks_lowercase.clear();
+      string::const_iterator a_start( contents.begin() );
+      string::const_iterator a_end( contents.end() );
+      boost::match_results< string::const_iterator > a_what;
+      boost::match_flag_type a_flags = boost::match_default;
+
+      if(!is_css(full_path))
+      {
+        string previous_id;
+
+        while( boost::regex_search( a_start, a_end, a_what, html_bookmark_regex, a_flags) )
+        {
+          // a_what[0] contains the whole string iterators.
+          // a_what[1] contains the tag iterators.
+          // a_what[2] contains the attribute name.
+          // a_what[4] contains the bookmark iterators.
+
+          if (a_what[4].matched)
+          {
+            string tag( a_what[1].first, a_what[1].second );
+            boost::algorithm::to_lower(tag);
+            string attribute( a_what[2].first, a_what[2].second );
+            boost::algorithm::to_lower(attribute);
+            string bookmark( a_what[4].first, a_what[4].second );
+
+            bool name_following_id = ( attribute == "name" && previous_id == bookmark );
+            if ( tag != "meta" && attribute == "id" ) previous_id = bookmark;
+            else previous_id.clear();
+
+            if ( tag != "meta" && !name_following_id )
+            {
+              bookmarks.insert( bookmark );
+//              std::cout << "******************* " << bookmark << '\n';
+
+              // w3.org recommends case-insensitive checking for duplicate bookmarks
+              // since some browsers do a case-insensitive match.
+              string bookmark_lowercase( bookmark );
+              boost::algorithm::to_lower(bookmark_lowercase);
+
+              std::pair<bookmark_set::iterator, bool> result
+                = bookmarks_lowercase.insert( bookmark_lowercase );
+              if (!result.second)
+              {
+                ++m_duplicate_bookmark_errors;
+                int ln = std::count( contents.begin(), a_what[3].first, '\n' ) + 1;
+                error( library_name, full_path, "Duplicate bookmark: " + bookmark, ln );
+              }
+            }
+          }
+
+          a_start = a_what[0].second; // update search position
+          a_flags |= boost::match_prev_avail; // update flags
+          a_flags |= boost::match_not_bob;
+        }
+      }
+
+      // process urls
       string::const_iterator start( contents.begin() );
       string::const_iterator end( contents.end() );
       boost::match_results< string::const_iterator > what;
@@ -138,14 +210,17 @@ namespace boost
           // what[0] contains the whole string iterators.
           // what[1] contains the element type iterators.
           // what[3] contains the URL iterators.
+          
+          if(what[3].matched)
+          {
+            string type( what[1].first, what[1].second );
+            boost::algorithm::to_lower(type);
 
-          string type( what[1].first, what[1].second );
-          boost::algorithm::to_lower(type);
-
-          // TODO: Complain if 'link' tags use external stylesheets.
-          do_url( string( what[3].first, what[3].second ),
-            library_name, full_path, no_link_errors,
-            type == "a" || type == "link" );
+            // TODO: Complain if 'link' tags use external stylesheets.
+            do_url( string( what[3].first, what[3].second ),
+              library_name, full_path, no_link_errors,
+              type == "a" || type == "link", contents.begin(), what[3].first );
+          }
 
           start = what[0].second; // update search position
           flags |= boost::match_prev_avail; // update flags
@@ -157,8 +232,13 @@ namespace boost
       {
         // what[0] contains the whole string iterators.
         // what[2] contains the URL iterators.
-        do_url( string( what[2].first, what[2].second ),
-          library_name, full_path, no_link_errors, false );
+        
+        if(what[2].matched)
+        {
+          do_url( string( what[2].first, what[2].second ),
+            library_name, full_path, no_link_errors, false,
+            contents.begin(), what[3].first );
+        }
 
         start = what[0].second; // update search position
         flags |= boost::match_prev_avail; // update flags
@@ -169,12 +249,14 @@ namespace boost
 //  do_url  ------------------------------------------------------------------//
 
     void link_check::do_url( const string & url, const string & library_name,
-      const path & source_path, bool no_link_errors, bool allow_external_content )
+      const path & source_path, bool no_link_errors, bool allow_external_content,
+        std::string::const_iterator contents_begin, std::string::const_iterator url_start )
         // precondition: source_path.is_complete()
     {
       if(!no_link_errors && url.empty()) {
         ++m_invalid_errors;
-        error( library_name, source_path, string(name()) + " empty URL." );
+        int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+        error( library_name, source_path, "Empty URL.", ln );
         return;
       }
 
@@ -183,7 +265,9 @@ namespace boost
       if(decoded_url.empty()) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (invalid ampersand encodings): " + url );
+          int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+          error( library_name, source_path,
+            "Invalid URL (invalid ampersand encodings): " + url, ln );
         }
         return;
       }
@@ -192,7 +276,8 @@ namespace boost
       if(!boost::regex_match(decoded_url, m, url_decompose_regex)) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL: " + decoded_url );
+          int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+          error( library_name, source_path, "Invalid URL: " + decoded_url, ln );
         }
         return;
       }
@@ -212,7 +297,8 @@ namespace boost
       if(!allow_external_content && (authority_matched || scheme_matched)) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " external content: " + decoded_url );
+          int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+          error( library_name, source_path, "External content: " + decoded_url, ln );
         }
       }
 
@@ -225,7 +311,8 @@ namespace boost
           if(!authority_matched) {
             if(!no_link_errors) {
               ++m_invalid_errors;
-              error( library_name, source_path, string(name()) + " no hostname: " + decoded_url );
+              int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+              error( library_name, source_path, "No hostname: " + decoded_url, ln );
             }
           }
 
@@ -234,19 +321,24 @@ namespace boost
         else if(scheme == "file") {
           if(!no_link_errors) {
             ++m_invalid_errors;
-            error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + decoded_url );
+            int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+            error( library_name, source_path,
+              "Invalid URL (hardwired file): " + decoded_url, ln );
           }
         }
         else if(scheme == "mailto" || scheme == "ftp" || scheme == "news" || scheme == "javascript") {
           if ( !no_link_errors && is_css(source_path) ) {
             ++m_invalid_errors;
-            error( library_name, source_path, string(name()) + " invalid protocol for css: " + decoded_url );
+            int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+            error( library_name, source_path,
+              "Invalid protocol for css: " + decoded_url, ln );
           }
         }
         else {
           if(!no_link_errors) {
             ++m_invalid_errors;
-            error( library_name, source_path, string(name()) + " unknown protocol: " + decoded_url );
+            int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+            error( library_name, source_path, "Unknown protocol: '" + scheme + "' in url: " + decoded_url, ln );
           }
         }
 
@@ -257,7 +349,9 @@ namespace boost
       if(authority_matched) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (hostname without protocol): " + decoded_url );
+          int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+          error( library_name, source_path,
+            "Invalid URL (hostname without protocol): " + decoded_url, ln );
         }
       }
 
@@ -266,14 +360,26 @@ namespace boost
         if ( is_css(source_path) ) {
             if ( !no_link_errors ) {
               ++m_invalid_errors;
-              error( library_name, source_path, string(name()) + " fragment link in CSS: " + decoded_url );
+              int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+              error( library_name, source_path,
+                "Fragment link in CSS: " + decoded_url, ln );
             }
         }
         else {
           if ( !no_link_errors && fragment.find( '#' ) != string::npos )
           {
             ++m_bookmark_errors;
-            error( library_name, source_path, string(name()) + " invalid bookmark: " + decoded_url );
+            int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+            error( library_name, source_path, "Invalid bookmark: " + decoded_url, ln );
+          }
+          else if ( !no_link_errors && url_path.empty() && !fragment.empty()
+            // w3.org recommends case-sensitive broken bookmark checking
+            // since some browsers do a case-sensitive match.
+            && bookmarks.find(decode_percents(fragment)) == bookmarks.end() )
+          {
+            ++m_broken_errors;
+            int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+            error( library_name, source_path, "Unknown bookmark: " + decoded_url, ln );
           }
         }
 
@@ -285,23 +391,29 @@ namespace boost
       if ( !no_link_errors && decoded_url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
       {
         ++m_invalid_errors;
-        error( library_name, source_path, string(name()) + " invalid character in URL: " + decoded_url );
+        int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+        error( library_name, source_path,
+          "Invalid character in URL: " + decoded_url, ln );
       }
 
       // Check that we actually have a path.
       if(url_path.empty()) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (empty path in relative url): " + decoded_url );
+          int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+          error( library_name, source_path,
+            "Invalid URL (empty path in relative url): " + decoded_url, ln );
         }
       }
 
-      // Decode percent and ampersand encoded characters.
+      // Decode percent encoded characters.
       string decoded_path = decode_percents(url_path);
       if(decoded_path.empty()) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (invalid character encodings): " + decoded_url );
+          int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+          error( library_name, source_path,
+            "Invalid URL (invalid character encodings): " + decoded_url, ln );
         }
         return;
       }
@@ -316,8 +428,10 @@ namespace boost
       catch ( const fs::filesystem_error & )
       {
         if(!no_link_errors) {
+          int ln = std::count( contents_begin, url_start, '\n' ) + 1;
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (error resolving path): " + decoded_url );
+          error( library_name, source_path,
+            "Invalid URL (error resolving path): " + decoded_url, ln );
         }
         return;
       }
@@ -339,7 +453,8 @@ namespace boost
       if ( !no_link_errors && (itr->second & m_present) == 0 )
       {
         ++m_broken_errors;
-        error( library_name, source_path, string(name()) + " broken link: " + decoded_url );
+        int ln = std::count( contents_begin, url_start, '\n' ) + 1;
+        error( library_name, source_path, "Broken link: " + decoded_url, ln );
       }
     }
 
@@ -362,7 +477,7 @@ namespace boost
        {
          ++m_unlinked_errors;
          path full_path( fs::initial_path() / path(itr->first, fs::no_check) );
-         error( impute_library( full_path ), full_path, string(name()) + " unlinked file" );
+         error( impute_library( full_path ), full_path, "Unlinked file" );
        }
      }
    }

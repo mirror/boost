@@ -22,6 +22,7 @@
 #include <cstring>
 
 #include "boost/shared_ptr.hpp"
+#include "boost/lexical_cast.hpp"
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/fstream.hpp"
 
@@ -38,6 +39,7 @@
 #include "path_name_check.hpp"
 #include "tab_check.hpp"
 #include "ascii_check.hpp"
+#include "apple_macro_check.hpp"
 #include "minmax_check.hpp"
 #include "unnamed_namespace_check.hpp"
 
@@ -75,6 +77,7 @@ namespace
     string library;
     string rel_path;
     string msg;
+    int    line_number;
 
     bool operator<( const error_msg & rhs ) const
     {
@@ -82,6 +85,8 @@ namespace
       if ( library > rhs.library ) return false;
       if ( rel_path < rhs.rel_path ) return true;
       if ( rel_path > rhs.rel_path ) return false;
+      if ( line_number < rhs.line_number ) return true;
+      if ( line_number > rhs.line_number ) return false;
       return msg < rhs.msg;
     }
   };
@@ -399,11 +404,11 @@ namespace
       }
       std::cout << "\n";
     }
-    else
+    else  // html
     {
       // display error messages with group indication
       error_msg current;
-      string sep;
+      bool first_sep = true;
       bool first = true;
       for ( error_msg_vector::iterator itr ( msgs.begin() );
         itr != msgs.end(); ++itr )
@@ -419,14 +424,26 @@ namespace
         {
           std::cout << "\n";
           std::cout << itr->rel_path;
-          sep = ": ";
+          first_sep = true;
         }
         if ( current.library != itr->library
           || current.rel_path != itr->rel_path
           || current.msg != itr->msg )
         {
-          std::cout << sep << itr->msg;
-          sep = ", ";
+          std::string sep;
+          if (first_sep)
+            if (itr->line_number) sep = ":<br>&nbsp;&nbsp;&nbsp; ";
+            else sep = ": ";
+          else
+            if (itr->line_number) sep = "<br>&nbsp;&nbsp;&nbsp; ";
+            else sep = ", ";
+
+          // print the message
+          if (itr->line_number)
+            std::cout << sep << "(line " << itr->line_number << ") " << itr->msg;
+          else std::cout << sep << itr->msg;
+
+          first_sep = false;
         }
         current.library = itr->library;
         current.rel_path = itr->rel_path;
@@ -529,6 +546,7 @@ namespace
          "  -path_name\n"
          "  -tab\n"
          "  -ascii\n"
+         "  -apple_macro\n"
          "  -minmax\n"
          "  -unnamed\n"
          " default is all checks on; otherwise options specify desired checks"
@@ -579,13 +597,14 @@ namespace boost
 //  error  -------------------------------------------------------------------//
 
     void inspector::error( const string & library_name,
-      const path & full_path, const string & msg )
+      const path & full_path, const string & msg, int line_number )
     {
       ++error_count;
       error_msg err_msg;
       err_msg.library = library_name;
       err_msg.rel_path = relative_to( full_path, fs::initial_path() );
       err_msg.msg = msg;
+      err_msg.line_number = line_number;
       msgs.push_back( err_msg );
 
 //     std::cout << library_name << ": "
@@ -699,6 +718,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool path_name_ck = true;
   bool tab_ck = true;
   bool ascii_ck = true;
+  bool apple_ok = true;
   bool minmax_ck = true;
   bool unnamed_ck = true;
   bool cvs = false;
@@ -731,6 +751,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     path_name_ck = false;
     tab_ck = false;
     ascii_ck = false;
+    apple_ok = false;
     minmax_ck = false;
     unnamed_ck = false;
   }
@@ -754,6 +775,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       tab_ck = true;
     else if ( std::strcmp( argv[1], "-ascii" ) == 0 )
       ascii_ck = true;
+    else if ( std::strcmp( argv[1], "-apple_macro" ) == 0 )
+      apple_ok = true;
     else if ( std::strcmp( argv[1], "-minmax" ) == 0 )
         minmax_ck = true;
     else if ( std::strcmp( argv[1], "-unnamed" ) == 0 )
@@ -797,6 +820,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
   if ( ascii_ck )
       inspectors.push_back( inspector_element( new boost::inspect::ascii_check ) );
+  if ( apple_ok )
+      inspectors.push_back( inspector_element( new boost::inspect::apple_macro_check ) );
   if ( minmax_ck )
       inspectors.push_back( inspector_element( new boost::inspect::minmax_check ) );
   if ( unnamed_ck )

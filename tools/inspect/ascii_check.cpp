@@ -91,8 +91,9 @@ namespace boost
       if ( bad_char != contents.end ())
       {
         ++m_files_with_errors;
+        int ln = std::count( contents.begin(), bad_char, '\n' ) + 1;
         string the_line = find_line ( contents, bad_char );
-        error( library_name, full_path, string ( name()) + " non-ASCII: " + the_line );
+        error( library_name, full_path, "Non-ASCII: " + the_line, ln );
       }
     }
   } // namespace inspect
