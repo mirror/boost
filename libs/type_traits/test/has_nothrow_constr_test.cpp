@@ -142,6 +142,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<cmf>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<enum_UDT>::value, true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<int[2]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<int[3][2]>::value, true);

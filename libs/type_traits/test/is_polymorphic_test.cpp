@@ -32,6 +32,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<int*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<int* const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<int[2]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<mf4>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<f1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<enum_UDT>::value, false);

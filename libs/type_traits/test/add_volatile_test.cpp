@@ -21,6 +21,9 @@ BOOST_DECL_TRANSFORM_TEST(add_volatile_test_10, ::tt::add_volatile, const*, cons
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_11, ::tt::add_volatile, volatile*, volatile*volatile)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_5, ::tt::add_volatile, const &, const&)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_6, ::tt::add_volatile, &, &)
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_DECL_TRANSFORM_TEST(add_volatile_test_6a, ::tt::add_volatile, &&, &&)
+#endif
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_8, ::tt::add_volatile, const [2], const volatile [2])
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_9, ::tt::add_volatile, volatile &, volatile&)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_12, ::tt::add_volatile, [2][3], volatile[2][3])
@@ -41,6 +44,9 @@ TT_TEST_BEGIN(add_volatile)
    add_volatile_test_9();
    add_volatile_test_12();
    add_volatile_test_13();
+#ifndef BOOST_NO_RVALUE_REFERENCES
+   add_volatile_test_6a();
+#endif
 
 TT_TEST_END
 

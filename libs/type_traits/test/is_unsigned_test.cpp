@@ -24,9 +24,12 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<unsigned short>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<unsigned char>::value, true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<UDT>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<int&>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<int*>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<int[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<unsigned&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<unsigned&&>::value, false);
+#endif
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<unsigned*>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_unsigned<unsigned[2]>::value, false);
 
 TT_TEST_END
 

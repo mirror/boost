@@ -142,6 +142,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<cmf>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<enum_UDT>::value, false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<int[2]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<int[3][2]>::value, false);

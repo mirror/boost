@@ -24,6 +24,9 @@ TT_TEST_BEGIN(is_empty)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<int>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<int*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<int[2]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<f1>::value, false);

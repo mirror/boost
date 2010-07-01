@@ -17,6 +17,9 @@ TT_TEST_BEGIN(is_object)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_object<int>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_object<UDT>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_object<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_object<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_object<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_object<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_object<test_abc1>::value, true);

@@ -39,6 +39,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<empty_UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<float*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<float&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<float&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<const float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<float[2]>::value, false);
 

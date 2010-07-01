@@ -32,6 +32,12 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<const volatile int[]>::value, tr
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<const int[]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<volatile int[]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<int[]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<int&>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<volatile int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<int&&>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<volatile int&&>::value, false);
+#endif
 
 TT_TEST_END
 
