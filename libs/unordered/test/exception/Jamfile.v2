@@ -15,7 +15,7 @@ project unordered-test/exception-tests
         <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
         <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
         <toolset>gcc:<define>_GLIBCXX_DEBUG
-        <toolset>darwin:<define>_GLIBCXX_DEBUG
+        #<toolset>darwin:<define>_GLIBCXX_DEBUG
         <toolset>msvc:<warnings-as-errors>on
         #<toolset>gcc:<warnings-as-errors>on
         #<toolset>darwin:<warnings-as-errors>on
