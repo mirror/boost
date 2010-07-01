@@ -14,6 +14,23 @@
 
 <!-- End Banner -->
 
+<h4>1.44</h4>
+
+<ul>
+  <li>
+    Lots of fixes, especially for compression and decompression, by Steven Watanabe.
+  </li>
+  <li>
+    New constructors and <code>open</code> methods from file descriptors/handles for
+    <code>file_descriptor</code>, <code>file_descriptor_source</code>
+    and <code>file_descriptor_sink</code>. See
+    <a title="File descriptor devices referece" href="classes/file_descriptor.html">the documentation</a>
+    for details. The old methods are still available is you define
+    <code>BOOST_IOSTREAMS_USE_DEPRECATED</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/3517">#3517</a>).
+  </li>
+</ul>
+
 <h4>1.43</h4>
 
 <p>
@@ -47,7 +64,7 @@ More fixes.
 <h4>1.42</h4>
 
 <p>
-Fixed many outstanding issues. Thanks to Richard Smith for mworking on a lot
+Fixed many outstanding issues. Thanks to Richard Smith for working on a lot
 of these changes.
 </p>
 
