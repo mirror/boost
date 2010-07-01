@@ -54,6 +54,8 @@
 #include "boost/type_traits/is_polymorphic.hpp"
 #include "boost/type_traits/is_pointer.hpp"
 #include "boost/type_traits/is_reference.hpp"
+#include "boost/type_traits/is_rvalue_reference.hpp"
+#include "boost/type_traits/is_lvalue_reference.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "boost/type_traits/is_scalar.hpp"
 #include "boost/type_traits/is_stateless.hpp"

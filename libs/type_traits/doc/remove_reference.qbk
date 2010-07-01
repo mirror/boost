@@ -31,6 +31,8 @@ __header ` #include <boost/type_traits/remove_reference.hpp>` or ` #include <boo
 
 [[`remove_reference<int const&>::type`] [`int const`]]
 
+[[`remove_reference<int&&>::type`] [`int`]]
+
 [[`remove_reference<int*>::type`] [`int*`]]
 
 [[`remove_reference<int*&>::type`] [`int*`]]
