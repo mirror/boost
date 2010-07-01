@@ -16,7 +16,7 @@
 
 namespace boost {
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_rvalue_reference,T,false);
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_rvalue_reference,T,false)
 #ifndef BOOST_NO_RVALUE_REFERENCES
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_rvalue_reference,T&&,true)
 #endif
