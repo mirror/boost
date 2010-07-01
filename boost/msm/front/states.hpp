@@ -83,7 +83,6 @@ struct interrupt_state : public boost::msm::front::detail::state_base<BASE>, SMP
 template <int ZoneIndex=-1>
 struct explicit_entry 
 {
-    typedef int no_automatic_create;
     typedef int explicit_entry_state;
     enum {zone_index=ZoneIndex};
 };
