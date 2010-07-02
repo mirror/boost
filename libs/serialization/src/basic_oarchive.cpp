@@ -21,7 +21,6 @@
 // including this here to work around an ICC in intel 7.0
 // normally this would be part of basic_oarchive.hpp below.
 #define BOOST_ARCHIVE_SOURCE
-#define BOOST_SERIALIZATION_SOURCE
 
 #include <boost/archive/detail/decl.hpp>
 #include <boost/archive/basic_archive.hpp>

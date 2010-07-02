@@ -29,7 +29,6 @@ namespace std{
 #include <boost/serialization/tracking.hpp>
 
 #define BOOST_ARCHIVE_SOURCE
-#define BOOST_SERIALIZATION_SOURCE
 
 #include <boost/archive/archive_exception.hpp>
 
