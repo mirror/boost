@@ -18,9 +18,9 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstddef> // for ptrdiff_t
+#include <boost/config.hpp>
 #include <boost/noncopyable.hpp>
 
-#include <boost/serialization/config.hpp>
 #include <boost/serialization/smart_cast.hpp>
 #include <boost/serialization/singleton.hpp>
 #include <boost/serialization/force_include.hpp>
@@ -29,6 +29,7 @@
 #include <boost/type_traits/is_virtual_base_of.hpp>
 #include <boost/serialization/void_cast_fwd.hpp>
 
+#include <boost/serialization/config.hpp>
 #include <boost/config/abi_prefix.hpp> // must be the last header
 
 #ifdef BOOST_MSVC
