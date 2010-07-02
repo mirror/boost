@@ -23,4 +23,8 @@
 #   define HAS_XXX_ASSERT(x) MPL_ASSERT_NOT(x)
 #endif
 
+#if defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
+#   define HAS_XXX_TEMPLATE_ASSERT(x) MPL_ASSERT_NOT(x)
+#endif
+
 #include "has_xxx.cpp"
