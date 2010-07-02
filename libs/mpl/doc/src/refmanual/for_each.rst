@@ -103,7 +103,7 @@ For any |Forward Sequence| ``s``, |Lambda Expression| ``op`` , and an
         
     .. parsed-literal::
 
-        for_each< tranform_view<s,op> >( f );
+        for_each< transform_view<s,op> >( f );
 
 
 Complexity
@@ -121,7 +121,7 @@ Example
     {
         template< typename U > void operator()(U x)
         {
-            std::cout << x << '\n';
+            std::cout << x << '\\n';
         }
     };
 
