@@ -37,12 +37,6 @@ class file_descriptor_source;
 class file_descriptor_sink;
 namespace detail { struct file_descriptor_impl; }
 
-enum file_descriptor_flags
-{
-	never_close_handle = 0,
-	close_handle = 3
-};
-
 class BOOST_IOSTREAMS_DECL file_descriptor {
 public:
     friend class file_descriptor_source;
@@ -58,17 +52,9 @@ public:
     file_descriptor();
 
     // Constructors taking file desciptors
-    file_descriptor(handle_type fd, file_descriptor_flags);
-#ifdef BOOST_IOSTREAMS_WINDOWS
-    file_descriptor(int fd, file_descriptor_flags);
-#endif
-
-#if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
-    // Constructors taking file desciptors
     explicit file_descriptor(handle_type fd, bool close_on_exit = false);
 #ifdef BOOST_IOSTREAMS_WINDOWS
     explicit file_descriptor(int fd, bool close_on_exit = false);
-#endif
 #endif
 
     // Constructor taking a std:: string
@@ -95,17 +81,9 @@ public:
     file_descriptor(const file_descriptor& other);
 
     // open overloads taking file descriptors
-    void open(handle_type fd, file_descriptor_flags);
-#ifdef BOOST_IOSTREAMS_WINDOWS
-    void open(int fd, file_descriptor_flags);
-#endif
-
-#if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
-    // open overloads taking file descriptors
     void open(handle_type fd, bool close_on_exit = false);
 #ifdef BOOST_IOSTREAMS_WINDOWS
     void open(int fd, bool close_on_exit = false);
-#endif
 #endif
 
     // open overload taking a std::string
@@ -166,17 +144,9 @@ public:
     file_descriptor_source() { }
 
     // Constructors taking file desciptors
-    explicit file_descriptor_source(handle_type fd, file_descriptor_flags);
-#ifdef BOOST_IOSTREAMS_WINDOWS
-    explicit file_descriptor_source(int fd, file_descriptor_flags);
-#endif
-
-#if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
-    // Constructors taking file desciptors
     explicit file_descriptor_source(handle_type fd, bool close_on_exit = false);
 #ifdef BOOST_IOSTREAMS_WINDOWS
     explicit file_descriptor_source(int fd, bool close_on_exit = false);
-#endif
 #endif
 
     // Constructor taking a std:: string
@@ -196,18 +166,10 @@ public:
     // Copy constructor
     file_descriptor_source(const file_descriptor_source& other);
 
-    // Constructors taking file desciptors
-    void open(handle_type fd, file_descriptor_flags);
-#ifdef BOOST_IOSTREAMS_WINDOWS
-    void open(int fd, file_descriptor_flags);
-#endif
-
-#if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
     // open overloads taking file descriptors
     void open(handle_type fd, bool close_on_exit = false);
 #ifdef BOOST_IOSTREAMS_WINDOWS
     void open(int fd, bool close_on_exit = false);
-#endif
 #endif
 
     // open overload taking a std::string
@@ -248,17 +210,9 @@ public:
     file_descriptor_sink() { }
 
     // Constructors taking file desciptors
-    file_descriptor_sink(handle_type fd, file_descriptor_flags);
-#ifdef BOOST_IOSTREAMS_WINDOWS
-    file_descriptor_sink(int fd, file_descriptor_flags);
-#endif
-
-#if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
-    // Constructors taking file desciptors
     explicit file_descriptor_sink(handle_type fd, bool close_on_exit = false);
 #ifdef BOOST_IOSTREAMS_WINDOWS
     explicit file_descriptor_sink(int fd, bool close_on_exit = false);
-#endif
 #endif
 
     // Constructor taking a std:: string
@@ -279,17 +233,9 @@ public:
     file_descriptor_sink(const file_descriptor_sink& other);
 
     // open overloads taking file descriptors
-    void open(handle_type fd, file_descriptor_flags);
-#ifdef BOOST_IOSTREAMS_WINDOWS
-    void open(int fd, file_descriptor_flags);
-#endif
-
-#if defined(BOOST_IOSTREAMS_USE_DEPRECATED)
-    // open overloads taking file descriptors
     void open(handle_type fd, bool close_on_exit = false);
 #ifdef BOOST_IOSTREAMS_WINDOWS
     void open(int fd, bool close_on_exit = false);
-#endif
 #endif
 
     // open overload taking a std::string

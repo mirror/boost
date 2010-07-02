@@ -20,7 +20,6 @@ rule test-iostreams ( sources * : requirements * ) {
             run
                 $(sources)
                 /boost/test//boost_unit_test_framework/<link>static
-                /boost/filesystem//boost_filesystem/<link>static
             : # command
             : # input files
             : # build requirements
@@ -32,24 +31,6 @@ rule test-iostreams ( sources * : requirements * ) {
                 $(requirements)
         ] ;
 }
-
-rule compile-fail-iostreams ( sources * : requirements * : target-name ? ) {
-    return [
-            compile-fail
-                $(sources)
-                /boost/test//boost_unit_test_framework/<link>static
-                /boost/filesystem//boost_filesystem/<link>static
-            : # build requirements
-                <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
-                <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-                <toolset>cw-9.3,<os>darwin:<runtime-link>static
-                <define>BOOST_IOSTREAMS_NO_LIB
-                <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
-                $(requirements)
-            : $(target-name)
-        ] ;
-}
-
 
     local all-tests = 
           [ test-iostreams array_test.cpp ]
@@ -70,12 +51,6 @@ rule compile-fail-iostreams ( sources * : requirements * : target-name ? ) {
           [ test-iostreams file_test.cpp ]
           [ test-iostreams file_descriptor_test.cpp
                 ../build//boost_iostreams ]
-          [ test-iostreams deprecated_file_descriptor_test.cpp
-                ../build//boost_iostreams
-                : <define>BOOST_IOSTREAMS_USE_DEPRECATED ]
-          [ compile-fail-iostreams deprecated_file_descriptor_test.cpp
-                :
-                : deprecated_file_descriptor_fail ]
           [ test-iostreams filtering_stream_test.cpp ]
           [ test-iostreams finite_state_filter_test.cpp ]
           [ test-iostreams flush_test.cpp ]

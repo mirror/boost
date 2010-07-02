@@ -22,6 +22,7 @@ using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;  
+namespace io = boost::iostreams;
 
 void read_write_test()
 {
@@ -153,7 +154,7 @@ void close_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
+            io::tee(
                 closable_device<output>(seq.new_operation(1)),
                 closable_device<
                     #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
@@ -173,7 +174,7 @@ void close_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
+            io::tee(
                 closable_device<bidirectional>(
                     seq.new_operation(1),
                     seq.new_operation(2)
@@ -193,7 +194,7 @@ void close_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
+            io::tee(
                 closable_device<seekable>(seq.new_operation(1)),
                 closable_device<seekable>(seq.new_operation(2))
             )
@@ -206,7 +207,7 @@ void close_test()
     {
         operation_sequence  seq;
         chain<output>       ch;
-        ch.push(boost::iostreams::tee(closable_device<output>(seq.new_operation(1))));
+        ch.push(io::tee(closable_device<output>(seq.new_operation(1))));
         ch.push(closable_device<output>(seq.new_operation(2)));
         BOOST_CHECK_NO_THROW(ch.reset());
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
@@ -217,7 +218,7 @@ void close_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
+            io::tee(
                 closable_device<bidirectional>(
                     seq.new_operation(1),
                     seq.new_operation(2)
@@ -233,7 +234,7 @@ void close_test()
     {
         operation_sequence  seq;
         chain<output>       ch;
-        ch.push(boost::iostreams::tee(closable_device<seekable>(seq.new_operation(1))));
+        ch.push(io::tee(closable_device<seekable>(seq.new_operation(1))));
         ch.push(closable_device<seekable>(seq.new_operation(2)));
         BOOST_CHECK_NO_THROW(ch.reset());
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
@@ -250,8 +251,8 @@ void tee_composite_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
-                boost::iostreams::compose(
+            io::tee(
+                io::compose(
                     closable_filter<output>(seq.new_operation(1)),
                     closable_device<output>(seq.new_operation(2))
                 ),
@@ -267,8 +268,8 @@ void tee_composite_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
-                boost::iostreams::compose(
+            io::tee(
+                io::compose(
                     closable_filter<bidirectional>(
                         seq.new_operation(2),
                         seq.new_operation(3)
@@ -290,8 +291,8 @@ void tee_composite_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
-                boost::iostreams::compose(
+            io::tee(
+                io::compose(
                     closable_filter<seekable>(seq.new_operation(1)),
                     closable_device<seekable>(seq.new_operation(2))
                 ),
@@ -308,8 +309,8 @@ void tee_composite_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
-                boost::iostreams::compose(
+            io::tee(
+                io::compose(
                     closable_filter<output>(seq.new_operation(1)),
                     closable_device<output>(seq.new_operation(2))
                 )
@@ -325,8 +326,8 @@ void tee_composite_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
-                boost::iostreams::compose(
+            io::tee(
+                io::compose(
                     closable_filter<bidirectional>(
                         seq.new_operation(2),
                         seq.new_operation(3)
@@ -348,8 +349,8 @@ void tee_composite_test()
         operation_sequence  seq;
         chain<output>       ch;
         ch.push(
-            boost::iostreams::tee(
-                boost::iostreams::compose(
+            io::tee(
+                io::compose(
                     closable_filter<seekable>(seq.new_operation(1)),
                     closable_device<seekable>(seq.new_operation(2))
                 )
