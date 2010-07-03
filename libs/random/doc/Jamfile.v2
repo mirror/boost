@@ -129,8 +129,8 @@ doxygen reference :
         \"aseed=seed\" \\
         \"BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os,T,t)=template<class CharT, class Traits> friend std::basic_ostream<CharT,Traits>& operator<<(std::basic_ostream<CharT,Traits>& os, const T& t)\" \\
         \"BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is,T,t)=template<class CharT, class Traits> friend std::basic_istream<CharT,Traits>& operator>>(std::basic_istream<CharT,Traits>& is, const T& t)\" \\
-        \"BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(T,lhs,rhs)=friend bool operator==(const T& rhs, const T& rhs)\" \\
-        \"BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(T)=friend bool operator!=(const T& rhs, const T& rhs) { return !(lhs == rhs); }\" \\
+        \"BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(T,lhs,rhs)=friend bool operator==(const T& lhs, const T& rhs)\" \\
+        \"BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(T)=friend bool operator!=(const T& lhs, const T& rhs) { return !(lhs == rhs); }\" \\
         \"BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(Self,T,t)=explicit Self(T t)\" \\
         \"BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(Self,T,t)=template<class T> explicit Self(T& t)\" \\
         \"BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(Self,T,t)=template<class T> explicit Self(T& t)\" \\
