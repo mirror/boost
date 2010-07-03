@@ -9,6 +9,7 @@
 #include <boost/exception/info.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <stdlib.h>
 
 struct
 my_exception:
@@ -38,6 +39,7 @@ boost
 #ifndef BOOST_NO_RTTI
         BOOST_TEST(s.find("my_tag")!=std::string::npos);
 #endif
+        exit(0);
         }
     }
 
