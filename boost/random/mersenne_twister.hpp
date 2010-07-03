@@ -25,6 +25,7 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/ptr_helper.hpp>
 #include <boost/random/detail/seed.hpp>
+#include <boost/random/detail/generator_seed_seq.hpp>
 
 namespace boost {
 namespace random {
@@ -507,6 +508,42 @@ typedef mersenne_twister_engine<uint64_t,64,312,156,31,
     UINT64_C(0x71d67fffeda60000),37,UINT64_C(0xfff7eee000000000),43,
     UINT64_C(6364136223846793005)> mt19937_64;
 #endif
+
+
+/// \cond
+
+template<class UIntType,
+         int w, int n, int m, int r,
+         UIntType a, int u, std::size_t s,
+         UIntType b, int t,
+         UIntType c, int l, UIntType v>
+class mersenne_twister :
+    public mersenne_twister_engine<UIntType,
+        w, n, m, r, a, u, ~(UIntType)0, s, b, t, c, l, 1812433253>
+{
+    typedef mersenne_twister_engine<UIntType,
+        w, n, m, r, a, u, ~(UIntType)0, s, b, t, c, l, 1812433253> base_type;
+public:
+    mersenne_twister() {}
+    BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(mersenne_twister, Gen, gen)
+    { seed(gen); }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(mersenne_twister, UIntType, val)
+    { seed(val); }
+    template<class It>
+    mersenne_twister(It& first, It last) : base_type(first, last) {}
+    void seed() { base_type::seed(); }
+    BOOST_RANDOM_DETAIL_GENERATOR_SEED(mersenne_twister, Gen, gen)
+    {
+        detail::generator_seed_seq<Gen> seq(gen);
+        base_type::seed(seq);
+    }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(mersenne_twister, UIntType, val)
+    { base_type::seed(val); }
+    template<class It>
+    void seed(It& first, It last) { base_type::seed(first, last); }
+};
+
+/// \endcond
 
 } // namespace random
 

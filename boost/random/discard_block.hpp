@@ -192,6 +192,25 @@ template<class URNG, std::size_t p, std::size_t r>
 const std::size_t discard_block_engine<URNG, p, r>::used_block;
 #endif
 
+template<class URNG, int p, int r>
+class discard_block : public discard_block_engine<URNG, p, r>
+{
+    typedef discard_block_engine<URNG, p, r> base_t;
+    typedef typename base_t::result_type result_type;
+public:
+    discard_block() {}
+    template<class T>
+    discard_block(T& arg) : base_t(arg) {}
+    template<class T>
+    discard_block(const T& arg) : base_t(arg) {}
+    template<class It>
+    discard_block(It& first, It last) : base_t(first, last) {}
+    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    { return (this->base().min)(); }
+    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    { return (this->base().max)(); }
+};
+
 } // namespace random
 
 } // namespace boost

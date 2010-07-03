@@ -24,6 +24,7 @@
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/integer/static_log2.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/seed.hpp>
@@ -494,6 +495,65 @@ const std::size_t subtract_with_carry_01_engine<RealType, w, s, r>::short_lag;
 template<class RealType, std::size_t w, std::size_t s, std::size_t r>
 const uint32_t subtract_with_carry_01_engine<RealType, w, s, r>::default_seed;
 #endif
+
+
+/// \cond
+
+template<class IntType, IntType m, unsigned s, unsigned r, IntType v>
+class subtract_with_carry :
+    public subtract_with_carry_engine<IntType,
+        boost::static_log2<m>::value, s, r>
+{
+    typedef subtract_with_carry_engine<IntType,
+        boost::static_log2<m>::value, s, r> base_type;
+public:
+    subtract_with_carry() {}
+    BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(subtract_with_carry, Gen, gen)
+    { seed(gen); }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(subtract_with_carry,
+                                               uint32_t, val)
+    { seed(val); }
+    template<class It>
+    subtract_with_carry(It& first, It last) : base_type(first, last) {}
+    void seed() { base_type::seed(); }
+    BOOST_RANDOM_DETAIL_GENERATOR_SEED(subtract_with_carry, Gen, gen)
+    {
+        detail::generator_seed_seq<Gen> seq(gen);
+        base_type::seed(seq);
+    }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry, uint32_t, val)
+    { base_type::seed(val); }
+    template<class It>
+    void seed(It& first, It last) { base_type::seed(first, last); }
+};
+
+template<class RealType, int w, unsigned s, unsigned r, int v = 0>
+class subtract_with_carry_01 :
+    public subtract_with_carry_01_engine<RealType, w, s, r>
+{
+    typedef subtract_with_carry_01_engine<RealType, w, s, r> base_type;
+public:
+    subtract_with_carry_01() {}
+    BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(subtract_with_carry_01, Gen, gen)
+    { seed(gen); }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(subtract_with_carry_01,
+                                               uint32_t, val)
+    { seed(val); }
+    template<class It>
+    subtract_with_carry_01(It& first, It last) : base_type(first, last) {}
+    void seed() { base_type::seed(); }
+    BOOST_RANDOM_DETAIL_GENERATOR_SEED(subtract_with_carry_01, Gen, gen)
+    {
+        detail::generator_seed_seq<Gen> seq(gen);
+        base_type::seed(seq);
+    }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry_01, uint32_t, val)
+    { base_type::seed(val); }
+    template<class It>
+    void seed(It& first, It last) { base_type::seed(first, last); }
+};
+
+/// \endcond
 
 } // namespace random
 } // namespace boost
