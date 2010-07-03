@@ -22,12 +22,12 @@
 <div class="spirit-nav">
 <a accesskey="p" href="functional/generation/metafunctions/mk_unfused.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="change_log.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Notes">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="fusion.notes"></a><a class="link" href="notes.html" title="Notes">Notes</a>
 </h2></div></div></div>
 <a name="fusion.notes.recursive_inlined_functions"></a><h4>
-<a name="id874796"></a>
+<a name="id1110622"></a>
       <a class="link" href="notes.html#fusion.notes.recursive_inlined_functions">Recursive Inlined
       Functions</a>
     </h4>
@@ -40,7 +40,7 @@
       remains linear.
     </p>
 <a name="fusion.notes.overloaded_functions"></a><h4>
-<a name="id874837"></a>
+<a name="id1110663"></a>
       <a class="link" href="notes.html#fusion.notes.overloaded_functions">Overloaded Functions</a>
     </h4>
 <p>
@@ -50,7 +50,7 @@
       given a key, <code class="computeroutput"><span class="identifier">k</span></code>.
     </p>
 <a name="fusion.notes.tag_dispatching"></a><h4>
-<a name="id874889"></a>
+<a name="id1110716"></a>
       <a class="link" href="notes.html#fusion.notes.tag_dispatching">Tag Dispatching</a>
     </h4>
 <p>
@@ -59,14 +59,14 @@
     </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-        A type for which an appropriate template specialization is required
-      </li>
+          A type for which an appropriate template specialization is required
+        </li>
 <li class="listitem">
-        A metafunction that associates the type with a tag type
-      </li>
+          A metafunction that associates the type with a tag type
+        </li>
 <li class="listitem">
-        A template that is specialized for the tag type
-      </li>
+          A template that is specialized for the tag type
+        </li>
 </ol></div>
 <p>
       For example, the fusion <code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code> metafunction
@@ -86,22 +86,22 @@
     </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">Sequence</span></code> is the type for
-        which a suitable implementation of <code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin_impl</span></code>
-        is required
-      </li>
+          <code class="computeroutput"><span class="identifier">Sequence</span></code> is the type for
+          which a suitable implementation of <code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin_impl</span></code>
+          is required
+        </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><span class="identifier">tag_of</span></code> is the metafunction that associates
-        <code class="computeroutput"><span class="identifier">Sequence</span></code> with an appropriate
-        tag
-      </li>
+          <code class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><span class="identifier">tag_of</span></code> is the metafunction that associates
+          <code class="computeroutput"><span class="identifier">Sequence</span></code> with an appropriate
+          tag
+        </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin_impl</span></code> is the template which is specialized
-        to provide an implementation for each tag type
-      </li>
+          <code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin_impl</span></code> is the template which is specialized
+          to provide an implementation for each tag type
+        </li>
 </ol></div>
 <a name="fusion.notes.extensibility"></a><h4>
-<a name="id875157"></a>
+<a name="id1111004"></a>
       <a class="link" href="notes.html#fusion.notes.extensibility">Extensibility</a>
     </h4>
 <p>
@@ -136,7 +136,7 @@
       it very cheap to pass around.
     </p>
 <a name="fusion.notes.element_conversion"></a><h4>
-<a name="id875339"></a>
+<a name="id1111186"></a>
       <a class="link" href="notes.html#fusion.notes.element_conversion">Element Conversion</a>
     </h4>
 <p>
@@ -157,9 +157,7 @@
       <span class="bold"><strong>Arrays:</strong></span>
     </p>
 <p>
-      Array arguments are deduced to reference to const types. For example
-      <sup>[<a name="id875444" href="#ftn.id875444" class="footnote">10</a>]</sup>
-      :
+      Array arguments are deduced to reference to const types. For example <sup>[<a name="id1111290" href="#ftn.id1111290" class="footnote">10</a>]</sup>:
     </p>
 <pre class="programlisting"><a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a><span class="special">(</span><span class="string">"Donald"</span><span class="special">,</span> <span class="string">"Daisy"</span><span class="special">)</span>
 </pre>
@@ -187,7 +185,7 @@
 <pre class="programlisting"><a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a><span class="special">&lt;</span><span class="keyword">void</span> <span class="special">(*)(</span><span class="keyword">int</span><span class="special">)&gt;</span>
 </pre>
 <a name="fusion.notes.boost__ref"></a><h4>
-<a name="id875731"></a>
+<a name="id1111592"></a>
       <a class="link" href="notes.html#fusion.notes.boost__ref">boost::ref</a>
     </h4>
 <p>
@@ -227,12 +225,12 @@
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id875444" href="#id875444" class="para">10</a>] </sup>
-          Note that the type of a string literal is an array of const characters,
-          not <code class="computeroutput"><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span></code>. To get <a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a> to create a <a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a> with an element of a non-const
-          array type one must use the <code class="computeroutput"><span class="identifier">ref</span></code>
-          wrapper (see <a class="link" href="notes.html#fusion.notes.boost__ref"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">ref</span></code></a>).
-        </p></div>
+<div class="footnote"><p><sup>[<a name="ftn.id1111290" href="#id1111290" class="para">10</a>] </sup>
+        Note that the type of a string literal is an array of const characters, not
+        <code class="computeroutput"><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span></code>. To get <a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a> to create a <a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a> with an element of a non-const
+        array type one must use the <code class="computeroutput"><span class="identifier">ref</span></code>
+        wrapper (see <a class="link" href="notes.html#fusion.notes.boost__ref"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">ref</span></code></a>).
+      </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

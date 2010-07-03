@@ -22,12 +22,12 @@
 <div class="spirit-nav">
 <a accesskey="p" href="joint_view.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../view.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="transform_view.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="zip_view">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.view.zip_view"></a><a class="link" href="zip_view.html" title="zip_view">zip_view</a>
 </h3></div></div></div>
 <a name="fusion.view.zip_view.description"></a><h5>
-<a name="id748063"></a>
+<a name="id978614"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.description">Description</a>
       </h5>
 <p>
@@ -38,21 +38,21 @@
         to the component <span class="underline">_sequence</span>_s.
       </p>
 <a name="fusion.view.zip_view.header"></a><h5>
-<a name="id748110"></a>
+<a name="id978660"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.zip_view.synopsis"></a><h5>
-<a name="id750403"></a>
+<a name="id978768"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequences</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">zip_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.zip_view.template_parameters"></a><h5>
-<a name="id750454"></a>
+<a name="id978820"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -97,18 +97,18 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.view.zip_view.model_of"></a><h5>
-<a name="id750552"></a>
+<a name="id978917"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
-<a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>,
-          <a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
-          Sequence</a> or <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
-          Access Sequence</a> depending on the traversal characteristics (see
-          <a class="link" href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence Traversal Concept</a>)
-          of its underlying sequence.
-        </li></ul></div>
-<div class="variablelist" title="Notation">
+            <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>,
+            <a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+            Sequence</a> or <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
+            Access Sequence</a> depending on the traversal characteristics (see
+            <a class="link" href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence Traversal
+            Concept</a>) of its underlying sequence.
+          </li></ul></div>
+<div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">ZV</span></code></span></dt>
@@ -126,7 +126,7 @@
 </dl>
 </div>
 <a name="fusion.view.zip_view.expression_semantics"></a><h5>
-<a name="id750686"></a>
+<a name="id979055"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
@@ -197,7 +197,7 @@
 </tbody>
 </table></div>
 <a name="fusion.view.zip_view.example"></a><h5>
-<a name="id750912"></a>
+<a name="id979281"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec1</span><span class="special">;</span>

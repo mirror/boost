@@ -22,12 +22,12 @@
 <div class="spirit-nav">
 <a accesskey="p" href="vector.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../container.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="list.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="cons">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.container.cons"></a><a class="link" href="cons.html" title="cons">cons</a>
 </h3></div></div></div>
 <a name="fusion.container.cons.description"></a><h5>
-<a name="id706271"></a>
+<a name="id935322"></a>
         <a class="link" href="cons.html#fusion.container.cons.description">Description</a>
       </h5>
 <p>
@@ -42,21 +42,21 @@
         Inlined Functions</a>).
       </p>
 <a name="fusion.container.cons.header"></a><h5>
-<a name="id706353"></a>
+<a name="id935403"></a>
         <a class="link" href="cons.html#fusion.container.cons.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">/</span><span class="identifier">cons</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">cons</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.cons.synopsis"></a><h5>
-<a name="id706468"></a>
+<a name="id935518"></a>
         <a class="link" href="cons.html#fusion.container.cons.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Car</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Cdr</span> <span class="special">=</span> <span class="identifier">nil</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">cons</span><span class="special">;</span>
 </pre>
 <a name="fusion.container.cons.template_parameters"></a><h5>
-<a name="id706542"></a>
+<a name="id935593"></a>
         <a class="link" href="cons.html#fusion.container.cons.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -119,11 +119,13 @@
 </tbody>
 </table></div>
 <a name="fusion.container.cons.model_of"></a><h5>
-<a name="id706670"></a>
+<a name="id935720"></a>
         <a class="link" href="cons.html#fusion.container.cons.model_of">Model of</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a></li></ul></div>
-<div class="variablelist" title="Notation">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+            <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>
+          </li></ul></div>
+<div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">nil</span></code></span></dt>
@@ -159,7 +161,7 @@
 </dl>
 </div>
 <a name="fusion.container.cons.expression_semantics"></a><h5>
-<a name="id706882"></a>
+<a name="id937029"></a>
         <a class="link" href="cons.html#fusion.container.cons.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
@@ -292,7 +294,7 @@
       </p>
 </div>
 <a name="fusion.container.cons.example"></a><h5>
-<a name="id708449"></a>
+<a name="id937503"></a>
         <a class="link" href="cons.html#fusion.container.cons.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="identifier">cons</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">cons</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">l</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="identifier">cons</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;(</span><span class="number">5.5f</span><span class="special">));</span>

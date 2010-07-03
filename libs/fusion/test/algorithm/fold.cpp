@@ -43,7 +43,7 @@ struct add_ints_only
 
     template <typename State, typename T>
     State
-    operator()(State const& state, T const& x) const
+    operator()(State const& state, T const& /*x*/) const
     {
         return state;
     }
@@ -81,8 +81,8 @@ struct count_ints
     typename result<count_ints(CountT, T)>::type
     operator()(CountT const&, T const&) const
     {
-        typedef typename result<count_ints(CountT, T)>::type result;
-        return result();
+        typedef typename result<count_ints(CountT, T)>::type result_;
+        return result_();
     }
 };
 

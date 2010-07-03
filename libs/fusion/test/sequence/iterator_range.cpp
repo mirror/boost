@@ -28,6 +28,7 @@ int
 main()
 {
     using namespace boost::fusion;
+    namespace fusion = boost::fusion;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
@@ -104,9 +105,9 @@ main()
         BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::next<result_of::begin<range_type>::type>::type>::type, char>));
 
         std::cout << deref_data(begin(r)) << std::endl;
-        std::cout << deref_data(next(begin(r))) << std::endl;
+        std::cout << deref_data(fusion::next(begin(r))) << std::endl;
         BOOST_TEST((deref_data(begin(r)) == "foo"));
-        BOOST_TEST((deref_data(next(begin(r))) == 'x'));
+        BOOST_TEST((deref_data(fusion::next(begin(r))) == 'x'));
     }
 
     return boost::report_errors();

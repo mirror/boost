@@ -80,7 +80,9 @@ main()
         BOOST_STATIC_ASSERT(result_of::size<filter_view_type>::value == 4);
     }
 
-    {
+    //cschmidt: This is illegal C++. ADL instantiates less<_, int_<3> > - which
+    //leads to compile errors.
+    /*{
         // $$$ JDG $$$ For some obscure reason, EDG based compilers
         // (e.g. comeau 4.3.3, intel) have problems with this.
         // vc7.1 and g++ are ok. The errors from comeau are useless.
@@ -94,7 +96,7 @@ main()
         BOOST_TEST((view == make_vector(1, 2, 0, -1)));
         BOOST_STATIC_ASSERT(result_of::size<filter_view_type>::value == 4);
 #endif
-    }
+    }*/
 
     {
         // Previous filtering out all values caused problems as begin<seq> was not equal to end<seq>

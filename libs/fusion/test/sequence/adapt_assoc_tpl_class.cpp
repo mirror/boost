@@ -32,7 +32,7 @@ namespace ns
     public:
     
         point() : x(0), y(0) {}
-        point(X x, Y y) : x(x), y(y) {}
+        point(X in_x, Y in_y) : x(in_x), y(in_y) {}
             
         X get_x() const { return x; }
         Y get_y() const { return y; }
@@ -102,14 +102,14 @@ main()
     {
         // conversion from point to vector
         point p(5, 3);
-        boost::fusion::vector<int, short> v(p);
+        boost::fusion::vector<int, long> v(p);
         v = p;
     }
 
     {
         // conversion from point to list
         point p(5, 3);
-        boost::fusion::list<int, short> l(p);
+        boost::fusion::list<int, long> l(p);
         l = p;
     }
 

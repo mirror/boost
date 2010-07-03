@@ -38,7 +38,7 @@ namespace ns
     public:
     
         point() : x(0), y(0) {}
-        point(int x, int y) : x(x), y(y) {}
+        point(int in_x, int in_y) : x(in_x), y(in_y) {}
             
         int get_x() const { return x; }
         int get_y() const { return y; }
@@ -71,7 +71,7 @@ main()
     std::cout << tuple_delimiter(", ");
 
     {
-        BOOST_MPL_ASSERT_NOT((traits::is_view<adapted::point>));
+        BOOST_MPL_ASSERT((traits::is_view<adapted::point>));
         ns::point basep(123, 456);
         adapted::point p(basep);
 
@@ -112,7 +112,7 @@ main()
         ns::point basep(5, 3);
         adapted::point p(basep);
 
-        fusion::vector<int, short> v(p);
+        fusion::vector<int, long> v(p);
         v = p;
     }
 
@@ -121,7 +121,7 @@ main()
         ns::point basep(5, 3);
         adapted::point p(basep);
 
-        fusion::list<int, short> l(p);
+        fusion::list<int, long> l(p);
         l = p;
     }
 

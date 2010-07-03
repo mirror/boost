@@ -33,11 +33,15 @@ namespace boost { namespace fusion
         template<typename Seq, int N>
         struct struct_member_name;
 
+        template<typename Seq>
+        struct struct_size;
+
+        template<typename Seq>
+        struct struct_is_view;
+
         template<typename Seq, int N>
         struct struct_assoc_key;
 
-        template<typename Seq>
-        struct struct_size;
     }
 }}
 

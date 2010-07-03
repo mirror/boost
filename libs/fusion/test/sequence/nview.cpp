@@ -26,7 +26,7 @@ BOOST_FUSION_ADAPT_STRUCT(
     (int, int_)
     (std::string, string_)
     (double, double_)
-);
+)
 
 namespace fusion = boost::fusion;
 

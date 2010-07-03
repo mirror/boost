@@ -38,7 +38,7 @@ namespace ns
     public:
     
         point() : x(0), y(0) {}
-        point(int x, int y) : x(x), y(y) {}
+        point(int in_x, int in_y) : x(in_x), y(in_y) {}
             
         int get_x() const { return x; }
         int get_y() const { return y; }
@@ -106,14 +106,14 @@ main()
     {
         // conversion from ns::point to vector
         ns::point p(5, 3);
-        fusion::vector<int, short> v(p);
+        fusion::vector<int, long> v(p);
         v = p;
     }
 
     {
         // conversion from ns::point to list
         ns::point p(5, 3);
-        fusion::list<int, short> l(p);
+        fusion::list<int, long> l(p);
         l = p;
     }
 

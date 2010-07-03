@@ -302,7 +302,7 @@ complexity (see __overloaded_functions__).
 
     #include <boost/fusion/container/set.hpp>
     #include <boost/fusion/include/set.hpp>
-    #include <boost/fusion/container/set_fwd.hpp>
+    #include <boost/fusion/container/set/set_fwd.hpp>
     #include <boost/fusion/include/set_fwd.hpp>
 
 [heading Synopsis]
@@ -384,7 +384,7 @@ __overloaded_functions__).
 
     #include <boost/fusion/container/map.hpp>
     #include <boost/fusion/include/map.hpp>
-    #include <boost/fusion/container/map_fwd.hpp>
+    #include <boost/fusion/container/map/map_fwd.hpp>
     #include <boost/fusion/include/map_fwd.hpp>
 
 [heading Synopsis]

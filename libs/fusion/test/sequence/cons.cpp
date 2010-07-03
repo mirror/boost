@@ -26,6 +26,7 @@ main()
 {
     using namespace boost::fusion;
     using boost::is_same;
+    namespace fusion = boost::fusion;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
@@ -39,18 +40,18 @@ main()
             make_cons(1, make_cons(hello));
 
         BOOST_TEST((*begin(ns) == 1));
-        BOOST_TEST((*next(begin(ns)) == hello));
+        BOOST_TEST((*fusion::next(begin(ns)) == hello));
 
         *begin(ns) += 1;
-        *next(begin(ns)) += ' ';
+        *fusion::next(begin(ns)) += ' ';
 
         BOOST_TEST((*begin(ns) == 2));
-        BOOST_TEST((*next(begin(ns)) == hello + ' '));
+        BOOST_TEST((*fusion::next(begin(ns)) == hello + ' '));
 
         for_each(ns, boost::lambda::_1 += ' ');
 
         BOOST_TEST((*begin(ns) == 2 + ' '));
-        BOOST_TEST((*next(begin(ns)) == hello + ' ' + ' '));
+        BOOST_TEST((*fusion::next(begin(ns)) == hello + ' ' + ' '));
     }
 
     {

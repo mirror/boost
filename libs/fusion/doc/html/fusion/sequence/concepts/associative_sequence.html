@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="random_access_sequence.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../intrinsic.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Associative Sequence">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequence.concepts.associative_sequence"></a><a class="link" href="associative_sequence.html" title="Associative Sequence">Associative
         Sequence</a>
 </h4></div></div></div>
 <a name="fusion.sequence.concepts.associative_sequence.description"></a><h6>
-<a name="id668512"></a>
+<a name="id898516"></a>
           <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.description">Description</a>
         </h6>
 <p>
@@ -38,7 +38,7 @@
           Fusion associative sequences have no implied ordering relation. Instead,
           type identity is used to impose an equivalence relation on keys.
         </p>
-<div class="variablelist" title="Notation">
+<div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
@@ -64,7 +64,7 @@
 </dl>
 </div>
 <a name="fusion.sequence.concepts.associative_sequence.valid_expressions"></a><h6>
-<a name="id668651"></a>
+<a name="id898656"></a>
           <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.valid_expressions">Valid
           Expressions</a>
         </h6>
@@ -173,7 +173,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.associative_sequence.result_type_expressions"></a><h6>
-<a name="id670048"></a>
+<a name="id900735"></a>
           <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h6>
@@ -247,7 +247,7 @@
         </p>
 </div>
 <a name="fusion.sequence.concepts.associative_sequence.expression_semantics"></a><h6>
-<a name="id670456"></a>
+<a name="id901143"></a>
           <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.expression_semantics">Expression
           Semantics</a>
         </h6>
@@ -302,35 +302,39 @@
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.associative_sequence.models"></a><h6>
-<a name="id670680"></a>
+<a name="id901367"></a>
           <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><a class="link" href="../../container/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a></li>
-<li class="listitem"><a class="link" href="../../container/map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a></li>
 <li class="listitem">
-<a class="link" href="../../view/filter_view.html" title="filter_view"><code class="computeroutput"><span class="identifier">filter_view</span></code></a>
-            (where adapted sequence is an <a class="link" href="associative_sequence.html" title="Associative Sequence">Associative
-            Sequence</a> and a <a class="link" href="forward_sequence.html" title="Forward Sequence">Forward
-            Sequence</a>)
-          </li>
+              <a class="link" href="../../container/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a>
+            </li>
 <li class="listitem">
-<a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
-            (where adapted iterators are <a class="link" href="../../iterator/concepts/associative_iterator.html" title="Associative Iterator">Associative
-            Iterator</a>s)
-          </li>
+              <a class="link" href="../../container/map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a>
+            </li>
 <li class="listitem">
-<a class="link" href="../../view/joint_view.html" title="joint_view"><code class="computeroutput"><span class="identifier">joint_view</span></code></a>
-            (where adapted sequences are <a class="link" href="associative_sequence.html" title="Associative Sequence">Associative
-            Sequence</a>s and <a class="link" href="forward_sequence.html" title="Forward Sequence">Forward
-            Sequence</a>s)
-          </li>
+              <a class="link" href="../../view/filter_view.html" title="filter_view"><code class="computeroutput"><span class="identifier">filter_view</span></code></a>
+              (where adapted sequence is an <a class="link" href="associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> and a <a class="link" href="forward_sequence.html" title="Forward Sequence">Forward
+              Sequence</a>)
+            </li>
 <li class="listitem">
-<a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a>
-            (where adapted sequence is an <a class="link" href="associative_sequence.html" title="Associative Sequence">Associative
-            Sequence</a> and a <a class="link" href="bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
-            Sequence</a>)
-          </li>
+              <a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
+              (where adapted iterators are <a class="link" href="../../iterator/concepts/associative_iterator.html" title="Associative Iterator">Associative
+              Iterator</a>s)
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/joint_view.html" title="joint_view"><code class="computeroutput"><span class="identifier">joint_view</span></code></a>
+              (where adapted sequences are <a class="link" href="associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a>s and <a class="link" href="forward_sequence.html" title="Forward Sequence">Forward
+              Sequence</a>s)
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a>
+              (where adapted sequence is an <a class="link" href="associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> and a <a class="link" href="bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+              Sequence</a>)
+            </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

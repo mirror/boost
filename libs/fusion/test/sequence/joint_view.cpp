@@ -34,6 +34,7 @@ int
 main()
 {
     using namespace boost::fusion;
+    namespace fusion = boost::fusion;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
@@ -175,11 +176,11 @@ main()
               , float>));
 
         std::cout << deref_data(begin(j)) << std::endl;
-        std::cout << deref_data(boost::fusion::next(begin(j))) << std::endl;
-        std::cout << deref_data(next(boost::fusion::next(begin(j)))) << std::endl;
+        std::cout << deref_data(fusion::next(begin(j))) << std::endl;
+        std::cout << deref_data(fusion::next(fusion::next(begin(j)))) << std::endl;
         BOOST_TEST((deref_data(begin(j)) == 0));
-        BOOST_TEST((deref_data(boost::fusion::next(begin(j))) == "foo"));
-        BOOST_TEST((deref_data(next(boost::fusion::next(begin(j)))) == 1.3f));
+        BOOST_TEST((deref_data(fusion::next(begin(j))) == "foo"));
+        BOOST_TEST((deref_data(fusion::next(fusion::next(begin(j)))) == 1.3f));
     }
 
     return boost::report_errors();

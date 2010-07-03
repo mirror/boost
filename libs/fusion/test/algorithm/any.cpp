@@ -17,8 +17,8 @@ namespace
 {
     struct search_for
     {
-        explicit search_for(int search)
-            : search(search)
+        explicit search_for(int in_search)
+            : search(in_search)
         {}
 
         template<typename T>

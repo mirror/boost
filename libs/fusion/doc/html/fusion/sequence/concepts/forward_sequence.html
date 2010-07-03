@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../concepts.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="bidirectional_sequence.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Forward Sequence">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequence.concepts.forward_sequence"></a><a class="link" href="forward_sequence.html" title="Forward Sequence">Forward
         Sequence</a>
 </h4></div></div></div>
 <a name="fusion.sequence.concepts.forward_sequence.description"></a><h6>
-<a name="id664636"></a>
+<a name="id894047"></a>
           <a class="link" href="forward_sequence.html#fusion.sequence.concepts.forward_sequence.description">Description</a>
         </h6>
 <p>
@@ -38,7 +38,7 @@
           equality (if the container's element type is Equality Comparable) and of
           lexicographical ordering (if the container's element type is LessThan Comparable).
         </p>
-<div class="variablelist" title="Notation">
+<div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
@@ -60,7 +60,7 @@
 </dl>
 </div>
 <a name="fusion.sequence.concepts.forward_sequence.valid_expressions"></a><h6>
-<a name="id664739"></a>
+<a name="id894150"></a>
           <a class="link" href="forward_sequence.html#fusion.sequence.concepts.forward_sequence.valid_expressions">Valid
           Expressions</a>
         </h6>
@@ -235,7 +235,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.forward_sequence.result_type_expressions"></a><h6>
-<a name="id665201"></a>
+<a name="id894612"></a>
           <a class="link" href="forward_sequence.html#fusion.sequence.concepts.forward_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h6>
@@ -320,7 +320,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.forward_sequence.expression_semantics"></a><h6>
-<a name="id665514"></a>
+<a name="id894925"></a>
           <a class="link" href="forward_sequence.html#fusion.sequence.concepts.forward_sequence.expression_semantics">Expression
           Semantics</a>
         </h6>
@@ -408,7 +408,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.forward_sequence.invariants"></a><h6>
-<a name="id665850"></a>
+<a name="id895261"></a>
           <a class="link" href="forward_sequence.html#fusion.sequence.concepts.forward_sequence.invariants">Invariants</a>
         </h6>
 <p>
@@ -416,42 +416,71 @@
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="special">[</span><a class="link" href="../intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a class="link" href="../intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></code> is always a valid range.
-          </li>
+              <code class="computeroutput"><span class="special">[</span><a class="link" href="../intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a class="link" href="../intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></code> is always a valid range.
+            </li>
 <li class="listitem">
-            An <a class="link" href="../../algorithm.html" title="Algorithm">Algorithm</a> that iterates through
-            the range <code class="computeroutput"><span class="special">[</span><a class="link" href="../intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a class="link" href="../intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></code> will pass through every element of
-            <code class="computeroutput"><span class="identifier">s</span></code> exactly once.
-          </li>
+              An <a class="link" href="../../algorithm.html" title="Algorithm">Algorithm</a> that iterates
+              through the range <code class="computeroutput"><span class="special">[</span><a class="link" href="../intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a class="link" href="../intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></code> will pass through every element of
+              <code class="computeroutput"><span class="identifier">s</span></code> exactly once.
+            </li>
 <li class="listitem">
-<code class="computeroutput"><a class="link" href="../intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
-            is identical to <code class="computeroutput"><a class="link" href="../intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></code>
-            if and only if <code class="computeroutput"><span class="identifier">s</span></code> is empty.
-          </li>
+              <code class="computeroutput"><a class="link" href="../intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+              is identical to <code class="computeroutput"><a class="link" href="../intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></code>
+              if and only if <code class="computeroutput"><span class="identifier">s</span></code> is
+              empty.
+            </li>
 <li class="listitem">
-            Two different iterations through <code class="computeroutput"><span class="identifier">s</span></code>
-            will access its elements in the same order.
-          </li>
+              Two different iterations through <code class="computeroutput"><span class="identifier">s</span></code>
+              will access its elements in the same order.
+            </li>
 </ul></div>
 <a name="fusion.sequence.concepts.forward_sequence.models"></a><h6>
-<a name="id666050"></a>
+<a name="id895476"></a>
           <a class="link" href="forward_sequence.html#fusion.sequence.concepts.forward_sequence.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><a class="link" href="../../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a></li>
-<li class="listitem"><a class="link" href="../../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a></li>
-<li class="listitem"><a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a></li>
-<li class="listitem"><a class="link" href="../../container/cons.html" title="cons"><code class="computeroutput"><span class="identifier">cons</span></code></a></li>
-<li class="listitem"><a class="link" href="../../container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a></li>
-<li class="listitem"><a class="link" href="../../container/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a></li>
-<li class="listitem"><a class="link" href="../../container/map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/single_view.html" title="single_view"><code class="computeroutput"><span class="identifier">single_view</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/filter_view.html" title="filter_view"><code class="computeroutput"><span class="identifier">filter_view</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/joint_view.html" title="joint_view"><code class="computeroutput"><span class="identifier">joint_view</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/zip_view.html" title="zip_view"><code class="computeroutput"><span class="identifier">zip_view</span></code></a></li>
+<li class="listitem">
+              <a class="link" href="../../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../container/cons.html" title="cons"><code class="computeroutput"><span class="identifier">cons</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../container/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../container/map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/single_view.html" title="single_view"><code class="computeroutput"><span class="identifier">single_view</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/filter_view.html" title="filter_view"><code class="computeroutput"><span class="identifier">filter_view</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/joint_view.html" title="joint_view"><code class="computeroutput"><span class="identifier">joint_view</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/zip_view.html" title="zip_view"><code class="computeroutput"><span class="identifier">zip_view</span></code></a>
+            </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

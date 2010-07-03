@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="bidirectional_sequence.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="associative_sequence.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Random Access Sequence">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequence.concepts.random_access_sequence"></a><a class="link" href="random_access_sequence.html" title="Random Access Sequence">Random
         Access Sequence</a>
 </h4></div></div></div>
 <a name="fusion.sequence.concepts.random_access_sequence.description"></a><h6>
-<a name="id667284"></a>
+<a name="id897264"></a>
           <a class="link" href="random_access_sequence.html#fusion.sequence.concepts.random_access_sequence.description">Description</a>
         </h6>
 <p>
@@ -38,7 +38,7 @@
           sequence elements.
         </p>
 <a name="fusion.sequence.concepts.random_access_sequence.refinement_of"></a><h6>
-<a name="id667316"></a>
+<a name="id897295"></a>
           <a class="link" href="random_access_sequence.html#fusion.sequence.concepts.random_access_sequence.refinement_of">Refinement
           of</a>
         </h6>
@@ -46,7 +46,7 @@
           <a class="link" href="bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
           Sequence</a>
         </p>
-<div class="variablelist" title="Notation">
+<div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
@@ -73,7 +73,7 @@
 </dl>
 </div>
 <a name="fusion.sequence.concepts.random_access_sequence.valid_expressions"></a><h6>
-<a name="id667450"></a>
+<a name="id897429"></a>
           <a class="link" href="random_access_sequence.html#fusion.sequence.concepts.random_access_sequence.valid_expressions">Valid
           Expressions</a>
         </h6>
@@ -205,7 +205,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.random_access_sequence.result_type_expressions"></a><h6>
-<a name="id667809"></a>
+<a name="id897788"></a>
           <a class="link" href="random_access_sequence.html#fusion.sequence.concepts.random_access_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h6>
@@ -291,7 +291,7 @@
         </p>
 </div>
 <a name="fusion.sequence.concepts.random_access_sequence.expression_semantics"></a><h6>
-<a name="id668261"></a>
+<a name="id898240"></a>
           <a class="link" href="random_access_sequence.html#fusion.sequence.concepts.random_access_sequence.expression_semantics">Expression
           Semantics</a>
         </h6>
@@ -331,26 +331,34 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.sequence.concepts.random_access_sequence.models"></a><h6>
-<a name="id668375"></a>
+<a name="id898354"></a>
           <a class="link" href="random_access_sequence.html#fusion.sequence.concepts.random_access_sequence.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><a class="link" href="../../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a></li>
-<li class="listitem"><a class="link" href="../../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a></li>
-<li class="listitem"><a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a></li>
-<li class="listitem"><a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a></li>
 <li class="listitem">
-<a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
-            (where adapted sequence is a Random Access Sequence)
-          </li>
+              <a class="link" href="../../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a>
+            </li>
 <li class="listitem">
-<a class="link" href="../../view/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a>
-            (where adapted sequence is a Random Access Sequence)
-          </li>
+              <a class="link" href="../../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a>
+            </li>
 <li class="listitem">
-<a class="link" href="../../view/zip_view.html" title="zip_view"><code class="computeroutput"><span class="identifier">zip_view</span></code></a>
-            (where adapted sequences are models of Random Access Sequence)
-          </li>
+              <a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a>
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
+              (where adapted sequence is a Random Access Sequence)
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a>
+              (where adapted sequence is a Random Access Sequence)
+            </li>
+<li class="listitem">
+              <a class="link" href="../../view/zip_view.html" title="zip_view"><code class="computeroutput"><span class="identifier">zip_view</span></code></a>
+              (where adapted sequences are models of Random Access Sequence)
+            </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
