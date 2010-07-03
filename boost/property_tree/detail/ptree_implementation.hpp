@@ -15,6 +15,11 @@
 #include <boost/iterator/reverse_iterator.hpp>
 #include <memory>
 
+#if defined(BOOST_MSVC) && \
+    (_MSC_FULL_VER >= 160000000 && _MSC_FULL_VER < 170000000)
+#define BOOST_PROPERTY_TREE_PAIR_BUG
+#endif
+
 namespace boost { namespace property_tree
 {
     template <class K, class D, class C>
@@ -22,6 +27,22 @@ namespace boost { namespace property_tree
     {
         struct by_name {};
         // The actual child container.
+#if defined(BOOST_PROPERTY_TREE_PAIR_BUG)
+        // MSVC 10 has moved std::pair's members to a base
+        // class. Unfortunately this does break the interface.
+        BOOST_STATIC_CONSTANT(unsigned,
+            first_offset = offsetof(value_type, first));
+        typedef multi_index_container<value_type,
+            multi_index::indexed_by<
+                multi_index::sequenced<>,
+                multi_index::ordered_non_unique<multi_index::tag<by_name>,
+                    multi_index::member_offset<value_type, const key_type,
+                                        first_offset>,
+                    key_compare
+                >
+            >
+        > base_container;
+#else
         typedef multi_index_container<value_type,
             multi_index::indexed_by<
                 multi_index::sequenced<>,
@@ -32,6 +53,7 @@ namespace boost { namespace property_tree
                 >
             >
         > base_container;
+#endif
         // The by-name lookup index.
         typedef typename base_container::template index<by_name>::type
             by_name_index;
@@ -873,5 +895,9 @@ namespace boost { namespace property_tree
     }
 
 } }
+
+#if defined(BOOST_PROPERTY_TREE_PAIR_BUG)
+#undef BOOST_PROPERTY_TREE_PAIR_BUG
+#endif
 
 #endif
