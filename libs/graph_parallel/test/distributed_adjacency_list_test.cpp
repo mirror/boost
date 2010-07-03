@@ -67,7 +67,7 @@ int test_main(int argc, char** argv)
 
     graph_traits<Graph1>::vertex_iterator v, v_end;
     int counter = 0;
-    for (tie(v, v_end) = vertices(g1); v != v_end; ++v) {
+    for (boost::tie(v, v_end) = vertices(g1); v != v_end; ++v) {
       std::cout << "Processor #" << process_id(pg) << ": vertex " << ++counter
                 << std::endl;
 
@@ -142,7 +142,7 @@ int test_main(int argc, char** argv)
 
     graph_traits<Graph2>::vertex_iterator v, v_end;
     int counter = 0;
-    for (tie(v, v_end) = vertices(g2); v != v_end; ++v) {
+    for (boost::tie(v, v_end) = vertices(g2); v != v_end; ++v) {
       std::cout << "Processor #" << process_id(pg) << ": vertex " << ++counter
                 << std::endl;
 
@@ -188,7 +188,7 @@ int test_main(int argc, char** argv)
 
     graph_traits<Graph3>::vertex_iterator v, v_end;
     int counter = 0;
-    for (tie(v, v_end) = vertices(g3); v != v_end; ++v) {
+    for (boost::tie(v, v_end) = vertices(g3); v != v_end; ++v) {
       std::cout << "Processor #" << process_id(pg) << ": vertex " << ++counter
                 << std::endl;
 
@@ -228,7 +228,7 @@ int test_main(int argc, char** argv)
     }
 
     // Add some remote edges
-    for (tie(v, v_end) = vertices(g3); v != v_end; ++v) {
+    for (boost::tie(v, v_end) = vertices(g3); v != v_end; ++v) {
       graph_traits<Graph1>::vertex_descriptor other = *v;
       other.owner = (other.owner + 1) % num_processes(pg);
       other.local = 0;

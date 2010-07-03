@@ -248,7 +248,7 @@ int test_main(int argc, char* argv[])
     typedef graph_traits<Graph>::vertex_iterator vertex_iterator;
     vertex_iterator v, v_end;
     
-    for (tie(v, v_end) = vertices(g); v != v_end; ++v) {
+    for (boost::tie(v, v_end) = vertices(g); v != v_end; ++v) {
       if (get(centrality, *v) != seqCentralityS[(n/p) * get(owner, *v) + get(local, *v)]) {
         std::cerr << "  " << id << ": Error - centrality of " << get(local, *v) << "@" << get(owner, *v)
                   << " does not match the sequential result (" << get(centrality, *v) << " vs. " 
@@ -269,7 +269,7 @@ int test_main(int argc, char* argv[])
     typedef graph_traits<seqGraph>::vertex_iterator vertex_iterator;
     vertex_iterator v, v_end;
   
-    for (tie(v, v_end) = vertices(sg); v != v_end; ++v) {
+    for (boost::tie(v, v_end) = vertices(sg); v != v_end; ++v) {
       if (get(seqCentrality, *v) != get(nonDistributedCentrality, *v)) {
         std::cerr << "  " << id << ": Error - non-distributed centrality of " << *v
                   << " does not match the sequential result (" << get(nonDistributedCentrality, *v) 
