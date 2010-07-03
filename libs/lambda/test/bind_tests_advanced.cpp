@@ -2,6 +2,7 @@
 //
 // Copyright (C) 2000-2003 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 // Copyright (C) 2000-2003 Gary Powell (powellg@amazon.com)
+// Copyright (C) 2010 Steven Watanabe
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -19,6 +20,9 @@
 
 
 #include "boost/any.hpp"
+#include "boost/type_traits/is_reference.hpp"
+#include "boost/mpl/assert.hpp"
+#include "boost/mpl/if.hpp"
 
 #include <iostream>
 
@@ -352,6 +356,55 @@ void test_break_const()
   BOOST_CHECK(i == 3);
 }
 
+template<class T>
+struct func {
+  template<class Args>
+  struct sig {
+    typedef typename boost::tuples::element<1, Args>::type arg1;
+    // If the argument type is not the same as the expected type,
+    // return void, which will cause an error.  Note that we
+    // can't just assert that the types are the same, because
+    // both const and non-const versions can be instantiated
+    // even though only one is ultimately used.
+    typedef typename boost::mpl::if_<boost::is_same<arg1, T>,
+      typename boost::remove_const<arg1>::type,
+      void
+    >::type type;
+  };
+  template<class U>
+  U operator()(const U& arg) const {
+    return arg;
+  }
+};
+
+void test_sig()
+{
+  int i = 1;
+  BOOST_CHECK(bind(func<int>(), 1)() == 1);
+  BOOST_CHECK(bind(func<const int>(), _1)(static_cast<const int&>(i)) == 1);
+  BOOST_CHECK(bind(func<int>(), _1)(i) == 1);
+}
+
+class base {
+public:
+  virtual int foo() = 0;
+};
+
+class derived : public base {
+public:
+  virtual int foo() {
+    return 1;
+  }
+};
+
+void test_abstract()
+{
+  derived d;
+  base& b = d;
+  BOOST_CHECK(bind(&base::foo, var(b))() == 1);
+  BOOST_CHECK(bind(&base::foo, *_1)(&b) == 1);
+}
+
 int test_main(int, char *[]) {
 
   test_nested_binds();
@@ -361,17 +414,7 @@ int test_main(int, char *[]) {
   test_const_parameters();
   test_rvalue_arguments(); 
   test_break_const(); 
+  test_sig();
+  test_abstract();
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-

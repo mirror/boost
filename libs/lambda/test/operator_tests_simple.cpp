@@ -235,6 +235,22 @@ void compound_operators() {
   (_1 %= 2)(i);
   BOOST_CHECK(i == 1);
   
+  // lambda expression as a left operand with rvalue on RHS
+  (_1 += (0 + 1))(i);
+  BOOST_CHECK(i == 2);
+
+  (_1 -= (0 + 1))(i);
+  BOOST_CHECK(i == 1);
+
+  (_1 *= (0 + 10))(i);
+  BOOST_CHECK(i == 10);
+
+  (_1 /= (0 + 2))(i);
+  BOOST_CHECK(i == 5);
+
+  (_1 %= (0 + 2))(i);
+  BOOST_CHECK(i == 1);
+  
   // shifts
   unsigned int ui = 2;
   (_1 <<= 1)(ui);
