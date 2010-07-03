@@ -132,4 +132,6 @@ test-suite numeric/uBLAS
       ]
       [ run test_complex_norms.cpp
       ]
+	[ run test_assignment.cpp
+	]
     ;
