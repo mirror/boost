@@ -203,6 +203,7 @@ Features include:
   * Don't treat 4+ consecutive blank lines as multiple paragraph breaks.
 * Don't require commas between authors in docinfo.
 * Allow empty document bodies.
+* Less empty paragraphs.
 
 [endsect]
 

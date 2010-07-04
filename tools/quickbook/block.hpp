@@ -415,7 +415,7 @@ namespace quickbook
                     ;
 
                 paragraph =
-                   *(   common
+                   +(   common
                     |   (anychar_p -                    // Make sure we don't go past
                             paragraph_end               // a single block.
                         )                               [actions.plain_char]
