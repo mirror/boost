@@ -550,8 +550,8 @@ private:
     >
     struct irow_
     {
-        typedef typename ROW::Source T1;
-        typedef typename ROW::Target T2;
+        typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
+        typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
         typedef T1 current_state_type;
         typedef T2 next_state_type;
@@ -593,8 +593,8 @@ private:
     >
     struct g_irow_
     {
-        typedef typename ROW::Source T1;
-        typedef typename ROW::Target T2;
+        typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
+        typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
         typedef T1 current_state_type;
         typedef T2 next_state_type;
@@ -629,8 +629,9 @@ private:
     >
     struct a_irow_ 
     {
-        typedef typename ROW::Source T1;
-        typedef typename ROW::Target T2;
+        typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
+        typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
+
         typedef typename ROW::Evt transition_event;
         typedef T1 current_state_type;
         typedef T2 next_state_type;
@@ -656,8 +657,8 @@ private:
     >
     struct _irow_ 
     {
-        typedef typename ROW::Source T1;
-        typedef typename ROW::Target T2;
+        typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
+        typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
         typedef T1 current_state_type;
         typedef T2 next_state_type;
