@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Quick Start</title>
-<link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="prev" href="introduction.html" title="Introduction">
@@ -13,14 +13,14 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="introduction.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="organization.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="introduction.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="organization.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -34,13 +34,13 @@
     </p>
 <p>
       For starters, we shall include all of Fusion's <a class="link" href="sequence.html" title="Sequence">Sequence</a>(s)
-      <sup>[<a name="id854024" href="#ftn.id854024" class="footnote">2</a>]</sup>:
+      <sup>[<a name="id760784" href="#ftn.id760784" class="footnote">2</a>]</sup>:
     </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-      Let's begin with a <code class="computeroutput"><a class="link" href="container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a></code> <sup>[<a name="id854140" href="#ftn.id854140" class="footnote">3</a>]</sup>:
+      Let's begin with a <code class="computeroutput"><a class="link" href="container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a></code> <sup>[<a name="id760912" href="#ftn.id760912" class="footnote">3</a>]</sup>:
     </p>
 <pre class="programlisting"><a class="link" href="container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">stuff</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="string">"howdy"</span><span class="special">);</span>
 <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <a class="link" href="sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">stuff</span><span class="special">);</span>
@@ -56,7 +56,7 @@
       Let's see some examples.
     </p>
 <a name="fusion.quick_start.print_the_vector_as_xml"></a><h4>
-<a name="id854455"></a>
+<a name="id761273"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.print_the_vector_as_xml">Print the vector
       as XML</a>
     </h4>
@@ -97,7 +97,7 @@
     </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../doc/html/images/caution.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../doc/src/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
 <tr><td align="left" valign="top"><p>
@@ -111,7 +111,7 @@
       print just about any Fusion <a class="link" href="sequence.html" title="Sequence">Sequence</a>.
     </p>
 <a name="fusion.quick_start.print_only_pointers"></a><h4>
-<a name="id858851"></a>
+<a name="id761791"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.print_only_pointers">Print only pointers</a>
     </h4>
 <p>
@@ -143,7 +143,7 @@
       Easy, right?
     </p>
 <a name="fusion.quick_start.associative_tuples"></a><h4>
-<a name="id859125"></a>
+<a name="id762108"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.associative_tuples">Associative tuples</a>
     </h4>
 <p>
@@ -215,7 +215,7 @@
       a <code class="computeroutput"><span class="identifier">dog</span></code> or a whole <code class="computeroutput"><span class="identifier">alternate_universe</span></code>.
     </p>
 <a name="fusion.quick_start.tip_of_the_iceberg"></a><h4>
-<a name="id859835"></a>
+<a name="id762909"></a>
       <a class="link" href="quick_start.html#fusion.quick_start.tip_of_the_iceberg">Tip of the Iceberg</a>
     </h4>
 <p>
@@ -226,12 +226,12 @@
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id854024" href="#id854024" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id760784" href="#id760784" class="para">2</a>] </sup>
         There are finer grained header files available if you wish to have more control
         over which components to include (see section <a class="link" href="organization.html" title="Organization">Orgainization</a>
         for details).
       </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id854140" href="#id854140" class="para">3</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id760912" href="#id760912" class="para">3</a>] </sup>
         Unless otherwise noted, components are in namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span></code>.
         For the sake of simplicity, code in this quick start implies <code class="computeroutput"><span class="keyword">using</span></code> directives for the fusion components
         we will be using.
@@ -249,7 +249,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="introduction.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="organization.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="introduction.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="organization.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
