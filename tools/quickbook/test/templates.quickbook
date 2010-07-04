@@ -105,5 +105,6 @@ x[super 2]
 [template foo 1]
 [fool]
 
-[endsect]
+[template blah 10]
 
+[endsect]
