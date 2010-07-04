@@ -37,6 +37,8 @@ test-suite quickbook.test :
     [ quickbook-test cond_phrase ]
     [ quickbook-test doc-info-1 ]
     [ quickbook-test doc-info-2 ]
+    [ quickbook-test doc-info-3 ]
+    [ quickbook-test doc-info-4 ]
     [ quickbook-test callouts ]
     [ quickbook-test simple_markup ]
     [ quickbook-test blocks ]

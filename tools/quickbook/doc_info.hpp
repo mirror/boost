@@ -129,9 +129,13 @@ namespace quickbook
                     ;
 
                 doc_authors =
-                        "authors" >> hard_space
-                    >>  *(  doc_author              [push_back_a(actions.doc_authors, name)]
-                            >> space >> !ch_p(',') >> space
+                        "authors"
+                    >>  hard_space
+                    >>  doc_author                  [push_back_a(actions.doc_authors, name)]
+                    >>  space
+                    >>  *(  !(ch_p(',') >> space)
+                        >>  doc_author              [push_back_a(actions.doc_authors, name)]
+                        >>  space
                         )
                     ;
 
