@@ -136,6 +136,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<empty_UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<float*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<float&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<float&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<const float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<float[2]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<foo0_t>::value, false);

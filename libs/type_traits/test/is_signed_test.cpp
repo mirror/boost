@@ -25,6 +25,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_signed<unsigned char>::value, false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_signed<UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_signed<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_signed<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_signed<int*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_signed<int[2]>::value, false);
 

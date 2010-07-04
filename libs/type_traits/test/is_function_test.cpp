@@ -30,6 +30,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int>::value, false);
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int&&>::value, false);
+#endif
 #else
 std::cout << 
 "<note>is_function will fail with some types (references for example)"

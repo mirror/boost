@@ -28,6 +28,10 @@ BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_13, ::tt::remove_bounds, (&)[2], (&
 BOOST_DECL_TRANSFORM_TEST3(remove_bounds_test_14, ::tt::remove_bounds, [])
 BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_15, ::tt::remove_bounds, const [], const)
 BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_16, ::tt::remove_bounds, const[][3], const[3])
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_5a, ::tt::remove_bounds, const &&, const&&)
+BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_13a, ::tt::remove_bounds, (&&)[2], (&&)[2])
+#endif
 
 TT_TEST_BEGIN(remove_bounds)
 
@@ -47,6 +51,10 @@ TT_TEST_BEGIN(remove_bounds)
    remove_bounds_test_14();
    remove_bounds_test_15();
    remove_bounds_test_16();
+#ifndef BOOST_NO_RVALUE_REFERENCES
+   remove_bounds_test_5a();
+   remove_bounds_test_13a();
+#endif
 
 TT_TEST_END
 

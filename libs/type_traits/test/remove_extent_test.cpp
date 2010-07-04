@@ -28,6 +28,10 @@ BOOST_DECL_TRANSFORM_TEST(remove_extent_test_13, ::tt::remove_extent, (&)[2], (&
 BOOST_DECL_TRANSFORM_TEST3(remove_extent_test_14, ::tt::remove_extent, [])
 BOOST_DECL_TRANSFORM_TEST(remove_extent_test_15, ::tt::remove_extent, const [], const)
 BOOST_DECL_TRANSFORM_TEST(remove_extent_test_16, ::tt::remove_extent, const[][3], const[3])
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_DECL_TRANSFORM_TEST(remove_extent_test_9a, ::tt::remove_extent, const &&, const&&)
+BOOST_DECL_TRANSFORM_TEST(remove_extent_test_13a, ::tt::remove_extent, (&&)[2], (&&)[2])
+#endif
 
 TT_TEST_BEGIN(remove_extent)
 
@@ -47,6 +51,10 @@ TT_TEST_BEGIN(remove_extent)
    remove_extent_test_14();
    remove_extent_test_15();
    remove_extent_test_16();
+#ifndef BOOST_NO_RVALUE_REFERENCES
+   remove_extent_test_9a();
+   remove_extent_test_13a();
+#endif
 
 TT_TEST_END
 

@@ -2,7 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Background and Tutorial</title>
-<link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.TypeTraits">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.TypeTraits">
@@ -13,14 +13,14 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="intro.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="category.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="intro.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="category.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -56,7 +56,7 @@
       method available to them.
     </p>
 <a name="boost_typetraits.background.type_traits"></a><h5>
-<a name="id769782"></a>
+<a name="id1003211"></a>
       <a class="link" href="background.html#boost_typetraits.background.type_traits">Type Traits</a>
     </h5>
 <p>
@@ -84,7 +84,7 @@
       given.
     </p>
 <a name="boost_typetraits.background.implementation"></a><h5>
-<a name="id769846"></a>
+<a name="id1003274"></a>
       <a class="link" href="background.html#boost_typetraits.background.implementation">Implementation</a>
     </h5>
 <p>
@@ -174,7 +174,7 @@
       in the default template.
     </p>
 <a name="boost_typetraits.background.optimized_copy"></a><h5>
-<a name="id778570"></a>
+<a name="id1011732"></a>
       <a class="link" href="background.html#boost_typetraits.background.optimized_copy">Optimized copy</a>
     </h5>
 <p>
@@ -195,32 +195,32 @@
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-        Both of the iterator types <code class="computeroutput"><span class="identifier">Iter1</span></code>
-        and <code class="computeroutput"><span class="identifier">Iter2</span></code> must be pointers.
-      </li>
+          Both of the iterator types <code class="computeroutput"><span class="identifier">Iter1</span></code>
+          and <code class="computeroutput"><span class="identifier">Iter2</span></code> must be pointers.
+        </li>
 <li>
-        Both <code class="computeroutput"><span class="identifier">Iter1</span></code> and <code class="computeroutput"><span class="identifier">Iter2</span></code> must point to the same type - excluding
-        const and volatile-qualifiers.
-      </li>
+          Both <code class="computeroutput"><span class="identifier">Iter1</span></code> and <code class="computeroutput"><span class="identifier">Iter2</span></code> must point to the same type - excluding
+          const and volatile-qualifiers.
+        </li>
 <li>
-        The type pointed to by <code class="computeroutput"><span class="identifier">Iter1</span></code>
-        must have a trivial assignment operator.
-      </li>
+          The type pointed to by <code class="computeroutput"><span class="identifier">Iter1</span></code>
+          must have a trivial assignment operator.
+        </li>
 </ul></div>
 <p>
       By trivial assignment operator we mean that the type is either a scalar type<a class="link" href="background.html#background.references">[3]</a> or:
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-        The type has no user defined assignment operator.
-      </li>
+          The type has no user defined assignment operator.
+        </li>
 <li>
-        The type does not have any data members that are references.
-      </li>
+          The type does not have any data members that are references.
+        </li>
 <li>
-        All base classes, and all data member objects must have trivial assignment
-        operators.
-      </li>
+          All base classes, and all data member objects must have trivial assignment
+          operators.
+        </li>
 </ul></div>
 <p>
       If all these conditions are met then a type can be copied using <code class="computeroutput"><span class="identifier">memcpy</span></code> rather than using a compiler generated
@@ -247,7 +247,7 @@
       otherwise it will call the "slow but safe version".
     </p>
 <a name="boost_typetraits.background.was_it_worth_it_"></a><h5>
-<a name="id778917"></a>
+<a name="id1012100"></a>
       <a class="link" href="background.html#boost_typetraits.background.was_it_worth_it_">Was it worth it?</a>
     </h5>
 <p>
@@ -266,24 +266,24 @@
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-        If you use the right algorithm for the job in the first place then optimization
-        will not be required; in some cases, memcpy is the right algorithm.
-      </li>
+          If you use the right algorithm for the job in the first place then optimization
+          will not be required; in some cases, memcpy is the right algorithm.
+        </li>
 <li>
-        If a component is going to be reused in many places by many people then optimizations
-        may well be worthwhile where they would not be so for a single case - in
-        other words, the likelihood that the optimization will be absolutely necessary
-        somewhere, sometime is that much higher. Just as importantly the perceived
-        value of the stock implementation will be higher: there is no point standardizing
-        an algorithm if users reject it on the grounds that there are better, more
-        heavily optimized versions available.
-      </li>
+          If a component is going to be reused in many places by many people then
+          optimizations may well be worthwhile where they would not be so for a single
+          case - in other words, the likelihood that the optimization will be absolutely
+          necessary somewhere, sometime is that much higher. Just as importantly
+          the perceived value of the stock implementation will be higher: there is
+          no point standardizing an algorithm if users reject it on the grounds that
+          there are better, more heavily optimized versions available.
+        </li>
 </ul></div>
 <div class="table">
-<a name="id778954"></a><p class="title"><b>Table&#160;1.1.&#160;Time taken to copy 1000 elements using `copy&lt;const
-    T*, T*&gt;` (times in micro-seconds)</b></p>
-<div class="table-contents"><table class="table" summary="Time taken to copy 1000 elements using `copy&lt;const
-    T*, T*&gt;` (times in micro-seconds)">
+<a name="id1012144"></a><p class="title"><b>Table&#160;1.1.&#160;Time taken to copy 1000 elements using `copy&lt;const T*, T*&gt;` (times
+      in micro-seconds)</b></p>
+<div class="table-contents"><table class="table" summary="Time taken to copy 1000 elements using `copy&lt;const T*, T*&gt;` (times
+      in micro-seconds)">
 <colgroup>
 <col>
 <col>
@@ -291,95 +291,95 @@
 </colgroup>
 <thead><tr>
 <th>
-          <p>
-            Version
-          </p>
-          </th>
+              <p>
+                Version
+              </p>
+            </th>
 <th>
-          <p>
-            T
-          </p>
-          </th>
+              <p>
+                T
+              </p>
+            </th>
 <th>
-          <p>
-            Time
-          </p>
-          </th>
+              <p>
+                Time
+              </p>
+            </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-          <p>
-            "Optimized" copy
-          </p>
-          </td>
+              <p>
+                "Optimized" copy
+              </p>
+            </td>
 <td>
-          <p>
-            char
-          </p>
-          </td>
+              <p>
+                char
+              </p>
+            </td>
 <td>
-          <p>
-            0.99
-          </p>
-          </td>
+              <p>
+                0.99
+              </p>
+            </td>
 </tr>
 <tr>
 <td>
-          <p>
-            Conventional copy
-          </p>
-          </td>
+              <p>
+                Conventional copy
+              </p>
+            </td>
 <td>
-          <p>
-            char
-          </p>
-          </td>
+              <p>
+                char
+              </p>
+            </td>
 <td>
-          <p>
-            8.07
-          </p>
-          </td>
+              <p>
+                8.07
+              </p>
+            </td>
 </tr>
 <tr>
 <td>
-          <p>
-            "Optimized" copy
-          </p>
-          </td>
+              <p>
+                "Optimized" copy
+              </p>
+            </td>
 <td>
-          <p>
-            int
-          </p>
-          </td>
+              <p>
+                int
+              </p>
+            </td>
 <td>
-          <p>
-            2.52
-          </p>
-          </td>
+              <p>
+                2.52
+              </p>
+            </td>
 </tr>
 <tr>
 <td>
-          <p>
-            Conventional copy
-          </p>
-          </td>
+              <p>
+                Conventional copy
+              </p>
+            </td>
 <td>
-          <p>
-            int
-          </p>
-          </td>
+              <p>
+                int
+              </p>
+            </td>
 <td>
-          <p>
-            8.02
-          </p>
-          </td>
+              <p>
+                8.02
+              </p>
+            </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><a name="boost_typetraits.background.pair_of_references"></a><h5>
-<a name="id779092"></a>
+<a name="id1012294"></a>
       <a class="link" href="background.html#boost_typetraits.background.pair_of_references">Pair of References</a>
     </h5>
 <p>
@@ -416,7 +416,7 @@
       to hold non-reference types, references, and constant references:
     </p>
 <div class="table">
-<a name="id779354"></a><p class="title"><b>Table&#160;1.2.&#160;Required Constructor Argument Types</b></p>
+<a name="id1012556"></a><p class="title"><b>Table&#160;1.2.&#160;Required Constructor Argument Types</b></p>
 <div class="table-contents"><table class="table" summary="Required Constructor Argument Types">
 <colgroup>
 <col>
@@ -424,52 +424,52 @@
 </colgroup>
 <thead><tr>
 <th>
-          <p>
-            Type of <code class="computeroutput"><span class="identifier">T1</span></code>
-          </p>
-          </th>
+              <p>
+                Type of <code class="computeroutput"><span class="identifier">T1</span></code>
+              </p>
+            </th>
 <th>
-          <p>
-            Type of parameter to initializing constructor
-          </p>
-          </th>
+              <p>
+                Type of parameter to initializing constructor
+              </p>
+            </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-          <p>
-            T
-          </p>
-          </td>
+              <p>
+                T
+              </p>
+            </td>
 <td>
-          <p>
-            const T &amp;
-          </p>
-          </td>
+              <p>
+                const T &amp;
+              </p>
+            </td>
 </tr>
 <tr>
 <td>
-          <p>
-            T &amp;
-          </p>
-          </td>
+              <p>
+                T &amp;
+              </p>
+            </td>
 <td>
-          <p>
-            T &amp;
-          </p>
-          </td>
+              <p>
+                T &amp;
+              </p>
+            </td>
 </tr>
 <tr>
 <td>
-          <p>
-            const T &amp;
-          </p>
-          </td>
+              <p>
+                const T &amp;
+              </p>
+            </td>
 <td>
-          <p>
-            const T &amp;
-          </p>
-          </td>
+              <p>
+                const T &amp;
+              </p>
+            </td>
 </tr>
 </tbody>
 </table></div>
@@ -481,10 +481,8 @@
       adds a reference to its type, unless it is already a reference.
     </p>
 <div class="table">
-<a name="id779457"></a><p class="title"><b>Table&#160;1.3.&#160;Using add_reference to synthesize the correct constructor
-    type</b></p>
-<div class="table-contents"><table class="table" summary="Using add_reference to synthesize the correct constructor
-    type">
+<a name="id1012664"></a><p class="title"><b>Table&#160;1.3.&#160;Using add_reference to synthesize the correct constructor type</b></p>
+<div class="table-contents"><table class="table" summary="Using add_reference to synthesize the correct constructor type">
 <colgroup>
 <col>
 <col>
@@ -492,72 +490,73 @@
 </colgroup>
 <thead><tr>
 <th>
-          <p>
-            Type of <code class="computeroutput"><span class="identifier">T1</span></code>
-          </p>
-          </th>
+              <p>
+                Type of <code class="computeroutput"><span class="identifier">T1</span></code>
+              </p>
+            </th>
 <th>
-          <p>
-            Type of <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">T1</span></code>
-          </p>
-          </th>
+              <p>
+                Type of <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">T1</span></code>
+              </p>
+            </th>
 <th>
-          <p>
-            Type of <code class="computeroutput"><span class="identifier">add_reference</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">T1</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-          </p>
-          </th>
+              <p>
+                Type of <code class="computeroutput"><span class="identifier">add_reference</span><span class="special">&lt;</span><span class="keyword">const</span>
+                <span class="identifier">T1</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+              </p>
+            </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-          <p>
-            T
-          </p>
-          </td>
+              <p>
+                T
+              </p>
+            </td>
 <td>
-          <p>
-            const T
-          </p>
-          </td>
+              <p>
+                const T
+              </p>
+            </td>
 <td>
-          <p>
-            const T &amp;
-          </p>
-          </td>
+              <p>
+                const T &amp;
+              </p>
+            </td>
 </tr>
 <tr>
 <td>
-          <p>
-            T &amp;
-          </p>
-          </td>
+              <p>
+                T &amp;
+              </p>
+            </td>
 <td>
-          <p>
-            T &amp; [8]
-          </p>
-          </td>
+              <p>
+                T &amp; [8]
+              </p>
+            </td>
 <td>
-          <p>
-            T &amp;
-          </p>
-          </td>
+              <p>
+                T &amp;
+              </p>
+            </td>
 </tr>
 <tr>
 <td>
-          <p>
-            const T &amp;
-          </p>
-          </td>
+              <p>
+                const T &amp;
+              </p>
+            </td>
 <td>
-          <p>
-            const T &amp;
-          </p>
-          </td>
+              <p>
+                const T &amp;
+              </p>
+            </td>
 <td>
-          <p>
-            const T &amp;
-          </p>
-          </td>
+              <p>
+                const T &amp;
+              </p>
+            </td>
 </tr>
 </tbody>
 </table></div>
@@ -598,7 +597,7 @@
       easier to maintain and easier to understand.
     </p>
 <a name="boost_typetraits.background.conclusion"></a><h5>
-<a name="id779915"></a>
+<a name="id1013133"></a>
       <a class="link" href="background.html#boost_typetraits.background.conclusion">Conclusion</a>
     </h5>
 <p>
@@ -611,7 +610,7 @@
       can be optimal as well as generic.
     </p>
 <a name="boost_typetraits.background.acknowledgements"></a><h5>
-<a name="id779932"></a>
+<a name="id1013150"></a>
       <a class="link" href="background.html#boost_typetraits.background.acknowledgements">Acknowledgements</a>
     </h5>
 <p>
@@ -619,52 +618,53 @@
       comments when preparing this article.
     </p>
 <a name="background.references"></a><a name="boost_typetraits.background.references"></a><h5>
-<a name="id779953"></a>
+<a name="id1013170"></a>
       <a class="link" href="background.html#boost_typetraits.background.references">References</a>
     </h5>
 <div class="orderedlist"><ol type="1">
 <li>
-        Nathan C. Myers, C++ Report, June 1995.
-      </li>
+          Nathan C. Myers, C++ Report, June 1995.
+        </li>
 <li>
-        The type traits library is based upon contributions by Steve Cleary, Beman
-        Dawes, Howard Hinnant and John Maddock: it can be found at www.boost.org.
-      </li>
+          The type traits library is based upon contributions by Steve Cleary, Beman
+          Dawes, Howard Hinnant and John Maddock: it can be found at www.boost.org.
+        </li>
 <li>
-        A scalar type is an arithmetic type (i.e. a built-in integer or floating
-        point type), an enumeration type, a pointer, a pointer to member, or a const-
-        or volatile-qualified version of one of these types.
-      </li>
+          A scalar type is an arithmetic type (i.e. a built-in integer or floating
+          point type), an enumeration type, a pointer, a pointer to member, or a
+          const- or volatile-qualified version of one of these types.
+        </li>
 <li>
-        This quote is from Donald Knuth, ACM Computing Surveys, December 1974, pg
-        268.
-      </li>
+          This quote is from Donald Knuth, ACM Computing Surveys, December 1974,
+          pg 268.
+        </li>
 <li>
-        The test code is available as part of the boost utility library (see algo_opt_examples.cpp),
-        the code was compiled with gcc 2.95 with all optimisations turned on, tests
-        were conducted on a 400MHz Pentium II machine running Microsoft Windows 98.
-      </li>
+          The test code is available as part of the boost utility library (see algo_opt_examples.cpp),
+          the code was compiled with gcc 2.95 with all optimisations turned on, tests
+          were conducted on a 400MHz Pentium II machine running Microsoft Windows
+          98.
+        </li>
 <li>
-        John Maddock and Howard Hinnant have submitted a "compressed_pair"
-        library to Boost, which uses a technique similar to the one described here
-        to hold references. Their pair also uses type traits to determine if any
-        of the types are empty, and will derive instead of contain to conserve space
-        -- hence the name "compressed".
-      </li>
+          John Maddock and Howard Hinnant have submitted a "compressed_pair"
+          library to Boost, which uses a technique similar to the one described here
+          to hold references. Their pair also uses type traits to determine if any
+          of the types are empty, and will derive instead of contain to conserve
+          space -- hence the name "compressed".
+        </li>
 <li>
-        This is actually an issue with the C++ Core Language Working Group (issue
-        #106), submitted by Bjarne Stroustrup. The tentative resolution is to allow
-        a "reference to a reference to T" to mean the same thing as a "reference
-        to T", but only in template instantiation, in a method similar to multiple
-        cv-qualifiers.
-      </li>
+          This is actually an issue with the C++ Core Language Working Group (issue
+          #106), submitted by Bjarne Stroustrup. The tentative resolution is to allow
+          a "reference to a reference to T" to mean the same thing as a
+          "reference to T", but only in template instantiation, in a method
+          similar to multiple cv-qualifiers.
+        </li>
 <li>
-        For those of you who are wondering why this shouldn't be const-qualified,
-        remember that references are always implicitly constant (for example, you
-        can't re-assign a reference). Remember also that "const T &amp;"
-        is something completely different. For this reason, cv-qualifiers on template
-        type arguments that are references are ignored.
-      </li>
+          For those of you who are wondering why this shouldn't be const-qualified,
+          remember that references are always implicitly constant (for example, you
+          can't re-assign a reference). Remember also that "const T &amp;"
+          is something completely different. For this reason, cv-qualifiers on template
+          type arguments that are references are ignored.
+        </li>
 </ol></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
@@ -680,7 +680,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="intro.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="category.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="intro.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="category.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

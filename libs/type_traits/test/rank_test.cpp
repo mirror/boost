@@ -21,6 +21,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::rank<int[5][10]>::value, 2);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::rank<int[5][10][40]>::value, 3);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::rank<int (&)[5][10]>::value, 0);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::rank<int (*)[5][10]>::value, 0);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::rank<int (&&)[5][10]>::value, 0);
+#endif
 
 TT_TEST_END
 

@@ -16,6 +16,9 @@ TT_TEST_BEGIN(is_pointer)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<int>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<int*>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<const int*>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<volatile int*>::value, true);

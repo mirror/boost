@@ -61,7 +61,10 @@ then use the `std::numeric_limits template` instead.
    struct __is_pointer;
      
    template <class T>
-   struct __is_reference;
+   struct __is_lvalue_reference;
+     
+   template <class T>
+   struct __is_rvalue_reference;
      
    template <class T>
    struct __is_union;
@@ -88,6 +91,9 @@ in addition to one of the primary categories.
    template <class T>
    struct __is_object;
    
+   template <class T>
+   struct __is_reference;
+     
    template <class T>
    struct __is_scalar;
    

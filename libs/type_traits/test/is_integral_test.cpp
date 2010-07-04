@@ -122,6 +122,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<empty_UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<int*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<int&&>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<int[2]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<test_abc1>::value, false);

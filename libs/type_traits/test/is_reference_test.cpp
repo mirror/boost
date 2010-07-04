@@ -35,6 +35,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<incomplete_type>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<int&&>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<UDT&&>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<const UDT&&>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<volatile UDT&&>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<const volatile UDT&&>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<int (&&)[2]>::value, true);
+#endif
 
 TT_TEST_END
 

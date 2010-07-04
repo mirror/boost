@@ -28,6 +28,10 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_void<foo2_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_void<foo3_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_void<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_void<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_void<int&>::value, false);
+#ifndef BOOST_NO_RVALUE_REFERENCES
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_void<int&&>::value, false);
+#endif
 
 TT_TEST_END
 
