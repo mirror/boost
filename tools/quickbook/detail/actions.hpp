@@ -85,6 +85,29 @@ namespace quickbook
         std::string post;
     };
 
+    struct implicit_paragraph_action
+    {
+        //  implicit paragraphs
+        //  doesn't output the paragraph if it's only whitespace.
+
+        implicit_paragraph_action(
+            collector& out,
+            collector& phrase,
+            std::string const& pre,
+            std::string const& post)
+        : out(out)
+        , phrase(phrase)
+        , pre(pre)
+        , post(post) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        collector& out;
+        collector& phrase;
+        std::string pre;
+        std::string post;
+    };
+
     struct header_action
     {
         //  Handles paragraph, h1, h2, h3, h4, h5, h6,

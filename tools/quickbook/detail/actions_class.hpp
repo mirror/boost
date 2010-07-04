@@ -113,8 +113,8 @@ namespace quickbook
         code_action             code;
         code_action             code_block;
         inline_code_action      inline_code;
-        phrase_action           paragraph;
-        phrase_action           inside_paragraph;
+        implicit_paragraph_action paragraph;
+        implicit_paragraph_action inside_paragraph;
         generic_header_action   h;
         header_action           h1, h2, h3, h4, h5, h6;
         markup_action           hr;

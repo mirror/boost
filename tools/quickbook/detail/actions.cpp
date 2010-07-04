@@ -67,6 +67,28 @@ namespace quickbook
         out << pre << str << post;
     }
 
+    void implicit_paragraph_action::operator()(iterator first, iterator last) const
+    {
+        std::string str;
+        phrase.swap(str);
+
+        // TODO: Use spirit to do this?
+
+        std::string::const_iterator
+            pos = str.begin(),
+            end = str.end();
+
+        while(pos != end && (
+            *pos == ' ' || *pos == '\t' || *pos == '\n' || *pos == '\r'))
+        {
+            ++pos;
+        }
+
+        if(pos != end) {
+            out << pre << str << post;
+        }
+    }
+
     void header_action::operator()(iterator first, iterator last) const
     {
         std::string str;

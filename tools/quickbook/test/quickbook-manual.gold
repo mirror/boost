@@ -1541,8 +1541,6 @@ escape (no processing/formatting)
           highlighted according to the current <link linkend="quickbook.syntax.phrase.source_mode">Source
           Mode</link>:
         </para>
-        <para>
-        </para>
         
 <programlisting><phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
@@ -1553,8 +1551,6 @@ escape (no processing/formatting)
     <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-        <para>
-        </para>
         
 <programlisting><phrase role="keyword">import</phrase> <phrase role="identifier">cgi</phrase>
 
@@ -1563,8 +1559,6 @@ escape (no processing/formatting)
 
     <phrase role="keyword">return</phrase> <phrase role="identifier">cgi</phrase><phrase role="special">.</phrase><phrase role="identifier">escape</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">)</phrase>
 </programlisting>
-        <para>
-        </para>
         <para>
           Macros that are already defined are expanded in source code. Example:
         </para>
@@ -2840,8 +2834,6 @@ for the journey to old age.]]]
     </para>
     <section id="quickbook.install.windows">
       <title><link linkend="quickbook.install.windows"> Windows 2000, XP, 2003, Vista</link></title>
-      <para>
-      </para>
       <blockquote>
         <para>
           <emphasis>Section contributed by Julio M. Merino Vidal</emphasis>
