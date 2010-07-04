@@ -657,12 +657,10 @@ namespace boost_no_complete_value_initialization
     m_member_function_ptr_array(),
     m_member_function_ptr_struct(),
     m_member_function_ptr_struct_array(),
-#ifndef BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER
     m_ptr_to_member(),
     m_ptr_to_member_array(),
     m_ptr_to_member_struct(),
     m_ptr_to_member_struct_array(),
-#endif
     m_bit_field_struct(),
     m_bit_field_struct_array(),
     m_int_struct(),
@@ -760,14 +758,12 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct_array[1]) +
-#ifndef BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_struct_array[1]) +
-#endif
         FAILED_TO_VALUE_INITIALIZE(m_bit_field_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_bit_field_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_bit_field_struct_array[1]) +
@@ -853,10 +849,8 @@ namespace boost_no_complete_value_initialization
       FAILED_TO_VALUE_INITIALIZE(function_ptr_struct()) +
       FAILED_TO_VALUE_INITIALIZE(member_function_ptr_type()) +
       FAILED_TO_VALUE_INITIALIZE(member_function_ptr_struct()) +
-#ifndef BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER
       FAILED_TO_VALUE_INITIALIZE(ptr_to_member_type()) +
       FAILED_TO_VALUE_INITIALIZE(ptr_to_member_struct()) +
-#endif
       FAILED_TO_VALUE_INITIALIZE(int_struct()) +
       FAILED_TO_VALUE_INITIALIZE(int_struct_holder()) +
       FAILED_TO_VALUE_INITIALIZE(pod_struct()) +
@@ -909,10 +903,8 @@ namespace boost_no_complete_value_initialization
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<function_ptr_struct>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<member_function_ptr_type>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<member_function_ptr_struct>() ) +
-#ifndef BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<ptr_to_member_type>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<ptr_to_member_struct>() ) +
-#endif
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<bit_field_struct>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<int_struct>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<int_struct>() ) +
@@ -1015,7 +1007,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 31."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 32."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
