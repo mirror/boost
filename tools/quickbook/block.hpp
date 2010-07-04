@@ -54,7 +54,7 @@ namespace quickbook
                 }
 
                 blocks =
-                   +(   block_markup
+                   *(   block_markup
                     |   code
                     |   list                            [actions.list]
                     |   hr                              [actions.hr]

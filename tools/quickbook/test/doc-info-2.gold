@@ -17,7 +17,4 @@ last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.o
     <librarycategory name="category:tests"></librarycategory> <librarycategory name="category:irrelevance"></librarycategory>
   </libraryinfo>
   <title>Document Information 1</title>
-  <para>
-    The body is largely irrelevant.
-  </para>
 </library>
