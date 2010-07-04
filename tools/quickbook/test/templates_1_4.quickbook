@@ -27,8 +27,7 @@
 [binary 1.\.2..3] [/ {1..2-3} ]
 [binary 1.\.2 3]  [/ {1..2-3} ]
 
-[binary [binary 1 2..3] 4] [/ {[binary 1 2- {1 2-y}} 4] ]
-[/ This is obviously wrong, but I don't feel up to fixing it at the moment.]
+[binary [binary 1 2..3] 4] [/ {[binary 1 2-3} 4] ]
 
 [template ternary[x y z] {[x]-[y]-[z]}]
 [ternary 1..2..3]  [/ {1-2-3} ]

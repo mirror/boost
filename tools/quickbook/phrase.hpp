@@ -126,7 +126,7 @@ namespace quickbook
                         ch_p('`')                       [assign_a(actions.template_escape,true_)]
                         |
                         eps_p                           [assign_a(actions.template_escape,false_)]
-                    )
+                    )                                   [clear_a(actions.template_info)]
                     >>
                     ( (
                         (eps_p(punct_p)
