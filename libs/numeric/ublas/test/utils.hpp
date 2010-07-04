@@ -14,9 +14,9 @@
 #define JOIN_(x,y) x ## y
 
 #ifndef NDEBUG
-# 	define BOOST_UBLAS_DEBUG_TRACE(x) std::cerr << "[Debug>> " << EXPAND_(x) << std::endl
+#       define BOOST_UBLAS_DEBUG_TRACE(x) std::cerr << "[Debug>> " << EXPAND_(x) << std::endl
 #else
-# 	define BOOST_UBLAS_DEBUG_TRACE(x) /**/
+#       define BOOST_UBLAS_DEBUG_TRACE(x) /**/
 #endif // NDEBUG
 
 #define BOOST_UBLAS_TEST_BEGIN() unsigned int test_fails_(0)

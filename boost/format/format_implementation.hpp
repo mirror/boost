@@ -172,6 +172,47 @@ namespace boost {
     }
 
     template< class Ch, class Tr, class Alloc>
+    int basic_format<Ch,Tr, Alloc>::
+    bound_args() const {
+        if(bound_.size()==0)
+            return 0;
+        int n=0;
+        for(int i=0; i<num_args_ ; ++i)
+            if(bound_[i])
+                ++n;
+        return n;
+    }
+
+    template< class Ch, class Tr, class Alloc>
+    int basic_format<Ch,Tr, Alloc>::
+    fed_args() const {
+        if(bound_.size()==0)
+            return cur_arg_;
+        int n=0;
+        for(int i=0; i<cur_arg_ ; ++i)
+            if(!bound_[i])
+                ++n;
+        return n;
+    }
+
+    template< class Ch, class Tr, class Alloc>
+    int basic_format<Ch,Tr, Alloc>::
+    cur_arg() const {
+      return cur_arg_+1; }
+
+    template< class Ch, class Tr, class Alloc>
+    int basic_format<Ch,Tr, Alloc>::
+    remaining_args() const {
+        if(bound_.size()==0)
+            return num_args_-cur_arg_;
+        int n=0;
+        for(int i=cur_arg_; i<num_args_ ; ++i)
+            if(!bound_[i])
+                ++n;
+        return n;
+    }
+
+    template< class Ch, class Tr, class Alloc>
     typename basic_format<Ch, Tr, Alloc>::string_type 
     basic_format<Ch,Tr, Alloc>:: 
     str () const {

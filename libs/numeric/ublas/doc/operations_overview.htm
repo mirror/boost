@@ -42,7 +42,7 @@
 <td>are <a href="range.htm#slice">slices</a>, e.g. <code>slice(0, 1, 3)</code></td></tr>
 </table>
 
-<h2 id="blas"><a name="blas">Basic Linear Algebra</a></h2>
+<h2><a name="blas">Basic Linear Algebra</a></h2>
 
 <h3>standard operations: addition, subtraction, multiplication by a
 scalar</h3>
@@ -81,7 +81,7 @@ w = conj(u); w = real(u); w = imag(u);
 C = trans(A); C = conj(A); C = herm(A); C = real(A); C = imag(A);
 </code></pre>
 
-<h2 id="advanced"><a name="advanced">Advanced functions</a></h2>
+<h2><a name="advanced">Advanced functions</a></h2>
 
 <h3>norms</h3>
 
@@ -129,7 +129,7 @@ opb_prod(A, B, C, false); // C += A * B
 may give a speedup if <code>A</code> has less columns than rows,
 because the product is computed as a sum of outer products.</p>
 
-<h2 id="sub"><a name="sub">Submatrices, Subvectors</a></h2>
+<h2><a name="sub">Submatrices, Subvectors</a></h2>
 <p>Accessing submatrices and subvectors via <b>proxies</b> using <code>project</code> functions:</p>
 <pre><code>
 w = project(u, r);         // the subvector of u specifed by the index range r
@@ -181,7 +181,7 @@ the column with a slice with stride 0 thus:<br />
 slice(0,0,2));
 </code></p>
 
-<h2 id="speed"><a name="speed">Speed improvements</a></h2>
+<h2><a name="speed">Speed improvements</a></h2>
 <h3><a name='noalias'>Matrix / Vector assignment</a></h3>
 <p>If you know for sure that the left hand expression and the right
 hand expression have no common storage, then assignment has

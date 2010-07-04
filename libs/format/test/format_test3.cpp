@@ -93,12 +93,31 @@ int test_main(int, char* [])
       BOOST_ERROR("nesting did not work");
     }
 
+    // bind args, and various arguments counts :
+    {
+        boost::format bf("%1% %4% %1%");
+        bf.bind_arg(1, "one") % 2 % "three" ;
+        BOOST_CHECK_EQUAL(bf.expected_args(), 4);
+        BOOST_CHECK_EQUAL(bf.fed_args(), 2);
+        BOOST_CHECK_EQUAL(bf.bound_args(), 1);
+        BOOST_CHECK_EQUAL(bf.remaining_args(), 1);
+        BOOST_CHECK_EQUAL(bf.cur_arg(), 4);
+        bf.clear_binds();
+        bf % "one" % 2 % "three" ;
+        BOOST_CHECK_EQUAL(bf.expected_args(), 4);
+        BOOST_CHECK_EQUAL(bf.fed_args(), 3);
+        BOOST_CHECK_EQUAL(bf.bound_args(), 0);
+        BOOST_CHECK_EQUAL(bf.remaining_args(), 1);
+        BOOST_CHECK_EQUAL(bf.cur_arg(), 4);
+    }
     // testcase for bug reported at 
     // http://lists.boost.org/boost-users/2006/05/19723.php
-    format f("%40t%1%");
-    int x = 0;
-    f.bind_arg(1, x);
-    f.clear();
+    {
+        format f("%40t%1%");
+        int x = 0;
+        f.bind_arg(1, x);
+        f.clear();
+    }
 
     // testcase for bug reported at
     // http://lists.boost.org/boost-users/2005/11/15454.php
