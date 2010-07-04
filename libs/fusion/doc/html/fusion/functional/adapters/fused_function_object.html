@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>fused_function_object</title>
-<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../adapters.html" title="Adapters">
 <link rel="prev" href="fused_procedure.html" title="fused_procedure">
@@ -13,21 +13,21 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="fused_procedure.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unfused.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="fused_procedure.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="unfused.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.fused_function_object"></a><a class="link" href="fused_function_object.html" title="fused_function_object">fused_function_object</a>
 </h4></div></div></div>
 <a name="fusion.functional.adapters.fused_function_object.description"></a><h6>
-<a name="id1097454"></a>
+<a name="id973705"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.description">Description</a>
         </h6>
 <p>
@@ -44,20 +44,20 @@
           object is held by value, the adapter is const).
         </p>
 <a name="fusion.functional.adapters.fused_function_object.header"></a><h6>
-<a name="id1097497"></a>
+<a name="id973772"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.header">Header</a>
         </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">fused_function_object</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.synopsis"></a><h6>
-<a name="id1097569"></a>
+<a name="id973863"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.synopsis">Synopsis</a>
         </h6>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Function</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fused_function_object</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.template_parameters"></a><h6>
-<a name="id1097623"></a>
+<a name="id973935"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.template_parameters">Template
           parameters</a>
         </h6>
@@ -97,13 +97,11 @@
                   </p>
                 </td>
 <td>
-                  <p>
-                  </p>
                 </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_function_object.model_of"></a><h6>
-<a name="id1097718"></a>
+<a name="id974036"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.model_of">Model
           of</a>
         </h6>
@@ -141,7 +139,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_function_object.expression_semantics"></a><h6>
-<a name="id1097887"></a>
+<a name="id974243"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.expression_semantics">Expression
           Semantics</a>
         </h6>
@@ -206,7 +204,7 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_function_object.example"></a><h6>
-<a name="id1098082"></a>
+<a name="id974472"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.example">Example</a>
         </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SeqOfSeqs</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Func</span><span class="special">&gt;</span>
@@ -243,7 +241,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.see_also"></a><h6>
-<a name="id1098854"></a>
+<a name="id975403"></a>
           <a class="link" href="fused_function_object.html#fusion.functional.adapters.fused_function_object.see_also">See
           also</a>
         </h6>
@@ -276,7 +274,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="fused_procedure.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unfused.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="fused_procedure.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="unfused.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
