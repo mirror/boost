@@ -54,7 +54,7 @@ C = t * A; C = A * t; C = A / t;
 w = t * u; w = u * t; w = u / t;
 </code></pre>
 
-<h3>computed assignements</h3>
+<h3>computed assignments</h3>
 
 <pre><code>
 C += A; C -= A; 
@@ -104,18 +104,18 @@ axpy_prod(A, B, C, false); // C += A * B
 </code></pre>
 <p><em>Note:</em> The last argument (<code>bool init</code>) of
 <code>axpy_prod</code> is optional. Currently it defaults to
-<code>true</code>, but this may change in the future. Set the
-<code>init</code> to <code>true</code> is equivalent to call
-<code>w.clear()</code> before <code>axpy_prod</code>. Up to now
-there are some specialisation for compressed matrices that give a
+<code>true</code>, but this may change in the future. Setting the
+<code>init</code> to <code>true</code> is equivalent to calling
+<code>w.clear()</code> before <code>axpy_prod</code>. 
+There are some specialisation for products of compressed matrices that give a
 large speed up compared to <code>prod</code>.</p>
 <pre><code>
 w = block_prod&lt;matrix_type, 64&gt; (A, u); // w = A * u
 w = block_prod&lt;matrix_type, 64&gt; (u, A); // w = trans(A) * u
-C = block_prod&lt;matrix_type, 64&gt; (A, B); // w = A * B
+C = block_prod&lt;matrix_type, 64&gt; (A, B); // C = A * B
 </code></pre>
 <p><em>Note:</em> The blocksize can be any integer. However, the
-total speed depends very strong on the combination of blocksize,
+actual speed depends very significantly on the combination of blocksize,
 CPU and compiler. The function <code>block_prod</code> is designed
 for large dense matrices.</p>
 <h3>rank-k updates</h3>

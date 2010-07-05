@@ -118,6 +118,8 @@ test-suite numeric/uBLAS
       ]
       [ run comp_mat_erase.cpp
       ]
+      [ run sparse_view_test.cpp
+      ]
       [ run begin_end.cpp
       ]
       [ run num_columns.cpp
@@ -130,4 +132,6 @@ test-suite numeric/uBLAS
       ]
       [ run test_complex_norms.cpp
       ]
+	[ run test_assignment.cpp
+	]
     ;
