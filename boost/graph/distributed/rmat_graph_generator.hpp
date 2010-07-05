@@ -60,7 +60,7 @@ namespace boost {
           if (permute_vertices) 
               generate_permutation_vector(gen, vertexPermutation, n);
 
-          int SCALE = int(floor(log(n)/log(2.)));
+          int SCALE = int(floor(log(double(n))/log(2.)));
           boost::uniform_01<RandomGenerator> prob(gen);
       
           std::map<value_type, bool> edge_map;
