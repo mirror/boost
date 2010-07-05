@@ -22,8 +22,6 @@
 #include <boost/test/minimal.hpp>
 #include <boost/graph/iteration_macros.hpp>
 
-#include <sys/time.h>
-#include <time.h>
 #include <iostream>
 #include <iomanip>
 
@@ -43,9 +41,7 @@ typedef double time_type;
 
 inline time_type get_time()
 {
-  timeval tp;
-  gettimeofday(&tp, 0);
-  return tp.tv_sec + tp.tv_usec / 1000000.0;
+  return MPI_Wtime();
 }
 
 std::string print_time(time_type t)
