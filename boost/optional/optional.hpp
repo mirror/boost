@@ -168,8 +168,10 @@ class optional_base : public optional_tag
 
     typedef BOOST_DEDUCED_TYPENAME is_reference<T>::type is_reference_predicate ;
 
+  public:
     typedef BOOST_DEDUCED_TYPENAME mpl::if_<is_reference_predicate,types_when_ref,types_when_not_ref>::type types ;
 
+  protected:
     typedef bool (this_type::*unspecified_bool_type)() const;
 
     typedef BOOST_DEDUCED_TYPENAME types::reference_type       reference_type ;
