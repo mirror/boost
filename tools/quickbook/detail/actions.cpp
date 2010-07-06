@@ -67,7 +67,7 @@ namespace quickbook
         out << pre << str << post;
     }
 
-    void implicit_paragraph_action::operator()(iterator first, iterator last) const
+    void implicit_paragraph_action::operator()() const
     {
         std::string str;
         phrase.swap(str);
@@ -749,6 +749,7 @@ namespace quickbook
         bool parse_template(
             std::string& body
           , std::string& result
+          , bool& is_block
           , boost::spirit::classic::file_position const& template_pos
           , quickbook::actions& actions
         )
@@ -764,7 +765,7 @@ namespace quickbook
             std::string::const_iterator iter = body.begin();
             while (iter != body.end() && ((*iter == ' ') || (*iter == '\t')))
                 ++iter; // skip spaces and tabs
-            bool is_block = (iter != body.end()) && ((*iter == '\r') || (*iter == '\n'));
+            is_block = (iter != body.end()) && ((*iter == '\r') || (*iter == '\n'));
             bool r = false;
 
             if (actions.template_escape)
@@ -796,6 +797,7 @@ namespace quickbook
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
                 r = boost::spirit::classic::parse(first, last, block_p).full;
+                actions.inside_paragraph();
                 actions.out.swap(result);
             }
             return r;
@@ -827,6 +829,7 @@ namespace quickbook
         BOOST_ASSERT(symbol);
             
         std::string result;
+        bool is_block;
         actions.push(); // scope the actions' states
         {
             // Store the current section level so that we can ensure that
@@ -881,7 +884,7 @@ namespace quickbook
             body.assign(tpl->begin(), tpl->end());
             body.reserve(body.size()+2); // reserve 2 more
 
-            if (!parse_template(body, result, template_pos, actions))
+            if (!parse_template(body, result, is_block, template_pos, actions))
             {
                 boost::spirit::classic::file_position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
@@ -909,7 +912,13 @@ namespace quickbook
         }
 
         actions.pop(); // restore the actions' states
-        actions.phrase << result; // print it!!!
+        if(is_block) {
+        	actions.inside_paragraph();
+        	actions.temp_para << result; // print it!!!
+        }
+        else {
+	        actions.phrase << result; // print it!!!
+	   	}
         --actions.template_depth;
     }
 
@@ -1643,6 +1652,13 @@ namespace quickbook
     void phrase_to_string_action::operator()(iterator first, iterator last) const
     {
         phrase.swap(out);
+    }
+
+	void copy_stream_action::operator()(iterator first, iterator last) const
+    {
+    	std::string str;
+    	phrase.swap(str);
+    	out << str;
     }
 }
 

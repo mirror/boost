@@ -13,24 +13,18 @@
       foo baz
     </para>
     <para>
-      <para>
-        foo baz
-      </para>
+      foo baz
     </para>
     <para>
-      <para>
-        This is a complete paragraph. kalamazoo kalamazoo kalamazoo kalamazoo kalamazoo
-        kalamazoo kalamazoo kalamazoo kalamazoo.... blah blah blah......
-      </para>
+      This is a complete paragraph. kalamazoo kalamazoo kalamazoo kalamazoo kalamazoo
+      kalamazoo kalamazoo kalamazoo kalamazoo.... blah blah blah......
     </para>
     <para>
       <hey>baz</hey>
     </para>
     <para>
-      <para>
-        This is a complete paragraph. madagascar madagascar madagascar madagascar
-        madagascar madagascar madagascar madagascar madagascar.... blah blah blah......
-      </para>
+      This is a complete paragraph. madagascar madagascar madagascar madagascar madagascar
+      madagascar madagascar madagascar madagascar.... blah blah blah......
     </para>
     <para>
       zoom peanut zoom
@@ -44,14 +38,12 @@
     <para>
       wxyz wxyz trail
     </para>
-    <para>
-      
+    
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> &quot;Hello, World&quot; <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-    </para>
     <para>
       x<superscript>2</superscript>
     </para>

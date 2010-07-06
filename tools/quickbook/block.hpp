@@ -59,7 +59,8 @@ namespace quickbook
                     |   list                            [actions.list]
                     |   hr                              [actions.hr]
                     |   comment >> +eol
-                    |   paragraph                       [actions.paragraph]
+                    |   paragraph                       [actions.inside_paragraph]
+                    									[actions.write_paragraphs]
                     |   eol
                     )
                     ;

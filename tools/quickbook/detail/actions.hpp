@@ -100,7 +100,8 @@ namespace quickbook
         , pre(pre)
         , post(post) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()() const;
+        void operator()(iterator first, iterator last) const { (*this)(); }
 
         collector& out;
         collector& phrase;
@@ -853,6 +854,17 @@ namespace quickbook
         void operator()(iterator first, iterator last) const;
 
         std::string& out;
+        collector& phrase;
+    };
+
+    struct copy_stream_action
+    {
+        copy_stream_action(collector& out, collector& phrase)
+            : out(out) , phrase(phrase) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        collector& out;
         collector& phrase;
     };
 }

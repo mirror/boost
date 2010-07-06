@@ -5,99 +5,93 @@
   <articleinfo>
   </articleinfo>
   <para>
-    <para>
-      This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
-    </para>
-    <para>
-      This description can have paragraphs...
-    </para>
-    <itemizedlist>
-      <listitem>
-        <simpara>
-          lists
-        </simpara>
-      </listitem>
-      <listitem>
-        <simpara>
-          etc.
-        </simpara>
-      </listitem>
-    </itemizedlist>
-    <para>
-      And any quickbook block markup.
-    </para>
-    <para>
-      
+    This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
+  </para>
+  <para>
+    This description can have paragraphs...
+  </para>
+  <itemizedlist>
+    <listitem>
+      <simpara>
+        lists
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        etc.
+      </simpara>
+    </listitem>
+  </itemizedlist>
+  <para>
+    And any quickbook block markup.
+  </para>
+  <para>
+    
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-    </para>
   </para>
   <para>
-    <para>
-      This is the Python <emphasis role="bold"><emphasis>foo</emphasis></emphasis>
-      function.
-    </para>
-    <para>
-      This description can have paragraphs...
-    </para>
-    <itemizedlist>
-      <listitem>
-        <simpara>
-          lists
-        </simpara>
-      </listitem>
-      <listitem>
-        <simpara>
-          etc.
-        </simpara>
-      </listitem>
-    </itemizedlist>
-    <para>
-      And any quickbook block markup.
-    </para>
-    <para>
-      
+    This is the Python <emphasis role="bold"><emphasis>foo</emphasis></emphasis>
+    function.
+  </para>
+  <para>
+    This description can have paragraphs...
+  </para>
+  <itemizedlist>
+    <listitem>
+      <simpara>
+        lists
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        etc.
+      </simpara>
+    </listitem>
+  </itemizedlist>
+  <para>
+    And any quickbook block markup.
+  </para>
+  <para>
+    
 <programlisting><phrase role="keyword">def</phrase> <phrase role="identifier">foo</phrase><phrase role="special">():</phrase>
     <phrase role="comment"># return 'em, foo man!
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase>
 
 </programlisting>
-    </para>
   </para>
   <para>
-    <para>
-      This is the C <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
-    </para>
-    <para>
-      This description can have paragraphs...
-    </para>
-    <itemizedlist>
-      <listitem>
-        <simpara>
-          lists
-        </simpara>
-      </listitem>
-      <listitem>
-        <simpara>
-          etc.
-        </simpara>
-      </listitem>
-    </itemizedlist>
-    <para>
-      And any quickbook block markup.
-    </para>
-    <para>
-      
+    This is the C <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
+  </para>
+  <para>
+    This description can have paragraphs...
+  </para>
+  <itemizedlist>
+    <listitem>
+      <simpara>
+        lists
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        etc.
+      </simpara>
+    </listitem>
+  </itemizedlist>
+  <para>
+    And any quickbook block markup.
+  </para>
+  <para>
+    
 <programlisting><phrase role="keyword">char</phrase><phrase role="special">*</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-    </para>
   </para>
 </article>
