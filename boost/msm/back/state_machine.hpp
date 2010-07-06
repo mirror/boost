@@ -17,7 +17,6 @@
 #include <functional>
 #include <numeric>
 #include <utility>
-
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/deref.hpp>
 
@@ -264,7 +263,7 @@ private:
     struct entry_pt : public EntryPoint
     {
         // tags
-        typedef EntryPoint          wrapped_exit;
+        typedef EntryPoint          wrapped_entry;
         typedef int                 pseudo_entry;
         typedef library_sm          owner;
         typedef int                 no_automatic_create;
@@ -289,13 +288,13 @@ private:
         typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
-        // if the source has no automatic creation (i.e. is an exit pseudo state), then
+        // if the source is an exit pseudo state, then
         // current_state_type becomes the result of get_owner
         // meaning the containing SM from which the exit occurs
         typedef typename ::boost::mpl::eval_if<
-            typename has_no_automatic_create<T1>::type,
-            get_owner<T1,library_sm>,
-            ::boost::mpl::identity<T1> >::type current_state_type;
+                typename has_pseudo_exit<T1>::type,
+                get_owner<T1,library_sm>,
+                ::boost::mpl::identity<typename ROW::Source> >::type current_state_type;
 
         // if Target is a sequence, then we have a fork and expect a sequence of explicit_entry
         // else if Target is an explicit_entry, next_state_type becomes the result of get_owner
@@ -327,7 +326,7 @@ private:
             BOOST_STATIC_CONSTANT(int, next_state = (get_state_id<stt,next_state_type>::type::value));
             BOOST_ASSERT(state == (current_state));
             // if T1 is an exit pseudo state, then take the transition only if the pseudo exit state is active
-            if (!::boost::is_same<T1,current_state_type>::value && 
+            if (has_pseudo_exit<T1>::type::value && 
                 !is_exit_state_active<T1,get_owner<T1,library_sm> >(fsm))
             {
                 return HANDLED_FALSE;
@@ -366,13 +365,13 @@ private:
         typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
-        // if the source has no automatic creation (i.e. is an exit pseudo state), then
+        // if the source is an exit pseudo state, then
         // current_state_type becomes the result of get_owner
         // meaning the containing SM from which the exit occurs
         typedef typename ::boost::mpl::eval_if<
-            typename has_no_automatic_create<T1>::type,
-            get_owner<T1,library_sm>,
-            ::boost::mpl::identity<T1> >::type current_state_type;
+                typename has_pseudo_exit<T1>::type,
+                get_owner<T1,library_sm>,
+                ::boost::mpl::identity<typename ROW::Source> >::type current_state_type;
 
         // if Target is a sequence, then we have a fork and expect a sequence of explicit_entry
         // else if Target is an explicit_entry, next_state_type becomes the result of get_owner
@@ -403,7 +402,7 @@ private:
             BOOST_STATIC_CONSTANT(int, next_state = (get_state_id<stt,next_state_type>::type::value));
             BOOST_ASSERT(state == (current_state));
             // if T1 is an exit pseudo state, then take the transition only if the pseudo exit state is active
-            if (!::boost::is_same<T1,current_state_type>::value && 
+            if (has_pseudo_exit<T1>::type::value && 
                 !is_exit_state_active<T1,get_owner<T1,library_sm> >(fsm))
             {
                 return HANDLED_FALSE;
@@ -436,13 +435,13 @@ private:
         typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
-        // if the source has no automatic creation (i.e. is an exit pseudo state), then
+        // if the source is an exit pseudo state, then
         // current_state_type becomes the result of get_owner
         // meaning the containing SM from which the exit occurs
         typedef typename ::boost::mpl::eval_if<
-            typename has_no_automatic_create<T1>::type,
-            get_owner<T1,library_sm>,
-            ::boost::mpl::identity<T1> >::type current_state_type;
+                typename has_pseudo_exit<T1>::type,
+                get_owner<T1,library_sm>,
+                ::boost::mpl::identity<typename ROW::Source> >::type current_state_type;
 
         // if Target is a sequence, then we have a fork and expect a sequence of explicit_entry
         // else if Target is an explicit_entry, next_state_type becomes the result of get_owner
@@ -464,7 +463,7 @@ private:
             BOOST_ASSERT(state == (current_state));
 
             // if T1 is an exit pseudo state, then take the transition only if the pseudo exit state is active
-            if (!::boost::is_same<T1,current_state_type>::value && 
+            if (has_pseudo_exit<T1>::type::value && 
                 !is_exit_state_active<T1,get_owner<T1,library_sm> >(fsm))
             {
                 return HANDLED_FALSE;
@@ -499,13 +498,13 @@ private:
         typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
-        // if the source has no automatic creation (i.e. is an exit pseudo state), then
+        // if the source is an exit pseudo state, then
         // current_state_type becomes the result of get_owner
         // meaning the containing SM from which the exit occurs
         typedef typename ::boost::mpl::eval_if<
-                typename has_no_automatic_create<T1>::type,
+                typename has_pseudo_exit<T1>::type,
                 get_owner<T1,library_sm>,
-                ::boost::mpl::identity<T1> >::type current_state_type;
+                ::boost::mpl::identity<typename ROW::Source> >::type current_state_type;
 
         // if Target is a sequence, then we have a fork and expect a sequence of explicit_entry
         // else if Target is an explicit_entry, next_state_type becomes the result of get_owner
@@ -527,7 +526,7 @@ private:
             BOOST_ASSERT(state == (current_state));
 
             // if T1 is an exit pseudo state, then take the transition only if the pseudo exit state is active
-            if (!::boost::is_same<T1,current_state_type>::value && 
+            if (has_pseudo_exit<T1>::type::value && 
                 !is_exit_state_active<T1,get_owner<T1,library_sm> >(fsm))
             {
                 return HANDLED_FALSE;
@@ -553,7 +552,7 @@ private:
         typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
-        typedef T1 current_state_type;
+        typedef typename ROW::Source current_state_type;
         typedef T2 next_state_type;
 
         // if a guard condition is here, call it to check that the event is accepted
@@ -596,7 +595,7 @@ private:
         typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
-        typedef T1 current_state_type;
+        typedef typename ROW::Source current_state_type;
         typedef T2 next_state_type;
 
         // if a guard condition is defined, call it to check that the event is accepted
@@ -633,7 +632,7 @@ private:
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
 
         typedef typename ROW::Evt transition_event;
-        typedef T1 current_state_type;
+        typedef typename ROW::Source current_state_type;
         typedef T2 next_state_type;
 
         // Take the transition action and return the next state.
@@ -660,7 +659,7 @@ private:
         typedef typename make_entry<typename ROW::Source,library_sm>::type T1;
         typedef typename make_exit<typename ROW::Target,library_sm>::type T2;
         typedef typename ROW::Evt transition_event;
-        typedef T1 current_state_type;
+        typedef typename ROW::Source current_state_type;
         typedef T2 next_state_type;
 
         // Take the transition action and return the next state.
@@ -1889,7 +1888,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          operator()(EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<1> = 0)
          {
              (static_cast<Derived*>(self))->on_entry(evt,fsm);
-             int state_id = get_state_id<stt,typename EventType::active_state>::value;
+             int state_id = get_state_id<stt,typename EventType::active_state::wrapped_entry>::value;
              BOOST_STATIC_ASSERT(EventType::active_state::zone_index >= 0);
              BOOST_STATIC_ASSERT(EventType::active_state::zone_index <= nr_regions::value);
              // just set the correct zone, the others will be default/history initialized
@@ -1927,7 +1926,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          {
              // entry on the FSM
              (static_cast<Derived*>(self))->on_entry(evt,fsm);
-             int state_id = get_state_id<stt,typename EventType::active_state>::value;
+             int state_id = get_state_id<stt,typename EventType::active_state::wrapped_entry>::value;
              // given region starts with the entry pseudo state as active state
              self->m_states[EventType::active_state::zone_index] = state_id;
              self->start(evt.m_event);
@@ -1946,7 +1945,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              template <class StateType>
              void operator()( ::boost::msm::wrap<StateType> const& )
              {
-                 int state_id = get_state_id<stt,StateType>::value;
+                 int state_id = get_state_id<stt,typename StateType::wrapped_entry>::value;
                  BOOST_STATIC_ASSERT(StateType::zone_index >= 0);
                  BOOST_STATIC_ASSERT(StateType::zone_index <= nr_regions::value);
                  helper_self->m_states[StateType::zone_index] = state_id;
