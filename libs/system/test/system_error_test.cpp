@@ -9,9 +9,12 @@
 
 //----------------------------------------------------------------------------// 
 
+//  test without deprecated features
+#define BOOST_SYSTEM_NO_DEPRECATED
+
 #include <boost/config/warning_disable.hpp>
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <boost/system/system_error.hpp>
 #include <iostream>
 #include <string>
@@ -33,8 +36,8 @@ namespace
     int v, const char * str )
   {
     std::cout << "test " << desc << "\n what() returns \"" << ex.what() << "\"\n";
-    BOOST_CHECK( ex.code().value() == v );
-    BOOST_CHECK( ex.code().category() == system_category );
+    BOOST_TEST( ex.code().value() == v );
+    BOOST_TEST( ex.code().category() == system_category() );
 # ifdef BOOST_WINDOWS_API
     LANGID language_id;
 #   if !defined(__MINGW32__) && !defined(__CYGWIN__)
@@ -45,7 +48,7 @@ namespace
     // std::cout << "GetUserDefaultUILanguage() returns " << language_id << '\n';
     if ( language_id == 0x0409 )  // English (United States)
     {
-      BOOST_CHECK( std::string( ex.what() ) == str );
+      BOOST_TEST( std::string( ex.what() ) == str );
       if ( std::string( ex.what() ) != str )
         std::cout << "expected \"" << str << "\", but what() returned \""
           << ex.what() << "\"\n";
@@ -56,51 +59,51 @@ namespace
   const boost::uint_least32_t uvalue = 2u;
 }
 
-int test_main( int, char *[] )
+int main( int, char *[] )
 {
   // all constructors, in the same order as they appear in the header:
 
-  system_error c1_0( error_code(0, system_category) ); 
-  system_error c1_1( error_code(1, system_category) );
-  system_error c1_2u( error_code(uvalue, system_category) );
+  system_error c1_0( error_code(0, system_category()) ); 
+  system_error c1_1( error_code(1, system_category()) );
+  system_error c1_2u( error_code(uvalue, system_category()) );
 
-  system_error c2_0( error_code(0, system_category), string("c2_0") ); 
-  system_error c2_1( error_code(1, system_category), string("c2_1") );
+  system_error c2_0( error_code(0, system_category()), string("c2_0") ); 
+  system_error c2_1( error_code(1, system_category()), string("c2_1") );
 
-  system_error c3_0( error_code(0, system_category), "c3_0" ); 
-  system_error c3_1( error_code(1, system_category), "c3_1" );
+  system_error c3_0( error_code(0, system_category()), "c3_0" ); 
+  system_error c3_1( error_code(1, system_category()), "c3_1" );
 
-  system_error c4_0( 0, system_category ); 
-  system_error c4_1( 1, system_category );
-  system_error c4_2u( uvalue, system_category );
+  system_error c4_0( 0, system_category() ); 
+  system_error c4_1( 1, system_category() );
+  system_error c4_2u( uvalue, system_category() );
 
-  system_error c5_0( 0, system_category, string("c5_0") ); 
-  system_error c5_1( 1, system_category, string("c5_1") );
+  system_error c5_0( 0, system_category(), string("c5_0") ); 
+  system_error c5_1( 1, system_category(), string("c5_1") );
 
-  system_error c6_0( 0, system_category, "c6_0" ); 
-  system_error c6_1( 1, system_category, "c6_1" );
+  system_error c6_0( 0, system_category(), "c6_0" ); 
+  system_error c6_1( 1, system_category(), "c6_1" );
 
-  TEST( c1_0, 0, "" );
+  TEST( c1_0, 0, "The operation completed successfully" );
   TEST( c1_1, 1, "Incorrect function" );
   TEST( c1_2u, 2, "The system cannot find the file specified" );
 
-  TEST( c2_0, 0, "c2_0" );
+  TEST( c2_0, 0, "c2_0: The operation completed successfully" );
   TEST( c2_1, 1, "c2_1: Incorrect function" );
 
-  TEST( c3_0, 0, "c3_0" );
+  TEST( c3_0, 0, "c3_0: The operation completed successfully" );
   TEST( c3_1, 1, "c3_1: Incorrect function" );
 
-  TEST( c4_0, 0, "" );
+  TEST( c4_0, 0, "The operation completed successfully" );
   TEST( c4_1, 1, "Incorrect function" );
   TEST( c4_2u, 2, "The system cannot find the file specified" );
 
-  TEST( c5_0, 0, "c5_0" );
+  TEST( c5_0, 0, "c5_0: The operation completed successfully" );
   TEST( c5_1, 1, "c5_1: Incorrect function" );
 
-  TEST( c6_0, 0, "c6_0" );
+  TEST( c6_0, 0, "c6_0: The operation completed successfully" );
   TEST( c6_1, 1, "c6_1: Incorrect function" );
 
-  return 0;
+  return ::boost::report_errors();
 }
 
 

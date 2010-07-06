@@ -6,7 +6,7 @@
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <title>System Library Reference</title>
-<link rel="stylesheet" type="text/css" href="../../../doc/html/minimal.css">
+<link rel="stylesheet" type="text/css" href="../../../doc/src/minimal.css">
 </head>
 
 <body>
@@ -40,6 +40,7 @@
       <a href="#Introduction">Introduction</a><br>
       <a href="#Macros">Macros</a><br>
       <a href="#Deprecated-names">Deprecated names</a><br>
+      <a href="#Breaking-changes">Breaking changes</a><br>
       <a href="#Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a><br>
       <a href="#Class-error_category">Class <code>error_category</code></a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-synopsis">Class <code>error_category</code> synopsis</a><br>
@@ -77,55 +78,50 @@ errno</code>.</p>
 <h2><a name="Macros">Macros</a></h2>
 <p>Users may defined the following macros if desired. Sensible defaults are 
 provided, so users may ignore these macros if they prefer.</p>
-<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" height="368">
   <tr>
-    <td><b><i>Macro Name</i></b></td>
-    <td><b><i>Default</i></b></td>
-    <td><b><i>Effect if defined</i></b></td>
+    <td height="16"><b><i>Macro Name</i></b></td>
+    <td height="16"><b><i>Default</i></b></td>
+    <td height="16"><b><i>Effect if defined</i></b></td>
   </tr>
   <tr>
-    <td valign="top"><code>BOOST_WINDOWS_API</code></td>
-    <td valign="top">Defined if Windows is detected by Boost.System's automatic configuration 
-    code, otherwise not defined.</td>
-    <td valign="top">Implementation uses the Microsoft Windows native 
-    application program interface (API).</td>
-  </tr>
-  <tr>
-    <td valign="top"><code>BOOST_POSIX_API</code></td>
-    <td valign="top">Defined if Windows is not detected by Boost.System's automatic configuration 
-    code.</td>
-    <td valign="top">Implementation uses the POSIX native 
-    application program interface (API).</td>
-  </tr>
-  <tr>
-    <td valign="top"><code>BOOST_SYSTEM_DYN_LINK</code></td>
-    <td valign="top">Defined if <code>BOOST_ALL_DYN_LINK</code> is defined, 
+    <td valign="top" height="64"><code>BOOST_SYSTEM_DYN_LINK</code></td>
+    <td valign="top" height="64">Defined if <code>BOOST_ALL_DYN_LINK</code> is defined, 
     otherwise not defined.</td>
-    <td valign="top">Boost.System library is dynamically linked. If not defined, 
+    <td valign="top" height="64">Boost.System library is dynamically linked. If not defined, 
     static linking is assumed.</td>
   </tr>
   <tr>
-    <td valign="top"><code>BOOST_SYSTEM_NO_LIB</code></td>
-    <td valign="top">Defined if <code>BOOST_ALL_NO_LIB</code> is defined, 
+    <td valign="top" height="47"><code>BOOST_SYSTEM_NO_LIB</code></td>
+    <td valign="top" height="47">Defined if <code>BOOST_ALL_NO_LIB</code> is defined, 
     otherwise not defined.</td>
-    <td valign="top">Boost.System library does not use the Boost auto-link 
+    <td valign="top" height="47">Boost.System library does not use the Boost auto-link 
     facility.</td>
   </tr>
   <tr>
-    <td valign="top"><code>BOOST_SYSTEM_NO_DEPRECATED</code></td>
-    <td valign="top">Not defined.</td>
-    <td valign="top">Deprecated features are excluded.</td>
+    <td valign="top" height="32"><code>BOOST_SYSTEM_NO_DEPRECATED</code></td>
+    <td valign="top" height="32">Not defined.</td>
+    <td valign="top" height="32">Deprecated features are excluded.</td>
   </tr>
-</table>
+  </table>
 <h2><a name="Deprecated-names">Deprecated names</a></h2>
-<p>In the process of adding Boost.System to C++0x standard library, some of the 
-names are being changed. To ease transition, Boost.System deprecates the old 
+<p>In the process of adding Boost.System to C++0x standard library, the C++ 
+committee changed some  
+names. To ease transition, Boost.System deprecates the old 
 names, but continues to provide them unless macro <code>BOOST_SYSTEM_NO_DEPRECATED</code> 
 is defined.</p>
 <table border="1" cellpadding="5" cellspacing="1" style="border-collapse: collapse" bordercolor="#111111">
   <tr>
-    <td><b><i>Old name, now deprecated</i></b></td>
-    <td><b><i>New name</i></b></td>
+    <td><b><i>Old usage, now deprecated</i></b></td>
+    <td><b><i>Replacement</i></b></td>
+  </tr>
+  <tr>
+    <td><code>get_generic_category()</code></td>
+    <td><code>generic_category()</code></td>
+  </tr>
+  <tr>
+    <td><code>get_system_category()</code></td>
+    <td><code>system_category()</code></td>
   </tr>
   <tr>
     <td><code>namespace posix</code></td>
@@ -141,21 +137,39 @@ is defined.</p>
   </tr>
   <tr>
     <td><code>get_posix_category()</code></td>
-    <td><code>get_generic_category()</code></td>
+    <td><code>generic_category()</code></td>
   </tr>
   <tr>
     <td><code>posix_category</code></td>
-    <td><code>generic_category</code></td>
+    <td><code>generic_category()</code></td>
   </tr>
   <tr>
     <td><code>errno_ecat</code></td>
-    <td><code>generic_category</code></td>
+    <td><code>generic_category()</code></td>
   </tr>
   <tr>
     <td><code>native_ecat</code></td>
-    <td><code>system_category</code></td>
+    <td><code>system_category()</code></td>
   </tr>
 </table>
+<h2><a name="Breaking-changes">Breaking changes</a></h2>
+<p>Two static consts are replaced by functions. These are breaking changes best 
+fixed by globally adding () to these names to turn them into function calls.</p>
+<table border="1" cellpadding="5" cellspacing="1" style="border-collapse: collapse" bordercolor="#111111">
+  <tr>
+    <td><b><i>Old usage, now broken</i></b></td>
+    <td><b><i>Replacement</i></b></td>
+  </tr>
+  <tr>
+    <td><code>generic_category</code></td>
+    <td><code>generic_category()</code></td>
+  </tr>
+  <tr>
+    <td><code>system_category</code></td>
+    <td><code>system_category()</code></td>
+  </tr>
+  </table>
+<p>User-defined BOOST_POSIX_API and BOOST_WINDOWS_API macros are no longer supported.</p>
 <h2><a name="Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a></h2>
 <h3>&lt;boost/system/error_code.hpp&gt; synopsis</h3>
 <blockquote>
@@ -265,9 +279,6 @@ is defined.</p>
     template<> struct is_error_condition_enum<posix::posix_errno>&lt;errc::errc_t&gt;
       { static const bool value = true; };
 
-    // predefined error_code object used as &quot;throw on error&quot; tag
-    extern error_code <a href="#throws-object">throws</a>;
-
     //  <a href="#Non-member-functions">non-member functions</a>
 
     bool operator==( const error_code &amp; lhs, const error_code &amp; rhs );
@@ -336,11 +347,8 @@ types should create a single object of each such type. <i>—end note</i> ]</p>
       bool operator&lt; ( const error_category &amp; rhs ) const;
     };
 
-    const error_category &amp;  get_system_category();
-    const error_category &amp;  get_generic_category();
-
-    static const error_category &amp;  system_category = get_system_category();
-    static const error_category &amp;  generic_category = get_generic_category();
+    const error_category &amp;  system_category();
+    const error_category &amp;  generic_category();
   }
 }</pre>
 </blockquote>
@@ -362,8 +370,8 @@ this subclause.</p>
 <blockquote>
   <p><i>Returns:</i>&nbsp; <code>error_condition( ev, *this )</code>.</p>
   <blockquote>
-    <p>&nbsp;[<i>--Note:</i> Derived classes will typically convert <code>ev</code> 
-    to some portable <code>error_category</code>, such as <code>generic_category</code>, 
+    <p dir="ltr">&nbsp;[<i>--Note:</i> Derived classes will typically convert <code>ev</code> 
+    to some portable <code>error_category</code>, such as <code>generic_category()</code>, 
     and return it as an <code>error_condition</code> for that category. <i>--end 
     note</i>]</p>
   </blockquote>
@@ -402,22 +410,18 @@ const;</code></p>
 </blockquote>
 <h3><a name="Class-error_category-non-member-functions">Class <code>error_category</code> 
 non-member functions</a></h3>
-<pre>const error_category &amp; get_system_category();</pre>
+<pre>const error_category &amp; system_category();</pre>
 <blockquote>
   <p><i>Returns:</i> A reference to a <code>error_category</code> object 
   identifying errors originating from the operating system.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-<pre>const error_category &amp; get_generic_category();</pre>
+<pre>const error_category &amp; generic_category();</pre>
 <blockquote>
   <p><i>Returns:</i> A reference to a <code>error_category</code> object 
   identifying portable error conditions.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-<h3><a name="Class-error_category-predefined-objects">Class <code>error_category</code> 
-predefined objects</a></h3>
-<p>Predefined objects <code>system_category</code> 
-and <code>generic_category</code> identify system specific error codes and portable error conditions, respectively.</p>
 <h2><a name="Class-error_code">Class <code>
 error_code</code></a></h2>
 <p>The class <code>error_code</code> describes an object used to hold error code 
@@ -439,14 +443,12 @@ error_code</code> synopsis</a></h3>
       error_code();
       error_code( val, const error_category &amp; cat );
       template &lt;class <code>ErrorCodeEnum</code>&gt;
-        error_code(<code> ErrorCodeEnum</code> e,
-         typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt; &gt;::type* = 0);
+        error_code(<code> ErrorCodeEnum</code> e );
 
       // modifiers:
       void assign( int val, const error_category &amp; cat );
       template&lt;typename <code>ErrorCodeEnum</code>&gt;
-        typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt;, error_code&gt;::type &amp;
-          operator=( <code>ErrorCodeEnum</code> val );;
+        error_code &amp; operator=( <code>ErrorCodeEnum</code> val );;
       void clear();
 
       // observers:
@@ -468,7 +470,7 @@ error_code</code> constructors</a></h3>
 <pre>error_code();</pre>
 <blockquote>
   <p><i>Effects: </i>Constructs an object of type <code>error_code</code>.</p>
-  <p><i>Postconditions:</i> <code>val_ == 0 &amp;&amp; cat_ == &amp;system_category</code>.</p>
+  <p><i>Postconditions:</i> <code>val_ == 0 &amp;&amp; cat_ == &amp;system_category()</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>error_code( int val, const error_category &amp; cat );</pre>
@@ -478,12 +480,14 @@ error_code</code> constructors</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template &lt;class <code>ErrorCodeEnum</code>&gt;
-  error_code(<code> errorCodeEnum</code> val,
-    typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt; &gt;::type* = 0);</pre>
+  error_code(<code> ErrorCodeEnum</code> val );</pre>
 <blockquote>
   <p><i>Effects: </i>Constructs an object of type <code>error_code</code>.</p>
   <p><i>Postconditions:</i> <code>*this == make_error_code( val )</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This constructor shall not participate in overload 
+  resolution unless <code>is_error_code_enum&lt;ErrorCodeEnum&gt;::value</code> is
+  <code>true</code>.</p>
 </blockquote>
 <h3><a name="Class-error_code-modifiers">Class <code>
 error_code</code> modifiers</a></h3>
@@ -493,15 +497,17 @@ error_code</code> modifiers</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template&lt;typename <code>ErrorCodeEnum</code>&gt;
-  typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt;, error_code&gt;::type &amp;
-    operator=( <code>ErrorCodeEnum</code> val );</pre>
+  error_code &amp; operator=( <code>ErrorCodeEnum</code> val );</pre>
 <blockquote>
   <p><i>Postconditions:</i> <code>*this == make_error_code( val )</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This operator shall not participate in overload resolution 
+  unless <code>is_error_code_enum&lt;ErrorCodeEnum&gt;::value</code> is <code>true</code>.</p>
 </blockquote>
 <p><code>void clear();</code></p>
 <blockquote>
-  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == generic_category</code></p>
+  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == 
+  system_category()</code></p>
 </blockquote>
   <h3><a name="Class-error_code-observers">Class <code>
 error_code</code> observers</a></h3>
@@ -557,14 +563,12 @@ implementation specific. <i>--end note ]</i></p>
       error_condition();
       error_condition( int val, const error_category &amp; cat );
       template &lt;class ErrorConditionEnum&gt;
-        error_condition( errorConditionEnum val,
-          typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt; &gt;::type* = 0 );
+        error_condition( errorConditionEnum val );
 
       // modifiers:
       void assign( int val, const error_category &amp; cat );
       template&lt;typename ErrorConditionEnum&gt;
-        typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt;, error_code&gt;::type &amp;
-          operator=( ErrorConditionEnum val );
+        error_condition &amp; operator=( ErrorConditionEnum val );
       void clear();
 
       // observers:
@@ -585,7 +589,7 @@ constructors</a></h3>
 <pre>error_condition(); </pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>error_condition</code>.</p>
-  <p><i>Postconditions:</i> <code>val_ == 0 and cat_ == &amp;generic_category</code>.</p>
+  <p><i>Postconditions:</i> <code>val_ == 0 and cat_ == &amp;generic_category()</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>error_condition( int val, const error_category &amp; cat );</pre>
@@ -595,12 +599,14 @@ constructors</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template &lt;class ErrorConditionEnum&gt;
-  error_condition( errorConditionEnum val,
-    typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt; &gt;::type* = 0 );</pre>
+  error_condition( ErrorConditionEnum e );</pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>error_condition</code>.</p>
-  <p><i>Postconditions:</i> <code>*this == make_error_condition( val )</code>.</p>
+  <p><i>Postconditions:</i> <code>*this == make_error_condition(e)</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This constructor shall not participate in overload 
+  resolution unless <code>is_error_condition_enum&lt;ErrorConditionEnum&gt;::value</code> 
+  is <code>true</code>.</p>
 </blockquote>
 <h3><a name="Class-error_condition-modifiers">Class <code>error_condition</code> 
 modifiers</a></h3>
@@ -610,15 +616,18 @@ modifiers</a></h3>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template&lt;typename ErrorConditionEnum&gt;
-  typename enable_if&lt;is_error_condition_enum&lt;ErrorConditionEnum&gt;, error_code&gt;::type &amp;
-    operator=( ErrorConditionEnum val );</pre>
+  error_condition &amp; operator=( ErrorConditionEnum e );</pre>
 <blockquote>
-  <p><i>Postconditions:</i> <code>*this == make_error_condition( val )</code>.</p>
+  <p><i>Postconditions:</i> <code>*this == make_error_condition( e )</code>.</p>
+  <p><i>Returns:</i> <code>*this</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
+  <p><i>Remarks:</i> This operator shall not participate in overload resolution 
+  unless <code>is_error_condition_enum&lt;ErrorConditionEnum&gt;::value</code> is
+  <code>true</code>.</p>
 </blockquote>
 <p><code>void clear();</code></p>
 <blockquote>
-  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == generic_category</code></p>
+  <p><i>postcondition:</i> <code>value() == 0 &amp;&amp; category() == generic_category()</code></p>
 </blockquote>
 <h3><a name="Class-error_condition-observers">Class <code>error_condition</code> 
 observers</a></h3>
@@ -730,11 +739,11 @@ bool operator!=( const error_condition &amp; condition, const error_code &amp; c
 </blockquote>
 <pre>error_code make_error_code( errc::errc_t e );</pre>
 <blockquote>
-  <p><i>Returns:</i> <code>error_code( e, generic_category)</code>.</p>
+  <p><i>Returns:</i> <code>error_code( e, generic_category())</code>.</p>
 </blockquote>
 <pre>error_condition make_error_condition( errc::errc_t e );</pre>
 <blockquote>
-  <p><i>Returns:</i> <code>error_condition( static_cast&lt;int&gt;( e ), generic_category)</code>.</p>
+  <p><i>Returns:</i> <code>error_condition( static_cast&lt;int&gt;( e ), generic_category())</code>.</p>
 </blockquote>
 
 <pre>template &lt;class charT, class traits&gt;
@@ -831,7 +840,7 @@ application program interfaces.</p>
 <hr>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->October 11, 2008<!--webbot bot="Timestamp" endspan i-checksum="30976" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->June 29, 2010<!--webbot bot="Timestamp" endspan i-checksum="14432" --> </font>
 </p>
 
 <p>© Copyright Beman Dawes, 2006, 2007, 2008</p>

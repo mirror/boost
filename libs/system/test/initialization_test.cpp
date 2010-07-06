@@ -10,7 +10,7 @@
 //  This test verifiies that the error_category vtable does not suffer from
 //  order-of-initialization problems.
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <boost/system/error_code.hpp>
 
 struct foo
@@ -22,7 +22,7 @@ struct foo
   }
 } f;
 
-int test_main( int, char ** )
+int main( int, char ** )
 {
-       return 0;
+  return ::boost::report_errors();
 }

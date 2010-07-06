@@ -6,7 +6,7 @@
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <title>Boost System Library</title>
-<link rel="stylesheet" type="text/css" href="../../../doc/html/minimal.css">
+<link rel="stylesheet" type="text/css" href="../../../doc/src/minimal.css">
 </head>
 
 <body>
@@ -93,6 +93,18 @@ supports both error reporting by exception and by error code.</p>
 error_code.hpp</code> header, system-specific headers support the Cygwin, Linux, 
 and Windows platforms. These headers are effectively no-ops if included for 
 platforms other than their intended target.</p>
+<table border="1" cellpadding="10" cellspacing="1" style="border-collapse: collapse" bordercolor="#111111">
+  <tr>
+    <td>The Boost System Library will become part of the C++0x Standard Library. 
+    A number of changes, particularly to names, were made by the C++ committee 
+    during standardization. The Boost implementation is tracking those changes. 
+    See <a href="reference.html#Deprecated-names">Deprecated names</a> for 
+    synonyms provided to prevent breakage of existing user code. See
+    <a href="reference.html#Breaking-changes">Breaking changes</a> for changes 
+    that unavoidably break existing user code. All breaking changes are noisy 
+    and will cause compile-time errors.</td>
+  </tr>
+</table>
 <h2><a name="Design_Rationale">Design Rationale</a></h2>
 <p>Class <code>error_code</code>&nbsp; and <code>error_condition</code> are designed as a value types so 
 they can be copied 
@@ -133,7 +145,7 @@ paper. Johan Nilsson's comments led to several of the refinements in N2066 .</p>
 <hr>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->February 23, 2008<!--webbot bot="Timestamp" endspan i-checksum="41408" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->May 28, 2010<!--webbot bot="Timestamp" endspan i-checksum="11241" --> </font>
 </p>
 
 <p>© Copyright Beman Dawes, 1999</p>

@@ -14,11 +14,13 @@
 
 //  Motivation was a Boost posting by Christopher Kohlhoff on June 28, 2006.
 
+#define BOOST_SYSTEM_NO_DEPRECATED
+
 #include <boost/system/error_code.hpp>
 #include <boost/cerrno.hpp>
 #include <string>
 #include <cstdio>
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #ifdef BOOST_POSIX_API
 # include <sys/stat.h>
@@ -40,7 +42,7 @@ boost::system::error_code my_mkdir( const std::string & path )
 #   else
       ::CreateDirectoryA( path.c_str(), 0 ) != 0 ? 0 : ::GetLastError(),
 #   endif
-      boost::system::system_category );
+      boost::system::system_category() );
 }
 
 //  ------------------------------------------------------------------------  //
@@ -53,9 +55,9 @@ boost::system::error_code my_remove( const std::string & path )
 {
   return boost::system::error_code(
     std::remove( path.c_str() ) == 0 ? 0 : errno,
-    boost::system::posix_category ); // OK for both Windows and POSIX
-                                     // Alternatively, could use posix_category
-                                     // on Windows and system_category on
+    boost::system::generic_category() ); // OK for both Windows and POSIX
+                                     // Alternatively, could use generic_category()
+                                     // on Windows and system_category() on
                                      // POSIX-based systems.
 }
 
@@ -118,8 +120,8 @@ namespace boost
       boost::system::error_condition default_error_condition( int ev ) const
       {
         return ev == boo_boo
-          ? boost::system::error_condition( boost::system::posix::io_error,
-              boost::system::posix_category )
+          ? boost::system::error_condition( boost::system::errc::io_error,
+              boost::system::generic_category() )
           : boost::system::error_condition( ev,
               boost::lib3::lib3_error_category );
       }
@@ -180,8 +182,8 @@ namespace lib4
     boost::system::error_condition default_error_condition( int ev ) const
     {
       return ev == boo_boo.value()
-        ? boost::system::error_condition( boost::system::posix::io_error,
-            boost::system::posix_category )
+        ? boost::system::error_condition( boost::system::errc::io_error,
+            boost::system::generic_category() )
         : boost::system::error_condition( ev, lib4::lib4_error_category );
     }
     
@@ -237,15 +239,15 @@ namespace lib4
 //      switch (ev)
 //      {
 //        case user_success:
-//          return boost::system::error_code(boost::system::posix::success, boost::system::posix_category);
+//          return boost::system::error_code(boost::system::errc::success, boost::system::generic_category());
 //        case user_permission_denied:
-//          return boost::system::error_code(boost::system::posix::permission_denied, boost::system::posix_category);
+//          return boost::system::error_code(boost::system::errc::permission_denied, boost::system::generic_category());
 //        case user_out_of_memory:
-//          return boost::system::error_code(boost::system::posix::not_enough_memory, boost::system::posix_category);
+//          return boost::system::error_code(boost::system::errc::not_enough_memory, boost::system::generic_category());
 //        default:
 //          break;
 //      }
-//      return boost::system::error_code(boost::system::posix::no_posix_equivalent, boost::system::posix_category);
+//      return boost::system::error_code(boost::system::errc::no_posix_equivalent, boost::system::generic_category());
 //    }
 //    
 //  };
@@ -264,8 +266,8 @@ namespace lib4
 //
 //  void check_success(const boost::system::error_code& ec, bool expect)
 //  {
-//    BOOST_CHECK( (ec == boost::system::posix::success) == expect );
-//    if (ec == boost::system::posix::success)
+//    BOOST_TEST( (ec == boost::system::errc::success) == expect );
+//    if (ec == boost::system::errc::success)
 //      std::cout << "yes... " << (expect ? "ok" : "fail") << '\n';
 //    else
 //      std::cout << "no...  " << (expect ? "fail" : "ok") << '\n';
@@ -273,8 +275,8 @@ namespace lib4
 //
 //  void check_permission_denied(const boost::system::error_code& ec, bool expect)
 //  {
-//    BOOST_CHECK( (ec == boost::system::posix::permission_denied) == expect );
-//    if (ec ==  boost::system::posix::permission_denied)
+//    BOOST_TEST( (ec == boost::system::errc::permission_denied) == expect );
+//    if (ec ==  boost::system::errc::permission_denied)
 //      std::cout << "yes... " << (expect ? "ok" : "fail") << '\n';
 //    else
 //      std::cout << "no...  " << (expect ? "fail" : "ok") << '\n';
@@ -282,8 +284,8 @@ namespace lib4
 //
 //  void check_out_of_memory(const boost::system::error_code& ec, bool expect)
 //  {
-//    BOOST_CHECK( (ec == boost::system::posix::not_enough_memory) == expect );
-//    if (ec ==  boost::system::posix::not_enough_memory)
+//    BOOST_TEST( (ec == boost::system::errc::not_enough_memory) == expect );
+//    if (ec ==  boost::system::errc::not_enough_memory)
 //      std::cout << "yes... " << (expect ? "ok" : "fail") << '\n';
 //    else
 //      std::cout << "no...  " << (expect ? "fail" : "ok") << '\n';
@@ -295,23 +297,23 @@ namespace lib4
 //    printf("=====\n");
 //    boost::system::error_code ec;
 //    check_success(ec, true);
-//    check_success(boost::system::posix::success, true);
-//    check_success(boost::system::posix::permission_denied, false);
-//    check_success(boost::system::posix::not_enough_memory, false);
+//    check_success(boost::system::errc::success, true);
+//    check_success(boost::system::errc::permission_denied, false);
+//    check_success(boost::system::errc::not_enough_memory, false);
 //    check_success(user_success, true);
 //    check_success(user_permission_denied, false);
 //    check_success(user_out_of_memory, false);
 //    check_permission_denied(ec, false);
-//    check_permission_denied(boost::system::posix::success, false);
-//    check_permission_denied(boost::system::posix::permission_denied, true);
-//    check_permission_denied(boost::system::posix::not_enough_memory, false);
+//    check_permission_denied(boost::system::errc::success, false);
+//    check_permission_denied(boost::system::errc::permission_denied, true);
+//    check_permission_denied(boost::system::errc::not_enough_memory, false);
 //    check_permission_denied(user_success, false);
 //    check_permission_denied(user_permission_denied, true);
 //    check_permission_denied(user_out_of_memory, false);
 //    check_out_of_memory(ec, false);
-//    check_out_of_memory(boost::system::posix::success, false);
-//    check_out_of_memory(boost::system::posix::permission_denied, false);
-//    check_out_of_memory(boost::system::posix::not_enough_memory, true);
+//    check_out_of_memory(boost::system::errc::success, false);
+//    check_out_of_memory(boost::system::errc::permission_denied, false);
+//    check_out_of_memory(boost::system::errc::not_enough_memory, true);
 //    check_out_of_memory(user_success, false);
 //    check_out_of_memory(user_permission_denied, false);
 //    check_out_of_memory(user_out_of_memory, true);
@@ -337,7 +339,7 @@ namespace lib4
 
 //  ------------------------------------------------------------------------  //
 
-int test_main( int, char *[] )
+int main( int, char *[] )
 {
   boost::system::error_code ec;
 
@@ -346,35 +348,35 @@ int test_main( int, char *[] )
   ec = my_mkdir( "/no-such-file-or-directory/will-not-succeed" );
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == boost::system::posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.category() == boost::system::system_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == boost::system::errc::no_such_file_or_directory );
+  BOOST_TEST( ec.category() == boost::system::system_category() );
 
   // Library 2 tests:
 
   ec = my_remove( "/no-such-file-or-directory" );
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == boost::system::posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.category() == boost::system::posix_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == boost::system::errc::no_such_file_or_directory );
+  BOOST_TEST( ec.category() == boost::system::generic_category() );
 
   // Library 3 tests:
 
   ec = boost::lib3::boo_boo;
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == boost::lib3::boo_boo );
-  BOOST_CHECK( ec.value() == boost::lib3::boo_boo );
-  BOOST_CHECK( ec.category() == boost::lib3::lib3_error_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == boost::lib3::boo_boo );
+  BOOST_TEST( ec.value() == boost::lib3::boo_boo );
+  BOOST_TEST( ec.category() == boost::lib3::lib3_error_category );
 
-  BOOST_CHECK( ec == boost::system::posix::io_error );
+  BOOST_TEST( ec == boost::system::errc::io_error );
 
   boost::system::error_code ec3( boost::lib3::boo_boo+100,
     boost::lib3::lib3_error_category );
-  BOOST_CHECK( ec3.category() == boost::lib3::lib3_error_category );
-  BOOST_CHECK( ec3.default_error_condition().category()
+  BOOST_TEST( ec3.category() == boost::lib3::lib3_error_category );
+  BOOST_TEST( ec3.default_error_condition().category()
     == boost::lib3::lib3_error_category );
 
   // Library 4 tests:
@@ -382,21 +384,21 @@ int test_main( int, char *[] )
   ec = lib4::boo_boo;
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == lib4::boo_boo );
-  BOOST_CHECK( ec.value() == lib4::boo_boo.value() );
-  BOOST_CHECK( ec.category() == lib4::lib4_error_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == lib4::boo_boo );
+  BOOST_TEST( ec.value() == lib4::boo_boo.value() );
+  BOOST_TEST( ec.category() == lib4::lib4_error_category );
 
-  BOOST_CHECK( ec == boost::system::posix::io_error );
+  BOOST_TEST( ec == boost::system::errc::io_error );
 
   boost::system::error_code ec4( lib4::boo_boo.value()+100,
     lib4::lib4_error_category );
-  BOOST_CHECK( ec4.default_error_condition().category()
+  BOOST_TEST( ec4.default_error_condition().category()
     == lib4::lib4_error_category );
 
   // Test 3
 
   //test3::run();
 
-  return 0;
+  return ::boost::report_errors();
 }
