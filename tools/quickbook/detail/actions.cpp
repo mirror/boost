@@ -913,12 +913,12 @@ namespace quickbook
 
         actions.pop(); // restore the actions' states
         if(is_block) {
-        	actions.inside_paragraph();
-        	actions.temp_para << result; // print it!!!
+            actions.inside_paragraph();
+            actions.temp_para << result; // print it!!!
         }
         else {
-	        actions.phrase << result; // print it!!!
-	   	}
+            actions.phrase << result; // print it!!!
+        }
         --actions.template_depth;
     }
 
@@ -1654,11 +1654,10 @@ namespace quickbook
         phrase.swap(out);
     }
 
-	void copy_stream_action::operator()(iterator first, iterator last) const
+    void copy_stream_action::operator()(iterator first, iterator last) const
     {
-    	std::string str;
-    	phrase.swap(str);
-    	out << str;
+        std::string str;
+        phrase.swap(str);
+        out << str;
     }
 }
-

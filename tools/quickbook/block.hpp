@@ -60,7 +60,7 @@ namespace quickbook
                     |   hr                              [actions.hr]
                     |   comment >> +eol
                     |   paragraph                       [actions.inside_paragraph]
-                    									[actions.write_paragraphs]
+                                                        [actions.write_paragraphs]
                     |   eol
                     )
                     ;
@@ -460,5 +460,3 @@ namespace quickbook
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
-
-
