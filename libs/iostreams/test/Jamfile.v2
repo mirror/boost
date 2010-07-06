@@ -20,6 +20,7 @@ rule test-iostreams ( sources * : requirements * ) {
             run
                 $(sources)
                 /boost/test//boost_unit_test_framework/<link>static
+                /boost/filesystem//boost_filesystem/<link>static
             : # command
             : # input files
             : # build requirements
