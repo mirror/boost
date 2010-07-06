@@ -28,6 +28,7 @@ test-suite msm-unit-tests
     [ run CompositeEuml.cpp ]
     [ run CompositeMachine.cpp ]
     [ run Constructor.cpp ]
+    [ run Entries.cpp ]
     [ run History.cpp ]
     [ run OrthogonalDeferred.cpp ]
     [ run OrthogonalDeferred2.cpp ]
