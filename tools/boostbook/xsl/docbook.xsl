@@ -180,24 +180,6 @@
     <xsl:copy-of select="."/>
   </xsl:template>
 
-  <!-- Syntax highlighting -->
-  <xsl:template name="highlight-keyword">
-    <xsl:param name="keyword"/>
-    <xsl:choose>
-      <xsl:when test="$boost.syntax.highlight='1'">
-        <emphasis role="bold"><xsl:value-of select="$keyword"/></emphasis>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$keyword"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="highlight-comment">
-    <xsl:param name="text"/>
-    <emphasis><xsl:copy-of select="$text"/></emphasis>
-  </xsl:template>
-
   <xsl:template name="monospaced">
     <xsl:param name="text"/>
     <computeroutput><xsl:value-of select="$text"/></computeroutput>

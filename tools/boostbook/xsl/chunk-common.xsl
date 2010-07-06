@@ -10,10 +10,14 @@
                 version="1.0">
 
 <!-- Import the HTML chunking stylesheet -->
+  
+<!-- Watch out that we don't override chunk.xsl -->
+<!--
 <xsl:import
-    href="http://docbook.sourceforge.net/release/xsl/current/html/chunk-common.xsl"/>
+    href="http://docbook.sourceforge.net/release/xsl/current/html/chunk-common.xsl"/> -->
 
-<xsl:import href="relative-href.xsl"/>
+<!-- Already included in the main stylesheet -->
+<!-- <xsl:import href="relative-href.xsl"/> -->
 
 <!-- ==================================================================== -->
 
@@ -64,6 +68,9 @@
     </xsl:variable>
 
     <xsl:choose>
+    <xsl:when test="$navtext = 'xxx'">
+        <xsl:value-of select="$direction"/>
+    </xsl:when>
 	<xsl:when test="$navig.graphics != 0">
 	    <img>
 		<xsl:attribute name="src">

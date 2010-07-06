@@ -14,6 +14,7 @@
   <xsl:import 
     href="http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl"/>
   <xsl:import href="admon.xsl"/>
+  <xsl:import href="relative-href.xsl"/>
 
   <xsl:param name="admon.style"/>
   <xsl:param name="admon.graphics">1</xsl:param>

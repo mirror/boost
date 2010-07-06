@@ -9,8 +9,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-<xsl:import href="relative-href.xsl"/>
-
+<!-- Already included in the main style sheet -->
+<!-- <xsl:import href="relative-href.xsl"/> -->
+ 
    <!--
       boost.defaults:
         *custom  - only use explicitly set parameters
@@ -369,7 +370,7 @@
             </xsl:call-template>
          </a></xsl:if>
          <!-- home -->
-         <xsl:if test = "$home != . or $nav.context = 'toc'">
+         <xsl:if test = "generate-id($home) != generate-id(.) or $nav.context = 'toc'">
             <a accesskey = "h">
                <xsl:attribute name = "href"><xsl:call-template name = "href.target">
                   <xsl:with-param name = "object" select = "$home"/>
