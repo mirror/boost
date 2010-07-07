@@ -1089,10 +1089,12 @@ It is specified as `tag::covariance<_variate_type_, _variate_tag_>`.
     [[Extractor Complexity] [O(1)]] 
 ]
 
-[*Header]
+[*Headers]
 [def _COVARIANCE_HPP_ [headerref boost/accumulators/statistics/covariance.hpp]]
+[def _COVARIATE_HPP_ [headerref boost/accumulators/statistics/variates/covariate.hpp]]
 
     #include <_COVARIANCE_HPP_>
+    #include <_COVARIATE_HPP_>
 
 [*Example]
 
