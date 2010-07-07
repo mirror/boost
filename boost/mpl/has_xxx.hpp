@@ -280,12 +280,11 @@ struct trait \
 
 #if !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 
-// Create boolean n-ary Metafunction to detect a nested template
-// member with n template parameters. This implementation is based on
-// a USENET newsgroup's posting by Aleksey Gurtovoy
-// (comp.lang.c++.moderated, 2002-03-19), Rani Sharoni's USENET
-// posting cited above, the non-template has_xxx implementations
-// above, and discussion on the Boost mailing list.
+// Create a boolean Metafunction to detect a nested template
+// member. This implementation is based on a USENET newsgroup's
+// posting by Aleksey Gurtovoy (comp.lang.c++.moderated, 2002-03-19),
+// Rani Sharoni's USENET posting cited above, the non-template has_xxx
+// implementations above, and discussion on the Boost mailing list.
 
 #   if !defined(BOOST_MPL_HAS_XXX_NO_WRAPPED_TYPES)
 #     if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
@@ -294,15 +293,8 @@ struct trait \
 #   endif
 
 #   if !defined(BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION)
-#     if (defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) \
-          || BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, <= 0x0303))
+#     if (defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS))
 #       define BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION 1
-#     endif
-#   endif
-
-#   if !defined(BOOST_MPL_HAS_XXX_NO_IMPLICIT_SUBSTITUTE_TEMPLATE)
-#     if BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, <= 0x0303)
-#       define BOOST_MPL_HAS_XXX_NO_IMPLICIT_SUBSTITUTE_TEMPLATE 1
 #     endif
 #   endif
 
@@ -312,17 +304,16 @@ struct trait \
 #     endif
 #   endif
 
-// NOTE: All internal implementation macros take a Boost.Preprocessor
-// array argument called args which contains the arguments passed to
-// HAS_XXX_TEMPLATE_NAMED_DEF and is of the following form.
-//               ( 4, ( trait, name, n, default_ ) )
+// NOTE: Many internal implementation macros take a Boost.Preprocessor
+// array argument called args which is of the following form.
+//           ( 4, ( trait, name, max_arity, default_ ) )
 
 #   define BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args) \
       BOOST_PP_CAT(BOOST_PP_ARRAY_ELEM(0, args) , _introspect) \
     /**/
 
-#   define BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args) \
-      BOOST_PP_CAT(BOOST_PP_ARRAY_ELEM(0, args) , _substitute) \
+#   define BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args, n) \
+      BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_ARRAY_ELEM(0, args) , _substitute), n) \
     /**/
 
 #   define BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args) \
@@ -332,11 +323,21 @@ struct trait \
 // Thanks to Guillaume Melquiond for pointing out the need for the
 // "substitute" template as an argument to the overloaded test
 // functions to get SFINAE to work for member templates with the
-// correct name but incorrect arguments.
-#   define BOOST_MPL_HAS_MEMBER_SUBSTITUTE(args, substitute_macro) \
-      template< substitute_macro(args, V) > \
-      struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args) { \
+// correct name but different number of arguments.
+#   define BOOST_MPL_HAS_MEMBER_MULTI_SUBSTITUTE(z, n, args) \
+      template< \
+          template< BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n), typename V) > class V \
+       > \
+      struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args, n) { \
       }; \
+    /**/
+
+#   define BOOST_MPL_HAS_MEMBER_SUBSTITUTE(args, substitute_macro) \
+      BOOST_PP_REPEAT( \
+          BOOST_PP_ARRAY_ELEM(2, args) \
+        , BOOST_MPL_HAS_MEMBER_MULTI_SUBSTITUTE \
+        , args \
+      ) \
     /**/
 
 #   if !BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION
@@ -353,15 +354,22 @@ struct trait \
 #   endif
 
 #   if !BOOST_MPL_HAS_XXX_NO_WRAPPED_TYPES
-#     define BOOST_MPL_HAS_MEMBER_ACCEPT(args, member_macro) \
+#     define BOOST_MPL_HAS_MEMBER_MULTI_ACCEPT(z, n, args) \
         template< typename V > \
         static boost::mpl::aux::yes_tag \
         BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)( \
             boost::mpl::aux::type_wrapper< V > const volatile* \
-          , BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args) < \
-                member_macro(args, V, T) \
+          , BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args, n) < \
+                V::template BOOST_PP_ARRAY_ELEM(1, args) \
             >* = 0 \
         ); \
+      /**/
+#     define BOOST_MPL_HAS_MEMBER_ACCEPT(args, member_macro) \
+        BOOST_PP_REPEAT( \
+            BOOST_PP_ARRAY_ELEM(2, args) \
+          , BOOST_MPL_HAS_MEMBER_MULTI_ACCEPT \
+          , args \
+        ) \
       /**/
 #   else
 #     define BOOST_MPL_HAS_MEMBER_ACCEPT(args, member_macro) \
@@ -419,9 +427,6 @@ struct trait \
            ) \
       template< \
           typename T \
-          BOOST_PP_ENUM_TRAILING_PARAMS( \
-              BOOST_PP_ARRAY_ELEM(2, args), typename T \
-          )  \
         , typename fallback_ \
               = boost::mpl::bool_< BOOST_PP_ARRAY_ELEM(3, args) > \
       > \
@@ -436,45 +441,9 @@ struct trait \
       }; \
     /**/
 
-// For example,
-// BOOST_MPL_HAS_MEMBER_WITH_FUNCTION_SFINAE(
-//     (4, (has_xxx, xxx, 2, false))
-//   , BOOST_MPL_HAS_MEMBER_TEMPLATE_SUBSTITUTE_PARAMETER
-//   , BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS
-// )
-// expands to something like the following...
-//
-// template<
-//     typename T , typename T0 , typename T1
-//   , typename fallback_ = boost::mpl::bool_< false >
-// >
-// class has_xxx {
-//     template< typename U >
-//     struct has_xxx_introspect {
-//         template< template< typename V0 , typename V1 > class V >
-//         struct has_xxx_substitute {
-//         };
-//
-//         template< typename V >
-//         static boost::mpl::aux::no_tag
-//         has_xxx_test(...);
-//
-//         template< typename V >
-//         static boost::mpl::aux::yes_tag
-//         has_xxx_test(
-//             boost::mpl::aux::type_wrapper< V > const volatile*
-//           , has_xxx_substitute < V::template xxx >* = 0
-//         );
-//
-//         static const bool value
-//             = sizeof(has_xxx_test< U >(0))
-//                   == sizeof(boost::mpl::aux::yes_tag);
-//         typedef boost::mpl::bool_< value > type;
-//     };
-// public:
-//     static const bool value = has_xxx_introspect< T >::value;
-//     typedef typename has_xxx_introspect< T >::type type;
-// };
+// BOOST_MPL_HAS_MEMBER_WITH_FUNCTION_SFINAE expands to the full
+// implementation of the function-based metafunction. Compile with -E
+// to see the preprocessor output for this macro.
 #   define BOOST_MPL_HAS_MEMBER_WITH_FUNCTION_SFINAE( \
                args, substitute_macro, member_macro \
            ) \
@@ -496,17 +465,17 @@ struct trait \
 
 #     if !BOOST_MPL_HAS_XXX_NEEDS_NAMESPACE_LEVEL_SUBSTITUTE
 #       define BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME_WITH_TEMPLATE_SFINAE( \
-                   args \
+                   args, n \
                ) \
-          BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args) \
+          BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args, n) \
         /**/
 #     else
 #       define BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME_WITH_TEMPLATE_SFINAE( \
-                   args \
+                   args, n \
                ) \
           BOOST_PP_CAT( \
               boost_mpl_has_xxx_ \
-            , BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args) \
+            , BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args, n) \
           ) \
         /**/
 #     endif
@@ -516,20 +485,20 @@ struct trait \
              ) \
         BOOST_PP_CAT( \
             BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME_WITH_TEMPLATE_SFINAE( \
-                args \
+                args, 0 \
             ) \
           , _tag \
         ) \
       /**/
 
-#     define BOOST_MPL_HAS_MEMBER_SUBSTITUTE_WITH_TEMPLATE_SFINAE( \
-                 args, substitute_macro \
+#     define BOOST_MPL_HAS_MEMBER_MULTI_SUBSTITUTE_WITH_TEMPLATE_SFINAE( \
+                 z, n, args \
              ) \
-        typedef void \
-            BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_TAG_NAME(args); \
-        template< substitute_macro(args, U) > \
+        template< \
+             template< BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n), typename U) > class U \
+        > \
         struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME_WITH_TEMPLATE_SFINAE( \
-                args \
+                args, n \
                ) { \
             typedef \
                 BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_TAG_NAME(args) \
@@ -537,14 +506,23 @@ struct trait \
         }; \
       /**/
 
+#     define BOOST_MPL_HAS_MEMBER_SUBSTITUTE_WITH_TEMPLATE_SFINAE( \
+                 args, substitute_macro \
+             ) \
+        typedef void \
+            BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_TAG_NAME(args); \
+        BOOST_PP_REPEAT( \
+            BOOST_PP_ARRAY_ELEM(2, args) \
+          , BOOST_MPL_HAS_MEMBER_MULTI_SUBSTITUTE_WITH_TEMPLATE_SFINAE \
+          , args \
+        ) \
+      /**/
+
 #     define BOOST_MPL_HAS_MEMBER_REJECT_WITH_TEMPLATE_SFINAE( \
                  args, member_macro \
              ) \
         template< \
             typename U \
-            BOOST_PP_ENUM_TRAILING_PARAMS( \
-                BOOST_PP_ARRAY_ELEM(2, args), typename U \
-            ) \
           , typename V \
                 = BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_TAG_NAME(args) \
         > \
@@ -554,22 +532,17 @@ struct trait \
         }; \
       /**/
 
-#     define BOOST_MPL_HAS_MEMBER_ACCEPT_WITH_TEMPLATE_SFINAE( \
-                 args, member_macro \
+#     define BOOST_MPL_HAS_MEMBER_MULTI_ACCEPT_WITH_TEMPLATE_SFINAE( \
+                 z, n, args \
              ) \
-        template< \
-            typename U \
-            BOOST_PP_ENUM_TRAILING_PARAMS( \
-                BOOST_PP_ARRAY_ELEM(2, args), typename U \
-            ) \
-        > \
+        template< typename U > \
         struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)< \
-            U BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ARRAY_ELEM(2, args), U) \
+            U \
           , typename \
                 BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME_WITH_TEMPLATE_SFINAE( \
-                    args \
+                    args, n \
                 )< \
-                    member_macro(args, U, U) \
+                    BOOST_MSVC_TYPENAME U::BOOST_PP_ARRAY_ELEM(1, args)< > \
                 >::type \
         > { \
             BOOST_STATIC_CONSTANT(bool, value = true); \
@@ -577,89 +550,30 @@ struct trait \
         }; \
       /**/
 
-#     define BOOST_MPL_HAS_MEMBER_BASIC_INTROSPECT_WITH_TEMPLATE_SFINAE( \
+#     define BOOST_MPL_HAS_MEMBER_ACCEPT_WITH_TEMPLATE_SFINAE( \
+                 args, member_macro \
+             ) \
+        BOOST_PP_REPEAT( \
+            BOOST_PP_ARRAY_ELEM(2, args) \
+          , BOOST_MPL_HAS_MEMBER_MULTI_ACCEPT_WITH_TEMPLATE_SFINAE \
+          , args \
+        ) \
+      /**/
+
+#     define BOOST_MPL_HAS_MEMBER_INTROSPECT_WITH_TEMPLATE_SFINAE( \
                  args, substitute_macro, member_macro \
              ) \
         BOOST_MPL_HAS_MEMBER_REJECT_WITH_TEMPLATE_SFINAE(args, member_macro) \
         BOOST_MPL_HAS_MEMBER_ACCEPT_WITH_TEMPLATE_SFINAE(args, member_macro) \
         template< typename U > \
         struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args) \
-            : BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)< \
-                  U \
-                  BOOST_PP_ENUM_TRAILING_PARAMS( \
-                      BOOST_PP_ARRAY_ELEM(2, args) \
-                    , T \
-                  ) \
-              > { \
+            : BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)< U > { \
         }; \
       /**/
-
-#     if !BOOST_MPL_HAS_XXX_NEEDS_NAMESPACE_LEVEL_SUBSTITUTE
-#       define BOOST_MPL_HAS_MEMBER_INTROSPECT_WITH_TEMPLATE_SFINAE( \
-                   args, substitute_macro, member_macro \
-               ) \
-          BOOST_MPL_HAS_MEMBER_SUBSTITUTE_WITH_TEMPLATE_SFINAE( \
-              args, substitute_macro \
-          ) \
-          BOOST_MPL_HAS_MEMBER_BASIC_INTROSPECT_WITH_TEMPLATE_SFINAE( \
-              args, substitute_macro, member_macro \
-          ) \
-        /**/
-#     else
-#       define BOOST_MPL_HAS_MEMBER_INTROSPECT_WITH_TEMPLATE_SFINAE( \
-                   args, substitute_macro, member_macro \
-               ) \
-          BOOST_MPL_HAS_MEMBER_BASIC_INTROSPECT_WITH_TEMPLATE_SFINAE( \
-              args, substitute_macro, member_macro \
-          ) \
-        /**/
-#     endif
-
-// For example,
-// BOOST_MPL_HAS_MEMBER_WITH_TEMPLATE_SFINAE(
-//     (4, (has_xxx, xxx, 2, false))
-//   , BOOST_MPL_HAS_MEMBER_TEMPLATE_SUBSTITUTE_PARAMETER
-//   , BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS
-// )
-// expands to something like the following...
-//
-// template<
-//     typename T , typename T0 , typename T1
-//   , typename fallback_ = boost::mpl::bool_< false >
-// >
-// class has_xxx {
-//     typedef void has_xxx_substitute_tag;
-//
-//     template< template< typename U0 , typename U1 > class U >
-//     struct has_xxx_substitute {
-//         typedef has_xxx_substitute_tag type;
-//     };
-//
-//     template<
-//         typename U , typename U0 , typename U1
-//       , typename V = has_xxx_substitute_tag
-//     >
-//     struct has_xxx_test {
-//         static const bool value = false;
-//         typedef boost::mpl::bool_< value > type;
-//     };
-//
-//     template< typename U , typename U0 , typename U1 >
-//     struct has_xxx_test<
-//         U , U0 , U1
-//       , typename has_xxx_substitute< U::template xxx >::type
-//     > {
-//         static const bool value = true;
-//         typedef boost::mpl::bool_< value > type;
-//     };
-//
-//     template< typename U >
-//     struct has_xxx_introspect : has_xxx_test< U , T0 , T1 > {
-//     };
-// public:
-//     static const bool value = has_xxx_introspect< T >::value;
-//     typedef typename has_xxx_introspect< T >::type type;
-// };
+ 
+// BOOST_MPL_HAS_MEMBER_WITH_TEMPLATE_SFINAE expands to the full
+// implementation of the template-based metafunction. Compile with -E
+// to see the preprocessor output for this macro.
 //
 // Note that if BOOST_MPL_HAS_XXX_NEEDS_NAMESPACE_LEVEL_SUBSTITUTE is
 // defined BOOST_MPL_HAS_MEMBER_SUBSTITUTE_WITH_TEMPLATE_SFINAE needs
@@ -668,6 +582,9 @@ struct trait \
 #     define BOOST_MPL_HAS_MEMBER_WITH_TEMPLATE_SFINAE( \
                  args, substitute_macro, member_macro \
              ) \
+        BOOST_MPL_HAS_MEMBER_SUBSTITUTE_WITH_TEMPLATE_SFINAE( \
+            args, substitute_macro \
+        ) \
         BOOST_MPL_HAS_MEMBER_IMPLEMENTATION( \
             args \
           , BOOST_MPL_HAS_MEMBER_INTROSPECT_WITH_TEMPLATE_SFINAE \
@@ -678,130 +595,22 @@ struct trait \
 
 #   endif // BOOST_MPL_HAS_XXX_NEEDS_TEMPLATE_SFINAE
 
-#   define BOOST_MPL_HAS_MEMBER_TEMPLATE_EXPLICIT_SUBSTITUTE_PARAMETER( \
-               args, param \
-           ) \
-      typename \
-    /**/
-
-#   if !BOOST_MPL_HAS_XXX_NO_IMPLICIT_SUBSTITUTE_TEMPLATE
-#     define BOOST_MPL_HAS_MEMBER_TEMPLATE_IMPLICIT_SUBSTITUTE_PARAMETER( \
-                 args, param \
-             ) \
-        template< \
-            BOOST_PP_ENUM_PARAMS(BOOST_PP_ARRAY_ELEM(2, args), typename param) \
-        > \
-        class param\
-      /**/
-
-// See comment at BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS below.
-#     define BOOST_MPL_HAS_MEMBER_TEMPLATE_SUBSTITUTE_PARAMETER(args, param) \
-        BOOST_PP_IF( \
-            BOOST_PP_ARRAY_ELEM(2, args) \
-          , BOOST_MPL_HAS_MEMBER_TEMPLATE_IMPLICIT_SUBSTITUTE_PARAMETER \
-          , BOOST_MPL_HAS_MEMBER_TEMPLATE_EXPLICIT_SUBSTITUTE_PARAMETER \
-        ) ( args, param ) \
-      /**/
-#   else
-#     define BOOST_MPL_HAS_MEMBER_TEMPLATE_SUBSTITUTE_PARAMETER(args, param) \
-        BOOST_MPL_HAS_MEMBER_TEMPLATE_EXPLICIT_SUBSTITUTE_PARAMETER( \
-            args, param \
-        ) \
-      /**/
-#   endif
-
-#   define BOOST_MPL_HAS_MEMBER_TEMPLATE_EXPLICIT_ACCESS( \
-               args, class_type, param \
-           ) \
-      typename class_type::template BOOST_PP_ARRAY_ELEM(1, args)< \
-          BOOST_PP_ENUM_PARAMS(BOOST_PP_ARRAY_ELEM(2, args), param) \
-      > \
-    /**/
-
-#   if !BOOST_MPL_HAS_XXX_NO_IMPLICIT_SUBSTITUTE_TEMPLATE
-#     define BOOST_MPL_HAS_MEMBER_TEMPLATE_IMPLICIT_ACCESS( \
-               args, class_type, param \
-             ) \
-        class_type::template BOOST_PP_ARRAY_ELEM(1, args) \
-      /**/
-
-// Note: to recognize templates with no required arguments use
-// explicit access since a substitute template with no args cannot be
-// declared.
-#     define BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS(args, class_type, param) \
-        BOOST_PP_IF( \
-            BOOST_PP_ARRAY_ELEM(2, args) \
-          , BOOST_MPL_HAS_MEMBER_TEMPLATE_IMPLICIT_ACCESS \
-          , BOOST_MPL_HAS_MEMBER_TEMPLATE_EXPLICIT_ACCESS \
-        ) ( args, class_type, param ) \
-      /**/
-#   else
-#     define BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS(args, class_type, param) \
-        BOOST_MPL_HAS_MEMBER_TEMPLATE_EXPLICIT_ACCESS( \
-            args, class_type, param \
-        ) \
-      /**/
-#   endif
-
-#   if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
-// MSVC (7.1, 8.0) accepts the member template access syntax below
-// regardless of the member template's arity. introspect will reject
-// member templates with the wrong arity due to the substitute
-// template. Note that using this syntax also enables MSVC
-// template-based SFINAE to reject non-template members. This is
-// important because explicitly passing the template args will match
-// templates with the correct name and arguments but will cause ICE on
-// non-template members. However, MSVC nullary template-based SFINAE
-// (introspection for a member template with no required args) can not
-// reject non-template members, but MSVC function-based SFINAE
-// can. So, one of the two is chosen based on the number of required
-// template parameters.
-#     if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-#       define BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS_MSVC( \
-                   args, class_type, param \
-               ) \
-          typename class_type::template BOOST_PP_ARRAY_ELEM(1, args)< > \
-        /**/
-#     else
-#       define BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS_MSVC( \
-                   args, class_type, param \
-               ) \
-          class_type::BOOST_PP_ARRAY_ELEM(1, agrs)< > \
-        /**/
-#     endif
-
-#     define BOOST_MPL_HAS_MEMBER_TEMPLATE_MSVC( \
-                 args, substitute_macro, member_macro \
-             ) \
-        BOOST_MPL_HAS_MEMBER_SUBSTITUTE_WITH_TEMPLATE_SFINAE( \
-            args, substitute_macro \
-        ) \
-        BOOST_PP_IF( \
-            BOOST_PP_ARRAY_ELEM(2, args) \
-          , BOOST_MPL_HAS_MEMBER_WITH_TEMPLATE_SFINAE \
-          , BOOST_MPL_HAS_MEMBER_WITH_FUNCTION_SFINAE \
-        ) ( \
-            args \
-          , substitute_macro \
-          , member_macro \
-        ) \
-      /**/
-#   endif
-
+// Note: In the current implementation the parameter and access macros
+// are no longer expanded.
 #   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
-#     define BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(trait, name, n, default_) \
+#     define BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(trait, name, default_) \
         BOOST_MPL_HAS_MEMBER_WITH_FUNCTION_SFINAE( \
-            ( 4, ( trait, name, n, default_ ) ) \
+            ( 4, ( trait, name, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, default_ ) ) \
           , BOOST_MPL_HAS_MEMBER_TEMPLATE_SUBSTITUTE_PARAMETER \
           , BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS \
         ) \
       /**/
 #   else
-#     define BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(trait, name, n, default_) \
-        BOOST_MPL_HAS_MEMBER_TEMPLATE_MSVC( \
-            ( 4, ( trait, name, n, default_ ) ) \
+#     define BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(trait, name, default_) \
+        BOOST_MPL_HAS_MEMBER_WITH_TEMPLATE_SFINAE( \
+            ( 4, ( trait, name, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, default_ ) ) \
           , BOOST_MPL_HAS_MEMBER_TEMPLATE_SUBSTITUTE_PARAMETER \
-          , BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS_MSVC \
+          , BOOST_MPL_HAS_MEMBER_TEMPLATE_ACCESS \
         ) \
       /**/
 #   endif
@@ -810,9 +619,8 @@ struct trait \
 
 // placeholder implementation
 
-#   define BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(trait, name, n, default_) \
+#   define BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(trait, name, default_) \
       template< typename T \
-                BOOST_PP_ENUM_TRAILING_PARAMS(n, typename U) \
               , typename fallback_ = boost::mpl::bool_< default_ > > \
       struct trait { \
           BOOST_STATIC_CONSTANT(bool, value = fallback_::value); \
@@ -822,9 +630,9 @@ struct trait \
 
 #endif // BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE
 
-#   define BOOST_MPL_HAS_XXX_TEMPLATE_DEF(name, n) \
+#   define BOOST_MPL_HAS_XXX_TEMPLATE_DEF(name) \
       BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF( \
-          BOOST_PP_CAT(has_, name), name, n, false \
+          BOOST_PP_CAT(has_, name), name, false \
       ) \
     /**/
 

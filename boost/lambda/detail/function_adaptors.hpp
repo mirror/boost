@@ -23,7 +23,7 @@ namespace lambda {
 
 namespace detail {
 
-BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(has_template_sig, sig, 1, true)
+BOOST_MPL_HAS_XXX_TEMPLATE_DEF(sig)
 
 template<class Tuple>
 struct remove_references_from_elements {
@@ -160,7 +160,7 @@ template <class Func> struct function_adaptor {
     : result_converter<
         Args
       , tuples::length<typename Args::tail_type>::value
-      , detail::has_template_sig<plainF, Args>::value
+      , detail::has_sig<plainF>::value
       >
   {};
 #else // BOOST_NO_RESULT_OF
