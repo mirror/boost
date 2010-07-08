@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Alternatives</title>
-<link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
-<link rel="home" href="../index.html" title="Chapter 1. Boost.ScopeExit">
-<link rel="up" href="../index.html" title="Chapter 1. Boost.ScopeExit">
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">
 <link rel="prev" href="tutorial.html" title="Tutorial">
 <link rel="next" href="compilers.html" title="Supported Compilers">
 </head>
@@ -20,13 +20,13 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="tutorial.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="compilers.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="tutorial.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="scope_exit.alternatives"></a> Alternatives</h2></div></div></div>
 <a name="alternatives.try_catch"></a><h4>
-<a name="id1037675"></a>
+<a name="id761016"></a>
       try-catch
     </h4>
 <p>
@@ -51,25 +51,25 @@
 <p>
       Note the following:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-        the <code class="computeroutput"><span class="identifier">passwd</span></code> object is defined
-        outside of the <code class="computeroutput"><span class="keyword">try</span></code> block because
-        this object is required inside the <code class="computeroutput"><span class="keyword">catch</span></code>
-        block to close the file,
-      </li>
-<li>
-        the <code class="computeroutput"><span class="identifier">passwd</span></code> object is not
-        fully constructed until after the <code class="computeroutput"><span class="identifier">open</span></code>
-        member function returns, and
-      </li>
-<li>
-        if opening throws, the <code class="computeroutput"><span class="identifier">passwd</span><span class="special">.</span><span class="identifier">close</span><span class="special">()</span></code> should not be called, hence the call to
-        <code class="computeroutput"><span class="identifier">passwd</span><span class="special">.</span><span class="identifier">is_open</span><span class="special">()</span></code>.
-      </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          the <code class="computeroutput"><span class="identifier">passwd</span></code> object is defined
+          outside of the <code class="computeroutput"><span class="keyword">try</span></code> block because
+          this object is required inside the <code class="computeroutput"><span class="keyword">catch</span></code>
+          block to close the file,
+        </li>
+<li class="listitem">
+          the <code class="computeroutput"><span class="identifier">passwd</span></code> object is not
+          fully constructed until after the <code class="computeroutput"><span class="identifier">open</span></code>
+          member function returns, and
+        </li>
+<li class="listitem">
+          if opening throws, the <code class="computeroutput"><span class="identifier">passwd</span><span class="special">.</span><span class="identifier">close</span><span class="special">()</span></code> should not be called, hence the call
+          to <code class="computeroutput"><span class="identifier">passwd</span><span class="special">.</span><span class="identifier">is_open</span><span class="special">()</span></code>.
+        </li>
 </ul></div>
 <p>
-      <a class="link" href="../index.html" title="Chapter 1. Boost.ScopeExit">ScopeExit</a> doesn't have any of these problems:
+      <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">ScopeExit</a> doesn't have any of these problems:
     </p>
 <pre class="programlisting"><span class="keyword">try</span> <span class="special">{</span>
     <span class="identifier">File</span> <span class="identifier">passwd</span><span class="special">(</span><span class="string">"/etc/passwd"</span><span class="special">);</span>
@@ -84,7 +84,7 @@
 <span class="special">}</span>
 </pre>
 <a name="alternatives.raii"></a><h4>
-<a name="id1038144"></a>
+<a name="id761495"></a>
       RAII
     </h4>
 <p>
@@ -139,7 +139,7 @@
       Multi-Index Containers Library</a>.
     </p>
 <a name="alternatives._ulink_url__http___www_ddj_com_dept_cpp_184403758__scopeguard__ulink_"></a><h4>
-<a name="id1038643"></a>
+<a name="id761994"></a>
       <a href="http://www.ddj.com/dept/cpp/184403758" target="_top">ScopeGuard</a>
     </h4>
 <p>
@@ -180,22 +180,22 @@
 <p>
       Note that
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-        Boost.lambda expressions are hard to write correctly, for example, overloaded
-        function must be explicitly casted, as demonstrated in this example,
-      </li>
-<li>
-        condition in <code class="computeroutput"><span class="identifier">if_</span></code> expression
-        refers to <code class="computeroutput"><span class="identifier">commit</span></code> variable
-        indirectly through the <code class="computeroutput"><span class="identifier">_1</span></code>
-        placeholder,
-      </li>
-<li>
-        setting a breakpoint inside <code class="computeroutput"><span class="identifier">if_</span><span class="special">[</span> <span class="special">...</span> <span class="special">]</span></code>
-        requires in-depth knowledge of <a href="../../../../../libs/lambda/index.html" target="_top">Boost.Lambda</a>
-        and debugging techniques.
-      </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          Boost.lambda expressions are hard to write correctly, for example, overloaded
+          function must be explicitly casted, as demonstrated in this example,
+        </li>
+<li class="listitem">
+          condition in <code class="computeroutput"><span class="identifier">if_</span></code> expression
+          refers to <code class="computeroutput"><span class="identifier">commit</span></code> variable
+          indirectly through the <code class="computeroutput"><span class="identifier">_1</span></code>
+          placeholder,
+        </li>
+<li class="listitem">
+          setting a breakpoint inside <code class="computeroutput"><span class="identifier">if_</span><span class="special">[</span> <span class="special">...</span> <span class="special">]</span></code>
+          requires in-depth knowledge of <a href="../../../../../libs/lambda/index.html" target="_top">Boost.Lambda</a>
+          and debugging techniques.
+        </li>
 </ul></div>
 <p>
       This code will look much better with native lambda expressions proposed for
@@ -210,7 +210,7 @@
 <span class="special">);</span>
 </pre>
 <p>
-      With <a class="link" href="../index.html" title="Chapter 1. Boost.ScopeExit">ScopeExit</a> you can simply do
+      With <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">ScopeExit</a> you can simply do
     </p>
 <pre class="programlisting"><span class="identifier">BOOST_SCOPE_EXIT</span><span class="special">(</span> <span class="special">(</span><span class="identifier">currency_rate_inserted</span><span class="special">)(&amp;</span><span class="identifier">commit</span><span class="special">)(&amp;</span><span class="identifier">rates</span><span class="special">)(&amp;</span><span class="identifier">currency</span><span class="special">)</span> <span class="special">)</span>
 <span class="special">{</span>
@@ -223,49 +223,49 @@
 <span class="identifier">commit</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">;</span>
 </pre>
 <a name="alternatives.c__0x"></a><h4>
-<a name="id1039632"></a>
+<a name="id762994"></a>
       C++0x
     </h4>
 <p>
-      In future releases <a class="link" href="../index.html" title="Chapter 1. Boost.ScopeExit">ScopeExit</a> will take advantages
+      In future releases <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">ScopeExit</a> will take advantages
       of C++0x features.
     </p>
-<div class="itemizedlist"><ul type="disc"><li>
-        Passing capture list as <a href="../../../../../libs/preprocessor/index.html" target="_top">Boost.Preprocessor
-        sequence</a> will be replaced with a traditional macro invocation style:
-      </li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+          Passing capture list as <a href="../../../../../libs/preprocessor/index.html" target="_top">Boost.Preprocessor
+          sequence</a> will be replaced with a traditional macro invocation style:
+        </li></ul></div>
 <pre class="programlisting"><span class="identifier">BOOST_SCOPE_EXIT</span><span class="special">(</span><span class="identifier">currency_rate_inserted</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">commit</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">rates</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">currency</span><span class="special">)</span>
 <span class="special">{</span>
     <span class="keyword">if</span><span class="special">(</span><span class="identifier">currency_rate_inserted</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">commit</span><span class="special">)</span>
         <span class="identifier">rates</span><span class="special">.</span><span class="identifier">erase</span><span class="special">(</span><span class="identifier">currency</span><span class="special">);</span>
 <span class="special">}</span> <span class="identifier">BOOST_SCOPE_EXIT_END</span>
 </pre>
-<div class="itemizedlist"><ul type="disc"><li>
-<code class="computeroutput"><span class="identifier">BOOST_SCOPE_EXIT_END</span></code> will
-        be replaced with a semicolon:
-      </li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+          <code class="computeroutput"><span class="identifier">BOOST_SCOPE_EXIT_END</span></code> will
+          be replaced with a semicolon:
+        </li></ul></div>
 <pre class="programlisting"><span class="identifier">BOOST_SCOPE_EXIT</span><span class="special">(</span><span class="identifier">currency_rate_inserted</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">commit</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">rates</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">currency</span><span class="special">)</span>
 <span class="special">{</span>
     <span class="keyword">if</span><span class="special">(</span><span class="identifier">currency_rate_inserted</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">commit</span><span class="special">)</span>
         <span class="identifier">rates</span><span class="special">.</span><span class="identifier">erase</span><span class="special">(</span><span class="identifier">currency</span><span class="special">);</span>
 <span class="special">};</span>
 </pre>
-<div class="itemizedlist"><ul type="disc"><li>
-        Users will be able to capture local variables implicitly with lambda capture
-        defaults <code class="computeroutput"><span class="special">&amp;</span></code> and <code class="computeroutput"><span class="special">=</span></code>:
-      </li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+          Users will be able to capture local variables implicitly with lambda capture
+          defaults <code class="computeroutput"><span class="special">&amp;</span></code> and <code class="computeroutput"><span class="special">=</span></code>:
+        </li></ul></div>
 <pre class="programlisting"><span class="identifier">BOOST_SCOPE_EXIT</span><span class="special">(&amp;,</span> <span class="identifier">currency_rate_inserted</span><span class="special">)</span>
 <span class="special">{</span>
     <span class="keyword">if</span><span class="special">(</span><span class="identifier">currency_rate_inserted</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">commit</span><span class="special">)</span>
         <span class="identifier">rates</span><span class="special">.</span><span class="identifier">erase</span><span class="special">(</span><span class="identifier">currency</span><span class="special">);</span>
 <span class="special">};</span>
 </pre>
-<div class="itemizedlist"><ul type="disc"><li>
-        It will be possible to capture <code class="computeroutput"><span class="keyword">this</span></code>
-        pointer.
-      </li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+          It will be possible to capture <code class="computeroutput"><span class="keyword">this</span></code>
+          pointer.
+        </li></ul></div>
 <a name="alternatives.the_d_programming_language"></a><h4>
-<a name="id1040070"></a>
+<a name="id763445"></a>
       The D Programming Language
     </h4>
 <p>
@@ -288,16 +288,16 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2009 Alexander Nasonov<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 -2009 Alexander Nasonov<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
-        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">
-        http://www.boost.org/LICENSE_1_0.txt </a>)
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org/LICENSE_1_0.txt"&gt;
+        http://www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
       </p>
 </div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="tutorial.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="compilers.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="tutorial.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

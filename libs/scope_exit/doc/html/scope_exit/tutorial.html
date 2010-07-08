@@ -1,12 +1,12 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Tutorial</title>
-<link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
-<link rel="home" href="../index.html" title="Chapter 1. Boost.ScopeExit">
-<link rel="up" href="../index.html" title="Chapter 1. Boost.ScopeExit">
-<link rel="prev" href="../index.html" title="Chapter 1. Boost.ScopeExit">
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">
+<link rel="prev" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">
 <link rel="next" href="alternatives.html" title="Alternatives">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="alternatives.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="alternatives.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="scope_exit.tutorial"></a> Tutorial</h2></div></div></div>
 <p>
@@ -60,17 +60,17 @@
 </span><span class="special">}</span>
 </pre>
 <p>
-      The block below point <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">)</span></code> is a <a class="link" href="../index.html" title="Chapter 1. Boost.ScopeExit">ScopeExit</a>
-      declaration. Unlike point <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">)</span></code>, an execution of the <a class="link" href="../index.html" title="Chapter 1. Boost.ScopeExit">ScopeExit</a>
+      The block below point <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">)</span></code> is a <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">ScopeExit</a>
+      declaration. Unlike point <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">)</span></code>, an execution of the <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">ScopeExit</a>
       body will be delayed until the end of the current scope. In this case it will
       be executed either after point <code class="computeroutput"><span class="special">(</span><span class="number">4</span><span class="special">)</span></code> or on any
       exception.
     </p>
 <p>
-      The <a class="link" href="../index.html" title="Chapter 1. Boost.ScopeExit">ScopeExit</a> declaration starts with <code class="computeroutput"><span class="identifier">BOOST_SCOPE_EXIT</span></code> macro invocation which accepts
+      The <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">ScopeExit</a> declaration starts with <code class="computeroutput"><span class="identifier">BOOST_SCOPE_EXIT</span></code> macro invocation which accepts
       <a href="../../../../../libs/preprocessor/index.html" target="_top">Boost.Preprocessor sequence</a>
       of captured variables. If a capture starts with the ampersand sign <code class="computeroutput"><span class="special">&amp;</span></code>, a reference to the captured variable
-      will be available inside the <a class="link" href="../index.html" title="Chapter 1. Boost.ScopeExit">ScopeExit</a> body;
+      will be available inside the <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit">ScopeExit</a> body;
       otherwise, a copy of the variable will be made after the point <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">)</span></code>
       and only the copy will be available inside the body.
     </p>
@@ -136,16 +136,16 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2009 Alexander Nasonov<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 -2009 Alexander Nasonov<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
-        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">
-        http://www.boost.org/LICENSE_1_0.txt </a>)
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org/LICENSE_1_0.txt"&gt;
+        http://www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
       </p>
 </div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="alternatives.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="alternatives.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
