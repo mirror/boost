@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>basic_regex</title>
-<link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="../ref.html" title="Reference">
@@ -20,14 +20,14 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../ref.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="match_results.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../ref.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="match_results.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.ref.basic_regex"></a><a class="link" href="basic_regex.html" title="basic_regex"> basic_regex</a>
 </h3></div></div></div>
 <a name="boost_regex.ref.basic_regex.synopsis"></a><h5>
-<a name="id693964"></a>
+<a name="id783385"></a>
         <a class="link" href="basic_regex.html#boost_regex.ref.basic_regex.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -37,19 +37,19 @@
         encapsulates regular expression parsing and compilation. The class takes
         two template parameters:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-<code class="computeroutput"><span class="identifier">charT</span></code>: determines the character
-          type, i.e. either <code class="computeroutput"><span class="keyword">char</span></code> or
-          <code class="computeroutput"><span class="keyword">wchar_t</span></code>; see <a class="link" href="concepts/charT_concept.html" title="charT Requirements">charT
-          concept</a>.
-        </li>
-<li>
-<code class="computeroutput"><span class="identifier">traits</span></code>: determines the
-          behavior of the character type, for example which character class names
-          are recognized. A default traits class is provided: <code class="computeroutput"><span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span></code>. See also <a class="link" href="concepts/traits_concept.html" title="Traits Class Requirements">traits
-          concept</a>.
-        </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            <code class="computeroutput"><span class="identifier">charT</span></code>: determines the
+            character type, i.e. either <code class="computeroutput"><span class="keyword">char</span></code>
+            or <code class="computeroutput"><span class="keyword">wchar_t</span></code>; see <a class="link" href="concepts/charT_concept.html" title="charT Requirements">charT
+            concept</a>.
+          </li>
+<li class="listitem">
+            <code class="computeroutput"><span class="identifier">traits</span></code>: determines the
+            behavior of the character type, for example which character class names
+            are recognized. A default traits class is provided: <code class="computeroutput"><span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span></code>. See also <a class="link" href="concepts/traits_concept.html" title="Traits Class Requirements">traits
+            concept</a>.
+          </li>
 </ul></div>
 <p>
         For ease of use there are two typedefs that define the two standard <code class="computeroutput"><span class="identifier">basic_regex</span></code> instances, unless you want
@@ -244,7 +244,7 @@
 <span class="special">}</span> <span class="comment">// namespace boost
 </span></pre>
 <a name="boost_regex.ref.basic_regex.description"></a><h5>
-<a name="id699440"></a>
+<a name="id788920"></a>
         <a class="link" href="basic_regex.html#boost_regex.ref.basic_regex.description">Description</a>
       </h5>
 <p>
@@ -318,16 +318,14 @@
         then a constant with the same name, type and value is declared within the
         scope of basic_regex.
       </p>
-<a name="boost_regex.basic_regex.construct1"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">();</span>
+<a name="boost_regex.basic_regex.construct1"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">();</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
         <code class="computeroutput"><span class="identifier">basic_regex</span></code>.
       </p>
 <div class="table">
-<a name="id702443"></a><p class="title"><b>Table&#160;1.&#160;basic_regex default construction postconditions</b></p>
+<a name="id790622"></a><p class="title"><b>Table&#160;1.&#160;basic_regex default construction postconditions</b></p>
 <div class="table-contents"><table class="table" summary="basic_regex default construction postconditions">
 <colgroup>
 <col>
@@ -335,59 +333,57 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Element
-            </p>
-            </th>
+                <p>
+                  Element
+                </p>
+              </th>
 <th>
-            <p>
-              Value
-            </p>
-            </th>
+                <p>
+                  Value
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="keyword">true</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">true</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="number">0</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="number">0</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct2"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
+<br class="table-break"><a name="boost_regex.basic_regex.construct2"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Requires</strong></span>: <span class="emphasis"><em>p</em></span> shall not
@@ -407,7 +403,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id702741"></a><p class="title"><b>Table&#160;2.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id790976"></a><p class="title"><b>Table&#160;2.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -415,83 +411,81 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Element
-            </p>
-            </th>
+                <p>
+                  Element
+                </p>
+              </th>
 <th>
-            <p>
-              Value
-            </p>
-            </th>
+                <p>
+                  Value
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">false</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">char_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;::</span><span class="identifier">length</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">char_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;::</span><span class="identifier">length</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>f</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>f</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The number of marked sub-expressions within the expression.
-            </p>
-            </td>
+                <p>
+                  The number of marked sub-expressions within the expression.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct3"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p2</span><span class="special">,</span> 
+<br class="table-break"><a name="boost_regex.basic_regex.construct3"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p2</span><span class="special">,</span> 
             <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
@@ -512,7 +506,7 @@
         specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id703153"></a><p class="title"><b>Table&#160;3.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id791462"></a><p class="title"><b>Table&#160;3.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -520,83 +514,81 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Element
-            </p>
-            </th>
+                <p>
+                  Element
+                </p>
+              </th>
 <th>
-            <p>
-              Value
-            </p>
-            </th>
+                <p>
+                  Value
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">false</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>f</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>f</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The number of marked sub-expressions within the expression.
-            </p>
-            </td>
+                <p>
+                  The number of marked sub-expressions within the expression.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct4"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">size_type</span> <span class="identifier">len</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span><span class="special">);</span>
+<br class="table-break"><a name="boost_regex.basic_regex.construct4"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">size_type</span> <span class="identifier">len</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Requires</strong></span>: <span class="emphasis"><em>p</em></span> shall not
@@ -616,7 +608,7 @@
         according the option flags specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id703558"></a><p class="title"><b>Table&#160;4.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id791936"></a><p class="title"><b>Table&#160;4.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -624,92 +616,89 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Element
-            </p>
-            </th>
+                <p>
+                  Element
+                </p>
+              </th>
 <th>
-            <p>
-              Value
-            </p>
-            </th>
+                <p>
+                  Value
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">false</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>len</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>len</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">,</span> <span class="identifier">len</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">,</span>
+                  <span class="identifier">len</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>f</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>f</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The number of marked sub-expressions within the expression.
-            </p>
-            </td>
+                <p>
+                  The number of marked sub-expressions within the expression.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct5"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">);</span>
+<br class="table-break"><a name="boost_regex.basic_regex.construct5"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
         <a class="link" href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
         as a copy of the object <span class="emphasis"><em>e</em></span>.
       </p>
-<a name="boost_regex.basic_regex.construct6"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ST</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">SA</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.construct6"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ST</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">SA</span><span class="special">&gt;</span>
 <span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">ST</span><span class="special">,</span> <span class="identifier">SA</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span> 
             <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
@@ -727,7 +716,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id704106"></a><p class="title"><b>Table&#160;5.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id792497"></a><p class="title"><b>Table&#160;5.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -735,83 +724,81 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Element
-            </p>
-            </th>
+                <p>
+                  Element
+                </p>
+              </th>
 <th>
-            <p>
-              Value
-            </p>
-            </th>
+                <p>
+                  Value
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">false</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>s</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>s</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>f</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>f</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The number of marked sub-expressions within the expression.
-            </p>
-            </td>
+                <p>
+                  The number of marked sub-expressions within the expression.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct7"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ForwardIterator</span><span class="special">&gt;</span>
+<br class="table-break"><a name="boost_regex.basic_regex.construct7"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ForwardIterator</span><span class="special">&gt;</span>
 <span class="identifier">basic_regex</span><span class="special">(</span><span class="identifier">ForwardIterator</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">ForwardIterator</span> <span class="identifier">last</span><span class="special">,</span> 
             <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
@@ -829,7 +816,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id704465"></a><p class="title"><b>Table&#160;6.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id792920"></a><p class="title"><b>Table&#160;6.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -837,90 +824,86 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Element
-            </p>
-            </th>
+                <p>
+                  Element
+                </p>
+              </th>
 <th>
-            <p>
-              Value
-            </p>
-            </th>
+                <p>
+                  Value
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">false</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">distance</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">distance</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>f</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>f</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The number of marked sub-expressions within the expression.
-            </p>
-            </td>
+                <p>
+                  The number of marked sub-expressions within the expression.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.opeq1"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">);</span>
+<br class="table-break"><a name="boost_regex.basic_regex.opeq1"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">())</span></code>.
       </p>
-<a name="boost_regex.basic_regex.opeq2"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">);</span>
+<a name="boost_regex.basic_regex.opeq2"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Requires</strong></span>: <span class="emphasis"><em>p</em></span> shall not
@@ -929,17 +912,13 @@
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">)</span></code>.
       </p>
-<a name="boost_regex.basic_regex.opeq3"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ST</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">SA</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.opeq3"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ST</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">SA</span><span class="special">&gt;</span>
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">ST</span><span class="special">,</span> <span class="identifier">SA</span><span class="special">&gt;&amp;</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span></code>.
       </p>
-<a name="boost_regex.basic_regex.subexpression"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span> <span class="identifier">const_iterator</span><span class="special">&gt;</span> <span class="identifier">subexpression</span><span class="special">(</span><span class="identifier">size_type</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.subexpression"></a><pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span> <span class="identifier">const_iterator</span><span class="special">&gt;</span> <span class="identifier">subexpression</span><span class="special">(</span><span class="identifier">size_type</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a pair of iterators denoting
@@ -953,78 +932,58 @@
         set. Argument <span class="emphasis"><em>n</em></span> must be in within the range <code class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span> <span class="identifier">n</span>
         <span class="special">&lt;</span> <span class="identifier">mark_count</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.basic_regex.begin"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">begin</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.begin"></a><pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">begin</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a starting iterator to
         a sequence of characters representing the regular expression.
       </p>
-<a name="boost_regex.basic_regex.end"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">end</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.end"></a><pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">end</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns termination iterator to
         a sequence of characters representing the regular expression.
       </p>
-<a name="boost_regex.basic_regex.size"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">size</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.size"></a><pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">size</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the length of the sequence
         of characters representing the regular expression.
       </p>
-<a name="boost_regex.basic_regex.max_size"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">max_size</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.max_size"></a><pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">max_size</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the maximum length of the
         sequence of characters representing the regular expression.
       </p>
-<a name="boost_regex.basic_regex.empty"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">empty</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.empty"></a><pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">empty</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns true if the object does
         not contain a valid regular expression, otherwise false.
       </p>
-<a name="boost_regex.basic_regex.mark_count"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">unsigned</span> <span class="identifier">mark_count</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.mark_count"></a><pre class="programlisting"><span class="keyword">unsigned</span> <span class="identifier">mark_count</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the number of marked sub-expressions
         within the regular expresion.
       </p>
-<a name="boost_regex.basic_regex.assign1"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
+<a name="boost_regex.basic_regex.assign1"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">that</span><span class="special">.</span><span class="identifier">str</span><span class="special">(),</span> <span class="identifier">that</span><span class="special">.</span><span class="identifier">flags</span><span class="special">())</span></code></a>.
       </p>
-<a name="boost_regex.basic_regex.assign2"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
+<a name="boost_regex.basic_regex.assign2"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></code></a>.
       </p>
-<a name="boost_regex.basic_regex.assign3"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">len</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span><span class="special">);</span>
+<a name="boost_regex.basic_regex.assign3"></a><pre class="programlisting"><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">len</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">,</span> <span class="identifier">len</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></code></a>.
       </p>
-<a name="boost_regex.basic_regex.assign4"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">string_traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.assign4"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">string_traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">string_traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
                   <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
@@ -1043,7 +1002,7 @@
         in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id705981"></a><p class="title"><b>Table&#160;7.&#160;Postconditions for basic_regex::assign</b></p>
+<a name="id794714"></a><p class="title"><b>Table&#160;7.&#160;Postconditions for basic_regex::assign</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex::assign">
 <colgroup>
 <col>
@@ -1051,83 +1010,81 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Element
-            </p>
-            </th>
+                <p>
+                  Element
+                </p>
+              </th>
 <th>
-            <p>
-              Value
-            </p>
-            </th>
+                <p>
+                  Value
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">false</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>s</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>s</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="emphasis"><em>f</em></span>
-            </p>
-            </td>
+                <p>
+                  <span class="emphasis"><em>f</em></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The number of marked sub-expressions within the expression.
-            </p>
-            </td>
+                <p>
+                  The number of marked sub-expressions within the expression.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.assign5"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InputIterator</span><span class="special">&gt;</span>
+<br class="table-break"><a name="boost_regex.basic_regex.assign5"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InputIterator</span><span class="special">&gt;</span>
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="identifier">InputIterator</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">InputIterator</span> <span class="identifier">last</span><span class="special">,</span>
                     <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
@@ -1139,44 +1096,34 @@
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></code></a>.
       </p>
-<a name="boost_regex.basic_regex.flags"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">flag_type</span> <span class="identifier">flags</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.flags"></a><pre class="programlisting"><span class="identifier">flag_type</span> <span class="identifier">flags</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a copy of the <a class="link" href="syntax_option_type.html" title="syntax_option_type">regular
         expression syntax flags</a> that were passed to the object's constructor,
         or the last call to <code class="computeroutput"><span class="identifier">assign</span></code>.
       </p>
-<a name="boost_regex.basic_regex.status"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">status</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.status"></a><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">status</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns zero if the expression
         contains a valid regular expression, otherwise an error code. This member
         function is retained for use in environments that cannot use exception handling.
       </p>
-<a name="boost_regex.basic_regex.str"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">str</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.str"></a><pre class="programlisting"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">str</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a copy of the character
         sequence passed to the object's constructor, or the last call to assign.
       </p>
-<a name="boost_regex.basic_regex.compare"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.compare"></a><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: If <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span> <span class="special">==</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">()</span></code> then returns <code class="computeroutput"><span class="identifier">str</span><span class="special">().</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">())</span></code>,
         otherwise returns <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span>
         <span class="special">-</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.basic_regex.imbue"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">locale_type</span> <span class="identifier">imbue</span><span class="special">(</span><span class="identifier">locale_type</span> <span class="identifier">l</span><span class="special">);</span>
+<a name="boost_regex.basic_regex.imbue"></a><pre class="programlisting"><span class="identifier">locale_type</span> <span class="identifier">imbue</span><span class="special">(</span><span class="identifier">locale_type</span> <span class="identifier">l</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">traits_inst</span><span class="special">.</span><span class="identifier">imbue</span><span class="special">(</span><span class="identifier">l</span><span class="special">)</span></code> where
@@ -1188,9 +1135,7 @@
 <p>
         <span class="bold"><strong>Postcondition</strong></span>: <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span> <span class="special">==</span> <span class="keyword">true</span></code>.
       </p>
-<a name="boost_regex.basic_regex.getloc"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">locale_type</span> <span class="identifier">getloc</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.basic_regex.getloc"></a><pre class="programlisting"><span class="identifier">locale_type</span> <span class="identifier">getloc</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">traits_inst</span><span class="special">.</span><span class="identifier">getloc</span><span class="special">()</span></code>
@@ -1198,9 +1143,7 @@
         initialized) instance of the template parameter traits stored within the
         object.
       </p>
-<a name="boost_regex.basic_regex.swap"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span> <span class="keyword">throw</span><span class="special">();</span>
+<a name="boost_regex.basic_regex.swap"></a><pre class="programlisting"><span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span> <span class="keyword">throw</span><span class="special">();</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Swaps the contents of the two regular
@@ -1216,7 +1159,7 @@
       </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/html/images/note.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/src/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top"><p>
@@ -1227,9 +1170,7 @@
           code that may need to be ported to other implementations of <a class="link" href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>.
         </p></td></tr>
 </table></div>
-<a name="boost_regex.basic_regex.op_eq"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_eq"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -1237,9 +1178,7 @@
         <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">==</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.basic_regex.op_ne"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_ne"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -1247,9 +1186,7 @@
         <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">!=</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.basic_regex.op_lt"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_lt"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -1257,9 +1194,7 @@
         <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">&lt;</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.basic_regex.op_le"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_le"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -1267,9 +1202,7 @@
         <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">&lt;=</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.basic_regex.op_ge"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_ge"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -1277,9 +1210,7 @@
         <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">&gt;=</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.basic_regex.op_gt"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_gt"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -1289,7 +1220,7 @@
       </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/html/images/note.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/src/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top"><p>
@@ -1297,9 +1228,7 @@
           outputs the textual representation of the expression to the stream.
         </p></td></tr>
 </table></div>
-<a name="boost_regex.basic_regex.op_stream"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">io_traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">re_traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_stream"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">io_traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">re_traits</span><span class="special">&gt;</span>
 <span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">io_traits</span><span class="special">&gt;&amp;</span>
    <span class="keyword">operator</span> <span class="special">&lt;&lt;</span> <span class="special">(</span><span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">io_traits</span><span class="special">&gt;&amp;</span> <span class="identifier">os</span>
                <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">re_traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">);</span>
@@ -1307,9 +1236,7 @@
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="special">(</span><span class="identifier">os</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">())</span></code>.
       </p>
-<a name="boost_regex.basic_regex.op_swap"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
+<a name="boost_regex.basic_regex.op_swap"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
          <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -1327,7 +1254,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../ref.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="match_results.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../ref.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="match_results.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

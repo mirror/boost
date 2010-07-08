@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>POSIX Basic Regular Expression Syntax</title>
-<link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../syntax.html" title="Regular Expression Syntax">
 <link rel="prev" href="basic_extended.html" title="POSIX Extended Regular Expression Syntax">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="basic_extended.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../syntax.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="character_classes.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="basic_extended.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../syntax.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="character_classes.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.syntax.basic_syntax"></a><a class="link" href="basic_syntax.html" title="POSIX Basic Regular Expression Syntax"> POSIX Basic Regular
       Expression Syntax</a>
 </h3></div></div></div>
 <a name="boost_regex.syntax.basic_syntax.synopsis"></a><h4>
-<a name="id685438"></a>
+<a name="id776159"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.synopsis">Synopsis</a>
       </h4>
 <p>
@@ -42,10 +42,8 @@
 <span class="comment">// e2 a case insensitive POSIX-Basic expression:
 </span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e2</span><span class="special">(</span><span class="identifier">my_expression</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">basic</span><span class="special">|</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">icase</span><span class="special">);</span>
 </pre>
-<a name="boost_regex.posix_basic"></a><p>
-      </p>
-<a name="boost_regex.syntax.basic_syntax.posix_basic_syntax"></a><h4>
-<a name="id686183"></a>
+<a name="boost_regex.posix_basic"></a><a name="boost_regex.syntax.basic_syntax.posix_basic_syntax"></a><h4>
+<a name="id776413"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.posix_basic_syntax">POSIX
         Basic Syntax</a>
       </h4>
@@ -55,25 +53,25 @@
       </p>
 <pre class="programlisting">.[\*^$</pre>
 <a name="boost_regex.syntax.basic_syntax.wildcard_"></a><h5>
-<a name="id686205"></a>
+<a name="id776448"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.wildcard_">Wildcard:</a>
       </h5>
 <p>
         The single character '.' when used outside of a character set will match
         any single character except:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-          The NULL character when the flag <code class="computeroutput"><span class="identifier">match_no_dot_null</span></code>
-          is passed to the matching algorithms.
-        </li>
-<li>
-          The newline character when the flag <code class="computeroutput"><span class="identifier">match_not_dot_newline</span></code>
-          is passed to the matching algorithms.
-        </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            The NULL character when the flag <code class="computeroutput"><span class="identifier">match_no_dot_null</span></code>
+            is passed to the matching algorithms.
+          </li>
+<li class="listitem">
+            The newline character when the flag <code class="computeroutput"><span class="identifier">match_not_dot_newline</span></code>
+            is passed to the matching algorithms.
+          </li>
 </ul></div>
 <a name="boost_regex.syntax.basic_syntax.anchors_"></a><h5>
-<a name="id686249"></a>
+<a name="id776515"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.anchors_">Anchors:</a>
       </h5>
 <p>
@@ -85,7 +83,7 @@
         of an expression, or the last character of a sub-expression.
       </p>
 <a name="boost_regex.syntax.basic_syntax.marked_sub_expressions_"></a><h5>
-<a name="id686270"></a>
+<a name="id776548"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.marked_sub_expressions_">Marked
         sub-expressions:</a>
       </h5>
@@ -97,7 +95,7 @@
         by a back-reference.
       </p>
 <a name="boost_regex.syntax.basic_syntax.repeats_"></a><h5>
-<a name="id686301"></a>
+<a name="id776600"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.repeats_">Repeats:</a>
       </h5>
 <p>
@@ -155,7 +153,7 @@ aaaa
         to.
       </p>
 <a name="boost_regex.syntax.basic_syntax.back_references_"></a><h5>
-<a name="id686465"></a>
+<a name="id776817"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.back_references_">Back references:</a>
       </h5>
 <p>
@@ -173,7 +171,7 @@ aaaa
       </p>
 <pre class="programlisting">aaabba</pre>
 <a name="boost_regex.syntax.basic_syntax.character_sets_"></a><h5>
-<a name="id686515"></a>
+<a name="id776885"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.character_sets_">Character
         sets:</a>
       </h5>
@@ -186,7 +184,7 @@ aaaa
         A bracket expression may contain any combination of the following:
       </p>
 <a name="boost_regex.syntax.basic_syntax.single_characters_"></a><h6>
-<a name="id686535"></a>
+<a name="id776916"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.single_characters_">Single
         characters:</a>
       </h6>
@@ -195,7 +193,7 @@ aaaa
         or 'c'.
       </p>
 <a name="boost_regex.syntax.basic_syntax.character_ranges_"></a><h6>
-<a name="id686566"></a>
+<a name="id776961"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.character_ranges_">Character
         ranges:</a>
       </h6>
@@ -211,7 +209,7 @@ aaaa
         of the characters only.
       </p>
 <a name="boost_regex.syntax.basic_syntax.negation_"></a><h6>
-<a name="id686623"></a>
+<a name="id777042"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.negation_">Negation:</a>
       </h6>
 <p>
@@ -220,7 +218,7 @@ aaaa
         range a-c.
       </p>
 <a name="boost_regex.syntax.basic_syntax.character_classes_"></a><h6>
-<a name="id686661"></a>
+<a name="id777097"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.character_classes_">Character
         classes:</a>
       </h6>
@@ -230,7 +228,7 @@ aaaa
         <a class="link" href="character_classes.html" title="Character Class Names">character class names</a>.
       </p>
 <a name="boost_regex.syntax.basic_syntax.collating_elements_"></a><h6>
-<a name="id686713"></a>
+<a name="id777170"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.collating_elements_">Collating
         Elements:</a>
       </h6>
@@ -259,7 +257,7 @@ aaaa
         element names</a>.
       </p>
 <a name="boost_regex.syntax.basic_syntax.equivalence_classes_"></a><h6>
-<a name="id686804"></a>
+<a name="id777304"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.equivalence_classes_">Equivalence
         classes:</a>
       </h6>
@@ -276,7 +274,7 @@ aaaa
         or even all locales on one platform.
       </p>
 <a name="boost_regex.syntax.basic_syntax.combinations_"></a><h6>
-<a name="id686861"></a>
+<a name="id777386"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.combinations_">Combinations:</a>
       </h6>
 <p>
@@ -284,7 +282,7 @@ aaaa
         <code class="computeroutput"><span class="special">[[:</span><span class="identifier">digit</span><span class="special">:]</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">[.</span><span class="identifier">NUL</span><span class="special">.]].</span></code>
       </p>
 <a name="boost_regex.syntax.basic_syntax.escapes"></a><h5>
-<a name="id686914"></a>
+<a name="id777456"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.escapes">Escapes</a>
       </h5>
 <p>
@@ -299,7 +297,7 @@ aaaa
         will match either a literal '\' or a '^'.
       </p>
 <a name="boost_regex.syntax.basic_syntax.what_gets_matched"></a><h4>
-<a name="id686948"></a>
+<a name="id777506"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.what_gets_matched">What Gets
         Matched</a>
       </h4>
@@ -309,13 +307,11 @@ aaaa
         rule</a>.
       </p>
 <a name="boost_regex.syntax.basic_syntax.variations"></a><h4>
-<a name="id686969"></a>
+<a name="id777542"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.variations">Variations</a>
       </h4>
-<a name="boost_regex.grep_syntax"></a><p>
-      </p>
-<a name="boost_regex.syntax.basic_syntax.grep"></a><h5>
-<a name="id686990"></a>
+<a name="boost_regex.grep_syntax"></a><a name="boost_regex.syntax.basic_syntax.grep"></a><h5>
+<a name="id777569"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.grep">Grep</a>
       </h5>
 <p>
@@ -333,7 +329,7 @@ aaaa
         As its name suggests, this behavior is consistent with the Unix utility grep.
       </p>
 <a name="boost_regex.syntax.basic_syntax.emacs"></a><h5>
-<a name="id687085"></a>
+<a name="id777698"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.emacs">emacs</a>
       </h5>
 <p>
@@ -347,75 +343,75 @@ aaaa
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Character
-              </p>
+                <p>
+                  Character
+                </p>
               </th>
 <th>
-              <p>
-                Description
-              </p>
+                <p>
+                  Description
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                +
-              </p>
+                <p>
+                  +
+                </p>
               </td>
 <td>
-              <p>
-                repeats the preceding atom one or more times.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ?
-              </p>
-              </td>
-<td>
-              <p>
-                repeats the preceding atom zero or one times.
-              </p>
+                <p>
+                  repeats the preceding atom one or more times.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                *?
-              </p>
+                <p>
+                  ?
+                </p>
               </td>
 <td>
-              <p>
-                A non-greedy version of *.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                +?
-              </p>
-              </td>
-<td>
-              <p>
-                A non-greedy version of +.
-              </p>
+                <p>
+                  repeats the preceding atom zero or one times.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                ??
-              </p>
+                <p>
+                  *?
+                </p>
               </td>
 <td>
-              <p>
-                A non-greedy version of ?.
-              </p>
+                <p>
+                  A non-greedy version of *.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  +?
+                </p>
+              </td>
+<td>
+                <p>
+                  A non-greedy version of +.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  ??
+                </p>
+              </td>
+<td>
+                <p>
+                  A non-greedy version of ?.
+                </p>
               </td>
 </tr>
 </tbody>
@@ -430,176 +426,176 @@ aaaa
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Escape
-              </p>
+                <p>
+                  Escape
+                </p>
               </th>
 <th>
-              <p>
-                Description
-              </p>
+                <p>
+                  Description
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                \|
-              </p>
+                <p>
+                  \|
+                </p>
               </td>
 <td>
-              <p>
-                specifies an alternative.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                \(?: ... )
-              </p>
-              </td>
-<td>
-              <p>
-                is a non-marking grouping construct - allows you to lexically group
-                something without spitting out an extra sub-expression.
-              </p>
+                <p>
+                  specifies an alternative.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                \w
-              </p>
+                <p>
+                  \(?: ... )
+                </p>
               </td>
 <td>
-              <p>
-                matches any word character.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                \W
-              </p>
-              </td>
-<td>
-              <p>
-                matches any non-word character.
-              </p>
+                <p>
+                  is a non-marking grouping construct - allows you to lexically group
+                  something without spitting out an extra sub-expression.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                \sx
-              </p>
+                <p>
+                  \w
+                </p>
               </td>
 <td>
-              <p>
-                matches any character in the syntax group x, the following emacs
-                groupings are supported: 's', ' ', '_', 'w', '.', ')', '(', '"',
-                '\'', '&gt;' and '&lt;'. Refer to the emacs docs for details.
-              </p>
+                <p>
+                  matches any word character.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                \Sx
-              </p>
+                <p>
+                  \W
+                </p>
               </td>
 <td>
-              <p>
-                matches any character not in the syntax grouping x.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                \c and \C
-              </p>
-              </td>
-<td>
-              <p>
-                These are not supported.
-              </p>
+                <p>
+                  matches any non-word character.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                \`
-              </p>
+                <p>
+                  \sx
+                </p>
               </td>
 <td>
-              <p>
-                matches zero characters only at the start of a buffer (or string
-                being matched).
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                \'
-              </p>
-              </td>
-<td>
-              <p>
-                matches zero characters only at the end of a buffer (or string being
-                matched).
-              </p>
+                <p>
+                  matches any character in the syntax group x, the following emacs
+                  groupings are supported: 's', ' ', '_', 'w', '.', ')', '(', '"',
+                  '\'', '&gt;' and '&lt;'. Refer to the emacs docs for details.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                \b
-              </p>
+                <p>
+                  \Sx
+                </p>
               </td>
 <td>
-              <p>
-                matches zero characters at a word boundary.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                \B
-              </p>
-              </td>
-<td>
-              <p>
-                matches zero characters, not at a word boundary.
-              </p>
+                <p>
+                  matches any character not in the syntax grouping x.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                \&lt;
-              </p>
+                <p>
+                  \c and \C
+                </p>
               </td>
 <td>
-              <p>
-                matches zero characters only at the start of a word.
-              </p>
+                <p>
+                  These are not supported.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                \&gt;
-              </p>
+                <p>
+                  \`
+                </p>
               </td>
 <td>
-              <p>
-                matches zero characters only at the end of a word.
-              </p>
+                <p>
+                  matches zero characters only at the start of a buffer (or string
+                  being matched).
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  \'
+                </p>
+              </td>
+<td>
+                <p>
+                  matches zero characters only at the end of a buffer (or string
+                  being matched).
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  \b
+                </p>
+              </td>
+<td>
+                <p>
+                  matches zero characters at a word boundary.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  \B
+                </p>
+              </td>
+<td>
+                <p>
+                  matches zero characters, not at a word boundary.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  \&lt;
+                </p>
+              </td>
+<td>
+                <p>
+                  matches zero characters only at the start of a word.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  \&gt;
+                </p>
+              </td>
+<td>
+                <p>
+                  matches zero characters only at the end of a word.
+                </p>
               </td>
 </tr>
 </tbody>
@@ -613,7 +609,7 @@ aaaa
         leftmost-longest rule</a>.
       </p>
 <a name="boost_regex.syntax.basic_syntax.options"></a><h4>
-<a name="id687502"></a>
+<a name="id778164"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.options">Options</a>
       </h4>
 <p>
@@ -627,7 +623,7 @@ aaaa
         options</a> modify how the case and locale sensitivity are to be applied.
       </p>
 <a name="boost_regex.syntax.basic_syntax.references"></a><h4>
-<a name="id687609"></a>
+<a name="id778317"></a>
         <a class="link" href="basic_syntax.html#boost_regex.syntax.basic_syntax.references">References</a>
       </h4>
 <p>
@@ -654,7 +650,7 @@ aaaa
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="basic_extended.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../syntax.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="character_classes.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="basic_extended.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../syntax.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="character_classes.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

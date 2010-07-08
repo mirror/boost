@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Localization</title>
-<link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../background_information.html" title="Background Information">
 <link rel="prev" href="headers.html" title="Headers">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="headers.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../background_information.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="thread_safety.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="headers.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../background_information.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="thread_safety.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.background_information.locale"></a><a class="link" href="locale.html" title="Localization"> Localization</a>
 </h3></div></div></div>
@@ -58,7 +58,7 @@
         There are three separate localization mechanisms supported by Boost.Regex:
       </p>
 <a name="boost_regex.background_information.locale.win32_localization_model_"></a><h5>
-<a name="id826760"></a>
+<a name="id902918"></a>
         <a class="link" href="locale.html#boost_regex.background_information.locale.win32_localization_model_">Win32
         localization model.</a>
       </h5>
@@ -90,7 +90,7 @@
         are treated as "unknown" graphic characters.
       </p>
 <a name="boost_regex.background_information.locale.c_localization_model_"></a><h5>
-<a name="id826914"></a>
+<a name="id903135"></a>
         <a class="link" href="locale.html#boost_regex.background_information.locale.c_localization_model_">C
         localization model.</a>
       </h5>
@@ -114,7 +114,7 @@
         libraries including version 1 of this library.
       </p>
 <a name="boost_regex.background_information.locale.c___localization_model_"></a><h5>
-<a name="id826983"></a>
+<a name="id903238"></a>
         <a class="link" href="locale.html#boost_regex.background_information.locale.c___localization_model_">C++
         localization model.</a>
       </h5>
@@ -151,7 +151,7 @@
         in your code. The best way to ensure this is to add the #define to <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">user</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>.
       </p>
 <a name="boost_regex.background_information.locale.providing_a_message_catalogue"></a><h5>
-<a name="id827284"></a>
+<a name="id903650"></a>
         <a class="link" href="locale.html#boost_regex.background_information.locale.providing_a_message_catalogue">Providing
         a message catalogue</a>
       </h5>
@@ -170,958 +170,958 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Message
-              </p>
+                <p>
+                  Message
+                </p>
               </th>
 <th>
-              <p>
-                id
-              </p>
+                <p>
+                  id
+                </p>
               </th>
 <th>
-              <p>
-                Meaning
-              </p>
+                <p>
+                  Meaning
+                </p>
               </th>
 <th>
-              <p>
-                Default value
-              </p>
+                <p>
+                  Default value
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                101
-              </p>
+                <p>
+                  101
+                </p>
               </td>
 <td>
-              <p>
-                The character used to start a sub-expression.
-              </p>
+                <p>
+                  The character used to start a sub-expression.
+                </p>
               </td>
 <td>
-              <p>
-                "("
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                102
-              </p>
-              </td>
-<td>
-              <p>
-                The character used to end a sub-expression declaration.
-              </p>
-              </td>
-<td>
-              <p>
-                ")"
-              </p>
+                <p>
+                  "("
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                103
-              </p>
+                <p>
+                  102
+                </p>
               </td>
 <td>
-              <p>
-                The character used to denote an end of line assertion.
-              </p>
+                <p>
+                  The character used to end a sub-expression declaration.
+                </p>
               </td>
 <td>
-              <p>
-                "$"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                104
-              </p>
-              </td>
-<td>
-              <p>
-                The character used to denote the start of line assertion.
-              </p>
-              </td>
-<td>
-              <p>
-                "^"
-              </p>
+                <p>
+                  ")"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                105
-              </p>
+                <p>
+                  103
+                </p>
               </td>
 <td>
-              <p>
-                The character used to denote the "match any character expression".
-              </p>
+                <p>
+                  The character used to denote an end of line assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "."
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                106
-              </p>
-              </td>
-<td>
-              <p>
-                The match zero or more times repetition operator.
-              </p>
-              </td>
-<td>
-              <p>
-                "*"
-              </p>
+                <p>
+                  "$"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                107
-              </p>
+                <p>
+                  104
+                </p>
               </td>
 <td>
-              <p>
-                The match one or more repetition operator.
-              </p>
+                <p>
+                  The character used to denote the start of line assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "+"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                108
-              </p>
-              </td>
-<td>
-              <p>
-                The match zero or one repetition operator.
-              </p>
-              </td>
-<td>
-              <p>
-                "?"
-              </p>
+                <p>
+                  "^"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                109
-              </p>
+                <p>
+                  105
+                </p>
               </td>
 <td>
-              <p>
-                The character set opening character.
-              </p>
+                <p>
+                  The character used to denote the "match any character expression".
+                </p>
               </td>
 <td>
-              <p>
-                "["
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                110
-              </p>
-              </td>
-<td>
-              <p>
-                The character set closing character.
-              </p>
-              </td>
-<td>
-              <p>
-                "]"
-              </p>
+                <p>
+                  "."
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                111
-              </p>
+                <p>
+                  106
+                </p>
               </td>
 <td>
-              <p>
-                The alternation operator.
-              </p>
+                <p>
+                  The match zero or more times repetition operator.
+                </p>
               </td>
 <td>
-              <p>
-                "|"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                112
-              </p>
-              </td>
-<td>
-              <p>
-                The escape character.
-              </p>
-              </td>
-<td>
-              <p>
-                "\"
-              </p>
+                <p>
+                  "*"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
+                <p>
+                  107
+                </p>
               </td>
 <td>
-              <p>
-                The hash character (not currently used).
-              </p>
+                <p>
+                  The match one or more repetition operator.
+                </p>
               </td>
 <td>
-              <p>
-                "#"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                114
-              </p>
-              </td>
-<td>
-              <p>
-                The range operator.
-              </p>
-              </td>
-<td>
-              <p>
-                "-"
-              </p>
+                <p>
+                  "+"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                115
-              </p>
+                <p>
+                  108
+                </p>
               </td>
 <td>
-              <p>
-                The repetition operator opening character.
-              </p>
+                <p>
+                  The match zero or one repetition operator.
+                </p>
               </td>
 <td>
-              <p>
-                "{"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                116
-              </p>
-              </td>
-<td>
-              <p>
-                The repetition operator closing character.
-              </p>
-              </td>
-<td>
-              <p>
-                "}"
-              </p>
+                <p>
+                  "?"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                117
-              </p>
+                <p>
+                  109
+                </p>
               </td>
 <td>
-              <p>
-                The digit characters.
-              </p>
+                <p>
+                  The character set opening character.
+                </p>
               </td>
 <td>
-              <p>
-                "0123456789"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                118
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the word boundary assertion.
-              </p>
-              </td>
-<td>
-              <p>
-                "b"
-              </p>
+                <p>
+                  "["
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                119
-              </p>
+                <p>
+                  110
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                the non-word boundary assertion.
-              </p>
+                <p>
+                  The character set closing character.
+                </p>
               </td>
 <td>
-              <p>
-                "B"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                120
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the word-start boundary assertion.
-              </p>
-              </td>
-<td>
-              <p>
-                "&lt;"
-              </p>
+                <p>
+                  "]"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                121
-              </p>
+                <p>
+                  111
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                the word-end boundary assertion.
-              </p>
+                <p>
+                  The alternation operator.
+                </p>
               </td>
 <td>
-              <p>
-                "&gt;"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                122
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                any word character.
-              </p>
-              </td>
-<td>
-              <p>
-                "w"
-              </p>
+                <p>
+                  "|"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                123
-              </p>
+                <p>
+                  112
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                a non-word character.
-              </p>
+                <p>
+                  The escape character.
+                </p>
               </td>
 <td>
-              <p>
-                "W"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                124
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                a start of buffer assertion.
-              </p>
-              </td>
-<td>
-              <p>
-                "`A"
-              </p>
+                <p>
+                  "\"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                125
-              </p>
+                <p>
+                  113
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                an end of buffer assertion.
-              </p>
+                <p>
+                  The hash character (not currently used).
+                </p>
               </td>
 <td>
-              <p>
-                "'z"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                126
-              </p>
-              </td>
-<td>
-              <p>
-                The newline character.
-              </p>
-              </td>
-<td>
-              <p>
-                "\n"
-              </p>
+                <p>
+                  "#"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                127
-              </p>
+                <p>
+                  114
+                </p>
               </td>
 <td>
-              <p>
-                The comma separator.
-              </p>
+                <p>
+                  The range operator.
+                </p>
               </td>
 <td>
-              <p>
-                ","
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                128
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the bell character.
-              </p>
-              </td>
-<td>
-              <p>
-                "a"
-              </p>
+                <p>
+                  "-"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                129
-              </p>
+                <p>
+                  115
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                the form feed character.
-              </p>
+                <p>
+                  The repetition operator opening character.
+                </p>
               </td>
 <td>
-              <p>
-                "f"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                130
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the newline character.
-              </p>
-              </td>
-<td>
-              <p>
-                "n"
-              </p>
+                <p>
+                  "{"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                131
-              </p>
+                <p>
+                  116
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                the carriage return character.
-              </p>
+                <p>
+                  The repetition operator closing character.
+                </p>
               </td>
 <td>
-              <p>
-                "r"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                132
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the tab character.
-              </p>
-              </td>
-<td>
-              <p>
-                "t"
-              </p>
+                <p>
+                  "}"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                133
-              </p>
+                <p>
+                  117
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                the vertical tab character.
-              </p>
+                <p>
+                  The digit characters.
+                </p>
               </td>
 <td>
-              <p>
-                "v"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                134
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the start of a hexadecimal character constant.
-              </p>
-              </td>
-<td>
-              <p>
-                "x"
-              </p>
+                <p>
+                  "0123456789"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                135
-              </p>
+                <p>
+                  118
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                the start of an ASCII escape character.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the word boundary assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "c"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                136
-              </p>
-              </td>
-<td>
-              <p>
-                The colon character.
-              </p>
-              </td>
-<td>
-              <p>
-                ":"
-              </p>
+                <p>
+                  "b"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                137
-              </p>
+                <p>
+                  119
+                </p>
               </td>
 <td>
-              <p>
-                The equals character.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the non-word boundary assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "="
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                138
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the ASCII escape character.
-              </p>
-              </td>
-<td>
-              <p>
-                "e"
-              </p>
+                <p>
+                  "B"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                139
-              </p>
+                <p>
+                  120
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                any lower case character.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the word-start boundary assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "l"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                140
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                any non-lower case character.
-              </p>
-              </td>
-<td>
-              <p>
-                "L"
-              </p>
+                <p>
+                  "&lt;"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                141
-              </p>
+                <p>
+                  121
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                any upper case character.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the word-end boundary assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "u"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                142
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                any non-upper case character.
-              </p>
-              </td>
-<td>
-              <p>
-                "U"
-              </p>
+                <p>
+                  "&gt;"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                143
-              </p>
+                <p>
+                  122
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                any space character.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any word character.
+                </p>
               </td>
 <td>
-              <p>
-                "s"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                144
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                any non-space character.
-              </p>
-              </td>
-<td>
-              <p>
-                "S"
-              </p>
+                <p>
+                  "w"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                145
-              </p>
+                <p>
+                  123
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                any digit character.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  a non-word character.
+                </p>
               </td>
 <td>
-              <p>
-                "d"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                146
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                any non-digit character.
-              </p>
-              </td>
-<td>
-              <p>
-                "D"
-              </p>
+                <p>
+                  "W"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                147
-              </p>
+                <p>
+                  124
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                the end quote operator.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  a start of buffer assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "E"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                148
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the start quote operator.
-              </p>
-              </td>
-<td>
-              <p>
-                "Q"
-              </p>
+                <p>
+                  "`A"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                149
-              </p>
+                <p>
+                  125
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                a Unicode combining character sequence.
-              </p>
+                <p>
+                  The character which when preceded by an escape character represents
+                  an end of buffer assertion.
+                </p>
               </td>
 <td>
-              <p>
-                "X"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                150
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                any single character.
-              </p>
-              </td>
-<td>
-              <p>
-                "C"
-              </p>
+                <p>
+                  "'z"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                151
-              </p>
+                <p>
+                  126
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceded by an escape character represents
-                end of buffer operator.
-              </p>
+                <p>
+                  The newline character.
+                </p>
               </td>
 <td>
-              <p>
-                "Z"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                152
-              </p>
-              </td>
-<td>
-              <p>
-                The character which when preceded by an escape character represents
-                the continuation assertion.
-              </p>
-              </td>
-<td>
-              <p>
-                "G"
-              </p>
+                <p>
+                  "\n"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                153
-              </p>
+                <p>
+                  127
+                </p>
               </td>
 <td>
-              <p>
-                The character which when preceeded by (? indicates a zero width negated
-                forward lookahead assert.
-              </p>
+                <p>
+                  The comma separator.
+                </p>
               </td>
 <td>
-              <p>
-                !
-              </p>
+                <p>
+                  ","
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  128
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the bell character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "a"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  129
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the form feed character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "f"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  130
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the newline character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "n"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  131
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the carriage return character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "r"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  132
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the tab character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "t"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  133
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the vertical tab character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "v"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  134
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the start of a hexadecimal character constant.
+                </p>
+              </td>
+<td>
+                <p>
+                  "x"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  135
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the start of an ASCII escape character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "c"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  136
+                </p>
+              </td>
+<td>
+                <p>
+                  The colon character.
+                </p>
+              </td>
+<td>
+                <p>
+                  ":"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  137
+                </p>
+              </td>
+<td>
+                <p>
+                  The equals character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "="
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  138
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the ASCII escape character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "e"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  139
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any lower case character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "l"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  140
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any non-lower case character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "L"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  141
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any upper case character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "u"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  142
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any non-upper case character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "U"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  143
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any space character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "s"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  144
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any non-space character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "S"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  145
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any digit character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "d"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  146
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any non-digit character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "D"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  147
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the end quote operator.
+                </p>
+              </td>
+<td>
+                <p>
+                  "E"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  148
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the start quote operator.
+                </p>
+              </td>
+<td>
+                <p>
+                  "Q"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  149
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  a Unicode combining character sequence.
+                </p>
+              </td>
+<td>
+                <p>
+                  "X"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  150
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  any single character.
+                </p>
+              </td>
+<td>
+                <p>
+                  "C"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  151
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  end of buffer operator.
+                </p>
+              </td>
+<td>
+                <p>
+                  "Z"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  152
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceded by an escape character represents
+                  the continuation assertion.
+                </p>
+              </td>
+<td>
+                <p>
+                  "G"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  153
+                </p>
+              </td>
+<td>
+                <p>
+                  The character which when preceeded by (? indicates a zero width
+                  negated forward lookahead assert.
+                </p>
+              </td>
+<td>
+                <p>
+                  !
+                </p>
               </td>
 </tr>
 </tbody>
@@ -1137,191 +1137,171 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Message ID
-              </p>
+                <p>
+                  Message ID
+                </p>
               </th>
 <th>
-              <p>
-                Error message ID
-              </p>
+                <p>
+                  Error message ID
+                </p>
               </th>
 <th>
-              <p>
-                Default string
-              </p>
+                <p>
+                  Default string
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                201
-              </p>
+                <p>
+                  201
+                </p>
               </td>
 <td>
-              <p>
-                REG_NOMATCH
-              </p>
+                <p>
+                  REG_NOMATCH
+                </p>
               </td>
 <td>
-              <p>
-                "No match"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                202
-              </p>
-              </td>
-<td>
-              <p>
-                REG_BADPAT
-              </p>
-              </td>
-<td>
-              <p>
-                "Invalid regular expression"
-              </p>
+                <p>
+                  "No match"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                203
-              </p>
+                <p>
+                  202
+                </p>
               </td>
 <td>
-              <p>
-                REG_ECOLLATE
-              </p>
+                <p>
+                  REG_BADPAT
+                </p>
               </td>
 <td>
-              <p>
-                "Invalid collation character"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                204
-              </p>
-              </td>
-<td>
-              <p>
-                REG_ECTYPE
-              </p>
-              </td>
-<td>
-              <p>
-                "Invalid character class name"
-              </p>
+                <p>
+                  "Invalid regular expression"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                205
-              </p>
+                <p>
+                  203
+                </p>
               </td>
 <td>
-              <p>
-                REG_EESCAPE
-              </p>
+                <p>
+                  REG_ECOLLATE
+                </p>
               </td>
 <td>
-              <p>
-                "Trailing backslash"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                206
-              </p>
-              </td>
-<td>
-              <p>
-                REG_ESUBREG
-              </p>
-              </td>
-<td>
-              <p>
-                "Invalid back reference"
-              </p>
+                <p>
+                  "Invalid collation character"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                207
-              </p>
+                <p>
+                  204
+                </p>
               </td>
 <td>
-              <p>
-                REG_EBRACK
-              </p>
+                <p>
+                  REG_ECTYPE
+                </p>
               </td>
 <td>
-              <p>
-                "Unmatched [ or <code class="literal">" </code>
-              </p>
-              </td>
-<td>
-              <p>
-                [208
-              </p>
-              </td>
-<td>
-              <p>
-                REG_EPAREN
-              </p>
-              </td>
-<td>
-              <p>
-                "Unmatched ( or \("
-              </p>
+                <p>
+                  "Invalid character class name"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                209
-              </p>
+                <p>
+                  205
+                </p>
               </td>
 <td>
-              <p>
-                REG_EBRACE
-              </p>
+                <p>
+                  REG_EESCAPE
+                </p>
               </td>
 <td>
-              <p>
-                "Unmatched \{"
-              </p>
+                <p>
+                  "Trailing backslash"
+                </p>
               </td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
 </tr>
 <tr>
 <td>
-              <p>
-                210
-              </p>
+                <p>
+                  206
+                </p>
               </td>
 <td>
-              <p>
-                REG_BADBR
-              </p>
+                <p>
+                  REG_ESUBREG
+                </p>
               </td>
 <td>
-              <p>
-                "Invalid content of \{\}"
-              </p>
+                <p>
+                  "Invalid back reference"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  207
+                </p>
+              </td>
+<td>
+                <p>
+                  REG_EBRACK
+                </p>
+              </td>
+<td>
+                <p>
+                  "Unmatched [ or <code class="literal">" </code>
+                </p>
+              </td>
+<td>
+                <p>
+                  [208
+                </p>
+              </td>
+<td>
+                <p>
+                  REG_EPAREN
+                </p>
+              </td>
+<td>
+                <p>
+                  "Unmatched ( or \("
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  209
+                </p>
+              </td>
+<td>
+                <p>
+                  REG_EBRACE
+                </p>
+              </td>
+<td>
+                <p>
+                  "Unmatched \{"
+                </p>
               </td>
 <td class="auto-generated">&#160;</td>
 <td class="auto-generated">&#160;</td>
@@ -1329,39 +1309,19 @@
 </tr>
 <tr>
 <td>
-              <p>
-                211
-              </p>
+                <p>
+                  210
+                </p>
               </td>
 <td>
-              <p>
-                REG_ERANGE
-              </p>
+                <p>
+                  REG_BADBR
+                </p>
               </td>
 <td>
-              <p>
-                "Invalid range end"
-              </p>
-              </td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
-</tr>
-<tr>
-<td>
-              <p>
-                212
-              </p>
-              </td>
-<td>
-              <p>
-                REG_ESPACE
-              </p>
-              </td>
-<td>
-              <p>
-                "Memory exhausted"
-              </p>
+                <p>
+                  "Invalid content of \{\}"
+                </p>
               </td>
 <td class="auto-generated">&#160;</td>
 <td class="auto-generated">&#160;</td>
@@ -1369,39 +1329,19 @@
 </tr>
 <tr>
 <td>
-              <p>
-                213
-              </p>
+                <p>
+                  211
+                </p>
               </td>
 <td>
-              <p>
-                REG_BADRPT
-              </p>
+                <p>
+                  REG_ERANGE
+                </p>
               </td>
 <td>
-              <p>
-                "Invalid preceding regular expression"
-              </p>
-              </td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
-</tr>
-<tr>
-<td>
-              <p>
-                214
-              </p>
-              </td>
-<td>
-              <p>
-                REG_EEND
-              </p>
-              </td>
-<td>
-              <p>
-                "Premature end of regular expression"
-              </p>
+                <p>
+                  "Invalid range end"
+                </p>
               </td>
 <td class="auto-generated">&#160;</td>
 <td class="auto-generated">&#160;</td>
@@ -1409,39 +1349,19 @@
 </tr>
 <tr>
 <td>
-              <p>
-                215
-              </p>
+                <p>
+                  212
+                </p>
               </td>
 <td>
-              <p>
-                REG_ESIZE
-              </p>
+                <p>
+                  REG_ESPACE
+                </p>
               </td>
 <td>
-              <p>
-                "Regular expression too big"
-              </p>
-              </td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
-<td class="auto-generated">&#160;</td>
-</tr>
-<tr>
-<td>
-              <p>
-                216
-              </p>
-              </td>
-<td>
-              <p>
-                REG_ERPAREN
-              </p>
-              </td>
-<td>
-              <p>
-                "Unmatched ) or \)"
-              </p>
+                <p>
+                  "Memory exhausted"
+                </p>
               </td>
 <td class="auto-generated">&#160;</td>
 <td class="auto-generated">&#160;</td>
@@ -1449,19 +1369,19 @@
 </tr>
 <tr>
 <td>
-              <p>
-                217
-              </p>
+                <p>
+                  213
+                </p>
               </td>
 <td>
-              <p>
-                REG_EMPTY
-              </p>
+                <p>
+                  REG_BADRPT
+                </p>
               </td>
 <td>
-              <p>
-                "Empty expression"
-              </p>
+                <p>
+                  "Invalid preceding regular expression"
+                </p>
               </td>
 <td class="auto-generated">&#160;</td>
 <td class="auto-generated">&#160;</td>
@@ -1469,19 +1389,99 @@
 </tr>
 <tr>
 <td>
-              <p>
-                218
-              </p>
+                <p>
+                  214
+                </p>
               </td>
 <td>
-              <p>
-                REG_E_UNKNOWN
-              </p>
+                <p>
+                  REG_EEND
+                </p>
               </td>
 <td>
-              <p>
-                "Unknown error"
-              </p>
+                <p>
+                  "Premature end of regular expression"
+                </p>
+              </td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+</tr>
+<tr>
+<td>
+                <p>
+                  215
+                </p>
+              </td>
+<td>
+                <p>
+                  REG_ESIZE
+                </p>
+              </td>
+<td>
+                <p>
+                  "Regular expression too big"
+                </p>
+              </td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+</tr>
+<tr>
+<td>
+                <p>
+                  216
+                </p>
+              </td>
+<td>
+                <p>
+                  REG_ERPAREN
+                </p>
+              </td>
+<td>
+                <p>
+                  "Unmatched ) or \)"
+                </p>
+              </td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+</tr>
+<tr>
+<td>
+                <p>
+                  217
+                </p>
+              </td>
+<td>
+                <p>
+                  REG_EMPTY
+                </p>
+              </td>
+<td>
+                <p>
+                  "Empty expression"
+                </p>
+              </td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+</tr>
+<tr>
+<td>
+                <p>
+                  218
+                </p>
+              </td>
+<td>
+                <p>
+                  REG_E_UNKNOWN
+                </p>
+              </td>
+<td>
+                <p>
+                  "Unknown error"
+                </p>
               </td>
 <td class="auto-generated">&#160;</td>
 <td class="auto-generated">&#160;</td>
@@ -1500,258 +1500,258 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Message ID
-              </p>
+                <p>
+                  Message ID
+                </p>
               </th>
 <th>
-              <p>
-                Description
-              </p>
+                <p>
+                  Description
+                </p>
               </th>
 <th>
-              <p>
-                Equivalent default class name
-              </p>
+                <p>
+                  Equivalent default class name
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                300
-              </p>
+                <p>
+                  300
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for alphanumeric characters.
-              </p>
+                <p>
+                  The character class name for alphanumeric characters.
+                </p>
               </td>
 <td>
-              <p>
-                "alnum"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                301
-              </p>
-              </td>
-<td>
-              <p>
-                The character class name for alphabetic characters.
-              </p>
-              </td>
-<td>
-              <p>
-                "alpha"
-              </p>
+                <p>
+                  "alnum"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                302
-              </p>
+                <p>
+                  301
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for control characters.
-              </p>
+                <p>
+                  The character class name for alphabetic characters.
+                </p>
               </td>
 <td>
-              <p>
-                "cntrl"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                303
-              </p>
-              </td>
-<td>
-              <p>
-                The character class name for digit characters.
-              </p>
-              </td>
-<td>
-              <p>
-                "digit"
-              </p>
+                <p>
+                  "alpha"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                304
-              </p>
+                <p>
+                  302
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for graphics characters.
-              </p>
+                <p>
+                  The character class name for control characters.
+                </p>
               </td>
 <td>
-              <p>
-                "graph"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                305
-              </p>
-              </td>
-<td>
-              <p>
-                The character class name for lower case characters.
-              </p>
-              </td>
-<td>
-              <p>
-                "lower"
-              </p>
+                <p>
+                  "cntrl"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                306
-              </p>
+                <p>
+                  303
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for printable characters.
-              </p>
+                <p>
+                  The character class name for digit characters.
+                </p>
               </td>
 <td>
-              <p>
-                "print"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                307
-              </p>
-              </td>
-<td>
-              <p>
-                The character class name for punctuation characters.
-              </p>
-              </td>
-<td>
-              <p>
-                "punct"
-              </p>
+                <p>
+                  "digit"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                308
-              </p>
+                <p>
+                  304
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for space characters.
-              </p>
+                <p>
+                  The character class name for graphics characters.
+                </p>
               </td>
 <td>
-              <p>
-                "space"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                309
-              </p>
-              </td>
-<td>
-              <p>
-                The character class name for upper case characters.
-              </p>
-              </td>
-<td>
-              <p>
-                "upper"
-              </p>
+                <p>
+                  "graph"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                310
-              </p>
+                <p>
+                  305
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for hexadecimal characters.
-              </p>
+                <p>
+                  The character class name for lower case characters.
+                </p>
               </td>
 <td>
-              <p>
-                "xdigit"
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                311
-              </p>
-              </td>
-<td>
-              <p>
-                The character class name for blank characters.
-              </p>
-              </td>
-<td>
-              <p>
-                "blank"
-              </p>
+                <p>
+                  "lower"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                312
-              </p>
+                <p>
+                  306
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for word characters.
-              </p>
+                <p>
+                  The character class name for printable characters.
+                </p>
               </td>
 <td>
-              <p>
-                "word"
-              </p>
+                <p>
+                  "print"
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                313
-              </p>
+                <p>
+                  307
+                </p>
               </td>
 <td>
-              <p>
-                The character class name for Unicode characters.
-              </p>
+                <p>
+                  The character class name for punctuation characters.
+                </p>
               </td>
 <td>
-              <p>
-                "unicode"
-              </p>
+                <p>
+                  "punct"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  308
+                </p>
+              </td>
+<td>
+                <p>
+                  The character class name for space characters.
+                </p>
+              </td>
+<td>
+                <p>
+                  "space"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  309
+                </p>
+              </td>
+<td>
+                <p>
+                  The character class name for upper case characters.
+                </p>
+              </td>
+<td>
+                <p>
+                  "upper"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  310
+                </p>
+              </td>
+<td>
+                <p>
+                  The character class name for hexadecimal characters.
+                </p>
+              </td>
+<td>
+                <p>
+                  "xdigit"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  311
+                </p>
+              </td>
+<td>
+                <p>
+                  The character class name for blank characters.
+                </p>
+              </td>
+<td>
+                <p>
+                  "blank"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  312
+                </p>
+              </td>
+<td>
+                <p>
+                  The character class name for word characters.
+                </p>
+              </td>
+<td>
+                <p>
+                  "word"
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  313
+                </p>
+              </td>
+<td>
+                <p>
+                  The character class name for Unicode characters.
+                </p>
+              </td>
+<td>
+                <p>
+                  "unicode"
+                </p>
               </td>
 </tr>
 </tbody>
@@ -1783,7 +1783,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="headers.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../background_information.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="thread_safety.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="headers.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../background_information.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="thread_safety.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
