@@ -99,7 +99,7 @@ namespace quickbook
         , plain_char(phrase)
         , raw_char(phrase)
         , escape_unicode(phrase)
-        , attribute(attributes, attribute_name)
+        , attribute(attributes, attribute_name, error_count)
         , image(phrase, attributes, image_fileref)
         , cond_phrase_pre(phrase, conditions, macro)
         , cond_phrase_post(phrase, conditions, macro)

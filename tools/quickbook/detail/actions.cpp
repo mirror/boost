@@ -475,6 +475,7 @@ namespace quickbook
         {
             detail::outerr(pos.file,pos.line)
                 << "Repeated attribute: " << attribute_name << ".\n";
+            ++error_count;
         }
     }
 

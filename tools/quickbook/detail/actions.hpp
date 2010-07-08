@@ -407,14 +407,17 @@ namespace quickbook
         
         attribute_action(
             attribute_map& attributes
-          , std::string& attribute_name)
+          , std::string& attribute_name
+          , int& error_count)
         : attributes(attributes)
-        , attribute_name(attribute_name) {}
+        , attribute_name(attribute_name)
+        , error_count(error_count) {}
 
         void operator()(iterator first, iterator last) const;
 
         attribute_map& attributes;
         std::string& attribute_name;
+        int& error_count;
     };
 
     struct image_action

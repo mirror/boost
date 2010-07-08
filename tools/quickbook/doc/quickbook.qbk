@@ -205,6 +205,7 @@ Features include:
 * Allow empty document bodies.
 * Less empty paragraphs.
 * XML encode the documentation info correctly.
+* Fix duplicate image attribute detection.
 * Preparing for quickbook 1.6:
   * When automatically generating ids for headers, use the quickbook
     source, rather than the generated docbook.
