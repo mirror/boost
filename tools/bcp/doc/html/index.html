@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>BCP</title>
-<link rel="stylesheet" href="../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="index.html" title="BCP">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -17,7 +17,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav"></div>
-<div class="article" lang="en">
+<div class="article">
 <div class="titlepage">
 <div>
 <div><h2 class="title">
@@ -27,7 +27,7 @@
 </h3></div></div></div>
 <div><p class="copyright">Copyright &#169; 2209 John Maddock</p></div>
 <div><div class="legalnotice">
-<a name="id774375"></a><p>
+<a name="id759699"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -50,7 +50,7 @@
 </dl></dd>
 </dl>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="bcp.overview"></a><a class="link" href="index.html#bcp.overview" title="Overview"> Overview</a>
 </h2></div></div></div>
@@ -64,7 +64,7 @@
       what licences are used by those dependencies.
     </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="bcp.examples"></a><a class="link" href="index.html#bcp.examples" title="Examples"> Examples</a>
 </h2></div></div></div>
@@ -109,7 +109,7 @@
       The report contains license information, author details, and file dependencies.
     </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="bcp.syntax"></a><a class="link" href="index.html#bcp.syntax" title="Syntax"> Syntax</a>
 </h2></div></div></div>
@@ -120,7 +120,7 @@
 <dt><span class="section"><a href="index.html#bcp.syntax.output"> output-path</a></span></dt>
 <dt><span class="section"><a href="index.html#bcp.syntax.dependencies">Dependencies</a></span></dt>
 </dl></div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="bcp.syntax.main"></a><a class="link" href="index.html#bcp.syntax.main" title="Behaviour Selection"> Behaviour Selection</a>
 </h3></div></div></div>
@@ -139,29 +139,29 @@
 <p>
         Outputs a html report file containing:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-          All the licenses in effect, plus the files using each license, and the
-          copyright holders using each license.
-        </li>
-<li>
-          Any files with no recognizable license (please report these to the boost
-          mailing lists).
-        </li>
-<li>
-          Any files with no recognizable copyright holders (please report these to
-          the boost mailing lists).
-        </li>
-<li>
-          All the copyright holders and the files on which they hold copyright.
-        </li>
-<li>
-          File dependency information - indicates the reason for the inclusion of
-          any particular file in the dependencies found.
-        </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            All the licenses in effect, plus the files using each license, and the
+            copyright holders using each license.
+          </li>
+<li class="listitem">
+            Any files with no recognizable license (please report these to the boost
+            mailing lists).
+          </li>
+<li class="listitem">
+            Any files with no recognizable copyright holders (please report these
+            to the boost mailing lists).
+          </li>
+<li class="listitem">
+            All the copyright holders and the files on which they hold copyright.
+          </li>
+<li class="listitem">
+            File dependency information - indicates the reason for the inclusion
+            of any particular file in the dependencies found.
+          </li>
 </ul></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="bcp.syntax.options"></a><a class="link" href="index.html#bcp.syntax.options" title="Options"> Options</a>
 </h3></div></div></div>
@@ -209,7 +209,7 @@
         Make sure that all copied files use Unix style line endings.
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="bcp.syntax.module"></a><a class="link" href="index.html#bcp.syntax.module" title="module-list"> module-list</a>
 </h3></div></div></div>
@@ -217,23 +217,23 @@
         When the --scan option is not used then a list of boost files or library
         names to copy, this can be:
       </p>
-<div class="orderedlist"><ol type="1">
-<li>
-          The name of a tool: for example "build" will find "tools/build".
-        </li>
-<li>
-          The name of a library: for example "regex".
-        </li>
-<li>
-          The title of a header: for example "scoped_ptr" will find "boost/scoped_ptr.hpp".
-        </li>
-<li>
-          The name of a header: for example "scoped_ptr.hpp" will find
-          "boost/scoped_ptr.hpp".
-        </li>
-<li>
-          The name of a file: for example "boost/regex.hpp".
-        </li>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+            The name of a tool: for example "build" will find "tools/build".
+          </li>
+<li class="listitem">
+            The name of a library: for example "regex".
+          </li>
+<li class="listitem">
+            The title of a header: for example "scoped_ptr" will find "boost/scoped_ptr.hpp".
+          </li>
+<li class="listitem">
+            The name of a header: for example "scoped_ptr.hpp" will find
+            "boost/scoped_ptr.hpp".
+          </li>
+<li class="listitem">
+            The name of a file: for example "boost/regex.hpp".
+          </li>
 </ol></div>
 <p>
         When the --scan option is used, then a list of (probably non-boost) files
@@ -241,7 +241,7 @@
         copied/listed.
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="bcp.syntax.output"></a><a class="link" href="index.html#bcp.syntax.output" title="output-path"> output-path</a>
 </h3></div></div></div>
@@ -249,31 +249,32 @@
         The path to which files will be copied (this path must exist).
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="bcp.syntax.dependencies"></a><a class="link" href="index.html#bcp.syntax.dependencies" title="Dependencies">Dependencies</a>
 </h3></div></div></div>
 <p>
         File dependencies are found as follows:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-          C++ source files are scanned for #includes, all #includes present in the
-          boost source tree will then be scanned for their dependencies and so on.
-        </li>
-<li>
-          C++ source files are associated with the name of a library, if that library
-          has source code (and possibly build data), then include that source in
-          the dependencies.
-        </li>
-<li>
-          C++ source files are checked for dependencies on Boost.test (for example
-          to see if they use cpp_main as an entry point).
-        </li>
-<li>
-          HTML files are scanned for immediate dependencies (images and style sheets,
-          but not links).
-        </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            C++ source files are scanned for #includes, all #includes present in
+            the boost source tree will then be scanned for their dependencies and
+            so on.
+          </li>
+<li class="listitem">
+            C++ source files are associated with the name of a library, if that library
+            has source code (and possibly build data), then include that source in
+            the dependencies.
+          </li>
+<li class="listitem">
+            C++ source files are checked for dependencies on Boost.test (for example
+            to see if they use cpp_main as an entry point).
+          </li>
+<li class="listitem">
+            HTML files are scanned for immediate dependencies (images and style sheets,
+            but not links).
+          </li>
 </ul></div>
 <p>
         It should be noted that in practice bcp can produce a rather "fat"
@@ -297,28 +298,28 @@
         274 header dependencies for boost/shared_ptr.hpp: by running bcp in report
         mode we can see why all these headers have been found as dependencies:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-          All of the Config library headers get included (52 headers, would be about
-          6 for one compiler only).
-        </li>
-<li>
-          A lot of MPL and type traits code that includes workarounds for broken
-          compilers that you may or may not need. Tracing back through the code shows
-          that most of these aren't needed unless the user has defined BOOST_SP_USE_QUICK_ALLOCATOR,
-          however bcp isn't aware of whether that preprocessor path will be taken
-          or not, so the headers get included just in case. This adds about 48 headers
-          (type traits), plus another 49 from MPL.
-        </li>
-<li>
-          The Preprocessor library gets used heavily by MPL: this adds another 96
-          headers.
-        </li>
-<li>
-          The Shared Pointer library contains a lot of platform specific code, split
-          up into around 22 headers: normally your compiler would need only a couple
-          of these files.
-        </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            All of the Config library headers get included (52 headers, would be
+            about 6 for one compiler only).
+          </li>
+<li class="listitem">
+            A lot of MPL and type traits code that includes workarounds for broken
+            compilers that you may or may not need. Tracing back through the code
+            shows that most of these aren't needed unless the user has defined BOOST_SP_USE_QUICK_ALLOCATOR,
+            however bcp isn't aware of whether that preprocessor path will be taken
+            or not, so the headers get included just in case. This adds about 48
+            headers (type traits), plus another 49 from MPL.
+          </li>
+<li class="listitem">
+            The Preprocessor library gets used heavily by MPL: this adds another
+            96 headers.
+          </li>
+<li class="listitem">
+            The Shared Pointer library contains a lot of platform specific code,
+            split up into around 22 headers: normally your compiler would need only
+            a couple of these files.
+          </li>
 </ul></div>
 <p>
         As you can see the number of dependencies found are much larger than those
@@ -335,7 +336,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: December 28, 2009 at 13:24:19 GMT</small></p></td>
+<td align="left"><p><small>Last revised: July 08, 2010 at 22:44:20 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
