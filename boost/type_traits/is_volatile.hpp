@@ -105,7 +105,7 @@ struct is_volatile_helper<false,false>
     {
         static T* t;
         BOOST_STATIC_CONSTANT(bool, value = (
-            sizeof(detail::yes_type) == sizeof(detail::is_volatile_tester(t))
+            sizeof(boost::detail::yes_type) == sizeof(boost::detail::is_volatile_tester(t))
             ));
     };
 };
@@ -117,7 +117,7 @@ struct is_volatile_helper<false,true>
     {
         static T t;
         BOOST_STATIC_CONSTANT(bool, value = (
-            sizeof(detail::yes_type) == sizeof(detail::is_volatile_tester(&t))
+            sizeof(boost::detail::yes_type) == sizeof(boost::detail::is_volatile_tester(&t))
             ));
     };
 };

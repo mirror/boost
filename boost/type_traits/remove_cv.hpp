@@ -52,7 +52,7 @@ struct rvalue_ref_filter_rem_cv<T&&>
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 //  convert a type T to a non-cv-qualified type - remove_cv<T>
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_cv,T,typename detail::rvalue_ref_filter_rem_cv<T>::type)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_cv,T,typename boost::detail::rvalue_ref_filter_rem_cv<T>::type)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_cv,T&,T&)
 #if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T const[N],T type[N])

@@ -117,7 +117,7 @@ struct is_const_helper<false,false>
     {
         static T* t;
         BOOST_STATIC_CONSTANT(bool, value = (
-            sizeof(detail::yes_type) == sizeof(detail::is_const_tester(t))
+            sizeof(boost::detail::yes_type) == sizeof(boost::detail::is_const_tester(t))
             ));
     };
 };
@@ -129,7 +129,7 @@ struct is_const_helper<false,true>
     {
         static T t;
         BOOST_STATIC_CONSTANT(bool, value = (
-            sizeof(detail::yes_type) == sizeof(detail::is_const_tester(&t))
+            sizeof(boost::detail::yes_type) == sizeof(boost::detail::is_const_tester(&t))
             ));
     };
 };
