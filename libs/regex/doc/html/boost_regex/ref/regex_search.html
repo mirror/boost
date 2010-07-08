@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>regex_search</title>
-<link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="regex_match.html" title="regex_match">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="regex_match.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="regex_replace.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="regex_match.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="regex_replace.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.ref.regex_search"></a><a class="link" href="regex_search.html" title="regex_search"> regex_search</a>
 </h3></div></div></div>
@@ -73,7 +73,7 @@
                   <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.regex_search.description"></a><h5>
-<a name="id752230"></a>
+<a name="id835348"></a>
         <a class="link" href="regex_search.html#boost_regex.ref.regex_search.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
@@ -114,193 +114,195 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Element
-              </p>
+                <p>
+                  Element
+                </p>
               </th>
 <th>
-              <p>
-                Value
-              </p>
+                <p>
+                  Value
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">e</span><span class="special">.</span><span class="identifier">mark_count</span><span class="special">()</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">empty</span><span class="special">()</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="keyword">false</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">e</span><span class="special">.</span><span class="identifier">mark_count</span><span class="special">()</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">empty</span><span class="special">()</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">first</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">last</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="keyword">false</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">matched</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span> <span class="special">!=</span>
-                <span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">second</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">second</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">first</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">last</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">last</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">last</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">matched</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span> <span class="special">!=</span>
-                <span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">second</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">matched</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                The start of the sequence of characters that matched the regular
-                expression
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">second</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                The end of the sequence of characters that matched the regular expression
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span> <span class="special">!=</span>
+                  <span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">second</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">matched</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                true if a full match was found, and false if it was a partial match
-                (found as a result of the match_partial flag being set).
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">first</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, the start of the sequence that
-                matched sub-expression <span class="emphasis"><em>n</em></span>. Alternatively, if
-                sub-expression <span class="emphasis"><em>n</em></span> did not participate in the
-                match, then last.
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">second</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">second</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">last</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, the end of the sequence that matched
-                sub-expression <span class="emphasis"><em>n</em></span>. Alternatively, if sub-expression
-                <span class="emphasis"><em>n</em></span> did not participate in the match, then <code class="computeroutput"><span class="identifier">last</span></code>.
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">last</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">matched</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">matched</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, true if sub-expression <span class="emphasis"><em>n</em></span>
-                participated in the match, false otherwise.
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span> <span class="special">!=</span>
+                  <span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">second</span></code>
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  The start of the sequence of characters that matched the regular
+                  expression
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">second</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  The end of the sequence of characters that matched the regular
+                  expression
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">matched</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  true if a full match was found, and false if it was a partial match
+                  (found as a result of the match_partial flag being set).
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">first</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, the start of the sequence that
+                  matched sub-expression <span class="emphasis"><em>n</em></span>. Alternatively, if
+                  sub-expression <span class="emphasis"><em>n</em></span> did not participate in the
+                  match, then last.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">second</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, the end of the sequence that
+                  matched sub-expression <span class="emphasis"><em>n</em></span>. Alternatively, if
+                  sub-expression <span class="emphasis"><em>n</em></span> did not participate in the
+                  match, then <code class="computeroutput"><span class="identifier">last</span></code>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">matched</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, true if sub-expression <span class="emphasis"><em>n</em></span>
+                  participated in the match, false otherwise.
+                </p>
               </td>
 </tr>
 </tbody>
@@ -355,7 +357,7 @@
         <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">regex_search</span><span class="special">(</span><span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>.
       </p>
 <a name="boost_regex.ref.regex_search.examples"></a><h5>
-<a name="id755755"></a>
+<a name="id838244"></a>
         <a class="link" href="regex_search.html#boost_regex.ref.regex_search.examples">Examples</a>
       </h5>
 <p>
@@ -417,7 +419,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="regex_match.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="regex_replace.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="regex_match.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="regex_replace.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
