@@ -57,7 +57,7 @@ a sequence repeatedly applying an operation to its elements.
 
 [section Functions]
 
-[template fold_desc[name result_of_name arg_desc arg_id arg_type_id invoke_desc semantics_elements_desc example_arg_transform example_result I0 I1 IN]
+[template fold_desc[name result_of_name arg_desc seq_concept arg_id arg_type_id invoke_desc semantics_elements_desc example_arg_transform example_result I0 I1 IN]
 [heading Description]
 For a sequence `seq`, initial state `initial_state`, and binary function object
 or function pointer `f`, [^[name]] returns the result of the repeated application of
@@ -83,12 +83,13 @@ the first call) and [arg_desc] of `seq`.
     typename result_of_name_macro<Sequence const, State const, F>::type name_macro(
         Sequence const& seq, State const& initial_state, F f);
 
+[def seq_concept_macro [seq_concept]]
 [def arg_type_id_macro [arg_type_id]]
 [def arg_id_macro [arg_id]]
 [def invoke_desc_macro [invoke_desc]]
 [table Parameters
     [[Parameter][Requirement][Description]]
-    [[`seq`][A model of __forward_sequence__][Operation's argument]]
+    [[`seq`][A model of seq_concept_macro][Operation's argument]]
     [[`initial_state`][Any type][Initial state]]
     [[`f`][`f(s,arg_id_macro)` with return type `__boost_result_of_call__<F(S,arg_type_id_macro)>::type` must be a valid expression for current state `s` of type `S`, and for each invoke_desc_macro][Operation's argument]]
 ]
@@ -127,23 +128,23 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 ]
 
 [section fold]
-[fold_desc fold..__result_of_fold__..each element..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."12"..1..2..N]
+[fold_desc fold..__result_of_fold__..each element..__forward_sequence__..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."12"..1..2..N]
 [endsect]
 
 [section reverse_fold]
-[fold_desc reverse_fold..__result_of_reverse_fold__..each element..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."21"..N..N-1..1]
+[fold_desc reverse_fold..__result_of_reverse_fold__..each element..__bidirectional_sequence__..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."21"..N..N-1..1]
 [endsect]
 
 [section iter_fold]
-[fold_desc iter_fold..__result_of_iter_fold__..iterators on each element..it..It..iterator `it` of type `It` on an element of `seq`..consecutive iterators on the elements of `seq`..__deref__(t).."12"..1..2..N]
+[fold_desc iter_fold..__result_of_iter_fold__..iterators on each element..__forward_sequence__..it..It..iterator `it` of type `It` on an element of `seq`..consecutive iterators on the elements of `seq`..__deref__(t).."12"..1..2..N]
 [endsect]
 
 [section reverse_iter_fold]
-[fold_desc reverse_iter_fold..__result_of_reverse_iter_fold__..iterators on each element..it..It..iterator `it` of type `It` on an element of `seq`..consecutive iterators on the elements of `seq`..__deref__(t).."21"..N..N-1..1]
+[fold_desc reverse_iter_fold..__result_of_reverse_iter_fold__..iterators on each element..__bidirectional_sequence__..it..It..iterator `it` of type `It` on an element of `seq`..consecutive iterators on the elements of `seq`..__deref__(t).."21"..N..N-1..1]
 [endsect]
 
 [section accumulate]
-[fold_desc accumulate..__result_of_accumulate__..each element..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."12"..1..2..N]
+[fold_desc accumulate..__result_of_accumulate__..each element..__forward_sequence__..e..E..element `e` of type `E` in `seq`..the consecutive elements of `seq`..t.."12"..1..2..N]
 [endsect]
 
 [section for_each]
@@ -200,7 +201,7 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 
 [section Metafunctions]
 
-[template meta_fold_desc[name name_func arg_id arg_type_id invoke_meta_desc]
+[template meta_fold_desc[name name_func seq_concept arg_id arg_type_id invoke_meta_desc]
 [heading Description]
 Returns the result type of [name_func].
 
@@ -215,12 +216,13 @@ Returns the result type of [name_func].
         typedef __unspecified__ type;
     };
 
+[def seq_concept_macro [seq_concept]]
 [def arg_type_id_macro [arg_type_id]]
 [def arg_id_macro [arg_id]]
 [def invoke_meta_desc_macro [invoke_meta_desc]]
 [table Parameters
     [[Parameter]  [Requirement] [Description]]
-    [[`Sequence`] [A model of __forward_sequence__] [The sequence to iterate]]
+    [[`Sequence`] [A model of seq_concept_macro]    [The sequence to iterate]]
     [[`State`]    [Any type]                        [The initial state for the first application of `F`]]
     [[`F`]        [`__boost_result_of_call__<F(S,arg_type_id_macro)>::type` is the return type of `f(s,arg_id_macro)` with current state `s` of type `S`, and an invoke_meta_desc_macro][The operation to be applied on traversal]]
 ]
@@ -244,23 +246,23 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `F`.
 ]
 
 [section fold]
-[meta_fold_desc fold..__fold__..e..E..element `e` of type `E` in `seq`]
+[meta_fold_desc fold..__fold__..__forward_sequence__..e..E..element `e` of type `E` in `seq`]
 [endsect]
 
 [section reverse_fold]
-[meta_fold_desc reverse_fold..__reverse_fold__..e..E..element `e` of type `E` in `seq`]
+[meta_fold_desc reverse_fold..__reverse_fold__..__bidirectional_sequence__..e..E..element `e` of type `E` in `seq`]
 [endsect]
 
 [section iter_fold]
-[meta_fold_desc iter_fold..__iter_fold__..it..It..iterator `it` of type `It` on an element of `seq`]
+[meta_fold_desc iter_fold..__iter_fold__..__forward_sequence__..it..It..iterator `it` of type `It` on an element of `seq`]
 [endsect]
 
 [section reverse_iter_fold]
-[meta_fold_desc reverse_iter_fold..__reverse_iter_fold__..it..It..iterator `it` of type `It` on an element of `seq`]
+[meta_fold_desc reverse_iter_fold..__reverse_iter_fold__..__bidirectional_sequence__..it..It..iterator `it` of type `It` on an element of `seq`]
 [endsect]
 
 [section accumulate]
-[meta_fold_desc accumulate..__accumulate__..e..E..element `e` of type `E` in `seq`]
+[meta_fold_desc accumulate..__accumulate__..__forward_sequence__..e..E..element `e` of type `E` in `seq`]
 [endsect]
 
 [section for_each]

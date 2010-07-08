@@ -6,10 +6,6 @@ License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt)
 ===============================================================================
 
-* Provide macros for adapting classes, similar to BOOST_FUSION_ADAPT_STRUCT
-  and BOOST_FUSION_ADAPT_ASSOC_STRUCT, but with with user control over
-  member accessors (e.g. get and set free functions).
-
 * Document extension::struct_size, extension::struct_member and
   extension::struct_assoc_member in extension section.
 
