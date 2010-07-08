@@ -105,8 +105,12 @@ namespace quickbook
         }
         else // version 1.3 and above
         {
-            std::string anchor = fully_qualified_id(library_id, qualified_section_id,
-                detail::make_identifier(str.begin(), str.end()));
+            std::string id = qbk_version_n >= 106 ?
+                detail::make_identifier(first, last) :
+                detail::make_identifier(str.begin(), str.end());
+
+            std::string anchor =
+                fully_qualified_id(library_id, qualified_section_id, id);
 
             out << "<anchor id=\"" << anchor << "\"/>"
                 << pre
@@ -128,8 +132,12 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
-        std::string anchor = fully_qualified_id(library_id, qualified_section_id,
-            detail::make_identifier(str.begin(), str.end()));
+        std::string id = qbk_version_n >= 106 ?
+            detail::make_identifier(first, last) :
+            detail::make_identifier(str.begin(), str.end());
+
+        std::string anchor =
+            fully_qualified_id(library_id, qualified_section_id, id);
 
         out
             << "<anchor id=\"" << anchor << "\"/>"
