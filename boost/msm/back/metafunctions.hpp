@@ -54,6 +54,7 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(completion_event)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(no_exception_thrown)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(no_message_queue)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(activate_deferred_events)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(wrapped_entry)
 
 namespace boost { namespace msm { namespace back
 {
@@ -340,6 +341,23 @@ struct get_explicit_creation
     typedef typename StateType::explicit_creation type;
 };
 
+template <class StateType>
+struct get_wrapped_entry 
+{
+    typedef typename StateType::wrapped_entry type;
+};
+// used for states created with explicit_creation
+// if the state is an explicit entry, we reach for the wrapped state
+// otherwise, this returns the state itself
+template <class StateType>
+struct get_wrapped_state 
+{
+    typedef typename ::boost::mpl::eval_if<
+                typename has_wrapped_entry<StateType>::type,
+                get_wrapped_entry<StateType>,
+                ::boost::mpl::identity<StateType> >::type type;
+};
+
 template <class Derived>
 struct create_stt 
 {
@@ -357,7 +375,7 @@ struct create_stt
                  ::boost::mpl::has_key<states, ::boost::mpl::placeholders::_2>,
                  ::boost::mpl::placeholders::_1,
                  ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
-                             not_a_row< ::boost::mpl::placeholders::_2 > > 
+                             not_a_row< get_wrapped_state< ::boost::mpl::placeholders::_2> > > 
                   >
         >::type with_init;
     // do the same for states marked as explicitly created
@@ -379,7 +397,7 @@ struct create_stt
                  ::boost::mpl::has_key<states, ::boost::mpl::placeholders::_2>,
                  ::boost::mpl::placeholders::_1,
                  ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
-                             not_a_row< ::boost::mpl::placeholders::_2 > > 
+                             not_a_row< get_wrapped_state< ::boost::mpl::placeholders::_2> > > 
                   >
         >::type type;
 };
