@@ -44,7 +44,7 @@ struct remove_rvalue_ref<T&&>
 
 } // namespace detail
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_reference,T,typename detail::remove_rvalue_ref<T>::type)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_reference,T,typename boost::detail::remove_rvalue_ref<T>::type)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_reference,T&,T)
 
 #if defined(BOOST_ILLEGAL_CV_REFERENCES)
