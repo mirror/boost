@@ -1389,10 +1389,23 @@ namespace quickbook
         std::swap(actions.filename, filein);
 
         // save the doc info strings
-        actions.doc_type.swap(doc_type);
-        actions.doc_id.swap(doc_id);
-        actions.doc_dirname.swap(doc_dirname);
-        actions.doc_last_revision.swap(doc_last_revision);
+        if(qbk_version_n >= 106) {
+            doc_type = actions.doc_type;
+            doc_id = actions.doc_id;
+            doc_dirname = actions.doc_dirname;
+            doc_last_revision = actions.doc_last_revision;
+        }
+        else {
+            actions.doc_type.swap(doc_type);
+            actions.doc_id.swap(doc_id);
+            actions.doc_dirname.swap(doc_dirname);
+            actions.doc_last_revision.swap(doc_last_revision);
+        }
+        
+        // save the version info
+        unsigned qbk_major_version_store = qbk_major_version;
+        unsigned qbk_minor_version_store = qbk_minor_version;
+        unsigned qbk_version_n_store = qbk_version_n;
 
         // scope the macros
         string_symbols macro = actions.macro;
@@ -1420,6 +1433,13 @@ namespace quickbook
         actions.doc_id.swap(doc_id);
         actions.doc_dirname.swap(doc_dirname);
         actions.doc_last_revision.swap(doc_last_revision);
+        
+        if(qbk_version_n >= 106 || qbk_version_n_store >= 106)
+        {
+            qbk_major_version = qbk_major_version_store;
+            qbk_minor_version = qbk_minor_version_store;
+            qbk_version_n = qbk_version_n_store;
+        }
 
         // restore the macros
         actions.macro = macro;
