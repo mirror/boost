@@ -204,6 +204,7 @@ Features include:
 * Don't require commas between authors in docinfo.
 * Allow empty document bodies.
 * Less empty paragraphs.
+* XML encode the documentation info correctly.
 * Preparing for quickbook 1.6:
   * When automatically generating ids for headers, use the quickbook
     source, rather than the generated docbook.

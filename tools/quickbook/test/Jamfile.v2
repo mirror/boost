@@ -48,6 +48,8 @@ test-suite quickbook.test :
     [ quickbook-test doc-info-4 ]
     [ quickbook-test callouts ]
     [ quickbook-test simple_markup ]
+    [ quickbook-test xml-escape_1_2 ]
+    [ quickbook-test xml-escape_1_5 ]
     [ quickbook-test blocks ]
     [ quickbook-fail-test fail-include ]
     [ quickbook-fail-test fail-import ]
