@@ -35,4 +35,9 @@
     [[cell]]
 ]
 
+[table A & B
+    [[A][B]]
+    [[a][b]]
+]
+
 [endsect]
