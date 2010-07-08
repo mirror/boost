@@ -2,7 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Standard Integer Types</title>
-<link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Boost.Integer">
 <link rel="up" href="../index.html" title="Boost.Integer">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="traits.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="traits.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Standard Integer Types">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_integer.cstdint"></a><a class="link" href="cstdint.html" title="Standard Integer Types"> Standard Integer Types</a>
 </h2></div></div></div>
@@ -41,7 +41,7 @@
 <dt><span class="section"><a href="cstdint.html#boost_integer.cstdint.integer_constant_macros">Integer
       Constant Macros</a></span></dt>
 </dl></div>
-<div class="section" title="Overview">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.overview"></a><a class="link" href="cstdint.html#boost_integer.cstdint.overview" title="Overview">Overview</a>
 </h3></div></div></div>
@@ -62,7 +62,7 @@
         a test program.
       </p>
 </div>
-<div class="section" title="Rationale">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.rationale"></a><a class="link" href="cstdint.html#boost_integer.cstdint.rationale" title="Rationale"> Rationale</a>
 </h3></div></div></div>
@@ -82,7 +82,7 @@
         conventions rather than C++ Standard Library header naming conventions.
       </p>
 </div>
-<div class="section" title="Caveat emptor">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.ce"></a><a class="link" href="cstdint.html#boost_integer.cstdint.ce" title="Caveat emptor"> <span class="emphasis"><em>Caveat emptor</em></span></a>
 </h3></div></div></div>
@@ -99,7 +99,7 @@
         Use the respective names in namespace <code class="literal">boost</code> instead.
       </p>
 </div>
-<div class="section" title="Exact-width integer types">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.exact_width_integer_types"></a><a class="link" href="cstdint.html#boost_integer.cstdint.exact_width_integer_types" title="Exact-width integer types">Exact-width
       integer types</a>
@@ -119,7 +119,7 @@
         The absence of int64_t and uint64_t is indicated by the macro <code class="computeroutput"><span class="identifier">BOOST_NO_INT64_T</span></code>.
       </p>
 </div>
-<div class="section" title="Minimum-width integer types">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.minimum_width_integer_types"></a><a class="link" href="cstdint.html#boost_integer.cstdint.minimum_width_integer_types" title="Minimum-width integer types">Minimum-width
       integer types</a>
@@ -138,26 +138,42 @@
         The following minimum-width integer types are provided for all platforms:
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><code class="literal">int_least8_t</code></li>
-<li class="listitem"><code class="literal">int_least16_t</code></li>
-<li class="listitem"><code class="literal">int_least32_t</code></li>
-<li class="listitem"><code class="literal">uint_least8_t</code></li>
-<li class="listitem"><code class="literal">uint_least16_t</code></li>
-<li class="listitem"><code class="literal">uint_least32_t</code></li>
+<li class="listitem">
+            <code class="literal">int_least8_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">int_least16_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">int_least32_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_least8_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_least16_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_least32_t</code>
+          </li>
 </ul></div>
 <p>
         The following types are available only if, after including &lt;boost/cstdint.hpp&gt;,
         the macro BOOST_NO_INT64_T is not defined:
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><code class="literal">int_least64_t</code></li>
-<li class="listitem"><code class="literal">uint_least64_t</code></li>
+<li class="listitem">
+            <code class="literal">int_least64_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_least64_t</code>
+          </li>
 </ul></div>
 <p>
         All other minimum-width integer types are optional.
       </p>
 </div>
-<div class="section" title="Fastest minimum-width integer types">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.fastest_minimum_width_integer_types"></a><a class="link" href="cstdint.html#boost_integer.cstdint.fastest_minimum_width_integer_types" title="Fastest minimum-width integer types">Fastest
       minimum-width integer types</a>
@@ -176,26 +192,42 @@
         The following fastest minimum-width integer types are provided for all platforms:
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><code class="literal">int_fast8_t</code></li>
-<li class="listitem"><code class="literal">int_fast16_t</code></li>
-<li class="listitem"><code class="literal">int_fast32_t</code></li>
-<li class="listitem"><code class="literal">uint_fast8_t</code></li>
-<li class="listitem"><code class="literal">uint_fast16_t</code></li>
-<li class="listitem"><code class="literal">uint_fast32_t</code></li>
+<li class="listitem">
+            <code class="literal">int_fast8_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">int_fast16_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">int_fast32_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_fast8_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_fast16_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_fast32_t</code>
+          </li>
 </ul></div>
 <p>
         The following types are available only if, after including &lt;boost/cstdint.hpp&gt;,
         the macro BOOST_NO_INT64_T is not defined:
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><code class="literal">int_fast64_t</code></li>
-<li class="listitem"><code class="literal">uint_fast64_t</code></li>
+<li class="listitem">
+            <code class="literal">int_fast64_t</code>
+          </li>
+<li class="listitem">
+            <code class="literal">uint_fast64_t</code>
+          </li>
 </ul></div>
 <p>
         All other fastest minimum-width integer types are optional.
       </p>
 </div>
-<div class="section" title="Greatest-width integer types">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.greatest_width_integer_types"></a><a class="link" href="cstdint.html#boost_integer.cstdint.greatest_width_integer_types" title="Greatest-width integer types">Greatest-width
       integer types</a>
@@ -212,7 +244,7 @@
         These types are provided for all platforms.
       </p>
 </div>
-<div class="section" title="Integer Constant Macros">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.cstdint.integer_constant_macros"></a><a class="link" href="cstdint.html#boost_integer.cstdint.integer_constant_macros" title="Integer Constant Macros">Integer
       Constant Macros</a>
@@ -251,7 +283,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="traits.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="traits.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
