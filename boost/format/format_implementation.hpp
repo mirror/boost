@@ -67,7 +67,7 @@ namespace boost {
     template< class Ch, class Tr, class Alloc> // just don't copy the buf_ member
     basic_format<Ch, Tr, Alloc>:: basic_format(const basic_format& x)
         : items_(x.items_), bound_(x.bound_), style_(x.style_),
-          cur_arg_(x.cur_arg_), num_args_(x.num_args_), dumped_(false),
+          cur_arg_(x.cur_arg_), num_args_(x.num_args_), dumped_(x.dumped_),
           prefix_(x.prefix_), exceptions_(x.exceptions_), loc_(x.loc_)
     {
     }
@@ -302,7 +302,7 @@ namespace detail {
             while(self.cur_arg_ < self.num_args_ && self.bound_[self.cur_arg_])   
                 ++self.cur_arg_;
         }
-        // In any case, we either have all args, or are on a non-binded arg :
+        // In any case, we either have all args, or are on an unbound arg :
         BOOST_ASSERT( self.cur_arg_ >= self.num_args_ || ! self.bound_[self.cur_arg_]);
         return self;
     }
