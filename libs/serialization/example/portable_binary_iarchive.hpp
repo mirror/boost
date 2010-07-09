@@ -23,6 +23,7 @@
 
 #include <istream>
 #include <boost/serialization/string.hpp>
+#include <boost/serialization/item_version_type.hpp>
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/basic_binary_iprimitive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
@@ -104,7 +105,26 @@ protected:
         boost::intmax_t l;
         load_impl(l, sizeof(T));
         // use cast to avoid compile time warning
-        t = static_cast<T>(l);
+        //t = static_cast<T>(l);
+        t = T(l);
+    }
+    void load(boost::serialization::item_version_type & t){
+        boost::intmax_t l;
+        load_impl(l, sizeof(boost::serialization::item_version_type));
+        // use cast to avoid compile time warning
+        t = boost::serialization::item_version_type(l);
+    }
+    void load(boost::archive::version_type & t){
+        boost::intmax_t l;
+        load_impl(l, sizeof(boost::archive::version_type));
+        // use cast to avoid compile time warning
+        t = boost::archive::version_type(l);
+    }
+    void load(boost::archive::class_id_type & t){
+        boost::intmax_t l;
+        load_impl(l, sizeof(boost::archive::class_id_type));
+        // use cast to avoid compile time warning
+        t = boost::archive::class_id_type(static_cast<int>(l));
     }
     void load(std::string & t){
         this->primitive_base_t::load(t);

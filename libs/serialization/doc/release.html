@@ -1,6 +1,6 @@
 <!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-    <!--
+<!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
 Use, modification and distribution is subject to the Boost Software
 License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -29,6 +29,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="index">
+    <dt><a href="#differences_1_43">Differences from version 1.43</a></dt> 
     <dt><a href="#differences_1_42">Differences from version 1.42</a></dt> 
     <dt><a href="#differences_1_41">Differences from version 1.41</a></dt> 
     <dt><a href="#differences_1_40">Differences from version 1.40</a></dt> 
@@ -43,6 +44,11 @@ http://www.boost.org/LICENSE_1_0.txt)
 As of this writing, there are no known bugs. However, due to compiler/library 
 quirks and or bugs, some tests fail with some combinations of compilers and 
 libraries.
+<h2><a name="differences_1_43"></a>Differences from Boost 1.43</h2>
+<ul>
+    <li>fixed bug in the serialization of virtual base classes.  Due
+    to heroic efforts by Takatoshi Kondo.
+</ul>
 <h2><a name="differences_1_42"></a>Differences from Boost 1.42</h2>
 <ul>
     <li>fixed failure of shared_ptr serialization when serializing pointers
@@ -216,7 +222,7 @@ filed as TRAK tickets have been addressed.
     <li>
     Pointers to pointers cannot currently be serialized
     <li>
-        Its possible that <code style="white-space: normal">std::string</code> and <code style="white-space: normal">
+        It's possible that <code style="white-space: normal">std::string</code> and <code style="white-space: normal">
             std::wstring</code>
     contain characters such as '\0' and -1 (EOF) which cannot be rendered in text 
     and XML archives without an escape mechanism. Currently there is no such escape 
@@ -227,6 +233,9 @@ filed as TRAK tickets have been addressed.
         serialization of <code style="white-space: normal">std::map</code>
     for those compilers which do not support partial template specialization. Also, 
     types which contain pointers or tracked types might not work correctly.
+    <li>
+        Serialization of virtual base classes relies upon RTTI.  It will fail when used on
+        systems which don't have RTTI enabled.
 </ul>
 <p>
     Aside from the above, there are a number of issues related to specific 

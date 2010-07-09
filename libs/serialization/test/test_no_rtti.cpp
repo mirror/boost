@@ -26,9 +26,6 @@ namespace std{
 }
 #endif
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
-
 #include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/type_info_implementation.hpp>

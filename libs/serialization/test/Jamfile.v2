@@ -71,6 +71,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_derived_class : A ]
      [ test-bsl-run_files test_derived_class_ptr : A ]
      [ test-bsl-run_files test_diamond ]
+     [ test-bsl-run_files test_diamond_complex ]
      [ test-bsl-run_files test_exported : polymorphic_base ]
      [ test-bsl-run_files test_class_info_load ]
      [ test-bsl-run_files test_class_info_save ]

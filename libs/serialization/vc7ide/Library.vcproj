@@ -44,7 +44,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_42.dll"
+				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_44.dll"
 				GenerateDebugInformation="TRUE"
 				GenerateMapFile="TRUE"/>
 			<Tool
@@ -95,7 +95,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-1_42.dll"
+				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-1_44.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="2"
@@ -155,7 +155,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ConfigurationName)\libboost_serialization-vc71-mt-sgd-1_42.lib"/>
+				OutputFile="$(ConfigurationName)\libboost_serialization-vc71-mt-sgd-1_44.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -208,7 +208,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-s-1_39.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-s-1_44.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -297,6 +297,9 @@
 				RelativePath="..\..\..\boost\serialization\bitset.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\collection_size_type.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\collection_traits.hpp">
 			</File>
 			<File
@@ -325,6 +328,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\is_bitwise_serializable.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\item_version_type.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\list.hpp">
@@ -358,6 +364,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\utility.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\valarray.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\variant.hpp">
@@ -506,9 +515,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\codecvt_null.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\collection_size_type.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\config.hpp">

@@ -1,5 +1,5 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// test_plugin.cpp
+// test_dll_plugin.cpp
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
@@ -155,6 +155,7 @@ void load_exported(const char *testfile)
 #ifdef BOOST_WINDOWS
 
 #define WIN32_LEAN_AND_MEAN
+#include <TCHAR.H>
 #include <windows.h>
 
 int
@@ -164,8 +165,11 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     HINSTANCE hDLL;               // Handle to DLL
-    hDLL = LoadLibrary("plugin_polymorphic_derived2.dll");
-    BOOST_CHECK_MESSAGE((0 != hDLL), "Failed to find/load plugin_polymorphic_derived2" );
+    hDLL = LoadLibrary(_T("plugin_polymorphic_derived2.dll"));
+    BOOST_CHECK_MESSAGE(
+        (0 != hDLL), 
+        "Failed to find/load plugin_polymorphic_derived2"
+    );
     if(0 == hDLL)
         return EXIT_FAILURE;
 

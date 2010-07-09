@@ -13,6 +13,7 @@
 #include <cstddef> // NULL
 #include <cstdio> // remove
 #include <fstream>
+#include <cmath>
 
 #include <boost/config.hpp>
 
@@ -26,6 +27,48 @@ namespace std{
 
 #include "A.hpp"
 #include "A.ipp"
+
+bool A::check_equal(const A &rhs) const
+{
+    BOOST_CHECK_EQUAL(b, rhs.b);
+    BOOST_CHECK_EQUAL(l, rhs.l);
+    #ifndef BOOST_NO_INT64_T
+    BOOST_CHECK_EQUAL(f, rhs.f);
+    BOOST_CHECK_EQUAL(g, rhs.g);
+    #endif
+    BOOST_CHECK_EQUAL(m, rhs.m);
+    BOOST_CHECK_EQUAL(n, rhs.n);
+    BOOST_CHECK_EQUAL(o, rhs.o);
+    BOOST_CHECK_EQUAL(p, rhs.p);
+    BOOST_CHECK_EQUAL(q, rhs.q);
+    #ifndef BOOST_NO_CWCHAR
+    BOOST_CHECK_EQUAL(r, rhs.r);
+    #endif
+    BOOST_CHECK_EQUAL(c, rhs.c);
+    BOOST_CHECK_EQUAL(s, rhs.s);
+    BOOST_CHECK_EQUAL(t, rhs.t);
+    BOOST_CHECK_EQUAL(u, rhs.u);
+    BOOST_CHECK_EQUAL(v, rhs.v);
+    BOOST_CHECK_EQUAL(l, rhs.l);
+    BOOST_CHECK(!(
+        w == 0 
+        && std::fabs(rhs.w) > std::numeric_limits<float>::epsilon()
+    ));
+    BOOST_CHECK(!(
+        std::fabs(rhs.w/w - 1.0) > std::numeric_limits<float>::epsilon()
+    ));
+    BOOST_CHECK(!(
+        x == 0 && std::fabs(rhs.x - x) > std::numeric_limits<float>::epsilon()
+    ));
+    BOOST_CHECK(!(
+        std::fabs(rhs.x/x - 1.0) > std::numeric_limits<float>::epsilon()
+    ));
+    BOOST_CHECK(!(0 != y.compare(rhs.y)));
+    #ifndef BOOST_NO_STD_WSTRING
+    BOOST_CHECK(!(0 != z.compare(rhs.z)));
+    #endif      
+    return true;
+}
 
 int 
 test_main( int /* argc */, char* /* argv */[] )
@@ -44,7 +87,7 @@ test_main( int /* argc */, char* /* argv */[] )
         test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("a", a1);
     }
-    BOOST_CHECK_EQUAL(a, a1);
+    a.check_equal(a1);
     std::remove(testfile);
     return 0;
 }

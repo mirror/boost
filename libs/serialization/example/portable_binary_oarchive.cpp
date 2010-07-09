@@ -70,7 +70,7 @@ portable_binary_oarchive::init(unsigned int flags) {
         );
         * this << file_signature;
         // write library version
-        const boost::archive::version_type v(
+        const boost::archive::library_version_type v(
             boost::archive::BOOST_ARCHIVE_VERSION()
         );
         * this << v;
@@ -78,10 +78,15 @@ portable_binary_oarchive::init(unsigned int flags) {
     save(static_cast<unsigned char>(m_flags >> CHAR_BIT));
 }
 
+#include <boost/archive/impl/archive_serializer_map.ipp>
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
 
 namespace boost {
 namespace archive {
+
+namespace detail {
+    template class archive_serializer_map<portable_binary_oarchive>;
+}
 
 template class basic_binary_oprimitive<
     portable_binary_oarchive,

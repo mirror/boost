@@ -52,7 +52,10 @@ class B
     template<class Archive>
     void serialize(Archive & /*ar*/, const unsigned int file_version){
         // verify at execution that correct version number is passed on save
-        BOOST_CHECK(file_version == ::boost::serialization::version<B>::value);
+        BOOST_CHECK(
+            static_cast<const int>(file_version) 
+            == ::boost::serialization::version<B>::value
+        );
         ++count;
     }
 public:

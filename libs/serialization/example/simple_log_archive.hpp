@@ -133,12 +133,13 @@ public:
     }
     template<class T, int N>
     simple_log_archive & operator<<(const T (&t)[N]){
-        ar << serialization::make_array(
-            static_cast<value_type const*>(&t[0]),count
+        return *this << boost::serialization::make_array(
+            static_cast<const T *>(&t[0]),
+            N
         );
     }
     template<class T>
-    simple_log_archive & operator<<(const ::boost::serialization::nvp<T> & t){
+    simple_log_archive & operator<<(const boost::serialization::nvp<T> & t){
         m_os << '\n'; // start line with each named object
         // indent according to object depth
         for(unsigned int i = 0; i < m_depth; ++i)
