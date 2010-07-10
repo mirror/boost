@@ -1541,7 +1541,7 @@ namespace quickbook
             return;
         }
 
-        if (qbk_major_version == 0)
+        if (qbk_major_version == -1)
         {
             // hard code quickbook version to v1.1
             qbk_major_version = 1;
@@ -1553,7 +1553,25 @@ namespace quickbook
         }
         else
         {
-            qbk_version_n = (qbk_major_version * 100) + qbk_minor_version;
+            qbk_version_n = ((unsigned) qbk_major_version * 100) +
+                (unsigned) qbk_minor_version;
+        }
+        
+        if (qbk_version_n == 106)
+        {
+            detail::outwarn(actions.filename.file_string(),1)
+                << "Quickbook 1.6 is still under development and is "
+                "likely to change in the future." << std::endl;
+        }
+        else if(qbk_version_n < 100 || qbk_version_n > 106)
+        {
+            detail::outerr(actions.filename.file_string(),1)
+                << "Unknown version of quickbook: quickbook "
+                << qbk_major_version
+                << "."
+                << qbk_minor_version
+                << std::endl;
+            ++actions.error_count;
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
