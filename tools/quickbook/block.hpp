@@ -233,8 +233,9 @@ namespace quickbook
 
                 template_ =
                     "template"
-                    >> hard_space                       [clear_a(actions.template_info)]
-                    >> template_id                      [push_back_a(actions.template_info)]
+                    >> hard_space
+                    >> template_id                      [assign_a(actions.template_identifier)]
+                                                        [clear_a(actions.template_info)]
                     >>
                     !(
                         space >> '['

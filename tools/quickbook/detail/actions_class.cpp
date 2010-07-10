@@ -60,6 +60,7 @@ namespace quickbook
         , macro_id()
         , list_marks()
         , list_indent(-1)
+        , template_identifier()
         , template_info()
         , template_depth(0)
         , template_escape(false)

@@ -89,6 +89,7 @@ namespace quickbook
         std::stack<mark_type>   list_marks;
         int                     list_indent;
         std::vector<bool>       conditions;
+        std::string             template_identifier;
         string_list             template_info;
         int                     template_depth;
         bool                    template_escape;
