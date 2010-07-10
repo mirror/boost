@@ -139,6 +139,7 @@ void iterator_test()
     ++siter;
     BOOST_CHECK(equals(*siter, "abb"));
     ++siter;
+    BOOST_CHECK(siter==split_iterator<string::iterator>(siter));
     BOOST_CHECK(siter==split_iterator<string::iterator>());
 
 }

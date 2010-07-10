@@ -169,7 +169,7 @@
         <programlisting>
     string str1="     hello world!     ";
     string str2=trim_left_copy(str1);   // str2 == "hello world!     "
-    string str3=trim_right_copy(str2);  // str3 == "     hello world!"
+    string str3=trim_right_copy(str1);  // str3 == "     hello world!"
     trim(str1);                         // str1 == "hello world!"
 
     string phone="00423333444";
@@ -339,7 +339,7 @@
     typedef vector&lt; string &gt; split_vector_type;
     
     split_vector_type SplitVec; // #2: Search for tokens
-    split( SplitVec, str1, is_any_of("-*") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
+    split( SplitVec, str1, is_any_of("-*"), token_compress_on ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
         </programlisting>
         <para>
             <code>[hello]</code> designates an <code>iterator_range</code> delimiting this substring.                       
