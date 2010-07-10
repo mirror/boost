@@ -808,6 +808,11 @@ namespace quickbook
         }
     }
 
+    namespace detail
+    {
+        int callout_id = 0;
+    }
+
     void do_template_action::operator()(iterator first, iterator) const
     {
         // Get the arguments and clear values stored in action.
@@ -854,13 +859,56 @@ namespace quickbook
                 actions.templates.set_parent_scope(*symbol->parent);
 
             ///////////////////////////////////
-            // Break the arguments
-            if (!break_arguments(args, symbol->params, pos))
+            // Initialise the arguments
+            
+            if (!symbol->callout)
             {
-                actions.pop(); // restore the actions' states
-                --actions.template_depth;
-                ++actions.error_count;
-                return;
+                // Break the arguments for a template
+            
+                if (!break_arguments(args, symbol->params, pos))
+                {
+                    actions.pop(); // restore the actions' states
+                    --actions.template_depth;
+                    ++actions.error_count;
+                    return;
+                }
+            }
+            else
+            {
+                if (!args.empty())
+                {
+                    detail::outerr(pos.file, pos.line)
+                        << "Arguments for code snippet."
+                        <<std::endl;
+                    ++actions.error_count;
+
+                    args.clear();
+                }
+
+                BOOST_ASSERT(symbol->params.size() % 2 == 0);
+                unsigned int size = symbol->params.size() / 2;
+
+                for(unsigned int i = 0; i < size; ++i)
+                {
+                    std::string callout_id = actions.doc_id +
+                        boost::lexical_cast<std::string>(detail::callout_id++);
+
+                    std::string code;
+                    code += "'''";
+                    code += "<co id=\"" + callout_id + "co\" ";
+                    code += "linkends=\"" + callout_id + "\" />";
+                    code += "'''";
+
+                    args.push_back(code);
+                    
+                    code.clear();
+                    code += "'''";
+                    code += "<callout arearefs=\"" + callout_id + "co\" ";
+                    code += "id=\"" + callout_id + "\">";
+                    code += "'''";
+
+                    args.push_back(code);
+                }
             }
 
             ///////////////////////////////////
@@ -1198,21 +1246,10 @@ namespace quickbook
         code += *first;
     }
 
-    namespace detail
-    {
-        int callout_id = 0;
-    }
-
     void code_snippet_actions::callout(iterator first, iterator last)
     {
-        using detail::callout_id;
-        code += "``'''";
-        code += "<co id=\"";
-        code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "co\" ";
-        code += "linkends=\"";
-        code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "\" />";
-        code += "'''``";
-
+        code += "``[[callout" + boost::lexical_cast<std::string>(callouts.size()) + "]]``";
+    
         callouts.push_back(std::string(first, last));
     }
 
@@ -1239,7 +1276,8 @@ namespace quickbook
 
     void code_snippet_actions::compile(iterator first, iterator last)
     {
-        using detail::callout_id;
+        std::vector<std::string> params;
+    
         if (!code.empty())
         {
             detail::unindent(code); // remove all indents
@@ -1252,29 +1290,32 @@ namespace quickbook
 
             if(callouts.size() > 0)
             {
+              std::vector<std::string> callout_items;
+            
               snippet += "'''<calloutlist>'''";
               for (size_t i = 0; i < callouts.size(); ++i)
               {
-                  snippet += "'''<callout arearefs=\"";
-                  snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "co\" ";
-                  snippet += "id=\"";
-                  snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "\">";
-                  snippet += "'''";
-
+                  std::string callout_template = "[callout" + boost::lexical_cast<std::string>(i) + "]";
+                  std::string calloutitem_template = "[calloutitem" + boost::lexical_cast<std::string>(i) + "]";
+              
+                  snippet += "[" + calloutitem_template + "]";
                   snippet += "'''<para>'''";
                   snippet += callouts[i];
                   snippet += "\n";
                   snippet += "'''</para>'''";
                   snippet += "'''</callout>'''";
+                  
+                  params.push_back(callout_template);
+                  params.push_back(calloutitem_template);
               }
               snippet += "'''</calloutlist>'''";
             }
         }
 
-        std::vector<std::string> empty_params;
-        storage.push_back(template_symbol(id, empty_params, snippet, first.get_position()));
+        template_symbol symbol(id, params, snippet, first.get_position());
+        symbol.callout = true;
+        storage.push_back(symbol);
 
-        callout_id += callouts.size();
         callouts.clear();
         code.clear();
         snippet.clear();

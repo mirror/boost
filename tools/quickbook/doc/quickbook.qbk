@@ -210,6 +210,7 @@ Features include:
     followed by whitespace or a list character.
   * Doesn't treat several consecutive blank lines as multiple paragraph breaks.
 * Fixes duplicate image attribute detection.
+* Fixes using code snippets more than once.
 * Early work on quickbook 1.6, available using the `[quickbook 1.6]` version switch,
   but liable to change in future versions.
   * When automatically generating ids for headers, use the quickbook

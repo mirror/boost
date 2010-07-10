@@ -32,12 +32,14 @@ namespace quickbook
                 boost::spirit::classic::file_position const& position,
                 template_scope const* parent = 0)
            : identifier(identifier)
+           , callout(false)
            , params(params)
            , body(body)
            , position(position)
            , parent(parent) {}
 
         std::string identifier;
+        bool callout;
         std::vector<std::string> params;
         std::string body;
         boost::spirit::classic::file_position position;
