@@ -105,5 +105,42 @@ x[super 2]
 [template foo 1]
 [fool]
 
+[template blah 10]
+
 [endsect]
 
+[section Empty Templates]
+
+[template empty1]
+[template empty2 ]
+[template empty3 [/comment]]
+[template empty4 [/comment]
+
+]
+[template empty5
+]
+[template empty6
+
+]
+[template empty7
+[/comment]
+]
+[template empty8
+
+[/comment]
+]
+[template empty_arg1[x]]
+[template empty_arg2[x y]]
+
+[empty1]
+[empty2]
+[empty3]
+[empty4]
+[empty5]
+[empty6]
+[empty7]
+[empty8]
+[empty_arg1 1]
+[empty_arg2 1 2]
+
+[endsect]

@@ -131,14 +131,16 @@ namespace quickbook
                     ( (
                         (eps_p(punct_p)
                             >> actions.templates.scope
-                        )                               [push_back_a(actions.template_info)]
+                        )                               [assign_a(actions.template_identifier)]
+                                                        [clear_a(actions.template_info)]
                         >> !template_args
                     ) | (
                         (actions.templates.scope
-                            >> eps_p
-                        )                               [push_back_a(actions.template_info)]
-                        >> !(hard_space
-                            >> template_args)
+                            >> eps_p(hard_space)
+                        )                               [assign_a(actions.template_identifier)]
+                                                        [clear_a(actions.template_info)]
+                        >> space
+                        >> !template_args
                     ) )
                     >> eps_p(']')
                     ;

@@ -14,3 +14,6 @@
 [$ [/comment] test.gif  ]
 [$ [/comment] test.gif [/comment] ]
 [$ [/comment] test.gif [/comment] [alt comment] ]
+
+[/ This should warn about repeated attribute and then ignore it. ]
+[$test.gif [width 10cm] [height 10cm] [width 20cm]]

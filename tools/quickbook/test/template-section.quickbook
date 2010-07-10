@@ -4,7 +4,7 @@
 
 [template nestedsection[]
 
-It's a pity if the whole template is wrapped in a paragraph.
+Some text before the section.
 
 [section Test]
 

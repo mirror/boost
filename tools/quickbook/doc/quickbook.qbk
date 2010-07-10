@@ -191,16 +191,34 @@ Features include:
 
 [h3 Version 1.5.2 - Boost 1.44.0]
 
-* Generate more valid boostbook (still invalid in a few places).
-* Warn about invalid doc_info members.
-* Support multiple categories in library doc_info.
 * Use the cygwin 1.7 API for better path handling.
-* Fix some corner cases for paragraph detection:
+* Improved boostbook generation:
+  * XML encode the documentation info correctly.
+  * Avoid generating empty paragraphs.
+  * No longer wraps block templates in paragraphs.
+  * Doesn't generate invalid doc_info members for docbook document types,
+    warns if you use any.
+  * Fixes some other causes of invalid boostbook, although it still
+    generates invalid boostbook in places.
+* Improved grammar:
+  * Supports multiple categories in library doc_info.
+  * No longer requires commas between authors in docinfo.
+  * Allows empty document bodies.
   * A line containing only a comment is no longer interpreted as a
     paragraph break.
   * If a line starts with a comment, interpret it as a paragraph even if it's
     followed by whitespace or a list character.
-  * Don't treat 4+ consecutive blank lines as multiple paragraph breaks.
+  * Doesn't treat several consecutive blank lines as multiple paragraph breaks.
+* Fixes duplicate image attribute detection.
+* Fixes using code snippets more than once.
+* Early work on quickbook 1.6, available using the `[quickbook 1.6]` version switch,
+  but liable to change in future versions.
+  * When automatically generating ids for headers, use the quickbook
+    source, rather than the generated docbook.
+  * Fix id generation in included files. It wasn't correctly using the
+    main document's documentation id.
+  * Correctly restore the quickbook version switch after including a file
+    with a different version.
 
 [endsect]
 
@@ -757,7 +775,7 @@ like this:
     [copyright 2000 2002 2003 Joe Blow, Jane Doe]
     [purpose The document's reason for being]
     [category The document's category]
-    [authors [Blow, Joe], [Doe, Jane]]
+    [authors [Blow, Joe] [Doe, Jane]]
     [license The document's license]
     [source-mode source-type]
 ]

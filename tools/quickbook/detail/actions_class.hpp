@@ -89,6 +89,7 @@ namespace quickbook
         std::stack<mark_type>   list_marks;
         int                     list_indent;
         std::vector<bool>       conditions;
+        std::string             template_identifier;
         string_list             template_info;
         int                     template_depth;
         bool                    template_escape;
@@ -113,8 +114,8 @@ namespace quickbook
         code_action             code;
         code_action             code_block;
         inline_code_action      inline_code;
-        phrase_action           paragraph;
-        phrase_action           inside_paragraph;
+        implicit_paragraph_action inside_paragraph;
+        copy_stream_action      write_paragraphs;
         generic_header_action   h;
         header_action           h1, h2, h3, h4, h5, h6;
         markup_action           hr;

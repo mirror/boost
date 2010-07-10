@@ -23,23 +23,32 @@ namespace quickbook
 {
     struct template_scope;
 
-    //  template symbols with N arguments are stored as follows:
-    //
-    //  vector<std::string>
-    //        0: template name
-    //        1: template param name[0]
-    //        2: template param name[1]
-    //      ...
-    //        N: template param name[N-1]
-    //      N+1: template body
-    //  file position
-    //  template scope (only used for 1.5+, 1.4- uses the dynamic scope)
+    struct template_symbol
+    {
+        template_symbol(
+                std::string const& identifier,
+                std::vector<std::string> const& params,
+                std::string const& body,
+                boost::spirit::classic::file_position const& position,
+                template_scope const* parent = 0)
+           : identifier(identifier)
+           , callout(false)
+           , params(params)
+           , body(body)
+           , position(position)
+           , parent(parent) {}
 
-    typedef boost::tuple<
-            std::vector<std::string>
-          , boost::spirit::classic::file_position
-          , template_scope const*>
-    template_symbol;
+        std::string identifier;
+        bool callout;
+        std::vector<std::string> params;
+        std::string body;
+        boost::spirit::classic::file_position position;
+        
+        // This is only used for quickbook 1.5+, 1.4 uses the dynamic scope.
+        // TODO: I should probably call this something like lexical_parent
+        // or static_parent for clarity.
+        template_scope const* parent;
+    };
 
     typedef boost::spirit::classic::symbols<template_symbol> template_symbols;
     
@@ -101,7 +110,7 @@ namespace quickbook
         template_scope const& top_scope() const;
         // Add the given template symbol to the current scope.
         // If it doesn't have a scope, sets the symbol's scope to the current scope.
-        void add(std::string const& symbol, template_symbol const& ts);
+        bool add(template_symbol const&);
         void push();
         void pop();
 

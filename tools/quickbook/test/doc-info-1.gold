@@ -4,8 +4,13 @@
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Document Information 1</title>
   <articleinfo>
+    <authorgroup>
+    <author>
+      <firstname>Joe</firstname> <surname>Blow</surname>
+    </author>
+    <author>
+      <firstname>Jane</firstname> <surname>Doe</surname>
+    </author>
+    </authorgroup>
   </articleinfo>
-  <para>
-    The body is largely irrelevant.
-  </para>
 </article>

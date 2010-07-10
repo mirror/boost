@@ -49,13 +49,22 @@ namespace quickbook
     }
     
     // TODO: Should symbols defined by '[import]' use the current scope?
-    void template_stack::add(std::string const& symbol, template_symbol const& ts)
+    bool template_stack::add(template_symbol const& ts)
     {
         BOOST_ASSERT(!scopes.empty());
-        boost::spirit::classic::add(scopes.front().symbols, symbol.c_str(),
-            boost::get<2>(ts) ? ts :
-            template_symbol(boost::get<0>(ts), boost::get<1>(ts), &top_scope()));
-    }    
+        
+        if (this->find_top_scope(ts.identifier)) {
+            return false;
+        }
+        
+        template_symbol symbol(ts);
+        if(!ts.parent) symbol.parent = &top_scope();
+
+        boost::spirit::classic::add(scopes.front().symbols, ts.identifier.c_str(),
+            symbol);
+
+        return true;
+    }
     
     void template_stack::push()
     {

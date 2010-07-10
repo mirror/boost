@@ -54,12 +54,13 @@ namespace quickbook
                 }
 
                 blocks =
-                   +(   block_markup
+                   *(   block_markup
                     |   code
                     |   list                            [actions.list]
                     |   hr                              [actions.hr]
                     |   comment >> +eol
-                    |   paragraph                       [actions.paragraph]
+                    |   paragraph                       [actions.inside_paragraph]
+                                                        [actions.write_paragraphs]
                     |   eol
                     )
                     ;
@@ -232,7 +233,9 @@ namespace quickbook
 
                 template_ =
                     "template"
-                    >> hard_space >> template_id        [push_back_a(actions.template_info)]
+                    >> hard_space
+                    >> template_id                      [assign_a(actions.template_identifier)]
+                                                        [clear_a(actions.template_info)]
                     >>
                     !(
                         space >> '['
@@ -246,7 +249,8 @@ namespace quickbook
 
                 template_body =
                    *(('[' >> template_body >> ']') | (anychar_p - ']'))
-                    >> space >> eps_p(']')
+                    >> eps_p(space >> ']')
+                    >> space
                     ;
 
                 variablelist =
@@ -413,7 +417,7 @@ namespace quickbook
                     ;
 
                 paragraph =
-                   *(   common
+                   +(   common
                     |   (anychar_p -                    // Make sure we don't go past
                             paragraph_end               // a single block.
                         )                               [actions.plain_char]
@@ -457,5 +461,3 @@ namespace quickbook
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
-
-

@@ -142,5 +142,38 @@
         </tbody>
       </tgroup>
     </table>
+    <table frame="all" id="table_1_5.section1.a___b">
+      <title>A &amp; B</title>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>
+              <para>
+                A
+              </para>
+            </entry>
+            <entry>
+              <para>
+                B
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>
+              <para>
+                a
+              </para>
+            </entry>
+            <entry>
+              <para>
+                b
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </section>
 </article>

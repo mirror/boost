@@ -67,6 +67,28 @@ namespace quickbook
         out << pre << str << post;
     }
 
+    void implicit_paragraph_action::operator()() const
+    {
+        std::string str;
+        phrase.swap(str);
+
+        // TODO: Use spirit to do this?
+
+        std::string::const_iterator
+            pos = str.begin(),
+            end = str.end();
+
+        while(pos != end && (
+            *pos == ' ' || *pos == '\t' || *pos == '\n' || *pos == '\r'))
+        {
+            ++pos;
+        }
+
+        if(pos != end) {
+            out << pre << str << post;
+        }
+    }
+
     void header_action::operator()(iterator first, iterator last) const
     {
         std::string str;
@@ -83,8 +105,12 @@ namespace quickbook
         }
         else // version 1.3 and above
         {
-            std::string anchor = fully_qualified_id(library_id, qualified_section_id,
-                detail::make_identifier(str.begin(), str.end()));
+            std::string id = qbk_version_n >= 106 ?
+                detail::make_identifier(first, last) :
+                detail::make_identifier(str.begin(), str.end());
+
+            std::string anchor =
+                fully_qualified_id(library_id, qualified_section_id, id);
 
             out << "<anchor id=\"" << anchor << "\"/>"
                 << pre
@@ -106,8 +132,12 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
-        std::string anchor = fully_qualified_id(library_id, qualified_section_id,
-            detail::make_identifier(str.begin(), str.end()));
+        std::string id = qbk_version_n >= 106 ?
+            detail::make_identifier(first, last) :
+            detail::make_identifier(str.begin(), str.end());
+
+        std::string anchor =
+            fully_qualified_id(library_id, qualified_section_id, id);
 
         out
             << "<anchor id=\"" << anchor << "\"/>"
@@ -443,7 +473,7 @@ namespace quickbook
                 attribute_map::value_type(attribute_name, std::string(first, last))
             ).second)
         {
-            detail::outerr(pos.file,pos.line)
+            detail::outwarn(pos.file,pos.line)
                 << "Repeated attribute: " << attribute_name << ".\n";
         }
     }
@@ -569,19 +599,17 @@ namespace quickbook
 
     void template_body_action::operator()(iterator first, iterator last) const
     {
-        BOOST_ASSERT(actions.template_info.size());
-        if (actions.templates.find_top_scope(actions.template_info[0]))
+        if (!actions.templates.add(
+            template_symbol(actions.template_identifier, actions.template_info,
+                std::string(first, last), first.get_position())))
         {
             boost::spirit::classic::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
-                << "Template Redefinition: " << actions.template_info[0] << std::endl;
+                << "Template Redefinition: " << actions.template_identifier << std::endl;
             ++actions.error_count;
         }
 
-        actions.template_info.push_back(std::string(first, last));
-        actions.templates.add(
-            actions.template_info[0]
-          , template_symbol(actions.template_info, first.get_position()));
+        actions.template_identifier.clear();
         actions.template_info.clear();
     }
 
@@ -638,8 +666,8 @@ namespace quickbook
         }
     
         bool break_arguments(
-            std::vector<std::string>& template_info
-          , std::vector<std::string> const& template_
+            std::vector<std::string>& args
+          , std::vector<std::string> const& params
           , boost::spirit::classic::file_position const& pos
         )
         {
@@ -650,17 +678,16 @@ namespace quickbook
             //                 then use whitespace to separate them
             //                 (2 = template name + argument).
 
-            if (qbk_version_n < 105 || template_info.size() == 2)
+            if (qbk_version_n < 105 || args.size() == 1)
             {
-                // template_.size() - 1 because template_ also includes the body.
-                while (template_info.size() < template_.size()-1 )
+                while (args.size() < params.size() )
                 {
                     // Try to break the last argument at the first space found
-                    // and push it into the back of template_info. Do this
+                    // and push it into the back of args. Do this
                     // recursively until we have all the expected number of
                     // arguments, or if there are no more spaces left.
 
-                    std::string& str = template_info.back();
+                    std::string& str = args.back();
                     std::string::size_type l_pos = find_first_seperator(str);
                     if (l_pos == std::string::npos)
                         break;
@@ -670,17 +697,17 @@ namespace quickbook
                         break;
                     std::string second(str.begin()+r_pos, str.end());
                     str = first;
-                    template_info.push_back(second);
+                    args.push_back(second);
                 }
             }
 
-            if (template_info.size() != template_.size()-1)
+            if (args.size() != params.size())
             {
                 detail::outerr(pos.file, pos.line)
                     << "Invalid number of arguments passed. Expecting: "
-                    << template_.size()-2
+                    << params.size()
                     << " argument(s), got: "
-                    << template_info.size()-1
+                    << args.size()
                     << " argument(s) instead."
                     << std::endl;
                 return false;
@@ -690,34 +717,28 @@ namespace quickbook
 
         std::pair<bool, std::vector<std::string>::const_iterator>
         get_arguments(
-            std::vector<std::string>& template_info
-          , std::vector<std::string> const& template_
+            std::vector<std::string>& args
+          , std::vector<std::string> const& params
           , template_scope const& scope
           , boost::spirit::classic::file_position const& pos
           , quickbook::actions& actions
         )
         {
-            std::vector<std::string>::const_iterator arg = template_info.begin()+1;
-            std::vector<std::string>::const_iterator tpl = template_.begin()+1;
+            std::vector<std::string>::const_iterator arg = args.begin();
+            std::vector<std::string>::const_iterator tpl = params.begin();
+            std::vector<std::string> empty_params;
+
 
             // Store each of the argument passed in as local templates:
-            while (arg != template_info.end())
+            while (arg != args.end())
             {
-                std::vector<std::string> tinfo;
-                tinfo.push_back(*tpl);
-                tinfo.push_back(*arg);
-                template_symbol template_(tinfo, pos, &scope);
-
-                if (actions.templates.find_top_scope(*tpl))
+                if (!actions.templates.add(
+                        template_symbol(*tpl, empty_params, *arg, pos, &scope)))
                 {
                     detail::outerr(pos.file,pos.line)
                         << "Duplicate Symbol Found" << std::endl;
                     ++actions.error_count;
                     return std::make_pair(false, tpl);
-                }
-                else
-                {
-                    actions.templates.add(*tpl, template_);
                 }
                 ++arg; ++tpl;
             }
@@ -725,24 +746,24 @@ namespace quickbook
         }
 
         bool parse_template(
-            std::string& body
+            std::string body
           , std::string& result
+          , bool& is_block
           , boost::spirit::classic::file_position const& template_pos
           , quickbook::actions& actions
         )
         {
-            simple_phrase_grammar<quickbook::actions> phrase_p(actions);
-            block_grammar<quickbook::actions, true> block_p(actions);
-
             // How do we know if we are to parse the template as a block or
             // a phrase? We apply a simple heuristic: if the body starts with
             // a newline, then we regard it as a block, otherwise, we parse
             // it as a phrase.
 
+            body.reserve(body.size() + 2);
+
             std::string::const_iterator iter = body.begin();
             while (iter != body.end() && ((*iter == ' ') || (*iter == '\t')))
                 ++iter; // skip spaces and tabs
-            bool is_block = (iter != body.end()) && ((*iter == '\r') || (*iter == '\n'));
+            is_block = (iter != body.end()) && ((*iter == '\r') || (*iter == '\n'));
             bool r = false;
 
             if (actions.template_escape)
@@ -754,6 +775,8 @@ namespace quickbook
             }
             else if (!is_block)
             {
+                simple_phrase_grammar<quickbook::actions> phrase_p(actions);
+
                 //  do a phrase level parse
                 iterator first(body.begin(), body.end(), actions.filename.file_string().c_str());
                 first.set_position(template_pos);
@@ -763,6 +786,8 @@ namespace quickbook
             }
             else
             {
+                block_grammar<quickbook::actions, true> block_p(actions);
+
                 //  do a block level parse
                 //  ensure that we have enough trailing newlines to eliminate
                 //  the need to check for end of file in the grammar.
@@ -774,15 +799,29 @@ namespace quickbook
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
                 r = boost::spirit::classic::parse(first, last, block_p).full;
+                actions.inside_paragraph();
                 actions.out.swap(result);
             }
+
             return r;
         }
     }
 
+    namespace detail
+    {
+        int callout_id = 0;
+    }
+
     void do_template_action::operator()(iterator first, iterator) const
     {
+        // Get the arguments and clear values stored in action.
+
+        std::vector<std::string> args;
+        std::string identifier;
+        std::swap(args, actions.template_info);
+        std::swap(identifier, actions.template_identifier);
         boost::spirit::classic::file_position const pos = first.get_position();
+
         ++actions.template_depth;
         if (actions.template_depth > actions.max_template_depth)
         {
@@ -800,42 +839,75 @@ namespace quickbook
         // arguments are expanded.
         template_scope const& call_scope = actions.templates.top_scope();
 
-        template_symbol const* symbol =
-            actions.templates.find(actions.template_info[0]);
+        template_symbol const* symbol = actions.templates.find(identifier);
         BOOST_ASSERT(symbol);
             
         std::string result;
+        bool is_block;
         actions.push(); // scope the actions' states
         {
             // Store the current section level so that we can ensure that
             // [section] and [endsect] tags in the template are balanced.
             actions.min_section_level = actions.section_level;
 
-            template_symbol const* symbol =
-                actions.templates.find(actions.template_info[0]);
-            BOOST_ASSERT(symbol);
-
             // Quickbook 1.4-: When expanding the tempalte continue to use the
             //                 current scope (the dynamic scope).
             // Quickbook 1.5+: Use the scope the template was defined in
             //                 (the static scope).
             if (qbk_version_n >= 105)
-                actions.templates.set_parent_scope(*boost::get<2>(*symbol));
-
-            std::vector<std::string> template_ = boost::get<0>(*symbol);
-            boost::spirit::classic::file_position template_pos = boost::get<1>(*symbol);
-
-            std::vector<std::string> template_info;
-            std::swap(template_info, actions.template_info);
+                actions.templates.set_parent_scope(*symbol->parent);
 
             ///////////////////////////////////
-            // Break the arguments
-            if (!break_arguments(template_info, template_, pos))
+            // Initialise the arguments
+            
+            if (!symbol->callout)
             {
-                actions.pop(); // restore the actions' states
-                --actions.template_depth;
-                ++actions.error_count;
-                return;
+                // Break the arguments for a template
+            
+                if (!break_arguments(args, symbol->params, pos))
+                {
+                    actions.pop(); // restore the actions' states
+                    --actions.template_depth;
+                    ++actions.error_count;
+                    return;
+                }
+            }
+            else
+            {
+                if (!args.empty())
+                {
+                    detail::outerr(pos.file, pos.line)
+                        << "Arguments for code snippet."
+                        <<std::endl;
+                    ++actions.error_count;
+
+                    args.clear();
+                }
+
+                BOOST_ASSERT(symbol->params.size() % 2 == 0);
+                unsigned int size = symbol->params.size() / 2;
+
+                for(unsigned int i = 0; i < size; ++i)
+                {
+                    std::string callout_id = actions.doc_id +
+                        boost::lexical_cast<std::string>(detail::callout_id++);
+
+                    std::string code;
+                    code += "'''";
+                    code += "<co id=\"" + callout_id + "co\" ";
+                    code += "linkends=\"" + callout_id + "\" />";
+                    code += "'''";
+
+                    args.push_back(code);
+                    
+                    code.clear();
+                    code += "'''";
+                    code += "<callout arearefs=\"" + callout_id + "co\" ";
+                    code += "id=\"" + callout_id + "\">";
+                    code += "'''";
+
+                    args.push_back(code);
+                }
             }
 
             ///////////////////////////////////
@@ -843,7 +915,7 @@ namespace quickbook
             bool get_arg_result;
             std::vector<std::string>::const_iterator tpl;
             boost::tie(get_arg_result, tpl) =
-                get_arguments(template_info, template_,
+                get_arguments(args, symbol->params,
                     call_scope, pos, actions);
 
             if (!get_arg_result)
@@ -855,17 +927,15 @@ namespace quickbook
 
             ///////////////////////////////////
             // parse the template body:
-            std::string body;
-            body.assign(tpl->begin(), tpl->end());
-            body.reserve(body.size()+2); // reserve 2 more
 
-            if (!parse_template(body, result, template_pos, actions))
+            if (!parse_template(symbol->body, result, is_block, symbol->position, actions))
             {
                 boost::spirit::classic::file_position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
-                    << "Expanding template:" << template_info[0] << std::endl
+                    << "Expanding template:" << symbol->identifier << std::endl
+                    << std::endl
                     << "------------------begin------------------" << std::endl
-                    << body
+                    << symbol->body
                     << "------------------end--------------------" << std::endl
                     << std::endl;
                 actions.pop(); // restore the actions' states
@@ -873,12 +943,12 @@ namespace quickbook
                 ++actions.error_count;
                 return;
             }
-            
+
             if (actions.section_level != actions.min_section_level)
             {
                 boost::spirit::classic::file_position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
-                    << "Mismatched sections in template " << template_info[0] << std::endl;
+                    << "Mismatched sections in template " << identifier << std::endl;
                 actions.pop(); // restore the actions' states
                 --actions.template_depth;
                 ++actions.error_count;
@@ -887,7 +957,13 @@ namespace quickbook
         }
 
         actions.pop(); // restore the actions' states
-        actions.phrase << result; // print it!!!
+        if(is_block) {
+            actions.inside_paragraph();
+            actions.temp_para << result; // print it!!!
+        }
+        else {
+            actions.phrase << result; // print it!!!
+        }
         --actions.template_depth;
     }
 
@@ -1169,21 +1245,10 @@ namespace quickbook
         code += *first;
     }
 
-    namespace detail
-    {
-        int callout_id = 0;
-    }
-
     void code_snippet_actions::callout(iterator first, iterator last)
     {
-        using detail::callout_id;
-        code += "``'''";
-        code += "<co id=\"";
-        code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "co\" ";
-        code += "linkends=\"";
-        code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "\" />";
-        code += "'''``";
-
+        code += "``[[callout" + boost::lexical_cast<std::string>(callouts.size()) + "]]``";
+    
         callouts.push_back(std::string(first, last));
     }
 
@@ -1210,7 +1275,8 @@ namespace quickbook
 
     void code_snippet_actions::compile(iterator first, iterator last)
     {
-        using detail::callout_id;
+        std::vector<std::string> params;
+    
         if (!code.empty())
         {
             detail::unindent(code); // remove all indents
@@ -1223,31 +1289,32 @@ namespace quickbook
 
             if(callouts.size() > 0)
             {
+              std::vector<std::string> callout_items;
+            
               snippet += "'''<calloutlist>'''";
               for (size_t i = 0; i < callouts.size(); ++i)
               {
-                  snippet += "'''<callout arearefs=\"";
-                  snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "co\" ";
-                  snippet += "id=\"";
-                  snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "\">";
-                  snippet += "'''";
-
+                  std::string callout_template = "[callout" + boost::lexical_cast<std::string>(i) + "]";
+                  std::string calloutitem_template = "[calloutitem" + boost::lexical_cast<std::string>(i) + "]";
+              
+                  snippet += "[" + calloutitem_template + "]";
                   snippet += "'''<para>'''";
                   snippet += callouts[i];
                   snippet += "\n";
                   snippet += "'''</para>'''";
                   snippet += "'''</callout>'''";
+                  
+                  params.push_back(callout_template);
+                  params.push_back(calloutitem_template);
               }
               snippet += "'''</calloutlist>'''";
             }
         }
 
-        std::vector<std::string> tinfo;
-        tinfo.push_back(id);
-        tinfo.push_back(snippet);
-        storage.push_back(template_symbol(tinfo, first.get_position()));
+        template_symbol symbol(id, params, snippet, first.get_position());
+        symbol.callout = true;
+        storage.push_back(symbol);
 
-        callout_id += callouts.size();
         callouts.clear();
         code.clear();
         snippet.clear();
@@ -1326,17 +1393,13 @@ namespace quickbook
 
         BOOST_FOREACH(template_symbol const& ts, storage)
         {
-            std::string tname = boost::get<0>(ts)[0];
-            if (actions.templates.find_top_scope(tname))
+            std::string tname = ts.identifier;
+            if (!actions.templates.add(ts))
             {
-                boost::spirit::classic::file_position const pos = boost::get<1>(ts);
+                boost::spirit::classic::file_position const pos = ts.position;
                 detail::outerr(pos.file, pos.line)
                     << "Template Redefinition: " << tname << std::endl;
                 ++actions.error_count;
-            }
-            else
-            {
-                actions.templates.add(tname, ts);
             }
         }
     }
@@ -1350,10 +1413,23 @@ namespace quickbook
         std::swap(actions.filename, filein);
 
         // save the doc info strings
-        actions.doc_type.swap(doc_type);
-        actions.doc_id.swap(doc_id);
-        actions.doc_dirname.swap(doc_dirname);
-        actions.doc_last_revision.swap(doc_last_revision);
+        if(qbk_version_n >= 106) {
+            doc_type = actions.doc_type;
+            doc_id = actions.doc_id;
+            doc_dirname = actions.doc_dirname;
+            doc_last_revision = actions.doc_last_revision;
+        }
+        else {
+            actions.doc_type.swap(doc_type);
+            actions.doc_id.swap(doc_id);
+            actions.doc_dirname.swap(doc_dirname);
+            actions.doc_last_revision.swap(doc_last_revision);
+        }
+        
+        // save the version info
+        unsigned qbk_major_version_store = qbk_major_version;
+        unsigned qbk_minor_version_store = qbk_minor_version;
+        unsigned qbk_version_n_store = qbk_version_n;
 
         // scope the macros
         string_symbols macro = actions.macro;
@@ -1381,6 +1457,13 @@ namespace quickbook
         actions.doc_id.swap(doc_id);
         actions.doc_dirname.swap(doc_dirname);
         actions.doc_last_revision.swap(doc_last_revision);
+        
+        if(qbk_version_n >= 106 || qbk_version_n_store >= 106)
+        {
+            qbk_major_version = qbk_major_version_store;
+            qbk_minor_version = qbk_minor_version_store;
+            qbk_version_n = qbk_version_n_store;
+        }
 
         // restore the macros
         actions.macro = macro;
@@ -1391,8 +1474,12 @@ namespace quickbook
     void xml_author::operator()(std::pair<std::string, std::string> const& author) const
     {
         out << "      <author>\n"
-            << "        <firstname>" << author.first << "</firstname>\n"
-            << "        <surname>" << author.second << "</surname>\n"
+            << "        <firstname>";
+        detail::print_string(author.first, out.get());
+        out << "</firstname>\n"
+            << "        <surname>";
+        detail::print_string(author.second, out.get());
+        out << "</surname>\n"
             << "      </author>\n";
     }
 
@@ -1405,7 +1492,9 @@ namespace quickbook
           , copyright.first.end()
           , xml_year(out));
 
-        out << "      <holder>" << copyright.second << "</holder>\n"
+        out << "      <holder>";
+        detail::print_string(copyright.second, out.get());
+        out << "</holder>\n"
             << "    </copyright>\n"
             << "\n"
         ;
@@ -1452,7 +1541,7 @@ namespace quickbook
             return;
         }
 
-        if (qbk_major_version == 0)
+        if (qbk_major_version == -1)
         {
             // hard code quickbook version to v1.1
             qbk_major_version = 1;
@@ -1464,7 +1553,25 @@ namespace quickbook
         }
         else
         {
-            qbk_version_n = (qbk_major_version * 100) + qbk_minor_version;
+            qbk_version_n = ((unsigned) qbk_major_version * 100) +
+                (unsigned) qbk_minor_version;
+        }
+        
+        if (qbk_version_n == 106)
+        {
+            detail::outwarn(actions.filename.file_string(),1)
+                << "Quickbook 1.6 is still under development and is "
+                "likely to change in the future." << std::endl;
+        }
+        else if(qbk_version_n < 100 || qbk_version_n > 106)
+        {
+            detail::outerr(actions.filename.file_string(),1)
+                << "Unknown version of quickbook: quickbook "
+                << qbk_major_version
+                << "."
+                << qbk_minor_version
+                << std::endl;
+            ++actions.error_count;
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -1473,19 +1580,27 @@ namespace quickbook
             << " PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
             << "     \"http://www.boost.org/tools/boostbook/dtd/boostbook.dtd\">\n"
             << '<' << actions.doc_type << "\n"
-            << "    id=\"" << actions.doc_id << "\"\n";
+            << "    id=\"";
+        detail::print_string(actions.doc_id, out.get());
+        out << "\"\n";
         
         if(actions.doc_type == "library")
         {
-            out << "    name=\"" << actions.doc_title << "\"\n";
+            out << "    name=\"";
+            detail::print_string(actions.doc_title, out.get());
+            out << "\"\n";
         }
 
         if(!actions.doc_dirname.empty())
         {
-            out << "    dirname=\"" << actions.doc_dirname << "\"\n";
+            out << "    dirname=\"";
+            detail::print_string(actions.doc_dirname, out.get());
+            out << "\"\n";
         }
 
-        out << "    last-revision=\"" << actions.doc_last_revision << "\" \n"
+        out << "    last-revision=\"";
+        detail::print_string(actions.doc_last_revision, out.get());
+        out << "\" \n"
             << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n";
             
         if(actions.doc_type == "library") {
@@ -1515,9 +1630,12 @@ namespace quickbook
     {
         if (!actions.doc_title.empty())
         {
-            out<< "  <title>" << actions.doc_title;
-            if (!actions.doc_version.empty())
-                out << ' ' << actions.doc_version;
+            out<< "  <title>";
+            detail::print_string(actions.doc_title, out.get());
+            if (!actions.doc_version.empty()) {
+                out << ' ';
+                detail::print_string(actions.doc_version, out.get());
+            }
             out<< "</title>\n\n\n";
         }
     }
@@ -1548,35 +1666,68 @@ namespace quickbook
 
         if (qbk_version_n < 103)
         {
-            // version < 1.3 compatibility
-            actions.doc_license = actions.doc_license_1_1;
-            actions.doc_purpose = actions.doc_purpose_1_1;
-        }
-
-        if (!actions.doc_license.empty())
-        {
-            out << "    <legalnotice>\n"
-                << "      <para>\n"
-                << "        " << actions.doc_license << "\n"
-                << "      </para>\n"
-                << "    </legalnotice>\n"
-                << "\n"
-            ;
-        }
-
-        if (!actions.doc_purpose.empty())
-        {
-            if (actions.doc_type == "library")
+            if (!actions.doc_license_1_1.empty())
             {
-                out << "    <" << actions.doc_type << "purpose>\n"
-                    << "      " << actions.doc_purpose
-                    << "    </" << actions.doc_type << "purpose>\n"
+                out << "    <legalnotice>\n"
+                    << "      <para>\n"
+                    << "        ";
+                detail::print_string(actions.doc_license_1_1, out.get());
+                out << "\n"
+                    << "      </para>\n"
+                    << "    </legalnotice>\n"
                     << "\n"
                 ;
             }
-            else
+        }
+        else
+        {
+            if (!actions.doc_license.empty())
             {
-                invalid_attributes.push_back("purpose");
+                out << "    <legalnotice>\n"
+                    << "      <para>\n"
+                    << "        " << actions.doc_license << "\n"
+                    << "      </para>\n"
+                    << "    </legalnotice>\n"
+                    << "\n"
+                ;
+            }
+        }
+
+        if (qbk_version_n < 103)
+        {
+            if (!actions.doc_purpose_1_1.empty())
+            {
+                if (actions.doc_type == "library")
+                {
+                    out << "    <" << actions.doc_type << "purpose>\n"
+                        << "      ";
+                    detail::print_string(actions.doc_purpose_1_1, out.get());
+                    out << "    </" << actions.doc_type << "purpose>\n"
+                        << "\n"
+                    ;
+                }
+                else
+                {
+                    invalid_attributes.push_back("purpose");
+                }
+            }
+        }
+        else
+        {
+            if (!actions.doc_purpose.empty())
+            {
+                if (actions.doc_type == "library")
+                {
+                    out << "    <" << actions.doc_type << "purpose>\n"
+                        << "      " << actions.doc_purpose
+                        << "    </" << actions.doc_type << "purpose>\n"
+                        << "\n"
+                    ;
+                }
+                else
+                {
+                    invalid_attributes.push_back("purpose");
+                }
             }
         }
 
@@ -1589,9 +1740,9 @@ namespace quickbook
                     end = actions.doc_categories.end();
                     it != end; ++it)
                 {
-                    out << "    <" << actions.doc_type << "category name=\"category:"
-                        << *it
-                        << "\"></" << actions.doc_type << "category>\n"
+                    out << "    <" << actions.doc_type << "category name=\"category:";
+                    detail::print_string(*it, out.get());
+                    out << "\"></" << actions.doc_type << "category>\n"
                         << "\n"
                     ;
                 }
@@ -1622,5 +1773,11 @@ namespace quickbook
     {
         phrase.swap(out);
     }
-}
 
+    void copy_stream_action::operator()(iterator first, iterator last) const
+    {
+        std::string str;
+        phrase.swap(str);
+        out << str;
+    }
+}

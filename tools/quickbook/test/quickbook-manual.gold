@@ -1541,8 +1541,6 @@ escape (no processing/formatting)
           highlighted according to the current <link linkend="quickbook.syntax.phrase.source_mode">Source
           Mode</link>:
         </para>
-        <para>
-        </para>
         
 <programlisting><phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
@@ -1553,8 +1551,6 @@ escape (no processing/formatting)
     <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-        <para>
-        </para>
         
 <programlisting><phrase role="keyword">import</phrase> <phrase role="identifier">cgi</phrase>
 
@@ -1563,8 +1559,6 @@ escape (no processing/formatting)
 
     <phrase role="keyword">return</phrase> <phrase role="identifier">cgi</phrase><phrase role="special">.</phrase><phrase role="identifier">escape</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">)</phrase>
 </programlisting>
-        <para>
-        </para>
         <para>
           Macros that are already defined are expanded in source code. Example:
         </para>
@@ -2066,12 +2060,10 @@ replacement text...
           Which will expand to:
         </para>
         <para>
-          <para>
-            Hi, my name is James Bond. I am 39 years old. I am a Spy.
-          </para>
-          <para>
-            Hi, my name is Santa Clause. I am 87 years old. I am a Big Red Fatso.
-          </para>
+          Hi, my name is James Bond. I am 39 years old. I am a Spy.
+        </para>
+        <para>
+          Hi, my name is Santa Clause. I am 87 years old. I am a Big Red Fatso.
         </para>
         <caution>
           <para>
@@ -2695,52 +2687,48 @@ for the journey to old age.]]]
           And the result is:
         </para>
         <para>
-          <para>
-            This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis>
-            function.
-          </para>
-          <para>
-            This description can have paragraphs...
-          </para>
-          <itemizedlist>
-            <listitem>
-              <simpara>
-                lists
-              </simpara>
-            </listitem>
-            <listitem>
-              <simpara>
-                etc.
-              </simpara>
-            </listitem>
-          </itemizedlist>
-          <para>
-            And any quickbook block markup.
-          </para>
-          <para>
-            
+          This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
+        </para>
+        <para>
+          This description can have paragraphs...
+        </para>
+        <itemizedlist>
+          <listitem>
+            <simpara>
+              lists
+            </simpara>
+          </listitem>
+          <listitem>
+            <simpara>
+              etc.
+            </simpara>
+          </listitem>
+        </itemizedlist>
+        <para>
+          And any quickbook block markup.
+        </para>
+        <para>
+          
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-          </para>
-          <para>
-            This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis>
-            function
-          </para>
-          <para>
-            
+        </para>
+        <para>
+          This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis> function
+        </para>
+        <para>
+          
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">bar</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, bar man!
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;bar&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase></programlisting>
-          </para>
-          <para>
-            Some trailing text here
-          </para>
+        </para>
+        <para>
+          Some trailing text here
         </para>
         <anchor id="quickbook.syntax.block.import.code_snippet_markup"/>
         <bridgehead renderas="sect5">
@@ -2804,18 +2792,16 @@ for the journey to old age.]]]
           for details. Example:
         </para>
         <para>
-          <para>
-            
+          
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <!--quickbook-escape-prefix--><co id="quickbook0co" linkends="quickbook0" /><!--quickbook-escape-postfix-->
 <phrase role="special">{</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <!--quickbook-escape-prefix--><co id="quickbook1co" linkends="quickbook1" /><!--quickbook-escape-postfix-->
 <phrase role="special">}</phrase>
 </programlisting>
-          </para>
-          <para>
-            <calloutlist><callout arearefs="quickbook0co" id="quickbook0"><para> The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
-            for details</ulink> </para></callout><callout arearefs="quickbook1co" id="quickbook1"><para> return 'em, foo-bar man! </para></callout></calloutlist>
-          </para>
+        </para>
+        <para>
+          <calloutlist><callout arearefs="quickbook0co" id="quickbook0"><para> The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
+          for details</ulink> </para></callout><callout arearefs="quickbook1co" id="quickbook1"><para> return 'em, foo-bar man! </para></callout></calloutlist>
         </para>
         <para>
           Checkout <ulink url="../../test/stub.cpp">stub.cpp</ulink> to see the actual
@@ -2840,8 +2826,6 @@ for the journey to old age.]]]
     </para>
     <section id="quickbook.install.windows">
       <title><link linkend="quickbook.install.windows"> Windows 2000, XP, 2003, Vista</link></title>
-      <para>
-      </para>
       <blockquote>
         <para>
           <emphasis>Section contributed by Julio M. Merino Vidal</emphasis>
@@ -3739,13 +3723,11 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              <para>
-                
+              
 <programlisting><!--quickbook-escape-prefix--># one
 # two
 # three
 <!--quickbook-escape-postfix--></programlisting>
-              </para>
             </entry>
             <entry>
               <para>
@@ -3761,13 +3743,11 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              <para>
-                
+              
 <programlisting><!--quickbook-escape-prefix-->* one
 * two
 * three
 <!--quickbook-escape-postfix--></programlisting>
-              </para>
             </entry>
             <entry>
               <para>
@@ -4004,14 +3984,12 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              <para>
-                
+              
 <programlisting><!--quickbook-escape-prefix-->[table Title
 [[a][b][c]]
 [[a][b][c]]
 ]
 <!--quickbook-escape-postfix--></programlisting>
-              </para>
             </entry>
             <entry>
               <para>
@@ -4026,14 +4004,12 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              <para>
-                
+              
 <programlisting><!--quickbook-escape-prefix-->[variablelist Title
 [[a][b]]
 [[a][b]]
 ]
 <!--quickbook-escape-postfix--></programlisting>
-              </para>
             </entry>
             <entry>
               <para>
