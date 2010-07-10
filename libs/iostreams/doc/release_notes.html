@@ -16,18 +16,126 @@
 
 <h4>1.44</h4>
 
+<p>Lots of fixes in this version, almost all are by Steven Watanabe.</p>
+
+<p>File descriptor fixes:</p>
+
 <ul>
   <li>
-    Lots of fixes, especially for compression and decompression, by Steven Watanabe.
-  </li>
-  <li>
-    New constructors and <code>open</code> methods from file descriptors/handles for
+    <strong>Breaking change:</strong>
+    new constructors and <code>open</code> methods from file descriptors/handles for
     <code>file_descriptor</code>, <code>file_descriptor_source</code>
     and <code>file_descriptor_sink</code>. See
     <a title="File descriptor devices referece" href="classes/file_descriptor.html">the documentation</a>
     for details. The old methods are still available is you define
     <code>BOOST_IOSTREAMS_USE_DEPRECATED</code>
     (<a href="https://svn.boost.org/trac/boost/ticket/3517">#3517</a>).
+  </li>
+  <li>
+    Add <code>BOOST_IOSTREAMS_DECL</code> to
+    <code>file_descriptor_source</code> and
+    <code>file_descriptor_sink</code> fixing their use in dynamic libraries
+    (<a href="https://svn.boost.org/trac/boost/ticket/4335">#4335</a>).
+  </li>
+  <li>
+    Rejigger <code>file_descriptors</code> handling of
+    <code>std::ios_base::openmode</code> to match <code>std::fstream</code>.
+    In particular, truncate existing files, if
+    <code>std::ios_base::trunc</code> is passed
+    (<a href="https://svn.boost.org/trac/boost/ticket/3323">#3323</a>).
+  </li>
+  <li>
+    Open files in append mode on Windows instead of seeking to the end at every
+    write when <code>std::ios_base::app</code> is passed
+    (<a href="https://svn.boost.org/trac/boost/ticket/3323">#3323</a>).
+  </li>
+</ul>
+
+<p>Compression/decompression fixes:</p>
+
+<ul>
+  <li>
+    Don't end the stream produced by a reading through a symmetric_filter
+    prematurely
+    (<a href="https://svn.boost.org/trac/boost/ticket/2318">#2318</a>).
+  </li>
+  <li>
+    Allow building zlib 1.2.4+, using a glob to include only source files that
+    actually exist
+    (<a href="https://svn.boost.org/trac/boost/ticket/4091">#4091</a>).
+  </li>
+  <li>
+    Fix compressing an empty string.
+  </li>
+  <li>
+    Allow bzip2 filters to be closed even if no input has been read
+    (<a href="https://svn.boost.org/trac/boost/ticket/3348">#3348</a>).
+  </li>
+  <li>
+    Throw an exception on an unexpected end of file in
+    <code>bzip2_decompressor</code> instead of going into an infinite loop
+    (<a href="https://svn.boost.org/trac/boost/ticket/2783">#2783</a>).
+  </li>
+  <li>
+    Reset the crc for zlib when we reuse a filter.
+  </li>
+  <li>
+    Make <code>gzip_decompressor</code> a <code>DualUseFilter</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/1579">#1579</a>).
+  </li>
+  <li>
+    Allow <code>bzip2_decompressor</code> to process multiple concatenated
+    streams
+    (<a href="https://svn.boost.org/trac/boost/ticket/3853">#3853</a>).
+  </li>
+</ul>
+
+<p>Other fixes:</p>
+
+<ul>
+  <li>
+    Make <code>aggregate_filter</code> work with wide characters
+    (<a href="https://svn.boost.org/trac/boost/ticket/3851">#3851</a>).
+  </li>
+  <li>
+    Make <code>symmetric_filter</code> compile with <code>wchar_t</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/3279">#3279</a>).
+  </li>
+  <li>
+    Fix <code>boost/iostreams/detail/resolve.hpp</code> compilation on xlc.
+  </li>
+  <li>
+    Fix definition of <code>multichar_dual_use_filter_tag</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/3689">#3689</a>).
+  </li>
+  <li>
+    Make <code>concept_adapter</code> work with custom <code>char_traits</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/2356">#2356</a>).
+  </li>
+  <li>
+    On windows, open mapped files with just read/write permissions, rather than
+    full control - which might not be available
+    (<a href="https://svn.boost.org/trac/boost/ticket/2996">#2996</a>).
+  </li>
+  <li>
+    Make sure that <code>direct_streambuf</code> and
+    <code>indirect_streambuf</code> are reset correctly on open
+    (<a href="https://svn.boost.org/trac/boost/ticket/4102">#4102</a>).
+  </li>
+  <li>
+    Make <code>basic_file</code> and <code>basic_file_sync</code>
+    <code>Flushable</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/2998">#2998</a>).
+  </li>
+  <li>
+    Several documentation improvements, including
+    documenting private mapping with <code>mapped_file</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/1612">#1612</a>).
+  </li>
+  <li>
+    Make the tests more reliable by using Boost.Filesystem's
+    <code>unique_path</code> instead of <code>tmpnam</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/2325">#2325</a>).
   </li>
 </ul>
 

@@ -39,8 +39,8 @@ namespace detail { struct file_descriptor_impl; }
 
 enum file_descriptor_flags
 {
-	never_close_handle = 0,
-	close_handle = 3
+    never_close_handle = 0,
+    close_handle = 3
 };
 
 class BOOST_IOSTREAMS_DECL file_descriptor {
