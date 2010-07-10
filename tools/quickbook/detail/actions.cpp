@@ -473,9 +473,8 @@ namespace quickbook
                 attribute_map::value_type(attribute_name, std::string(first, last))
             ).second)
         {
-            detail::outerr(pos.file,pos.line)
+            detail::outwarn(pos.file,pos.line)
                 << "Repeated attribute: " << attribute_name << ".\n";
-            ++error_count;
         }
     }
 

@@ -65,7 +65,6 @@ test-suite quickbook.test :
     [ quickbook-fail-test fail-template-section-1 ]
     [ quickbook-fail-test fail-template-section-2 ]
     [ quickbook-fail-test fail-template-section-3 ]
-    [ quickbook-fail-test fail-image_1_5 ]
     [ quickbook-test utf-8 ]
     [ quickbook-test utf-8-bom ]
     [ quickbook-test unicode-escape ]
