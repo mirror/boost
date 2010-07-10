@@ -139,7 +139,7 @@ template< class T, class A > boost::shared_ptr< T > allocate_shared( A const & a
 
 // Variadic templates, rvalue reference
 
-template< class T, class... Args > boost::shared_ptr< T > make_shared( Args && ... args )
+template< class T, class Arg1, class... Args > boost::shared_ptr< T > make_shared( Arg1 && arg1, Args && ... args )
 {
     boost::shared_ptr< T > pt( static_cast< T* >( 0 ), boost::detail::sp_ms_deleter< T >() );
 
@@ -147,7 +147,7 @@ template< class T, class... Args > boost::shared_ptr< T > make_shared( Args && .
 
     void * pv = pd->address();
 
-    ::new( pv ) T( boost::detail::sp_forward<Args>( args )... );
+    ::new( pv ) T( boost::detail::sp_forward<Arg1>( arg1 ), boost::detail::sp_forward<Args>( args )... );
     pd->set_initialized();
 
     T * pt2 = static_cast< T* >( pv );
@@ -156,7 +156,7 @@ template< class T, class... Args > boost::shared_ptr< T > make_shared( Args && .
     return boost::shared_ptr< T >( pt, pt2 );
 }
 
-template< class T, class A, class... Args > boost::shared_ptr< T > allocate_shared( A const & a, Args && ... args )
+template< class T, class A, class Arg1, class... Args > boost::shared_ptr< T > allocate_shared( A const & a, Arg1 && arg1, Args && ... args )
 {
     boost::shared_ptr< T > pt( static_cast< T* >( 0 ), boost::detail::sp_ms_deleter< T >(), a );
 
@@ -164,7 +164,7 @@ template< class T, class A, class... Args > boost::shared_ptr< T > allocate_shar
 
     void * pv = pd->address();
 
-    ::new( pv ) T( boost::detail::sp_forward<Args>( args )... );
+    ::new( pv ) T( boost::detail::sp_forward<Arg1>( arg1 ), boost::detail::sp_forward<Args>( args )... );
     pd->set_initialized();
 
     T * pt2 = static_cast< T* >( pv );
