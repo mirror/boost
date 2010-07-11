@@ -1693,63 +1693,49 @@ namespace quickbook
             }
         }
 
-        if (qbk_version_n < 103)
+        if (!actions.doc_purpose.empty())
         {
-            if (!actions.doc_purpose_1_1.empty())
+            if (actions.doc_type != "library")
             {
-                if (actions.doc_type == "library")
-                {
-                    out << "    <" << actions.doc_type << "purpose>\n"
-                        << "      ";
-                    detail::print_string(actions.doc_purpose_1_1, out.get());
-                    out << "    </" << actions.doc_type << "purpose>\n"
-                        << "\n"
-                    ;
-                }
-                else
-                {
-                    invalid_attributes.push_back("purpose");
-                }
+                invalid_attributes.push_back("purpose");
             }
-        }
-        else
-        {
-            if (!actions.doc_purpose.empty())
+
+            if (qbk_version_n < 103)
             {
-                if (actions.doc_type == "library")
-                {
-                    out << "    <" << actions.doc_type << "purpose>\n"
-                        << "      " << actions.doc_purpose
-                        << "    </" << actions.doc_type << "purpose>\n"
-                        << "\n"
-                    ;
-                }
-                else
-                {
-                    invalid_attributes.push_back("purpose");
-                }
+                out << "    <" << actions.doc_type << "purpose>\n"
+                    << "      ";
+                detail::print_string(actions.doc_purpose_1_1, out.get());
+                out << "    </" << actions.doc_type << "purpose>\n"
+                    << "\n"
+                ;
+            }
+            else
+            {
+                out << "    <" << actions.doc_type << "purpose>\n"
+                    << "      " << actions.doc_purpose
+                    << "    </" << actions.doc_type << "purpose>\n"
+                    << "\n"
+                ;
             }
         }
 
         if (!actions.doc_categories.empty())
         {
-            if (actions.doc_type == "library")
-            {
-                for(actions::string_list::const_iterator
-                    it = actions.doc_categories.begin(),
-                    end = actions.doc_categories.end();
-                    it != end; ++it)
-                {
-                    out << "    <" << actions.doc_type << "category name=\"category:";
-                    detail::print_string(*it, out.get());
-                    out << "\"></" << actions.doc_type << "category>\n"
-                        << "\n"
-                    ;
-                }
-            }
-            else
+            if (actions.doc_type != "library")
             {
                 invalid_attributes.push_back("category");
+            }
+
+            for(actions::string_list::const_iterator
+                it = actions.doc_categories.begin(),
+                end = actions.doc_categories.end();
+                it != end; ++it)
+            {
+                out << "    <" << actions.doc_type << "category name=\"category:";
+                detail::print_string(*it, out.get());
+                out << "\"></" << actions.doc_type << "category>\n"
+                    << "\n"
+                ;
             }
         }
 
@@ -1762,7 +1748,7 @@ namespace quickbook
             detail::outwarn(actions.filename.file_string(),1)
                 << (invalid_attributes.size() > 1 ?
                     "Invalid attributes" : "Invalid attribute")
-                << " for '" << actions.doc_type << "': "
+                << " for '" << actions.doc_type << " document info': "
                 << boost::algorithm::join(invalid_attributes, ", ")
                 << "\n"
                 ;

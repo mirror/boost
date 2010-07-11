@@ -12,5 +12,9 @@
       <firstname>Jane</firstname> <surname>Doe</surname>
     </author>
     </authorgroup>
+    <articlepurpose>
+      Inline code test: <code>1 + 2</code>
+    </articlepurpose>
+    <articlecategory name="category:tests"></articlecategory> <articlecategory name="category:irrelevance"></articlecategory>
   </articleinfo>
 </article>
