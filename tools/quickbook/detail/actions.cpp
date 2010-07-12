@@ -30,23 +30,6 @@ namespace quickbook
     char const* quickbook_get_time = "__quickbook_get_time__";
 
     namespace {
-        char filter_identifier_char(char ch)
-        {
-            if (!std::isalnum(static_cast<unsigned char>(ch)))
-                ch = '_';
-            return static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
-        }
-
-        template <typename Iterator>
-        inline std::string
-        make_identifier(Iterator const& first, Iterator const& last)
-        {
-            std::string out_name;
-            for (Iterator i = first; i != last; ++i)
-                out_name += filter_identifier_char(*i);
-            return out_name;
-        }
-    
         std::string fully_qualified_id(std::string const& library_id,
             std::string const& qualified_section_id,
             std::string const& section_id)
@@ -115,7 +98,7 @@ namespace quickbook
         {
             out << "<anchor id=\""
                 << section_id << '.'
-                << make_identifier(str.begin(), str.end())
+                << detail::make_identifier(str.begin(), str.end())
                 << "\" />"
                 << pre << str << post
                 ;
@@ -123,8 +106,8 @@ namespace quickbook
         else // version 1.3 and above
         {
             std::string id = qbk_version_n >= 106 ?
-                make_identifier(first, last) :
-                make_identifier(str.begin(), str.end());
+                detail::make_identifier(first, last) :
+                detail::make_identifier(str.begin(), str.end());
 
             std::string anchor =
                 fully_qualified_id(library_id, qualified_section_id, id);
@@ -150,8 +133,8 @@ namespace quickbook
         phrase.swap(str);
 
         std::string id = qbk_version_n >= 106 ?
-            make_identifier(first, last) :
-            make_identifier(str.begin(), str.end());
+            detail::make_identifier(first, last) :
+            detail::make_identifier(str.begin(), str.end());
 
         std::string anchor =
             fully_qualified_id(library_id, qualified_section_id, id);
@@ -1055,7 +1038,7 @@ namespace quickbook
             else if(has_title) {
                 table_id = fully_qualified_id(actions.doc_id,
                     actions.qualified_section_id,
-                    make_identifier(first, last));
+                    detail::make_identifier(first, last));
             }
         }
 
@@ -1143,7 +1126,7 @@ namespace quickbook
     void begin_section_action::operator()(iterator first, iterator last) const
     {
         section_id = element_id.empty() ?
-            make_identifier(first, last) :
+            detail::make_identifier(first, last) :
             element_id;
 
         if (section_level != 0)
@@ -1531,7 +1514,7 @@ namespace quickbook
         // *before* anything else.
 
         if (actions.doc_id.empty())
-            actions.doc_id = make_identifier(
+            actions.doc_id = detail::make_identifier(
                 actions.doc_title.begin(),actions.doc_title.end());
 
         if (actions.doc_dirname.empty() && actions.doc_type == "library")

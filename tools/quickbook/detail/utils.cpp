@@ -51,6 +51,13 @@ namespace quickbook { namespace detail
         out << ch;
     }
 
+    char filter_identifier_char(char ch)
+    {
+        if (!std::isalnum(static_cast<unsigned char>(ch)))
+            ch = '_';
+        return static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+    }
+
     // un-indent a code segment
     void unindent(std::string& program)
     {
