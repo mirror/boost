@@ -39,7 +39,7 @@ template <typename ch, typename char_traits>
         const std::streamsize width = os.width(0);
         const std::streamsize uuid_width = 36;
         const std::ios_base::fmtflags flags = os.flags();
-        const std::basic_ios<ch, char_traits>::char_type fill = os.fill();
+        const typename std::basic_ios<ch, char_traits>::char_type fill = os.fill();
         if (flags & (std::ios_base::right | std::ios_base::internal)) {
             for (std::streamsize i=uuid_width; i<width; i++) {
                 os << fill;
