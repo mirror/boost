@@ -107,7 +107,7 @@ if (vm.count("response-file")) {
      // Load the file and tokenize it
      ifstream ifs(vm["response-file"].as<string>().c_str());
      if (!ifs) {
-         cout << "Could no open the response file\n";
+         cout << "Could not open the response file\n";
          return 1;
      }
      // Read the whole file into a string
@@ -146,7 +146,7 @@ if (vm.count("response-file")) {
 vector&lt;string&gt; args = split_winmain(lpCmdLine);
 store(command_line_parser(args).options(desc).run(), vm);
 </programlisting>      
-      The function is an overload for <code>wchar_t</code> strings, so can
+      The <code>split_winmain</code> function is overloaded for <code>wchar_t</code> strings, so can
       also be used in Unicode applications.
     </para>
 
