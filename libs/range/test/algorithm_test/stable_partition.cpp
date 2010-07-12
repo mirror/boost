@@ -41,7 +41,21 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::stable_partition(cont, UnaryPredicate());
+                Container cont2(cont);
+                
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::stable_partition(cont, UnaryPredicate());
+                
+                iter_t temp_result = boost::stable_partition(
+                    boost::make_iterator_range(cont2), UnaryPredicate());
+                    
+                BOOST_CHECK_EQUAL( std::distance(cont.begin(), result),
+                                   std::distance(cont2.begin(), temp_result) );
+                                   
+                BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                               cont2.begin(), cont2.end() );
+                
+                return result;
             }
 
             UnaryPredicate pred() const { return UnaryPredicate(); }
@@ -53,7 +67,17 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::stable_partition<return_type>(cont, policy.pred());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    Container cont2(cont);
+                    result_t result = boost::stable_partition<return_type>(cont, policy.pred());
+                    
+                    result_t result2 = boost::stable_partition<return_type>(
+                                        boost::make_iterator_range(cont2), policy.pred());
+                                        
+                    BOOST_CHECK_EQUAL_COLLECTIONS( cont2.begin(), cont2.end(),
+                                                   cont.begin(), cont.end() );
+                                        
+                    return result;
                 }
             };
 

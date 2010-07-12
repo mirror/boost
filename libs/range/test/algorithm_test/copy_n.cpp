@@ -40,6 +40,13 @@ namespace
             target.begin(), target.end(),
             source.begin(), source.end()
             );
+
+        it = boost::copy(boost::make_iterator_range(source), target.begin());
+
+        BOOST_CHECK( it == target.end() );
+
+        BOOST_CHECK_EQUAL_COLLECTIONS(target.begin(), target.end(),
+                                      source.begin(), source.end());
     }
 
     void test_copy_n()

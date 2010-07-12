@@ -35,15 +35,36 @@ namespace
         Container2 test2(source2);
         boost::swap_ranges(test1, test2);
 
-        BOOST_CHECK_EQUAL_COLLECTIONS(
-            reference1.begin(), reference1.end(),
-            test1.begin(), test1.end()
-            );
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference1.begin(), reference1.end(),
+                                       test1.begin(), test1.end() );
 
-        BOOST_CHECK_EQUAL_COLLECTIONS(
-            reference2.begin(), reference2.end(),
-            test2.begin(), test2.end()
-            );
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference2.begin(), reference2.end(),
+                                       test2.begin(), test2.end() );
+                                       
+        test1 = source1;
+        test2 = source2;
+        boost::swap_ranges(boost::make_iterator_range(test1), test2);
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference1.begin(), reference1.end(),
+                                       test1.begin(), test1.end() );
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference2.begin(), reference2.end(),
+                                       test2.begin(), test2.end() );
+                                       
+        test1 = source1;
+        test2 = source2;
+        boost::swap_ranges(test1, boost::make_iterator_range(test2));
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference1.begin(), reference1.end(),
+                                       test1.begin(), test1.end() );
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference2.begin(), reference2.end(),
+                                       test2.begin(), test2.end() );
+                                       
+        test1 = source1;
+        test2 = source2;
+        boost::swap_ranges(boost::make_iterator_range(test1),
+                           boost::make_iterator_range(test2));
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference1.begin(), reference1.end(),
+                                       test1.begin(), test1.end() );
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference2.begin(), reference2.end(),
+                                       test2.begin(), test2.end() );
     }
 
     template<class Container1, class Container2>

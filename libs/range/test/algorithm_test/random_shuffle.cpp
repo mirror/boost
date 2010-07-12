@@ -110,6 +110,14 @@ namespace boost
                 {
                     shuffled = true;
                 }
+                
+                // Verify that the shuffle can be performed on a
+                // temporary range
+                Container test2(cont);
+                boost::random_shuffle(boost::make_iterator_range(test2));
+                ok = test_shuffle_result(cont, test2);
+                if (!ok)
+                    break;
             }
         }
 
@@ -123,6 +131,17 @@ namespace boost
             if (cont.size() > 2)
             {
                 BOOST_CHECK( gen.invocation_count() > 0 );
+            }
+            
+            // Test that random shuffle works when 
+            // passed a temporary range
+            RandomGenerator gen2;
+            Container cont2(old_cont);
+            boost::random_shuffle(boost::make_iterator_range(cont2), gen2);
+            test_shuffle_result(cont2, old_cont);
+            if (cont2.size() > 2)
+            {
+                BOOST_CHECK( gen2.invocation_count() > 0 );
             }
         }
 

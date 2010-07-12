@@ -40,8 +40,14 @@ namespace boost
             boost::replace_if(target, boost::bind(pred, _1, what), with_what);
 
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
-                target.begin(), target.end() );
-
+                                           target.begin(), target.end() );
+                
+            std::vector<int> target2(cont.begin(), cont.end());
+            boost::replace_if(boost::make_iterator_range(target2),
+                              boost::bind(pred, _1, what), with_what);
+                              
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target2.begin(), target2.end() );
         }
 
         template< class Container >

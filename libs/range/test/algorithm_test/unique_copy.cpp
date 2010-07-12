@@ -49,6 +49,17 @@ namespace
 
         BOOST_CHECK_EQUAL_COLLECTIONS(reference.begin(), reference.end(),
                                       test.begin(), test.end());
+                                      
+        test.clear();
+        
+        test_append(
+            boost::unique_copy(boost::make_iterator_range(c),
+                               std::back_inserter(test)),
+            value_type()
+            );
+            
+        BOOST_CHECK_EQUAL_COLLECTIONS(reference.begin(), reference.end(),
+                                      test.begin(), test.end());
     }
 
     template<class Container, class Pred>
@@ -68,6 +79,17 @@ namespace
             value_type()
             );
 
+        BOOST_CHECK_EQUAL_COLLECTIONS(reference.begin(), reference.end(),
+                                      test.begin(), test.end());
+                                      
+        test.clear();
+        
+        test_append(
+            boost::unique_copy(boost::make_iterator_range(c),
+                               std::back_inserter(test), pred),
+            value_type()
+            );
+            
         BOOST_CHECK_EQUAL_COLLECTIONS(reference.begin(), reference.end(),
                                       test.begin(), test.end());
     }

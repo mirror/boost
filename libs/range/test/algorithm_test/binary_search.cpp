@@ -37,6 +37,8 @@ namespace boost
 
             BOOST_CHECK( reference_result == test_result );
 
+            BOOST_CHECK( test_result == boost::binary_search(boost::make_iterator_range(test), 5) );
+
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference.begin(), reference.end(),
                 test.begin(), test.end()
@@ -67,6 +69,8 @@ namespace boost
                                         pred);
 
             bool test_result = boost::binary_search(test, 5, pred);
+
+            BOOST_CHECK( test_result == boost::binary_search(boost::make_iterator_range(test), 5, pred) );
 
             BOOST_CHECK( reference_result == test_result );
 

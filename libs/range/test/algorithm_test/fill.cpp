@@ -36,6 +36,12 @@ namespace boost
 
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
                 target.begin(), target.end() );
+
+            Container target2(cont);
+            boost::fill(boost::make_iterator_range(target2), 1);
+
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target2.begin(), target2.end() );
         }
 
         template< class Container >

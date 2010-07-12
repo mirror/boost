@@ -41,7 +41,21 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::partition(cont, UnaryPredicate());
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                
+                const Container old_cont(cont);
+                Container cont2(old_cont);
+                iter_t result = boost::partition(cont, UnaryPredicate());
+                
+                iter_t temp_result = boost::partition(cont2, UnaryPredicate());
+                cont2 = old_cont;
+                BOOST_CHECK( temp_result == boost::partition(
+                    boost::make_iterator_range(cont2), UnaryPredicate()) );
+                    
+                BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                               cont2.begin(), cont2.end() );
+                                               
+                return result;
             }
 
             UnaryPredicate pred() const { return UnaryPredicate(); }
@@ -53,7 +67,22 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::partition<return_type>(cont, policy.pred());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    
+                    const Container old_cont(cont);
+                    Container cont2(old_cont);
+                    result_t result = boost::partition<return_type>(cont, policy.pred());
+                    
+                    result_t temp_result = boost::partition<return_type>(
+                                                        cont2, policy.pred());
+                    cont2 = old_cont;
+                    BOOST_CHECK( temp_result == boost::partition<return_type>(
+                        boost::make_iterator_range(cont2), policy.pred()) );
+                        
+                    BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                                   cont2.begin(), cont2.end() );
+                                                   
+                    return result;
                 }
             };
 

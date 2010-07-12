@@ -31,7 +31,18 @@ namespace boost
             template<class Container, class Iterator>
             void test_partial_sort(Container& cont, Iterator mid)
             {
+                const Container old_cont(cont);
+                
                 boost::partial_sort(cont, mid);
+                
+                const std::size_t index = std::distance(cont.begin(), mid);
+                Container cont2(old_cont);
+                Iterator mid2(cont2.begin());
+                std::advance(mid2, index);
+                boost::partial_sort(cont2, mid2);
+                
+                BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                               cont2.begin(), cont2.end() );
             }
 
             template<class Container, class Iterator>
@@ -47,7 +58,18 @@ namespace boost
             template<class Container, class Iterator>
             void test_partial_sort(Container& cont, Iterator mid)
             {
+                const Container old_cont(cont);
+                
                 boost::partial_sort(cont, mid, BinaryPredicate());
+                
+                const std::size_t index = std::distance(cont.begin(), mid);
+                Container cont2(old_cont);
+                Iterator mid2(cont2.begin());
+                std::advance(mid2, index);
+                boost::partial_sort(cont2, mid2, BinaryPredicate());
+                
+                BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                               cont2.begin(), cont2.end() );
             }
 
             template<class Container, class Iterator>

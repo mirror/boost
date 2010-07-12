@@ -32,14 +32,12 @@ namespace
         for (std::size_t n = 0; n < cont1.size(); ++n)
         {
             iterator1_t it = boost::search_n(cont1, n, value);
-            iterator1_t it2 = boost::search_n(cont1, n, value);
-            const_iterator1_t cit = boost::search_n(ccont1, n, value);
-            const_iterator1_t cit2 = boost::search_n(ccont1, n, value);
-
+            BOOST_CHECK( it == boost::search_n(boost::make_iterator_range(cont1), n, value) );
             BOOST_CHECK( it == std::search_n(cont1.begin(), cont1.end(), n, value) );
-            BOOST_CHECK( it2 == std::search_n(cont1.begin(), cont1.end(), n, value) );
+
+            const_iterator1_t cit = boost::search_n(ccont1, n, value);
+            BOOST_CHECK( cit == boost::search_n(boost::make_iterator_range(ccont1), n, value) );
             BOOST_CHECK( cit == std::search_n(ccont1.begin(), ccont1.end(), n, value) );
-            BOOST_CHECK( cit2 == std::search_n(ccont1.begin(), ccont1.end(), n, value) );
         }
     }
 

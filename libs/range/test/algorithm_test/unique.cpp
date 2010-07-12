@@ -47,7 +47,18 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy&, Container& cont)
                 {
-                    return boost::unique<return_type>(cont);
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    
+                    Container cont2(cont);
+                    
+                    result_t result = boost::unique<return_type>(cont);
+                    
+                    boost::unique<return_type>(boost::make_iterator_range(cont2));
+                    
+                    BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                                   cont2.begin(), cont2.end() );
+                    
+                    return result;
                 }
             };
 
@@ -82,7 +93,18 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::unique<return_type>(cont, policy.pred());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    
+                    Container cont2(cont);
+                    
+                    result_t result = boost::unique<return_type>(cont, policy.pred());
+                    
+                    boost::unique<return_type>(boost::make_iterator_range(cont2), policy.pred());
+                    
+                    BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                                   cont2.begin(), cont2.end() );
+                    
+                    return result;
                 }
             };
 

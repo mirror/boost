@@ -48,10 +48,19 @@ namespace
             value_type()
             );
 
-        BOOST_CHECK_EQUAL_COLLECTIONS(
-            reference.begin(), reference.end(),
-            test.begin(), test.end()
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                       test.begin(), test.end() );
+            
+        test.clear();
+        
+        test_append(
+            boost::rotate_copy(boost::make_iterator_range(cont), where_it,
+                               std::back_inserter(test)),
+            value_type()
             );
+            
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                       test.begin(), test.end() );
     }
 
     template<class Container>

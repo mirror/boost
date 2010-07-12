@@ -42,10 +42,18 @@ namespace boost
 
             boost::rotate(test, test_where_it);
 
-            BOOST_CHECK_EQUAL_COLLECTIONS(
-                reference.begin(), reference.end(),
-                test.begin(), test.end()
-                );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test.begin(), test.end() );
+                
+            test = cont;
+            test_where_it = test.begin();
+            std::advance(test_where_it,
+                         std::distance(cont.begin(), where_it));
+                         
+            boost::rotate(boost::make_iterator_range(test), test_where_it);
+            
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test.begin(), test.end() );
         }
 
         template<class Container>

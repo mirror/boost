@@ -33,9 +33,25 @@ namespace boost
             const Container2& ccont2 = cont2;
 
             iterator1_t it = boost::search(cont1, cont2);
+            BOOST_CHECK( it == boost::search(boost::make_iterator_range(cont1), cont2) );
+            BOOST_CHECK( it == boost::search(cont1, boost::make_iterator_range(cont2)) );
+            BOOST_CHECK( it == boost::search(boost::make_iterator_range(cont1),
+                                             boost::make_iterator_range(cont2)) );
             iterator1_t it2 = boost::search(cont1, ccont2);
+            BOOST_CHECK( it2 == boost::search(boost::make_iterator_range(cont1), ccont2) );
+            BOOST_CHECK( it2 == boost::search(cont1, boost::make_iterator_range(ccont2)) );
+            BOOST_CHECK( it2 == boost::search(boost::make_iterator_range(cont1),
+                                              boost::make_iterator_range(ccont2)) );
             const_iterator1_t cit = boost::search(ccont1, cont2);
+            BOOST_CHECK( cit == boost::search(boost::make_iterator_range(ccont1), cont2) );
+            BOOST_CHECK( cit == boost::search(ccont1, boost::make_iterator_range(cont2)) );
+            BOOST_CHECK( cit == boost::search(boost::make_iterator_range(ccont1),
+                                              boost::make_iterator_range(cont2)) );
             const_iterator1_t cit2 = boost::search(ccont1, ccont2);
+            BOOST_CHECK( cit2 == boost::search(boost::make_iterator_range(ccont1), ccont2) );
+            BOOST_CHECK( cit2 == boost::search(ccont1, boost::make_iterator_range(ccont2)) );
+            BOOST_CHECK( cit2 == boost::search(boost::make_iterator_range(ccont1),
+                                               boost::make_iterator_range(ccont2)) );
 
             BOOST_CHECK( it == std::search(cont1.begin(), cont1.end(), cont2.begin(), cont2.end()) );
             BOOST_CHECK( it2 == std::search(cont1.begin(), cont1.end(), ccont2.begin(), ccont2.end()) );

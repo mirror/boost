@@ -46,6 +46,10 @@ namespace boost
                 old_cont2.begin(), old_cont2.end(),
                 cont2.begin(), cont2.end()
                 );
+                
+            BOOST_CHECK( test_result == boost::includes(boost::make_iterator_range(cont1), cont2) );
+            BOOST_CHECK( test_result == boost::includes(cont1, boost::make_iterator_range(cont2)) );
+            BOOST_CHECK( test_result == boost::includes(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2)) );
         }
 
         template<class Container, class BinaryPredicate>
@@ -88,6 +92,10 @@ namespace boost
                 old_cont2.begin(), old_cont2.end(),
                 cont2.begin(), cont2.end()
                 );
+                
+            BOOST_CHECK( test_result == boost::includes(boost::make_iterator_range(cont1), cont2, pred) );
+            BOOST_CHECK( test_result == boost::includes(cont1, boost::make_iterator_range(cont2), pred) );
+            BOOST_CHECK( test_result == boost::includes(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), pred) );
         }
 
         template<class Container1, class Container2>

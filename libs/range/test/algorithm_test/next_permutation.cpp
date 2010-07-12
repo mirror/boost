@@ -29,11 +29,19 @@ namespace boost
             const bool reference_ret
                 = std::next_permutation(reference.begin(), reference.end());
 
-            const bool test_ret
-                = boost::next_permutation(test);
+            const bool test_ret = boost::next_permutation(test);
 
             BOOST_CHECK( reference_ret == test_ret );
 
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference.begin(), reference.end(),
+                test.begin(), test.end()
+                );
+                
+            test = cont;
+            
+            BOOST_CHECK( test_ret == boost::next_permutation(boost::make_iterator_range(test)) );
+            
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference.begin(), reference.end(),
                 test.begin(), test.end()
@@ -56,6 +64,15 @@ namespace boost
 
             BOOST_CHECK( reference_ret == test_ret );
 
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference.begin(), reference.end(),
+                test.begin(), test.end()
+                );
+                
+            test = cont;
+            
+            BOOST_CHECK( test_ret == boost::next_permutation(boost::make_iterator_range(test), pred) );
+            
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference.begin(), reference.end(),
                 test.begin(), test.end()

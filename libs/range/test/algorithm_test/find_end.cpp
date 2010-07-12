@@ -41,7 +41,12 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::find_end(cont, m_cont);
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::find_end(cont, m_cont);
+                BOOST_CHECK( result == boost::find_end(boost::make_iterator_range(cont), m_cont) );
+                BOOST_CHECK( result == boost::find_end(cont, boost::make_iterator_range(m_cont)) );
+                BOOST_CHECK( result == boost::find_end(boost::make_iterator_range(cont), boost::make_iterator_range(m_cont)) );
+                return result;
             }
 
             template<range_return_value return_type>
@@ -51,7 +56,13 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::find_end<return_type>(cont, policy.cont());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    result_t result = boost::find_end<return_type>(cont, policy.cont());
+                    BOOST_CHECK( result == boost::find_end<return_type>(boost::make_iterator_range(cont), policy.cont()) );
+                    BOOST_CHECK( result == boost::find_end<return_type>(cont, boost::make_iterator_range(policy.cont())) );
+                    BOOST_CHECK( result == boost::find_end<return_type>(boost::make_iterator_range(cont),
+                                                                        boost::make_iterator_range(policy.cont())) );
+                    return result;
                 }
             };
 
@@ -84,7 +95,12 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::find_end(cont, m_cont, m_pred);
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t it = boost::find_end(cont, m_cont, m_pred);
+                BOOST_CHECK( it == boost::find_end(boost::make_iterator_range(cont), m_cont, m_pred) );
+                BOOST_CHECK( it == boost::find_end(cont, boost::make_iterator_range(m_cont), m_pred) );
+                BOOST_CHECK( it == boost::find_end(boost::make_iterator_range(cont), boost::make_iterator_range(m_cont), m_pred) );
+                return it;
             }
 
             template<range_return_value return_type>
@@ -94,6 +110,12 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    result_t result = boost::find_end<return_type>(cont, policy.cont(), policy.pred());
+                    BOOST_CHECK( result == boost::find_end<return_type>(boost::make_iterator_range(cont), policy.cont(), policy.pred()) );
+                    BOOST_CHECK( result == boost::find_end<return_type>(cont, boost::make_iterator_range(policy.cont()), policy.pred()) );
+                    BOOST_CHECK( result == boost::find_end<return_type>(boost::make_iterator_range(cont),
+                                                                        boost::make_iterator_range(policy.cont()), policy.pred()) );
                     return boost::find_end<return_type>(cont, policy.cont(), policy.pred());
                 }
             };

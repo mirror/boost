@@ -41,7 +41,12 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::find_first_of(cont, m_cont);
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::find_first_of(cont, m_cont);
+                BOOST_CHECK( result == boost::find_first_of(boost::make_iterator_range(cont), m_cont) );
+                BOOST_CHECK( result == boost::find_first_of(cont, boost::make_iterator_range(m_cont)) );
+                BOOST_CHECK( result == boost::find_first_of(boost::make_iterator_range(cont), boost::make_iterator_range(m_cont)) );
+                return result;
             }
 
             template<range_return_value return_type>
@@ -51,7 +56,12 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::find_first_of<return_type>(cont, policy.cont());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    result_t result = boost::find_first_of<return_type>(cont, policy.cont());
+                    BOOST_CHECK( result == boost::find_first_of<return_type>(boost::make_iterator_range(cont), policy.cont()) );
+                    BOOST_CHECK( result == boost::find_first_of<return_type>(cont, boost::make_iterator_range(policy.cont())) );
+                    BOOST_CHECK( result == boost::find_first_of<return_type>(boost::make_iterator_range(cont), boost::make_iterator_range(policy.cont())) );
+                    return result;
                 }
             };
 
@@ -84,7 +94,12 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::find_first_of(cont, m_cont, m_pred);
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::find_first_of(cont, m_cont, m_pred);
+                BOOST_CHECK( result == boost::find_first_of(boost::make_iterator_range(cont), m_cont, m_pred) );
+                BOOST_CHECK( result == boost::find_first_of(cont, boost::make_iterator_range(m_cont), m_pred) );
+                BOOST_CHECK( result == boost::find_first_of(boost::make_iterator_range(cont), boost::make_iterator_range(m_cont), m_pred) );
+                return result;
             }
 
             template<range_return_value return_type>
@@ -94,7 +109,12 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::find_first_of<return_type>(cont, policy.cont(), policy.pred());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    result_t result = boost::find_first_of<return_type>(cont, policy.cont(), policy.pred());
+                    BOOST_CHECK( result == boost::find_first_of<return_type>(boost::make_iterator_range(cont), policy.cont(), policy.pred()) );
+                    BOOST_CHECK( result == boost::find_first_of<return_type>(cont, boost::make_iterator_range(policy.cont()), policy.pred()) );
+                    BOOST_CHECK( result == boost::find_first_of<return_type>(boost::make_iterator_range(cont), boost::make_iterator_range(policy.cont()), policy.pred()) );
+                    return result;
                 }
             };
 
@@ -103,8 +123,8 @@ namespace boost
             reference(Container& cont)
             {
                 return std::find_first_of(cont.begin(), cont.end(),
-                                     m_cont.begin(), m_cont.end(),
-                                     m_pred);
+                                          m_cont.begin(), m_cont.end(),
+                                          m_pred);
             }
 
         private:

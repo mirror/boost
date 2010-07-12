@@ -28,13 +28,16 @@ namespace boost
         void test_lexicographical_compare_impl_nopred(ForwardRange1& rng1,
                                                       ForwardRange2& rng2)
         {
-            bool reference = std::lexicographical_compare(
+            const bool reference = std::lexicographical_compare(
                 boost::begin(rng1), boost::end(rng1),
                 boost::begin(rng2), boost::end(rng2));
 
-            bool test = boost::lexicographical_compare(rng1, rng2);
+            const bool test = boost::lexicographical_compare(rng1, rng2);
 
             BOOST_CHECK( reference == test );
+            BOOST_CHECK( test == boost::lexicographical_compare(boost::make_iterator_range(rng1), rng2) );
+            BOOST_CHECK( test == boost::lexicographical_compare(rng1, boost::make_iterator_range(rng2)) );
+            BOOST_CHECK( test == boost::lexicographical_compare(boost::make_iterator_range(rng1), boost::make_iterator_range(rng2)) );
         }
 
         template<class ForwardRange1, class ForwardRange2,
@@ -43,14 +46,17 @@ namespace boost
                                                     ForwardRange2& rng2,
                                                     BinaryPredicate pred)
         {
-            bool reference = std::lexicographical_compare(
+            const bool reference = std::lexicographical_compare(
                 boost::begin(rng1), boost::end(rng1),
                 boost::begin(rng2), boost::end(rng2),
                 pred);
 
-            bool test = boost::lexicographical_compare(rng1, rng2, pred);
+            const bool test = boost::lexicographical_compare(rng1, rng2, pred);
 
             BOOST_CHECK( reference == test );
+            BOOST_CHECK( test == boost::lexicographical_compare(boost::make_iterator_range(rng1), rng2, pred) );
+            BOOST_CHECK( test == boost::lexicographical_compare(rng1, boost::make_iterator_range(rng2), pred) );
+            BOOST_CHECK( test == boost::lexicographical_compare(boost::make_iterator_range(rng1), boost::make_iterator_range(rng2), pred) );
         }
 
         template<class Container1, class Container2>

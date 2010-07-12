@@ -32,7 +32,10 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::upper_bound(cont, 5);
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::upper_bound(cont, 5);
+                BOOST_CHECK( result == boost::upper_bound(boost::make_iterator_range(cont), 5) );
+                return result;
             }
 
             template<range_return_value result_type>
@@ -42,7 +45,10 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,result_type>::type
                 operator()(Policy&, Container& cont)
                 {
-                    return boost::upper_bound<result_type>(cont, 5);
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,result_type>::type result_t;
+                    result_t result = boost::upper_bound<result_type>(cont, 5);
+                    BOOST_CHECK( result == boost::upper_bound<result_type>(boost::make_iterator_range(cont), 5) );
+                    return result;
                 }
             };
 
@@ -61,7 +67,10 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::upper_bound(cont, 5, BinaryPredicate());
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::upper_bound(cont, 5, BinaryPredicate());
+                BOOST_CHECK( result == boost::upper_bound(boost::make_iterator_range(cont), 5, BinaryPredicate()) );
+                return result;
             }
 
             template< range_return_value result_type>
@@ -71,8 +80,14 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,result_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::upper_bound<result_type>(
-                        cont, 5, policy.pred());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,result_type>::type result_t;
+                    
+                    result_t result = boost::upper_bound<result_type>(cont, 5, policy.pred());
+                    
+                    BOOST_CHECK( result == boost::upper_bound<result_type>(
+                        boost::make_iterator_range(cont), 5, policy.pred()) );
+                        
+                    return result;
                 }
             };
 

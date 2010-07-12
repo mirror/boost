@@ -50,6 +50,15 @@ namespace
 
         BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
             test.begin(), test.end() );
+            
+        std::vector<value_type> test2;
+        test_append(
+            boost::remove_copy(boost::make_iterator_range(c),
+                               std::back_inserter(test2), to_remove),
+            to_remove);
+                               
+        BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                       test2.begin(), test2.end() );
     }
 
     template< class Container >

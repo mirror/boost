@@ -9,7 +9,7 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 #include <boost/range/algorithm/adjacent_find.hpp>
-
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -38,14 +38,18 @@ namespace boost
 
             BOOST_CHECK( boost::adjacent_find(cont) == cont.end() );
             BOOST_CHECK( boost::adjacent_find(cref_cont) == cref_cont.end() );
+            BOOST_CHECK( boost::adjacent_find(boost::make_iterator_range(cont)) == cont.end() );
             BOOST_CHECK( boost::adjacent_find(cont, pred) == cont.end() );
             BOOST_CHECK( boost::adjacent_find(cref_cont, pred) == cref_cont.end() );
+            BOOST_CHECK( boost::adjacent_find(boost::make_iterator_range(cont), pred) == cont.end() );
 
             cont += 1;
             BOOST_CHECK( boost::adjacent_find(cont) == cont.end() );
             BOOST_CHECK( boost::adjacent_find(cref_cont) == cref_cont.end() );
+            BOOST_CHECK( boost::adjacent_find(boost::make_iterator_range(cont)) == cont.end() );
             BOOST_CHECK( boost::adjacent_find(cont, pred) == cont.end() );
             BOOST_CHECK( boost::adjacent_find(cref_cont, pred) == cref_cont.end() );
+            BOOST_CHECK( boost::adjacent_find(boost::make_iterator_range(cont), pred) == cont.end() );
 
             cont += 2,3,4,5,5,5,6,7,8,9;
             iterator_t it = boost::adjacent_find(cont);
@@ -57,6 +61,8 @@ namespace boost
             {
                 BOOST_CHECK( *it == 5 );
             }
+            BOOST_CHECK( it == boost::adjacent_find(boost::make_iterator_range(cont)) );
+            BOOST_CHECK( it_pred == boost::adjacent_find(boost::make_iterator_range(cont), pred) );
             const_iterator_t cit = boost::adjacent_find(cref_cont);
             const_iterator_t cit_pred = boost::adjacent_find(cref_cont, pred);
             BOOST_CHECK( cit == cit_pred );

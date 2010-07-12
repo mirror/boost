@@ -15,6 +15,7 @@
 
 #include <boost/assign.hpp>
 #include "../test_function/false_predicate.hpp"
+#include "../test_function/true_predicate.hpp"
 #include "../test_function/equal_to_x.hpp"
 #include <algorithm>
 #include <list>
@@ -38,29 +39,42 @@ namespace boost
 
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cont, pred_t(0)) );
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cref_cont, pred_t(0)) );
+            BOOST_CHECK_EQUAL( 0u, boost::count_if(boost::make_iterator_range(cont), pred_t(0)) );
 
             cont += 1;
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cont, pred_t(0)) );
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cref_cont, pred_t(0)) );
+            BOOST_CHECK_EQUAL( 0u, boost::count_if(boost::make_iterator_range(cont), pred_t(0)) );
             BOOST_CHECK_EQUAL( 1u, boost::count_if(cont, pred_t(1)) );
             BOOST_CHECK_EQUAL( 1u, boost::count_if(cref_cont, pred_t(1)) );
+            BOOST_CHECK_EQUAL( 1u, boost::count_if(boost::make_iterator_range(cont), pred_t(1)) );
 
             cont += 2,3,4,5,6,7,8,9;
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cont, pred_t(0)) );
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cref_cont, pred_t(0)) );
+            BOOST_CHECK_EQUAL( 0u, boost::count_if(boost::make_iterator_range(cont), pred_t(0)) );
             BOOST_CHECK_EQUAL( 1u, boost::count_if(cont, pred_t(1)) );
             BOOST_CHECK_EQUAL( 1u, boost::count_if(cref_cont, pred_t(1)) );
+            BOOST_CHECK_EQUAL( 1u, boost::count_if(boost::make_iterator_range(cont), pred_t(1)) );
 
             cont += 2;
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cont, pred_t(0)) );
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cref_cont, pred_t(0)) );
+            BOOST_CHECK_EQUAL( 0u, boost::count_if(boost::make_iterator_range(cont), pred_t(0)) );
             BOOST_CHECK_EQUAL( 1u, boost::count_if(cont, pred_t(1)) );
             BOOST_CHECK_EQUAL( 1u, boost::count_if(cref_cont, pred_t(1)) );
+            BOOST_CHECK_EQUAL( 1u, boost::count_if(boost::make_iterator_range(cont), pred_t(1)) );
             BOOST_CHECK_EQUAL( 2u, boost::count_if(cont, pred_t(2)) );
             BOOST_CHECK_EQUAL( 2u, boost::count_if(cref_cont, pred_t(2)) );
+            BOOST_CHECK_EQUAL( 2u, boost::count_if(boost::make_iterator_range(cont), pred_t(2)) );
 
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cont, false_predicate()) );
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cref_cont, false_predicate()) );
+            BOOST_CHECK_EQUAL( 0u, boost::count_if(boost::make_iterator_range(cont), false_predicate()) );
+
+            BOOST_CHECK_EQUAL( cont.size(), boost::count_if(cont, true_predicate()) );
+            BOOST_CHECK_EQUAL( cont.size(), boost::count_if(cref_cont, true_predicate()) );
+            BOOST_CHECK_EQUAL( cont.size(), boost::count_if(boost::make_iterator_range(cont), true_predicate()) );
         }
 
         void test_count_if()

@@ -33,10 +33,13 @@ namespace boost
             boost::stable_sort(test);
             std::stable_sort(reference.begin(), reference.end());
 
-            BOOST_CHECK_EQUAL_COLLECTIONS(
-                reference.begin(), reference.end(),
-                test.begin(), test.end()
-                );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test.begin(), test.end() );
+                
+            test = cont;
+            boost::stable_sort(boost::make_iterator_range(test));
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test.begin(), test.end() );
         }
 
         template<class Container, class BinaryPredicate>
@@ -48,10 +51,13 @@ namespace boost
             boost::stable_sort(test, pred);
             std::stable_sort(reference.begin(), reference.end(), pred);
 
-            BOOST_CHECK_EQUAL_COLLECTIONS(
-                reference.begin(), reference.end(),
-                test.begin(), test.end()
-                );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test.begin(), test.end() );
+                                           
+            test = cont;
+            boost::stable_sort(boost::make_iterator_range(test), pred);
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test.begin(), test.end() );
         }
 
         template<class Container>
