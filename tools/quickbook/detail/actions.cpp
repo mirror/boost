@@ -30,6 +30,23 @@ namespace quickbook
     char const* quickbook_get_time = "__quickbook_get_time__";
 
     namespace {
+        char filter_identifier_char(char ch)
+        {
+            if (!std::isalnum(static_cast<unsigned char>(ch)))
+                ch = '_';
+            return static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        }
+
+        template <typename Iterator>
+        inline std::string
+        make_identifier(Iterator const& first, Iterator const& last)
+        {
+            std::string out_name;
+            for (Iterator i = first; i != last; ++i)
+                out_name += filter_identifier_char(*i);
+            return out_name;
+        }
+    
         std::string fully_qualified_id(std::string const& library_id,
             std::string const& qualified_section_id,
             std::string const& section_id)
@@ -98,7 +115,7 @@ namespace quickbook
         {
             out << "<anchor id=\""
                 << section_id << '.'
-                << detail::make_identifier(str.begin(), str.end())
+                << make_identifier(str.begin(), str.end())
                 << "\" />"
                 << pre << str << post
                 ;
@@ -106,8 +123,8 @@ namespace quickbook
         else // version 1.3 and above
         {
             std::string id = qbk_version_n >= 106 ?
-                detail::make_identifier(first, last) :
-                detail::make_identifier(str.begin(), str.end());
+                make_identifier(first, last) :
+                make_identifier(str.begin(), str.end());
 
             std::string anchor =
                 fully_qualified_id(library_id, qualified_section_id, id);
@@ -133,8 +150,8 @@ namespace quickbook
         phrase.swap(str);
 
         std::string id = qbk_version_n >= 106 ?
-            detail::make_identifier(first, last) :
-            detail::make_identifier(str.begin(), str.end());
+            make_identifier(first, last) :
+            make_identifier(str.begin(), str.end());
 
         std::string anchor =
             fully_qualified_id(library_id, qualified_section_id, id);
@@ -1038,7 +1055,7 @@ namespace quickbook
             else if(has_title) {
                 table_id = fully_qualified_id(actions.doc_id,
                     actions.qualified_section_id,
-                    detail::make_identifier(first, last));
+                    make_identifier(first, last));
             }
         }
 
@@ -1126,7 +1143,7 @@ namespace quickbook
     void begin_section_action::operator()(iterator first, iterator last) const
     {
         section_id = element_id.empty() ?
-            detail::make_identifier(first, last) :
+            make_identifier(first, last) :
             element_id;
 
         if (section_level != 0)
@@ -1514,7 +1531,7 @@ namespace quickbook
         // *before* anything else.
 
         if (actions.doc_id.empty())
-            actions.doc_id = detail::make_identifier(
+            actions.doc_id = make_identifier(
                 actions.doc_title.begin(),actions.doc_title.end());
 
         if (actions.doc_dirname.empty() && actions.doc_type == "library")
@@ -1693,63 +1710,49 @@ namespace quickbook
             }
         }
 
-        if (qbk_version_n < 103)
+        if (!actions.doc_purpose.empty())
         {
-            if (!actions.doc_purpose_1_1.empty())
+            if (actions.doc_type != "library")
             {
-                if (actions.doc_type == "library")
-                {
-                    out << "    <" << actions.doc_type << "purpose>\n"
-                        << "      ";
-                    detail::print_string(actions.doc_purpose_1_1, out.get());
-                    out << "    </" << actions.doc_type << "purpose>\n"
-                        << "\n"
-                    ;
-                }
-                else
-                {
-                    invalid_attributes.push_back("purpose");
-                }
+                invalid_attributes.push_back("purpose");
             }
-        }
-        else
-        {
-            if (!actions.doc_purpose.empty())
+
+            if (qbk_version_n < 103)
             {
-                if (actions.doc_type == "library")
-                {
-                    out << "    <" << actions.doc_type << "purpose>\n"
-                        << "      " << actions.doc_purpose
-                        << "    </" << actions.doc_type << "purpose>\n"
-                        << "\n"
-                    ;
-                }
-                else
-                {
-                    invalid_attributes.push_back("purpose");
-                }
+                out << "    <" << actions.doc_type << "purpose>\n"
+                    << "      ";
+                detail::print_string(actions.doc_purpose_1_1, out.get());
+                out << "    </" << actions.doc_type << "purpose>\n"
+                    << "\n"
+                ;
+            }
+            else
+            {
+                out << "    <" << actions.doc_type << "purpose>\n"
+                    << "      " << actions.doc_purpose
+                    << "    </" << actions.doc_type << "purpose>\n"
+                    << "\n"
+                ;
             }
         }
 
         if (!actions.doc_categories.empty())
         {
-            if (actions.doc_type == "library")
-            {
-                for(actions::string_list::const_iterator
-                    it = actions.doc_categories.begin(),
-                    end = actions.doc_categories.end();
-                    it != end; ++it)
-                {
-                    out << "    <" << actions.doc_type << "category name=\"category:";
-                    detail::print_string(*it, out.get());
-                    out << "\"></" << actions.doc_type << "category>\n"
-                        << "\n"
-                    ;
-                }
-            }
-            else
+            if (actions.doc_type != "library")
             {
                 invalid_attributes.push_back("category");
+            }
+
+            for(actions::string_list::const_iterator
+                it = actions.doc_categories.begin(),
+                end = actions.doc_categories.end();
+                it != end; ++it)
+            {
+                out << "    <" << actions.doc_type << "category name=\"category:";
+                detail::print_string(*it, out.get());
+                out << "\"></" << actions.doc_type << "category>\n"
+                    << "\n"
+                ;
             }
         }
 
@@ -1762,7 +1765,7 @@ namespace quickbook
             detail::outwarn(actions.filename.file_string(),1)
                 << (invalid_attributes.size() > 1 ?
                     "Invalid attributes" : "Invalid attribute")
-                << " for '" << actions.doc_type << "': "
+                << " for '" << actions.doc_type << " document info': "
                 << boost::algorithm::join(invalid_attributes, ", ")
                 << "\n"
                 ;

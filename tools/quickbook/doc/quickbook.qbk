@@ -196,8 +196,7 @@ Features include:
   * XML encode the documentation info correctly.
   * Avoid generating empty paragraphs.
   * No longer wraps block templates in paragraphs.
-  * Doesn't generate invalid doc_info members for docbook document types,
-    warns if you use any.
+  * Warns if you use invalid doc_info members for docbook document types.
   * Fixes some other causes of invalid boostbook, although it still
     generates invalid boostbook in places.
 * Improved grammar:
@@ -800,6 +799,11 @@ In its absence, version 1.1 is assumed.
 
 =version=, =id=, =dirname=, =copyright=, =purpose=, =category=, =authors=,
 =license=, =last-revision= and =source-mode= are optional information.
+
+=dirname=, =purpose= and =category= are boostbook attributes which are only
+valid for =library= documents. If you use them for other document types,
+quickbook will warn about them, but still use them, generating invalid markup,
+that's just ignored by the style sheets.
 
 =source-type= is a lowercase string setting the initial __source_mode__. If
 the =source-mode= field is omitted, a default value of =c++= will be used.

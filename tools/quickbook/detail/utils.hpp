@@ -21,17 +21,6 @@ namespace quickbook { namespace detail
     void print_char(char ch, std::ostream& out);
     void print_string(std::basic_string<char> const& str, std::ostream& out);
     void print_space(char ch, std::ostream& out);
-    char filter_identifier_char(char ch);
-
-    template <typename Iterator>
-    inline std::string
-    make_identifier(Iterator const& first, Iterator const& last)
-    {
-        std::string out_name;
-        for (Iterator i = first; i != last; ++i)
-            out_name += filter_identifier_char(*i);
-        return out_name;
-    }
 
     template <typename T>
     struct var_wrapper
