@@ -8,6 +8,7 @@ import testing ;
 test-suite uuid :
     # make sure each header file is self-contained
     [ compile compile_uuid.cpp ]
+    [ compile compile_uuid.cpp : <define>BOOST_UUID_NO_TYPE_TRAITS : compile_uuid_no_type_traits ]
     [ compile compile_uuid_io.cpp ]
     [ compile compile_uuid_serialize.cpp ]
     [ compile compile_uuid_generators.cpp ]
@@ -40,8 +41,7 @@ test-suite uuid :
     [ run test_uuid_class.cpp ]
 
     # test serializing uuids
-    [ run test_serialization.cpp ../../serialization/build//boost_serialization
-    ]
+    [ run test_serialization.cpp ../../serialization/build//boost_serialization ]
     # TODO - This test fails to like with boost_wserialization
     #[ run test_wserialization.cpp
     #    ../../serialization/build//boost_serialization
