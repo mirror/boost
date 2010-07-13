@@ -26,11 +26,18 @@ the result of a merge of all of the RangeEx features into Boost.Range.
 There were an enormous number of very significant contributors through all
 stages of this library.
 
+Prior to Boost.RangeEx there had been a number of Range library implementations,
+these include library implementations by Eric Niebler, Adobe,
+Shunsuke Sogame etc. Eric Niebler contributed the Range Adaptor idea which is
+arguably the single biggest innovation in this library. Inevitably a great deal
+of commonality evolved in each of these libraries, but a considerable amount
+of effort was expended to learn from all of the divergent techniques.
+
 The people in the following list all made contributions in the form of reviews,
 user feedback, design suggestions, or defect detection:
 
 * Thorsten Ottosen: review management, design advice, documentation feedback
-* Eric Niebler:     feedback
+* Eric Niebler:     early implementation, and review feedback
 * Joel de Guzman:   review
 * Mathias Gaunard:  review
 * David Abrahams:   implementation advice

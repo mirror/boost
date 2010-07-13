@@ -29,7 +29,10 @@ namespace boost
 /// \pre ForwardRange2 is a model of the ForwardRangeConcept
 /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
 template< class SinglePassRange1, class ForwardRange2 >
-inline BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<SinglePassRange1>,
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type
+>::type
 find_first_of(SinglePassRange1 & rng1, ForwardRange2 const & rng2)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
@@ -53,7 +56,10 @@ find_first_of(const SinglePassRange1& rng1, const ForwardRange2& rng2)
 
 /// \overload
 template< class SinglePassRange1, class ForwardRange2, class BinaryPredicate >
-inline BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<SinglePassRange1>,
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type
+>::type
 find_first_of(SinglePassRange1 & rng1, ForwardRange2 const & rng2, BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
@@ -78,7 +84,10 @@ find_first_of(const SinglePassRange1& rng1, const ForwardRange2& rng2, BinaryPre
 // range return overloads
 /// \overload
 template< range_return_value re, class SinglePassRange1, class ForwardRange2 >
-inline BOOST_DEDUCED_TYPENAME range_return<SinglePassRange1,re>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<SinglePassRange1>,
+    BOOST_DEDUCED_TYPENAME range_return<SinglePassRange1,re>::type
+>::type
 find_first_of(SinglePassRange1& rng1, const ForwardRange2& rng2)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
@@ -107,7 +116,10 @@ find_first_of(const SinglePassRange1& rng1, const ForwardRange2& rng2)
 /// \overload
 template< range_return_value re, class SinglePassRange1, class ForwardRange2,
           class BinaryPredicate >
-inline BOOST_DEDUCED_TYPENAME range_return<SinglePassRange1,re>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<SinglePassRange1>,
+    BOOST_DEDUCED_TYPENAME range_return<SinglePassRange1,re>::type
+>::type
 find_first_of(SinglePassRange1 & rng1, const ForwardRange2& rng2,
               BinaryPredicate pred)
 {

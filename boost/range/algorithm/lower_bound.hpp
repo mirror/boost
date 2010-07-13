@@ -27,7 +27,10 @@ namespace boost
 ///
 /// \pre ForwardRange is a model of the ForwardRangeConcept
 template< class ForwardRange, class Value >
-inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<ForwardRange>,
+    BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
+>::type
 lower_bound( ForwardRange& rng, Value val )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
@@ -45,7 +48,10 @@ lower_bound( const ForwardRange& rng, Value val )
 
 /// \overload
 template< class ForwardRange, class Value, class SortPredicate >
-inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<ForwardRange>,
+    BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
+>::type
 lower_bound( ForwardRange& rng, Value val, SortPredicate pred )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
@@ -63,7 +69,10 @@ lower_bound( const ForwardRange& rng, Value val, SortPredicate pred )
 
 /// \overload
 template< range_return_value re, class ForwardRange, class Value >
-inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<ForwardRange>,
+    BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
+>::type
 lower_bound( ForwardRange& rng, Value val )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
@@ -85,7 +94,10 @@ lower_bound( const ForwardRange& rng, Value val )
 
 /// \overload
 template< range_return_value re, class ForwardRange, class Value, class SortPredicate >
-inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
+inline BOOST_DEDUCED_TYPENAME disable_if<
+    is_const<ForwardRange>,
+    BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
+>::type
 lower_bound( ForwardRange& rng, Value val, SortPredicate pred )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));

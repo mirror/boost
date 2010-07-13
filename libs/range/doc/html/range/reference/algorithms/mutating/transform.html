@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>transform</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../mutating.html" title="Mutating algorithms">
 <link rel="prev" href="swap_ranges.html" title="swap_ranges">
@@ -13,21 +13,21 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="swap_ranges.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unique.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="swap_ranges.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="unique.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="transform">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="range.reference.algorithms.mutating.transform"></a><a class="link" href="transform.html" title="transform"> transform</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.mutating.transform.prototype"></a><h6>
-<a name="id3109807"></a>
+<a name="id3089109"></a>
             <a class="link" href="transform.html#range.reference.algorithms.mutating.transform.prototype">Prototype</a>
           </h6>
 <p>
@@ -56,7 +56,7 @@
 <p>
           </p>
 <a name="range.reference.algorithms.mutating.transform.description"></a><h6>
-<a name="id3110146"></a>
+<a name="id3089448"></a>
             <a class="link" href="transform.html#range.reference.algorithms.mutating.transform.description">Description</a>
           </h6>
 <p>
@@ -92,14 +92,14 @@
             The return value is <code class="computeroutput"><span class="identifier">out</span> <span class="special">+</span> <span class="identifier">min</span><span class="special">(</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">),</span> <span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng2</span><span class="special">))</span></code>.
           </p>
 <a name="range.reference.algorithms.mutating.transform.definition"></a><h6>
-<a name="id3110697"></a>
+<a name="id3089998"></a>
             <a class="link" href="transform.html#range.reference.algorithms.mutating.transform.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transform</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.mutating.transform.requirements"></a><h6>
-<a name="id3110769"></a>
+<a name="id3090070"></a>
             <a class="link" href="transform.html#range.reference.algorithms.mutating.transform.requirements">Requirements</a>
           </h6>
 <p>
@@ -107,69 +107,69 @@
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">SinglePassRange1</span></code> is
-              a model of the <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
-              Pass Range</a> Concept.
-            </li>
+                <code class="computeroutput"><span class="identifier">SinglePassRange1</span></code>
+                is a model of the <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
+                Pass Range</a> Concept.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">OutputIterator</span></code> is a
-              model of the <code class="computeroutput"><span class="identifier">OutputIteratorConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">OutputIterator</span></code> is
+                a model of the <code class="computeroutput"><span class="identifier">OutputIteratorConcept</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">UnaryOperation</span></code> is a
-              model of the <code class="computeroutput"><span class="identifier">UnaryFunctionConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">UnaryOperation</span></code> is
+                a model of the <code class="computeroutput"><span class="identifier">UnaryFunctionConcept</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">SinglePassRange1</span></code>'s
-              value type must be convertible to <code class="computeroutput"><span class="identifier">UnaryFunction</span></code>'s
-              argument type.
-            </li>
+                <code class="computeroutput"><span class="identifier">SinglePassRange1</span></code>'s
+                value type must be convertible to <code class="computeroutput"><span class="identifier">UnaryFunction</span></code>'s
+                argument type.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">UnaryFunction</span></code>'s result
-              type must be convertible to a type in <code class="computeroutput"><span class="identifier">OutputIterator</span></code>'s
-              set of value types.
-            </li>
+                <code class="computeroutput"><span class="identifier">UnaryFunction</span></code>'s result
+                type must be convertible to a type in <code class="computeroutput"><span class="identifier">OutputIterator</span></code>'s
+                set of value types.
+              </li>
 </ul></div>
 <p>
             <span class="bold"><strong>For the binary versions of transform:</strong></span>
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">SinglePassRange1</span></code> is
-              a model of the <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
-              Pass Range</a> Concept.
-            </li>
+                <code class="computeroutput"><span class="identifier">SinglePassRange1</span></code>
+                is a model of the <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
+                Pass Range</a> Concept.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">SinglePassRange2</span></code> is
-              a model of the <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
-              Pass Range</a> Concept.
-            </li>
+                <code class="computeroutput"><span class="identifier">SinglePassRange2</span></code>
+                is a model of the <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
+                Pass Range</a> Concept.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">OutputIterator</span></code> is a
-              model of the <code class="computeroutput"><span class="identifier">OutputIteratorConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">OutputIterator</span></code> is
+                a model of the <code class="computeroutput"><span class="identifier">OutputIteratorConcept</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">BinaryOperation</span></code> is
-              a model of the <code class="computeroutput"><span class="identifier">BinaryFunctionConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">BinaryOperation</span></code> is
+                a model of the <code class="computeroutput"><span class="identifier">BinaryFunctionConcept</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">SinglePassRange1</span></code>'s
-              value type must be convertible to <code class="computeroutput"><span class="identifier">BinaryFunction</span></code>'s
-              first argument type.
-            </li>
+                <code class="computeroutput"><span class="identifier">SinglePassRange1</span></code>'s
+                value type must be convertible to <code class="computeroutput"><span class="identifier">BinaryFunction</span></code>'s
+                first argument type.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">SinglePassRange2</span></code>'s
-              value type must be convertible to <code class="computeroutput"><span class="identifier">BinaryFunction</span></code>'s
-              second argument type.
-            </li>
+                <code class="computeroutput"><span class="identifier">SinglePassRange2</span></code>'s
+                value type must be convertible to <code class="computeroutput"><span class="identifier">BinaryFunction</span></code>'s
+                second argument type.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">BinaryOperation</span></code>'s result
-              type must be convertible to a type in <code class="computeroutput"><span class="identifier">OutputIterator</span></code>'s
-              set of value types.
-            </li>
+                <code class="computeroutput"><span class="identifier">BinaryOperation</span></code>'s
+                result type must be convertible to a type in <code class="computeroutput"><span class="identifier">OutputIterator</span></code>'s
+                set of value types.
+              </li>
 </ul></div>
 <a name="range.reference.algorithms.mutating.transform.precondition_"></a><h6>
-<a name="id3111119"></a>
+<a name="id3090460"></a>
             <a class="link" href="transform.html#range.reference.algorithms.mutating.transform.precondition_">Precondition:</a>
           </h6>
 <p>
@@ -177,31 +177,33 @@
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">out</span></code> is not an iterator
-              within the range <code class="computeroutput"><span class="special">[</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">))</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">out</span></code> is not an iterator
+                within the range <code class="computeroutput"><span class="special">[</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">))</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="special">[</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">out</span> <span class="special">+</span> <span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">))</span></code> is a valid range.
-            </li>
+                <code class="computeroutput"><span class="special">[</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">out</span>
+                <span class="special">+</span> <span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">))</span></code> is a valid range.
+              </li>
 </ul></div>
 <p>
             <span class="bold"><strong>For the binary version of transform:</strong></span>
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">out</span></code> is not an iterator
-              within the range <code class="computeroutput"><span class="special">[</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">))</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">out</span></code> is not an iterator
+                within the range <code class="computeroutput"><span class="special">[</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">))</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">out</span></code> is not an iterator
-              within the range <code class="computeroutput"><span class="special">[</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng2</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">rng2</span><span class="special">))</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">out</span></code> is not an iterator
+                within the range <code class="computeroutput"><span class="special">[</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng2</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">rng2</span><span class="special">))</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="special">[</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">out</span> <span class="special">+</span> <span class="identifier">min</span><span class="special">(</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">),</span> <span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng2</span><span class="special">)))</span></code> is a valid range.
-            </li>
+                <code class="computeroutput"><span class="special">[</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">out</span>
+                <span class="special">+</span> <span class="identifier">min</span><span class="special">(</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng1</span><span class="special">),</span> <span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng2</span><span class="special">)))</span></code> is a valid range.
+              </li>
 </ul></div>
 <a name="range.reference.algorithms.mutating.transform.complexity"></a><h6>
-<a name="id3111534"></a>
+<a name="id3090892"></a>
             <a class="link" href="transform.html#range.reference.algorithms.mutating.transform.complexity">Complexity</a>
           </h6>
 <p>
@@ -219,7 +221,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="swap_ranges.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unique.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="swap_ranges.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="unique.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

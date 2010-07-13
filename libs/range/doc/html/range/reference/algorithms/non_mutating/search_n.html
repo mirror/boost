@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>search_n</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../non_mutating.html" title="Non-mutating algorithms">
 <link rel="prev" href="search.html" title="search">
@@ -13,22 +13,22 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="search.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../non_mutating.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="upper_bound.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="search.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../non_mutating.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="upper_bound.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="search_n">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="range.reference.algorithms.non_mutating.search_n"></a><a class="link" href="search_n.html" title="search_n">
           search_n</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.non_mutating.search_n.prototype"></a><h6>
-<a name="id3134118"></a>
+<a name="id3113898"></a>
             <a class="link" href="search_n.html#range.reference.algorithms.non_mutating.search_n.prototype">Prototype</a>
           </h6>
 <p>
@@ -55,7 +55,7 @@
 <p>
           </p>
 <a name="range.reference.algorithms.non_mutating.search_n.description"></a><h6>
-<a name="id3134873"></a>
+<a name="id3114654"></a>
             <a class="link" href="search_n.html#range.reference.algorithms.non_mutating.search_n.description">Description</a>
           </h6>
 <p>
@@ -64,14 +64,14 @@
             and by a predicate when one is supplied.
           </p>
 <a name="range.reference.algorithms.non_mutating.search_n.definition"></a><h6>
-<a name="id3134945"></a>
+<a name="id3114726"></a>
             <a class="link" href="search_n.html#range.reference.algorithms.non_mutating.search_n.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">search_n</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.non_mutating.search_n.requirements"></a><h6>
-<a name="id3135018"></a>
+<a name="id3114798"></a>
             <a class="link" href="search_n.html#range.reference.algorithms.non_mutating.search_n.requirements">Requirements</a>
           </h6>
 <p>
@@ -79,53 +79,53 @@
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">ForwardRange</span></code> is a model
-              of the <a class="link" href="../../../concepts/forward_range.html" title="Forward Range">Forward Range</a>
-              Concept.
-            </li>
+                <code class="computeroutput"><span class="identifier">ForwardRange</span></code> is a
+                model of the <a class="link" href="../../../concepts/forward_range.html" title="Forward Range">Forward
+                Range</a> Concept.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">ForwardRange</span></code>'s value
-              type is a model of the <code class="computeroutput"><span class="identifier">EqualityComparableConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">ForwardRange</span></code>'s value
+                type is a model of the <code class="computeroutput"><span class="identifier">EqualityComparableConcept</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">ForwardRange</span></code>s value
-              type can be compared for equality with <code class="computeroutput"><span class="identifier">Value</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">ForwardRange</span></code>s value
+                type can be compared for equality with <code class="computeroutput"><span class="identifier">Value</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">Integer</span></code> is a model
-              of the <code class="computeroutput"><span class="identifier">IntegerConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">Integer</span></code> is a model
+                of the <code class="computeroutput"><span class="identifier">IntegerConcept</span></code>.
+              </li>
 </ul></div>
 <p>
             <span class="bold"><strong>For the predicate versions:</strong></span>
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">ForwardRange</span></code> is a model
-              of the <a class="link" href="../../../concepts/forward_range.html" title="Forward Range">Forward Range</a>
-              Concept.
-            </li>
+                <code class="computeroutput"><span class="identifier">ForwardRange</span></code> is a
+                model of the <a class="link" href="../../../concepts/forward_range.html" title="Forward Range">Forward
+                Range</a> Concept.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">BinaryPredicate</span></code> is
-              a model of the <code class="computeroutput"><span class="identifier">BinaryPredicateConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">BinaryPredicate</span></code> is
+                a model of the <code class="computeroutput"><span class="identifier">BinaryPredicateConcept</span></code>.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">ForwardRange</span></code>'s value
-              type is convertible to <code class="computeroutput"><span class="identifier">BinaryPredicate</span></code>'s
-              first argument type.
-            </li>
+                <code class="computeroutput"><span class="identifier">ForwardRange</span></code>'s value
+                type is convertible to <code class="computeroutput"><span class="identifier">BinaryPredicate</span></code>'s
+                first argument type.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">Value</span></code> is convertible
-              to <code class="computeroutput"><span class="identifier">BinaryPredicate</span></code>'s
-              second argument type.
-            </li>
+                <code class="computeroutput"><span class="identifier">Value</span></code> is convertible
+                to <code class="computeroutput"><span class="identifier">BinaryPredicate</span></code>'s
+                second argument type.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">Integer</span></code> is a model
-              of the <code class="computeroutput"><span class="identifier">IntegerConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">Integer</span></code> is a model
+                of the <code class="computeroutput"><span class="identifier">IntegerConcept</span></code>.
+              </li>
 </ul></div>
 <a name="range.reference.algorithms.non_mutating.search_n.complexity"></a><h6>
-<a name="id3135291"></a>
+<a name="id3115101"></a>
             <a class="link" href="search_n.html#range.reference.algorithms.non_mutating.search_n.complexity">Complexity</a>
           </h6>
 <p>
@@ -142,7 +142,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="search.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../non_mutating.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="upper_bound.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="search.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../non_mutating.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="upper_bound.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
