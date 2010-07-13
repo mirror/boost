@@ -447,10 +447,10 @@ struct string_generator {
 <p>The <tt>boost::uuids::string_generator</tt> class generates a <b>uuid</b> from a string.
 <pre>
 boost::uuids::string_generator gen;
-boost::uuids::uuid u1 = gen("{01234567-89ab-cdef-0123456789abcdef}");
-boost::uuids::uuid u2 = gen(L"01234567-89ab-cdef-0123456789abcdef");
+boost::uuids::uuid u1 = gen("{01234567-89ab-cdef-0123-456789abcdef}");
+boost::uuids::uuid u2 = gen(L"01234567-89ab-cdef-0123-456789abcdef");
 boost::uuids::uuid u3 = gen(std::string("0123456789abcdef0123456789abcdef"));
-boost::uuids::uuid u4 = gen(std::wstring(L"01234567-89ab-cdef-0123456789abcdef"));
+boost::uuids::uuid u4 = gen(std::wstring(L"01234567-89ab-cdef-0123-456789abcdef"));
 </pre>
 
 <h3><a name="boost/uuid/name_generator.hpp" href="./../../boost/uuid/name_generator.hpp">boost/uuid/name_generator.hpp</a></h3>

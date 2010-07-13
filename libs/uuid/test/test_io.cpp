@@ -19,6 +19,7 @@
 #include <iomanip>
 
 #ifndef BOOST_NO_STD_WSTRING
+namespace std {
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(std::basic_ostream<Elem, Traits>& os, std::wstring const& s) {
     // convert to string
@@ -26,6 +27,7 @@ std::basic_ostream<Elem, Traits>& operator<<(std::basic_ostream<Elem, Traits>& o
     os << temp;
     return os;
 }
+} // namespace std
 #endif
 
 int main(int, char*[])
