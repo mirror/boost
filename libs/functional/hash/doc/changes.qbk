@@ -108,10 +108,15 @@
 
 [h2 Boost 1.44.0]
 
-* Prevent implicit conversions when calling `hash_value`. If you find
-  that the new version breaks your code, you can enable the old
-  behaviour by defining `BOOST_HASH_ALLOW_IMPLICIT_CASTS` - although
-  I would recommend that you update your code to work with the new
-  version.
+* Add option to prevent implicit conversions when calling `hash_value` by
+  defining `BOOST_HASH_NO_IMPLICIT_CASTS`. When using `boost::hash`
+  for a type that does not have `hash_value` declared but does have
+  an implicit conversion to a type that does, it would use that
+  implicit conversion to hash it. Which can sometimes go very wrong,
+  e.g. using a conversion to bool and only hashing to 2 possible
+  values. Since fixing this is a breaking change and was only
+  approached quite late in the release cycle with little discussion
+  it's opt-in for now. This, or something like it, will become the
+  default in a future version.
 
 [endsect]
