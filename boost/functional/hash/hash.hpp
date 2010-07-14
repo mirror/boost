@@ -15,7 +15,10 @@
 #include <boost/functional/hash/detail/hash_float.hpp>
 #include <string>
 #include <boost/limits.hpp>
+
+#if defined(BOOST_HASH_NO_IMPLICIT_CASTS)
 #include <boost/static_assert.hpp>
+#endif
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #include <boost/type_traits/is_pointer.hpp>
