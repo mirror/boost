@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>regex_iterator</title>
 <link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="regex_replace.html" title="regex_replace">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="regex_replace.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="regex_token_iterator.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.ref.regex_iterator"></a><a class="link" href="regex_iterator.html" title="regex_iterator"> regex_iterator</a>
 </h3></div></div></div>
@@ -78,7 +78,7 @@
                           <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">m</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.regex_iterator.description"></a><h5>
-<a name="id845746"></a>
+<a name="id984542"></a>
         <a class="link" href="regex_iterator.html#boost_regex.ref.regex_iterator.description">Description</a>
       </h5>
 <p>
@@ -86,13 +86,17 @@
         is constructed from a pair of iterators, and enumerates all occurrences of
         a regular expression within that iterator range.
       </p>
-<a name="boost_regex.regex_iterator.construct1"></a><pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">();</span>
+<a name="boost_regex.regex_iterator.construct1"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">();</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: constructs an end of sequence
         <a class="link" href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a>.
       </p>
-<a name="boost_regex.regex_iterator.construct2"></a><pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">(</span><span class="identifier">BidirectionalIterator</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">BidirectionalIterator</span> <span class="identifier">b</span><span class="special">,</span> 
+<a name="boost_regex.regex_iterator.construct2"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">(</span><span class="identifier">BidirectionalIterator</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">BidirectionalIterator</span> <span class="identifier">b</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">regex_type</span><span class="special">&amp;</span> <span class="identifier">re</span><span class="special">,</span> 
                <span class="identifier">match_flag_type</span> <span class="identifier">m</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
@@ -110,7 +114,9 @@
         matcher exhausts its permitted memory allocation (if Boost.Regex is configured
         in non-recursive mode).
       </p>
-<a name="boost_regex.regex_iterator.construct3"></a><pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
+<a name="boost_regex.regex_iterator.construct3"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: constructs a copy of <code class="computeroutput"><span class="identifier">that</span></code>.
@@ -118,7 +124,9 @@
 <p>
         <span class="bold"><strong>Postconditions</strong></span>: <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span> <span class="special">==</span> <span class="identifier">that</span></code>.
       </p>
-<a name="boost_regex.regex_iterator.assign"></a><pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;);</span>
+<a name="boost_regex.regex_iterator.assign"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: sets <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> equal to those in <code class="computeroutput"><span class="identifier">that</span></code>.
@@ -126,18 +134,24 @@
 <p>
         <span class="bold"><strong>Postconditions</strong></span>: *this == that.
       </p>
-<a name="boost_regex.regex_iterator.op_eq"></a><pre class="programlisting"><span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">==(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.regex_iterator.op_eq"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">==(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: returns true if *this is equal
         to that.
       </p>
-<a name="boost_regex.regex_iterator.op_ne"></a><pre class="programlisting"><span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">!=(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.regex_iterator.op_ne"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">!=(</span><span class="keyword">const</span> <span class="identifier">regex_iterator</span><span class="special">&amp;)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="special">!(*</span><span class="keyword">this</span> <span class="special">==</span> <span class="identifier">that</span><span class="special">)</span></code>.
       </p>
-<a name="boost_regex.regex_iterator.op_deref"></a><pre class="programlisting"><span class="keyword">const</span> <span class="identifier">value_type</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">*()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.regex_iterator.op_deref"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">const</span> <span class="identifier">value_type</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">*()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: dereferencing a <a class="link" href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> object it yields
@@ -360,12 +374,16 @@
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.regex_iterator.op_arrow"></a><pre class="programlisting"><span class="keyword">const</span> <span class="identifier">value_type</span><span class="special">*</span> <span class="keyword">operator</span><span class="special">-&gt;()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.regex_iterator.op_arrow"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">const</span> <span class="identifier">value_type</span><span class="special">*</span> <span class="keyword">operator</span><span class="special">-&gt;()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="special">&amp;(*</span><span class="keyword">this</span><span class="special">)</span></code>.
       </p>
-<a name="boost_regex.regex_iterator.op_inc"></a><pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">++();</span>
+<a name="boost_regex.regex_iterator.op_inc"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">++();</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: moves the iterator to the next
@@ -388,7 +406,9 @@
 <p>
         <span class="bold"><strong>Returns</strong></span>: *this.
       </p>
-<a name="boost_regex.regex_iterator.op_inc2"></a><pre class="programlisting"><span class="identifier">regex_iterator</span> <span class="keyword">operator</span><span class="special">++(</span><span class="keyword">int</span><span class="special">);</span>
+<a name="boost_regex.regex_iterator.op_inc2"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">regex_iterator</span> <span class="keyword">operator</span><span class="special">++(</span><span class="keyword">int</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: constructs a copy result of <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>, then
@@ -397,7 +417,9 @@
 <p>
         <span class="bold"><strong>Returns</strong></span>: result.
       </p>
-<a name="boost_regex.regex_iterator.make"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span> 
+<a name="boost_regex.regex_iterator.make"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span> 
 <span class="identifier">regex_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*,</span> <span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;</span>
    <span class="identifier">make_regex_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span> 
                      <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">m</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_default</span><span class="special">);</span> 
@@ -415,7 +437,7 @@
         <span class="emphasis"><em>m</em></span>.
       </p>
 <a name="boost_regex.ref.regex_iterator.examples"></a><h5>
-<a name="id848508"></a>
+<a name="id987942"></a>
         <a class="link" href="regex_iterator.html#boost_regex.ref.regex_iterator.examples">Examples</a>
       </h5>
 <p>
