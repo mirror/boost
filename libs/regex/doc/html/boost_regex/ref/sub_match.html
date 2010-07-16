@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>sub_match</title>
 <link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="match_results.html" title="match_results">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="match_results.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="regex_match.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.ref.sub_match"></a><a class="link" href="sub_match.html" title="sub_match"> sub_match</a>
 </h3></div></div></div>
@@ -329,56 +329,74 @@
 <span class="special">}</span> <span class="comment">// namespace boost
 </span></pre>
 <a name="boost_regex.ref.sub_match.description"></a><h5>
-<a name="id816848"></a>
+<a name="id953201"></a>
         <a class="link" href="sub_match.html#boost_regex.ref.sub_match.description">Description</a>
       </h5>
 <a name="boost_regex.ref.sub_match.members"></a><h6>
-<a name="id816869"></a>
+<a name="id953214"></a>
         <a class="link" href="sub_match.html#boost_regex.ref.sub_match.members">Members</a>
       </h6>
-<a name="boost_regex.sub_match.value_type"></a><pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="identifier">value_type</span><span class="special">;</span>
+<a name="boost_regex.sub_match.value_type"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="identifier">value_type</span><span class="special">;</span>
 </pre>
 <p>
         The type pointed to by the iterators.
       </p>
-<a name="boost_regex.sub_match.diff_type"></a><pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;::</span><span class="identifier">difference_type</span> <span class="identifier">difference_type</span><span class="special">;</span>
+<a name="boost_regex.sub_match.diff_type"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;::</span><span class="identifier">difference_type</span> <span class="identifier">difference_type</span><span class="special">;</span>
 </pre>
 <p>
         A type that represents the difference between two iterators.
       </p>
-<a name="boost_regex.sub_match.it_type"></a><pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">BidirectionalIterator</span> <span class="identifier">iterator</span><span class="special">;</span>
+<a name="boost_regex.sub_match.it_type"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">BidirectionalIterator</span> <span class="identifier">iterator</span><span class="special">;</span>
 </pre>
 <p>
         The iterator type.
       </p>
-<a name="boost_regex.sub_match.first"></a><pre class="programlisting"><span class="identifier">iterator</span> <span class="identifier">first</span>
+<a name="boost_regex.sub_match.first"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">iterator</span> <span class="identifier">first</span>
 </pre>
 <p>
         An iterator denoting the position of the start of the match.
       </p>
-<a name="boost_regex.sub_match.second"></a><pre class="programlisting"><span class="identifier">iterator</span> <span class="identifier">second</span>
+<a name="boost_regex.sub_match.second"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">iterator</span> <span class="identifier">second</span>
 </pre>
 <p>
         An iterator denoting the position of the end of the match.
       </p>
-<a name="boost_regex.sub_match.matched"></a><pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">matched</span>
+<a name="boost_regex.sub_match.matched"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">matched</span>
 </pre>
 <p>
         A Boolean value denoting whether this sub-expression participated in the
         match.
       </p>
-<a name="boost_regex.sub_match.length"></a><pre class="programlisting"><span class="keyword">static</span> <span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">();</span>
+<a name="boost_regex.sub_match.length"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">();</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: returns the length of this matched
         sub-expression, or 0 if this sub-expression was not matched: <code class="computeroutput"><span class="identifier">matched</span> <span class="special">?</span> <span class="identifier">distance</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">second</span><span class="special">)</span> <span class="special">:</span> <span class="number">0</span><span class="special">)</span></code>.
       </p>
-<a name="boost_regex.sub_match.cast"></a><pre class="programlisting"><span class="keyword">operator</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.sub_match.cast"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">operator</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: converts <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> into a string: returns <code class="computeroutput"><span class="special">(</span><span class="identifier">matched</span> <span class="special">?</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">second</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;())</span></code>.
       </p>
-<a name="boost_regex.sub_match.str"></a><pre class="programlisting"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;</span> <span class="identifier">str</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.sub_match.str"></a><p>
+      </p>
+<pre class="programlisting"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;</span> <span class="identifier">str</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: returns a string representation
@@ -386,25 +404,33 @@
         <code class="computeroutput"><span class="special">(</span><span class="identifier">matched</span>
         <span class="special">?</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">second</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;())</span></code>.
       </p>
-<a name="boost_regex.sub_match.compare1"></a><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.sub_match.compare1"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: performs a lexical comparison to
         <span class="emphasis"><em>s</em></span>: returns <code class="computeroutput"><span class="identifier">str</span><span class="special">().</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">s</span><span class="special">.</span><span class="identifier">str</span><span class="special">())</span></code>.
       </p>
-<a name="boost_regex.sub_match.compare2"></a><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.sub_match.compare2"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: compares <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> to the string <span class="emphasis"><em>s</em></span>:
         returns <code class="computeroutput"><span class="identifier">str</span><span class="special">().</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>.
       </p>
-<a name="boost_regex.sub_match.compare3"></a><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">value_type</span><span class="special">*</span> <span class="identifier">s</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.sub_match.compare3"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">value_type</span><span class="special">*</span> <span class="identifier">s</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: compares <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> to the null-terminated string <span class="emphasis"><em>s</em></span>:
         returns <code class="computeroutput"><span class="identifier">str</span><span class="special">().</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>.
       </p>
-<a name="boost_regex.sub_match.cap_seq_type"></a><pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">implementation</span><span class="special">-</span><span class="keyword">private</span> <span class="identifier">capture_sequence_type</span><span class="special">;</span>
+<a name="boost_regex.sub_match.cap_seq_type"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">implementation</span><span class="special">-</span><span class="keyword">private</span> <span class="identifier">capture_sequence_type</span><span class="special">;</span>
 </pre>
 <p>
         Defines an implementation-specific type that satisfies the requirements of
@@ -412,7 +438,9 @@
         whose value_type is a <code class="computeroutput"><span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span></code>. This type happens to be <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> <span class="special">&gt;</span></code>,
         but you shouldn't actually rely on that.
       </p>
-<a name="boost_regex.sub_match.captures"></a><pre class="programlisting"><span class="keyword">const</span> <span class="identifier">capture_sequence_type</span><span class="special">&amp;</span> <span class="identifier">captures</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> 
+<a name="boost_regex.sub_match.captures"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">const</span> <span class="identifier">capture_sequence_type</span><span class="special">&amp;</span> <span class="identifier">captures</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> 
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: returns a sequence containing all
@@ -429,28 +457,30 @@
         <span class="bold"><strong>Rationale</strong></span>: Enabling this feature has several
         consequences:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
             sub_match occupies more memory resulting in complex expressions running
             out of memory or stack space more quickly during matching.
           </li>
-<li class="listitem">
+<li>
             The matching algorithms are less efficient at handling some features
             (independent sub-expressions for example), even when match_extra is not
             used.
           </li>
-<li class="listitem">
+<li>
             The matching algorithms are much less efficient (i.e. slower), when match_extra
             is used. Mostly this is down to the extra memory allocations that have
             to take place.
           </li>
 </ul></div>
 <a name="boost_regex.ref.sub_match.sub_match_non_member_operators"></a><h6>
-<a name="id818224"></a>
+<a name="id954343"></a>
         <a class="link" href="sub_match.html#boost_regex.ref.sub_match.sub_match_non_member_operators">sub_match
         non-member operators</a>
       </h6>
-<a name="boost_regex.sub_match.op_compare1"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<a name="boost_regex.sub_match.op_compare1"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -458,7 +488,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">==</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare2"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<a name="boost_regex.sub_match.op_compare2"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -466,7 +498,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">!=</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare3"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<a name="boost_regex.sub_match.op_compare3"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -474,7 +508,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">&lt;</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare4"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<a name="boost_regex.sub_match.op_compare4"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -482,7 +518,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">&lt;=</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare5"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<a name="boost_regex.sub_match.op_compare5"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -490,7 +528,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">&gt;=</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare6"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<a name="boost_regex.sub_match.op_compare6"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
@@ -498,7 +538,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
         <span class="special">&gt;</span> <span class="number">0</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare7"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare7"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                                           <span class="identifier">traits</span><span class="special">,</span>
                                                           <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
@@ -508,7 +550,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">==</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare8"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare8"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                                           <span class="identifier">traits</span><span class="special">,</span> 
                                                           <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -518,7 +562,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">!=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare9"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare9"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                          <span class="identifier">traits</span><span class="special">,</span> 
                                          <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -528,7 +574,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&lt;</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare10"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare10"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                                          <span class="identifier">traits</span><span class="special">,</span> 
                                                          <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -538,7 +586,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&gt;</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare11"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare11"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                           <span class="identifier">traits</span><span class="special">,</span> 
                                           <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -548,7 +598,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&gt;=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare12"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare12"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                           <span class="identifier">traits</span><span class="special">,</span> 
                                           <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -558,7 +610,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&lt;=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare13"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare13"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                           <span class="identifier">traits</span><span class="special">,</span> 
@@ -568,7 +622,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">==</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare14"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare14"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                           <span class="identifier">traits</span><span class="special">,</span> 
@@ -578,7 +634,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">!=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare15"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare15"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                        <span class="identifier">traits</span><span class="special">,</span> 
@@ -588,7 +646,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&lt;</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare16"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare16"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                  <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                          <span class="identifier">traits</span><span class="special">,</span> 
@@ -598,7 +658,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&gt;</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare17"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare17"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                           <span class="identifier">traits</span><span class="special">,</span> 
@@ -608,7 +670,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&gt;=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare18"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare18"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                           <span class="identifier">traits</span><span class="special">,</span> 
@@ -618,7 +682,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&lt;=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare19"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare19"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -626,7 +692,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">==</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare20"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare20"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -634,7 +702,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">!=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare21"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare21"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -642,7 +712,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&lt;</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare22"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare22"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -650,7 +722,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&gt;</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare23"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare23"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -658,7 +732,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&gt;=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare24"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare24"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -666,7 +742,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&lt;=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare25"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare25"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -674,7 +752,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">==</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare26"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare26"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -682,7 +762,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">!=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare27"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare27"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -690,7 +772,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&lt;</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare28"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare28"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -698,7 +782,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&gt;</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare29"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare29"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -706,7 +792,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&gt;=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare30"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare30"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -714,7 +802,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&lt;=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare31"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare31"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -722,7 +812,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">==</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare32"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare32"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -730,7 +822,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">!=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare33"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare33"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -738,7 +832,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&lt;</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare34"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare34"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -746,7 +842,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&gt;</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare35"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare35"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -754,7 +852,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&gt;=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare36"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare36"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -762,7 +862,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span>
         <span class="special">&lt;=</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare37"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare37"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -770,7 +872,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">==</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare38"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare38"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -778,7 +882,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">!=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare39"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare39"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -786,7 +892,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&lt;</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare40"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare40"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -794,7 +902,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&gt;</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare41"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare41"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&gt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -802,7 +912,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">&gt;=</span> <span class="identifier">rhs</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_compare42"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_compare42"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">&lt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> 
                   <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span> 
 </pre>
@@ -815,7 +927,9 @@
         to any type to which you can add a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span></code>
         and obtain a new string as the result.
       </p>
-<a name="boost_regex.sub_match.op_add1"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_add1"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
    <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
                                        <span class="identifier">traits</span><span class="special">,</span> 
@@ -826,7 +940,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">s</span>
         <span class="special">+</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_add2"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_add2"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
    <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> 
@@ -837,7 +953,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">+</span> <span class="identifier">s</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_add3"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_add3"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">&gt;</span> 
    <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">s</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">);</span> 
@@ -846,7 +964,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">s</span>
         <span class="special">+</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_add4"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_add4"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">&gt;</span> 
    <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">,</span> 
                <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span> <span class="special">*</span> <span class="identifier">s</span><span class="special">);</span>
@@ -855,7 +975,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">+</span> <span class="identifier">s</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_add5"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_add5"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">&gt;</span> 
    <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> 
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">);</span> 
@@ -864,7 +986,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">s</span>
         <span class="special">+</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_add6"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_add6"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">&gt;</span> 
    <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">,</span> 
                <span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span> 
@@ -873,7 +997,9 @@
         <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span>
         <span class="special">+</span> <span class="identifier">s</span></code>.
       </p>
-<a name="boost_regex.sub_match.op_add7"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
+<a name="boost_regex.sub_match.op_add7"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">&gt;</span> 
    <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
@@ -883,10 +1009,12 @@
         <span class="special">+</span> <span class="identifier">m2</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>.
       </p>
 <a name="boost_regex.ref.sub_match.stream_inserter"></a><h6>
-<a name="id828897"></a>
+<a name="id967429"></a>
         <a class="link" href="sub_match.html#boost_regex.ref.sub_match.stream_inserter">Stream inserter</a>
       </h6>
-<a name="boost_regex.sub_match.op_stream"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<a name="boost_regex.sub_match.op_stream"></a><p>
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span>
    <span class="keyword">operator</span> <span class="special">&lt;&lt;</span> <span class="special">(</span><span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">os</span>
                <span class="keyword">const</span> <span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">);</span>
