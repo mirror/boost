@@ -47,10 +47,10 @@ namespace boost
                 Container cont2(old_cont);
                 iter_t result = boost::partition(cont, UnaryPredicate());
 
-                iter_t temp_result = boost::partition(cont2, UnaryPredicate());
+                boost::partition(cont2, UnaryPredicate());
                 cont2 = old_cont;
-                BOOST_CHECK( temp_result == boost::partition(
-                    boost::make_iterator_range(cont2), UnaryPredicate()) );
+                boost::partition(
+                    boost::make_iterator_range(cont2), UnaryPredicate());
 
                 BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
                                                cont2.begin(), cont2.end() );
