@@ -13,6 +13,7 @@
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <boost/array.hpp>
 #include <boost/assign.hpp>
 #include <boost/range/algorithm_ext.hpp>
 
@@ -111,6 +112,48 @@ namespace boost
         {
             map_test_impl< std::map<int,int> >();
         }
+
+        void test_trac_item_4388()
+        {
+            typedef std::pair<int,char> pair_t;
+            const boost::array<pair_t,3> ar = {{
+                pair_t(3, 'a'),
+                pair_t(1, 'b'),
+                pair_t(4, 'c')
+            }};
+
+            const boost::array<int, 3> expected_keys = {{ 3, 1, 4 }};
+            const boost::array<char, 3> expected_values = {{ 'a', 'b', 'c' }};
+
+            {
+                std::vector<int> test;
+                boost::push_back(test, ar | boost::adaptors::map_keys);
+                BOOST_CHECK_EQUAL_COLLECTIONS(
+                    expected_keys.begin(), expected_keys.end(),
+                    test.begin(), test.end()
+                );
+            }
+
+            {
+                std::vector<char> test;
+                boost::push_back(test, ar | boost::adaptors::map_values);
+                BOOST_CHECK_EQUAL_COLLECTIONS(
+                    expected_values.begin(), expected_values.end(),
+                    test.begin(), test.end()
+                );
+            }
+
+            {
+                std::vector<char> test;
+                boost::array<std::pair<int, char>, 3> src(ar);
+                boost::push_back(test, src | boost::adaptors::map_values);
+                BOOST_CHECK_EQUAL_COLLECTIONS(
+                    expected_values.begin(), expected_values.end(),
+                    test.begin(), test.end()
+                );
+            }
+        }
+
     }
 }
 
@@ -122,6 +165,7 @@ init_unit_test_suite(int argc, char* argv[])
         = BOOST_TEST_SUITE( "RangeTestSuite.adaptor.map" );
 
     test->add( BOOST_TEST_CASE( &boost::map_test ) );
+    test->add( BOOST_TEST_CASE( &boost::test_trac_item_4388 ) );
 
     return test;
 }

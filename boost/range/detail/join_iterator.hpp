@@ -134,7 +134,11 @@ public:
     typedef Iterator1 iterator1_t;
     typedef Iterator2 iterator2_t;
 
-    join_iterator() : m_section(0u) {}
+    join_iterator()
+        : m_section(0u)
+        , m_it(0u, iterator1_t(), iterator2_t())
+        , m_link(link_t(iterator1_t(), iterator2_t()))
+    {}
 
     join_iterator(unsigned int section, Iterator1 current1, Iterator1 last1, Iterator2 first2, Iterator2 current2)
         : m_section(section)
