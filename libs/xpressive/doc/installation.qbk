@@ -9,20 +9,11 @@
 
 [h2 Getting xpressive]
 
-There are three ways to get xpressive. The first and simplest is to download
+There are two ways to get xpressive. The first and simplest is to download
 the latest version of Boost. Just go to [@http://sf.net/projects/boost] and
 follow the ["Download] link.
 
-The second way is by downloading xpressive.zip at the
-[@http://www.boost-consulting.com/vault/index.php?directory=Strings%20-%20Text%20Processing
-Boost File Vault] in the ["Strings - Text Processing] directory. In addition to
-the source code and the Boost license, this archive contains a copy of this
-documentation in PDF format. This version will always be stable and at least as
-current as the version in the latest Boost release. It may be more recent. The
-version in the File Vault is always guaranteed to work with the latest official
-Boost release.
-
-The third way is by directly accessing the Boost Subversion repository.
+The second way is by directly accessing the Boost Subversion repository.
 Just go to [@http://svn.boost.org/trac/boost/] and follow the instructions there for
 anonymous Subversion access. The version in Boost Subversion is unstable.
 
