@@ -12,62 +12,27 @@ The main advantages are
 * more flexible, compact and maintainable client code
 * safe use of built-in arrays (for legacy code; why else would you use built-in arrays?)
 
-Below are given a small example (the complete example can be found [@http://www.boost.org/libs/range/test/algorithm_example.cpp here] ):
-
+[heading Example - Iterate over the values in a map]
 ``
-        //
-        // example: extracting bounds in a generic algorithm
-        //
-        template< class ForwardReadableRange, class T >
-        inline typename boost::range_iterator< ForwardReadableRange >::type
-        find( ForwardReadableRange& c, const T& value )
-        {
-           return std::find( boost::begin( c ), boost::end( c ), value );
-        }
-
-        template< class ForwardReadableRange, class T >
-        inline typename boost::range_iterator< const ForwardReadableRange >::type
-        find( const ForwardReadableRange& c, const T& value )
-        {
-           return std::find( boost::begin( c ), boost::end( c ), value );
-        }
-
-        //
-        // replace first value and return its index
-        //
-        template< class ForwardReadableWriteableRange, class T >
-        inline typename boost::range_size< ForwardReadableWriteableRange >::type
-        my_generic_replace( ForwardReadableWriteableRange& c, const T& value, const T& replacement )
-        {
-           typename boost::range_iterator< ForwardReadableWriteableRange >::type found = find( c, value );
-
-           if( found != boost::end( c ) )
-               *found = replacement;
-           return std::distance( boost::begin( c ), found );
-        }
-
-        //
-        // usage
-        //
-        const int N = 5;
-        std::vector<int> my_vector;
-        int values[] = { 1,2,3,4,5,6,7,8,9 };
-
-        my_vector.assign( values, boost::end( values ) );
-        typedef std::vector<int>::iterator iterator;
-        std::pair<iterator,iterator>       my_view( boost::begin( my_vector ),
-                                                    boost::begin( my_vector ) + N );
-        char  str_val[] = "a string";
-        char* str       = str_val;
-
-        std::cout << my_generic_replace( my_vector, 4, 2 );
-        std::cout << my_generic_replace( my_view, 4, 2 );
-        std::cout << my_generic_replace( str, 'a', 'b' );
-
-        // prints '3', '5' and '0'
+using namespace boost;
+using namespace boost::adaptors;
+for_each( my_map | map_values, fn );
 ``
 
-By using the free-standing functions and __metafunctions__, the code automatically works for all the types supported by this library; now and in the future. Notice that we have to provide two versions of `find()` since we cannot forward a non-const rvalue with reference arguments (see this article about __the_forwarding_problem__ ).
+[heading Example - Iterate over the keys in a map]
+``
+using namespace boost;
+using namespace boost::adaptors;
+for_each( my_map | map_keys, fn );
+``
+
+[heading Example - Push the even values from a map in reverse order into the container `target`]
+``
+using namespace boost;
+using namespace boost::adaptors;
+// Assume that is_even is a predicate that has been implemented elsewhere...
+push_back(target, my_map | map_values | filtered(is_even()) | reversed);
+``
 
 [endsect]
 

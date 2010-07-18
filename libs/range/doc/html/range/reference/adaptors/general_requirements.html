@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>General Requirements</title>
-<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../adaptors.html" title="Range Adaptors">
 <link rel="prev" href="introduction.html" title="Introduction and motivation">
@@ -13,16 +13,16 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="introduction.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adaptors.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="introduction.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adaptors.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="General Requirements">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="range.reference.adaptors.general_requirements"></a><a class="link" href="general_requirements.html" title="General Requirements"> General
         Requirements</a>
@@ -33,40 +33,40 @@
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">fwdRng</span></code> is an expression
-            of a type <code class="computeroutput"><span class="identifier">R</span></code> that models
-            <code class="computeroutput"><span class="identifier">ForwardRange</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">fwdRng</span></code> is an expression
+              of a type <code class="computeroutput"><span class="identifier">R</span></code> that models
+              <code class="computeroutput"><span class="identifier">ForwardRange</span></code>
+            </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">biRng</span></code> is an expression
-            of a type <code class="computeroutput"><span class="identifier">R</span></code> that models
-            <code class="computeroutput"><span class="identifier">BidirectionalRange</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">biRng</span></code> is an expression
+              of a type <code class="computeroutput"><span class="identifier">R</span></code> that models
+              <code class="computeroutput"><span class="identifier">BidirectionalRange</span></code>
+            </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">rndRng</span></code> is an expression
-            of a type <code class="computeroutput"><span class="identifier">R</span></code> that models
-            <code class="computeroutput"><span class="identifier">RandomAccessRange</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">rndRng</span></code> is an expression
+              of a type <code class="computeroutput"><span class="identifier">R</span></code> that models
+              <code class="computeroutput"><span class="identifier">RandomAccessRange</span></code>
+            </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">pred</span></code> is an expression
-            of a type that models <code class="computeroutput"><span class="identifier">UnaryPredicate</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">pred</span></code> is an expression
+              of a type that models <code class="computeroutput"><span class="identifier">UnaryPredicate</span></code>
+            </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">bi_pred</span></code> is an expression
-            of a type that models <code class="computeroutput"><span class="identifier">BinaryPredicate</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">bi_pred</span></code> is an expression
+              of a type that models <code class="computeroutput"><span class="identifier">BinaryPredicate</span></code>
+            </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">fun</span></code> is an expression
-            of a type that models <code class="computeroutput"><span class="identifier">UnaryFunction</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">fun</span></code> is an expression
+              of a type that models <code class="computeroutput"><span class="identifier">UnaryFunction</span></code>
+            </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">value</span></code>, <code class="computeroutput"><span class="identifier">new_value</span></code> and <code class="computeroutput"><span class="identifier">old_value</span></code>
-            are objects convertible to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_value</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">value</span></code>, <code class="computeroutput"><span class="identifier">new_value</span></code> and <code class="computeroutput"><span class="identifier">old_value</span></code>
+              are objects convertible to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_value</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">n</span><span class="special">,</span><span class="identifier">m</span></code> are integer expressions convertible
-            to <code class="computeroutput"><span class="identifier">range_difference</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-</li>
+              <code class="computeroutput"><span class="identifier">n</span><span class="special">,</span><span class="identifier">m</span></code> are integer expressions convertible
+              to <code class="computeroutput"><span class="identifier">range_difference</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </li>
 </ul></div>
 <p>
           Also note that <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_value</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;::</span><span class="identifier">type</span></code> must be implicitly convertible to
@@ -135,7 +135,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="introduction.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adaptors.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="introduction.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adaptors.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

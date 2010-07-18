@@ -25,18 +25,26 @@ namespace boost
         {
             Container reference(cont);
             Container test(cont);
+            Container test2(cont);
 
             const bool reference_ret
                 = std::prev_permutation(reference.begin(), reference.end());
 
-            const bool test_ret
-                = boost::prev_permutation(test);
+            const bool test_ret = boost::prev_permutation(test);
 
             BOOST_CHECK( reference_ret == test_ret );
 
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference.begin(), reference.end(),
                 test.begin(), test.end()
+                );
+
+            BOOST_CHECK( test_ret == boost::prev_permutation(
+                                boost::make_iterator_range(test2)) );
+                                
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference.begin(), reference.end(),
+                test2.begin(), test2.end()
                 );
         }
 
@@ -46,19 +54,27 @@ namespace boost
         {
             Container reference(cont);
             Container test(cont);
+            Container test2(cont);
 
             const bool reference_ret
                 = std::prev_permutation(reference.begin(), reference.end(),
                                         pred);
 
-            const bool test_ret
-                = boost::prev_permutation(test, pred);
+            const bool test_ret = boost::prev_permutation(test, pred);
 
             BOOST_CHECK( reference_ret == test_ret );
 
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference.begin(), reference.end(),
                 test.begin(), test.end()
+                );
+                
+            BOOST_CHECK( test_ret == boost::prev_permutation(
+                boost::make_iterator_range(test2), pred) );
+                
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference.begin(), reference.end(),
+                test2.begin(), test2.end()
                 );
         }
 

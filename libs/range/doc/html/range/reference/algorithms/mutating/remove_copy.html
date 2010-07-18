@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>remove_copy</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../mutating.html" title="Mutating algorithms">
 <link rel="prev" href="remove.html" title="remove">
@@ -13,22 +13,22 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="remove.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="remove_copy_if.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="remove.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="remove_copy_if.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="remove_copy">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="range.reference.algorithms.mutating.remove_copy"></a><a class="link" href="remove_copy.html" title="remove_copy">
           remove_copy</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.mutating.remove_copy.prototype"></a><h6>
-<a name="id2734862"></a>
+<a name="id3309242"></a>
             <a class="link" href="remove_copy.html#range.reference.algorithms.mutating.remove_copy.prototype">Prototype</a>
           </h6>
 <p>
@@ -45,7 +45,7 @@
 <p>
           </p>
 <a name="range.reference.algorithms.mutating.remove_copy.description"></a><h6>
-<a name="id2735168"></a>
+<a name="id3309548"></a>
             <a class="link" href="remove_copy.html#range.reference.algorithms.mutating.remove_copy.description">Description</a>
           </h6>
 <p>
@@ -54,37 +54,37 @@
             <code class="computeroutput"><span class="identifier">rng</span></code> for which <code class="computeroutput"><span class="identifier">x</span> <span class="special">==</span> <span class="identifier">val</span></code> is <code class="computeroutput"><span class="keyword">false</span></code>.
           </p>
 <a name="range.reference.algorithms.mutating.remove_copy.definition"></a><h6>
-<a name="id2735257"></a>
+<a name="id3309638"></a>
             <a class="link" href="remove_copy.html#range.reference.algorithms.mutating.remove_copy.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">remove_copy</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.mutating.remove_copy.requirements"></a><h6>
-<a name="id2735330"></a>
+<a name="id3309712"></a>
             <a class="link" href="remove_copy.html#range.reference.algorithms.mutating.remove_copy.requirements">Requirements</a>
           </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">ForwardRange</span></code> is a model
-              of the <a class="link" href="../../../concepts/forward_range.html" title="Forward Range">Forward Range</a>
-              Concept.
-            </li>
+                <code class="computeroutput"><span class="identifier">ForwardRange</span></code> is a
+                model of the <a class="link" href="../../../concepts/forward_range.html" title="Forward Range">Forward
+                Range</a> Concept.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">ForwardRange</span></code> is mutable.
-            </li>
+                <code class="computeroutput"><span class="identifier">ForwardRange</span></code> is mutable.
+              </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">Value</span></code> is a model of
-              the <code class="computeroutput"><span class="identifier">EqualityComparableConcept</span></code>.
-            </li>
+                <code class="computeroutput"><span class="identifier">Value</span></code> is a model
+                of the <code class="computeroutput"><span class="identifier">EqualityComparableConcept</span></code>.
+              </li>
 <li class="listitem">
-              Objects of type <code class="computeroutput"><span class="identifier">Value</span></code>
-              can be compared for equality with objects of <code class="computeroutput"><span class="identifier">ForwardRange</span></code>'s
-              value type.
-            </li>
+                Objects of type <code class="computeroutput"><span class="identifier">Value</span></code>
+                can be compared for equality with objects of <code class="computeroutput"><span class="identifier">ForwardRange</span></code>'s
+                value type.
+              </li>
 </ul></div>
 <a name="range.reference.algorithms.mutating.remove_copy.complexity"></a><h6>
-<a name="id2735444"></a>
+<a name="id3309838"></a>
             <a class="link" href="remove_copy.html#range.reference.algorithms.mutating.remove_copy.complexity">Complexity</a>
           </h6>
 <p>
@@ -103,7 +103,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="remove.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="remove_copy_if.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="remove.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mutating.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="remove_copy_if.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

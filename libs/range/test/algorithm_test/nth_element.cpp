@@ -29,7 +29,21 @@ namespace boost
             template<class Container, class Iterator>
             void test_nth_element(Container& cont, Iterator mid)
             {
+                const Container old_cont(cont);
+                
                 boost::nth_element(cont, mid);
+                
+                // Test the same operation on the container, for the
+                // case where a temporary is passed as the first
+                // argument.
+                Container cont2(old_cont);
+                const std::size_t index = std::distance(cont.begin(), mid);
+                Iterator mid2(cont2.begin());
+                std::advance(mid2, index);
+                boost::nth_element(boost::make_iterator_range(cont2), mid2);
+                
+                BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                               cont2.begin(), cont2.end() );
             }
 
             template<class Container, class Iterator>
@@ -45,7 +59,19 @@ namespace boost
             template<class Container, class Iterator>
             void test_nth_element(Container& cont, Iterator mid)
             {
+                const Container old_cont(cont);
+                
                 boost::nth_element(cont, mid, BinaryPredicate());
+                
+                Container cont2(old_cont);
+                const std::size_t index = std::distance(cont.begin(), mid);
+                Iterator mid2(cont2.begin());
+                std::advance(mid2, index);
+                boost::nth_element(boost::make_iterator_range(cont2), mid2,
+                                   BinaryPredicate());
+                                   
+                BOOST_CHECK_EQUAL_COLLECTIONS( cont.begin(), cont.end(),
+                                               cont2.begin(), cont2.end() );
             }
 
             template<class Container, class Iterator>

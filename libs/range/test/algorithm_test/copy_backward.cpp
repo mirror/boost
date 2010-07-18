@@ -39,6 +39,10 @@ namespace boost
             BOOST_CHECK( it == target.end() );
             BOOST_CHECK_EQUAL_COLLECTIONS( target.begin(), target.end(),
                 source.rbegin(), source.rend() );
+                
+            BOOST_CHECK( it == boost::copy_backward(boost::make_iterator_range(source), target.begin()) );
+            BOOST_CHECK_EQUAL_COLLECTIONS( target.begin(), target.end(),
+                                           source.rbegin(), source.rend() );
         }
 
         void test_copy_backward()

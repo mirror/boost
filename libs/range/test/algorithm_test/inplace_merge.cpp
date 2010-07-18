@@ -35,6 +35,7 @@ namespace boost
                                     cont2.begin(), cont2.end());
 
             std::vector<value_t> test_target(reference_target);
+            std::vector<value_t> test_target2(reference_target);
 
             std::inplace_merge(reference_target.begin(),
                                reference_target.begin() + cont1.size(),
@@ -46,6 +47,14 @@ namespace boost
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference_target.begin(), reference_target.end(),
                 test_target.begin(), test_target.end()
+                );
+                
+            boost::inplace_merge(boost::make_iterator_range(test_target2),
+                                 test_target2.begin() + cont1.size());
+                                 
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target2.begin(), test_target2.end()
                 );
         }
 
@@ -75,6 +84,7 @@ namespace boost
                                     cont2.begin(), cont2.end());
 
             std::vector<value_t> test_target(reference_target);
+            std::vector<value_t> test_target2(reference_target);
 
             std::inplace_merge(reference_target.begin(),
                                reference_target.begin() + cont1.size(),
@@ -87,6 +97,15 @@ namespace boost
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference_target.begin(), reference_target.end(),
                 test_target.begin(), test_target.end()
+                );
+
+            boost::inplace_merge(boost::make_iterator_range(test_target2),
+                                 test_target2.begin() + cont1.size(),
+                                 pred);
+                                 
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target2.begin(), test_target2.end()
                 );
         }
 

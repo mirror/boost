@@ -17,6 +17,7 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
+#include <boost/array.hpp>
 #include <boost/range/as_array.hpp>
 #include <boost/range/as_literal.hpp>
 #include <boost/range/functions.hpp>
@@ -28,6 +29,34 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+
+namespace
+{
+    template< class CharT, std::size_t Length >
+    class test_string
+    {
+    public:
+        typedef CharT value_type;
+        typedef value_type* pointer;
+        typedef const value_type* const_pointer;
+        typedef std::size_t size_type;
+        typedef value_type array_t[Length];
+        typedef const value_type const_array_t[Length];
+        
+        explicit test_string(const CharT literal_sz[])
+        {
+            std::copy(literal_sz, literal_sz + Length, m_buffer.data());
+            m_buffer[Length] = value_type();
+        }
+
+        const_pointer const_sz() const { return m_buffer.data(); }
+        pointer mutable_sz() { return m_buffer.data(); }
+
+    private:
+        typedef boost::array<value_type, Length + 1> buffer_t;
+        buffer_t m_buffer;
+    };
+}
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME boost::range_iterator<T>::type
@@ -105,11 +134,15 @@ void check_char()
 {
     typedef char*                  char_iterator_t;
     typedef char                   char_array_t[10];
-    const char*      char_s            = "a string";
-    char             my_string[]       = "another string";
+    
+    test_string<char, 8> a_string("a string");
+    test_string<char, 14> another_string("another string");
+
+    const char*      char_s = a_string.const_sz();
+    char             my_string[] = "another_string";
     const char       my_const_string[] = "another string";
-    const unsigned   my_string_length  = 14;
-    char*            char_s2           = "a string";
+    const unsigned   my_string_length = 14;
+    char*            char_s2 = a_string.mutable_sz();
     
     BOOST_STATIC_ASSERT(( is_same<  range_value<char_iterator_t>::type, 
                                     detail::iterator_traits<char_iterator_t>::value_type>::value ));
@@ -181,10 +214,14 @@ void check_string()
     check_char();
     
 #ifndef BOOST_NO_STD_WSTRING
-    typedef wchar_t*               wchar_iterator_t;          
-    const wchar_t*  char_ws      = L"a wide string";
+    typedef wchar_t*               wchar_iterator_t;
+
+    test_string<wchar_t, 13> a_wide_string(L"a wide string");
+    test_string<wchar_t, 19> another_wide_string(L"another wide string");
+    
+    const wchar_t*  char_ws      = a_wide_string.const_sz();
     wchar_t         my_wstring[] = L"another wide string";
-    wchar_t*        char_ws2     = L"a wide string";
+    wchar_t*        char_ws2     = a_wide_string.mutable_sz();
             
     BOOST_STATIC_ASSERT(( is_same< range_value<wchar_iterator_t>::type, 
                                    detail::iterator_traits<wchar_iterator_t>::value_type>::value ));
@@ -203,12 +240,17 @@ void check_string()
     BOOST_CHECK_EQUAL( sz, std::char_traits<wchar_t>::length( char_ws ) );
 
     wchar_t to_search = L'n';
-    BOOST_CHECK( find( char_ws, to_search ) != str_end(char_ws) );    
+    BOOST_CHECK( find( char_ws, to_search ) != str_end(char_ws) );
+    BOOST_CHECK( find( char_ws2, to_search ) != str_end(char_ws2) );
 
 #if BOOST_WORKAROUND(_MSC_VER, BOOST_TESTED_AT(1300))
 
     BOOST_CHECK( find( my_wstring, to_search ) != str_end(my_wstring) );
 
+#else
+
+    boost::ignore_unused_variable_warning( my_wstring );
+    
 #endif  
 #endif
     

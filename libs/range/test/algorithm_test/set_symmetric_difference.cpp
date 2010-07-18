@@ -63,6 +63,28 @@ namespace boost
 
             check_result(reference, reference_result,
                          test_cont, test_result);
+                         
+            test_result = boost::set_symmetric_difference(
+                            boost::make_iterator_range(cont1), cont2,
+                            test_cont.begin());
+                            
+            check_result(reference, reference_result,
+                         test_cont, test_result);
+                         
+            test_result = boost::set_symmetric_difference(
+                            cont1, boost::make_iterator_range(cont2),
+                            test_cont.begin());
+                            
+            check_result(reference, reference_result,
+                         test_cont, test_result);
+                         
+            test_result = boost::set_symmetric_difference(
+                            boost::make_iterator_range(cont1),
+                            boost::make_iterator_range(cont2),
+                            test_cont.begin());
+                            
+            check_result(reference, reference_result,
+                         test_cont, test_result);
         }
 
         template<class Container, class BinaryPredicate>
@@ -100,6 +122,28 @@ namespace boost
                 = boost::set_symmetric_difference(cont1, cont2,
                                                   test_cont.begin(), pred);
 
+            check_result(reference, reference_result,
+                         test_cont, test_result);
+                         
+            test_result = boost::set_symmetric_difference(
+                            boost::make_iterator_range(cont1), cont2,
+                            test_cont.begin(), pred);
+                            
+            check_result(reference, reference_result,
+                         test_cont, test_result);
+                         
+            test_result = boost::set_symmetric_difference(
+                            cont1, boost::make_iterator_range(cont2),
+                            test_cont.begin(), pred);
+                            
+            check_result(reference, reference_result,
+                         test_cont, test_result);
+                         
+            test_result = boost::set_symmetric_difference(
+                            boost::make_iterator_range(cont1),
+                            boost::make_iterator_range(cont2),
+                            test_cont.begin(), pred);
+                            
             check_result(reference, reference_result,
                          test_cont, test_result);
         }

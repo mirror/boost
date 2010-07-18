@@ -36,7 +36,14 @@ namespace boost
             boost::replace(target, what, with_what);
 
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
-                target.begin(), target.end() );
+                                           target.begin(), target.end() );
+                
+            std::vector<int> target2(cont.begin(), cont.end());
+            boost::replace(boost::make_iterator_range(target2), what,
+                           with_what);
+                           
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target2.begin(), target2.end() );
 
         }
 

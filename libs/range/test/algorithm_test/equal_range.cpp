@@ -70,8 +70,11 @@ namespace boost
 
             pair_t test_result = boost::equal_range(test, 5);
 
-            check_result(reference, reference_result,
-                         test, test_result);
+            check_result(reference, reference_result, test, test_result);
+
+            pair_t test_result2 = boost::equal_range(boost::make_iterator_range(test), 5);
+
+            check_result(reference, reference_result, test, test_result2);
         }
 
         template<class Container, class BinaryPredicate>
@@ -107,8 +110,11 @@ namespace boost
 
             pair_t test_result = boost::equal_range(test, 5, BinaryPredicate());
 
-            check_result(reference, reference_result,
-                         test, test_result);
+            check_result(reference, reference_result, test, test_result);
+
+            pair_t test_result2 = boost::equal_range(boost::make_iterator_range(test), 5, BinaryPredicate());
+
+            check_result(reference, reference_result, test, test_result2);
         }
 
         template<class Container>

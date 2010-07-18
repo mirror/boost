@@ -47,16 +47,23 @@ namespace boost
 
             BOOST_CHECK( test_it == target.end() );
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
-                target.begin(), target.end() );
-
+                                           target.begin(), target.end() );
+                
+            BOOST_CHECK( test_it == boost::transform(boost::make_iterator_range(cont), target.begin(), fn) );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target.begin(), target.end() );
+                                           
             target.clear();
             target.resize(ccont.size());
 
             test_it = boost::transform(ccont, target.begin(), fn);
-
+            
             BOOST_CHECK( test_it == target.end() );
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
-                target.begin(), target.end() );
+                                           target.begin(), target.end() );
+            BOOST_CHECK( test_it == boost::transform(boost::make_iterator_range(ccont), target.begin(), fn) );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target.begin(), target.end() );
         }
 
         template< class Container >
@@ -97,10 +104,25 @@ namespace boost
 
             iterator_t test_it
                 = boost::transform(cont1, cont2, target.begin(), fn);
-
+                
             BOOST_CHECK( test_it == target.end() );
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
-                target.begin(), target.end() );
+                                           target.begin(), target.end() );
+                                           
+            BOOST_CHECK( test_it == boost::transform(boost::make_iterator_range(cont1), cont2, target.begin(), fn) );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target.begin(), target.end() );
+                                           
+            BOOST_CHECK( test_it == boost::transform(cont1, boost::make_iterator_range(cont2), target.begin(), fn) );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target.begin(), target.end() );
+                                           
+            BOOST_CHECK( test_it == boost::transform(boost::make_iterator_range(cont1),
+                                                     boost::make_iterator_range(cont2),
+                                                     target.begin(), fn) );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           target.begin(), target.end() );
+                         
 
             target.clear();
             target.resize(ccont1.size());

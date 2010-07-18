@@ -49,6 +49,12 @@ namespace boost
 
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
                 test.begin(), test.end() );
+                
+            Container test2(cont);
+            boost::generate(boost::make_iterator_range(test2), generator_fn());
+            
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test2.begin(), test2.end() );
         }
 
         template< class Container >

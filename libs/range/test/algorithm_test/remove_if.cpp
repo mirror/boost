@@ -43,7 +43,17 @@ namespace boost
                                std::distance(reference.begin(), reference_it) );
 
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
-                test.begin(), test.end() );
+                                           test.begin(), test.end() );
+                
+            Container test2(c);
+            iterator_t test_it2 = boost::remove_if(
+                boost::make_iterator_range(test2), pred);
+                
+            BOOST_CHECK_EQUAL( std::distance(test2.begin(), test_it2),
+                               std::distance(reference.begin(), reference_it) );
+                               
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test2.begin(), test2.end() );
         }
 
         template< class Container >

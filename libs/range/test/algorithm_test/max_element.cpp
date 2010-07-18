@@ -33,7 +33,11 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::max_element(cont);
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::max_element(cont);
+                BOOST_CHECK( result == boost::max_element(
+                                            boost::make_iterator_range(cont)) );
+                return result;
             }
 
             template<range_return_value return_type>
@@ -43,7 +47,11 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy&, Container& cont)
                 {
-                    return boost::max_element<return_type>(cont);
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    result_t result = boost::max_element<return_type>(cont);
+                    BOOST_CHECK( result == boost::max_element<return_type>(
+                                                boost::make_iterator_range(cont)) );
+                    return result;
                 }
             };
 
@@ -63,7 +71,11 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::max_element(cont, Pred());
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::max_element(cont, Pred());
+                BOOST_CHECK( result == boost::max_element(
+                                            boost::make_iterator_range(cont), Pred()) );
+                return result;
             }
 
             Pred pred() const { return Pred(); }
@@ -75,7 +87,11 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy& policy, Container& cont)
                 {
-                    return boost::max_element<return_type>(cont, policy.pred());
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    result_t result = boost::max_element<return_type>(cont, policy.pred());
+                    BOOST_CHECK( result == boost::max_element<return_type>(
+                                                boost::make_iterator_range(cont), policy.pred()) );
+                    return result;
                 }
             };
 

@@ -24,6 +24,130 @@ namespace boost
     namespace
     {
         template< class Container1, class Container2 >
+        void eval_mismatch(Container1& cont1,
+                           Container2& cont2,
+                           BOOST_DEDUCED_TYPENAME range_iterator<Container1>::type ref_it1,
+                           BOOST_DEDUCED_TYPENAME range_iterator<Container2>::type ref_it2
+                           )
+        {
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container1>::type iter1_t;
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container2>::type iter2_t;
+            typedef std::pair<iter1_t, iter2_t> result_pair_t;
+            
+            result_pair_t result = boost::mismatch(cont1, cont2);
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1),
+                                     cont2);
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+            
+            result = boost::mismatch(cont1,
+                                     boost::make_iterator_range(cont2));
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1),
+                                     boost::make_iterator_range(cont2));
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+        }
+        
+        template< class Container1, class Container2, class Pred >
+        void eval_mismatch(Container1& cont1,
+                           Container2& cont2,
+                           Pred pred,
+                           BOOST_DEDUCED_TYPENAME range_iterator<Container1>::type ref_it1,
+                           BOOST_DEDUCED_TYPENAME range_iterator<Container2>::type ref_it2
+                           )
+        {
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container1>::type iter1_t;
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container2>::type iter2_t;
+            typedef std::pair<iter1_t, iter2_t> result_pair_t;
+            
+            result_pair_t result = boost::mismatch(cont1, cont2, pred);
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1),
+                                     cont2, pred);
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+            
+            result = boost::mismatch(cont1,
+                                     boost::make_iterator_range(cont2), pred);
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1),
+                                     boost::make_iterator_range(cont2),
+                                     pred);
+            BOOST_CHECK( result.first == ref_it1 );
+            BOOST_CHECK( result.second == ref_it2 );
+        }
+        
+        template< class Container1, class Container2 >
+        void eval_mismatch(Container1& cont1,
+                           Container2& cont2,
+                           const int ref1,
+                           const int ref2)
+        {
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container1>::type iter1_t;
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container2>::type iter2_t;
+            typedef std::pair<iter1_t, iter2_t> result_pair_t;
+            
+            result_pair_t result = boost::mismatch(cont1, cont2);
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1), cont2);
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+            
+            result = boost::mismatch(cont1, boost::make_iterator_range(cont2));
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1),
+                                     boost::make_iterator_range(cont2));
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+        }
+        
+        template< class Container1, class Container2, class Pred >
+        void eval_mismatch(Container1& cont1,
+                           Container2& cont2,
+                           Pred pred,
+                           const int ref1,
+                           const int ref2)
+        {
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container1>::type iter1_t;
+            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container2>::type iter2_t;
+            typedef std::pair<iter1_t, iter2_t> result_pair_t;
+            
+            result_pair_t result = boost::mismatch(cont1, cont2, pred);
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1),
+                                     cont2, pred);
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+            
+            result = boost::mismatch(cont1, boost::make_iterator_range(cont2),
+                                     pred);
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+            
+            result = boost::mismatch(boost::make_iterator_range(cont1),
+                                     boost::make_iterator_range(cont2),
+                                     pred);
+            BOOST_CHECK_EQUAL( ref1, *result.first );
+            BOOST_CHECK_EQUAL( ref2, *result.second );
+        }
+        
+        template< class Container1, class Container2 >
         void test_mismatch_impl()
         {
             using namespace boost::assign;
@@ -46,107 +170,42 @@ namespace boost
             typedef std::pair<iterator1_t,       const_iterator2_t> pair_mcit_t;
             typedef std::pair<const_iterator1_t, const_iterator2_t> pair_ccit_t;
 
-            pair_mmit_t pair_mmit = boost::mismatch(cont1, cont2);
-            BOOST_CHECK( pair_mmit.first == cont1.end() );
-            BOOST_CHECK( pair_mmit.second == cont2.end() );
-            pair_mmit = boost::mismatch(cont1, cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_mmit.first == cont1.end() );
-            BOOST_CHECK( pair_mmit.second == cont2.end() );
-
-            pair_cmit_t pair_cmit = boost::mismatch(cref_cont1, cont2);
-            BOOST_CHECK( pair_cmit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_cmit.second == cont2.end() );
-            pair_cmit = boost::mismatch(cref_cont1, cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_cmit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_cmit.second == cont2.end() );
-
-            pair_mcit_t pair_mcit = boost::mismatch(cont1, cref_cont2);
-            BOOST_CHECK( pair_mcit.first == cont1.end() );
-            BOOST_CHECK( pair_mcit.second == cref_cont2.end() );
-            pair_mcit = boost::mismatch(cont1, cref_cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_mcit.first == cont1.end() );
-            BOOST_CHECK( pair_mcit.second == cref_cont2.end() );
-
-            pair_ccit_t pair_ccit = boost::mismatch(cref_cont1, cref_cont2);
-            BOOST_CHECK( pair_ccit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_ccit.second == cref_cont2.end() );
-            pair_ccit = boost::mismatch(cref_cont1, cref_cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_ccit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_ccit.second == cref_cont2.end() );
+            eval_mismatch(cont1, cont2, cont1.end(), cont2.end());
+            eval_mismatch(cont1, cont2, std::equal_to<int>(), cont1.end(), cont2.end());
+            eval_mismatch(cref_cont1, cont2, cref_cont1.end(), cont2.end());
+            eval_mismatch(cref_cont1, cont2, std::equal_to<int>(), cref_cont1.end(), cont2.end());
+            eval_mismatch(cont1, cref_cont2, cont1.end(), cref_cont2.end());
+            eval_mismatch(cont1, cref_cont2, std::equal_to<int>(), cont1.end(), cref_cont2.end());
+            eval_mismatch(cref_cont1, cref_cont2, cref_cont1.end(), cref_cont2.end());
+            eval_mismatch(cref_cont1, cref_cont2, std::equal_to<int>(), cref_cont1.end(), cref_cont2.end());
 
             cont1 += 1,2,3,4;
             cont2 += 1,2,3,4;
-            pair_mmit = boost::mismatch(cont1, cont2);
-            BOOST_CHECK( pair_mmit.first == cont1.end() );
-            BOOST_CHECK( pair_mmit.second == cont2.end() );
-            pair_mmit = boost::mismatch(cont1, cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_mmit.first == cont1.end() );
-            BOOST_CHECK( pair_mmit.second == cont2.end() );
-
-            pair_cmit = boost::mismatch(cref_cont1, cont2);
-            BOOST_CHECK( pair_cmit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_cmit.second == cont2.end() );
-            pair_cmit = boost::mismatch(cref_cont1, cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_cmit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_cmit.second == cont2.end() );
-
-            pair_mcit = boost::mismatch(cont1, cref_cont2);
-            BOOST_CHECK( pair_mcit.first == cont1.end() );
-            BOOST_CHECK( pair_mcit.second == cref_cont2.end() );
-            pair_mcit = boost::mismatch(cont1, cref_cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_mcit.first == cont1.end() );
-            BOOST_CHECK( pair_mcit.second == cref_cont2.end() );
-
-            pair_ccit = boost::mismatch(cref_cont1, cref_cont2);
-            BOOST_CHECK( pair_ccit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_ccit.second == cref_cont2.end() );
-            pair_ccit = boost::mismatch(cref_cont1, cref_cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_ccit.first == cref_cont1.end() );
-            BOOST_CHECK( pair_ccit.second == cref_cont2.end() );
+            eval_mismatch(cont1, cont2, cont1.end(), cont2.end());
+            eval_mismatch(cont1, cont2, std::equal_to<int>(), cont1.end(), cont2.end());
+            eval_mismatch(cref_cont1, cont2, cref_cont1.end(), cont2.end());
+            eval_mismatch(cref_cont1, cont2, std::equal_to<int>(), cref_cont1.end(), cont2.end());
+            eval_mismatch(cont1, cref_cont2, cont1.end(), cref_cont2.end());
+            eval_mismatch(cont1, cref_cont2, std::equal_to<int>(), cont1.end(), cref_cont2.end());
+            eval_mismatch(cref_cont1, cref_cont2, cref_cont1.end(), cref_cont2.end());
+            eval_mismatch(cref_cont1, cref_cont2, std::equal_to<int>(), cref_cont1.end(), cref_cont2.end());
 
             cont1.clear();
             cont2.clear();
             cont1 += 1,2,3,4;
             cont2 += 1,2,5,4;
-            pair_mmit = boost::mismatch(cont1, cont2);
-            BOOST_CHECK( pair_mmit.first != cont1.end() && *pair_mmit.first == 3 );
-            BOOST_CHECK( pair_mmit.second != cont2.end() && *pair_mmit.second == 5 );
-            pair_mmit = boost::mismatch(cont1, cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_mmit.first != cont1.end() && *pair_mmit.first == 3 );
-            BOOST_CHECK( pair_mmit.second != cont2.end() && *pair_mmit.second == 5 );
-            pair_mmit = boost::mismatch(cont1, cont2, std::not_equal_to<int>());
-            BOOST_CHECK( pair_mmit.first == cont1.begin() );
-            BOOST_CHECK( pair_mmit.second == cont2.begin() );
-
-            pair_cmit = boost::mismatch(cref_cont1, cont2);
-            BOOST_CHECK( pair_cmit.first != cref_cont1.end() && *pair_cmit.first == 3 );
-            BOOST_CHECK( pair_cmit.second != cont2.end() && *pair_cmit.second == 5 );
-            pair_cmit = boost::mismatch(cref_cont1, cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_cmit.first != cref_cont1.end() && *pair_cmit.first == 3 );
-            BOOST_CHECK( pair_cmit.second != cont2.end() && *pair_cmit.second == 5 );
-            pair_cmit = boost::mismatch(cref_cont1, cont2, std::not_equal_to<int>());
-            BOOST_CHECK( pair_cmit.first == cref_cont1.begin() );
-            BOOST_CHECK( pair_cmit.second == cont2.begin() );
-
-            pair_mcit = boost::mismatch(cont1, cref_cont2);
-            BOOST_CHECK( pair_mcit.first != cont1.end() && *pair_mcit.first == 3 );
-            BOOST_CHECK( pair_mcit.second != cref_cont2.end() && *pair_mcit.second == 5 );
-            pair_mcit = boost::mismatch(cont1, cref_cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_mcit.first != cont1.end() && *pair_mcit.first == 3 );
-            BOOST_CHECK( pair_mcit.second != cref_cont2.end() && *pair_mcit.second == 5 );
-            pair_mcit = boost::mismatch(cont1, cref_cont2, std::not_equal_to<int>());
-            BOOST_CHECK( pair_mcit.first == cont1.begin() );
-            BOOST_CHECK( pair_mcit.second == cref_cont2.begin() );
-
-            pair_ccit = boost::mismatch(cref_cont1, cref_cont2);
-            BOOST_CHECK( pair_ccit.first != cref_cont1.end() && *pair_ccit.first == 3 );
-            BOOST_CHECK( pair_ccit.second != cref_cont2.end() && *pair_ccit.second == 5 );
-            pair_ccit = boost::mismatch(cref_cont1, cref_cont2, std::equal_to<int>());
-            BOOST_CHECK( pair_ccit.first != cref_cont1.end() && *pair_ccit.first == 3 );
-            BOOST_CHECK( pair_ccit.second != cref_cont2.end() && *pair_ccit.second == 5 );
-            pair_ccit = boost::mismatch(cref_cont1, cref_cont2, std::not_equal_to<int>());
-            BOOST_CHECK( pair_ccit.first == cref_cont1.begin() );
-            BOOST_CHECK( pair_ccit.second == cref_cont2.begin() );
+            eval_mismatch(cont1, cont2, 3, 5);
+            eval_mismatch(cont1, cont2, std::equal_to<int>(), 3, 5);
+            eval_mismatch(cont1, cont2, std::not_equal_to<int>(), cont1.begin(), cont2.begin());
+            eval_mismatch(cref_cont1, cont2, 3, 5);
+            eval_mismatch(cref_cont1, cont2, std::equal_to<int>(), 3, 5);
+            eval_mismatch(cref_cont1, cont2, std::not_equal_to<int>(), cref_cont1.begin(), cont2.begin());
+            eval_mismatch(cont1, cref_cont2, 3, 5);
+            eval_mismatch(cont1, cref_cont2, std::equal_to<int>(), 3, 5);
+            eval_mismatch(cont1, cref_cont2, std::not_equal_to<int>(), cont1.begin(), cref_cont2.begin());
+            eval_mismatch(cref_cont1, cref_cont2, 3, 5);
+            eval_mismatch(cref_cont1, cref_cont2, std::equal_to<int>(), 3, 5);
+            eval_mismatch(cref_cont1, cref_cont2, std::not_equal_to<int>(), cref_cont1.begin(), cref_cont2.begin());
         }
 
         void test_mismatch()

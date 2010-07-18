@@ -41,28 +41,39 @@ namespace boost
             reference += 1,2,3,4,5,6,7,8,9;
 
             std::vector<int> test_cont(reference);
+            std::vector<int> test_cont2(reference);
 
             std::make_heap(reference.begin(), reference.end());
             boost::make_heap(test_cont);
             check_equal(reference, test_cont);
+            boost::make_heap(boost::make_iterator_range(test_cont2));
+            check_equal(reference, test_cont2);
 
             std::push_heap(reference.begin(), reference.end());
             boost::push_heap(test_cont);
             check_equal(reference, test_cont);
+            boost::push_heap(boost::make_iterator_range(test_cont2));
+            check_equal(reference, test_cont2);
 
             std::make_heap(reference.begin(), reference.end());
             boost::make_heap(test_cont);
+            boost::make_heap(boost::make_iterator_range(test_cont2));
 
             std::sort_heap(reference.begin(), reference.end());
             boost::sort_heap(test_cont);
             check_equal(reference, test_cont);
+            boost::sort_heap(boost::make_iterator_range(test_cont2));
+            check_equal(reference, test_cont2);
 
             std::make_heap(reference.begin(), reference.end());
             boost::make_heap(test_cont);
+            boost::make_heap(boost::make_iterator_range(test_cont2));
 
             std::pop_heap(reference.begin(), reference.end());
             boost::pop_heap(test_cont);
             check_equal(reference, test_cont);
+            boost::pop_heap(boost::make_iterator_range(test_cont2));
+            check_equal(reference, test_cont2);
         }
 
         template<class BinaryPredicate>
@@ -75,30 +86,42 @@ namespace boost
             std::sort(reference.begin(), reference.end(), pred);
 
             std::vector<int> test_cont(reference);
+            std::vector<int> test_cont2(reference);
 
             std::make_heap(reference.begin(), reference.end(), pred);
             boost::make_heap(test_cont, pred);
             check_equal(reference, test_cont);
+            boost::make_heap(boost::make_iterator_range(test_cont2), pred);
+            check_equal(reference, test_cont2);
 
             reference.push_back(5);
             test_cont.push_back(5);
+            test_cont2.push_back(5);
             std::push_heap(reference.begin(), reference.end(), pred);
             boost::push_heap(test_cont, pred);
             check_equal(reference, test_cont);
+            boost::push_heap(boost::make_iterator_range(test_cont2), pred);
+            check_equal(reference, test_cont2);
 
             std::make_heap(reference.begin(), reference.end(), pred);
             boost::make_heap(test_cont, pred);
+            boost::make_heap(boost::make_iterator_range(test_cont2), pred);
 
             std::sort_heap(reference.begin(), reference.end(), pred);
             boost::sort_heap(test_cont, pred);
             check_equal(reference, test_cont);
+            boost::sort_heap(boost::make_iterator_range(test_cont2), pred);
+            check_equal(reference, test_cont2);
 
             std::make_heap(reference.begin(), reference.end(), pred);
             boost::make_heap(test_cont, pred);
+            boost::make_heap(boost::make_iterator_range(test_cont2), pred);
 
             std::pop_heap(reference.begin(), reference.end(), pred);
             boost::pop_heap(test_cont, pred);
             check_equal(reference, test_cont);
+            boost::pop_heap(boost::make_iterator_range(test_cont2), pred);
+            check_equal(reference, test_cont2);
         }
 
         void test_heap()

@@ -51,6 +51,46 @@ namespace boost
                 reference_target.begin(), reference_target.end(),
                 test_target.begin(), test_target.end()
                 );
+                
+            test_it = boost::merge(boost::make_iterator_range(cont1),
+                                   cont2, test_target.begin());
+                                   
+            BOOST_CHECK_EQUAL(
+                std::distance<iterator_t>(reference_target.begin(), reference_it),
+                std::distance<iterator_t>(test_target.begin(), test_it)
+                );
+                
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target.begin(), test_target.end()
+                );
+                
+            test_it = boost::merge(cont1, boost::make_iterator_range(cont2),
+                                   test_target.begin());
+                                   
+            BOOST_CHECK_EQUAL(
+                std::distance<iterator_t>(reference_target.begin(), reference_it),
+                std::distance<iterator_t>(test_target.begin(), test_it)
+                );
+                
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target.begin(), test_target.end()
+                );
+                
+            test_it = boost::merge(boost::make_iterator_range(cont1),
+                                   boost::make_iterator_range(cont2),
+                                   test_target.begin());
+                                   
+            BOOST_CHECK_EQUAL(
+                std::distance<iterator_t>(reference_target.begin(), reference_it),
+                std::distance<iterator_t>(test_target.begin(), test_it)
+                );
+                
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target.begin(), test_target.end()
+                );
         }
 
         template<class Container, class BinaryPredicate>
@@ -91,6 +131,46 @@ namespace boost
                 std::distance(test_target.begin(), test_it)
                 );
 
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target.begin(), test_target.end()
+                );
+                
+            test_it = boost::merge(boost::make_iterator_range(cont1), cont2,
+                                   test_target.begin(), pred);
+                                   
+            BOOST_CHECK_EQUAL(
+                std::distance(reference_target.begin(), reference_it),
+                std::distance(test_target.begin(), test_it)
+                );
+                
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target.begin(), test_target.end()
+                );
+                
+            test_it = boost::merge(cont1, boost::make_iterator_range(cont2),
+                                   test_target.begin(), pred);
+                                   
+            BOOST_CHECK_EQUAL(
+                std::distance(reference_target.begin(), reference_it),
+                std::distance(test_target.begin(), test_it)
+                );
+                
+            BOOST_CHECK_EQUAL_COLLECTIONS(
+                reference_target.begin(), reference_target.end(),
+                test_target.begin(), test_target.end()
+                );
+                
+            test_it = boost::merge(boost::make_iterator_range(cont1),
+                                   boost::make_iterator_range(cont2),
+                                   test_target.begin(), pred);
+                                   
+            BOOST_CHECK_EQUAL(
+                std::distance(reference_target.begin(), reference_it),
+                std::distance(test_target.begin(), test_it)
+                );
+                
             BOOST_CHECK_EQUAL_COLLECTIONS(
                 reference_target.begin(), reference_target.end(),
                 test_target.begin(), test_target.end()

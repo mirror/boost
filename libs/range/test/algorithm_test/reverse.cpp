@@ -29,14 +29,16 @@ namespace boost
         {
             Container reference(cont);
             Container test(cont);
+            Container test2(cont);
 
             boost::reverse(test);
             std::reverse(reference.begin(), reference.end());
-
-            BOOST_CHECK_EQUAL_COLLECTIONS(
-                reference.begin(), reference.end(),
-                test.begin(), test.end()
-                );
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test.begin(), test.end() );
+                                           
+            boost::reverse(boost::make_iterator_range(test2));
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           test2.begin(), test2.end() );
         }
 
         template<class Container>

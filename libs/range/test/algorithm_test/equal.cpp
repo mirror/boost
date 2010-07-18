@@ -38,30 +38,70 @@ namespace boost
             Container2& cont2 = mcont2;
 
             BOOST_CHECK( boost::equal(cont1, cont2) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), cont2) );
+            BOOST_CHECK( boost::equal(cont1, boost::make_iterator_range(cont2)) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2)) );
             BOOST_CHECK( boost::equal(cont1, cont2, std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), cont2, std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(cont1, boost::make_iterator_range(cont2), std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::equal_to<int>()) );
             BOOST_CHECK( boost::equal(cont1, cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::not_equal_to<int>()) );
 
             mcont1 += 1;
             BOOST_CHECK( !boost::equal(cont1, cont2) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2) );
+            BOOST_CHECK( !boost::equal(cont1, boost::make_iterator_range(cont2)) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2)) );
             BOOST_CHECK( !boost::equal(cont1, cont2, std::equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2, std::equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(cont1, boost::make_iterator_range(cont2), std::equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::equal_to<int>()) );
             BOOST_CHECK( !boost::equal(cont1, cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::not_equal_to<int>()) );
 
             mcont1.clear();
             mcont2 += 1;
             BOOST_CHECK( !boost::equal(cont1, cont2) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2)) );
             BOOST_CHECK( !boost::equal(cont1, cont2, std::equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2, std::equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::equal_to<int>()) );
             BOOST_CHECK( !boost::equal(cont1, cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::not_equal_to<int>()) );
 
             mcont1 += 1;
             BOOST_CHECK( boost::equal(cont1, cont2) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), cont2) );
+            BOOST_CHECK( boost::equal(cont1, boost::make_iterator_range(cont2)) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2)) );
             BOOST_CHECK( boost::equal(cont1, cont2, std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), cont2, std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(cont1, boost::make_iterator_range(cont2), std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::equal_to<int>()) );
             BOOST_CHECK( !boost::equal(cont1, cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(cont1, boost::make_iterator_range(cont2), std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::not_equal_to<int>()) );
 
             mcont1 += 2,3,4,5,6,7,8,9;
             mcont2 += 2,3,4,5,6,7,8,9;
             BOOST_CHECK( boost::equal(cont1, cont2) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), cont2) );
+            BOOST_CHECK( boost::equal(cont1, boost::make_iterator_range(cont2)) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2)) );
             BOOST_CHECK( boost::equal(cont1, cont2, std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), cont2, std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(cont1, boost::make_iterator_range(cont2), std::equal_to<int>()) );
+            BOOST_CHECK( boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::equal_to<int>()) );
             BOOST_CHECK( !boost::equal(cont1, cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), cont2, std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(cont1, boost::make_iterator_range(cont2), std::not_equal_to<int>()) );
+            BOOST_CHECK( !boost::equal(boost::make_iterator_range(cont1), boost::make_iterator_range(cont2), std::not_equal_to<int>()) );
         }
 
         template< class Container1, class Container2 >

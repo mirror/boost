@@ -31,28 +31,36 @@ namespace boost
             Container cont;
             const Container& cref_cont = cont;
 
-            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0) );
-            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(boost::make_iterator_range(cont), 0u) );
 
             cont += 1;
-            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0) );
-            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0) );
-            BOOST_CHECK_EQUAL( 1u, boost::count(cont, 1) );
-            BOOST_CHECK_EQUAL( 1u, boost::count(cref_cont, 1) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(boost::make_iterator_range(cont), 0u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(cont, 1u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(cref_cont, 1u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(boost::make_iterator_range(cont), 1u) );
 
             cont += 2,3,4,5,6,7,8,9;
-            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0) );
-            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0) );
-            BOOST_CHECK_EQUAL( 1u, boost::count(cont, 1) );
-            BOOST_CHECK_EQUAL( 1u, boost::count(cref_cont, 1) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(boost::make_iterator_range(cont), 0u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(cont, 1u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(cref_cont, 1u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(boost::make_iterator_range(cont), 1u) );
 
             cont += 2;
-            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0) );
-            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0) );
-            BOOST_CHECK_EQUAL( 1u, boost::count(cont, 1) );
-            BOOST_CHECK_EQUAL( 1u, boost::count(cref_cont, 1) );
-            BOOST_CHECK_EQUAL( 2u, boost::count(cont, 2) );
-            BOOST_CHECK_EQUAL( 2u, boost::count(cref_cont, 2) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(cref_cont, 0u) );
+            BOOST_CHECK_EQUAL( 0u, boost::count(boost::make_iterator_range(cont), 0u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(cont, 1u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(cref_cont, 1u) );
+            BOOST_CHECK_EQUAL( 1u, boost::count(boost::make_iterator_range(cont), 1u) );
+            BOOST_CHECK_EQUAL( 2u, boost::count(cont, 2u) );
+            BOOST_CHECK_EQUAL( 2u, boost::count(cref_cont, 2u) );
+            BOOST_CHECK_EQUAL( 2u, boost::count(boost::make_iterator_range(cont), 2u) );
         }
 
         void test_count()

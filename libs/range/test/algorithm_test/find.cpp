@@ -33,7 +33,11 @@ namespace boost
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
             test_iter(Container& cont)
             {
-                return boost::find(cont, 3);
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iter_t;
+                iter_t result = boost::find(cont, 3);
+                iter_t result2 = boost::find(boost::make_iterator_range(cont), 3);
+                BOOST_CHECK( result == result2 );
+                return result;
             }
 
             template<range_return_value return_type>
@@ -43,7 +47,11 @@ namespace boost
                 BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
                 operator()(Policy&, Container& cont)
                 {
-                    return boost::find<return_type>(cont, 3);
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type result_t;
+                    result_t result = boost::find<return_type>(cont, 3);
+                    result_t result2 = boost::find<return_type>(boost::make_iterator_range(cont), 3);
+                    BOOST_CHECK( result == result2 );
+                    return result;
                 }
             };
 
@@ -90,6 +98,8 @@ namespace boost
             std::vector<int> vi;
             const std::vector<int>& cvi = vi;
             std::vector<int>::const_iterator it = boost::find(vi, 0);
+            std::vector<int>::const_iterator it2 = boost::find(cvi, 0);
+            BOOST_CHECK( it == it2 );
         }
     }
 }
