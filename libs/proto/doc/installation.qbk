@@ -13,8 +13,7 @@
 [heading Getting Proto]
 [/====================]
 
-You can get Proto by downloading [^proto.zip] from
-[@http://www.boost-consulting.com/vault/index.php?directory=Template%20Metaprogramming],
+You can get Proto
 by downloading Boost (Proto is in version 1.37 and later),
 or by accessing Boost's SVN repository on SourceForge.net. Just go to
 [@http://svn.boost.org/trac/boost/wiki/BoostSubversion]
