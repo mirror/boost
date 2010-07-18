@@ -168,6 +168,12 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     void *x, 
     const unsigned int file_version
 ) const {
+    // note: we now comment this out. Before we permited archive
+    // version # to be very large.  Now we don't.  To permit
+    // readers of these old archives, we have to suppress this 
+    // code.  Perhaps in the future we might re-enable it but
+    // permit its suppression with a runtime switch.
+    #if 0
     // trap case where the program cannot handle the current version
     if(file_version > static_cast<const unsigned int>(version()))
         boost::serialization::throw_exception(
@@ -176,7 +182,7 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
                 get_debug_info()
             )
         );
-
+    #endif
     // make sure call is routed through the higest interface that might
     // be specialized by the user.
     boost::serialization::serialize_adl(
