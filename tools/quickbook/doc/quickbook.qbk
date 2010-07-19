@@ -1943,7 +1943,7 @@ rebuilds and install a system-wide Quickbook instead:
 
 # Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
 
-# Build the utility by issuing `bjam --v2`.
+# Build the utility by issuing `bjam`.
 
 # Copy the resulting `quickbook` binary (located under the
   `BOOST_ROOT/bin.v2` hierarchy) to a safe place.  Following our previous
@@ -2033,7 +2033,7 @@ rebuilds:
 
 # Go to Quickbook's source directory (`BOOST_ROOT\tools\quickbook`).
 
-# Build the utility by issuing `bjam --v2`.
+# Build the utility by issuing `bjam`.
 
 # Copy the resulting `quickbook.exe` binary (located under the
   `BOOST_ROOT\bin.v2` hierarchy) to a safe place.  Following our previous
@@ -2084,7 +2084,7 @@ rebuilds:
 
 # Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
 
-# Build the utility by issuing `bjam --v2`.
+# Build the utility by issuing `bjam`.
 
 # Copy the resulting `quickbook` binary (located under the
   `BOOST_ROOT/bin.v2` hierarchy) to a safe place.  The traditional location is

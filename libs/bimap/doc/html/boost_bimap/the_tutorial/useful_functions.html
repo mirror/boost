@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Useful functions</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
-<link rel="home" href="../../index.html" title="Chapter 1. Boost.Bimap">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="up" href="../the_tutorial.html" title="The tutorial">
 <link rel="prev" href="differences_with_standard_maps.html" title="Differences with standard maps">
 <link rel="next" href="bimaps_with_user_defined_names.html" title="Bimaps with user defined names">
@@ -13,16 +13,16 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="differences_with_standard_maps.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="bimaps_with_user_defined_names.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="differences_with_standard_maps.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="bimaps_with_user_defined_names.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Useful functions">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_bimap.the_tutorial.useful_functions"></a><a class="link" href="useful_functions.html" title="Useful functions">Useful functions</a>
 </h3></div></div></div>
@@ -34,7 +34,7 @@
 <dt><span class="section"><a href="useful_functions.html#boost_bimap.the_tutorial.useful_functions.retrieval_of_ranges">Retrieval
         of ranges</a></span></dt>
 </dl></div>
-<div class="section" title="Projection of iterators">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_bimap.the_tutorial.useful_functions.projection_of_iterators"></a><a class="link" href="useful_functions.html#boost_bimap.the_tutorial.useful_functions.projection_of_iterators" title="Projection of iterators">Projection
         of iterators</a>
@@ -55,9 +55,7 @@
           <a href="../../../../example/projection.cpp" target="_top">Go to source code</a>
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span><span class="identifier">multiset_of</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">greater</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
 
@@ -77,11 +75,9 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"The next younger person after Peter is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">years_iter</span><span class="special">-&gt;</span><span class="identifier">second</span><span class="special">;</span>
 </pre>
 <p>
-          </p>
-<p>
         </p>
 </div>
-<div class="section" title="replace and modify">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_bimap.the_tutorial.useful_functions.replace_and_modify"></a><a class="link" href="useful_functions.html#boost_bimap.the_tutorial.useful_functions.replace_and_modify" title="replace and modify">replace
         and modify</a>
@@ -100,9 +96,7 @@
           code</a>
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
 <span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
@@ -128,23 +122,19 @@
 
     <span class="keyword">bool</span> <span class="identifier">successful_replace</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">replace_data</span><span class="special">(</span> <span class="identifier">it</span><span class="special">,</span> <span class="string">"two"</span> <span class="special">);</span>
 
-    <span class="line_callout_bug"><a class="co" name="boost_bimap9co" href="useful_functions.html#boost_bimap9"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">assert</span><span class="special">(</span> <span class="special">!</span> <span class="identifier">successful_replace</span> <span class="special">);</span>
+    <a class="co" name="boost_bimap9co" href="useful_functions.html#boost_bimap9"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">assert</span><span class="special">(</span> <span class="special">!</span> <span class="identifier">successful_replace</span> <span class="special">);</span>
     <span class="identifier">assert</span><span class="special">(</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">==</span> <span class="number">2</span> <span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
-          </p>
+        </p>
 <p>
           </p>
-<p>
-            </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap9"></a><a href="#boost_bimap9co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">it</span></code> is still valid here,
-            and the bimap was left unchanged </p></td>
+          and the bimap was left unchanged </p></td>
 </tr></table></div>
-<p>
-          </p>
 <p>
         </p>
 <p>
@@ -153,17 +143,17 @@
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-            The complexity is constant time if the changed element retains its original
-            order with respect to all views; it is logarithmic otherwise.
-          </li>
+              The complexity is constant time if the changed element retains its
+              original order with respect to all views; it is logarithmic otherwise.
+            </li>
 <li class="listitem">
-            Iterator and reference validity are preserved.
-          </li>
+              Iterator and reference validity are preserved.
+            </li>
 <li class="listitem">
-            The operation is strongly exception-safe, i.e. the <code class="computeroutput"><span class="identifier">bimap</span></code>
-            remains unchanged if some exception (originated by the system or the
-            user's data types) is thrown.
-          </li>
+              The operation is strongly exception-safe, i.e. the <code class="computeroutput"><span class="identifier">bimap</span></code>
+              remains unchanged if some exception (originated by the system or the
+              user's data types) is thrown.
+            </li>
 </ul></div>
 <p>
           <code class="computeroutput"><span class="identifier">replace</span></code> functions are powerful
@@ -209,9 +199,7 @@
           code</a>
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
 <span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
@@ -236,27 +224,23 @@
 
     <span class="keyword">bool</span> <span class="identifier">successful_modify</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">modify_data</span><span class="special">(</span> <span class="identifier">it</span><span class="special">,</span> <span class="identifier">_data</span> <span class="special">=</span> <span class="string">"two"</span> <span class="special">);</span>
 
-    <span class="line_callout_bug"><a class="co" name="boost_bimap10co" href="useful_functions.html#boost_bimap10"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">assert</span><span class="special">(</span> <span class="special">!</span> <span class="identifier">successful_modify</span> <span class="special">);</span>
+    <a class="co" name="boost_bimap10co" href="useful_functions.html#boost_bimap10"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">assert</span><span class="special">(</span> <span class="special">!</span> <span class="identifier">successful_modify</span> <span class="special">);</span>
     <span class="identifier">assert</span><span class="special">(</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">==</span> <span class="number">1</span> <span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
-          </p>
+        </p>
 <p>
           </p>
-<p>
-            </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap10"></a><a href="#boost_bimap10co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">it</span></code> is not longer valid
-            and <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="string">"1"</span><span class="special">)</span></code> is removed from the bimap </p></td>
+          and <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="string">"1"</span><span class="special">)</span></code> is removed from the bimap </p></td>
 </tr></table></div>
-<p>
-          </p>
 <p>
         </p>
 </div>
-<div class="section" title="Retrieval of ranges">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_bimap.the_tutorial.useful_functions.retrieval_of_ranges"></a><a class="link" href="useful_functions.html#boost_bimap.the_tutorial.useful_functions.retrieval_of_ranges" title="Retrieval of ranges">Retrieval
         of ranges</a>
@@ -271,9 +255,7 @@
           <code class="computeroutput"><span class="special">[</span><span class="number">20</span><span class="special">,</span><span class="number">50</span><span class="special">]</span></code>
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
 <span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
@@ -286,8 +268,6 @@
 <span class="comment">// range [iter_first,iter_second) contains the elements in [20,50]
 </span></pre>
 <p>
-          </p>
-<p>
         </p>
 <p>
           Subtle changes to the code are required when strict inequalities are considered.
@@ -295,17 +275,13 @@
           to be rewritten as
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_iterator</span> <span class="identifier">iter_first</span>  <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">upper_bound</span><span class="special">(</span><span class="number">20</span><span class="special">);</span>
 <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_iterator</span> <span class="identifier">iter_second</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">lower_bound</span><span class="special">(</span><span class="number">50</span><span class="special">);</span>
 
 <span class="comment">// range [iter_first,iter_second) contains the elements in (20,50)
 </span></pre>
-<p>
-          </p>
 <p>
         </p>
 <p>
@@ -322,45 +298,40 @@
           can greatly help alleviate this situation:
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
 <span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
 
 <span class="comment">// ...
 </span>
-<span class="line_callout_bug"><a class="co" name="boost_bimap11co" href="useful_functions.html#boost_bimap11"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_range_type</span> <span class="identifier">r</span><span class="special">;</span>
+<a class="co" name="boost_bimap11co" href="useful_functions.html#boost_bimap11"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_range_type</span> <span class="identifier">r</span><span class="special">;</span>
 
-<span class="line_callout_bug"><a class="co" name="boost_bimap12co" href="useful_functions.html#boost_bimap12"><img src="../../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a></span><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;=</span> <span class="number">50</span> <span class="special">);</span> <span class="comment">// [20,50]
+<a class="co" name="boost_bimap12co" href="useful_functions.html#boost_bimap12"><img src="../../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;=</span> <span class="number">50</span> <span class="special">);</span> <span class="comment">// [20,50]
 </span>
 <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;</span>  <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;</span>  <span class="number">50</span> <span class="special">);</span> <span class="comment">// (20,50)
 </span>
 <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;</span>  <span class="number">50</span> <span class="special">);</span> <span class="comment">// [20,50)
 </span></pre>
 <p>
-          </p>
+        </p>
 <p>
           </p>
-<p>
-            </p>
 <div class="calloutlist"><table border="0" summary="Callout list">
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap11"></a><a href="#boost_bimap11co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">range_type</span></code> is a handy
-            typedef equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span><span class="identifier">iterator</span><span class="special">&gt;</span></code>. <code class="computeroutput"><span class="identifier">const_range_type</span></code>
-            is provided too, and it is equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span><span class="identifier">const_iterator</span><span class="special">&gt;</span></code> </p></td>
+<td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">range_type</span></code> is a handy typedef
+          equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span><span class="identifier">iterator</span><span class="special">&gt;</span></code>.
+          <code class="computeroutput"><span class="identifier">const_range_type</span></code> is provided
+          too, and it is equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span><span class="identifier">const_iterator</span><span class="special">&gt;</span></code> </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap12"></a><a href="#boost_bimap12co"><img src="../../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
 <td valign="top" align="left"><p> _key is a Boost.Lambda placeholder.
-            To use it you have to include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">bimap</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-            </p></td>
+          To use it you have to include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">bimap</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+          </p></td>
 </tr>
 </table></div>
-<p>
-          </p>
 <p>
         </p>
 <p>
@@ -373,28 +344,22 @@
           One or both bounds can be omitted with the special unbounded marker:
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">unbounded</span> <span class="special">);</span> <span class="comment">// [20,inf)
 </span>
 <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="identifier">unbounded</span> <span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;</span> <span class="number">50</span> <span class="special">);</span> <span class="comment">// (-inf,50)
 </span>
-<span class="line_callout_bug"><a class="co" name="boost_bimap13co" href="useful_functions.html#boost_bimap13"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="identifier">unbounded</span> <span class="special">,</span> <span class="identifier">unbounded</span> <span class="special">);</span> <span class="comment">// (-inf,inf)
+<a class="co" name="boost_bimap13co" href="useful_functions.html#boost_bimap13"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="identifier">unbounded</span> <span class="special">,</span> <span class="identifier">unbounded</span> <span class="special">);</span> <span class="comment">// (-inf,inf)
 </span></pre>
 <p>
-          </p>
+        </p>
 <p>
           </p>
-<p>
-            </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap13"></a><a href="#boost_bimap13co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p> This is equivalent to std::make_pair(s.begin(),s.end()) </p></td>
 </tr></table></div>
-<p>
-          </p>
 <p>
         </p>
 <p>
@@ -404,7 +369,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 Matias Capeletto<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 -2007 Matias Capeletto<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -412,7 +377,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="differences_with_standard_maps.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="bimaps_with_user_defined_names.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="differences_with_standard_maps.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="bimaps_with_user_defined_names.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

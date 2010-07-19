@@ -210,7 +210,7 @@ using boostbook
         documentation for libraries that do not require Doxygen. To
         test this, change into the directory <filename
         class="directory">$BOOST_ROOT/libs/function/doc</filename> and
-        run the command <code>bjam --v2</code>: it should produce HTML
+        run the command <code>bjam</code>: it should produce HTML
         documentation for the Boost.Function library in the
         <code>html</code> subdirectory.</para>
       </section>
@@ -287,7 +287,7 @@ using fop : FOP_COMMAND
 
       <para>To test PDF generation, switch to the directory <filename
       class="directory">$BOOST_ROOT/libs/function/doc</filename> and
-      execute the command <command>bjam --v2 pdf</command>. In the
+      execute the command <command>bjam pdf</command>. In the
       absence of any errors, Apache FOP will be executed to transform
       the XSL:FO output of DocBook into a PDF file.</para>
     </section>
@@ -300,8 +300,8 @@ using fop : FOP_COMMAND
     documentation. First, change to the directory
     <code>$BOOST_ROOT/doc</code> and remove (or make writable) the
     <code>.html</code> files in
-    <code>$BOOST_ROOT/doc/html</code>. Then, run <code>bjam
-    --v2</code> to build HTML documentation. You should see several
+    <code>$BOOST_ROOT/doc/html</code>. Then, run <code>bjam</code>
+    to build HTML documentation. You should see several
     warnings like these while DocBook documentation is being built
     from BoostBook documentation:</para>
 
@@ -316,12 +316,12 @@ Cannot find function named 'next'</programlisting>
     documentation for Boost will be available in
     <code>$BOOST_ROOT/doc/html</code>. You can also create HTML
     documentation in a single (large!) HTML file with the command line
-    <code>bjam --v2 onehtml</code>, or Unix man pages with the command
-    line <code>bjam --v2 man</code>. The complete list of output
+    <code>bjam onehtml</code>, or Unix man pages with the command
+    line <code>bjam man</code>. The complete list of output
     formats is listed in <xref
     linkend="boostbook.output.formats"/>. Several output formats can
     be passed to a single invocation of <code>bjam</code>, e.g.,
-    <code>bjam --v2 html man docbook</code> would generate HTML
+    <code>bjam html man docbook</code> would generate HTML
     (multiple files), man pages, and DocBook documentation.</para>
    
     <table id="boostbook.output.formats">

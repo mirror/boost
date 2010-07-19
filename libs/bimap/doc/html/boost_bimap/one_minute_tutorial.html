@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>One minute tutorial</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
-<link rel="home" href="../index.html" title="Chapter 1. Boost.Bimap">
-<link rel="up" href="../index.html" title="Chapter 1. Boost.Bimap">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="prev" href="introduction.html" title="Introduction">
 <link rel="next" href="the_tutorial.html" title="The tutorial">
 </head>
@@ -13,21 +13,21 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="introduction.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="the_tutorial.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="introduction.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="the_tutorial.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="One minute tutorial">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_bimap.one_minute_tutorial"></a><a class="link" href="one_minute_tutorial.html" title="One minute tutorial">One minute tutorial</a>
 </h2></div></div></div>
 <a name="boost_bimap.one_minute_tutorial.what_is_a_bimap_"></a><h4>
-<a name="id554565"></a>
+<a name="id760382"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.what_is_a_bimap_">What is a
       bimap?</a>
     </h4>
@@ -51,20 +51,19 @@
 </pre>
 <p>
       Given this code, the following is the complete description of the resulting
-      bimap.
-      <sup>[<a name="id554727" href="#ftn.id554727" class="footnote">1</a>]</sup>
+      bimap. <sup>[<a name="id760544" href="#ftn.id760544" class="footnote">1</a>]</sup>
     </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span></code> is signature-compatible with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">,</span><span class="identifier">Y</span><span class="special">&gt;</span></code>
-</li>
+          <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span></code> is signature-compatible with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">,</span><span class="identifier">Y</span><span class="special">&gt;</span></code>
+        </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span></code> is signature-compatible with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">Y</span><span class="special">,</span><span class="identifier">X</span><span class="special">&gt;</span></code>
-</li>
+          <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span></code> is signature-compatible with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">Y</span><span class="special">,</span><span class="identifier">X</span><span class="special">&gt;</span></code>
+        </li>
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">bm</span></code> is signature-compatible
-        with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span><span class="special">&lt;</span> <span class="identifier">relation</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">,</span><span class="identifier">Y</span><span class="special">&gt;</span> <span class="special">&gt;</span></code>
-</li>
+          <code class="computeroutput"><span class="identifier">bm</span></code> is signature-compatible
+          with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span><span class="special">&lt;</span> <span class="identifier">relation</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">,</span><span class="identifier">Y</span><span class="special">&gt;</span> <span class="special">&gt;</span></code>
+        </li>
 </ul></div>
 <p>
       <span class="inlinemediaobject"><img src="../images/bimap/simple.bimap.png" alt="simple.bimap"></span>
@@ -106,7 +105,7 @@
 ...
 </pre>
 <a name="boost_bimap.one_minute_tutorial.layout_of_the_relation_and_the_pairs_of_a_bimap"></a><h4>
-<a name="id555399"></a>
+<a name="id761226"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.layout_of_the_relation_and_the_pairs_of_a_bimap">Layout
       of the relation and the pairs of a bimap</a>
     </h4>
@@ -120,7 +119,7 @@
       <span class="inlinemediaobject"><img src="../images/bimap/relation.and.pair.png" alt="relation.and.pair"></span>
     </p>
 <a name="boost_bimap.one_minute_tutorial.step_by_step"></a><h4>
-<a name="id555466"></a>
+<a name="id761293"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.step_by_step">Step by step</a>
     </h4>
 <p>
@@ -132,19 +131,15 @@
       Lets define a bidirectional map between integers and strings:
     </p>
 <p>
-      </p>
-<p>
-        
+      
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">bimap</span><span class="special">&lt;</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
 <span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
 </pre>
 <p>
-      </p>
-<p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.the_collection_of_relations_view"></a><h4>
-<a name="id555616"></a>
+<a name="id761439"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.the_collection_of_relations_view">The
       collection of relations view</a>
     </h4>
@@ -154,9 +149,7 @@
       using this view.
     </p>
 <p>
-      </p>
-<p>
-        
+      
 </p>
 <pre class="programlisting"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="string">"one"</span> <span class="special">)</span> <span class="special">);</span>
 <span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="string">"two"</span> <span class="special">)</span> <span class="special">);</span>
@@ -173,11 +166,9 @@
 <span class="special">}</span>
 </pre>
 <p>
-      </p>
-<p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.the_left_map_view"></a><h4>
-<a name="id556065"></a>
+<a name="id761885"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.the_left_map_view">The left
       map view</a>
     </h4>
@@ -188,11 +179,9 @@
       use a standard map.
     </p>
 <p>
-      </p>
-<p>
-        
+      
 </p>
-<pre class="programlisting"><span class="line_callout_bug"><a class="co" name="boost_bimap0co" href="one_minute_tutorial.html#boost_bimap0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a></span><span class="keyword">typedef</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span><span class="special">::</span><span class="identifier">const_iterator</span> <span class="identifier">left_const_iterator</span><span class="special">;</span>
+<pre class="programlisting"><a class="co" name="boost_bimap0co" href="one_minute_tutorial.html#boost_bimap0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="keyword">typedef</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span><span class="special">::</span><span class="identifier">const_iterator</span> <span class="identifier">left_const_iterator</span><span class="special">;</span>
 
 <span class="keyword">for</span><span class="special">(</span> <span class="identifier">left_const_iterator</span> <span class="identifier">left_iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">iend</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">end</span><span class="special">();</span>
      <span class="identifier">left_iter</span> <span class="special">!=</span> <span class="identifier">iend</span><span class="special">;</span> <span class="special">++</span><span class="identifier">left_iter</span> <span class="special">)</span>
@@ -203,41 +192,38 @@
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">first</span> <span class="special">&lt;&lt;</span> <span class="string">" --&gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">second</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span>
 
-<span class="line_callout_bug"><a class="co" name="boost_bimap1co" href="one_minute_tutorial.html#boost_bimap1"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a></span><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_const_iterator</span> <span class="identifier">left_iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">find</span><span class="special">(</span><span class="number">2</span><span class="special">);</span>
+<a class="co" name="boost_bimap1co" href="one_minute_tutorial.html#boost_bimap1"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_const_iterator</span> <span class="identifier">left_iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">find</span><span class="special">(</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span> <span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">second</span> <span class="special">==</span>  <span class="string">"two"</span> <span class="special">);</span>
 
-<span class="line_callout_bug"><a class="co" name="boost_bimap2co" href="one_minute_tutorial.html#boost_bimap2"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a></span><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_value_type</span><span class="special">(</span> <span class="number">3</span><span class="special">,</span> <span class="string">"three"</span> <span class="special">)</span> <span class="special">);</span>
+<a class="co" name="boost_bimap2co" href="one_minute_tutorial.html#boost_bimap2"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_value_type</span><span class="special">(</span> <span class="number">3</span><span class="special">,</span> <span class="string">"three"</span> <span class="special">)</span> <span class="special">);</span>
 </pre>
 <p>
-      </p>
+    </p>
 <p>
       </p>
-<p>
-        </p>
 <div class="calloutlist"><table border="0" summary="Callout list">
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap0"></a><a href="#boost_bimap0co"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p> The type of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span></code> is <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span></code>
-        and the type of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span></code> is <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_map</span></code>
-        </p></td>
+      and the type of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span></code> is <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_map</span></code>
+      </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap1"></a><a href="#boost_bimap1co"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
 <td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_</span></code>-type- can be used as a shortcut for
-        the more verbose <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span><span class="special">::</span></code>-type- </p></td>
+      the more verbose <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span><span class="special">::</span></code>-type-
+      </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap2"></a><a href="#boost_bimap2co"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
-<td valign="top" align="left"><p> This line produces the same effect
-        of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="number">3</span><span class="special">,</span><span class="string">"three"</span><span class="special">)</span> <span class="special">);</span></code> </p></td>
+<td valign="top" align="left"><p> This line produces the same effect of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span>
+      <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="number">3</span><span class="special">,</span><span class="string">"three"</span><span class="special">)</span> <span class="special">);</span></code> </p></td>
 </tr>
 </table></div>
 <p>
-      </p>
-<p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.the_right_map_view"></a><h4>
-<a name="id556790"></a>
+<a name="id762598"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.the_right_map_view">The right
       map view</a>
     </h4>
@@ -248,9 +234,7 @@
       one, exactly as with standard maps.
     </p>
 <p>
-      </p>
-<p>
-        
+      
 </p>
 <pre class="programlisting"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_const_iterator</span> <span class="identifier">right_iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span><span class="special">.</span><span class="identifier">find</span><span class="special">(</span><span class="string">"two"</span><span class="special">);</span>
 
@@ -263,25 +247,21 @@
 
 <span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span><span class="special">.</span><span class="identifier">erase</span><span class="special">(</span><span class="string">"two"</span><span class="special">);</span>
 
-<span class="line_callout_bug"><a class="co" name="boost_bimap3co" href="one_minute_tutorial.html#boost_bimap3"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_value_type</span><span class="special">(</span> <span class="string">"four"</span><span class="special">,</span> <span class="number">4</span> <span class="special">)</span> <span class="special">);</span>
+<a class="co" name="boost_bimap3co" href="one_minute_tutorial.html#boost_bimap3"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_value_type</span><span class="special">(</span> <span class="string">"four"</span><span class="special">,</span> <span class="number">4</span> <span class="special">)</span> <span class="special">);</span>
 </pre>
 <p>
-      </p>
+    </p>
 <p>
       </p>
-<p>
-        </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap3"></a><a href="#boost_bimap3co"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> This line produces the same effect of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="number">4</span><span class="special">,</span><span class="string">"four"</span><span class="special">)</span>
-        <span class="special">);</span></code> </p></td>
+<td valign="top" align="left"><p> This line produces the same effect of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span>
+      <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="number">4</span><span class="special">,</span><span class="string">"four"</span><span class="special">)</span> <span class="special">);</span></code> </p></td>
 </tr></table></div>
-<p>
-      </p>
 <p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.differences_with_std__map"></a><h4>
-<a name="id557230"></a>
+<a name="id763032"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.differences_with_std__map">Differences
       with std::map</a>
     </h4>
@@ -312,7 +292,7 @@
 <span class="identifier">assert</span><span class="special">(</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">==</span> <span class="number">1</span> <span class="special">);</span>
 </pre>
 <a name="boost_bimap.one_minute_tutorial.a_simple_example"></a><h4>
-<a name="id557889"></a>
+<a name="id763691"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.a_simple_example">A simple example</a>
     </h4>
 <p>
@@ -323,9 +303,7 @@
       <a href="../../../example/simple_bimap.cpp" target="_top">Go to source code</a>
     </p>
 <p>
-      </p>
-<p>
-        
+      
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
@@ -385,8 +363,6 @@
 <span class="special">}</span>
 </pre>
 <p>
-      </p>
-<p>
     </p>
 <p>
       The output of this program will be the following:
@@ -408,7 +384,7 @@
 <code class="literal">Spain ends in position 2</code>
 </pre>
 <a name="boost_bimap.one_minute_tutorial.continuing_the_journey"></a><h4>
-<a name="id559435"></a>
+<a name="id764963"></a>
       <a class="link" href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.continuing_the_journey">Continuing
       the journey</a>
     </h4>
@@ -417,9 +393,9 @@
       or read the <a class="link" href="reference.html" title="Reference">reference</a> section
       of this documentation.
     </p>
-<div class="caution" title="Caution"><table border="0" summary="Caution">
+<div class="caution"><table border="0" summary="Caution">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../doc/html/images/caution.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../doc/src/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
 <tr><td align="left" valign="top"><p>
@@ -434,16 +410,16 @@
 </table></div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id554727" href="#id554727" class="para">1</a>] </sup>
-          A type is <span class="emphasis"><em>signature-compatible</em></span> with other type if
-          it has the same signature for functions and metadata. Preconditions, postconditions
-          and the order of operations need not be the same.
-        </p></div>
+<div class="footnote"><p><sup>[<a name="ftn.id760544" href="#id760544" class="para">1</a>] </sup>
+        A type is <span class="emphasis"><em>signature-compatible</em></span> with other type if it
+        has the same signature for functions and metadata. Preconditions, postconditions
+        and the order of operations need not be the same.
+      </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 Matias Capeletto<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 -2007 Matias Capeletto<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -451,7 +427,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="introduction.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="the_tutorial.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="introduction.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="the_tutorial.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
