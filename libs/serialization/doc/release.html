@@ -48,6 +48,24 @@ libraries.
 <ul>
     <li>fixed bug in the serialization of virtual base classes.  Due
     to heroic efforts by Takatoshi Kondo.
+    <li>Native binary archives created under versions 1.42 and 1.43
+    suffer from a serious problem.  It's likely they won't be readable
+    by this latest version. This due to the fact that 1.42 made some
+    changes in the binary format of some types.  Normally this could
+    be addressed by detecting the library version number written into
+    the archive header.  Unfortunately, this library version number
+    was not incremented at 1.42 as it should have been.  So now we have
+    two different binary archive versions with the same library version
+    number.
+    <p>
+    This has been addressed by including a small utility in the example
+    directory named fix_six.cpp.  This should be run with the command line<br>
+    <code><pre>
+    fix_six &lt;file name&gt;
+    </pre></code>
+    This will assign 7 to the library version number of the archive. This
+    fix will need to ba applied to native binary archives created with
+    boost versions 1.42 and 1.43.
 </ul>
 <h2><a name="differences_1_42"></a>Differences from Boost 1.42</h2>
 <ul>
