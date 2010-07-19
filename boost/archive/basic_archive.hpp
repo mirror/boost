@@ -74,7 +74,7 @@ BOOST_ARCHIVE_VERSION();
 
 class version_type {
 private:
-    typedef unsigned int base_type;
+    typedef uint_least32_t base_type;
     base_type t;
     version_type(): t(0) {};
 public:

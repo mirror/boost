@@ -34,6 +34,7 @@
 #include <boost/archive/detail/common_oarchive.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/item_version_type.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -87,14 +88,58 @@ public:
     // binary files don't include the optional information 
     void save_override(const class_id_optional_type & /* t */, int){}
 
-    #if 0 // enable this if we decide to support generation of previous versions
+    // enable this if we decide to support generation of previous versions
+    #if 0
     void save_override(const boost::archive::version_type & t, int version){
-        if(this->get_library_version() < boost::archive::library_version_type(7)){
-            * this->This() << static_cast<int_least16_t >(t);
+        library_version_type lvt = this->get_library_version();
+        if(boost::archive::library_version_type(7) < lvt){
+            this->detail_common_oarchive::save_override(t, version);
         }
         else
-            this->detail_common_oarchive::save_override(t, version);
+        if(boost::archive::library_version_type(6) < lvt){
+            const boost::uint_least16_t x = t;
+            * this->This() << x;
+        }
+        else{
+            const unsigned int x = t;
+            * this->This() << x;
+        }
     }
+    void save_override(const boost::serialization::item_version_type & t, int version){
+        library_version_type lvt = this->get_library_version();
+        if(boost::archive::library_version_type(7) < lvt){
+            this->detail_common_oarchive::save_override(t, version);
+        }
+        else
+        if(boost::archive::library_version_type(6) < lvt){
+            const boost::uint_least16_t x = t;
+            * this->This() << x;
+        }
+        else{
+            const unsigned int x = t;
+            * this->This() << x;
+        }
+    }
+
+    void save_override(class_id_type & t, int version){
+        library_version_type lvt = this->get_library_version();
+        if(boost::archive::library_version_type(7) < lvt){
+            this->detail_common_oarchive::save_override(t, version);
+        }
+        else
+        if(boost::archive::library_version_type(6) < lvt){
+            const boost::int_least16_t x = t;
+            * this->This() << x;
+        }
+        else{
+            const int x = t;
+            * this->This() << x;
+        }
+    }
+    void save_override(class_id_reference_type & t, int version){
+        save_override(static_cast<class_id_type &>(t), version);
+    }
+
     #endif
 
     // explicitly convert to char * to avoid compile ambiguities
