@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Additional information</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
-<link rel="home" href="../../index.html" title="Chapter 1. Boost.Bimap">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="up" href="../the_tutorial.html" title="The tutorial">
 <link rel="prev" href="unconstrained_sets.html" title="Unconstrained Sets">
 <link rel="next" href="complete_instantiation_scheme.html" title="Complete instantiation scheme">
@@ -13,16 +13,16 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="unconstrained_sets.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="complete_instantiation_scheme.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="unconstrained_sets.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="complete_instantiation_scheme.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Additional information">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_bimap.the_tutorial.additional_information"></a><a class="link" href="additional_information.html" title="Additional information">Additional
       information</a>
@@ -32,9 +32,7 @@
         we want to represent a books and author bidirectional map.
       </p>
 <p>
-        </p>
-<p>
-          
+        
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span>
 
@@ -54,20 +52,18 @@
 </span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span><span class="special">.</span><span class="identifier">at</span><span class="special">(</span> <span class="string">"Modern C++ Design"</span> <span class="special">);</span>
 </pre>
 <p>
-        </p>
-<p>
       </p>
 <p>
         Suppose now that we want to store abstract of each book. We have two options:
       </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-          Books name are unique identifiers, so we can create a separate <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span> <span class="identifier">string</span><span class="special">,</span> <span class="identifier">string</span> <span class="special">&gt;</span></code>
-          that relates books names with abstracts.
-        </li>
+            Books name are unique identifiers, so we can create a separate <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span> <span class="identifier">string</span><span class="special">,</span> <span class="identifier">string</span> <span class="special">&gt;</span></code>
+            that relates books names with abstracts.
+          </li>
 <li class="listitem">
-          We can use <a href="http://www.boost.org/libs/multi_index/doc/index.html" target="_top"><span class="bold"><strong>Boost.MultiIndex</strong></span></a> for the new beast.
-        </li>
+            We can use <a href="http://www.boost.org/libs/multi_index/doc/index.html" target="_top"><span class="bold"><strong>Boost.MultiIndex</strong></span></a> for the new beast.
+          </li>
 </ol></div>
 <p>
         Option 1 is the wrong approach, if we go this path we lost what bimap has
@@ -105,9 +101,7 @@
         constructor.
       </p>
 <p>
-        </p>
-<p>
-          
+        
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span>
 
@@ -138,21 +132,15 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">i</span><span class="special">-&gt;</span><span class="identifier">info</span><span class="special">;</span>
 </pre>
 <p>
-        </p>
-<p>
       </p>
 <p>
         Contrary to the two key types, the information will be mutable using iterators.
       </p>
 <p>
-        </p>
-<p>
-          
+        
 </p>
 <pre class="programlisting"><span class="identifier">i</span><span class="special">-&gt;</span><span class="identifier">info</span> <span class="special">+=</span> <span class="string">"More details about this book"</span><span class="special">;</span>
 </pre>
-<p>
-        </p>
 <p>
       </p>
 <p>
@@ -161,15 +149,11 @@
         but returned the associated information instead of the data.
       </p>
 <p>
-        </p>
-<p>
-          
+        
 </p>
 <pre class="programlisting"><span class="comment">// Print the new abstract
 </span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span><span class="special">.</span><span class="identifier">info_at</span><span class="special">(</span><span class="string">"The C++ Programming Language"</span><span class="special">);</span>
 </pre>
-<p>
-        </p>
 <p>
       </p>
 <p>
@@ -177,9 +161,7 @@
         is a rewrite of the above example using user defined names:
       </p>
 <p>
-        </p>
-<p>
-          
+        
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span>
 
@@ -217,8 +199,6 @@
 </span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">title</span><span class="special">&gt;().</span><span class="identifier">info_at</span><span class="special">(</span><span class="string">"The C++ Programming Language"</span><span class="special">);</span>
 </pre>
 <p>
-        </p>
-<p>
       </p>
 <p>
         <a href="../../../../example/tutorial_info_hook.cpp" target="_top">Go to source code</a>
@@ -226,7 +206,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 Matias Capeletto<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 -2007 Matias Capeletto<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -234,7 +214,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="unconstrained_sets.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="complete_instantiation_scheme.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="unconstrained_sets.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="complete_instantiation_scheme.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

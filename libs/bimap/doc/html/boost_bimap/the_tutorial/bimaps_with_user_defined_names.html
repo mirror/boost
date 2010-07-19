@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Bimaps with user defined names</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
-<link rel="home" href="../../index.html" title="Chapter 1. Boost.Bimap">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="up" href="../the_tutorial.html" title="The tutorial">
 <link rel="prev" href="useful_functions.html" title="Useful functions">
 <link rel="next" href="unconstrained_sets.html" title="Unconstrained Sets">
@@ -13,16 +13,16 @@
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="useful_functions.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unconstrained_sets.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="useful_functions.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="unconstrained_sets.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="Bimaps with user defined names">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_bimap.the_tutorial.bimaps_with_user_defined_names"></a><a class="link" href="bimaps_with_user_defined_names.html" title="Bimaps with user defined names">Bimaps
       with user defined names</a>
@@ -35,9 +35,7 @@
         <a href="../../../../example/user_defined_names.cpp" target="_top">Go to source code</a>
       </p>
 <p>
-        </p>
-<p>
-          
+        
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">bimap</span>
 <span class="special">&lt;</span>
@@ -85,8 +83,6 @@
 <span class="special">}</span>
 </pre>
 <p>
-        </p>
-<p>
       </p>
 <p>
         In Boost.Bimap there is a better way to document the code and in the meantime
@@ -114,9 +110,7 @@
         <a href="../../../../example/user_defined_names.cpp" target="_top">Go to source code</a>
       </p>
 <p>
-        </p>
-<p>
-          
+        
 </p>
 <pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">id</span>   <span class="special">{};</span> <span class="comment">// Tag for the identification number
 </span><span class="keyword">struct</span> <span class="identifier">name</span> <span class="special">{};</span> <span class="comment">// Tag for the name of the person
@@ -157,8 +151,6 @@
 <span class="special">}</span>
 </pre>
 <p>
-        </p>
-<p>
       </p>
 <p>
         Here is a list of common structures in both tagged and untagged versions.
@@ -181,7 +173,7 @@
 <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_iterator</span> <span class="identifier">right_iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span><span class="special">.</span><span class="identifier">begin</span><span class="special">();</span>
 </pre>
 <div class="table">
-<a name="id577416"></a><p class="title"><b>Table 1.3. Equivalence of expresions using user defined names</b></p>
+<a name="id782992"></a><p class="title"><b>Table&#160;1.3.&#160;Equivalence of expresions using user defined names</b></p>
 <div class="table-contents"><table class="table" summary="Equivalence of expresions using user defined names">
 <colgroup>
 <col>
@@ -189,184 +181,184 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Untagged version
-            </p>
-            </th>
+                <p>
+                  Untagged version
+                </p>
+              </th>
 <th>
-            <p>
-              Tagged version
-            </p>
-            </th>
+                <p>
+                  Tagged version
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">right</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_value_type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_value_type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;::</span><span class="identifier">value_type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;::</span><span class="identifier">value_type</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_iterator</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_iterator</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;::</span><span class="identifier">iterator</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;::</span><span class="identifier">iterator</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_const_iterator</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">right_const_iterator</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;::</span><span class="identifier">const_iterator</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;::</span><span class="identifier">const_iterator</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">left</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">left</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">right</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">right</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">first</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">first</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">second</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">second</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">left_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">first</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">first</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">second</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">second</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">right_iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project_left</span><span class="special">(</span><span class="identifier">iter</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project_left</span><span class="special">(</span><span class="identifier">iter</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;(</span><span class="identifier">iter</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project</span><span class="special">&lt;</span><span class="identifier">Left</span><span class="special">&gt;(</span><span class="identifier">iter</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project_right</span><span class="special">(</span><span class="identifier">iter</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project_right</span><span class="special">(</span><span class="identifier">iter</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;(</span><span class="identifier">iter</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">project</span><span class="special">&lt;</span><span class="identifier">Right</span><span class="special">&gt;(</span><span class="identifier">iter</span><span class="special">)</span></code>
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
@@ -375,7 +367,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 Matias Capeletto<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 -2007 Matias Capeletto<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -383,7 +375,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="useful_functions.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unconstrained_sets.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="useful_functions.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../the_tutorial.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="unconstrained_sets.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
