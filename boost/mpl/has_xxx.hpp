@@ -17,6 +17,7 @@
 // $Revision$
 
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
 #include <boost/mpl/aux_/yes_no.hpp>
 #include <boost/mpl/aux_/config/gcc.hpp>
