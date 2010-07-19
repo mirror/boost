@@ -466,11 +466,9 @@ struct make_choice : sc::event&lt; make_choice &gt; {};
 
 // universal choice point base class template
 template&lt; class MostDerived, class Context &gt;
-struct choice_point : sc::state&lt; MostDerived, Context, 
-  sc::custom_reaction&lt; make_choice &gt; &gt;
+struct choice_point : sc::state&lt; MostDerived, Context &gt;
 {
-  typedef sc::state&lt; MostDerived, Context, 
-    sc::custom_reaction&lt; make_choice &gt; &gt; base_type;
+  typedef sc::state&lt; MostDerived, Context &gt; base_type;
   typedef typename base_type::my_context my_context;
   typedef choice_point my_base;
 
