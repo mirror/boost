@@ -55,10 +55,14 @@ void test2( Opt o, Opt buff )
 {
   stringstream s ;
 
-  s << o ;
-  s >> buff ;
+  const int markv = 123 ;
+  int mark = 0 ;
+  
+  s << o << " " << markv ;
+  s >> buff >> mark ;
 
   BOOST_ASSERT( buff == o ) ;
+  BOOST_ASSERT( mark == markv ) ;
 }
 
 
@@ -77,7 +81,6 @@ int test_main( int, char* [] )
   {
     test(1,2);
     test(string("hello"),string("buffer"));
-    test(string(""),string("buffer"));
   }
   catch ( ... )
   {
