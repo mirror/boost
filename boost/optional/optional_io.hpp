@@ -73,9 +73,14 @@ operator>>(std::basic_istream<CharType, CharTrait>& in, optional<T>& v)
     }
     else
     {
-      BOOST_ASSERT(d == '-');
+      if ( d != '-')
+        in.setstate( ios::failbit );
+        
       d = in.get();
-      BOOST_ASSERT(d == '-');
+      
+      if ( d != '-')
+        in.setstate( ios::failbit );
+        
       v = optional<T>() ;
     }
   }
