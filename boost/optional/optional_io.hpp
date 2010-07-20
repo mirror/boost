@@ -25,7 +25,7 @@
 #  include <ostream>
 #endif  
 
-
+#include <boost/assert.hpp>
 #include "boost/optional/optional.hpp"
 #include "boost/utility/value_init.hpp"
 
@@ -72,7 +72,12 @@ operator>>(std::basic_istream<CharType, CharTrait>& in, optional<T>& v)
       v = x ;
     }
     else
+    {
+      BOOST_ASSERT(d == '-');
+      d = in.get();
+      BOOST_ASSERT(d == '-');
       v = optional<T>() ;
+    }
   }
 
   return in;
