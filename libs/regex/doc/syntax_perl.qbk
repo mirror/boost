@@ -143,7 +143,7 @@ consume as little input as possible while still producing a match.
 ={n,m}?= Matches the previous atom between n and m times, while 
    consuming as little input as possible.
    
-[h4 Pocessive repeats]
+[h4 Possessive repeats]
 
 By default when a repeated pattern does not match then the engine will backtrack until
 a match is found.  However, this behaviour can sometime be undesireable so there are
