@@ -76,8 +76,9 @@ class version_type {
 private:
     typedef uint_least32_t base_type;
     base_type t;
-    version_type(): t(0) {};
 public:
+    // should be private - but MPI fails if it's not!!!
+    version_type(): t(0) {};
     explicit version_type(const unsigned int & t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
@@ -109,6 +110,7 @@ private:
     typedef int_least16_t base_type;
     base_type t;
 public:
+    // should be private - but then can't use BOOST_STRONG_TYPE below
     class_id_type() : t(0) {};
     explicit class_id_type(const int t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);

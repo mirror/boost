@@ -23,8 +23,9 @@ class item_version_type {
 private:
     typedef unsigned int base_type;
     base_type t;
-    item_version_type(): t(0) {};
 public:
+    // should be private - but MPI fails if it's not!!!
+    item_version_type(): t(0) {};
     explicit item_version_type(const unsigned int t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
