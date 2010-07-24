@@ -11,9 +11,9 @@ The motivation for the Range concept is that there are many useful Container-lik
 
 Because of the second requirement, a Range object must be passed by (const or non-const) reference in generic code.
 
-The operations that can be performed on a Range is dependent on the [@../../iterator/doc/new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal traversal category] of the underlying iterator type. Therefore the range concepts are named to reflect which traversal category its iterators support. See also terminology and style guidelines. for more information about naming of ranges.
+The operations that can be performed on a Range is dependent on the [@boost:/libs/iterator/doc/new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal traversal category] of the underlying iterator type. Therefore the range concepts are named to reflect which traversal category its iterators support. See also terminology and style guidelines. for more information about naming of ranges.
 
-The concepts described below specifies associated types as [@../../libs/mpl/doc/refmanual/metafunction.html metafunctions] and all functions as free-standing functions to allow for a layer of indirection.
+The concepts described below specifies associated types as [@boost:/libs/mpl/doc/refmanual/metafunction.html metafunctions] and all functions as free-standing functions to allow for a layer of indirection.
 
 [endsect]
 
@@ -217,7 +217,7 @@ __bidirectional_range__
 
 [section Concept Checking]
 
-Each of the range concepts has a corresponding concept checking class in the file [@../../boost/range/concepts.hpp `<boost/range/concepts.hpp>`]. These classes may be used in conjunction with the __concept_check__ to ensure that the type of a template parameter is compatible with a range concept. If not, a meaningful compile time error is generated. Checks are provided for the range concepts related to iterator traversal categories. For example, the following line checks that the type `T` models the __forward_range__ concept.
+Each of the range concepts has a corresponding concept checking class in the file [@boost:/boost/range/concepts.hpp `<boost/range/concepts.hpp>`]. These classes may be used in conjunction with the __concept_check__ to ensure that the type of a template parameter is compatible with a range concept. If not, a meaningful compile time error is generated. Checks are provided for the range concepts related to iterator traversal categories. For example, the following line checks that the type `T` models the __forward_range__ concept.
 
 ``
 BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<T> ));
