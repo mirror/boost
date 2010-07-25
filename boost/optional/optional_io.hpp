@@ -74,12 +74,12 @@ operator>>(std::basic_istream<CharType, CharTrait>& in, optional<T>& v)
     else
     {
       if ( d != '-')
-        in.setstate( ios::failbit );
+        in.setstate( std::ios::failbit );
         
       d = in.get();
       
       if ( d != '-')
-        in.setstate( ios::failbit );
+        in.setstate( std::ios::failbit );
         
       v = optional<T>() ;
     }
