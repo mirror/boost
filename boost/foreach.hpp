@@ -31,8 +31,9 @@
 
 // Some compilers let us detect even const-qualified rvalues at compile-time
 #if BOOST_WORKAROUND(BOOST_MSVC, >= 1310) && !defined(_PREFAST_)                                 \
- || (BOOST_WORKAROUND(__GNUC__, >= 4) && !defined(BOOST_INTEL))                                 \
- || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ >= 4) && !defined(BOOST_INTEL))
+ || (BOOST_WORKAROUND(__GNUC__, >= 4) && !defined(BOOST_INTEL) && !defined(BOOST_CLANG))         \
+ || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ >= 4) && !defined(BOOST_INTEL) &&       \
+                                                                  !defined(BOOST_CLANG))
 # define BOOST_FOREACH_COMPILE_TIME_CONST_RVALUE_DETECTION
 #else
 // Some compilers allow temporaries to be bound to non-const references.
@@ -696,7 +697,7 @@ end(auto_any_t col, type2type<T, const_> *, bool *)
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template<typename T, typename C>
 inline auto_any<int>
-end(auto_any_t col, type2type<T *, C> *, boost::mpl::true_ *) // null-terminated C-style strings
+end(auto_any_t, type2type<T *, C> *, boost::mpl::true_ *) // null-terminated C-style strings
 {
     return 0; // not used
 }
