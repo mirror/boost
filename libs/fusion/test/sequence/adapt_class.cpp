@@ -50,6 +50,26 @@ namespace ns
         int x;
         int y;
     };
+
+#if !BOOST_WORKAROUND(__GNUC__,<4)
+    class point_with_private_members
+    {
+        friend struct boost::fusion::extension::access;
+
+    public:
+        point_with_private_members() : x(0), y(0) {}
+        point_with_private_members(int x, int y) : x(x), y(y) {}
+
+    private:
+        int get_x() const { return x; }
+        int get_y() const { return y; }
+        void set_x(int x_) { x = x_; }
+        void set_y(int y_) { y = y_; }
+
+        int x;
+        int y;
+    };
+#endif
 }
 
 BOOST_FUSION_ADAPT_CLASS(
@@ -57,6 +77,14 @@ BOOST_FUSION_ADAPT_CLASS(
     (int, int, obj.get_x(), obj.set_x(val))
     (int, int, obj.get_y(), obj.set_y(val))
 )
+
+#if !BOOST_WORKAROUND(__GNUC__,<4)
+BOOST_FUSION_ADAPT_CLASS(
+    ns::point_with_private_members,
+    (int, int, obj.get_x(), obj.set_x(val))
+    (int, int, obj.get_y(), obj.set_y(val))
+)
+#endif
 
 int
 main()
@@ -123,6 +151,28 @@ main()
             fusion::result_of::value_at_c<ns::point,0>::type
           , mpl::front<ns::point>::type>));
     }
+
+#if !BOOST_WORKAROUND(__GNUC__,<4)
+    {
+        BOOST_MPL_ASSERT_NOT((traits::is_view<ns::point_with_private_members>));
+        ns::point_with_private_members p(123, 456);
+
+        std::cout << at_c<0>(p) << std::endl;
+        std::cout << at_c<1>(p) << std::endl;
+        std::cout << p << std::endl;
+        BOOST_TEST(p == make_vector(123, 456));
+
+        at_c<0>(p) = 6;
+        at_c<1>(p) = 9;
+        BOOST_TEST(p == make_vector(6, 9));
+
+        BOOST_STATIC_ASSERT(result_of::size<ns::point_with_private_members>::value == 2);
+        BOOST_STATIC_ASSERT(!result_of::empty<ns::point_with_private_members>::value);
+
+        BOOST_TEST(front(p) == 6);
+        BOOST_TEST(back(p) == 9);
+    }
+#endif
 
     return boost::report_errors();
 }
