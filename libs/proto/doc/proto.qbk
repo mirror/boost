@@ -167,6 +167,12 @@
   [classref boost::proto::reverse_fold `proto::reverse_fold<>`]]
 [def _reverse_fold_tree_pt_ 
   [classref boost::proto::reverse_fold_tree `proto::reverse_fold_tree<>`]]
+[def _generator_ 
+  [classref boost::proto::generator `proto::generator<>`]]
+[def _pod_generator_ 
+  [classref boost::proto::pod_generator `proto::pod_generator<>`]]
+[def _deduce_domain_ 
+  [classref boost::proto::deduce_domain `proto::deduce_domain`]]
 [def _lazy_pt_ 
   [classref boost::proto::lazy `proto::lazy<>`]]
 [def _SYB_ 
