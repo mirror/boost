@@ -132,7 +132,7 @@ For example:
     // what as_expr does by default.
     template<class T>
     struct as_child
-      : base_domain::as_child<T>
+      : base_domain::as_expr<T>
     {};
   };
 
