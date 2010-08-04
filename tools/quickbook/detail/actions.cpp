@@ -11,8 +11,8 @@
 #include <numeric>
 #include <functional>
 #include <boost/bind.hpp>
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/v2/convenience.hpp>
+#include <boost/filesystem/v2/fstream.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include "./quickbook.hpp"

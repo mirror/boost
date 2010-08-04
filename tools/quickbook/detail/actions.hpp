@@ -17,7 +17,7 @@
 #include <stack>
 #include <algorithm>
 #include <boost/spirit/include/classic_iterator.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/v2/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 #include "../syntax_highlight.hpp"

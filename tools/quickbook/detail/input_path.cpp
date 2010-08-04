@@ -30,7 +30,7 @@ namespace quickbook { namespace detail
 
 // Cygwin 1.5.x
 
-#include <boost/filesystem/config.hpp>
+#include <boost/filesystem/v2/config.hpp>
 #include <windows.h>
 #include <sys/cygwin.h>
 
@@ -61,7 +61,7 @@ namespace quickbook { namespace detail
 
 // Cygwin 1.7.x
     
-#include <boost/filesystem/config.hpp>
+#include <boost/filesystem/v2/config.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/program_options/errors.hpp>
 #include <windows.h>
