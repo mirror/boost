@@ -50,7 +50,7 @@ namespace quickbook { namespace detail
 #elif defined(BOOST_POSIX_PATH)
         cygwin_conv_to_posix_path(path.c_str(), result);
 #else
-#    error "Bosot filesystem path type doesn't seem to be set."
+#    error "Boost filesystem path type doesn't seem to be set."
 #endif
 
         v = input_path(result);
@@ -81,7 +81,7 @@ namespace quickbook { namespace detail
 #elif defined(BOOST_POSIX_PATH)
         cygwin_conv_path_t flags = CCP_WIN_A_TO_POSIX | CCP_RELATIVE;
 #else
-#    error "Bosot filesystem path type doesn't seem to be set."
+#    error "Boost filesystem path type doesn't seem to be set."
 #endif
 
         ssize_t size = cygwin_conv_path(flags, path.c_str(), NULL, 0);
