@@ -98,6 +98,10 @@ struct NumberGrammar
 struct my_terminal
 {};
 
+template<typename T>
+struct a_template
+{};
+
 void test_matches()
 {
     assert_matches< _ >( lit(1) );
@@ -262,6 +266,13 @@ void test_matches()
 
         assert_matches< proto::and_<proto::terminal<int> > >( lit(1) );
         assert_matches< proto::or_<proto::terminal<int> > >( lit(1) );
+    }
+
+    // Test lambda matches with arrays, a corner case that had
+    // a bug that was reported by Antoine de Maricourt on boost@lists.boost.org
+    {
+        a_template<int[3]> a;
+        assert_matches< proto::terminal< a_template<_> > >( lit(a) );
     }
 }
 
