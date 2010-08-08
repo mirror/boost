@@ -24,6 +24,20 @@ public:
    virtual ~D()throw();
 };
 
+// for bug report 4453: https://svn.boost.org/trac/boost/ticket/4453
+class non_virtual_base
+{
+public:
+	non_virtual_base();
+};
+class non_virtual_derived : public non_virtual_base
+{
+public:
+	non_virtual_derived();
+	virtual int Y();
+	virtual int X();
+};
+
 TT_TEST_BEGIN(is_virtual_base_of)
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Derived,Base>::value), false);
@@ -60,6 +74,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit5,int_con
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Base,virtual_inherit6>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit6,Base>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<B,D>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<non_virtual_base,non_virtual_derived>::value), false);
 
 TT_TEST_END
 
