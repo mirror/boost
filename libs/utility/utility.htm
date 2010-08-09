@@ -183,10 +183,9 @@ typedef boost::result_of&lt;
 &gt;::type type;</pre>
                 </blockquote>
 
-                <p>If your compiler does not support
-                <code>decltype</code>, then automatic result type
-                deduction of function objects is not
-                possible. Instead, <code>result_of</code>
+                <p>If <code>decltype</code> is not enabled,
+                then automatic result type deduction of function
+                objects is not possible. Instead, <code>result_of</code>
                 uses the following protocol to allow the programmer to
                 specify a type. When <code>F</code> is a class type with a
                 member type <code>result_type</code>,
