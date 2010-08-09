@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.7: http://docutils.sourceforge.net/" />
 <title>The MPL Reference Manual: protect</title>
 <link rel="stylesheet" href="../style.css" type="text/css" />
 </head>
@@ -12,7 +12,7 @@
 <td class="header-group page-location"><a href="../refmanual.html" class="navigation-link">Front Page</a> / <a href="./metafunctions.html" class="navigation-link">Metafunctions</a> / <a href="./composition-and-argument-binding.html" class="navigation-link">Composition and Argument Binding</a> / <a href="./protect.html" class="navigation-link">protect</a></td>
 </tr></table><div class="header-separator"></div>
 <div class="section" id="protect">
-<h1><a class="toc-backref" href="./composition-and-argument-binding.html#id1517">protect</a></h1>
+<h1><a class="toc-backref" href="./composition-and-argument-binding.html#id1534">protect</a></h1>
 <div class="section" id="id953">
 <h3><a class="subsection-title" href="#synopsis" name="synopsis">Synopsis</a></h3>
 <pre class="literal-block">
@@ -94,25 +94,22 @@ struct g
 <div class="section" id="id958">
 <h3><a class="subsection-title" href="#example" name="example">Example</a></h3>
 <pre class="literal-block">
-FIXME
-
 struct f
 {
     template&lt; typename T1, typename T2 &gt; struct <a href="./apply.html" class="identifier">apply</a>
     {
-        // <em>...</em>
+        typedef T2 type;
     };
 };
 
-typedef <a href="./bind.html" class="identifier">bind</a>&lt;<a href="./placeholders.html" class="identifier">_1</a>, <a href="./protect.html" class="identifier">protect</a>&lt; <a href="./bind.html" class="identifier">bind</a>&lt;f,<a href="./placeholders.html" class="identifier">_1</a>,<a href="./placeholders.html" class="identifier">_2</a>&gt; &gt; &gt;
+typedef <a href="./bind.html" class="identifier">bind</a>&lt; <a href="./quote.html" class="identifier">quote</a><tt class="literal"><span class="pre">3</span></tt>&lt;<a href="./if.html" class="identifier">if_</a>&gt;,<a href="./placeholders.html" class="identifier">_1</a>,<a href="./placeholders.html" class="identifier">_2</a>,<a href="./bind.html" class="identifier">bind</a>&lt;f,<a href="./placeholders.html" class="identifier">_1</a>,<a href="./placeholders.html" class="identifier">_2</a>&gt; &gt; b1;
+typedef <a href="./bind.html" class="identifier">bind</a>&lt; <a href="./quote.html" class="identifier">quote</a><tt class="literal"><span class="pre">3</span></tt>&lt;<a href="./if.html" class="identifier">if_</a>&gt;,<a href="./placeholders.html" class="identifier">_1</a>,<a href="./placeholders.html" class="identifier">_2</a>,<a href="./protect.html" class="identifier">protect</a>&lt; <a href="./bind.html" class="identifier">bind</a>&lt;f,<a href="./placeholders.html" class="identifier">_1</a>,<a href="./placeholders.html" class="identifier">_2</a>&gt; &gt; &gt; b2;
 
-typedef apply_wrap0&lt; f0 &gt;::type r1;
-typedef apply_wrap0&lt; g0 &gt;::type r2;
-typedef apply_wrap2&lt; f2,int,char &gt;::type r3;
+typedef <a href="./apply-wrap.html" class="identifier">apply_wrap</a><tt class="literal"><span class="pre">2</span></tt>&lt; b1,<a href="./bool.html" class="identifier">false_</a>,char &gt;::type r1;
+typedef <a href="./apply-wrap.html" class="identifier">apply_wrap</a><tt class="literal"><span class="pre">2</span></tt>&lt; b2,<a href="./bool.html" class="identifier">false_</a>,char &gt;::type r2;
 
 <a href="./assert.html" class="identifier">BOOST_MPL_ASSERT</a>(( is_same&lt;r1,char&gt; ));
-<a href="./assert.html" class="identifier">BOOST_MPL_ASSERT</a>(( is_same&lt;r2,char&gt; ));
-<a href="./assert.html" class="identifier">BOOST_MPL_ASSERT</a>(( is_same&lt;r3,char&gt; ));
+<a href="./assert.html" class="identifier">BOOST_MPL_ASSERT</a>(( is_same&lt;r2,<a href="./protect.html" class="identifier">protect</a>&lt; <a href="./bind.html" class="identifier">bind</a>&lt;f,<a href="./placeholders.html" class="identifier">_1</a>,<a href="./placeholders.html" class="identifier">_2</a>&gt; > > ));
 </pre>
 </div>
 <div class="section" id="id959">

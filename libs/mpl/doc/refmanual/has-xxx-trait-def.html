@@ -3,17 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.7: http://docutils.sourceforge.net/" />
 <title>The MPL Reference Manual: BOOST_MPL_HAS_XXX_TRAIT_DEF</title>
 <link rel="stylesheet" href="../style.css" type="text/css" />
 </head>
 <body class="docframe refmanual">
-<table class="header"><tr class="header"><td class="header-group navigation-bar"><span class="navigation-group"><a href="./introspection.html" class="navigation-link">Prev</a>&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Next</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group">Back&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Along</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./introspection.html" class="navigation-link">Up</a>&nbsp;<a href="../refmanual.html" class="navigation-link">Home</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./refmanual_toc.html" class="navigation-link">Full TOC</a></span></td>
+<table class="header"><tr class="header"><td class="header-group navigation-bar"><span class="navigation-group"><a href="./has-xxx-template-named-def.html" class="navigation-link">Prev</a>&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Next</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./has-xxx-template-named-def.html" class="navigation-link">Back</a>&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Along</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./introspection.html" class="navigation-link">Up</a>&nbsp;<a href="../refmanual.html" class="navigation-link">Home</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./refmanual_toc.html" class="navigation-link">Full TOC</a></span></td>
 <td class="header-group page-location"><a href="../refmanual.html" class="navigation-link">Front Page</a> / <a href="./macros.html" class="navigation-link">Macros</a> / <a href="./introspection.html" class="navigation-link">Introspection</a> / <a href="./has-xxx-trait-def.html" class="navigation-link">BOOST_MPL_HAS_XXX_TRAIT_DEF</a></td>
 </tr></table><div class="header-separator"></div>
 <div class="section" id="boost-mpl-has-xxx-trait-def">
-<h1><a class="toc-backref" href="./introspection.html#id1576">BOOST_MPL_HAS_XXX_TRAIT_DEF</a></h1>
-<div class="section" id="id1315">
+<h1><a class="toc-backref" href="./introspection.html#id1595">BOOST_MPL_HAS_XXX_TRAIT_DEF</a></h1>
+<div class="section" id="id1329">
 <h3><a class="subsection-title" href="#synopsis" name="synopsis">Synopsis</a></h3>
 <pre class="literal-block">
 #define <a href="./has-xxx-trait-def.html" class="identifier">BOOST_MPL_HAS_XXX_TRAIT_DEF</a>(name) \
@@ -21,7 +21,7 @@
 /**/
 </pre>
 </div>
-<div class="section" id="id1316">
+<div class="section" id="id1330">
 <h3><a class="subsection-title" href="#description" name="description">Description</a></h3>
 <p>Expands into a definition of a boolean unary <a class="reference internal" href="./metafunction.html">Metafunction</a> <tt class="literal"><span class="pre">has_name</span></tt>
 such that for any type <tt class="literal"><span class="pre">x</span></tt> <tt class="literal"><span class="pre">has_name&lt;x&gt;::value</span> <span class="pre">==</span> <span class="pre">true</span></tt> if and only
@@ -33,13 +33,13 @@ the &quot;deficient&quot; status of a particular compiler.</p>
 <p>[<em>Note:</em> <a class="reference internal" href="./has-xxx-trait-def.html">BOOST_MPL_HAS_XXX_TRAIT_DEF</a> is a simplified front end to
 the <a class="reference internal" href="./has-xxx-trait-named-def.html">BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</a> introspection macro — <em>end note</em>]</p>
 </div>
-<div class="section" id="id1317">
+<div class="section" id="id1331">
 <h3><a class="subsection-title" href="#header" name="header">Header</a></h3>
 <pre class="literal-block">
 #include &lt;<a href="../../../../boost/mpl/has_xxx.hpp" class="header">boost/mpl/has_xxx.hpp</a>&gt;
 </pre>
 </div>
-<div class="section" id="id1318">
+<div class="section" id="id1332">
 <h3><a class="subsection-title" href="#parameters" name="parameters">Parameters</a></h3>
 <table border="1" class="docutils table">
 <colgroup>
@@ -61,7 +61,7 @@ the <a class="reference internal" href="./has-xxx-trait-named-def.html">BOOST_MP
 </tbody>
 </table>
 </div>
-<div class="section" id="id1319">
+<div class="section" id="id1333">
 <h3><a class="subsection-title" href="#expression-semantics" name="expression-semantics">Expression semantics</a></h3>
 <p>For any legal C++ identifier <tt class="literal"><span class="pre">name</span></tt>:</p>
 <pre class="literal-block">
@@ -88,7 +88,7 @@ the <a class="reference internal" href="./has-xxx-trait-named-def.html">BOOST_MP
 </tbody>
 </table>
 </div>
-<div class="section" id="id1320">
+<div class="section" id="id1334">
 <h3><a class="subsection-title" href="#example" name="example">Example</a></h3>
 <pre class="literal-block">
 <a href="./has-xxx-trait-def.html" class="identifier">BOOST_MPL_HAS_XXX_TRAIT_DEF</a>(xxx)
@@ -122,7 +122,7 @@ struct test9 { typedef void (xxx)(); };
 <a href="./assert.html" class="identifier">BOOST_MPL_ASSERT</a>(( has_xxx&lt;test9,<a href="./bool.html" class="identifier">true_</a>&gt; ));
 </pre>
 </div>
-<div class="section" id="id1321">
+<div class="section" id="id1335">
 <h3><a class="subsection-title" href="#see-also" name="see-also">See also</a></h3>
 <p><a class="reference internal" href="./macros.html">Macros</a>, <a class="reference internal" href="./has-xxx-trait-named-def.html">BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</a>, <a class="reference internal" href="./cfg-no-has-xxx.html">BOOST_MPL_CFG_NO_HAS_XXX</a></p>
 <!-- Macros/Introspection//BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF -->
@@ -130,7 +130,7 @@ struct test9 { typedef void (xxx)(); };
 </div>
 
 <div class="footer-separator"></div>
-<table class="footer"><tr class="footer"><td class="header-group navigation-bar"><span class="navigation-group"><a href="./introspection.html" class="navigation-link">Prev</a>&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Next</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group">Back&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Along</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./introspection.html" class="navigation-link">Up</a>&nbsp;<a href="../refmanual.html" class="navigation-link">Home</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./refmanual_toc.html" class="navigation-link">Full TOC</a></span></td>
+<table class="footer"><tr class="footer"><td class="header-group navigation-bar"><span class="navigation-group"><a href="./has-xxx-template-named-def.html" class="navigation-link">Prev</a>&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Next</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./has-xxx-template-named-def.html" class="navigation-link">Back</a>&nbsp;<a href="./has-xxx-trait-named-def.html" class="navigation-link">Along</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./introspection.html" class="navigation-link">Up</a>&nbsp;<a href="../refmanual.html" class="navigation-link">Home</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./refmanual_toc.html" class="navigation-link">Full TOC</a></span></td>
 <td><div class="copyright-footer"><div class="copyright">Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams</div>
 Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at <a class="reference external" href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)</div></td></tr></table></body>
