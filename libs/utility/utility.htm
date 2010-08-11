@@ -151,35 +151,95 @@ void f() {
                 <code>result_of&lt;F(T1, T2, ...,
                 T<em>N</em>)&gt;::type</code> defines the result type
                 of the expression <code>f(t1, t2,
-                ...,t<em>N</em>)</code>. The implementation permits
+                ...,t<em>N</em>)</code>. This implementation permits
                 the type <code>F</code> to be a function pointer,
                 function reference, member function pointer, or class
-                type. When <code>F</code> is a class type with a
+                type. By default, <em>N</em> may be any value between 0 and
+                10. To change the upper limit, define the macro
+                <code>BOOST_RESULT_OF_NUM_ARGS</code> to the maximum
+                value for <em>N</em>. Class template <code>result_of</code>
+                resides in the header <code>&lt;<a
+                href="../../boost/utility/result_of.hpp">boost/utility/result_of.hpp</a>&gt;</code>.</p>
+
+                <p>If your compiler supports <code>decltype</code>,
+                then you can enable automatic result type deduction by
+                defining the macro <code>BOOST_RESULT_OF_USE_DECLTYPE</code>,
+                as in the following example.</p>
+
+                <blockquote>
+                <pre>#define BOOST_RESULT_OF_USE_DECLTYPE
+#include &lt;boost/utility/result_of.hpp&gt;
+
+struct functor {
+    template&lt;class T&gt;
+    T operator()(T x)
+    {
+        return x;
+    }
+};
+
+typedef boost::result_of&lt;
+    functor(int)
+&gt;::type type;</pre>
+                </blockquote>
+
+                <p>If <code>decltype</code> is not enabled,
+                then automatic result type deduction of function
+                objects is not possible. Instead, <code>result_of</code>
+                uses the following protocol to allow the programmer to
+                specify a type. When <code>F</code> is a class type with a
                 member type <code>result_type</code>,
                 <code>result_of&lt;F(T1, T2, ...,
                 T<em>N</em>)&gt;</code> is
-                <code>F::result_type</code>. Otherwise,
+                <code>F::result_type</code>. When <code>F</code> does
+                not contain <code>result_type</code>,
                 <code>result_of&lt;F(T1, T2, ...,
                 T<em>N</em>)&gt;</code> is <code>F::result&lt;F(T1,
                 T2, ..., T<em>N</em>)&gt;::type</code> when
                 <code><em>N</em> &gt; 0</code> or <code>void</code>
-                when <code><em>N</em> = 0</code>. For additional
-                information about <code>result_of</code>, see the
-                C++ Library Technical Report, <a
-                href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">N1836</a>,
-                or, for motivation and design rationale, the <code>result_of</code> <a
-                href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1454.html">proposal</a>.</p>
+                when <code><em>N</em> = 0</code>. Note that it is the
+                responsibility of the programmer to ensure that
+                function objects accurately advertise their result
+                type via this protocol, as in the following
+                example.</p>
 
-                <p>Class template <code>result_of</code> resides in
-                the header <code>&lt;<a
-                href="../../boost/utility/result_of.hpp">boost/utility/result_of.hpp</a>&gt;</code>. By
-                default, <em>N</em> may be any value between 0 and
-                10. To change the upper limit, define the macro
-                <code>BOOST_RESULT_OF_NUM_ARGS</code> to the maximum
-                value for <em>N</em>.</p>
+                <blockquote>
+                <pre>struct functor {
+    template&lt;class&gt; struct result;
+
+    template&lt;class F, class T&gt;
+    struct result&lt;F(T)&gt; {
+        typedef T type;
+    };
+
+    template&lt;class T&gt;
+    T operator()(T x)
+    {
+        return x;
+    }
+};
+
+typedef boost::result_of&lt;
+    functor(int)
+&gt;::type type;</pre>
+                </blockquote>
 
                 <a name="BOOST_NO_RESULT_OF"></a>
-                <p>This implementation of <code>result_of</code> requires class template partial specialization, the ability to parse function types properly, and support for SFINAE. If <code>result_of</code> is not supported by your compiler, including the header <code>boost/utility/result_of.hpp</code> will define the macro <code>BOOST_NO_RESULT_OF</code>. Contributed by Doug Gregor.</p>
+                <p>This implementation of <code>result_of</code>
+                requires class template partial specialization, the
+                ability to parse function types properly, and support
+                for SFINAE. If <code>result_of</code> is not supported
+                by your compiler, including the header 
+                <code>boost/utility/result_of.hpp</code> will
+                define the macro <code>BOOST_NO_RESULT_OF</code>.</p>
+
+                <p>For additional information
+                about <code>result_of</code>, see the C++ Library
+                Technical Report,
+                <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">N1836</a>,
+                or, for motivation and design rationale,
+                the <code>result_of</code> <a href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1454.html">proposal</a>.</p>
+                Contributed by Doug Gregor.</p>
 
 		<h2>Class templates for the Base-from-Member Idiom</h2>
 		<p>See <a href="base_from_member.html">separate documentation</a>.</p>
