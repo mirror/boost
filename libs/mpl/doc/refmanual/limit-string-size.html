@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.7: http://docutils.sourceforge.net/" />
 <title>The MPL Reference Manual: BOOST_MPL_LIMIT_STRING_SIZE</title>
 <link rel="stylesheet" href="../style.css" type="text/css" />
 </head>
@@ -12,8 +12,8 @@
 <td class="header-group page-location"><a href="../refmanual.html" class="navigation-link">Front Page</a> / <a href="./macros.html" class="navigation-link">Macros</a> / <a href="./configuration.html" class="navigation-link">Configuration</a> / <a href="./limit-string-size.html" class="navigation-link">BOOST_MPL_LIMIT_STRING_SIZE</a></td>
 </tr></table><div class="header-separator"></div>
 <div class="section" id="boost-mpl-limit-string-size">
-<h1><a class="toc-backref" href="./configuration.html#id1586">BOOST_MPL_LIMIT_STRING_SIZE</a></h1>
-<div class="section" id="id1359">
+<h1><a class="toc-backref" href="./configuration.html#id1606">BOOST_MPL_LIMIT_STRING_SIZE</a></h1>
+<div class="section" id="id1376">
 <h3><a class="subsection-title" href="#synopsis" name="synopsis">Synopsis</a></h3>
 <pre class="literal-block">
 #if !defined(<a href="./limit-string-size.html" class="identifier">BOOST_MPL_LIMIT_STRING_SIZE</a>)
@@ -23,15 +23,15 @@
 #endif
 </pre>
 </div>
-<div class="section" id="id1360">
+<div class="section" id="id1377">
 <h3><a class="subsection-title" href="#description" name="description">Description</a></h3>
 <p><tt class="literal"><span class="pre"><a href="./limit-string-size.html" class="identifier">BOOST_MPL_LIMIT_STRING_SIZE</a></span></tt> is an overridable configuration macro regulating
-the maximum arity of the <tt class="literal"><span class="pre"><a href="./string.html" class="identifier">string</a></span></tt>'s <a class="reference internal" href="./variadic-sequence.html#variadic-forms">variadic forms</a>. In this
+the maximum arity of the <tt class="literal"><span class="pre"><a href="./string.html" class="identifier">string</a></span></tt>'s <a class="reference internal" href="./variadic-sequence.html">variadic forms</a>. In this
 implementation of the library, <tt class="literal"><span class="pre"><a href="./limit-string-size.html" class="identifier">BOOST_MPL_LIMIT_STRING_SIZE</a></span></tt> has a default value
 of 32. To override the default limit, define <tt class="literal"><span class="pre"><a href="./limit-string-size.html" class="identifier">BOOST_MPL_LIMIT_STRING_SIZE</a></span></tt> to
 the desired maximum arity before including any library header.</p>
 </div>
-<div class="section" id="id1361">
+<div class="section" id="id1378">
 <h3><a class="subsection-title" href="#example" name="example">Example</a></h3>
 <pre class="literal-block">
 #define <a href="./limit-string-size.html" class="identifier">BOOST_MPL_LIMIT_STRING_SIZE</a> 8
@@ -44,7 +44,7 @@ typedef <a href="./string.html" class="identifier">string</a>&lt;'abcd','efgh'&g
 // typedef <a href="./string.html" class="identifier">string</a>&lt;'abcd','efgh','i'&gt; s_9; // error!
 </pre>
 </div>
-<div class="section" id="id1362">
+<div class="section" id="id1379">
 <h3><a class="subsection-title" href="#see-also" name="see-also">See also</a></h3>
 <p><a class="reference internal" href="./configuration.html">Configuration</a>, <a class="reference internal" href="./limit-vector-size.html">BOOST_MPL_LIMIT_VECTOR_SIZE</a></p>
 <!-- Macros/Configuration//BOOST_MPL_LIMIT_UNROLLING |70 -->

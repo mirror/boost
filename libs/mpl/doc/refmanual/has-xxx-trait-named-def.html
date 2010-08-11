@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.7: http://docutils.sourceforge.net/" />
 <title>The MPL Reference Manual: BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</title>
 <link rel="stylesheet" href="../style.css" type="text/css" />
 </head>
@@ -12,8 +12,8 @@
 <td class="header-group page-location"><a href="../refmanual.html" class="navigation-link">Front Page</a> / <a href="./macros.html" class="navigation-link">Macros</a> / <a href="./introspection.html" class="navigation-link">Introspection</a> / <a href="./has-xxx-trait-named-def.html" class="navigation-link">BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</a></td>
 </tr></table><div class="header-separator"></div>
 <div class="section" id="boost-mpl-has-xxx-trait-named-def">
-<h1><a class="toc-backref" href="./introspection.html#id1577">BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</a></h1>
-<div class="section" id="id1322">
+<h1><a class="toc-backref" href="./introspection.html#id1596">BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</a></h1>
+<div class="section" id="id1336">
 <h3><a class="subsection-title" href="#synopsis" name="synopsis">Synopsis</a></h3>
 <pre class="literal-block">
 #define <a href="./has-xxx-trait-named-def.html" class="identifier">BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</a>(trait, name, default_) \
@@ -21,7 +21,7 @@
 /**/
 </pre>
 </div>
-<div class="section" id="id1323">
+<div class="section" id="id1337">
 <h3><a class="subsection-title" href="#description" name="description">Description</a></h3>
 <p>Expands into a definition of a boolean unary <a class="reference internal" href="./metafunction.html">Metafunction</a> <tt class="literal"><span class="pre">trait</span></tt>
 such that for any type <tt class="literal"><span class="pre">x</span></tt> <tt class="literal"><span class="pre">trait&lt;x&gt;::value</span> <span class="pre">==</span> <span class="pre">true</span></tt> if and only
@@ -34,13 +34,13 @@ to signal or override the &quot;deficient&quot; status of a particular compiler.
 metafunction invocation; see the <cite>Expression semantics</cite> section for
 details — <em>end note</em>]</p>
 </div>
-<div class="section" id="id1324">
+<div class="section" id="id1338">
 <h3><a class="subsection-title" href="#header" name="header">Header</a></h3>
 <pre class="literal-block">
 #include &lt;<a href="../../../../boost/mpl/has_xxx.hpp" class="header">boost/mpl/has_xxx.hpp</a>&gt;
 </pre>
 </div>
-<div class="section" id="id1325">
+<div class="section" id="id1339">
 <h3><a class="subsection-title" href="#parameters" name="parameters">Parameters</a></h3>
 <table border="1" class="docutils table">
 <colgroup>
@@ -70,7 +70,7 @@ details — <em>end note</em>]</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="id1326">
+<div class="section" id="id1340">
 <h3><a class="subsection-title" href="#expression-semantics" name="expression-semantics">Expression semantics</a></h3>
 <p>For any legal C++ identifiers <tt class="literal"><span class="pre">trait</span></tt> and <tt class="literal"><span class="pre">name</span></tt>, boolean constant expression <tt class="literal"><span class="pre">c1</span></tt>,
 boolean <a class="reference internal" href="./integral-constant.html">Integral Constant</a> <tt class="literal"><span class="pre">c2</span></tt>, and arbitrary type <tt class="literal"><span class="pre">x</span></tt>:</p>
@@ -136,7 +136,7 @@ typedef trait&lt;x&gt;::type r;
 </tbody>
 </table>
 </div>
-<div class="section" id="id1327">
+<div class="section" id="id1341">
 <h3><a class="subsection-title" href="#example" name="example">Example</a></h3>
 <pre class="literal-block">
 <a href="./has-xxx-trait-named-def.html" class="identifier">BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF</a>(has_xxx, xxx, false)
@@ -170,7 +170,7 @@ struct test9 { typedef void (xxx)(); };
 <a href="./assert.html" class="identifier">BOOST_MPL_ASSERT</a>(( has_xxx&lt;test9,<a href="./bool.html" class="identifier">true_</a>&gt; ));
 </pre>
 </div>
-<div class="section" id="id1328">
+<div class="section" id="id1342">
 <h3><a class="subsection-title" href="#see-also" name="see-also">See also</a></h3>
 <p><a class="reference internal" href="./macros.html">Macros</a>, <a class="reference internal" href="./has-xxx-trait-def.html">BOOST_MPL_HAS_XXX_TRAIT_DEF</a>, <a class="reference internal" href="./cfg-no-has-xxx.html">BOOST_MPL_CFG_NO_HAS_XXX</a></p>
 </div>
