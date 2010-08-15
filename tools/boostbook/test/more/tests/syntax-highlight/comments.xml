@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="example.hpp">
+  <para>
+    Fake reference documentation, so that the syntax highlighter will kick in.
+  </para>
+
+  <macro name="foo">
+    <description>
+      <programlisting>/* C style comment */</programlisting>
+      <programlisting>/* Broken C style comment</programlisting>
+      <programlisting>
+/* Multi-line
+ *comment
+ */</programlisting>
+      <programlisting>/*/ Tricky comment */</programlisting>
+      <programlisting>/**/</programlisting>
+      <programlisting>/***/</programlisting>
+      <programlisting>// Single line comment</programlisting>
+      <programlisting>// Single line comment
+</programlisting>
+    </description>
+  </macro>
+
+</header>

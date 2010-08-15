@@ -363,20 +363,39 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="substring($text, 1, 2) = '//'">
-        <xsl:call-template name="highlight-comment">
-          <xsl:with-param name="text" select="substring-before($text, '&#xA;')"/>
-        </xsl:call-template>
-        <xsl:call-template name="highlight-text-impl-root">
-          <xsl:with-param name="text" select="concat('&#xA;', substring-after($text, '&#xA;'))"/>
-        </xsl:call-template>
+        <xsl:choose>
+          <xsl:when test="contains($text, '&#xA;')">
+            <xsl:call-template name="highlight-comment">
+              <xsl:with-param name="text" select="substring-before($text, '&#xA;')"/>
+            </xsl:call-template>
+            <xsl:call-template name="highlight-text-impl-root">
+              <xsl:with-param name="text" select="concat('&#xA;', substring-after($text, '&#xA;'))"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="highlight-comment">
+              <xsl:with-param name="text" select="$text"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:when test="substring($text, 1, 2) = '/*'">
-        <xsl:call-template name="highlight-comment">
-          <xsl:with-param name="text" select="concat(substring-before($text, '*/'), '*/')"/>
-        </xsl:call-template>
-        <xsl:call-template name="highlight-text-impl-root">
-          <xsl:with-param name="text" select="substring-after($text, '*/')"/>
-        </xsl:call-template>
+        <xsl:variable name="after-start" select="substring($text, 3)" />
+        <xsl:choose>
+          <xsl:when test="contains($after-start, '*/')">
+            <xsl:call-template name="highlight-comment">
+              <xsl:with-param name="text" select="concat('/*', substring-before($after-start, '*/'), '*/')"/>
+            </xsl:call-template>
+            <xsl:call-template name="highlight-text-impl-root">
+              <xsl:with-param name="text" select="substring-after($after-start, '*/')"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="highlight-comment">
+              <xsl:with-param name="text" select="$text"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:when test="contains('&#xA;&#xD;', substring($text, 1, 1))">
         <xsl:value-of select="substring($text, 1, 1)"/>
