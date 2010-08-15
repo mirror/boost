@@ -280,8 +280,8 @@ namespace quickbook
                     >>
                     (
                         (
-                            varlistterm
-                            >> +varlistitem
+                            varlistterm                 [actions.start_varlistitem]
+                            >> (+varlistitem)           [actions.end_varlistitem]
                             >>  ch_p(']')               [actions.end_varlistentry]
                             >>  space
                         )
@@ -305,12 +305,12 @@ namespace quickbook
 
                 varlistitem =
                     space
-                    >>  ch_p('[')                       [actions.start_varlistitem]
+                    >>  ch_p('[')
                     >>
                     (
                         (
                             inside_paragraph
-                            >>  ch_p(']')               [actions.end_varlistitem]
+                            >>  ch_p(']')
                             >>  space
                         )
                         | eps_p                         [actions.error]

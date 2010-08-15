@@ -569,7 +569,12 @@ namespace quickbook
         start_varlistitem_action(collector& phrase)
         : phrase(phrase) {}
 
-        void operator()(char) const;
+        void operator()() const;
+
+        template <typename T1>
+        void operator()(T1 const&) const { return (*this)(); }
+        template <typename T1, typename T2>
+        void operator()(T1 const&, T2 const&) const { return (*this)(); }
 
         collector& phrase;
     };
@@ -579,7 +584,12 @@ namespace quickbook
         end_varlistitem_action(collector& phrase, collector& temp_para)
         : phrase(phrase), temp_para(temp_para) {}
 
-        void operator()(char) const;
+        void operator()() const;
+
+        template <typename T1>
+        void operator()(T1 const&) const { return (*this)(); }
+        template <typename T1, typename T2>
+        void operator()(T1 const&, T2 const&) const { return (*this)(); }
 
         collector& phrase;
         collector& temp_para;

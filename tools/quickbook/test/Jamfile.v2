@@ -40,6 +40,7 @@ test-suite quickbook.test :
     [ quickbook-test identifier_1_5 ]
     [ quickbook-test identifier_1_6 ]
     [ quickbook-test para-test ]
+    [ quickbook-test variablelist ]
     [ quickbook-test table_1_5 ]
     [ quickbook-test image_1_5 ]
     [ quickbook-test list_test ]

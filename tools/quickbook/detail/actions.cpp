@@ -1045,13 +1045,13 @@ namespace quickbook
         actions.table_title.clear();
     }
 
-    void start_varlistitem_action::operator()(char) const
+    void start_varlistitem_action::operator()() const
     {
         phrase << start_varlistitem_;
         phrase.push();
     }
 
-    void end_varlistitem_action::operator()(char) const
+    void end_varlistitem_action::operator()() const
     {
         std::string str;
         temp_para.swap(str);
