@@ -116,6 +116,7 @@ namespace quickbook
         header_action(
             collector& out,
             collector& phrase,
+            std::string const& element_id,
             std::string const& library_id,
             std::string const& section_id,
             std::string const& qualified_section_id,
@@ -123,6 +124,7 @@ namespace quickbook
             std::string const& post)
         : out(out)
         , phrase(phrase)
+        , element_id(element_id)
         , library_id(library_id)
         , section_id(section_id)
         , qualified_section_id(qualified_section_id)
@@ -133,6 +135,7 @@ namespace quickbook
 
         collector& out;
         collector& phrase;
+        std::string const& element_id;
         std::string const& library_id;
         std::string const& section_id;
         std::string const& qualified_section_id;
@@ -147,12 +150,14 @@ namespace quickbook
         generic_header_action(
             collector& out,
             collector& phrase,
+            std::string const& element_id,
             std::string const& library_id,
             std::string const& section_id,
             std::string const& qualified_section_id,
             int const& section_level)
         : out(out)
         , phrase(phrase)
+        , element_id(element_id)
         , library_id(library_id)
         , section_id(section_id)
         , qualified_section_id(qualified_section_id)
@@ -162,6 +167,7 @@ namespace quickbook
 
         collector& out;
         collector& phrase;
+        std::string const& element_id;
         std::string const& library_id;
         std::string const& section_id;
         std::string const& qualified_section_id;

@@ -6,3 +6,11 @@
 [heading Header Test]
 
 Testing headers without sections.
+
+[heading:Not an Id]
+
+Paragraph.
+
+[h3:Not an Id again]
+
+Paragraph.

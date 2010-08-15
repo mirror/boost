@@ -146,6 +146,15 @@ namespace quickbook
                         ]
                         ;
 
+                element_id_1_6 =
+                        if_p(qbk_since(106u)) [
+                            element_id
+                        ]
+                        .else_p [
+                            eps_p                       [assign_a(actions.element_id)]
+                        ]
+                        ;
+
                 begin_section =
                        "section"
                     >> hard_space
@@ -161,13 +170,13 @@ namespace quickbook
                     h1 | h2 | h3 | h4 | h5 | h6 | h
                     ;
 
-                h = "heading" >> hard_space >> phrase   [actions.h];
-                h1 = "h1" >> hard_space >> phrase       [actions.h1];
-                h2 = "h2" >> hard_space >> phrase       [actions.h2];
-                h3 = "h3" >> hard_space >> phrase       [actions.h3];
-                h4 = "h4" >> hard_space >> phrase       [actions.h4];
-                h5 = "h5" >> hard_space >> phrase       [actions.h5];
-                h6 = "h6" >> hard_space >> phrase       [actions.h6];
+                h = "heading" >> hard_space >> element_id_1_6 >> phrase   [actions.h];
+                h1 = "h1" >> hard_space >> element_id_1_6 >> phrase       [actions.h1];
+                h2 = "h2" >> hard_space >> element_id_1_6 >> phrase       [actions.h2];
+                h3 = "h3" >> hard_space >> element_id_1_6 >> phrase       [actions.h3];
+                h4 = "h4" >> hard_space >> element_id_1_6 >> phrase       [actions.h4];
+                h5 = "h5" >> hard_space >> element_id_1_6 >> phrase       [actions.h5];
+                h6 = "h6" >> hard_space >> element_id_1_6 >> phrase       [actions.h6];
 
                 static const bool true_ = true;
                 static const bool false_ = false;
@@ -446,7 +455,8 @@ namespace quickbook
                             xinclude, include, hard_space, eol, paragraph_end,
                             template_, template_id, template_formal_arg,
                             template_body, identifier, dummy_block, import,
-                            inside_paragraph, element_id, element_id_1_5;
+                            inside_paragraph,
+                            element_id, element_id_1_5, element_id_1_6;
 
             symbols<>       paragraph_end_markups;
 

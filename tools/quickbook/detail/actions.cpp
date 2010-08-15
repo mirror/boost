@@ -105,8 +105,9 @@ namespace quickbook
         }
         else // version 1.3 and above
         {
-            std::string id = qbk_version_n >= 106 ?
-                detail::make_identifier(first, last) :
+            std::string id =
+                !element_id.empty() ? element_id :
+                qbk_version_n >= 106 ? detail::make_identifier(first, last) :
                 detail::make_identifier(str.begin(), str.end());
 
             std::string anchor =
@@ -132,8 +133,9 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
-        std::string id = qbk_version_n >= 106 ?
-            detail::make_identifier(first, last) :
+        std::string id =
+            !element_id.empty() ? element_id :
+            qbk_version_n >= 106 ? detail::make_identifier(first, last) :
             detail::make_identifier(str.begin(), str.end());
 
         std::string anchor =
