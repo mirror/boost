@@ -41,36 +41,36 @@
     <listitem>
       <simpara>
         A
-        <itemizedlist>
-          <listitem>
-            <simpara>
-              A
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              B
-            </simpara>
-          </listitem>
-        </itemizedlist>
       </simpara>
+      <itemizedlist>
+        <listitem>
+          <simpara>
+            A
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            B
+          </simpara>
+        </listitem>
+      </itemizedlist>
     </listitem>
     <listitem>
       <simpara>
         B
-        <itemizedlist>
-          <listitem>
-            <simpara>
-              A
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              B
-            </simpara>
-          </listitem>
-        </itemizedlist>
       </simpara>
+      <itemizedlist>
+        <listitem>
+          <simpara>
+            A
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            B
+          </simpara>
+        </listitem>
+      </itemizedlist>
     </listitem>
   </itemizedlist>
   <para>
@@ -80,36 +80,36 @@
     <listitem>
       <simpara>
         A
-        <itemizedlist>
-          <listitem>
-            <simpara>
-              A
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              B
-            </simpara>
-          </listitem>
-        </itemizedlist>
       </simpara>
+      <itemizedlist>
+        <listitem>
+          <simpara>
+            A
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            B
+          </simpara>
+        </listitem>
+      </itemizedlist>
     </listitem>
     <listitem>
       <simpara>
         B
-        <itemizedlist>
-          <listitem>
-            <simpara>
-              A
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              B
-            </simpara>
-          </listitem>
-        </itemizedlist>
       </simpara>
+      <itemizedlist>
+        <listitem>
+          <simpara>
+            A
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            B
+          </simpara>
+        </listitem>
+      </itemizedlist>
     </listitem>
   </orderedlist>
   <para>
@@ -119,53 +119,53 @@
     <listitem>
       <simpara>
         A
-        <itemizedlist>
-          <listitem>
-            <simpara>
-              A
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              B
-              <itemizedlist>
-                <listitem>
-                  <simpara>
-                    C
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    D
-                  </simpara>
-                </listitem>
-              </itemizedlist>
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              E
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              F
-              <itemizedlist>
-                <listitem>
-                  <simpara>
-                    G
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    H
-                  </simpara>
-                </listitem>
-              </itemizedlist>
-            </simpara>
-          </listitem>
-        </itemizedlist>
       </simpara>
+      <itemizedlist>
+        <listitem>
+          <simpara>
+            A
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            B
+          </simpara>
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                C
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                D
+              </simpara>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <simpara>
+            E
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            F
+          </simpara>
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                G
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                H
+              </simpara>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
     </listitem>
   </orderedlist>
   <para>
@@ -175,31 +175,31 @@
     <listitem>
       <simpara>
         A
-        <itemizedlist>
-          <listitem>
-            <simpara>
-              A
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              B
-              <orderedlist>
-                <listitem>
-                  <simpara>
-                    C
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    D
-                  </simpara>
-                </listitem>
-              </orderedlist>
-            </simpara>
-          </listitem>
-        </itemizedlist>
       </simpara>
+      <itemizedlist>
+        <listitem>
+          <simpara>
+            A
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            B
+          </simpara>
+          <orderedlist>
+            <listitem>
+              <simpara>
+                C
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                D
+              </simpara>
+            </listitem>
+          </orderedlist>
+        </listitem>
+      </itemizedlist>
     </listitem>
     <listitem>
       <simpara>

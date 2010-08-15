@@ -204,7 +204,7 @@ namespace quickbook
             list_marks.pop();
             out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
             if (list_marks.size() >= 1)
-                out << list_item_post;
+                out << "</listitem>";
         }
 
         list_indent = -1; // reset
@@ -244,12 +244,12 @@ namespace quickbook
             {
                 // Make this new list a child of the previous list.
                 // The previous listelem has already ended so we erase
-                // list_item_post to accomodate this sub-list. We'll close
+                // "</listitem>" to accomodate this sub-list. We'll close
                 // the listelem later.
 
                 std::string str;
                 out.swap(str);
-                std::string::size_type pos = str.rfind(list_item_post);
+                std::string::size_type pos = str.rfind("</listitem>");
                 BOOST_ASSERT(pos <= str.size());
                 str.erase(str.begin()+pos, str.end());
                 out << str;
@@ -268,7 +268,7 @@ namespace quickbook
                 list_marks.pop();
                 out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
                 if (list_marks.size() >= 1)
-                    out << list_item_post;
+                    out << "</listitem>";
             }
         }
 
