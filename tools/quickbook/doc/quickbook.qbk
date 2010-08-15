@@ -222,6 +222,9 @@ Features include:
 [h3 Version 1.5.3 - Boost 1.45.0]
 
 * Fix command line flag for defining macros.
+* Fix a couple of issues with the code block parser:
+  * A comment with no indentation will now end a code block.
+  * Code blocks no longer have to be followed by a blank line.
 * Further work on quickbook 1.6, still not stable.
   * Allow heading to have ids, using the syntax: `[heading:id title]`.
 

@@ -384,14 +384,17 @@ namespace quickbook
                 code =
                     (
                         code_line
-                        >> *(*eol >> code_line)
+                        >> *(*blank_line >> code_line)
                     )                                   [actions.code]
-                    >> +eol
+                    >> *eol
                     ;
 
                 code_line =
-                    ((ch_p(' ') | '\t'))
-                    >> *(anychar_p - eol) >> eol
+                    blank_p >> *(anychar_p - eol_p) >> eol_p
+                    ;
+
+                blank_line =
+                    *blank_p >> eol_p
                     ;
 
                 list =
@@ -446,7 +449,7 @@ namespace quickbook
 
             bool no_eols;
 
-            rule<Scanner>   start_, blocks, block_markup, code, code_line,
+            rule<Scanner>   start_, blocks, block_markup, code, code_line, blank_line,
                             paragraph, space, blank, comment, headings, h, h1, h2,
                             h3, h4, h5, h6, hr, blurb, blockquote, admonition,
                             phrase, list, phrase_end, ordered_list, def_macro,

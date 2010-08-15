@@ -12,6 +12,7 @@ import quickbook-testing : quickbook-test quickbook-fail-test ;
 
 test-suite quickbook.test :
     [ quickbook-test quickbook-manual ]
+    [ quickbook-test code-block ]
     [ quickbook-test code-block-1 ]
     [ quickbook-test code-block-2 ]
     [ quickbook-test code-block-3 ]
