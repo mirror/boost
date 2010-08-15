@@ -21,6 +21,24 @@
 
 namespace quickbook
 {
+    struct template_body
+    {
+        template_body(
+                std::string const& content,
+                boost::spirit::classic::file_position position,
+                bool is_block
+            )
+            : content(content)
+            , position(position)
+            , is_block(is_block)
+        {
+        }
+    
+        std::string content;
+        boost::spirit::classic::file_position position;
+        bool is_block;
+    };
+
     struct template_scope;
 
     struct template_symbol
@@ -30,24 +48,26 @@ namespace quickbook
                 std::vector<std::string> const& params,
                 std::string const& body,
                 boost::spirit::classic::file_position const& position,
+                bool is_block,
                 template_scope const* parent = 0)
            : identifier(identifier)
-           , callout(false)
            , params(params)
-           , body(body)
-           , position(position)
-           , parent(parent) {}
+           , body(body, position, is_block)
+           , parent(parent)
+           , callout(false)
+           , callouts() {}
 
         std::string identifier;
-        bool callout;
         std::vector<std::string> params;
-        std::string body;
-        boost::spirit::classic::file_position position;
+        template_body body;
         
         // This is only used for quickbook 1.5+, 1.4 uses the dynamic scope.
         // TODO: I should probably call this something like lexical_parent
         // or static_parent for clarity.
         template_scope const* parent;
+
+        bool callout;
+        std::vector<template_body> callouts;
     };
 
     typedef boost::spirit::classic::symbols<template_symbol> template_symbols;

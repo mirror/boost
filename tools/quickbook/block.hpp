@@ -24,11 +24,11 @@ namespace quickbook
 {
     using namespace boost::spirit::classic;
 
-    template <typename Actions, bool skip_initial_spaces = false>
+    template <typename Actions>
     struct block_grammar : grammar<block_grammar<Actions> >
     {
-        block_grammar(Actions& actions_)
-            : actions(actions_) {}
+        block_grammar(Actions& actions_, bool skip_initial_spaces = false)
+            : actions(actions_), skip_initial_spaces(skip_initial_spaces) { }
 
         template <typename Scanner>
         struct definition
@@ -40,10 +40,10 @@ namespace quickbook
                 using detail::var;
                 Actions& actions = self.actions;
 
-                if (skip_initial_spaces)
+                if (self.skip_initial_spaces)
                 {
                     start_ =
-                        *(space_p | comment) >> blocks >> blank
+                        *(blank_p | comment) >> blocks >> blank
                         ;
                 }
                 else
@@ -58,10 +58,9 @@ namespace quickbook
                     |   code
                     |   list                            [actions.list]
                     |   hr                              [actions.hr]
-                    |   comment >> +eol
+                    |   +eol
                     |   paragraph                       [actions.inside_paragraph]
                                                         [actions.write_paragraphs]
-                    |   eol
                     )
                     ;
 
@@ -254,7 +253,10 @@ namespace quickbook
                             )
                         >> space >> ']'
                     )
-                    >> template_body                    [actions.template_body]
+                    >>  (   eps_p(*blank_p >> eol_p)    [assign_a(actions.template_block, true_)]
+                        |   eps_p                       [assign_a(actions.template_block, false_)]
+                        )
+                    >>  template_body                   [actions.template_body]
                     ;
 
                 template_body =
@@ -471,6 +473,7 @@ namespace quickbook
         };
 
         Actions&   actions;
+        bool const skip_initial_spaces;
     };
 }
 

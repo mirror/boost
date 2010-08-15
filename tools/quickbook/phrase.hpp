@@ -132,13 +132,13 @@ namespace quickbook
                         (eps_p(punct_p)
                             >> actions.templates.scope
                         )                               [assign_a(actions.template_identifier)]
-                                                        [clear_a(actions.template_info)]
+                                                        [clear_a(actions.template_args)]
                         >> !template_args
                     ) | (
                         (actions.templates.scope
                             >> eps_p(hard_space)
                         )                               [assign_a(actions.template_identifier)]
-                                                        [clear_a(actions.template_info)]
+                                                        [clear_a(actions.template_args)]
                         >> space
                         >> !template_args
                     ) )
@@ -153,30 +153,31 @@ namespace quickbook
                     ]
                     ;
 
-                template_args_1_4 =
-                    template_arg_1_4                    [push_back_a(actions.template_info)]
-                    >> *(
-                            ".." >> template_arg_1_4    [push_back_a(actions.template_info)]
-                        )
-                    ;
+                template_args_1_4 = template_arg_1_4 >> *(".." >> template_arg_1_4);
 
                 template_arg_1_4 =
+                        (   eps_p(*blank_p >> eol_p)    [assign_a(actions.template_block, true_)]
+                        |   eps_p                       [assign_a(actions.template_block, false_)]
+                        )
+                    >>  template_inner_arg_1_4          [actions.template_arg]
+                    ;
+
+                template_inner_arg_1_4 =
                     +(brackets_1_4 | (anychar_p - (str_p("..") | ']')))
                     ;
 
                 brackets_1_4 =
-                    '[' >> +template_arg_1_4 >> ']'
+                    '[' >> template_inner_arg_1_4 >> ']'
                     ;
 
-                template_args_1_5 =
-                    template_arg_1_5                    [push_back_a(actions.template_info)]
-                    >> *(
-                            ".." >> template_arg_1_5    [push_back_a(actions.template_info)]
-                        )
-                    ;
+                template_args_1_5 = template_arg_1_5 >> *(".." >> template_arg_1_5);
 
                 template_arg_1_5 =
-                    +(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p("..") | '[' | ']')))
+                        (   eps_p(*blank_p >> eol_p)    [assign_a(actions.template_block, true_)]
+                        |   eps_p                       [assign_a(actions.template_block, false_)]
+                        )
+                    >>  (+(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p("..") | '[' | ']'))))
+                                                        [actions.template_arg]
                     ;
 
                 template_inner_arg_1_5 =
@@ -184,7 +185,7 @@ namespace quickbook
                     ;
 
                 brackets_1_5 =
-                    '[' >> +template_inner_arg_1_5 >> ']'
+                    '[' >> template_inner_arg_1_5 >> ']'
                     ;
 
                 inline_code =
@@ -478,7 +479,8 @@ namespace quickbook
                             simple_teletype, source_mode, template_,
                             quote, code_block, footnote, replaceable, macro,
                             dummy_block, cond_phrase, macro_identifier, template_args,
-                            template_args_1_4, template_arg_1_4, brackets_1_4,
+                            template_args_1_4, template_arg_1_4,
+                            template_inner_arg_1_4, brackets_1_4,
                             template_args_1_5, template_arg_1_5,
                             template_inner_arg_1_5, brackets_1_5
                             ;

@@ -35,7 +35,7 @@ namespace quickbook
         std::string code;
         std::string snippet;
         std::string id;
-        std::vector<std::string> callouts;
+        std::vector<template_body> callouts;
         std::vector<template_symbol>& storage;
         std::string const doc_id;
         char const* const source_type;
@@ -166,12 +166,14 @@ namespace quickbook
 
                 inline_callout =
                     "/*<"
+                    >> *space_p
                     >> (*(anychar_p - ">*/"))       [boost::bind(&actions_type::callout, &actions, _1, _2)]
                     >> ">*/"
                     ;
 
                 line_callout =
                     "/*<<"
+                    >> *space_p
                     >> (*(anychar_p - ">>*/"))      [boost::bind(&actions_type::callout, &actions, _1, _2)]
                     >> ">>*/"
                     >> *space_p

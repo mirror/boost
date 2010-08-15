@@ -2802,10 +2802,19 @@ for the journey to old age.]]]
 <phrase role="special">}</phrase>
 </programlisting>
         </para>
-        <para>
-          <calloutlist><callout arearefs="quickbook0co" id="quickbook0"><para> The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
-          for details</ulink> </para></callout><callout arearefs="quickbook1co" id="quickbook1"><para> return 'em, foo-bar man! </para></callout></calloutlist>
-        </para>
+        <calloutlist>
+          <callout arearefs="quickbook0co" id="quickbook0">
+            <para>
+              The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
+              for details</ulink>
+            </para>
+          </callout>
+          <callout arearefs="quickbook1co" id="quickbook1">
+            <para>
+              return 'em, foo-bar man!
+            </para>
+          </callout>
+        </calloutlist>
         <para>
           Checkout <ulink url="../../test/stub.cpp">stub.cpp</ulink> to see the actual
           code.

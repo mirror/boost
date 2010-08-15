@@ -19,9 +19,13 @@
 
 </programlisting>
   </para>
-  <para>
-    <calloutlist><callout arearefs="callout_tests0co" id="callout_tests0"><para> create a uniform_int distribution </para></callout></calloutlist>
-  </para>
+  <calloutlist>
+    <callout arearefs="callout_tests0co" id="callout_tests0">
+      <para>
+        create a uniform_int distribution
+      </para>
+    </callout>
+  </calloutlist>
   <para>
     Example 2:
   </para>
@@ -33,17 +37,15 @@
 
 </programlisting>
   </para>
-  <para>
-    <calloutlist><callout arearefs="callout_tests1co" id="callout_tests1"><para>
-  </para>
-  <important>
-    <para>
-      test
-    </para>
-  </important>
-  <para>
-    </para></callout></calloutlist>
-  </para>
+  <calloutlist>
+    <callout arearefs="callout_tests1co" id="callout_tests1">
+      <important>
+        <para>
+          test
+        </para>
+      </important>
+    </callout>
+  </calloutlist>
   <para>
     Example 3:
   </para>
@@ -55,17 +57,15 @@
 
 </programlisting>
   </para>
-  <para>
-    <calloutlist><callout arearefs="callout_tests2co" id="callout_tests2"><para>
-  </para>
-  <important>
-    <para>
-      test
-    </para>
-  </important>
-  <para>
-    </para></callout></calloutlist>
-  </para>
+  <calloutlist>
+    <callout arearefs="callout_tests2co" id="callout_tests2">
+      <important>
+        <para>
+          test
+        </para>
+      </important>
+    </callout>
+  </calloutlist>
   <para>
     Example 3 (again!):
   </para>
@@ -77,15 +77,13 @@
 
 </programlisting>
   </para>
-  <para>
-    <calloutlist><callout arearefs="callout_tests3co" id="callout_tests3"><para>
-  </para>
-  <important>
-    <para>
-      test
-    </para>
-  </important>
-  <para>
-    </para></callout></calloutlist>
-  </para>
+  <calloutlist>
+    <callout arearefs="callout_tests3co" id="callout_tests3">
+      <important>
+        <para>
+          test
+        </para>
+      </important>
+    </callout>
+  </calloutlist>
 </article>
