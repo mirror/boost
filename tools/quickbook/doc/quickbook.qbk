@@ -219,6 +219,10 @@ Features include:
   * Correctly restore the quickbook version switch after including a file
     with a different version.
 
+[h3 Version 1.5.3 - Boost 1.45.0]
+
+* Fix command line flag for defining macros.
+
 [endsect]
 
 [section:syntax Syntax Summary]

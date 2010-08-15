@@ -78,7 +78,7 @@ namespace quickbook
                     ;
 
                 macro_identifier =
-                    +(anychar_p - (space_p | ']'))
+                    +(anychar_p - (space_p | ']' | '='))
                     ;
 
                 phrase =
