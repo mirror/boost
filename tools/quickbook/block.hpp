@@ -159,6 +159,7 @@ namespace quickbook
                        "section"
                     >> hard_space
                     >> element_id
+                    >> space
                     >> phrase                           [actions.begin_section]
                     ;
 
@@ -170,13 +171,13 @@ namespace quickbook
                     h1 | h2 | h3 | h4 | h5 | h6 | h
                     ;
 
-                h = "heading" >> hard_space >> element_id_1_6 >> phrase   [actions.h];
-                h1 = "h1" >> hard_space >> element_id_1_6 >> phrase       [actions.h1];
-                h2 = "h2" >> hard_space >> element_id_1_6 >> phrase       [actions.h2];
-                h3 = "h3" >> hard_space >> element_id_1_6 >> phrase       [actions.h3];
-                h4 = "h4" >> hard_space >> element_id_1_6 >> phrase       [actions.h4];
-                h5 = "h5" >> hard_space >> element_id_1_6 >> phrase       [actions.h5];
-                h6 = "h6" >> hard_space >> element_id_1_6 >> phrase       [actions.h6];
+                h = "heading" >> hard_space >> element_id_1_6 >> space >> phrase   [actions.h];
+                h1 = "h1" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h1];
+                h2 = "h2" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h2];
+                h3 = "h3" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h3];
+                h4 = "h4" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h4];
+                h5 = "h5" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h5];
+                h6 = "h6" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h6];
 
                 static const bool true_ = true;
                 static const bool false_ = false;

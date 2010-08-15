@@ -13,14 +13,14 @@
   </para>
   <anchor id="header.heading_id"/>
   <bridgehead renderas="sect2">
-    <link linkend="header.heading_id"> Heading with an id</link>
+    <link linkend="header.heading_id">Heading with an id</link>
   </bridgehead>
   <para>
     Paragraph.
   </para>
   <anchor id="header.heading_id2"/>
   <bridgehead renderas="sect3">
-    <link linkend="header.heading_id2"> Heading with an id</link>
+    <link linkend="header.heading_id2">Heading with an id</link>
   </bridgehead>
   <para>
     Paragraph.
