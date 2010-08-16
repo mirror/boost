@@ -21,72 +21,113 @@ using std::wstring;
 int main()
 {
 
-  std::stringstream ss;
   std::wstringstream wss;
 
-  const string s1("foo\\bar, \" *");
   string r; // test results
 
-  ss << quoted(s1);
-  ss >> r;
-  BOOST_TEST_EQ(r, "\"foo\\\\bar, \\\" *\"");
+  const string s0("foo");
+  {
+    std::stringstream ss;
+    ss << quoted(s0);
+    ss >> r;
+    BOOST_TEST(r == "\"foo\"");
+  }
+  {
+    std::stringstream ss;
+    ss << quoted(s0);
+    ss >> quoted(r);
+    BOOST_TEST(r == "foo");
+  }
 
-  ss << quoted(s1.c_str());
-  ss >> r;
-  BOOST_TEST_EQ(r, "\"foo\\\\bar, \\\" *\"");
+  const string s0s("foo bar");
+  {
+    std::stringstream ss;
+    ss << quoted(s0s);
+    ss >> r;
+    BOOST_TEST(r == "\"foo");
+  }
+  {
+    std::stringstream ss;
+    ss << quoted(s0s);
+    ss >> quoted(r);
+    BOOST_TEST(r == "foo bar");
+  }
 
-  ss << quoted(s1);
-  ss >> quoted(r);
-  BOOST_TEST_EQ(r, s1);
-
-  ss << quoted(s1.c_str());
-  ss >> quoted(r);
-  BOOST_TEST_EQ(r, s1);
+  const string s1("foo\\bar, \" *");
+  {
+    std::stringstream ss;
+    ss << quoted(s1);
+    ss >> r;
+    BOOST_TEST(r == "\"foo\\\\bar,");
+  }
+  {
+    std::stringstream ss;
+    ss << quoted("foo\\bar, \" *");
+    ss >> r;
+    BOOST_TEST(r == "\"foo\\\\bar,");
+  }
+  {
+    std::stringstream ss;
+    ss << quoted(s1);
+    ss >> quoted(r);
+    BOOST_TEST(r == s1);
+  }
+  {
+    std::stringstream ss;
+    ss << quoted(s1.c_str());
+    ss >> quoted(r);
+    BOOST_TEST(r == s1);
+  }
 
   string s2("'Jack & Jill'");                                 
-
-  ss << quoted(s2, '&', '\'');
-  ss >> r;
-  BOOST_TEST_EQ(r, "'&'Jack && Jill&''");
-
-  ss << quoted(s2, '&', '\'');
-  ss >> quoted(r, '&', '\'');
-  BOOST_TEST_EQ(r, s2);
+  {
+    std::stringstream ss;
+    ss << quoted(s2, '&', '\'');
+    ss >> quoted(r, '&', '\'');
+    BOOST_TEST(r == s2);
+  }
 
   wstring ws1(L"foo$bar, \" *");
   wstring wr; // test results
-
-  wss << quoted(ws1, L'$');
-  wss >> wr;
-  BOOST_TEST(wr == wstring(L"\"foo$$bar, $\" *\""));
-
-  wss << quoted(ws1, L'$');
-  wss >> quoted(wr,  L'$');
-  BOOST_TEST(wr == ws1);
+  {
+    std::wstringstream wss;
+    wss << quoted(ws1, L'$');
+    wss >> quoted(wr,  L'$');
+    BOOST_TEST(wr == ws1);
+  }
 
   const string s3("const string");
-  ss << quoted(s3);
-  ss >> quoted(r);
-  BOOST_TEST_EQ(r, s3);
-
-  //  missing end delimiter test
-  ss << "\"abc";      // load ss with faulty quoting
-  ss >> quoted(r);    // this loops if istream error/eof not detected
-  BOOST_TEST_EQ(r, "abc");
-
-  //  no initial delmiter test
-  ss << "abc";
-  ss >> quoted(r);
-  BOOST_TEST_EQ(r, "abc");
-
-  //  no initial delmiter, space in ss
-  ss << "abc def";
-  ss >> quoted(r);
-  BOOST_TEST_EQ(r, "abc");
+  {
+    std::stringstream ss;
+    ss << quoted(s3);
+    ss >> quoted(r);
+    BOOST_TEST(r == s3);
+  }
+  {
+    //  missing end delimiter test
+    std::stringstream ss;
+    ss << "\"abc";      // load ss with faulty quoting
+    ss >> quoted(r);    // this loops if istream error/eof not detected
+    BOOST_TEST(r == "abc");
+  }
+  {
+    //  no initial delmiter test
+    std::stringstream ss;
+    ss << "abc";
+    ss >> quoted(r);
+    BOOST_TEST(r == "abc");
+  }
+  {
+    //  no initial delmiter, space in ss
+    std::stringstream ss;
+    ss << "abc def";
+    ss >> quoted(r);
+    BOOST_TEST(r == "abc");
+  }
 
   // these should fail to compile because the arguments are const:
   //   ss >> quoted(s1);
   //   ss >> quoted("foo");
 
-  return 0;
+  return boost::report_errors();
 }
