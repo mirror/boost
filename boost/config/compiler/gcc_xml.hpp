@@ -50,7 +50,6 @@
 #  define BOOST_NO_LAMBDAS
 #  define BOOST_NO_RAW_LITERALS
 #  define BOOST_NO_UNICODE_LITERALS
-#  define BOOST_NO_VARIADIC_MACROS
 
 #define BOOST_COMPILER "GCC-XML C++ version " __GCCXML__
 
