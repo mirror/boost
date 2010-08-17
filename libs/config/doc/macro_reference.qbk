@@ -620,6 +620,9 @@ Unicode (`u8`, `u`, `U`) literals.
 [[`BOOST_NO_VARIADIC_TEMPLATES`][The compiler does not support
 variadic templates. 
 ]]
+[[`BOOST_NO_VARIADIC_MACROS`][The compiler does not support
+variadic macros. 
+]]
 ]
 
 [endsect]

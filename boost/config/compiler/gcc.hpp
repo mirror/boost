@@ -43,6 +43,8 @@
 #   define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #   define BOOST_NO_IS_ABSTRACT
 #   define BOOST_NO_EXTERN_TEMPLATE
+// Variadic macros do not exist for gcc versions before 3.0
+#   define BOOST_NO_VARIADIC_MACROS
 #elif __GNUC__ == 3
 #  if defined (__PATHSCALE__)
 #     define BOOST_NO_TWO_PHASE_NAME_LOOKUP
