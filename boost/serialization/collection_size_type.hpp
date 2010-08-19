@@ -37,7 +37,7 @@ public:
         return *this;
     }
     // used for text output
-    operator const base_type () const {
+    operator base_type () const {
         return t;
     }                
     // used for text input
