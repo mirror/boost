@@ -54,7 +54,7 @@ public:
         return *this;
     }
     // used for text output
-    operator const base_type () const {
+    operator base_type () const {
         return t;
     }                
     // used for text input
@@ -90,7 +90,7 @@ public:
         return *this;
     }
     // used for text output
-    operator const base_type () const {
+    operator base_type () const {
         return t;
     }                
     // used for text intput
@@ -127,7 +127,7 @@ public:
     }
 
     // used for text output
-    operator const int () const {
+    operator int () const {
         return t;
     }                
     // used for text input
@@ -161,7 +161,7 @@ public:
         return *this;
     }
     // used for text output
-    operator const uint_least32_t () const {
+    operator uint_least32_t () const {
         return t;
     }                
     // used for text input
