@@ -77,7 +77,7 @@ public:
 
     // include these to trap a change in binary format which
     // isn't specifically handled
-    BOOST_STATIC_ASSERT(sizeof(tracking_type) == sizeof(char));
+    BOOST_STATIC_ASSERT(sizeof(tracking_type) == sizeof(bool));
     // upto 32K classes
     BOOST_STATIC_ASSERT(sizeof(class_id_type) == sizeof(int_least16_t));
     BOOST_STATIC_ASSERT(sizeof(class_id_reference_type) == sizeof(int_least16_t));
