@@ -405,7 +405,11 @@ namespace boost { namespace fusion
     }
 
     template<typename Seq, typename State, typename F>
-    inline typename result_of::fold<Seq,State const,F>::type
+    inline typename result_of::BOOST_FUSION_FOLD_NAME<
+        Seq
+      , State const
+      , F
+    >::type
     BOOST_FUSION_FOLD_NAME(Seq& seq,State const& state,F f)
     {
         return result_of::BOOST_FUSION_FOLD_NAME<Seq,State const,F>::call(
@@ -415,7 +419,11 @@ namespace boost { namespace fusion
     }
 
     template<typename Seq, typename State, typename F>
-    inline typename result_of::fold<Seq const,State const,F>::type
+    inline typename result_of::BOOST_FUSION_FOLD_NAME<
+        Seq const
+      , State const
+      , F
+    >::type
     BOOST_FUSION_FOLD_NAME(Seq const& seq,State const& state,F f)
     {
         return result_of::BOOST_FUSION_FOLD_NAME<Seq const,State const,F>::call(
