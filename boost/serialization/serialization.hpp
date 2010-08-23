@@ -11,6 +11,7 @@
 #endif
 
 #include <boost/config.hpp>
+#include <boost/serialization/strong_typedef.hpp>
 #include <boost/serialization/pfto.hpp>
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
@@ -57,6 +58,8 @@
 
 namespace boost {
 namespace serialization {
+
+BOOST_STRONG_TYPEDEF(unsigned int, version_type)
 
 // default implementation - call the member function "serialize"
 template<class Archive, class T>
@@ -121,7 +124,8 @@ inline void serialize_adl(
     // PFTO, suppress it here.  As far as we know, there are no compilers
     // which fail to support PFTO while supporting two-phase lookup.
     #if ! defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-        serialize(ar, t, file_version);
+        const version_type v(file_version);
+        serialize(ar, t, v);
     #else
         serialize(ar, t, file_version);
     #endif
@@ -135,7 +139,8 @@ inline void save_construct_data_adl(
 ){
     // see above
     #if ! defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-        save_construct_data(ar, t, file_version);
+        const version_type v(file_version);
+        save_construct_data(ar, t, v);
     #else
         save_construct_data(ar, t, file_version);
     #endif
@@ -149,7 +154,8 @@ inline void load_construct_data_adl(
 ){
     // see above comment
     #if ! defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-        load_construct_data(ar, t, file_version);
+        const version_type v(file_version);
+        load_construct_data(ar, t, v);
     #else
         load_construct_data(ar, t, file_version);
     #endif

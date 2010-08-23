@@ -41,7 +41,8 @@ struct free_saver {
     ){
         // use function overload (version_type) to workaround
         // two-phase lookup issue
-        save(ar, t, file_version);
+        const version_type v(file_version);
+        save(ar, t, v);
     }
 };
 template<class Archive, class T>
@@ -53,7 +54,8 @@ struct free_loader {
     ){
         // use function overload (version_type) to workaround
         // two-phase lookup issue
-        load(ar, t, file_version);
+        const version_type v(file_version);
+        load(ar, t, v);
     }
 };
 //} // namespace detail
