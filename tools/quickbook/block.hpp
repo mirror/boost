@@ -281,7 +281,9 @@ namespace quickbook
                     (
                         (
                             varlistterm                 [actions.start_varlistitem]
-                            >> (+varlistitem)           [actions.end_varlistitem]
+                            >>  (   +varlistitem
+                                |   eps_p               [actions.error]
+                                )                       [actions.end_varlistitem]
                             >>  ch_p(']')               [actions.end_varlistentry]
                             >>  space
                         )
