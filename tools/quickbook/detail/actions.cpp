@@ -1276,68 +1276,143 @@ namespace quickbook
         out << "\" />\n";
     }
 
+    void code_snippet_actions::append_code()
+    {
+        if(snippet_stack.empty()) return;
+        snippet_data& snippet = snippet_stack.top();
+    
+        if (!code.empty())
+        {
+            detail::unindent(code); // remove all indents
+
+            if(snippet.content.empty())
+            {
+                snippet.start_code = true;
+            }
+            else if(!snippet.end_code)
+            {
+                snippet.content += "\n\n";
+                snippet.content += source_type;
+                snippet.content += "```\n";
+            }
+            
+            snippet.content += code;
+            snippet.end_code = true;
+
+            code.clear();
+        }
+    }
+
+    void code_snippet_actions::close_code()
+    {
+        if(snippet_stack.empty()) return;
+        snippet_data& snippet = snippet_stack.top();
+    
+        if(snippet.end_code)
+        {
+            snippet.content += "```\n\n";
+            snippet.end_code = false;
+        }
+    }
+
     void code_snippet_actions::pass_thru(iterator first, iterator last)
     {
+        if(snippet_stack.empty()) return;
         code += *first;
+    }
+
+    void code_snippet_actions::pass_thru_char(char c)
+    {
+        if(snippet_stack.empty()) return;
+        code += c;
     }
 
     void code_snippet_actions::callout(iterator first, iterator last)
     {
-        code += "``[[callout" + boost::lexical_cast<std::string>(callouts.size()) + "]]``";
+        if(snippet_stack.empty()) return;
+        code += "``[[callout" + boost::lexical_cast<std::string>(callout_id) + "]]``";
     
-        callouts.push_back(template_body(std::string(first, last), first.get_position(), true));
+        snippet_stack.top().callouts.push_back(
+            template_body(std::string(first, last), first.get_position(), true));
+        ++callout_id;
     }
 
     void code_snippet_actions::escaped_comment(iterator first, iterator last)
     {
-        if (!code.empty())
-        {
-            detail::unindent(code); // remove all indents
-            if (code.size() != 0)
-            {
-                snippet += "\n\n";
-                snippet += source_type;
-                snippet += "``\n" + code + "``\n\n";
-                code.clear();
-            }
-        }
+        if(snippet_stack.empty()) return;
+        snippet_data& snippet = snippet_stack.top();
+        append_code();
+        close_code();
+
         std::string temp(first, last);
         detail::unindent(temp); // remove all indents
         if (temp.size() != 0)
         {
-            snippet += "\n" + temp; // add a linebreak to allow block marskups
+            snippet.content += "\n" + temp; // add a linebreak to allow block markups
         }
     }
 
-    void code_snippet_actions::compile(iterator first, iterator last)
+    void code_snippet_actions::start_snippet(iterator first, iterator last)
     {
-        std::vector<std::string> params;
-    
-        if (!code.empty())
-        {
-            detail::unindent(code); // remove all indents
-            if (code.size() != 0)
-            {
-                snippet += "\n\n";
-                snippet += source_type;
-                snippet += "```\n" + code + "```\n\n";
-            }
+        append_code();
+        snippet_stack.push(snippet_data(id, callout_id));
+        id.clear();
+    }
 
-            for (size_t i = 0; i < callouts.size(); ++i)
-            {
-                params.push_back("[callout" + boost::lexical_cast<std::string>(i) + "]");
-            }
+    void code_snippet_actions::end_snippet(iterator first, iterator last)
+    {
+        // TODO: Error?
+        if(snippet_stack.empty()) return;
+
+        append_code();
+
+        snippet_data snippet = snippet_stack.top();
+        snippet_stack.pop();
+
+        std::string body;
+        if(snippet.start_code) {
+            body += "\n\n";
+            body += source_type;
+            body += "```\n";
         }
-
-        template_symbol symbol(id, params, snippet, first.get_position(), true);
+        body += snippet.content;
+        if(snippet.end_code) {
+            body += "```\n\n";
+        }
+        
+        std::vector<std::string> params;
+        for (size_t i = 0; i < snippet.callouts.size(); ++i)
+        {
+            params.push_back("[callout" + boost::lexical_cast<std::string>(snippet.callout_base_id + i) + "]");
+        }
+        
+        // TODO: Save position in start_snippet
+        template_symbol symbol(snippet.id, params, body, first.get_position(), true);
         symbol.callout = true;
-        symbol.callouts = callouts;
+        symbol.callouts = snippet.callouts;
         storage.push_back(symbol);
 
-        callouts.clear();
-        code.clear();
-        snippet.clear();
-        id.clear();
+        // Merge the snippet into its parent
+
+        if(!snippet_stack.empty())
+        {
+            snippet_data& next = snippet_stack.top();
+            if(!snippet.content.empty()) {
+                if(!snippet.start_code) {
+                    close_code();
+                }
+                else if(!next.end_code) {
+                    next.content += "\n\n";
+                    next.content += source_type;
+                    next.content += "```\n";
+                }
+                
+                next.content += snippet.content;
+                next.end_code = snippet.end_code;
+            }
+            
+            next.callouts.insert(next.callouts.end(), snippet.callouts.begin(), snippet.callouts.end());
+        }
     }
 
     int load_snippets(

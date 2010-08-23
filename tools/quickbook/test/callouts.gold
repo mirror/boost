@@ -86,4 +86,50 @@
       </important>
     </callout>
   </calloutlist>
+  <para>
+    Example 4:
+  </para>
+  <para>
+    
+<programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">roll_die</phrase><phrase role="special">()</phrase> <phrase role="special">{</phrase>
+  <!--quickbook-escape-prefix--><co id="callout_tests4co" linkends="callout_tests4" /><!--quickbook-escape-postfix--><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">variate_generator</phrase><phrase role="special">&lt;</phrase><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">mt19937</phrase><phrase role="special">&amp;,</phrase> <phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="special">&gt;</phrase> <phrase role="identifier">die</phrase><phrase role="special">(</phrase><phrase role="identifier">gen</phrase><phrase role="special">,</phrase> <phrase role="identifier">dist</phrase><phrase role="special">);</phrase>
+<!--quickbook-escape-prefix--><co id="callout_tests5co" linkends="callout_tests5" /><!--quickbook-escape-postfix--><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="identifier">dist</phrase><phrase role="special">(</phrase><phrase role="number">1</phrase><phrase role="special">,</phrase> <phrase role="number">6</phrase><phrase role="special">);</phrase> <!--quickbook-escape-prefix--><co id="callout_tests6co" linkends="callout_tests6" /><!--quickbook-escape-postfix-->
+<phrase role="special">}</phrase>
+
+</programlisting>
+  </para>
+  <calloutlist>
+    <callout arearefs="callout_tests4co" id="callout_tests4">
+      <para>
+        callout 1
+      </para>
+    </callout>
+    <callout arearefs="callout_tests5co" id="callout_tests5">
+      <para>
+        callout 2
+      </para>
+    </callout>
+    <callout arearefs="callout_tests6co" id="callout_tests6">
+      <para>
+        create a uniform_int distribution
+      </para>
+    </callout>
+  </calloutlist>
+  <para>
+    
+<programlisting><!--quickbook-escape-prefix--><co id="callout_tests7co" linkends="callout_tests7" /><!--quickbook-escape-postfix--><phrase role="identifier">boost</phrase><phrase role="special">::</phrase><phrase role="identifier">uniform_int</phrase><phrase role="special">&lt;&gt;</phrase> <phrase role="identifier">dist</phrase><phrase role="special">(</phrase><phrase role="number">1</phrase><phrase role="special">,</phrase> <phrase role="number">6</phrase><phrase role="special">);</phrase> <!--quickbook-escape-prefix--><co id="callout_tests8co" linkends="callout_tests8" /><!--quickbook-escape-postfix-->
+</programlisting>
+  </para>
+  <calloutlist>
+    <callout arearefs="callout_tests7co" id="callout_tests7">
+      <para>
+        callout 2
+      </para>
+    </callout>
+    <callout arearefs="callout_tests8co" id="callout_tests8">
+      <para>
+        create a uniform_int distribution
+      </para>
+    </callout>
+  </calloutlist>
 </article>
