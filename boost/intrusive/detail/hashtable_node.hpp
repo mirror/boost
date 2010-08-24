@@ -22,7 +22,7 @@
 #include <boost/intrusive/detail/utilities.hpp>
 #include <boost/intrusive/detail/slist_node.hpp> //remove-me
 #include <cstddef>
-
+#include <boost/pointer_cast.hpp>
 namespace boost {
 namespace intrusive {
 namespace detail {
@@ -118,7 +118,12 @@ class hashtable_iterator
    typedef typename Container::size_type                          size_type;
 
    static typename Container::node_ptr downcast_bucket(typename bucket_type::node_ptr p)
-   {  return typename Container::node_ptr(&static_cast<typename Container::node&>(*p));   }
+   {
+//      This still fails in gcc < 4.4 so forget about it
+//      using ::boost::static_pointer_cast;
+//      return static_pointer_cast<typename Container::node>(p);
+      return typename Container::node_ptr(&static_cast<typename Container::node&>(*p));
+   }
 
    public:
    typedef typename Container::value_type    value_type;

@@ -410,14 +410,10 @@ struct member_hook_traits
    static const link_mode_type link_mode = Hook::boost_intrusive_tags::link_mode;
 
    static node_ptr to_node_ptr(reference value)
-   {
-      return reinterpret_cast<node*>(&(value.*P));
-   }
+   {  return static_cast<node*>(&(value.*P));   }
 
    static const_node_ptr to_node_ptr(const_reference value)
-   {
-      return static_cast<const node*>(&(value.*P));
-   }
+   {  return static_cast<const node*>(&(value.*P));   }
 
    static pointer to_value_ptr(node_ptr n)
    {
@@ -431,6 +427,45 @@ struct member_hook_traits
          (static_cast<const Hook*>(detail::boost_intrusive_get_pointer(n)), P);
    }
 };
+
+template<class Functor>
+struct function_hook_traits
+{
+   public:
+   typedef typename Functor::hook_type                               hook_type;
+   typedef typename Functor::hook_ptr                                hook_ptr;
+   typedef typename Functor::const_hook_ptr                          const_hook_ptr;
+   typedef typename hook_type::boost_intrusive_tags::node_traits     node_traits;
+   typedef typename node_traits::node                                node;
+   typedef typename Functor::value_type                              value_type;
+   typedef typename node_traits::node_ptr                            node_ptr;
+   typedef typename node_traits::const_node_ptr                      const_node_ptr;
+   typedef typename boost::pointer_to_other<node_ptr, value_type>::type       pointer;
+   typedef typename boost::pointer_to_other<node_ptr, const value_type>::type const_pointer;
+   typedef typename std::iterator_traits<pointer>::reference         reference;
+   typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
+   static const link_mode_type link_mode = hook_type::boost_intrusive_tags::link_mode;
+
+   static node_ptr to_node_ptr(reference value)
+   {  return static_cast<node*>(&*Functor::to_hook_ptr(value));  }
+
+   static const_node_ptr to_node_ptr(const_reference value)
+   {  return static_cast<const node*>(&*Functor::to_hook_ptr(value));  }
+
+   static pointer to_value_ptr(node_ptr n)
+   {  return Functor::to_value_ptr(to_hook_ptr(n));  }
+
+   static const_pointer to_value_ptr(const_node_ptr n)
+   {  return Functor::to_value_ptr(to_hook_ptr(n));  }
+
+   private:
+   static hook_ptr to_hook_ptr(node_ptr n)
+   {  return hook_ptr(&*static_cast<hook_type*>(&*n));  }
+
+   static const_hook_ptr to_hook_ptr(const_node_ptr n)
+   {  return const_hook_ptr(&*static_cast<const hook_type*>(&*n));  }
+};
+
 
 //This function uses binary search to discover the
 //highest set bit of the integer
@@ -454,14 +489,19 @@ inline std::size_t floor_log2 (std::size_t x)
 
 inline float fast_log2 (float val)
 {
-   boost::uint32_t * exp_ptr =
-      static_cast<boost::uint32_t *>(static_cast<void*>(&val));
-   boost::uint32_t x = *exp_ptr;
+   union caster_t
+   {
+      boost::uint32_t x;
+      float val;
+   } caster;
+
+   caster.val = val;
+   boost::uint32_t x = caster.x;
    const int log_2 = (int)(((x >> 23) & 255) - 128);
    x &= ~(255 << 23);
    x += 127 << 23;
-   *exp_ptr = x;
-
+   caster.x = x;
+   val = caster.val;
    val = ((-1.0f/3) * val + 2) * val - 2.0f/3;
 
    return (val + log_2);

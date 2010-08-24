@@ -23,6 +23,7 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/functional/hash.hpp>
+#include <boost/pointer_cast.hpp>
 //General intrusive utilities
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
@@ -157,26 +158,22 @@ struct get_slist_impl_from_supposed_value_traits
 template<class SupposedValueTraits>
 struct unordered_bucket_impl
 {
-   /// @cond
    typedef typename 
       get_slist_impl_from_supposed_value_traits
          <SupposedValueTraits>::type            slist_impl;
    typedef detail::bucket_impl<slist_impl>      implementation_defined;
-   /// @endcond
    typedef implementation_defined               type;
 };
 
 template<class SupposedValueTraits>
 struct unordered_bucket_ptr_impl
 {
-   /// @cond
    typedef typename detail::get_node_traits
       <SupposedValueTraits>::type::node_ptr     node_ptr;
    typedef typename unordered_bucket_impl
       <SupposedValueTraits>::type               bucket_type;
    typedef typename boost::pointer_to_other
       <node_ptr, bucket_type>::type             implementation_defined;
-   /// @endcond
    typedef implementation_defined               type;
 };
 
@@ -329,7 +326,12 @@ struct group_functions
    typedef circular_slist_algorithms<group_traits>                group_algorithms;
 
    static node_ptr dcast_bucket_ptr(slist_node_ptr p)
-   {  return node_ptr(&static_cast<node&>(*p));   }
+   {
+//      This still fails in gcc < 4.4 so forget about it
+//      using ::boost::static_pointer_cast;
+//      return static_pointer_cast<node>(p);
+      return node_ptr(&static_cast<node&>(*p));
+   }
 
    static slist_node_ptr priv_get_bucket_before_begin
       (slist_node_ptr bucket_beg, slist_node_ptr bucket_end, node_ptr p)
@@ -496,7 +498,6 @@ struct unordered_bucket_ptr
 template<class ValueTraitsOrHookOption>
 struct unordered_default_bucket_traits
 {
-   /// @cond
    typedef typename ValueTraitsOrHookOption::
       template pack<none>::value_traits         supposed_value_traits;
    typedef typename detail::
@@ -504,7 +505,6 @@ struct unordered_default_bucket_traits
          <supposed_value_traits>::type          slist_impl;
    typedef detail::bucket_traits_impl
       <slist_impl>                              implementation_defined;
-   /// @endcond
    typedef implementation_defined               type;
 };
 
@@ -2322,7 +2322,12 @@ class hashtable_impl
    }
 
    static node_ptr dcast_bucket_ptr(typename slist_impl::node_ptr p)
-   {  return node_ptr(&static_cast<node&>(*p));   }
+   {
+//      This still fails in gcc < 4.4 so forget about it
+//      using ::boost::static_pointer_cast;
+//      return static_pointer_cast<node>(p);
+      return node_ptr(&static_cast<node&>(*p));
+   }
 
    std::size_t priv_stored_or_compute_hash(const value_type &v, detail::true_) const
    {  return node_traits::get_hash(this->get_real_value_traits().to_node_ptr(v));  }
@@ -2889,7 +2894,6 @@ struct make_hashtable_opt
    //Real value traits must be calculated from options
    typedef typename detail::get_value_traits
       <T, typename packed_options::value_traits>::type   value_traits;
-   /// @cond
    static const bool external_value_traits =
       detail::external_value_traits_is_true<value_traits>::value;
    typedef typename detail::eval_if_c
@@ -2898,7 +2902,6 @@ struct make_hashtable_opt
       , detail::identity<value_traits>
       >::type                                            real_value_traits;
    typedef typename packed_options::bucket_traits        specified_bucket_traits;   
-   /// @endcond
 
    //Real bucket traits must be calculated from options and calculated value_traits
    typedef typename detail::get_slist_impl

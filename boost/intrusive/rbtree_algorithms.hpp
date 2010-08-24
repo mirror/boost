@@ -57,6 +57,9 @@
 #include <boost/intrusive/detail/utilities.hpp>
 #include <boost/intrusive/detail/tree_algorithms.hpp>
 
+#if (defined _MSC_VER) && (_MSC_VER >= 1200)
+#pragma optimize( "g", off )
+#endif
 
 namespace boost {
 namespace intrusive {
@@ -904,6 +907,10 @@ class rbtree_algorithms
 
 } //namespace intrusive 
 } //namespace boost 
+
+#if (defined _MSC_VER) && (_MSC_VER >= 1200)
+#pragma optimize( "", on )
+#endif
 
 #include <boost/intrusive/detail/config_end.hpp>
 
