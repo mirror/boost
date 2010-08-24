@@ -33,3 +33,16 @@ int roll_die() {
 }
 
 //]
+
+//[ example4
+
+int roll_die() {
+  /*<< callout 1 >>*/
+  boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
+//[ example4a
+  /*<< callout 2 >>*/
+  boost::uniform_int<> dist(1, 6); /*< create a uniform_int distribution >*/
+//]
+}
+
+//]

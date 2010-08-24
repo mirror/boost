@@ -12,6 +12,7 @@ import quickbook-testing : quickbook-test quickbook-fail-test ;
 
 test-suite quickbook.test :
     [ quickbook-test quickbook-manual ]
+    [ quickbook-test code-block ]
     [ quickbook-test code-block-1 ]
     [ quickbook-test code-block-2 ]
     [ quickbook-test code-block-3 ]
@@ -35,9 +36,11 @@ test-suite quickbook.test :
     [ quickbook-test section_1_4 ]
     [ quickbook-test section_1_5 ]
     [ quickbook-test heading ]
+    [ quickbook-test heading_1_6 ]
     [ quickbook-test identifier_1_5 ]
     [ quickbook-test identifier_1_6 ]
     [ quickbook-test para-test ]
+    [ quickbook-test variablelist ]
     [ quickbook-test table_1_5 ]
     [ quickbook-test image_1_5 ]
     [ quickbook-test list_test ]
@@ -51,6 +54,7 @@ test-suite quickbook.test :
     [ quickbook-test xml-escape_1_2 ]
     [ quickbook-test xml-escape_1_5 ]
     [ quickbook-test blocks ]
+    [ quickbook-test command_line_macro : : : <quickbook-define>__macro__=*bold* ]
     [ quickbook-fail-test fail-include ]
     [ quickbook-fail-test fail-import ]
     [ quickbook-fail-test fail-template-arguments1 ]

@@ -16,6 +16,7 @@ import toolset ;
 import type ;
 
 feature.feature quickbook-testing.quickbook-command : : free dependency ;
+feature.feature <quickbook-define> : : free ;
 
 type.register QUICKBOOK_INPUT : quickbook ;
 type.register QUICKBOOK_OUTPUT ;
@@ -94,6 +95,8 @@ rule quickbook-fail-test ( target-name : input ? : requirements * )
 
 ################################################################################
 toolset.flags quickbook-testing.process-quickbook quickbook-command <quickbook-testing.quickbook-command> ;
+toolset.flags quickbook-testing.process-quickbook QB-DEFINES        <quickbook-define> ;
+
 rule process-quickbook ( target : source : properties * )
 {
     DEPENDS $(target) : [ on $(target) return $(quickbook-command) ] ;
@@ -101,6 +104,6 @@ rule process-quickbook ( target : source : properties * )
 
 actions process-quickbook bind quickbook-command
 {
-    $(quickbook-command) $(>) --output-file=$(<) --debug
+    $(quickbook-command) $(>) --output-file=$(<) --debug -D"$(QB-DEFINES)"
 }
 

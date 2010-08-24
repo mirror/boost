@@ -17,7 +17,7 @@
 #include <stack>
 #include <algorithm>
 #include <boost/spirit/include/classic_iterator.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/v2/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 #include "../syntax_highlight.hpp"
@@ -116,6 +116,7 @@ namespace quickbook
         header_action(
             collector& out,
             collector& phrase,
+            std::string const& element_id,
             std::string const& library_id,
             std::string const& section_id,
             std::string const& qualified_section_id,
@@ -123,6 +124,7 @@ namespace quickbook
             std::string const& post)
         : out(out)
         , phrase(phrase)
+        , element_id(element_id)
         , library_id(library_id)
         , section_id(section_id)
         , qualified_section_id(qualified_section_id)
@@ -133,6 +135,7 @@ namespace quickbook
 
         collector& out;
         collector& phrase;
+        std::string const& element_id;
         std::string const& library_id;
         std::string const& section_id;
         std::string const& qualified_section_id;
@@ -147,12 +150,14 @@ namespace quickbook
         generic_header_action(
             collector& out,
             collector& phrase,
+            std::string const& element_id,
             std::string const& library_id,
             std::string const& section_id,
             std::string const& qualified_section_id,
             int const& section_level)
         : out(out)
         , phrase(phrase)
+        , element_id(element_id)
         , library_id(library_id)
         , section_id(section_id)
         , qualified_section_id(qualified_section_id)
@@ -162,6 +167,7 @@ namespace quickbook
 
         collector& out;
         collector& phrase;
+        std::string const& element_id;
         std::string const& library_id;
         std::string const& section_id;
         std::string const& qualified_section_id;
@@ -563,7 +569,12 @@ namespace quickbook
         start_varlistitem_action(collector& phrase)
         : phrase(phrase) {}
 
-        void operator()(char) const;
+        void operator()() const;
+
+        template <typename T1>
+        void operator()(T1 const&) const { return (*this)(); }
+        template <typename T1, typename T2>
+        void operator()(T1 const&, T2 const&) const { return (*this)(); }
 
         collector& phrase;
     };
@@ -573,7 +584,12 @@ namespace quickbook
         end_varlistitem_action(collector& phrase, collector& temp_para)
         : phrase(phrase), temp_para(temp_para) {}
 
-        void operator()(char) const;
+        void operator()() const;
+
+        template <typename T1>
+        void operator()(T1 const&) const { return (*this)(); }
+        template <typename T1, typename T2>
+        void operator()(T1 const&, T2 const&) const { return (*this)(); }
 
         collector& phrase;
         collector& temp_para;
@@ -622,6 +638,18 @@ namespace quickbook
         template_body_action(quickbook::actions& actions)
         : actions(actions) {}
 
+        void operator()(iterator first, iterator last) const;
+
+        quickbook::actions& actions;
+    };
+    
+    struct template_arg_action
+    {
+        // Handles a template argument
+
+        template_arg_action(quickbook::actions& actions)
+        : actions(actions) {}
+        
         void operator()(iterator first, iterator last) const;
 
         quickbook::actions& actions;

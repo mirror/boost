@@ -16,8 +16,8 @@
 #include "./input_path.hpp"
 #include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/program_options.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/v2/path.hpp>
+#include <boost/filesystem/v2/operations.hpp>
 #include <boost/ref.hpp>
 
 #include <stdexcept>
@@ -29,7 +29,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.5.2"
+#define QUICKBOOK_VERSION "Quickbook Version 1.5.3"
 
 namespace quickbook
 {
@@ -78,7 +78,7 @@ namespace quickbook
                     ;
 
                 macro_identifier =
-                    +(anychar_p - (space_p | ']'))
+                    +(anychar_p - (space_p | ']' | '='))
                     ;
 
                 phrase =

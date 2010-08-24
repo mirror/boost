@@ -6,13 +6,13 @@
   <articleinfo>
   </articleinfo>
   <section id="include_test_sub_document.test">
-    <title><link linkend="include_test_sub_document.test"> Test</link></title>
+    <title><link linkend="include_test_sub_document.test">Test</link></title>
     <para>
       Just testing.
     </para>
   </section>
   <section id="foo.test">
-    <title><link linkend="foo.test"> Test</link></title>
+    <title><link linkend="foo.test">Test</link></title>
     <para>
       Just testing.
     </para>

@@ -9,18 +9,18 @@
     <link linkend="header.header_test">Header Test</link>
   </bridgehead>
   <para>
-    Testing headers without sections.
+    Paragraph.
   </para>
-  <anchor id="header._not_an_id"/>
+  <anchor id="header.heading_id"/>
   <bridgehead renderas="sect2">
-    <link linkend="header._not_an_id">:Not an Id</link>
+    <link linkend="header.heading_id">Heading with an id</link>
   </bridgehead>
   <para>
     Paragraph.
   </para>
-  <anchor id="header._not_an_id_again"/>
+  <anchor id="header.heading_id2"/>
   <bridgehead renderas="sect3">
-    <link linkend="header._not_an_id_again">:Not an Id again</link>
+    <link linkend="header.heading_id2">Heading with an id</link>
   </bridgehead>
   <para>
     Paragraph.

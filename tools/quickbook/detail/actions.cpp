@@ -10,9 +10,10 @@
 =============================================================================*/
 #include <numeric>
 #include <functional>
+#include <algorithm>
 #include <boost/bind.hpp>
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/v2/convenience.hpp>
+#include <boost/filesystem/v2/fstream.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include "./quickbook.hpp"
@@ -105,8 +106,9 @@ namespace quickbook
         }
         else // version 1.3 and above
         {
-            std::string id = qbk_version_n >= 106 ?
-                detail::make_identifier(first, last) :
+            std::string id =
+                !element_id.empty() ? element_id :
+                qbk_version_n >= 106 ? detail::make_identifier(first, last) :
                 detail::make_identifier(str.begin(), str.end());
 
             std::string anchor =
@@ -132,8 +134,9 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
-        std::string id = qbk_version_n >= 106 ?
-            detail::make_identifier(first, last) :
+        std::string id =
+            !element_id.empty() ? element_id :
+            qbk_version_n >= 106 ? detail::make_identifier(first, last) :
             detail::make_identifier(str.begin(), str.end());
 
         std::string anchor =
@@ -202,7 +205,7 @@ namespace quickbook
             list_marks.pop();
             out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
             if (list_marks.size() >= 1)
-                out << list_item_post;
+                out << "</listitem>";
         }
 
         list_indent = -1; // reset
@@ -242,12 +245,12 @@ namespace quickbook
             {
                 // Make this new list a child of the previous list.
                 // The previous listelem has already ended so we erase
-                // list_item_post to accomodate this sub-list. We'll close
+                // "</listitem>" to accomodate this sub-list. We'll close
                 // the listelem later.
 
                 std::string str;
                 out.swap(str);
-                std::string::size_type pos = str.rfind(list_item_post);
+                std::string::size_type pos = str.rfind("</listitem>");
                 BOOST_ASSERT(pos <= str.size());
                 str.erase(str.begin()+pos, str.end());
                 out << str;
@@ -266,7 +269,7 @@ namespace quickbook
                 list_marks.pop();
                 out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
                 if (list_marks.size() >= 1)
-                    out << list_item_post;
+                    out << "</listitem>";
             }
         }
 
@@ -601,7 +604,8 @@ namespace quickbook
     {
         if (!actions.templates.add(
             template_symbol(actions.template_identifier, actions.template_info,
-                std::string(first, last), first.get_position())))
+                std::string(first, last), first.get_position(),
+                actions.template_block, &actions.templates.top_scope())))
         {
             boost::spirit::classic::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
@@ -615,48 +619,53 @@ namespace quickbook
 
     namespace
     {
-        std::string::size_type find_bracket_end(std::string const& str, std::string::size_type pos)
+        iterator find_bracket_end(iterator begin, iterator const& end)
         {
             unsigned int depth = 1;
 
             while(depth > 0) {
-                pos = str.find_first_of("[]\\", pos);
-                if(pos == std::string::npos) return pos;
+                char const* search_chars = "[]\\";
+                begin = std::find_first_of(begin, end, search_chars, search_chars + 3);
+                if(begin == end) return begin;
 
-                if(str[pos] == '\\')
+                if(*begin == '\\')
                 {
-                    pos += 2;
+                    if(++begin == end) return begin;
+                    ++begin;
                 }
                 else
                 {
-                    depth += (str[pos] == '[') ? 1 : -1;
-                    ++pos;
+                    depth += (*begin == '[') ? 1 : -1;
+                    ++begin;
                 }
             }
 
-            return pos;
+            return begin;
         }
 
-        std::string::size_type find_first_seperator(std::string const& str)
+        iterator find_first_seperator(iterator const& begin, iterator const& end)
         {
             if(qbk_version_n < 105) {
-                return str.find_first_of(" \t\r\n");
+                char const* whitespace = " \t\r\n";
+                return std::find_first_of(begin, end, whitespace, whitespace + 4);
             }
             else {
-                std::string::size_type pos = 0;
+                iterator pos = begin;
 
                 while(true)
                 {
-                    pos = str.find_first_of(" \t\r\n\\[", pos);
-                    if(pos == std::string::npos) return pos;
+                    char const* search_chars = " \t\r\n\\[";
+                    pos = std::find_first_of(pos, end, search_chars, search_chars + 6);
+                    if(pos == end) return pos;
 
-                    switch(str[pos])
+                    switch(*pos)
                     {
                     case '[':
-                        pos = find_bracket_end(str, pos + 1);
+                        pos = find_bracket_end(++pos, end);
                         break;
                     case '\\':
-                        pos += 2;
+                        if(++pos == end) return pos;
+                        ++pos;
                         break;
                     default:
                         return pos;
@@ -666,7 +675,7 @@ namespace quickbook
         }
     
         bool break_arguments(
-            std::vector<std::string>& args
+            std::vector<template_body>& args
           , std::vector<std::string> const& params
           , boost::spirit::classic::file_position const& pos
         )
@@ -680,23 +689,29 @@ namespace quickbook
 
             if (qbk_version_n < 105 || args.size() == 1)
             {
-                while (args.size() < params.size() )
+           
+                while (args.size() < params.size())
                 {
                     // Try to break the last argument at the first space found
                     // and push it into the back of args. Do this
                     // recursively until we have all the expected number of
                     // arguments, or if there are no more spaces left.
 
-                    std::string& str = args.back();
-                    std::string::size_type l_pos = find_first_seperator(str);
-                    if (l_pos == std::string::npos)
+                    template_body& body = args.back();
+                    iterator begin(body.content.begin(), body.content.end(), body.position.file);
+                    iterator end(body.content.end(), body.content.end());
+                    
+                    iterator l_pos = find_first_seperator(begin, end);
+                    if (l_pos == end)
                         break;
-                    std::string first(str.begin(), str.begin()+l_pos);
-                    std::string::size_type r_pos = str.find_first_not_of(" \t\r\n", l_pos);
-                    if (r_pos == std::string::npos)
+                    char const* whitespace = " \t\r\n";
+                    char const* whitespace_end = whitespace + 4;
+                    iterator r_pos = l_pos;
+                    while(r_pos != end && std::find(whitespace, whitespace_end, *r_pos) != whitespace_end) ++r_pos;
+                    if (r_pos == end)
                         break;
-                    std::string second(str.begin()+r_pos, str.end());
-                    str = first;
+                    template_body second(std::string(r_pos, end), begin.get_position(), false);
+                    body.content = std::string(begin, l_pos);
                     args.push_back(second);
                 }
             }
@@ -717,14 +732,14 @@ namespace quickbook
 
         std::pair<bool, std::vector<std::string>::const_iterator>
         get_arguments(
-            std::vector<std::string>& args
+            std::vector<template_body>& args
           , std::vector<std::string> const& params
           , template_scope const& scope
           , boost::spirit::classic::file_position const& pos
           , quickbook::actions& actions
         )
         {
-            std::vector<std::string>::const_iterator arg = args.begin();
+            std::vector<template_body>::const_iterator arg = args.begin();
             std::vector<std::string>::const_iterator tpl = params.begin();
             std::vector<std::string> empty_params;
 
@@ -733,7 +748,8 @@ namespace quickbook
             while (arg != args.end())
             {
                 if (!actions.templates.add(
-                        template_symbol(*tpl, empty_params, *arg, pos, &scope)))
+                        template_symbol(*tpl, empty_params, arg->content,
+                            arg->position, arg->is_block, &scope)))
                 {
                     detail::outerr(pos.file,pos.line)
                         << "Duplicate Symbol Found" << std::endl;
@@ -744,12 +760,11 @@ namespace quickbook
             }
             return std::make_pair(true, tpl);
         }
-
+        
         bool parse_template(
-            std::string body
+            template_body const& body
+          , bool escape
           , std::string& result
-          , bool& is_block
-          , boost::spirit::classic::file_position const& template_pos
           , quickbook::actions& actions
         )
         {
@@ -757,53 +772,43 @@ namespace quickbook
             // a phrase? We apply a simple heuristic: if the body starts with
             // a newline, then we regard it as a block, otherwise, we parse
             // it as a phrase.
+            //
+            // Note: this is now done in the grammar.
 
-            body.reserve(body.size() + 2);
-
-            std::string::const_iterator iter = body.begin();
-            while (iter != body.end() && ((*iter == ' ') || (*iter == '\t')))
-                ++iter; // skip spaces and tabs
-            is_block = (iter != body.end()) && ((*iter == '\r') || (*iter == '\n'));
-            bool r = false;
-
-            if (actions.template_escape)
+            if (escape)
             {
                 //  escape the body of the template
                 //  we just copy out the literal body
-                result = body;
-                r = true;
+                result = body.content;
+                return true;
             }
-            else if (!is_block)
+            else if (!body.is_block)
             {
                 simple_phrase_grammar<quickbook::actions> phrase_p(actions);
 
                 //  do a phrase level parse
-                iterator first(body.begin(), body.end(), actions.filename.file_string().c_str());
-                first.set_position(template_pos);
-                iterator last(body.end(), body.end());
-                r = boost::spirit::classic::parse(first, last, phrase_p).full;
+                iterator first(body.content.begin(), body.content.end(), body.position);
+                iterator last(body.content.end(), body.content.end());
+                bool r = boost::spirit::classic::parse(first, last, phrase_p).full;
                 actions.phrase.swap(result);
+                return r;
             }
             else
             {
-                block_grammar<quickbook::actions, true> block_p(actions);
+                block_grammar<quickbook::actions> block_p(actions, true);
 
                 //  do a block level parse
                 //  ensure that we have enough trailing newlines to eliminate
                 //  the need to check for end of file in the grammar.
-                body.push_back('\n');
-                body.push_back('\n');
-                while (iter != body.end() && ((*iter == '\r') || (*iter == '\n')))
-                    ++iter; // skip initial newlines
-                iterator first(iter, body.end(), actions.filename.file_string().c_str());
-                first.set_position(template_pos);
-                iterator last(body.end(), body.end());
-                r = boost::spirit::classic::parse(first, last, block_p).full;
+                
+                std::string content = body.content + "\n\n";
+                iterator first(content.begin(), content.end(), body.position);
+                iterator last(content.end(), content.end());
+                bool r = boost::spirit::classic::parse(first, last, block_p).full;
                 actions.inside_paragraph();
                 actions.out.swap(result);
+                return r;
             }
-
-            return r;
         }
     }
 
@@ -812,13 +817,22 @@ namespace quickbook
         int callout_id = 0;
     }
 
+    void template_arg_action::operator()(iterator first, iterator last) const
+    {
+        actions.template_args.push_back(
+            template_body(
+                std::string(first, last),
+                first.get_position(),
+                actions.template_block));
+    }
+
     void do_template_action::operator()(iterator first, iterator) const
     {
         // Get the arguments and clear values stored in action.
 
-        std::vector<std::string> args;
+        std::vector<template_body> args;
         std::string identifier;
-        std::swap(args, actions.template_info);
+        std::swap(args, actions.template_args);
         std::swap(identifier, actions.template_identifier);
         boost::spirit::classic::file_position const pos = first.get_position();
 
@@ -843,7 +857,6 @@ namespace quickbook
         BOOST_ASSERT(symbol);
             
         std::string result;
-        bool is_block;
         actions.push(); // scope the actions' states
         {
             // Store the current section level so that we can ensure that
@@ -884,13 +897,12 @@ namespace quickbook
                     args.clear();
                 }
 
-                BOOST_ASSERT(symbol->params.size() % 2 == 0);
-                unsigned int size = symbol->params.size() / 2;
+                unsigned int size = symbol->params.size();
 
                 for(unsigned int i = 0; i < size; ++i)
                 {
                     std::string callout_id = actions.doc_id +
-                        boost::lexical_cast<std::string>(detail::callout_id++);
+                        boost::lexical_cast<std::string>(detail::callout_id + i);
 
                     std::string code;
                     code += "'''";
@@ -898,15 +910,7 @@ namespace quickbook
                     code += "linkends=\"" + callout_id + "\" />";
                     code += "'''";
 
-                    args.push_back(code);
-                    
-                    code.clear();
-                    code += "'''";
-                    code += "<callout arearefs=\"" + callout_id + "co\" ";
-                    code += "id=\"" + callout_id + "\">";
-                    code += "'''";
-
-                    args.push_back(code);
+                    args.push_back(template_body(code, first.get_position(), false));
                 }
             }
 
@@ -928,14 +932,16 @@ namespace quickbook
             ///////////////////////////////////
             // parse the template body:
 
-            if (!parse_template(symbol->body, result, is_block, symbol->position, actions))
+            if (!parse_template(symbol->body, actions.template_escape, result, actions))
             {
                 boost::spirit::classic::file_position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
-                    << "Expanding template:" << symbol->identifier << std::endl
+                    << "Expanding "
+                    << (symbol->body.is_block ? "block" : "phrase")
+                    << " template: " << symbol->identifier << std::endl
                     << std::endl
                     << "------------------begin------------------" << std::endl
-                    << symbol->body
+                    << symbol->body.content
                     << "------------------end--------------------" << std::endl
                     << std::endl;
                 actions.pop(); // restore the actions' states
@@ -957,7 +963,37 @@ namespace quickbook
         }
 
         actions.pop(); // restore the actions' states
-        if(is_block) {
+
+        if(symbol->callout && symbol->callouts.size() > 0)
+        {
+            result += "<calloutlist>";
+            BOOST_FOREACH(template_body const& c, symbol->callouts)
+            {
+                std::string callout_id = actions.doc_id +
+                    boost::lexical_cast<std::string>(detail::callout_id++);
+
+                std::string callout_value;
+                actions.push();
+                bool r = parse_template(c, false, callout_value, actions);
+                actions.pop();
+
+                if(!r)
+                {
+                    detail::outerr(c.position.file, c.position.line)
+                        << "Expanding callout." << std::endl;
+                    ++actions.error_count;
+                    return;
+                }
+                
+                result += "<callout arearefs=\"" + callout_id + "co\" ";
+                result += "id=\"" + callout_id + "\">";
+                result += callout_value;
+                result += "</callout>";
+            }
+            result += "</calloutlist>";
+        }
+
+        if(symbol->body.is_block) {
             actions.inside_paragraph();
             actions.temp_para << result; // print it!!!
         }
@@ -1009,13 +1045,13 @@ namespace quickbook
         actions.table_title.clear();
     }
 
-    void start_varlistitem_action::operator()(char) const
+    void start_varlistitem_action::operator()() const
     {
         phrase << start_varlistitem_;
         phrase.push();
     }
 
-    void end_varlistitem_action::operator()(char) const
+    void end_varlistitem_action::operator()() const
     {
         std::string str;
         temp_para.swap(str);
@@ -1240,85 +1276,143 @@ namespace quickbook
         out << "\" />\n";
     }
 
+    void code_snippet_actions::append_code()
+    {
+        if(snippet_stack.empty()) return;
+        snippet_data& snippet = snippet_stack.top();
+    
+        if (!code.empty())
+        {
+            detail::unindent(code); // remove all indents
+
+            if(snippet.content.empty())
+            {
+                snippet.start_code = true;
+            }
+            else if(!snippet.end_code)
+            {
+                snippet.content += "\n\n";
+                snippet.content += source_type;
+                snippet.content += "```\n";
+            }
+            
+            snippet.content += code;
+            snippet.end_code = true;
+
+            code.clear();
+        }
+    }
+
+    void code_snippet_actions::close_code()
+    {
+        if(snippet_stack.empty()) return;
+        snippet_data& snippet = snippet_stack.top();
+    
+        if(snippet.end_code)
+        {
+            snippet.content += "```\n\n";
+            snippet.end_code = false;
+        }
+    }
+
     void code_snippet_actions::pass_thru(iterator first, iterator last)
     {
+        if(snippet_stack.empty()) return;
         code += *first;
+    }
+
+    void code_snippet_actions::pass_thru_char(char c)
+    {
+        if(snippet_stack.empty()) return;
+        code += c;
     }
 
     void code_snippet_actions::callout(iterator first, iterator last)
     {
-        code += "``[[callout" + boost::lexical_cast<std::string>(callouts.size()) + "]]``";
+        if(snippet_stack.empty()) return;
+        code += "``[[callout" + boost::lexical_cast<std::string>(callout_id) + "]]``";
     
-        callouts.push_back(std::string(first, last));
+        snippet_stack.top().callouts.push_back(
+            template_body(std::string(first, last), first.get_position(), true));
+        ++callout_id;
     }
 
     void code_snippet_actions::escaped_comment(iterator first, iterator last)
     {
-        if (!code.empty())
-        {
-            detail::unindent(code); // remove all indents
-            if (code.size() != 0)
-            {
-                snippet += "\n\n";
-                snippet += source_type;
-                snippet += "``\n" + code + "``\n\n";
-                code.clear();
-            }
-        }
+        if(snippet_stack.empty()) return;
+        snippet_data& snippet = snippet_stack.top();
+        append_code();
+        close_code();
+
         std::string temp(first, last);
         detail::unindent(temp); // remove all indents
         if (temp.size() != 0)
         {
-            snippet += "\n" + temp; // add a linebreak to allow block marskups
+            snippet.content += "\n" + temp; // add a linebreak to allow block markups
         }
     }
 
-    void code_snippet_actions::compile(iterator first, iterator last)
+    void code_snippet_actions::start_snippet(iterator first, iterator last)
     {
-        std::vector<std::string> params;
-    
-        if (!code.empty())
-        {
-            detail::unindent(code); // remove all indents
-            if (code.size() != 0)
-            {
-                snippet += "\n\n";
-                snippet += source_type;
-                snippet += "```\n" + code + "```\n\n";
-            }
+        append_code();
+        snippet_stack.push(snippet_data(id, callout_id));
+        id.clear();
+    }
 
-            if(callouts.size() > 0)
-            {
-              std::vector<std::string> callout_items;
-            
-              snippet += "'''<calloutlist>'''";
-              for (size_t i = 0; i < callouts.size(); ++i)
-              {
-                  std::string callout_template = "[callout" + boost::lexical_cast<std::string>(i) + "]";
-                  std::string calloutitem_template = "[calloutitem" + boost::lexical_cast<std::string>(i) + "]";
-              
-                  snippet += "[" + calloutitem_template + "]";
-                  snippet += "'''<para>'''";
-                  snippet += callouts[i];
-                  snippet += "\n";
-                  snippet += "'''</para>'''";
-                  snippet += "'''</callout>'''";
-                  
-                  params.push_back(callout_template);
-                  params.push_back(calloutitem_template);
-              }
-              snippet += "'''</calloutlist>'''";
-            }
+    void code_snippet_actions::end_snippet(iterator first, iterator last)
+    {
+        // TODO: Error?
+        if(snippet_stack.empty()) return;
+
+        append_code();
+
+        snippet_data snippet = snippet_stack.top();
+        snippet_stack.pop();
+
+        std::string body;
+        if(snippet.start_code) {
+            body += "\n\n";
+            body += source_type;
+            body += "```\n";
         }
-
-        template_symbol symbol(id, params, snippet, first.get_position());
+        body += snippet.content;
+        if(snippet.end_code) {
+            body += "```\n\n";
+        }
+        
+        std::vector<std::string> params;
+        for (size_t i = 0; i < snippet.callouts.size(); ++i)
+        {
+            params.push_back("[callout" + boost::lexical_cast<std::string>(snippet.callout_base_id + i) + "]");
+        }
+        
+        // TODO: Save position in start_snippet
+        template_symbol symbol(snippet.id, params, body, first.get_position(), true);
         symbol.callout = true;
+        symbol.callouts = snippet.callouts;
         storage.push_back(symbol);
 
-        callouts.clear();
-        code.clear();
-        snippet.clear();
-        id.clear();
+        // Merge the snippet into its parent
+
+        if(!snippet_stack.empty())
+        {
+            snippet_data& next = snippet_stack.top();
+            if(!snippet.content.empty()) {
+                if(!snippet.start_code) {
+                    close_code();
+                }
+                else if(!next.end_code) {
+                    next.content += "\n\n";
+                    next.content += source_type;
+                    next.content += "```\n";
+                }
+                
+                next.content += snippet.content;
+                next.end_code = snippet.end_code;
+            }
+            
+            next.callouts.insert(next.callouts.end(), snippet.callouts.begin(), snippet.callouts.end());
+        }
     }
 
     int load_snippets(
@@ -1391,12 +1485,13 @@ namespace quickbook
         actions.error_count +=
             load_snippets(path.string(), storage, ext, actions.doc_id);
 
-        BOOST_FOREACH(template_symbol const& ts, storage)
+        BOOST_FOREACH(template_symbol& ts, storage)
         {
             std::string tname = ts.identifier;
+            ts.parent = &actions.templates.top_scope();
             if (!actions.templates.add(ts))
             {
-                boost::spirit::classic::file_position const pos = ts.position;
+                boost::spirit::classic::file_position const pos = ts.body.position;
                 detail::outerr(pos.file, pos.line)
                     << "Template Redefinition: " << tname << std::endl;
                 ++actions.error_count;

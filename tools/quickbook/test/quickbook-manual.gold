@@ -26,7 +26,7 @@
     </articlepurpose>
   </articleinfo>
   <section id="quickbook.intro">
-    <title><link linkend="quickbook.intro"> Introduction</link></title>
+    <title><link linkend="quickbook.intro">Introduction</link></title>
     <blockquote>
       <para>
         <emphasis role="bold"><emphasis><quote>Why program by hand in five days what
@@ -102,7 +102,7 @@
     </itemizedlist>
   </section>
   <section id="quickbook.change_log">
-    <title><link linkend="quickbook.change_log"> Change Log</link></title> <anchor
+    <title><link linkend="quickbook.change_log">Change Log</link></title> <anchor
     id="quickbook.change_log.version_1_3"/>
     <bridgehead renderas="sect3">
       <link linkend="quickbook.change_log.version_1_3">Version 1.3</link>
@@ -279,7 +279,7 @@
     </itemizedlist>
   </section>
   <section id="quickbook.syntax">
-    <title><link linkend="quickbook.syntax"> Syntax Summary</link></title>
+    <title><link linkend="quickbook.syntax">Syntax Summary</link></title>
     <para>
       A QuickBook document is composed of one or more blocks. An example of a block
       is the paragraph or a C++ code snippet. Some blocks have special mark-ups.
@@ -311,7 +311,7 @@
 </programlisting>
     </section>
     <section id="quickbook.syntax.phrase">
-      <title><link linkend="quickbook.syntax.phrase"> Phrase Level Elements</link></title>
+      <title><link linkend="quickbook.syntax.phrase">Phrase Level Elements</link></title>
       <section id="quickbook.syntax.phrase.font_styles">
         <title><link linkend="quickbook.syntax.phrase.font_styles">Font Styles</link></title>
         
@@ -928,7 +928,7 @@ Some link text]</literal>.
         </para>
       </section>
       <section id="quickbook.syntax.phrase.code_links">
-        <title><link linkend="quickbook.syntax.phrase.code_links"> Code Links</link></title>
+        <title><link linkend="quickbook.syntax.phrase.code_links">Code Links</link></title>
         <para>
           If you want to link to a function, class, member, enum, concept or header
           in the reference section, you can use:
@@ -1058,7 +1058,7 @@ escape (no processing/formatting)
       </section>
     </section>
     <section id="quickbook.syntax.block">
-      <title><link linkend="quickbook.syntax.block"> Block Level Elements</link></title>
+      <title><link linkend="quickbook.syntax.block">Block Level Elements</link></title>
       <section id="quickbook.syntax.block.document">
         <title><link linkend="quickbook.syntax.block.document">Document</link></title>
         <para>
@@ -1272,48 +1272,48 @@ escape (no processing/formatting)
             <listitem>
               <simpara>
                 Three
-                <orderedlist>
-                  <listitem>
-                    <simpara>
-                      Three.a
-                    </simpara>
-                  </listitem>
-                  <listitem>
-                    <simpara>
-                      Three.b
-                    </simpara>
-                  </listitem>
-                  <listitem>
-                    <simpara>
-                      Three.c
-                    </simpara>
-                  </listitem>
-                </orderedlist>
               </simpara>
+              <orderedlist>
+                <listitem>
+                  <simpara>
+                    Three.a
+                  </simpara>
+                </listitem>
+                <listitem>
+                  <simpara>
+                    Three.b
+                  </simpara>
+                </listitem>
+                <listitem>
+                  <simpara>
+                    Three.c
+                  </simpara>
+                </listitem>
+              </orderedlist>
             </listitem>
             <listitem>
               <simpara>
                 Fourth
-                <orderedlist>
-                  <listitem>
-                    <simpara>
-                      Four.a
-                      <orderedlist>
-                        <listitem>
-                          <simpara>
-                            Four.a.i
-                          </simpara>
-                        </listitem>
-                        <listitem>
-                          <simpara>
-                            Four.a.ii
-                          </simpara>
-                        </listitem>
-                      </orderedlist>
-                    </simpara>
-                  </listitem>
-                </orderedlist>
               </simpara>
+              <orderedlist>
+                <listitem>
+                  <simpara>
+                    Four.a
+                  </simpara>
+                  <orderedlist>
+                    <listitem>
+                      <simpara>
+                        Four.a.i
+                      </simpara>
+                    </listitem>
+                    <listitem>
+                      <simpara>
+                        Four.a.ii
+                      </simpara>
+                    </listitem>
+                  </orderedlist>
+                </listitem>
+              </orderedlist>
             </listitem>
             <listitem>
               <simpara>
@@ -1418,24 +1418,24 @@ escape (no processing/formatting)
             <listitem>
               <simpara>
                 Three
-                <itemizedlist>
-                  <listitem>
-                    <simpara>
-                      Three.a
-                    </simpara>
-                  </listitem>
-                  <listitem>
-                    <simpara>
-                      Three.b
-                    </simpara>
-                  </listitem>
-                  <listitem>
-                    <simpara>
-                      Three.c
-                    </simpara>
-                  </listitem>
-                </itemizedlist>
               </simpara>
+              <itemizedlist>
+                <listitem>
+                  <simpara>
+                    Three.a
+                  </simpara>
+                </listitem>
+                <listitem>
+                  <simpara>
+                    Three.b
+                  </simpara>
+                </listitem>
+                <listitem>
+                  <simpara>
+                    Three.c
+                  </simpara>
+                </listitem>
+              </itemizedlist>
             </listitem>
             <listitem>
               <simpara>
@@ -1467,72 +1467,72 @@ escape (no processing/formatting)
             <listitem>
               <simpara>
                 1
-                <itemizedlist>
-                  <listitem>
-                    <simpara>
-                      1.a
-                      <orderedlist>
-                        <listitem>
-                          <simpara>
-                            1.a.1
-                          </simpara>
-                        </listitem>
-                        <listitem>
-                          <simpara>
-                            1.a.2
-                          </simpara>
-                        </listitem>
-                      </orderedlist>
-                    </simpara>
-                  </listitem>
-                  <listitem>
-                    <simpara>
-                      1.b
-                    </simpara>
-                  </listitem>
-                </itemizedlist>
               </simpara>
+              <itemizedlist>
+                <listitem>
+                  <simpara>
+                    1.a
+                  </simpara>
+                  <orderedlist>
+                    <listitem>
+                      <simpara>
+                        1.a.1
+                      </simpara>
+                    </listitem>
+                    <listitem>
+                      <simpara>
+                        1.a.2
+                      </simpara>
+                    </listitem>
+                  </orderedlist>
+                </listitem>
+                <listitem>
+                  <simpara>
+                    1.b
+                  </simpara>
+                </listitem>
+              </itemizedlist>
             </listitem>
             <listitem>
               <simpara>
                 2
-                <itemizedlist>
-                  <listitem>
-                    <simpara>
-                      2.a
-                    </simpara>
-                  </listitem>
-                  <listitem>
-                    <simpara>
-                      2.b
-                      <orderedlist>
-                        <listitem>
-                          <simpara>
-                            2.b.1
-                          </simpara>
-                        </listitem>
-                        <listitem>
-                          <simpara>
-                            2.b.2
-                            <itemizedlist>
-                              <listitem>
-                                <simpara>
-                                  2.b.2.a
-                                </simpara>
-                              </listitem>
-                              <listitem>
-                                <simpara>
-                                  2.b.2.b
-                                </simpara>
-                              </listitem>
-                            </itemizedlist>
-                          </simpara>
-                        </listitem>
-                      </orderedlist>
-                    </simpara>
-                  </listitem>
-                </itemizedlist>
               </simpara>
+              <itemizedlist>
+                <listitem>
+                  <simpara>
+                    2.a
+                  </simpara>
+                </listitem>
+                <listitem>
+                  <simpara>
+                    2.b
+                  </simpara>
+                  <orderedlist>
+                    <listitem>
+                      <simpara>
+                        2.b.1
+                      </simpara>
+                    </listitem>
+                    <listitem>
+                      <simpara>
+                        2.b.2
+                      </simpara>
+                      <itemizedlist>
+                        <listitem>
+                          <simpara>
+                            2.b.2.a
+                          </simpara>
+                        </listitem>
+                        <listitem>
+                          <simpara>
+                            2.b.2.b
+                          </simpara>
+                        </listitem>
+                      </itemizedlist>
+                    </listitem>
+                  </orderedlist>
+                </listitem>
+              </itemizedlist>
             </listitem>
           </orderedlist>
         </section>
@@ -1579,8 +1579,8 @@ escape (no processing/formatting)
 </programlisting>
       </section>
       <section id="quickbook.syntax.block.escape_back">
-        <title><link linkend="quickbook.syntax.block.escape_back"> Escaping Back
-        To QuickBook</link></title>
+        <title><link linkend="quickbook.syntax.block.escape_back">Escaping Back To
+        QuickBook</link></title>
         <para>
           Inside code, code blocks and inline code, QuickBook does not allow any
           markup to avoid conflicts with the target syntax (e.g. c++). In case you
@@ -2802,10 +2802,19 @@ for the journey to old age.]]]
 <phrase role="special">}</phrase>
 </programlisting>
         </para>
-        <para>
-          <calloutlist><callout arearefs="quickbook0co" id="quickbook0"><para> The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
-          for details</ulink> </para></callout><callout arearefs="quickbook1co" id="quickbook1"><para> return 'em, foo-bar man! </para></callout></calloutlist>
-        </para>
+        <calloutlist>
+          <callout arearefs="quickbook0co" id="quickbook0">
+            <para>
+              The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
+              for details</ulink>
+            </para>
+          </callout>
+          <callout arearefs="quickbook1co" id="quickbook1">
+            <para>
+              return 'em, foo-bar man!
+            </para>
+          </callout>
+        </calloutlist>
         <para>
           Checkout <ulink url="../../test/stub.cpp">stub.cpp</ulink> to see the actual
           code.
@@ -2814,7 +2823,7 @@ for the journey to old age.]]]
     </section>
   </section>
   <section id="quickbook.install">
-    <title><link linkend="quickbook.install"> Installation and configuration</link></title>
+    <title><link linkend="quickbook.install">Installation and configuration</link></title>
     <para>
       This section provides some guidelines on how to install and configure BoostBook
       and Quickbook under several operating systems.
@@ -2828,7 +2837,7 @@ for the journey to old age.]]]
       trying again. Otherwise your configuration fixes will not take any effect.
     </para>
     <section id="quickbook.install.windows">
-      <title><link linkend="quickbook.install.windows"> Windows 2000, XP, 2003, Vista</link></title>
+      <title><link linkend="quickbook.install.windows">Windows 2000, XP, 2003, Vista</link></title>
       <blockquote>
         <para>
           <emphasis>Section contributed by Julio M. Merino Vidal</emphasis>
@@ -2979,7 +2988,7 @@ for the journey to old age.]]]
 </programlisting>
     </section>
     <section id="quickbook.install.linux">
-      <title><link linkend="quickbook.install.linux"> Debian, Ubuntu</link></title>
+      <title><link linkend="quickbook.install.linux">Debian, Ubuntu</link></title>
       <para>
         The following instructions apply to Debian and its derivatives. They are
         based on a Ubuntu Edgy install but should work on other Debian based systems.
@@ -3070,7 +3079,7 @@ for the journey to old age.]]]
     </section>
   </section>
   <section id="quickbook.editors">
-    <title><link linkend="quickbook.editors"> Editor Support</link></title>
+    <title><link linkend="quickbook.editors">Editor Support</link></title>
     <para>
       Editing quickbook files is usually done with text editors both simple and powerful.
       The following sections list the settings for some editors which can help make
@@ -3088,7 +3097,7 @@ for the journey to old age.]]]
     </para>
     </sidebar>
     <section id="quickbook.editors.scite">
-      <title><link linkend="quickbook.editors.scite"> Scintilla Text Editor</link></title>
+      <title><link linkend="quickbook.editors.scite">Scintilla Text Editor</link></title>
       <blockquote>
         <para>
           <emphasis>Section contributed by Dean Michael Berris</emphasis>
@@ -3136,7 +3145,7 @@ comment.box.end.props=]
     </section>
   </section>
   <section id="quickbook.faq">
-    <title><link linkend="quickbook.faq"> Frequently Asked Questions</link></title>
+    <title><link linkend="quickbook.faq">Frequently Asked Questions</link></title>
     <anchor id="quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_"/>
     <bridgehead renderas="sect3">
       <link linkend="quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_">Can
@@ -3178,7 +3187,7 @@ boostbook standalone
 </programlisting>
   </section>
   <section id="quickbook.ref">
-    <title><link linkend="quickbook.ref"> Quick Reference</link></title>
+    <title><link linkend="quickbook.ref">Quick Reference</link></title>
     <para>
       [cpp]
     </para>

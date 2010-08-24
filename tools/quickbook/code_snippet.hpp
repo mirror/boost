@@ -22,20 +22,44 @@ namespace quickbook
         code_snippet_actions(std::vector<template_symbol>& storage,
                                  std::string const& doc_id,
                                  char const* source_type)
-            : storage(storage)
+            : callout_id(0)
+            , storage(storage)
             , doc_id(doc_id)
             , source_type(source_type)
         {}
 
+        void pass_thru_char(char);
         void pass_thru(iterator first, iterator last);
         void escaped_comment(iterator first, iterator last);
-        void compile(iterator first, iterator last);
+        void start_snippet(iterator first, iterator last);
+        void end_snippet(iterator first, iterator last);
         void callout(iterator first, iterator last);
+        
+        void append_code();
+        void close_code();
 
+        struct snippet_data
+        {
+            snippet_data(std::string const& id, int callout_base_id)
+                : id(id)
+                , callout_base_id(callout_base_id)
+                , content()
+                , start_code(false)
+                , end_code(false)
+            {}
+
+            std::string id;
+            int callout_base_id;
+            std::string content;
+            bool start_code;
+            bool end_code;
+            std::vector<template_body> callouts;
+        };
+        
+        int callout_id;
+        std::stack<snippet_data> snippet_stack;
         std::string code;
-        std::string snippet;
         std::string id;
-        std::vector<std::string> callouts;
         std::vector<template_symbol>& storage;
         std::string const doc_id;
         char const* const source_type;
@@ -57,30 +81,30 @@ namespace quickbook
             
             definition(python_code_snippet_grammar const& self)
             {
+
                 actions_type& actions = self.actions;
             
-                start_ =
-                    +(
-                            snippet                 [boost::bind(&actions_type::compile, &actions, _1, _2)]
-                        |   anychar_p
-                    )
-                    ;
+                start_ = *code_elements;
 
                 identifier =
                     (alpha_p | '_') >> *(alnum_p | '_')
                     ;
 
-                snippet =
-                    "#[" >> *space_p
-                    >> identifier                   [assign_a(actions.id)]
-                    >> (*(code_elements - "#]"))
-                    >> "#]"
+                code_elements =
+                        start_snippet               [boost::bind(&actions_type::start_snippet, &actions, _1, _2)]
+                    |   end_snippet                 [boost::bind(&actions_type::end_snippet, &actions, _1, _2)]
+                    |   escaped_comment
+                    |   ignore
+                    |   anychar_p                   [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
                     ;
 
-                code_elements =
-                        escaped_comment
-                    |   ignore
-                    |   (anychar_p - "#]")         [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
+                start_snippet =
+                    "#[" >> *space_p
+                    >> identifier                   [assign_a(actions.id)]
+                    ;
+
+                end_snippet =
+                    str_p("#]")
                     ;
 
                 ignore =
@@ -106,8 +130,8 @@ namespace quickbook
             }
 
             rule<Scanner>
-                start_, snippet, identifier, code_elements, escaped_comment,
-                ignore;
+                start_, identifier, code_elements, start_snippet, end_snippet,
+                escaped_comment, ignore;
 
             rule<Scanner> const&
             start() const { return start_; }
@@ -132,46 +156,45 @@ namespace quickbook
             {
                 actions_type& actions = self.actions;
             
-                start_ =
-                    +(
-                            snippet                 [boost::bind(&actions_type::compile, &actions, _1, _2)]
-                        |   anychar_p
-                    )
-                    ;
+                start_ = *code_elements;
 
                 identifier =
                     (alpha_p | '_') >> *(alnum_p | '_')
                     ;
 
-                snippet =
-                        "//[" >> *space_p
-                        >> identifier                   [assign_a(actions.id)]
-                        >> (*(code_elements - "//]"))
-                        >> "//]"
-                    |
-                        "/*[" >> *space_p
-                        >> identifier                   [assign_a(actions.id)]
-                        >> *space_p >> "*/"
-                        >> (*(code_elements - "/*]*"))
-                        >> "/*]*/"
-                    ;
-
                 code_elements =
-                        escaped_comment
+                        start_snippet               [boost::bind(&actions_type::start_snippet, &actions, _1, _2)]
+                    |   end_snippet                 [boost::bind(&actions_type::end_snippet, &actions, _1, _2)]
+                    |   escaped_comment
                     |   ignore
                     |   line_callout
                     |   inline_callout
-                    |   (anychar_p - "//]" - "/*]*/")    [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
+                    |   anychar_p                   [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
+                    ;
+
+                start_snippet =
+                        "//[" >> *space_p
+                        >> identifier               [assign_a(actions.id)]
+                    |
+                        "/*[" >> *space_p
+                        >> identifier               [assign_a(actions.id)]
+                        >> *space_p >> "*/"
+                    ;
+
+                end_snippet =
+                    str_p("//]") | "/*]*/"
                     ;
 
                 inline_callout =
                     "/*<"
+                    >> *space_p
                     >> (*(anychar_p - ">*/"))       [boost::bind(&actions_type::callout, &actions, _1, _2)]
                     >> ">*/"
                     ;
 
                 line_callout =
                     "/*<<"
+                    >> *space_p
                     >> (*(anychar_p - ">>*/"))      [boost::bind(&actions_type::callout, &actions, _1, _2)]
                     >> ">>*/"
                     >> *space_p
@@ -200,8 +223,8 @@ namespace quickbook
             }
 
             rule<Scanner>
-                start_, snippet, identifier, code_elements, escaped_comment,
-                inline_callout, line_callout, ignore;
+	        start_, identifier, code_elements, start_snippet, end_snippet,
+                escaped_comment, inline_callout, line_callout, ignore;
 
             rule<Scanner> const&
             start() const { return start_; }

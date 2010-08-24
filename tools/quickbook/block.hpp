@@ -24,11 +24,11 @@ namespace quickbook
 {
     using namespace boost::spirit::classic;
 
-    template <typename Actions, bool skip_initial_spaces = false>
+    template <typename Actions>
     struct block_grammar : grammar<block_grammar<Actions> >
     {
-        block_grammar(Actions& actions_)
-            : actions(actions_) {}
+        block_grammar(Actions& actions_, bool skip_initial_spaces = false)
+            : actions(actions_), skip_initial_spaces(skip_initial_spaces) { }
 
         template <typename Scanner>
         struct definition
@@ -40,10 +40,10 @@ namespace quickbook
                 using detail::var;
                 Actions& actions = self.actions;
 
-                if (skip_initial_spaces)
+                if (self.skip_initial_spaces)
                 {
                     start_ =
-                        *(space_p | comment) >> blocks >> blank
+                        *(blank_p | comment) >> blocks >> blank
                         ;
                 }
                 else
@@ -58,10 +58,9 @@ namespace quickbook
                     |   code
                     |   list                            [actions.list]
                     |   hr                              [actions.hr]
-                    |   comment >> +eol
+                    |   +eol
                     |   paragraph                       [actions.inside_paragraph]
                                                         [actions.write_paragraphs]
-                    |   eol
                     )
                     ;
 
@@ -146,10 +145,20 @@ namespace quickbook
                         ]
                         ;
 
+                element_id_1_6 =
+                        if_p(qbk_since(106u)) [
+                            element_id
+                        ]
+                        .else_p [
+                            eps_p                       [assign_a(actions.element_id)]
+                        ]
+                        ;
+
                 begin_section =
                        "section"
                     >> hard_space
                     >> element_id
+                    >> space
                     >> phrase                           [actions.begin_section]
                     ;
 
@@ -161,13 +170,13 @@ namespace quickbook
                     h1 | h2 | h3 | h4 | h5 | h6 | h
                     ;
 
-                h = "heading" >> hard_space >> phrase   [actions.h];
-                h1 = "h1" >> hard_space >> phrase       [actions.h1];
-                h2 = "h2" >> hard_space >> phrase       [actions.h2];
-                h3 = "h3" >> hard_space >> phrase       [actions.h3];
-                h4 = "h4" >> hard_space >> phrase       [actions.h4];
-                h5 = "h5" >> hard_space >> phrase       [actions.h5];
-                h6 = "h6" >> hard_space >> phrase       [actions.h6];
+                h = "heading" >> hard_space >> element_id_1_6 >> space >> phrase   [actions.h];
+                h1 = "h1" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h1];
+                h2 = "h2" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h2];
+                h3 = "h3" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h3];
+                h4 = "h4" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h4];
+                h5 = "h5" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h5];
+                h6 = "h6" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h6];
 
                 static const bool true_ = true;
                 static const bool false_ = false;
@@ -244,7 +253,10 @@ namespace quickbook
                             )
                         >> space >> ']'
                     )
-                    >> template_body                    [actions.template_body]
+                    >>  (   eps_p(*blank_p >> eol_p)    [assign_a(actions.template_block, true_)]
+                        |   eps_p                       [assign_a(actions.template_block, false_)]
+                        )
+                    >>  template_body                   [actions.template_body]
                     ;
 
                 template_body =
@@ -268,8 +280,10 @@ namespace quickbook
                     >>
                     (
                         (
-                            varlistterm
-                            >> +varlistitem
+                            varlistterm                 [actions.start_varlistitem]
+                            >>  (   +varlistitem
+                                |   eps_p               [actions.error]
+                                )                       [actions.end_varlistitem]
                             >>  ch_p(']')               [actions.end_varlistentry]
                             >>  space
                         )
@@ -293,12 +307,12 @@ namespace quickbook
 
                 varlistitem =
                     space
-                    >>  ch_p('[')                       [actions.start_varlistitem]
+                    >>  ch_p('[')
                     >>
                     (
                         (
                             inside_paragraph
-                            >>  ch_p(']')               [actions.end_varlistitem]
+                            >>  ch_p(']')
                             >>  space
                         )
                         | eps_p                         [actions.error]
@@ -374,14 +388,17 @@ namespace quickbook
                 code =
                     (
                         code_line
-                        >> *(*eol >> code_line)
+                        >> *(*blank_line >> code_line)
                     )                                   [actions.code]
-                    >> +eol
+                    >> *eol
                     ;
 
                 code_line =
-                    ((ch_p(' ') | '\t'))
-                    >> *(anychar_p - eol) >> eol
+                    blank_p >> *(anychar_p - eol_p) >> eol_p
+                    ;
+
+                blank_line =
+                    *blank_p >> eol_p
                     ;
 
                 list =
@@ -436,7 +453,7 @@ namespace quickbook
 
             bool no_eols;
 
-            rule<Scanner>   start_, blocks, block_markup, code, code_line,
+            rule<Scanner>   start_, blocks, block_markup, code, code_line, blank_line,
                             paragraph, space, blank, comment, headings, h, h1, h2,
                             h3, h4, h5, h6, hr, blurb, blockquote, admonition,
                             phrase, list, phrase_end, ordered_list, def_macro,
@@ -446,7 +463,8 @@ namespace quickbook
                             xinclude, include, hard_space, eol, paragraph_end,
                             template_, template_id, template_formal_arg,
                             template_body, identifier, dummy_block, import,
-                            inside_paragraph, element_id, element_id_1_5;
+                            inside_paragraph,
+                            element_id, element_id_1_5, element_id_1_6;
 
             symbols<>       paragraph_end_markups;
 
@@ -457,6 +475,7 @@ namespace quickbook
         };
 
         Actions&   actions;
+        bool const skip_initial_spaces;
     };
 }
 

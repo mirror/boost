@@ -93,6 +93,9 @@ namespace quickbook
         string_list             template_info;
         int                     template_depth;
         bool                    template_escape;
+        bool                    template_block;
+        std::vector<quickbook::template_body>
+                                template_args;
         template_stack          templates;
         int                     error_count;
         std::string             image_fileref;
@@ -186,6 +189,7 @@ namespace quickbook
         macro_definition_action macro_definition;
         do_macro_action         do_macro;
         template_body_action    template_body;
+        template_arg_action     template_arg;
         do_template_action      do_template;
         link_action             url_pre;
         markup_action           url_post;
