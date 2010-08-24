@@ -4,6 +4,11 @@
 dirname="test_that______are_being_escaped_" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <libraryinfo>
+    <legalnotice>
+      <para>
+        &amp; should be &amp;amp;, &lt; should &amp;lt;
+      </para>
+    </legalnotice>
     <librarypurpose>
       &amp; should be &amp;amp;, &lt; should &amp;lt;
     </librarypurpose>

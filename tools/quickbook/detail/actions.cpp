@@ -1762,9 +1762,9 @@ namespace quickbook
             {
                 out << "    <legalnotice>\n"
                     << "      <para>\n"
-                    << "        "
-                    << actions.doc_license_1_1
-                    << "\n"
+                    << "        ";
+                detail::print_string(actions.doc_license_1_1, out.get());
+                out << "\n"
                     << "      </para>\n"
                     << "    </legalnotice>\n"
                     << "\n"
