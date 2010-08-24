@@ -230,6 +230,7 @@ Features include:
 * In docbook, variable list entries can only have one `listitem`, so if an
   entry has multiple values, merge them into one `listitem`.
 * Support nested code snippets.
+* Allow escapes in doc info fields (apart from `\n`).
 * Further work on quickbook 1.6, still not stable.
   * Allow heading to have ids, using the syntax: `[heading:id title]`.
 

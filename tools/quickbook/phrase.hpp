@@ -275,8 +275,7 @@ namespace quickbook
                     ;
 
                 escape =
-                        str_p("\\n")                    [actions.break_]
-                    |   "\\ "                           // ignore an escaped char
+                        str_p("\\ ")                    // ignore an escaped space
                     |   '\\' >> punct_p                 [actions.raw_char]
                     |   "\\u" >> repeat_p(4) [chset<>("0-9a-fA-F")]
                                                         [actions.escape_unicode]

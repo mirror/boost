@@ -49,10 +49,9 @@ namespace quickbook
                     >> '[' >> space
                     >> (doc_types >> eps_p)         [assign_a(actions.doc_type)]
                     >> hard_space
-                    >>  (  *(anychar_p -
-                            (ch_p('[') | ']' | eol_p)
-                            )
-                        )                           [assign_a(actions.doc_title)]
+                    >>  (  *(~eps_p(ch_p('[') | ']' | eol_p) >> char_)
+                        )                           [assign_a(actions.doc_title_raw)]
+                                                    [actions.extract_doc_title]
                     >>  !(
                             space >> '[' >>
                                 quickbook_version
@@ -65,7 +64,7 @@ namespace quickbook
                               doc_version
                             | doc_id
                             | doc_dirname
-                            | doc_copyright         [push_back_a(actions.doc_copyrights, copyright)]
+                            | doc_copyright         [push_back_a(actions.doc_copyrights, actions.copyright)]
                             | doc_purpose           [actions.extract_doc_purpose]
                             | doc_category
                             | doc_authors
@@ -88,26 +87,28 @@ namespace quickbook
 
                 doc_version =
                         "version" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_version)]
+                    >> (*(~eps_p(']') >> char_))    [actions.extract_doc_version]
                     ;
 
+                // TODO: Restrictions on doc_id?
                 doc_id =
                         "id" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_id)]
+                    >> (*(~eps_p(']') >> char_))    [actions.extract_doc_id]
                     ;
 
+                // TODO: Restrictions on doc_dirname?
                 doc_dirname =
                         "dirname" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_dirname)]
+                    >> (*(~eps_p(']') >> char_))    [actions.extract_doc_dirname]
                     ;
 
                 doc_copyright =
-                        "copyright" >> hard_space   [clear_a(copyright.first)]
-                    >> +( repeat_p(4)[digit_p]      [push_back_a(copyright.first)]
+                        "copyright" >> hard_space   [clear_a(actions.copyright.first)]
+                    >> +( repeat_p(4)[digit_p]      [push_back_a(actions.copyright.first)]
                           >> space
                         )
                     >> space
-                    >> (*(anychar_p - ']'))         [assign_a(copyright.second)]
+                    >> (*(~eps_p(']') >> char_))    [actions.extract_copyright_second]
                     ;
 
                 doc_purpose =
@@ -117,24 +118,25 @@ namespace quickbook
 
                 doc_category =
                         "category" >> hard_space
-                    >> (*(anychar_p - ']'))         [push_back_a(actions.doc_categories)]
+                    >> (*(~eps_p(']') >> char_))    [actions.extract_doc_category]
+                                                    [push_back_a(actions.doc_categories, actions.doc_category)]
                     ;
 
                 doc_author =
                         '[' >> space
-                    >>  (*(anychar_p - ','))        [assign_a(name.second)] // surname
+                    >>  (*(~eps_p(',') >> char_))   [actions.extract_name_second] // surname
                     >>  ',' >> space
-                    >>  (*(anychar_p - ']'))        [assign_a(name.first)] // firstname
+                    >>  (*(~eps_p(']') >> char_))   [actions.extract_name_first] // firstname
                     >>  ']'
                     ;
 
                 doc_authors =
                         "authors"
                     >>  hard_space
-                    >>  doc_author                  [push_back_a(actions.doc_authors, name)]
+                    >>  doc_author                  [push_back_a(actions.doc_authors, actions.name)]
                     >>  space
                     >>  *(  !(ch_p(',') >> space)
-                        >>  doc_author              [push_back_a(actions.doc_authors, name)]
+                        >>  doc_author              [push_back_a(actions.doc_authors, actions.name)]
                         >>  space
                         )
                     ;
@@ -146,7 +148,7 @@ namespace quickbook
 
                 doc_last_revision =
                         "last-revision" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_last_revision)]
+                    >> (*(~eps_p(']') >> char_))    [actions.extract_doc_last_revision]
                     ;
 
                 doc_source_mode =
@@ -176,16 +178,31 @@ namespace quickbook
                     |   (anychar_p - ']')           [actions.plain_char]
                     )
                     ;
+
+                char_ =
+                        str_p("\\n")                [actions.break_]
+                    |   "\\ "                       // ignore an escaped space
+                    |   '\\' >> punct_p             [actions.raw_char]
+                    |   "\\u" >> repeat_p(4) [chset<>("0-9a-fA-F")]
+                                                    [actions.escape_unicode]
+                    |   "\\U" >> repeat_p(8) [chset<>("0-9a-fA-F")]
+                                                    [actions.escape_unicode]
+                    |   (
+                            ("'''" >> !eol_p)       [actions.escape_pre]
+                        >>  *(anychar_p - "'''")    [actions.raw_char]
+                        >>  str_p("'''")            [actions.escape_post]
+                        )
+                    |   anychar_p                   [actions.plain_char]
+                    ;
             }
 
             bool unused;
-            std::pair<std::string, std::string> name;
-            std::pair<std::vector<std::string>, std::string> copyright;
             std::string category;
             rule<Scanner>   doc_info, doc_title, doc_version, doc_id, doc_dirname,
                             doc_copyright, doc_purpose, doc_category, doc_authors,
                             doc_author, comment, space, hard_space, doc_license,
-                            doc_last_revision, doc_source_mode, phrase, quickbook_version;
+                            doc_last_revision, doc_source_mode, phrase, quickbook_version,
+                            char_;
             phrase_grammar<Actions> common;
             symbols<> doc_types;
 

@@ -21,6 +21,7 @@ namespace quickbook
     // header info
         : doc_type()
         , doc_title()
+        , doc_title_raw()
         , doc_version()
         , doc_id()
         , doc_dirname()
@@ -72,9 +73,17 @@ namespace quickbook
 
     // actions
         , error(error_count)
+        , extract_doc_title(doc_title, phrase)
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
-
+        , extract_doc_version(doc_version, phrase)
+        , extract_doc_id(doc_id, phrase)
+        , extract_doc_dirname(doc_dirname, phrase)
+        , extract_copyright_second(copyright.second, phrase)
+        , extract_name_second(name.second, phrase)
+        , extract_name_first(name.first, phrase)
+        , extract_doc_last_revision(doc_last_revision, phrase)
+        , extract_doc_category(doc_category, phrase)
         , syntax_p(temp, source_mode, macro, *this)
         , code(out, phrase, syntax_p)
         , code_block(phrase, phrase, syntax_p)

@@ -35,6 +35,7 @@ namespace quickbook
     // header info
         std::string             doc_type;
         std::string             doc_title;
+        std::string             doc_title_raw;
         std::string             doc_version;
         std::string             doc_id;
         std::string             doc_dirname;
@@ -47,6 +48,13 @@ namespace quickbook
         std::string             include_doc_id;
         std::string             doc_license_1_1;
         std::string             doc_purpose_1_1;
+        //temporary state
+        std::pair<std::string, std::string>
+                                name;
+        std::pair<std::vector<std::string>, std::string>
+                                copyright;
+        std::string             doc_category;
+
 
     // main output stream
         collector               out;
@@ -110,8 +118,17 @@ namespace quickbook
     // actions
     ///////////////////////////////////////////////////////////////////////////
         error_action            error;
+        phrase_to_string_action extract_doc_title;
         phrase_to_string_action extract_doc_license;
         phrase_to_string_action extract_doc_purpose;
+        phrase_to_string_action extract_doc_version;
+        phrase_to_string_action extract_doc_id;
+        phrase_to_string_action extract_doc_dirname;
+        phrase_to_string_action extract_copyright_second;
+        phrase_to_string_action extract_name_second;
+        phrase_to_string_action extract_name_first;
+        phrase_to_string_action extract_doc_last_revision;
+        phrase_to_string_action extract_doc_category;
 
         syntax_highlight        syntax_p;
         code_action             code;

@@ -1569,12 +1569,12 @@ namespace quickbook
     void xml_author::operator()(std::pair<std::string, std::string> const& author) const
     {
         out << "      <author>\n"
-            << "        <firstname>";
-        detail::print_string(author.first, out.get());
-        out << "</firstname>\n"
-            << "        <surname>";
-        detail::print_string(author.second, out.get());
-        out << "</surname>\n"
+            << "        <firstname>"
+            << author.first
+            << "</firstname>\n"
+            << "        <surname>"
+            << author.second
+            << "</surname>\n"
             << "      </author>\n";
     }
 
@@ -1587,9 +1587,9 @@ namespace quickbook
           , copyright.first.end()
           , xml_year(out));
 
-        out << "      <holder>";
-        detail::print_string(copyright.second, out.get());
-        out << "</holder>\n"
+        out << "      <holder>"
+            << copyright.second
+            << "</holder>\n"
             << "    </copyright>\n"
             << "\n"
         ;
@@ -1610,7 +1610,7 @@ namespace quickbook
 
         if (actions.doc_id.empty())
             actions.doc_id = detail::make_identifier(
-                actions.doc_title.begin(),actions.doc_title.end());
+                actions.doc_title_raw.begin(),actions.doc_title_raw.end());
 
         if (actions.doc_dirname.empty() && actions.doc_type == "library")
             actions.doc_dirname = actions.doc_id;
@@ -1675,27 +1675,25 @@ namespace quickbook
             << " PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
             << "     \"http://www.boost.org/tools/boostbook/dtd/boostbook.dtd\">\n"
             << '<' << actions.doc_type << "\n"
-            << "    id=\"";
-        detail::print_string(actions.doc_id, out.get());
-        out << "\"\n";
+            << "    id=\""
+            << actions.doc_id
+            << "\"\n";
         
         if(actions.doc_type == "library")
         {
-            out << "    name=\"";
-            detail::print_string(actions.doc_title, out.get());
-            out << "\"\n";
+            out << "    name=\"" << actions.doc_title << "\"\n";
         }
 
         if(!actions.doc_dirname.empty())
         {
-            out << "    dirname=\"";
-            detail::print_string(actions.doc_dirname, out.get());
-            out << "\"\n";
+            out << "    dirname=\""
+                << actions.doc_dirname
+                << "\"\n";
         }
 
-        out << "    last-revision=\"";
-        detail::print_string(actions.doc_last_revision, out.get());
-        out << "\" \n"
+        out << "    last-revision=\""
+            << actions.doc_last_revision
+            << "\" \n"
             << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n";
             
         if(actions.doc_type == "library") {
@@ -1725,11 +1723,10 @@ namespace quickbook
     {
         if (!actions.doc_title.empty())
         {
-            out<< "  <title>";
-            detail::print_string(actions.doc_title, out.get());
+            out << "  <title>"
+                << actions.doc_title;
             if (!actions.doc_version.empty()) {
-                out << ' ';
-                detail::print_string(actions.doc_version, out.get());
+                out << ' ' << actions.doc_version;
             }
             out<< "</title>\n\n\n";
         }
@@ -1765,9 +1762,9 @@ namespace quickbook
             {
                 out << "    <legalnotice>\n"
                     << "      <para>\n"
-                    << "        ";
-                detail::print_string(actions.doc_license_1_1, out.get());
-                out << "\n"
+                    << "        "
+                    << actions.doc_license_1_1
+                    << "\n"
                     << "      </para>\n"
                     << "    </legalnotice>\n"
                     << "\n"
@@ -1826,9 +1823,9 @@ namespace quickbook
                 end = actions.doc_categories.end();
                 it != end; ++it)
             {
-                out << "    <" << actions.doc_type << "category name=\"category:";
-                detail::print_string(*it, out.get());
-                out << "\"></" << actions.doc_type << "category>\n"
+                out << "    <" << actions.doc_type << "category name=\"category:"
+                    << *it
+                    << "\"></" << actions.doc_type << "category>\n"
                     << "\n"
                 ;
             }
@@ -1852,6 +1849,7 @@ namespace quickbook
 
     void phrase_to_string_action::operator()(iterator first, iterator last) const
     {
+        out.clear();
         phrase.swap(out);
     }
 
