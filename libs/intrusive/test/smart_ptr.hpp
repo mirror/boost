@@ -13,6 +13,7 @@
 
 #include <boost/iterator.hpp>
 #include <boost/intrusive/pointer_plus_bits.hpp>
+#include <boost/pointer_cast.hpp>
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -312,7 +313,7 @@ inline T* boost_intrusive_get_pointer(const smart_ptr<T>  & p)
 //!Simulation of static_cast between pointers. Never throws.
 template<class T, class U> 
 inline smart_ptr<T> 
-   static_pointer_cast(smart_ptr<U> const & r)
+   static_pointer_cast(const smart_ptr<U> & r)
 {  
    return smart_ptr<T>(r, detail::static_cast_tag());  
 }

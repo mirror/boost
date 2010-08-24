@@ -2,8 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="slist"
-	ProjectGUID="{5A02061D-3728-4C49-AFC8-0130C1F161C0}"
+	Name="function_hook"
+	ProjectGUID="{761A79B4-9968-CB81-F02B-2A4497345475}"
+	RootNamespace="function_hook"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -20,7 +21,9 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../../../"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="BOOST_DATE_TIME_NO_LIB"
+				GeneratePreprocessedFile="0"
+				KeepComments="FALSE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
@@ -35,10 +38,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/slist.exe"
+				OutputFile="$(OutDir)/function_hook.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/slist.pdb"
+				ProgramDatabaseFile="$(OutDir)/function_hook.pdb"
+				GenerateMapFile="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -71,8 +75,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="../../../../../"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="BOOST_DATE_TIME_NO_LIB"
 				RuntimeLibrary="4"
+				DisableLanguageExtensions="FALSE"
+				ForceConformanceInForLoopScope="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -81,7 +87,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/slist.exe"
+				OutputFile="$(OutDir)/function_hook.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -116,9 +122,9 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4C737FF1-7AB5-3764-A066-252B75A372FF}">
 			<File
-				RelativePath="..\..\..\test\slist_test.cpp">
+				RelativePath="..\..\..\test\function_hook_test.cpp">
 			</File>
 		</Filter>
 	</Files>

@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2007-2009 Ion Gaztanaga
+ / Copyright (c) 2007-2010 Ion Gaztanaga
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
 [library Boost.Intrusive
     [quickbook 1.4]
     [authors [Krzikalla, Olaf], [Gaztanaga, Ion]]
-    [copyright 2005 Olaf Krzikalla, 2006-2009 Ion Gaztanaga]
+    [copyright 2005 Olaf Krzikalla, 2006-2010 Ion Gaztanaga]
     [id intrusive]
     [dirname intrusive]
     [purpose Intrusive containers]
@@ -198,7 +198,7 @@ Intrusive containers have also downsides:
    swapping can be used to implement move capabilities. To ease the implementation of
    copy constructors and assignment operators of classes storing [*Boost.Intrusive]
    containers, [*Boost.Intrusive] offers special cloning functions. See
-   [link intrusive.clone_from Cloning [*Boost.Intrusive] containers] section for more information.
+   [link intrusive.clone_from Cloning Boost.Intrusive containers] section for more information.
 
 *  Analyzing the thread safety of a program that uses containers is harder with intrusive containers, because
    the container might be modified indirectly without an explicit call to a container member.
@@ -246,7 +246,10 @@ just include:
 Every class to be inserted in an intrusive container, needs to contain a hook that
 will offer the necessary data and resources to be insertable in the container.
 With [*Boost.Intrusive] you just choose the hook to be a public base class or
-a public member of the class to be inserted.
+a public member of the class to be inserted. [*Boost.Intrusive] also offers 
+more flexible hooks for advanced users, as explained in the chapter
+[link intrusive.function_hooks Using function hooks], but usually base or member
+hooks are good enough for most users.
 
 [section:usage_base_hook Using base hooks]
 
@@ -450,6 +453,7 @@ stored object is not bound to or managed by the container:
    because the container contains a pointer to an non-existing object.
 
 [endsect]
+
 
 [endsect]
 
@@ -2147,7 +2151,7 @@ that erase an element from the container.
 
 [endsect]
 
-[section:clone_from Cloning [*Boost.Intrusive] containers]
+[section:clone_from Cloning Boost.Intrusive containers]
 
 As previously mentioned, [*Boost.Intrusive] containers are [*non-copyable and non-assignable], because
 intrusive containers don't allocate memory at all. To implement a copy-constructor or assignment operator,
@@ -2189,6 +2193,105 @@ Here is an example of `clone_from`:
 [doc_clone_from]
 
 [endsect]
+
+[section:function_hooks Using function hooks]
+
+A programmer might find that base or member hooks are not flexible enough in some situations.
+In some applications it would be optimal to put a hook deep inside a member of a class or just outside the class.
+[*Boost.Intrusive] has an easy option to allow such cases: [classref boost::intrusive::function_hook function_hook].
+
+This option is similar to [classref boost::intrusive::member_hook member_hook] or
+[classref boost::intrusive::base_hook base_hook], but the programmer can specify a function
+object that tells the container how to obtain a hook from a value and vice versa.
+The programmer just needs to define the following function object:
+
+[c++]
+
+   //This functor converts between value_type and a hook_type
+   struct Functor
+   {
+      //Required types
+      typedef /*impl-defined*/      hook_type;
+      typedef /*impl-defined*/      hook_ptr;
+      typedef /*impl-defined*/      const_hook_ptr;
+      typedef /*impl-defined*/      value_type;
+      typedef /*impl-defined*/      pointer;
+      typedef /*impl-defined*/      const_pointer;
+      //Required static functions
+      static hook_ptr to_hook_ptr (value_type &value);
+      static const_hook_ptr to_hook_ptr(const value_type &value);
+      static pointer to_value_ptr(hook_ptr n);
+      static const_pointer to_value_ptr(const_hook_ptr n);
+   };
+
+Converting from values to hooks is generally easy, since most hooks are
+in practice members or base classes of class data members. The inverse operation
+is a bit more complicated, but [*Boost.Intrusive] offers a bit of help with the function
+[funcref boost::intrusive::get_parent_from_member get_parent_from_member],
+which allows easy conversions from the address of a data member to the address of
+the parent holding that member. Let's see a little example of 
+[classref boost::intrusive::function_hook function_hook]:
+
+[import ../example/doc_function_hooks.cpp]
+[doc_function_hooks]
+
+[endsect]
+
+
+[section:recursive Recursive Boost.Intrusive containers]
+
+[*Boost.Intrusive] containers can be used to define recursive structures very easily,
+allowing complex data structures with very low overhead. Let's see an example:
+
+[import ../example/doc_recursive.cpp]
+[doc_recursive]
+
+Recursive data structures using [*Boost.Intrusive] containers must avoid using hook deduction to avoid early type
+instantiation:
+
+[c++]
+
+  //This leads to compilation error (Recursive is instantiated by 
+  //'list' to deduce hook properties (pointer type, tag, safe-mode...)
+  class Recursive
+  {  //...
+
+     list< Recursive > l;
+     //...
+  };
+
+  //Ok, programmer must specify the hook type to avoid early Recursive instantiation
+  class Recursive
+  {  //...
+     list< Recursive, base_hook<BaseHook> > l;
+     //...
+  };
+
+
+Member hooks are not suitable for recursive structures:
+
+[c++]
+
+   class Recursive
+   {
+      private:
+      Recursive(const Recursive&);
+      Recursive & operator=(const Recursive&);
+
+      public:
+      list_member_hook<> memhook;
+      list< Recursive, member_hook<Recursive, list_member_hook<>, &Recursive::memhook> > children;
+   };
+
+Specifying `&Recursive::memhook` (that is, the offset between memhook and Recursive) provokes an early
+instantiation of `Recursive`. To define recursive structures using member hooks, a programmer should use
+[classref ::boost::interprocess::function_hook function_hook]:
+
+[import ../example/doc_recursive_member.cpp]
+[doc_recursive_member]
+
+[endsect]
+
 
 [section:using_smart_pointers Using smart pointers with Boost.Intrusive containers]
 
@@ -3313,7 +3416,7 @@ If you are concerned with file sizes and compilation times, this option is your 
 
 When designing [*Boost.Intrusive] the following guidelines have been taken into account:
 
-[section: Boost.Intrusive in performance sensitive environments]
+[section:performance_sensitive Boost.Intrusive in performance sensitive environments]
 
 [*Boost.Intrusive] should be a valuable tool in performance sensitive environments,
 and following this guideline, [*Boost.Intrusive] has been designed to offer well
@@ -3327,7 +3430,7 @@ constructions.
 
 [endsect]
 
-[section: Boost.Intrusive in space constrained environments]
+[section:space_constrained Boost.Intrusive in space constrained environments]
 
 [*Boost.Intrusive] should be useful in space constrained environments,
 and following this guideline [*Boost.Intrusive] separates node algorithms
@@ -3344,7 +3447,7 @@ when the container is empty or contains few values.
 
 [endsect]
 
-[section: Boost.Intrusive as a basic building block]
+[section:basic_building_block Boost.Intrusive as a basic building block]
 
 [*Boost.Intrusive] can be a basic building block to build more complex containers
 and this potential has motivated many design decisions. For example, the ability
@@ -3358,7 +3461,7 @@ functions come in handy when implementing non-intrusive containers
 
 [endsect]
 
-[section: Extending Boost.Intrusive]
+[section:extending_intrusive Extending Boost.Intrusive]
 
 [*Boost.Intrusive] offers a wide range of containers but also allows the
 construction of custom containers reusing [*Boost.Intrusive] elements.
@@ -3728,6 +3831,28 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [section:release_notes Release Notes]
 
+[section:release_notes_boost_1_45_00 Boost 1.45 Release]
+
+*  Added `function_hook` option.
+*  Fixed bugs
+  [@https://svn.boost.org/trac/boost/ticket/3668 #3668],
+  [@https://svn.boost.org/trac/boost/ticket/3339 #3688],
+  [@https://svn.boost.org/trac/boost/ticket/3698 #3698],
+  [@https://svn.boost.org/trac/boost/ticket/3706 #3706],
+  [@https://svn.boost.org/trac/boost/ticket/3721 #3721].
+  [@https://svn.boost.org/trac/boost/ticket/3729 #3729],
+  [@https://svn.boost.org/trac/boost/ticket/3746 #3746],
+  [@https://svn.boost.org/trac/boost/ticket/3781 #3781],
+  [@https://svn.boost.org/trac/boost/ticket/3829 #3829],
+  [@https://svn.boost.org/trac/boost/ticket/3840 #3840],
+  [@https://svn.boost.org/trac/boost/ticket/3339 #3339],
+  [@https://svn.boost.org/trac/boost/ticket/3419 #3419],
+  [@https://svn.boost.org/trac/boost/ticket/3431 #3431],
+  [@https://svn.boost.org/trac/boost/ticket/4021 #4021],
+
+[endsect]
+
+
 [section:release_notes_boost_1_40_00 Boost 1.40 Release]
 
 *  Code cleanup in tree_algorithms.hpp and avl_tree_algorithms.hpp
@@ -3850,28 +3975,3 @@ helpful discussions.
 [endsect]
 
 [xinclude autodoc.xml]
-
-[section:license_notices License notices]
-
-Most of the internal implementation of red-black trees is based on that of SGI STL stl_tree.h file:
-
-['Copyright (c) 1996,1997 Silicon Graphics Computer Systems, Inc. 
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation. Silicon Graphics makes no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.]
-
-['Copyright (c) 1994 Hewlett-Packard Company 
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation. Hewlett-Packard Company makes no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.]
-
-The tree destruction algorithm is based on Julienne Walker and The EC Team code:
-
-['This code is in the public domain. Anyone may
-use it or change it in any way that they see
-fit. The author assumes no responsibility for 
-damages incurred through use of the original
-code or any variations thereof.]
-
-['It is requested, but not required, that due
-credit is given to the original author and
-anyone who has modified the code through
-a header comment, such as this one.]
-
-[endsect]

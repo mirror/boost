@@ -157,6 +157,9 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\options.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\parent_from_member.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_bits.hpp">
 			</File>
 			<File
@@ -374,6 +377,9 @@
 				RelativePath="..\..\..\example\doc_external_value_traits.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\example\doc_function_hooks.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\example\doc_how_to_use.cpp">
 			</File>
 			<File
@@ -393,6 +399,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_rbtree_algorithms.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_recursive.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_recursive_member.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_set.cpp">

@@ -10,10 +10,8 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/list.hpp>
-
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include "itestvalue.hpp"
 #include "smart_ptr.hpp"
@@ -500,4 +498,3 @@ int main( int, char* [] )
 
    return boost::report_errors();
 }
-#include <boost/intrusive/detail/config_end.hpp>
