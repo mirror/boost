@@ -27,33 +27,33 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
 
         typedef std::vector<std::string> string_list;
-        typedef std::vector<std::pair<std::string, std::string> > author_list;
-        typedef std::vector<std::pair<string_list, std::string> > copyright_list;
+
+        typedef std::vector<docinfo_string> docinfo_list;
+        typedef std::pair<docinfo_string, docinfo_string> author;
+        typedef std::vector<author> author_list;
+        typedef std::pair<string_list, docinfo_string> copyright_item;
+        typedef std::vector<copyright_item> copyright_list;
         typedef std::pair<char, int> mark_type;
         static int const max_template_depth = 100;
 
     // header info
         std::string             doc_type;
-        std::string             doc_title;
-        std::string             doc_title_raw;
-        std::string             doc_version;
+        docinfo_string          doc_title;
+        docinfo_string          doc_version;
         std::string             doc_id;
-        std::string             doc_dirname;
+        docinfo_string          doc_dirname;
         copyright_list          doc_copyrights;
-        std::string             doc_purpose;
-        string_list             doc_categories;
+        docinfo_string          doc_purpose;
+        docinfo_list            doc_categories;
         author_list             doc_authors;
-        std::string             doc_license;
-        std::string             doc_last_revision;
+        docinfo_string          doc_license;
+        docinfo_string          doc_last_revision;
         std::string             include_doc_id;
-        std::string             doc_license_1_1;
-        std::string             doc_purpose_1_1;
         //temporary state
-        std::pair<std::string, std::string>
-                                name;
-        std::pair<std::vector<std::string>, std::string>
-                                copyright;
-        std::string             doc_category;
+        docinfo_string          doc_id_tmp;
+        author                  name;
+        copyright_item          copyright;
+        docinfo_string          doc_category;
 
 
     // main output stream
@@ -118,17 +118,17 @@ namespace quickbook
     // actions
     ///////////////////////////////////////////////////////////////////////////
         error_action            error;
-        phrase_to_string_action extract_doc_title;
-        phrase_to_string_action extract_doc_license;
-        phrase_to_string_action extract_doc_purpose;
-        phrase_to_string_action extract_doc_version;
-        phrase_to_string_action extract_doc_id;
-        phrase_to_string_action extract_doc_dirname;
-        phrase_to_string_action extract_copyright_second;
-        phrase_to_string_action extract_name_second;
-        phrase_to_string_action extract_name_first;
-        phrase_to_string_action extract_doc_last_revision;
-        phrase_to_string_action extract_doc_category;
+        phrase_to_docinfo_action extract_doc_title;
+        phrase_to_docinfo_action extract_doc_license;
+        phrase_to_docinfo_action extract_doc_purpose;
+        phrase_to_docinfo_action extract_doc_version;
+        phrase_to_docinfo_action extract_doc_id;
+        phrase_to_docinfo_action extract_doc_dirname;
+        phrase_to_docinfo_action extract_copyright_second;
+        phrase_to_docinfo_action extract_name_second;
+        phrase_to_docinfo_action extract_name_first;
+        phrase_to_docinfo_action extract_doc_last_revision;
+        phrase_to_docinfo_action extract_doc_category;
 
         syntax_highlight        syntax_p;
         code_action             code;

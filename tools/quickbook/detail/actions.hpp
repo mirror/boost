@@ -838,6 +838,29 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
+    struct docinfo_string {
+        std::string raw;
+        std::string encoded;
+
+        docinfo_string() : raw(), encoded() {}
+
+        void swap(docinfo_string& x) {
+            raw.swap(x.raw);
+            encoded.swap(x.encoded);
+        }
+
+        void clear() {
+            raw.clear();
+            encoded.clear();
+        }
+
+        bool empty() const {
+            return raw.empty();
+        }
+
+        std::string const& get(unsigned version) const;
+    };
+
     struct xml_author
     {
         // Handles xml author
@@ -845,7 +868,7 @@ namespace quickbook
         xml_author(collector& out)
         : out(out) {}
 
-        void operator()(std::pair<std::string, std::string> const& author) const;
+        void operator()(std::pair<docinfo_string, docinfo_string> const& author) const;
 
         collector& out;
     };
@@ -869,7 +892,7 @@ namespace quickbook
         xml_copyright(collector& out)
             : out(out) {}
 
-        void operator()(std::pair<std::vector<std::string>, std::string> const &copyright) const;
+        void operator()(std::pair<std::vector<std::string>, docinfo_string> const &copyright) const;
 
         collector& out;
     };
@@ -885,6 +908,18 @@ namespace quickbook
         void operator()(iterator first, iterator last) const;
 
         std::string& out;
+        collector& phrase;
+    };
+
+    struct phrase_to_docinfo_action
+    {
+        phrase_to_docinfo_action(docinfo_string& out, collector& phrase)
+            : out(out)
+            , phrase(phrase) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        docinfo_string& out;
         collector& phrase;
     };
 

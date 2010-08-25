@@ -50,8 +50,7 @@ namespace quickbook
                     >> (doc_types >> eps_p)         [assign_a(actions.doc_type)]
                     >> hard_space
                     >>  (  *(~eps_p(ch_p('[') | ']' | eol_p) >> char_)
-                        )                           [assign_a(actions.doc_title_raw)]
-                                                    [actions.extract_doc_title]
+                        )                           [actions.extract_doc_title]
                     >>  !(
                             space >> '[' >>
                                 quickbook_version
@@ -65,10 +64,10 @@ namespace quickbook
                             | doc_id
                             | doc_dirname
                             | doc_copyright         [push_back_a(actions.doc_copyrights, actions.copyright)]
-                            | doc_purpose           [actions.extract_doc_purpose]
+                            | doc_purpose
                             | doc_category
                             | doc_authors
-                            | doc_license           [actions.extract_doc_license]
+                            | doc_license
                             | doc_last_revision
                             | doc_source_mode
                             )
@@ -113,7 +112,7 @@ namespace quickbook
 
                 doc_purpose =
                         "purpose" >> hard_space
-                    >> phrase                       [assign_a(actions.doc_purpose_1_1)]
+                    >> phrase                       [actions.extract_doc_purpose]
                     ;
 
                 doc_category =
@@ -143,7 +142,7 @@ namespace quickbook
 
                 doc_license =
                         "license" >> hard_space
-                    >> phrase                       [assign_a(actions.doc_license_1_1)]
+                    >> phrase                       [actions.extract_doc_license]
                     ;
 
                 doc_last_revision =

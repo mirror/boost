@@ -1502,7 +1502,8 @@ namespace quickbook
     void include_action::operator()(iterator first, iterator last) const
     {
         fs::path filein = include_search(actions.filename.parent_path(), std::string(first,last));
-        std::string doc_type, doc_id, doc_dirname, doc_last_revision;
+        std::string doc_type, doc_id;
+        docinfo_string doc_dirname, doc_last_revision;
 
         // swap the filenames
         std::swap(actions.filename, filein);
@@ -1566,19 +1567,24 @@ namespace quickbook
         //~ actions.templates = templates; $$$ fixme $$$
     }
 
-    void xml_author::operator()(std::pair<std::string, std::string> const& author) const
+    std::string const& docinfo_string::get(unsigned version) const
+    {
+        return (qbk_version_n < version) ? raw : encoded;
+    }
+
+    void xml_author::operator()(actions::author const& name) const
     {
         out << "      <author>\n"
             << "        <firstname>"
-            << author.first
+            << name.first.get(103)
             << "</firstname>\n"
             << "        <surname>"
-            << author.second
+            << name.second.get(103)
             << "</surname>\n"
             << "      </author>\n";
     }
 
-    void xml_copyright::operator()(std::pair<std::vector<std::string>, std::string> const& copyright) const
+    void xml_copyright::operator()(actions::copyright_item const& copyright) const
     {
         out << "\n" << "    <copyright>\n";
 
@@ -1588,7 +1594,7 @@ namespace quickbook
           , xml_year(out));
 
         out << "      <holder>"
-            << copyright.second
+            << copyright.second.get(103)
             << "</holder>\n"
             << "    </copyright>\n"
             << "\n"
@@ -1608,12 +1614,23 @@ namespace quickbook
         // The doc_info in the file has been parsed. Here's what we'll do
         // *before* anything else.
 
+        if (!actions.doc_id_tmp.empty())
+            actions.doc_id = actions.doc_id_tmp.get(103);
+
         if (actions.doc_id.empty())
             actions.doc_id = detail::make_identifier(
-                actions.doc_title_raw.begin(),actions.doc_title_raw.end());
+                actions.doc_title.raw.begin(),actions.doc_title.raw.end());
 
-        if (actions.doc_dirname.empty() && actions.doc_type == "library")
-            actions.doc_dirname = actions.doc_id;
+        if (actions.doc_dirname.empty() && actions.doc_type == "library") {
+            if (!actions.doc_id_tmp.empty()) {
+                actions.doc_dirname = actions.doc_id_tmp;
+            }
+            else {
+                actions.doc_dirname.raw = actions.doc_dirname.encoded = actions.doc_id;
+            }
+        }
+
+        actions.doc_id_tmp.clear();
 
         if (actions.doc_last_revision.empty())
         {
@@ -1627,7 +1644,7 @@ namespace quickbook
                     "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $"),
                 current_gm_time
             );
-            actions.doc_last_revision = strdate;
+            actions.doc_last_revision.raw = actions.doc_last_revision.encoded = strdate;
         }
 
         // if we're ignoring the document info, we're done.
@@ -1681,18 +1698,18 @@ namespace quickbook
         
         if(actions.doc_type == "library")
         {
-            out << "    name=\"" << actions.doc_title << "\"\n";
+            out << "    name=\"" << actions.doc_title.get(103) << "\"\n";
         }
 
         if(!actions.doc_dirname.empty())
         {
             out << "    dirname=\""
-                << actions.doc_dirname
+                << actions.doc_dirname.get(103)
                 << "\"\n";
         }
 
         out << "    last-revision=\""
-            << actions.doc_last_revision
+            << actions.doc_last_revision.get(103)
             << "\" \n"
             << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n";
             
@@ -1724,9 +1741,9 @@ namespace quickbook
         if (!actions.doc_title.empty())
         {
             out << "  <title>"
-                << actions.doc_title;
+                << actions.doc_title.get(103);
             if (!actions.doc_version.empty()) {
-                out << ' ' << actions.doc_version;
+                out << ' ' << actions.doc_version.get(103);
             }
             out<< "</title>\n\n\n";
         }
@@ -1756,33 +1773,15 @@ namespace quickbook
               , xml_copyright(out));
         }
 
-        if (qbk_version_n < 103)
+        if (!actions.doc_license.empty())
         {
-            if (!actions.doc_license_1_1.empty())
-            {
-                out << "    <legalnotice>\n"
-                    << "      <para>\n"
-                    << "        ";
-                detail::print_string(actions.doc_license_1_1, out.get());
-                out << "\n"
-                    << "      </para>\n"
-                    << "    </legalnotice>\n"
-                    << "\n"
-                ;
-            }
-        }
-        else
-        {
-            if (!actions.doc_license.empty())
-            {
-                out << "    <legalnotice>\n"
-                    << "      <para>\n"
-                    << "        " << actions.doc_license << "\n"
-                    << "      </para>\n"
-                    << "    </legalnotice>\n"
-                    << "\n"
-                ;
-            }
+            out << "    <legalnotice>\n"
+                << "      <para>\n"
+                << "        " << actions.doc_license.get(103) << "\n"
+                << "      </para>\n"
+                << "    </legalnotice>\n"
+                << "\n"
+            ;
         }
 
         if (!actions.doc_purpose.empty())
@@ -1792,23 +1791,11 @@ namespace quickbook
                 invalid_attributes.push_back("purpose");
             }
 
-            if (qbk_version_n < 103)
-            {
-                out << "    <" << actions.doc_type << "purpose>\n"
-                    << "      ";
-                detail::print_string(actions.doc_purpose_1_1, out.get());
-                out << "    </" << actions.doc_type << "purpose>\n"
-                    << "\n"
+            out << "    <" << actions.doc_type << "purpose>\n"
+                << "      " << actions.doc_purpose.get(103)
+                << "    </" << actions.doc_type << "purpose>\n"
+                << "\n"
                 ;
-            }
-            else
-            {
-                out << "    <" << actions.doc_type << "purpose>\n"
-                    << "      " << actions.doc_purpose
-                    << "    </" << actions.doc_type << "purpose>\n"
-                    << "\n"
-                ;
-            }
         }
 
         if (!actions.doc_categories.empty())
@@ -1818,13 +1805,13 @@ namespace quickbook
                 invalid_attributes.push_back("category");
             }
 
-            for(actions::string_list::const_iterator
+            for(actions::docinfo_list::const_iterator
                 it = actions.doc_categories.begin(),
                 end = actions.doc_categories.end();
                 it != end; ++it)
             {
                 out << "    <" << actions.doc_type << "category name=\"category:"
-                    << *it
+                    << it->get(103)
                     << "\"></" << actions.doc_type << "category>\n"
                     << "\n"
                 ;
@@ -1851,6 +1838,13 @@ namespace quickbook
     {
         out.clear();
         phrase.swap(out);
+    }
+
+    void phrase_to_docinfo_action::operator()(iterator first, iterator last) const
+    {
+        out.encoded.clear();
+        phrase.swap(out.encoded);
+        out.raw = std::string(first, last);
     }
 
     void copy_stream_action::operator()(iterator first, iterator last) const

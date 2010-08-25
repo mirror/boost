@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<library id="test_that______are_being_escaped_" name="Test that &amp;, &lt; are being escaped."
-dirname="test_that______are_being_escaped_" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
+<library id="test_that__amp____lt__are_being_escaped_" name="Test that &amp;, &lt; are being escaped."
+dirname="test_that__amp____lt__are_being_escaped_" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <libraryinfo>
     <legalnotice>
@@ -14,7 +14,7 @@ dirname="test_that______are_being_escaped_" last-revision="DEBUG MODE Date: 2000
     </librarypurpose>
   </libraryinfo>
   <title>Test that &amp;, &lt; are being escaped.</title>
-  <section id="test_that______are_being_escaped_.escapes___explicitly_written_markup">
+  <section id="test_that__amp____lt__are_being_escaped_.escapes___explicitly_written_markup">
     <title>Escapes &amp; explicitly written markup</title>
     <itemizedlist>
       <listitem>
