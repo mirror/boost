@@ -153,17 +153,17 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <default>boost::parameter::void_</default>
           </template-type-parameter>
         </template>
-        <purpose>Specify a the template type parameters of a boost::signals2::signal using named parameters.</purpose>
+        <purpose>Specify a the template type parameters of a <classname>boost::signals2::signal</classname> using named parameters.</purpose>
         <description>
           <para>The <code>signal_type</code> metafunction employs the Boost.Parameter library to
-            allow users to specify the template type parameters of a <classname>signal</classname>
+            allow users to specify the template type parameters of a <classname>signals2::signal</classname>
             using named parameters.  The resulting signal type is provided through the
             <code>signal_type::type</code> typedef.  Named template type parameters
             can enhance readability of code, and provide convenience for specifying classes
             which have a large number of template parameters.
           </para>
           <para>The template type parameters may be passed positionally, similarly to passing them
-            to the <classname>signal</classname> class directly.  Or, they may be passed as named template parameters
+            to the <classname>signals2::signal</classname> class directly.  Or, they may be passed as named template parameters
             by wrapping them in one of the template keyword classes provided in the
             <code>boost::signals2::keywords</code> namespace.  The supported template keywords are:
             <classname>keywords::signature_type</classname>, <classname>keywords::combiner_type</classname>,

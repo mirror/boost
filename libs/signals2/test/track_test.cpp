@@ -9,6 +9,7 @@
 
 // For more information, see http://www.boost.org
 
+#include <memory>
 #include <boost/optional.hpp>
 #include <boost/ref.hpp>
 #include <boost/shared_ptr.hpp>
@@ -108,5 +109,36 @@ int test_main(int, char*[])
     BOOST_CHECK(s1(2) == 2);
   }
   BOOST_CHECK(s1(2) == 0);
+
+// there isn't a boost config macro that detects the existance of std::shared_ptr or std::weak_ptr,
+// so we rely on BOOST_NO_VARIADIC_TEMPLATES as a hack
+#ifndef BOOST_NO_VARIADIC_TEMPLATES
+  // Test tracking through std::shared_ptr/weak_ptr
+  BOOST_CHECK(s1(5) == 0);
+  {
+    std::shared_ptr<int> shorty(new int());
+    s1.connect(sig_type::slot_type(swallow(), shorty.get(), _1).track_foreign(shorty));
+    BOOST_CHECK(s1(5) == 5);
+  }
+  BOOST_CHECK(s1(5) == 0);
+  {
+    std::shared_ptr<int> shorty(new int());
+    s1.connect
+    (
+      sig_type::slot_type
+      (
+        swallow(),
+        shorty.get(),
+        _1
+      ).track_foreign
+      (
+        std::weak_ptr<int>(shorty)
+      )
+    );
+    BOOST_CHECK(s1(5) == 5);
+  }
+  BOOST_CHECK(s1(5) == 0);
+#endif
+
   return 0;
 }
