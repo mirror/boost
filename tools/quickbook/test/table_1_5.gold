@@ -2,8 +2,6 @@
 <!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <article id="table_1_5" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Table 1.5</title>
-  <articleinfo>
-  </articleinfo>
   <table frame="all" id="table_1_5.table1">
     <title>Table 1</title>
     <tgroup cols="1">

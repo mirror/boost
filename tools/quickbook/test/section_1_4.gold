@@ -3,8 +3,6 @@
 <article id="section_id_1_4" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Section Id 1.4</title>
-  <articleinfo>
-  </articleinfo>
   <section id="section_id_1_4.id_test1">
     <title><link linkend="section_id_1_4.id_test1">Quickbook section id test</link></title>
   </section>

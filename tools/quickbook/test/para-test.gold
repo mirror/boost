@@ -3,8 +3,6 @@
 <article id="paragraph_test" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Paragraph Test</title>
-  <articleinfo>
-  </articleinfo>
   <section id="paragraph_test.some_paragraphs">
     <title><link linkend="paragraph_test.some_paragraphs">Some Paragraphs</link></title>
     <para>

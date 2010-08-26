@@ -8,6 +8,7 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
+#include <sstream>
 #include <numeric>
 #include <functional>
 #include <algorithm>
@@ -1718,18 +1719,17 @@ namespace quickbook
     void write_document_info(collector& out, quickbook::actions& actions)
     {
         std::vector<std::string> invalid_attributes;
-
-        out << "  <" << actions.doc_type << "info>\n";
+        std::ostringstream tmp;
 
         if(!actions.doc_authors.empty())
         {
-            out << "    <authorgroup>\n";
+            tmp << "    <authorgroup>\n";
             for(actions::author_list::const_iterator
                 it = actions.doc_authors.begin(),
                 end = actions.doc_authors.end();
                 it != end; ++it)
             {
-                out << "      <author>\n"
+                tmp << "      <author>\n"
                     << "        <firstname>"
                     << it->first.get(103)
                     << "</firstname>\n"
@@ -1738,7 +1738,7 @@ namespace quickbook
                     << "</surname>\n"
                     << "      </author>\n";
             }
-            out << "    </authorgroup>\n";
+            tmp << "    </authorgroup>\n";
         }
 
         if (!actions.doc_copyrights.empty())
@@ -1748,17 +1748,17 @@ namespace quickbook
                 end = actions.doc_copyrights.end();
                 it != end; ++it)
             {
-                out << "\n" << "    <copyright>\n";
+                tmp << "\n" << "    <copyright>\n";
         
                 for(actions::string_list::const_iterator
                     it2 = it->first.begin(),
                     end = it->first.end();
                     it2 != end; ++it2)
                 {
-                    out << "      <year>" << *it2 << "</year>\n";
+                    tmp << "      <year>" << *it2 << "</year>\n";
                 }
         
-                out << "      <holder>"
+                tmp << "      <holder>"
                     << it->second.get(103)
                     << "</holder>\n"
                     << "    </copyright>\n"
@@ -1769,7 +1769,7 @@ namespace quickbook
 
         if (!actions.doc_license.empty())
         {
-            out << "    <legalnotice>\n"
+            tmp << "    <legalnotice>\n"
                 << "      <para>\n"
                 << "        " << actions.doc_license.get(103) << "\n"
                 << "      </para>\n"
@@ -1785,7 +1785,7 @@ namespace quickbook
                 invalid_attributes.push_back("purpose");
             }
 
-            out << "    <" << actions.doc_type << "purpose>\n"
+            tmp << "    <" << actions.doc_type << "purpose>\n"
                 << "      " << actions.doc_purpose.get(103)
                 << "    </" << actions.doc_type << "purpose>\n"
                 << "\n"
@@ -1804,7 +1804,7 @@ namespace quickbook
                 end = actions.doc_categories.end();
                 it != end; ++it)
             {
-                out << "    <" << actions.doc_type << "category name=\"category:"
+                tmp << "    <" << actions.doc_type << "category name=\"category:"
                     << it->get(103)
                     << "\"></" << actions.doc_type << "category>\n"
                     << "\n"
@@ -1812,10 +1812,16 @@ namespace quickbook
             }
         }
 
-        out << "  </" << actions.doc_type << "info>\n"
-            << "\n"
-        ;
-        
+        std::string value = tmp.str();
+        if(!value.empty())
+        {
+            out << "  <" << actions.doc_type << "info>\n"
+                << value
+                << "  </" << actions.doc_type << "info>\n"
+                << "\n"
+            ;
+        }
+
         if(!invalid_attributes.empty())
         {
             detail::outwarn(actions.filename.file_string(),1)

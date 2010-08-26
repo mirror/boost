@@ -3,8 +3,6 @@
 <article id="variable_list_tests" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Variable List Tests</title>
-  <articleinfo>
-  </articleinfo>
   <variablelist>
     <title>Empty</title>
   </variablelist>
