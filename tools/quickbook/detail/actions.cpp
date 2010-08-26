@@ -759,7 +759,7 @@ namespace quickbook
             }
             else if (!body.is_block)
             {
-                simple_phrase_grammar<quickbook::actions> phrase_p(actions);
+                simple_phrase_grammar phrase_p(actions);
 
                 //  do a phrase level parse
                 iterator first(body.content.begin(), body.content.end(), body.position);
@@ -770,7 +770,7 @@ namespace quickbook
             }
             else
             {
-                block_grammar<quickbook::actions> block_p(actions, true);
+                block_grammar block_p(actions, true);
 
                 //  do a block level parse
                 //  ensure that we have enough trailing newlines to eliminate

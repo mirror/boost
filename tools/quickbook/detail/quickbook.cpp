@@ -50,11 +50,10 @@ namespace quickbook
     //  Parse the macros passed as command line parameters
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename Actions>
     struct command_line_grammar
-        : public grammar<command_line_grammar<Actions> >
+        : public grammar<command_line_grammar>
     {
-        command_line_grammar(Actions& actions)
+        command_line_grammar(quickbook::actions& actions)
             : actions(actions) {}
 
         template <typename Scanner>
@@ -63,7 +62,7 @@ namespace quickbook
             definition(command_line_grammar const& self)
                 : unused(false), common(self.actions, unused)
             {
-                Actions& actions = self.actions;
+                quickbook::actions& actions = self.actions;
 
                 macro =
                         *space_p
@@ -90,18 +89,18 @@ namespace quickbook
 
             bool unused;
             rule<Scanner> macro, macro_identifier, phrase;
-            phrase_grammar<Actions> common;
+            phrase_grammar common;
 
             rule<Scanner> const&
             start() const { return macro; }
         };
 
-        Actions& actions;
+        quickbook::actions& actions;
     };
 
     static void set_macros(actions& actor)
     {
-        quickbook::command_line_grammar<actions> grammar(actor);
+        quickbook::command_line_grammar grammar(actor);
 
         for(std::vector<std::string>::const_iterator
                 it = preset_defines.begin(),
@@ -140,14 +139,14 @@ namespace quickbook
         iterator_type first(storage.begin(), storage.end(), filein_);
         iterator_type last(storage.end(), storage.end());
 
-        doc_info_grammar<actions> l(actor);
+        doc_info_grammar l(actor);
         parse_info<iterator_type> info = parse(first, last, l);
 
         if (info.hit || ignore_docinfo)
         {
             pre(actor.out, actor, ignore_docinfo);
 
-            block_grammar<actions> g(actor);
+            block_grammar g(actor);
             info = parse(info.hit ? info.stop : first, last, g);
             if (info.full)
             {

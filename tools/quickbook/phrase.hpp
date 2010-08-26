@@ -11,6 +11,7 @@
 #define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
 #include "./detail/quickbook.hpp"
+#include "./detail/actions_class.hpp"
 #include "detail/utils.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
@@ -58,10 +59,9 @@ namespace quickbook
             ;
     }
 
-    template <typename Actions>
-    struct phrase_grammar : grammar<phrase_grammar<Actions> >
+    struct phrase_grammar : grammar<phrase_grammar>
     {
-        phrase_grammar(Actions& actions, bool& no_eols)
+        phrase_grammar(quickbook::actions& actions, bool& no_eols)
             : no_eols(no_eols), actions(actions) {}
 
         template <typename Scanner>
@@ -70,7 +70,7 @@ namespace quickbook
             definition(phrase_grammar const& self)
             {
                 using detail::var;
-                Actions& actions = self.actions;
+                quickbook::actions& actions = self.actions;
 
                 space =
                     *(space_p | comment)
@@ -490,14 +490,13 @@ namespace quickbook
         };
 
         bool& no_eols;
-        Actions& actions;
+        quickbook::actions& actions;
     };
 
-    template <typename Actions>
     struct simple_phrase_grammar
-    : public grammar<simple_phrase_grammar<Actions> >
+    : public grammar<simple_phrase_grammar >
     {
-        simple_phrase_grammar(Actions& actions)
+        simple_phrase_grammar(quickbook::actions& actions)
             : actions(actions) {}
 
         template <typename Scanner>
@@ -506,7 +505,7 @@ namespace quickbook
             definition(simple_phrase_grammar const& self)
                 : unused(false), common(self.actions, unused)
             {
-                Actions& actions = self.actions;
+                quickbook::actions& actions = self.actions;
 
                 phrase =
                    *(   common
@@ -526,13 +525,13 @@ namespace quickbook
 
             bool unused;
             rule<Scanner> phrase, comment, dummy_block;
-            phrase_grammar<Actions> common;
+            phrase_grammar common;
 
             rule<Scanner> const&
             start() const { return phrase; }
         };
 
-        Actions& actions;
+        quickbook::actions& actions;
     };
 }
 

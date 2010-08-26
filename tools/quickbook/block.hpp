@@ -24,10 +24,9 @@ namespace quickbook
 {
     using namespace boost::spirit::classic;
 
-    template <typename Actions>
-    struct block_grammar : grammar<block_grammar<Actions> >
+    struct block_grammar : grammar<block_grammar>
     {
-        block_grammar(Actions& actions_, bool skip_initial_spaces = false)
+        block_grammar(quickbook::actions& actions_, bool skip_initial_spaces = false)
             : actions(actions_), skip_initial_spaces(skip_initial_spaces) { }
 
         template <typename Scanner>
@@ -38,7 +37,7 @@ namespace quickbook
                 , common(self.actions, no_eols)
             {
                 using detail::var;
-                Actions& actions = self.actions;
+                quickbook::actions& actions = self.actions;
 
                 if (self.skip_initial_spaces)
                 {
@@ -468,13 +467,13 @@ namespace quickbook
 
             symbols<>       paragraph_end_markups;
 
-            phrase_grammar<Actions> common;
+            phrase_grammar common;
 
             rule<Scanner> const&
             start() const { return start_; }
         };
 
-        Actions&   actions;
+        quickbook::actions& actions;
         bool const skip_initial_spaces;
     };
 }

@@ -21,11 +21,10 @@ namespace quickbook
 {
     using namespace boost::spirit::classic;
 
-    template <typename Actions>
     struct doc_info_grammar
-    : public grammar<doc_info_grammar<Actions> >
+    : public grammar<doc_info_grammar>
     {
-        doc_info_grammar(Actions& actions)
+        doc_info_grammar(quickbook::actions& actions)
             : actions(actions) {}
 
         template <typename Scanner>
@@ -36,7 +35,7 @@ namespace quickbook
             definition(doc_info_grammar const& self)
                 : unused(false), common(self.actions, unused)
             {
-                Actions& actions = self.actions;
+                quickbook::actions& actions = self.actions;
 
                 doc_types =
                     "book", "article", "library", "chapter", "part"
@@ -202,14 +201,14 @@ namespace quickbook
                             doc_author, comment, space, hard_space, doc_license,
                             doc_last_revision, doc_source_mode, phrase, quickbook_version,
                             char_;
-            phrase_grammar<Actions> common;
+            phrase_grammar common;
             symbols<> doc_types;
 
             rule<Scanner> const&
             start() const { return doc_info; }
         };
 
-        Actions& actions;
+        quickbook::actions& actions;
     };
 }
 

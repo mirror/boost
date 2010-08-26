@@ -19,7 +19,6 @@ namespace quickbook
       , do_macro_action
       , pre_escape_back
       , post_escape_back
-      , actions
       , unexpected_char
       , collector>
     cpp_p_type;
@@ -31,7 +30,6 @@ namespace quickbook
       , do_macro_action
       , pre_escape_back
       , post_escape_back
-      , actions
       , unexpected_char
       , collector>
     python_p_type;
@@ -42,7 +40,6 @@ namespace quickbook
       , do_macro_action
       , pre_escape_back
       , post_escape_back
-      , actions
       , collector>
     teletype_p_type;
     

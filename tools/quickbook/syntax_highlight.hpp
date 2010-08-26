@@ -29,13 +29,12 @@ namespace quickbook
       , typename DoMacro
       , typename PreEscape
       , typename PostEscape
-      , typename EscapeActions
       , typename Unexpected
       , typename Out>
     struct cpp_highlight
-    : public grammar<cpp_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, EscapeActions, Unexpected, Out> >
+    : public grammar<cpp_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, Unexpected, Out> >
     {
-        cpp_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
+        cpp_highlight(Out& out, Macro const& macro, DoMacro do_macro, actions& escape_actions)
         : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
 
         template <typename Scanner>
@@ -155,7 +154,7 @@ namespace quickbook
                             string_char;
 
             symbols<> keyword_;
-            phrase_grammar<EscapeActions> common;
+            phrase_grammar common;
             std::string save;
             bool unused;
 
@@ -166,7 +165,7 @@ namespace quickbook
         Out& out;
         Macro const& macro;
         DoMacro do_macro;
-        EscapeActions& escape_actions;
+        actions& escape_actions;
     };
 
     // Grammar for Python highlighting
@@ -179,13 +178,12 @@ namespace quickbook
       , typename DoMacro
       , typename PreEscape
       , typename PostEscape
-      , typename EscapeActions
       , typename Unexpected
       , typename Out>
     struct python_highlight
-    : public grammar<python_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, EscapeActions, Unexpected, Out> >
+    : public grammar<python_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, Unexpected, Out> >
     {
-        python_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
+        python_highlight(Out& out, Macro const& macro, DoMacro do_macro, actions& escape_actions)
         : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
 
         template <typename Scanner>
@@ -310,7 +308,7 @@ namespace quickbook
                             qbk_phrase, escape, string_char;
 
             symbols<> keyword_;
-            phrase_grammar<EscapeActions> common;
+            phrase_grammar common;
             std::string save;
             bool unused;
 
@@ -321,7 +319,7 @@ namespace quickbook
         Out& out;
         Macro const& macro;
         DoMacro do_macro;
-        EscapeActions& escape_actions;
+        actions& escape_actions;
     };
 
     // Grammar for plain text (no actual highlighting)
@@ -331,12 +329,11 @@ namespace quickbook
       , typename DoMacro
       , typename PreEscape
       , typename PostEscape
-      , typename EscapeActions
       , typename Out>
     struct teletype_highlight
-    : public grammar<teletype_highlight<CharProcess, Macro, DoMacro, PreEscape, PostEscape, EscapeActions, Out> >
+    : public grammar<teletype_highlight<CharProcess, Macro, DoMacro, PreEscape, PostEscape, Out> >
     {
-        teletype_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
+        teletype_highlight(Out& out, Macro const& macro, DoMacro do_macro, actions& escape_actions)
         : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
 
         template <typename Scanner>
@@ -388,7 +385,7 @@ namespace quickbook
 
             rule<Scanner> program, macro, qbk_phrase, escape;
 
-            phrase_grammar<EscapeActions> common;
+            phrase_grammar common;
             std::string save;
             bool unused;
 
@@ -399,7 +396,7 @@ namespace quickbook
         Out& out;
         Macro const& macro;
         DoMacro do_macro;
-        EscapeActions& escape_actions;
+        actions& escape_actions;
     };
 
 }
