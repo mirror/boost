@@ -26,6 +26,7 @@ exe quickbook
     post_process.cpp
     collector.cpp
     template_stack.cpp
+    code_snippet.cpp
     markups.cpp
     syntax_highlight.cpp
     block_grammar.cpp

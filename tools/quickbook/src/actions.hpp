@@ -49,6 +49,8 @@ namespace quickbook
     // forward declarations
     struct actions;
     int parse_file(char const* filein_, actions& actor, bool ignore_docinfo = false);
+    int load_snippets(std::string const& file, std::vector<template_symbol>& storage,
+        std::string const& extension, std::string const& doc_id);
 
     struct error_action
     {
