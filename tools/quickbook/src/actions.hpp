@@ -32,11 +32,11 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit::classic;
-
+    namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
-    typedef position_iterator<std::string::const_iterator> iterator;
-    typedef symbols<std::string> string_symbols;
+
+    typedef cl::position_iterator<std::string::const_iterator> iterator;
+    typedef cl::symbols<std::string> string_symbols;
     typedef std::map<std::string, std::string> attribute_map;
 
     struct actions;

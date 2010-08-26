@@ -17,6 +17,8 @@
 
 namespace quickbook
 {
+    using namespace boost::spirit::classic;
+
     struct code_snippet_actions
     {
         code_snippet_actions(std::vector<template_symbol>& storage,

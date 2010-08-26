@@ -14,14 +14,15 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit::classic;
+    namespace cl = boost::spirit::classic;
 
     template <typename Scanner>
     struct phrase_grammar::definition
     {
         definition(phrase_grammar const& self);
 
-        rule<Scanner>   space, blank, comment, phrase, phrase_markup, image,
+        cl::rule<Scanner>
+                        space, blank, comment, phrase, phrase_markup, image,
                         simple_phrase_end, phrase_end, bold, italic, underline, teletype,
                         strikethrough, escape, url, common, funcref, classref,
                         memberref, enumref, macroref, headerref, conceptref, globalref,
@@ -36,7 +37,7 @@ namespace quickbook
                         template_inner_arg_1_5, brackets_1_5
                         ;
 
-        rule<Scanner> const&
+        cl::rule<Scanner> const&
         start() const { return common; }
     };
 }

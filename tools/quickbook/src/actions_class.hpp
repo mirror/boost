@@ -15,7 +15,7 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit::classic;
+    namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
 
     struct actions

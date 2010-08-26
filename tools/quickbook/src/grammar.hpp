@@ -15,10 +15,10 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit::classic;
+    namespace cl = boost::spirit::classic;
 
     struct doc_info_grammar
-    : public grammar<doc_info_grammar>
+    : public cl::grammar<doc_info_grammar>
     {
         doc_info_grammar(quickbook::actions& actions)
             : actions(actions) {}
@@ -29,7 +29,7 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    struct block_grammar : grammar<block_grammar>
+    struct block_grammar : cl::grammar<block_grammar>
     {
         block_grammar(quickbook::actions& actions_, bool skip_initial_spaces = false)
             : actions(actions_), skip_initial_spaces(skip_initial_spaces) { }
@@ -41,7 +41,7 @@ namespace quickbook
         bool const skip_initial_spaces;
     };
 
-    struct phrase_grammar : grammar<phrase_grammar>
+    struct phrase_grammar : cl::grammar<phrase_grammar>
     {
         phrase_grammar(quickbook::actions& actions, bool& no_eols)
             : no_eols(no_eols), actions(actions) {}
@@ -53,7 +53,7 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    struct simple_phrase_grammar : public grammar<simple_phrase_grammar >
+    struct simple_phrase_grammar : public cl::grammar<simple_phrase_grammar >
     {
         simple_phrase_grammar(quickbook::actions& actions)
             : actions(actions) {}
@@ -65,7 +65,7 @@ namespace quickbook
     };
 
     struct command_line_grammar
-        : public grammar<command_line_grammar>
+        : public cl::grammar<command_line_grammar>
     {
         command_line_grammar(quickbook::actions& actions)
             : actions(actions) {}
@@ -77,7 +77,7 @@ namespace quickbook
     };
 
     template <typename Iterator, typename Grammar>
-    parse_info<Iterator> parse(Iterator&, Iterator, Grammar&);
+    cl::parse_info<Iterator> parse(Iterator&, Iterator, Grammar&);
 }
 
 #endif
