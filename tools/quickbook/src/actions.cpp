@@ -17,13 +17,13 @@
 #include <boost/filesystem/v2/fstream.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/join.hpp>
-#include "./quickbook.hpp"
-#include "./actions.hpp"
-#include "./utils.hpp"
-#include "./markups.hpp"
-#include "./actions_class.hpp"
-#include "./grammar.hpp"
-#include "./code_snippet.hpp"
+#include "quickbook.hpp"
+#include "actions.hpp"
+#include "utils.hpp"
+#include "markups.hpp"
+#include "actions_class.hpp"
+#include "grammar.hpp"
+#include "code_snippet.hpp"
 
 namespace quickbook
 {

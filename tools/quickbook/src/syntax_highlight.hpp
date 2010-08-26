@@ -15,7 +15,7 @@
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
-#include "./phrase_grammar.hpp"
+#include "phrase_grammar.hpp"
 
 namespace quickbook
 {

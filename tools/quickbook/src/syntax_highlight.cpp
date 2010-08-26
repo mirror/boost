@@ -7,8 +7,8 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#include "./syntax_highlight.hpp"
-#include "./actions_class.hpp"
+#include "syntax_highlight.hpp"
+#include "actions_class.hpp"
 
 namespace quickbook
 {

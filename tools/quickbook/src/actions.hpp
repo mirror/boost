@@ -20,9 +20,9 @@
 #include <boost/filesystem/v2/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
-#include "./collector.hpp"
-#include "./template_stack.hpp"
-#include "./utils.hpp"
+#include "collector.hpp"
+#include "template_stack.hpp"
+#include "utils.hpp"
 
 #ifdef BOOST_MSVC
 // disable copy/assignment could not be generated, unreferenced formal params

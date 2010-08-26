@@ -7,12 +7,12 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#include "./grammar.hpp"
-#include "./quickbook.hpp"
-#include "./actions_class.hpp"
-#include "./post_process.hpp"
-#include "./utils.hpp"
-#include "./input_path.hpp"
+#include "grammar.hpp"
+#include "quickbook.hpp"
+#include "actions_class.hpp"
+#include "post_process.hpp"
+#include "utils.hpp"
+#include "input_path.hpp"
 #include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/v2/path.hpp>

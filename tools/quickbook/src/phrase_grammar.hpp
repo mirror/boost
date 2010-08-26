@@ -10,7 +10,7 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
-#include "./grammar.hpp"
+#include "grammar.hpp"
 
 namespace quickbook
 {

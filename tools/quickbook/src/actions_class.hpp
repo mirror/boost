@@ -10,7 +10,7 @@
 #if !defined(BOOST_SPIRIT_ACTIONS_CLASS_HPP)
 #define BOOST_SPIRIT_ACTIONS_CLASS_HPP
 
-#include "./actions.hpp"
+#include "actions.hpp"
 #include <boost/tuple/tuple.hpp>
 
 namespace quickbook

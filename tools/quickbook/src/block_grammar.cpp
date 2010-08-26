@@ -8,10 +8,10 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include "./phrase_grammar.hpp"
-#include "./quickbook.hpp"
-#include "./utils.hpp"
-#include "./actions_class.hpp"
+#include "phrase_grammar.hpp"
+#include "quickbook.hpp"
+#include "utils.hpp"
+#include "actions_class.hpp"
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_assign_actor.hpp>

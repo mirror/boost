@@ -7,7 +7,7 @@
 =============================================================================*/
 
 #include <boost/program_options.hpp>
-#include "./input_path.hpp"
+#include "input_path.hpp"
 
 #if !(defined(__cygwin__) || defined(__CYGWIN__))
 
