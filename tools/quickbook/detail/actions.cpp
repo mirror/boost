@@ -1620,6 +1620,8 @@ namespace quickbook
             return;
         }
 
+        // Quickbook version
+
         if (qbk_major_version == -1)
         {
             // hard code quickbook version to v1.1
@@ -1652,6 +1654,35 @@ namespace quickbook
                 << std::endl;
             ++actions.error_count;
         }
+
+        // Warn about invalid fields
+
+        if (actions.doc_type != "library")
+        {
+            std::vector<std::string> invalid_attributes;
+
+            if (!actions.doc_purpose.empty())
+                invalid_attributes.push_back("purpose");
+
+            if (!actions.doc_categories.empty())
+                invalid_attributes.push_back("category");
+
+            if (!actions.doc_dirname.empty())
+                invalid_attributes.push_back("dirname");
+
+            if(!invalid_attributes.empty())
+            {
+                detail::outwarn(actions.filename.file_string(),1)
+                    << (invalid_attributes.size() > 1 ?
+                        "Invalid attributes" : "Invalid attribute")
+                    << " for '" << actions.doc_type << " document info': "
+                    << boost::algorithm::join(invalid_attributes, ", ")
+                    << "\n"
+                    ;
+            }
+        }
+
+        // Write out header
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             << "<!DOCTYPE "
@@ -1718,7 +1749,6 @@ namespace quickbook
 
     void write_document_info(collector& out, quickbook::actions& actions)
     {
-        std::vector<std::string> invalid_attributes;
         std::ostringstream tmp;
 
         if(!actions.doc_authors.empty())
@@ -1780,11 +1810,6 @@ namespace quickbook
 
         if (!actions.doc_purpose.empty())
         {
-            if (actions.doc_type != "library")
-            {
-                invalid_attributes.push_back("purpose");
-            }
-
             tmp << "    <" << actions.doc_type << "purpose>\n"
                 << "      " << actions.doc_purpose.get(103)
                 << "    </" << actions.doc_type << "purpose>\n"
@@ -1794,11 +1819,6 @@ namespace quickbook
 
         if (!actions.doc_categories.empty())
         {
-            if (actions.doc_type != "library")
-            {
-                invalid_attributes.push_back("category");
-            }
-
             for(actions::docinfo_list::const_iterator
                 it = actions.doc_categories.begin(),
                 end = actions.doc_categories.end();
@@ -1820,17 +1840,6 @@ namespace quickbook
                 << "  </" << actions.doc_type << "info>\n"
                 << "\n"
             ;
-        }
-
-        if(!invalid_attributes.empty())
-        {
-            detail::outwarn(actions.filename.file_string(),1)
-                << (invalid_attributes.size() > 1 ?
-                    "Invalid attributes" : "Invalid attribute")
-                << " for '" << actions.doc_type << " document info': "
-                << boost::algorithm::join(invalid_attributes, ", ")
-                << "\n"
-                ;
         }
     }
 
