@@ -1572,76 +1572,6 @@ namespace quickbook
         return (qbk_version_n < version) ? raw : encoded;
     }
 
-    struct xml_author
-    {
-        // Handles xml author
-
-        xml_author(collector& out)
-        : out(out) {}
-
-        void operator()(std::pair<docinfo_string, docinfo_string> const& author) const;
-
-        collector& out;
-    };
-
-    struct xml_year
-    {
-        // Handles xml year
-
-        xml_year(collector& out)
-            : out(out) {}
-
-        void operator()(std::string const &year) const;
-
-        collector& out;
-    };
-
-    struct xml_copyright
-    {
-        // Handles xml copyright
-
-        xml_copyright(collector& out)
-            : out(out) {}
-
-        void operator()(std::pair<std::vector<std::string>, docinfo_string> const &copyright) const;
-
-        collector& out;
-    };
-
-    void xml_author::operator()(actions::author const& name) const
-    {
-        out << "      <author>\n"
-            << "        <firstname>"
-            << name.first.get(103)
-            << "</firstname>\n"
-            << "        <surname>"
-            << name.second.get(103)
-            << "</surname>\n"
-            << "      </author>\n";
-    }
-
-    void xml_copyright::operator()(actions::copyright_item const& copyright) const
-    {
-        out << "\n" << "    <copyright>\n";
-
-        for_each(
-            copyright.first.begin()
-          , copyright.first.end()
-          , xml_year(out));
-
-        out << "      <holder>"
-            << copyright.second.get(103)
-            << "</holder>\n"
-            << "    </copyright>\n"
-            << "\n"
-        ;
-    }
-
-    void xml_year::operator()(std::string const &year) const
-    {
-        out << "      <year>" << year << "</year>\n";
-    }
-
     static void write_document_title(collector& out, quickbook::actions& actions);
     static void write_document_info(collector& out, quickbook::actions& actions);
 
@@ -1794,19 +1724,47 @@ namespace quickbook
         if(!actions.doc_authors.empty())
         {
             out << "    <authorgroup>\n";
-            for_each(
-                actions.doc_authors.begin()
-              , actions.doc_authors.end()
-              , xml_author(out));
+            for(actions::author_list::const_iterator
+                it = actions.doc_authors.begin(),
+                end = actions.doc_authors.end();
+                it != end; ++it)
+            {
+                out << "      <author>\n"
+                    << "        <firstname>"
+                    << it->first.get(103)
+                    << "</firstname>\n"
+                    << "        <surname>"
+                    << it->second.get(103)
+                    << "</surname>\n"
+                    << "      </author>\n";
+            }
             out << "    </authorgroup>\n";
         }
 
         if (!actions.doc_copyrights.empty())
         {
-            for_each(
-                actions.doc_copyrights.begin()
-              , actions.doc_copyrights.end()
-              , xml_copyright(out));
+            for(actions::copyright_list::const_iterator
+                it = actions.doc_copyrights.begin(),
+                end = actions.doc_copyrights.end();
+                it != end; ++it)
+            {
+                out << "\n" << "    <copyright>\n";
+        
+                for(actions::string_list::const_iterator
+                    it2 = it->first.begin(),
+                    end = it->first.end();
+                    it2 != end; ++it2)
+                {
+                    out << "      <year>" << *it2 << "</year>\n";
+                }
+        
+                out << "      <holder>"
+                    << it->second.get(103)
+                    << "</holder>\n"
+                    << "    </copyright>\n"
+                    << "\n"
+                ;
+            }
         }
 
         if (!actions.doc_license.empty())
