@@ -1545,7 +1545,7 @@ namespace quickbook
         *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.file_string();
 
         // parse the file
-        quickbook::parse(actions.filename.file_string().c_str(), actions, true);
+        quickbook::parse_file(actions.filename.file_string().c_str(), actions, true);
 
         // restore the values
         std::swap(actions.filename, filein);

@@ -47,7 +47,7 @@ namespace quickbook
 
     // forward declarations
     struct actions;
-    int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
+    int parse_file(char const* filein_, actions& actor, bool ignore_docinfo = false);
 
     struct error_action
     {

@@ -123,7 +123,7 @@ namespace quickbook
     //
     ///////////////////////////////////////////////////////////////////////////
     int
-    parse(char const* filein_, actions& actor, bool ignore_docinfo)
+    parse_file(char const* filein_, actions& actor, bool ignore_docinfo)
     {
         using std::cerr;
         using std::vector;
@@ -167,11 +167,11 @@ namespace quickbook
     }
 
     static int
-    parse(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
+    parse_document(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
         set_macros(actor);
-        bool r = parse(filein_, actor);
+        bool r = parse_file(filein_, actor);
         if (actor.section_level != 0)
             detail::outwarn(filein_)
                 << "Warning missing [endsect] detected at end of file."
@@ -187,7 +187,7 @@ namespace quickbook
     }
 
     static int
-    parse(
+    parse_document(
         char const* filein_
       , char const* fileout_
       , int indent
@@ -202,7 +202,7 @@ namespace quickbook
         if (pretty_print)
         {
             string_stream buffer;
-            result = parse(filein_, outdir, buffer);
+            result = parse_document(filein_, outdir, buffer);
             if (result == 0)
             {
                 result = post_process(buffer.str(), fileout, indent, linewidth);
@@ -211,7 +211,7 @@ namespace quickbook
         else
         {
             string_stream buffer;
-            result = parse(filein_, outdir, buffer);
+            result = parse_document(filein_, outdir, buffer);
             fileout << buffer.str();
         }
         return result;
@@ -349,7 +349,7 @@ main(int argc, char* argv[])
                 << fileout
                 << std::endl;
 
-            return quickbook::parse(filein.c_str(), fileout.c_str(), indent, linewidth, pretty_print);
+            return quickbook::parse_document(filein.c_str(), fileout.c_str(), indent, linewidth, pretty_print);
         }
         else
         {
