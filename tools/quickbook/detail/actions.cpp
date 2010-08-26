@@ -1572,6 +1572,42 @@ namespace quickbook
         return (qbk_version_n < version) ? raw : encoded;
     }
 
+    struct xml_author
+    {
+        // Handles xml author
+
+        xml_author(collector& out)
+        : out(out) {}
+
+        void operator()(std::pair<docinfo_string, docinfo_string> const& author) const;
+
+        collector& out;
+    };
+
+    struct xml_year
+    {
+        // Handles xml year
+
+        xml_year(collector& out)
+            : out(out) {}
+
+        void operator()(std::string const &year) const;
+
+        collector& out;
+    };
+
+    struct xml_copyright
+    {
+        // Handles xml copyright
+
+        xml_copyright(collector& out)
+            : out(out) {}
+
+        void operator()(std::pair<std::vector<std::string>, docinfo_string> const &copyright) const;
+
+        collector& out;
+    };
+
     void xml_author::operator()(actions::author const& name) const
     {
         out << "      <author>\n"
