@@ -9,8 +9,8 @@
 =============================================================================*/
 #include "./quickbook.hpp"
 #include "./actions_class.hpp"
-#include "../block.hpp"
-#include "../doc_info.hpp"
+#include "./block.hpp"
+#include "./doc_info.hpp"
 #include "./post_process.hpp"
 #include "./utils.hpp"
 #include "./input_path.hpp"

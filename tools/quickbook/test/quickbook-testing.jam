@@ -50,7 +50,7 @@ rule quickbook-test ( target-name : input ? : reference-output ? : requirements 
             : $(input)
             : $(requirements)
                 <location-prefix>$(target-name).test
-                <quickbook-testing.quickbook-command>..//quickbook
+                <quickbook-testing.quickbook-command>../src//quickbook
         ]
 
         [ targets.create-typed-target RUN
@@ -81,7 +81,7 @@ rule quickbook-fail-test ( target-name : input ? : requirements * )
         [ targets.create-typed-target RUN_FAIL
             : $(project)
             : $(target-name)
-            : ..//quickbook
+            : ../src//quickbook
             : $(requirements)
               <preserve-test-targets>on
               <dependency>$(input)

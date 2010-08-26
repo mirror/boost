@@ -11,7 +11,7 @@
 #define BOOST_SPIRIT_QUICKBOOK_DOC_INFO_HPP
 
 #include "./phrase.hpp"
-#include "./detail/quickbook.hpp"
+#include "./quickbook.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_loops.hpp>

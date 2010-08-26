@@ -10,8 +10,8 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
 
-#include "./detail/quickbook.hpp"
-#include "./detail/utils.hpp"
+#include "./quickbook.hpp"
+#include "./utils.hpp"
 #include "./phrase.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>

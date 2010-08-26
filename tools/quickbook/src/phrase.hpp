@@ -10,9 +10,9 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
-#include "./detail/quickbook.hpp"
-#include "./detail/actions_class.hpp"
-#include "detail/utils.hpp"
+#include "./quickbook.hpp"
+#include "./actions_class.hpp"
+#include "utils.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
