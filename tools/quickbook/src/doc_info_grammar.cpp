@@ -7,32 +7,43 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#if !defined(BOOST_SPIRIT_QUICKBOOK_DOC_INFO_HPP)
-#define BOOST_SPIRIT_QUICKBOOK_DOC_INFO_HPP
 
-#include "./phrase.hpp"
+#include "./phrase_grammar.hpp"
 #include "./quickbook.hpp"
+#include "./actions_class.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
 
 namespace quickbook
 {
     using namespace boost::spirit::classic;
 
-    struct doc_info_grammar
-    : public grammar<doc_info_grammar>
-    {
-        doc_info_grammar(quickbook::actions& actions)
-            : actions(actions) {}
-
         template <typename Scanner>
-        struct definition
+        struct doc_info_grammar::definition
         {
+            definition(doc_info_grammar const&);
+
             typedef uint_parser<int, 10, 1, 2>  uint2_t;
 
-            definition(doc_info_grammar const& self)
+            bool unused;
+            std::string category;
+            rule<Scanner>   doc_info, doc_title, doc_version, doc_id, doc_dirname,
+                            doc_copyright, doc_purpose, doc_category, doc_authors,
+                            doc_author, comment, space, hard_space, doc_license,
+                            doc_last_revision, doc_source_mode, phrase, quickbook_version,
+                            char_;
+            phrase_grammar common;
+            symbols<> doc_types;
+
+            rule<Scanner> const&
+            start() const { return doc_info; }
+        };
+
+            template <typename Scanner>
+            doc_info_grammar::definition<Scanner>::definition(doc_info_grammar const& self)
                 : unused(false), common(self.actions, unused)
             {
                 quickbook::actions& actions = self.actions;
@@ -194,23 +205,14 @@ namespace quickbook
                     ;
             }
 
-            bool unused;
-            std::string category;
-            rule<Scanner>   doc_info, doc_title, doc_version, doc_id, doc_dirname,
-                            doc_copyright, doc_purpose, doc_category, doc_authors,
-                            doc_author, comment, space, hard_space, doc_license,
-                            doc_last_revision, doc_source_mode, phrase, quickbook_version,
-                            char_;
-            phrase_grammar common;
-            symbols<> doc_types;
 
-            rule<Scanner> const&
-            start() const { return doc_info; }
-        };
+    template <typename Iterator, typename Grammar>
+    parse_info<Iterator> parse(Iterator& first, Iterator last, Grammar& g)
+    {
+        return boost::spirit::classic::parse(first, last, g);
+    }
 
-        quickbook::actions& actions;
-    };
+    void instantiate_doc_info_grammar(quickbook::iterator i, doc_info_grammar& g) {
+        parse(i, i, g);
+    }
 }
-
-#endif // BOOST_SPIRIT_QUICKBOOK_DOC_INFO_HPP
-

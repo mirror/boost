@@ -7,32 +7,52 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#if !defined(BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP)
-#define BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
 
+#include "./phrase_grammar.hpp"
 #include "./quickbook.hpp"
 #include "./utils.hpp"
-#include "./phrase.hpp"
-#include <boost/spirit/include/classic_core.hpp>
+#include "./actions_class.hpp"
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_assign_actor.hpp>
 #include <boost/spirit/include/classic_if.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
+#include <boost/spirit/include/classic_clear_actor.hpp>
 
 namespace quickbook
 {
     using namespace boost::spirit::classic;
 
-    struct block_grammar : grammar<block_grammar>
-    {
-        block_grammar(quickbook::actions& actions_, bool skip_initial_spaces = false)
-            : actions(actions_), skip_initial_spaces(skip_initial_spaces) { }
-
         template <typename Scanner>
-        struct definition
+        struct block_grammar::definition
         {
-            definition(block_grammar const& self)
+            definition(block_grammar const&);
+
+            bool no_eols;
+
+            rule<Scanner>   start_, blocks, block_markup, code, code_line, blank_line,
+                            paragraph, space, blank, comment, headings, h, h1, h2,
+                            h3, h4, h5, h6, hr, blurb, blockquote, admonition,
+                            phrase, list, phrase_end, ordered_list, def_macro,
+                            macro_identifier, table, table_row, variablelist,
+                            varlistentry, varlistterm, varlistitem, table_cell,
+                            preformatted, list_item, begin_section, end_section,
+                            xinclude, include, hard_space, eol, paragraph_end,
+                            template_, template_id, template_formal_arg,
+                            template_body, identifier, dummy_block, import,
+                            inside_paragraph,
+                            element_id, element_id_1_5, element_id_1_6;
+
+            symbols<>       paragraph_end_markups;
+
+            phrase_grammar common;
+
+            rule<Scanner> const&
+            start() const { return start_; }
+        };
+
+            template <typename Scanner>
+            block_grammar::definition<Scanner>::definition(block_grammar const& self)
                 : no_eols(true)
                 , common(self.actions, no_eols)
             {
@@ -450,32 +470,13 @@ namespace quickbook
                     ;
             }
 
-            bool no_eols;
+    template <typename Iterator, typename Grammar>
+    parse_info<Iterator> parse(Iterator& first, Iterator last, Grammar& g)
+    {
+        return boost::spirit::classic::parse(first, last, g);
+    }
 
-            rule<Scanner>   start_, blocks, block_markup, code, code_line, blank_line,
-                            paragraph, space, blank, comment, headings, h, h1, h2,
-                            h3, h4, h5, h6, hr, blurb, blockquote, admonition,
-                            phrase, list, phrase_end, ordered_list, def_macro,
-                            macro_identifier, table, table_row, variablelist,
-                            varlistentry, varlistterm, varlistitem, table_cell,
-                            preformatted, list_item, begin_section, end_section,
-                            xinclude, include, hard_space, eol, paragraph_end,
-                            template_, template_id, template_formal_arg,
-                            template_body, identifier, dummy_block, import,
-                            inside_paragraph,
-                            element_id, element_id_1_5, element_id_1_6;
-
-            symbols<>       paragraph_end_markups;
-
-            phrase_grammar common;
-
-            rule<Scanner> const&
-            start() const { return start_; }
-        };
-
-        quickbook::actions& actions;
-        bool const skip_initial_spaces;
-    };
+    void instantiate_block_grammar(quickbook::iterator i, block_grammar& g) {
+        parse(i, i, g);
+    }
 }
-
-#endif // BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP

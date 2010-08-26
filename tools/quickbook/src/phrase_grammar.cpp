@@ -7,12 +7,11 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#if !defined(BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP)
-#define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
+#include "./phrase_grammar.hpp"
 #include "./quickbook.hpp"
 #include "./actions_class.hpp"
-#include "utils.hpp"
+#include "./utils.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
@@ -59,15 +58,8 @@ namespace quickbook
             ;
     }
 
-    struct phrase_grammar : grammar<phrase_grammar>
-    {
-        phrase_grammar(quickbook::actions& actions, bool& no_eols)
-            : no_eols(no_eols), actions(actions) {}
-
-        template <typename Scanner>
-        struct definition
-        {
-            definition(phrase_grammar const& self)
+            template <typename Scanner>
+            phrase_grammar::definition<Scanner>::definition(phrase_grammar const& self)
             {
                 using detail::var;
                 quickbook::actions& actions = self.actions;
@@ -470,37 +462,8 @@ namespace quickbook
                     ;
             }
 
-            rule<Scanner>   space, blank, comment, phrase, phrase_markup, image,
-                            simple_phrase_end, phrase_end, bold, italic, underline, teletype,
-                            strikethrough, escape, url, common, funcref, classref,
-                            memberref, enumref, macroref, headerref, conceptref, globalref,
-                            anchor, link, hard_space, eol, inline_code, simple_format,
-                            simple_bold, simple_italic, simple_underline,
-                            simple_teletype, source_mode, template_,
-                            quote, code_block, footnote, replaceable, macro,
-                            dummy_block, cond_phrase, macro_identifier, template_args,
-                            template_args_1_4, template_arg_1_4,
-                            template_inner_arg_1_4, brackets_1_4,
-                            template_args_1_5, template_arg_1_5,
-                            template_inner_arg_1_5, brackets_1_5
-                            ;
-
-            rule<Scanner> const&
-            start() const { return common; }
-        };
-
-        bool& no_eols;
-        quickbook::actions& actions;
-    };
-
-    struct simple_phrase_grammar
-    : public grammar<simple_phrase_grammar >
-    {
-        simple_phrase_grammar(quickbook::actions& actions)
-            : actions(actions) {}
-
         template <typename Scanner>
-        struct definition
+        struct simple_phrase_grammar::definition
         {
             definition(simple_phrase_grammar const& self)
                 : unused(false), common(self.actions, unused)
@@ -531,9 +494,60 @@ namespace quickbook
             start() const { return phrase; }
         };
 
-        quickbook::actions& actions;
-    };
+        template <typename Scanner>
+        struct command_line_grammar::definition
+        {
+            definition(command_line_grammar const& self)
+                : unused(false), common(self.actions, unused)
+            {
+                quickbook::actions& actions = self.actions;
+
+                macro =
+                        *space_p
+                    >>  macro_identifier            [actions.macro_identifier]
+                    >>  *space_p
+                    >>  (   '='
+                        >>  *space_p
+                        >>  phrase                  [actions.macro_definition]
+                        >>  *space_p
+                        )
+                    |   eps_p                       [actions.macro_definition]
+                    ;
+
+                macro_identifier =
+                    +(anychar_p - (space_p | ']' | '='))
+                    ;
+
+                phrase =
+                   *(   common
+                    |   (anychar_p - ']')           [actions.plain_char]
+                    )
+                    ;
+            }
+
+            bool unused;
+            rule<Scanner> macro, macro_identifier, phrase;
+            phrase_grammar common;
+
+            rule<Scanner> const&
+            start() const { return macro; }
+        };
+
+    template <typename Iterator, typename Grammar>
+    parse_info<Iterator> parse(Iterator& first, Iterator last, Grammar& g)
+    {
+        return boost::spirit::classic::parse(first, last, g);
+    }
+
+    void instantiate_phrase_grammar(quickbook::iterator i, phrase_grammar& g) {
+        parse(i, i, g);
+    }
+
+    void instantiate_simple_phrase_grammar(quickbook::iterator i, simple_phrase_grammar& g) {
+        parse(i, i, g);
+    }
+
+    void instantiate_command_line_grammar(quickbook::iterator i, command_line_grammar& g) {
+        parse(i, i, g);
+    }
 }
-
-#endif // BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
-

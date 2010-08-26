@@ -28,6 +28,9 @@ exe quickbook
     template_stack.cpp
     markups.cpp
     syntax_highlight.cpp
+    block_grammar.cpp
+    phrase_grammar.cpp
+    doc_info_grammar.cpp
     /boost//program_options
     /boost//filesystem
     : #<define>QUICKBOOK_NO_DATES

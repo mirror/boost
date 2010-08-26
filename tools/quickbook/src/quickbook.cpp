@@ -7,10 +7,9 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
+#include "./grammar.hpp"
 #include "./quickbook.hpp"
 #include "./actions_class.hpp"
-#include "./block.hpp"
-#include "./doc_info.hpp"
 #include "./post_process.hpp"
 #include "./utils.hpp"
 #include "./input_path.hpp"
@@ -44,59 +43,6 @@ namespace quickbook
     bool ms_errors = false; // output errors/warnings as if for VS
     std::vector<std::string> include_path;
     std::vector<std::string> preset_defines;
-
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  Parse the macros passed as command line parameters
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    struct command_line_grammar
-        : public grammar<command_line_grammar>
-    {
-        command_line_grammar(quickbook::actions& actions)
-            : actions(actions) {}
-
-        template <typename Scanner>
-        struct definition
-        {
-            definition(command_line_grammar const& self)
-                : unused(false), common(self.actions, unused)
-            {
-                quickbook::actions& actions = self.actions;
-
-                macro =
-                        *space_p
-                    >>  macro_identifier            [actions.macro_identifier]
-                    >>  *space_p
-                    >>  (   '='
-                        >>  *space_p
-                        >>  phrase                  [actions.macro_definition]
-                        >>  *space_p
-                        )
-                    |   eps_p                       [actions.macro_definition]
-                    ;
-
-                macro_identifier =
-                    +(anychar_p - (space_p | ']' | '='))
-                    ;
-
-                phrase =
-                   *(   common
-                    |   (anychar_p - ']')           [actions.plain_char]
-                    )
-                    ;
-            }
-
-            bool unused;
-            rule<Scanner> macro, macro_identifier, phrase;
-            phrase_grammar common;
-
-            rule<Scanner> const&
-            start() const { return macro; }
-        };
-
-        quickbook::actions& actions;
-    };
 
     static void set_macros(actions& actor)
     {
