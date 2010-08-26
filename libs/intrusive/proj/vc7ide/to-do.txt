@@ -14,3 +14,4 @@
 -> Non-array buckets
 -> Document incremental<> option better
 -> Assure stable order for optimize_multikey and inverse order otherwise
+-> add an option to unordered containers to get O(1) traversal and begin()/end() even with very low load factors

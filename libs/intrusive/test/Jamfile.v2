@@ -20,10 +20,14 @@ rule test_all
 
    for local fileb in [ glob *.cpp ]
    {
-      all_rules += [ run $(fileb)
+      all_rules += [ run $(fileb) /boost/thread//boost_thread
       :  # additional args
       :  # test-files
       :  # requirements
+        <toolset>acc:<linkflags>-lrt
+        <toolset>acc-pa_risc:<linkflags>-lrt
+        <toolset>gcc-mingw:<linkflags>"-lole32 -loleaut32" 
+        <host-os>hpux,<toolset>gcc:<linkflags>"-Wl,+as,mpas"
       ] ;
    }
 

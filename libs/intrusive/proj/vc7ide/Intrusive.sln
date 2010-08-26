@@ -91,12 +91,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "treap_multiset", "treap_mul
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recursive", "recursive\recursive.vcproj", "{7679B41B-F2B4-9176-CB81-35449467B435}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "function_hook", "function_hook\function_hook.vcproj", "{761A79B4-9968-CB81-F02B-2A4497345475}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
-	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{977B61B4-9968-497C-9F0B-24A8145473B8}.Debug.ActiveCfg = Debug|Win32
@@ -191,6 +197,14 @@ Global
 		{16E09E95-F4A2-C971-BC76-9BA407191C59}.Debug.Build.0 = Debug|Win32
 		{16E09E95-F4A2-C971-BC76-9BA407191C59}.Release.ActiveCfg = Release|Win32
 		{16E09E95-F4A2-C971-BC76-9BA407191C59}.Release.Build.0 = Release|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Debug.ActiveCfg = Debug|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Debug.Build.0 = Debug|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Release.ActiveCfg = Release|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Release.Build.0 = Release|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Debug.ActiveCfg = Debug|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Debug.Build.0 = Debug|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Release.ActiveCfg = Release|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
