@@ -12,6 +12,8 @@ alias quickbook
     : src//quickbook
     ;
 
+explicit quickbook ;
+
 install dist-bin
     :
     quickbook
