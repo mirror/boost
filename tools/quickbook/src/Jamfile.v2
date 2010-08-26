@@ -20,6 +20,7 @@ exe quickbook
     :
     quickbook.cpp
     actions.cpp
+    doc_info_actions.cpp
     actions_class.cpp
     utils.cpp
     input_path.cpp
