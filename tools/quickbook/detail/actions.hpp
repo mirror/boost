@@ -20,7 +20,6 @@
 #include <boost/filesystem/v2/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
-#include "../syntax_highlight.hpp"
 #include "./collector.hpp"
 #include "./template_stack.hpp"
 #include "./utils.hpp"
@@ -33,6 +32,8 @@
 
 namespace quickbook
 {
+    using namespace boost::spirit::classic;
+
     namespace fs = boost::filesystem;
     typedef position_iterator<std::string::const_iterator> iterator;
     typedef symbols<std::string> string_symbols;
@@ -467,40 +468,6 @@ namespace quickbook
         collector& phrase;
         std::string str;
     };
-
-    typedef cpp_highlight<
-        span
-      , space
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , unexpected_char
-      , collector>
-    cpp_p_type;
-
-    typedef python_highlight<
-        span
-      , space
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , unexpected_char
-      , collector>
-    python_p_type;
-    
-    typedef teletype_highlight<
-        plain_char_action
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , collector>
-    teletype_p_type;
     
     struct syntax_highlight
     {
@@ -511,20 +478,19 @@ namespace quickbook
           , actions& escape_actions)
         : temp(temp)
         , source_mode(source_mode)
-        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
-        , python_p(temp, macro, do_macro_action(temp), escape_actions)
-        , teletype_p(temp, macro, do_macro_action(temp), escape_actions)
+        , macro(macro)
+        , escape_actions(escape_actions)
         {
         }
 
-        std::string operator()(iterator first, iterator last) const;
+        std::string operator()(iterator begin, iterator end) const;
 
         collector& temp;
         std::string const& source_mode;
-        cpp_p_type cpp_p;
-        python_p_type python_p;
-        teletype_p_type teletype_p;
+        string_symbols const& macro;
+        actions& escape_actions;
     };
+
 
     struct code_action
     {

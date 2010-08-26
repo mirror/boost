@@ -359,32 +359,6 @@ namespace quickbook
         out << escape_actions.phrase.str();
         escape_actions.phrase.pop(); // restore the stream
     }
-    
-    std::string syntax_highlight::operator()(iterator first, iterator last) const
-    {
-        // print the code with syntax coloring
-        if (source_mode == "c++")
-        {
-            parse(first, last, cpp_p);
-        }
-        else if (source_mode == "python")
-        {
-            parse(first, last, python_p);
-        }
-        else if (source_mode == "teletype")
-        {
-            parse(first, last, teletype_p);
-        }
-        else
-        {
-            BOOST_ASSERT(0);
-        }
-
-        std::string str;
-        temp.swap(str);
-        
-        return str;
-    }
 
     void code_action::operator()(iterator first, iterator last) const
     {
