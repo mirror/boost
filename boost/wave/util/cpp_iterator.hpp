@@ -676,6 +676,7 @@ bool returned_from_include_file = returned_from_include();
 
             if (was_seen_newline && pp_directive()) {
             // a pp directive was found
+//                 pending_queue.push_back(result_type(T_NEWLINE, "\n", act_pos));
 //                 seen_newline = true;
 //                 must_emit_line_directive = true;
 
@@ -1075,6 +1076,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
     token_id id = token_id(*it);
     bool can_exit = true;
     if (!ctx.get_if_block_status()) {
+        impl::call_skipped_token_hook(ctx, *it);
         if (IS_EXTCATEGORY(*it, PPConditionalTokenType)) {
         // simulate the if block hierarchy
             switch (static_cast<unsigned int>(id)) {
