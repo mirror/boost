@@ -20,10 +20,9 @@
 #include <boost/filesystem/v2/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
-#include "../syntax_highlight.hpp"
-#include "./collector.hpp"
-#include "./template_stack.hpp"
-#include "./utils.hpp"
+#include "collector.hpp"
+#include "template_stack.hpp"
+#include "utils.hpp"
 
 #ifdef BOOST_MSVC
 // disable copy/assignment could not be generated, unreferenced formal params
@@ -33,9 +32,11 @@
 
 namespace quickbook
 {
+    namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
-    typedef position_iterator<std::string::const_iterator> iterator;
-    typedef symbols<std::string> string_symbols;
+
+    typedef cl::position_iterator<std::string::const_iterator> iterator;
+    typedef cl::symbols<std::string> string_symbols;
     typedef std::map<std::string, std::string> attribute_map;
 
     struct actions;
@@ -47,7 +48,9 @@ namespace quickbook
 
     // forward declarations
     struct actions;
-    int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
+    int parse_file(char const* filein_, actions& actor, bool ignore_docinfo = false);
+    int load_snippets(std::string const& file, std::vector<template_symbol>& storage,
+        std::string const& extension, std::string const& doc_id);
 
     struct error_action
     {
@@ -467,40 +470,6 @@ namespace quickbook
         collector& phrase;
         std::string str;
     };
-
-    typedef cpp_highlight<
-        span
-      , space
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , unexpected_char
-      , collector>
-    cpp_p_type;
-
-    typedef python_highlight<
-        span
-      , space
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , unexpected_char
-      , collector>
-    python_p_type;
-    
-    typedef teletype_highlight<
-        plain_char_action
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , collector>
-    teletype_p_type;
     
     struct syntax_highlight
     {
@@ -511,20 +480,19 @@ namespace quickbook
           , actions& escape_actions)
         : temp(temp)
         , source_mode(source_mode)
-        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
-        , python_p(temp, macro, do_macro_action(temp), escape_actions)
-        , teletype_p(temp, macro, do_macro_action(temp), escape_actions)
+        , macro(macro)
+        , escape_actions(escape_actions)
         {
         }
 
-        std::string operator()(iterator first, iterator last) const;
+        std::string operator()(iterator begin, iterator end) const;
 
         collector& temp;
         std::string const& source_mode;
-        cpp_p_type cpp_p;
-        python_p_type python_p;
-        teletype_p_type teletype_p;
+        string_symbols const& macro;
+        actions& escape_actions;
     };
+
 
     struct code_action
     {
@@ -838,40 +806,27 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    struct xml_author
-    {
-        // Handles xml author
+    struct docinfo_string {
+        std::string raw;
+        std::string encoded;
 
-        xml_author(collector& out)
-        : out(out) {}
+        docinfo_string() : raw(), encoded() {}
 
-        void operator()(std::pair<std::string, std::string> const& author) const;
+        void swap(docinfo_string& x) {
+            raw.swap(x.raw);
+            encoded.swap(x.encoded);
+        }
 
-        collector& out;
-    };
+        void clear() {
+            raw.clear();
+            encoded.clear();
+        }
 
-    struct xml_year
-    {
-        // Handles xml year
+        bool empty() const {
+            return raw.empty();
+        }
 
-        xml_year(collector& out)
-            : out(out) {}
-
-        void operator()(std::string const &year) const;
-
-        collector& out;
-    };
-
-    struct xml_copyright
-    {
-        // Handles xml copyright
-
-        xml_copyright(collector& out)
-            : out(out) {}
-
-        void operator()(std::pair<std::vector<std::string>, std::string> const &copyright) const;
-
-        collector& out;
+        std::string const& get(unsigned version) const;
     };
 
     void pre(collector& out, quickbook::actions& actions, bool ignore_docinfo = false);
@@ -885,6 +840,18 @@ namespace quickbook
         void operator()(iterator first, iterator last) const;
 
         std::string& out;
+        collector& phrase;
+    };
+
+    struct phrase_to_docinfo_action
+    {
+        phrase_to_docinfo_action(docinfo_string& out, collector& phrase)
+            : out(out)
+            , phrase(phrase) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        docinfo_string& out;
         collector& phrase;
     };
 

@@ -11,19 +11,15 @@
 #include <numeric>
 #include <functional>
 #include <algorithm>
-#include <boost/bind.hpp>
 #include <boost/filesystem/v2/convenience.hpp>
 #include <boost/filesystem/v2/fstream.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/join.hpp>
-#include "./quickbook.hpp"
-#include "./actions.hpp"
-#include "./utils.hpp"
-#include "./markups.hpp"
-#include "./actions_class.hpp"
-#include "../block.hpp"
-#include "../phrase.hpp"
-#include "../code_snippet.hpp"
+#include "quickbook.hpp"
+#include "actions.hpp"
+#include "utils.hpp"
+#include "markups.hpp"
+#include "actions_class.hpp"
+#include "grammar.hpp"
 
 namespace quickbook
 {
@@ -357,32 +353,6 @@ namespace quickbook
     {
         out << escape_actions.phrase.str();
         escape_actions.phrase.pop(); // restore the stream
-    }
-    
-    std::string syntax_highlight::operator()(iterator first, iterator last) const
-    {
-        // print the code with syntax coloring
-        if (source_mode == "c++")
-        {
-            parse(first, last, cpp_p);
-        }
-        else if (source_mode == "python")
-        {
-            parse(first, last, python_p);
-        }
-        else if (source_mode == "teletype")
-        {
-            parse(first, last, teletype_p);
-        }
-        else
-        {
-            BOOST_ASSERT(0);
-        }
-
-        std::string str;
-        temp.swap(str);
-        
-        return str;
     }
 
     void code_action::operator()(iterator first, iterator last) const
@@ -784,18 +754,18 @@ namespace quickbook
             }
             else if (!body.is_block)
             {
-                simple_phrase_grammar<quickbook::actions> phrase_p(actions);
+                simple_phrase_grammar phrase_p(actions);
 
                 //  do a phrase level parse
                 iterator first(body.content.begin(), body.content.end(), body.position);
                 iterator last(body.content.end(), body.content.end());
-                bool r = boost::spirit::classic::parse(first, last, phrase_p).full;
+                bool r = quickbook::parse(first, last, phrase_p).full;
                 actions.phrase.swap(result);
                 return r;
             }
             else
             {
-                block_grammar<quickbook::actions> block_p(actions, true);
+                block_grammar block_p(actions, true);
 
                 //  do a block level parse
                 //  ensure that we have enough trailing newlines to eliminate
@@ -804,7 +774,7 @@ namespace quickbook
                 std::string content = body.content + "\n\n";
                 iterator first(content.begin(), content.end(), body.position);
                 iterator last(content.end(), content.end());
-                bool r = boost::spirit::classic::parse(first, last, block_p).full;
+                bool r = quickbook::parse(first, last, block_p).full;
                 actions.inside_paragraph();
                 actions.out.swap(result);
                 return r;
@@ -1276,176 +1246,6 @@ namespace quickbook
         out << "\" />\n";
     }
 
-    void code_snippet_actions::append_code()
-    {
-        if(snippet_stack.empty()) return;
-        snippet_data& snippet = snippet_stack.top();
-    
-        if (!code.empty())
-        {
-            detail::unindent(code); // remove all indents
-
-            if(snippet.content.empty())
-            {
-                snippet.start_code = true;
-            }
-            else if(!snippet.end_code)
-            {
-                snippet.content += "\n\n";
-                snippet.content += source_type;
-                snippet.content += "```\n";
-            }
-            
-            snippet.content += code;
-            snippet.end_code = true;
-
-            code.clear();
-        }
-    }
-
-    void code_snippet_actions::close_code()
-    {
-        if(snippet_stack.empty()) return;
-        snippet_data& snippet = snippet_stack.top();
-    
-        if(snippet.end_code)
-        {
-            snippet.content += "```\n\n";
-            snippet.end_code = false;
-        }
-    }
-
-    void code_snippet_actions::pass_thru(iterator first, iterator last)
-    {
-        if(snippet_stack.empty()) return;
-        code += *first;
-    }
-
-    void code_snippet_actions::pass_thru_char(char c)
-    {
-        if(snippet_stack.empty()) return;
-        code += c;
-    }
-
-    void code_snippet_actions::callout(iterator first, iterator last)
-    {
-        if(snippet_stack.empty()) return;
-        code += "``[[callout" + boost::lexical_cast<std::string>(callout_id) + "]]``";
-    
-        snippet_stack.top().callouts.push_back(
-            template_body(std::string(first, last), first.get_position(), true));
-        ++callout_id;
-    }
-
-    void code_snippet_actions::escaped_comment(iterator first, iterator last)
-    {
-        if(snippet_stack.empty()) return;
-        snippet_data& snippet = snippet_stack.top();
-        append_code();
-        close_code();
-
-        std::string temp(first, last);
-        detail::unindent(temp); // remove all indents
-        if (temp.size() != 0)
-        {
-            snippet.content += "\n" + temp; // add a linebreak to allow block markups
-        }
-    }
-
-    void code_snippet_actions::start_snippet(iterator first, iterator last)
-    {
-        append_code();
-        snippet_stack.push(snippet_data(id, callout_id));
-        id.clear();
-    }
-
-    void code_snippet_actions::end_snippet(iterator first, iterator last)
-    {
-        // TODO: Error?
-        if(snippet_stack.empty()) return;
-
-        append_code();
-
-        snippet_data snippet = snippet_stack.top();
-        snippet_stack.pop();
-
-        std::string body;
-        if(snippet.start_code) {
-            body += "\n\n";
-            body += source_type;
-            body += "```\n";
-        }
-        body += snippet.content;
-        if(snippet.end_code) {
-            body += "```\n\n";
-        }
-        
-        std::vector<std::string> params;
-        for (size_t i = 0; i < snippet.callouts.size(); ++i)
-        {
-            params.push_back("[callout" + boost::lexical_cast<std::string>(snippet.callout_base_id + i) + "]");
-        }
-        
-        // TODO: Save position in start_snippet
-        template_symbol symbol(snippet.id, params, body, first.get_position(), true);
-        symbol.callout = true;
-        symbol.callouts = snippet.callouts;
-        storage.push_back(symbol);
-
-        // Merge the snippet into its parent
-
-        if(!snippet_stack.empty())
-        {
-            snippet_data& next = snippet_stack.top();
-            if(!snippet.content.empty()) {
-                if(!snippet.start_code) {
-                    close_code();
-                }
-                else if(!next.end_code) {
-                    next.content += "\n\n";
-                    next.content += source_type;
-                    next.content += "```\n";
-                }
-                
-                next.content += snippet.content;
-                next.end_code = snippet.end_code;
-            }
-            
-            next.callouts.insert(next.callouts.end(), snippet.callouts.begin(), snippet.callouts.end());
-        }
-    }
-
-    int load_snippets(
-        std::string const& file
-      , std::vector<template_symbol>& storage   // snippets are stored in a
-                                                // vector of template_symbols
-      , std::string const& extension
-      , std::string const& doc_id)
-    {
-        std::string code;
-        int err = detail::load(file, code);
-        if (err != 0)
-            return err; // return early on error
-
-        typedef position_iterator<std::string::const_iterator> iterator_type;
-        iterator_type first(code.begin(), code.end(), file);
-        iterator_type last(code.end(), code.end());
-
-        size_t fname_len = file.size();
-        bool is_python = fname_len >= 3
-            && file[--fname_len]=='y' && file[--fname_len]=='p' && file[--fname_len]=='.';
-        code_snippet_actions a(storage, doc_id, is_python ? "[python]" : "[c++]");
-        // TODO: Should I check that parse succeeded?
-        if(is_python) {
-            boost::spirit::classic::parse(first, last, python_code_snippet_grammar(a));
-        }
-        else {
-            boost::spirit::classic::parse(first, last, cpp_code_snippet_grammar(a));
-        }
-
-        return 0;
-    }
-
     namespace
     {
         fs::path include_search(fs::path const & current, std::string const & name)
@@ -1502,7 +1302,8 @@ namespace quickbook
     void include_action::operator()(iterator first, iterator last) const
     {
         fs::path filein = include_search(actions.filename.parent_path(), std::string(first,last));
-        std::string doc_type, doc_id, doc_dirname, doc_last_revision;
+        std::string doc_type, doc_id;
+        docinfo_string doc_dirname, doc_last_revision;
 
         // swap the filenames
         std::swap(actions.filename, filein);
@@ -1543,7 +1344,7 @@ namespace quickbook
         *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.file_string();
 
         // parse the file
-        quickbook::parse(actions.filename.file_string().c_str(), actions, true);
+        quickbook::parse_file(actions.filename.file_string().c_str(), actions, true);
 
         // restore the values
         std::swap(actions.filename, filein);
@@ -1566,293 +1367,17 @@ namespace quickbook
         //~ actions.templates = templates; $$$ fixme $$$
     }
 
-    void xml_author::operator()(std::pair<std::string, std::string> const& author) const
-    {
-        out << "      <author>\n"
-            << "        <firstname>";
-        detail::print_string(author.first, out.get());
-        out << "</firstname>\n"
-            << "        <surname>";
-        detail::print_string(author.second, out.get());
-        out << "</surname>\n"
-            << "      </author>\n";
-    }
-
-    void xml_copyright::operator()(std::pair<std::vector<std::string>, std::string> const& copyright) const
-    {
-        out << "\n" << "    <copyright>\n";
-
-        for_each(
-            copyright.first.begin()
-          , copyright.first.end()
-          , xml_year(out));
-
-        out << "      <holder>";
-        detail::print_string(copyright.second, out.get());
-        out << "</holder>\n"
-            << "    </copyright>\n"
-            << "\n"
-        ;
-    }
-
-    void xml_year::operator()(std::string const &year) const
-    {
-        out << "      <year>" << year << "</year>\n";
-    }
-
-    static void write_document_title(collector& out, quickbook::actions& actions);
-    static void write_document_info(collector& out, quickbook::actions& actions);
-
-    void pre(collector& out, quickbook::actions& actions, bool ignore_docinfo)
-    {
-        // The doc_info in the file has been parsed. Here's what we'll do
-        // *before* anything else.
-
-        if (actions.doc_id.empty())
-            actions.doc_id = detail::make_identifier(
-                actions.doc_title.begin(),actions.doc_title.end());
-
-        if (actions.doc_dirname.empty() && actions.doc_type == "library")
-            actions.doc_dirname = actions.doc_id;
-
-        if (actions.doc_last_revision.empty())
-        {
-            // default value for last-revision is now
-
-            char strdate[64];
-            strftime(
-                strdate, sizeof(strdate),
-                (debug_mode ?
-                    "DEBUG MODE Date: %Y/%m/%d %H:%M:%S $" :
-                    "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $"),
-                current_gm_time
-            );
-            actions.doc_last_revision = strdate;
-        }
-
-        // if we're ignoring the document info, we're done.
-        if (ignore_docinfo)
-        {
-            return;
-        }
-
-        if (qbk_major_version == -1)
-        {
-            // hard code quickbook version to v1.1
-            qbk_major_version = 1;
-            qbk_minor_version = 1;
-            qbk_version_n = 101;
-            detail::outwarn(actions.filename.file_string(),1)
-                << "Warning: Quickbook version undefined. "
-                "Version 1.1 is assumed" << std::endl;
-        }
-        else
-        {
-            qbk_version_n = ((unsigned) qbk_major_version * 100) +
-                (unsigned) qbk_minor_version;
-        }
-        
-        if (qbk_version_n == 106)
-        {
-            detail::outwarn(actions.filename.file_string(),1)
-                << "Quickbook 1.6 is still under development and is "
-                "likely to change in the future." << std::endl;
-        }
-        else if(qbk_version_n < 100 || qbk_version_n > 106)
-        {
-            detail::outerr(actions.filename.file_string(),1)
-                << "Unknown version of quickbook: quickbook "
-                << qbk_major_version
-                << "."
-                << qbk_minor_version
-                << std::endl;
-            ++actions.error_count;
-        }
-
-        out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            << "<!DOCTYPE "
-            << actions.doc_type
-            << " PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
-            << "     \"http://www.boost.org/tools/boostbook/dtd/boostbook.dtd\">\n"
-            << '<' << actions.doc_type << "\n"
-            << "    id=\"";
-        detail::print_string(actions.doc_id, out.get());
-        out << "\"\n";
-        
-        if(actions.doc_type == "library")
-        {
-            out << "    name=\"";
-            detail::print_string(actions.doc_title, out.get());
-            out << "\"\n";
-        }
-
-        if(!actions.doc_dirname.empty())
-        {
-            out << "    dirname=\"";
-            detail::print_string(actions.doc_dirname, out.get());
-            out << "\"\n";
-        }
-
-        out << "    last-revision=\"";
-        detail::print_string(actions.doc_last_revision, out.get());
-        out << "\" \n"
-            << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n";
-            
-        if(actions.doc_type == "library") {
-            write_document_info(out, actions);
-            write_document_title(out, actions);
-        }
-        else {
-            write_document_title(out, actions);
-            write_document_info(out, actions);
-        }
-    }
-    
-    void post(collector& out, quickbook::actions& actions, bool ignore_docinfo)
-    {
-        // if we're ignoring the document info, do nothing.
-        if (ignore_docinfo)
-        {
-            return;
-        }
-
-        // We've finished generating our output. Here's what we'll do
-        // *after* everything else.
-        out << "\n</" << actions.doc_type << ">\n\n";
-    }
-
-    void write_document_title(collector& out, quickbook::actions& actions)
-    {
-        if (!actions.doc_title.empty())
-        {
-            out<< "  <title>";
-            detail::print_string(actions.doc_title, out.get());
-            if (!actions.doc_version.empty()) {
-                out << ' ';
-                detail::print_string(actions.doc_version, out.get());
-            }
-            out<< "</title>\n\n\n";
-        }
-    }
-
-    void write_document_info(collector& out, quickbook::actions& actions)
-    {
-        std::vector<std::string> invalid_attributes;
-
-        out << "  <" << actions.doc_type << "info>\n";
-
-        if(!actions.doc_authors.empty())
-        {
-            out << "    <authorgroup>\n";
-            for_each(
-                actions.doc_authors.begin()
-              , actions.doc_authors.end()
-              , xml_author(out));
-            out << "    </authorgroup>\n";
-        }
-
-        if (!actions.doc_copyrights.empty())
-        {
-            for_each(
-                actions.doc_copyrights.begin()
-              , actions.doc_copyrights.end()
-              , xml_copyright(out));
-        }
-
-        if (qbk_version_n < 103)
-        {
-            if (!actions.doc_license_1_1.empty())
-            {
-                out << "    <legalnotice>\n"
-                    << "      <para>\n"
-                    << "        ";
-                detail::print_string(actions.doc_license_1_1, out.get());
-                out << "\n"
-                    << "      </para>\n"
-                    << "    </legalnotice>\n"
-                    << "\n"
-                ;
-            }
-        }
-        else
-        {
-            if (!actions.doc_license.empty())
-            {
-                out << "    <legalnotice>\n"
-                    << "      <para>\n"
-                    << "        " << actions.doc_license << "\n"
-                    << "      </para>\n"
-                    << "    </legalnotice>\n"
-                    << "\n"
-                ;
-            }
-        }
-
-        if (!actions.doc_purpose.empty())
-        {
-            if (actions.doc_type != "library")
-            {
-                invalid_attributes.push_back("purpose");
-            }
-
-            if (qbk_version_n < 103)
-            {
-                out << "    <" << actions.doc_type << "purpose>\n"
-                    << "      ";
-                detail::print_string(actions.doc_purpose_1_1, out.get());
-                out << "    </" << actions.doc_type << "purpose>\n"
-                    << "\n"
-                ;
-            }
-            else
-            {
-                out << "    <" << actions.doc_type << "purpose>\n"
-                    << "      " << actions.doc_purpose
-                    << "    </" << actions.doc_type << "purpose>\n"
-                    << "\n"
-                ;
-            }
-        }
-
-        if (!actions.doc_categories.empty())
-        {
-            if (actions.doc_type != "library")
-            {
-                invalid_attributes.push_back("category");
-            }
-
-            for(actions::string_list::const_iterator
-                it = actions.doc_categories.begin(),
-                end = actions.doc_categories.end();
-                it != end; ++it)
-            {
-                out << "    <" << actions.doc_type << "category name=\"category:";
-                detail::print_string(*it, out.get());
-                out << "\"></" << actions.doc_type << "category>\n"
-                    << "\n"
-                ;
-            }
-        }
-
-        out << "  </" << actions.doc_type << "info>\n"
-            << "\n"
-        ;
-        
-        if(!invalid_attributes.empty())
-        {
-            detail::outwarn(actions.filename.file_string(),1)
-                << (invalid_attributes.size() > 1 ?
-                    "Invalid attributes" : "Invalid attribute")
-                << " for '" << actions.doc_type << " document info': "
-                << boost::algorithm::join(invalid_attributes, ", ")
-                << "\n"
-                ;
-        }
-    }
-
     void phrase_to_string_action::operator()(iterator first, iterator last) const
     {
+        out.clear();
         phrase.swap(out);
+    }
+
+    void phrase_to_docinfo_action::operator()(iterator first, iterator last) const
+    {
+        out.encoded.clear();
+        phrase.swap(out.encoded);
+        out.raw = std::string(first, last);
     }
 
     void copy_stream_action::operator()(iterator first, iterator last) const

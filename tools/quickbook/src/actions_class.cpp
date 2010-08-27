@@ -8,8 +8,8 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#include "./actions_class.hpp"
-#include "./markups.hpp"
+#include "actions_class.hpp"
+#include "markups.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -31,8 +31,6 @@ namespace quickbook
         , doc_license()
         , doc_last_revision()
         , include_doc_id()
-        , doc_license_1_1()
-        , doc_purpose_1_1()
 
     // main output stream
         , out(out_)
@@ -72,9 +70,17 @@ namespace quickbook
 
     // actions
         , error(error_count)
+        , extract_doc_title(doc_title, phrase)
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
-
+        , extract_doc_version(doc_version, phrase)
+        , extract_doc_id(doc_id_tmp, phrase)
+        , extract_doc_dirname(doc_dirname, phrase)
+        , extract_copyright_second(copyright.second, phrase)
+        , extract_name_second(name.second, phrase)
+        , extract_name_first(name.first, phrase)
+        , extract_doc_last_revision(doc_last_revision, phrase)
+        , extract_doc_category(doc_category, phrase)
         , syntax_p(temp, source_mode, macro, *this)
         , code(out, phrase, syntax_p)
         , code_block(phrase, phrase, syntax_p)

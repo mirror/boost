@@ -3,8 +3,6 @@
 <article id="section_in_a_template" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Section in a template</title>
-  <articleinfo>
-  </articleinfo>
   <para>
     Some text before the section.
   </para>

@@ -7,13 +7,12 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#include "./quickbook.hpp"
-#include "./actions_class.hpp"
-#include "../block.hpp"
-#include "../doc_info.hpp"
-#include "./post_process.hpp"
-#include "./utils.hpp"
-#include "./input_path.hpp"
+#include "grammar.hpp"
+#include "quickbook.hpp"
+#include "actions_class.hpp"
+#include "post_process.hpp"
+#include "utils.hpp"
+#include "input_path.hpp"
 #include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/v2/path.hpp>
@@ -45,63 +44,9 @@ namespace quickbook
     std::vector<std::string> include_path;
     std::vector<std::string> preset_defines;
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  Parse the macros passed as command line parameters
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Actions>
-    struct command_line_grammar
-        : public grammar<command_line_grammar<Actions> >
-    {
-        command_line_grammar(Actions& actions)
-            : actions(actions) {}
-
-        template <typename Scanner>
-        struct definition
-        {
-            definition(command_line_grammar const& self)
-                : unused(false), common(self.actions, unused)
-            {
-                Actions& actions = self.actions;
-
-                macro =
-                        *space_p
-                    >>  macro_identifier            [actions.macro_identifier]
-                    >>  *space_p
-                    >>  (   '='
-                        >>  *space_p
-                        >>  phrase                  [actions.macro_definition]
-                        >>  *space_p
-                        )
-                    |   eps_p                       [actions.macro_definition]
-                    ;
-
-                macro_identifier =
-                    +(anychar_p - (space_p | ']' | '='))
-                    ;
-
-                phrase =
-                   *(   common
-                    |   (anychar_p - ']')           [actions.plain_char]
-                    )
-                    ;
-            }
-
-            bool unused;
-            rule<Scanner> macro, macro_identifier, phrase;
-            phrase_grammar<Actions> common;
-
-            rule<Scanner> const&
-            start() const { return macro; }
-        };
-
-        Actions& actions;
-    };
-
     static void set_macros(actions& actor)
     {
-        quickbook::command_line_grammar<actions> grammar(actor);
+        quickbook::command_line_grammar grammar(actor);
 
         for(std::vector<std::string>::const_iterator
                 it = preset_defines.begin(),
@@ -123,7 +68,7 @@ namespace quickbook
     //
     ///////////////////////////////////////////////////////////////////////////
     int
-    parse(char const* filein_, actions& actor, bool ignore_docinfo)
+    parse_file(char const* filein_, actions& actor, bool ignore_docinfo)
     {
         using std::cerr;
         using std::vector;
@@ -140,14 +85,14 @@ namespace quickbook
         iterator_type first(storage.begin(), storage.end(), filein_);
         iterator_type last(storage.end(), storage.end());
 
-        doc_info_grammar<actions> l(actor);
+        doc_info_grammar l(actor);
         parse_info<iterator_type> info = parse(first, last, l);
 
         if (info.hit || ignore_docinfo)
         {
             pre(actor.out, actor, ignore_docinfo);
 
-            block_grammar<actions> g(actor);
+            block_grammar g(actor);
             info = parse(info.hit ? info.stop : first, last, g);
             if (info.full)
             {
@@ -167,11 +112,11 @@ namespace quickbook
     }
 
     static int
-    parse(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
+    parse_document(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
         set_macros(actor);
-        bool r = parse(filein_, actor);
+        bool r = parse_file(filein_, actor);
         if (actor.section_level != 0)
             detail::outwarn(filein_)
                 << "Warning missing [endsect] detected at end of file."
@@ -187,7 +132,7 @@ namespace quickbook
     }
 
     static int
-    parse(
+    parse_document(
         char const* filein_
       , char const* fileout_
       , int indent
@@ -202,7 +147,7 @@ namespace quickbook
         if (pretty_print)
         {
             string_stream buffer;
-            result = parse(filein_, outdir, buffer);
+            result = parse_document(filein_, outdir, buffer);
             if (result == 0)
             {
                 result = post_process(buffer.str(), fileout, indent, linewidth);
@@ -211,7 +156,7 @@ namespace quickbook
         else
         {
             string_stream buffer;
-            result = parse(filein_, outdir, buffer);
+            result = parse_document(filein_, outdir, buffer);
             fileout << buffer.str();
         }
         return result;
@@ -349,7 +294,7 @@ main(int argc, char* argv[])
                 << fileout
                 << std::endl;
 
-            return quickbook::parse(filein.c_str(), fileout.c_str(), indent, linewidth, pretty_print);
+            return quickbook::parse_document(filein.c_str(), fileout.c_str(), indent, linewidth, pretty_print);
         }
         else
         {
