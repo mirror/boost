@@ -1472,7 +1472,6 @@ position described by a given iterator.
 [*Return type]:
 
 * A model of __forward_sequence__.
-* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, in their original order, and a new element with the
 type and value of `t` inserted at iterator `pos`.
@@ -1513,7 +1512,7 @@ Returns a new sequence with another sequence inserted at a specified iterator.
 ]
 
 [heading Expression Semantics]
-    __insert__(seq, pos, range);
+    __insert_range__(seq, pos, range);
 
 [*Return type]:
 
@@ -1725,7 +1724,6 @@ Returns a new sequence with an element added at the end.
 [*Return type]:
 
 * A model of __forward_sequence__.
-* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, and new element `t` appended to the end. The elements are in the same order as they were in `seq`.
 
@@ -1767,7 +1765,6 @@ Returns a new sequence with an element added at the beginning.
 [*Return type]:
 
 * A model of __forward_sequence__.
-* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, and new element `t` appended to the beginning. The elements are in the same order as they were in `seq`.
 
@@ -2293,7 +2290,6 @@ Returns the result type of __insert__, given the sequence, position iterator and
 [*Return type]:
 
 * A model of __forward_sequence__.
-* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with an element of type `T` inserted at position `Position` in `Sequence`.
 
@@ -2524,7 +2520,6 @@ Returns the result type of __push_back__, given the types of the input sequence 
 [*Return type]:
 
 * A model of __forward_sequence__.
-* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with the elements of `Sequence` and an element of type `T` added to the end.
 
@@ -2565,7 +2560,6 @@ Returns the result type of __push_front__, given the types of the input sequence
 [*Return type]:
 
 * A model of __forward_sequence__.
-* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with the elements of `Sequence` and an element of type `T` added to the beginning.
 
