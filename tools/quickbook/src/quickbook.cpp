@@ -53,9 +53,8 @@ namespace quickbook
                 end = preset_defines.end();
                 it != end; ++it)
         {
-            typedef position_iterator<std::string::const_iterator> iterator_type;
-            iterator_type first(it->begin(), it->end(), "command line parameter");
-            iterator_type last(it->end(), it->end());
+            iterator first(it->begin(), it->end(), "command line parameter");
+            iterator last(it->end(), it->end());
 
             call_parse(first, last, grammar);
             // TODO: Check result?
@@ -81,12 +80,11 @@ namespace quickbook
             return err;
         }
 
-        typedef position_iterator<std::string::const_iterator> iterator_type;
-        iterator_type first(storage.begin(), storage.end(), filein_);
-        iterator_type last(storage.end(), storage.end());
+        iterator first(storage.begin(), storage.end(), filein_);
+        iterator last(storage.end(), storage.end());
 
         doc_info_grammar l(actor);
-        parse_info<iterator_type> info = call_parse(first, last, l);
+        parse_info<iterator> info = call_parse(first, last, l);
 
         if (info.hit || ignore_docinfo)
         {
@@ -102,7 +100,7 @@ namespace quickbook
 
         if (!info.full)
         {
-            file_position const pos = info.stop.get_position();
+            position const pos = info.stop.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Syntax Error near column " << pos.column << ".\n";
             ++actor.error_count;

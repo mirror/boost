@@ -43,7 +43,7 @@ namespace quickbook
     // Handles line-breaks (DEPRECATED!!!)
     void break_action::operator()(iterator first, iterator) const
     {
-        boost::spirit::classic::file_position const pos = first.get_position();
+        position const pos = first.get_position();
         detail::outwarn(pos.file,pos.line) << "in column:" << pos.column << ", "
             << "[br] and \\n are deprecated" << ".\n";
         phrase << break_mark;
@@ -51,7 +51,7 @@ namespace quickbook
 
     void error_action::operator()(iterator first, iterator /*last*/) const
     {
-        boost::spirit::classic::file_position const pos = first.get_position();
+        position const pos = first.get_position();
         detail::outerr(pos.file,pos.line)
             << "Syntax Error near column " << pos.column << ".\n";
         ++error_count;
@@ -271,7 +271,7 @@ namespace quickbook
 
         if (mark != list_marks.top().first) // new_indent == list_indent
         {
-            boost::spirit::classic::file_position const pos = first.get_position();
+            position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Illegal change of list style near column " << pos.column << ".\n";
             detail::outwarn(pos.file,pos.line)
@@ -290,7 +290,7 @@ namespace quickbook
 
     void unexpected_char::operator()(iterator first, iterator last) const
     {
-        boost::spirit::classic::file_position const pos = first.get_position();
+        position const pos = first.get_position();
 
         detail::outwarn(pos.file, pos.line)
             << "in column:" << pos.column
@@ -440,7 +440,7 @@ namespace quickbook
 
     void attribute_action::operator()(iterator first, iterator last) const
     {
-        boost::spirit::classic::file_position const pos = first.get_position();
+        position const pos = first.get_position();
 
         if (!attributes.insert(
                 attribute_map::value_type(attribute_name, std::string(first, last))
@@ -578,7 +578,7 @@ namespace quickbook
                 std::string(first, last), first.get_position(),
                 actions.template_block, &actions.templates.top_scope())))
         {
-            boost::spirit::classic::file_position const pos = first.get_position();
+            position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Template Redefinition: " << actions.template_identifier << std::endl;
             ++actions.error_count;
@@ -648,7 +648,7 @@ namespace quickbook
         bool break_arguments(
             std::vector<template_body>& args
           , std::vector<std::string> const& params
-          , boost::spirit::classic::file_position const& pos
+          , position const& pos
         )
         {
             // Quickbook 1.4-: If there aren't enough parameters seperated by
@@ -669,7 +669,8 @@ namespace quickbook
                     // arguments, or if there are no more spaces left.
 
                     template_body& body = args.back();
-                    iterator begin(body.content.begin(), body.content.end(), body.position.file);
+                    iterator begin(body.content.begin(), body.content.end(),
+                        position(body.position.file.c_str(), body.position.line, body.position.column));
                     iterator end(body.content.end(), body.content.end());
                     
                     iterator l_pos = find_first_seperator(begin, end);
@@ -706,7 +707,7 @@ namespace quickbook
             std::vector<template_body>& args
           , std::vector<std::string> const& params
           , template_scope const& scope
-          , boost::spirit::classic::file_position const& pos
+          , position const& pos
           , quickbook::actions& actions
         )
         {
@@ -758,7 +759,8 @@ namespace quickbook
                 simple_phrase_grammar phrase_p(actions);
 
                 //  do a phrase level parse
-                iterator first(body.content.begin(), body.content.end(), body.position);
+                iterator first(body.content.begin(), body.content.end(),
+                    position(body.position.file.c_str(), body.position.line, body.position.column));
                 iterator last(body.content.end(), body.content.end());
                 bool r = call_parse(first, last, phrase_p).full;
                 actions.phrase.swap(result);
@@ -773,7 +775,8 @@ namespace quickbook
                 //  the need to check for end of file in the grammar.
                 
                 std::string content = body.content + "\n\n";
-                iterator first(content.begin(), content.end(), body.position);
+                iterator first(content.begin(), content.end(),
+                    position(body.position.file.c_str(), body.position.line, body.position.column));
                 iterator last(content.end(), content.end());
                 bool r = call_parse(first, last, block_p).full;
                 actions.inside_paragraph();
@@ -805,7 +808,7 @@ namespace quickbook
         std::string identifier;
         std::swap(args, actions.template_args);
         std::swap(identifier, actions.template_identifier);
-        boost::spirit::classic::file_position const pos = first.get_position();
+        position const pos = first.get_position();
 
         ++actions.template_depth;
         if (actions.template_depth > actions.max_template_depth)
@@ -905,7 +908,7 @@ namespace quickbook
 
             if (!parse_template(symbol->body, actions.template_escape, result, actions))
             {
-                boost::spirit::classic::file_position const pos = first.get_position();
+                position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
                     << "Expanding "
                     << (symbol->body.is_block ? "block" : "phrase")
@@ -923,7 +926,7 @@ namespace quickbook
 
             if (actions.section_level != actions.min_section_level)
             {
-                boost::spirit::classic::file_position const pos = first.get_position();
+                position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
                     << "Mismatched sections in template " << identifier << std::endl;
                 actions.pop(); // restore the actions' states
@@ -951,7 +954,12 @@ namespace quickbook
                 if(!r)
                 {
                     detail::outerr(c.position.file, c.position.line)
-                        << "Expanding callout." << std::endl;
+                        << "Expanding callout." << std::endl
+                        << "------------------begin------------------" << std::endl
+                        << c.content
+                        << std::endl
+                        << "------------------end--------------------" << std::endl
+                        ;
                     ++actions.error_count;
                     return;
                 }
@@ -1176,7 +1184,7 @@ namespace quickbook
     {
         if (section_level <= min_section_level)
         {
-            boost::spirit::classic::file_position const pos = first.get_position();
+            position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Mismatched [endsect] near column " << pos.column << ".\n";
             ++error_count;
@@ -1201,7 +1209,7 @@ namespace quickbook
     
     void element_id_warning_action::operator()(iterator first, iterator) const
     {
-        boost::spirit::classic::file_position const pos = first.get_position();
+        position const pos = first.get_position();
         detail::outwarn(pos.file,pos.line) << "Empty id.\n";        
     }
 
@@ -1292,7 +1300,7 @@ namespace quickbook
             ts.parent = &actions.templates.top_scope();
             if (!actions.templates.add(ts))
             {
-                boost::spirit::classic::file_position const pos = ts.body.position;
+                cl::file_position const pos = ts.body.position;
                 detail::outerr(pos.file, pos.line)
                     << "Template Redefinition: " << tname << std::endl;
                 ++actions.error_count;

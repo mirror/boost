@@ -35,7 +35,9 @@ namespace quickbook
     namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
 
-    typedef cl::position_iterator<std::string::const_iterator> iterator;
+    typedef cl::position_iterator<std::string::const_iterator,
+        cl::file_position_base<char const*> > iterator;
+    typedef cl::file_position_base<char const*> position;
     typedef cl::symbols<std::string> string_symbols;
     typedef std::map<std::string, std::string> attribute_map;
 

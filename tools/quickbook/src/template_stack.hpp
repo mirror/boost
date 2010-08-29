@@ -25,7 +25,7 @@ namespace quickbook
     {
         template_body(
                 std::string const& content,
-                boost::spirit::classic::file_position position,
+                boost::spirit::classic::file_position const& position,
                 bool is_block
             )
             : content(content)
@@ -33,8 +33,21 @@ namespace quickbook
             , is_block(is_block)
         {
         }
+
+        template_body(
+                std::string const& content,
+                boost::spirit::classic::file_position_base<char const*> const& position,
+                bool is_block
+            )
+            : content(content)
+            , position(position.file, position.line, position.column)
+            , is_block(is_block)
+        {
+        }
     
         std::string content;
+        // Note: Using file_position to store the filename after the file
+        // has been closed.
         boost::spirit::classic::file_position position;
         bool is_block;
     };
@@ -48,6 +61,20 @@ namespace quickbook
                 std::vector<std::string> const& params,
                 std::string const& body,
                 boost::spirit::classic::file_position const& position,
+                bool is_block,
+                template_scope const* parent = 0)
+           : identifier(identifier)
+           , params(params)
+           , body(body, position, is_block)
+           , parent(parent)
+           , callout(false)
+           , callouts() {}
+
+        template_symbol(
+                std::string const& identifier,
+                std::vector<std::string> const& params,
+                std::string const& body,
+                boost::spirit::classic::file_position_base<char const*> const& position,
                 bool is_block,
                 template_scope const* parent = 0)
            : identifier(identifier)
