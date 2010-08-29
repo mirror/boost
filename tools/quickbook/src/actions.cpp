@@ -760,7 +760,7 @@ namespace quickbook
                 //  do a phrase level parse
                 iterator first(body.content.begin(), body.content.end(), body.position);
                 iterator last(body.content.end(), body.content.end());
-                bool r = quickbook::parse(first, last, phrase_p).full;
+                bool r = call_parse(first, last, phrase_p).full;
                 actions.phrase.swap(result);
                 return r;
             }
@@ -775,7 +775,7 @@ namespace quickbook
                 std::string content = body.content + "\n\n";
                 iterator first(content.begin(), content.end(), body.position);
                 iterator last(content.end(), content.end());
-                bool r = quickbook::parse(first, last, block_p).full;
+                bool r = call_parse(first, last, block_p).full;
                 actions.inside_paragraph();
                 actions.out.swap(result);
                 return r;

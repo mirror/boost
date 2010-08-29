@@ -41,7 +41,8 @@ namespace quickbook
         bool const skip_initial_spaces;
     };
 
-    struct phrase_grammar : cl::grammar<phrase_grammar>
+    struct phrase_grammar
+        : cl::grammar<phrase_grammar>
     {
         phrase_grammar(quickbook::actions& actions, bool& no_eols)
             : no_eols(no_eols), actions(actions) {}
@@ -53,7 +54,8 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    struct simple_phrase_grammar : public cl::grammar<simple_phrase_grammar >
+    struct simple_phrase_grammar
+        : public cl::grammar<simple_phrase_grammar >
     {
         simple_phrase_grammar(quickbook::actions& actions)
             : actions(actions) {}
@@ -76,8 +78,16 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    template <typename Iterator, typename Grammar>
-    cl::parse_info<Iterator> parse(Iterator&, Iterator, Grammar&);
+    cl::parse_info<iterator> call_parse(
+        iterator&, iterator, doc_info_grammar&);
+    cl::parse_info<iterator> call_parse(
+        iterator&, iterator, block_grammar&);
+    cl::parse_info<iterator> call_parse(
+        iterator&, iterator, phrase_grammar&);
+    cl::parse_info<iterator> call_parse(
+        iterator&, iterator, simple_phrase_grammar&);
+    cl::parse_info<iterator> call_parse(
+        iterator&, iterator, command_line_grammar&);
 }
 
 #endif

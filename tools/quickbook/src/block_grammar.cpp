@@ -470,13 +470,9 @@ namespace quickbook
             ;
     }
 
-    template <typename Iterator, typename Grammar>
-    parse_info<Iterator> parse(Iterator& first, Iterator last, Grammar& g)
+    parse_info<iterator> call_parse(
+        iterator& first, iterator last, block_grammar& g)
     {
         return boost::spirit::classic::parse(first, last, g);
-    }
-
-    void instantiate_block_grammar(quickbook::iterator i, block_grammar& g) {
-        parse(i, i, g);
     }
 }

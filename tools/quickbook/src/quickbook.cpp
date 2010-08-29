@@ -57,7 +57,7 @@ namespace quickbook
             iterator_type first(it->begin(), it->end(), "command line parameter");
             iterator_type last(it->end(), it->end());
 
-            parse(first, last, grammar);
+            call_parse(first, last, grammar);
             // TODO: Check result?
         }
     }
@@ -86,14 +86,14 @@ namespace quickbook
         iterator_type last(storage.end(), storage.end());
 
         doc_info_grammar l(actor);
-        parse_info<iterator_type> info = parse(first, last, l);
+        parse_info<iterator_type> info = call_parse(first, last, l);
 
         if (info.hit || ignore_docinfo)
         {
             pre(actor.out, actor, ignore_docinfo);
 
             block_grammar g(actor);
-            info = parse(info.hit ? info.stop : first, last, g);
+            info = call_parse(info.hit ? info.stop : first, last, g);
             if (info.full)
             {
                 post(actor.out, actor, ignore_docinfo);
