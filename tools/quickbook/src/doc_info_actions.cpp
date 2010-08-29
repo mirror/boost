@@ -31,7 +31,7 @@ namespace quickbook
         // *before* anything else.
 
         if (!actions.doc_id_tmp.empty())
-            actions.doc_id = actions.doc_id_tmp.get(103);
+            actions.doc_id = actions.doc_id_tmp.get(106);
 
         if (actions.doc_id.empty())
             actions.doc_id = detail::make_identifier(
@@ -145,18 +145,18 @@ namespace quickbook
         
         if(actions.doc_type == "library")
         {
-            out << "    name=\"" << actions.doc_title.get(103) << "\"\n";
+            out << "    name=\"" << actions.doc_title.get(106) << "\"\n";
         }
 
         if(!actions.doc_dirname.empty())
         {
             out << "    dirname=\""
-                << actions.doc_dirname.get(103)
+                << actions.doc_dirname.get(106)
                 << "\"\n";
         }
 
         out << "    last-revision=\""
-            << actions.doc_last_revision.get(103)
+            << actions.doc_last_revision.get(106)
             << "\" \n"
             << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n";
             
@@ -188,9 +188,9 @@ namespace quickbook
         if (!actions.doc_title.empty())
         {
             out << "  <title>"
-                << actions.doc_title.get(103);
+                << actions.doc_title.get(106);
             if (!actions.doc_version.empty()) {
-                out << ' ' << actions.doc_version.get(103);
+                out << ' ' << actions.doc_version.get(106);
             }
             out<< "</title>\n\n\n";
         }
@@ -210,10 +210,10 @@ namespace quickbook
             {
                 tmp << "      <author>\n"
                     << "        <firstname>"
-                    << it->first.get(103)
+                    << it->first.get(106)
                     << "</firstname>\n"
                     << "        <surname>"
-                    << it->second.get(103)
+                    << it->second.get(106)
                     << "</surname>\n"
                     << "      </author>\n";
             }
@@ -238,7 +238,7 @@ namespace quickbook
                 }
         
                 tmp << "      <holder>"
-                    << it->second.get(103)
+                    << it->second.get(106)
                     << "</holder>\n"
                     << "    </copyright>\n"
                     << "\n"
@@ -274,7 +274,7 @@ namespace quickbook
                 it != end; ++it)
             {
                 tmp << "    <" << actions.doc_type << "category name=\"category:"
-                    << it->get(103)
+                    << it->get(106)
                     << "\"></" << actions.doc_type << "category>\n"
                     << "\n"
                 ;

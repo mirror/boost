@@ -1,4 +1,4 @@
-[library Test that &, < are being escaped.
+[library Test that &amp;, &lt; are being escaped.
     [quickbook 1.5]
     [purpose & should be &amp;, < should &lt;]
     [license & should be &amp;, < should &lt;]

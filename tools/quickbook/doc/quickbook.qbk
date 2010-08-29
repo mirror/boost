@@ -230,11 +230,12 @@ Features include:
 * In docbook, variable list entries can only have one `listitem`, so if an
   entry has multiple values, merge them into one `listitem`.
 * Support nested code snippets.
-* Allow escapes in doc info fields (apart from `\n`).
-* Don't escape the raw markup for versions less than 1.3, for better
-  compatibility with older documentation.
+* Revert xml escaping document info, it broke some documentation files
+  (now a 1.6 feature).
 * Further work on quickbook 1.6, still not stable.
   * Allow heading to have ids, using the syntax: `[heading:id title]`.
+  * XML escape documentation fields, with escapes to allow encoding unicode
+    in ASCII.
 
 [endsect]
 
