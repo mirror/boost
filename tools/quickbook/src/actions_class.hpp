@@ -68,6 +68,7 @@ namespace quickbook
     // state
         fs::path                filename;
         fs::path                outdir;
+        std::size_t             macro_change_depth;
         string_symbols          macro;
         int                     section_level;
         int                     min_section_level;
@@ -78,7 +79,7 @@ namespace quickbook
         typedef boost::tuple<
             fs::path
           , fs::path
-          , string_symbols
+          , std::size_t
           , int
           , int
           , std::string
@@ -87,6 +88,8 @@ namespace quickbook
         state_tuple;
 
         std::stack<state_tuple> state_stack;
+        // Stack macros separately as copying macros is expensive.
+        std::stack<string_symbols> macro_stack;
 
     // temporary or global state
         std::string             element_id;
@@ -111,6 +114,7 @@ namespace quickbook
         attribute_map           attributes;
 
     // push/pop the states and the streams
+        void copy_macros_for_write();
         void push();
         void pop();
 
