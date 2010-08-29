@@ -134,7 +134,7 @@ public:
     RealType min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
     /* Returns the largest value that the distribution can produce. */
     RealType max BOOST_PREVENT_MACRO_SUBSTITUTION () const
-    { return (std::numeric_limits<RealType>::max)(); }
+    { return (std::numeric_limits<RealType>::infinity)(); }
 
     /** Returns the parameters of the distribution. */
     param_type param() const { return param_type(_alpha, _beta); }
