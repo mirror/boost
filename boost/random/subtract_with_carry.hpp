@@ -29,6 +29,7 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/seed.hpp>
 #include <boost/random/detail/operators.hpp>
+#include <boost/random/detail/generator_seed_seq.hpp>
 #include <boost/random/linear_congruential.hpp>
 
 
