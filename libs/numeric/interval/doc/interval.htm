@@ -233,7 +233,7 @@
   <code>width</code>, <code>median</code>, <code>empty</code>,
   <code>singleton</code>, <code>equal</code>, <code>in</code>,
   <code>zero_in</code>, <code>subset</code>, <code>proper_subset</code>,
-  <code>overlap</code>, <code>intersection</code>, <code>hull</code>,
+  <code>overlap</code>, <code>intersect</code>, <code>hull</code>,
   <code>bisect</code>).</p>
 
   <p>For some functions which take several parameters of type
@@ -358,7 +358,7 @@ template &lt;class T, class Policies&gt;  bool proper_subset(const interval&lt;T
 template &lt;class T, class Policies&gt;  bool overlap(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 
 /* set manipulation interval functions */
-template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; intersection(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
+template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; intersect(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; hull(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; hull(const interval&lt;T, Policies&gt;&amp; x, const T&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; hull(const T&amp; x, const interval&lt;T, Policies&gt;&amp; y);
