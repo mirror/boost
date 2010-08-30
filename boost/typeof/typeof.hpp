@@ -15,7 +15,7 @@
 
 #if defined(__COMO__)
 #   ifdef __GNUG__
-#       ifndef(BOOST_TYPEOF_EMULATION)
+#       ifndef BOOST_TYPEOF_EMULATION
 #           ifndef BOOST_TYPEOF_NATIVE
 #               define BOOST_TYPEOF_NATIVE
 #           endif
