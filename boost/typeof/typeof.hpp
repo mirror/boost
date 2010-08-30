@@ -113,18 +113,18 @@
 #   elif (_MSC_VER >= 1310)  // 7.1 ->
 #       ifndef BOOST_TYPEOF_EMULATION
 #           ifndef BOOST_TYPEOF_NATIVE
-#				ifndef _MSC_EXTENSIONS
-#					define BOOST_TYPEOF_EMULATION
-#				else
-#		            define BOOST_TYPEOF_NATIVE
-#				endif
+#               ifndef _MSC_EXTENSIONS
+#                   define BOOST_TYPEOF_EMULATION
+#               else
+#                   define BOOST_TYPEOF_NATIVE
+#               endif
 #           endif
 #       endif
-#		ifdef BOOST_TYPEOF_NATIVE
-#			include <boost/typeof/msvc/typeof_impl.hpp>
+#       ifdef BOOST_TYPEOF_NATIVE
+#           include <boost/typeof/msvc/typeof_impl.hpp>
 #           define MSVC_TYPEOF_HACK
-#		endif
-#	endif
+#       endif
+#   endif
 #elif defined(__HP_aCC)
 #   ifndef BOOST_TYPEOF_NATIVE
 #       ifndef BOOST_TYPEOF_EMULATION
