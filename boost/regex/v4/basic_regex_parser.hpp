@@ -1003,6 +1003,21 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
    //
    if(pocessive)
    {
+      if(m_position != m_end)
+      {
+         //
+         // Check for illegal following quantifier, we have to do this here, because
+         // the extra states we insert below circumvents are usual error checking :-(
+         //
+         switch(this->m_traits.syntax_type(*m_position))
+         {
+         case regex_constants::syntax_star:
+         case regex_constants::syntax_plus:
+         case regex_constants::syntax_question:
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+      }
       re_brace* pb = static_cast<re_brace*>(this->insert_state(insert_point, syntax_element_startmark, sizeof(re_brace)));
       pb->index = -3;
       pb->icase = this->flags() & regbase::icase;
