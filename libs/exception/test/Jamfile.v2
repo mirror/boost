@@ -7,7 +7,7 @@
 
 import testing ;
 
-project : requirements <exception-handling>on ;
+project : requirements <exception-handling>on <define>BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR ;
 
 #to_string
 
@@ -36,7 +36,8 @@ run refcount_ptr_test.cpp ;
 run current_exception_cast_test.cpp ;
 run no_exceptions_test.cpp : : : <exception-handling>off ;
 run errinfos_test.cpp ;
-run exception_ptr_test.cpp /boost//thread : : : <threading>multi ;
+run exception_ptr_test.cpp /boost//thread /boost//exception : : : <threading>multi ;
+
 compile-fail exception_fail.cpp ;
 compile-fail throw_exception_fail.cpp ;
 compile-fail error_info_const_fail.cpp ;
