@@ -14,6 +14,7 @@
 #include <boost/mpl/set_c.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
+#include <boost/mpl/begin_end.hpp>
 
 #include <boost/mpl/aux_/test.hpp>
 
@@ -59,6 +60,18 @@ MPL_TEST_CASE()
     MPL_ASSERT(( is_same< test::at_c<s1,false>::type, void_ > ));
     MPL_ASSERT(( is_same< test::at_c<s2,true>::type, void_ > ));
 #endif
+
+    typedef begin<s1>::type first1;
+    typedef end<s1>::type last1;
+    MPL_ASSERT_RELATION( (distance<first1, last1>::value), ==, 1 );
+
+    typedef begin<s2>::type first2;
+    typedef end<s2>::type last2;
+    MPL_ASSERT_RELATION( (distance<first2, last2>::value), ==, 1 );
+    
+    typedef begin<s3>::type first3;
+    typedef end<s3>::type last3;
+    MPL_ASSERT_RELATION( (distance<first3, last3>::value), ==, 2 );
 }
 #endif
 
@@ -82,4 +95,12 @@ MPL_TEST_CASE()
     MPL_ASSERT(( is_same< test::at_c<s1,'z'>::type, void_ > ));
     MPL_ASSERT(( is_same< test::at_c<s2,'k'>::type, void_ > ));
 #endif
+    
+    typedef begin<s1>::type first1;
+    typedef end<s1>::type last1;
+    MPL_ASSERT_RELATION( (distance<first1, last1>::value), ==, 1 );
+
+    typedef begin<s2>::type first2;
+    typedef end<s2>::type last2;
+    MPL_ASSERT_RELATION( (distance<first2, last2>::value), ==, 8 );
 }
