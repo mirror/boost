@@ -72,7 +72,8 @@ namespace
         class_has_virtual_base=4
         };
 
-    struct cpp_type_info
+    struct
+    cpp_type_info
         {
         unsigned flags;
         void const * type_info; //std::type_info * type_info;
@@ -103,9 +104,11 @@ namespace
     exception_object_deleter
         {
         cpp_exception_type const * exception_type_;
+        bool run_destructor_;
 
-        exception_object_deleter( cpp_exception_type const * exception_type ):
-            exception_type_(exception_type)
+        exception_object_deleter( cpp_exception_type const * exception_type, bool run_destructor ):
+            exception_type_(exception_type),
+            run_destructor_(run_destructor)
             {
             BOOST_ASSERT(exception_type_!=0);
             }
@@ -114,14 +117,17 @@ namespace
         operator()( void * exception_object )
             {
             BOOST_ASSERT(exception_object!=0);
-            dummy_exception_type * dummy_exception_ptr=reinterpret_cast<dummy_exception_type *>(exception_object);
-            (dummy_exception_ptr->*(exception_type_->destructor))();
+            if( run_destructor_ )
+                {
+                dummy_exception_type * dummy_exception_ptr=reinterpret_cast<dummy_exception_type *>(exception_object);
+                (dummy_exception_ptr->*(exception_type_->destructor))();
+                }
             free(exception_object);
             }
         };
 
     boost::shared_ptr<void>
-    copy_msvc_exception( void * source_object, cpp_exception_type const * exception_type )
+    copy_msvc_exception( void * source_object, cpp_exception_type const * exception_type, bool run_destructor )
         {
         void * exception_object = malloc(exception_type->type_info_table->info[0]->size);
         if( !exception_object )
@@ -137,7 +143,7 @@ namespace
             }
         else
             memmove(exception_object,source_object,type->size);
-        return boost::shared_ptr<void>(exception_object,exception_object_deleter(exception_type));
+        return boost::shared_ptr<void>(exception_object,exception_object_deleter(exception_type,run_destructor));
         }
 
     class
@@ -154,7 +160,7 @@ namespace
 
         cloned_exception( void * source_object, cpp_exception_type const * exception_type ):
             exception_type_(exception_type),
-            exception_object_(copy_msvc_exception(source_object,exception_type_))
+            exception_object_(copy_msvc_exception(source_object,exception_type_,true))
             {
             }
 
@@ -171,7 +177,7 @@ namespace
         void
         rethrow() const
             {
-            boost::shared_ptr<void const> clone=copy_msvc_exception(exception_object_.get(),exception_type_);
+            boost::shared_ptr<void const> clone=copy_msvc_exception(exception_object_.get(),exception_type_,false);
             ULONG_PTR args[cpp_exception_parameter_count];
             args[0]=cpp_exception_magic_flag;
             args[1]=reinterpret_cast<ULONG_PTR>(clone.get());
@@ -181,7 +187,7 @@ namespace
         };
 
     bool
-    is_cpp_exception( EXCEPTION_RECORD * record )
+    is_cpp_exception( EXCEPTION_RECORD const * record )
         {
         return record && 
             (record->ExceptionCode==cpp_exception_code) &&
@@ -190,30 +196,27 @@ namespace
         }
 
     unsigned long
-    exception_cloning_filter( boost::exception_detail::clone_base const * * ptr, void * info_ )
+    exception_cloning_filter( int & result, boost::exception_detail::clone_base const * & ptr, void * info_ )
         {
-        BOOST_ASSERT(ptr!=0);
-        BOOST_ASSERT(!*ptr);
         BOOST_ASSERT(info_!=0);
         EXCEPTION_POINTERS * info=reinterpret_cast<EXCEPTION_POINTERS *>(info_);
         EXCEPTION_RECORD * record=info->ExceptionRecord;
         if( is_cpp_exception(record) )
             {
             if( !record->ExceptionInformation[2] )
-                {
                 record = *reinterpret_cast<EXCEPTION_RECORD * *>(reinterpret_cast<char *>(_errno())+exception_info_offset);
-                }
             if( is_cpp_exception(record) && record->ExceptionInformation[2] )
                 try
                     {
-                    *ptr = new cloned_exception(
+                    ptr = new cloned_exception(
                             reinterpret_cast<void *>(record->ExceptionInformation[1]),
                             reinterpret_cast<cpp_exception_type const *>(record->ExceptionInformation[2]));
+                    result = boost::exception_detail::clone_current_exception_result::success;
                     }
                 catch(
                 std::bad_alloc & )
                     {
-                    BOOST_ASSERT(!*ptr);
+                    result = boost::exception_detail::clone_current_exception_result::bad_alloc;
                     }
                 catch(
                 ... )
@@ -235,23 +238,22 @@ boost
         clone_current_exception_msvc( clone_base const * & cloned )
             {
             BOOST_ASSERT(!cloned);
-            if( exception_info_offset<0 )
-                return clone_current_exception_result::not_supported;
-             clone_base const * res=0;
-            __try
+            int result = clone_current_exception_result::not_supported;
+            if( exception_info_offset>=0 )
                 {
-                throw;
+                 clone_base const * ptr=0;
+                __try
+                    {
+                    throw;
+                    }
+                __except(exception_cloning_filter(result,ptr,GetExceptionInformation()))
+                    {
+                    }
+                if( result==clone_current_exception_result::success )
+                    cloned=ptr;
                 }
-            __except(exception_cloning_filter(&res,GetExceptionInformation()))
-                {
-                }
-            if( !res )
-                return clone_current_exception_result::bad_alloc;
-            else
-                {
-                cloned=res;
-                return clone_current_exception_result::success;
-                }
+            BOOST_ASSERT(result!=clone_current_exception_result::success || cloned);
+            return result;
             }
         }
     }

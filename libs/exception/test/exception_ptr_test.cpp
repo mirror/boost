@@ -84,7 +84,8 @@ exc:
         ++exc_count;
         }
 
-    ~exc()
+    virtual
+    ~exc() throw()
         {
         --exc_count;
         }
