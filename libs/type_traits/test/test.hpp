@@ -23,6 +23,17 @@
 // We have to turn off warnings that occur within the test suite:
 #pragma warning(disable:4127)
 #endif
+#ifdef BOOST_INTEL
+// remark #1418: external function definition with no prior declaration
+// remark #981: operands are evaluated in unspecified order
+#pragma warning(disable:1418 981)
+#endif
+
+#ifdef BOOST_INTEL
+// turn off warnings from this header:
+#pragma warning(push)
+#pragma warning(disable:444)
+#endif
 
 //
 // basic configuration:
@@ -289,7 +300,7 @@ struct VB
    virtual ~VB(){};
 };
 
-struct VD : VB
+struct VD : public VB
 {
    ~VD(){};
 };
@@ -356,21 +367,21 @@ struct polymorphic_base
    virtual void method();
 };
 
-struct polymorphic_derived1 : polymorphic_base
+struct polymorphic_derived1 : public polymorphic_base
 {
 };
 
-struct polymorphic_derived2 : polymorphic_base
+struct polymorphic_derived2 : public polymorphic_base
 {
    virtual void method();
 };
 
-struct virtual_inherit1 : virtual Base { };
-struct virtual_inherit2 : virtual_inherit1 { };
+struct virtual_inherit1 : public virtual Base { };
+struct virtual_inherit2 : public virtual_inherit1 { };
 struct virtual_inherit3 : private virtual Base {};
-struct virtual_inherit4 : virtual boost::noncopyable {};
-struct virtual_inherit5 : virtual int_convertible {};
-struct virtual_inherit6 : virtual Base { virtual ~virtual_inherit6()throw(); };
+struct virtual_inherit4 : public virtual boost::noncopyable {};
+struct virtual_inherit5 : public virtual int_convertible {};
+struct virtual_inherit6 : public virtual Base { virtual ~virtual_inherit6()throw(); };
 
 typedef void foo0_t();
 typedef void foo1_t(int);
@@ -413,6 +424,9 @@ protected:
    wrap& operator=(const wrap&);
 };
 
+#ifdef BOOST_INTEL
+#pragma warning(pop)
+#endif
 
 #endif
 

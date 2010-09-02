@@ -16,6 +16,13 @@
 #include <string>
 #include <utility>
 
+#ifdef BOOST_INTEL
+//  remark #383: value copied to temporary, reference to temporary used
+//     std::pair<std::string, int>        p2 = boost::make_pair( "foo", 1 );
+//                                                                      ^
+#pragma warning(disable:383)
+#endif
+
 namespace boost
 {
 

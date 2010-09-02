@@ -27,6 +27,10 @@ inline void no_unused_warning(const volatile T&)
 {
 }
 
+#if defined(__GNUC__) && (__GNUC__ >= 4) && !defined(BOOST_INTEL)
+#pragma GCC diagnostic ignored "-Wmissing-braces"
+#endif
+
 template <class T>
 void do_check(const T&)
 {
@@ -55,7 +59,7 @@ void do_check(const T&)
 
 #ifndef TEST_STD
    // Non-Tr1 behaviour:
-   typedef typename tt::aligned_storage<T::value,-1L>::type t3;
+   typedef typename tt::aligned_storage<T::value, ~static_cast<std::size_t>(0UL)>::type t3;
    t3 as3 = { 0, };
    must_be_pod<t3> pod3;
    no_unused_warning(as3);

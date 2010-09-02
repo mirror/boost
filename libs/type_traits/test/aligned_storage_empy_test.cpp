@@ -102,7 +102,7 @@ do_check<long double>();
 do_check<__int64>();
 #endif
 #ifdef BOOST_HAS_LONG_LONG
-do_check<long long>();
+do_check<boost::long_long_type>();
 #endif
 
 do_check<int(*)(int)>();

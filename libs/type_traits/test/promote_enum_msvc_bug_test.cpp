@@ -17,6 +17,11 @@
 
 #include "promote_util.hpp"
 
+#ifdef BOOST_INTEL
+//  remark #1418: external function definition with no prior declaration
+#pragma warning(disable:1418)
+#endif
+
 
 enum UIntEnum { UIntEnum_max = UINT_MAX };
 

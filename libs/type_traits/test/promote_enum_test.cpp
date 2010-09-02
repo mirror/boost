@@ -31,6 +31,11 @@
 #include "promote_util.hpp"
 #include <boost/detail/workaround.hpp>
 
+#ifdef BOOST_INTEL
+//  remark #1418: external function definition with no prior declaration
+#pragma warning(disable:1418)
+#endif
+
 enum IntEnum1 { IntEnum1_min = -5      , IntEnum1_max = 5        };
 enum IntEnum2 { IntEnum2_min = SHRT_MIN, IntEnum2_max = SHRT_MAX };
 enum IntEnum3 { IntEnum3_min = INT_MIN , IntEnum3_max = INT_MAX  };

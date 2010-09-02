@@ -19,8 +19,8 @@ struct convertible_from
 };
 
 struct base2 { };
-struct middle2 : virtual base2 { };
-struct derived2 : middle2 { };
+struct middle2 : public virtual base2 { };
+struct derived2 : public middle2 { };
 
 
 TT_TEST_BEGIN(is_convertible)
