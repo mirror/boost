@@ -3,6 +3,7 @@
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+//This MSVC-specific cpp file implements non-intrusive cloning of exception objects.
 //Based on an exception_ptr implementation by Anthony Williams.
 
 #ifdef BOOST_NO_EXCEPTIONS
@@ -155,11 +156,20 @@ namespace
         {
         assert(src!=0);
         cpp_type_info const & ti=get_cpp_type_info(et);
-        void * dst = malloc(ti.size);
-        if( !dst )
+        if( void * dst = malloc(ti.size) )
+            try
+                {
+                copy_msvc_exception(dst,src,ti);
+                return boost::shared_ptr<void>(dst,exception_object_deleter(et));
+                }
+            catch(
+            ... )
+                {
+                free(dst);
+                throw;
+                }
+        else
             throw std::bad_alloc();
-        copy_msvc_exception(dst,src,ti);
-        return boost::shared_ptr<void>(dst,exception_object_deleter(et));
         }
 
     class
