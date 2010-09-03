@@ -359,7 +359,7 @@ boost
                     catch(
                     std::bad_exception & e )
                         {
-                        return exception_detail::exception_ptr_static_exception_object<exception_detail::bad_exception_>::e;
+                        return exception_detail::current_exception_std_exception(e);
                         }
                     catch(
                     std::exception & e )
