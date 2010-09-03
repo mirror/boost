@@ -145,7 +145,7 @@ The definition of `basic_regex` follows: it is based very closely on class
       ``[link boost_regex.basic_regex.size size_type size]``() const; 
       ``[link boost_regex.basic_regex.max_size size_type max_size]``() const; 
       ``[link boost_regex.basic_regex.empty bool empty]``() const; 
-      ``[link boost_regex.basic_regex.mark_count unsigned mark_count]``()const; 
+      ``[link boost_regex.basic_regex.mark_count size_type mark_count]``()const; 
       //
       // modifiers: 
       ``[link boost_regex.basic_regex.assign1 basic_regex& assign]``(const basic_regex& that); 
@@ -485,7 +485,7 @@ otherwise false.
 
 [#boost_regex.basic_regex.mark_count]
 
-   unsigned mark_count() const;
+   size_type mark_count() const;
 
 [*Effects]: Returns the number of marked sub-expressions within the regular expresion.
 

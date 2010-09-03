@@ -342,13 +342,13 @@ void test_icu(const wchar_t&, const test_regex_search_tag& )
    {
       BOOST_REGEX_TEST_ERROR("Expression did not compile when it should have done: " << e.what(), UChar32);
    }
-   catch(const std::runtime_error& r)
+   catch(const std::runtime_error& e)
    {
-      BOOST_REGEX_TEST_ERROR("Received an unexpected std::runtime_error: " << r.what(), UChar32);
+      BOOST_REGEX_TEST_ERROR("Received an unexpected std::runtime_error: " << e.what(), UChar32);
    }
-   catch(const std::exception& r)
+   catch(const std::exception& e)
    {
-      BOOST_REGEX_TEST_ERROR("Received an unexpected std::exception: " << r.what(), UChar32);
+      BOOST_REGEX_TEST_ERROR("Received an unexpected std::exception: " << e.what(), UChar32);
    }
    catch(...)
    {
@@ -418,15 +418,15 @@ void test_icu(const wchar_t&, const test_invalid_regex_tag&)
    {
       have_catch = true;
    }
-   catch(const std::runtime_error& r)
+   catch(const std::runtime_error& e)
    {
       have_catch = true;
-      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::runtime_error instead: " << r.what(), wchar_t);
+      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::runtime_error instead: " << e.what(), wchar_t);
    }
-   catch(const std::exception& r)
+   catch(const std::exception& e)
    {
       have_catch = true;
-      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::exception instead: " << r.what(), wchar_t);
+      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::exception instead: " << e.what(), wchar_t);
    }
    catch(...)
    {
@@ -624,13 +624,13 @@ void test_icu(const wchar_t&, const test_regex_replace_tag&)
    {
       BOOST_REGEX_TEST_ERROR("Expression did not compile when it should have done: " << e.what(), UChar32);
    }
-   catch(const std::runtime_error& r)
+   catch(const std::runtime_error& e)
    {
-      BOOST_REGEX_TEST_ERROR("Received an unexpected std::runtime_error: " << r.what(), UChar32);
+      BOOST_REGEX_TEST_ERROR("Received an unexpected std::runtime_error: " << e.what(), UChar32);
    }
-   catch(const std::exception& r)
+   catch(const std::exception& e)
    {
-      BOOST_REGEX_TEST_ERROR("Received an unexpected std::exception: " << r.what(), UChar32);
+      BOOST_REGEX_TEST_ERROR("Received an unexpected std::exception: " << e.what(), UChar32);
    }
    catch(...)
    {

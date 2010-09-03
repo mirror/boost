@@ -19,6 +19,14 @@
 
 #ifndef BOOST_REGEX_REGRESS_TEST_HPP
 #define BOOST_REGEX_REGRESS_TEST_HPP
+
+#include <boost/regex.hpp>
+
+#ifdef BOOST_INTEL
+// disable Intel's "remarks":
+#pragma warning(disable:1418 981 383 1419 7)
+#endif
+
 #include <typeinfo>
 #include "test_not_regex.hpp"
 #include "test_regex_search.hpp"

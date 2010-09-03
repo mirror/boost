@@ -3,6 +3,11 @@
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
 
+project : requirements
+   # default to all warnings on:
+   <warnings>all
+   ;
+
 #
 # ICU configuration:
 #
@@ -32,7 +37,32 @@ else
    lib icuin : : <toolset>msvc <variant>release <name>icuin <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
    lib icuin : : <name>this_is_an_invalid_library_name ;
 
-   ICU_OPTS = <include>$(ICU_PATH)/include <library>icuuc/<link>shared/<runtime-link>shared <library>icudt/<link>shared/<runtime-link>shared <library>icuin/<link>shared/<runtime-link>shared <dll-path>$(ICU_PATH)/bin <define>BOOST_HAS_ICU=1 <runtime-link>shared ;
+   if $(ICU_PATH)
+   {
+      icuucd_name = [ GLOB $(ICU_PATH)/bin : icuuc??d.dll ] ;
+      icuuc_name = [ GLOB $(ICU_PATH)/bin : icuuc??.dll ] ;
+      icudt_name = [ GLOB $(ICU_PATH)/bin : icudt??.dll ] ;
+      icuin_name = [ GLOB $(ICU_PATH)/bin : icuin??.dll ] ;
+      icuind_name = [ GLOB $(ICU_PATH)/bin : icuin??d.dll ] ;
+
+      #ECHO $(icuucd_name:B) $(icuuc_name:B) $(icudt_name:B) $(icuin_name:B) $(icuind_name:B) ;
+   }
+
+   ICU_OPTS = 
+      <include>$(ICU_PATH)/include 
+      <library>icuuc/<link>shared/<runtime-link>shared 
+      <library>icudt/<link>shared/<runtime-link>shared 
+      <library>icuin/<link>shared/<runtime-link>shared 
+      <dll-path>$(ICU_PATH)/bin 
+      <define>BOOST_HAS_ICU=1 
+      <runtime-link>shared
+      <toolset>msvc:<linkflags>/delayload:$(icuucd_name:B).dll
+      <toolset>msvc:<linkflags>/delayload:$(icuuc_name:B).dll
+      <toolset>msvc:<linkflags>/delayload:$(icudt_name:B).dll
+      <toolset>msvc:<linkflags>/delayload:$(icuin_name:B).dll
+      <toolset>msvc:<linkflags>/delayload:$(icuind_name:B).dll
+      <toolset>msvc:<linkflags>delayimp.lib 
+      ;
 }
 
 exe has_icu : ./has_icu_test.cpp  : $(ICU_OPTS) ;
@@ -69,4 +99,5 @@ lib boost_regex : ../src/$(SOURCES) icu_options
     ;
 
 boost-install boost_regex ;
+
 

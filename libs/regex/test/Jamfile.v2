@@ -13,8 +13,7 @@ project
       # There are unidentified linker problems on these platforms:
       <toolset>mipspro-7.4:<link>static
       <toolset>sun-5.9:<link>static
-      <toolset>msvc:<warnings>all
-      <toolset>gcc:<warnings>all
+      <warnings>all
       <toolset>gcc:<cxxflags>-Wextra
       <toolset>gcc:<cxxflags>-Wshadow
       <define>U_USING_ICU_NAMESPACE=0
@@ -78,6 +77,7 @@ lib boost_regex_recursive :
    ../src/wide_posix_api.cpp
    ../src/winstances.cpp 
    ../src/usinstances.cpp 
+   ../build//icu_options
     : 
         <define>BOOST_REGEX_RECURSIVE=1
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1

@@ -70,7 +70,7 @@ class named_subexpressions_base
 {
 public:
    virtual int get_id(const charT* i, const charT* j)const = 0;
-   virtual int get_id(std::size_t hash)const = 0;
+   virtual int get_id(std::size_t h)const = 0;
 #ifdef __GNUC__
    // warning supression:
    virtual ~named_subexpressions_base(){}
