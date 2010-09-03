@@ -21,7 +21,8 @@ boost
             {
             int const success=0;
             int const bad_alloc=1;
-            int const not_supported=2;
+            int const bad_exception=2;
+            int const not_supported=3;
             }
 
         class clone_base;

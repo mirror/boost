@@ -11,7 +11,7 @@ project
   : requirements
       <exception-handling>on
       <source>/boost//exception
-#      <define>BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR
+      <define>BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR
       ;
 
 #to_string

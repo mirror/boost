@@ -70,31 +70,38 @@ boost
                 {
                 };
 
-        template <int Dummy>
+        struct
+        bad_exception_:
+            boost::exception,
+            std::bad_exception
+                {
+                };
+
+        template <class Exception>
         exception_ptr
-        get_bad_alloc()
+        get_static_exception_object()
             {
-            bad_alloc_ ba;
-            exception_detail::clone_impl<bad_alloc_> c(ba);
+            Exception ba;
+            exception_detail::clone_impl<Exception> c(ba);
             c <<
                 throw_function(BOOST_CURRENT_FUNCTION) <<
                 throw_file(__FILE__) <<
                 throw_line(__LINE__);
-            static exception_ptr ep(new exception_detail::clone_impl<bad_alloc_>(c));
+            static exception_ptr ep(new exception_detail::clone_impl<Exception>(c));
             return ep;
             }
 
-        template <int Dummy>
+        template <class Exception>
         struct
-        exception_ptr_bad_alloc
+        exception_ptr_static_exception_object
             {
             static exception_ptr const e;
             };
 
-        template <int Dummy>
+        template <class Exception>
         exception_ptr const
-        exception_ptr_bad_alloc<Dummy>::
-        e = get_bad_alloc<Dummy>();
+        exception_ptr_static_exception_object<Exception>::
+        e = get_static_exception_object<Exception>();
         }
 
     class
@@ -259,7 +266,13 @@ boost
                 bad_alloc:
                     {
                     BOOST_ASSERT(!e);
-                    return exception_detail::exception_ptr_bad_alloc<42>::e;
+                    return exception_detail::exception_ptr_static_exception_object<bad_alloc_>::e;
+                    }
+                case exception_detail::clone_current_exception_result::
+                bad_exception:
+                    {
+                    BOOST_ASSERT(!e);
+                    return exception_detail::exception_ptr_static_exception_object<bad_exception_>::e;
                     }
                 default:
                     BOOST_ASSERT(0);
@@ -346,7 +359,7 @@ boost
                     catch(
                     std::bad_exception & e )
                         {
-                        return exception_detail::current_exception_std_exception(e);
+                        return exception_detail::exception_ptr_static_exception_object<exception_detail::bad_exception_>::e;
                         }
                     catch(
                     std::exception & e )
@@ -380,25 +393,12 @@ boost
         catch(
         std::bad_alloc & )
             {
-            ret=exception_detail::exception_ptr_bad_alloc<42>::e;
+            ret=exception_detail::exception_ptr_static_exception_object<exception_detail::bad_alloc_>::e;
             }
         catch(
         ... )
             {
-            try
-                {
-                ret=exception_detail::current_exception_std_exception(std::bad_exception());
-                }
-            catch(
-            std::bad_alloc & )
-                {
-                ret=exception_detail::exception_ptr_bad_alloc<42>::e;
-                }
-            catch(
-            ... )
-                {
-                BOOST_ASSERT(0);
-                }
+            ret=exception_detail::exception_ptr_static_exception_object<exception_detail::bad_exception_>::e;
             }
         BOOST_ASSERT(ret);
         return ret;
