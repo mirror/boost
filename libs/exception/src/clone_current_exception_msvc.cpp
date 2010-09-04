@@ -157,10 +157,10 @@ namespace
         assert(src!=0);
         cpp_type_info const & ti=get_cpp_type_info(et);
         if( void * dst = malloc(ti.size) )
+            {
             try
                 {
                 copy_msvc_exception(dst,src,ti);
-                return boost::shared_ptr<void>(dst,exception_object_deleter(et));
                 }
             catch(
             ... )
@@ -168,6 +168,8 @@ namespace
                 free(dst);
                 throw;
                 }
+            return boost::shared_ptr<void>(dst,exception_object_deleter(et));
+            }
         else
             throw std::bad_alloc();
         }
