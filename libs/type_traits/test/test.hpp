@@ -167,8 +167,8 @@ void name(){ TRANSFORM_CHECK(type, BOOST_DUMMY_MACRO_PARAM, BOOST_DUMMY_MACRO_PA
 enum enum_UDT{ one, two, three };
 struct UDT
 {
-   UDT(){};
-   ~UDT(){};
+   UDT();
+   ~UDT();
    UDT(const UDT&);
    UDT& operator=(const UDT&);
    int i;
@@ -217,12 +217,11 @@ typedef const r_type cr_type;
 struct POD_UDT { int x; };
 struct empty_UDT
 {
-   empty_UDT(){};
-   empty_UDT(const empty_UDT&){};
-   ~empty_UDT(){};
-   empty_UDT& operator=(const empty_UDT&){ return *this; }
-   bool operator==(const empty_UDT&)const
-   { return true; }
+   empty_UDT();
+   empty_UDT(const empty_UDT&);
+   ~empty_UDT();
+   empty_UDT& operator=(const empty_UDT&);
+   bool operator==(const empty_UDT&)const;
 };
 struct empty_POD_UDT
 {
@@ -251,7 +250,7 @@ struct nothrow_copy_UDT
    nothrow_copy_UDT();
    nothrow_copy_UDT(const nothrow_copy_UDT&)throw();
    ~nothrow_copy_UDT(){};
-   nothrow_copy_UDT& operator=(const nothrow_copy_UDT&){ return *this; }
+   nothrow_copy_UDT& operator=(const nothrow_copy_UDT&);
    bool operator==(const nothrow_copy_UDT&)const
    { return true; }
 };

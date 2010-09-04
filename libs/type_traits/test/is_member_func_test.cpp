@@ -30,7 +30,10 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<foo0_t>::value, f
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const int[2] >::value, false);
+#ifndef __IBMCPP__
+// this test may not be strictly legal:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const int[] >::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<void>::value, false);
 
 #ifdef BOOST_TT_TEST_MS_FUNC_SIGS
