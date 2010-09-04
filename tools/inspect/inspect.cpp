@@ -154,6 +154,7 @@ namespace
       // this really out of our hands
       && leaf != "jam_src"
       && local.find("tools/jam/src") != 0
+      && local.find("tools/build/v2/engine") != 0
       // too many issues with generated HTML files
       && leaf != "status"
       // no point in checking doxygen xml output
