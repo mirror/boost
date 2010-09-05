@@ -527,11 +527,10 @@ namespace boost
             std::string::size_type const grouping_size = grouping.size();
             CharT thousands_sep = grouping_size ? np.thousands_sep() : 0;
             std::string::size_type group = 0; // current group number
-            char last_grp_size = grouping[0] <= 0 ? CHAR_MAX : grouping[0];
-            // a) Since grouping is const, grouping[grouping.size()] returns 0.
-            // b) It's safe to assume here and below that CHAR_MAX
-            //    is equivalent to unlimited grouping:
+            char last_grp_size =
+                grouping_size == 0 || grouping[0] <= 0 ? CHAR_MAX : grouping[0];
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+            // Check that ulimited group is unreachable:
             BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
 #endif
 
