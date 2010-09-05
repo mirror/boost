@@ -20,6 +20,19 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.45.0
+- V2.1.0
+- Token pasting is well formed only as long as the formed token(s) are 
+  pp_tokens as defined by the C++0x Standard. Until now, Wave allowed for 
+  non-pp_tokens to be formed in --variadics mode. 
+- Fixed a problem, which prevented reporting /##/ in a macro definition as 
+  invalid token pasting.
+- Fixed problem preventing the skipped_token hook to be called for 'inactive'
+  conditional preprocessing directive tokens. Improved overall consistency in
+  reporting skipped tokens to the hooks function when processing conditional
+  preprocessing directives. Added a new test case verifying the skipped_token
+  hook gets called reproducibly (t_2_020.cpp).
+
 Boost V1.44.0
 - V2.0.6
 - Added information about the file type to iteration context. This can be 

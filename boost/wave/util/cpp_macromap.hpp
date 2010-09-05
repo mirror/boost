@@ -970,7 +970,7 @@ bool adjacent_stringize = false;
         typename ContainerT::size_type i;
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
         bool is_ellipsis = false;
-        
+
             if (IS_EXTCATEGORY((*cit), ExtParameterTokenType)) {
                 BOOST_ASSERT(boost::wave::need_variadics(ctx.get_language()));
                 i = token_id(*cit) - T_EXTPARAMETERBASE;
@@ -981,10 +981,10 @@ bool adjacent_stringize = false;
             {
                 i = token_id(*cit) - T_PARAMETERBASE;
             }
-            
+
             BOOST_ASSERT(i < arguments.size());
             if (use_replaced_arg) {
-                
+
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                 if (is_ellipsis) {
                 position_type const &pos = (*cit).get_position();
@@ -1636,7 +1636,13 @@ macromap<ContextT>::is_valid_concat(string_type new_value,
         lang);
     lexer_type end = lexer_type();
     for (/**/; it != end && T_EOF != token_id(*it); ++it) 
+    {
+        // as of Wave V2.0.7 pasting of tokens is valid only if the resulting
+        // tokens are pp_tokens (as mandated by C++0x)
+        if (!is_pp_token(*it))
+            return false;
         rescanned.push_back(*it);
+    }
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     if (boost::wave::need_variadics(ctx.get_language()))
@@ -1644,8 +1650,6 @@ macromap<ContextT>::is_valid_concat(string_type new_value,
 #endif 
 
 // test if the newly generated token sequence contains more than 1 token
-// the second one is the T_EOF token
-//    BOOST_ASSERT(T_EOF == token_id(rescanned.back()));
     return 1 == rescanned.size();
 }
 
@@ -1655,6 +1659,22 @@ macromap<ContextT>::is_valid_concat(string_type new_value,
 //  token sequence.
 //
 ///////////////////////////////////////////////////////////////////////////////
+template <typename Context>
+inline void report_invalid_concatenation(Context& ctx, 
+    typename Context::token_type const& prev, 
+    typename Context::token_type const& next,
+    typename Context::position_type const& main_pos)
+{
+typename Context::string_type error_string("\"");
+
+    error_string += prev.get_value();
+    error_string += "\" and \"";
+    error_string += next.get_value();
+    error_string += "\"";
+    BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, invalid_concat,
+        error_string.c_str(), main_pos);
+}
+
 template <typename ContextT>
 template <typename ContainerT>
 inline bool 
@@ -1725,14 +1745,7 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
                 !IS_CATEGORY(*prev, WhiteSpaceTokenType) && 
                 !IS_CATEGORY(*next, WhiteSpaceTokenType)) 
             {
-            string_type error_string("\"");
-
-                error_string += (*prev).get_value();
-                error_string += "\" and \"";
-                error_string += (*next).get_value();
-                error_string += "\"";
-                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, invalid_concat,
-                    error_string.c_str(), main_pos);
+                report_invalid_concatenation(ctx, *prev, *next, main_pos);
                 return false;
             }
 
