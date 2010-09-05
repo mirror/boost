@@ -682,7 +682,7 @@ namespace quickbook
                     while(r_pos != end && std::find(whitespace, whitespace_end, *r_pos) != whitespace_end) ++r_pos;
                     if (r_pos == end)
                         break;
-                    template_body second(std::string(r_pos, end), begin.get_position(), false);
+                    template_body second(std::string(r_pos, end), r_pos.get_position(), false);
                     body.content = std::string(begin, l_pos);
                     args.push_back(second);
                 }
