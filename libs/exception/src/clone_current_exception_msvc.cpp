@@ -10,6 +10,8 @@
 #error This file requires exception handling to be enabled.
 #endif
 
+#if defined(_MSC_VER) && defined(_M_IX86) && !defined(_M_X64)
+
 #include <boost/exception/detail/clone_current_exception.hpp>
 #include <boost/exception/exception.hpp>
 #include <boost/shared_ptr.hpp>
@@ -266,7 +268,7 @@ boost
     exception_detail
         {
         int
-        clone_current_exception_msvc( clone_base const * & cloned )
+        clone_current_exception_msvc_x86( clone_base const * & cloned )
             {
             BOOST_ASSERT(!cloned);
             int result = clone_current_exception_result::not_supported;
@@ -288,3 +290,5 @@ boost
             }
         }
     }
+
+#endif

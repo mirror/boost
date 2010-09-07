@@ -26,18 +26,17 @@ boost
             }
 
         class clone_base;
-        int clone_current_exception_msvc( clone_base const * & cloned );
+        int clone_current_exception_msvc_x86( clone_base const * & cloned );
 
         inline
         int
         clone_current_exception( clone_base const * & cloned )
             {
-#ifdef BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR
-#ifdef _MSC_VER
-            return clone_current_exception_msvc(cloned);
-#endif
-#endif
+#if defined(BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR) && defined(_MSC_VER) && defined(_M_IX86) && !defined(_M_X64)
+            return clone_current_exception_msvc_x86(cloned);
+#else
             return clone_current_exception_result::not_supported;
+#endif
             }
         }
     }
