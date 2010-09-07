@@ -1007,27 +1007,6 @@ private:
         }       
     }
 
-    // Tries to process a completion event (useful if a previous one was rejected by a guard).
-    execute_return process_completion()
-    {
-        typedef typename ::boost::mpl::deref<
-                    typename ::boost::mpl::begin<
-                        typename find_completion_events<library_sm>::type
-                    >::type
-            >::type first_completion_event;
-
-        // if the state machine has terminate or interrupt flags, check them, otherwise skip
-        if (is_event_handling_blocked_helper<first_completion_event>
-                ( ::boost::mpl::bool_<has_fsm_blocking_states<library_sm>::type::value>() ) )
-            return HANDLED_TRUE;
-
-        // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 §15.3.14)
-        handle_eventless_transitions_helper<library_sm> eventless_helper(this,true);
-        eventless_helper.process_completion_event();
-
-        return HANDLED_TRUE;
-    }
-
     // Getter that returns the current state of the FSM
     const int* current_state() const
     {
