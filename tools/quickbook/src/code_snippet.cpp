@@ -9,6 +9,7 @@
 
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include "template_stack.hpp"
@@ -108,26 +109,35 @@ namespace quickbook
                     cl::str_p("#]")
                     ;
 
-                ignore =
-                        *cl::blank_p >> "#<-"
-                        >> (*(cl::anychar_p - "#->"))
-                        >> "#->" >> *cl::blank_p >> cl::eol_p
-                    |   "\"\"\"<-\"\"\""
-                        >> (*(cl::anychar_p - "\"\"\"->\"\"\""))
-                        >> "\"\"\"->\"\"\""
-                    |   "\"\"\"<-"
-                        >> (*(cl::anychar_p - "->\"\"\""))
-                        >> "->\"\"\""
+                ignore
+                    =   cl::confix_p(
+                            *cl::blank_p >> "#<-",
+                            *cl::anychar_p,
+                            "#->" >> *cl::blank_p >> cl::eol_p
+                        )
+                    |   cl::confix_p(
+                            "\"\"\"<-\"\"\"",
+                            *cl::anychar_p,
+                            "\"\"\"->\"\"\""
+                        )
+                    |   cl::confix_p(
+                            "\"\"\"<-",
+                            *cl::anychar_p,
+                            "->\"\"\""
+                        )
                     ;
 
                 escaped_comment =
-                        *cl::space_p >> "#`"
-                        >> ((*(cl::anychar_p - cl::eol_p))
-                            >> cl::eol_p)           [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                    |   *cl::space_p >> "\"\"\"`"
-                        >> (*(cl::anychar_p - "\"\"\""))
-                                                    [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                        >> "\"\"\""
+                        cl::confix_p(
+                            *cl::space_p >> "#`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            cl::eol_p
+                        )
+                    |   cl::confix_p(
+                            *cl::space_p >> "\"\"\"`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            "\"\"\""
+                        )
                     ;
             }
 
@@ -187,41 +197,54 @@ namespace quickbook
                     cl::str_p("//]") | "/*]*/"
                     ;
 
-                inline_callout =
-                    "/*<"
-                    >> *cl::space_p
-                    >> (*(cl::anychar_p - ">*/"))   [boost::bind(&actions_type::callout, &actions, _1, _2)]
-                    >> ">*/"
+                inline_callout
+                    =   cl::confix_p(
+                            "/*<" >> *cl::space_p,
+                            (*cl::anychar_p)        [boost::bind(&actions_type::callout, &actions, _1, _2)],
+                            ">*/"
+                        )
+                        ;
+
+                line_callout
+                    =   cl::confix_p(
+                            "/*<<" >> *cl::space_p,
+                            (*cl::anychar_p)        [boost::bind(&actions_type::callout, &actions, _1, _2)],
+                            ">>*/"
+                        )
+                    >>  *cl::space_p
                     ;
 
-                line_callout =
-                    "/*<<"
-                    >> *cl::space_p
-                    >> (*(cl::anychar_p - ">>*/"))  [boost::bind(&actions_type::callout, &actions, _1, _2)]
-                    >> ">>*/"
-                    >> *cl::space_p
+                ignore
+                    =   cl::confix_p(
+                            *cl::blank_p >> "//<-",
+                            *cl::anychar_p,
+                            "//->"
+                        )
+                    >>  *cl::blank_p
+                    >>  cl::eol_p
+                    |   cl::confix_p(
+                            "/*<-*/",
+                            *cl::anychar_p,
+                            "/*->*/"
+                        )
+                    |   cl::confix_p(
+                            "/*<-",
+                            *cl::anychar_p,
+                            "->*/"
+                        )
                     ;
 
-                ignore =
-                        *cl::blank_p >> "//<-"
-                        >> (*(cl::anychar_p - "//->"))
-                        >> "//->" >> *cl::blank_p >> cl::eol_p
-                    |   "/*<-*/"
-                        >> (*(cl::anychar_p - "/*->*/"))
-                        >> "/*->*/"
-                    |   "/*<-"
-                        >> (*(cl::anychar_p - "->*/"))
-                        >> "->*/"
-                    ;
-
-                escaped_comment =
-                        *cl::space_p >> "//`"
-                        >> ((*(cl::anychar_p - cl::eol_p))
-                            >> cl::eol_p)           [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                    |   *cl::space_p >> "/*`"
-                        >> (*(cl::anychar_p - "*/"))
-                                                    [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                        >> "*/"
+                escaped_comment
+                    =   cl::confix_p(
+                            *cl::space_p >> "//`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            cl::eol_p
+                        )
+                    |   cl::confix_p(
+                            *cl::space_p >> "/*`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            "*/"
+                        )
                     ;
             }
 
