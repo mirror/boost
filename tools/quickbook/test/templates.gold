@@ -64,4 +64,47 @@
   <section id="templates.empty_templates">
     <title><link linkend="templates.empty_templates">Empty Templates</link></title>
   </section>
+  <section id="templates.nested_templates">
+    <title><link linkend="templates.nested_templates">Nested Templates</link></title>
+    <para>
+      Start block template.
+    </para>
+    <para>
+      Start block template.
+    </para>
+    <para>
+      Hello!
+    </para>
+    <para>
+      End block template.
+    </para>
+    <para>
+      End block template.
+    </para>
+    <para>
+      Start block template.
+    </para>
+    <para>
+      Start phrase template. Hello! End phrase template.
+    </para>
+    <para>
+      End block template.
+    </para>
+    <para>
+      Start phrase template.
+    </para>
+    <para>
+      Start block template.
+    </para>
+    <para>
+      Hello!
+    </para>
+    <para>
+      End block template.
+    </para>
+    <para>
+      End phrase template. Start phrase template. Start phrase template. Hello! End
+      phrase template. End phrase template.
+    </para>
+  </section>
 </article>

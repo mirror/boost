@@ -740,7 +740,6 @@ namespace quickbook
         bool parse_template(
             template_body const& body
           , bool escape
-          , std::string& result
           , quickbook::actions& actions
         )
         {
@@ -755,7 +754,7 @@ namespace quickbook
             {
                 //  escape the body of the template
                 //  we just copy out the literal body
-                result = body.content;
+                (body.is_block ? actions.out : actions.phrase) << body.content;
                 return true;
             }
             else if (!body.is_block)
@@ -766,9 +765,7 @@ namespace quickbook
                 iterator first(body.content.begin(), body.content.end(),
                     position(body.position.file.c_str(), body.position.line, body.position.column));
                 iterator last(body.content.end(), body.content.end());
-                bool r = call_parse(first, last, phrase_p).full;
-                actions.phrase.swap(result);
-                return r;
+                return call_parse(first, last, phrase_p).full;
             }
             else
             {
@@ -782,10 +779,7 @@ namespace quickbook
                 iterator first(content.begin(), content.end(),
                     position(body.position.file.c_str(), body.position.line, body.position.column));
                 iterator last(content.end(), content.end());
-                bool r = call_parse(first, last, block_p).full;
-                actions.inside_paragraph();
-                actions.out.swap(result);
-                return r;
+                return call_parse(first, last, block_p).full;
             }
         }
     }
@@ -833,8 +827,10 @@ namespace quickbook
 
         template_symbol const* symbol = actions.templates.find(identifier);
         BOOST_ASSERT(symbol);
-            
-        std::string result;
+
+        std::string block;
+        std::string phrase;
+
         actions.push(); // scope the actions' states
         {
             // Store the current section level so that we can ensure that
@@ -910,7 +906,7 @@ namespace quickbook
             ///////////////////////////////////
             // parse the template body:
 
-            if (!parse_template(symbol->body, actions.template_escape, result, actions))
+            if (!parse_template(symbol->body, actions.template_escape, actions))
             {
                 position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
@@ -940,11 +936,15 @@ namespace quickbook
             }
         }
 
+        actions.write_paragraphs(); // Deal with any content in 'temp_para'
+        actions.out.swap(block);
+        actions.phrase.swap(phrase);
         actions.pop(); // restore the actions' states
 
         if(symbol->callout && symbol->callouts.size() > 0)
         {
-            result += "<calloutlist>";
+            BOOST_ASSERT(phrase.empty());
+            block += "<calloutlist>";
             BOOST_FOREACH(template_body const& c, symbol->callouts)
             {
                 std::string callout_id = actions.doc_id +
@@ -952,7 +952,8 @@ namespace quickbook
 
                 std::string callout_value;
                 actions.push();
-                bool r = parse_template(c, false, callout_value, actions);
+                bool r = parse_template(c, false, actions);
+                actions.out.swap(callout_value);
                 actions.pop();
 
                 if(!r)
@@ -968,20 +969,21 @@ namespace quickbook
                     return;
                 }
                 
-                result += "<callout arearefs=\"" + callout_id + "co\" ";
-                result += "id=\"" + callout_id + "\">";
-                result += callout_value;
-                result += "</callout>";
+                block += "<callout arearefs=\"" + callout_id + "co\" ";
+                block += "id=\"" + callout_id + "\">";
+                block += callout_value;
+                block += "</callout>";
             }
-            result += "</calloutlist>";
+            block += "</calloutlist>";
         }
 
-        if(symbol->body.is_block) {
+        if(symbol->body.is_block || !block.empty()) {
             actions.inside_paragraph();
-            actions.temp_para << result; // print it!!!
+            actions.temp_para << block;
+            actions.phrase << phrase;
         }
         else {
-            actions.phrase << result; // print it!!!
+            actions.phrase << phrase;
         }
         --actions.template_depth;
     }
@@ -1395,7 +1397,7 @@ namespace quickbook
         out.raw = std::string(first, last);
     }
 
-    void copy_stream_action::operator()(iterator first, iterator last) const
+    void copy_stream_action::operator()() const
     {
         std::string str;
         phrase.swap(str);

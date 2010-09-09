@@ -858,7 +858,8 @@ namespace quickbook
         copy_stream_action(collector& out, collector& phrase)
             : out(out) , phrase(phrase) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator, iterator) const { (*this)(); }
+        void operator()() const;
 
         collector& out;
         collector& phrase;
