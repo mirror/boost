@@ -281,6 +281,20 @@ namespace quickbook
             }
         }
 
+        for (actions::biblioid_list::const_iterator
+            it = actions.doc_biblioid_items.begin(),
+            end = actions.doc_biblioid_items.end();
+            it != end; ++it)
+        {
+            tmp << "    <biblioid class=\""
+                << it->first
+                << "\">"
+                << it->second.get(103)
+                << "</biblioid>"
+                << "\n"
+                ;
+        }
+
         std::string value = tmp.str();
         if(!value.empty())
         {

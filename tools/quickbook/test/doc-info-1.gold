@@ -19,5 +19,6 @@
       Inline code test: <code>1 + 2</code>
     </articlepurpose>
     <articlecategory name="category:tests"></articlecategory> <articlecategory name="category:irrelevance"></articlecategory>
+    <biblioid class="uri">http://www.boost.org/tools/quickbook/test/doc-info-1.quickbook</biblioid>
   </articleinfo>
 </article>

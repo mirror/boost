@@ -33,8 +33,8 @@ namespace quickbook
                         doc_info, doc_title, doc_version, doc_id, doc_dirname,
                         doc_copyright, doc_purpose, doc_category, doc_authors,
                         doc_author, comment, space, hard_space, doc_license,
-                        doc_last_revision, doc_source_mode, phrase, quickbook_version,
-                        char_;
+                        doc_last_revision, doc_source_mode, doc_biblioid,
+                        phrase, quickbook_version, char_;
         phrase_grammar common;
         cl::symbols<> doc_types;
 
@@ -80,6 +80,7 @@ namespace quickbook
                     | doc_license
                     | doc_last_revision
                     | doc_source_mode
+                    | doc_biblioid
                     )
                     >> space >> ']' >> +cl::eol_p
                 )
@@ -177,6 +178,16 @@ namespace quickbook
                 |  "teletype"
                 )                           [cl::assign_a(actions.source_mode)]
             ;
+
+		doc_biblioid =
+				"biblioid"
+			>>	hard_space
+			>>	(+cl::alnum_p)				[cl::assign_a(actions.doc_biblioid.first)]
+			>>	hard_space
+			>>	(+(~cl::eps_p(']') >> char_))
+											[actions.extract_doc_biblioid]
+											[cl::push_back_a(actions.doc_biblioid_items, actions.doc_biblioid)]
+			;
 
         comment =
             "[/" >> *(cl::anychar_p - ']') >> ']'

@@ -33,6 +33,8 @@ namespace quickbook
         typedef std::vector<author> author_list;
         typedef std::pair<string_list, docinfo_string> copyright_item;
         typedef std::vector<copyright_item> copyright_list;
+        typedef std::pair<std::string, docinfo_string> biblioid_item;
+        typedef std::vector<biblioid_item> biblioid_list;
         typedef std::pair<char, int> mark_type;
         static int const max_template_depth = 100;
 
@@ -48,8 +50,10 @@ namespace quickbook
         author_list             doc_authors;
         docinfo_string          doc_license;
         docinfo_string          doc_last_revision;
+        biblioid_list           doc_biblioid_items;
         std::string             include_doc_id;
         //temporary state
+        biblioid_item           doc_biblioid;
         docinfo_string          doc_id_tmp;
         author                  name;
         copyright_item          copyright;
@@ -132,6 +136,7 @@ namespace quickbook
         phrase_to_docinfo_action extract_name_first;
         phrase_to_docinfo_action extract_doc_last_revision;
         phrase_to_docinfo_action extract_doc_category;
+        phrase_to_docinfo_action extract_doc_biblioid;
 
         code_action             code;
         code_action             code_block;
