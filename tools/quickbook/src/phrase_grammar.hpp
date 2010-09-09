@@ -25,7 +25,6 @@
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
-    using namespace boost::spirit::classic;
 
     template <typename Rule, typename Action>
     inline void
@@ -40,20 +39,20 @@ namespace quickbook
             mark >>
             (
                 (
-                    graph_p                     // A single char. e.g. *c*
-                    >> eps_p(mark
-                        >> (space_p | punct_p | end_p))
+                    cl::graph_p                 // A single char. e.g. *c*
+                    >> cl::eps_p(mark
+                        >> (cl::space_p | cl::punct_p | cl::end_p))
                                                 // space_p, punct_p or end_p
                 )                               // must follow mark
             |
-                (   graph_p >>                  // graph_p must follow mark
-                    *(anychar_p -
-                        (   (graph_p >> mark)   // Make sure that we don't go
-                        |   close               // past a single block
+                (   cl::graph_p >>              // graph_p must follow mark
+                    *(cl::anychar_p -
+                        (   (cl::graph_p >> mark) // Make sure that we don't go
+                        |   close                 // past a single block
                         )
-                    ) >> graph_p                // graph_p must precede mark
-                    >> eps_p(mark
-                        >> (space_p | punct_p | end_p))
+                    ) >> cl::graph_p            // graph_p must precede mark
+                    >> cl::eps_p(mark
+                        >> (cl::space_p | cl::punct_p | cl::end_p))
                                                 // space_p, punct_p or end_p
                 )                               // must follow mark
             )                                   [action]
@@ -93,34 +92,36 @@ namespace quickbook
         quickbook::actions& actions = self.actions;
 
         space =
-            *(space_p | comment)
+            *(cl::space_p | comment)
             ;
 
         blank =
-            *(blank_p | comment)
+            *(cl::blank_p | comment)
             ;
 
-        eol = blank >> eol_p
+        eol = blank >> cl::eol_p
             ;
 
         phrase_end =
             ']' |
-            if_p(var(self.no_eols))
+            cl::if_p(var(self.no_eols))
             [
                 eol >> eol                      // Make sure that we don't go
             ]                                   // past a single block, except
             ;                                   // when preformatted.
 
+        // Follows an alphanumeric identifier - ensures that it doesn't
+        // match an empty space in the middle of the identifier.
         hard_space =
-            (eps_p - (alnum_p | '_')) >> space  // must not be preceded by
-            ;                                   // alpha-numeric or underscore
+            (cl::eps_p - (cl::alnum_p | '_')) >> space
+            ;
 
         comment =
-            "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
+            "[/" >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
             ;
 
         dummy_block =
-            '[' >> *(dummy_block | (anychar_p - ']')) >> ']'
+            '[' >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
             ;
 
         common =
@@ -134,8 +135,9 @@ namespace quickbook
             ;
 
         macro =
-            eps_p(actions.macro                 // must not be followed by
-                >> (eps_p - (alpha_p | '_')))   // alpha or underscore
+            // must not be followed by alpha or underscore
+            cl::eps_p(actions.macro
+                >> (cl::eps_p - (cl::alpha_p | '_')))
             >> actions.macro                    [actions.do_macro]
             ;
 
@@ -144,30 +146,30 @@ namespace quickbook
 
         template_ =
             (
-                ch_p('`')                       [assign_a(actions.template_escape,true_)]
+                cl::ch_p('`')                   [cl::assign_a(actions.template_escape,true_)]
                 |
-                eps_p                           [assign_a(actions.template_escape,false_)]
+                cl::eps_p                       [cl::assign_a(actions.template_escape,false_)]
             )
             >>
             ( (
-                (eps_p(punct_p)
+                (cl::eps_p(cl::punct_p)
                     >> actions.templates.scope
-                )                               [assign_a(actions.template_identifier)]
-                                                [clear_a(actions.template_args)]
+                )                               [cl::assign_a(actions.template_identifier)]
+                                                [cl::clear_a(actions.template_args)]
                 >> !template_args
             ) | (
                 (actions.templates.scope
-                    >> eps_p(hard_space)
-                )                               [assign_a(actions.template_identifier)]
-                                                [clear_a(actions.template_args)]
+                    >> cl::eps_p(hard_space)
+                )                               [cl::assign_a(actions.template_identifier)]
+                                                [cl::clear_a(actions.template_args)]
                 >> space
                 >> !template_args
             ) )
-            >> eps_p(']')
+            >> cl::eps_p(']')
             ;
 
         template_args =
-            if_p(qbk_since(105u)) [
+            cl::if_p(qbk_since(105u)) [
                 template_args_1_5
             ].else_p [
                 template_args_1_4
@@ -177,14 +179,15 @@ namespace quickbook
         template_args_1_4 = template_arg_1_4 >> *(".." >> template_arg_1_4);
 
         template_arg_1_4 =
-                (   eps_p(*blank_p >> eol_p)    [assign_a(actions.template_block, true_)]
-                |   eps_p                       [assign_a(actions.template_block, false_)]
+                (   cl::eps_p(*cl::blank_p >> cl::eol_p)
+                                                [cl::assign_a(actions.template_block, true_)]
+                |   cl::eps_p                   [cl::assign_a(actions.template_block, false_)]
                 )
             >>  template_inner_arg_1_4          [actions.template_arg]
             ;
 
         template_inner_arg_1_4 =
-            +(brackets_1_4 | (anychar_p - (str_p("..") | ']')))
+            +(brackets_1_4 | (cl::anychar_p - (cl::str_p("..") | ']')))
             ;
 
         brackets_1_4 =
@@ -194,15 +197,16 @@ namespace quickbook
         template_args_1_5 = template_arg_1_5 >> *(".." >> template_arg_1_5);
 
         template_arg_1_5 =
-                (   eps_p(*blank_p >> eol_p)    [assign_a(actions.template_block, true_)]
-                |   eps_p                       [assign_a(actions.template_block, false_)]
+                (   cl::eps_p(*cl::blank_p >> cl::eol_p)
+                                                [cl::assign_a(actions.template_block, true_)]
+                |   cl::eps_p                   [cl::assign_a(actions.template_block, false_)]
                 )
-            >>  (+(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p("..") | '[' | ']'))))
+            >>  (+(brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p("..") | '[' | ']'))))
                                                 [actions.template_arg]
             ;
 
         template_inner_arg_1_5 =
-            +(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p('[') | ']')))
+            +(brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p('[') | ']')))
             ;
 
         brackets_1_5 =
@@ -212,11 +216,11 @@ namespace quickbook
         inline_code =
             '`' >>
             (
-               *(anychar_p -
+               *(cl::anychar_p -
                     (   '`'
                     |   (eol >> eol)            // Make sure that we don't go
                     )                           // past a single block
-                ) >> eps_p('`')
+                ) >> cl::eps_p('`')
             )                                   [actions.inline_code]
             >>  '`'
             ;
@@ -225,16 +229,16 @@ namespace quickbook
                 (
                     "```" >>
                     (
-                       *(anychar_p - "```")
-                            >> eps_p("```")
+                       *(cl::anychar_p - "```")
+                            >> cl::eps_p("```")
                     )                           [actions.code_block]
                     >>  "```"
                 )
             |   (
                     "``" >>
                     (
-                       *(anychar_p - "``")
-                            >> eps_p("``")
+                       *(cl::anychar_p - "``")
+                            >> cl::eps_p("``")
                     )                           [actions.code_block]
                     >>  "``"
                 )
@@ -261,7 +265,7 @@ namespace quickbook
         phrase =
            *(   common
             |   comment
-            |   (anychar_p - phrase_end)        [actions.plain_char]
+            |   (cl::anychar_p - phrase_end)    [actions.plain_char]
             )
             ;
 
@@ -290,27 +294,27 @@ namespace quickbook
                 |   replaceable
                 |   footnote
                 |   template_                   [actions.do_template]
-                |   str_p("br")                 [actions.break_]
+                |   cl::str_p("br")             [actions.break_]
                 )
             >>  ']'
             ;
 
         escape =
-                str_p("\\ ")                    // ignore an escaped space
-            |   '\\' >> punct_p                 [actions.raw_char]
-            |   "\\u" >> repeat_p(4) [chset<>("0-9a-fA-F")]
+                cl::str_p("\\ ")                // ignore an escaped space
+            |   '\\' >> cl::punct_p             [actions.raw_char]
+            |   "\\u" >> cl::repeat_p(4) [cl::chset<>("0-9a-fA-F")]
                                                 [actions.escape_unicode]
-            |   "\\U" >> repeat_p(8) [chset<>("0-9a-fA-F")]
+            |   "\\U" >> cl::repeat_p(8) [cl::chset<>("0-9a-fA-F")]
                                                 [actions.escape_unicode]
             |   (
                     ("'''" >> !eol)             [actions.escape_pre]
-                >>  *(anychar_p - "'''")        [actions.raw_char]
-                >>  str_p("'''")                [actions.escape_post]
+                >>  *(cl::anychar_p - "'''")    [actions.raw_char]
+                >>  cl::str_p("'''")            [actions.escape_post]
                 )
             ;
 
         macro_identifier =
-            +(anychar_p - (space_p | ']'))
+            +(cl::anychar_p - (cl::space_p | ']'))
             ;
 
         cond_phrase =
@@ -320,43 +324,43 @@ namespace quickbook
             ;
 
         image =
-                '$' >> blank                    [clear_a(actions.attributes)]
-            >>  if_p(qbk_since(105u)) [
+                '$' >> blank                    [cl::clear_a(actions.attributes)]
+            >>  cl::if_p(qbk_since(105u)) [
                         (+(
-                            *space_p
-                        >>  +(anychar_p - (space_p | phrase_end | '['))
-                        ))                       [assign_a(actions.image_fileref)]
+                            *cl::space_p
+                        >>  +(cl::anychar_p - (cl::space_p | phrase_end | '['))
+                        ))                       [cl::assign_a(actions.image_fileref)]
                     >>  hard_space
                     >>  *(
                             '['
-                        >>  (*(alnum_p | '_'))  [assign_a(actions.attribute_name)]
+                        >>  (*(cl::alnum_p | '_'))  [cl::assign_a(actions.attribute_name)]
                         >>  space
-                        >>  (*(anychar_p - (phrase_end | '[')))
+                        >>  (*(cl::anychar_p - (phrase_end | '[')))
                                                 [actions.attribute]
                         >>  ']'
                         >>  space
                         )
                 ].else_p [
-                        (*(anychar_p -
-                            phrase_end))        [assign_a(actions.image_fileref)]
+                        (*(cl::anychar_p - phrase_end))
+                                                [cl::assign_a(actions.image_fileref)]
                 ]
-            >>  eps_p(']')                      [actions.image]
+            >>  cl::eps_p(']')                  [actions.image]
             ;
             
         url =
                 '@'
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.url_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.url_post]
             ;
 
         link =
                 "link" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.link_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.link_post]
             ;
@@ -364,128 +368,127 @@ namespace quickbook
         anchor =
                 '#'
             >>  blank
-            >>  (   *(anychar_p -
-                        phrase_end)
+            >>  (   *(cl::anychar_p - phrase_end)
                 )                               [actions.anchor]
             ;
 
         funcref =
             "funcref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.funcref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.funcref_post]
             ;
 
         classref =
             "classref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.classref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.classref_post]
             ;
 
         memberref =
             "memberref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.memberref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.memberref_post]
             ;
 
         enumref =
             "enumref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.enumref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.enumref_post]
             ;
 
         macroref =
             "macroref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.macroref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.macroref_post]
             ;
 
         headerref =
             "headerref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.headerref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.headerref_post]
             ;
 
         conceptref =
             "conceptref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.conceptref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.conceptref_post]
             ;
 
         globalref =
             "globalref" >> hard_space
-            >>  (*(anychar_p -
+            >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.globalref_pre]
-            >>  (   eps_p(']')
+            >>  (   cl::eps_p(']')
                 |   (hard_space >> phrase)
                 )                               [actions.globalref_post]
             ;
 
         bold =
-                ch_p('*')                       [actions.bold_pre]
+                cl::ch_p('*')                   [actions.bold_pre]
             >>  blank >> phrase                 [actions.bold_post]
             ;
 
         italic =
-                ch_p('\'')                      [actions.italic_pre]
+                cl::ch_p('\'')                  [actions.italic_pre]
             >>  blank >> phrase                 [actions.italic_post]
             ;
 
         underline =
-                ch_p('_')                       [actions.underline_pre]
+                cl::ch_p('_')                   [actions.underline_pre]
             >>  blank >> phrase                 [actions.underline_post]
             ;
 
         teletype =
-                ch_p('^')                       [actions.teletype_pre]
+                cl::ch_p('^')                   [actions.teletype_pre]
             >>  blank >> phrase                 [actions.teletype_post]
             ;
 
         strikethrough =
-                ch_p('-')                       [actions.strikethrough_pre]
+                cl::ch_p('-')                   [actions.strikethrough_pre]
             >>  blank >> phrase                 [actions.strikethrough_post]
             ;
 
         quote =
-                ch_p('"')                       [actions.quote_pre]
+                cl::ch_p('"')                   [actions.quote_pre]
             >>  blank >> phrase                 [actions.quote_post]
             ;
 
         replaceable =
-                ch_p('~')                       [actions.replaceable_pre]
+                cl::ch_p('~')                   [actions.replaceable_pre]
             >>  blank >> phrase                 [actions.replaceable_post]
             ;
 
         source_mode =
             (
-                str_p("c++")
+                cl::str_p("c++")
             |   "python"
             |   "teletype"
-            )                                   [assign_a(actions.source_mode)]
+            )                                   [cl::assign_a(actions.source_mode)]
             ;
 
         footnote =
-                str_p("footnote")               [actions.footnote_pre]
+                cl::str_p("footnote")           [actions.footnote_pre]
             >>  blank >> phrase                 [actions.footnote_post]
             ;
     }

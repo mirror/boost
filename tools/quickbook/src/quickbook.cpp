@@ -32,8 +32,9 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit::classic;
+    namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
+
     tm* current_time; // the current time
     tm* current_gm_time; // the current UTC time
     bool debug_mode; // for quickbook developers only
@@ -84,7 +85,7 @@ namespace quickbook
         iterator last(storage.end(), storage.end());
 
         doc_info_grammar l(actor);
-        parse_info<iterator> info = call_parse(first, last, l);
+        cl::parse_info<iterator> info = call_parse(first, last, l);
 
         if (info.hit || ignore_docinfo)
         {

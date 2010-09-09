@@ -23,24 +23,24 @@ namespace quickbook
             phrase =
                *(   common
                 |   comment
-                |   (anychar_p - ']')           [actions.plain_char]
+                |   (cl::anychar_p - ']')       [actions.plain_char]
                 )
                 ;
 
             comment =
-                "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
+                "[/" >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
                 ;
 
             dummy_block =
-                '[' >> *(dummy_block | (anychar_p - ']')) >> ']'
+                '[' >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
                 ;
         }
 
         bool unused;
-        rule<Scanner> phrase, comment, dummy_block;
+        cl::rule<Scanner> phrase, comment, dummy_block;
         phrase_grammar common;
 
-        rule<Scanner> const&
+        cl::rule<Scanner> const&
         start() const { return phrase; }
     };
 
@@ -53,49 +53,49 @@ namespace quickbook
             quickbook::actions& actions = self.actions;
 
             macro =
-                    *space_p
+                    *cl::space_p
                 >>  macro_identifier            [actions.macro_identifier]
-                >>  *space_p
+                >>  *cl::space_p
                 >>  (   '='
-                    >>  *space_p
+                    >>  *cl::space_p
                     >>  phrase                  [actions.macro_definition]
-                    >>  *space_p
+                    >>  *cl::space_p
                     )
-                |   eps_p                       [actions.macro_definition]
+                |   cl::eps_p                   [actions.macro_definition]
                 ;
 
             macro_identifier =
-                +(anychar_p - (space_p | ']' | '='))
+                +(cl::anychar_p - (cl::space_p | ']' | '='))
                 ;
 
             phrase =
                *(   common
-                |   (anychar_p - ']')           [actions.plain_char]
+                |   (cl::anychar_p - ']')       [actions.plain_char]
                 )
                 ;
         }
 
         bool unused;
-        rule<Scanner> macro, macro_identifier, phrase;
+        cl::rule<Scanner> macro, macro_identifier, phrase;
         phrase_grammar common;
 
-        rule<Scanner> const&
+        cl::rule<Scanner> const&
         start() const { return macro; }
     };
 
-    parse_info<iterator> call_parse(
+    cl::parse_info<iterator> call_parse(
         iterator& first, iterator last, phrase_grammar& g)
     {
         return boost::spirit::classic::parse(first, last, g);
     }
 
-    parse_info<iterator> call_parse(
+    cl::parse_info<iterator> call_parse(
         iterator& first, iterator last, simple_phrase_grammar& g)
     {
         return boost::spirit::classic::parse(first, last, g);
     }
 
-    parse_info<iterator> call_parse(
+    cl::parse_info<iterator> call_parse(
         iterator& first, iterator last, command_line_grammar& g)
     {
         return boost::spirit::classic::parse(first, last, g);
