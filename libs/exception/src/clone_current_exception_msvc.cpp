@@ -19,6 +19,7 @@
 #include <typeinfo>
 #endif
 #include <windows.h>
+#include <malloc.h>
 
 namespace
     {
