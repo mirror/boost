@@ -61,7 +61,6 @@ namespace quickbook
 
     // auxilliary streams
         collector               phrase;
-        collector               temp;
         collector               temp_para;
         collector               list_buffer;
 
@@ -134,7 +133,6 @@ namespace quickbook
         phrase_to_docinfo_action extract_doc_last_revision;
         phrase_to_docinfo_action extract_doc_category;
 
-        syntax_highlight        syntax_p;
         code_action             code;
         code_action             code_block;
         inline_code_action      inline_code;

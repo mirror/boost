@@ -10,16 +10,15 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP
 
-#include <time.h>
 #include <map>
 #include <string>
 #include <vector>
 #include <stack>
 #include <algorithm>
-#include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/filesystem/v2/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
+#include "fwd.hpp"
 #include "collector.hpp"
 #include "template_stack.hpp"
 #include "utils.hpp"
@@ -35,24 +34,44 @@ namespace quickbook
     namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
 
-    typedef cl::position_iterator<std::string::const_iterator,
-        cl::file_position_base<char const*> > iterator;
-    typedef cl::file_position_base<char const*> position;
+    extern int qbk_major_version;
+    extern int qbk_minor_version;
+    extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
+
+    struct quickbook_range {
+        template <typename Arg>
+        struct result
+        {
+            typedef bool type;
+        };
+        
+        quickbook_range(unsigned min_, unsigned max_)
+            : min_(min_), max_(max_) {}
+        
+        bool operator()() const {
+            return qbk_version_n >= min_ && qbk_version_n < max_;
+        }
+
+        unsigned min_, max_;
+    };
+    
+    inline quickbook_range qbk_since(unsigned min_) {
+        return quickbook_range(min_, 999);
+    }
+    
+    inline quickbook_range qbk_before(unsigned max_) {
+        return quickbook_range(0, max_);
+    }
+
     typedef cl::symbols<std::string> string_symbols;
     typedef std::map<std::string, std::string> attribute_map;
 
-    struct actions;
-    extern tm* current_time; // the current time
-    extern tm* current_gm_time; // the current UTC time
-    extern bool debug_mode;
-    extern std::vector<std::string> include_path;
-    extern std::vector<std::string> preset_defines;
-
-    // forward declarations
-    struct actions;
-    int parse_file(char const* filein_, actions& actor, bool ignore_docinfo = false);
     int load_snippets(std::string const& file, std::vector<template_symbol>& storage,
         std::string const& extension, std::string const& doc_id);
+    std::string syntax_highlight(
+        iterator first, iterator last,
+        actions& escape_actions,
+        std::string const& source_mode);        
 
     struct error_action
     {
@@ -473,29 +492,6 @@ namespace quickbook
         std::string str;
     };
     
-    struct syntax_highlight
-    {
-        syntax_highlight(
-            collector& temp
-          , std::string const& source_mode
-          , string_symbols const& macro
-          , actions& escape_actions)
-        : temp(temp)
-        , source_mode(source_mode)
-        , macro(macro)
-        , escape_actions(escape_actions)
-        {
-        }
-
-        std::string operator()(iterator begin, iterator end) const;
-
-        collector& temp;
-        std::string const& source_mode;
-        string_symbols const& macro;
-        actions& escape_actions;
-    };
-
-
     struct code_action
     {
         // Does the actual syntax highlighing of code
@@ -503,10 +499,10 @@ namespace quickbook
         code_action(
             collector& out
           , collector& phrase
-          , syntax_highlight& syntax_p)
+          , quickbook::actions& actions)
         : out(out)
         , phrase(phrase)
-        , syntax_p(syntax_p)
+        , actions(actions)
         {
         }
 
@@ -514,7 +510,7 @@ namespace quickbook
 
         collector& out;
         collector& phrase;
-        syntax_highlight& syntax_p;
+        quickbook::actions& actions;
     };
 
     struct inline_code_action
@@ -523,15 +519,15 @@ namespace quickbook
 
         inline_code_action(
             collector& out
-          , syntax_highlight& syntax_p)
+          , quickbook::actions& actions)
         : out(out)
-        , syntax_p(syntax_p)
+        , actions(actions)
         {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& out;
-        syntax_highlight& syntax_p;
+        quickbook::actions& actions;
     };
 
     struct start_varlistitem_action

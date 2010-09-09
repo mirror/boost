@@ -38,9 +38,6 @@ namespace quickbook
     tm* current_time; // the current time
     tm* current_gm_time; // the current UTC time
     bool debug_mode; // for quickbook developers only
-    int qbk_major_version = -1;
-    int qbk_minor_version = -1;
-    unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
     bool ms_errors = false; // output errors/warnings as if for VS
     std::vector<std::string> include_path;
     std::vector<std::string> preset_defines;

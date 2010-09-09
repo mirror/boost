@@ -10,6 +10,7 @@
 =============================================================================*/
 #include "actions_class.hpp"
 #include "markups.hpp"
+#include "quickbook.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -37,7 +38,6 @@ namespace quickbook
 
     // auxilliary streams
         , phrase()
-        , temp()
         , list_buffer()
 
     // state
@@ -82,10 +82,9 @@ namespace quickbook
         , extract_name_first(name.first, phrase)
         , extract_doc_last_revision(doc_last_revision, phrase)
         , extract_doc_category(doc_category, phrase)
-        , syntax_p(temp, source_mode, macro, *this)
-        , code(out, phrase, syntax_p)
-        , code_block(phrase, phrase, syntax_p)
-        , inline_code(phrase, syntax_p)
+        , code(out, phrase, *this)
+        , code_block(phrase, phrase, *this)
+        , inline_code(phrase, *this)
         , inside_paragraph(temp_para, phrase, paragraph_pre, paragraph_post)
         , write_paragraphs(out, temp_para)
         , h(out, phrase, element_id, doc_id, section_id, qualified_section_id, section_level)
@@ -221,7 +220,6 @@ namespace quickbook
 
         out.push();
         phrase.push();
-        temp.push();
         temp_para.push();
         list_buffer.push();
         templates.push();        
@@ -263,7 +261,6 @@ namespace quickbook
 
         out.pop();
         phrase.pop();
-        temp.pop();
         temp_para.pop();
         list_buffer.pop();
         templates.pop();

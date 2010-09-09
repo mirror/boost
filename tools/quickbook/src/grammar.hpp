@@ -11,7 +11,7 @@
 #define BOOST_SPIRIT_QUICKBOOK_GRAMMARS_HPP
 
 #include <boost/spirit/include/classic_core.hpp>
-#include "actions.hpp"
+#include "fwd.hpp"
 
 namespace quickbook
 {
