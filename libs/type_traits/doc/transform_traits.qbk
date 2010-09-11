@@ -19,6 +19,9 @@ result of applying the transformation to the template argument `T`.
 
    template <class T>
    struct __add_cv;
+
+   template <class T>
+   struct __add_lvalue_reference;
    
    template <class T>
    struct __add_pointer;
@@ -26,6 +29,9 @@ result of applying the transformation to the template argument `T`.
    template <class T>
    struct __add_reference;
 
+   template <class T>
+   struct __add_rvalue_reference;
+   
    template <class T>
    struct __add_volatile;
 

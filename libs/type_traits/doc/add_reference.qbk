@@ -7,6 +7,12 @@
 
 [section:add_reference add_reference]
 
+[note This trait has been made obsolete by __add_lvalue_reference and __add_rvalue_reference, 
+and new code should use these new traits rather than __is_reference which is retained
+for backwards compatibility only.
+]
+
+
    template <class T>
    struct add_reference
    {
