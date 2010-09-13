@@ -49,6 +49,11 @@ public:
          }
          return *this;
     }
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & m_initialStates;
+    }
 private:
     int m_initialStates[NumberOfRegions];
 };
@@ -84,6 +89,11 @@ public:
              m_initialStates[i] = rhs.m_initialStates[i];
          }
          return *this;
+    }
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & m_initialStates;
     }
 private:
     int m_initialStates[NumberOfRegions];
@@ -128,6 +138,12 @@ public:
              m_currentStates[i] = rhs.m_currentStates[i];
          }
          return *this;
+    }
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & m_initialStates;
+        ar & m_currentStates;
     }
 private:
     int m_initialStates[NumberOfRegions];

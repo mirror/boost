@@ -31,6 +31,7 @@
 #include <boost/fusion/include/at_key.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/include/for_each.hpp>
+#include <boost/fusion/include/for_each.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/ref.hpp>
@@ -58,6 +59,7 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(no_automatic_create)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(non_forwarding_flag)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(direct_entry)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(initial_event)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(do_serialize)
 
 #ifndef BOOST_MSM_CONSTRUCTOR_ARG_SIZE
 #define BOOST_MSM_CONSTRUCTOR_ARG_SIZE 5 // default max number of arguments for constructors
@@ -1011,6 +1013,38 @@ private:
     const int* current_state() const
     {
         return this->m_states;
+    }
+
+    template <class Archive>
+    struct serialize_state
+    {
+        serialize_state(Archive& ar):ar_(ar){}
+
+        template<typename T>
+        typename ::boost::enable_if< typename has_do_serialize<T>::type,void >::type
+        operator()(T& t) const
+        {
+            ar_ & t;
+        }
+        template<typename T>
+        typename ::boost::disable_if< typename has_do_serialize<T>::type,void >::type
+        operator()(T& t) const
+        {
+            // no state to serialize
+        }
+        Archive& ar_;
+    };
+    
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & m_states;
+        // queues cannot be serialized => skip
+        ar & m_history;
+        ar & m_event_processing;
+        ar & m_is_included;
+        // visitors cannot be serialized => skip
+        ::boost::fusion::for_each(m_substate_list, serialize_state<Archive>(ar));
     }
 
     // linearly search for the state with the given id
