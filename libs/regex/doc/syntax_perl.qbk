@@ -26,7 +26,7 @@ default behavior in Boost.Regex or you can pass the flag =perl= to the
 In Perl regular expressions, all characters match themselves except for the 
 following special characters:
 
-[pre .\[{()\\\*+?|^$]
+[pre .\[{}()\\\*+?|^$]
 
 [h4 Wildcard]
 

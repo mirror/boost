@@ -25,7 +25,7 @@ Boost.Regex by passing the flag `extended` to the regex constructor, for example
 In POSIX-Extended regular expressions, all characters match themselves except for 
 the following special characters:
 
-[pre .\[{()\\\*+?|^$]
+[pre .\[{}()\\\*+?|^$]
 
 [h4 Wildcard:]
 
