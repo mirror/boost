@@ -19,7 +19,7 @@ test-suite quickbook.test :
     [ quickbook-test code-block-teletype ]
     [ quickbook-test code-snippet ]
     [ quickbook-test preformatted ]
-    [ quickbook-test link-side-by-side ]
+    [ quickbook-test link ]
     [ quickbook-test escape ]
     [ quickbook-test templates ]
     [ quickbook-test templates_1_4 ]
