@@ -222,23 +222,23 @@ namespace quickbook
             ;
 
         admonition =
-            "warning" >> blank >>
+            "warning" >> hard_space >>
             scoped_block(actions)[inside_paragraph]
                                                 [actions.warning]
             |
-            "caution" >> blank >>
+            "caution" >> hard_space >>
             scoped_block(actions)[inside_paragraph]
                                                 [actions.caution]
             |
-            "important" >> blank >>
+            "important" >> hard_space >>
             scoped_block(actions)[inside_paragraph]
                                                 [actions.important]
             |
-            "note" >> blank >>
+            "note" >> hard_space >>
             scoped_block(actions)[inside_paragraph]
                                                 [actions.note]
             |
-            "tip" >> blank >>
+            "tip" >> hard_space >>
             scoped_block(actions)[inside_paragraph]
                                                 [actions.tip]
             ;
