@@ -136,24 +136,24 @@ namespace quickbook
       , bool pretty_print)
     {
         int result = 0;
-        std::ofstream fileout(fileout_);
         fs::path outdir = fs::path(fileout_).parent_path();
         if (outdir.empty())
             outdir = ".";
-        if (pretty_print)
+        string_stream buffer;
+        result = parse_document(filein_, outdir, buffer);
+
+        if (result == 0)
         {
-            string_stream buffer;
-            result = parse_document(filein_, outdir, buffer);
-            if (result == 0)
+            std::ofstream fileout(fileout_);
+
+            if (pretty_print)
             {
                 result = post_process(buffer.str(), fileout, indent, linewidth);
             }
-        }
-        else
-        {
-            string_stream buffer;
-            result = parse_document(filein_, outdir, buffer);
-            fileout << buffer.str();
+            else
+            {
+                fileout << buffer.str();
+            }
         }
         return result;
     }
