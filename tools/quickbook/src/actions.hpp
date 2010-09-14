@@ -86,6 +86,23 @@ namespace quickbook
         int& error_count;
     };
 
+    struct tagged_action
+    {
+        tagged_action(
+            collector& out,
+            std::string const& pre,
+            std::string const& post)
+        : out(out)
+        , pre(pre)
+        , post(post) {}
+
+        void operator()(std::string const&) const;
+
+        collector& out;
+        std::string pre;
+        std::string post;
+    };
+
     struct phrase_action
     {
         //  blurb, blockquote, preformatted, list_item,
@@ -530,37 +547,6 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    struct start_varlistitem_action
-    {
-        start_varlistitem_action(collector& phrase)
-        : phrase(phrase) {}
-
-        void operator()() const;
-
-        template <typename T1>
-        void operator()(T1 const&) const { return (*this)(); }
-        template <typename T1, typename T2>
-        void operator()(T1 const&, T2 const&) const { return (*this)(); }
-
-        collector& phrase;
-    };
-
-    struct end_varlistitem_action
-    {
-        end_varlistitem_action(collector& phrase, collector& temp_para)
-        : phrase(phrase), temp_para(temp_para) {}
-
-        void operator()() const;
-
-        template <typename T1>
-        void operator()(T1 const&) const { return (*this)(); }
-        template <typename T1, typename T2>
-        void operator()(T1 const&, T2 const&) const { return (*this)(); }
-
-        collector& phrase;
-        collector& temp_para;
-    };
-
     struct break_action
     {
         // Handles line-breaks (DEPRECATED!!!)
@@ -685,28 +671,15 @@ namespace quickbook
         std::string& header;
     };
 
-    struct start_col_action
+    struct col_action
     {
-        // Handles table columns
-
-        start_col_action(collector& phrase, unsigned& span)
+        col_action(collector& phrase, unsigned& span)
         : phrase(phrase), span(span) {}
 
-        void operator()(char) const;
+        void operator()(std::string const&) const;
 
         collector& phrase;
         unsigned& span;
-    };
-
-    struct end_col_action
-    {
-        end_col_action(collector& phrase, collector& temp_para)
-        : phrase(phrase), temp_para(temp_para) {}
-
-        void operator()(char) const;
-
-        collector& phrase;
-        collector& temp_para;
     };
 
     struct begin_section_action
@@ -850,18 +823,6 @@ namespace quickbook
         void operator()(iterator first, iterator last) const;
 
         docinfo_string& out;
-        collector& phrase;
-    };
-
-    struct copy_stream_action
-    {
-        copy_stream_action(collector& out, collector& phrase)
-            : out(out) , phrase(phrase) {}
-
-        void operator()(iterator, iterator) const { (*this)(); }
-        void operator()() const;
-
-        collector& out;
         collector& phrase;
     };
 }

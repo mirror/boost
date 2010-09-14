@@ -11,6 +11,7 @@
 #include "phrase_grammar.hpp"
 #include "utils.hpp"
 #include "actions_class.hpp"
+#include "scoped_block.hpp"
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_assign_actor.hpp>
@@ -79,7 +80,6 @@ namespace quickbook
             |   hr                              [actions.hr]
             |   +eol
             |   paragraph                       [actions.inside_paragraph]
-                                                [actions.write_paragraphs]
             )
             ;
 
@@ -211,30 +211,36 @@ namespace quickbook
 
         blurb =
             "blurb" >> hard_space
-            >> inside_paragraph                 [actions.blurb]
-            >> cl::eps_p
+            >> scoped_block(actions)[inside_paragraph]
+                                                [actions.blurb]
             ;
 
         blockquote =
             ':' >> blank >>
-            inside_paragraph                    [actions.blockquote]
+            scoped_block(actions)[inside_paragraph]
+                                                [actions.blockquote]
             ;
 
         admonition =
             "warning" >> blank >>
-            inside_paragraph                    [actions.warning]
+            scoped_block(actions)[inside_paragraph]
+                                                [actions.warning]
             |
             "caution" >> blank >>
-            inside_paragraph                    [actions.caution]
+            scoped_block(actions)[inside_paragraph]
+                                                [actions.caution]
             |
             "important" >> blank >>
-            inside_paragraph                    [actions.important]
+            scoped_block(actions)[inside_paragraph]
+                                                [actions.important]
             |
             "note" >> blank >>
-            inside_paragraph                    [actions.note]
+            scoped_block(actions)[inside_paragraph]
+                                                [actions.note]
             |
             "tip" >> blank >>
-            inside_paragraph                    [actions.tip]
+            scoped_block(actions)[inside_paragraph]
+                                                [actions.tip]
             ;
 
         preformatted =
@@ -302,10 +308,11 @@ namespace quickbook
             >>
             (
                 (
-                    varlistterm                 [actions.start_varlistitem]
-                    >>  (   +varlistitem
+                    varlistterm
+                    >>  (   scoped_block(actions) [+varlistitem]
+                                                [actions.varlistitem]
                         |   cl::eps_p           [actions.error]
-                        )                       [actions.end_varlistitem]
+                        )
                     >>  cl::ch_p(']')           [actions.end_varlistentry]
                     >>  space
                 )
@@ -367,17 +374,15 @@ namespace quickbook
             ;
 
         table_cell =
-            space
-            >>  cl::ch_p('[')                   [actions.start_cell]
-            >>
-            (
-                (
-                    inside_paragraph
-                    >>  cl::ch_p(']')           [actions.end_cell]
+                space
+            >>  cl::ch_p('[')
+            >>  (   scoped_block(actions) [
+                        inside_paragraph
+                    >>  cl::ch_p(']')
                     >>  space
-                )
+                    ]                           [actions.cell]
                 | cl::eps_p                     [actions.error]
-            )
+                )
             ;
 
         xinclude =
@@ -458,7 +463,7 @@ namespace quickbook
 
         paragraph =
            +(   common
-            |   (cl::anychar_p -                    // Make sure we don't go past
+            |   (cl::anychar_p -                // Make sure we don't go past
                     paragraph_end               // a single block.
                 )                               [actions.plain_char]
             )

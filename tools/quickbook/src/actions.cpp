@@ -61,6 +61,11 @@ namespace quickbook
         ++error_count;
     }
 
+    void tagged_action::operator()(std::string const& str) const
+    {
+        out << pre << str << post;
+    }
+
     void phrase_action::operator()(iterator first, iterator last) const
     {
         std::string str;
@@ -936,7 +941,6 @@ namespace quickbook
             }
         }
 
-        actions.write_paragraphs(); // Deal with any content in 'temp_para'
         actions.out.swap(block);
         actions.phrase.swap(phrase);
         actions.pop(); // restore the actions' states
@@ -979,7 +983,7 @@ namespace quickbook
 
         if(symbol->body.is_block || !block.empty()) {
             actions.inside_paragraph();
-            actions.temp_para << block;
+            actions.out << block;
             actions.phrase << phrase;
         }
         else {
@@ -1028,20 +1032,6 @@ namespace quickbook
         actions.table_span = 0;
         actions.table_header.clear();
         actions.table_title.clear();
-    }
-
-    void start_varlistitem_action::operator()() const
-    {
-        phrase << start_varlistitem_;
-        phrase.push();
-    }
-
-    void end_varlistitem_action::operator()() const
-    {
-        std::string str;
-        temp_para.swap(str);
-        phrase.pop();
-        phrase << str << end_varlistitem_;
     }
 
     void table_action::operator()(iterator, iterator) const
@@ -1129,19 +1119,10 @@ namespace quickbook
         (*this)(*f);
     }
 
-    void start_col_action::operator()(char) const
+    void col_action::operator()(std::string const& contents) const
     {
-        phrase << start_cell_;
-        phrase.push();
+        phrase << start_cell_ << contents << end_cell_;
         ++span;
-    }
-
-    void end_col_action::operator()(char) const
-    {
-        std::string str;
-        temp_para.swap(str);
-        phrase.pop();
-        phrase << str << end_cell_;
     }
 
     void begin_section_action::operator()(iterator first, iterator last) const
@@ -1395,12 +1376,5 @@ namespace quickbook
         out.encoded.clear();
         phrase.swap(out.encoded);
         out.raw = std::string(first, last);
-    }
-
-    void copy_stream_action::operator()() const
-    {
-        std::string str;
-        phrase.swap(str);
-        out << str;
     }
 }

@@ -249,7 +249,7 @@ namespace quickbook
             }
 
             cl::rule<Scanner>
-	        start_, identifier, code_elements, start_snippet, end_snippet,
+            start_, identifier, code_elements, start_snippet, end_snippet,
                 escaped_comment, inline_callout, line_callout, ignore;
 
             cl::rule<Scanner> const&

@@ -179,15 +179,15 @@ namespace quickbook
                 )                           [cl::assign_a(actions.source_mode)]
             ;
 
-		doc_biblioid =
-				"biblioid"
-			>>	hard_space
-			>>	(+cl::alnum_p)				[cl::assign_a(actions.doc_biblioid.first)]
-			>>	hard_space
-			>>	(+(~cl::eps_p(']') >> char_))
-											[actions.extract_doc_biblioid]
-											[cl::push_back_a(actions.doc_biblioid_items, actions.doc_biblioid)]
-			;
+        doc_biblioid =
+                "biblioid"
+            >>  hard_space
+            >>  (+cl::alnum_p)              [cl::assign_a(actions.doc_biblioid.first)]
+            >>  hard_space
+            >>  (+(~cl::eps_p(']') >> char_))
+                                            [actions.extract_doc_biblioid]
+                                            [cl::push_back_a(actions.doc_biblioid_items, actions.doc_biblioid)]
+            ;
 
         comment =
             "[/" >> *(cl::anychar_p - ']') >> ']'
