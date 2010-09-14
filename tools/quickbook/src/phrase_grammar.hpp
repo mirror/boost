@@ -350,97 +350,85 @@ namespace quickbook
                 '@'
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.url_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.url_post]
+            >>  hard_space
+            >>  phrase                          [actions.url_post]
             ;
 
         link =
                 "link" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.link_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.link_post]
+            >>  hard_space
+            >>  phrase                          [actions.link_post]
             ;
 
         anchor =
-                '#'
-            >>  blank
-            >>  (   *(cl::anychar_p - phrase_end)
-                )                               [actions.anchor]
+                blank
+            >>  (*(cl::anychar_p - phrase_end)) [actions.anchor]
             ;
 
         funcref =
             "funcref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.funcref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.funcref_post]
+            >>  hard_space
+            >>  phrase                          [actions.funcref_post]
             ;
 
         classref =
             "classref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.classref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.classref_post]
+            >>  hard_space
+            >>  phrase                          [actions.classref_post]
             ;
 
         memberref =
             "memberref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.memberref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.memberref_post]
+            >>  hard_space
+            >>  phrase                          [actions.memberref_post]
             ;
 
         enumref =
             "enumref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.enumref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.enumref_post]
+            >>  hard_space
+            >>  phrase                          [actions.enumref_post]
             ;
 
         macroref =
             "macroref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.macroref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.macroref_post]
+            >>  hard_space
+            >>  phrase                          [actions.macroref_post]
             ;
 
         headerref =
             "headerref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.headerref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.headerref_post]
+            >>  hard_space
+            >>  phrase                          [actions.headerref_post]
             ;
 
         conceptref =
             "conceptref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.conceptref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.conceptref_post]
+            >>  hard_space
+            >>  phrase                          [actions.conceptref_post]
             ;
 
         globalref =
             "globalref" >> hard_space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.globalref_pre]
-            >>  (   cl::eps_p(']')
-                |   (hard_space >> phrase)
-                )                               [actions.globalref_post]
+            >>  hard_space
+            >>  phrase                          [actions.globalref_post]
             ;
 
         bold =
