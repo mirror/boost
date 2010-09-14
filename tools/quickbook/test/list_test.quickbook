@@ -51,3 +51,10 @@ Three level list:
       # D
 # G
 # H
+
+[section List immediately following markup]
+* One
+* Two
+* Three
+
+[endsect]
