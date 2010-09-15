@@ -45,13 +45,24 @@ namespace
     // front-end: define the FSM structure 
     struct player_ : public msm::front::state_machine_def<player_>
     {
+        //we might want to serialize some data contained by the front-end
+        int front_end_data;
+        player_():front_end_data(0){}
+        // to achieve this, ask for it
+        typedef int do_serialize;
+        // and provide a serialize
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int )
+        {
+            ar & front_end_data;
+        }
         // The list of FSM states
         struct Empty : public msm::front::state<> 
         {
             // we want Empty to be serialized
             typedef int do_serialize;
             template<class Archive>
-            void serialize(Archive & ar, const unsigned int version)
+            void serialize(Archive & ar, const unsigned int )
             {
                 ar & some_dummy_data;
             }
@@ -180,6 +191,8 @@ namespace
         // needed to start the highest-level SM. This will call on_entry and mark the start of the SM
         p.start(); 
         p.get_state<player_::Empty&>().some_dummy_data=3;
+        p.front_end_data=4;
+
         // go to Open, call on_exit on Empty, then action, then on_entry on Open
         p.process_event(open_close()); pstate(p);
 
@@ -202,6 +215,7 @@ namespace
         // we now use p2 as it was loaded
         // check that we kept Empty's data value
         std::cout << "Empty's data should be 3:" << p2.get_state<player_::Empty&>().some_dummy_data << std::endl;
+        std::cout << "front-end data should be 4:" << p2.front_end_data << std::endl;
 
         p2.process_event(open_close()); pstate(p2);
         // will be rejected, wrong disk type
@@ -225,7 +239,6 @@ namespace
 // eliminate object tracking (even if serialized through a pointer)
 // at the risk of a programming error creating duplicate objects.
 // this is to get rid of warning because p is not const
-// TODO is this correct?
 BOOST_CLASS_TRACKING(player, boost::serialization::track_never)
 
 int main()
