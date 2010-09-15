@@ -50,7 +50,7 @@ public:
          return *this;
     }
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
+    void serialize(Archive & ar, const unsigned int)
     {
         ar & m_initialStates;
     }
@@ -91,7 +91,7 @@ public:
          return *this;
     }
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
+    void serialize(Archive & ar, const unsigned int)
     {
         ar & m_initialStates;
     }
@@ -140,7 +140,7 @@ public:
          return *this;
     }
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
+    void serialize(Archive & ar, const unsigned int)
     {
         ar & m_initialStates;
         ar & m_currentStates;

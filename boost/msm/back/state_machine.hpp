@@ -45,6 +45,9 @@
 #ifndef BOOST_NO_RTTI
 #include <boost/any.hpp>
 #endif
+
+#include <boost/serialization/base_object.hpp> 
+
 #include <boost/msm/row_tags.hpp>
 #include <boost/msm/back/metafunctions.hpp>
 #include <boost/msm/back/history_policies.hpp>
@@ -1021,13 +1024,25 @@ private:
         serialize_state(Archive& ar):ar_(ar){}
 
         template<typename T>
-        typename ::boost::enable_if< typename has_do_serialize<T>::type,void >::type
+        typename ::boost::enable_if< 
+            typename ::boost::mpl::or_<
+                typename has_do_serialize<T>::type,
+                typename is_composite_state<T>::type
+            >::type
+            ,void 
+        >::type
         operator()(T& t) const
         {
             ar_ & t;
         }
         template<typename T>
-        typename ::boost::disable_if< typename has_do_serialize<T>::type,void >::type
+        typename ::boost::disable_if< 
+            typename ::boost::mpl::or_<
+                typename has_do_serialize<T>::type,
+                typename is_composite_state<T>::type
+            >::type
+            ,void 
+        >::type
         operator()(T& t) const
         {
             // no state to serialize
@@ -1036,8 +1051,11 @@ private:
     };
     
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
+    void serialize(Archive & ar, const unsigned int)
     {
+        // invoke serialization of the base class 
+        (serialize_state<Archive>(ar))(boost::serialization::base_object<Derived>(*this));
+        // now our attributes
         ar & m_states;
         // queues cannot be serialized => skip
         ar & m_history;
