@@ -10,6 +10,7 @@
 =============================================================================*/
 #include "actions_class.hpp"
 #include "markups.hpp"
+#include "quickbook.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -37,12 +38,12 @@ namespace quickbook
 
     // auxilliary streams
         , phrase()
-        , temp()
         , list_buffer()
 
     // state
         , filename(fs::complete(fs::path(filein_)))
         , outdir(outdir_)
+        , macro_change_depth(0)
         , macro()
         , section_level(0)
         , min_section_level(0)
@@ -81,12 +82,11 @@ namespace quickbook
         , extract_name_first(name.first, phrase)
         , extract_doc_last_revision(doc_last_revision, phrase)
         , extract_doc_category(doc_category, phrase)
-        , syntax_p(temp, source_mode, macro, *this)
-        , code(out, phrase, syntax_p)
-        , code_block(phrase, phrase, syntax_p)
-        , inline_code(phrase, syntax_p)
-        , inside_paragraph(temp_para, phrase, paragraph_pre, paragraph_post)
-        , write_paragraphs(out, temp_para)
+        , extract_doc_biblioid(doc_biblioid.second, phrase)
+        , code(out, phrase, *this)
+        , code_block(phrase, phrase, *this)
+        , inline_code(phrase, *this)
+        , inside_paragraph(out, phrase, paragraph_pre, paragraph_post)
         , h(out, phrase, element_id, doc_id, section_id, qualified_section_id, section_level)
         , h1(out, phrase, element_id, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
         , h2(out, phrase, element_id, doc_id, section_id, qualified_section_id, h2_pre, h2_post)
@@ -95,14 +95,14 @@ namespace quickbook
         , h5(out, phrase, element_id, doc_id, section_id, qualified_section_id, h5_pre, h5_post)
         , h6(out, phrase, element_id, doc_id, section_id, qualified_section_id, h6_pre, h6_post)
         , hr(out, hr_)
-        , blurb(out, temp_para, blurb_pre, blurb_post)
-        , blockquote(out, temp_para, blockquote_pre, blockquote_post)
+        , blurb(out, blurb_pre, blurb_post)
+        , blockquote(out, blockquote_pre, blockquote_post)
         , preformatted(out, phrase, preformatted_pre, preformatted_post)
-        , warning(out, temp_para, warning_pre, warning_post)
-        , caution(out, temp_para, caution_pre, caution_post)
-        , important(out, temp_para, important_pre, important_post)
-        , note(out, temp_para, note_pre, note_post)
-        , tip(out, temp_para, tip_pre, tip_post)
+        , warning(out, warning_pre, warning_post)
+        , caution(out, caution_pre, caution_post)
+        , important(out, important_pre, important_post)
+        , note(out, note_pre, note_post)
+        , tip(out, tip_pre, tip_post)
         , plain_char(phrase)
         , raw_char(phrase)
         , escape_unicode(phrase)
@@ -160,8 +160,7 @@ namespace quickbook
         , end_varlistentry(phrase, end_varlistentry_)
         , start_varlistterm(phrase, start_varlistterm_)
         , end_varlistterm(phrase, end_varlistterm_)
-        , start_varlistitem(phrase)
-        , end_varlistitem(phrase, temp_para)
+        , varlistitem(phrase, start_varlistitem_, end_varlistitem_)
 
         , break_(phrase)
         , macro_identifier(*this)
@@ -177,8 +176,7 @@ namespace quickbook
         , table(*this)
         , start_row(phrase, table_span, table_header)
         , end_row(phrase, end_row_)
-        , start_cell(phrase, table_span)
-        , end_cell(phrase, temp_para)
+        , cell(phrase, table_span)
         , anchor(out)
 
         , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, element_id)
@@ -209,7 +207,7 @@ namespace quickbook
             boost::make_tuple(
                 filename
               , outdir
-              , macro
+              , macro_change_depth
               , section_level
               , min_section_level
               , section_id
@@ -220,18 +218,36 @@ namespace quickbook
 
         out.push();
         phrase.push();
-        temp.push();
-        temp_para.push();
         list_buffer.push();
         templates.push();        
+    }
+    
+    // Pushing and popping the macro symbol table is pretty expensive, so
+    // instead implement a sort of 'stack on write'. Call this whenever a
+    // change is made to the macro table, and it'll stack the current macros
+    // if necessary. Would probably be better to implement macros in a less
+    // expensive manner.
+    void actions::copy_macros_for_write()
+    {
+        if(macro_change_depth != state_stack.size())
+        {
+            macro_stack.push(macro);
+            macro_change_depth = state_stack.size();
+        }
     }
 
     void actions::pop()
     {
+        if(macro_change_depth == state_stack.size())
+        {
+            macro = macro_stack.top();
+            macro_stack.pop();
+        }
+    
         boost::tie(
             filename
           , outdir
-          , macro
+          , macro_change_depth
           , section_level
           , min_section_level
           , section_id
@@ -242,8 +258,6 @@ namespace quickbook
 
         out.pop();
         phrase.pop();
-        temp.pop();
-        temp_para.pop();
         list_buffer.pop();
         templates.pop();
     }

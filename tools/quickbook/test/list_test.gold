@@ -210,4 +210,25 @@
       </simpara>
     </listitem>
   </orderedlist>
+  <section id="list_test.list_immediately_following_markup">
+    <title><link linkend="list_test.list_immediately_following_markup">List immediately
+    following markup</link></title>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+          One
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          Two
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          Three
+        </simpara>
+      </listitem>
+    </itemizedlist>
+  </section>
 </article>

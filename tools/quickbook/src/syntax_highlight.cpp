@@ -43,22 +43,27 @@ namespace quickbook
       , collector>
     teletype_p_type;
     
-    std::string syntax_highlight::operator()(iterator first, iterator last) const
+    std::string syntax_highlight(
+        iterator first, iterator last,
+        actions& escape_actions,
+        std::string const& source_mode)
     {
+        quickbook::collector temp;
+
         // print the code with syntax coloring
         if (source_mode == "c++")
         {
-            cpp_p_type cpp_p(temp, macro, do_macro_action(temp), escape_actions);
+            cpp_p_type cpp_p(temp, escape_actions.macro, do_macro_action(temp), escape_actions);
             boost::spirit::classic::parse(first, last, cpp_p);
         }
         else if (source_mode == "python")
         {
-            python_p_type python_p(temp, macro, do_macro_action(temp), escape_actions);
+            python_p_type python_p(temp, escape_actions.macro, do_macro_action(temp), escape_actions);
             boost::spirit::classic::parse(first, last, python_p);
         }
         else if (source_mode == "teletype")
         {
-            teletype_p_type teletype_p(temp, macro, do_macro_action(temp), escape_actions);
+            teletype_p_type teletype_p(temp, escape_actions.macro, do_macro_action(temp), escape_actions);
             boost::spirit::classic::parse(first, last, teletype_p);
         }
         else

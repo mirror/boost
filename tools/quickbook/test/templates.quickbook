@@ -144,3 +144,25 @@ x[super 2]
 [empty_arg2 1 2]
 
 [endsect]
+
+[/----------------------------------- Nested templates ]
+
+[section Nested Templates]
+
+[template block[content]
+
+Start block template.
+
+[content]
+
+End block template.
+]
+
+[template phrase[content] Start phrase template. [content] End phrase template.]
+
+[block [block Hello!]]
+[block [phrase Hello!]]
+[phrase [block Hello!]]
+[phrase [phrase Hello!]]
+
+[endsect]

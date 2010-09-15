@@ -12,36 +12,20 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_QUICKBOOK_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_QUICKBOOK_HPP
 
+#include <time.h>
+#include <vector>
+#include <string>
+#include "fwd.hpp"
+
 namespace quickbook
 {
-    extern int qbk_major_version;
-    extern int qbk_minor_version;
-    extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
+    extern tm* current_time; // the current time
+    extern tm* current_gm_time; // the current UTC time
+    extern bool debug_mode;
+    extern std::vector<std::string> include_path;
+    extern std::vector<std::string> preset_defines;
 
-    struct quickbook_range {
-        template <typename Arg>
-        struct result
-        {
-            typedef bool type;
-        };
-        
-        quickbook_range(unsigned min_, unsigned max_)
-            : min_(min_), max_(max_) {}
-        
-        bool operator()() const {
-            return qbk_version_n >= min_ && qbk_version_n < max_;
-        }
-
-        unsigned min_, max_;
-    };
-    
-    inline quickbook_range qbk_since(unsigned min_) {
-        return quickbook_range(min_, 999);
-    }
-    
-    inline quickbook_range qbk_before(unsigned max_) {
-        return quickbook_range(0, max_);
-    }
+    int parse_file(char const* filein_, actions& actor, bool ignore_docinfo = false);
 }
 
 #endif

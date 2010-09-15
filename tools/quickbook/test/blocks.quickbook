@@ -37,3 +37,6 @@ Warning second paragraph.]
 [: Blockquote containing a footnote[footnote Here it is!].]
 
 [/ Unfortunately footnotes currently can't contain blocks.]
+
+[/ Quickbook shouldn't think that this is a tip]
+[tipping point]

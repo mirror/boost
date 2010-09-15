@@ -6,11 +6,10 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#if !defined(BOOST_SPIRIT_QUICKBOOK_CODE_SNIPPET_HPP)
-#define BOOST_SPIRIT_QUICKBOOK_CODE_SNIPPET_HPP
 
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include "template_stack.hpp"
@@ -18,7 +17,7 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit::classic;
+    namespace cl = boost::spirit::classic;
 
     struct code_snippet_actions
     {
@@ -69,7 +68,7 @@ namespace quickbook
     };
 
     struct python_code_snippet_grammar
-        : grammar<python_code_snippet_grammar>
+        : cl::grammar<python_code_snippet_grammar>
     {
         typedef code_snippet_actions actions_type;
   
@@ -90,7 +89,7 @@ namespace quickbook
                 start_ = *code_elements;
 
                 identifier =
-                    (alpha_p | '_') >> *(alnum_p | '_')
+                    (cl::alpha_p | '_') >> *(cl::alnum_p | '_')
                     ;
 
                 code_elements =
@@ -98,45 +97,55 @@ namespace quickbook
                     |   end_snippet                 [boost::bind(&actions_type::end_snippet, &actions, _1, _2)]
                     |   escaped_comment
                     |   ignore
-                    |   anychar_p                   [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
+                    |   cl::anychar_p               [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
                     ;
 
                 start_snippet =
-                    "#[" >> *space_p
-                    >> identifier                   [assign_a(actions.id)]
+                    "#[" >> *cl::space_p
+                    >> identifier                   [cl::assign_a(actions.id)]
                     ;
 
                 end_snippet =
-                    str_p("#]")
+                    cl::str_p("#]")
                     ;
 
-                ignore =
-                        *blank_p >> "#<-"
-                        >> (*(anychar_p - "#->"))
-                        >> "#->" >> *blank_p >> eol_p
-                    |   "\"\"\"<-\"\"\""
-                        >> (*(anychar_p - "\"\"\"->\"\"\""))
-                        >> "\"\"\"->\"\"\""
-                    |   "\"\"\"<-"
-                        >> (*(anychar_p - "->\"\"\""))
-                        >> "->\"\"\""
+                ignore
+                    =   cl::confix_p(
+                            *cl::blank_p >> "#<-",
+                            *cl::anychar_p,
+                            "#->" >> *cl::blank_p >> cl::eol_p
+                        )
+                    |   cl::confix_p(
+                            "\"\"\"<-\"\"\"",
+                            *cl::anychar_p,
+                            "\"\"\"->\"\"\""
+                        )
+                    |   cl::confix_p(
+                            "\"\"\"<-",
+                            *cl::anychar_p,
+                            "->\"\"\""
+                        )
                     ;
 
                 escaped_comment =
-                        *space_p >> "#`"
-                        >> ((*(anychar_p - eol_p))
-                            >> eol_p)               [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                    |   *space_p >> "\"\"\"`"
-                        >> (*(anychar_p - "\"\"\""))    [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                        >> "\"\"\""
+                        cl::confix_p(
+                            *cl::space_p >> "#`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            cl::eol_p
+                        )
+                    |   cl::confix_p(
+                            *cl::space_p >> "\"\"\"`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            "\"\"\""
+                        )
                     ;
             }
 
-            rule<Scanner>
+            cl::rule<Scanner>
                 start_, identifier, code_elements, start_snippet, end_snippet,
                 escaped_comment, ignore;
 
-            rule<Scanner> const&
+            cl::rule<Scanner> const&
             start() const { return start_; }
         };
 
@@ -144,7 +153,7 @@ namespace quickbook
     };  
 
     struct cpp_code_snippet_grammar
-        : grammar<cpp_code_snippet_grammar>
+        : cl::grammar<cpp_code_snippet_grammar>
     {
         typedef code_snippet_actions actions_type;
   
@@ -162,7 +171,7 @@ namespace quickbook
                 start_ = *code_elements;
 
                 identifier =
-                    (alpha_p | '_') >> *(alnum_p | '_')
+                    (cl::alpha_p | '_') >> *(cl::alnum_p | '_')
                     ;
 
                 code_elements =
@@ -172,64 +181,78 @@ namespace quickbook
                     |   ignore
                     |   line_callout
                     |   inline_callout
-                    |   anychar_p                   [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
+                    |   cl::anychar_p               [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
                     ;
 
                 start_snippet =
-                        "//[" >> *space_p
-                        >> identifier               [assign_a(actions.id)]
+                        "//[" >> *cl::space_p
+                        >> identifier               [cl::assign_a(actions.id)]
                     |
-                        "/*[" >> *space_p
-                        >> identifier               [assign_a(actions.id)]
-                        >> *space_p >> "*/"
+                        "/*[" >> *cl::space_p
+                        >> identifier               [cl::assign_a(actions.id)]
+                        >> *cl::space_p >> "*/"
                     ;
 
                 end_snippet =
-                    str_p("//]") | "/*]*/"
+                    cl::str_p("//]") | "/*]*/"
                     ;
 
-                inline_callout =
-                    "/*<"
-                    >> *space_p
-                    >> (*(anychar_p - ">*/"))       [boost::bind(&actions_type::callout, &actions, _1, _2)]
-                    >> ">*/"
+                inline_callout
+                    =   cl::confix_p(
+                            "/*<" >> *cl::space_p,
+                            (*cl::anychar_p)        [boost::bind(&actions_type::callout, &actions, _1, _2)],
+                            ">*/"
+                        )
+                        ;
+
+                line_callout
+                    =   cl::confix_p(
+                            "/*<<" >> *cl::space_p,
+                            (*cl::anychar_p)        [boost::bind(&actions_type::callout, &actions, _1, _2)],
+                            ">>*/"
+                        )
+                    >>  *cl::space_p
                     ;
 
-                line_callout =
-                    "/*<<"
-                    >> *space_p
-                    >> (*(anychar_p - ">>*/"))      [boost::bind(&actions_type::callout, &actions, _1, _2)]
-                    >> ">>*/"
-                    >> *space_p
+                ignore
+                    =   cl::confix_p(
+                            *cl::blank_p >> "//<-",
+                            *cl::anychar_p,
+                            "//->"
+                        )
+                    >>  *cl::blank_p
+                    >>  cl::eol_p
+                    |   cl::confix_p(
+                            "/*<-*/",
+                            *cl::anychar_p,
+                            "/*->*/"
+                        )
+                    |   cl::confix_p(
+                            "/*<-",
+                            *cl::anychar_p,
+                            "->*/"
+                        )
                     ;
 
-                ignore =
-                        *blank_p >> "//<-"
-                        >> (*(anychar_p - "//->"))
-                        >> "//->" >> *blank_p >> eol_p
-                    |   "/*<-*/"
-                        >> (*(anychar_p - "/*->*/"))
-                        >> "/*->*/"
-                    |   "/*<-"
-                        >> (*(anychar_p - "->*/"))
-                        >> "->*/"
-                    ;
-
-                escaped_comment =
-                        *space_p >> "//`"
-                        >> ((*(anychar_p - eol_p))
-                            >> eol_p)               [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                    |   *space_p >> "/*`"
-                        >> (*(anychar_p - "*/"))    [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
-                        >> "*/"
+                escaped_comment
+                    =   cl::confix_p(
+                            *cl::space_p >> "//`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            cl::eol_p
+                        )
+                    |   cl::confix_p(
+                            *cl::space_p >> "/*`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)],
+                            "*/"
+                        )
                     ;
             }
 
-            rule<Scanner>
-	        start_, identifier, code_elements, start_snippet, end_snippet,
+            cl::rule<Scanner>
+            start_, identifier, code_elements, start_snippet, end_snippet,
                 escaped_comment, inline_callout, line_callout, ignore;
 
-            rule<Scanner> const&
+            cl::rule<Scanner> const&
             start() const { return start_; }
         };
 
@@ -248,9 +271,8 @@ namespace quickbook
         if (err != 0)
             return err; // return early on error
 
-        typedef position_iterator<std::string::const_iterator> iterator_type;
-        iterator_type first(code.begin(), code.end(), file);
-        iterator_type last(code.end(), code.end());
+        iterator first(code.begin(), code.end(), file.c_str());
+        iterator last(code.end(), code.end());
 
         size_t fname_len = file.size();
         bool is_python = fname_len >= 3
@@ -406,6 +428,3 @@ namespace quickbook
         }
     }
 }
-
-#endif // BOOST_SPIRIT_QUICKBOOK_CODE_SNIPPET_HPP
-

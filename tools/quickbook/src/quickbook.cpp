@@ -32,14 +32,12 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit::classic;
+    namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
+
     tm* current_time; // the current time
     tm* current_gm_time; // the current UTC time
     bool debug_mode; // for quickbook developers only
-    int qbk_major_version = -1;
-    int qbk_minor_version = -1;
-    unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
     bool ms_errors = false; // output errors/warnings as if for VS
     std::vector<std::string> include_path;
     std::vector<std::string> preset_defines;
@@ -53,11 +51,10 @@ namespace quickbook
                 end = preset_defines.end();
                 it != end; ++it)
         {
-            typedef position_iterator<std::string::const_iterator> iterator_type;
-            iterator_type first(it->begin(), it->end(), "command line parameter");
-            iterator_type last(it->end(), it->end());
+            iterator first(it->begin(), it->end(), "command line parameter");
+            iterator last(it->end(), it->end());
 
-            parse(first, last, grammar);
+            call_parse(first, last, grammar);
             // TODO: Check result?
         }
     }
@@ -81,19 +78,18 @@ namespace quickbook
             return err;
         }
 
-        typedef position_iterator<std::string::const_iterator> iterator_type;
-        iterator_type first(storage.begin(), storage.end(), filein_);
-        iterator_type last(storage.end(), storage.end());
+        iterator first(storage.begin(), storage.end(), filein_);
+        iterator last(storage.end(), storage.end());
 
         doc_info_grammar l(actor);
-        parse_info<iterator_type> info = parse(first, last, l);
+        cl::parse_info<iterator> info = call_parse(first, last, l);
 
         if (info.hit || ignore_docinfo)
         {
             pre(actor.out, actor, ignore_docinfo);
 
             block_grammar g(actor);
-            info = parse(info.hit ? info.stop : first, last, g);
+            info = call_parse(info.hit ? info.stop : first, last, g);
             if (info.full)
             {
                 post(actor.out, actor, ignore_docinfo);
@@ -102,7 +98,7 @@ namespace quickbook
 
         if (!info.full)
         {
-            file_position const pos = info.stop.get_position();
+            position const pos = info.stop.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Syntax Error near column " << pos.column << ".\n";
             ++actor.error_count;
@@ -140,24 +136,24 @@ namespace quickbook
       , bool pretty_print)
     {
         int result = 0;
-        std::ofstream fileout(fileout_);
         fs::path outdir = fs::path(fileout_).parent_path();
         if (outdir.empty())
             outdir = ".";
-        if (pretty_print)
+        string_stream buffer;
+        result = parse_document(filein_, outdir, buffer);
+
+        if (result == 0)
         {
-            string_stream buffer;
-            result = parse_document(filein_, outdir, buffer);
-            if (result == 0)
+            std::ofstream fileout(fileout_);
+
+            if (pretty_print)
             {
                 result = post_process(buffer.str(), fileout, indent, linewidth);
             }
-        }
-        else
-        {
-            string_stream buffer;
-            result = parse_document(filein_, outdir, buffer);
-            fileout << buffer.str();
+            else
+            {
+                fileout << buffer.str();
+            }
         }
         return result;
     }

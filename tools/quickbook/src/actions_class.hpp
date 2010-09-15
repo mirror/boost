@@ -33,6 +33,8 @@ namespace quickbook
         typedef std::vector<author> author_list;
         typedef std::pair<string_list, docinfo_string> copyright_item;
         typedef std::vector<copyright_item> copyright_list;
+        typedef std::pair<std::string, docinfo_string> biblioid_item;
+        typedef std::vector<biblioid_item> biblioid_list;
         typedef std::pair<char, int> mark_type;
         static int const max_template_depth = 100;
 
@@ -48,8 +50,10 @@ namespace quickbook
         author_list             doc_authors;
         docinfo_string          doc_license;
         docinfo_string          doc_last_revision;
+        biblioid_list           doc_biblioid_items;
         std::string             include_doc_id;
         //temporary state
+        biblioid_item           doc_biblioid;
         docinfo_string          doc_id_tmp;
         author                  name;
         copyright_item          copyright;
@@ -61,13 +65,12 @@ namespace quickbook
 
     // auxilliary streams
         collector               phrase;
-        collector               temp;
-        collector               temp_para;
         collector               list_buffer;
 
     // state
         fs::path                filename;
         fs::path                outdir;
+        std::size_t             macro_change_depth;
         string_symbols          macro;
         int                     section_level;
         int                     min_section_level;
@@ -78,7 +81,7 @@ namespace quickbook
         typedef boost::tuple<
             fs::path
           , fs::path
-          , string_symbols
+          , std::size_t
           , int
           , int
           , std::string
@@ -87,6 +90,8 @@ namespace quickbook
         state_tuple;
 
         std::stack<state_tuple> state_stack;
+        // Stack macros separately as copying macros is expensive.
+        std::stack<string_symbols> macro_stack;
 
     // temporary or global state
         std::string             element_id;
@@ -111,6 +116,7 @@ namespace quickbook
         attribute_map           attributes;
 
     // push/pop the states and the streams
+        void copy_macros_for_write();
         void push();
         void pop();
 
@@ -129,18 +135,18 @@ namespace quickbook
         phrase_to_docinfo_action extract_name_first;
         phrase_to_docinfo_action extract_doc_last_revision;
         phrase_to_docinfo_action extract_doc_category;
+        phrase_to_docinfo_action extract_doc_biblioid;
 
-        syntax_highlight        syntax_p;
         code_action             code;
         code_action             code_block;
         inline_code_action      inline_code;
         implicit_paragraph_action inside_paragraph;
-        copy_stream_action      write_paragraphs;
         generic_header_action   h;
         header_action           h1, h2, h3, h4, h5, h6;
         markup_action           hr;
-        phrase_action           blurb, blockquote, preformatted;
-        phrase_action           warning, caution, important, note, tip;
+        tagged_action           blurb, blockquote;
+        phrase_action           preformatted;
+        tagged_action           warning, caution, important, note, tip;
         plain_char_action       plain_char;
         raw_char_action         raw_char;
         escape_unicode_action   escape_unicode;
@@ -198,8 +204,7 @@ namespace quickbook
         markup_action           end_varlistentry;
         markup_action           start_varlistterm;
         markup_action           end_varlistterm;
-        start_varlistitem_action start_varlistitem;
-        end_varlistitem_action  end_varlistitem;
+        tagged_action           varlistitem;
 
         break_action            break_;
         macro_identifier_action macro_identifier;
@@ -215,8 +220,7 @@ namespace quickbook
         table_action            table;
         start_row_action        start_row;
         markup_action           end_row;
-        start_col_action        start_cell;
-        end_col_action          end_cell;
+        col_action              cell;
         anchor_action           anchor;
 
         begin_section_action    begin_section;
