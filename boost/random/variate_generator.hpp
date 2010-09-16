@@ -215,6 +215,6 @@ private:
 
 } // namespace boost
 
-#include <boost/random/detail/disable_warnings.hpp>
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_RANDOM_GENERATOR_HPP
