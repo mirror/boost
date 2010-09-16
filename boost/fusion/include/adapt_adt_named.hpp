@@ -1,12 +1,13 @@
 /*=============================================================================
-    Copyright (c) 2001-2009 Joel de Guzman
+    Copyright (c) 2010 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_INCLUDE_ADAPT_CLASS_NAMED)
-#define FUSION_INCLUDE_ADAPT_CLASS_NAMED
 
-#include <boost/fusion/adapted/class/adapt_class_named.hpp>
+#ifndef BOOST_FUSION_INCLUDE_ADAPT_ADT_NAMED_HPP
+#define BOOST_FUSION_INCLUDE_ADAPT_ADT_NAMED_HPP
+
+#include <boost/fusion/adapted/adt/adapt_adt_named.hpp>
 
 #endif

@@ -5,7 +5,7 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/adapted/class/adapt_class.hpp>
+#include <boost/fusion/adapted/adt/adapt_adt_named.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
@@ -28,54 +28,52 @@
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/static_assert.hpp>
 #include <iostream>
 #include <string>
 
 namespace ns
 {
-    template<typename X, typename Y>
     class point
     {
     public:
     
         point() : x(0), y(0) {}
-        point(X x_, Y y_) : x(x_), y(y_) {}
+        point(int in_x, int in_y) : x(in_x), y(in_y) {}
             
-        X get_x() const { return x; }
-        Y get_y() const { return y; }
-        void set_x(X x_) { x = x_; }
-        void set_y(Y y_) { y = y_; }
+        int get_x() const { return x; }
+        int get_y() const { return y; }
+        void set_x(int x_) { x = x_; }
+        void set_y(int y_) { y = y_; }
         
     private:
         
-        X x;
-        Y y;
+        int x;
+        int y;
     };
 }
 
-BOOST_FUSION_ADAPT_TPL_CLASS(
-    (X)(Y),
-    (ns::point)(X)(Y),
-    (X, X, obj.get_x(), obj.set_x(val))
-    (Y, Y, obj.get_y(), obj.set_y(val))
+// this creates a fusion view: boost::fusion::adapted::point
+BOOST_FUSION_ADAPT_ADT_NAMED(
+    ns::point, point,
+    (int, int, obj.obj.get_x(), obj.obj.set_x(val))
+    (int, int, obj.obj.get_y(), obj.obj.set_y(val))
 )
 
 int
 main()
 {
     using namespace boost::fusion;
+    using namespace boost;
     using namespace std;
-
-    typedef ns::point<int, int> point;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
     std::cout << tuple_delimiter(", ");
 
     {
-        BOOST_MPL_ASSERT_NOT((traits::is_view<point>));
-        point p(123, 456);
+        BOOST_MPL_ASSERT((traits::is_view<adapted::point>));
+        ns::point basep(123, 456);
+        adapted::point p(basep);
 
         std::cout << at_c<0>(p) << std::endl;
         std::cout << at_c<1>(p) << std::endl;
@@ -86,17 +84,19 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<point>::value);
+        BOOST_STATIC_ASSERT(result_of::size<adapted::point>::value == 2);
+        BOOST_STATIC_ASSERT(!result_of::empty<adapted::point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
     }
 
     {
-        boost::fusion::vector<int, float> v1(4, 2);
-        point v2(5, 3);
-        boost::fusion::vector<long, double> v3(5, 4);
+        fusion::vector<int, float> v1(4, 2);
+        ns::point basep(5, 3);
+        adapted::point v2(basep);
+
+        fusion::vector<long, double> v3(5, 4);
         BOOST_TEST(v1 < v2);
         BOOST_TEST(v1 <= v2);
         BOOST_TEST(v2 > v1);
@@ -108,24 +108,28 @@ main()
     }
 
     {
-        // conversion from point to vector
-        point p(5, 3);
-        boost::fusion::vector<int, long> v(p);
+        // conversion from ns::point to vector
+        ns::point basep(5, 3);
+        adapted::point p(basep);
+
+        fusion::vector<int, long> v(p);
         v = p;
     }
 
     {
-        // conversion from point to list
-        point p(5, 3);
-        boost::fusion::list<int, long> l(p);
+        // conversion from ns::point to list
+        ns::point basep(5, 3);
+        adapted::point p(basep);
+
+        fusion::list<int, long> l(p);
         l = p;
     }
 
     {
-        BOOST_MPL_ASSERT((boost::mpl::is_sequence<point>));
+        BOOST_MPL_ASSERT((mpl::is_sequence<adapted::point>));
         BOOST_MPL_ASSERT((boost::is_same<
-            boost::fusion::result_of::value_at_c<point,0>::type
-          , boost::mpl::front<point>::type>));
+            fusion::result_of::value_at_c<adapted::point,0>::type
+          , mpl::front<adapted::point>::type>));
     }
 
     return boost::report_errors();

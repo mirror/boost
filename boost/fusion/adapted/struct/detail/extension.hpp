@@ -32,8 +32,8 @@ namespace boost { namespace fusion
             template<typename Seq, int N>
             struct struct_member;
 
-            template <typename T, int N>
-            struct class_member_proxy;
+            template <typename T, int N, bool Const>
+            struct adt_attribute_proxy;
         };
 
         template<typename Seq, int N>
