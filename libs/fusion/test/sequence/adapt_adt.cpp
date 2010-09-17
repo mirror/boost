@@ -28,6 +28,7 @@
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <iostream>
 #include <string>
 
@@ -173,6 +174,29 @@ main()
         BOOST_TEST(back(p) == 9);
     }
 #endif
+
+    {
+        BOOST_MPL_ASSERT((
+            boost::is_same<
+                result_of::front<ns::point>::type,
+                boost::fusion::extension::adt_attribute_proxy<ns::point,0,false>
+            >));
+        BOOST_MPL_ASSERT((
+            boost::is_same<
+                result_of::front<ns::point>::type::type,
+                int
+            >));
+        BOOST_MPL_ASSERT((
+            boost::is_same<
+                result_of::front<ns::point const>::type,
+                boost::fusion::extension::adt_attribute_proxy<ns::point,0,true>
+            >));
+        BOOST_MPL_ASSERT((
+            boost::is_same<
+                result_of::front<ns::point const>::type::type,
+                int
+            >));
+    }
 
     return boost::report_errors();
 }

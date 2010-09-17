@@ -33,7 +33,39 @@
     template<                                                                   \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_TEMPLATE_PARAMS(TEMPLATE_PARAMS_SEQ)   \
     >                                                                           \
-    struct access::adt_attribute_proxy<                                         \
+    struct access::adt_attribute_access<                                        \
+        BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                         \
+      , I                                                                       \
+    >                                                                           \
+    {                                                                           \
+        template<class Arg>                                                     \
+        static void                                                             \
+        boost_fusion_adapt_adt_impl_set(                                        \
+            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& obj,               \
+            Arg const& val)                                                     \
+        {                                                                       \
+            BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 3, ATTRIBUTE);            \
+        }                                                                       \
+                                                                                \
+        static BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 0, ATTRIBUTE)          \
+        boost_fusion_adapt_adt_impl_get(                                        \
+            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& obj)               \
+        {                                                                       \
+            return BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 2, ATTRIBUTE);     \
+        }                                                                       \
+                                                                                \
+        static BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 1, ATTRIBUTE)          \
+        boost_fusion_adapt_adt_impl_get(                                        \
+            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const& obj)         \
+        {                                                                       \
+            return BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 2, ATTRIBUTE);     \
+        }                                                                       \
+    };                                                                          \
+                                                                                \
+    template<                                                                   \
+        BOOST_FUSION_ADAPT_STRUCT_UNPACK_TEMPLATE_PARAMS(TEMPLATE_PARAMS_SEQ)   \
+    >                                                                           \
+    struct adt_attribute_proxy<                                                 \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                         \
       , I                                                                       \
       , true                                                                    \
@@ -43,25 +75,25 @@
                                                                                 \
         explicit                                                                \
         adt_attribute_proxy(                                                    \
-            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const& o)           \
+            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const*const o)      \
           : obj(o)                                                              \
         {}                                                                      \
                                                                                 \
         operator type() const                                                   \
         {                                                                       \
-            return BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 2, ATTRIBUTE);     \
+            return access::adt_attribute_access<                                \
+                BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                 \
+              , I                                                               \
+            >::boost_fusion_adapt_adt_impl_get(*obj);                           \
         }                                                                       \
                                                                                 \
-        BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const& obj;             \
-                                                                                \
-    private:                                                                    \
-        adt_attribute_proxy& operator= (adt_attribute_proxy const&);            \
+        BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const* obj;             \
     };                                                                          \
                                                                                 \
     template<                                                                   \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_TEMPLATE_PARAMS(TEMPLATE_PARAMS_SEQ)   \
     >                                                                           \
-    struct access::adt_attribute_proxy<                                         \
+    struct adt_attribute_proxy<                                                 \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                         \
       , I                                                                       \
       , false                                                                   \
@@ -70,7 +102,8 @@
         typedef BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 0, ATTRIBUTE) type;   \
                                                                                 \
         explicit                                                                \
-        adt_attribute_proxy(BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& o) \
+        adt_attribute_proxy(                                                    \
+            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)*const o)            \
           : obj(o)                                                              \
         {}                                                                      \
                                                                                 \
@@ -78,19 +111,22 @@
         adt_attribute_proxy&                                                    \
         operator=(Arg const& val)                                               \
         {                                                                       \
-            BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 3, ATTRIBUTE);            \
+            access::adt_attribute_access<                                       \
+                BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                 \
+              , I                                                               \
+            >::boost_fusion_adapt_adt_impl_set(*obj, val);                      \
             return *this;                                                       \
         }                                                                       \
                                                                                 \
         operator type() const                                                   \
         {                                                                       \
-            return BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 2, ATTRIBUTE);     \
+            return access::adt_attribute_access<                                \
+                BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                 \
+              , I                                                               \
+            >::boost_fusion_adapt_adt_impl_get(*obj);                           \
         }                                                                       \
                                                                                 \
-        BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& obj;                   \
-                                                                                \
-    private:                                                                    \
-        adt_attribute_proxy& operator= (adt_attribute_proxy const&);            \
+        BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)* obj;                   \
     };                                                                          \
                                                                                 \
     template<                                                                   \
@@ -117,7 +153,7 @@
         struct apply                                                            \
         {                                                                       \
             typedef                                                             \
-                access::adt_attribute_proxy<                                    \
+                adt_attribute_proxy<                                            \
                     BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)             \
                   , I                                                           \
                   , is_const<Seq>::value                                        \
@@ -127,7 +163,7 @@
             static type                                                         \
             call(Seq& obj)                                                      \
             {                                                                   \
-                return type(obj);                                               \
+                return type(&obj);                                              \
             }                                                                   \
         };                                                                      \
     };
