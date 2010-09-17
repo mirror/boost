@@ -35,6 +35,9 @@ result of applying the transformation to the template argument `T`.
    template <class T>
    struct __add_volatile;
 
+   template <class... T>
+   struct __common_type;
+
    template <class T>
    struct __decay;
 

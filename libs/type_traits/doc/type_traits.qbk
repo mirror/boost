@@ -107,6 +107,7 @@
 [def __add_const [link boost_typetraits.reference.add_const add_const]]
 [def __add_volatile [link boost_typetraits.reference.add_volatile add_volatile]]
 [def __add_cv [link boost_typetraits.reference.add_cv add_cv]]
+[def __common_type [link boost_typetraits.reference.common_type common_type]]
 
 [def __type_with_alignment [link boost_typetraits.reference.type_with_alignment type_with_alignment]]
 [def __aligned_storage [link boost_typetraits.reference.aligned_storage aligned_storage]]
@@ -171,6 +172,7 @@ that is the result of the transformation.
 [include add_volatile.qbk]
 [include aligned_storage.qbk]
 [include alignment_of.qbk]
+[include common_type.qbk]
 [include decay.qbk]
 [include extent.qbk]
 [include floating_point_promotion.qbk]

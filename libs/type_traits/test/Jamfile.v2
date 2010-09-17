@@ -32,5 +32,7 @@ rule all-tests {
             
 test-suite type_traits : [ all-tests ] ;
 
+compile-fail common_type_fail.cpp ;
+
 
 
