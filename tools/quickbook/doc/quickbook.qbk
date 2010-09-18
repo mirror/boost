@@ -26,47 +26,47 @@
 
 [def __comments__           [link quickbook.syntax.comments Comments]]
 
-[def __font_styles__        [link quickbook.syntax.phrase.font_styles Font Styles]]
-[def __quotations__         [link quickbook.syntax.phrase.quotations Quotations]]
-[def __replaceable__        [link quickbook.syntax.phrase.replaceable Replaceble]]
-[def __simple_formatting__  [link quickbook.syntax.phrase.simple_formatting Simple formatting]]
-[def __inline_code__        [link quickbook.syntax.phrase.inline_code Inline code]]
-[def __code_blocks__        [link quickbook.syntax.phrase.code_blocks Code blocks]]
-[def __source_mode__        [link quickbook.syntax.phrase.source_mode Source Mode]]
-[def __line_break__         [link quickbook.syntax.phrase.line_break line-break]]
-[def __anchors__            [link quickbook.syntax.phrase.anchors Anchors]]
-[def __links__              [link quickbook.syntax.phrase.links Links]]
-[def __anchor_links__       [link quickbook.syntax.phrase.anchor_links Anchor links]]
-[def __refentry_links__     [link quickbook.syntax.phrase.refentry_links refentry links]]
-[def __code_links__         [link quickbook.syntax.phrase.code_links function, class, member, enum, macro, concept or header links]]
-[def __escape__             [link quickbook.syntax.phrase.escape Escape]]
-[def __single_char_escape__ [link quickbook.syntax.phrase.single_char_escape Single char escape]]
-[def __images__             [link quickbook.syntax.phrase.images Images]]
-[def __cond__               [link quickbook.syntax.phrase.cond Conditional Generation]]
+[def __font_styles__        [link quickbook.phrase.font_styles Font Styles]]
+[def __quotations__         [link quickbook.phrase.quotations Quotations]]
+[def __replaceable__        [link quickbook.phrase.replaceable Replaceble]]
+[def __simple_formatting__  [link quickbook.phrase.simple_formatting Simple formatting]]
+[def __inline_code__        [link quickbook.phrase.inline_code Inline code]]
+[def __code_blocks__        [link quickbook.phrase.code_blocks Code blocks]]
+[def __source_mode__        [link quickbook.phrase.source_mode Source Mode]]
+[def __line_break__         [link quickbook.phrase.line_break line-break]]
+[def __anchors__            [link quickbook.phrase.anchors Anchors]]
+[def __links__              [link quickbook.phrase.links Links]]
+[def __anchor_links__       [link quickbook.phrase.anchor_links Anchor links]]
+[def __refentry_links__     [link quickbook.phrase.refentry_links refentry links]]
+[def __code_links__         [link quickbook.phrase.code_links function, class, member, enum, macro, concept or header links]]
+[def __escape__             [link quickbook.phrase.escape Escape]]
+[def __single_char_escape__ [link quickbook.phrase.single_char_escape Single char escape]]
+[def __images__             [link quickbook.phrase.images Images]]
+[def __cond__               [link quickbook.phrase.cond Conditional Generation]]
 
-[def __document__           [link quickbook.syntax.block.document Document]]
-[def __section__            [link quickbook.syntax.block.section Section]]
-[def __xinclude__           [link quickbook.syntax.block.xinclude  xinclude]]
-[def __paragraphs__         [link quickbook.syntax.block.paragraphs Paragraphs]]
-[def __ordered_lists__      [link quickbook.syntax.block.lists.ordered_lists Ordered lists]]
-[def __list_hierarchies__   [link quickbook.syntax.block.lists.list_hierarchies List Hierarchies]]
-[def __long_list_lines__    [link quickbook.syntax.block.lists.long_list_lines Long List Lines]]
-[def __unordered_lists__    [link quickbook.syntax.block.lists.unordered_lists Unordered lists]]
-[def __mixed_lists__        [link quickbook.syntax.block.lists.mixed_lists Mixed lists]]
-[def __code__               [link quickbook.syntax.block.code Code]]
-[def __escape_back__        [link quickbook.syntax.block.escape_back Escaping Back To QuickBook]]
-[def __preformatted__       [link quickbook.syntax.block.preformatted Preformatted]]
-[def __blockquote__         [link quickbook.syntax.block.blockquote Blockquote]]
-[def __heading__            [link quickbook.syntax.block.headings Heading]]
-[def __macros__             [link quickbook.syntax.block.macros Macros]]
-[def __templates__          [link quickbook.syntax.block.templates Templates]]
-[def __predefined_macros__  [link quickbook.syntax.block.predefined_macros Predefined Macros]]
-[def __blurbs__             [link quickbook.syntax.block.blurbs Blurbs]]
-[def __admonitions__        [link quickbook.syntax.block.admonitions Admonitions]]
-[def __tables__             [link quickbook.syntax.block.tables Tables]]
-[def __variable_lists__     [link quickbook.syntax.block.variable_lists Variable Lists]]
-[def __include__            [link quickbook.syntax.block.include Include]]
-[def __import__             [link quickbook.syntax.block.import Import]]
+[def __document__           [link quickbook.block.document Document]]
+[def __section__            [link quickbook.block.section Section]]
+[def __xinclude__           [link quickbook.block.xinclude  xinclude]]
+[def __paragraphs__         [link quickbook.block.paragraphs Paragraphs]]
+[def __ordered_lists__      [link quickbook.block.lists.ordered_lists Ordered lists]]
+[def __list_hierarchies__   [link quickbook.block.lists.list_hierarchies List Hierarchies]]
+[def __long_list_lines__    [link quickbook.block.lists.long_list_lines Long List Lines]]
+[def __unordered_lists__    [link quickbook.block.lists.unordered_lists Unordered lists]]
+[def __mixed_lists__        [link quickbook.block.lists.mixed_lists Mixed lists]]
+[def __code__               [link quickbook.block.code Code]]
+[def __escape_back__        [link quickbook.block.escape_back Escaping Back To QuickBook]]
+[def __preformatted__       [link quickbook.block.preformatted Preformatted]]
+[def __blockquote__         [link quickbook.block.blockquote Blockquote]]
+[def __heading__            [link quickbook.block.headings Heading]]
+[def __macros__             [link quickbook.block.macros Macros]]
+[def __templates__          [link quickbook.block.templates Templates]]
+[def __predefined_macros__  [link quickbook.block.predefined_macros Predefined Macros]]
+[def __blurbs__             [link quickbook.block.blurbs Blurbs]]
+[def __admonitions__        [link quickbook.block.admonitions Admonitions]]
+[def __tables__             [link quickbook.block.tables Tables]]
+[def __variable_lists__     [link quickbook.block.variable_lists Variable Lists]]
+[def __include__            [link quickbook.block.include Include]]
+[def __import__             [link quickbook.block.import Import]]
 
 [section:intro Introduction]
 
@@ -279,6 +279,8 @@ Can be placed anywhere.
 [/ for testing [*only ] ]
 
 [endsect] [/Comments]
+
+[endsect] [/Syntax Summary]
 
 [section:phrase Phrase Level Elements]
 
@@ -1367,7 +1369,7 @@ alphanumeric characters or the underscore. This is similar to your typical
 C/C++ identifier.
 
 A template formal argument temporarily hides a template of the same name at
-the point where the [link quickbook.syntax.block.templates.template_expansion
+the point where the [link quickbook.block.templates.template_expansion
 template is expanded]. Note that the body of the [^person] template above
 refers to [^name] [^age] and [^what] as [^\[name\]] [^\[age\]] and
 [^\[what\]]. [^name] [^age] and [^what] are actually templates that exist
@@ -1424,7 +1426,7 @@ recursion. QuickBook can detect this situation and report an error if
 recursion exceeds a certain limit.]
 
 Each actual argument can be a word, a text fragment or just about any [link
-quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by the
+quickbook.phrase QuickBook phrase]. Arguments are separated by the
 double dot [^".."] and terminated by the close parenthesis.
 
 [heading Nullary Templates]
@@ -1449,7 +1451,7 @@ Some squiggles...[*[alpha][beta]]
 
 The difference with macros are
 
-* The explicit [link quickbook.syntax.block.templates.template_expansion
+* The explicit [link quickbook.block.templates.template_expansion
   template expansion syntax]. This is an advantage because, now, we don't
   have to use obscure naming conventions like double underscores (e.g.
   \_\_alpha\_\_) to avoid unwanted
@@ -1549,7 +1551,7 @@ The arguments being: "w", "x", "y" and "z trail".
 could use both the double dot and whitespace as separators in the same template
 call. If your document is marked up as an older version, it will use the old
 behavior, which is described in the
-[@http://www.boost.org/doc/libs/1_40_0/doc/html/quickbook/syntax.html#quickbook.syntax.block.templates.simple_arguments
+[@http://www.boost.org/doc/libs/1_40_0/doc/html/quickbook/syntax.html#quickbook.block.templates.simple_arguments
 QuickBook 1.4 documentation].]
 
 [heading Punctuation Templates]
@@ -1558,7 +1560,7 @@ With templates, one of our objectives is to allow us to rewrite QuickBook
 in QuickBook (as a qbk library). For that to happen, we need to accommodate
 single character punctuation templates which are fairly common in
 QuickBook. You might have noticed that single character punctuations are
-allowed as [link quickbook.syntax.block.templates.template_identifier
+allowed as [link quickbook.block.templates.template_identifier
 template identifiers]. Example:
 
 [pre'''
@@ -1601,7 +1603,7 @@ will generate this:
     (EBNF) completely in C++.
 ]
 
-[note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever
+[note Prefer [link quickbook.block.admonitions admonitions] wherever
 appropriate.]
 
 [endsect] [/Blurbs]
@@ -1636,12 +1638,12 @@ sections, the id is optional. If the table has a title but no id, an id will
 be generated from the title. The table above can be linked to using:
 
 [pre'''
-[link quickbook.syntax.block.tables.id link to table]
+[link quickbook.block.tables.id link to table]
 ''']
 
 which will generate:
 
-[link quickbook.syntax.block.tables.id link to table]
+[link quickbook.block.tables.id link to table]
 
 The syntax is free-format and allows big cells to be formatted
 nicely. Example:
@@ -1930,8 +1932,6 @@ See the actual code here: [@boost:/tools/quickbook/test/stub.cpp]
 [endsect] [/Import]
 
 [endsect] [/Block Level Elements]
-
-[endsect] [/Syntax Summary]
 
 [section:install Installation and configuration]
 
