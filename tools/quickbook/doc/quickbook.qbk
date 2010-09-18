@@ -106,7 +106,7 @@ Features include:
 * automatic syntax coloring of code samples
 * CSS support
 
-[endsect]
+[endsect] [/Introduction]
 
 [section:change_log Change Log]
 
@@ -238,7 +238,7 @@ Features include:
   * XML escape documentation fields, with escapes to allow encoding unicode
     in ASCII.
 
-[endsect]
+[endsect] [/Change log]
 
 [section:syntax Syntax Summary]
 
@@ -278,7 +278,7 @@ Can be placed anywhere.
 
 [/ for testing [*only ] ]
 
-[endsect]
+[endsect] [/Comments]
 
 [section:phrase Phrase Level Elements]
 
@@ -302,7 +302,7 @@ will generate:
 
 [*['bold-italic]]
 
-[endsect]
+[endsect] [/Font Styles]
 
 [section Replaceable]
 
@@ -316,7 +316,7 @@ This will generate:
 
 [~replacement]
 
-[endsect]
+[endsect] [/Replaceable]
 
 [section Quotations]
 
@@ -344,7 +344,8 @@ will generate:
 ["Here's the rule for bargains: ["Do other men, for they would do you.]
 That's the true business precept.]
 
-[endsect]
+[endsect] [/Quotations]
+
 [section Simple formatting]
 
 Simple markup for formatting text, common in many applications, is now supported:
@@ -426,7 +427,8 @@ Yes sir, yes sir, three bags full!
 One for the master, one for the dame,
 And one for the little boy who lives down the lane.
 
-[endsect]
+[endsect] [/Simple Formatting]
+
 [section Inline code]
 
 Inlining code in paragraphs is quite common when writing C++ documentation. We
@@ -445,7 +447,8 @@ syntax highlighted.
 single quote: `"'"`. Note too that [^'''`some code`'''] is preferred over
 [^'''[^some code]''']. ]
 
-[endsect]
+[endsect] [/Inline Code]
+
 [section Code blocks]
 
 Preformatted code simply starts with a space or a tab (See __code__).
@@ -482,7 +485,8 @@ will generate:
     }
 ``
 
-[endsect]
+[endsect] [/Code blocks]
+
 [section Source Mode]
 
 If a document contains more than one type of source code then the source
@@ -514,7 +518,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 
 [note The source mode strings are lowercase.]
 
-[endsect]
+[endsect] [/Source Mode]
+
 [section line-break]
 
 [pre'''
@@ -539,7 +544,8 @@ These anchors are global and can be accessed from anywhere in the
 quickbook documentation. Be careful to avoid clashes with anchors in
 other sections.
 
-[endsect]
+[endsect] [/Line break]
+
 [section Links]
 
 [pre'''
@@ -578,7 +584,8 @@ will generate: [@boost:/libs/spirit/index.html the Boost.Spirit documentation]
 Note that this is only available when using BoostBook, and only for links
 - it can't be used for images.
 
-[endsect]
+[endsect] [/Links]
+
 [section Anchor links]
 
 You can link within a document using:
@@ -589,7 +596,8 @@ You can link within a document using:
 
 See sections __section__ and __heading__ for more info.
 
-[endsect]
+[endsect] [/Anchor links]
+
 [section refentry links]
 
 In addition, you can link internally to an XML refentry like:
@@ -609,7 +617,8 @@ automatically be the refentry. Example:
 
 This gets converted into [^<link linkend="xml.refentry">xml.refentry</link>].
 
-[endsect]
+[endsect] [/refentry links]
+
 [section:code_links Code Links]
 
 If you want to link to a function, class, member, enum, concept, global, or header in
@@ -636,7 +645,8 @@ Example:
 
 would have "boost::bar::baz" as the link text.
 
-[endsect]
+[endsect] [/Code Links]
+
 [section Escape]
 
 The escape mark-up is used when we don't want to do any processing.
@@ -662,7 +672,8 @@ Escaping allows us to pass XML markup to __boostbook__ or __docbook__. For examp
 [important Be careful when using the escape. The text must conform to
 __boostbook__/__docbook__ syntax.]
 
-[endsect]
+[endsect] [/Escape]
+
 [section Single char escape]
 
 The backslash may be used to escape a single punctuation character. The
@@ -679,7 +690,8 @@ and table cells (see __tables__) may now contain paragraphs.]
 The escaped space: `\ ` also has a special meaning. The escaped space is removed
 from the output.
 
-[endsect]
+[endsect] [/Single char escape]
+
 [section Unicode escape]
 
 You can enter any 16-bit unicode character by using `\u` followed by its 4 digit
@@ -696,7 +708,8 @@ will generate:
 \u03B1 + \u03B2
 ]
 
-[endsect]
+[endsect] [/Unicode escape]
+
 [section Images]
 
 [pre'''
@@ -711,7 +724,8 @@ DocBook imagedata attributes]:
 [$image.jpg [width 200in] [height 200in]]
 ''']
 
-[endsect]
+[endsect] [/Images]
+
 [section Footnotes]
 
 As of version 1.3, QuickBook supports footnotes. Just put the text of the
@@ -724,6 +738,8 @@ of the current page. For example, this:
 
 will generate this[footnote A sample footnote].
 
+[endsect] [/Footnotes]
+
 [section Macro Expansion]
 
 [pre'''
@@ -732,7 +748,7 @@ __a_macro_identifier__
 
 See __macros__ for details.
 
-[endsect]
+[endsect] [/Macro Expansion]
 
 [section Template Expansion]
 
@@ -742,9 +758,7 @@ See __macros__ for details.
 
 See __templates__ for details.
 
-[endsect]
-
-[endsect]
+[endsect] [/Template Expansion]
 
 [section:cond Conditional Generation]
 
@@ -774,9 +788,10 @@ And try again:
 
 Yes![footnote Conditional Generation makes quickbook turing complete.]
 
-[endsect]
+[endsect] [/Condition Generation]
 
-[endsect]
+[endsect] [/Phrase Level Elements]
+
 [section:block Block Level Elements]
 
 [section Document]
@@ -827,7 +842,8 @@ that's just ignored by the style sheets.
 =source-type= is a lowercase string setting the initial __source_mode__. If
 the =source-mode= field is omitted, a default value of =c++= will be used.
 
-[endsect]
+[endsect] [/Document]
+
 [section Section]
 
 Starting a new section is accomplished with:
@@ -850,7 +866,8 @@ End a section with:
 
 Sections can nest, and that results in a hierarchy in the table of contents.
 
-[endsect]
+[endsect] [/Section]
+
 [section xinclude]
 
 You can include another XML file with:
@@ -862,7 +879,8 @@ You can include another XML file with:
 This is useful when file.xml has been generated by Doxygen and contains your
 reference section.
 
-[endsect]
+[endsect] [/xinclude]
+
 [section Paragraphs]
 
 Paragraphs start left-flushed and are terminated by two or more newlines. No
@@ -872,7 +890,7 @@ the context. Block markups \[section, endsect, h1, h2, h3, h4, h5, h6, blurb,
  [/ <-- There's a space here. Don't remove. this is intentianal, for testing]
 This is a new paragraph...
 
-[endsect]
+[endsect] [/Paragraphs]
 
 [section Lists]
 [section Ordered lists]
@@ -889,7 +907,7 @@ will generate:
 # Two
 # Three
 
-[endsect]
+[endsect] [/Ordered lists]
 [section List Hierarchies]
 
 List hierarchies are supported. Example:
@@ -922,7 +940,7 @@ will generate:
         # Four.a.ii
 # Five
 
-[endsect]
+[endsect] [/List Hierarchies]
 [section Long List Lines]
 
 Long lines will be wrapped appropriately. Example:
@@ -945,7 +963,7 @@ Long lines will be wrapped appropriately. Example:
   A very long item. A very long item. A very long item.
 # A short item.
 
-[endsect]
+[endsect] [/Long list lines]
 [section Unordered lists]
 
 [pre'''
@@ -960,7 +978,7 @@ will generate:
 * Second
 * Third
 
-[endsect]
+[endsect] [/Unordered lists]
 [section Mixed lists]
 
 Mixed lists (ordered and unordered) are supported. Example:
@@ -1017,8 +1035,8 @@ will generate:
             * 2.b.2.a
             * 2.b.2.b
 
-[endsect]
-[endsect]
+[endsect] [/Mixed lists]
+[endsect] [/Lists]
 
 [section Code]
 
@@ -1063,7 +1081,8 @@ Generates:
 
     using __boost__::__array__;
 
-[endsect]
+[endsect] [/Code]
+
 [section:escape_back Escaping Back To QuickBook]
 
 Inside code, code blocks and inline code, QuickBook does not allow any
@@ -1087,7 +1106,8 @@ Will generate:
 When escaping from code to QuickBook, only phrase level markups are
 allowed. Block level markups like lists, tables etc. are not allowed.
 
-[endsect]
+[endsect] [/Escaping back to quickbook]
+
 [section Preformatted]
 
 Sometimes, you don't want some preformatted text to be parsed as C++. In such
@@ -1122,7 +1142,8 @@ Some *preformatted* text                    Some *preformatted* text
 Notice that unlike Code, phrase markup such as font style is still permitted
 inside =pre= blocks.
 
-[endsect]
+[endsect] [/Preformatted]
+
 [section Blockquote]
 
 [pre
@@ -1131,7 +1152,8 @@ inside =pre= blocks.
 
 [:Indents the paragraph. This applies to one paragraph only.]
 
-[endsect]
+[endsect] [/Blockquote]
+
 [section Admonitions]
 
 [pre'''
@@ -1154,7 +1176,8 @@ These are the only admonitions supported by __docbook__. So,
 for example [^\[information This is some information\]] is unlikely
 to produce the desired effect.
 
-[endsect]
+[endsect] [/Admonitions]
+
 [section Headings]
 
 [pre'''
@@ -1187,7 +1210,8 @@ For example: Heading 1 in section Section 2 will be normalized to
 
 to link to them. See __anchor_links__ and __section__ for more info.
 
-[endsect]
+[endsect] [/Headings]
+
 [section Generic Heading]
 
 In cases when you don't want to care about the heading level (1 to 6), you
@@ -1232,7 +1256,8 @@ at will without any extra work to ensure correct heading levels. In fact,
 with /section/ and /heading/, you have all you need. /h1/../h6/ becomes
 redundant. /h1/../h6/ might be deprecated in the future.
 
-[endsect]
+[endsect] [/Generic Heading]
+
 [section Macros]
 
 [pre'''
@@ -1284,7 +1309,8 @@ will generate this:
 
 Hi __spirit__ :-)
 
-[endsect]
+[endsect] [/Macros]
+
 [section Predefined Macros]
 
 Quickbook has some predefined macros that you can already use.
@@ -1296,7 +1322,8 @@ Quickbook has some predefined macros that you can already use.
     [['''__FILENAME__''']   [Quickbook source filename]     [__FILENAME__]]
 ]
 
-[endsect]
+[endsect] [/Predefined Macros]
+
 [section Templates]
 
 Templates provide a more versatile text substitution mechanism. Templates
@@ -1550,7 +1577,8 @@ We will have:
 <hey>baz</hey>
 ]
 
-[endsect]
+[endsect] [/Templates]
+
 [section Blurbs]
 
 [pre'''
@@ -1576,7 +1604,8 @@ will generate this:
 [note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever
 appropriate.]
 
-[endsect]
+[endsect] [/Blurbs]
+
 [section Tables]
 
 [pre'''
@@ -1699,7 +1728,8 @@ Here's how to have preformatted blocks of code in a table cell:
     ]
 ]
 
-[endsect]
+[endsect] [/Tables]
+
 [section Variable Lists]
 
 [pre'''
@@ -1731,7 +1761,8 @@ only 2 "columns" are allowed. The first column contains the terms, and
 the second column contains the definitions. Those familiar with HTML
 will recognize this as a "definition list".
 
-[endsect]
+[endsect] [/Variable Lists]
+
 [section Include]
 
 You can include one QuickBook file from another. The syntax is simply:
@@ -1761,7 +1792,7 @@ for instance, if there is a top section in someother.qbk named "Intro", the
 named anchor for that section will be "someid.intro", and you can link to
 it with [^\[link someid.intro The Intro\]].
 
-[endsect]
+[endsect] [/Include]
 
 [section Import]
 
@@ -1896,10 +1927,11 @@ Example:
 
 See the actual code here: [@boost:/tools/quickbook/test/stub.cpp]
 
-[endsect]
+[endsect] [/Import]
 
-[endsect]
-[endsect]
+[endsect] [/Block Level Elements]
+
+[endsect] [/Syntax Summary]
 
 [section:install Installation and configuration]
 
@@ -1993,7 +2025,7 @@ Alternatively, you may want to install all the prerequistes through a
 package system to avoid manual management of the installations.  In that
 case, check out [@http://www.pkgsrc.org pkgsrc].
 
-[endsect]
+[endsect] [/Mac OS X]
 
 [section:windows Windows 2000, XP, 2003, Vista]
 
@@ -2065,7 +2097,7 @@ rebuilds:
      : "C:/Users/example/Documents/boost/xml/bin/quickbook.exe"
      ;
 
-[endsect]
+[endsect] [/Windows]
 
 [section:linux Debian, Ubuntu]
 
@@ -2116,7 +2148,8 @@ rebuilds:
      : /usr/local/bin/quickbook
      ;
 
-[endsect]
+[endsect] [/Linux]
+
 [endsect] [/Installation and configuration]
 
 [section:editors Editor Support]
@@ -2301,4 +2334,4 @@ QuickBook (which IMO is a whole lot easier to edit and maintain).
                             [[^'''[? symbol phrase]''']]                    [__cond__]]
 ]
 
-[endsect]
+[endsect] [/ quick reference]
