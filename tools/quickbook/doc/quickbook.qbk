@@ -230,6 +230,7 @@ Features include:
 * In docbook, variable list entries can only have one `listitem`, so if an
   entry has multiple values, merge them into one `listitem`.
 * Support nested code snippets.
+* Support nested blocks in document info comments.
 * Revert xml escaping document info, it broke some documentation files
   (now a 1.6 feature).
 * Further work on quickbook 1.6, still not stable.

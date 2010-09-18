@@ -6,5 +6,6 @@
 [purpose Inline code test: `1 + 2`]
 [category tests]
 [category irrelevance]
+[/ [category commented out] ]
 [biblioid uri http://www.boost.org/tools/quickbook/test/doc-info-1.quickbook]
 ]
