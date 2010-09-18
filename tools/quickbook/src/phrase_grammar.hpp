@@ -363,7 +363,8 @@ namespace quickbook
             ;
 
         anchor =
-                blank
+                "#"
+            >>  blank
             >>  (*(cl::anychar_p - phrase_end)) [actions.anchor]
             ;
 
