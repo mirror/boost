@@ -71,13 +71,11 @@ A type <code style="white-space: normal">T</code> is <strong>Serializable</stron
 if and only if one of the following is true:
 <ul>
   <li>it is a primitive type.<br>
-    In this document, we use the term primitive type to mean
-    types whose data is simply saved/loaded to/from an archive
-    with no further processing.  Arithmetic (including characters), 
-    bool, enum and stl::string and stl::wstring types are primitive types.  Using 
-    <a target="detail" href="traits.html#Traits">serialization traits</a>,
-    any user type can also be designated as "primitive"
-    so that it is handled in this way.
+    By <i>primitive type</i> we mean a C++ built-in type and <i>ONLY</i>
+    a C++ built-in type. Arithmetic (including characters), bool, enum are primitive types.
+    Below in <a target="detail" href="traits.html#Traits">serialization traits</a>,
+    we define a "primitive" implementation level in a different way for a 
+    different purpose.  This can be a source of confusion.
   <li>It is a class type and one of the following has been declared according
     to the prototypes detailed below:
     <ul>
