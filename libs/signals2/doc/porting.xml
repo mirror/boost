@@ -227,6 +227,14 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   </section>
   <section id="signals2.api_history">
     <title>Signals2 API Development</title>
+    <section id="signals2.api_history.1-45">
+      <title>Version 1.4x</title>
+      <para>
+        Version 1.45 added <methodname>slot::track_foreign</methodname>().  This method allows tracking
+        of objects owned by <code>shared_ptr</code> classes other than <classname>boost::shared_ptr</classname>,
+        for example <classname>std::shared_ptr</classname>.
+      </para>
+    </section>
     <section id="signals2.api_history.1-40">
       <title>Version 1.40</title>
       <para>
