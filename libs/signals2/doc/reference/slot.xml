@@ -230,6 +230,61 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </effects>
             <returns><para><code>*this</code></para></returns>
           </overloaded-method>
+          <overloaded-method name="track_foreign">
+            <signature>
+              <template>
+                <template-type-parameter name="ForeignWeakPtr"/>
+              </template>
+              <type>slot &amp;</type>
+              <parameter name="tracked_object">
+                <paramtype>const ForeignWeakPtr &amp;</paramtype>
+              </parameter>
+              <parameter name="SFINAE">
+                <paramtype>typename weak_ptr_traits&lt;ForeignWeakPtr&gt;::shared_type *</paramtype>
+                <default>0</default>
+              </parameter>
+            </signature>
+            <signature>
+              <template>
+                <template-type-parameter name="ForeignSharedPtr"/>
+              </template>
+              <type>slot &amp;</type>
+              <parameter name="tracked_object">
+                <paramtype>const ForeignSharedPtr &amp;</paramtype>
+              </parameter>
+              <parameter name="SFINAE">
+                <paramtype>typename shared_ptr_traits&lt;ForeignSharedPtr&gt;::weak_type *</paramtype>
+                <default>0</default>
+              </parameter>
+            </signature>
+            <effects>
+              <para>
+                The <code>track_foreign</code>() method behaves similarly to calling the <methodname>track</methodname>() method
+                with a <classname>boost::shared_ptr</classname> or <classname>boost::weak_ptr</classname> argument.
+                However, <code>track_foreign</code> is more flexible in that it will accept <code>shared_ptr</code>
+                or <code>weak_ptr</code> classes from outside of boost (most significantly <code>std::shared_ptr</code>
+                or <code>std::weak_ptr</code>).
+              </para>
+              <para>
+                In order to use a particular <code>shared_ptr</code> class with this function, a specialization of
+                <classname>boost::signals2::shared_ptr_traits</classname> must exist for it.
+                Also, a specialization of <classname>boost::signals2::weak_ptr_traits</classname> must
+                be provided for its corresponding <code>weak_ptr</code> class.
+                The <code>shared_ptr_traits</code> specialization must include a <code>weak_type</code>
+                member typedef which specifies the
+                corresponding <code>weak_ptr</code> type of the <code>shared_ptr</code> class.
+                Similarly, the <code>weak_ptr_traits</code> specialization must include a <code>shared_type</code>
+                member typedef which specifies the corresponding <code>shared_ptr</code> type of the
+                <code>weak_ptr</code> class.  Specializations
+                for <code>std::shared_ptr</code> and <code>std::weak_ptr</code> are already provided by the signals2 library.
+                For other <code>shared_ptr</code> classes, you must provide the specializations.
+              </para>
+              <para>The second argument "SFINAE" may be ignored, it is used to resolve the overload between
+                either <code>shared_ptr</code> or <code>weak_ptr</code> objects passed in as the first argument.
+              </para>
+            </effects>
+            <returns><para><code>*this</code></para></returns>
+          </overloaded-method>
         </method-group>
 
         <method-group name="slot function access">

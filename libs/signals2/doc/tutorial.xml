@@ -430,6 +430,11 @@ deliverNews.<methodname>connect</methodname>(signal_type::slot_type(&amp;NewsMes
   implies we wish to allow the tracked object to expire, and automatically
   disconnect the connection when this occurs.
 </para>
+<para>
+  <code>shared_ptr</code> classes other than <classname>boost::shared_ptr</classname>
+  (such as <code>std::shared_ptr</code>) may also be tracked for connection management
+  purposes.  They are supported by the <methodname>slot::track_foreign</methodname> method.
+</para>
 </section>
 
   <section id="signals2.tutorial.deconstruct">
