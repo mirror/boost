@@ -40,5 +40,8 @@ test-suite msm-unit-tests
     [ run SimpleInternalFunctors.cpp ]
     [ run SimpleMachine.cpp ]
     [ run SimpleWithFunctors.cpp ]
+    [ run Serialize.cpp ]
+    [ run SerializeWithHistory.cpp ]
+    [ run SerializeSimpleEuml.cpp ]
     ;
 
