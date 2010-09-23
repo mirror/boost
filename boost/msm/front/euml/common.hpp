@@ -197,6 +197,18 @@ struct sm_domain
     : proto::domain< proto::generator<euml_terminal>, terminal_grammar >
 {};
 
+struct state_grammar : 
+    proto::and_<
+        proto::not_<proto::address_of<proto::_> >,
+        proto::not_<proto::shift_right<proto::_,proto::_> >,
+        proto::not_<proto::shift_left<proto::_,proto::_> >,
+        proto::not_<proto::bitwise_and<proto::_,proto::_> >
+    >
+{};
+struct state_domain
+    : proto::domain< proto::generator<euml_terminal>, state_grammar,sm_domain >
+{};
+
 template<typename Expr>
 struct euml_terminal
     : proto::extends<Expr, euml_terminal<Expr>, sm_domain>
@@ -229,10 +241,10 @@ struct euml_event: proto::extends<typename proto::terminal<event_tag>::type, EVT
     };
 };
 template <class STATE>
-struct euml_state: proto::extends<typename proto::terminal<state_tag>::type, STATE, sm_domain>
+struct euml_state: proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>
 {
     typedef state_tag euml_tag_type;
-    using proto::extends<typename proto::terminal<state_tag>::type, STATE, sm_domain>::operator=;
+    using proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>::operator=;
     template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5 
 #ifdef BOOST_MSVC 
  ,class Arg6 
