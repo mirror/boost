@@ -102,7 +102,8 @@ std::ofstream ofs("fsm.txt");
                         serialize a concrete state, the macros like
                             <code class="code">BOOST_MSM_EUML_STATE</code> cannot be used, so the state will have
                         to be implemented by directly inheriting from
-                            <code class="code">front::euml::euml_state</code>.</p></div><div class="sect2" title="Base state type"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2209"></a><span class="command"><strong><a name="backend-base-state"></a></strong></span>Base state type </h3></div></div></div><p>Sometimes, one needs to customize states to avoid repetition and provide a
+                            <code class="code">front::euml::euml_state</code>.</p><p>This <a class="link" href="examples/Serialize.cpp" target="_top">example</a> shows a state machine which we serialize after processing an
+                        event. The <code class="code">Empty</code> state also has some data to serialize.</p></div><div class="sect2" title="Base state type"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2217"></a><span class="command"><strong><a name="backend-base-state"></a></strong></span>Base state type </h3></div></div></div><p>Sometimes, one needs to customize states to avoid repetition and provide a
                         common functionality, for example in the form of a virtual method. You might
                         also want to make your states polymorphic so that you can call typeid on
                         them for logging or debugging. It is also useful if you need a visitor, like
@@ -125,7 +126,7 @@ std::ofstream ofs("fsm.txt");
                                     </p><pre class="programlisting">struct player_ : public msm::front::state_machine&lt;player_,my_base_state&gt;             </pre></li></ul></div><p>You can also ask for a state with a given id (which you might have gotten
                         from current_state()) using <code class="code">const base_state* get_state_by_id(int id)
                             const</code> where base_state is the one you just defined. You can now
-                        do something polymorphically.</p></div><div class="sect2" title="Visitor"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2235"></a><span class="command"><strong><a name="backend-visitor"></a></strong></span>Visitor</h3></div></div></div><p>In some cases, having a pointer-to-base of the currently active states is
+                        do something polymorphically.</p></div><div class="sect2" title="Visitor"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2243"></a><span class="command"><strong><a name="backend-visitor"></a></strong></span>Visitor</h3></div></div></div><p>In some cases, having a pointer-to-base of the currently active states is
                         not enough. You might want to call non-virtually a method of the currently
                         active states. It will not be said that MSM forces the virtual keyword down
                         your throat!</p><p>To achieve this goal, MSM provides its own variation of a visitor pattern
@@ -164,18 +165,18 @@ struct my_visitable_state
                         the accept function is to contain a parameter passed by reference, pass this
                         parameter with a boost:ref/cref to avoid undesired copies or slicing. So,
                         for example, in the above case, call:</p><pre class="programlisting">SomeVisitor vis; sm.visit_current_states(boost::ref(vis));</pre><p>This <a class="link" href="examples/SM-2Arg.cpp" target="_top">example</a> uses a
-                        visiting function with 2 arguments.</p></div><div class="sect2" title="Flags"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2278"></a>Flags</h3></div></div></div><p>Flags is a MSM-only concept, supported by all front-ends, which base
+                        visiting function with 2 arguments.</p></div><div class="sect2" title="Flags"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2286"></a>Flags</h3></div></div></div><p>Flags is a MSM-only concept, supported by all front-ends, which base
                         themselves on the functions: </p><pre class="programlisting">template &lt;class Flag&gt; bool is_flag_active()
 template &lt;class Flag,class BinaryOp&gt; bool is_flag_active()</pre><p>These functions return true if the currently active state(s) support the
                         Flag property. The first variant ORs the result if there are several
                         orthogonal regions, the second one expects OR or AND, for example:</p><pre class="programlisting">my_fsm.is_flag_active&lt;MyFlag&gt;()
-my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR&gt;()</pre><p>Please refer to the front-ends sections for usage examples.</p></div><div class="sect2" title="Getting a state"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2291"></a>Getting a state</h3></div></div></div><p>It is sometimes necessary to have the client code get access to the
+my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR&gt;()</pre><p>Please refer to the front-ends sections for usage examples.</p></div><div class="sect2" title="Getting a state"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2299"></a>Getting a state</h3></div></div></div><p>It is sometimes necessary to have the client code get access to the
                         states' data. After all, the states are created once for good and hang
                         around as long as the state machine does so why not use it? You simply just
                         need sometimes to get information about any state, even inactive ones. An
                         example is if you want to write a coverage tool and know how many times a
                         state was visited. To get a state, use the get_state method giving the state
-                        name, for example: </p><pre class="programlisting">player::Stopped* tempstate = p.get_state&lt;player::Stopped*&gt;();</pre><p> or </p><pre class="programlisting">player::Stopped&amp; tempstate2 = p.get_state&lt;player::Stopped&amp;&gt;();</pre><p>depending on your personal taste. </p></div><div class="sect2" title="State machine constructor with arguments"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2304"></a> State machine constructor with arguments </h3></div></div></div><p>You might want to define a state machine with a non-default constructor.
+                        name, for example: </p><pre class="programlisting">player::Stopped* tempstate = p.get_state&lt;player::Stopped*&gt;();</pre><p> or </p><pre class="programlisting">player::Stopped&amp; tempstate2 = p.get_state&lt;player::Stopped&amp;&gt;();</pre><p>depending on your personal taste. </p></div><div class="sect2" title="State machine constructor with arguments"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2312"></a> State machine constructor with arguments </h3></div></div></div><p>You might want to define a state machine with a non-default constructor.
                         For example, you might want to write: </p><pre class="programlisting">struct player_ : public msm::front::state_machine_def&lt;player_&gt; 
 { 
     player_(int some_value){&#8230;} 
@@ -191,7 +192,7 @@ my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR&gt;()</pre><p>Please refer 
 typedef msm::back::state_machine&lt;player_ &gt; player; 
 SomeType data;
 player p(boost::ref(data),3);
-                        </pre></div><div class="sect2" title="Trading run-time speed for better compile-time / multi-TU compilation"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2323"></a><span class="command"><strong><a name="backend-tradeof-rt-ct"></a></strong></span>Trading run-time speed for
+                        </pre></div><div class="sect2" title="Trading run-time speed for better compile-time / multi-TU compilation"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2331"></a><span class="command"><strong><a name="backend-tradeof-rt-ct"></a></strong></span>Trading run-time speed for
                         better compile-time / multi-TU compilation</h3></div></div></div><p>MSM is optimized for run-time speed at the cost of longer compile-time.
                         This can become a problem with older compilers and big state machines,
                         especially if you don't really care about run-time speed that much and would

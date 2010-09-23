@@ -535,202 +535,30 @@
                     <title>Transition table</title>
                     <para>As previously stated, MSM is based on the transition table, so let us
                         define one:</para>
-                    <para>struct transition_table : mpl::vector&lt;</para>
-                    <para>
-                        <informaltable frame="void">
-                            <tbody>
-                                <tr>
-                                    <td>//</td>
-                                    <td>Start</td>
-                                    <td>Event</td>
-                                    <td>Next</td>
-                                    <td>Action</td>
-                                    <td>Guard</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>play,</td>
-                                    <td>Playing,</td>
-                                    <td>&amp;player_::start_playback</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>open_close,</td>
-                                    <td>Open,</td>
-                                    <td>&amp;player_::open_drawer</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>_row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>stop,</td>
-                                    <td>Stopped</td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Open ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Empty ,</td>
-                                    <td>&amp;player_::close_drawer</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>&amp;player_::open_drawer</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>cd_detected ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>&amp;player_::store_cd_info ,</td>
-                                    <td>&amp;player_::good_disk_format</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>cd_detected ,</td>
-                                    <td>Playing ,</td>
-                                    <td>&amp;player_::store_cd_info ,</td>
-                                    <td>&amp;player_::auto_start</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>stop ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>&amp;player_::stop_playback</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>pause ,</td>
-                                    <td>Paused ,</td>
-                                    <td>&amp;player_::pause_playback</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>&amp;player_::stop_and_open</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>end_pause ,</td>
-                                    <td>Playing ,</td>
-                                    <td>&amp;player_::resume_playback</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>stop ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>&amp;player_::stop_playback</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>&amp;player_::stop_and_open</td>
-                                    <td> </td>
-                                    <td>></td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>> {};</td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                            </tbody>
-                        </informaltable>
-                    </para>
+                    <programlisting> 
+struct transition_table : mpl::vector&lt;
+//    Start     Event        Target      Action                      Guard 
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+a_row&lt; Stopped , play       ,  Playing  , &amp;player_::start_playback                               >,
+a_row&lt; Stopped , open_close ,  Open     , &amp;player_::open_drawer                                  >,
+ _row&lt; Stopped , stop       ,  Stopped                                                           >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+a_row&lt; Open    , open_close ,  Empty    , &amp;player_::close_drawer                                 >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+a_row&lt; Empty   , open_close ,  Open     , &amp;player_::open_drawer                                  >,
+  row&lt; Empty   , cd_detected,  Stopped  , &amp;player_::store_cd_info   , &amp;player_::good_disk_format >,
+  row&lt; Empty   , cd_detected,  Playing  , &amp;player_::store_cd_info   , &amp;player_::auto_start       >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+a_row&lt; Playing , stop       ,  Stopped  , &amp;player_::stop_playback                                >,
+a_row&lt; Playing , pause      ,  Paused   , &amp;player_::pause_playback                               >,
+a_row&lt; Playing , open_close ,  Open     , &amp;player_::stop_and_open                                >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+a_row&lt; Paused  , end_pause  ,  Playing  , &amp;player_::resume_playback                              >,
+a_row&lt; Paused  , stop       ,  Stopped  , &amp;player_::stop_playback                                >,
+a_row&lt; Paused  , open_close ,  Open     , &amp;player_::stop_and_open                                >
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+> {};
+                        </programlisting>
                     <para>You will notice that this is almost exactly our founding example. The only
                         change in the transition table is the different types of transitions (rows).
                         The founding example forces one to define an action method and offers no
@@ -870,82 +698,19 @@ typedef msm::back::state_machine&lt;Playing_> Playing;</programlisting>
                     </para>
                     <para>Like for any state machine, one also needs a transition table and an
                         initial state:</para>
-                    <para> struct transition_table : mpl::vector&lt;<informaltable>
-                            <tbody>
-                                <tr>
-                                    <td>//</td>
-                                    <td>Start</td>
-                                    <td>Event</td>
-                                    <td>Next</td>
-                                    <td>Action</td>
-                                    <td>Guard</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>------------------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Song1 ,</td>
-                                    <td>NextSong,</td>
-                                    <td>Song2,</td>
-                                    <td>&amp;Playing_::start_next_song </td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Song2 ,</td>
-                                    <td>PreviousSong,</td>
-                                    <td>Song1,</td>
-                                    <td>&amp;Playing_::start_prev_song </td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Song2 ,</td>
-                                    <td>NextSong,</td>
-                                    <td>Song3,</td>
-                                    <td>&amp;Playing_::start_next_song </td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>a_row &lt;</td>
-                                    <td>Song3 ,</td>
-                                    <td>PreviousSong ,</td>
-                                    <td>Song2 ,</td>
-                                    <td>&amp;Playing_::start_prev_song </td>
-                                    <td> </td>
-                                    <td>></td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>------------------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>> {};</td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                            </tbody>
-                        </informaltable></para>
+                    <para>
+                        <programlisting> 
+struct transition_table : mpl::vector&lt;
+//    Start    Event    Target    Action                      Guard 
+//   +--------+---------+--------+---------------------------+------+ 
+a_row&lt; Song1  , NextSong, Song2  , &amp;Playing_::start_next_song        >,
+a_row&lt; Song2  , NextSong, Song1  , &amp;Playing_::start_prev_song        >,
+a_row&lt; Song2  , NextSong, Song3  , &amp;Playing_::start_next_song        >,
+a_row&lt; Song3  , NextSong, Song2  , &amp;Playing_::start_prev_song        >
+//   +--------+---------+--------+---------------------------+------+ 
+> {};
+                        </programlisting>
+                    </para>
                     <para>
                         <programlisting>typedef Song1 initial_state; </programlisting>
                     </para>
@@ -1728,201 +1493,30 @@ typedef my_initial_event initial_event;
                     <title> Transition table </title>
                     <para>We can change the definition of the simple tutorial's transition table
                         to:</para>
-                    <para>
-                        <informaltable>
-                            <tbody>
-                                <tr>
-                                    <td>//</td>
-                                    <td>Start</td>
-                                    <td>Event</td>
-                                    <td>Next</td>
-                                    <td>Action</td>
-                                    <td>Guard</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>play,</td>
-                                    <td>Playing,</td>
-                                    <td>start_playback</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>open_close,</td>
-                                    <td>Open,</td>
-                                    <td>open_drawer,</td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>stop,</td>
-                                    <td>Stopped,</td>
-                                    <td> </td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Open ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Empty ,</td>
-                                    <td>close_drawer,</td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>open_drawer</td>
-                                    <td> </td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>cd_detected ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>store_cd_info ,</td>
-                                    <td>good_disk_format</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>g_row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>cd_detected ,</td>
-                                    <td>Playing ,</td>
-                                    <td>store_cd_info ,</td>
-                                    <td>&amp;player_::auto_start</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>stop ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>stop_playback,</td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>pause ,</td>
-                                    <td>Paused ,</td>
-                                    <td>pause_playback,</td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>stop_and_open,</td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>end_pause ,</td>
-                                    <td>Playing ,</td>
-                                    <td>resume_playback,</td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>stop ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>stop_playback,</td>
-                                    <td> none</td>
-                                    <td>>,</td>
-                                </tr>
-                                <tr>
-                                    <td>Row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>stop_and_open,</td>
-                                    <td> none</td>
-                                    <td>></td>
-                                </tr>
-                                <tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>> {};</td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                            </tbody>
-                        </informaltable>
-                    </para>
+                    <programlisting> 
+struct transition_table : mpl::vector&lt;
+//    Start     Event        Target      Action                      Guard 
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Stopped , play       ,  Playing  , start_playback            , none                       >,
+Row  &lt; Stopped , open_close ,  Open     , open_drawer               , none                       >,
+Row  &lt; Stopped , stop       ,  Stopped  , none                      , none                       >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Open    , open_close ,  Empty    , close_drawer              , none                       >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Empty   , open_close ,  Open     , open_drawer               , none                       >,
+Row  &lt; Empty   , cd_detected,  Stopped  , store_cd_info             , good_disk_format           >,
+g_row&lt; Empty   , cd_detected,  Playing  , &amp;player_::store_cd_info   , &amp;player_::auto_start       >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Playing , stop       ,  Stopped  , stop_playback             , none                       >,
+Row  &lt; Playing , pause      ,  Paused   , pause_playback            , none                       >,
+Row  &lt; Playing , open_close ,  Open     , stop_and_open             , none                       >,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Paused  , end_pause  ,  Playing  , resume_playback           , none                       >,
+Row  &lt; Paused  , stop       ,  Stopped  , stop_playback             , none                       >,
+Row  &lt; Paused  , open_close ,  Open     , stop_and_open             , none                       >
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+> {};
+                        </programlisting>
                     <para>Transitions are now of type "Row" with exactly 5 template arguments:
                         source state, event, target state, action and guard. Wherever there is
                         nothing (for example actions and guards), write "none". Actions and guards
@@ -2108,100 +1702,25 @@ struct Empty : public msm::front::euml::func_state&lt;Empty_Entry,Empty_Exit>{};
                     <para>The first version looks like a drawn transition in a diagram, the second
                         one seems natural to a C++ developer.</para>
                     <para>The simple transition table written with the <command
-                            xlink:href="#functor-front-end">previous front-end</command> can now be
+                            xlink:href="#functor-front-end">functor front-end</command> can now be
                         written as:</para>
-                    <para>
-                        <informaltable frame="void">
-                            <tbody>
-                                <tr>
-                                    <td>BOOST_MSM_EUML_TRANSITION_TABLE(( </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>Stopped +</td>
-                                    <td>play [DummyGuard] / (TestFct,start_playback)</td>
-                                    <td>== Playing</td>
-                                </tr>
-                                <tr>
-                                    <td>Stopped +</td>
-                                    <td>open_close/ open_drawer</td>
-                                    <td>== Open</td>
-                                </tr>
-                                <tr>
-                                    <td>Stopped +</td>
-                                    <td>stop</td>
-                                    <td>== Stopped</td>
-                                </tr>
-                                <tr>
-                                    <td>Open +</td>
-                                    <td>open_close / close_drawer</td>
-                                    <td>== Empty</td>
-                                </tr>
-                                <tr>
-                                    <td>Empty +</td>
-                                    <td>open_close / open_drawer </td>
-                                    <td>== Open</td>
-                                </tr>
-                                <tr>
-                                    <td>Empty +</td>
-                                    <td>cd_detected [good_disk_format] / store_cd_info </td>
-                                    <td>== Stopped</td>
-                                </tr>
-                                <tr>
-                                    <td>),transition_table)</td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                            </tbody>
-                        </informaltable>
-                    </para>
+                    <programlisting>BOOST_MSM_EUML_TRANSITION_TABLE(( 
+Stopped + play [some_guard] / (some_action , start_playback)  == Playing ,
+Stopped + open_close/ open_drawer                             == Open    ,
+Stopped + stop                                                == Stopped ,
+Open    + open_close / close_drawer                           == Empty   ,
+Empty   + open_close / open_drawer                            == Open    ,
+Empty   + cd_detected [good_disk_format] / store_cd_info      == Stopped
+),transition_table)                       </programlisting>
                     <para>Or, using the alternative notation, it can be:</para>
-                    <para>
-                        <informaltable>
-                            <tbody>
-                                <tr>
-                                    <td>BOOST_MSM_EUML_TRANSITION_TABLE((</td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>Playing == </td>
-                                    <td>Stopped +</td>
-                                    <td>play [DummyGuard] / (TestFct,start_playback)</td>
-                                </tr>
-                                <tr>
-                                    <td>Open ==</td>
-                                    <td>Stopped +</td>
-                                    <td>open_close/ open_drawer</td>
-                                </tr>
-                                <tr>
-                                    <td>Stopped ==</td>
-                                    <td>Stopped +</td>
-                                    <td>stop</td>
-                                </tr>
-                                <tr>
-                                    <td>Empty ==</td>
-                                    <td>Open +</td>
-                                    <td>open_close / close_drawer</td>
-                                </tr>
-                                <tr>
-                                    <td>Open ==</td>
-                                    <td>Empty +</td>
-                                    <td>open_close / open_drawer</td>
-                                </tr>
-                                <tr>
-                                    <td>Stopped ==</td>
-                                    <td>Empty +</td>
-                                    <td>cd_detected [good_disk_format] / store_cd_info </td>
-                                </tr>
-                                <tr>
-                                    <td>),transition_table)</td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                            </tbody>
-                        </informaltable>
-                    </para>
+                    <programlisting>BOOST_MSM_EUML_TRANSITION_TABLE(( 
+Playing  == Stopped + play [some_guard] / (some_action , start_playback) ,
+Open     == Stopped + open_close/ open_drawer                            ,
+Stopped  == Stopped + stop                                               ,
+Empty    == Open    + open_close / close_drawer                          ,
+Open     == Empty   + open_close / open_drawer                           ,
+Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
+),transition_table)           </programlisting>
                     <para>The transition table now looks like a list of (readable) rules with little
                         noise.</para>
                     <para>UML defines guards between “[ ]” and actions after a “/”, so the chosen
@@ -2403,22 +1922,8 @@ Empty_impl const Empty;</programlisting>
                             </listitem>
                         </itemizedlist>For example, a minimum state machine could be defined
                         as:</para>
-                    <para>
-                        <informaltable>
-                            <tbody>
-                                <tr>
-                                    <td>BOOST_MSM_EUML_TRANSITION_TABLE((</td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>),transition_table)</td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                            </tbody>
-                        </informaltable>
-                    </para>
+                    <programlisting>BOOST_MSM_EUML_TRANSITION_TABLE(( 
+),transition_table)                       </programlisting>
                     <programlisting>BOOST_MSM_EUML_DECLARE_STATE_MACHINE((transition_table,init_ &lt;&lt; Empty ),
                                      player_)</programlisting>
                     <para>Please have a look at the player tutorial written using eUML's <link
@@ -3042,6 +2547,86 @@ some_event e1; fsm.process_event(e1)</programlisting>
                         current_state() will return an array of state ids. Please refer to the
                             <command xlink:href="#internals-state-id">internals section</command> to
                         know how state ids are generated.</para>
+                </sect2>
+                <sect2>
+                    <title>Serialization</title>
+                    <para>A common need is the ability to save a state machine and restore it at a
+                        different time. MSM supports this feature for the basic and functor
+                        front-ends, and in a more limited manner for eUML. MSM supports
+                        boost::serialization out of the box (by offering a <code>serialize</code>
+                        function). Actually, for basic serialization, you need not do much, a MSM
+                        state machine is serializable almost like any other type. Without any
+                        special work, you can make a state machine remember its state, for
+                        example:</para>
+                    <para>
+                        <programlisting>MyFsm fsm;
+// write to archive
+std::ofstream ofs("fsm.txt");
+// save fsm to archive
+{
+    boost::archive::text_oarchive oa(ofs);
+    // write class instance to archive
+    oa &lt;&lt; fsm;
+}                                                  </programlisting>
+                    </para>
+                    <para>Loading back is very similar:</para>
+                    <para>
+                        <programlisting>MyFsm fsm;
+{
+    // create and open an archive for input
+    std::ifstream ifs("fsm.txt");
+    boost::archive::text_iarchive ia(ifs);
+    // read class state from archive
+    ia >> fsm;
+}                                          </programlisting>
+                    </para>
+                    <para>This will (de)serialize the state machine itself but not the concrete
+                        states' data. This can be done on a per-state basis to reduce the amount of
+                        typing necessary. To allow serialization of a concrete state, provide a
+                        do_serialize typedef and implement the serialize function:</para>
+                    <para>
+                        <programlisting>struct Empty : public msm::front::state&lt;> 
+{
+    // we want Empty to be serialized. First provide the typedef
+    typedef int do_serialize;
+    // then implement serialize
+    template&lt;class Archive>
+    void serialize(Archive &amp; ar, const unsigned int /* version */)
+    {
+        ar &amp; some_dummy_data;
+    }
+    Empty():some_dummy_data(0){}           
+    int some_dummy_data;
+};                        </programlisting>
+                    </para>
+                    <para>You can also serialize data contained in the front-end class. Again, you
+                        need to provide the typedef and implement serialize:</para>
+                    <para>
+                        <programlisting>struct player_ : public msm::front::state_machine_def&lt;player_>
+{
+    //we might want to serialize some data contained by the front-end
+    int front_end_data;
+    player_():front_end_data(0){}
+    // to achieve this, provide the typedef
+    typedef int do_serialize;
+    // and implement serialize
+    template&lt;class Archive>
+    void serialize(Archive &amp; ar, const unsigned int )
+    {
+        ar &amp; front_end_data;
+    }  
+...
+};                                               </programlisting>
+                    </para>
+                    <para>The saving of the back-end data (the current state(s)) is valid for all
+                        front-ends, so a front-end written using eUML can be serialized. However, to
+                        serialize a concrete state, the macros like
+                            <code>BOOST_MSM_EUML_STATE</code> cannot be used, so the state will have
+                        to be implemented by directly inheriting from
+                            <code>front::euml::euml_state</code>.</para>
+                    <para>This <link
+                        xlink:href="examples/Serialize.cpp">example</link> shows a state machine which we serialize after processing an
+                        event. The <code>Empty</code> state also has some data to serialize.</para>
                 </sect2>
                 <sect2>
                     <title><command xml:id="backend-base-state"/>Base state type </title>
