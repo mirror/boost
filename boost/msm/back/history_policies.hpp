@@ -36,7 +36,7 @@ public:
     }
     // returns the state where the state machine should be at start
     template <class Event>
-    int* const history_entry(Event const& )
+    const int* history_entry(Event const& )
     {
         // always come back to the original state
         return m_initialStates;
@@ -77,7 +77,7 @@ public:
     }
     // returns the state where the state machine should be at start
     template <class Event>
-    int* const history_entry(Event const& )
+    const int* history_entry(Event const& )
     {
         // always load back the last active state
         return m_initialStates;
@@ -121,7 +121,7 @@ public:
     }
     // returns the state where the state machine should be at start
     template <class Event>
-    int* const history_entry(Event const&)
+    const int* history_entry(Event const&)
     {
         if ( ::boost::mpl::contains<Events,Event>::value)
         {
