@@ -19,6 +19,7 @@ project msm
        <toolset>darwin:<optimization>off
        <toolset>intel:<optimization>off
        <library>/boost/test//boost_unit_test_framework/<link>static
+       <library>/boost/serialization//boost_serialization/<link>static
     ;
 
 test-suite msm-unit-tests
