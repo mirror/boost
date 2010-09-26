@@ -144,6 +144,9 @@ The C++ implementation does not provide the `<limits>` header. Never check for
 this symbol in library code; always include `<boost/limits.hpp>`, which
 guarantees to provide `std::numeric_limits`.
 ]]
+[[`BOOST_NO_NUMERIC_LIMITS_LOWEST`][Standard library][
+Static function `numeric_limits<T>::lowest()` is not available for use.
+]]
 [[`BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS`][Standard library][
 Constants such as `numeric_limits<T>::is_signed` are not available for use
 at compile-time.

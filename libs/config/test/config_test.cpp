@@ -1,4 +1,4 @@
-//  This file was automatically generated on Tue Aug 17 09:59:01 2010
+//  This file was automatically generated on Sat Sep 25 16:53:42 2010
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -341,6 +341,11 @@ namespace boost_no_limits = empty_boost;
 #include "boost_no_limits_const_exp.ipp"
 #else
 namespace boost_no_limits_compile_time_constants = empty_boost;
+#endif
+#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
+#include "boost_no_limits_lowest.ipp"
+#else
+namespace boost_no_numeric_limits_lowest = empty_boost;
 #endif
 #ifndef BOOST_NO_LONG_LONG_NUMERIC_LIMITS
 #include "boost_no_ll_limits.ipp"
@@ -1434,6 +1439,11 @@ int main( int, char *[] )
    if(0 != boost_no_limits_compile_time_constants::test())
    {
       std::cerr << "Failed test for BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_numeric_limits_lowest::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_NUMERIC_LIMITS_LOWEST at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_long_long_numeric_limits::test())
