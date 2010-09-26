@@ -32,9 +32,9 @@ namespace quickbook
         cl::rule<Scanner>
                         doc_info, doc_title, doc_version, doc_id, doc_dirname,
                         doc_copyright, doc_purpose, doc_category, doc_authors,
-                        doc_author, comment, space, hard_space, doc_license,
+                        doc_author, space, hard_space, doc_license,
                         doc_last_revision, doc_source_mode, doc_biblioid,
-                        phrase, quickbook_version, char_;
+                        phrase, quickbook_version, char_, comment, dummy_block;
         phrase_grammar common;
         cl::symbols<> doc_types;
 
@@ -190,7 +190,11 @@ namespace quickbook
             ;
 
         comment =
-            "[/" >> *(cl::anychar_p - ']') >> ']'
+            "[/" >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
+            ;
+
+        dummy_block =
+            '[' >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
             ;
 
         space =
