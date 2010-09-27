@@ -14,6 +14,10 @@
 #endif
 #include <iostream>
 
+#ifdef BOOST_INTEL
+#pragma warning(disable: 304 383)
+#endif
+
 struct C1 {};
     
 struct C2 {};
