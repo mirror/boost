@@ -48,7 +48,7 @@
 #include <boost/type_traits/remove_cv.hpp>
 #endif
 #include <boost/mpl/if.hpp>
-//#include <boost/type_traits/declval.hpp>
+#include <boost/utility/declval.hpp>
 #include <boost/type_traits/add_rvalue_reference.hpp>
 
 //----------------------------------------------------------------------------//
