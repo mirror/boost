@@ -14,6 +14,9 @@
 #ifdef __SUNPRO_CC
 #  define BOOST_COMMON_TYPE_DONT_USE_TYPEOF
 #endif
+#ifdef __IBMCPP__
+#  define BOOST_COMMON_TYPE_DONT_USE_TYPEOF
+#endif
 
 //----------------------------------------------------------------------------//
 #if defined(BOOST_NO_VARIADIC_TEMPLATES)
