@@ -2064,12 +2064,19 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         m_history.history_exit(this->m_states);
      }
 
+    // the IBM compiler seems to have problems with the friend declaration of dispatch_table
+#ifdef __IBMCPP__
+     public:
+#endif
     // no transition for event.
     template <class Event>
     static HandledEnum call_no_transition(library_sm& , int , int , Event const& )
     {
         return HANDLED_FALSE;
     }
+#ifdef __IBMCPP__
+     private:
+#endif
     // called for deferred events. Address set in the dispatch_table at init
     template <class Event>
     static HandledEnum defer_transition(library_sm& fsm, int , int , Event const& e)
