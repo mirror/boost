@@ -96,15 +96,15 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         </typedef>
         <typedef name="argument_type">
           <type>T1</type>
-          <purpose>Exists iff iff arity == 1</purpose>
+          <purpose>Exists iff arity == 1</purpose>
         </typedef>
         <typedef name="first_argument_type">
           <type>T1</type>
-          <purpose>Exists iff iff arity == 2</purpose>
+          <purpose>Exists iff arity == 2</purpose>
         </typedef>
         <typedef name="second_argument_type">
           <type>T2</type>
-          <purpose>Exists iff iff arity == 2</purpose>
+          <purpose>Exists iff arity == 2</purpose>
         </typedef>
 
         <class name="arg">
