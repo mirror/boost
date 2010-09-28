@@ -174,10 +174,13 @@ namespace boost { namespace program_options {
     option_description::format_name() const
     {
         if (!m_short_name.empty())
-            return string(m_short_name).append(" [ --").
-            append(m_long_name).append(" ]");
-        else
-            return string("--").append(m_long_name);
+        {
+            return m_long_name.empty() 
+                ? m_short_name 
+                : string(m_short_name).append(" [ --").
+                  append(m_long_name).append(" ]");
+        }
+        return string("--").append(m_long_name);
     }
 
     std::string 
