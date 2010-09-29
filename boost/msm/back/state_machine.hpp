@@ -1702,12 +1702,20 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
 #undef MSM_VISITOR_ARGS_EXECUTE
 #undef MSM_VISITOR_ARGS_SUB
 
+// the IBM compiler seems to have problems with nested classes
+// the same seems to apply to the Apple version of gcc 4.0.1 (just in case we do for < 4.1)
+#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1) )
+     public:
+#endif
     template<class ContainingSM>
     void set_containing_sm(ContainingSM* sm)
     {
         m_is_included=true;
         ::boost::fusion::for_each(m_substate_list,add_state<ContainingSM>(this,sm));
     }
+#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1) )
+     private:
+#endif
     // A function object for use with mpl::for_each that stuffs
     // states into the state list.
     template<class ContainingSM>
@@ -2065,7 +2073,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      }
 
     // the IBM compiler seems to have problems with the friend declaration of dispatch_table
-#ifdef __IBMCPP__
+#if defined (__IBMCPP__)
      public:
 #endif
     // no transition for event.
@@ -2074,9 +2082,6 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     {
         return HANDLED_FALSE;
     }
-#ifdef __IBMCPP__
-     private:
-#endif
     // called for deferred events. Address set in the dispatch_table at init
     template <class Event>
     static HandledEnum defer_transition(library_sm& fsm, int , int , Event const& e)
@@ -2084,7 +2089,6 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         fsm.defer_event(e);
         return HANDLED_DEFERRED;
     }
-
     // called for completion events. Default address set in the dispatch_table at init
     // prevents no-transition detection for completion events
     template <class Event>
@@ -2092,7 +2096,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     {
         return HANDLED_FALSE;
     }
-
+#if defined (__IBMCPP__)
+     private:
+#endif
     // puts a deferred event in the queue
     void post_deferred_event(deferred_fct& deferred)
     {
