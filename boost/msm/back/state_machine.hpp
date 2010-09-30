@@ -1704,7 +1704,8 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
 
 // the IBM compiler seems to have problems with nested classes
 // the same seems to apply to the Apple version of gcc 4.0.1 (just in case we do for < 4.1)
-#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1) )
+// and also to MS VC < 8
+#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1)) || (defined(_MSC_VER) && (_MSC_VER < 1400))
      public:
 #endif
     template<class ContainingSM>
@@ -1713,7 +1714,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         m_is_included=true;
         ::boost::fusion::for_each(m_substate_list,add_state<ContainingSM>(this,sm));
     }
-#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1) )
+#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1)) || (defined(_MSC_VER) && (_MSC_VER < 1400))
      private:
 #endif
     // A function object for use with mpl::for_each that stuffs
@@ -2072,8 +2073,8 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         m_history.history_exit(this->m_states);
      }
 
-    // the IBM compiler seems to have problems with the friend declaration of dispatch_table
-#if defined (__IBMCPP__)
+    // the IBM and VC<8 compilers seem to have problems with the friend declaration of dispatch_table
+#if defined (__IBMCPP__) || (defined(_MSC_VER) && (_MSC_VER < 1400))
      public:
 #endif
     // no transition for event.
@@ -2096,7 +2097,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     {
         return HANDLED_FALSE;
     }
-#if defined (__IBMCPP__)
+#if defined (__IBMCPP__) || (defined(_MSC_VER) && (_MSC_VER < 1400))
      private:
 #endif
     // puts a deferred event in the queue
