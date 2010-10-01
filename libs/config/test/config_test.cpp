@@ -1,4 +1,4 @@
-//  This file was automatically generated on Fri Jun 04 12:51:35 2010
+//  This file was automatically generated on Sat Sep 25 16:53:42 2010
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -342,6 +342,11 @@ namespace boost_no_limits = empty_boost;
 #else
 namespace boost_no_limits_compile_time_constants = empty_boost;
 #endif
+#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
+#include "boost_no_limits_lowest.ipp"
+#else
+namespace boost_no_numeric_limits_lowest = empty_boost;
+#endif
 #ifndef BOOST_NO_LONG_LONG_NUMERIC_LIMITS
 #include "boost_no_ll_limits.ipp"
 #else
@@ -581,6 +586,11 @@ namespace boost_no_using_declaration_overloads_from_typename_base = empty_boost;
 #include "boost_no_using_template.ipp"
 #else
 namespace boost_no_using_template = empty_boost;
+#endif
+#ifndef BOOST_NO_VARIADIC_MACROS
+#include "boost_no_variadic_macros.ipp"
+#else
+namespace boost_no_variadic_macros = empty_boost;
 #endif
 #ifndef BOOST_NO_VARIADIC_TEMPLATES
 #include "boost_no_variadic_templates.ipp"
@@ -1431,6 +1441,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_numeric_limits_lowest::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_NUMERIC_LIMITS_LOWEST at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_long_long_numeric_limits::test())
    {
       std::cerr << "Failed test for BOOST_NO_LONG_LONG_NUMERIC_LIMITS at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1669,6 +1684,11 @@ int main( int, char *[] )
    if(0 != boost_no_using_template::test())
    {
       std::cerr << "Failed test for BOOST_NO_USING_TEMPLATE at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_variadic_macros::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_VARIADIC_MACROS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_variadic_templates::test())

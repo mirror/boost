@@ -13,15 +13,31 @@
 namespace boost_no_nested_friendship {
 
 class A {
-   static int b;
-   class B {
-      int f() { return b; }
+public:
+   A() {}
+   struct B {
+      int f(A& a) 
+      {
+         a.f1();
+         a.f2(a); 
+         return a.b; 
+      }
    };
+
+private:
+   static int b;
+   static void f1(){}
+   template <class T>
+   static void f2(const T&){}
 };
+
+int A::b = 0;
 
 int test()
 {
-    return 0;
+    A a;
+    A::B b;
+    return b.f(a);
 }
 
 }
