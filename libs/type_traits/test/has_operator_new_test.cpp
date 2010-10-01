@@ -7,6 +7,13 @@
 #include "check_integral_constant.hpp"
 #include <boost/type_traits/has_new_operator.hpp>
 
+#ifdef BOOST_INTEL
+//  remark #1720: function "class_with_new_op::operator new" has no corresponding member operator delete (to be called if an exception is thrown during initialization of an allocated object)
+//      void * operator new(std::size_t);
+//             ^
+#pragma warning(disable:1720)
+#endif
+
 struct class_with_new_op {
     void * operator new(std::size_t);
 };

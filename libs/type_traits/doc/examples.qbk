@@ -216,5 +216,22 @@ and enum types to double:
 
 [endsect]
 
+[section:improved_min Improving std::min with common_type]
+
+An improved `std::min` function could be written like this:
+
+   template <class T, class U>
+   typename __common_type<T, U>::type min(T t, T u)
+   {
+      return t < u ? t : u;
+   }
+
+And now expressions such as:
+
+   min(1, 2.0)
+
+will actually compile and return the correct type!
+
+[endsect]
 [endsect]
 

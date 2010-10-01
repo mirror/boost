@@ -21,71 +21,71 @@
 struct TestA {};
 struct TestB { virtual void foo(void) = 0; };
 struct TestC { private: virtual void foo(void) = 0; };
-struct TestD : TestA {};
-struct TestE : TestB {};
-struct TestF : TestC {};
-struct TestG : TestB { virtual void foo(void) {} };
-struct TestH : TestC { private: virtual void foo(void) {} };
-struct TestI : TestB, TestC {};
-struct TestJ : TestI { virtual void foo(void) {} };
-struct TestK : TestB { virtual void foo(void); virtual void foo2(void) = 0; };
-struct TestL : TestK { virtual void foo2(void) {} };
-struct TestM : virtual TestB {};
-struct TestN : virtual TestC {};
-struct TestO : TestM, TestN {};
-struct TestP : TestO { virtual void foo(void) {} };
-struct TestQ : TestB { virtual void foo(void) = 0; };
-struct TestR : TestC { private: virtual void foo(void) = 0; };
+struct TestD : public TestA {};
+struct TestE : public TestB {};
+struct TestF : public TestC {};
+struct TestG : public TestB { virtual void foo(void) {} };
+struct TestH : public TestC { private: virtual void foo(void) {} };
+struct TestI : public TestB, public TestC {};
+struct TestJ : public TestI { virtual void foo(void) {} };
+struct TestK : public TestB { virtual void foo(void); virtual void foo2(void) = 0; };
+struct TestL : public TestK { virtual void foo2(void) {} };
+struct TestM : public virtual TestB {};
+struct TestN : public virtual TestC {};
+struct TestO : public TestM, public TestN {};
+struct TestP : public TestO { virtual void foo(void) {} };
+struct TestQ : public TestB { virtual void foo(void) = 0; };
+struct TestR : public TestC { private: virtual void foo(void) = 0; };
 struct TestS { virtual void foo(void) {} };
 struct TestT { virtual ~TestT(void) {} virtual void foo(void) {} };
-struct TestU : TestT { virtual void foo(void) = 0; };
-struct TestV : TestT { virtual void foo(void) {} };
+struct TestU : public TestT { virtual void foo(void) = 0; };
+struct TestV : public TestT { virtual void foo(void) {} };
 struct TestW { virtual void foo1(void) = 0; virtual void foo2(void) = 0; };
-struct TestX : TestW { virtual void foo1(void) {}  virtual void foo2(void) {} };
+struct TestX : public TestW { virtual void foo1(void) {}  virtual void foo2(void) {} };
 struct TestY { virtual ~TestY(void) = 0; };
 struct TestZ { virtual ~TestZ(void) = 0; }; TestZ::~TestZ(void) {}
-struct TestAA : TestZ { virtual ~TestAA(void) = 0; }; TestAA::~TestAA(void) {}
-struct TestAB : TestAA { virtual ~TestAB(void) {} }; 
+struct TestAA : public TestZ { virtual ~TestAA(void) = 0; }; TestAA::~TestAA(void) {}
+struct TestAB : public TestAA { virtual ~TestAB(void) {} }; 
 struct TestAC { virtual void foo(void) = 0; }; void TestAC::foo(void) {}
-struct TestAD : TestAC {};
-struct TestAE : TestAD { virtual void foo() {} };
-struct TestAF : TestAD { virtual void foo(); }; void TestAF::foo(void) {}
-struct TestAG : virtual TestA {};
+struct TestAD : public TestAC {};
+struct TestAE : public TestAD { virtual void foo() {} };
+struct TestAF : public TestAD { virtual void foo(); }; void TestAF::foo(void) {}
+struct TestAG : public virtual TestA {};
 
 // template test types:
 template <class T> struct TTestA {};
 template <class T> struct TTestB { virtual void foo(void) = 0; };
 template <class T> struct TTestC { private: virtual void foo(void) = 0; };
-template <class T> struct TTestD : TTestA<T> {};
-template <class T> struct TTestE : TTestB<T> {};
-template <class T> struct TTestF : TTestC<T> {};
-template <class T> struct TTestG : TTestB<T> { virtual void foo(void) {} };
-template <class T> struct TTestH : TTestC<T> { private: virtual void foo(void) {} };
-template <class T> struct TTestI : TTestB<T>, TTestC<T> {};
-template <class T> struct TTestJ : TTestI<T> { virtual void foo(void) {} };
-template <class T> struct TTestK : TTestB<T> { virtual void foo(void); virtual void foo2(void) = 0; };
-template <class T> struct TTestL : TTestK<T> { virtual void foo2(void) {} };
-template <class T> struct TTestM : virtual TTestB<T> {};
-template <class T> struct TTestN : virtual TTestC<T> {};
-template <class T> struct TTestO : TTestM<T>, TTestN<T> {};
-template <class T> struct TTestP : TTestO<T> { virtual void foo(void) {} };
-template <class T> struct TTestQ : TTestB<T> { virtual void foo(void) = 0; };
-template <class T> struct TTestR : TTestC<T> { private: virtual void foo(void) = 0; };
+template <class T> struct TTestD : public TTestA<T> {};
+template <class T> struct TTestE : public TTestB<T> {};
+template <class T> struct TTestF : public TTestC<T> {};
+template <class T> struct TTestG : public TTestB<T> { virtual void foo(void) {} };
+template <class T> struct TTestH : public TTestC<T> { private: virtual void foo(void) {} };
+template <class T> struct TTestI : public TTestB<T>, public TTestC<T> {};
+template <class T> struct TTestJ : public TTestI<T> { virtual void foo(void) {} };
+template <class T> struct TTestK : public TTestB<T> { virtual void foo(void); virtual void foo2(void) = 0; };
+template <class T> struct TTestL : public TTestK<T> { virtual void foo2(void) {} };
+template <class T> struct TTestM : public virtual TTestB<T> {};
+template <class T> struct TTestN : public virtual TTestC<T> {};
+template <class T> struct TTestO : public TTestM<T>, public TTestN<T> {};
+template <class T> struct TTestP : public TTestO<T> { virtual void foo(void) {} };
+template <class T> struct TTestQ : public TTestB<T> { virtual void foo(void) = 0; };
+template <class T> struct TTestR : public TTestC<T> { private: virtual void foo(void) = 0; };
 template <class T> struct TTestS { virtual void foo(void) {} };
 template <class T> struct TTestT { virtual ~TTestT(void) {} virtual void foo(void) {} };
-template <class T> struct TTestU : TTestT<T> { virtual void foo(void) = 0; };
-template <class T> struct TTestV : TTestT<T> { virtual void foo(void) {} };
+template <class T> struct TTestU : public TTestT<T> { virtual void foo(void) = 0; };
+template <class T> struct TTestV : public TTestT<T> { virtual void foo(void) {} };
 template <class T> struct TTestW { virtual void foo1(void) = 0; virtual void foo2(void) = 0; };
-template <class T> struct TTestX : TTestW<T> { virtual void foo1(void) {}  virtual void foo2(void) {} };
+template <class T> struct TTestX : public TTestW<T> { virtual void foo1(void) {}  virtual void foo2(void) {} };
 template <class T> struct TTestY { virtual ~TTestY(void) = 0; };
 template <class T> struct TTestZ { virtual ~TTestZ(void) = 0; }; template <class T> TTestZ<T>::~TTestZ(void) {}
-template <class T> struct TTestAA : TTestZ<T> { virtual ~TTestAA(void) = 0; }; template <class T> TTestAA<T>::~TTestAA(void) {}
-template <class T> struct TTestAB : TTestAA<T> { virtual ~TTestAB(void) {} }; 
+template <class T> struct TTestAA : public TTestZ<T> { virtual ~TTestAA(void) = 0; }; template <class T> TTestAA<T>::~TTestAA(void) {}
+template <class T> struct TTestAB : public TTestAA<T> { virtual ~TTestAB(void) {} }; 
 template <class T> struct TTestAC { virtual void foo(void) = 0; }; template <class T> void TTestAC<T>::foo(void) {}
-template <class T> struct TTestAD : TTestAC<T> {};
-template <class T> struct TTestAE : TTestAD<T> { virtual void foo() {} };
-template <class T> struct TTestAF : TTestAD<T> { virtual void foo(); }; template <class T> void TTestAF<T>::foo(void) {}
-template <class T> struct TTestAG : virtual TTestA<T> {};
+template <class T> struct TTestAD : public TTestAC<T> {};
+template <class T> struct TTestAE : public TTestAD<T> { virtual void foo() {} };
+template <class T> struct TTestAF : public TTestAD<T> { virtual void foo(); }; template <class T> void TTestAF<T>::foo(void) {}
+template <class T> struct TTestAG : public virtual TTestA<T> {};
 
 
 TT_TEST_BEGIN(is_abstract)

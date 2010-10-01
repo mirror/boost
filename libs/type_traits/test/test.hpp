@@ -23,6 +23,17 @@
 // We have to turn off warnings that occur within the test suite:
 #pragma warning(disable:4127)
 #endif
+#ifdef BOOST_INTEL
+// remark #1418: external function definition with no prior declaration
+// remark #981: operands are evaluated in unspecified order
+#pragma warning(disable:1418 981)
+#endif
+
+#ifdef BOOST_INTEL
+// turn off warnings from this header:
+#pragma warning(push)
+#pragma warning(disable:444)
+#endif
 
 //
 // basic configuration:
@@ -156,8 +167,8 @@ void name(){ TRANSFORM_CHECK(type, BOOST_DUMMY_MACRO_PARAM, BOOST_DUMMY_MACRO_PA
 enum enum_UDT{ one, two, three };
 struct UDT
 {
-   UDT(){};
-   ~UDT(){};
+   UDT();
+   ~UDT();
    UDT(const UDT&);
    UDT& operator=(const UDT&);
    int i;
@@ -206,12 +217,11 @@ typedef const r_type cr_type;
 struct POD_UDT { int x; };
 struct empty_UDT
 {
-   empty_UDT(){};
-   empty_UDT(const empty_UDT&){};
-   ~empty_UDT(){};
-   empty_UDT& operator=(const empty_UDT&){ return *this; }
-   bool operator==(const empty_UDT&)const
-   { return true; }
+   empty_UDT();
+   empty_UDT(const empty_UDT&);
+   ~empty_UDT();
+   empty_UDT& operator=(const empty_UDT&);
+   bool operator==(const empty_UDT&)const;
 };
 struct empty_POD_UDT
 {
@@ -240,7 +250,7 @@ struct nothrow_copy_UDT
    nothrow_copy_UDT();
    nothrow_copy_UDT(const nothrow_copy_UDT&)throw();
    ~nothrow_copy_UDT(){};
-   nothrow_copy_UDT& operator=(const nothrow_copy_UDT&){ return *this; }
+   nothrow_copy_UDT& operator=(const nothrow_copy_UDT&);
    bool operator==(const nothrow_copy_UDT&)const
    { return true; }
 };
@@ -289,7 +299,7 @@ struct VB
    virtual ~VB(){};
 };
 
-struct VD : VB
+struct VD : public VB
 {
    ~VD(){};
 };
@@ -356,21 +366,21 @@ struct polymorphic_base
    virtual void method();
 };
 
-struct polymorphic_derived1 : polymorphic_base
+struct polymorphic_derived1 : public polymorphic_base
 {
 };
 
-struct polymorphic_derived2 : polymorphic_base
+struct polymorphic_derived2 : public polymorphic_base
 {
    virtual void method();
 };
 
-struct virtual_inherit1 : virtual Base { };
-struct virtual_inherit2 : virtual_inherit1 { };
+struct virtual_inherit1 : public virtual Base { };
+struct virtual_inherit2 : public virtual_inherit1 { };
 struct virtual_inherit3 : private virtual Base {};
-struct virtual_inherit4 : virtual boost::noncopyable {};
-struct virtual_inherit5 : virtual int_convertible {};
-struct virtual_inherit6 : virtual Base { virtual ~virtual_inherit6()throw(); };
+struct virtual_inherit4 : public virtual boost::noncopyable {};
+struct virtual_inherit5 : public virtual int_convertible {};
+struct virtual_inherit6 : public virtual Base { virtual ~virtual_inherit6()throw(); };
 
 typedef void foo0_t();
 typedef void foo1_t(int);
@@ -413,6 +423,9 @@ protected:
    wrap& operator=(const wrap&);
 };
 
+#ifdef BOOST_INTEL
+#pragma warning(pop)
+#endif
 
 #endif
 

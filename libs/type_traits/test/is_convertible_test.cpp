@@ -19,8 +19,8 @@ struct convertible_from
 };
 
 struct base2 { };
-struct middle2 : virtual base2 { };
-struct derived2 : middle2 { };
+struct middle2 : public virtual base2 { };
+struct derived2 : public middle2 { };
 
 
 TT_TEST_BEGIN(is_convertible)
@@ -104,8 +104,11 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float const&> >::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float&> >::value), true);
 
+#if !(defined(__GNUC__) && (__GNUC__ < 4))
+// GCC 3.x emits warnings here, which causes the tests to fail when we compile with warnings-as-errors:
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<char> >::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<char const&> >::value), true);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<char&> >::value), false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<char,convertible_from<char> >::value), true);

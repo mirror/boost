@@ -13,6 +13,18 @@
 #endif
 
 //
+// Need to defined some member function for empty_UDT,
+// we don't want to put these in the test.hpp as that
+// causes overly-clever compilers to figure out that they can't throw
+// which in turn breaks other tests.
+//
+empty_UDT::empty_UDT(){}
+empty_UDT::~empty_UDT(){}
+empty_UDT::empty_UDT(const empty_UDT&){}
+empty_UDT& empty_UDT::operator=(const empty_UDT&){ return *this; }
+bool empty_UDT::operator==(const empty_UDT&)const{ return true; }
+
+//
 // VC++ emits an awful lot of warnings unless we define these:
 #ifdef BOOST_MSVC
 #  pragma warning(disable:4244)
