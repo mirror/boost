@@ -262,9 +262,6 @@ struct nominal_candidates< T, U, V*, W*, false >
 
 template<class T, class U, bool b>
 struct common_type_dispatch_on_rvalueness;
-
-template< class T, class U >
-struct common_type_dispatch_on_rvalueness< T, U, true >
     : deduce_common_type< T, U, typename nominal_candidates<T,U>::type >
 { };
 
@@ -302,3 +299,4 @@ template<> struct common_type_impl< void, void > { typedef void type; };
 } // namespace boost
 
 #endif // BOOST_TYPE_TRAITS_DETAIL_COMMON_TYPE_HPP
+
