@@ -261,7 +261,7 @@ struct nominal_candidates< T, U, V*, W*, false >
 };
 
 template<class T, class U, bool b>
-struct common_type_dispatch_on_rvalueness;
+struct common_type_dispatch_on_rvalueness
     : deduce_common_type< T, U, typename nominal_candidates<T,U>::type >
 { };
 
