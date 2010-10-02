@@ -14,6 +14,10 @@
 #include <boost/regex/v4/primary_transform.hpp>
 #include <assert.h>
 
+#ifdef BOOST_INTEL
+#pragma warning(disable:1418 981 983 2259)
+#endif
+
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{
    using ::strxfrm;

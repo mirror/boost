@@ -476,5 +476,9 @@ void test_pocessive_repeats()
    TEST_REGEX_SEARCH("x{1,5}+\\w", perl, "xxxxxa", match_default, make_array(0, 6, -2, -2));
    TEST_REGEX_SEARCH("x{1,4}+\\w", perl, "xxxxxa", match_default, make_array(0, 5, -2, -2));
    TEST_REGEX_SEARCH("x{1,3}+\\w", perl, "xxxxxa", match_default, make_array(0, 4, -2, 4, 6, -2, -2));
+   TEST_INVALID_REGEX("\\d+++", perl);
+   TEST_INVALID_REGEX("\\d*++", perl);
+   TEST_INVALID_REGEX("\\d?++", perl);
+   TEST_INVALID_REGEX("\\d{1,2}++", perl);
 }
 

@@ -18,6 +18,10 @@
 #ifdef __BORLANDC__
 #pragma option -w-8019 -w-8004 -w-8008
 #endif
+#ifdef BOOST_INTEL
+#pragma warning(disable:1418 981 983 595 383)
+#endif
+
 #include <boost/regex.hpp>
 #include <boost/detail/workaround.hpp>
 #if !BOOST_WORKAROUND(_MSC_VER, < 1310) && !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__) && !BOOST_WORKAROUND(__GNUC__, < 3)

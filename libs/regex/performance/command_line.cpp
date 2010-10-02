@@ -34,6 +34,7 @@ bool time_safe_greta = false;
 bool time_posix = false;
 bool time_pcre = false;
 bool time_xpressive = false;
+bool time_std = false;
 
 bool test_matches = false;
 bool test_code = false;
@@ -55,6 +56,7 @@ double locale_boost_total = 0;
 double posix_total = 0;
 double pcre_total = 0;
 double xpressive_total = 0;
+double std_total = 0;
 unsigned greta_test_count = 0;
 unsigned safe_greta_test_count = 0;
 unsigned boost_test_count = 0;
@@ -62,6 +64,7 @@ unsigned locale_boost_test_count = 0;
 unsigned posix_test_count = 0;
 unsigned pcre_test_count = 0;
 unsigned xpressive_test_count = 0;
+unsigned std_test_count = 0;
 
 int handle_argument(const std::string& what)
 {
@@ -87,6 +90,10 @@ int handle_argument(const std::string& what)
    else if(what == "-xpressive" || what == "-dxpr")
       time_xpressive = true;
 #endif
+#ifndef BOOST_NO_0X_HDR_REGEX
+   else if(what == "-std")
+      time_std = true;
+#endif
    else if(what == "-all")
    {
       time_boost = true;
@@ -103,6 +110,9 @@ int handle_argument(const std::string& what)
 #endif
 #ifdef BOOST_HAS_XPRESSIVE
       time_xpressive = true;
+#endif
+#ifndef BOOST_NO_0X_HDR_REGEX
+      time_std = true;
 #endif
    }
    else if(what == "-test-matches")
@@ -166,6 +176,9 @@ int show_usage()
 #endif
 #ifdef BOOST_HAS_XPRESSIVE
       "      -dxpr  Apply tests to dynamic xpressive library\n"
+#endif
+#ifndef BOOST_NO_0X_HDR_REGEX
+	  "      -std  Apply tests to std::regex.\n"
 #endif
       "      -all   Apply tests to all libraries\n\n"
       "   test options:\n"
@@ -274,6 +287,10 @@ void output_html_results(bool show_description, const std::string& tagname)
       if(time_xpressive == true)
          os << "<td><strong>Dynamic Xpressive</strong></td>";
 #endif
+#ifndef BOOST_NO_0X_HDR_REGEX
+      if(time_std == true)
+         os << "<td><strong>std::regex</strong></td>";
+#endif
       os << "</tr>\n";
 
       //
@@ -307,7 +324,6 @@ void output_html_results(bool show_description, const std::string& tagname)
             }
          }
 #endif
-#if defined(BOOST_HAS_POSIX)
          if(time_boost == true)
          {
             print_result(os, first->boost_time, first->factor);
@@ -317,7 +333,6 @@ void output_html_results(bool show_description, const std::string& tagname)
                ++boost_test_count;
             }
          }
-#endif
          if(time_localised_boost == true)
          {
             print_result(os, first->localised_boost_time, first->factor);
@@ -355,6 +370,17 @@ void output_html_results(bool show_description, const std::string& tagname)
             {
                xpressive_total += first->xpressive_time / first->factor;
                ++xpressive_test_count;
+            }
+         }
+#endif
+#ifndef BOOST_NO_0X_HDR_REGEX
+         if(time_std == true)
+         {
+            print_result(os, first->std_time, first->factor);
+            if(first->std_time > 0)
+            {
+               std_total += first->std_time / first->factor;
+               ++std_test_count;
             }
          }
 #endif
@@ -430,6 +456,12 @@ std::string get_averages_table()
       os << "<td><strong>Dynamic Xpressive</strong></td>";
    }
 #endif
+#ifndef BOOST_NO_0X_HDR_REGEX
+   if(time_std == true)
+   {
+      os << "<td><strong>std::regex</strong></td>";
+   }
+#endif
    os << "</tr>\n";
 
    //
@@ -446,6 +478,8 @@ std::string get_averages_table()
    if(time_boost == true)
       os << "<td>" << (boost_total / boost_test_count) << "</td>\n";
 #endif
+   if(time_boost == true)
+      os << "<td>" << (boost_total / boost_test_count) << "</td>\n";
    if(time_localised_boost == true)
       os << "<td>" << (locale_boost_total / locale_boost_test_count) << "</td>\n";
    if(time_posix == true)
@@ -457,6 +491,10 @@ std::string get_averages_table()
 #if defined(BOOST_HAS_XPRESSIVE)
    if(time_xpressive == true)
       os << "<td>" << (xpressive_total / xpressive_test_count) << "</td>\n";
+#endif
+#ifndef BOOST_NO_0X_HDR_REGEX
+   if(time_std == true)
+      os << "<td>" << (std_total / std_test_count) << "</td>\n";
 #endif
    os << "</tr>\n";
    os << "</table>\n";

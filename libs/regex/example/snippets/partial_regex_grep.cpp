@@ -54,9 +54,9 @@ void search(std::istream& is)
    while(have_more)
    {
       // how much do we copy forward from last try:
-      unsigned leftover = (buf + sizeof(buf)) - next_pos;
+      std::ptrdiff_t leftover = (buf + sizeof(buf)) - next_pos;
       // and how much is left to fill:
-      unsigned size = next_pos - buf;
+      std::ptrdiff_t size = next_pos - buf;
       // copy forward whatever we have left:
       std::memmove(buf, next_pos, leftover);
       // fill the rest from the stream:

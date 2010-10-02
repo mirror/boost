@@ -20,6 +20,10 @@
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>
 
+#ifdef BOOST_INTEL
+#pragma warning(disable:1418 981 983 383)
+#endif
+
 int test_main( int , char* [] )
 {
    std::string bad_text(1024, ' ');

@@ -19,6 +19,14 @@
 
 #ifndef BOOST_REGEX_REGRESS_TEST_HPP
 #define BOOST_REGEX_REGRESS_TEST_HPP
+
+#include <boost/regex.hpp>
+
+#ifdef BOOST_INTEL
+// disable Intel's "remarks":
+#pragma warning(disable:1418 981 383 1419 7)
+#endif
+
 #include <typeinfo>
 #include "test_not_regex.hpp"
 #include "test_regex_search.hpp"
@@ -28,6 +36,9 @@
 #include "test_icu.hpp"
 #include "test_locale.hpp"
 
+#ifdef TEST_THREADS
+#include <boost/thread/once.hpp>
+#endif
 
 //
 // define test entry proc, this forwards on to the appropriate
@@ -54,6 +65,16 @@ void test(const wchar_t&, const test_regex_search_tag&);
 void test(const wchar_t&, const test_invalid_regex_tag&);
 #endif
 
+template <class Regex>
+struct call_once_func
+{
+   Regex* pregex;
+   void operator()()const
+   {
+      return test_empty(*pregex);
+   }
+};
+
 template <class charT, class tagT>
 void do_test(const charT& c, const tagT& tag)
 {
@@ -65,12 +86,18 @@ void do_test(const charT& c, const tagT& tag)
    test_info<charT>::set_typename(typeid(boost::basic_regex<charT, boost::cpp_regex_traits<charT> >).name());
 #endif
    boost::basic_regex<charT, boost::cpp_regex_traits<charT> > e1;
+#ifndef TEST_THREADS
    static bool done_empty_test = false;
    if(done_empty_test == false)
    {
       test_empty(e1);
       done_empty_test = true;
    }
+#else
+   boost::once_flag f = BOOST_ONCE_INIT;
+   call_once_func<boost::basic_regex<charT, boost::cpp_regex_traits<charT> > > proc = { &e1 };
+   boost::call_once(f, proc);
+#endif
    if(test_locale::cpp_locale_state() == test_locale::test_with_locale)
       e1.imbue(test_locale::cpp_locale());
    if(test_locale::cpp_locale_state() != test_locale::no_test)

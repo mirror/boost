@@ -27,7 +27,7 @@
 <a name="boost_regex.ref.basic_regex"></a><a class="link" href="basic_regex.html" title="basic_regex"> basic_regex</a>
 </h3></div></div></div>
 <a name="boost_regex.ref.basic_regex.synopsis"></a><h5>
-<a name="id1039806"></a>
+<a name="id929474"></a>
         <a class="link" href="basic_regex.html#boost_regex.ref.basic_regex.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -177,7 +177,7 @@
 </span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.size">size_type size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.max_size">size_type max_size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.empty">bool empty</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
-   <a class="link" href="basic_regex.html#boost_regex.basic_regex.mark_count">unsigned mark_count</a><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> 
+   <a class="link" href="basic_regex.html#boost_regex.basic_regex.mark_count">size_type mark_count</a><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> 
    <span class="comment">//
 </span>   <span class="comment">// modifiers: 
 </span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign1">basic_regex&amp; assign</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span> 
@@ -244,7 +244,7 @@
 <span class="special">}</span> <span class="comment">// namespace boost
 </span></pre>
 <a name="boost_regex.ref.basic_regex.description"></a><h5>
-<a name="id1044607"></a>
+<a name="id934821"></a>
         <a class="link" href="basic_regex.html#boost_regex.ref.basic_regex.description">Description</a>
       </h5>
 <p>
@@ -327,7 +327,7 @@
         <code class="computeroutput"><span class="identifier">basic_regex</span></code>.
       </p>
 <div class="table">
-<a name="id1047610"></a><p class="title"><b>Table&#160;1.&#160;basic_regex default construction postconditions</b></p>
+<a name="id936186"></a><p class="title"><b>Table&#160;1.&#160;basic_regex default construction postconditions</b></p>
 <div class="table-contents"><table class="table" summary="basic_regex default construction postconditions">
 <colgroup>
 <col>
@@ -407,7 +407,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1047913"></a><p class="title"><b>Table&#160;2.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id936488"></a><p class="title"><b>Table&#160;2.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -512,7 +512,7 @@
         specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1048333"></a><p class="title"><b>Table&#160;3.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id936908"></a><p class="title"><b>Table&#160;3.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -616,7 +616,7 @@
         according the option flags specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1049294"></a><p class="title"><b>Table&#160;4.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id937866"></a><p class="title"><b>Table&#160;4.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -728,7 +728,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1049778"></a><p class="title"><b>Table&#160;5.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id938350"></a><p class="title"><b>Table&#160;5.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -830,7 +830,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1050144"></a><p class="title"><b>Table&#160;6.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id938716"></a><p class="title"><b>Table&#160;6.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -996,7 +996,7 @@
       </p>
 <a name="boost_regex.basic_regex.mark_count"></a><p>
       </p>
-<pre class="programlisting"><span class="keyword">unsigned</span> <span class="identifier">mark_count</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">mark_count</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the number of marked sub-expressions
@@ -1044,7 +1044,7 @@
         in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1051667"></a><p class="title"><b>Table&#160;7.&#160;Postconditions for basic_regex::assign</b></p>
+<a name="id940239"></a><p class="title"><b>Table&#160;7.&#160;Postconditions for basic_regex::assign</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex::assign">
 <colgroup>
 <col>
@@ -1320,7 +1320,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2010 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

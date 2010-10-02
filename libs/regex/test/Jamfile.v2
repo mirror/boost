@@ -13,8 +13,7 @@ project
       # There are unidentified linker problems on these platforms:
       <toolset>mipspro-7.4:<link>static
       <toolset>sun-5.9:<link>static
-      <toolset>msvc:<warnings>all
-      <toolset>gcc:<warnings>all
+      <warnings>all
       <toolset>gcc:<cxxflags>-Wextra
       <toolset>gcc:<cxxflags>-Wshadow
       <define>U_USING_ICU_NAMESPACE=0
@@ -59,6 +58,31 @@ test_unicode.cpp
 test_overloads.cpp
 test_operators.cpp
 ;
+
+lib boost_regex_recursive :    
+   ../src/c_regex_traits.cpp
+   ../src/cpp_regex_traits.cpp
+   ../src/cregex.cpp
+   ../src/fileiter.cpp
+   ../src/icu.cpp
+   ../src/instances.cpp
+   ../src/posix_api.cpp
+   ../src/regex.cpp
+   ../src/regex_debug.cpp
+   ../src/regex_raw_buffer.cpp
+   ../src/regex_traits_defaults.cpp
+   ../src/static_mutex.cpp
+   ../src/w32_regex_traits.cpp
+   ../src/wc_regex_traits.cpp
+   ../src/wide_posix_api.cpp
+   ../src/winstances.cpp 
+   ../src/usinstances.cpp 
+   ../build//icu_options
+    : 
+        <define>BOOST_REGEX_RECURSIVE=1
+	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
+    : 
+    ;
 
 local regress-sources = regress/$(R_SOURCE) ;
 
@@ -142,6 +166,14 @@ test-suite regex
  :  # test name
     captures_test
  ]
+
+[ run regress/$(R_SOURCE) .//boost_regex_recursive
+                          ../build//icu_options
+  : # command line
+  : # input files
+  : # requirements
+    <define>BOOST_REGEX_RECURSIVE=1
+  : regex_regress_recursive ]
 ;
-      
+
 build-project ../example ;

@@ -12,6 +12,9 @@
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>
 
+#ifdef BOOST_INTEL
+#pragma warning(disable:1418 981 983 383)
+#endif
 
 template <class charT>
 void test_named_subexpressions(charT)
