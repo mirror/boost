@@ -25,7 +25,7 @@
 #define BOOST_FUSION_ADAPT_ADT_GET_IDENTITY_NON_TEMPLATE_IMPL(                  \
     TEMPLATE_PARAMS_SEQ)                                                        \
                                                                                 \
-    lvalue
+    remove_const<remove_reference<T>::type>::type
 
 #define BOOST_FUSION_ADAPT_ADT_C_BASE(                                          \
     TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,ATTRIBUTE,ATTRIBUTE_TUPEL_SIZE)              \
@@ -79,12 +79,17 @@
           : obj(o)                                                              \
         {}                                                                      \
                                                                                 \
-        operator type() const                                                   \
+        type get() const                                                        \
         {                                                                       \
             return access::adt_attribute_access<                                \
                 BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                 \
               , I                                                               \
             >::boost_fusion_adapt_adt_impl_get(*obj);                           \
+        }                                                                       \
+                                                                                \
+        operator type() const                                                   \
+        {                                                                       \
+            return get();                                                       \
         }                                                                       \
                                                                                 \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const* obj;             \
@@ -118,12 +123,17 @@
             return *this;                                                       \
         }                                                                       \
                                                                                 \
-        operator type() const                                                   \
+        type get() const                                                        \
         {                                                                       \
             return access::adt_attribute_access<                                \
                 BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                 \
               , I                                                               \
             >::boost_fusion_adapt_adt_impl_get(*obj);                           \
+        }                                                                       \
+                                                                                \
+        operator type() const                                                   \
+        {                                                                       \
+            return get();                                                       \
         }                                                                       \
                                                                                 \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)* obj;                   \
