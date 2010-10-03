@@ -10,7 +10,7 @@
 #include <boost/fusion/container/list.hpp>
 #include <boost/fusion/container/vector.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
-#include <boost/fusion/adapted/class/adapt_assoc_class.hpp>
+#include <boost/fusion/adapted/adt/adapt_assoc_adt.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/front.hpp>
@@ -46,7 +46,7 @@ namespace ns
     };
 }
 
-BOOST_FUSION_ADAPT_ASSOC_TPL_CLASS(
+BOOST_FUSION_ADAPT_ASSOC_TPL_ADT(
     (X)(Y),
     (ns::point)(X)(Y),
     (X, X, obj.get_x(), obj.set_x(val), ns::x_member)

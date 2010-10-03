@@ -7,12 +7,12 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_CLASS_HPP
-#define BOOST_FUSION_ADAPTED_CLASS_HPP
+#ifndef BOOST_FUSION_ADAPTED_ADT_HPP
+#define BOOST_FUSION_ADAPTED_ADT_HPP
 
-#include <boost/fusion/adapted/class/adapt_assoc_class_named.hpp>
-#include <boost/fusion/adapted/class/adapt_assoc_class.hpp>
-#include <boost/fusion/adapted/class/adapt_class_named.hpp>
-#include <boost/fusion/adapted/class/adapt_class.hpp>
+#include <boost/fusion/adapted/adt/adapt_assoc_adt_named.hpp>
+#include <boost/fusion/adapted/adt/adapt_assoc_adt.hpp>
+#include <boost/fusion/adapted/adt/adapt_adt_named.hpp>
+#include <boost/fusion/adapted/adt/adapt_adt.hpp>
 
 #endif

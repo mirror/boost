@@ -28,6 +28,7 @@
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/static_assert.hpp>
 #include <iostream>
 #include <string>
 
@@ -38,6 +39,21 @@ namespace ns
         int x;
         int y;
     };
+
+#if !BOOST_WORKAROUND(__GNUC__,<4)
+    struct point_with_private_attributes
+    {
+        friend struct boost::fusion::extension::access;
+
+    private:
+        int x;
+        int y;
+
+    public:
+        point_with_private_attributes(int x, int y):x(x),y(y)
+        {}
+    };
+#endif
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -45,6 +61,14 @@ BOOST_FUSION_ADAPT_STRUCT(
     (int, x)
     (int, y)
 )
+
+#if !BOOST_WORKAROUND(__GNUC__,<4)
+BOOST_FUSION_ADAPT_STRUCT(
+    ns::point_with_private_attributes,
+    (int, x)
+    (int, y)
+)
+#endif
 
 struct s { int m; };
 BOOST_FUSION_ADAPT_STRUCT(s, (int, m))
@@ -118,13 +142,23 @@ main()
         BOOST_MPL_ASSERT((is_same<result_of::next<b>::type, e>));
     }
 
-
     {
         BOOST_MPL_ASSERT((mpl::is_sequence<ns::point>));
         BOOST_MPL_ASSERT((boost::is_same<
             fusion::result_of::value_at_c<ns::point,0>::type
           , mpl::front<ns::point>::type>));
     }
+
+#if !BOOST_WORKAROUND(__GNUC__,<4)
+    {
+        ns::point_with_private_attributes p(123, 456);
+
+        std::cout << at_c<0>(p) << std::endl;
+        std::cout << at_c<1>(p) << std::endl;
+        std::cout << p << std::endl;
+        BOOST_TEST(p == make_vector(123, 456));
+    }
+#endif
 
     return boost::report_errors();
 }
