@@ -27,7 +27,7 @@
 <a name="fusion.notes"></a><a class="link" href="notes.html" title="Notes">Notes</a>
 </h2></div></div></div>
 <a name="fusion.notes.recursive_inlined_functions"></a><h4>
-<a name="id1158837"></a>
+<a name="id1134807"></a>
       <a class="link" href="notes.html#fusion.notes.recursive_inlined_functions">Recursive Inlined
       Functions</a>
     </h4>
@@ -40,7 +40,7 @@
       remains linear.
     </p>
 <a name="fusion.notes.overloaded_functions"></a><h4>
-<a name="id1158878"></a>
+<a name="id1134848"></a>
       <a class="link" href="notes.html#fusion.notes.overloaded_functions">Overloaded Functions</a>
     </h4>
 <p>
@@ -50,7 +50,7 @@
       given a key, <code class="computeroutput"><span class="identifier">k</span></code>.
     </p>
 <a name="fusion.notes.tag_dispatching"></a><h4>
-<a name="id1158931"></a>
+<a name="id1134901"></a>
       <a class="link" href="notes.html#fusion.notes.tag_dispatching">Tag Dispatching</a>
     </h4>
 <p>
@@ -101,7 +101,7 @@
         </li>
 </ol></div>
 <a name="fusion.notes.extensibility"></a><h4>
-<a name="id1159219"></a>
+<a name="id1135189"></a>
       <a class="link" href="notes.html#fusion.notes.extensibility">Extensibility</a>
     </h4>
 <p>
@@ -136,7 +136,7 @@
       it very cheap to pass around.
     </p>
 <a name="fusion.notes.element_conversion"></a><h4>
-<a name="id1159401"></a>
+<a name="id1135371"></a>
       <a class="link" href="notes.html#fusion.notes.element_conversion">Element Conversion</a>
     </h4>
 <p>
@@ -157,7 +157,7 @@
       <span class="bold"><strong>Arrays:</strong></span>
     </p>
 <p>
-      Array arguments are deduced to reference to const types. For example <sup>[<a name="id1159506" href="#ftn.id1159506" class="footnote">10</a>]</sup>:
+      Array arguments are deduced to reference to const types. For example <sup>[<a name="id1135476" href="#ftn.id1135476" class="footnote">10</a>]</sup>:
     </p>
 <pre class="programlisting"><a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a><span class="special">(</span><span class="string">"Donald"</span><span class="special">,</span> <span class="string">"Daisy"</span><span class="special">)</span>
 </pre>
@@ -185,7 +185,7 @@
 <pre class="programlisting"><a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a><span class="special">&lt;</span><span class="keyword">void</span> <span class="special">(*)(</span><span class="keyword">int</span><span class="special">)&gt;</span>
 </pre>
 <a name="fusion.notes.boost__ref"></a><h4>
-<a name="id1160899"></a>
+<a name="id1136869"></a>
       <a class="link" href="notes.html#fusion.notes.boost__ref">boost::ref</a>
     </h4>
 <p>
@@ -224,7 +224,7 @@
       details.
     </p>
 <a name="fusion.notes.adt_attribute_proxy"></a><h4>
-<a name="id1161354"></a>
+<a name="id1137324"></a>
       <a class="link" href="notes.html#fusion.notes.adt_attribute_proxy">adt_attribute_proxy</a>
     </h4>
 <p>
@@ -439,10 +439,9 @@
 </tbody>
 </table></div>
 <p>
-      Additionally, <code class="computeroutput"><span class="identifier">proxy_type</span></code> and
-      <code class="computeroutput"><span class="identifier">const_proxy_type</span></code> are copy constructible,
-      copy assignable and implicitly convertible to <code class="computeroutput"><span class="identifier">proxy_type</span><span class="special">::</span><span class="identifier">type</span></code> or
-      <code class="computeroutput"><span class="identifier">const_proxy_type</span><span class="special">::</span><span class="identifier">type</span></code>.
+      Additionally, <code class="literal">proxy_type<span class="emphasis"><em>N</em></span></code> and <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span></code>
+      are copy constructible, copy assignable and implicitly convertible to <code class="literal">proxy_type<span class="emphasis"><em>N</em></span>::type</code>
+      or <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span>::type</code>.
     </p>
 <div class="tip"><table border="0" summary="Tip">
 <tr>
@@ -457,7 +456,7 @@
 </table></div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1159506" href="#id1159506" class="para">10</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1135476" href="#id1135476" class="para">10</a>] </sup>
         Note that the type of a string literal is an array of const characters, not
         <code class="computeroutput"><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span></code>. To get <a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a> to create a <a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a> with an element of a non-const
         array type one must use the <code class="computeroutput"><span class="identifier">ref</span></code>

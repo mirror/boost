@@ -216,9 +216,9 @@ for constant instances of `type_name` and `false` for non-constant ones.
     [[[^const_proxy['N].get()]]       [Invokes [^get_expr['N]] and forwards its return value. [^get_expr['N]] may access the variable named `obj` of type `type_name const&` which represents the underlying instance of `type_name`. [^attribute_const_type['N]] may specify the type that [^get_expr['N]] denotes to.]]
 ]
 
-Additionally, `proxy_type` and `const_proxy_type` are copy constructible,
-copy assignable and implicitly convertible to `proxy_type::type` or 
-`const_proxy_type::type`.
+Additionally, [^proxy_type['N]] and [^const_proxy_type['N]] are copy
+constructible, copy assignable and implicitly convertible to
+[^proxy_type['N]::type] or [^const_proxy_type['N]::type].
 
 [tip To avoid the pitfalls of the proxy type, an arbitrary class type may also
 be adapted directly using fusion's [link fusion.extension intrinsic extension
