@@ -207,10 +207,10 @@ for constant instances of `type_name` and `false` for non-constant ones.
  
 [table
     [[Expression]                     [Semantics]]
-    [[`proxy_type(inst)`]             [Creates an instance of `proxy_type` with underlying object `inst`]]
-    [[`const_proxy_type(const_inst)`] [Creates an instance of `proxy_type` with underlying object `const_inst`]]
-    [[`proxy_type::type`]             [Another name for [^attribute_type['N]]]]
-    [[`const_proxy_type::type`]       [Another name for [^const_attribute_type['N]]]]
+    [[[^proxy_type['N](inst)]]             [Creates an instance of [^proxy_type['N]] with underlying object `inst`]]
+    [[[^const_proxy_type['N](const_inst)]] [Creates an instance of [^const_proxy_type['N]] with underlying object `const_inst`]]
+    [[[^proxy_type['N]::type]]             [Another name for [^attribute_type['N]]]]
+    [[[^const_proxy_type['N]::type]]       [Another name for [^const_attribute_type['N]]]]
     [[[^proxy['N]=t]]                 [Invokes [^set_expr['N]], with `t` being an arbitrary object. [^set_expr['N]] may access the variables named `obj` of type `type_name&`, which represent the corresponding instance of `type_name`, and `val` of an arbitrary const-qualified reference template type parameter `Val`, which represents `t`.]]
     [[[^proxy['N].get()]]             [Invokes [^get_expr['N]] and forwards its return value. [^get_expr['N]] may access the variable named `obj` of type `type_name&` which represents the underlying instance of `type_name`. [^attribute_type['N]] may specify the type that [^get_expr['N]] denotes to.]]
     [[[^const_proxy['N].get()]]       [Invokes [^get_expr['N]] and forwards its return value. [^get_expr['N]] may access the variable named `obj` of type `type_name const&` which represents the underlying instance of `type_name`. [^attribute_const_type['N]] may specify the type that [^get_expr['N]] denotes to.]]

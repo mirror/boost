@@ -38,11 +38,11 @@
       , I                                                                       \
     >                                                                           \
     {                                                                           \
-        template<class Arg>                                                     \
+        template<class Val>                                                     \
         static void                                                             \
         boost_fusion_adapt_adt_impl_set(                                        \
             BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& obj,               \
-            Arg const& val)                                                     \
+            Val const& val)                                                     \
         {                                                                       \
             BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 3, ATTRIBUTE);            \
         }                                                                       \
@@ -112,9 +112,9 @@
           : obj(&o)                                                             \
         {}                                                                      \
                                                                                 \
-        template<class Arg>                                                     \
+        template<class Val>                                                     \
         adt_attribute_proxy&                                                    \
-        operator=(Arg const& val)                                               \
+        operator=(Val const& val)                                               \
         {                                                                       \
             access::adt_attribute_access<                                       \
                 BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                 \
