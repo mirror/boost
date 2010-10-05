@@ -45,5 +45,7 @@ test-suite multi_array
       [ run stl_interaction.cpp ../../test/build//boost_test_exec_monitor ]
       [ run resize.cpp ../../test/build//boost_test_exec_monitor ]
       [ run assert.cpp ../../test/build//boost_test_exec_monitor ]
+      [ run reverse_view.cpp ../../test/build//boost_test_exec_monitor ]
+
       [ compile concept_checks.cpp ]
     ;

@@ -975,7 +975,7 @@ object. This object can then be used to generate tuples of
 	      </row>
 	      <row>
 		<entry><literal>x[idx]</literal></entry>
-		<entry><literal>gen_type&lt;Dims,Ranges&gt;::type</literal>
+		<entry><literal>gen_type&lt;Dims,Ranges+1&gt;::type</literal>
 </entry>
 	<entry>Returns a new object containing all previous
 <classname>index_range</classname> objects in addition to a degenerate

@@ -45,7 +45,7 @@ void for_each (const boost::type<Element>& type_dispatch,
 template <typename Array, typename Functor>
 void for_each (Array& A, Functor xform) {
   // Dispatch to the proper function
-  for_each(boost::type<Array::element>(),A.begin(),A.end(),xform);
+  for_each(boost::type<typename Array::element>(),A.begin(),A.end(),xform);
 }
 
 
