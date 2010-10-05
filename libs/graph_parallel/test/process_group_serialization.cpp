@@ -7,6 +7,10 @@
 //  Authors: Douglas Gregor
 //           Andrew Lumsdaine
 
+// FIXME: Including because of a missing header in the serialization library.
+// Patch sent to list...
+#include <cassert>
+
 #include <boost/graph/use_mpi.hpp>
 #include <boost/config.hpp>
 #include <boost/throw_exception.hpp>
