@@ -38,28 +38,28 @@ test_main(int,char*[])
   typedef array::const_subarray<ndims>::type const_subarray;
 
 boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<array,ndims> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<array,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<array_ref,ndims> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<array_ref,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<const_array_ref,ndims> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<const_array_ref,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<array_view,ndims> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<array_view,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<const_array_view,ndims> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<const_array_view,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<subarray,ndims> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<subarray,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::ConstMultiArrayConcept<const_subarray,ndims> >();
+  boost::multi_array_concepts::ConstMultiArrayConcept<const_subarray,ndims> >();
 
 boost::function_requires<
-  boost::detail::multi_array::MutableMultiArrayConcept<array,ndims> >();
+  boost::multi_array_concepts::MutableMultiArrayConcept<array,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::MutableMultiArrayConcept<array_ref,ndims> >();
+  boost::multi_array_concepts::MutableMultiArrayConcept<array_ref,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::MutableMultiArrayConcept<array_view,ndims> >();
+  boost::multi_array_concepts::MutableMultiArrayConcept<array_view,ndims> >();
 boost::function_requires<
-  boost::detail::multi_array::MutableMultiArrayConcept<subarray,ndims> >();
+  boost::multi_array_concepts::MutableMultiArrayConcept<subarray,ndims> >();
 
   return 0;
 }
