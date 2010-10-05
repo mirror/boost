@@ -68,6 +68,7 @@ boost
             boost::exception,
             std::bad_alloc
                 {
+                ~bad_alloc_() throw() { }
                 };
 
         struct
@@ -75,6 +76,7 @@ boost
             boost::exception,
             std::bad_exception
                 {
+                ~bad_exception_() throw() { }
                 };
 
         template <class Exception>
@@ -104,6 +106,11 @@ boost
         e = get_static_exception_object<Exception>();
         }
 
+#if defined(__GNUC__)
+# if (__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)
+#  pragma GCC visibility push (default)
+# endif
+#endif
     class
     unknown_exception:
         public boost::exception,
@@ -143,6 +150,11 @@ boost
 #endif
             }
         };
+#if defined(__GNUC__)
+# if (__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)
+#  pragma GCC visibility pop
+# endif
+#endif
 
     namespace
     exception_detail

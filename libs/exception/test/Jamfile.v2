@@ -9,6 +9,7 @@ import testing ;
 
 project
   : requirements
+      <link>static
       <exception-handling>on
       <source>/boost//exception
       <define>BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR
