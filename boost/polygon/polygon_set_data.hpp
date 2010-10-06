@@ -364,7 +364,7 @@ namespace boost { namespace polygon {
         if(resizing < 0)
           return shrink(-resizing);
         if(resizing > 0)
-          return bloat(-resizing);
+          return bloat(resizing);
         return *this;
       }
       if(resizing == 0) return *this;
