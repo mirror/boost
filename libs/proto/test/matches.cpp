@@ -165,6 +165,14 @@ void test_matches()
     assert_matches< terminal<char [N]> >( as_child("hello") );
     assert_matches< terminal<char [N]> >( as_expr("hello") );
 
+    assert_matches< terminal<wchar_t const[N]> >( lit(L"hello") );
+    assert_matches< terminal<wchar_t const (&)[N]> >( as_child(L"hello") );
+    assert_matches< terminal<wchar_t const[N]> >( as_expr(L"hello") );
+
+    assert_matches< terminal<wchar_t [N]> >( lit(L"hello") );
+    assert_matches< terminal<wchar_t [N]> >( as_child(L"hello") );
+    assert_matches< terminal<wchar_t [N]> >( as_expr(L"hello") );
+
     assert_matches_not< if_<is_same<_value, int>()> >( lit("hello") );
 
     assert_matches< terminal<std::string> >( lit(std::string("hello")) );

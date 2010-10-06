@@ -337,7 +337,14 @@ namespace boost { namespace proto
     template<typename Grammar>
     struct vararg;
 
+    // Work around for MSVC-10 bug
+    // https://connect.microsoft.com/VisualStudio/feedback/details/611139/visual-c-cannot-create-a-typedef-to-an-array-of-non-char-with-more-than-0x7fffffff-elements
+    // Boost bug https://svn.boost.org/trac/boost/ticket/4602
+    #if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
+    int const N = (INT_MAX >> 10);
+    #else
     int const N = INT_MAX;
+    #endif
 
     namespace context
     {
