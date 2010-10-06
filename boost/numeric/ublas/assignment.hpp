@@ -13,13 +13,11 @@
 
 /*! \file assignment.hpp
     \brief uBlas assignment operator <<=.
-    
 */
 
 namespace boost { namespace numeric { namespace ublas {
 
-/**
- * \brief A CRTP and Barton-Nackman trick index manipulator wrapper class.
+/** \brief A CRTP and Barton-Nackman trick index manipulator wrapper class.
  *
  * This class is not meant to be used directly.
  */
@@ -37,14 +35,13 @@ public:
     }
 };
 
-/**
-* \brief A move_to vector index manipulator.
-*
-* When member function \c manip is called the referenced
-* index will be set to the manipulators' index.
-*
-* \sa move_to(T i)
-*/
+/** \brief A move_to vector index manipulator.
+ *
+ * When member function \c manip is called the referenced
+ * index will be set to the manipulators' index.
+ *
+ * \sa move_to(T i)
+ */
 template <typename T>
 class vector_move_to_manip: public index_manipulator<vector_move_to_manip<T> > {
 public:
@@ -58,38 +55,35 @@ private:
     T i;
 };
 
-/**
-* \brief An object generator that returns a move_to vector index manipulator
-*
-* \tparam T Size type
-* \param i The element number the manipulator will move to when \c manip
-* member function is called
-* \return A move_to vector manipulator
-*
-* Example usage:
-* \code
-* vector<double> a(6, 0);
-* a <<= 1, 2, move_to(5), 3;
-* \endcode
-* will result in:
-* \code
-* 1 2 0 0 0 3
-* \endcode
-*
-* \sa move_to()
-*/
+/** \brief An object generator that returns a move_to vector index manipulator
+ *
+ * \param i The element number the manipulator will move to when \c manip member function is called
+ * \return A move_to vector manipulator
+ *
+ * Example usage:
+ * \code
+ * vector<double> a(6, 0);
+ * a <<= 1, 2, move_to(5), 3;
+ * \endcode
+ * will result in:
+ * \code
+ * 1 2 0 0 0 3
+ * \endcode
+ *
+ * \tparam T Size type
+ * \sa move_to()
+ */
 template <typename T>
 BOOST_UBLAS_INLINE vector_move_to_manip<T>  move_to(T i) {
     return vector_move_to_manip<T>(i);
 }
 
-/**
-* \brief A static move to vector manipulator.
-*
-* When member function \c manip is called the referenced
-* index will be set to the manipulators' index
-*
-* \sa move_to(T i) and move_to()
+/** \brief A static move to vector manipulator.
+ *
+ * When member function \c manip is called the referenced
+ * index will be set to the manipulators' index
+ *
+ * \sa move_to(T i) and move_to()
 */
 template <std::size_t I>
 class static_vector_move_to_manip: public index_manipulator<static_vector_move_to_manip<I> > {
@@ -99,40 +93,37 @@ public:
     void manip(V &k) const { k=I; }
 };
 
-/**
-* \brief An object generator that returns a static move_to vector index  manipulator.
-*
-* Typically faster than the dynamic version, but can be used only when the
-* values are known at compile time.
-*
-* \tparam I The number of elements the manipulator will traverse the index when \c manip
-* function is called
-* \return A static move_to vector manipulator
-*
-* Example usage:
-* \code
-* vector<double> a(6, 0);
-* a <<= 1, 2, move_to<5>(), 3;
-* \endcode
-* will result in:
-* \code
-* 1 2 0 0 0 3
-* \endcode
-*
-*/
+/** \brief An object generator that returns a static move_to vector index  manipulator.
+ *
+ * Typically faster than the dynamic version, but can be used only when the
+ * values are known at compile time.
+ *
+ * \return A static move_to vector manipulator
+ *
+ * Example usage:
+ * \code
+ * vector<double> a(6, 0);
+ * a <<= 1, 2, move_to<5>(), 3;
+ * \endcode
+ * will result in:
+ * \code
+ * 1 2 0 0 0 3
+ * \endcode
+ *
+ * \tparam I The number of elements the manipulator will traverse the index when \c manip function is called
+ */
 template <std::size_t I>
 BOOST_UBLAS_INLINE static_vector_move_to_manip<I>  move_to() {
     return static_vector_move_to_manip<I>();
 }
 
-/**
-* \brief A move vector index manipulator.
-*
-* When member function traverse is called the manipulators'
-* index will be added to the referenced index.
-*
-* \sa move(T i)
-*/
+/** \brief A move vector index manipulator.
+ *
+ * When member function traverse is called the manipulators'
+ * index will be added to the referenced index.
+ *
+ * \see move(T i)
+ */
 template <typename T>
 class vector_move_manip: public index_manipulator<vector_move_manip<T> > {
 public:
