@@ -25,7 +25,7 @@
 #define BOOST_FUSION_ADAPT_ADT_GET_IDENTITY_NON_TEMPLATE_IMPL(                  \
     TEMPLATE_PARAMS_SEQ)                                                        \
                                                                                 \
-    remove_const<remove_reference<lvalue>::type>::type
+    boost::remove_const<boost::remove_reference<lvalue>::type>::type
 
 #define BOOST_FUSION_ADAPT_ADT_C_BASE(                                          \
     TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,ATTRIBUTE,ATTRIBUTE_TUPEL_SIZE)              \

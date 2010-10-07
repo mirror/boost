@@ -592,6 +592,9 @@ The value type (that is the type returned by __result_of_value_of__,
 __result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
 is [^attribute_type['N]] with const-qualifier and reference removed.
 
+The macro should be used at global scope, and `type_name` should be the fully
+namespace qualified name of the struct to be converted.
+
 [heading Header]
 
     #include <boost/fusion/adapted/adt/adapt_adt.hpp>
@@ -638,7 +641,340 @@ is [^attribute_type['N]] with const-qualifier and reference removed.
     front(e)="Edward Norton";
     back(e)=41;
     //Prints 'Edward Norton is 41 years old'
-    std::cout << e.get_name() << " is " << e.get_age() << "years old" << std::endl;
+    std::cout << e.get_name() << " is " << e.get_age() << " years old" << std::endl;
+    
+[heading See also]
+
+__adt_attribute_proxy__
+
+[endsect]
+
+[section:adapt_tpl_adt BOOST_FUSION_ADAPT_TPL_ADT]
+
+BOOST_FUSION_ADAPT_TPL_ADT is a macro than can be used to generate all the
+necessary boilerplate to adapt an arbitrary template class type as a model of
+__random_access_sequence__.
+
+[heading Synopsis]
+
+    BOOST_FUSION_ADAPT_ADT(
+        (template_param0)(template_param1)...,
+        (type_name) (specialization_param0)(specialization_param1)...,
+        (attribute_type0, attribute_const_type0, get_expr0, set_expr0)
+        (attribute_type1, attribute_const_type1, get_expr1, set_expr1)
+        ...
+        )
+
+[heading Expression Semantics]
+
+The above macro generates the necessary code to adapt `type_name`
+or an arbitrary specialization of `type_name`
+as a model of __random_access_sequence__. 
+The sequence `(template_param0)(template_param1)...` declares the names of
+the template type parameters used.
+The sequence `(specialization_param0)(specialization_param1)...`
+declares the template parameters of the actual specialization of `type_name`
+that is adapted as a fusion sequence.
+The sequence of
+[^(attribute_type['N], attribute_const_type['N], get_expr['N], set_expr['N])]
+quadruples declares the types, const types, get-expressions and set-expressions
+of the elements that are part of the adapted fusion sequence.
+[^get_expr['N]] is the expression that is invoked to get the ['N]th element
+of an instance of `type_name`. This expression may access a variable named
+`obj` of type `type_name&` or `type_name const&` which represents the underlying
+instance of `type_name`.
+[^attribute_type['N]] and [^attribute_const_type['N]] may specify the types
+that [^get_expr['N]] denotes to.
+[^set_expr['N]] is the expression that is invoked to set the ['N]th element
+of an instance of `type_name`. This expression may access variables named
+`obj` of type `type_name&`, which represent the corresponding instance of
+`type_name`, and `val` of an arbitrary const-qualified reference template type
+parameter `Val`, which represents the right operand of the assignment
+expression.
+
+The actual return type of fusion's intrinsic sequence access (meta-)functions
+when in invoked with (an instance of) `type_name` is a proxy type.
+This type is implicitly convertible to the attribute type via [^get_expr['N]] and
+forwards assignment to the underlying element via [^set_expr['N]].
+The value type (that is the type returned by __result_of_value_of__,
+__result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
+is [^attribute_type['N]] with const-qualifier and reference removed.
+
+The macro should be used at global scope, and `type_name` should be the fully
+namespace qualified name of the struct to be converted.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/adt/adapt_adt.hpp>
+    #include <boost/fusion/include/adapt_adt.hpp>
+    
+[heading Example]
+    namespace demo
+    { 
+		template<typename Name, typename Age>
+        struct employee
+        {
+        private:
+            Name name;
+            Age age;
+                
+        public:
+            void set_name(Name const& n)
+            {
+                name=n;
+            }
+                
+            void set_age(Age const& a)
+            {
+                age=a;
+            }
+                
+            Name const& get_name()const
+            {
+                return name;
+            }
+                
+            Age const& get_age()const
+            {
+                return age;
+            }
+        };
+    }
+    
+    BOOST_FUSION_ADAPT_TPL_ADT(
+        (Name)(Age),
+        (demo::employee) (Name)(Age),
+        (Name const&, Name const&, obj.get_name(), obj.set_name(val))
+        (Age const&, Age const&, obj.get_age(), obj.set_age(val)))
+
+    demo::employee<std::string, int> e;
+    boost::fusion::front(e)="Edward Norton";
+    boost::fusion::back(e)=41;
+    //Prints 'Edward Norton is 41 years old'
+    std::cout << e.get_name() << " is " << e.get_age() << " years old" << std::endl;
+    
+[heading See also]
+
+__adt_attribute_proxy__
+
+[endsect]
+
+[section:adapt_assoc_adt BOOST_FUSION_ADAPT_ASSOC_ADT]
+
+BOOST_FUSION_ADAPT_ASSOC_ADT is a macro than can be used to generate all the
+necessary boilerplate to adapt an arbitrary class type as a model of
+__random_access_sequence__  and __associative_sequence__.
+
+[heading Synopsis]
+
+    BOOST_FUSION_ADAPT_ASSOC_ADT(
+        type_name,
+        (attribute_type0, attribute_const_type0, get_expr0, set_expr0, key_type0)
+        (attribute_type1, attribute_const_type1, get_expr1, set_expr1, key_type1)
+        ...
+        )
+
+[heading Expression Semantics]
+
+The above macro generates the necessary code to adapt `type_name`
+as a model of __random_access_sequence__ and __associative_sequence__. 
+The sequence of
+[^(attribute_type['N], attribute_const_type['N], get_expr['N], set_expr['N], key_type['N])]
+5-tuples declares the types, const types, get-expressions, set-expressions and key types
+of the elements that are part of the adapted fusion sequence.
+[^get_expr['N]] is the expression that is invoked to get the ['N]th element
+of an instance of `type_name`. This expression may access a variable named
+`obj` of type `type_name&` or `type_name const&` which represents the underlying
+instance of `type_name`.
+[^attribute_type['N]] and [^attribute_const_type['N]] may specify the types
+that [^get_expr['N]] denotes to.
+[^set_expr['N]] is the expression that is invoked to set the ['N]th element
+of an instance of `type_name`. This expression may access variables named
+`obj` of type `type_name&`, which represent the corresponding instance of
+`type_name`, and `val` of an arbitrary const-qualified reference template type
+parameter `Val`, which represents the right operand of the assignment
+expression.
+
+The actual return type of fusion's intrinsic sequence access (meta-)functions
+when in invoked with (an instance of) `type_name` is a proxy type.
+This type is implicitly convertible to the attribute type via [^get_expr['N]] and
+forwards assignment to the underlying element via [^set_expr['N]].
+The value type (that is the type returned by __result_of_value_of__,
+__result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
+is [^attribute_type['N]] with const-qualifier and reference removed.
+
+The macro should be used at global scope, and `type_name` should be the fully
+namespace qualified name of the struct to be converted.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/adt/adapt_assoc_adt.hpp>
+    #include <boost/fusion/include/adapt_assoc_adt.hpp>
+    
+[heading Example]
+    namespace demo
+    {
+        struct employee
+        {
+        private:
+            std::string name;
+            int age;
+                
+        public:
+            void set_name(std::string const& n)
+            {
+                name=n;
+            }
+                
+            void set_age(int a)
+            {
+                age=a;
+            }
+                
+            std::string const& get_name()const
+            {
+                return name;
+            }
+                
+            int get_age()const
+            {
+                return age;
+            }
+        };
+    }
+    
+    namespace keys
+    {
+        struct name;
+        struct age;
+    }
+    
+    BOOST_FUSION_ADAPT_ASSOC_ADT(
+        demo::employee,
+        (std::string const&, std::string const&, obj.get_name(), obj.set_name(val), keys::name)
+        (int, int, obj.get_age(), obj.set_age(val), keys::age))
+    
+    demo::employee e;
+    at_key<keys::name>(e)="Edward Norton";
+    at_key<keys::age>(e)=41;
+    //Prints 'Edward Norton is 41 years old'
+    std::cout << e.get_name() << " is " << e.get_age() << " years old" << std::endl;
+    
+[heading See also]
+
+__adt_attribute_proxy__
+
+[endsect]
+
+[section:adapt_assoc_tpl_adt BOOST_FUSION_ADAPT_ASSOC_TPL_ADT]
+
+BOOST_FUSION_ADAPT_ASSOC_TPL_ADT is a macro than can be used to generate all the
+necessary boilerplate to adapt an arbitrary template class type as a model of
+__random_access_sequence__  and __associative_sequence__.
+
+[heading Synopsis]
+
+    BOOST_FUSION_ADAPT_ASSOC_TPL_ADT(
+        (template_param0)(template_param1)...,
+        (type_name) (specialization_param0)(specialization_param1)...,
+        (attribute_type0, attribute_const_type0, get_expr0, set_expr0, key_type0)
+        (attribute_type1, attribute_const_type1, get_expr1, set_expr1, key_type1)
+        ...
+        )
+
+[heading Expression Semantics]
+
+The above macro generates the necessary code to adapt `type_name`
+or an arbitrary specialization of `type_name`
+as a model of __random_access_sequence__ and __associative_sequence__. 
+The sequence `(template_param0)(template_param1)...` declares the names of
+the template type parameters used.
+The sequence `(specialization_param0)(specialization_param1)...`
+declares the template parameters of the actual specialization of `type_name`
+that is adapted as a fusion sequence.
+The sequence of
+[^(attribute_type['N], attribute_const_type['N], get_expr['N], set_expr['N], key_type['N])]
+5-tuples declares the types, const types, get-expressions, set-expressions and key types
+of the elements that are part of the adapted fusion sequence.
+[^get_expr['N]] is the expression that is invoked to get the ['N]th element
+of an instance of `type_name`. This expression may access a variable named
+`obj` of type `type_name&` or `type_name const&` which represents the underlying
+instance of `type_name`.
+[^attribute_type['N]] and [^attribute_const_type['N]] may specify the types
+that [^get_expr['N]] denotes to.
+[^set_expr['N]] is the expression that is invoked to set the ['N]th element
+of an instance of `type_name`. This expression may access variables named
+`obj` of type `type_name&`, which represent the corresponding instance of
+`type_name`, and `val` of an arbitrary const-qualified reference template type
+parameter `Val`, which represents the right operand of the assignment
+expression.
+
+The actual return type of fusion's intrinsic sequence access (meta-)functions
+when in invoked with (an instance of) `type_name` is a proxy type.
+This type is implicitly convertible to the attribute type via [^get_expr['N]] and
+forwards assignment to the underlying element via [^set_expr['N]].
+The value type (that is the type returned by __result_of_value_of__,
+__result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
+is [^attribute_type['N]] with const-qualifier and reference removed.
+
+The macro should be used at global scope, and `type_name` should be the fully
+namespace qualified name of the struct to be converted.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/adt/adapt_assoc_adt.hpp>
+    #include <boost/fusion/include/adapt_assoc_adt.hpp>
+    
+[heading Example]
+    namespace demo
+    {
+        template<typename Name, typename Age>
+        struct employee
+        {
+        private:
+            Name name;
+            Age age;
+                
+        public:
+            void set_name(Name const& n)
+            {
+                name=n;
+            }
+                
+            void set_age(Age const& a)
+            {
+                age=a;
+            }
+                
+            Name const& get_name()const
+            {
+                return name;
+            }
+                
+            Age const& get_age()const
+            {
+                return age;
+            }
+        };
+    }
+    
+    namespace keys
+    {
+        struct name;
+        struct age;
+    }
+    
+    BOOST_FUSION_ADAPT_ASSOC_TPL_ADT(
+        (Name)(Age),
+        (demo::employee) (Name)(Age),
+        (Name const&, Name const&, obj.get_name(), obj.set_name(val), keys::name)
+        (Age const&, Age const&, obj.get_age(), obj.set_age(val), keys::age))
+    
+    demo::employee<std::string, int> e;
+    at_key<keys::name>(e)="Edward Norton";
+    at_key<keys::age>(e)=41;
+    //Prints 'Edward Norton is 41 years old'
+    std::cout << e.get_name() << " is " << e.get_age() << " years old" << std::endl;
     
 [heading See also]
 

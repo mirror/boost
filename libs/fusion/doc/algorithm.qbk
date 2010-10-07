@@ -1,5 +1,6 @@
 [/==============================================================================
     Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+    Copyright (C) 2010 Christopher Schmidt
 
     Use, modification and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -91,7 +92,7 @@ the first call) and [arg_desc] of `seq`.
     [[Parameter][Requirement][Description]]
     [[`seq`][A model of seq_concept_macro][Operation's argument]]
     [[`initial_state`][Any type][Initial state]]
-    [[`f`][`f(s,arg_id_macro)` with return type `__boost_result_of_call__<F(S,arg_type_id_macro)>::type` must be a valid expression for current state `s` of type `S`, and for each invoke_desc_macro][Operation's argument]]
+    [[`f`][`f(s,arg_id_macro)` with return type `__boost_result_of_call__<F(S,arg_type_id_macro)>::type` for current state `s` of type `S`, and for each invoke_desc_macro][Operation's argument]]
 ]
 
 [heading Expression Semantics]

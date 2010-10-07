@@ -1,5 +1,6 @@
 [/==============================================================================
     Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+    Copyright (C) 2010 Christopher Schmidt
 
     Use, modification and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -138,6 +139,9 @@
 [def __adapt_assoc_struct_named__ [link fusion.adapted.adapt_assoc_struct_named `BOOST_FUSION_ADAPT_ASSOC_STRUCT_NAMED`]]
 [def __adapt_assoc_struct_named_ns__ [link fusion.adapted.adapt_assoc_struct_named `BOOST_FUSION_ADAPT_ASSOC_STRUCT_NAMED_NS`]]
 [def __adapt_adt__              [link fusion.adapted.adapt_adt `BOOST_FUSION_ADAPT_ADT`]]
+[def __adapt_tpl_adt__          [link fusion.adapted.adapt_tpl_adt `BOOST_FUSION_ADAPT_TPL_ADT`]]
+[def __adapt_assoc_adt__        [link fusion.adapted.adapt_assoc_adt `BOOST_FUSION_ADAPT_ASSOC_ADT`]]
+[def __adapt_assoc_tpl_adt__    [link fusion.adapted.adapt_assoc_tpl_adt `BOOST_FUSION_ADAPT_ASSOC_TPL_ADT`]]
 [def __define_struct__          [link fusion.adapted.define_struct `BOOST_FUSION_DEFINE_STRUCT`]]
 [def __define_tpl_struct__      [link fusion.adapted.define_tpl_struct `BOOST_FUSION_DEFINE_TPL_STRUCT`]]
 [def __define_assoc_struct__    [link fusion.adapted.define_assoc_struct `BOOST_FUSION_DEFINE_ASSOC_STRUCT`]]
