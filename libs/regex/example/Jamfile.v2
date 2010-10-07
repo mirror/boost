@@ -14,8 +14,8 @@ project
       <toolset>gcc:<warnings>all
       <toolset>gcc:<cxxflags>-Wextra
       <define>U_USING_ICU_NAMESPACE=0
-      <toolset>gcc-mw:<link>static
-	  <toolset>gcc-mingw:<link>static
+      #<toolset>gcc-mw:<link>static
+	  #<toolset>gcc-mingw:<link>static
 	  <toolset>gcc-cygwin:<link>static
     ;
 
@@ -65,6 +65,7 @@ test-suite regex-examples :
   : : :  <threading>multi <define>BOOST_REGEX_MATCH_EXTRA=1 ]
 
 ;
+
 
 
 
