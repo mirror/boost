@@ -1,5 +1,6 @@
 [/==============================================================================
     Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+    Copyright (C) 2010 Christopher Schmidt
 
     Use, modification and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -148,6 +149,80 @@ For example:
     __make_list__(ref(ca));             // creates list<const A&>
 
 See __boost_ref__ for details.
+
+[heading adt_attribute_proxy]
+
+To adapt arbitrary data types that do not allow direct access to their members,
+but allow indirect access via expressions (such as invocations of get- and
+set-methods), fusion's [^BOOST\_FUSION\_ADAPT\_['xxx]ADT['xxx]]-family (e.g.
+__adapt_adt__) may be used.
+To bypass the restriction of not having actual lvalues that
+represent the elements of the fusion sequence, but rather a sequence of paired
+expressions that access the elements, the actual return type of fusion's
+intrinsic sequence access functions (__at__, __at_c__, __at_key__, __deref__,
+and __deref_data__) is a proxy type, an instance of
+`adt_attribute_proxy`, that encapsulates these expressions.
+
+`adt_attribute_proxy` is defined in the namespace `boost::fusion::extension` and
+has three template arguments:
+
+    namespace boost { namespace fusion { namespace extension
+    {    
+        template<
+            typename Type
+          , int Index
+          , bool Const
+        >
+        struct adt_attribute_proxy;
+    }}}
+    
+When adapting a class type, `adt_attribute_proxy` is specialized for every
+element of the adapted sequence, with `Type` being the class type that is
+adapted, `Index` the 0-based indices of the elements, and `Const` both `true`
+and `false`. The return type of fusion's intrinsic sequence access functions
+for the ['N]th element of an adapted class type `type_name` is
+[^adt_attribute_proxy<type_name, ['N], ['Const]>], with [^['Const]] being `true`
+for constant instances of `type_name` and `false` for non-constant ones. 
+
+[variablelist Notation
+    [[`type_name`]
+        [The type to be adapted, with M attributes]]
+    [[`inst`]
+        [Object of type `type_name`]]
+    [[`const_inst`]
+        [Object of type `type_name const`]]
+    [[[^(attribute_type['N], attribute_const_type['N], get_expr['N], set_expr['N])]]
+        [Attribute descriptor of the ['N]th attribute of `type_name` as passed to the adaption macro, 0\u2264['N]<M]]
+    [[[^proxy_type['N]]]
+        [[^adt_attribute_proxy<type_name, ['N], `false`>] with ['N] being an integral constant, 0\u2264['N]<M]]
+    [[[^const_proxy_type['N]]]
+        [[^adt_attribute_proxy<type_name, ['N], `true`>] with ['N] being an integral constant, 0\u2264['N]<M]]
+    [[[^proxy['N]]]
+        [Object of type [^proxy_type['N]]]]
+    [[[^const_proxy['N]]]
+        [Object of type [^const_proxy_type['N]]]]
+]
+
+[*Expression Semantics]
+ 
+[table
+    [[Expression]                     [Semantics]]
+    [[[^proxy_type['N](inst)]]             [Creates an instance of [^proxy_type['N]] with underlying object `inst`]]
+    [[[^const_proxy_type['N](const_inst)]] [Creates an instance of [^const_proxy_type['N]] with underlying object `const_inst`]]
+    [[[^proxy_type['N]::type]]             [Another name for [^attribute_type['N]]]]
+    [[[^const_proxy_type['N]::type]]       [Another name for [^const_attribute_type['N]]]]
+    [[[^proxy['N]=t]]                 [Invokes [^set_expr['N]], with `t` being an arbitrary object. [^set_expr['N]] may access the variables named `obj` of type `type_name&`, which represent the corresponding instance of `type_name`, and `val` of an arbitrary const-qualified reference template type parameter `Val`, which represents `t`.]]
+    [[[^proxy['N].get()]]             [Invokes [^get_expr['N]] and forwards its return value. [^get_expr['N]] may access the variable named `obj` of type `type_name&` which represents the underlying instance of `type_name`. [^attribute_type['N]] may specify the type that [^get_expr['N]] denotes to.]]
+    [[[^const_proxy['N].get()]]       [Invokes [^get_expr['N]] and forwards its return value. [^get_expr['N]] may access the variable named `obj` of type `type_name const&` which represents the underlying instance of `type_name`. [^attribute_const_type['N]] may specify the type that [^get_expr['N]] denotes to.]]
+]
+
+Additionally, [^proxy_type['N]] and [^const_proxy_type['N]] are copy
+constructible, copy assignable and implicitly convertible to
+[^proxy_type['N]::type] or [^const_proxy_type['N]::type].
+
+[tip To avoid the pitfalls of the proxy type, an arbitrary class type may also
+be adapted directly using fusion's [link fusion.extension intrinsic extension
+mechanism].]
 
 [endsect]
 

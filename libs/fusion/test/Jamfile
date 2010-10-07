@@ -124,6 +124,7 @@ import testing ;
     [ run sequence/adapt_struct.cpp : : : : ]
     [ run sequence/adapt_tpl_adt.cpp : : : : ]
     [ run sequence/adapt_tpl_struct.cpp : : : : ]
+    [ run sequence/adt_attribute_proxy.cpp : : : : ]
     [ run sequence/define_struct.cpp : : : : ]
     [ run sequence/define_assoc_struct.cpp : : : : ]
     [ run sequence/define_tpl_struct.cpp : : : : ]

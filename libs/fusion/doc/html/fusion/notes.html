@@ -27,7 +27,7 @@
 <a name="fusion.notes"></a><a class="link" href="notes.html" title="Notes">Notes</a>
 </h2></div></div></div>
 <a name="fusion.notes.recursive_inlined_functions"></a><h4>
-<a name="id1106468"></a>
+<a name="id1069963"></a>
       <a class="link" href="notes.html#fusion.notes.recursive_inlined_functions">Recursive Inlined
       Functions</a>
     </h4>
@@ -40,7 +40,7 @@
       remains linear.
     </p>
 <a name="fusion.notes.overloaded_functions"></a><h4>
-<a name="id1106508"></a>
+<a name="id1070004"></a>
       <a class="link" href="notes.html#fusion.notes.overloaded_functions">Overloaded Functions</a>
     </h4>
 <p>
@@ -50,7 +50,7 @@
       given a key, <code class="computeroutput"><span class="identifier">k</span></code>.
     </p>
 <a name="fusion.notes.tag_dispatching"></a><h4>
-<a name="id1106561"></a>
+<a name="id1070056"></a>
       <a class="link" href="notes.html#fusion.notes.tag_dispatching">Tag Dispatching</a>
     </h4>
 <p>
@@ -101,7 +101,7 @@
         </li>
 </ol></div>
 <a name="fusion.notes.extensibility"></a><h4>
-<a name="id1106849"></a>
+<a name="id1070344"></a>
       <a class="link" href="notes.html#fusion.notes.extensibility">Extensibility</a>
     </h4>
 <p>
@@ -136,7 +136,7 @@
       it very cheap to pass around.
     </p>
 <a name="fusion.notes.element_conversion"></a><h4>
-<a name="id1107032"></a>
+<a name="id1070527"></a>
       <a class="link" href="notes.html#fusion.notes.element_conversion">Element Conversion</a>
     </h4>
 <p>
@@ -157,7 +157,7 @@
       <span class="bold"><strong>Arrays:</strong></span>
     </p>
 <p>
-      Array arguments are deduced to reference to const types. For example <sup>[<a name="id1107136" href="#ftn.id1107136" class="footnote">10</a>]</sup>:
+      Array arguments are deduced to reference to const types. For example <sup>[<a name="id1070631" href="#ftn.id1070631" class="footnote">10</a>]</sup>:
     </p>
 <pre class="programlisting"><a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a><span class="special">(</span><span class="string">"Donald"</span><span class="special">,</span> <span class="string">"Daisy"</span><span class="special">)</span>
 </pre>
@@ -185,7 +185,7 @@
 <pre class="programlisting"><a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a><span class="special">&lt;</span><span class="keyword">void</span> <span class="special">(*)(</span><span class="keyword">int</span><span class="special">)&gt;</span>
 </pre>
 <a name="fusion.notes.boost__ref"></a><h4>
-<a name="id1107423"></a>
+<a name="id1072147"></a>
       <a class="link" href="notes.html#fusion.notes.boost__ref">boost::ref</a>
     </h4>
 <p>
@@ -223,9 +223,240 @@
       See <a href="http://www.boost.org/doc/html/ref.html" target="_top">Boost.Ref</a> for
       details.
     </p>
+<a name="fusion.notes.adt_attribute_proxy"></a><h4>
+<a name="id1072602"></a>
+      <a class="link" href="notes.html#fusion.notes.adt_attribute_proxy">adt_attribute_proxy</a>
+    </h4>
+<p>
+      To adapt arbitrary data types that do not allow direct access to their members,
+      but allow indirect access via expressions (such as invocations of get- and
+      set-methods), fusion's <code class="literal">BOOST_FUSION_ADAPT_<span class="emphasis"><em>xxx</em></span>ADT<span class="emphasis"><em>xxx</em></span></code>-family
+      (e.g. <a class="link" href="adapted/adapt_adt.html" title="BOOST_FUSION_ADAPT_ADT"><code class="computeroutput"><span class="identifier">BOOST_FUSION_ADAPT_ADT</span></code></a>)
+      may be used. To bypass the restriction of not having actual lvalues that represent
+      the elements of the fusion sequence, but rather a sequence of paired expressions
+      that access the elements, the actual return type of fusion's intrinsic sequence
+      access functions (<a class="link" href="sequence/intrinsic/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>, <a class="link" href="sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a>, <a class="link" href="sequence/intrinsic/functions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">at_key</span></code></a>, <a class="link" href="iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a>, and <a class="link" href="iterator/functions/deref_data.html" title="deref_data"><code class="computeroutput"><span class="identifier">deref_data</span></code></a>) is a proxy type, an instance
+      of <code class="computeroutput"><span class="identifier">adt_attribute_proxy</span></code>, that
+      encapsulates these expressions.
+    </p>
+<p>
+      <code class="computeroutput"><span class="identifier">adt_attribute_proxy</span></code> is defined
+      in the namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">extension</span></code> and has three template arguments:
+    </p>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">extension</span>
+<span class="special">{</span>    
+    <span class="keyword">template</span><span class="special">&lt;</span>
+        <span class="keyword">typename</span> <span class="identifier">Type</span>
+      <span class="special">,</span> <span class="keyword">int</span> <span class="identifier">Index</span>
+      <span class="special">,</span> <span class="keyword">bool</span> <span class="identifier">Const</span>
+    <span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">adt_attribute_proxy</span><span class="special">;</span>
+<span class="special">}}}</span>
+</pre>
+<p>
+      When adapting a class type, <code class="computeroutput"><span class="identifier">adt_attribute_proxy</span></code>
+      is specialized for every element of the adapted sequence, with <code class="computeroutput"><span class="identifier">Type</span></code> being the class type that is adapted,
+      <code class="computeroutput"><span class="identifier">Index</span></code> the 0-based indices of
+      the elements, and <code class="computeroutput"><span class="identifier">Const</span></code> both
+      <code class="computeroutput"><span class="keyword">true</span></code> and <code class="computeroutput"><span class="keyword">false</span></code>.
+      The return type of fusion's intrinsic sequence access functions for the <span class="emphasis"><em>N</em></span>th
+      element of an adapted class type <code class="computeroutput"><span class="identifier">type_name</span></code>
+      is <code class="literal">adt_attribute_proxy&lt;type_name, <span class="emphasis"><em>N</em></span>, <span class="emphasis"><em>Const</em></span>&gt;</code>,
+      with <code class="literal"><span class="emphasis"><em>Const</em></span></code> being <code class="computeroutput"><span class="keyword">true</span></code>
+      for constant instances of <code class="computeroutput"><span class="identifier">type_name</span></code>
+      and <code class="computeroutput"><span class="keyword">false</span></code> for non-constant ones.
+    </p>
+<div class="variablelist">
+<p class="title"><b>Notation</b></p>
+<dl>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">type_name</span></code></span></dt>
+<dd><p>
+            The type to be adapted, with M attributes
+          </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">inst</span></code></span></dt>
+<dd><p>
+            Object of type <code class="computeroutput"><span class="identifier">type_name</span></code>
+          </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">const_inst</span></code></span></dt>
+<dd><p>
+            Object of type <code class="computeroutput"><span class="identifier">type_name</span> <span class="keyword">const</span></code>
+          </p></dd>
+<dt><span class="term"><code class="literal">(attribute_type<span class="emphasis"><em>N</em></span>, attribute_const_type<span class="emphasis"><em>N</em></span>,
+        get_expr<span class="emphasis"><em>N</em></span>, set_expr<span class="emphasis"><em>N</em></span>)</code></span></dt>
+<dd><p>
+            Attribute descriptor of the <span class="emphasis"><em>N</em></span>th attribute of <code class="computeroutput"><span class="identifier">type_name</span></code> as passed to the adaption
+            macro, 0&#8804;<span class="emphasis"><em>N</em></span>&lt;M
+          </p></dd>
+<dt><span class="term"><code class="literal">proxy_type<span class="emphasis"><em>N</em></span></code></span></dt>
+<dd><p>
+            <code class="literal">adt_attribute_proxy&lt;type_name, <span class="emphasis"><em>N</em></span>, <code class="computeroutput"><span class="keyword">false</span></code>&gt;</code> with <span class="emphasis"><em>N</em></span>
+            being an integral constant, 0&#8804;<span class="emphasis"><em>N</em></span>&lt;M
+          </p></dd>
+<dt><span class="term"><code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span></code></span></dt>
+<dd><p>
+            <code class="literal">adt_attribute_proxy&lt;type_name, <span class="emphasis"><em>N</em></span>, <code class="computeroutput"><span class="keyword">true</span></code>&gt;</code> with <span class="emphasis"><em>N</em></span>
+            being an integral constant, 0&#8804;<span class="emphasis"><em>N</em></span>&lt;M
+          </p></dd>
+<dt><span class="term"><code class="literal">proxy<span class="emphasis"><em>N</em></span></code></span></dt>
+<dd><p>
+            Object of type <code class="literal">proxy_type<span class="emphasis"><em>N</em></span></code>
+          </p></dd>
+<dt><span class="term"><code class="literal">const_proxy<span class="emphasis"><em>N</em></span></code></span></dt>
+<dd><p>
+            Object of type <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span></code>
+          </p></dd>
+</dl>
+</div>
+<p>
+      <span class="bold"><strong>Expression Semantics</strong></span>
+    </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Expression
+              </p>
+            </th>
+<th>
+              <p>
+                Semantics
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                <code class="literal">proxy_type<span class="emphasis"><em>N</em></span>(inst)</code>
+              </p>
+            </td>
+<td>
+              <p>
+                Creates an instance of <code class="literal">proxy_type<span class="emphasis"><em>N</em></span></code>
+                with underlying object <code class="computeroutput"><span class="identifier">inst</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span>(const_inst)</code>
+              </p>
+            </td>
+<td>
+              <p>
+                Creates an instance of <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span></code>
+                with underlying object <code class="computeroutput"><span class="identifier">const_inst</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">proxy_type<span class="emphasis"><em>N</em></span>::type</code>
+              </p>
+            </td>
+<td>
+              <p>
+                Another name for <code class="literal">attribute_type<span class="emphasis"><em>N</em></span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span>::type</code>
+              </p>
+            </td>
+<td>
+              <p>
+                Another name for <code class="literal">const_attribute_type<span class="emphasis"><em>N</em></span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">proxy<span class="emphasis"><em>N</em></span>=t</code>
+              </p>
+            </td>
+<td>
+              <p>
+                Invokes <code class="literal">set_expr<span class="emphasis"><em>N</em></span></code>, with
+                <code class="computeroutput"><span class="identifier">t</span></code> being an arbitrary
+                object. <code class="literal">set_expr<span class="emphasis"><em>N</em></span></code> may access
+                the variables named <code class="computeroutput"><span class="identifier">obj</span></code>
+                of type <code class="computeroutput"><span class="identifier">type_name</span><span class="special">&amp;</span></code>, which represent the corresponding
+                instance of <code class="computeroutput"><span class="identifier">type_name</span></code>,
+                and <code class="computeroutput"><span class="identifier">val</span></code> of an arbitrary
+                const-qualified reference template type parameter <code class="computeroutput"><span class="identifier">Val</span></code>,
+                which represents <code class="computeroutput"><span class="identifier">t</span></code>.
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">proxy<span class="emphasis"><em>N</em></span>.get()</code>
+              </p>
+            </td>
+<td>
+              <p>
+                Invokes <code class="literal">get_expr<span class="emphasis"><em>N</em></span></code> and forwards
+                its return value. <code class="literal">get_expr<span class="emphasis"><em>N</em></span></code>
+                may access the variable named <code class="computeroutput"><span class="identifier">obj</span></code>
+                of type <code class="computeroutput"><span class="identifier">type_name</span><span class="special">&amp;</span></code> which represents the underlying
+                instance of <code class="computeroutput"><span class="identifier">type_name</span></code>.
+                <code class="literal">attribute_type<span class="emphasis"><em>N</em></span></code> may specify
+                the type that <code class="literal">get_expr<span class="emphasis"><em>N</em></span></code> denotes
+                to.
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">const_proxy<span class="emphasis"><em>N</em></span>.get()</code>
+              </p>
+            </td>
+<td>
+              <p>
+                Invokes <code class="literal">get_expr<span class="emphasis"><em>N</em></span></code> and forwards
+                its return value. <code class="literal">get_expr<span class="emphasis"><em>N</em></span></code>
+                may access the variable named <code class="computeroutput"><span class="identifier">obj</span></code>
+                of type <code class="computeroutput"><span class="identifier">type_name</span> <span class="keyword">const</span><span class="special">&amp;</span></code>
+                which represents the underlying instance of <code class="computeroutput"><span class="identifier">type_name</span></code>.
+                <code class="literal">attribute_const_type<span class="emphasis"><em>N</em></span></code> may
+                specify the type that <code class="literal">get_expr<span class="emphasis"><em>N</em></span></code>
+                denotes to.
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+<p>
+      Additionally, <code class="literal">proxy_type<span class="emphasis"><em>N</em></span></code> and <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span></code>
+      are copy constructible, copy assignable and implicitly convertible to <code class="literal">proxy_type<span class="emphasis"><em>N</em></span>::type</code>
+      or <code class="literal">const_proxy_type<span class="emphasis"><em>N</em></span>::type</code>.
+    </p>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        To avoid the pitfalls of the proxy type, an arbitrary class type may also
+        be adapted directly using fusion's <a class="link" href="extension.html" title="Extension">intrinsic
+        extension mechanism</a>.
+      </p></td></tr>
+</table></div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1107136" href="#id1107136" class="para">10</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1070631" href="#id1070631" class="para">10</a>] </sup>
         Note that the type of a string literal is an array of const characters, not
         <code class="computeroutput"><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span></code>. To get <a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a> to create a <a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a> with an element of a non-const
         array type one must use the <code class="computeroutput"><span class="identifier">ref</span></code>

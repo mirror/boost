@@ -25,7 +25,7 @@
 #define BOOST_FUSION_ADAPT_ADT_GET_IDENTITY_NON_TEMPLATE_IMPL(                  \
     TEMPLATE_PARAMS_SEQ)                                                        \
                                                                                 \
-    remove_const<remove_reference<T>::type>::type
+    boost::remove_const<boost::remove_reference<lvalue>::type>::type
 
 #define BOOST_FUSION_ADAPT_ADT_C_BASE(                                          \
     TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,ATTRIBUTE,ATTRIBUTE_TUPEL_SIZE)              \
@@ -38,11 +38,11 @@
       , I                                                                       \
     >                                                                           \
     {                                                                           \
-        template<class Arg>                                                     \
+        template<class Val>                                                     \
         static void                                                             \
         boost_fusion_adapt_adt_impl_set(                                        \
             BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& obj,               \
-            Arg const& val)                                                     \
+            Val const& val)                                                     \
         {                                                                       \
             BOOST_PP_TUPLE_ELEM(ATTRIBUTE_TUPEL_SIZE, 3, ATTRIBUTE);            \
         }                                                                       \
@@ -75,8 +75,8 @@
                                                                                 \
         explicit                                                                \
         adt_attribute_proxy(                                                    \
-            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const*const o)      \
-          : obj(o)                                                              \
+            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ) const& o)           \
+          : obj(&o)                                                             \
         {}                                                                      \
                                                                                 \
         type get() const                                                        \
@@ -108,13 +108,13 @@
                                                                                 \
         explicit                                                                \
         adt_attribute_proxy(                                                    \
-            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)*const o)            \
-          : obj(o)                                                              \
+            BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)& o)                 \
+          : obj(&o)                                                             \
         {}                                                                      \
                                                                                 \
-        template<class Arg>                                                     \
+        template<class Val>                                                     \
         adt_attribute_proxy&                                                    \
-        operator=(Arg const& val)                                               \
+        operator=(Val const& val)                                               \
         {                                                                       \
             access::adt_attribute_access<                                       \
                 BOOST_FUSION_ADAPT_STRUCT_UNPACK_NAME(NAME_SEQ)                 \
@@ -173,7 +173,7 @@
             static type                                                         \
             call(Seq& obj)                                                      \
             {                                                                   \
-                return type(&obj);                                              \
+                return type(obj);                                               \
             }                                                                   \
         };                                                                      \
     };
