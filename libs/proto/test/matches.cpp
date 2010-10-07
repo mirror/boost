@@ -98,6 +98,10 @@ struct NumberGrammar
 struct my_terminal
 {};
 
+template<typename T>
+struct a_template
+{};
+
 void test_matches()
 {
     assert_matches< _ >( lit(1) );
@@ -160,6 +164,14 @@ void test_matches()
     assert_matches< terminal<char [N]> >( lit("hello") );
     assert_matches< terminal<char [N]> >( as_child("hello") );
     assert_matches< terminal<char [N]> >( as_expr("hello") );
+
+    assert_matches< terminal<wchar_t const[N]> >( lit(L"hello") );
+    assert_matches< terminal<wchar_t const (&)[N]> >( as_child(L"hello") );
+    assert_matches< terminal<wchar_t const[N]> >( as_expr(L"hello") );
+
+    assert_matches< terminal<wchar_t [N]> >( lit(L"hello") );
+    assert_matches< terminal<wchar_t [N]> >( as_child(L"hello") );
+    assert_matches< terminal<wchar_t [N]> >( as_expr(L"hello") );
 
     assert_matches_not< if_<is_same<_value, int>()> >( lit("hello") );
 
@@ -262,6 +274,13 @@ void test_matches()
 
         assert_matches< proto::and_<proto::terminal<int> > >( lit(1) );
         assert_matches< proto::or_<proto::terminal<int> > >( lit(1) );
+    }
+
+    // Test lambda matches with arrays, a corner case that had
+    // a bug that was reported by Antoine de Maricourt on boost@lists.boost.org
+    {
+        a_template<int[3]> a;
+        assert_matches< proto::terminal< a_template<_> > >( lit(a) );
     }
 }
 
