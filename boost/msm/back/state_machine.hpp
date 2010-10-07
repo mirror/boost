@@ -31,7 +31,6 @@
 #include <boost/fusion/include/at_key.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/include/for_each.hpp>
-#include <boost/fusion/include/for_each.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/ref.hpp>
@@ -49,6 +48,7 @@
 #include <boost/serialization/base_object.hpp> 
 
 #include <boost/msm/row_tags.hpp>
+#include <boost/msm/back/fold_to_list.hpp>
 #include <boost/msm/back/metafunctions.hpp>
 #include <boost/msm/back/history_policies.hpp>
 #include <boost/msm/back/bind_helpers.hpp>
@@ -85,6 +85,7 @@ struct direct_entry_event
 template <class Fsm,class Stt, class Event,class CompilePolicy>
 const boost::msm::back::dispatch_table<Fsm,Stt, Event,CompilePolicy>
 dispatch_table<Fsm,Stt, Event,CompilePolicy>::instance;
+
 
 // library-containing class for state machines.  Pass the actual FSM class as
 // the Concrete parameter.
@@ -1190,7 +1191,24 @@ private:
          int* const m_initial_states;
          int m_index;
      };
-     public:
+ public:
+     struct update_state
+     {
+         update_state(substate_list& to_overwrite_):to_overwrite(&to_overwrite_){}
+         template<typename StateType>
+         void operator()(StateType const& astate) const
+         {
+             ::boost::fusion::at_key<StateType>(*to_overwrite)=astate;
+         }
+         substate_list* to_overwrite;
+     };
+     template <class Expr>
+     void set_states(Expr const& expr)
+     {
+         ::boost::fusion::for_each( 
+             ::boost::fusion::as_vector(FoldToList()(expr, boost::fusion::nil())),update_state(this->m_substate_list));
+     }
+
      // Construct with the default initial states
      state_machine<Derived,HistoryPolicy,CompilePolicy   >()
          :Derived()
@@ -1209,13 +1227,38 @@ private:
          // create states
          fill_states(this);
      }
+     template <class Expr>
+     state_machine<Derived,HistoryPolicy,CompilePolicy   >
+         (Expr const& expr,typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* dummy=0)
+         :Derived()
+         ,m_events_queue() 
+         ,m_deferred_events_queue()
+         ,m_history()
+         ,m_event_processing(false)
+         ,m_is_included(false)
+         ,m_visitors()
+         ,m_substate_list()
+     {
+         BOOST_MPL_ASSERT_MSG(
+             ( ::boost::proto::matches<Expr, FoldToList>::value),
+             THE_STATES_EXPRESSION_PASSED_DOES_NOT_MATCH_GRAMMAR,
+             (FoldToList));
 
+         // initialize our list of states with the ones defined in Derived::initial_state
+         ::boost::mpl::for_each< seq_initial_states, ::boost::msm::wrap<mpl::placeholders::_1> >
+                        (init_states(m_states));
+         m_history.set_initial_states(m_states);
+         // create states
+         fill_states(this);
+         set_states(expr);
+     }
      // Construct with the default initial states and some default argument(s)
 #define MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB(z, n, unused) ARG ## n t ## n
 #define MSM_CONSTRUCTOR_HELPER_EXECUTE(z, n, unused)                                \
         template <BOOST_PP_ENUM_PARAMS(n, class ARG)>                               \
         state_machine<Derived,HistoryPolicy,CompilePolicy                           \
-        >(BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ) )                \
+        >(BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ),                 \
+        typename ::boost::disable_if<typename ::boost::proto::is_expr<ARG0>::type >::type* dummy=0 )                \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
          ,m_events_queue()                                                          \
          ,m_deferred_events_queue()                                                 \
@@ -1229,7 +1272,31 @@ private:
                         (init_states(m_states));                                    \
          m_history.set_initial_states(m_states);                                    \
          fill_states(this);                                                         \
+     }                                                                              \
+        template <class Expr,BOOST_PP_ENUM_PARAMS(n, class ARG)>                    \
+        state_machine<Derived,HistoryPolicy,CompilePolicy                           \
+        >(Expr const& expr,BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ), \
+        typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* dummy=0 ) \
+        :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
+         ,m_events_queue()                                                          \
+         ,m_deferred_events_queue()                                                 \
+         ,m_history()                                                               \
+         ,m_event_processing(false)                                                 \
+         ,m_is_included(false)                                                      \
+         ,m_visitors()                                                              \
+         ,m_substate_list()                                                         \
+     {                                                                              \
+         BOOST_MPL_ASSERT_MSG(                                                      \
+         ( ::boost::proto::matches<Expr, FoldToList>::value),                       \
+             THE_STATES_EXPRESSION_PASSED_DOES_NOT_MATCH_GRAMMAR,                   \
+             (FoldToList));                                                         \
+         ::boost::mpl::for_each< seq_initial_states, ::boost::msm::wrap<mpl::placeholders::_1> > \
+                        (init_states(m_states));                                    \
+         m_history.set_initial_states(m_states);                                    \
+         fill_states(this);                                                         \
+         set_states(expr);                                                          \
      }
+
      BOOST_PP_REPEAT_FROM_TO(1,BOOST_PP_ADD(BOOST_MSM_CONSTRUCTOR_ARG_SIZE,1), MSM_CONSTRUCTOR_HELPER_EXECUTE, ~)
 #undef MSM_CONSTRUCTOR_HELPER_EXECUTE
 #undef MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB

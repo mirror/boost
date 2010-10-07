@@ -12,25 +12,10 @@
 #define BOOST_MSM_FRONT_EUML_COMMON_H
 
 #include <boost/config.hpp>
-
-#ifdef BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-#undef BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-#endif
-
-#ifdef BOOST_PROTO_MAX_ARITY
-#undef BOOST_PROTO_MAX_ARITY
-#endif
+#include <boost/msm/proto_config.hpp>
 
 #ifndef BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 #define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-#endif
-
-#ifdef BOOST_MSVC 
-#define BOOST_MPL_LIMIT_METAFUNCTION_ARITY 7
-#define BOOST_PROTO_MAX_ARITY 7
-#else
-#define BOOST_MPL_LIMIT_METAFUNCTION_ARITY 6
-#define BOOST_PROTO_MAX_ARITY 6
 #endif
 
 #include <iterator>
