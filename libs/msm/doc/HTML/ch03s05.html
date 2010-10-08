@@ -176,7 +176,7 @@ my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR&gt;()</pre><p>Please refer 
                         need sometimes to get information about any state, even inactive ones. An
                         example is if you want to write a coverage tool and know how many times a
                         state was visited. To get a state, use the get_state method giving the state
-                        name, for example: </p><pre class="programlisting">player::Stopped* tempstate = p.get_state&lt;player::Stopped*&gt;();</pre><p> or </p><pre class="programlisting">player::Stopped&amp; tempstate2 = p.get_state&lt;player::Stopped&amp;&gt;();</pre><p>depending on your personal taste. </p></div><div class="sect2" title="State machine constructor with arguments"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2318"></a> State machine constructor with arguments </h3></div></div></div><p>You might want to define a state machine with a non-default constructor.
+                        name, for example: </p><pre class="programlisting">player::Stopped* tempstate = p.get_state&lt;player::Stopped*&gt;();</pre><p> or </p><pre class="programlisting">player::Stopped&amp; tempstate2 = p.get_state&lt;player::Stopped&amp;&gt;();</pre><p>depending on your personal taste. </p></div><div class="sect2" title="State machine constructor with arguments"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2318"></a><span class="command"><strong><a name="backend-fsm-constructor-args"></a></strong></span> State machine constructor with arguments </h3></div></div></div><p>You might want to define a state machine with a non-default constructor.
                         For example, you might want to write: </p><pre class="programlisting">struct player_ : public msm::front::state_machine_def&lt;player_&gt; 
 { 
     player_(int some_value){&#8230;} 
@@ -192,7 +192,15 @@ my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR&gt;()</pre><p>Please refer 
 typedef msm::back::state_machine&lt;player_ &gt; player; 
 SomeType data;
 player p(boost::ref(data),3);
-                        </pre></div><div class="sect2" title="Trading run-time speed for better compile-time / multi-TU compilation"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2337"></a><span class="command"><strong><a name="backend-tradeof-rt-ct"></a></strong></span>Trading run-time speed for
+                    </pre><p>Normally, MSM default-constructs all its states or submachines. There are
+                        however cases where you might not want this. An example is when you use a
+                        state machine as submachine, and this submachine used the above defined
+                        constructors. You can add as first argument of the state machine constructor
+                        an expression where existing states are passed and copied:</p><pre class="programlisting">player p( back::states_ &lt;&lt; state_1 &lt;&lt; ... &lt;&lt; state_n , boost::ref(data),3);</pre><p>Where state_1..n are instances of some or all of the states of the state
+                        machine. Submachines being state machines, this can recurse, for example, if
+                        Playing is a submachine containing a state Song1 having itself a constructor
+                        where some data is passed:</p><pre class="programlisting">player p( back::states_ &lt;&lt; Playing(back::states_ &lt;&lt; Song1(some_Song1_data)) , 
+          boost::ref(data),3);</pre><p>An <a class="link" href="examples/Constructor.cpp" target="_top">example</a> making intensive use of this capability is provided.</p></div><div class="sect2" title="Trading run-time speed for better compile-time / multi-TU compilation"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2351"></a><span class="command"><strong><a name="backend-tradeof-rt-ct"></a></strong></span>Trading run-time speed for
                         better compile-time / multi-TU compilation</h3></div></div></div><p>MSM is optimized for run-time speed at the cost of longer compile-time.
                         This can become a problem with older compilers and big state machines,
                         especially if you don't really care about run-time speed that much and would
