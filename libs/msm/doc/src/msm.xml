@@ -2,7 +2,7 @@
 <?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0/rng/docbook.rng" type="xml"?>
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
     <info>
-        <title>Meta State Machine (MSM) V2.10</title>
+        <title>Meta State Machine (MSM) V2.12</title>
         <author>
             <personname>Christophe Henry</personname>
             <email>christophe.j.henry@googlemail.com</email>
@@ -1659,11 +1659,8 @@ struct Empty : public msm::front::euml::func_state&lt;Empty_Entry,Empty_Exit>{};
             <sect1>
                 <title><command xml:id="eUML-front-end"/>eUML (experimental)</title>
                 <para><emphasis role="underline">Important note</emphasis>: eUML requires a compiler
-                    supporting the C++0x decltype/typeof feature (for example VC >= 9, g++ >= 4.3.
-                    VC8 supports eUML but will crash with middle-size state machines). More
-                    generally, eUML has experimental status because most compilers will start
-                    crashing when a state machine becomes too big. Only g++ 4.3 (unfortunately not
-                    4.4 which shows a serious regression) seems perfectly resilient.</para>
+                    supporting Boost.Typeof. More generally, eUML has experimental status because
+                    most compilers will start crashing when a state machine becomes too big.</para>
                 <para>The previous front-ends are simple to write but still force an amount of
                     noise, mostly MPL types, so it would be nice to write code looking like C++
                     (with a C++ action language) directly inside the transition table, like UML
@@ -1793,7 +1790,22 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
 {
     template &lt;class Evt,class Fsm,class State>
     void operator()(Evt const&amp; ,Fsm&amp; ,State&amp; ) { ... }                           
-}; </programlisting>
+    }; </programlisting>
+                        <para><command xml:id="eUML-reuse-functor"/>It is also possible to reuse the functors from the functor front-end.
+                            The syntax is however slightly less comfortable as we need to pretend
+                            creating one on the fly for typeof. For example:</para>
+                        <programlisting>struct start_playback 
+{
+        template &lt;class Fsm,class Evt,class SourceState,class TargetState>
+        void operator()(Evt const&amp; ,Fsm&amp;,SourceState&amp; ,TargetState&amp; )
+        {
+         ...            
+        }
+};
+BOOST_MSM_EUML_TRANSITION_TABLE((
+Playing   == Stopped  + play        / start_playback() ,
+...
+),transition_table)</programlisting>                        
                     </sect3>
                     <sect3>
                         <title>States</title>
@@ -2549,7 +2561,7 @@ some_event e1; fsm.process_event(e1)</programlisting>
                         know how state ids are generated.</para>
                 </sect2>
                 <sect2>
-                    <title>Serialization</title>
+                    <title><command xml:id="back-end-serialization"/>Serialization</title>
                     <para>A common need is the ability to save a state machine and restore it at a
                         different time. MSM supports this feature for the basic and functor
                         front-ends, and in a more limited manner for eUML. MSM supports
@@ -2908,29 +2920,28 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</programlisting>
             </sect1>
             <sect1>
                 <title>Supported compilers</title>
-                <para> MSM was successfully tested with: <itemizedlist>
+                <para>For a current status, have a look at the <link
+                        xlink:href="http://www.boost.org/development/tests/trunk/developer/msm.html"
+                        >regression tests</link>.</para>
+                <para>MSM was successfully tested with: <itemizedlist>
                         <listitem>
-                            <para>VC8 (please read further), VC9SP1, VC10 Beta 1 and 2</para>
+                            <para>VC8 (partly), VC9, VC10</para>
                         </listitem>
                         <listitem>
-                            <para>g++ 4.1 and higher</para>
+                            <para>g++ 4.0.1 and higher</para>
+                        </listitem>
+                        <listitem>
+                            <para>Intel 10.1 and higher</para>
+                        </listitem>
+                        <listitem>
+                            <para>Clang 2.9</para>
                         </listitem>
                         <listitem>
                             <para>Green Hills Software MULTI for ARM v5.0.5 patch 4416 (Simple and
                                 Composite tutorials)</para>
                         </listitem>
-                    </itemizedlist></para>
-                <para> eUML will only work with: <itemizedlist>
                         <listitem>
-                            <para>VC8 (partly). You cannot, however use any overloaded function
-                                (like splice) and compile times and RAM consumption explode</para>
-                        </listitem>
-                        <listitem>
-                            <para>VC9SP1, VC10 Beta1-2</para>
-                        </listitem>
-                        <listitem>
-                            <para>g++ 4.3 and higher (previous versions lack native typeof
-                                support)</para>
+                            <para>Partial support for IBM compiler</para>
                         </listitem>
                     </itemizedlist></para>
                 <para>VC8 and to some lesser extent VC9 suffer from a bug. Enabling the option
@@ -2951,10 +2962,10 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</programlisting>
                         </listitem>
                         <listitem>
                             <para>eUML allows very long constructs but will also quickly increase
-                                your compile time on some compilers (VC9, VC10 Beta1) with buggy
-                                decltype support (I suspect some at least quadratic algorithms
-                                there). Even g++ 4.4 shows some regression compared to 4.3 and will
-                                crash if the constructs become too big.</para>
+                                your compile time on some compilers (VC9, VC10) with buggy decltype
+                                support (I suspect some at least quadratic algorithms there). Even
+                                g++ 4.4 shows some regression compared to 4.3 and will crash if the
+                                constructs become too big.</para>
                         </listitem>
                         <listitem>
                             <para>Need to overwrite the mpl::vector/list default-size-limit of 20
@@ -3480,7 +3491,25 @@ typename ::boost::enable_if&lt;
         <chapter>
             <title>Version history</title>
             <sect1>
-                <title>From V2.0 to V2.10</title>
+                <title>From V2.10 to V2.12</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>Support for <command xlink:href="#back-end-serialization">serialization</command></para>
+                        </listitem>
+                        <listitem>
+                            <para><command xlink:href="#eUML-reuse-functor">Possibility to use
+                                    normal functors</command> (from functor front-end) in
+                                eUML.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfixes</para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+            </sect1>
+            <sect1>
+                <title>From V2.0 to V2.12</title>
                 <para>
                     <itemizedlist>
                         <listitem>
