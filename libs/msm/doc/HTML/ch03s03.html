@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Functor front-end</title><link rel="stylesheet" href="boostbook.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Meta State Machine (MSM) V2.10"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Tutorial"><link rel="prev" href="ch03s02.html" title="Basic front-end"><link rel="next" href="ch03s04.html" title="eUML (experimental)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Functor front-end</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Tutorial</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Functor front-end"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1877"></a><span class="command"><strong><a name="functor-front-end"></a></strong></span>Functor front-end</h2></div></div></div><p>The functor front-end is the preferred front-end at the moment. It is more
+   <title>Functor front-end</title><link rel="stylesheet" href="boostbook.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Meta State Machine (MSM) V2.12"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Tutorial"><link rel="prev" href="ch03s02.html" title="Basic front-end"><link rel="next" href="ch03s04.html" title="eUML (experimental)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Functor front-end</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Tutorial</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Functor front-end"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1206"></a><span class="command"><strong><a name="functor-front-end"></a></strong></span>Functor front-end</h2></div></div></div><p>The functor front-end is the preferred front-end at the moment. It is more
                     powerful than the standard front-end and has a more readable transition table.
                     It also makes it easier to reuse parts of state machines. Like <span class="command"><strong><a class="command" href="ch03s04.html#eUML-front-end">eUML</a></strong></span>, it also comes with a good deal
                     of predefined actions. Actually, eUML generates a functor front-end through
@@ -11,178 +11,31 @@
                                 means syntactic noise and more to learn.</p></li><li class="listitem"><p>Function pointers are weird in C++.</p></li><li class="listitem"><p>The action/guard signature is limited and does not allow for more
                                 variations of parameters (source state, target state, current state
                                 machine, etc.)</p></li><li class="listitem"><p>It is not easy to reuse action code from a state machine to
-                                another.</p></li></ul></div><div class="sect2" title="Transition table"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1901"></a> Transition table </h3></div></div></div><p>We can change the definition of the simple tutorial's transition table
-                        to:</p><p>
-                        </p><table id="d0e1908"><tbody><tr>
-                                    <td>//</td>
-                                    <td>Start</td>
-                                    <td>Event</td>
-                                    <td>Next</td>
-                                    <td>Action</td>
-                                    <td>Guard</td>
-                                    <td> </td>
-                                </tr><tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>play,</td>
-                                    <td>Playing,</td>
-                                    <td>start_playback</td>
-                                    <td> </td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>open_close,</td>
-                                    <td>Open,</td>
-                                    <td>open_drawer,</td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Stopped ,</td>
-                                    <td>stop,</td>
-                                    <td>Stopped,</td>
-                                    <td> </td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>//</td>
-                                    <td>+---------</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Open ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Empty ,</td>
-                                    <td>close_drawer,</td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>open_drawer</td>
-                                    <td> </td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>cd_detected ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>store_cd_info ,</td>
-                                    <td>good_disk_format</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>g_row &lt;</td>
-                                    <td>Empty ,</td>
-                                    <td>cd_detected ,</td>
-                                    <td>Playing ,</td>
-                                    <td>store_cd_info ,</td>
-                                    <td>&amp;player_::auto_start</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>stop ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>stop_playback,</td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>pause ,</td>
-                                    <td>Paused ,</td>
-                                    <td>pause_playback,</td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td>Playing ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>stop_and_open,</td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>end_pause ,</td>
-                                    <td>Playing ,</td>
-                                    <td>resume_playback,</td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>stop ,</td>
-                                    <td>Stopped ,</td>
-                                    <td>stop_playback,</td>
-                                    <td> none</td>
-                                    <td>&gt;,</td>
-                                </tr><tr>
-                                    <td>Row &lt;</td>
-                                    <td> Paused ,</td>
-                                    <td>open_close ,</td>
-                                    <td>Open ,</td>
-                                    <td>stop_and_open,</td>
-                                    <td> none</td>
-                                    <td>&gt;</td>
-                                </tr><tr>
-                                    <td>//</td>
-                                    <td>+---------+</td>
-                                    <td>-------------+</td>
-                                    <td>---------+</td>
-                                    <td>---------------------+</td>
-                                    <td>----------------------+</td>
-                                    <td> </td>
-                                </tr><tr>
-                                    <td>&gt; {};</td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr></tbody></table><p>
-                    </p><p>Transitions are now of type "Row" with exactly 5 template arguments:
+                                another.</p></li></ul></div><div class="sect2" title="Transition table"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1230"></a> Transition table </h3></div></div></div><p>We can change the definition of the simple tutorial's transition table
+                        to:</p><pre class="programlisting"> 
+struct transition_table : mpl::vector&lt;
+//    Start     Event        Target      Action                      Guard 
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Stopped , play       ,  Playing  , start_playback            , none                       &gt;,
+Row  &lt; Stopped , open_close ,  Open     , open_drawer               , none                       &gt;,
+Row  &lt; Stopped , stop       ,  Stopped  , none                      , none                       &gt;,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Open    , open_close ,  Empty    , close_drawer              , none                       &gt;,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Empty   , open_close ,  Open     , open_drawer               , none                       &gt;,
+Row  &lt; Empty   , cd_detected,  Stopped  , store_cd_info             , good_disk_format           &gt;,
+g_row&lt; Empty   , cd_detected,  Playing  , &amp;player_::store_cd_info   , &amp;player_::auto_start       &gt;,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Playing , stop       ,  Stopped  , stop_playback             , none                       &gt;,
+Row  &lt; Playing , pause      ,  Paused   , pause_playback            , none                       &gt;,
+Row  &lt; Playing , open_close ,  Open     , stop_and_open             , none                       &gt;,
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+Row  &lt; Paused  , end_pause  ,  Playing  , resume_playback           , none                       &gt;,
+Row  &lt; Paused  , stop       ,  Stopped  , stop_playback             , none                       &gt;,
+Row  &lt; Paused  , open_close ,  Open     , stop_and_open             , none                       &gt;
+//   +---------+------------+-----------+---------------------------+----------------------------+ 
+&gt; {};
+                        </pre><p>Transitions are now of type "Row" with exactly 5 template arguments:
                         source state, event, target state, action and guard. Wherever there is
                         nothing (for example actions and guards), write "none". Actions and guards
                         are no more methods but functors getting as arguments the detected event,
@@ -213,7 +66,7 @@
                         can achieve this using And_ and Or_ functors:
                         </p><pre class="programlisting">And_&lt;good_disk_format,Or_&lt; some_condition , some_other_condition&gt; &gt;</pre><p>It
                         even starts looking like functional programming. MSM ships with functors for
-                        operators, state machine usage, STL algorithms or container methods.</p></div><div class="sect2" title="Defining states with entry/exit actions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2420"></a>Defining states with entry/exit actions</h3></div></div></div><p>You probably noticed that we just showed a different transition table and
+                        operators, state machine usage, STL algorithms or container methods.</p></div><div class="sect2" title="Defining states with entry/exit actions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1263"></a>Defining states with entry/exit actions</h3></div></div></div><p>You probably noticed that we just showed a different transition table and
                         that we even mixed rows from different front-ends. This means that you can
                         do this and leave the definitions for states unchanged. Most examples are
                         doing this as it is the simplest solution. You still enjoy the simplicity of
@@ -236,16 +89,16 @@ struct Empty : public msm::front::euml::func_state&lt;Empty_Entry,Empty_Exit&gt;
                             rewritten</a>.</p><p>Usually, however, one will probably use the standard state definition as
                         it provides the same capabilities as this front-end state definition, unless
                         one needs some of the shipped predefined functors or is a fan of functional
-                        programming.</p></div><div class="sect2" title="Defining a simple state machine"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2439"></a>Defining a simple state machine</h3></div></div></div><p>Like states, state machines can be defined using the previous front-end,
+                        programming.</p></div><div class="sect2" title="Defining a simple state machine"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1282"></a>Defining a simple state machine</h3></div></div></div><p>Like states, state machines can be defined using the previous front-end,
                         as the previous example showed, or with the functor front-end, which allows
                         you to define a state machine entry and exit functions as functors, as in
                             <a class="link" href="examples/SimpleWithFunctors2.cpp" target="_top">this
-                        example</a>.</p></div><div class="sect2" title="Anonymous transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2447"></a>Anonymous transitions</h3></div></div></div><p>Anonymous (completion) transitions are transitions without a named event.
+                        example</a>.</p></div><div class="sect2" title="Anonymous transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1290"></a>Anonymous transitions</h3></div></div></div><p>Anonymous (completion) transitions are transitions without a named event.
                         We saw how this front-end uses <code class="code">none</code> when no action or guard is
                         required. We can also use <code class="code">none</code> instead of an event to mark an
                         anonymous transition. For example, the following transition makes an
                         immediate transition from State1 to State2:</p><pre class="programlisting">Row &lt; State1 , none , State2 &gt;</pre><p>The following transition does the same but calling an action in the
-                        process:</p><pre class="programlisting">Row &lt; State1 , none , State2 , State1ToState2, none &gt;</pre><p>The following diagram shows an example and its <a class="link" href="examples/AnonymousTutorialWithFunctors.cpp" target="_top">implementation</a>:</p><p><span class="inlinemediaobject"><img src="../images/Anonymous.jpg" width="70%"></span></p></div><div class="sect2" title="Internal transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2473"></a><span class="command"><strong><a name="functor-internal-transitions"></a></strong></span>Internal
+                        process:</p><pre class="programlisting">Row &lt; State1 , none , State2 , State1ToState2, none &gt;</pre><p>The following diagram shows an example and its <a class="link" href="examples/AnonymousTutorialWithFunctors.cpp" target="_top">implementation</a>:</p><p><span class="inlinemediaobject"><img src="../images/Anonymous.jpg" width="70%"></span></p></div><div class="sect2" title="Internal transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1316"></a><span class="command"><strong><a name="functor-internal-transitions"></a></strong></span>Internal
                         transitions</h3></div></div></div><p>The <a class="link" href="examples/SimpleTutorialInternalFunctors.cpp" target="_top">following example</a> uses internal transitions with the functor
                         front-end. As for the simple standard front-end, both methods of defining
                         internal transitions are supported:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>providing a <code class="code">Row</code> in the state machine's transition
