@@ -224,6 +224,28 @@ void test5()
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// test6
+//  Test as<>() with wide strings. Bug #4496.
+void test6()
+{
+    using namespace boost::xpressive;
+
+    std::wstring version(L"0.9.500");
+
+    local<int> maj1(0), min1(0), build1(0);
+
+    wsregex re1 = (+_d)[maj1 = as<int>(_)] >> L"." >>
+                  (+_d)[min1 = as<int>(_)] >> L"." >>
+                  (+_d)[build1 = as<int>(_)];
+
+    BOOST_REQUIRE(regex_match(version, re1));
+
+    BOOST_CHECK_EQUAL(maj1.get(), 0);
+    BOOST_CHECK_EQUAL(min1.get(), 9);
+    BOOST_CHECK_EQUAL(build1.get(), 500);
+}
+
 using namespace boost::unit_test;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -238,6 +260,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test->add(BOOST_TEST_CASE(&test4));
     test->add(BOOST_TEST_CASE(&test4_aux));
     test->add(BOOST_TEST_CASE(&test5));
+    test->add(BOOST_TEST_CASE(&test6));
     return test;
 }
 
