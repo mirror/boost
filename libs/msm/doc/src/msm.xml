@@ -2757,7 +2757,7 @@ my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR>()</programlisting>
                     <para>depending on your personal taste. </para>
                 </sect2>
                 <sect2>
-                    <title> State machine constructor with arguments </title>
+                    <title><command xml:id="backend-fsm-constructor-args"/> State machine constructor with arguments </title>
                     <para>You might want to define a state machine with a non-default constructor.
                         For example, you might want to write: </para>
                     <programlisting>struct player_ : public msm::front::state_machine_def&lt;player_> 
@@ -2781,7 +2781,21 @@ my_fsm.is_flag_active&lt;MyFlag,my_fsm_type::Flag_OR>()</programlisting>
 typedef msm::back::state_machine&lt;player_ > player; 
 SomeType data;
 player p(boost::ref(data),3);
-                        </programlisting>
+                    </programlisting>
+                    <para>Normally, MSM default-constructs all its states or submachines. There are
+                        however cases where you might not want this. An example is when you use a
+                        state machine as submachine, and this submachine used the above defined
+                        constructors. You can add as first argument of the state machine constructor
+                        an expression where existing states are passed and copied:</para>
+                    <programlisting>player p( back::states_ &lt;&lt; state_1 &lt;&lt; ... &lt;&lt; state_n , boost::ref(data),3);</programlisting>  
+                <para>Where state_1..n are instances of some or all of the states of the state
+                        machine. Submachines being state machines, this can recurse, for example, if
+                        Playing is a submachine containing a state Song1 having itself a constructor
+                        where some data is passed:</para>                    
+                    <programlisting>player p( back::states_ &lt;&lt; Playing(back::states_ &lt;&lt; Song1(some_Song1_data)) , 
+          boost::ref(data),3);</programlisting>
+                    <para>An <link xlink:href="examples/Constructor.cpp"
+                        >example</link> making intensive use of this capability is provided.</para>
                 </sect2>
                 <sect2>
                     <title><command xml:id="backend-tradeof-rt-ct"/>Trading run-time speed for
@@ -3501,6 +3515,11 @@ typename ::boost::enable_if&lt;
                             <para><command xlink:href="#eUML-reuse-functor">Possibility to use
                                     normal functors</command> (from functor front-end) in
                                 eUML.</para>
+                        </listitem>
+                        <listitem>
+                            <para><command xlink:href="#backend-fsm-constructor-args">New constructors</command> where substates / submachines can be taken as
+                                arguments. This allows passing arguments to the constructor of a
+                                submachine.</para>
                         </listitem>
                         <listitem>
                             <para>Bugfixes</para>

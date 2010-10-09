@@ -44,5 +44,6 @@ test-suite msm-unit-tests
     [ run Serialize.cpp ]
     [ run SerializeWithHistory.cpp ]
     [ run SerializeSimpleEuml.cpp ]
+    [ run TestConstructor.cpp ]
     ;
 
