@@ -2636,6 +2636,10 @@ std::ofstream ofs("fsm.txt");
                             <code>BOOST_MSM_EUML_STATE</code> cannot be used, so the state will have
                         to be implemented by directly inheriting from
                             <code>front::euml::euml_state</code>.</para>
+                    <para>The only limitiation is that the event queues cannot be serialized so
+                        serializing must be done in a stable state, when no event is being
+                        processed. You can serialize during event processing only if using no queue
+                        (deferred or event queue).</para>
                     <para>This <link
                         xlink:href="examples/Serialize.cpp">example</link> shows a state machine which we serialize after processing an
                         event. The <code>Empty</code> state also has some data to serialize.</para>
@@ -2794,6 +2798,9 @@ player p(boost::ref(data),3);
                         where some data is passed:</para>                    
                     <programlisting>player p( back::states_ &lt;&lt; Playing(back::states_ &lt;&lt; Song1(some_Song1_data)) , 
           boost::ref(data),3);</programlisting>
+                    <para>It is also possible to replace a given state by a new instance at any time
+                        using <code>set_states()</code> and the same syntax, for example:
+                        <programlisting>p.set_states( back::states_ &lt;&lt; state_1 &lt;&lt; ... &lt;&lt; state_n );</programlisting></para>
                     <para>An <link xlink:href="examples/Constructor.cpp"
                         >example</link> making intensive use of this capability is provided.</para>
                 </sect2>
