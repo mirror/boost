@@ -593,7 +593,7 @@ __result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
 is [^attribute_type['N]] with const-qualifier and reference removed.
 
 The macro should be used at global scope, and `type_name` should be the fully
-namespace qualified name of the struct to be converted.
+namespace qualified name of the class type to be adapted.
 
 [heading Header]
 
@@ -701,7 +701,7 @@ __result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
 is [^attribute_type['N]] with const-qualifier and reference removed.
 
 The macro should be used at global scope, and `type_name` should be the fully
-namespace qualified name of the struct to be converted.
+namespace qualified name of the template class type to be adapted.
 
 [heading Header]
 
@@ -799,12 +799,12 @@ The actual return type of fusion's intrinsic sequence access (meta-)functions
 when in invoked with (an instance of) `type_name` is a proxy type.
 This type is implicitly convertible to the attribute type via [^get_expr['N]] and
 forwards assignment to the underlying element via [^set_expr['N]].
-The value type (that is the type returned by __result_of_value_of__,
-__result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
+The value type (that is the type returned by __result_of_value_of__, __result_of_value_of_data__, 
+__result_of_value_at__, __result_of_value_at_c__ and __result_of_value_at_key__) of the ['N]th element
 is [^attribute_type['N]] with const-qualifier and reference removed.
 
 The macro should be used at global scope, and `type_name` should be the fully
-namespace qualified name of the struct to be converted.
+namespace qualified name of the class type to be adapted.
 
 [heading Header]
 
@@ -913,12 +913,12 @@ The actual return type of fusion's intrinsic sequence access (meta-)functions
 when in invoked with (an instance of) `type_name` is a proxy type.
 This type is implicitly convertible to the attribute type via [^get_expr['N]] and
 forwards assignment to the underlying element via [^set_expr['N]].
-The value type (that is the type returned by __result_of_value_of__,
-__result_of_value_at__ and __result_of_value_at_c__) of the ['N]th element
+The value type (that is the type returned by __result_of_value_of__, __result_of_value_of_data__, 
+__result_of_value_at__, __result_of_value_at_c__ and __result_of_value_at_key__) of the ['N]th element
 is [^attribute_type['N]] with const-qualifier and reference removed.
 
 The macro should be used at global scope, and `type_name` should be the fully
-namespace qualified name of the struct to be converted.
+namespace qualified name of the template class type to be adapted.
 
 [heading Header]
 

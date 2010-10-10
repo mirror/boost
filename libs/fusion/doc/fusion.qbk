@@ -169,7 +169,6 @@
 [def __result_of_at_key__       [link fusion.sequence.intrinsic.metafunctions.at_key `result_of::at_key`]]
 [def __has_key__                [link fusion.sequence.intrinsic.functions.has_key `has_key`]]
 [def __result_of_has_key__      [link fusion.sequence.intrinsic.metafunctions.has_key `result_of::has_key`]]
-[def __value_at_key__           [link fusion.sequence.intrinsic.metafunctions.value_at_key `value_at_key`]]
 [def __result_of_value_at__     [link fusion.sequence.intrinsic.metafunctions.value_at `result_of::value_at`]]
 [def __result_of_value_at_c__   [link fusion.sequence.intrinsic.metafunctions.value_at_c `result_of::value_at_c`]]
 [def __result_of_value_at_key__ [link fusion.sequence.intrinsic.metafunctions.value_at_key `result_of::value_at_key`]]
