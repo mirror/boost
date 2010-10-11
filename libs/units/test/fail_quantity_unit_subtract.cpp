@@ -13,7 +13,7 @@
     
 \brief fail_quantity_unit_subtract.cpp
 
-\detailed
+\details
 Test subtraction of quantity and unit.
 
 Output:

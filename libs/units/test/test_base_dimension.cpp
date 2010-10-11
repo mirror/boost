@@ -13,7 +13,7 @@
     
 \brief test_base_dimension.cpp
 
-\detailed
+\details
 Test base_dimension class.
 
 Output:

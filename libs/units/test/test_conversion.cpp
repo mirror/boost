@@ -13,7 +13,7 @@
     
 \brief test_conversion.cpp
 
-\detailed
+\details
 Test conversion between quantities.
 
 Output:

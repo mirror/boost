@@ -13,7 +13,7 @@
     
 \brief fail_quantity_subtract.cpp
 
-\detailed
+\details
 Test subtraction of quantities with different dimensions.
 
 Output:

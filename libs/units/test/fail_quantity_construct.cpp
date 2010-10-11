@@ -13,7 +13,7 @@
     
 \brief fail_quantity_construct.cpp
 
-\detailed
+\details
 Test construction of quantity from different dimensions.
 
 Output:

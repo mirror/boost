@@ -13,7 +13,7 @@
     
 \brief unit.cpp
 
-\detailed
+\details
 Test unit algebra.
 
 Output:

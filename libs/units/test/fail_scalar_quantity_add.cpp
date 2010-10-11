@@ -13,7 +13,7 @@
     
 \brief fail_scalar_quantity_add.cpp
 
-\detailed
+\details
 Test addition of scalar and quantity.
 
 Output:

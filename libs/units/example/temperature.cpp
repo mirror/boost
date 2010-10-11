@@ -13,7 +13,7 @@
     
 \brief temperature.cpp
 
-\detailed
+\details
 Conversions between Fahrenheit and Kelvin for absolute temperatures and 
 temperature differences.
 

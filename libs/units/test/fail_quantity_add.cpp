@@ -13,7 +13,7 @@
     
 \brief fail_quantity_add.cpp
 
-\detailed
+\details
 Test addition of quantities with different dimensions.
 
 Output:

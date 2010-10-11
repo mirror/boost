@@ -13,7 +13,7 @@
     
 \brief test_dimensionless_quantity.cpp
 
-\detailed
+\details
 Test unit class.
 
 Output:

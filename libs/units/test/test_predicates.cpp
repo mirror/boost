@@ -13,7 +13,7 @@
     
 \brief test_predicates.cpp
 
-\detailed
+\details
 Test metafunctions is_unit, is_quantity, is_dimension_list ....
 
 Output:

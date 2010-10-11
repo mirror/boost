@@ -28,6 +28,7 @@ rule run_doxygen ( target : files * : name )
 
         # Horribly ugly, but then macros usually are :(
         <doxygen:param>"PREDEFINED= \\
+            \"BOOST_MPL_ASSERT(expr)=\" \\
             \"BOOST_UNITS_STATIC_CONSTANT(a,b)=static const b a\" \\
             \"BOOST_UNITS_AUTO_STATIC_CONSTANT(a,b)=static const auto a = b\" \\
             \"BOOST_UNITS_TYPEOF(a)=typeof(a)\" \\
@@ -54,7 +55,8 @@ rule run_doxygen ( target : files * : name )
 
 run_doxygen units_reference
   :
-    [ glob $(here)/../../../boost/units/*.hpp ]
+    [ glob $(here)/../../../boost/units/*.hpp :
+           $(here)/../../../boost/units/physical_dimensions.hpp ]
   :
     "Units Reference"
   ;
@@ -166,10 +168,7 @@ rule generate-qbk ( target : sources * : properties * )
             local dir-name = [ path.basename [ path.parent $(file) ] ] ;
             base_unit = "$(base_unit) ($(dir-name))" ;
         }
-        # this looks better, but it won't work until my boostbook patch for
-        # annotation.xsl gets applied.
-        # print.text "[headerref $(output_filename) $(base_unit)]\\n" : overwrite ;
-        print.text "[headerref $(output_filename)]\\n" : overwrite ;
+        print.text "[headerref $(output_filename) $(base_unit)]\\n" : overwrite ;
     }
 }
 

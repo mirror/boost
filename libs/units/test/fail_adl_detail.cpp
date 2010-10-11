@@ -13,7 +13,7 @@
     
 \brief fail_adl_detail.cpp
 
-\detailed
+\details
 make sure that namespace detail is not pulled in by ADL.
 
 Output:

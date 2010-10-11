@@ -13,7 +13,7 @@
     
 \brief kitchen_sink.cpp
 
-\detailed
+\details
 More extensive quantity tests.
 
 Output:

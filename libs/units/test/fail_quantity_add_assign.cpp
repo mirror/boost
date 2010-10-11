@@ -13,7 +13,7 @@
     
 \brief fail_quantity_add_assign.cpp
 
-\detailed
+\details
 Test += of quantity from different dimensions.
 
 Output:

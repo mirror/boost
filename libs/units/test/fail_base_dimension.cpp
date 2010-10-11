@@ -13,7 +13,7 @@
     
 \brief fail_base_dimension.cpp
 
-\detailed
+\details
 make sure that trying to use the same ordinal for multiple
 base dimensions fails.
 

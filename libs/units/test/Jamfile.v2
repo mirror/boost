@@ -7,13 +7,26 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt
 
-project boost/units/test :
-    requirements <include>$(BOOST_ROOT) <include>../../.. <toolset>msvc:<asynch-exceptions>on
-;
-
 import testing ;
 
-alias test_framework : $(BOOST_ROOT)/libs/test/build//boost_unit_test_framework ;
+warning-options = <warnings>all <warnings-as-errors>on ;
+warning-compilers =
+    <toolset>msvc
+;
+
+project boost/units/test :
+    requirements
+        <source>/boost//headers
+        <include>../../..
+        <toolset>msvc:<asynch-exceptions>on
+        $(warning-compilers):$(warning-options)
+        # This warning comes from the test library.
+        <toolset>msvc:<cxxflags>"/wd4701"
+        # The comes from the exception library
+        <toolset>msvc,<toolset-msvc:version>7.1:<cxxflags>"/wd4800"
+;
+
+alias test_framework : /boost//unit_test_framework/<warnings-as-errors>off ;
 
 compile test_predicates.cpp ;
 compile test_negative_denominator.cpp ;

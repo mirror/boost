@@ -8,17 +8,22 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-/** 
-\file
+/**
+\file tutorial.cpp
     
-\brief tutorial.cpp
+\brief Basic tutorial using SI units.
 
-\detailed
-Basic tutorial using si units.
+\details
+Tutorial 
+Defines a function that computes the work, in joules,
+done by exerting a force in newtons over a specified distance 
+in meters and outputs the result to std::cout. 
+
+Also code for computing the complex impedance
+using std::complex<double> as the value type.
 
 Output:
 @verbatim
-
 //[tutorial_output
 F  = 2 N
 dx = 2 m
@@ -30,9 +35,8 @@ Z   = (1.5,-2) Ohm
 I*Z = (12.5,0) V
 I*Z == V? true
 //]
-
 @endverbatim
-**/
+*/
 
 //[tutorial_code
 #include <complex>
@@ -52,37 +56,39 @@ using namespace boost::units;
 using namespace boost::units::si;
 
 quantity<energy> 
-work(const quantity<force>& F,const quantity<length>& dx)
+work(const quantity<force>& F, const quantity<length>& dx)
 {
-    return F*dx;
+    return F * dx; // Defines the relation: work = force * distance.
 }
 
 int main()
 {   
-    /// test calcuation of work
-    quantity<force>     F(2.0*newton);
-    quantity<length>    dx(2.0*meter);
-    quantity<energy>    E(work(F,dx));
+    /// Test calculation of work.
+    quantity<force>     F(2.0 * newton); // Define a quantity of force.
+    quantity<length>    dx(2.0 * meter); // and a distance,
+    quantity<energy>    E(work(F,dx));  // and calculate the work done.
     
     std::cout << "F  = " << F << std::endl
               << "dx = " << dx << std::endl
               << "E  = " << E << std::endl
               << std::endl;
 
-    /// check complex quantities
-    typedef std::complex<double>    complex_type;
+    /// Test and check complex quantities.
+    typedef std::complex<double> complex_type; // double real and imaginary parts.
     
-    quantity<electric_potential,complex_type> v = complex_type(12.5,0.0)*volts;
-    quantity<current,complex_type>            i = complex_type(3.0,4.0)*amperes;
-    quantity<resistance,complex_type>         z = complex_type(1.5,-2.0)*ohms;
+    // Define some complex electrical quantities.
+    quantity<electric_potential, complex_type> v = complex_type(12.5, 0.0) * volts;
+    quantity<current, complex_type>            i = complex_type(3.0, 4.0) * amperes;
+    quantity<resistance, complex_type>         z = complex_type(1.5, -2.0) * ohms;
     
     std::cout << "V   = " << v << std::endl
               << "I   = " << i << std::endl
-              << "Z   = " << z << std::endl
-              << "I*Z = " << i*z << std::endl
-              << "I*Z == V? " << std::boolalpha << (i*z == v) << std::endl
+              << "Z   = " << z << std::endl 
+              // Calculate from Ohm's law voltage = current * resistance.
+              << "I * Z = " << i * z << std::endl
+              // Check defined V is equal to calculated.
+              << "I * Z == V? " << std::boolalpha << (i * z == v) << std::endl
               << std::endl;
-
     return 0;
 }
 //]

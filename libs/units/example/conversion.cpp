@@ -13,7 +13,7 @@
     
 \brief conversion.cpp
 
-\detailed
+\details
 Test explicit and implicit unit conversion.
 
 Output:

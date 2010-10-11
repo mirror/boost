@@ -13,7 +13,7 @@
     
 \brief test_custom_unit.cpp
 
-\detailed
+\details
 Make sure that a minimal + - * / unit class is fully functional.
 
 Output:
@@ -34,11 +34,17 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(simple_unit, (int)(int)(int))
 
 template<int Mass, int Length, int Time>
 simple_unit<Mass, Length, Time> operator+(const simple_unit<Mass, Length, Time>&,
-                                          const simple_unit<Mass, Length, Time>&) {}
+                                          const simple_unit<Mass, Length, Time>&)
+{
+    return simple_unit<Mass, Length, Time>();
+}
 
 template<int Mass, int Length, int Time>
 simple_unit<Mass, Length, Time> operator-(const simple_unit<Mass, Length, Time>&,
-                                          const simple_unit<Mass, Length, Time>&) {}
+                                          const simple_unit<Mass, Length, Time>&)
+{
+    return simple_unit<Mass, Length, Time>();
+}
 
 template<int Mass1, int Length1, int Time1, int Mass2, int Length2, int Time2>
 simple_unit<Mass1 + Mass2, Length1 + Length2, Time1 + Time2>

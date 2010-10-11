@@ -13,7 +13,7 @@
     
 \brief test_negative_denominator.cpp
 
-\detailed
+\details
 Test negative denominator for static_rational class.
 
 Output:

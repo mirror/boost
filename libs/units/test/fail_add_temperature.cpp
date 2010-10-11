@@ -13,7 +13,7 @@
     
 \brief fail_add_temperature.cpp
 
-\detailed
+\details
 Verify that adding two absolute temeratures fails miserably.
 
 Output:
