@@ -49,7 +49,7 @@ void test_tricky_cases()
    TEST_REGEX_SEARCH("(a)d|(b)c", perl, "abc", match_default, make_array(1, 3, -1, -1, 1, 2, -2, -2));
    TEST_REGEX_SEARCH("_+((www)|(ftp)|(mailto)):_*", perl, "_wwwnocolon _mailto:", match_default, make_array(12, 20, 13, 19, -1, -1, -1, -1, 13, 19, -2, -2));
    // subtleties of matching
-   TEST_REGEX_SEARCH("a(b)?c\\1d", perl, "acd", match_default, make_array(0, 3, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b)?c\\1d", perl, "acd", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("a(b?c)+d", perl, "accd", match_default, make_array(0, 4, 2, 3, -2, -2));
    TEST_REGEX_SEARCH("(wee|week)(knights|night)", perl, "weeknights", match_default, make_array(0, 10, 0, 3, 3, 10, -2, -2));
    TEST_REGEX_SEARCH(".*", perl, "abc", match_default, make_array(0, 3, -2, 3, 3, -2, -2));

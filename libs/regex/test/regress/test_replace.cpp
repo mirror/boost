@@ -184,5 +184,11 @@ void test_replace()
    TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "$2", "bb");
    TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "d$+{one}c", "daac");
    TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "c$+{two}d", "cbbd");
+
+   TEST_REGEX_REPLACE("(?<one>a)(?<one>b)(c)", perl, " ...abc,,", match_default, "$1.$2.$3.$+{one}", " ...a.b.c.a,,");
+   TEST_REGEX_REPLACE("(?:(?<one>a)|(?<one>b))", perl, " ...a,,", match_default, "$1.$2.$+{one}", " ...a..a,,");
+   TEST_REGEX_REPLACE("(?:(?<one>a)|(?<one>b))", perl, " ...b,,", match_default, "$1.$2.$+{one}", " ....b.b,,");
+   TEST_REGEX_REPLACE("(?:(?<one>a)(?<one>b))", perl, " ...ab,,", match_default, "$1.$2.$+{one}", " ...a.b.a,,");
+
 }
 
