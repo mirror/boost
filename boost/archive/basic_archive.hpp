@@ -282,4 +282,19 @@ BOOST_CLASS_IMPLEMENTATION(boost::archive::object_id_type, primitive_type)
 BOOST_CLASS_IMPLEMENTATION(boost::archive::object_reference_type, primitive_type)
 BOOST_CLASS_IMPLEMENTATION(boost::archive::tracking_type, primitive_type)
 
+#include <boost/serialization/is_bitwise_serializable.hpp>
+
+// set types used internally by the serialization library 
+// to be bitwise serializable
+
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::library_version_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::version_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::class_id_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::class_id_reference_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::class_id_optional_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::class_name_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::object_id_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::object_reference_type)
+BOOST_IS_BITWISE_SERIALIZABLE(boost::archive::tracking_type)
+
 #endif //BOOST_ARCHIVE_BASIC_ARCHIVE_HPP

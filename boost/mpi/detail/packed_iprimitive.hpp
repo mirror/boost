@@ -89,15 +89,15 @@ public:
     template<class CharType>
     void load(std::basic_string<CharType> & s)
     {
-       unsigned int l;
+        unsigned int l;
         load(l);
         // borland de-allocator fixup
-        #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
-        if(NULL != s.data())
-        #endif
+//        #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
+//        if(NULL != s.data())
+//        #endif
         s.resize(l);
         // note breaking a rule here - could be a problem on some platform
-        load_impl(const_cast<char *>(s.data()),get_mpi_datatype(CharType()),l);
+        load_impl(const_cast<CharType *>(s.data()),get_mpi_datatype(CharType()),l);
     }
 
 private:
@@ -108,10 +108,10 @@ private:
         (const_cast<char*>(boost::serialization::detail::get_data(buffer_)), buffer_.size(), &position, p, l, t, comm));
     }
 
-        buffer_type & buffer_;
-        mutable std::size_t size_;
-        MPI_Comm comm;
-        int position;
+    buffer_type & buffer_;
+    mutable std::size_t size_;
+    MPI_Comm comm;
+    int position;
 };
 
 } } // end namespace boost::mpi
