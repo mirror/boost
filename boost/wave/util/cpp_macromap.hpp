@@ -1276,8 +1276,9 @@ ContainerT replacement_list;
                     seqstart, seqend))
             {
                 // do not expand this macro, just copy the whole sequence 
+                expanded.push_back(curr_token);
                 std::copy(seqstart, first, 
-                    std::inserter(replacement_list, replacement_list.end()));
+                    std::inserter(expanded, expanded.end()));
                 return false;           // no further preprocessing required
             }
 #endif
@@ -1296,7 +1297,7 @@ ContainerT replacement_list;
                   macro_def.macroname, macro_def.macrodefinition, curr_token))
             {
                 // do not expand this macro, just copy the whole sequence 
-                replacement_list.push_back(curr_token);
+                expanded.push_back(curr_token);
                 ++first;                // skip macro name
                 return false;           // no further preprocessing required
             }
@@ -1339,7 +1340,7 @@ ContainerT replacement_list;
                   macro_def.macroname, macro_def.macrodefinition, curr_token))
             {
                 // do not expand this macro, just copy the whole sequence 
-                replacement_list.push_back(curr_token);
+                expanded.push_back(curr_token);
                 ++first;                // skip macro name
                 return false;           // no further preprocessing required
             }
