@@ -106,7 +106,7 @@ Now the save() function. It is also 7 lines of code:
       // be achieved using a combination of the insert and put_own
       // functions.
       BOOST_FOREACH(const std::string &name, m_modules)
-         pt.__ptree_put__("debug.modules.module", name, true);
+         pt.__ptree_add__("debug.modules.module", name);
 
       // Write the property tree to the XML file.
       __write_xml__(filename, pt);

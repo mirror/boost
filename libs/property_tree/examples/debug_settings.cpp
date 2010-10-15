@@ -10,7 +10,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-//#include <boost/foreach.hpp>
+#include <boost/foreach.hpp>
 #include <string>
 #include <set>
 #include <exception>
@@ -77,15 +77,15 @@ void debug_settings::save(const std::string &filename)
     // Put debug level in property tree
     pt.put("debug.level", m_level);
 
-    // Iterate over modules in set and put them in property 
-    // tree. Note that put function places new key at the
+    // Iterate over modules in set and put them in property
+    // tree. Note that the add function places new key at the
     // end of list of keys. This is fine in most of the
     // situations. If you want to place item at some other
     // place (i.e. at front or somewhere in the middle),
-    // this can be achieved using combination of insert 
+    // this can be achieved using a combination of the insert
     // and put_value functions
-    //BOOST_FOREACH(const std::string &name, m_modules)
-    //    pt.put("debug.modules.module", name, true);
+    BOOST_FOREACH(const std::string &name, m_modules)
+        pt.add("debug.modules.module", name);
     
     // Write property tree to XML file
     write_xml(filename, pt);
