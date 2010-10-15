@@ -336,6 +336,7 @@ testwave_app::testwave_app(po::variables_map const& vm)
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         ("noguard,G", "disable include guard detection")
 #endif
+        ("skipped_token_hooks", "record skipped_token hook calls")
     ;
 }
 
@@ -838,6 +839,13 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
 {
     if (9 == debuglevel) {
         std::cerr << "initialise_options: initializing options" << std::endl;
+    }
+
+    if (vm.count("skipped_token_hooks")) {
+        if (9 == debuglevel) {
+            std::cerr << "initialise_options: option: skipped_token_hooks" << std::endl;
+        }
+        ctx.get_hooks().set_skipped_token_hooks(true);
     }
 
 //  initialize the given context from the parsed options

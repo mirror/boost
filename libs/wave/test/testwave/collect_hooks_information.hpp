@@ -53,6 +53,35 @@ inline String repr(boost::wave::util::file_position<String> const& pos)
     return handle_filepath(pos.get_file()) + String("(") + linenum.c_str() + ")";
 }
 
+template <typename String>
+inline String repr(String const& value)
+{
+    String result;
+    typename String::const_iterator end = value.end();
+    for (typename String::const_iterator it = value.begin(); it != end; ++it)
+    {
+        typedef typename String::value_type char_type;
+        char_type c = *it;
+        if (c == static_cast<char_type>('\a'))
+            result.append("\\a");
+        else if (c == static_cast<char_type>('\b'))
+            result.append("\\b");
+        else if (c == static_cast<char_type>('\f'))
+            result.append("\\f");
+        else if (c == static_cast<char_type>('\n'))
+            result.append("\\n");
+        else if (c == static_cast<char_type>('\r'))
+            result.append("\\r");
+        else if (c == static_cast<char_type>('\t'))
+            result.append("\\t");
+        else if (c == static_cast<char_type>('\v'))
+            result.append("\\v");
+        else
+            result += static_cast<char_type>(c);
+    }
+    return result;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 template <typename Token>
 class collect_hooks_information 
@@ -62,8 +91,13 @@ class collect_hooks_information
 
 public:
     collect_hooks_information(std::string& trace)
-      : hooks_trace(trace)
+      : hooks_trace(trace), skipped_token_hooks(false)
     {}
+
+    void set_skipped_token_hooks(bool flag) 
+    {
+        skipped_token_hooks = flag;
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     //  
@@ -488,10 +522,13 @@ public:
     void
     skipped_token(Context const& ctx, Token const& token)
     {
-// this generates a lot of noise
-//         BOOST_WAVETEST_OSSTREAM strm;
-//         strm << "12: " << std::endl;
-//         hooks_trace += BOOST_WAVETEST_GETSTRING(strm);
+        // this normally generates a lot of noise
+        if (skipped_token_hooks) {
+            BOOST_WAVETEST_OSSTREAM strm;
+            strm << "12: " << repr(token.get_position()) << ": >" 
+                 << repr(token.get_value()) << "<" << std::endl;
+            hooks_trace += BOOST_WAVETEST_GETSTRING(strm);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -790,6 +827,7 @@ public:
 
 private:
     std::string& hooks_trace;
+    bool skipped_token_hooks;
 };
 
 #endif

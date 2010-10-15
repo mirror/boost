@@ -306,9 +306,9 @@ protected:
     template <typename IteratorT>
     bool extract_identifier(IteratorT &it);
     template <typename IteratorT>
-    bool ensure_is_last_on_line(IteratorT& it);
+    bool ensure_is_last_on_line(IteratorT& it, bool call_hook = true);
     template <typename IteratorT>
-    bool skip_to_eol_with_check(IteratorT &it);
+    bool skip_to_eol_with_check(IteratorT &it, bool call_hook = true);
 
     bool pp_directive();
     template <typename IteratorT>
@@ -340,8 +340,7 @@ protected:
         typename parse_tree_type::const_iterator const &end);
     void on_elif(result_type const& found_directive,
         typename parse_tree_type::const_iterator const &begin,
-        typename parse_tree_type::const_iterator const &end,
-        token_sequence_type const& found_eoltokens);
+        typename parse_tree_type::const_iterator const &end);
     void on_error(typename parse_tree_type::const_iterator const &begin,
         typename parse_tree_type::const_iterator const &end);
 #if BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
@@ -663,11 +662,7 @@ bool returned_from_include_file = returned_from_include();
                 if (!ctx.get_if_block_status()) {
                 // skip this token because of the disabled #if block
                     whitespace.shift_tokens(id);  // whitespace controller
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
-                    ctx.get_hooks().skipped_token(act_token);
-#else
-                    ctx.get_hooks().skipped_token(ctx.derived(), act_token);
-#endif
+                    util::call_skipped_token_hook(ctx, act_token);
                     continue;
                 }
                 return act_token; 
@@ -676,6 +671,7 @@ bool returned_from_include_file = returned_from_include();
 
             if (was_seen_newline && pp_directive()) {
             // a pp directive was found
+//                 pending_queue.push_back(result_type(T_NEWLINE, "\n", act_pos));
 //                 seen_newline = true;
 //                 must_emit_line_directive = true;
 
@@ -698,11 +694,7 @@ bool returned_from_include_file = returned_from_include();
                 }
 
             // next token
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
-                ctx.get_hooks().skipped_token(act_token);
-#else
-                ctx.get_hooks().skipped_token(ctx.derived(), act_token);
-#endif
+                util::call_skipped_token_hook(ctx, act_token);
                 ++iter_ctx->first;
             }
 
@@ -913,7 +905,7 @@ namespace impl {
             }
 
             // this token gets skipped
-            call_skipped_token_hook(ctx, *it);
+            util::call_skipped_token_hook(ctx, *it);
         }
         BOOST_ASSERT(it == end || id != T_UNKNOWN);
         return it != end && IS_CATEGORY(id, PPTokenType);
@@ -928,7 +920,7 @@ namespace impl {
 
         // this token gets skipped
         if (call_hook)
-            call_skipped_token_hook(ctx, *it);
+            util::call_skipped_token_hook(ctx, *it);
 
         for (++it; it != end; ++it) {
         token_id id = token_id(*it);
@@ -937,7 +929,7 @@ namespace impl {
                 context_policies::util::ccomment_has_newline(*it)) 
             {
                 if (call_hook)
-                    call_skipped_token_hook(ctx, *it);
+                    util::call_skipped_token_hook(ctx, *it);
                 ++it;           // skip eol/C/C++ comment
                 return true;    // no more significant tokens on this line
             }
@@ -947,31 +939,49 @@ namespace impl {
 
             // this token gets skipped
             if (call_hook)
-                call_skipped_token_hook(ctx, *it);
+                util::call_skipped_token_hook(ctx, *it);
         }
         return false;
     }
 
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContextT, typename IteratorT>
-    bool skip_to_eol(ContextT &ctx, IteratorT &it, IteratorT const &end)
+    bool skip_to_eol(ContextT &ctx, IteratorT &it, IteratorT const &end, 
+        bool call_hook = true)
     {
         using namespace boost::wave;
 
         for (/**/; it != end; ++it) {
         token_id id = token_id(*it);
 
-            call_skipped_token_hook(ctx, *it);
             if (T_CPPCOMMENT == id || T_NEWLINE == id ||
                 context_policies::util::ccomment_has_newline(*it)) 
             {
+                // always call hook for eol 
+                util::call_skipped_token_hook(ctx, *it);
                 ++it;           // skip eol/C/C++ comment
                 return true;    // found eol
             }
+
+            if (call_hook)
+                util::call_skipped_token_hook(ctx, *it);
         }
         return false;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    inline void
+    remove_leading_whitespace(ContextT &ctx, ContainerT& c, bool call_hook = true)
+    {
+        typename ContainerT::iterator it = c.begin();
+        while (IS_CATEGORY(*it, WhiteSpaceTokenType)) {
+            typename ContainerT::iterator save = it++;
+            if (call_hook)
+                util::call_skipped_token_hook(ctx, *save);
+            c.erase(save);
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1005,9 +1015,9 @@ string_type str(util::impl::as_string<string_type>(iter_ctx->first, it));
 template <typename ContextT>
 template <typename IteratorT>
 inline bool 
-pp_iterator_functor<ContextT>::ensure_is_last_on_line(IteratorT& it)
+pp_iterator_functor<ContextT>::ensure_is_last_on_line(IteratorT& it, bool call_hook)
 {
-    if (!impl::pp_is_last_on_line(ctx, it, iter_ctx->last, false)) 
+    if (!impl::pp_is_last_on_line(ctx, it, iter_ctx->last, call_hook)) 
     {
     // enable error recovery (start over with the next line)
         impl::skip_to_eol(ctx, it, iter_ctx->last);
@@ -1042,10 +1052,10 @@ pp_iterator_functor<ContextT>::ensure_is_last_on_line(IteratorT& it)
 template <typename ContextT>
 template <typename IteratorT>
 inline bool 
-pp_iterator_functor<ContextT>::skip_to_eol_with_check(IteratorT &it)
+pp_iterator_functor<ContextT>::skip_to_eol_with_check(IteratorT &it, bool call_hook)
 {
     typename ContextT::string_type value ((*it).get_value());
-    if (!impl::skip_to_eol(ctx, it, iter_ctx->last) &&
+    if (!impl::skip_to_eol(ctx, it, iter_ctx->last, call_hook) &&
         !need_single_line(ctx.get_language())) 
     {
     // The line doesn't end with an eol but eof token.
@@ -1074,6 +1084,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
 {
     token_id id = token_id(*it);
     bool can_exit = true;
+    bool call_hook_in_skip = true;
     if (!ctx.get_if_block_status()) {
         if (IS_EXTCATEGORY(*it, PPConditionalTokenType)) {
         // simulate the if block hierarchy
@@ -1121,6 +1132,9 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
                 on_illformed((*it).get_value());
                 break;
             }
+        }
+        else {
+            util::call_skipped_token_hook(ctx, *it);
         }
     }
     else {
@@ -1207,6 +1221,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
             {
                 on_undefine(it);
             }
+            call_hook_in_skip = false;
             break;
 
         case T_PP_IFDEF:                // #ifdef
@@ -1215,6 +1230,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
             {
                 on_ifdef(directive, it);
             }
+            call_hook_in_skip = false;
             break;
 
         case T_PP_IFNDEF:               // #ifndef
@@ -1223,6 +1239,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
             {
                 on_ifndef(directive, it);
             }
+            call_hook_in_skip = false;
             break;
 
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
@@ -1241,7 +1258,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
 
 // start over with the next line, if only possible
     if (can_exit) {
-        skip_to_eol_with_check(it);
+        skip_to_eol_with_check(it, call_hook_in_skip);
         return true;    // may be safely ignored
     }
     return false;   // do not ignore this pp directive
@@ -1430,7 +1447,7 @@ token_id id = token_id(found_directive);
         break;
 
     case T_PP_ELIF:         // #elif
-        on_elif(found_directive, begin_child_it, end_child_it, found_eoltokens);
+        on_elif(found_directive, begin_child_it, end_child_it);
         break;
 
 //     case T_PP_ELSE:         // #else
@@ -1480,6 +1497,10 @@ token_id id = token_id(found_directive);
         }
         break;
     }
+
+    // properly skip trailing newline for all directives
+    typename token_sequence_type::const_iterator eol = found_eoltokens.begin();
+    impl::skip_to_eol(ctx, eol, found_eoltokens.end());
     return true;    // return newline only
 }
 
@@ -1946,6 +1967,8 @@ token_sequence_type toexpand;
         make_ref_transform_iterator(end, get_value),
         std::inserter(toexpand, toexpand.end()));
 
+    impl::remove_leading_whitespace(ctx, toexpand);
+
 bool if_status = false;
 grammars::value_error status = grammars::error_noerror;
 token_sequence_type expanded;
@@ -2020,8 +2043,7 @@ inline void
 pp_iterator_functor<ContextT>::on_elif(
     result_type const& found_directive,
     typename parse_tree_type::const_iterator const &begin,
-    typename parse_tree_type::const_iterator const &end,
-    token_sequence_type const& found_eoltokens)
+    typename parse_tree_type::const_iterator const &end)
 {
 // preprocess the given sequence into the provided list
 get_token_value<result_type, parse_node_type> get_value;
@@ -2030,6 +2052,8 @@ token_sequence_type toexpand;
     std::copy(make_ref_transform_iterator(begin, get_value), 
         make_ref_transform_iterator(end, get_value),
         std::inserter(toexpand, toexpand.end()));
+
+    impl::remove_leading_whitespace(ctx, toexpand);
 
 // check current if block status
     if (ctx.get_if_block_some_part_status()) {
@@ -2042,10 +2066,8 @@ token_sequence_type toexpand;
 
     // skip all the expression and the trailing whitespace
     typename token_sequence_type::iterator begin2 = toexpand.begin();
-    typename token_sequence_type::const_iterator begin3 = found_eoltokens.begin();
 
         impl::skip_to_eol(ctx, begin2, toexpand.end());
-        impl::skip_to_eol(ctx, begin3, found_eoltokens.end());
         return;     // one of previous #if/#elif was true, so don't enter this #elif 
     }
 

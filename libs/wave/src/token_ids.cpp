@@ -216,7 +216,7 @@ static char const *tok_names[] = {
     BOOST_STATIC_ASSERT(
         sizeof(tok_names)/sizeof(tok_names[0]) == T_LAST_TOKEN-T_FIRST_TOKEN
     );
-    
+
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
     return (id < T_LAST_TOKEN-T_FIRST_TOKEN) ? tok_names[id] : "<UnknownToken>";
 }
