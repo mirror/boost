@@ -130,12 +130,18 @@ provided by Boost.Flyweight can fail:
 </pre></blockquote>
 
 <p>
-In some environments, the program above fails at termination time with something
-like the following:
+In some environments, the program above fails when exiting. For instance, if run
+from Microsoft Visual C++ environment in debug mode, a breakpoint is triggered
+at termination time and the debug output window shows a message along the following:
 </p>
 
 <blockquote><pre>
-Assertion failed: count()==0, file c:\boost\flyweight\refcounted.hpp, line 68
+HEAP[test.exe]: HEAP: Free Heap block 3a6488 modified at 3a6650 after it was
+freed
+Windows has triggered a breakpoint in test.exe.
+This may be due to a corruption of the heap, and indicates a bug in test.exe
+or any of the DLLs it has loaded.
+The output window may have more diagnostic information
 </pre></blockquote>
 
 <p>
@@ -180,9 +186,9 @@ Annex: MPL lambda expressions
 
 <br>
 
-<p>Revised June 22nd 2009</p>
+<p>Revised Octber 16th 2010</p>
 
-<p>&copy; Copyright 2006-2009 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2006-2010 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
