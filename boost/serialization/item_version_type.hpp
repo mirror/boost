@@ -11,6 +11,9 @@
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/is_bitwise_serializable.hpp>
 
+// fixes broken example build on x86_64-linux-gnu-gcc-4.6.0
+#include <cassert>
+
 namespace boost { 
 namespace serialization {
 
