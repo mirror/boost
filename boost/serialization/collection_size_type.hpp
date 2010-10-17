@@ -57,6 +57,6 @@ public:
 } } // end namespace boost::serialization
 
 BOOST_CLASS_IMPLEMENTATION(collection_size_type, primitive_type)
-BOOST_IS_BITWISE_SERIALIZABLE(collection_size_type);
+BOOST_IS_BITWISE_SERIALIZABLE(collection_size_type)
 
 #endif //BOOST_SERIALIZATION_COLLECTION_SIZE_TYPE_HPP
