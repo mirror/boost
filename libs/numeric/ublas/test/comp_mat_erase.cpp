@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_CASE( compressed_matrix_erase_after_end )
 {
     boost::numeric::ublas::compressed_matrix<int, boost::numeric::ublas::row_major > A(2, 2);
 
-    BOOST_CHECK_EQUAL( A.filled1(), 1 );
+    BOOST_CHECK_EQUAL( A.filled1(), (int) 1 );
     BOOST_CHECK_EQUAL( A.index1_data()[0], 0 );
 
     A(0,0) = 1;

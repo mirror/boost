@@ -92,6 +92,10 @@ struct test_my_vector {
         v2 = v1 * value_type (1.);
         std::cout << "v1 * 1. = " << v2 << std::endl;
         v2 = v1 * t;
+	  std::cout << "v1 * value_type(N) = " << v2 << std::endl;
+	  // test interop with integer
+	  v2 = v1 * N;
+
         std::cout << "v1 * N = " << v2 << std::endl;
 
         // Some assignments
@@ -108,6 +112,9 @@ struct test_my_vector {
         v1 *= value_type (1.);
         std::cout << "v1 *= 1. = " << v1 << std::endl;
         v1 *= t;
+	  std::cout << "v1 *= value_type(N) = " << v1 << std::endl;
+	  // test interop with integer
+	  v1 *= N;
         std::cout << "v1 *= N = " << v1 << std::endl;
 
         // Unary vector operations resulting in a scalar
