@@ -117,7 +117,7 @@ libraries += boost_mpi ;
         <link>shared:<define>BOOST_MPI_DYN_LINK=1    
         <link>shared:<define>BOOST_MPI_PYTHON_DYN_LINK=1        
         <link>shared:<define>BOOST_PYTHON_DYN_LINK=1    
-        <link>shared 
+        <link>shared <runtime-link>shared
       ;
   }
 }
