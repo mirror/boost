@@ -62,12 +62,12 @@ void bubble_down_one(I first, I last)
 }
 
 template <class Iterator>
-inline std::size_t hash_value_from_capture_name(Iterator i, Iterator j)
+inline int hash_value_from_capture_name(Iterator i, Iterator j)
 {
    std::size_t r = boost::hash_range(i, j);
    r %= ((std::numeric_limits<int>::max)() - 10001);
    r += 10000;
-   return r;
+   return static_cast<int>(r);
 }
 
 class named_subexpressions
@@ -81,12 +81,12 @@ public:
       { 
          hash = hash_value_from_capture_name(i, j); 
       }
-      name(std::size_t h, int idx)
+      name(int h, int idx)
          : index(idx), hash(h)
       { 
       }
       int index;
-      std::size_t hash;
+      int hash;
       bool operator < (const name& other)const
       {
          return hash < other.hash;
@@ -130,7 +130,7 @@ public:
       name t(i, j, 0);
       return std::equal_range(m_sub_names.begin(), m_sub_names.end(), t);
    }
-   int get_id(std::size_t h)const
+   int get_id(int h)const
    {
       name t(h, 0);
       std::vector<name>::const_iterator pos = std::lower_bound(m_sub_names.begin(), m_sub_names.end(), t);
@@ -140,7 +140,7 @@ public:
       }
       return -1;
    }
-   range_type equal_range(std::size_t h)const
+   range_type equal_range(int h)const
    {
       name t(h, 0);
       return std::equal_range(m_sub_names.begin(), m_sub_names.end(), t);

@@ -811,7 +811,7 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base* state)
                // There may be more than one capture group with this hash, just do what Perl
                // does and recurse to the leftmost:
                //
-               idx = m_pdata->get_id(idx);
+               idx = m_pdata->get_id(static_cast<int>(idx));
             }
             while(p)
             {
