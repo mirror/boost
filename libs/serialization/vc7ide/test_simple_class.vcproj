@@ -79,7 +79,7 @@
 				Optimization="2"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1;BOOST_ARCHIVE_TEST=binary_archive.hpp"
 				SmallerTypeCheck="FALSE"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"

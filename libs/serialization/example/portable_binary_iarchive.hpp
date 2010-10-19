@@ -105,7 +105,7 @@ protected:
         boost::intmax_t l;
         load_impl(l, sizeof(T));
         // use cast to avoid compile time warning
-        //t = static_cast<T>(l);
+        //t = static_cast< T >(l);
         t = T(l);
     }
     void load(boost::serialization::item_version_type & t){

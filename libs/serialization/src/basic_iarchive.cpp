@@ -29,6 +29,9 @@ namespace std{
 #include <boost/serialization/tracking.hpp>
 
 #define BOOST_ARCHIVE_SOURCE
+// include this to prevent linker errors when the
+// same modules are marked export and import.
+#define BOOST_SERIALIZATION_SOURCE
 
 #include <boost/archive/archive_exception.hpp>
 

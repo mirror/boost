@@ -29,13 +29,13 @@ namespace boost {
 namespace serialization {
 
 /////////////////////////////////////////////////////////////
-// implement serialization for auto_ptr<T>
+// implement serialization for auto_ptr< T >
 // note: this must be added to the boost namespace in order to
 // be called by the library
 template<class Archive, class T>
 inline void save(
     Archive & ar,
-    const std::auto_ptr<T> &t,
+    const std::auto_ptr< T > &t,
     const unsigned int file_version
 ){
     // only the raw pointer has to be saved
@@ -47,7 +47,7 @@ inline void save(
 template<class Archive, class T>
 inline void load(
     Archive & ar,
-    std::auto_ptr<T> &t,
+    std::auto_ptr< T > &t,
     const unsigned int file_version
 ){
     T *pTarget;
@@ -55,7 +55,7 @@ inline void load(
     // note that the reset automagically maintains the reference count
     #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
         t.release();
-        t = std::auto_ptr<T>(pTarget);
+        t = std::auto_ptr< T >(pTarget);
     #else
         t.reset(pTarget);
     #endif
@@ -66,7 +66,7 @@ inline void load(
 template<class Archive, class T>
 inline void serialize(
     Archive & ar,
-    std::auto_ptr<T> &t,
+    std::auto_ptr< T > &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);

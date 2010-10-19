@@ -48,7 +48,7 @@ class log_archive :
         base::save_override(boost::serialization::make_nvp(NULL, t), 0);
     }
     template<class T>
-    void save_override(const boost::serialization::nvp<T> & t, int){
+    void save_override(const boost::serialization::nvp< T > & t, int){
         // this is here to remove the "const" requirement.  Since
         // this class is to be used only for output, it's not required.
         base::save_override(t, 0);

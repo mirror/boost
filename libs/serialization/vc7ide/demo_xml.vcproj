@@ -73,7 +73,8 @@
 			Name="Debug runtime-dynamic|Win32"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1">
+			ConfigurationType="1"
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"

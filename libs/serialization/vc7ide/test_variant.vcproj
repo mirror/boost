@@ -185,6 +185,9 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\test\A.cpp">
+		</File>
+		<File
 			RelativePath="..\test\test_variant.cpp">
 		</File>
 	</Files>

@@ -100,6 +100,7 @@ lib boost_serialization
     : $(SOURCES).cpp
     : 
     <toolset>msvc:<cxxflags>/Gy
+    <toolset>gcc:<cxxflags>"-fvisibility=hidden"
     <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
     ;
 
@@ -107,6 +108,7 @@ lib boost_wserialization
     : $(WSOURCES).cpp boost_serialization 
     :     
     <toolset>msvc:<cxxflags>/Gy 
+    <toolset>gcc:<cxxflags>"-fvisibility=hidden"
     <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
     ;
 
