@@ -113,7 +113,7 @@ public:
 };
 
 template<class T>
-bool detail::singleton_wrapper<T>::m_is_destroyed = false;
+bool detail::singleton_wrapper< T >::m_is_destroyed = false;
 
 } // detail
 
@@ -125,10 +125,10 @@ private:
     // include this to provoke instantiation at pre-execution time
     static void use(T const &) {}
     BOOST_DLLEXPORT static T & get_instance() {
-        static detail::singleton_wrapper<T> t;
+        static detail::singleton_wrapper< T > t;
         // refer to instance, causing it to be instantiated (and
         // initialized at startup on working compilers)
-        assert(! detail::singleton_wrapper<T>::m_is_destroyed);
+        assert(! detail::singleton_wrapper< T >::m_is_destroyed);
         use(instance);
         return static_cast<T &>(t);
     }
@@ -141,12 +141,12 @@ public:
         return get_instance();
     }
     BOOST_DLLEXPORT static bool is_destroyed(){
-        return detail::singleton_wrapper<T>::m_is_destroyed;
+        return detail::singleton_wrapper< T >::m_is_destroyed;
     }
 };
 
 template<class T>
-BOOST_DLLEXPORT T & singleton<T>::instance = singleton<T>::get_instance();
+BOOST_DLLEXPORT T & singleton< T >::instance = singleton< T >::get_instance();
 
 } // namespace serialization
 } // namespace boost
