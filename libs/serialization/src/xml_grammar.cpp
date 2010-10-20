@@ -61,12 +61,12 @@ void xml_grammar::init_chset(){
     Letter   = standard::char_("\x41-\x5A\x61-\x7A\xC0-\xD6\xD8-\xF6\xF8-\xFF");
     Digit    = standard::digit;
     HexDigit = standard::xdigit;
-    Extender = standard::char_("\xB7");
+    Extender = standard::char_('\xB7');
     Sch      = standard::char_("\x20\x9\xD\xA");
     NameChar = Letter | Digit | standard::char_("._:-") | Extender ;
     AnyChar  = standard::char_;
 
-    DocTypeDeclChars = *(standard::char_ - qi::lit(">"));
+    DocTypeDeclChars = *(standard::char_ - qi::lit('>'));
     XMLDeclChars = *(standard::char_ - qi::lit("?>"));
     
     Name =

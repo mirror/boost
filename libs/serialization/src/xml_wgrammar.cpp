@@ -144,7 +144,7 @@ void xml_wgrammar::init_chset(){
 
     AnyChar = standard_wide::char_;
 
-    DocTypeDeclChars = *(standard_wide::char_ - qi::lit(L">"));
+    DocTypeDeclChars = *(standard_wide::char_ - qi::lit(L'>'));
     XMLDeclChars = *(standard_wide::char_ - qi::lit(L"?>"));
     
     Name =

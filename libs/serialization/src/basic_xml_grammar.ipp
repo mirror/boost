@@ -139,14 +139,14 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ETag = -S >> "</" >> Name >> !S >> '>';
 
     /* [6] CharData ::= (AnyChar - ("&" | "<"))+ */
-    CharData = +(AnyChar - (qi::lit(L"&") | L"<"))
+    CharData = +(AnyChar - (qi::lit('&') | '<'))
       [phoenix::ref(rv.contents) += qi::_1]
     ;
 
     /* [7] CharRef ::= ("&#" Digit* ';') | ("&#x" HexDigit* ';') */
     CharRef
-      = (qi::lit(L"&#") >> *Digit[phoenix::ref(rv.contents) += qi::_1] >> L';')
-      | (L"&#x" >> *HexDigit[phoenix::ref(rv.contents) += qi::_1] >> L';')
+      = (qi::lit("&#") >> *Digit[phoenix::ref(rv.contents) += qi::_1] >> ';')
+      | ("&#x" >> *HexDigit[phoenix::ref(rv.contents) += qi::_1] >> ';')
     ;
 
     /* [8] AmpRef ::= "&amp;"    *
@@ -154,18 +154,18 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
      * [a] GTRef ::= "&gt;"      *
      * [b] AposRef ::= "&apos;"  *
      * [c] QuoteRef ::= "&quot;" */
-    AmpRef   = qi::lit(L"&amp;") [phoenix::ref(rv.contents) += L'&'];
-    LTRef    = qi::lit(L"&lt;")  [phoenix::ref(rv.contents) += L'<'];
-    GTRef    = qi::lit(L"&gt;")  [phoenix::ref(rv.contents) += L'>'];
-    AposRef  = qi::lit(L"&apos;")[phoenix::ref(rv.contents) += L'\''];
-    QuoteRef = qi::lit(L"&quot;")[phoenix::ref(rv.contents) += L'"'];
+    AmpRef   = qi::lit("&amp;") [phoenix::ref(rv.contents) += '&'];
+    LTRef    = qi::lit("&lt;")  [phoenix::ref(rv.contents) += '<'];
+    GTRef    = qi::lit("&gt;")  [phoenix::ref(rv.contents) += '>'];
+    AposRef  = qi::lit("&apos;")[phoenix::ref(rv.contents) += '\''];
+    QuoteRef = qi::lit("&quot;")[phoenix::ref(rv.contents) += '"'];
     
     /* [d] AmpName ::= "&amp;"   *
      * [e] LTName ::= "&lt;"     *
      * [f] GTName ::= "&gt;"     */
-    AmpName = qi::lit(L"&amp;")[phoenix::ref(rv.class_name) += L'&'];
-    LTName  = qi::lit(L"&lt;") [phoenix::ref(rv.class_name) += L'<'];
-    GTName  = qi::lit(L"&gt;") [phoenix::ref(rv.class_name) += L'>'];
+    AmpName = qi::lit("&amp;")[phoenix::ref(rv.class_name) += '&'];
+    LTName  = qi::lit("&lt;") [phoenix::ref(rv.class_name) += '<'];
+    GTName  = qi::lit("&gt;") [phoenix::ref(rv.class_name) += '>'];
 
     /* [10] Reference ::= AmpRef LTRef GTRef AposRef QuoteRef CharRef */ 
     Reference
@@ -178,15 +178,15 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     /* [11] content ::= '<' | (Reference | CharData)+ '<' */
-    content = qi::lit(L'<') | +(Reference | CharData) >> qi::lit(L'<');
+    content = qi::lit('<') | +(Reference | CharData) >> qi::lit('<');
 
     ClassIDAttribute
       = qi::lit(BOOST_ARCHIVE_XML_CLASS_ID())
       >> *NameChar
       >> Eq
-      >> L'"'
+      >> '"'
       >> qi::short_[phoenix::ref(rv.class_id) = qi::_1]
-      >> L'"'
+      >> '"'
     ;
 
     ObjectIDAttribute
@@ -195,17 +195,17 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         )
       >> *NameChar
       >> Eq
-      >> L'"'
-      >> qi::lit(L'_')
+      >> '"'
+      >> qi::lit('_')
       >> qi::uint_[phoenix::ref(rv.object_id) = qi::_1]
-      >> L'"'
+      >> '"'
     ;
         
     ClassNameChar
       = AmpName
       | LTName
       | GTName
-      | (qi::char_ - L'"')[phoenix::ref(rv.class_name) += qi::_1]
+      | (qi::char_ - '"')[phoenix::ref(rv.class_name) += qi::_1]
     ;
     
     ClassName = *ClassNameChar;
@@ -213,33 +213,33 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ClassNameAttribute
       = qi::lit(BOOST_ARCHIVE_XML_CLASS_NAME()) 
       >> Eq
-      >> L'"'
+      >> '"'
       >> ClassName
-      >> L'"'
+      >> '"'
     ;
 
     TrackingAttribute
       = qi::lit(BOOST_ARCHIVE_XML_TRACKING())
       >> Eq
-      >> L'"'
+      >> '"'
       >> qi::uint_[phoenix::ref(rv.tracking_level) = qi::_1]
-      >> L'"'
+      >> '"'
     ;
 
     VersionAttribute
       = qi::lit(BOOST_ARCHIVE_XML_VERSION())
       >> Eq
-      >> L'"'
+      >> '"'
       >> qi::uint_[phoenix::ref(rv.version) = qi::_1]
-      >> L'"'
+      >> '"'
     ;
 
     UnusedAttribute
       = Name
       >> Eq
-      >> L'"'
+      >> '"'
       >> !CharData
-      >> L'"'
+      >> '"'
     ;
 
     Attribute
@@ -253,29 +253,29 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 
     XMLDecl
       =  -S
-      >> L"<?xml"
+      >> "<?xml"
       >> S
-      >> L"version"
+      >> "version"
       >> Eq
-      >> L"\"1.0\""
+      >> "\"1.0\""
       >> XMLDeclChars
       >> !S
-      >> L"?>"
+      >> "?>"
     ;
 
-    DocTypeDecl = -S >> L"<!DOCTYPE" >> DocTypeDeclChars >> L">";
+    DocTypeDecl = -S >> "<!DOCTYPE" >> DocTypeDeclChars >> '>';
 
-    SignatureAttribute = qi::lit(L"signature") >> Eq >> L'"' >> Name >> L'"';
+    SignatureAttribute = qi::lit("signature") >> Eq >> '"' >> Name >> '"';
     
     SerializationWrapper
       =  -S
-      >> L"<boost_serialization"
+      >> "<boost_serialization"
       >> S
       >> SignatureAttribute
       >> S
       >> VersionAttribute
       >> !S
-      >> L'>'
+      >> '>'
     ;
 }
 
