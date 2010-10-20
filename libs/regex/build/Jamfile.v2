@@ -102,11 +102,13 @@ SOURCES =
 lib boost_regex : ../src/$(SOURCES) icu_options
     :         
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
-	     <toolset>gcc-mw:<link>static
-	     <toolset>gcc-mingw:<link>static
+	     #<toolset>gcc-mw:<link>static
+	     #<toolset>gcc-mingw:<link>static
 	     <toolset>gcc-cygwin:<link>static
     ;
 
 boost-install boost_regex ;
+
+
 
 
