@@ -103,7 +103,7 @@ basic_binary_iarchive<Archive>::init(){
             // version 8+ followed by a zero
             this->This()->m_sb.sbumpc();
         }
-        #else defined(BOOST_BIG_ENDIAN)
+        #elif defined(BOOST_BIG_ENDIAN)
         if(v == 0)
             v = this->This()->m_sb.sbumpc();
         #endif

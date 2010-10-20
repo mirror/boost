@@ -120,7 +120,7 @@ ptr_serialization_support<Archive,Serializable>::instantiate()
 // This was made this way so that export.hpp could be included
 // in other headers.  This is still under study.
 
-namespace {
+namespace extra_detail {
 
 template<class T>
 struct guid_initializer
@@ -156,7 +156,7 @@ struct init_guid;
     namespace boost {                                        \
     namespace archive {                                      \
     namespace detail {                                       \
-    namespace {                                              \
+    namespace extra_detail {                                 \
     template<>                                               \
     struct init_guid< T > {                                  \
         static guid_initializer< T > const & g;              \
