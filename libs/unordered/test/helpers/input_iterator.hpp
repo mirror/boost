@@ -95,17 +95,20 @@ namespace test
         value_type* operator->() const {
             return &*base_;
         }
+        value_type operator[](difference_type d) {
+            return base_[d];
+        }
         copy_iterator_adaptor& operator++() {
             ++base_; return *this;
         }
         copy_iterator_adaptor operator++(int) {
             copy_iterator_adaptor tmp(*this); ++base_; return tmp;
         }
-        bool operator==(copy_iterator_adaptor const& x) const {
-            return base_ == x.base_;
+        copy_iterator_adaptor& operator--() {
+            --base_; return *this;
         }
-        bool operator!=(copy_iterator_adaptor const& x) const {
-            return base_ != x.base_;
+        copy_iterator_adaptor operator--(int) {
+            copy_iterator_adaptor tmp(*this); --base_; return tmp;
         }
         copy_iterator_adaptor operator+=(difference_type x) {
             base_ += x;
@@ -115,8 +118,36 @@ namespace test
             base_ -= x;
             return *this;
         }
+        copy_iterator_adaptor operator+(difference_type n) {
+            return copy_iterator_adaptor(base_+n);
+        }
+        copy_iterator_adaptor operator-(difference_type n) {
+            return copy_iterator_adaptor(base_-n);
+        }
+        friend copy_iterator_adaptor operator+(
+                difference_type n, copy_iterator_adaptor x) {
+            return x+n;
+        }
         difference_type operator-(copy_iterator_adaptor const& other) {
             return base_-other.base_;
+        }
+        bool operator==(copy_iterator_adaptor const& x) const {
+            return base_ == x.base_;
+        }
+        bool operator!=(copy_iterator_adaptor const& x) const {
+            return base_ != x.base_;
+        }
+        bool operator<(copy_iterator_adaptor const& x) const {
+            return base_ < x.base_;
+        }
+        bool operator>(copy_iterator_adaptor const& x) const {
+            return base_ > x.base_;
+        }
+        bool operator<=(copy_iterator_adaptor const& x) const {
+            return base_ <= x.base_;
+        }
+        bool operator>=(copy_iterator_adaptor const& x) const {
+            return base_ >= x.base_;
         }
     private:
         Iterator base_;
