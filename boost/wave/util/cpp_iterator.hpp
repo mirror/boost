@@ -1135,6 +1135,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
         }
         else {
             util::call_skipped_token_hook(ctx, *it);
+            ++it;
         }
     }
     else {
