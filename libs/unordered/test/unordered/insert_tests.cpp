@@ -1,5 +1,5 @@
 
-// Copyright 2006-2009 Daniel James.
+// Copyright 2006-2010 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -225,6 +225,18 @@ void insert_tests2(X*,
         BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator
             begin = v.begin(), end = v.end();
         x.insert(test::input_iterator(begin), test::input_iterator(end));
+        test::check_container(x, v);
+
+        test::check_equivalent_keys(x);
+    }
+
+    std::cerr<<"insert copy iterator range tests.\n";
+
+    {
+        X x;
+
+        test::random_values<X> v(1000, generator);
+        x.insert(test::copy_iterator(v.begin()), test::copy_iterator(v.end()));
         test::check_container(x, v);
 
         test::check_equivalent_keys(x);

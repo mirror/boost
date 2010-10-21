@@ -1,5 +1,5 @@
 
-// Copyright 2006-2009 Daniel James.
+// Copyright 2006-2010 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -254,6 +254,19 @@ void constructor_tests2(T*,
             x_begin = x.begin(), x_end = x.end();
         T y(test::input_iterator(x_begin),
             test::input_iterator(x_end), 0, hf2, eq2);
+        test::check_container(x, v);
+        test::check_container(y, x);
+        test::check_equivalent_keys(x);
+        test::check_equivalent_keys(y);
+    }
+    
+    std::cerr<<"Construct 8.5 - from copy iterator\n";
+    {
+        test::random_values<T> v(100, generator);
+        T x(test::copy_iterator(v.begin()),
+            test::copy_iterator(v.end()), 0, hf1, eq1);
+        T y(test::copy_iterator(x.begin()),
+            test::copy_iterator(x.end()), 0, hf2, eq2);
         test::check_container(x, v);
         test::check_container(y, x);
         test::check_equivalent_keys(x);

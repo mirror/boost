@@ -129,4 +129,9 @@ First official release.
 * Use Boost.Exception.
 * Stop using deprecated `BOOST_HAS_*` macros.
 
+[h2 Boost 1.45.0]
+
+* Fix a bug when inserting into an `unordered_map` or `unordered_set` using
+  iterators which returns `value_type` by copy.
+
 [endsect]
