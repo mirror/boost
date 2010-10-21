@@ -35,6 +35,8 @@ Boost V1.45.0
 - Fixed a problem with the pp hooks 'expanding_object_like_macro' and 
   'expanding_function_like_macro', which when returning true were stopping all
   preprocessing instead of just inhibiting the expansion of the macro.
+- Fixed a duplicated call to the pp hook skipped_token for preprocessing 
+  directives inside inactive conditional branches.
 
 Boost V1.44.0
 - V2.0.6
