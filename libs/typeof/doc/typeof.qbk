@@ -1,4 +1,4 @@
-[library Boost.Typeof
+﻿[library Boost.Typeof
     [authors [Vertleyb, Arkadiy], [Holt, Peder]]
     [copyright 2004 2005 Arkadiy Vertleyb, Peder Holt]
     [license
@@ -381,6 +381,14 @@ are supported for functios, and applies to functions, function pointers,
 function references, and member function pointers.  The default value is 10.
 Redefine if you want the Typeof Library to handle functions with more parameters.
    
+[endsect]
+
+[section:messages MESSAGES]
+
+Define `BOOST_TYPEOF_MESSAGE` before including boost/typeof/typeof.hpp to 
+include messages "using typeof emulation" and "using native typeof".
+By default, these messages will not be displayed.
+
 [endsect]
 
 [section:limit_size LIMIT_SIZE]
