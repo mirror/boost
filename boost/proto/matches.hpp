@@ -391,15 +391,18 @@
                   , matches_<proto::basic_expr<Tag, Args, Arity>, typename Then::proto_grammar>
                   , matches_<proto::basic_expr<Tag, Args, Arity>, typename Else::proto_grammar>
                 >::type
-            {};
-
-            template<typename Tag, typename Args, long Arity, typename If>
-            struct matches_<proto::basic_expr<Tag, Args, Arity>, proto::if_<If> >
-              : detail::uncvref<
-					typename when<_, If>::
-                        template impl<proto::expr<Tag, Args, Arity>, int, int>::result_type
-				>::type
-            {};
+            {
+                typedef
+                    typename mpl::if_c<
+                        remove_reference<
+                            typename when<_, If>::
+                                template impl<proto::expr<Tag, Args, Arity>, int, int>::result_type
+                        >::type::value
+                      , Then
+                      , Else
+                    >::type
+                which;
+            };
 
             // handle degenerate cases of proto::or_
             template<typename Expr>
@@ -440,7 +443,9 @@
                     proto::basic_expr<Tag, Args, Arity>
                   , typename Cases::template case_<Tag>::proto_grammar
                 >
-            {};
+            {
+                typedef typename Cases::template case_<Tag> which;
+            };
         }
 
         /// \brief A Boolean metafunction that evaluates whether a given
