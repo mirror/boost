@@ -30,6 +30,7 @@
 #include <boost/wave/preprocessing_hooks.hpp>
 #include <boost/wave/whitespace_handling.hpp>
 #include <boost/wave/language_support.hpp>
+#include <boost/wave/cpp_exceptions.hpp>
 
 #include "stop_watch.hpp"
 
@@ -69,7 +70,8 @@ class bad_pragma_exception :
 {
 public:
     enum error_code {
-        pragma_system_not_enabled = boost::wave::preprocess_exception::last_error_number + 1,
+        pragma_system_not_enabled = 
+            boost::wave::preprocess_exception::last_error_number + 1,
         pragma_mismatched_push_pop,
     };
 
@@ -510,10 +512,11 @@ public:
             if (!enable_system_command) {
             // if the #pragma wave system() directive is not enabled, throw
             // a corresponding error (actually its a remark),
+                typename ContextT::string_type msg(
+                    boost::wave::util::impl::as_string(values));
                 BOOST_WAVE_THROW_CTX(ctx, bad_pragma_exception, 
                     pragma_system_not_enabled,
-                    boost::wave::util::impl::as_string(values).c_str(), 
-                    act_token.get_position());
+                    msg.c_str(), act_token.get_position());
                 return false;
             }
 
@@ -523,9 +526,10 @@ public:
         }
         if (option.get_value() == "stop") {
         // stop the execution and output the argument
-            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, error_directive,
-                boost::wave::util::impl::as_string(values).c_str(), 
-                act_token.get_position());
+            typename ContextT::string_type msg(
+                boost::wave::util::impl::as_string(values));
+            BOOST_WAVE_THROW_CTX(ctx, boost::wave::preprocess_exception, 
+                error_directive, msg.c_str(), act_token.get_position());
             return false;
         }
         if (option.get_value() == "option") {
@@ -828,7 +832,7 @@ protected:
                 option_str += boost::wave::util::impl::as_string(values);
                 option_str += ")";
             }
-            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+            BOOST_WAVE_THROW_CTX(ctx, boost::wave::preprocess_exception, 
                 ill_formed_pragma_option, option_str.c_str(), 
                 act_token.get_position());
             return false;
@@ -1000,7 +1004,7 @@ protected:
         // open the new file
         outputstrm.open(fpath.string().c_str(), mode);
         if (!outputstrm.is_open()) { 
-            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+            BOOST_WAVE_THROW_CTX(ctx, boost::wave::preprocess_exception, 
                 could_not_open_output_file,
                 fpath.string().c_str(), act_token.get_position());
             return false;
@@ -1153,7 +1157,7 @@ protected:
                     option_str += util::impl::as_string(values);
                     option_str += ")";
                 }
-                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                BOOST_WAVE_THROW_CTX(ctx, boost::wave::preprocess_exception, 
                     ill_formed_pragma_option,
                     option_str.c_str(), act_token.get_position());
                 return false;
@@ -1190,7 +1194,7 @@ protected:
         string_type error_str("unable to spawn command: ");
 
             error_str += native_cmd;
-            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+            BOOST_WAVE_THROW_CTX(ctx, boost::wave::preprocess_exception, 
                 ill_formed_pragma_option,
                 error_str.c_str(), act_token.get_position());
             return false;
