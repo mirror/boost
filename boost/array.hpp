@@ -346,7 +346,8 @@ namespace boost {
         x.swap(y);
     }
 
-    // Specific for boost::array: simply returns its elems data member.
+#if 0
+	// Specific for boost::array: simply returns its elems data member.
     template <typename T, std::size_t N>
     T(&get_c_array(boost::array<T,N>& arg))[N]
     {
@@ -359,7 +360,29 @@ namespace boost {
     {
         return arg.elems;
     }
+#else
+	namespace detail {
+       template <typename T, std::size_t N> struct c_array
+       {
+           typedef T type[N];
+       };
+	}
+    
+   // Specific for boost::array: simply returns its elems data member.
+   template <typename T, std::size_t N>
+   typename detail::c_array<T,N>::type& get_c_array(boost::array<T,N>& arg)
+   {
+       return arg.elems;
+   }
 
+   // Specific for boost::array: simply returns its elems data member.
+   template <typename T, std::size_t N>
+   const typename detail::c_array<T,N>::type& get_c_array(const boost::array<T,N>& arg)
+   {
+       return arg.elems;
+   }
+#endif
+	
 #if 0
     // Overload for std::array, assuming that std::array will have
     // explicit conversion functions as discussed at the WG21 meeting
