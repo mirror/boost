@@ -440,8 +440,9 @@ pp_iterator_functor<ContextT>::returned_from_include()
     // report unbalanced #if/#endif now to make it possible to recover properly
         if (iter_ctx->if_block_depth != ctx.get_if_block_depth()) {
             using boost::wave::util::impl::escape_lit;
+            BOOST_WAVE_STRINGTYPE msg(escape_lit(oldfile));
             BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, unbalanced_if_endif, 
-                escape_lit(oldfile).c_str(), old_pos);
+                msg.c_str(), old_pos);
         }
         return true;
     }
@@ -1135,6 +1136,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
         }
         else {
             util::call_skipped_token_hook(ctx, *it);
+            ++it;
         }
     }
     else {
@@ -2260,8 +2262,10 @@ token_sequence_type toexpand;
         if (!impl::retrieve_line_info(expanded.begin(), expanded.end(), 
             line, file_name, error))
         {
+            typename ContextT::string_type msg(
+                boost::wave::util::impl::as_string(expanded));
             BOOST_WAVE_THROW_VAR_CTX(ctx, preprocess_exception, error, 
-                boost::wave::util::impl::as_string(expanded).c_str(), act_pos)
+                msg.c_str(), act_pos);
             return;
         }
 
@@ -2284,8 +2288,10 @@ token_sequence_type toexpand;
 
 // diagnose possible error in detected line directive
     if (error != preprocess_exception::no_error) {
+        typename ContextT::string_type msg(
+            boost::wave::util::impl::as_string(expanded));
         BOOST_WAVE_THROW_VAR_CTX(ctx, preprocess_exception, error, 
-            boost::wave::util::impl::as_string(expanded).c_str(), act_pos)
+            msg.c_str(), act_pos);
         return;
     }
 
@@ -2340,8 +2346,9 @@ token_sequence_type toexpand;
 #endif 
     {
     // report the corresponding error
+        BOOST_WAVE_STRINGTYPE msg(boost::wave::util::impl::as_string(expanded));
         BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, error_directive, 
-            boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
+            msg.c_str(), act_pos);
     }
 }
 
@@ -2388,8 +2395,9 @@ token_sequence_type toexpand;
 #endif 
     {
     // report the corresponding error
+        BOOST_WAVE_STRINGTYPE msg(boost::wave::util::impl::as_string(expanded));
         BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, warning_directive, 
-            boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
+            msg.c_str(), act_pos);
     }
 }
 #endif // BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0

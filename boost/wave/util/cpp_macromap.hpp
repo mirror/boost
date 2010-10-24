@@ -421,8 +421,9 @@ token_id id = token_id(*begin);
         !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType) &&
         !IS_CATEGORY(id, BoolLiteralTokenType)) 
     {
+        std::string msg(impl::get_full_name(begin, end));
         BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, invalid_macroname, 
-            impl::get_full_name(begin, end).c_str(), main_pos);
+            msg.c_str(), main_pos);
         return false;
     }
 
@@ -432,8 +433,9 @@ typename defined_macros_type::iterator cit;
 
     if (++it != end) {
     // there should be only one token as the inspected name
+        std::string msg(impl::get_full_name(begin, end));
         BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, invalid_macroname, 
-            impl::get_full_name(begin, end).c_str(), main_pos);
+            msg.c_str(), main_pos);
         return false;
     }
     return is_defined(name, cit, 0);

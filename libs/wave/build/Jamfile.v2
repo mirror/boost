@@ -11,6 +11,7 @@
 project boost/wave
     : requirements
       <link>shared:<define>BOOST_ALL_DYN_LINK=1
+      <link>static:<define>BOOST_THREAD_USE_LIB=1
       <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
       <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
     : source-location ../src
