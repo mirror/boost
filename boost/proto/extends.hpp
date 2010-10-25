@@ -204,7 +204,7 @@ namespace boost { namespace proto
         BOOST_PROTO_DISABLE_MSVC_C4522                                                              \
         Typename() boost::tr1_result_of<                                                            \
             Typename() This::proto_generator(                                                       \
-                Typename() boost::proto::base_expr<                                         \
+                Typename() boost::proto::base_expr<                                                 \
                     Typename() This::proto_domain                                                   \
                   , boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
@@ -217,7 +217,7 @@ namespace boost { namespace proto
         operator =(This Const() &a)                                                                 \
         {                                                                                           \
             typedef                                                                                 \
-                Typename() boost::proto::base_expr<                                         \
+                Typename() boost::proto::base_expr<                                                 \
                     Typename() This::proto_domain                                                   \
                   , boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
@@ -253,7 +253,7 @@ namespace boost { namespace proto
         template<typename A>                                                                        \
         typename boost::tr1_result_of<                                                              \
             proto_generator(                                                                        \
-                typename boost::proto::base_expr<                                           \
+                typename boost::proto::base_expr<                                                   \
                     proto_domain                                                                    \
                   , boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
@@ -266,7 +266,7 @@ namespace boost { namespace proto
         operator =(A ThatConst() &a) ThisConst()                                                    \
         {                                                                                           \
             typedef                                                                                 \
-                typename boost::proto::base_expr<                                           \
+                typename boost::proto::base_expr<                                                   \
                     proto_domain                                                                    \
                   , boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
@@ -274,12 +274,12 @@ namespace boost { namespace proto
                       , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type \
                     >                                                                               \
                 >::type                                                                             \
-            that_type;                                                                            \
+            that_type;                                                                              \
             that_type const that = {                                                                \
                 *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
             };                                                                                      \
-            return proto_generator()(that);                                                            \
+            return proto_generator()(that);                                                         \
         }                                                                                           \
         /**/
 
@@ -319,7 +319,7 @@ namespace boost { namespace proto
         template<typename A>                                                                        \
         typename boost::tr1_result_of<                                                              \
             proto_generator(                                                                        \
-                typename boost::proto::base_expr<                                           \
+                typename boost::proto::base_expr<                                                   \
                     proto_domain                                                                    \
                   , boost::proto::tag::subscript                                                    \
                   , boost::proto::list2<                                                            \
@@ -332,7 +332,7 @@ namespace boost { namespace proto
         operator [](A ThatConst() &a) ThisConst()                                                   \
         {                                                                                           \
             typedef                                                                                 \
-                typename boost::proto::base_expr<                                           \
+                typename boost::proto::base_expr<                                                   \
                     proto_domain                                                                    \
                   , boost::proto::tag::subscript                                                    \
                   , boost::proto::list2<                                                            \
