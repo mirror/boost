@@ -653,6 +653,8 @@ namespace boost { namespace proto
         BOOST_PROTO_CALLABLE()
     };
 
+    struct external;
+
     template<typename PrimitiveTransform, typename X = void>
     struct transform;
 
