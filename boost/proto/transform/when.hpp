@@ -112,6 +112,7 @@
         /// See \c action_map for an example.
         template<typename Grammar>
         struct when<Grammar, external_transform>
+          : proto::transform<when<Grammar, external_transform> >
         {
             typedef Grammar first;
             typedef external_transform second;
