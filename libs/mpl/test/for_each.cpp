@@ -55,6 +55,11 @@ struct value_printer
 # pragma warning(disable:985)
 #endif
 
+void push_back(std::vector<int>* c, int i)
+{
+    c->push_back(i);
+}
+
 int main()
 {
     typedef mpl::list<char,short,int,long,float,double> types;
@@ -63,16 +68,9 @@ int main()
     typedef mpl::range_c<int,0,10> numbers;
     std::vector<int> v;
 
-#if defined(__SGI_STL_PORT)
-    void (std::vector<int>::* push_back)(int const&) = &std::vector<int>::push_back;
     mpl::for_each<numbers>(
-          boost::bind(push_back, &v, _1)
+          boost::bind(&push_back, &v, _1)
         );
-#else
-    mpl::for_each<numbers>(
-          boost::bind(&std::vector<int>::push_back, &v, _1)
-        );    
-#endif
 
     mpl::for_each< numbers >(value_printer(std::cout));
     
