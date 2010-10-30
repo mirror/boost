@@ -40,7 +40,7 @@ def main(argv):
         boostbook_xsl = etree.XSLT(
             etree.parse(os.path.join(boostbook_directory, "docbook.xsl"), parser)
         )
-    except lxml.etree.XMLSyntaxError as error:
+    except lxml.etree.XMLSyntaxError, error:
         print "Error parsing boostbook xsl:"
         print error
         sys.exit(1)
@@ -59,11 +59,16 @@ def main(argv):
                     continue
 
                 if (generate_gold):
-                    with open(gold_path, 'w') as file:
+                    file = open(gold_path, 'w')
+                    try:
                         file.write(doc_text)
+                    finally: file.close()
                 else:
-                    with open(gold_path, 'r') as file:
+                    file = open(gold_path, 'r')
+                    try:
                         gold_text = file.read()
+                    finally:
+                        file.close()
                     compare_xml(filename, doc_text, gold_text)
 
 def run_boostbook(parser, boostbook_xsl, file):

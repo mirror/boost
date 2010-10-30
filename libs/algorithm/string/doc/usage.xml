@@ -57,7 +57,7 @@
                     The magic of <ulink url="../../libs/range/index.html">Boost.Range</ulink> 
                     provides a uniform way of handling different string types. 
                     If there is a need to pass a pair of iterators, 
-                    <ulink url="../../libs/range/doc/html/range/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink>
+                    <ulink url="../../libs/range/doc/html/range/reference/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink>
                     can be used to package iterators into a structure with a compatible interface.
                 </para>
             </listitem>
@@ -208,7 +208,7 @@
         </programlisting>
         <para>
             We have used <functionname>find_last()</functionname> to search the <code>text</code> for "ll".
-            The result is given in the <ulink url="../../libs/range/doc/html/range/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink>. 
+            The result is given in the <ulink url="../../libs/range/doc/html/range/reference/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink>. 
             This range delimits the
             part of the input which satisfies the find criteria. In our example it is the last occurrence of "ll".
             
@@ -217,7 +217,7 @@
             <ulink url="../../libs/range/index.html">Boost.Range</ulink>.
 
             The following lines transform the result. Notice that 
-            <ulink url="../../libs/range/doc/html/range/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink> has familiar 
+            <ulink url="../../libs/range/doc/html/range/reference/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink> has familiar 
             <code>begin()</code> and <code>end()</code> methods, so it can be used like any other STL container.
             Also it is convertible to bool therefore it is easy to use find algorithms for a simple containment checking.
         </para>
@@ -264,7 +264,7 @@
             the find iterator allows us to iterate over the substrings matching the specified criteria.
             This facility is using the <link linkend="string_algo.finder_concept">Finder</link> to incrementally
             search the string. 
-            Dereferencing a find iterator yields an <ulink url="../../libs/range/doc/html/range/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink> 
+            Dereferencing a find iterator yields an <ulink url="../../libs/range/doc/html/range/reference/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink> 
             object, that delimits the current match.
         </para>
         <para>
