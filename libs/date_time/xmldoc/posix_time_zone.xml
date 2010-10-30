@@ -28,16 +28,16 @@
   <para>
     A posix_time_zone is unique in that the object is created from a Posix time zone string (IEEE Std 1003.1). A POSIX time zone string takes the form of:
     <literallayout>
-      "std offset dst [offset],start[/time],end[/time]" (w/no spaces).</literallayout>'std' specifies the abbrev of the time zone. 'offset' is the offset from UTC. 'dst' specifies the abbrev of the time zone during daylight savings time. The second offset is how many hours changed during DST. 'start' and 'end' are the dates when DST goes into (and out of) effect. 'offset' takes the form of: 
+      "std offset dst [offset],start[/time],end[/time]" (w/no spaces).</literallayout>'std' specifies the abbrev of the time zone. 'offset' is the offset from UTC. 'dst' specifies the abbrev of the time zone during daylight savings time. The second offset is how many hours changed during DST. 'start' and 'end' are the dates when DST goes into (and out of) effect. 'offset' takes the form of:
     <literallayout>
-      [+|-]hh[:mm[:ss]] {h=0-23, m/s=0-59}</literallayout>'time' and 'offset' take the same form. 'start' and 'end' can be one of three forms: 
+      [+|-]hh[:mm[:ss]] {h=0-23, m/s=0-59}</literallayout>'time' and 'offset' take the same form. 'start' and 'end' can be one of three forms:
     <literallayout>
-      Mm.w.d {month=1-12, week=1-5 (5 is always last), day=0-6} 
-      Jn {n=1-365 Feb29 is never counted} 
+      Mm.w.d {month=1-12, week=1-5 (5 is always last), day=0-6}
+      Jn {n=1-365 Feb29 is never counted}
       n {n=0-365 Feb29 is counted in leap years}</literallayout>
   </para>
   <para>
-    Exceptions will be thrown under the following conditions: 
+    Exceptions will be thrown under the following conditions:
     <itemizedlist>
       <listitem>An exception will be thrown for an invalid date spec (see <link linkend="date_time.gregorian.date_class">date class</link>).</listitem>
       <listitem>A boost::local_time::bad_offset exception will be thrown for:</listitem>
@@ -66,13 +66,13 @@ leap_day.dst_local_start_time(2004); // ok
 leap_day.dst_local_start_time(2003); // Exception thrown</programlisting>
   </para>
   <para>
-    The posix_time_zone objects are used via a boost::shared_ptr&lt;local_time::time_zone_base&gt;. As a convenience, a typedef for boost::shared_ptr&lt;local_time::time_zone_base&gt; is provided: 
+    The posix_time_zone objects are used via a boost::shared_ptr&lt;local_time::time_zone_base&gt;. As a convenience, a typedef for boost::shared_ptr&lt;local_time::time_zone_base&gt; is provided:
     <programlisting>typedef boost::shared_ptr&lt;time_zone_base&gt; local_time::time_zone_ptr;</programlisting>
   </para>
   <para>
     See <link linkend="date_time.examples.simple_time_zone">Simple time zone</link> for a side by side example of time_zone and posix_time_zone usage.
   </para>
-  
+
   <anchor id="posix_time_zone_notes" />
   <bridgehead renderas="sect3">Important Notes</bridgehead>
   <itemizedlist>
@@ -133,7 +133,7 @@ time_zone_ptr zone(new posix_time_zone(nyc));</screen>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_zone_abbrev(); // "EDT"</screen></entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>std::string std_zone_abbrev()</screen></entry>
             <entry>Returns the standard abbreviation for the represented time zone.</entry>
@@ -141,7 +141,7 @@ time_zone_ptr zone(new posix_time_zone(nyc));</screen>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;std_zone_abbrev(); // "EST"</screen></entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>std::string dst_zone_name()</screen></entry>
             <entry>Returns the daylight savings ABBREVIATION for the represented time zone.</entry>
@@ -149,7 +149,7 @@ time_zone_ptr zone(new posix_time_zone(nyc));</screen>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_zone_name(); // "EDT"</screen></entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>std::string std_zone_name()</screen></entry>
             <entry>Returns the standard ABBREVIATION for the represented time zone.</entry>
@@ -157,7 +157,7 @@ time_zone_ptr zone(new posix_time_zone(nyc));</screen>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;std_zone_name(); // "EST"</screen></entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>bool has_dst()</screen></entry>
             <entry>Returns true when time_zone's shared_ptr to dst_calc_rules is not NULL.</entry>
@@ -167,7 +167,7 @@ time_zone_ptr zone(new posix_time_zone(nyc));</screen>
 phx_zone_sh_ptr-&gt;has_dst(); // false</screen>
             </entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>
 ptime dst_local_start_time(greg_year)</screen></entry>
@@ -177,7 +177,7 @@ ptime dst_local_start_time(greg_year)</screen></entry>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_local_start_time(2004);
 // 2004-Apr-04 02:00</screen></entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>
 ptime dst_local_end_time(greg_year)</screen></entry>
@@ -187,7 +187,7 @@ ptime dst_local_end_time(greg_year)</screen></entry>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_local_end_time(2004);
 // 2004-Oct-31 02:00</screen></entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>
 time_duration base_utc_offset()</screen></entry>
@@ -204,7 +204,7 @@ time_duration base_utc_offset()</screen></entry>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_offset(); // 01:00</screen></entry>
           </row>
-          
+
           <row>
             <entry valign="top" morerows="1"><screen>std::string to_posix_string()</screen></entry>
             <entry>Returns a posix time zone string representation of this time_zone_base object. Depending on how the time_zone object was created, the date-spec format of the string will be in either 'M' notation or 'n' notation. Every possible date-spec that can be represented in 'J' notation can also be represented in 'n' notation. The reverse is not true so only 'n' notation is used for these types of date-specs. For a detailed description of a posix time zone string see <link linkend="date_time.local_time.posix_time_zone">posix_time_zone</link>.</entry>
