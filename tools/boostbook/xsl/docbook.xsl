@@ -437,7 +437,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   </xsl:template>
 
   <xsl:template match="boostbook">
-    <book><xsl:apply-templates/></book>
+    <book><xsl:copy-of select="@*"/><xsl:apply-templates/></book>
   </xsl:template>
 
   <xsl:template match="programlisting">
