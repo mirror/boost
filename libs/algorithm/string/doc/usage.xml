@@ -57,7 +57,7 @@
                     The magic of <ulink url="../../libs/range/index.html">Boost.Range</ulink> 
                     provides a uniform way of handling different string types. 
                     If there is a need to pass a pair of iterators, 
-                    <ulink url="../../libs/range/doc/html/range/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink>
+                    <ulink url="../../libs/range/doc/html/range/reference/utilities/iterator_range.html"><code>boost::iterator_range</code></ulink>
                     can be used to package iterators into a structure with a compatible interface.
                 </para>
             </listitem>

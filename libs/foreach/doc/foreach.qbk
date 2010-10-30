@@ -28,8 +28,8 @@
 
 [def _foreach_                      [^BOOST_FOREACH]] 
 [def _range_                        [@../../libs/range/index.html Boost.Range]]
-[def _iterator_range_               [@boost:/libs/range/doc/html/range/utilities/iterator_range.html `boost::iterator_range<>`]]
-[def _sub_range_                    [@boost:/libs/range/doc/html/range/utilities/sub_range.html `boost::sub_range<>`]]
+[def _iterator_range_               [@boost:/libs/range/doc/html/range/reference/utilities/iterator_range.html `boost::iterator_range<>`]]
+[def _sub_range_                    [@boost:/libs/range/doc/html/range/reference/utilities/sub_range.html `boost::sub_range<>`]]
 [def _extending_range_              [@boost:/libs/range/doc/html/range/reference/extending.html Extending Boost.Range]]
 [def _single_pass_range_concept_    [@boost:/libs/range/doc/html/range/concepts/single_pass_range.html Single Pass Range Concept]]
 [def _range_portability_            [@boost:/libs/range/doc/html/range/portability.html Boost.Range Portability]]
