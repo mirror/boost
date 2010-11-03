@@ -118,6 +118,7 @@ test-suite statechart
     [ statechart-st-run-variants InStateReactionTest ]
     [ statechart-st-run-variants TerminationTest ]
     [ statechart-st-run-variants DeferralTest ]
+    [ statechart-st-run-variants DeferralBug ]
     [ statechart-st-run-variants CustomReactionTest ]
     [ statechart-compile-fail-variants InvalidResultAssignTest ]
     [ statechart-compile-fail-variants InvalidResultDefCtorTest ]
