@@ -17,14 +17,6 @@
 #define BOOST_WARCHIVE_SOURCE
 #include <boost/archive/impl/basic_xml_grammar.hpp>
 
-#include <boost/spirit/include/qi_char.hpp>
-#include <boost/spirit/include/qi_operator.hpp>
-#include <boost/spirit/include/qi_action.hpp>
-
-#include <boost/spirit/include/phoenix_core.hpp>
-#include <boost/spirit/include/phoenix_operator.hpp>
-#include <boost/spirit/include/phoenix_container.hpp>
-
 using namespace boost::spirit;
 
 // fixup for RogueWave
@@ -57,7 +49,7 @@ typedef basic_xml_grammar<wchar_t> xml_wgrammar;
 
 template<>
 void xml_wgrammar::init_chset(){
-    Char = standard_wide::char_(
+    Char = chset_t(
         #if defined(__GNUC__) && defined(linux)
             L"\x9\xA\xD\x20-\xD7FF\xE000-\xFFFD\x10000-\x10FFFF"
         #else
@@ -65,9 +57,9 @@ void xml_wgrammar::init_chset(){
         #endif
     );
 
-    Sch = standard_wide::char_(L"\x20\x9\xD\xA");
+    Sch = chset_t(L"\x20\x9\xD\xA");
 
-    BaseChar = standard_wide::char_(
+    BaseChar = chset_t(
         L"\x41-\x5A\x61-\x7A\xC0-\xD6\xD8-\xF6\xF8-\xFF\x100-\x131\x134-\x13E"
         L"\x141-\x148\x14A-\x17E\x180-\x1C3\x1CD-\x1F0\x1F4-\x1F5\x1FA-\x217"
         L"\x250-\x2A8\x2BB-\x2C1\x386\x388-\x38A\x38C\x38E-\x3A1\x3A3-\x3CE"
@@ -102,11 +94,11 @@ void xml_wgrammar::init_chset(){
         L"\x3041-\x3094\x30A1-\x30FA\x3105-\x312C\xAC00-\xD7A3"
     );
 
-    Ideographic = standard_wide::char_(L"\x4E00-\x9FA5\x3007\x3021-\x3029");
+    Ideographic = chset_t(L"\x4E00-\x9FA5\x3007\x3021-\x3029");
 
     Letter = BaseChar | Ideographic;
 
-    CombiningChar = standard_wide::char_(
+    CombiningChar = chset_t(
         L"\x0300-\x0345\x0360-\x0361\x0483-\x0486\x0591-\x05A1\x05A3-\x05B9"
         L"\x05BB-\x05BD\x05BF\x05C1-\x05C2\x05C4\x064B-\x0652\x0670"
         L"\x06D6-\x06DC\x06DD-\x06DF\x06E0-\x06E4\x06E7-\x06E8\x06EA-\x06ED"
@@ -126,34 +118,26 @@ void xml_wgrammar::init_chset(){
         L"\x20D0-\x20DC\x20E1\x302A-\x302F\x3099\x309A"
     );
 
-    Digit    = standard_wide::digit;
-    HexDigit = standard_wide::xdigit;
-    
-    Extender = standard_wide::char_(
+    Digit = chset_t(
+        L"\x0030-\x0039\x0660-\x0669\x06F0-\x06F9\x0966-\x096F\x09E6-\x09EF"
+        L"\x0A66-\x0A6F\x0AE6-\x0AEF\x0B66-\x0B6F\x0BE7-\x0BEF\x0C66-\x0C6F"
+        L"\x0CE6-\x0CEF\x0D66-\x0D6F\x0E50-\x0E59\x0ED0-\x0ED9\x0F20-\x0F29"
+    );
+
+    Extender = chset_t(
         L"\x00B7\x02D0\x02D1\x0387\x0640\x0E46\x0EC6\x3005\x3031-\x3035"
         L"\x309D-\x309E\x30FC-\x30FE"
     );
 
-    NameChar
-        = Letter 
+    NameChar =
+        Letter 
         | Digit 
-        | standard_wide::char_(L"[._:-")
+        | L'.'
+        | L'-'
+        | L'_'
+        | L':'
         | CombiningChar 
         | Extender
-    ;
-
-    AnyChar = standard_wide::char_;
-
-    DocTypeDeclChars = *(standard_wide::char_ - qi::lit(L'>'));
-    XMLDeclChars = *(standard_wide::char_ - qi::lit(L"?>"));
-    
-    Name =
-      (
-        (Letter | standard_wide::char_(L'_') | standard_wide::char_(L':'))[
-          phoenix::ref(rv.object_name) = qi::_1
-        ] >>
-        *NameChar[phoenix::ref(rv.object_name) += qi::_1]
-      )
     ;
 }
 } // namespace archive
