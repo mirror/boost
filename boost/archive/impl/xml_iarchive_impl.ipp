@@ -178,7 +178,7 @@ xml_iarchive_impl<Archive>::xml_iarchive_impl(
         BOOST_TRY{
             init();
         }
-       BOOST_CATCH(...){
+        BOOST_CATCH(...){
             delete gimpl;
             #ifndef BOOST_NO_EXCEPTIONS
                 throw; // re-throw
