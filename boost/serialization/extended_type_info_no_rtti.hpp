@@ -70,13 +70,13 @@ public:
 template<class T>
 class extended_type_info_no_rtti : 
     public no_rtti_system::extended_type_info_no_rtti_0,
-    public singleton<extended_type_info_no_rtti<T> >
+    public singleton<extended_type_info_no_rtti< T > >
 {
     template<bool tf>
     struct action {
         struct defined {
             static const char * invoke(){
-                return guid<T>();
+                return guid< T >();
             }
         };
         struct undefined {
@@ -113,16 +113,16 @@ public:
         // that the specified type has a function of the following signature.
         // A common implemention of such a function is to define as a virtual
         // function. So if the is not a polymporphic type it's likely an error
-        BOOST_STATIC_WARNING(boost::is_polymorphic<T>::value);
+        BOOST_STATIC_WARNING(boost::is_polymorphic< T >::value);
         const char * derived_key = t.get_key();
         assert(NULL != derived_key);
         return boost::serialization::extended_type_info::find(derived_key);
     }
     const char * get_key() const{
-        return action<guid_defined<T>::value >::invoke();
+        return action<guid_defined< T >::value >::invoke();
     }
     virtual const char * get_debug_info() const{
-        return action<guid_defined<T>::value >::invoke();
+        return action<guid_defined< T >::value >::invoke();
     }
     virtual void * construct(unsigned int count, ...) const{
         // count up the arguments
@@ -130,15 +130,15 @@ public:
         va_start(ap, count);
         switch(count){
         case 0:
-            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type, 0>(ap);
+            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 0>(ap);
         case 1:
-            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type, 1>(ap);
+            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 1>(ap);
         case 2:
-            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type, 2>(ap);
+            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 2>(ap);
         case 3:
-            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type, 3>(ap);
+            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 3>(ap);
         case 4:
-            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type, 4>(ap);
+            return factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 4>(ap);
         default:
             assert(false); // too many arguments
             // throw exception here?
@@ -168,7 +168,7 @@ public:
     template<class T>
     struct extended_type_info_impl {
         typedef BOOST_DEDUCED_TYPENAME 
-            boost::serialization::extended_type_info_no_rtti<T> type;
+            boost::serialization::extended_type_info_no_rtti< T > type;
     };
     } // namespace serialization
     } // namespace boost

@@ -11,6 +11,9 @@
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/is_bitwise_serializable.hpp>
 
+// fixes broken example build on x86_64-linux-gnu-gcc-4.6.0
+#include <cassert>
+
 namespace boost { 
 namespace serialization {
 
@@ -23,8 +26,9 @@ class item_version_type {
 private:
     typedef unsigned int base_type;
     base_type t;
-    item_version_type(): t(0) {};
 public:
+    // should be private - but MPI fails if it's not!!!
+    item_version_type(): t(0) {};
     explicit item_version_type(const unsigned int t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
@@ -36,7 +40,7 @@ public:
         return *this;
     }
     // used for text output
-    operator const base_type () const {
+    operator base_type () const {
         return t;
     }                
     // used for text input

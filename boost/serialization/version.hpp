@@ -46,7 +46,7 @@ struct version
     typedef
         BOOST_DEDUCED_TYPENAME mpl::eval_if<
             is_base_and_derived<boost::serialization::basic_traits,T>,
-            traits_class_version<T>,
+            traits_class_version< T >,
             mpl::int_<0>
         >::type type;
     BOOST_STATIC_CONSTANT(int, value = version::type::value);
