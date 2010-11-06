@@ -67,20 +67,20 @@ class simple_log_archive {
             boost::serialization::serialize_adl(
                 ar, 
                 const_cast<T &>(t), 
-                ::boost::serialization::version<T>::value
+                ::boost::serialization::version< T >::value
             );
         }
     };
     template<class T>
     void save(const T &t){
         typedef 
-            BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<boost::is_enum<T>,
+            BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<boost::is_enum< T >,
                 boost::mpl::identity<save_enum_type<simple_log_archive> >,
             //else
             BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<
                 // if its primitive
                     boost::mpl::equal_to<
-                        boost::serialization::implementation_level<T>,
+                        boost::serialization::implementation_level< T >,
                         boost::mpl::int_<boost::serialization::primitive_type>
                     >,
                     boost::mpl::identity<save_primitive<simple_log_archive> >,
@@ -139,7 +139,7 @@ public:
         );
     }
     template<class T>
-    simple_log_archive & operator<<(const boost::serialization::nvp<T> & t){
+    simple_log_archive & operator<<(const boost::serialization::nvp< T > & t){
         m_os << '\n'; // start line with each named object
         // indent according to object depth
         for(unsigned int i = 0; i < m_depth; ++i)
