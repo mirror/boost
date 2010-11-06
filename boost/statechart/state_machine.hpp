@@ -272,7 +272,14 @@ class state_machine : noncopyable
 
     void process_event( const event_base_type & evt )
     {
-      send_event( evt );
+      if ( send_event( evt ) == detail::do_defer_event )
+      {
+        // Before deferring, a reaction could post other events, which still
+        // need to be processed. This is why we push the event at the front.
+        eventQueue_.push_front( evt.intrusive_from_this() );
+        eventQueueBegin_ = ++eventQueue_.begin();
+      }
+
       process_queued_events();
     }
 
@@ -408,6 +415,7 @@ class state_machine : noncopyable
   protected:
     //////////////////////////////////////////////////////////////////////////
     state_machine() :
+      eventQueueBegin_( eventQueue_.begin() ),
       currentStatesEnd_( currentStates_.end() ),
       pOutermostState_( 0 ),
       isInnermostCommonOuter_( false ),
@@ -638,26 +646,9 @@ class state_machine : noncopyable
     }
 
 
-    void defer_event(
-      const event_base_type & evt,
-      const state_base_type * pForState )
+    void release_events()
     {
-      deferredMap_[ pForState ].push_back( evt.intrusive_from_this() );
-    }
-
-    void release_events( const state_base_type * pForState )
-    {
-      const typename deferred_map_type::iterator pFound =
-        deferredMap_.find( pForState );
-
-      // We are not guaranteed to find an entry because a state is marked for
-      // having deferred events _before_ the event is actually deferred. An
-      // exception might be thrown during deferral.
-      if ( pFound != deferredMap_.end() )
-      {
-        eventQueue_.splice( eventQueue_.end(), pFound->second );
-        deferredMap_.erase( pFound );
-      }
+      eventQueueBegin_ = eventQueue_.begin();
     }
 
 
@@ -880,7 +871,7 @@ class state_machine : noncopyable
     friend class terminator;
 
 
-    void send_event( const event_base_type & evt )
+    detail::reaction_result send_event( const event_base_type & evt )
     {
       terminator guard( *this, &evt );
       BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) == 0 );
@@ -908,16 +899,33 @@ class state_machine : noncopyable
       {
         polymorphic_downcast< MostDerived * >( this )->unconsumed_event( evt );
       }
+
+      return reactionResult;
     }
 
 
     void process_queued_events()
     {
-      while ( !eventQueue_.empty() )
+      while ( eventQueueBegin_ != eventQueue_.end() )
       {
-        const event_base_ptr_type pCurrentEvent( eventQueue_.front() );
-        eventQueue_.pop_front();
-        send_event( *pCurrentEvent );
+        const event_base_ptr_type pCurrentEvent( *eventQueueBegin_ );
+
+        try
+        {
+          if ( send_event( *pCurrentEvent ) == detail::do_defer_event )
+          {
+            ++eventQueueBegin_;
+          }
+          else
+          {
+            eventQueueBegin_ = eventQueue_.erase( eventQueueBegin_ );
+          }
+        }
+        catch ( ... )
+        {
+          eventQueueBegin_ = eventQueue_.erase( eventQueueBegin_ );
+          throw;
+        }
       }
     }
 
@@ -928,11 +936,11 @@ class state_machine : noncopyable
 
       if ( !terminated() )
       {
-        // this also empties deferredMap_
         terminate_impl( *pOutermostState_, performFullExit );
       }
 
       eventQueue_.clear();
+      eventQueueBegin_ = eventQueue_.begin();
       shallowHistoryMap_.clear();
       deepHistoryMap_.clear();
     }
@@ -1075,7 +1083,7 @@ class state_machine : noncopyable
 
 
     event_queue_type eventQueue_;
-    deferred_map_type deferredMap_;
+    typename event_queue_type::iterator eventQueueBegin_;
     state_list_type currentStates_;
     typename state_list_type::iterator currentStatesEnd_;
     state_base_type * pOutermostState_;
