@@ -33,7 +33,7 @@ int test_vector(T)
     BOOST_REQUIRE(NULL != testfile);
 
     // test array of objects
-    std::vector<T> avector;
+    std::vector< T > avector;
     avector.push_back(T());
     avector.push_back(T());
     {   
@@ -41,7 +41,7 @@ int test_vector(T)
         test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << boost::serialization::make_nvp("avector", avector);
     }
-    std::vector<T> avector1;
+    std::vector< T > avector1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is, TEST_ARCHIVE_FLAGS);

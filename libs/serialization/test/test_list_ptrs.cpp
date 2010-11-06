@@ -38,7 +38,7 @@ namespace std{
 template<class T>
 struct ptr_equal_to : public std::binary_function<T, T, bool> 
 {
-    BOOST_STATIC_ASSERT(::boost::is_pointer<T>::value);
+    BOOST_STATIC_ASSERT(::boost::is_pointer< T >::value);
     bool operator()(T const _Left, T const _Right) const
     {
         if(NULL == _Left && NULL == _Right)
