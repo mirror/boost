@@ -226,8 +226,9 @@ void_caster::recursive_register(bool includes_virtual_base) const {
     #endif
 
     std::pair<void_cast_detail::set_type::const_iterator, bool> result;
+    // comment this out for now.  
     result = s.insert(this);
-    assert(result.second);
+    //assert(result.second);
 
     // generate all implied void_casts.
     void_cast_detail::set_type::const_iterator it;

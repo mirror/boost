@@ -57,13 +57,23 @@ BOOST_ARCHIVE_SIGNATURE(){
 // 5 - Boost 1.36
 //     changed serialization of collections: adding version even for primitive
 //     types caused backwards compatibility breaking change in 1.35
-// 6 - Boost 1.41, serializing collection sizes as std::size_t
-// 7 - separated version_type into library_version_type and class_version_type
+// 6 - Boost 1.41 17 Nov 200
+//     serializing collection sizes as std::size_t
+// 7   Boost 1.42 2 Feb 2010
+//     error - changed binary version to 16 bits w/o changing library version #
+//     That is - binary archives are recorded with #6 even though they are
+//     different from the previous versions.  This means that binary archives
+//     created with versions 1.42 and 1.43 will have to be fixed with a special
+//     program which fixes the library version # in the header
+//     Boost 1.43 6 May 2010
+//     no change
+// 8 - Boost 1.44
+//     separated version_type into library_version_type and class_version_type
 //     changed version_type to be stored as 8 bits.
 
 BOOST_ARCHIVE_DECL(library_version_type)
 BOOST_ARCHIVE_VERSION(){
-    return library_version_type(7);
+    return library_version_type(8);
 }
 
 } // namespace archive
