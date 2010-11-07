@@ -40,4 +40,33 @@
     [[a][b]]
 ]
 
+[table Empty Table
+]
+
+[table Table with an empty cell
+[[x]]]
+
+[table Indentation
+  [
+    [
+      Header 1. Paragraph 1
+      
+      Header 1. Paragraph 2
+    ]
+    [
+      Header 2
+    ]
+  ]
+  [
+    [
+      Row 1. Cell 1.
+    ]
+    [
+      Row 1. Cell 2.
+      
+      Row 1. Cell 2. Paragraph 2.
+    ]
+  ]
+]
+
 [endsect]
