@@ -134,7 +134,7 @@ set of very specific traits classes, each of which encapsulate a single trait
 from the C++ type system; for example, is a type a pointer or a reference type? 
 Or does a type have a trivial constructor, or a const-qualifier?
  
-The type-traits classes share a unified design: each class inherits from a 
+The type-traits classes share a unified design: each class inherits from  
 the type __true_type if the type has the specified property and inherits from
 __false_type otherwise.
 
