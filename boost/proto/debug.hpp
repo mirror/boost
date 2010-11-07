@@ -9,9 +9,7 @@
 #ifndef BOOST_PROTO_DEBUG_HPP_EAN_12_31_2006
 #define BOOST_PROTO_DEBUG_HPP_EAN_12_31_2006
 
-#include <iomanip>
 #include <iostream>
-#include <typeinfo>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/proto/proto_fwd.hpp>
@@ -142,7 +140,8 @@ namespace boost { namespace proto
             {
                 using namespace hidden_detail_;
                 typedef typename tag_of<Expr>::type tag;
-                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ");
+                this->sout_.width(this->depth_);
+                this->sout_ << (this->first_? "" : ", ");
                 this->sout_ << tag() << "(" << proto::value(expr) << ")\n";
                 this->first_ = false;
             }
@@ -152,11 +151,13 @@ namespace boost { namespace proto
             {
                 using namespace hidden_detail_;
                 typedef typename tag_of<Expr>::type tag;
-                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ");
+                this->sout_.width(this->depth_);
+                this->sout_ << (this->first_? "" : ", ");
                 this->sout_ << tag() << "(\n";
                 display_expr display(this->sout_, this->depth_ + 4);
                 fusion::for_each(expr, display);
-                this->sout_ << std::setw(this->depth_) << "" << ")\n";
+                this->sout_.width(this->depth_);
+                this->sout_ << "" << ")\n";
                 this->first_ = false;
             }
 
