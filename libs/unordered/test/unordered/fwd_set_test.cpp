@@ -16,35 +16,52 @@ template <class Value, class Hash, class Pred, class Alloc>
 true_type is_unordered_set_impl(
         boost::unordered_set<Value, Hash, Pred, Alloc>*);
 
-typedef boost::unordered_set<int> int_set;
-
-void call_swap(int_set& x, int_set& y) {
+template<typename T>
+void call_swap(boost::unordered_set<T>& x,
+    boost::unordered_set<T>& y)
+{
     swap(x,y);
 }
 
-bool call_equals(int_set& x, int_set& y) {
+template<typename T>
+bool call_equals(boost::unordered_set<T>& x,
+    boost::unordered_set<T>& y)
+{
     return x == y;
 }
 
-bool call_not_equals(int_set& x, int_set& y) {
+template<typename T>
+bool call_not_equals(boost::unordered_set<T>& x,
+    boost::unordered_set<T>& y)
+{
     return x != y;
 }
 
-typedef boost::unordered_multiset<int> int_multiset;
-
-void call_swap(int_multiset& x, int_multiset& y) {
+template<typename T>
+void call_swap(boost::unordered_multiset<T>& x,
+    boost::unordered_multiset<T>& y)
+{
     swap(x,y);
 }
 
-bool call_equals(int_multiset& x, int_multiset& y) {
+template<typename T>
+bool call_equals(boost::unordered_multiset<T>& x,
+    boost::unordered_multiset<T>& y)
+{
     return x == y;
 }
 
-bool call_not_equals(int_multiset& x, int_multiset& y) {
+template<typename T>
+bool call_not_equals(boost::unordered_multiset<T>& x,
+    boost::unordered_multiset<T>& y)
+{
     return x != y;
 }
 
 #include "../helpers/test.hpp"
+
+typedef boost::unordered_set<int> int_set;
+typedef boost::unordered_multiset<int> int_multiset;
 
 UNORDERED_AUTO_TEST(use_fwd_declared_trait_without_definition) {
     BOOST_TEST(sizeof(is_unordered_set_impl((int_set*) 0))
