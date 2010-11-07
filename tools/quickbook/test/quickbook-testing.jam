@@ -16,7 +16,6 @@ import toolset ;
 import type ;
 
 feature.feature quickbook-testing.quickbook-command : : free dependency ;
-feature.feature <quickbook-define> : : free ;
 
 type.register QUICKBOOK_INPUT : quickbook ;
 type.register QUICKBOOK_OUTPUT ;
