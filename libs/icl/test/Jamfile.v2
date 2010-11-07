@@ -1,0 +1,61 @@
+# (C) Copyright 2008-2009: Joachim Faulhaber
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# bring in rules for testing
+import testing ;
+import feature ;
+
+project
+    : requirements
+      <library>/boost/test//boost_unit_test_framework
+      <library>/boost/date_time//boost_date_time
+      <link>static
+      <include>../../..
+    ;
+
+test-suite "itl"
+    : 
+      # interval
+      [ run fastest_icl_interval_/fastest_icl_interval.cpp ]
+      
+      # sets
+      [ run fastest_interval_set_/fastest_interval_set.cpp ]
+      [ run fastest_interval_set_infix_/fastest_interval_set_infix.cpp ]
+      
+      [ run fastest_separate_interval_set_/fastest_separate_interval_set.cpp ]
+      [ run fastest_separate_interval_set_infix_/fastest_separate_interval_set_infix.cpp ]
+      
+      [ run fastest_split_interval_set_/fastest_split_interval_set.cpp ]
+      [ run fastest_split_interval_set_infix_/fastest_split_interval_set_infix.cpp ]
+            
+      [ run fastest_interval_set_mixed_/fastest_interval_set_mixed.cpp ]
+      
+      # maps
+      [ run fastest_interval_map_/fastest_interval_map.cpp ]
+      [ run fastest_interval_map_infix_/fastest_interval_map_infix.cpp ]
+      [ run fastest_split_interval_map_/fastest_split_interval_map.cpp ]
+      [ run fastest_split_interval_map_infix_/fastest_split_interval_map_infix.cpp ]
+      [ run fastest_interval_map_mixed_/fastest_interval_map_mixed.cpp ]
+      [ run fastest_interval_map_mixed2_/fastest_interval_map_mixed2.cpp ]
+      [ run fastest_interval_map_infix_mixed_/fastest_interval_map_infix_mixed.cpp ]
+      [ run fastest_icl_map_/fastest_icl_map.cpp ]
+
+      # handcoded tests using laws (not LaBatea) -------------------------------
+      # Concept Set
+      [ run fastest_set_interval_set_/fastest_set_interval_set.cpp ]
+      [ run fastest_set_icl_set_/fastest_set_icl_set.cpp ]
+      
+      # Concept Map 
+      [ run fastest_partial_interval_quantifier_/fastest_partial_interval_quantifier.cpp ]
+      [ run fastest_total_interval_quantifier_/fastest_total_interval_quantifier.cpp ]            
+      [ run fastest_partial_icl_quantifier_/fastest_partial_icl_quantifier.cpp ]
+      [ run fastest_total_icl_quantifier_/fastest_total_icl_quantifier.cpp ]   
+      
+      # Misc -------------------------------------------------------------------         
+      [ run test_misc_/test_misc.cpp ]   
+      [ run test_doc_code_/test_doc_code.cpp ]   
+      [ run test_type_traits_/test_type_traits.cpp ]   
+      [ run test_combinable_/test_combinable.cpp ]   
+      [ run test_changing_interval_defaults_/test_changing_interval_defaults.cpp ]   
+    ;
