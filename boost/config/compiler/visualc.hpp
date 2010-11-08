@@ -94,10 +94,6 @@
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #endif
 
-#if _MSC_VER <= 1600  // 1600 == VC++ 10.0
-#  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
-#endif
-
 #if _MSC_VER == 1500  // 1500 == VC++ 9.0
    // A bug in VC9:
 #  define BOOST_NO_ADL_BARRIER
@@ -181,6 +177,7 @@
 #define BOOST_NO_STATIC_ASSERT
 #define BOOST_NO_NULLPTR
 #endif // _MSC_VER < 1600
+
 #if _MSC_VER >= 1600
 #define BOOST_HAS_STDINT_H
 #endif
@@ -198,10 +195,11 @@
 #define BOOST_NO_INITIALIZER_LISTS
 #define BOOST_NO_RAW_LITERALS
 #define BOOST_NO_SCOPED_ENUMS
-#define BOOST_NO_SFINAE_EXPR
 #define BOOST_NO_TEMPLATE_ALIASES
 #define BOOST_NO_UNICODE_LITERALS
 #define BOOST_NO_VARIADIC_TEMPLATES
+#define BOOST_NO_SFINAE_EXPR
+#define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 //
 // prefix and suffix headers:
 //
