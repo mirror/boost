@@ -275,9 +275,8 @@ class state_machine : noncopyable
       if ( send_event( evt ) == detail::do_defer_event )
       {
         // Before deferring, a reaction could post other events, which still
-        // need to be processed. This is why we push the event at the front.
-        eventQueue_.push_front( evt.intrusive_from_this() );
-        eventQueueBegin_ = ++eventQueue_.begin();
+        // need to be processed. This is why we push the event at the beginning.
+        eventQueueBegin_ = ++eventQueue_.insert( eventQueueBegin_, evt.intrusive_from_this() );
       }
 
       process_queued_events();
@@ -908,22 +907,20 @@ class state_machine : noncopyable
     {
       while ( eventQueueBegin_ != eventQueue_.end() )
       {
-        const event_base_ptr_type pCurrentEvent( *eventQueueBegin_ );
+        typename event_queue_type::iterator currentEventQueueBegin =
+          eventQueueBegin_++;
 
         try
         {
-          if ( send_event( *pCurrentEvent ) == detail::do_defer_event )
+          if ( send_event( **currentEventQueueBegin ) !=
+              detail::do_defer_event )
           {
-            ++eventQueueBegin_;
-          }
-          else
-          {
-            eventQueueBegin_ = eventQueue_.erase( eventQueueBegin_ );
+            eventQueue_.erase( currentEventQueueBegin );
           }
         }
         catch ( ... )
         {
-          eventQueueBegin_ = eventQueue_.erase( eventQueueBegin_ );
+          eventQueue_.erase( currentEventQueueBegin );
           throw;
         }
       }
