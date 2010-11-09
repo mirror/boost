@@ -309,6 +309,17 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             }
             return true;
         }
+
+        template<class Ch>
+        inline size_t get_index(const Ch c)
+        {
+            // If not ASCII char, its sematic is same as plain 'z'
+            if (c > 255)
+            {
+                return 'z';
+            }
+            return c;
+        }
     }
     //! \endcond
 
@@ -1399,7 +1410,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         {
             static unsigned char test(Ch ch)
             {
-                return internal::lookup_tables<0>::lookup_whitespace[static_cast<unsigned char>(ch)];
+                return internal::lookup_tables<0>::lookup_whitespace[internal::get_index(ch)];
             }
         };
 
@@ -1408,7 +1419,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         {
             static unsigned char test(Ch ch)
             {
-                return internal::lookup_tables<0>::lookup_node_name[static_cast<unsigned char>(ch)];
+                return internal::lookup_tables<0>::lookup_node_name[internal::get_index(ch)];
             }
         };
 
@@ -1417,7 +1428,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         {
             static unsigned char test(Ch ch)
             {
-                return internal::lookup_tables<0>::lookup_attribute_name[static_cast<unsigned char>(ch)];
+                return internal::lookup_tables<0>::lookup_attribute_name[internal::get_index(ch)];
             }
         };
 
@@ -1426,7 +1437,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         {
             static unsigned char test(Ch ch)
             {
-                return internal::lookup_tables<0>::lookup_text[static_cast<unsigned char>(ch)];
+                return internal::lookup_tables<0>::lookup_text[internal::get_index(ch)];
             }
         };
 
@@ -1435,7 +1446,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         {
             static unsigned char test(Ch ch)
             {
-                return internal::lookup_tables<0>::lookup_text_pure_no_ws[static_cast<unsigned char>(ch)];
+                return internal::lookup_tables<0>::lookup_text_pure_no_ws[internal::get_index(ch)];
             }
         };
 
@@ -1444,7 +1455,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         {
             static unsigned char test(Ch ch)
             {
-                return internal::lookup_tables<0>::lookup_text_pure_with_ws[static_cast<unsigned char>(ch)];
+                return internal::lookup_tables<0>::lookup_text_pure_with_ws[internal::get_index(ch)];
             }
         };
 
@@ -1455,9 +1466,9 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             static unsigned char test(Ch ch)
             {
                 if (Quote == Ch('\''))
-                    return internal::lookup_tables<0>::lookup_attribute_data_1[static_cast<unsigned char>(ch)];
+                    return internal::lookup_tables<0>::lookup_attribute_data_1[internal::get_index(ch)];
                 if (Quote == Ch('\"'))
-                    return internal::lookup_tables<0>::lookup_attribute_data_2[static_cast<unsigned char>(ch)];
+                    return internal::lookup_tables<0>::lookup_attribute_data_2[internal::get_index(ch)];
                 return 0;       // Should never be executed, to avoid warnings on Comeau
             }
         };
@@ -1469,9 +1480,9 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             static unsigned char test(Ch ch)
             {
                 if (Quote == Ch('\''))
-                    return internal::lookup_tables<0>::lookup_attribute_data_1_pure[static_cast<unsigned char>(ch)];
+                    return internal::lookup_tables<0>::lookup_attribute_data_1_pure[internal::get_index(ch)];
                 if (Quote == Ch('\"'))
-                    return internal::lookup_tables<0>::lookup_attribute_data_2_pure[static_cast<unsigned char>(ch)];
+                    return internal::lookup_tables<0>::lookup_attribute_data_2_pure[internal::get_index(ch)];
                 return 0;       // Should never be executed, to avoid warnings on Comeau
             }
         };
