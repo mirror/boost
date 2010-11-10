@@ -3368,10 +3368,17 @@ int main() {
     polygon_set_data<int> ps;
     polygon_90_set_data<int> ps90;
     rectangle_data<int> rect(0, 1, 10, 100);
+    std::vector<polygon_data<int> > rupolys, rupolys45;
     ps.insert(rect);
     ps90.insert(rect);
     ps.bloat(10);
     ps90.bloat(10, 10, 10, 10);
+    rupolys.clear();
+    rupolys45.clear();
+    ps.get(rupolys);
+    ps90.get(rupolys45);
+    std::cout << rupolys[0] << std::endl;
+    std::cout << rupolys45[0] << std::endl;
     if(!equivalence(ps, ps90)) {
       std::cout << "test manhattan vs general resize up failed\n";
       return 1;
@@ -3409,10 +3416,30 @@ int main() {
     ps45.insert(poly);
     ps.bloat(9);
     ps45.resize(9);
-    if(!equivalence(ps, ps45)) {
-      std::cout << "test 45 vs general resize up failed\n";
+    rupolys.clear();
+    rupolys45.clear();
+    ps.get(rupolys);
+    ps45.get(rupolys45);
+    std::cout << rupolys[0] << std::endl;
+    std::cout << rupolys45[0] << std::endl;
+    pts.clear();
+    pts.push_back(point_data<int>(32, -9));
+    pts.push_back(point_data<int>(-9, 32));
+    pts.push_back(point_data<int>(-9, -9));
+    set_points(poly, pts.begin(), pts.end());
+    if(!equivalence(ps, poly)) {
+      std::cout << "test general resize up failed\n";
       return 1;
-    }    
+    }
+    // this test is waived due to rounding differences between 45 and general resizing
+    // general resizing is computing floating point coordinates for the intersection
+    // and rounding those to closest while 45 is computing the normal point and rounding
+    // that to closest, it turns out to result in different intersection point
+    // we want the general to be more accurate to avoid artifacts
+    //if(!equivalence(ps, ps45)) {
+    //  std::cout << "test 45 vs general resize up failed\n";
+    //  return 1;
+    //}    
     ps.shrink(9);
     ps45.resize(-9);
     if(!equivalence(ps, ps45)) {
@@ -3428,10 +3455,33 @@ int main() {
     ps45.insert(poly, true);
     ps.bloat(1);
     ps45.resize(1);
-    if(!equivalence(ps, ps45)) {
-      std::cout << "test 45 vs general resize up with holes failed\n";
+    rupolys.clear();
+    rupolys45.clear();
+    ps.get(rupolys);
+    ps45.get(rupolys45);
+    std::cout << rupolys[0] << std::endl;
+    std::cout << rupolys45[0] << std::endl;
+    pts.clear();
+    pts.push_back(point_data<int>(12, -1));   
+    pts.push_back(point_data<int>(5, 6));   
+    pts.push_back(point_data<int>(5, 2));   
+    pts.push_back(point_data<int>(2, 2));   
+    pts.push_back(point_data<int>(2, 5));   
+    pts.push_back(point_data<int>(5, 2));   
+    pts.push_back(point_data<int>(5, 6));   
+    pts.push_back(point_data<int>(-1, 12));   
+    pts.push_back(point_data<int>(-1, -1));   
+    pts.push_back(point_data<int>(12, -1));   
+    set_points(poly, pts.begin(), pts.end());
+    if(!equivalence(ps, poly)) {
+      std::cout << "test general resize up with holes failed\n";
       return 1;
-    }    
+    }
+    //waived
+    //if(!equivalence(ps, ps45)) {
+    //  std::cout << "test 45 vs general resize up with holes failed\n";
+    //  return 1;
+    //}    
     ps.shrink(1);
     ps45.resize(-1);
     if(!equivalence(ps, ps45)) {
@@ -3445,7 +3495,6 @@ int main() {
       return 1;
     }    
   }
-
 
   std::cout << "ALL TESTS COMPLETE\n";
   return 0;
