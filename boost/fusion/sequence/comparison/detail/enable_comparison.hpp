@@ -11,11 +11,18 @@
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/equal_to.hpp>
+#include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {
+    template <typename Sequence>
+    struct is_native_fusion_sequence
+      : is_convertible<Sequence, detail::from_sequence_convertible_type>
+    {};
+
     template <typename Seq1, typename Seq2>
     struct enable_equality
         : mpl::or_<traits::is_sequence<Seq1>, traits::is_sequence<Seq2> >
