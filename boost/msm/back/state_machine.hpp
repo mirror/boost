@@ -351,7 +351,7 @@ private:
                 (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),evt,fsm);
 
             // then call the action method
-            ROW::action_call(fsm,evt,
+            HandledEnum res = ROW::action_call(fsm,evt,
                              ::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),
                              ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
                              fsm.m_substate_list);
@@ -360,7 +360,7 @@ private:
             convert_event_and_execute_entry<next_state_type,T2>
                 (::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),evt,fsm);
             fsm.m_states[region_index]=next_state;
-            return HANDLED_TRUE;
+            return res;
         }
     };
 
@@ -483,7 +483,7 @@ private:
                 (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),evt,fsm);
 
             // then call the action method
-            ROW::action_call(fsm,evt,
+            HandledEnum res = ROW::action_call(fsm,evt,
                             ::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),
                             ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
                             fsm.m_substate_list);
@@ -493,7 +493,7 @@ private:
                 (::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),evt,fsm);
 
             fsm.m_states[region_index]=next_state;
-            return HANDLED_TRUE;
+            return res;
         }
     };
 
@@ -587,11 +587,11 @@ private:
             }
 
             // call the action method
-            ROW::action_call(fsm,evt,
+            HandledEnum res = ROW::action_call(fsm,evt,
                              ::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),
                              ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
                              fsm.m_substate_list);
-            return HANDLED_TRUE;
+            return res;
         }
     };
 
@@ -651,12 +651,12 @@ private:
             BOOST_ASSERT(state == (current_state));
 
             // call the action method
-            ROW::action_call(fsm,evt,
+            HandledEnum res = ROW::action_call(fsm,evt,
                             ::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),
                             ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
                             fsm.m_substate_list);
 
-            return HANDLED_TRUE;
+            return res;
         }
     };
     // row simply ignoring the event
@@ -710,11 +710,11 @@ private:
             }
 
             // then call the action method
-            ROW::action_call(fsm,evt,
+            HandledEnum res = ROW::action_call(fsm,evt,
                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
                 fsm.m_substate_list);
-            return HANDLED_TRUE;
+            return res;
         }
     };
     template<
@@ -728,14 +728,14 @@ private:
         typedef typename ROW::Evt transition_event;
 
         // Take the transition action and return the next state.
-        static HandledEnum execute(library_sm& fsm, int region_index, int state, transition_event const& evt)
+        static HandledEnum execute(library_sm& fsm, int, int, transition_event const& evt)
         {
             // then call the action method
-            ROW::action_call(fsm,evt,
+            HandledEnum res = ROW::action_call(fsm,evt,
                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
                 fsm.m_substate_list);
-            return HANDLED_TRUE;
+            return res;
         }
     };
     template<
@@ -759,7 +759,7 @@ private:
             return false;
         }
         // Take the transition action and return the next state.
-        static HandledEnum execute(library_sm& fsm, int region_index, int state, transition_event const& evt)
+        static HandledEnum execute(library_sm& fsm, int, int, transition_event const& evt)
         {
             if (!check_guard(fsm,evt))
             {
@@ -1882,7 +1882,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          }
          template <class StateType>
          typename ::boost::disable_if<typename has_accept_sig<StateType>::type,void >::type
-             visitor_helper(int id) const
+             visitor_helper(int) const
          {
              // nothing to do
          }
