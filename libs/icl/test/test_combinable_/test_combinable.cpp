@@ -21,7 +21,6 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include <boost/icl/split_interval_set.hpp>
 #include <boost/icl/interval_map.hpp>
 #include <boost/icl/split_interval_map.hpp>
-#include <boost/validate/type/nat.hpp>
 
 using namespace std;
 using namespace boost;
