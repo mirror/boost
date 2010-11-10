@@ -44,9 +44,9 @@ namespace boost { namespace property_tree { namespace xml_parser
         {
         }
 
-        const Ch indent_char;
-        const typename std::basic_string<Ch>::size_type indent_count;
-        const std::basic_string<Ch> encoding;
+        Ch indent_char;
+        typename std::basic_string<Ch>::size_type indent_count;
+        std::basic_string<Ch> encoding;
     };
 
     template <class Ch>
