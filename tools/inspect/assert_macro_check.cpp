@@ -85,7 +85,8 @@ namespace boost
           }
 
           ++errors;
-          error( library_name, full_path, "C-style assert macro", line_number );
+          error( library_name, full_path, "C-style assert macro on line "
+            + boost::lexical_cast<string>( line_number ) );
         }
       }
       if(errors > 0) {
