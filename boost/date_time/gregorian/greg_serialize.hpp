@@ -12,6 +12,7 @@
 #include "boost/date_time/gregorian/gregorian_types.hpp"
 #include "boost/date_time/gregorian/parsers.hpp"
 #include "boost/serialization/split_free.hpp"
+#include "boost/serialization/nvp.hpp"
 
   
 // macros to split serialize functions into save & load functions
