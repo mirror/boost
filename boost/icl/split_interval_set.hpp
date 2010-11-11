@@ -6,8 +6,8 @@ Copyright (c) 1999-2006: Cortex Software GmbH, Kantstrasse 57, Berlin
       (See accompanying file LICENCE.txt or copy at
            http://www.boost.org/LICENSE_1_0.txt)
 +-----------------------------------------------------------------------------*/
-#ifndef __split_interval_set_JOFA_990223__
-#define __split_interval_set_JOFA_990223__
+#ifndef BOOST_ICL_SPLIT_INTERVAL_SET_HPP_JOFA_990223
+#define BOOST_ICL_SPLIT_INTERVAL_SET_HPP_JOFA_990223
 
 #include <boost/icl/type_traits/is_interval_splitter.hpp>
 #include <boost/icl/interval_base_set.hpp>
@@ -138,9 +138,9 @@ private:
         iterator it_ = first_;
         interval_type rest_interval = addend;
 
-        add_front(rest_interval, it_);
-        add_main (rest_interval, it_, last_);
-        add_rear (rest_interval, it_);
+        this->add_front(rest_interval, it_);
+        this->add_main (rest_interval, it_, last_);
+        this->add_rear (rest_interval, it_);
         return it_;
     }
 
@@ -154,9 +154,9 @@ private:
         iterator it_ = first_;
         interval_type rest_interval = addend;
 
-        add_front(rest_interval, it_);
-        add_main (rest_interval, it_, last_);
-        add_rear (rest_interval, it_);
+        this->add_front(rest_interval, it_);
+        this->add_main (rest_interval, it_, last_);
+        this->add_rear (rest_interval, it_);
 
         return it_;
     }
@@ -201,7 +201,7 @@ struct type_to_string<icl::split_interval_set<DomainT,Compare,Interval,Alloc> >
 
 }} // namespace icl boost
 
-#endif
+#endif // BOOST_ICL_SPLIT_INTERVAL_SET_HPP_JOFA_990223
 
 
 

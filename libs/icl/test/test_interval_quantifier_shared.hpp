@@ -8,7 +8,8 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #ifndef __TEST_INTERVAL_QUANTIFIER_SHARED_H_JOFA_090119__
 #define __TEST_INTERVAL_QUANTIFIER_SHARED_H_JOFA_090119__
 
-
+#include "portability.hpp"
+    
 template <class T, class U, class Trt,
           template<class T, class U,
                    class Traits = Trt,
@@ -20,10 +21,10 @@ template <class T, class U, class Trt,
                   >class IntervalMap
           >
 void make_3_itv_maps_and_derivatives_1
-                   (IntervalMap<T,U,Trt>& itv_map_a, 
-                    IntervalMap<T,U,Trt>& itv_map_b, 
-                    IntervalMap<T,U,Trt>& itv_map_c, 
-                    typename IntervalMap<T,U,Trt>::interval_mapping_type& val_pair,
+                   (ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& itv_map_a, 
+                    ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& itv_map_b, 
+                    ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& itv_map_c, 
+                    typename ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)::interval_mapping_type& val_pair,
                     mapping_pair<T,U>& map_pair)
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;

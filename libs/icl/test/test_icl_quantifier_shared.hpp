@@ -8,6 +8,7 @@ Copyright (c) 2008-2010: Joachim Faulhaber
 #ifndef __TEST_ICL_QUANTIFIER_SHARED_H_JOFA_100819__
 #define __TEST_ICL_QUANTIFIER_SHARED_H_JOFA_100819__
 
+#include "portability.hpp"
 
 template <class T, class U, class Trt,
           template<class T, class U,
@@ -25,7 +26,7 @@ void make_3_icl_maps_and_derivatives_1
                     icl::map<T,U,Trt>& map_c, 
                     std::pair<T,U>& map_pair_a,
                     std::pair<T,U>& map_pair_b,
-                    IntervalMap<T,U,Trt>*)
+                    ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)*)
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
     typedef    icl::map<T,U,Trt>         MapT;
@@ -118,12 +119,12 @@ void icl_quantifier_check_monoid_et_4_bicremental_types()
 //------------------------------------------------------------------------------
 
 template <class T, class U, class Trt,
-          template<class T, class U,
+          template<class _T, class _U,
                    class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
+                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, _U),
+                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, _U),
+                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, _U),
+                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, _T, Compare),
                    ICL_ALLOC   Alloc   = std::allocator
                   >class IntervalMap
           >

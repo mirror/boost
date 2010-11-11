@@ -5,24 +5,24 @@ Copyright (c) 2008-2009: Joachim Faulhaber
       (See accompanying file LICENCE.txt or copy at
            http://www.boost.org/LICENSE_1_0.txt)
 +-----------------------------------------------------------------------------*/
-#ifndef LIBS_ICL_TEST_TEST_ICL_set_interval_set_h_JOFA_090119__
-#define LIBS_ICL_TEST_TEST_ICL_set_interval_set_h_JOFA_090119__
+#ifndef LIBS_ICL_TEST_TEST_SET_INTERVAL_SET_SHARED_HPP_JOFA_090119
+#define LIBS_ICL_TEST_TEST_SET_INTERVAL_SET_SHARED_HPP_JOFA_090119
 
+#include "portability.hpp"
 
-
-template <class T, 
-          template<class T, 
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
+          //CL template<class T, 
+          //         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
+          //         ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
+          //         ICL_ALLOC   Alloc   = std::allocator
+          //        >class IntervalSet
+          //>
 void make_3_interval_sets_and_derivatives_1
-                   (IntervalSet<T>& set_a, 
-                    IntervalSet<T>& set_b, 
-                    IntervalSet<T>& set_c, 
-                    typename IntervalSet<T>::segment_type& segm_d,
-                    typename IntervalSet<T>::element_type& elem_e)
+                   (ICL_PORT_msvc_7_1_IntervalSet(T)& set_a, 
+                    ICL_PORT_msvc_7_1_IntervalSet(T)& set_b, 
+                    ICL_PORT_msvc_7_1_IntervalSet(T)& set_c, 
+                    typename ICL_PORT_msvc_7_1_IntervalSet(T)::segment_type& segm_d,
+                    typename ICL_PORT_msvc_7_1_IntervalSet(T)::element_type& elem_e)
 {
     typedef IntervalSet<T> IntervalSetT;
     typedef typename IntervalSetT::segment_type IntervalT;
@@ -42,13 +42,7 @@ void make_3_interval_sets_and_derivatives_1
 //------------------------------------------------------------------------------
 // Monoid EAN
 //------------------------------------------------------------------------------
-template <class T,
-          template<class T,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
 void interval_set_check_monoid_plus_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -66,13 +60,7 @@ void interval_set_check_monoid_plus_4_bicremental_types()
     CHECK_MONOID_INSTANCE_WRT(pipe) (set_a, set_b, set_c, inter_val1, inter_val2);
 }
 
-template <class T,
-          template<class T,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
 void interval_set_check_monoid_et_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -94,13 +82,7 @@ void interval_set_check_monoid_et_4_bicremental_types()
 // Abelian monoid EANC
 //------------------------------------------------------------------------------
 
-template <class T,
-          template<class T,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
 void interval_set_check_abelian_monoid_plus_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -118,13 +100,7 @@ void interval_set_check_abelian_monoid_plus_4_bicremental_types()
     CHECK_ABELIAN_MONOID_INSTANCE_WRT(pipe) (set_a, set_b, set_c, inter_val1, inter_val2);
 }
 
-template <class T,
-          template<class T,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
 void interval_set_check_abelian_monoid_et_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -146,13 +122,7 @@ void interval_set_check_abelian_monoid_et_4_bicremental_types()
 //------------------------------------------------------------------------------
 // Abelian partial invertive monoid 
 //------------------------------------------------------------------------------
-template <class T,
-          template<class T,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
 void interval_set_check_partial_invertive_monoid_plus_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -174,13 +144,7 @@ void interval_set_check_partial_invertive_monoid_plus_4_bicremental_types()
 //------------------------------------------------------------------------------
 // Containedness
 //------------------------------------------------------------------------------
-template <class T, 
-          template<class T, 
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet> 
 void interval_set_check_containedness_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -205,13 +169,7 @@ void interval_set_check_containedness_4_bicremental_types()
 //------------------------------------------------------------------------------
 // Inner complement
 //------------------------------------------------------------------------------
-template <class T, 
-          template<class T, 
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet> 
 void interval_set_check_inner_complementarity_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -228,13 +186,7 @@ void interval_set_check_inner_complementarity_4_bicremental_types()
     has_inner_complementarity<IntervalSetT,IntervalSetT>(set_c);
 }
 
-template <class T, 
-          template<class T, 
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet
-          >
+template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet> 
 void interval_set_check_length_complementarity_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -255,7 +207,5 @@ void interval_set_check_length_complementarity_4_bicremental_types()
     has_length_as_distance<IntervalSetT,IntervalSetT>(set_c);
 }
 
-
-
-#endif // LIBS_ICL_TEST_TEST_ICL_set_interval_set_h_JOFA_090119__
+#endif // LIBS_ICL_TEST_TEST_SET_INTERVAL_SET_SHARED_HPP_JOFA_090119
 

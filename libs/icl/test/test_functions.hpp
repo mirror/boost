@@ -18,23 +18,26 @@ Auxiliary functions to reduce redundancies in test case code.
 
 #include <boost/icl/type_traits/identity_element.hpp>
 #include <boost/icl/functors.hpp>
+#include "portability.hpp"
+
 
 namespace boost{namespace icl
 {
 
-template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap,
+template <class T, class U, class Trt, 
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap,
+          //CL template<class _T, class _U,
+          //         class Traits = Trt,
+          //         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, _T),
+          //         ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, _U),
+          //         ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, _U),
+          //         ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, _T, Compare),
+          //         ICL_ALLOC   Alloc   = std::allocator
+          //        >class IntervalMap,
           class SequenceT
 >
 void itl_map_copy(const SequenceT& segments, 
-                  IntervalMap<T,U,Trt>& destination)
+                  ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& destination) 
 {
     ICL_const_FORALL(typename SequenceT, segment_, segments)
         destination.insert(*segment_);
@@ -42,20 +45,22 @@ void itl_map_copy(const SequenceT& segments,
 
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap,
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap,
+          //template<class T, class U,
+          //         class Traits = Trt,
+          //         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
+          //         ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
+          //         ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
+          //         ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
+          //         ICL_ALLOC   Alloc   = std::allocator
+          //        >class IntervalMap,
           class SequenceT
 >
-void test_interval_map_copy_via_inserter(const SequenceT& segments, IntervalMap<T,U,Trt>& std_copied_map)
+void test_interval_map_copy_via_inserter(const SequenceT& segments, 
+                                         ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& std_copied_map)
 {
-    // The second parameter (std_copied_map) could be omitted and only held as a 
-    // local variable. I is there to help gcc-3.4.4 resolving the function template type.
+    // The second parameter (std_copied_map) could be omitted and is only held as a 
+    // local variable. It is there to help gcc-3.4.4 resolving the function template type.
     typedef IntervalMap<T,U,Trt> IntervalMapT;
     IntervalMapT looped_copied_map;
     std_copied_map.clear();
