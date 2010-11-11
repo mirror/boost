@@ -27,6 +27,10 @@
 #include <unistd.h>
 #endif
 
+#if defined(__MINGW32__)
+#  include <_mingw.h>
+#endif
+
 static unsigned int indent = 4;
 static unsigned int width = 40;
 
@@ -794,6 +798,8 @@ void print_platform_macros()
    PRINT_MACRO(_THREAD_SAFE);
    PRINT_MACRO(_XOPEN_SOURCE_EXTENDED);
    PRINT_MACRO(XPG);
+   PRINT_MACRO(__MINGW32_MAJOR_VERSION);
+   PRINT_MACRO(__MINGW32_MINOR_VERSION);
    // POSIX:
    PRINT_MACRO(_POSIX_ADVISORY_INFO);
    PRINT_MACRO(_POSIX_ASYNCHRONOUS_IO);
@@ -900,6 +906,7 @@ void print_boost_macros()
    PRINT_MACRO(BOOST_DISABLE_THREADS);
    PRINT_MACRO(BOOST_DISABLE_WIN32);
    PRINT_MACRO(BOOST_HAS_THREADS);
+   PRINT_MACRO(BOOST_WINDOWS);
 
    // BEGIN GENERATED BLOCK DO NOT EDIT THIS!!!!!!
    PRINT_MACRO(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG);
