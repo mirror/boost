@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <string>
 #include <iterator>
+#include <cassert>
 
 namespace boost { namespace property_tree
 {

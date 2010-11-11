@@ -14,6 +14,7 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <memory>
+#include <cassert>
 
 #if defined(BOOST_MSVC) && \
     (_MSC_FULL_VER >= 160000000 && _MSC_FULL_VER < 170000000)
