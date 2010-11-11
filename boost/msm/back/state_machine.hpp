@@ -1016,6 +1016,48 @@ private:
         }       
     }
 
+    template <class EventType>
+    void enqueue_event_helper(EventType const& evt, ::boost::mpl::false_ const &)
+    {
+        execute_return (library_sm::*pf) (EventType const& evt) = 
+            &library_sm::process_event; 
+
+        transition_fct f = ::boost::bind(pf,this,evt);
+        m_events_queue.m_events_queue.push(f);
+    }
+    template <class EventType>
+    void enqueue_event_helper(EventType const& evt, ::boost::mpl::true_ const &)
+    {
+        // no queue
+    }
+
+    void execute_queued_events_helper(::boost::mpl::false_ const &)
+    {
+        transition_fct to_call = m_events_queue.m_events_queue.front();
+        m_events_queue.m_events_queue.pop();
+        to_call();
+    }
+    void execute_queued_events_helper(::boost::mpl::true_ const &)
+    {
+        // no queue required
+    }
+
+    // enqueues an event in the message queue
+    // call execute_queued_events to process all queued events.
+    // Be careful if you do this during event processing, the event will be processed immediately
+    // and not kept in the queue
+    template <class EventType>
+    void enqueue_event(EventType const& evt)
+    {
+        enqueue_event_helper<EventType>(evt, typename is_no_message_queue<library_sm>::type());
+    }
+
+    // empty the queue and process events
+    void execute_queued_events()
+    {
+        execute_queued_events_helper(typename is_no_message_queue<library_sm>::type());
+    }
+
     // Getter that returns the current state of the FSM
     const int* current_state() const
     {
@@ -1092,7 +1134,7 @@ private:
     // return the state whose id is passed or 0 if not found
     // caution if you need this, you probably need polymorphic states
     // complexity: O(number of states)
-    const BaseState* get_state_by_id(int id) const
+    BaseState* get_state_by_id(int id)
     {
         const BaseState*  result_state=0;
         ::boost::mpl::for_each<state_list, 
