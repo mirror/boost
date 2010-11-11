@@ -12,6 +12,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/gregorian/greg_serialize.hpp"
 #include "boost/serialization/split_free.hpp"
+#include "boost/serialization/nvp.hpp"
 
 
 // macros to split serialize functions into save & load functions
