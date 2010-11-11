@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_STATE_MACHINE_HPP_INCLUDED
 #define BOOST_STATECHART_STATE_MACHINE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2002-2008 Andreas Huber Doenni
+// Copyright 2002-2010 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -274,9 +274,7 @@ class state_machine : noncopyable
     {
       if ( send_event( evt ) == detail::do_defer_event )
       {
-        // Before deferring, a reaction could post other events, which still
-        // need to be processed. This is why we push the event at the beginning.
-        eventQueueBegin_ = ++eventQueue_.insert( eventQueueBegin_, evt.intrusive_from_this() );
+        deferredEventQueue_.push_back( evt.intrusive_from_this() );
       }
 
       process_queued_events();
@@ -414,7 +412,6 @@ class state_machine : noncopyable
   protected:
     //////////////////////////////////////////////////////////////////////////
     state_machine() :
-      eventQueueBegin_( eventQueue_.begin() ),
       currentStatesEnd_( currentStates_.end() ),
       pOutermostState_( 0 ),
       isInnermostCommonOuter_( false ),
@@ -647,7 +644,7 @@ class state_machine : noncopyable
 
     void release_events()
     {
-      eventQueueBegin_ = eventQueue_.begin();
+      eventQueue_.splice( eventQueue_.begin(), deferredEventQueue_ );
     }
 
 
@@ -905,23 +902,14 @@ class state_machine : noncopyable
 
     void process_queued_events()
     {
-      while ( eventQueueBegin_ != eventQueue_.end() )
+      while ( !eventQueue_.empty() )
       {
-        typename event_queue_type::iterator currentEventQueueBegin =
-          eventQueueBegin_++;
+        event_base_ptr_type pEvent = eventQueue_.front();
+        eventQueue_.pop_front();
 
-        try
+        if ( send_event( *pEvent ) == detail::do_defer_event )
         {
-          if ( send_event( **currentEventQueueBegin ) !=
-              detail::do_defer_event )
-          {
-            eventQueue_.erase( currentEventQueueBegin );
-          }
-        }
-        catch ( ... )
-        {
-          eventQueue_.erase( currentEventQueueBegin );
-          throw;
+          deferredEventQueue_.push_back( pEvent );
         }
       }
     }
@@ -937,7 +925,7 @@ class state_machine : noncopyable
       }
 
       eventQueue_.clear();
-      eventQueueBegin_ = eventQueue_.begin();
+      deferredEventQueue_.clear();
       shallowHistoryMap_.clear();
       deepHistoryMap_.clear();
     }
@@ -1080,7 +1068,7 @@ class state_machine : noncopyable
 
 
     event_queue_type eventQueue_;
-    typename event_queue_type::iterator eventQueueBegin_;
+    event_queue_type deferredEventQueue_;
     state_list_type currentStates_;
     typename state_list_type::iterator currentStatesEnd_;
     state_base_type * pOutermostState_;
