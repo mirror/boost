@@ -37,6 +37,8 @@ Boost V1.45.0
   preprocessing instead of just inhibiting the expansion of the macro.
 - Fixed a duplicated call to the pp hook skipped_token for preprocessing 
   directives inside inactive conditional branches.
+- Changing exception handling to fix clang++ regression errors.
+- Replaced assert() with BOOST_ASSERT to pacify the Boost inspect tool.
 
 Boost V1.44.0
 - V2.0.6

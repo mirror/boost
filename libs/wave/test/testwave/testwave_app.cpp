@@ -18,6 +18,7 @@
 
 // include boost
 #include <boost/config.hpp>
+#include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -619,7 +620,7 @@ namespace {
             value.clear();
         else {
             std::string::size_type last = value.find_last_not_of(" \t");
-            assert(std::string::npos != last);
+            BOOST_ASSERT(std::string::npos != last);
             value = value.substr(first, last-first+1);
         }
         return value;
