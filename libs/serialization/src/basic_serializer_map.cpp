@@ -99,7 +99,7 @@ basic_serializer_map::find(
     map_type::const_iterator it;
     it = m_map.find(& bs);
     if(it == m_map.end()){
-        assert(false);
+        BOOST_ASSERT(false);
         return 0;
     }
     return *it;

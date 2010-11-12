@@ -10,7 +10,7 @@
 
 #include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <set>
 #include <list>
 #include <vector>
@@ -300,7 +300,7 @@ basic_iarchive_impl::register_type(
 
     if(result.second){
         cobject_id_vector.push_back(cobject_id(bis));
-        assert(cobject_info_set.size() == cobject_id_vector.size());
+        BOOST_ASSERT(cobject_info_set.size() == cobject_id_vector.size());
     }
     cid = result.first->m_class_id;
     // borland complains without this minor hack
@@ -433,11 +433,11 @@ basic_iarchive_impl::load_pointer(
                 );
             bpis_ptr = (*finder)(*eti);
         }
-        assert(NULL != bpis_ptr);
+        BOOST_ASSERT(NULL != bpis_ptr);
         class_id_type new_cid = register_type(bpis_ptr->get_basic_serializer());
         int i = cid;
         cobject_id_vector[i].bpis_ptr = bpis_ptr;
-        assert(new_cid == cid);
+        BOOST_ASSERT(new_cid == cid);
     }
     int i = cid;
     cobject_id & co = cobject_id_vector[i];
@@ -484,7 +484,7 @@ basic_iarchive_impl::load_pointer(
         );
         t = object_id_vector[ui].address;
         object_id_vector[ui].loaded_as_pointer = true;
-        assert(NULL != t);
+        BOOST_ASSERT(NULL != t);
     }
 
     return bpis_ptr;

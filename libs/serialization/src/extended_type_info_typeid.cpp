@@ -11,7 +11,7 @@
 
 #include <algorithm>
 #include <set>
-#include <cassert>
+#include <boost/assert.hpp>
 #include <typeinfo>
 #include <cstddef> // NULL
 
@@ -96,7 +96,7 @@ extended_type_info_typeid_0::type_unregister()
             tkmap & x = singleton<tkmap>::get_mutable_instance();
             tkmap::iterator start = x.lower_bound(this);
             tkmap::iterator end = x.upper_bound(this);
-            assert(start != end);
+            BOOST_ASSERT(start != end);
 
             // remove entry in map which corresponds to this type
             do{
@@ -120,11 +120,11 @@ class extended_type_info_typeid_arg :
     public extended_type_info_typeid_0
 {
     virtual void * construct(unsigned int /*count*/, ...) const{
-        assert(false);
+        BOOST_ASSERT(false);
         return NULL;
     }
     virtual void destroy(void const * const /*p*/) const {
-        assert(false);
+        BOOST_ASSERT(false);
     }
 public:
     extended_type_info_typeid_arg(const std::type_info & ti) :

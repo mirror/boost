@@ -103,7 +103,7 @@ shared_ptr_helper::append(const boost::shared_ptr<const void> &sp){
     if(i == m_pointers->end()){
         std::pair<collection_type::iterator, bool> result;
         result = m_pointers->insert(sp);
-        assert(result.second);
+        BOOST_ASSERT(result.second);
     }
 }
 
