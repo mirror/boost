@@ -80,7 +80,7 @@ class StoragePolicy
 */
 
 #include <boost/config.hpp>
-#include <boost/BOOST_ASSERT.hpp>
+#include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <boost/iterator/reverse_iterator.hpp>
