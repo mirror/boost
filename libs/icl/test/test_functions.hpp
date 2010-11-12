@@ -26,14 +26,6 @@ namespace boost{namespace icl
 
 template <class T, class U, class Trt, 
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap,
-          //CL template<class _T, class _U,
-          //         class Traits = Trt,
-          //         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, _T),
-          //         ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, _U),
-          //         ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, _U),
-          //         ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, _T, Compare),
-          //         ICL_ALLOC   Alloc   = std::allocator
-          //        >class IntervalMap,
           class SequenceT
 >
 void itl_map_copy(const SequenceT& segments, 
@@ -46,14 +38,6 @@ void itl_map_copy(const SequenceT& segments,
 
 template <class T, class U, class Trt,
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap,
-          //template<class T, class U,
-          //         class Traits = Trt,
-          //         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-          //         ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-          //         ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-          //         ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-          //         ICL_ALLOC   Alloc   = std::allocator
-          //        >class IntervalMap,
           class SequenceT
 >
 void test_interval_map_copy_via_inserter(const SequenceT& segments, 

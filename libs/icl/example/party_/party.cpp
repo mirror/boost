@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------+    
 Interval Container Library
 Author: Joachim Faulhaber
-Copyright (c) 2007-2009: Joachim Faulhaber
+Copyright (c) 2007-2010: Joachim Faulhaber
 Copyright (c) 1999-2006: Cortex Software GmbH, Kantstrasse 57, Berlin
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
@@ -16,7 +16,6 @@ using namespace std;
 using namespace boost::icl;
 
 /** 
-
     Party.cpp demonstrates the possibilities of an interval map (interval_map or
     split_interval_map). An interval_map maps intervals to a given content. In
     this case the content is a set of party guests represented by their name
@@ -49,7 +48,6 @@ using namespace boost::icl;
 
     The accumulative behavior accumulates associated values on every overlap of
     an insertion for the associated values.
-
 */
 
 // Type set<string> collects the names of party guests. Since std::set is
@@ -57,7 +55,7 @@ using namespace boost::icl;
 // that performs a set union on overlap of intervals.
 typedef std::set<string> GuestSetT;
 
-// Time is the domain type the split_interval_map. It's key values are therefore
+// 'Time' is the domain type the interval_map. It's key values are therefore
 // time intervals. The content is the set of names: GuestSetT.
 
 
@@ -75,10 +73,6 @@ void party()
     peter.insert("Peter");
 
     interval_map<Time, GuestSetT> party;
-
-    //party += make_pair( discrete_interval<Time>::right_open(Time(19,30), Time(23,00)), mary_harry);
-    //party += make_pair( discrete_interval<Time>::right_open(Time(20,10), Time(monday,0,0)), diana_susan);
-    //party += make_pair( discrete_interval<Time>::right_open(Time(22,15), Time(monday,0,30)), peter);
 
     party += make_pair( interval<Time>::right_open(Time(19,30), Time(23,00)), mary_harry);
     party += make_pair( interval<Time>::right_open(Time(20,10), Time(monday,0,0)), diana_susan);

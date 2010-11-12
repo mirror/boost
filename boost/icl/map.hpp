@@ -175,7 +175,8 @@ public:
         : base_type(first,past,comp) 
     {}
 
-    map(const map& src): base_type::map(src)
+    map(const map& src)
+        : base_type(src)
     {
         BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));

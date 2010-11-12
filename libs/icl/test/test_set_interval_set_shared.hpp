@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------+    
-Copyright (c) 2008-2009: Joachim Faulhaber
+Copyright (c) 2008-2010: Joachim Faulhaber
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENCE.txt or copy at
@@ -11,12 +11,6 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include "portability.hpp"
 
 template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
-          //CL template<class T, 
-          //         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-          //         ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-          //         ICL_ALLOC   Alloc   = std::allocator
-          //        >class IntervalSet
-          //>
 void make_3_interval_sets_and_derivatives_1
                    (ICL_PORT_msvc_7_1_IntervalSet(T)& set_a, 
                     ICL_PORT_msvc_7_1_IntervalSet(T)& set_b, 

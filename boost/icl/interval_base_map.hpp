@@ -6,8 +6,8 @@ Copyright (c) 1999-2006: Cortex Software GmbH, Kantstrasse 57, Berlin
       (See accompanying file LICENCE.txt or copy at
            http://www.boost.org/LICENSE_1_0.txt)
 +-----------------------------------------------------------------------------*/
-#ifndef __interval_base_map_h_JOFA_990223__
-#define __interval_base_map_h_JOFA_990223__
+#ifndef BOOST_ICL_INTERVAL_BASE_MAP_HPP_JOFA_990223
+#define BOOST_ICL_INTERVAL_BASE_MAP_HPP_JOFA_990223
 
 #include <limits>
 #include <boost/type_traits/ice.hpp>

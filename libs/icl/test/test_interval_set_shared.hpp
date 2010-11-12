@@ -1,20 +1,16 @@
 /*-----------------------------------------------------------------------------+    
-Copyright (c) 2008-2009: Joachim Faulhaber
+Copyright (c) 2008-2010: Joachim Faulhaber
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENCE.txt or copy at
            http://www.boost.org/LICENSE_1_0.txt)
 +-----------------------------------------------------------------------------*/
-#ifndef LIBS_ICL_TEST_TEST_ICL_interval_set_shared_h_JOFA_080920__
-#define LIBS_ICL_TEST_TEST_ICL_interval_set_shared_h_JOFA_080920__
+#ifndef LIBS_ICL_TEST_TEST_INTERVAL_SET_SHARED_HPP_JOFA_080920
+#define LIBS_ICL_TEST_TEST_INTERVAL_SET_SHARED_HPP_JOFA_080920
 
+#include "portability.hpp"
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_fundamentals_4_ordered_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -146,12 +142,7 @@ void interval_set_fundamentals_4_ordered_types()
 
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_ctor_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -201,12 +192,7 @@ void interval_set_ctor_4_bicremental_types()
 
 }
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_add_sub_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -245,12 +231,7 @@ void interval_set_add_sub_4_bicremental_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_distinct_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -275,12 +256,7 @@ void interval_set_distinct_4_bicremental_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_distinct_4_bicremental_continuous_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -317,12 +293,7 @@ void interval_set_distinct_4_bicremental_continuous_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_isolate_4_bicremental_continuous_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -365,12 +336,8 @@ void interval_set_isolate_4_bicremental_continuous_types()
     BOOST_CHECK_EQUAL( iso_set, iso_set4 );
 }
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_element_compare_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -411,12 +378,7 @@ void interval_set_element_compare_4_bicremental_types()
     BOOST_CHECK_EQUAL( is_element_equal( I_D(0,1)+ISet(I_D(1,4))+I_D(3,4), I_D(0,2)+ISet(I_D(2,4)) ), true );
 }
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_contains_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -452,12 +414,7 @@ void interval_set_contains_4_bicremental_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_operators_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -498,12 +455,7 @@ void interval_set_operators_4_bicremental_types()
 
 
 // Test for nontrivial intersection of interval sets with intervals and values
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_base_intersect_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -573,12 +525,7 @@ void interval_set_base_intersect_4_bicremental_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_flip_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -613,12 +560,7 @@ void interval_set_flip_4_bicremental_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_infix_plus_overload_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -636,12 +578,7 @@ void interval_set_infix_plus_overload_4_bicremental_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_infix_pipe_overload_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -661,12 +598,7 @@ void interval_set_infix_pipe_overload_4_bicremental_types()
 
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_infix_minus_overload_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -685,12 +617,7 @@ void interval_set_infix_minus_overload_4_bicremental_types()
 }
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_infix_et_overload_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -710,12 +637,7 @@ void interval_set_infix_et_overload_4_bicremental_types()
 
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_infix_caret_overload_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -735,12 +657,7 @@ void interval_set_infix_caret_overload_4_bicremental_types()
 
 
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_find_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -760,12 +677,7 @@ void interval_set_find_4_bicremental_types()
     BOOST_CHECK_EQUAL( found == set_a.end(), true );
 }
 
-template <template< class T, 
-                    ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, T),
-                    ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                    ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalSet, 
-          class T>
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_element_iter_4_discrete_types()
 {
     typedef IntervalSet<T> IntervalSetT;
@@ -796,5 +708,5 @@ void interval_set_element_iter_4_discrete_types()
     BOOST_CHECK_EQUAL( vec == dest, true );
 }
 
-#endif // LIBS_ICL_TEST_TEST_ICL_interval_set_shared_h_JOFA_080920__
+#endif // LIBS_ICL_TEST_TEST_INTERVAL_SET_SHARED_HPP_JOFA_080920
 

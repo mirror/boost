@@ -56,6 +56,7 @@ test-suite "itl"
       [ run test_misc_/test_misc.cpp ]   
       [ run test_doc_code_/test_doc_code.cpp ]   
       [ run test_type_traits_/test_type_traits.cpp ]   
-      [ run test_combinable_/test_combinable.cpp ]   
+      # test_combinable is too slow or too large for some compilers
+      #[ run test_combinable_/test_combinable.cpp ]   
       [ run test_changing_interval_defaults_/test_changing_interval_defaults.cpp ]   
     ;

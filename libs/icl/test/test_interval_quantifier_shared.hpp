@@ -11,15 +11,7 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include "portability.hpp"
     
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void make_3_itv_maps_and_derivatives_1
                    (ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& itv_map_a, 
                     ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& itv_map_b, 
@@ -42,15 +34,7 @@ void make_3_itv_maps_and_derivatives_1
 // Monoid EAN
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_monoid_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -65,15 +49,7 @@ void itv_quantifier_check_monoid_plus_4_bicremental_types()
 
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_monoid_et_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -91,15 +67,7 @@ void itv_quantifier_check_monoid_et_4_bicremental_types()
 //------------------------------------------------------------------------------
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_abelian_monoid_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -114,15 +82,7 @@ void itv_quantifier_check_abelian_monoid_plus_4_bicremental_types()
 
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_abelian_monoid_et_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -140,15 +100,7 @@ void itv_quantifier_check_abelian_monoid_et_4_bicremental_types()
 // Abelian partial invertive monoid 
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_partial_invertive_monoid_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -165,15 +117,7 @@ void itv_quantifier_check_partial_invertive_monoid_plus_4_bicremental_types()
 // Abelian partial invertive monoid with protonic equality for inversion
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -194,15 +138,7 @@ void itv_quantifier_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_t
 // Abelian group EANIC
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_abelian_group_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -219,15 +155,7 @@ void itv_quantifier_check_abelian_group_plus_4_bicremental_types()
 // (0 - x) + x =p= 0 
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_types()
 {
     // check abelian group wrt. + and inverability wrt. protonic equality =p= :
@@ -251,15 +179,7 @@ void itv_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_types()
 // Inner complement
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_inner_complementarity_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -275,15 +195,7 @@ void itv_quantifier_check_inner_complementarity_4_bicremental_types()
 }
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itv_quantifier_check_length_complementarity_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;

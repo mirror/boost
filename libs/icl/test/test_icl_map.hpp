@@ -1,24 +1,17 @@
 /*-----------------------------------------------------------------------------+    
-Copyright (c) 2008-2009: Joachim Faulhaber
+Copyright (c) 2008-2010: Joachim Faulhaber
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENCE.txt or copy at
            http://www.boost.org/LICENSE_1_0.txt)
 +-----------------------------------------------------------------------------*/
-#ifndef LIBS_ICL_TEST_TEST_ICL_itl_map_h_JOFA_090119__
-#define LIBS_ICL_TEST_TEST_ICL_itl_map_h_JOFA_090119__
+#ifndef LIBS_ICL_TEST_TEST_ICL_MAP_HPP_JOFA_090119
+#define LIBS_ICL_TEST_TEST_ICL_MAP_HPP_JOFA_090119
 
+#include "portability.hpp"
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itl_map_contains_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -47,15 +40,7 @@ void itl_map_contains_4_bicremental_types()
 
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itl_map_find_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -80,15 +65,7 @@ void itl_map_find_4_bicremental_types()
 
 
 template <class T, class U, class Trt,
-          template<class T, class U,
-                   class Traits = Trt,
-                   ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, U),
-                   ICL_COMBINE Combine = ICL_COMBINE_INSTANCE(icl::inplace_plus, U),
-                   ICL_SECTION Section = ICL_SECTION_INSTANCE(icl::inter_section, U),
-                   ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, T, Compare),
-                   ICL_ALLOC   Alloc   = std::allocator
-                  >class IntervalMap
-          >
+          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void itl_map_inclusion_compare_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -155,5 +132,5 @@ void itl_map_inclusion_compare_4_bicremental_types()
 }
 
 
-#endif // LIBS_ICL_TEST_TEST_ICL_itl_map_h_JOFA_090119__
+#endif // LIBS_ICL_TEST_TEST_ICL_MAP_HPP_JOFA_090119
 

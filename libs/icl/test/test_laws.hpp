@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------+    
-Copyright (c) 2008-2009: Joachim Faulhaber
+Copyright (c) 2008-2010: Joachim Faulhaber
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENCE.txt or copy at
@@ -789,5 +789,5 @@ DEFINE_ABELIAN_GROUP_CHECK_INSTANCE_WRT_EQUAL(pipe);
 
 }} // namespace icl boost
 
-#endif // LIBS_ICL_TEST_TEST_ICL_laws_h_JOFA_080920__
+#endif // BOOST_LIBS_ICL_TEST_ICL_LAWS_HPP_JOFA_090119
 
