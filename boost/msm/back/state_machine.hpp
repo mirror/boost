@@ -1001,7 +1001,7 @@ private:
                 ret_handled = HANDLED_TRUE;
             }
 
-            // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 ง15.3.14)
+            // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 ยง15.3.14)
             handle_eventless_transitions_helper<library_sm> eventless_helper(this,(handled == HANDLED_TRUE));
             eventless_helper.process_completion_event();
 
@@ -1139,6 +1139,13 @@ private:
         const BaseState*  result_state=0;
         ::boost::mpl::for_each<state_list, 
             ::boost::msm::wrap< ::boost::mpl::placeholders::_1> > (get_state_id_helper(id,&result_state,this));
+        return const_cast<BaseState*>(result_state);
+    }
+    const BaseState* get_state_by_id(int id) const
+    {
+        const BaseState*  result_state=0;
+        ::boost::mpl::for_each<state_list,
+            ::boost::msm::wrap< ::boost::mpl::placeholders::_1> > (get_state_id_helper(id,&result_state,this));
         return result_state;
     }
     // true if the sm is used in another sm
@@ -1274,7 +1281,7 @@ private:
      }
      template <class Expr>
      state_machine<Derived,HistoryPolicy,CompilePolicy   >
-         (Expr const& expr,typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* dummy=0)
+         (Expr const& expr,typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* =0)
          :Derived()
          ,m_events_queue() 
          ,m_deferred_events_queue()
@@ -1303,7 +1310,7 @@ private:
         template <BOOST_PP_ENUM_PARAMS(n, class ARG)>                               \
         state_machine<Derived,HistoryPolicy,CompilePolicy                           \
         >(BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ),                 \
-        typename ::boost::disable_if<typename ::boost::proto::is_expr<ARG0>::type >::type* dummy=0 )                \
+        typename ::boost::disable_if<typename ::boost::proto::is_expr<ARG0>::type >::type* =0 )                \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
          ,m_events_queue()                                                          \
          ,m_deferred_events_queue()                                                 \
@@ -1321,7 +1328,7 @@ private:
         template <class Expr,BOOST_PP_ENUM_PARAMS(n, class ARG)>                    \
         state_machine<Derived,HistoryPolicy,CompilePolicy                           \
         >(Expr const& expr,BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ), \
-        typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* dummy=0 ) \
+        typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* =0 ) \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
          ,m_events_queue()                                                          \
          ,m_deferred_events_queue()                                                 \
