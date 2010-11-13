@@ -21,14 +21,14 @@
 
 // This header defines most of the classes used to implement the unordered
 // containers. It doesn't include the insert methods as they require a lot
-// of preprocessor metaprogramming - they are in insert.hpp
+// of preprocessor metaprogramming - they are in unique.hpp and equivalent.hpp.
 
 // Template parameters:
 //
 // H = Hash Function
 // P = Predicate
 // A = Value Allocator
-// G = Grouped/Ungrouped
+// G = Bucket group policy, 'grouped' or 'ungrouped'
 // E = Key Extractor
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
@@ -90,7 +90,37 @@ namespace boost { namespace unordered_detail {
 #pragma warning(pop)
 #endif
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    // This section implements buckets and nodes. Here's a rough
+    // inheritance diagram, to show how they pull together.
+    //
+    // For unordered_set/unordered_map:
+    //
+    // hash_bucket<A>
+    //     |
+    // ungrouped_node_base<A>     value_base<A::value_type>
+    //     |                            |
+    //     +--------------+-------------+
+    //                    |
+    //         hash_node<A, ungrouped>
+    //
+    // For unordered_multiset/unordered_multimap:
+    //
+    // hash_bucket<A>
+    //     |
+    // grouped_node_base<A>       value_base<A::value_type>
+    //     |                            |
+    //     +--------------+-------------+
+    //                    |
+    //         hash_node<A, grouped>
+
     // hash_bucket
+    //
+    // hash_bucket is used for both the buckets and as a base class for
+    // nodes. By using 'bucket_ptr' for 'node_ptr', 'next_' can point
+    // to either a bucket or a node. This is used later to implement a
+    // sentinel at the end of the bucket array.
     
     template <class A>
     class hash_bucket
@@ -109,6 +139,16 @@ namespace boost { namespace unordered_detail {
         hash_bucket() : next_() {}
     };
 
+    // In containers with equivalent keys (unordered_multimap and
+    // unordered_multiset) equivalent nodes are grouped together, in
+    // containers with unique keys (unordered_map and unordered_set)
+    // individual nodes are treated as groups of one. The following two
+    // classes implement the data structure.
+
+    // This is used for containers with unique keys. There are no groups
+    // so it doesn't add any extra members, and just treats individual
+    // nodes as groups of one.
+
     template <class A>
     struct ungrouped_node_base : hash_bucket<A> {
         typedef hash_bucket<A> bucket;
@@ -124,6 +164,10 @@ namespace boost { namespace unordered_detail {
         static void unlink_nodes(bucket& b, node_ptr begin, node_ptr end);
         static void unlink_nodes(bucket& b, node_ptr end);
     };
+
+    // This is used for containers with equivalent keys. It implements a
+    // circular list running in the opposite direction to the linked
+    // list through the nodes.
 
     template <class A>
     struct grouped_node_base : hash_bucket<A>
@@ -151,6 +195,10 @@ namespace boost { namespace unordered_detail {
         }
     };
 
+    // These two classes implement an easy way to pass around the node
+    // group policy classes without the messy template parameters.
+    // Whenever you see the template parameter 'G' it's one of these.
+
     struct ungrouped
     {
         template <class A>
@@ -166,6 +214,8 @@ namespace boost { namespace unordered_detail {
             typedef grouped_node_base<A> type;
         };
     };
+
+    // The space used to store values in a node.
 
     template <class ValueType>
     struct value_base
@@ -203,7 +253,13 @@ namespace boost { namespace unordered_detail {
         hash_node& operator=(hash_node const&);
     };
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     // Iterator Base
+    //
+    // This is the iterator used internally, the external iterators are
+    // provided by lightweight wrappers (hash_iterator and
+    // hast_const_iterator) which provide the full iterator interface.
 
     template <class A, class G>
     class hash_iterator_base
@@ -248,12 +304,24 @@ namespace boost { namespace unordered_detail {
         }
     };
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    // Now the main data structure:
+    //
+    // hash_buckets<A, G>     hash_buffered_functions<H, P>
+    //       |                            |
+    //       +-------------+--------------+
+    //                     |
+    //                hash_table<T>
+    //
+    // T is a class which contains typedefs for all the types we need.
+    
     // hash_buckets
     //
     // This is responsible for allocating and deallocating buckets and nodes.
     //
     // Notes:
-    // 1. For the sake exception safety the allocators themselves don't allocate
+    // 1. For the sake exception safety the consturctors don't allocate
     //    anything.
     // 2. It's the callers responsibility to allocate the buckets before calling
     //    any of the methods (other than getters and setters).
@@ -326,6 +394,17 @@ namespace boost { namespace unordered_detail {
         std::size_t delete_nodes(node_ptr begin, node_ptr end);
         std::size_t delete_to_bucket_end(node_ptr begin);
     };
+
+    // Assigning and swapping the equality and hash function objects
+    // needs strong exception safety. To implement that normally we'd
+    // require one of them to be known to not throw and the other to
+    // guarantee strong exception safety. Unfortunately they both only
+    // have basic exception safety. So to acheive strong exception
+    // safety we have storage space for two copies, and assign the new
+    // copies to the unused space. Then switch to using that to use
+    // them. This is implemented in 'set_hash_functions' which
+    // atomically assigns the new function objects in a strongly
+    // exception safe manner.
 
     template <class H, class P> class set_hash_functions;
 
@@ -428,6 +507,12 @@ namespace boost { namespace unordered_detail {
             tmp_functions_ = !tmp_functions_;
         }
     };
+
+    // This implements almost all of the required functionality, apart
+    // from some things that are specific to containers with unique and
+    // equivalent keys which is implemented in hash_unique_table and
+    // hash_equivalent_table. See unique.hpp and equivalent.hpp for
+    // their declaration and implementation.
 
     template <class T>
     class hash_table : public T::buckets, public T::buffered_functions
@@ -569,7 +654,12 @@ namespace boost { namespace unordered_detail {
             node_constructor&, std::size_t);
     };
 
-    // Iterator Access
+    ///////////////////////////////////////////////////////////////////
+    //
+    // Iterators
+
+    // iterator_access is used to access the internal iterator without
+    // making it publicly available.
 
 #if !defined(__clang__)
     class iterator_access
@@ -605,7 +695,6 @@ namespace boost { namespace unordered_detail {
     };
 #endif
 
-    // Iterators
 
     template <class A, class G> class hash_iterator;
     template <class A, class G> class hash_const_iterator;
@@ -716,7 +805,7 @@ namespace boost { namespace unordered_detail {
         }
     };
 
-    // iterators
+    // Iterators
     //
     // all no throw
 
@@ -823,7 +912,12 @@ namespace boost { namespace unordered_detail {
         }
     };
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     // types
+    //
+    // This is used to convieniently pass around a container's typedefs
+    // without having 7 template parameters.
 
     template <class K, class V, class H, class P, class A, class E, class G>
     struct types
