@@ -231,6 +231,9 @@ namespace boost { namespace unordered_detail {
         value_type& value() {
             return *(ValueType*) this;
         }
+        value_type* value_ptr() {
+            return (ValueType*) this;
+        }
     private:
         value_base& operator=(value_base const&);
     };
@@ -248,6 +251,9 @@ namespace boost { namespace unordered_detail {
 
         static value_type& get_value(node_ptr p) {
             return static_cast<hash_node&>(*p).value();
+        }
+        static value_type* get_value_ptr(node_ptr p) {
+            return static_cast<hash_node&>(*p).value_ptr();
         }
     private:
         hash_node& operator=(hash_node const&);
@@ -719,7 +725,7 @@ namespace boost { namespace unordered_detail {
             return node::get_value(ptr_);
         }
         value_type* operator->() const {
-            return &node::get_value(ptr_);
+            return node::get_value_ptr(ptr_);
         }
         hash_local_iterator& operator++() {
             ptr_ = ptr_->next_; return *this;
@@ -769,7 +775,7 @@ namespace boost { namespace unordered_detail {
             return node::get_value(ptr_);
         }
         value_type const* operator->() const {
-            return &node::get_value(ptr_);
+            return node::get_value_ptr(ptr_);
         }
         hash_const_local_iterator& operator++() {
             ptr_ = ptr_->next_; return *this;
