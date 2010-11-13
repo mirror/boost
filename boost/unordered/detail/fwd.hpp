@@ -661,18 +661,6 @@ namespace boost { namespace unordered_detail {
     // iterator_access is used to access the internal iterator without
     // making it publicly available.
 
-#if !defined(__clang__)
-    class iterator_access
-    {
-    public:
-        template <class Iterator>
-        static BOOST_DEDUCED_TYPENAME Iterator::base const&
-            get(Iterator const& it)
-        {
-            return it.base_;
-        }
-    };
-#else
     class iterator_access
     {
     public:
@@ -693,8 +681,6 @@ namespace boost { namespace unordered_detail {
             return it.base_;
         }
     };
-#endif
-
 
     template <class A, class G> class hash_iterator;
     template <class A, class G> class hash_const_iterator;
