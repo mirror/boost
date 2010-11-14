@@ -670,18 +670,8 @@ namespace boost { namespace unordered_detail {
     class iterator_access
     {
     public:
-        // Note: we access Iterator::base here, rather than in the function
-        // signature to work around a bug in the friend support of an
-        // early version of clang.
-
         template <class Iterator>
-        struct base
-        {
-            typedef BOOST_DEDUCED_TYPENAME Iterator::base type;
-        };
-    
-        template <class Iterator>
-        static BOOST_DEDUCED_TYPENAME base<Iterator>::type const&
+        static BOOST_DEDUCED_TYPENAME Iterator::base const&
             get(Iterator const& it)
         {
             return it.base_;
