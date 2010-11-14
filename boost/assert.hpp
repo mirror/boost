@@ -13,6 +13,12 @@
 //  See http://www.boost.org/libs/utility/assert.html for documentation.
 //
 
+//
+// Stop inspect complaining about use of 'assert':
+//
+// boostinspect:naassert_macro
+//
+
 #undef BOOST_ASSERT
 
 #if defined(BOOST_DISABLE_ASSERTS)
