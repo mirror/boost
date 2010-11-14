@@ -1058,6 +1058,11 @@ private:
         execute_queued_events_helper(typename is_no_message_queue<library_sm>::type());
     }
 
+    typename events_queue_t::size_type get_message_queue_size() const
+    {
+        return m_events_queue.m_events_queue.size();
+    }
+
     // Getter that returns the current state of the FSM
     const int* current_state() const
     {
