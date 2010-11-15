@@ -38,9 +38,14 @@
 #include <boost/mpl/insert_range.hpp>
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/logical.hpp>
+#include <boost/mpl/plus.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/utility/enable_if.hpp>
+
+// mpl_graph graph implementation and depth first search
+#include <boost/msm/mpl_graph/incidence_list_graph.hpp>
+#include <boost/msm/mpl_graph/depth_first_search.hpp>
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(explicit_creation)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(pseudo_entry)
@@ -168,6 +173,7 @@ struct get_number_of_regions
 };
 
 // builds a mpl::vector of initial states
+//TODO remove duplicate from get_initial_states
 template <class region>
 struct get_regions_as_sequence 
 {
@@ -374,7 +380,7 @@ struct create_stt
         ::boost::mpl::if_<
                  ::boost::mpl::has_key<states, ::boost::mpl::placeholders::_2>,
                  ::boost::mpl::placeholders::_1,
-                 ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
+                 ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end< ::boost::mpl::placeholders::_1>,
                              not_a_row< get_wrapped_state< ::boost::mpl::placeholders::_2> > > 
                   >
         >::type with_init;
@@ -629,6 +635,141 @@ struct get_initial_event
 {
     typedef typename StateType::initial_event type;
 };
+
+template <class TransitionTable, class InitState>
+struct build_one_orthogonal_region 
+{
+     template<typename Row>
+     struct row_to_incidence :
+         ::boost::mpl::vector<
+                ::boost::mpl::pair<
+                    typename Row::next_state_type, 
+                    typename Row::transition_event>, 
+                typename Row::current_state_type, 
+                typename Row::next_state_type
+         > {};
+     template<typename Row>
+     struct row_to_incidence2 :
+         ::boost::mpl::vector<
+                ::boost::mpl::pair<
+                    typename Row::transition_event, 
+                    typename Row::next_state_type>, 
+                typename Row::next_state_type, 
+                typename Row::current_state_type
+         > {};
+
+     template <class Seq, class Elt>
+     struct transition_incidence_list_helper 
+     {
+         typedef typename ::boost::mpl::push_back< Seq, row_to_incidence< Elt > >::type one_direction;
+         typedef typename ::boost::mpl::push_back< one_direction, row_to_incidence2< Elt > >::type type;
+     };
+
+     typedef typename ::boost::mpl::fold<
+         TransitionTable,
+         ::boost::mpl::vector<>,
+         transition_incidence_list_helper< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2>
+     >::type transition_incidence_list;
+
+     typedef ::boost::metagraph::mpl_graph::incidence_list_graph<transition_incidence_list>
+         transition_graph;
+
+     struct preordering_dfs_visitor : 
+         ::boost::metagraph::mpl_graph::dfs_default_visitor_operations 
+     {    
+         template<typename Node, typename Graph, typename State>
+         struct discover_vertex :
+             ::boost::mpl::insert<State, Node>
+         {};
+     };
+
+     typedef typename mpl::first< 
+         typename ::boost::metagraph::mpl_graph::depth_first_search<
+            transition_graph, 
+            preordering_dfs_visitor,
+            ::boost::mpl::set<>,
+            InitState
+         >::type
+     >::type type;
+};
+
+// build a vector of regions states (as a set)
+// one set of states for every region
+// version if initial_state is a not sequence
+template <class TransitionTable, class InitStates,class Enable=void>
+struct build_orthogonal_regions 
+{
+    typedef ::boost::mpl::set<typename build_one_orthogonal_region<TransitionTable,InitStates>::type> type;
+};
+
+// version if initial_state is a sequence
+template <class TransitionTable, class InitStates>
+struct build_orthogonal_regions
+    <TransitionTable,InitStates,
+     typename ::boost::enable_if< 
+        ::boost::mpl::is_sequence<typename InitStates> >::type > 
+{
+    typedef typename 
+        ::boost::mpl::fold<
+            InitStates, ::boost::mpl::vector<>,
+            ::boost::mpl::push_back< 
+                ::boost::mpl::placeholders::_1, 
+                build_one_orthogonal_region< TransitionTable, ::boost::mpl::placeholders::_2 > >
+        >::type type;
+};
+
+template <class GraphAsSeqOfSets, class StateType>
+struct find_region_index
+{
+    typedef typename 
+        ::boost::mpl::fold<
+            GraphAsSeqOfSets, ::boost::mpl::pair< ::boost::mpl::int_< -1 > /*res*/, ::boost::mpl::int_<0> /*counter*/ >,
+            ::boost::mpl::if_<
+                ::boost::mpl::has_key< ::boost::mpl::placeholders::_2, StateType >,
+                ::boost::mpl::pair< 
+                    ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
+                    ::boost::mpl::next< ::boost::mpl::second< ::boost::mpl::placeholders::_1 > >
+                >,
+                ::boost::mpl::pair< 
+                    ::boost::mpl::first< ::boost::mpl::placeholders::_1 >,
+                    ::boost::mpl::next< ::boost::mpl::second< ::boost::mpl::placeholders::_1 > >
+                >
+            >
+        >::type result_pair;
+    typedef typename ::boost::mpl::first<result_pair>::type type;
+    enum {value = type::value};
+};
+
+template <typename Sequence, typename Range>
+struct set_insert_range
+{
+    typedef typename ::boost::mpl::fold<
+        Range,Sequence, 
+        ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >
+    >::type type;
+};
+
+template <class Fsm>
+struct check_regions_orthogonality
+{
+    typedef typename build_orthogonal_regions<typename Fsm::stt,typename Fsm::initial_states>::type regions;
+    
+    typedef typename ::boost::mpl::fold<
+        regions, ::boost::mpl::int_<0>,
+        ::boost::mpl::plus< ::boost::mpl::placeholders::_1 , ::boost::mpl::size< ::boost::mpl::placeholders::_2> >
+    >::type number_of_states_in_regions;
+
+    typedef typename ::boost::mpl::fold<
+            regions,mpl::set0<>,
+            set_insert_range< 
+                    ::boost::mpl::placeholders::_1, 
+                    ::boost::mpl::placeholders::_2 > 
+    >::type one_big_states_set;
+
+    enum {states_in_regions_raw = number_of_states_in_regions::value};
+    enum {cumulated_states_in_regions_raw = ::boost::mpl::size<one_big_states_set>::value};
+};
+
 // helper to find out if a SM has an active exit state and is therefore waiting for exiting
 template <class StateType,class OwnerFct,class FSM>
 inline

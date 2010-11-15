@@ -22,6 +22,7 @@
 
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/deref.hpp>
+#include <boost/mpl/assert.hpp>
 
 #include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/include/as_vector.hpp>
@@ -50,6 +51,8 @@
 
 #include <boost/serialization/base_object.hpp> 
 
+#include <boost/parameter.hpp>
+
 #include <boost/msm/row_tags.hpp>
 #include <boost/msm/back/fold_to_list.hpp>
 #include <boost/msm/back/metafunctions.hpp>
@@ -59,6 +62,7 @@
 #include <boost/msm/back/args.hpp>
 #include <boost/msm/back/default_compile_policy.hpp>
 #include <boost/msm/back/dispatch_table.hpp>
+#include <boost/msm/back/no_fsm_check.hpp>
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(accept_sig)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(no_automatic_create)
@@ -66,6 +70,9 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(non_forwarding_flag)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(direct_entry)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(initial_event)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(do_serialize)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(history_policy)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(fsm_check)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(compile_policy)
 
 #ifndef BOOST_MSM_CONSTRUCTOR_ARG_SIZE
 #define BOOST_MSM_CONSTRUCTOR_ARG_SIZE 5 // default max number of arguments for constructors
@@ -89,15 +96,64 @@ template <class Fsm,class Stt, class Event,class CompilePolicy>
 const boost::msm::back::dispatch_table<Fsm,Stt, Event,CompilePolicy>
 dispatch_table<Fsm,Stt, Event,CompilePolicy>::instance;
 
+BOOST_PARAMETER_TEMPLATE_KEYWORD(front_end)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(history_policy)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(compile_policy)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(fsm_check_policy)
+
+typedef ::boost::parameter::parameters<
+    ::boost::parameter::required< ::boost::msm::back::tag::front_end >
+  , ::boost::parameter::optional< 
+        ::boost::parameter::deduced< ::boost::msm::back::tag::history_policy>, has_history_policy< ::boost::mpl::_ > 
+    >
+  , ::boost::parameter::optional< 
+        ::boost::parameter::deduced< ::boost::msm::back::tag::compile_policy>, has_compile_policy< ::boost::mpl::_ > 
+    >
+  , ::boost::parameter::optional< 
+        ::boost::parameter::deduced< ::boost::msm::back::tag::fsm_check_policy>, has_fsm_check< ::boost::mpl::_ > 
+    >
+> state_machine_signature;
+
+
 
 // library-containing class for state machines.  Pass the actual FSM class as
 // the Concrete parameter.
-template<class Derived,class HistoryPolicy=NoHistory,class CompilePolicy=favor_runtime_speed>
-class state_machine : public Derived
+// A0=Derived,A1=NoHistory,A2=CompilePolicy,A3=FsmCheckPolicy >
+template <
+      class A0
+    , class A1 = parameter::void_
+    , class A2 = parameter::void_
+    , class A3 = parameter::void_
+>
+class state_machine : //public Derived
+    public ::boost::parameter::binding<
+            typename state_machine_signature::bind<A0,A1,A2,A3>::type, ::boost::msm::back::tag::front_end
+    >::type
 {
+public:
+    // Create ArgumentPack
+    typedef typename
+        state_machine_signature::bind<A0,A1,A2,A3>::type
+        state_machine_args;
+
+    // Extract first logical parameter.
+    typedef typename ::boost::parameter::binding<
+        state_machine_args, ::boost::msm::back::tag::front_end>::type Derived;
+
+    typedef typename ::boost::parameter::binding<
+        state_machine_args, ::boost::msm::back::tag::history_policy, NoHistory >::type HistoryPolicy;
+
+    typedef typename ::boost::parameter::binding<
+        state_machine_args, ::boost::msm::back::tag::compile_policy, favor_runtime_speed >::type CompilePolicy;
+
+    typedef typename ::boost::parameter::binding<
+        state_machine_args, ::boost::msm::back::tag::fsm_check_policy, no_fsm_check >::type FsmCheckPolicy;
+
+
 private: 
-    typedef boost::msm::back::state_machine<Derived,
-        HistoryPolicy,CompilePolicy>                library_sm;
+
+    typedef boost::msm::back::state_machine<
+        A0,A1,A2,A3>                                library_sm;
 
     typedef ::boost::function<
         execute_return ()>                          transition_fct;
@@ -108,7 +164,7 @@ private:
     typedef bool (*flag_handler)(library_sm&);
 
     // all state machines are friend with each other to allow embedding any of them in another fsm
-    template <class ,class , class
+    template <class ,class , class, class
     > friend class boost::msm::back::state_machine;
 
     // helper to add, if needed, visitors to all states
@@ -1267,7 +1323,7 @@ private:
      }
 
      // Construct with the default initial states
-     state_machine<Derived,HistoryPolicy,CompilePolicy   >()
+     state_machine<A0,A1,A2,A3 >()
          :Derived()
          ,m_events_queue() 
          ,m_deferred_events_queue()
@@ -1285,7 +1341,7 @@ private:
          fill_states(this);
      }
      template <class Expr>
-     state_machine<Derived,HistoryPolicy,CompilePolicy   >
+     state_machine<A0,A1,A2,A3 >
          (Expr const& expr,typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* =0)
          :Derived()
          ,m_events_queue() 
@@ -1313,7 +1369,7 @@ private:
 #define MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB(z, n, unused) ARG ## n t ## n
 #define MSM_CONSTRUCTOR_HELPER_EXECUTE(z, n, unused)                                \
         template <BOOST_PP_ENUM_PARAMS(n, class ARG)>                               \
-        state_machine<Derived,HistoryPolicy,CompilePolicy                           \
+        state_machine<A0,A1,A2,A3                                                   \
         >(BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ),                 \
         typename ::boost::disable_if<typename ::boost::proto::is_expr<ARG0>::type >::type* =0 )                \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
@@ -1331,7 +1387,7 @@ private:
          fill_states(this);                                                         \
      }                                                                              \
         template <class Expr,BOOST_PP_ENUM_PARAMS(n, class ARG)>                    \
-        state_machine<Derived,HistoryPolicy,CompilePolicy                           \
+        state_machine<A0,A1,A2,A3                                                   \
         >(Expr const& expr,BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ), \
         typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* =0 ) \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
@@ -1372,7 +1428,7 @@ private:
          }
         return *this;
      }
-     state_machine<Derived,HistoryPolicy,CompilePolicy> 
+     state_machine<A0,A1,A2,A3> 
          (library_sm const& rhs)
          : Derived(rhs)
      {
@@ -2046,6 +2102,26 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          region_start_helper< ::boost::mpl::int_<0> >::do_start(this,incomingEvent);
      }
 
+     template <class StateType>
+     struct find_region_id 
+     {
+         template <int region>
+         struct In
+         {
+             enum {region_index=region};
+         };
+         // if the user provides no region, find it!
+         template<>
+         struct In<-1>
+         {
+             typedef typename build_orthogonal_regions<
+                 stt,
+                 typename Derived::initial_state 
+             >::type all_regions;
+             enum {region_index= find_region_index<all_regions,StateType>::value };
+         };         
+         enum {region_index = In<StateType::zone_index>::region_index };
+     };
      // helper used to set the correct state as active state upon entry into a fsm
      struct direct_event_start_helper 
      {
@@ -2074,10 +2150,10 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          {
              (static_cast<Derived*>(self))->on_entry(evt,fsm);
              int state_id = get_state_id<stt,typename EventType::active_state::wrapped_entry>::value;
-             BOOST_STATIC_ASSERT(EventType::active_state::zone_index >= 0);
-             BOOST_STATIC_ASSERT(EventType::active_state::zone_index <= nr_regions::value);
+             BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index >= 0);
+             BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index <= nr_regions::value);
              // just set the correct zone, the others will be default/history initialized
-             self->m_states[EventType::active_state::zone_index] = state_id;
+             self->m_states[find_region_id<typename EventType::active_state::wrapped_entry>::region_index] = state_id;
              self->start(evt.m_event);
          }
 
@@ -2113,7 +2189,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              (static_cast<Derived*>(self))->on_entry(evt,fsm);
              int state_id = get_state_id<stt,typename EventType::active_state::wrapped_entry>::value;
              // given region starts with the entry pseudo state as active state
-             self->m_states[EventType::active_state::zone_index] = state_id;
+             self->m_states[find_region_id<typename EventType::active_state::wrapped_entry>::region_index] = state_id;
              self->start(evt.m_event);
              // and we process the transition in the zone of the newly active state
              // (entry pseudo states are, according to UML, a state connecting 1 transition outside to 1 inside
@@ -2131,9 +2207,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              void operator()( ::boost::msm::wrap<StateType> const& )
              {
                  int state_id = get_state_id<stt,typename StateType::wrapped_entry>::value;
-                 BOOST_STATIC_ASSERT(StateType::zone_index >= 0);
-                 BOOST_STATIC_ASSERT(StateType::zone_index <= nr_regions::value);
-                 helper_self->m_states[StateType::zone_index] = state_id;
+                 BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index >= 0);
+                 BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index <= nr_regions::value);
+                 helper_self->m_states[find_region_id<typename StateType::wrapped_entry>::region_index] = state_id;
              }
          private:
              library_sm*        helper_self;
@@ -2322,6 +2398,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     template <class ContainingSM>
     void fill_states(ContainingSM* containing_sm=0)
     {
+        // checks that regions are truly orthogonal
+        FsmCheckPolicy::template check_orthogonality<library_sm>();
+
         BOOST_STATIC_CONSTANT(int, max_state = (mpl::size<state_list>::value));
         // allocate the place without reallocation
         m_visitors.fill_visitors(max_state);
