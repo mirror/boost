@@ -134,6 +134,4 @@ test-suite numeric/uBLAS
       ]
 	[ run test_assignment.cpp
 	]
-	[ test_boost_ublas_size_0.cpp
-	]
     ;
