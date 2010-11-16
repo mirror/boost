@@ -707,7 +707,7 @@ template <class TransitionTable, class InitStates>
 struct build_orthogonal_regions
     <TransitionTable,InitStates,
      typename ::boost::enable_if< 
-        ::boost::mpl::is_sequence<typename InitStates> >::type > 
+        ::boost::mpl::is_sequence< InitStates> >::type > 
 {
     typedef typename 
         ::boost::mpl::fold<

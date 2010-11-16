@@ -2105,14 +2105,14 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      template <class StateType>
      struct find_region_id 
      {
-         template <int region>
+         template <int region,int Dummy=0>
          struct In
          {
              enum {region_index=region};
          };
          // if the user provides no region, find it!
-         template<>
-         struct In<-1>
+         template<int Dummy>
+         struct In<-1,Dummy>
          {
              typedef typename build_orthogonal_regions<
                  stt,
