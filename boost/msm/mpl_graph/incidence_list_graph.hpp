@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_METAGRAPH_MPL_GRAPH_INCIDENCE_LIST_GRAPH_HPP_INCLUDED
-#define BOOST_METAGRAPH_MPL_GRAPH_INCIDENCE_LIST_GRAPH_HPP_INCLUDED
+#ifndef BOOST_MSM_MPL_GRAPH_INCIDENCE_LIST_GRAPH_HPP_INCLUDED
+#define BOOST_MSM_MPL_GRAPH_INCIDENCE_LIST_GRAPH_HPP_INCLUDED
 
 // graph implementation based on a an mpl sequence of sequences <Edge,Source,Target> 
 
@@ -18,7 +18,7 @@
 #include <boost/msm/mpl_graph/detail/incidence_list_graph.ipp>
 
 namespace boost {
-namespace metagraph {
+namespace msm {
 namespace mpl_graph {
    
 template<typename EdgeSequence>
@@ -31,4 +31,4 @@ struct incidence_list_graph {
 }
 }
 
-#endif // BOOST_METAGRAPH_MPL_GRAPH_INCIDENCE_LIST_GRAPH_HPP_INCLUDED
+#endif // BOOST_MSM_MPL_GRAPH_INCIDENCE_LIST_GRAPH_HPP_INCLUDED

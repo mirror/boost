@@ -9,8 +9,8 @@
 // (See accompanying file LICENSEmpl::_1_0.txt or copy at
 // http://www.boost.org/LICENSEmpl::_1_0.txt)
 
-#ifndef BOOST_METAGRAPH_MPL_GRAPH_MPL_GRAPH_HPP_INCLUDED
-#define BOOST_METAGRAPH_MPL_GRAPH_MPL_GRAPH_HPP_INCLUDED
+#ifndef BOOST_MSM_MPL_GRAPH_MPL_GRAPH_HPP_INCLUDED
+#define BOOST_MSM_MPL_GRAPH_MPL_GRAPH_HPP_INCLUDED
 
 #include <boost/msm/mpl_graph/detail/graph_implementation_interface.ipp>
 
@@ -25,7 +25,7 @@
 #include <boost/mpl/back_inserter.hpp>
 
 namespace boost {
-namespace metagraph {
+namespace msm {
 namespace mpl_graph {
 
 // Boost Graph concepts, MPL style
@@ -108,7 +108,7 @@ struct num_edges :
 // source and target are defined in IncidenceGraph
 
 } // mpl_graph
-} // metagraph
+} // msm
 } // boost
 
-#endif // BOOST_METAGRAPH_MPL_GRAPH_MPL_GRAPH_HPP_INCLUDED
+#endif // BOOST_MSM_MPL_GRAPH_MPL_GRAPH_HPP_INCLUDED

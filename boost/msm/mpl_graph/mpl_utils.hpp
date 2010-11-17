@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_METAGRAPH_MPL_GRAPH_MPL_UTILS_HPP_INCLUDED
-#define BOOST_METAGRAPH_MPL_GRAPH_MPL_UTILS_HPP_INCLUDED
+#ifndef BOOST_MSM_MPL_GRAPH_MPL_UTILS_HPP_INCLUDED
+#define BOOST_MSM_MPL_GRAPH_MPL_UTILS_HPP_INCLUDED
 
 #include <boost/mpl/fold.hpp>
 #include <boost/mpl/map.hpp>
@@ -15,7 +15,7 @@
 #include <boost/mpl/and.hpp>
 
 namespace boost {
-namespace metagraph {
+namespace msm {
 namespace mpl_graph {
 namespace mpl_utils {
     
@@ -59,4 +59,4 @@ struct set_equal :
 }
 }              
 
-#endif // BOOST_METAGRAPH_MPL_GRAPH_MPL_UTILS_HPP_INCLUDED
+#endif // BOOST_MSM_MPL_GRAPH_MPL_UTILS_HPP_INCLUDED

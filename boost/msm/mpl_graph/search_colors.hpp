@@ -2,11 +2,11 @@
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_METAGRAPH_MPL_GRAPH_SEARCH_COLORS_HPP_INCLUDED
-#define BOOST_METAGRAPH_MPL_GRAPH_SEARCH_COLORS_HPP_INCLUDED
+#ifndef BOOST_MSM_MPL_GRAPH_SEARCH_COLORS_HPP_INCLUDED
+#define BOOST_MSM_MPL_GRAPH_SEARCH_COLORS_HPP_INCLUDED
 
 namespace boost {
-namespace metagraph {
+namespace msm {
 namespace mpl_graph {
 
 namespace search_colors {
@@ -32,8 +32,8 @@ struct search_color_map_ops {
 
 
 } // namespace mpl_graph
-} // namespace metagraph
+} // namespace msm
 } // namespace boost
 
 
-#endif // BOOST_METAGRAPH_MPL_GRAPH_SEARCH_COLORS_HPP_INCLUDED
+#endif // BOOST_MSM_MPL_GRAPH_SEARCH_COLORS_HPP_INCLUDED

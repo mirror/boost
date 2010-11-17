@@ -26,7 +26,7 @@
 namespace msm = boost::msm;
 namespace mpl = boost::mpl;
 
-namespace mpl_graph = boost::metagraph::mpl_graph;
+namespace mpl_graph = boost::msm::mpl_graph;
 
 namespace
 {

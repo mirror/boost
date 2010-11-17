@@ -2,14 +2,14 @@
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_METAGRAPH_MPL_GRAPH_DETAIL_GRAPH_IMPLEMENTATION_INTERFACE_IPP_INCLUDED
-#define BOOST_METAGRAPH_MPL_GRAPH_DETAIL_GRAPH_IMPLEMENTATION_INTERFACE_IPP_INCLUDED
+#ifndef BOOST_MSM_MPL_GRAPH_DETAIL_GRAPH_IMPLEMENTATION_INTERFACE_IPP_INCLUDED
+#define BOOST_MSM_MPL_GRAPH_DETAIL_GRAPH_IMPLEMENTATION_INTERFACE_IPP_INCLUDED
 
 // forward definitions of the producer metafunctions that need to be specialized for
 // each graph representation
 
 namespace boost {
-namespace metagraph {
+namespace msm {
 namespace mpl_graph {
 namespace detail {
     
@@ -38,5 +38,5 @@ namespace detail {
 }
 }
 
-#endif // BOOST_METAGRAPH_MPL_GRAPH_DETAIL_GRAPH_IMPLEMENTATION_INTERFACE_IPP_INCLUDED
+#endif // BOOST_MSM_MPL_GRAPH_DETAIL_GRAPH_IMPLEMENTATION_INTERFACE_IPP_INCLUDED
 

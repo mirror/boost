@@ -8,7 +8,7 @@
 #include <boost/msm/mpl_graph/incidence_list_graph.hpp>
 #include <boost/msm/mpl_graph/mpl_utils.hpp>
 
-namespace mpl_graph = boost::metagraph::mpl_graph;
+namespace mpl_graph = boost::msm::mpl_graph;
 namespace mpl_utils = mpl_graph::mpl_utils;
 namespace mpl = boost::mpl;
 /* 

@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_METAGRAPH_MPL_GRAPH_BREADTH_FIRST_SEARCH_HPP_INCLUDED
-#define BOOST_METAGRAPH_MPL_GRAPH_BREADTH_FIRST_SEARCH_HPP_INCLUDED
+#ifndef BOOST_MSM_MPL_GRAPH_BREADTH_FIRST_SEARCH_HPP_INCLUDED
+#define BOOST_MSM_MPL_GRAPH_BREADTH_FIRST_SEARCH_HPP_INCLUDED
 
 #include <boost/msm/mpl_graph/mpl_graph.hpp>
 
@@ -19,7 +19,7 @@
 #include "search_colors.hpp"
 
 namespace boost {
-namespace metagraph {
+namespace msm {
 namespace mpl_graph {
 
 // bfs takes a visitor which has all the bgl-like metafunctions encapsulated in an 
@@ -160,8 +160,8 @@ struct breadth_first_search_all : // visit "first" first, then visit any still w
 {};
 
 } // namespace mpl_graph
-} // namespace metagraph
+} // namespace msm
 } // namespace boost
 
 
-#endif // BOOST_METAGRAPH_MPL_GRAPH_BREADTH_FIRST_SEARCH_HPP_INCLUDED
+#endif // BOOST_MSM_MPL_GRAPH_BREADTH_FIRST_SEARCH_HPP_INCLUDED

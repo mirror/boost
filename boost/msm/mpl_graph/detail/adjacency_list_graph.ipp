@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_METAGRAPH_MPL_GRAPH_DETAIL_ADJACENCY_LIST_GRAPH_IPP_INCLUDED
-#define BOOST_METAGRAPH_MPL_GRAPH_DETAIL_ADJACENCY_LIST_GRAPH_IPP_INCLUDED
+#ifndef BOOST_MSM_MPL_GRAPH_DETAIL_ADJACENCY_LIST_GRAPH_IPP_INCLUDED
+#define BOOST_MSM_MPL_GRAPH_DETAIL_ADJACENCY_LIST_GRAPH_IPP_INCLUDED
 
 // implementation of a graph declared in adjacency list format
 // sequence< pair< source_vertex, sequence< pair<edge, target_vertex> > > >
@@ -21,7 +21,7 @@
 #include <boost/mpl/push_back.hpp>
 
 namespace boost {
-namespace metagraph {
+namespace msm {
 namespace mpl_graph {
 namespace detail {
     
@@ -124,5 +124,5 @@ struct produce_edge_set<adjacency_list_tag, GraphData> :
 }
 }
 
-#endif // BOOST_METAGRAPH_MPL_GRAPH_DETAIL_ADJACENCY_LIST_GRAPH_IPP_INCLUDED
+#endif // BOOST_MSM_MPL_GRAPH_DETAIL_ADJACENCY_LIST_GRAPH_IPP_INCLUDED
 
