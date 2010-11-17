@@ -671,11 +671,11 @@ struct build_one_orthogonal_region
          transition_incidence_list_helper< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2>
      >::type transition_incidence_list;
 
-     typedef ::boost::metagraph::mpl_graph::incidence_list_graph<transition_incidence_list>
+     typedef ::boost::msm::mpl_graph::incidence_list_graph<transition_incidence_list>
          transition_graph;
 
      struct preordering_dfs_visitor : 
-         ::boost::metagraph::mpl_graph::dfs_default_visitor_operations 
+         ::boost::msm::mpl_graph::dfs_default_visitor_operations 
      {    
          template<typename Node, typename Graph, typename State>
          struct discover_vertex :
@@ -684,7 +684,7 @@ struct build_one_orthogonal_region
      };
 
      typedef typename mpl::first< 
-         typename ::boost::metagraph::mpl_graph::depth_first_search<
+         typename ::boost::msm::mpl_graph::depth_first_search<
             transition_graph, 
             preordering_dfs_visitor,
             ::boost::mpl::set<>,
