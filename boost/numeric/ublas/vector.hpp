@@ -507,7 +507,7 @@ namespace boost { namespace numeric { namespace ublas {
         class const_iterator:
             public container_const_reference<vector>,
             public random_access_iterator_base<dense_random_access_iterator_tag,
-                                               const_iterator, value_type, difference_type> {
+                   const_iterator, value_type, difference_type> {
         public:
             typedef typename vector::difference_type difference_type;
             typedef typename vector::value_type value_type;
