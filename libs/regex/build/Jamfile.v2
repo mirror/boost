@@ -33,24 +33,44 @@ if ! $(disable-icu)
    }
    else
    {
-      lib icuuc : : <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
-      lib icuuc : : <toolset>msvc <variant>debug <name>icuucd <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+      lib icuuc : : <instruction-set>32:<search>$(ICU_PATH)/lib <instruction-set>64:<search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+      lib icuuc : : <toolset>msvc <variant>debug <name>icuucd <instruction-set>32:<search>$(ICU_PATH)/lib <instruction-set>64:<search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
       lib icuuc : : <name>this_is_an_invalid_library_name ;
-      lib icudt : : <search>$(ICU_PATH)/lib <name>icudata <link>shared <runtime-link>shared ;
-      lib icudt : : <search>$(ICU_PATH)/lib <name>icudt <toolset>msvc <link>shared <runtime-link>shared ;
+      lib icudt : : <instruction-set>32:<search>$(ICU_PATH)/lib <instruction-set>64:<search>$(ICU_PATH)/lib <name>icudata <link>shared <runtime-link>shared ;
+      lib icudt : : <instruction-set>32:<search>$(ICU_PATH)/lib <instruction-set>64:<search>$(ICU_PATH)/lib <name>icudt <toolset>msvc <link>shared <runtime-link>shared ;
       lib icudt : : <name>this_is_an_invalid_library_name ;
-      lib icuin : : <search>$(ICU_PATH)/lib <name>icui18n <link>shared <runtime-link>shared ;
-      lib icuin : : <toolset>msvc <variant>debug <name>icuind <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
-      lib icuin : : <toolset>msvc <variant>release <name>icuin <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+      lib icuin : : <instruction-set>32:<search>$(ICU_PATH)/lib <instruction-set>64:<search>$(ICU_PATH)/lib <name>icui18n <link>shared <runtime-link>shared ;
+      lib icuin : : <toolset>msvc <variant>debug <name>icuind <instruction-set>32:<search>$(ICU_PATH)/lib <instruction-set>64:<search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+      lib icuin : : <toolset>msvc <variant>release <name>icuin <instruction-set>32:<search>$(ICU_PATH)/lib <instruction-set>64:<search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
       lib icuin : : <name>this_is_an_invalid_library_name ;
 
       if $(ICU_PATH)
       {
          icuucd_name = [ GLOB $(ICU_PATH)/bin : icuuc??d.dll ] ;
+         if ! $(icuucd_name)
+         {
+            icuucd_name = [ GLOB $(ICU_PATH)/bin64 : icuuc??d.dll ] ;
+         }
          icuuc_name = [ GLOB $(ICU_PATH)/bin : icuuc??.dll ] ;
+         if ! $(icuuc_name)
+         {
+            icuuc_name = [ GLOB $(ICU_PATH)/bin64 : icuuc??.dll ] ;
+         }
          icudt_name = [ GLOB $(ICU_PATH)/bin : icudt??.dll ] ;
+         if ! $(icudt_name)
+         {
+            icudt_name = [ GLOB $(ICU_PATH)/bin64 : icudt??.dll ] ;
+         }
          icuin_name = [ GLOB $(ICU_PATH)/bin : icuin??.dll ] ;
+         if ! $(icuin_name)
+         {
+            icuin_name = [ GLOB $(ICU_PATH)/bin64 : icuin??.dll ] ;
+         }
          icuind_name = [ GLOB $(ICU_PATH)/bin : icuin??d.dll ] ;
+         if ! $(icuind_name)
+         {
+            icuind_name = [ GLOB $(ICU_PATH)/bin64 : icuin??d.dll ] ;
+         }
 
          #ECHO $(icuucd_name:B) $(icuuc_name:B) $(icudt_name:B) $(icuin_name:B) $(icuind_name:B) ;
       }
