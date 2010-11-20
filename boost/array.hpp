@@ -346,21 +346,12 @@ namespace boost {
         x.swap(y);
     }
 
-#if 0
-	// Specific for boost::array: simply returns its elems data member.
-    template <typename T, std::size_t N>
-    T(&get_c_array(boost::array<T,N>& arg))[N]
-    {
-        return arg.elems;
-    }
-    
-    // Const version.
-    template <typename T, std::size_t N>
-    const T(&get_c_array(const boost::array<T,N>& arg))[N]
-    {
-        return arg.elems;
-    }
-#else
+#if defined(__SUNPRO_CC)
+//	Trac ticket #4757; the Sun Solaris compiler can't handle
+//	syntax like 'T(&get_c_array(boost::array<T,N>& arg))[N]'
+//	
+//	We can't just use this for all compilers, because the 
+//		borland compilers can't handle this form. 
 	namespace detail {
        template <typename T, std::size_t N> struct c_array
        {
@@ -381,6 +372,20 @@ namespace boost {
    {
        return arg.elems;
    }
+#else
+// Specific for boost::array: simply returns its elems data member.
+    template <typename T, std::size_t N>
+    T(&get_c_array(boost::array<T,N>& arg))[N]
+    {
+        return arg.elems;
+    }
+    
+    // Const version.
+    template <typename T, std::size_t N>
+    const T(&get_c_array(const boost::array<T,N>& arg))[N]
+    {
+        return arg.elems;
+    }
 #endif
 	
 #if 0
