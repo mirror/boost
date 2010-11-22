@@ -126,8 +126,10 @@ void interval_set_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_typ
     CHECK_ABELIAN_MONOID_INSTANCE_WRT(plus)(set_a, set_b, set_c, segm, elem);
     CHECK_ABELIAN_MONOID_INSTANCE_WRT(pipe)(set_a, set_b, set_c, segm, elem);
 
+#if !defined(_MSC_VER) || (_MSC_VER >= 1400) // 1310==MSVC-7.1  1400 ==MSVC-8.0
     CHECK_PARTIAL_INVERTIVE_MONOID_INSTANCE_WRT_EQUAL(plus)(is_distinct_equal, set_a, set_b, set_c, segm, elem);
     CHECK_PARTIAL_INVERTIVE_MONOID_INSTANCE_WRT_EQUAL(pipe)(is_distinct_equal, set_a, set_b, set_c, segm, elem);
+#endif
 }
 
 
@@ -170,8 +172,10 @@ void interval_set_check_abelian_group_plus_prot_inv_4_bicremental_types()
     CHECK_ABELIAN_MONOID_INSTANCE_WRT(plus) (set_a, set_b, set_c, segm, elem);
     CHECK_ABELIAN_MONOID_INSTANCE_WRT(pipe) (set_a, set_b, set_c, segm, elem);
 
+#if !defined(_MSC_VER) || (_MSC_VER >= 1400) // 1310==MSVC-7.1  1400 ==MSVC-8.0
     CHECK_ABELIAN_GROUP_INSTANCE_WRT_EQUAL(plus) (is_distinct_equal, set_a, set_b, set_c, segm, elem);
     CHECK_ABELIAN_GROUP_INSTANCE_WRT_EQUAL(pipe) (is_distinct_equal, set_a, set_b, set_c, segm, elem);
+#endif
 }
 
 #endif // LIBS_ICL_TEST_TEST_INTERVAL_SET_LAWS_SHARED_HPP_JOFA_090201

@@ -673,7 +673,7 @@ private:
     template<class Type>
     struct on_total_absorbable<Type, true, true>
     {
-        static void flip(Type& object, const typename Type::segment_type& operand)
+        static void flip(Type& object, const typename Type::segment_type&)
         { icl::clear(object); }
     };
 
