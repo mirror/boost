@@ -34,6 +34,12 @@
     #include <stddef.h>
 #endif
 
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std {
+    using ::memset;
+}
+#endif
+
 namespace boost {
 
 /*!
