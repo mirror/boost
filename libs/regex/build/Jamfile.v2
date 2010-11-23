@@ -12,18 +12,17 @@ project : requirements
 
 local disable-icu = [ MATCH (--disable-icu) : [ modules.peek : ARGV ] ] ;
 
-rule dll-path_options ( properties * )
+rule path_options ( properties * )
 {
     local result ;
     if <address-model>64 in $(properties)
     {
-    	result = <dll-path>$(ICU_PATH)/bin64 ;
+    	result = <search>$(ICU_PATH)/bin64 <search>$(ICU_PATH)/lib64 ;
     }
     else
     {
-    	result = <dll-path>$(ICU_PATH)/bin ;
+    	result = <search>$(ICU_PATH)/bin <search>$(ICU_PATH)/lib ;
     }
-    ECHO $(result) ;
     return $(result) ;
 }
 
@@ -49,24 +48,17 @@ if ! $(disable-icu)
    }
    else
    {
-      lib icuuc : :                   <search>$(ICU_PATH)/lib   <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin ;
-      lib icuuc : : <address-model>64 <search>$(ICU_PATH)/lib64 <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin64 ;
-      lib icuuc : :                   <toolset>msvc <variant>debug <name>icuucd <search>$(ICU_PATH)/lib   <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin ;
-      lib icuuc : : <address-model>64 <toolset>msvc <variant>debug <name>icuucd <search>$(ICU_PATH)/lib64 <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin64 ;
+      lib icuuc : :                                           <link>shared <runtime-link>shared <conditional>@path_options ;
+      lib icuuc : : <toolset>msvc <variant>debug <name>icuucd <link>shared <runtime-link>shared <conditional>@path_options ;
       lib icuuc : : <name>this_is_an_invalid_library_name ;
 
-      lib icudt : :                   <search>$(ICU_PATH)/lib   <name>icudata <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin ;
-      lib icudt : : <address-model>64 <search>$(ICU_PATH)/lib64 <name>icudata <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin64 ;
-      lib icudt : :                   <search>$(ICU_PATH)/lib   <name>icudt <toolset>msvc <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin ;
-      lib icudt : : <address-model>64 <search>$(ICU_PATH)/lib64 <name>icudt <toolset>msvc <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin64 ;
+      lib icudt : : <name>icudata               <link>shared <runtime-link>shared <conditional>@path_options ;
+      lib icudt : : <name>icudt   <toolset>msvc <link>shared <runtime-link>shared <conditional>@path_options ;
       lib icudt : : <name>this_is_an_invalid_library_name ;
 
-      lib icuin : :                   <search>$(ICU_PATH)/lib   <name>icui18n <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin ;
-      lib icuin : : <address-model>64 <search>$(ICU_PATH)/lib64 <name>icui18n <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin64 ;
-      lib icuin : :                   <toolset>msvc <variant>debug <name>icuind <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin ;
-      lib icuin : : <address-model>64 <toolset>msvc <variant>debug <name>icuind <search>$(ICU_PATH)/lib64 <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin64 ;
-      lib icuin : :                   <toolset>msvc <variant>release <name>icuin <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin ;
-      lib icuin : : <address-model>64 <toolset>msvc <variant>release <name>icuin <search>$(ICU_PATH)/lib64 <link>shared <runtime-link>shared <dll-path>$(ICU_PATH)/bin64 ;
+      lib icuin : :                                <name>icui18n <link>shared <runtime-link>shared <conditional>@path_options ;
+      lib icuin : : <toolset>msvc <variant>debug   <name>icuind  <link>shared <runtime-link>shared <conditional>@path_options ;
+      lib icuin : : <toolset>msvc <variant>release <name>icuin   <link>shared <runtime-link>shared <conditional>@path_options ;
       lib icuin : : <name>this_is_an_invalid_library_name ;
 
       if $(ICU_PATH)
@@ -106,7 +98,6 @@ if ! $(disable-icu)
          <library>icudt/<link>shared/<runtime-link>shared 
          <library>icuin/<link>shared/<runtime-link>shared 
          <define>BOOST_HAS_ICU=1 
-         <dll-path>$(ICU_PATH)/bin
          <runtime-link>shared
          <toolset>msvc:<linkflags>/delayload:$(icuucd_name:B).dll
          <toolset>msvc:<linkflags>/delayload:$(icuuc_name:B).dll
