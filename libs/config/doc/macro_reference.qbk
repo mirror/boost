@@ -850,6 +850,26 @@ Defined to 1 if the compiler is the Clang compiler.
 [[`BOOST_WINDOWS`][`<boost/config.hpp>`][
 Defined if the Windows platfrom API is available.
 ]]
+[[`BOOST_LINUX`][`<boost/config.hpp>`][
+Defined if the system kernel is Linux 
+]]
+[[`BOOST_NIX`][`<boost/config.hpp>`][
+Defined if the system is POSIX compliant
+]]
+[[`BOOST_GENETIC_NIX`][`<boost/config.hpp>`][
+Defined if the system can trace its ancestry to the original AT&T codebase or
+designs, but is not certified by the Open Group. This is the case for modern
+open-source BSD systems.
+]]
+[[`BOOST_TRADEMARK_NIX`][`<boost/config.hpp>`][
+Systems certified as POSIX compliant by the Open Group. These systems can use
+the UNIX trademark. Most commercially developed *nix systems fall into this 
+category.
+]]
+[[`BOOST_FUNCTIONAL_NIX`][`<boost/config.hpp>`][
+Systems which behave in a manner roughly consistent with POSIX standards. Linux
+and Minix fall into this category. 
+]]
 [[`BOOST_DINKUMWARE_STDLIB`][`<boost/config.hpp>`][
 Defined if the dinkumware standard library is in use, takes the same value
 as the Dinkumware library version macro `_CPPLIB_VER` if defined, otherwise 1.

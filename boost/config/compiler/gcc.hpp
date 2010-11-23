@@ -89,6 +89,12 @@
 # define BOOST_NO_EXCEPTIONS
 #endif
 
+//
+// Identify cygwin environments
+// 
+#if __CYGWIN__
+#  define BOOST_CYGWIN
+#endif
 
 //
 // Threading support: Turn this on unconditionally here (except for
