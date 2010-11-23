@@ -4,6 +4,8 @@
 # Distributed under the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+using boostbook ;
+
 boostbook standalone : signals.xml :
     <dependency>hello_world_def_code_snippet.xml
     <implicit-dependency>hello_world_def_code_snippet.xml
@@ -24,10 +26,12 @@ boostbook standalone : signals.xml :
 
 import snippet-extractor ;
 
-exe snippet_extractor : snippet_extractor.cpp ;
+exe snippet_extractor : snippet_extractor.cpp : release ;
 
 make hello_world_def_code_snippet.xml
   : [ glob ../example/*.cpp ]
   : snippet-extractor.extract-snippets
   : <extractor-command>.//snippet_extractor
   ;
+
+
