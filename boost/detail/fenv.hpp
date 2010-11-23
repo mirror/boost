@@ -5,6 +5,12 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+#include <boost/config.hpp>
+
+#if !defined(BOOST_HAS_FENV_H)
+  #error This platform does not have a floating point environment
+#endif
+
 #if !defined(BOOST_DETAIL_FENV_HPP)
 #define BOOST_DETAIL_FENV_HPP
 
@@ -13,7 +19,6 @@
 #if defined(__clang__)       &&                       \
     defined(__GNU_LIBRARY__) && /* up to version 5 */ \
     defined(__GLIBC__)          /* version 6 + */
-
   #define _FENV_H
 
   #include <features.h>
@@ -56,16 +61,13 @@
   } }
 
 #else /* if we're not using GNU's C stdlib, fenv.h should work with clang */
-
-  #if defined(__CYGWIN__) /* lol cygwin */
-    #warn The <fenv.h> header is not available for this platform
-  #elif defined(__SUNPRO_CC) /* lol suncc */
+  #if defined(__SUNPRO_CC) /* lol suncc */
     #include <stdio.h>
-    #include <fenv.h>
-  #else
-    #include <fenv.h>
   #endif
+  
+  #include <fenv.h>
 
 #endif
 
-#endif /* BOOST_DETAIL_FENV_HPP */ 
+#endif /* BOOST_DETAIL_FENV_HPP */
+ 

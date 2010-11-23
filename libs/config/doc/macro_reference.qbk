@@ -399,6 +399,11 @@ The platform has the POSIX API `sched_yield`.
 [[`BOOST_HAS_SGI_TYPE_TRAITS`][Compiler, Standard library][
 The compiler has native support for SGI style type traits.
 ]]
+[[`BOOST_HAS_FENV_H`][Platform, Standard library][
+The platform has a `<fenv.h>`. [@../../../../boost/detail/fenv.hpp
+`<boost/detail/fenv.hpp>`] should be included instead of `<fenv.h>` for maximum
+portability. 
+]]
 [[`BOOST_HAS_STDINT_H`][Platform][
 The platform has a `<stdint.h>`
 ]]

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Guidelines for Boost Authors</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="boost_macro_reference.html" title="Boost Macro Reference">
@@ -22,14 +22,14 @@
 <div class="spirit-nav">
 <a accesskey="p" href="boost_macro_reference.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="rationale.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_config.guidelines_for_boost_authors"></a><a class="link" href="guidelines_for_boost_authors.html" title="Guidelines for Boost Authors">Guidelines for
     Boost Authors</a>
 </h2></div></div></div>
 <div class="toc"><dl>
-<dt><span class="section"><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings">
-      Disabling Compiler Warnings</a></span></dt>
+<dt><span class="section"><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings">Disabling
+      Compiler Warnings</a></span></dt>
 <dt><span class="section"><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros">Adding
       New Defect Macros</a></span></dt>
 <dt><span class="section"><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros">Adding
@@ -61,26 +61,26 @@
 <p>
       Note that:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           Boost library implementers are not required to "<code class="computeroutput"><span class="preprocessor">#include</span>
           <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>", and are not required in any
           way to support compilers that do not comply with the C++ Standard (ISO/IEC
           14882).
         </li>
-<li>
+<li class="listitem">
           If a library implementer wishes to support some non-conforming compiler,
           or to support some platform specific feature, "<code class="computeroutput"><span class="preprocessor">#include</span>
           <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>" is the preferred way to obtain
           configuration information not available from the standard headers such
           as <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">climits</span><span class="special">&gt;</span></code>, etc.
         </li>
-<li>
+<li class="listitem">
           If configuration information can be deduced from standard headers such
           as <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">climits</span><span class="special">&gt;</span></code>, use those standard headers rather
           than <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>.
         </li>
-<li>
+<li class="listitem">
           Boost files that use macros defined in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
           should have sensible, standard conforming, default behavior if the macro
           is not defined. This means that the starting point for porting <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> to a new platform is simply to define
@@ -88,25 +88,25 @@
           is no sensible default behavior, an #error message should describe the
           problem.
         </li>
-<li>
+<li class="listitem">
           If a Boost library implementer wants something added to <code class="computeroutput"><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span></code>,
           post a request on the Boost mailing list. There is no guarantee such a
           request will be honored; the intent is to limit the complexity of config.hpp.
         </li>
-<li>
+<li class="listitem">
           The intent is to support only compilers which appear on their way to becoming
           C++ Standard compliant, and only recent releases of those compilers at
           that.
         </li>
-<li>
+<li class="listitem">
           The intent is not to disable mainstream features now well-supported by
           the majority of compilers, such as namespaces, exceptions, RTTI, or templates.
         </li>
 </ul></div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.warnings"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings" title="Disabling Compiler Warnings">
-      Disabling Compiler Warnings</a>
+<a name="boost_config.guidelines_for_boost_authors.warnings"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings" title="Disabling Compiler Warnings">Disabling
+      Compiler Warnings</a>
 </h3></div></div></div>
 <p>
         The header <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">warning_disable</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
@@ -116,17 +116,17 @@
 <p>
         Note that:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             This header <span class="bold"><strong><span class="emphasis"><em>should never be included
             by another Boost header</em></span></strong></span>, it should only ever be
             used by a library source file or a test case.
           </li>
-<li>
+<li class="listitem">
             The header should be included <span class="bold"><strong><span class="emphasis"><em>before
             you include any other header</em></span></strong></span>.
           </li>
-<li>
+<li class="listitem">
             This header only disables warnings that are hard or impossible to otherwise
             deal with, and which are typically emitted by one compiler only, or in
             one compilers own standard library headers.
@@ -182,7 +182,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.guidelines_for_boost_authors.adding_new_defect_macros"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros" title="Adding New Defect Macros">Adding
       New Defect Macros</a>
@@ -233,15 +233,15 @@
         Once the test code is in place in libs/config/test, updating the configuration
         test system proceeds as:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">tools</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span></code>.
             This generates the <code class="computeroutput"><span class="special">.</span><span class="identifier">cpp</span></code>
             file test cases from the <code class="computeroutput"><span class="special">.</span><span class="identifier">ipp</span></code> file, updates the libs/config/test/all/Jamfile.v2,
             <code class="computeroutput"><span class="identifier">config_test</span><span class="special">.</span><span class="identifier">cpp</span></code> and <code class="computeroutput"><span class="identifier">config_info</span><span class="special">.</span><span class="identifier">cpp</span></code>.<br>
             <br>
           </li>
-<li>
+<li class="listitem">
             cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">all</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
             </code><span class="emphasis"><em>MACRONAME<code class="computeroutput"> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>,
             where <span class="emphasis"><em>MACRONAME</em></span> is the name of the new macro, and
@@ -253,7 +253,7 @@
             is defined when it should not be defined, xxx_fail_test will not report
             <code class="computeroutput"><span class="special">**</span><span class="identifier">passed</span><span class="special">**</span></code>.<br> <br>
           </li>
-<li>
+<li class="listitem">
             cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
             <span class="identifier">config_info</span> <span class="identifier">config_test</span>
             </code><span class="emphasis"><em><code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>.
@@ -266,26 +266,26 @@
 <p>
         Then you should:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             Define the defect macro in those config headers that require it.
           </li>
-<li>
+<li class="listitem">
             Document the macro in this documentation (please do not forget this step!!)
           </li>
-<li>
+<li class="listitem">
             Commit everything.
           </li>
-<li>
+<li class="listitem">
             Keep an eye on the regression tests for new failures in Boost.Config
             caused by the addition.
           </li>
-<li>
+<li class="listitem">
             Start using the macro.
           </li>
 </ul></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros" title="Adding New Feature Test Macros">Adding
       New Feature Test Macros</a>
@@ -309,7 +309,7 @@
         <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">unistd</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>).
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers" title="Modifying the Boost Configuration Headers">Modifying
       the Boost Configuration Headers</a>

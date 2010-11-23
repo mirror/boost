@@ -16,6 +16,13 @@
 #  endif
 #endif
 
+#if !defined(CYGWIN) && (defined(unix) || defined(__unix) || defined(__unix__))
+#  include <unistd.h>
+#  if defined(_POSIX_VERSION) || defined(_XOPEN_VERSION)
+#     define BOOST_HAS_FENV_H
+#  endif
+#endif
+
 //
 // __STL_STATIC_CONST_INIT_BUG implies BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 // for versions prior to 4.1(beta)

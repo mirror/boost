@@ -40,6 +40,14 @@
 #  define BOOST_NO_STRINGSTREAM
 #endif
 
+#if !defined(CYGWIN) && (defined(unix) || defined(__unix) || defined(__unix__))
+#  include <unistd.h>
+#  if defined(_POSIX_VERSION) || defined(_XOPEN_VERSION)
+#     define BOOST_HAS_FENV_H
+#  endif
+#endif
+
+
 //
 // Assume no std::locale without own iostreams (this may be an
 // incorrect assumption in some cases):

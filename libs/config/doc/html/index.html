@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost.Config</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="index.html" title="Boost.Config">
 <link rel="next" href="boost_config/boost_macro_reference.html" title="Boost Macro Reference">
 </head>
@@ -18,7 +18,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav"><a accesskey="n" href="boost_config/boost_macro_reference.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a></div>
-<div class="article" lang="en">
+<div class="article">
 <div class="titlepage">
 <div>
 <div><h2 class="title">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <div><p class="copyright">Copyright &#169; 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock</p></div>
 <div><div class="legalnotice">
-<a name="id1010243"></a><p>
+<a name="id663915"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -75,8 +75,8 @@
 <dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html">Guidelines for
     Boost Authors</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings">
-      Disabling Compiler Warnings</a></span></dt>
+<dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings">Disabling
+      Compiler Warnings</a></span></dt>
 <dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros">Adding
       New Defect Macros</a></span></dt>
 <dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros">Adding
@@ -92,7 +92,7 @@
 <dt><span class="section"><a href="boost_config/acknowledgements.html">Acknowledgements</a></span></dt>
 </dl>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_config.configuring_boost_for_your_platform"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform" title="Configuring Boost for Your Platform">Configuring
     Boost for Your Platform</a>
@@ -111,7 +111,7 @@
 <dt><span class="section"><a href="index.html#boost_config.configuring_boost_for_your_platform.testing_the_boost_configuration">Testing
       the boost configuration</a></span></dt>
 </dl></div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.using_the_default_boost_configuration"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.using_the_default_boost_configuration" title="Using the default boost configuration">Using
       the default boost configuration</a>
@@ -135,7 +135,7 @@
         and submitting a support request.
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.the__boost_config_hpp__header"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.the__boost_config_hpp__header" title="The &lt;boost/config.hpp&gt; header">The
       &lt;boost/config.hpp&gt; header</a>
@@ -166,9 +166,7 @@
         developers list.
       </p>
 </div>
-<a name="config_config_script"></a><p>
-    </p>
-<div class="section" lang="en">
+<a name="config_config_script"></a><div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.using_the_configure_script"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.using_the_configure_script" title="Using the configure script">Using
       the configure script</a>
@@ -289,15 +287,15 @@
         (located under <span class="emphasis"><em>&lt;boost-root&gt;</em></span><code class="computeroutput"><span class="special">/</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span></code>).
         There are two ways you can use this header:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             <span class="bold"><strong>Option 1:</strong></span> copy the header into <span class="emphasis"><em>&lt;boost-root&gt;</em></span><code class="computeroutput"><span class="special">/</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span></code> so that it replaces the default user.hpp
             provided by boost. This option allows only one configure-generated setup;
             boost developers should avoid this option, as it incurs the danger of
             accidentally committing a configure-modified <a href="../../../../boost/config/user.hpp" target="_top">&lt;boost/config/user.hpp&gt;</a>
             to the cvs repository (something you will not be thanked for!).
           </li>
-<li>
+<li class="listitem">
             <span class="bold"><strong>Option 2:</strong></span> give the header a more memorable
             name, and place it somewhere convenient; then, define the macro <code class="computeroutput"><span class="identifier">BOOST_USER_CONFIG</span></code> to point to it. For
             example create a new sub-directory <span class="emphasis"><em>&lt;boost-root&gt;</em></span><code class="computeroutput"><span class="special">/</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span></code> <code class="computeroutput"><span class="identifier">user</span><span class="special">/</span></code>, and copy the header there; for example
@@ -310,9 +308,7 @@
           </li>
 </ul></div>
 </div>
-<a name="config_user_settable"></a><p>
-    </p>
-<div class="section" lang="en">
+<a name="config_user_settable"></a><div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.user_settable_options"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.user_settable_options" title="User settable options">User
       settable options</a>
@@ -678,7 +674,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.advanced_configuration_usage"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.advanced_configuration_usage" title="Advanced configuration usage">Advanced
       configuration usage</a>
@@ -722,7 +718,7 @@
 <p>
         The following usage examples represent just a few of the possibilities:
       </p>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.advanced_configuration_usage.example_1__creating_our_own_frozen_configuration"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.advanced_configuration_usage.example_1__creating_our_own_frozen_configuration" title="Example 1, creating our own frozen configuration">Example
         1, creating our own frozen configuration</a>
@@ -754,7 +750,7 @@
           yet supported by boost.
         </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.advanced_configuration_usage.example_2__skipping_files_that_you_don_t_need"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.advanced_configuration_usage.example_2__skipping_files_that_you_don_t_need" title="Example 2: skipping files that you don't need">Example
         2: skipping files that you don't need</a>
@@ -773,7 +769,7 @@
           a dependency on two boost headers.
         </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.advanced_configuration_usage.example_3__using_configure_script_to_freeze_the_boost_configuration"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.advanced_configuration_usage.example_3__using_configure_script_to_freeze_the_boost_configuration" title="Example 3: using configure script to freeze the boost configuration">Example
         3: using configure script to freeze the boost configuration</a>
@@ -786,7 +782,7 @@
         </p>
 </div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.configuring_boost_for_your_platform.testing_the_boost_configuration"></a><a class="link" href="index.html#boost_config.configuring_boost_for_your_platform.testing_the_boost_configuration" title="Testing the boost configuration">Testing
       the boost configuration</a>
@@ -950,7 +946,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: September 26, 2010 at 09:24:20 GMT</small></p></td>
+<td align="left"><p><small>Last revised: November 23, 2010 at 03:21:20 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
