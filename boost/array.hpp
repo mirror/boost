@@ -368,7 +368,7 @@ namespace boost {
 
    // Specific for boost::array: simply returns its elems data member.
    template <typename T, std::size_t N>
-   const typename detail::c_array<T,N>::type& get_c_array(const boost::array<T,N>& arg)
+   typename const detail::c_array<T,N>::type& get_c_array(const boost::array<T,N>& arg)
    {
        return arg.elems;
    }
