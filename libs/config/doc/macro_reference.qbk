@@ -803,6 +803,38 @@ the arguments is itself a macro (see 16.3.1 in C++ standard). This is normally
 used to create a mangled name in combination with a predefined macro such a
 \_\_LINE__.
 ]]
+[[`BOOST_CONSTEXPR`][
+Some compilers don't support the use of `constexpr`. This macro expands to nothing on those compilers, and `constexpr`
+elsewhere. For example, when defining a constexpr function or constructor replace:
+``
+  constexpr tuple();
+``
+with:
+``
+  BOOST_CONSTEXPR tuple();
+``
+]]
+[[`BOOST_CONSTEXPR_OR_CONST`][
+Some compilers don't support the use of `constexpr`. This macro expands to `const` on those compilers, and `constexpr`
+elsewhere. For example, when defining const expr variables replace:
+``
+  static constexpr UIntType xor_mask = a;
+``
+with:
+``
+  static BOOST_CONSTEXPR_OR_CONST UIntType xor_mask = a;
+``
+]]
+[[`BOOST_STATIC_CONSTEXPR`][
+This is a shortcut for `static BOOST_CONSTEXPR_OR_CONST`For example, when defining const expr variables replace:
+``
+  static constexpr UIntType xor_mask = a;
+``
+with:
+``
+  BOOST_STATIC_CONSTEXPR UIntType xor_mask = a;
+``
+]]
 ]
 
 [endsect]
