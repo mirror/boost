@@ -30,7 +30,8 @@ void    RunTests()
 		fail_test ( "Array6: Same thing not equal?(1)" );
 		
 	const arr &caRef = get_c_array ( test_case );
-	if ( &*test_case.begin () != &caRef[0] )
+	typename test_type::const_iterator iter = test_case.begin ();
+	if ( &*iter != &caRef[0] )
 		fail_test ( "Array6: Same thing not equal?(2)" );
 }
 
