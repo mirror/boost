@@ -12,11 +12,8 @@
 #define BOOST_HAS_MACRO_USE_FACET
 #define BOOST_NO_STD_MESSAGES
 
-#if !defined(CYGWIN) && (defined(unix) || defined(__unix) || defined(__unix__))
+#if !defined(CYGWIN)
 #  include <unistd.h>
-#  if defined(_POSIX_VERSION) || defined(_XOPEN_VERSION)
-#     define BOOST_HAS_FENV_H
-#  endif
 #endif
 
 //  C++0x headers not yet implemented

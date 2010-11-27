@@ -7,7 +7,7 @@
 
 #include <boost/config.hpp>
 
-#if !defined(BOOST_HAS_FENV_H)
+#if defined(BOOST_NO_FENV_H)
   #error This platform does not have a floating point environment
 #endif
 

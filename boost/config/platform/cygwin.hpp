@@ -43,6 +43,9 @@
   #define BOOST_HAS_STDINT_H
 #endif
 
+/// Cygwin has no fenv.h
+#define BOOST_NO_FENV_H
+
 #include <boost/config/posix_features.hpp>
 
 // Cygwin lies about XSI conformance, there is no nl_types.h.

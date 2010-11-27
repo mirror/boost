@@ -16,11 +16,8 @@
 #  endif
 #endif
 
-#if !defined(CYGWIN) && (defined(unix) || defined(__unix) || defined(__unix__))
+#if !defined(CYGWIN) 
 #  include <unistd.h>
-#  if defined(_POSIX_VERSION) || defined(_XOPEN_VERSION)
-#     define BOOST_HAS_FENV_H
-#  endif
 #endif
 
 //
