@@ -27,7 +27,7 @@
                       Boost.Python]]
 [def _Python_      [@http://www.python.org Python]]
 [def _LAM_          [@http://www.lam-mpi.org/ LAM/MPI]]
-[def _MPICH_        [@http://www-unix.mcs.anl.gov/mpi/mpich/ MPICH]]
+[def _MPICH_        [@http://www-unix.mcs.anl.gov/mpi/mpich/ MPICH2]]
 [def _OpenMPI_      [@http://www.open-mpi.org OpenMPI]]
 [def _accumulate_   [@http://www.sgi.com/tech/stl/accumulate.html
                      `accumulate`]]
@@ -99,9 +99,9 @@ MPI implementation. There are many conforming _MPI_implementations_
 available. Boost.MPI should work with any of the
 implementations, although it has only been tested extensively with:
 
-* [@http://www.open-mpi.org Open MPI 1.0.x]
-* [@http://www.lam-mpi.org LAM/MPI 7.x]
-* [@http://www-unix.mcs.anl.gov/mpi/mpich/ MPICH 1.2.x]
+* [@http://www.open-mpi.org Open MPI]
+* [@http://www.lam-mpi.org LAM/MPI ]
+* [@http://www-unix.mcs.anl.gov/mpi/mpich/ MPICH2]
 
 You can test your implementation using the following simple program,
 which passes a message from one processor to another. Each processor
