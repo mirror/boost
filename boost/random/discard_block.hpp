@@ -196,8 +196,8 @@ template<class URNG, int p, int r>
 class discard_block : public discard_block_engine<URNG, p, r>
 {
     typedef discard_block_engine<URNG, p, r> base_t;
-    typedef typename base_t::result_type result_type;
 public:
+    typedef typename base_t::result_type result_type;
     discard_block() {}
     template<class T>
     discard_block(T& arg) : base_t(arg) {}
