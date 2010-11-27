@@ -90,13 +90,6 @@
 #endif
 
 //
-// Identify cygwin environments
-// 
-#if __CYGWIN__
-#  define BOOST_CYGWIN
-#endif
-
-//
 // Threading support: Turn this on unconditionally here (except for
 // those platforms where we can know for sure). It will get turned off again
 // later if no threading API is detected.
