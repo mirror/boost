@@ -107,7 +107,8 @@ private:
     void load_impl(void * p, int l)
     {
       assert(position+l<=static_cast<int>(buffer_.size()));
-      std::memcpy(p,&buffer_[position],l);
+      if (l)
+        std::memcpy(p,&buffer_[position],l);
       position += l;
     }
 
