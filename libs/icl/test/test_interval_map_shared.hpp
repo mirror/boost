@@ -24,9 +24,7 @@ void interval_map_fundamentals_4_ordered_types()
     // we are able to test operations only for the most basic values
     // identity_element (0, empty, T() ...) and unit_element.
 
-    //T v0 = identity_element<T>();
-    //T v1 = unit_element<T>();
-    T v0 = identity_element<T>::value();
+    T v0 = boost::icl::identity_element<T>::value();
     T v1 = unit_element<T>::value();
     IntervalT I0_0I(v0);
     IntervalT I1_1I(v1);
@@ -38,18 +36,18 @@ void interval_map_fundamentals_4_ordered_types()
     //-------------------------------------------------------------------------
     BOOST_CHECK_EQUAL(IntervalMapT().empty(), true);
     BOOST_CHECK_EQUAL(icl::is_empty(IntervalMapT()), true);
-    BOOST_CHECK_EQUAL(cardinality(IntervalMapT()), identity_element<size_T>::value());
-    BOOST_CHECK_EQUAL(IntervalMapT().size(), identity_element<size_T>::value());
-    BOOST_CHECK_EQUAL(icl::size(IntervalMapT()), identity_element<size_T>::value());
+    BOOST_CHECK_EQUAL(cardinality(IntervalMapT()), boost::icl::identity_element<size_T>::value());
+    BOOST_CHECK_EQUAL(IntervalMapT().size(), boost::icl::identity_element<size_T>::value());
+    BOOST_CHECK_EQUAL(icl::size(IntervalMapT()), boost::icl::identity_element<size_T>::value());
     BOOST_CHECK_EQUAL(interval_count(IntervalMapT()), 0);
     BOOST_CHECK_EQUAL(IntervalMapT().iterative_size(), 0);
     BOOST_CHECK_EQUAL(iterative_size(IntervalMapT()), 0);
     BOOST_CHECK_EQUAL(IntervalMapT(), IntervalMapT());
 
-    IntervalT mt_interval = identity_element<IntervalT >::value();
+    IntervalT mt_interval = boost::icl::identity_element<IntervalT >::value();
     BOOST_CHECK_EQUAL(mt_interval, IntervalT());
     typename IntervalMapT::value_type mt_u1 = make_pair(mt_interval, u1);
-    IntervalMapT mt_map = identity_element<IntervalMapT >::value();
+    IntervalMapT mt_map = boost::icl::identity_element<IntervalMapT >::value();
     BOOST_CHECK_EQUAL(mt_map, IntervalMapT());
 
     //adding emptieness to emptieness yields emptieness ;)
@@ -59,7 +57,7 @@ void interval_map_fundamentals_4_ordered_types()
     BOOST_CHECK_EQUAL(mt_map, IntervalMapT());
     (mt_map += mt_u1) += mt_u1;
     BOOST_CHECK_EQUAL(mt_map, IntervalMapT());
-    BOOST_CHECK_EQUAL(hull(mt_map), identity_element<IntervalT >::value());
+    BOOST_CHECK_EQUAL(hull(mt_map), boost::icl::identity_element<IntervalT >::value());
 
     //subtracting emptieness
     mt_map.subtract(mt_u1).subtract(mt_u1);

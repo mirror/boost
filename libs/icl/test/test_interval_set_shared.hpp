@@ -23,7 +23,7 @@ void interval_set_fundamentals_4_ordered_types()
     // we are able to test operations only for the most basic values
     // identity_element (0, empty, T() ...) and unit_element.
 
-    T v0 = identity_element<T>::value();
+    T v0 = boost::icl::identity_element<T>::value();
     T v1 = unit_element<T>::value();
     IntervalT I0_0I(v0);
     IntervalT I1_1I(v1);
@@ -34,16 +34,16 @@ void interval_set_fundamentals_4_ordered_types()
     //-------------------------------------------------------------------------
     BOOST_CHECK_EQUAL(IntervalSet<T>().empty(), true);
     BOOST_CHECK_EQUAL(icl::is_empty(IntervalSet<T>()), true);
-    BOOST_CHECK_EQUAL(cardinality(IntervalSet<T>()), identity_element<size_T>::value());
-    BOOST_CHECK_EQUAL(IntervalSet<T>().size(), identity_element<size_T>::value());
+    BOOST_CHECK_EQUAL(cardinality(IntervalSet<T>()), boost::icl::identity_element<size_T>::value());
+    BOOST_CHECK_EQUAL(IntervalSet<T>().size(), boost::icl::identity_element<size_T>::value());
     BOOST_CHECK_EQUAL(interval_count(IntervalSet<T>()), 0);
     BOOST_CHECK_EQUAL(IntervalSet<T>().iterative_size(), 0);
     BOOST_CHECK_EQUAL(iterative_size(IntervalSet<T>()), 0);
     BOOST_CHECK_EQUAL(IntervalSet<T>(), IntervalSet<T>());
 
-    IntervalT mt_interval = identity_element<IntervalT>::value();
+    IntervalT mt_interval = boost::icl::identity_element<IntervalT>::value();
     BOOST_CHECK_EQUAL(mt_interval, IntervalT());
-    IntervalSet<T> mt_set = identity_element<IntervalSet<T> >::value();
+    IntervalSet<T> mt_set = boost::icl::identity_element<IntervalSet<T> >::value();
     BOOST_CHECK_EQUAL(mt_set, IntervalSet<T>());
 
     //adding emptieness to emptieness yields emptieness ;)
@@ -53,7 +53,7 @@ void interval_set_fundamentals_4_ordered_types()
     BOOST_CHECK_EQUAL(mt_set, IntervalSet<T>());
     (mt_set += mt_interval) += mt_interval;
     BOOST_CHECK_EQUAL(mt_set, IntervalSet<T>());
-    BOOST_CHECK_EQUAL(hull(mt_set), identity_element<IntervalT >::value());
+    BOOST_CHECK_EQUAL(hull(mt_set), boost::icl::identity_element<IntervalT >::value());
 
     //subtracting emptieness
     mt_set.subtract(mt_interval).subtract(mt_interval);
