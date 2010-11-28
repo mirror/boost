@@ -168,9 +168,9 @@ hull(const typename interval_traits<Type>::domain_type& left,
      const typename interval_traits<Type>::domain_type& right)
 {
     if(interval_traits<Type>::domain_compare(left,right))
-        return construct<Type>(left, succ(right));
+        return construct<Type>(left, icl::succ(right));
     else
-        return construct<Type>(right, succ(left));
+        return construct<Type>(right, icl::succ(left));
 }
 
 template<class Type>
@@ -182,12 +182,12 @@ hull(const typename interval_traits<Type>::domain_type& left,
     if(interval_traits<Type>::domain_compare(left,right))
     {
         BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(left) )); 
-        return construct<Type>(pred(left), right);
+        return construct<Type>(icl::pred(left), right);
     }
     else
     {
         BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(right) )); 
-        return construct<Type>(pred(right), left);
+        return construct<Type>(icl::pred(right), left);
     }
 }
 
@@ -211,12 +211,12 @@ hull(const typename interval_traits<Type>::domain_type& left,
     if(interval_traits<Type>::domain_compare(left,right))
     {
         BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(left) )); 
-        return construct<Type>(pred(left), succ(right));
+        return construct<Type>(icl::pred(left), icl::succ(right));
     }
     else
     {
         BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(right) )); 
-        return construct<Type>(pred(right), succ(left));
+        return construct<Type>(icl::pred(right), icl::succ(left));
     }
 }
 
@@ -269,7 +269,7 @@ enable_if< mpl::and_< mpl::or_<is_static_left_open<Type>, is_static_open<Type> >
          , typename interval_traits<Type>::domain_type>::type
 first(const Type& object)
 { 
-    return succ(lower(object));
+    return icl::succ(lower(object));
 }
 
 template<class Type>
@@ -279,7 +279,7 @@ first(const Type& object)
 { 
     return is_left_closed(object.bounds()) ? 
                     lower(object) : 
-               succ(lower(object));
+               icl::succ(lower(object));
 }
 
 //- last -----------------------------------------------------------------------
@@ -302,7 +302,7 @@ last(const Type& object)
     typedef typename interval_traits<Type>::domain_type domain_type;
     BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value>
                                  ::is_less_than(upper(object)) )); 
-    return pred(upper(object));
+    return icl::pred(upper(object));
 }
 
 template<class Type>
@@ -314,8 +314,8 @@ last(const Type& object)
     BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value>
                                  ::is_less_than_or(upper(object), is_right_closed(object.bounds())) )); 
     return is_right_closed(object.bounds()) ? 
-                    upper(object) : 
-               pred(upper(object));
+                         upper(object) : 
+               icl::pred(upper(object));
 }
 
 //- last_next ------------------------------------------------------------------
@@ -326,7 +326,7 @@ enable_if< mpl::and_< mpl::or_<is_static_left_open<Type>, is_static_closed<Type>
          , typename interval_traits<Type>::domain_type>::type
 last_next(const Type& object)
 { 
-    return succ(upper(object));
+    return icl::succ(upper(object));
 }
 
 template<class Type>
@@ -346,8 +346,8 @@ inline typename enable_if<is_discrete_interval<Type>,
 last_next(const Type& object)
 { 
     return is_right_closed(object.bounds()) ? 
-               succ(upper(object)): 
-                    upper(object) ;
+               icl::succ(upper(object)): 
+                         upper(object) ;
 }
 
 //------------------------------------------------------------------------------
@@ -428,7 +428,7 @@ template<class Type>
 typename boost::enable_if<is_static_open<Type>, bool>::type
 is_empty(const Type& object)
 { 
-    return domain_less_equal<Type>(upper(object), succ(lower(object))); 
+    return domain_less_equal<Type>(upper(object), icl::succ(lower(object))); 
 }
 
 template<class Type>
@@ -438,7 +438,7 @@ is_empty(const Type& object)
     if(object.bounds() == interval_bounds::closed())
         return domain_less<Type>(upper(object), lower(object)); 
     else if(object.bounds() == interval_bounds::open())
-        return domain_less_equal<Type>(upper(object), succ(lower(object))); 
+        return domain_less_equal<Type>(upper(object), icl::succ(lower(object))); 
     else
         return domain_less_equal<Type>(upper(object), lower(object)); 
 }
@@ -815,7 +815,7 @@ template<class Type>
 typename boost::enable_if<is_discrete_interval<Type>, bool>::type
 touches(const Type& left, const Type& right)
 {
-    return domain_equal<Type>(succ(last(left)), first(right));
+    return domain_equal<Type>(icl::succ(last(left)), first(right));
 }
 
 template<class Type>
@@ -1021,7 +1021,7 @@ left_subtract(Type right, const Type& left_minuend)
     if(exclusive_less(left_minuend, right))
         return right; 
 
-    return construct<Type>(succ(upper(left_minuend)), upper(right));
+    return construct<Type>(icl::succ(upper(left_minuend)), upper(right));
 }
 
 template<class Type>
@@ -1031,7 +1031,7 @@ left_subtract(Type right, const Type& left_minuend)
     if(exclusive_less(left_minuend, right))
         return right; 
 
-    return construct<Type>(pred(upper(left_minuend)), upper(right));
+    return construct<Type>(icl::pred(upper(left_minuend)), upper(right));
 }
 
 template<class Type>
@@ -1073,7 +1073,7 @@ right_subtract(Type left, const Type& right_minuend)
     else if(lower_less_equal(right_minuend, left))
         return identity_element<Type>::value();
 
-    return construct<Type>(lower(left), pred(lower(right_minuend)));
+    return construct<Type>(lower(left), icl::pred(lower(right_minuend)));
 }
 
 template<class Type>
@@ -1083,7 +1083,7 @@ right_subtract(Type left, const Type& right_minuend)
     if(exclusive_less(left, right_minuend))
         return left;
 
-    return construct<Type>(lower(left), succ(lower(right_minuend)));
+    return construct<Type>(lower(left), icl::succ(lower(right_minuend)));
 }
 
 template<class Type>
@@ -1194,9 +1194,9 @@ inner_complement(const Type& left, const Type& right)
     if(icl::is_empty(left) || icl::is_empty(right))
         return  identity_element<Type>::value();
     else if(exclusive_less(left, right))
-        return construct<Type>(succ(upper(left)), pred(lower(right)));
+        return construct<Type>(icl::succ(upper(left)), icl::pred(lower(right)));
     else if(exclusive_less(right, left))
-        return construct<Type>(succ(upper(right)), pred(lower(left)));
+        return construct<Type>(icl::succ(upper(right)), icl::pred(lower(left)));
     else
         return identity_element<Type>::value();
 }
@@ -1255,9 +1255,9 @@ distance(const Type& x1, const Type& x2)
     if(icl::is_empty(x1) || icl::is_empty(x2))
         return icl::identity_element<difference_type>::value();
     else if(domain_less<Type>(last(x1), first(x2)))
-        return static_cast<difference_type>(pred(first(x2) - last(x1)));
+        return static_cast<difference_type>(icl::pred(first(x2) - last(x1)));
     else if(domain_less<Type>(last(x2), first(x1)))
-        return static_cast<difference_type>(pred(first(x1) - last(x2)));
+        return static_cast<difference_type>(icl::pred(first(x1) - last(x2)));
     else
         return icl::identity_element<difference_type>::value();
 }
