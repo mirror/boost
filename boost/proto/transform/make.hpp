@@ -61,13 +61,6 @@
             {};
 
             template<typename R, typename Expr, typename State, typename Data
-                // BUGBUG this should be is_transform, but if R is a template instantiation
-                // it will cause the template to be instantiated, whereas is_callable will not.
-              , bool IsTransform = is_callable<R>::value
-            >
-            struct make_if_;
-
-            template<typename R, typename Expr, typename State, typename Data
                 BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<R>::value)
             >
             struct make_
@@ -75,6 +68,28 @@
                 typedef R type;
                 typedef void not_applied_;
             };
+
+            template<typename R, typename Expr, typename State, typename Data
+              , bool IsTransform = is_transform<R>::value
+            >
+            struct make_if2_
+              : make_<R, Expr, State, Data>
+            {};
+
+            template<typename R, typename Expr, typename State, typename Data>
+            struct make_if2_<R, Expr, State, Data, true>
+              : uncvref<typename R::template impl<Expr, State, Data>::result_type>
+            {};
+
+            template<typename R, typename Expr, typename State, typename Data
+                // HACKHACK This should really be is_transform; however, is_transform
+                // would have the unfortunate side-effect of instantiating R which is
+                // not acceptable in this context. Instead, we first check to see if 
+                // R is callable, which will not instantiate R. If is_callable is true,
+                // it is safe to instantiate R to check if it is a transform.
+              , bool IsCallable = is_callable<R>::value
+            >
+            struct make_if_;
 
             template<typename R, typename Expr, typename State, typename Data>
             struct make_if_<R, Expr, State, Data, false>
@@ -99,10 +114,9 @@
             };
             #endif
 
-            // TODO could optimize this if R is a transform
             template<typename R, typename Expr, typename State, typename Data>
             struct make_if_<R, Expr, State, Data, true>
-              : uncvref<typename R::template impl<Expr, State, Data>::result_type>
+              : make_if2_<R, Expr, State, Data>
             {};
 
             template<typename Type, bool IsAggregate = is_aggregate<Type>::value>
@@ -272,6 +286,7 @@
         struct is_callable<protect<PrimitiveTransform> >
           : mpl::true_
         {};
+
     }}
 
     #endif
@@ -397,7 +412,6 @@
             {
                 /// \brief <tt>boost::result_of\<make\<Object\>(Expr, State, Data)\>::type</tt>
                 typedef typename detail::make_if_<Object, Expr, State, Data>::type result_type;
-                //typedef typename detail::make_<Object, Expr, State, Data>::type result_type;
 
                 /// Let \c ax be <tt>when\<_, Ax\>()(e, s, d)</tt>
                 /// for each \c x in <tt>[0,N]</tt>.

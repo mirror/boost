@@ -186,6 +186,13 @@
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/proto/transform/when.hpp>))
         #include BOOST_PP_ITERATE()
 
+        /// INTERNAL ONLY
+        ///
+        template<typename Grammar, typename Transform>
+        struct is_callable<when<Grammar, Transform> >
+          : mpl::true_
+        {};
+
     }} // namespace boost::proto
 
     #endif

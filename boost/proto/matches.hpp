@@ -925,6 +925,13 @@
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
+        template<typename Cases>
+        struct is_callable<switch_<Cases> >
+          : mpl::true_
+        {};
+
     }}
 
     #if defined(_MSC_VER) && (_MSC_VER >= 1020)

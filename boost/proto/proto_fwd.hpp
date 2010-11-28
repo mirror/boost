@@ -525,12 +525,6 @@ namespace boost { namespace proto
         template<typename Tag, typename Domain = deduce_domain>
         struct unpack_expr;
 
-        template<typename Tag, typename Domain = deduce_domain>
-        struct unfused_expr_fun;
-
-        template<typename Tag, typename Domain = deduce_domain>
-        struct unfused_expr;
-
         typedef make_expr<tag::terminal>            make_terminal;
         typedef make_expr<tag::unary_plus>          make_unary_plus;
         typedef make_expr<tag::negate>              make_negate;
@@ -638,10 +632,10 @@ namespace boost { namespace proto
     struct is_callable;
 
     template<typename T, typename Void = void>
-    struct is_aggregate;
+    struct is_transform;
 
     template<typename T, typename Void = void>
-    struct is_transform;
+    struct is_aggregate;
 
     #define BOOST_PROTO_UNEXPR() typedef int proto_is_expr_;
     #define BOOST_PROTO_CALLABLE() typedef void proto_is_callable_;
@@ -655,7 +649,7 @@ namespace boost { namespace proto
 
     struct external_transform;
 
-    template<typename PrimitiveTransform, typename X = void>
+    template<typename PrimitiveTransform = void, typename X = void>
     struct transform;
 
     template<typename Grammar, typename Fun = Grammar>
