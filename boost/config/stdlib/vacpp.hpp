@@ -18,7 +18,7 @@
                         || defined(unix)      \
                         || defined(__APPLE__) \
                         || defined(__APPLE)   \
-                        || defined(APPLE)
+                        || defined(APPLE))
 #  include <unistd.h>
 #endif
 
