@@ -16,7 +16,13 @@
 #  endif
 #endif
 
-#if !defined(CYGWIN) 
+// Apple doesn't seem to reliably defined a *unix* macro
+#if !defined(CYGWIN) && (  defined(__unix__)  \
+                        || defined(__unix)    \
+                        || defined(unix)      \
+                        || defined(__APPLE__) \
+                        || defined(__APPLE)   \
+                        || defined(APPLE)
 #  include <unistd.h>
 #endif
 
