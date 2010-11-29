@@ -27,7 +27,6 @@
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/traits.hpp>
 #include <boost/proto/eval.hpp>
-#include <boost/proto/functional/fusion.hpp>
 
 #if BOOST_MSVC
 #pragma warning(push)

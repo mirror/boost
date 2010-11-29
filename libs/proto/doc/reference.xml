@@ -317,6 +317,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::first">proto::functional::first</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::flatten">proto::functional::flatten</classname>
         </computeroutput>
       </listitem>
@@ -332,7 +337,27 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::make_pair">proto::functional::make_pair</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::pop_back">proto::functional::pop_back</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::pop_front">proto::functional::pop_front</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::push_back">proto::functional::push_back</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::push_front">proto::functional::push_front</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -343,6 +368,11 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::functional::right">proto::functional::right</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::second">proto::functional::second</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -1068,6 +1098,15 @@
   <xi:include href="reference/eval.xml"/>
   <xi:include href="reference/expr.xml"/>
   <xi:include href="reference/extends.xml"/>
+  <xi:include href="reference/functional.xml"/>
+  <xi:include href="reference/functional/fusion.xml"/>
+  <xi:include href="reference/functional/fusion/pop_back.xml"/>
+  <xi:include href="reference/functional/fusion/pop_front.xml"/>
+  <xi:include href="reference/functional/fusion/push_back.xml"/>
+  <xi:include href="reference/functional/fusion/push_front.xml"/>
+  <xi:include href="reference/functional/fusion/reverse.xml"/>
+  <xi:include href="reference/functional/std.xml"/>
+  <xi:include href="reference/functional/std/utility.xml"/>
   <xi:include href="reference/fusion.xml"/>
   <xi:include href="reference/generate.xml"/>
   <xi:include href="reference/literal.xml"/>

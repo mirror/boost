@@ -163,8 +163,26 @@
       <typedef name="_flatten">
         <type><classname>proto::functional::flatten</classname></type>
       </typedef>
+      <typedef name="_make_pair">
+        <type><classname>proto::functional::make_pair</classname></type>
+      </typedef>
+      <typedef name="_first">
+        <type><classname>proto::functional::first</classname></type>
+      </typedef>
+      <typedef name="_second">
+        <type><classname>proto::functional::second</classname></type>
+      </typedef>
+      <typedef name="_pop_back">
+        <type><classname>proto::functional::pop_back</classname></type>
+      </typedef>
       <typedef name="_pop_front">
         <type><classname>proto::functional::pop_front</classname></type>
+      </typedef>
+      <typedef name="_push_back">
+        <type><classname>proto::functional::push_back</classname></type>
+      </typedef>
+      <typedef name="_push_front">
+        <type><classname>proto::functional::push_front</classname></type>
       </typedef>
       <typedef name="_reverse">
         <type><classname>proto::functional::reverse</classname></type>

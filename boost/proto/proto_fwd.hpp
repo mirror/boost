@@ -572,12 +572,24 @@ namespace boost { namespace proto
         typedef make_expr<tag::function>            make_function;
 
         struct flatten;
+        struct make_pair;
+        struct first;
+        struct second;
         struct pop_front;
+        struct push_front;
+        struct pop_back;
+        struct push_back;
         struct reverse;
     }
 
     typedef functional::flatten     _flatten;
+    typedef functional::make_pair   _make_pair;
+    typedef functional::first       _first;
+    typedef functional::second      _second;
     typedef functional::pop_front   _pop_front;
+    typedef functional::push_front  _push_front;
+    typedef functional::pop_back    _pop_back;
+    typedef functional::push_back   _push_back;
     typedef functional::reverse     _reverse;
     typedef functional::eval        _eval;
     struct _deep_copy;
