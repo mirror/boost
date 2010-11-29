@@ -11,6 +11,7 @@ Copyright (c) 2010-2010: Joachim Faulhaber
 #include <functional>
 #include <boost/concept/assert.hpp>
 #include <boost/icl/concept/interval.hpp>
+#include <boost/icl/type_traits/succ_pred.hpp>
 #include <boost/icl/type_traits/value_size.hpp>
 #include <boost/icl/type_traits/type_to_string.hpp>
 
