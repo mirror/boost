@@ -1,4 +1,4 @@
-//  boost/detail/main.hpp  -------------------------------------------------------------//
+//  boost/detail/lightweight_main.hpp  -------------------------------------------------//
 
 //  Copyright Beman Dawes 2010
 
@@ -28,8 +28,7 @@ int main(int argc, char* argv[])
     std::cout
     << "\nERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR\n"
     << "\n****************************** std::exception *****************************\n"
-    << ex.what()
-    << "\n***************************************************************************\n"
+    << ex.what()                     ligh************************************************\n"
     << std::endl;
   }
   return 1;
