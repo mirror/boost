@@ -28,7 +28,8 @@ int main(int argc, char* argv[])
     std::cout
     << "\nERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR  ERROR\n"
     << "\n****************************** std::exception *****************************\n"
-    << ex.what()                     ligh************************************************\n"
+    << ex.what()
+    << "\n***************************************************************************\n"
     << std::endl;
   }
   return 1;
