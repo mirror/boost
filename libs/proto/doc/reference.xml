@@ -442,6 +442,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::is_transform">proto::is_transform</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::lazy">proto::lazy</classname>
         </computeroutput>
       </listitem>

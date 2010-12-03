@@ -16,6 +16,7 @@
   </para>
   <namespace name="boost">
     <namespace name="proto">
+
       <struct name="is_callable">
         <template>
           <template-type-parameter name="T"/>
@@ -57,6 +58,51 @@
               <listitem>
                 <para>
                   Otherwise, <computeroutput>proto::is_callable&lt;T&gt;::value</computeroutput>
+                  is <computeroutput>false</computeroutput>.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </para>
+        </description>
+        <inherit><type>mpl::bool_&lt;<replaceable>true-or-false</replaceable>&gt;</type></inherit>
+      </struct>
+
+      <struct name="is_transform">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+        <purpose>Boolean metafunction which tells whether a type is a
+          <conceptname>PrimitiveTransform</conceptname> or not.</purpose>
+        <description>
+          <para>
+            <computeroutput>proto::is_transform&lt;&gt;</computeroutput> is used by the
+            <computeroutput><classname alt="proto::make">proto::make&lt;&gt;</classname></computeroutput>
+            transform to determine whether a type <computeroutput>R</computeroutput> represents a
+            <conceptname>PrimitiveTransform</conceptname> to apply, or whether it merely represents itself.
+          </para>
+          <para>
+            It is also used by the 
+            <computeroutput><classname alt="proto::call">proto::call&lt;&gt;</classname></computeroutput>
+            transform to determine whether the function types <computeroutput>R()</computeroutput>,
+            <computeroutput>R(A1)</computeroutput>, and <computeroutput>R(A1, A2)</computeroutput> should
+            be passed the expression, state and data parameters (as needed).
+          </para>
+          <para>
+            Unless specialized for a type
+            <computeroutput>T</computeroutput>, <computeroutput>proto::is_transform&lt;T&gt;::value</computeroutput>
+            is computed as follows:
+            <itemizedlist>
+              <listitem>
+                <para>
+                  If <computeroutput>T</computeroutput> is a class type that inherits directly or indirectly from
+                  an instantiation of
+                  <computeroutput><classname alt="proto::transform">proto::transform&lt;&gt;</classname></computeroutput>,
+                  <computeroutput>proto::is_transform&lt;T&gt;::value</computeroutput> is <computeroutput>true</computeroutput>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Otherwise, <computeroutput>proto::is_transform&lt;T&gt;::value</computeroutput>
                   is <computeroutput>false</computeroutput>.
                 </para>
               </listitem>
