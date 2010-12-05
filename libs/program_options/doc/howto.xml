@@ -115,7 +115,8 @@ if (vm.count("response-file")) {
      ss << ifs.rdbuf();
      // Split the file content
      char_separator<char> sep(" \n\r");
-     tokenizer<char_separator<char> > tok(ss.str(), sep);
+     std::string ResponsefileContents( ss.str() );
+     tokenizer<char_separator<char> > tok(ResponsefileContents, sep);
      vector<string> args;
      copy(tok.begin(), tok.end(), back_inserter(args));
      // Parse the file and store the options
@@ -295,7 +296,7 @@ void validate(boost::any& v,
     if (regex_match(s, match, r)) {
         v = any(magic_number(lexical_cast<int>(match[1])));
     } else {
-        throw validation_error("invalid value");
+        throw validation_error(valodation_error::invalid_option_value);
     }        
 }
 ]]>        
