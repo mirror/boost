@@ -61,6 +61,7 @@
 				bind&lt;R&gt;(f, ...)</A></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#err_nonstd">Binding a nonstandard function</A></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#err_overloaded">Binding an overloaded function</A></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><A href="#err_modeling_stl_function_object_concepts">Modeling STL function object concepts</A></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#err_const_arg"><b>const</b> in signatures</A></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#err_msvc_using">MSVC specific: using 
 				boost::bind;</A></h4>
@@ -585,6 +586,48 @@ int main()
     boost::bind( get, _1 );
 }
 </pre>
+		<h3><a name="err_modeling_stl_function_object_concepts">Modeling STL function object concepts</a></h3>
+		<p>The function objects that are produced by <b>boost::bind</b> do not model the
+		STL <a href="http://www.sgi.com/tech/stl/UnaryFunction.html">Unary Function</a> or
+		<a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a> concepts,
+		even when the function objects are unary or binary operations, because the function object
+		types are missing public typedefs <tt>result_type</tt> and <tt>argument_type</tt> or
+		<tt>first_argument_type</tt> and <tt>second_argument_type</tt>. In cases where these
+		typedefs are desirable, however, the utility function <tt>make_adaptable</tt>
+		can be used to adapt unary and binary function objects to these concepts. This allows
+		unary and binary function objects resulting from <b>boost::bind</b> to be combined with
+		STL templates such as <a href="http://msdn.microsoft.com/en-us/library/se0409db%28v=VS.90%29.aspx"><tt>std::unary_negate</tt></a>
+		and <a href="http://msdn.microsoft.com/en-us/library/833073z4%28v=VS.90%29.aspx"><tt>std::binary_negate</tt></a>.</p>
+		
+		<p>The <tt>make_adaptable</tt> function is defined in &lt;<a href="../../boost/bind/make_adaptable.hpp">boost/bind/make_adaptable.hpp</a>&gt;,
+		which must be included explicitly in addition to &lt;boost/bind.hpp&gt;:</p>
+		<pre>
+#include &lt;boost/bind/make_adaptable.hpp&gt;
+
+template &lt;class R, class F&gt; <i>unspecified-type</i> make_adaptable(F f);
+
+template&lt;class R, class A1, class F&gt; <i>unspecified-unary-functional-type</i> make_adaptable(F f);
+
+template&lt;class R, class A1, class A2, class F&gt; <i>unspecified-binary-functional-type</i> make_adaptable(F f);
+
+template&lt;class R, class A1, class A2, class A3, class F&gt; <i>unspecified-ternary-functional-type</i> make_adaptable(F f);
+
+template&lt;class R, class A1, class A2, class A3, class A4, class F&gt; <i>unspecified-4-ary-functional-type</i> make_adaptable(F f);
+		</pre>
+		
+		<p>This example shows how to use <tt>make_adaptable</tt> to make a predicate for "is not a space":</p>
+		<pre>typedef char char_t;
+std::locale loc("");
+const std::ctype&lt;char_t&gt;&amp; ct = std::use_facet&lt;std::ctype&lt;char_t&gt; &gt;(loc);
+
+auto isntspace = std::not1( boost::make_adaptable&lt;bool, char_t&gt;( boost::bind(&amp;std::ctype&lt;char_t&gt;::is, &amp;ct, std::ctype_base::space, _1) ) );
+</pre>
+
+		<p>In this example, <b>boost::bind</b> creates the "is a space" (unary) predicate.
+		It is then passed to <tt>make_adaptable</tt> so that a function object modeling
+		the Unary Function concept can be created, serving as the argument to
+		<a href="http://msdn.microsoft.com/en-us/library/syyszzf8%28v=VS.90%29.aspx"><tt>std::not1</tt></a>.</p>
+		
 		<h3><a name="err_const_arg"><b>const</b> in signatures</a></h3>
 		<p>Some compilers, including MSVC 6.0 and Borland C++ 5.5.1, have problems with the 
 			top-level <b>const</b> in function signatures:
