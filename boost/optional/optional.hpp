@@ -11,12 +11,12 @@
 //
 // Revisions:
 // 27 Apr 2008 (improved swap) Fernando Cacciola, Niels Dekker, Thorsten Ottosen
-// 
+//
 #ifndef BOOST_OPTIONAL_OPTIONAL_FLC_19NOV2002_HPP
 #define BOOST_OPTIONAL_OPTIONAL_FLC_19NOV2002_HPP
 
-#include<new>
-#include<algorithm>
+#include <new>
+#include <algorithm>
 
 #include "boost/config.hpp"
 #include "boost/assert.hpp"
@@ -31,6 +31,7 @@
 #include "boost/mpl/not.hpp"
 #include "boost/detail/reference_content.hpp"
 #include "boost/none.hpp"
+#include "boost/utility/addressof.hpp"
 #include "boost/utility/compare_pointees.hpp"
 #include "boost/utility/in_place_factory.hpp"
 
@@ -110,7 +111,12 @@ template <class T>
 class aligned_storage
 {
     // Borland ICEs if unnamed unions are used for this!
-    union dummy_u
+    union
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+    // This works around GCC warnings about breaking strict aliasing rules when casting storage address to T*
+    __attribute__((may_alias))
+#endif
+    dummy_u
     {
         char data[ sizeof(T) ];
         BOOST_DEDUCED_TYPENAME type_with_alignment<
@@ -119,8 +125,13 @@ class aligned_storage
 
   public:
 
-    void const* address() const { return &dummy_.data[0]; }
-    void      * address()       { return &dummy_.data[0]; }
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+    void const* address() const { return &dummy_; }
+    void      * address()       { return &dummy_; }
+#else
+    void const* address() const { return dummy_.data; }
+    void      * address()       { return dummy_.data; }
+#endif
 } ;
 
 template<class T>
@@ -154,7 +165,7 @@ class optional_base : public optional_tag
     typedef
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     BOOST_DEDUCED_TYPENAME
-#endif 
+#endif
     ::boost::detail::make_reference_content<T>::type internal_type ;
 
     typedef aligned_storage<internal_type> storage_type ;
@@ -205,7 +216,7 @@ class optional_base : public optional_tag
     {
       construct(val);
     }
-    
+
     // Creates an optional<T> initialized with 'val' IFF cond is true, otherwise creates an uninitialzed optional<T>.
     // Can throw if T::T(T const&) does
     optional_base ( bool cond, argument_type val )
@@ -426,8 +437,22 @@ class optional_base : public optional_tag
   private :
 
     // internal_type can be either T or reference_content<T>
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+    // This workaround is supposed to silence GCC warnings about broken strict aliasing rules
+    internal_type const* get_object() const
+    {
+        union { void const* ap_pvoid; internal_type const* as_ptype; } caster = { m_storage.address() };
+        return caster.as_ptype;
+    }
+    internal_type *      get_object()
+    {
+        union { void* ap_pvoid; internal_type* as_ptype; } caster = { m_storage.address() };
+        return caster.as_ptype;
+    }
+#else
     internal_type const* get_object() const { return static_cast<internal_type const*>(m_storage.address()); }
     internal_type *      get_object()       { return static_cast<internal_type *>     (m_storage.address()); }
+#endif
 
     // reference_content<T> lacks an implicit conversion to T&, so the following is needed to obtain a proper reference.
     reference_const_type dereference( internal_type const* p, is_not_reference_tag ) const { return *p ; }
@@ -518,7 +543,7 @@ class optional : public optional_detail::optional_base<T>
     // Depending on the above some T ctor is called.
     // Can throw is the resolved T ctor throws.
     template<class Expr>
-    explicit optional ( Expr const& expr ) : base(expr,&expr) {}
+    explicit optional ( Expr const& expr ) : base(expr,boost::addressof(expr)) {}
 #endif
 
     // Creates a deep copy of another optional<T>
@@ -532,9 +557,9 @@ class optional : public optional_detail::optional_base<T>
     // Assigns from an expression. See corresponding constructor.
     // Basic Guarantee: If the resolved T ctor throws, this is left UNINITIALIZED
     template<class Expr>
-    optional& operator= ( Expr expr )
+    optional& operator= ( Expr const& expr )
       {
-        this->assign_expr(expr,&expr);
+        this->assign_expr(expr,boost::addressof(expr));
         return *this ;
       }
 #endif
@@ -595,7 +620,7 @@ class optional : public optional_detail::optional_base<T>
     // Returns a copy of the value if this is initialized, 'v' otherwise
     reference_const_type get_value_or ( reference_const_type v ) const { return this->is_initialized() ? get() : v ; }
     reference_type       get_value_or ( reference_type       v )       { return this->is_initialized() ? get() : v ; }
-    
+
     // Returns a pointer to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
@@ -612,22 +637,22 @@ class optional : public optional_detail::optional_base<T>
     // No-throw
     operator unspecified_bool_type() const { return this->safe_bool() ; }
 
-       // This is provided for those compilers which don't like the conversion to bool
-       // on some contexts.
-       bool operator!() const { return !this->is_initialized() ; }
+    // This is provided for those compilers which don't like the conversion to bool
+    // on some contexts.
+    bool operator!() const { return !this->is_initialized() ; }
 } ;
 
 // Returns optional<T>(v)
-template<class T> 
-inline 
+template<class T>
+inline
 optional<T> make_optional ( T const& v  )
 {
   return optional<T>(v);
 }
 
 // Returns optional<T>(cond,v)
-template<class T> 
-inline 
+template<class T>
+inline
 optional<T> make_optional ( bool cond, T const& v )
 {
   return optional<T>(cond,v);
