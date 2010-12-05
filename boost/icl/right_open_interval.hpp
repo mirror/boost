@@ -42,7 +42,7 @@ public:
 
     /** Constructor for a singleton interval <tt>[val,val+1)</tt> */
     explicit right_open_interval(const DomainT& val)
-        : _lwb(val), _upb(succ(val))
+        : _lwb(val), _upb(icl::succ(val))
     {
         BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));

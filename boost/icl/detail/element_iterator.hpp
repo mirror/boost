@@ -294,7 +294,7 @@ private:
 
     void increment()
     { 
-        if(_reptator < pred(adapt::length(_saltator)))
+		if(_reptator < icl::pred(adapt::length(_saltator)))
             ++_reptator; 
         else
         {
