@@ -27,11 +27,32 @@ using namespace boost::icl;
 
 BOOST_AUTO_TEST_CASE(casual)
 {
-    typedef int T;
+    typedef int* T;
     typedef int U;
     typedef interval_map<T,U, total_absorber> IntervalMapT;
     typedef interval_set<T>                   IntervalSetT;
     typedef IntervalMapT::interval_type       IntervalT;
+
+    int values[100];
+    for(int idx=0; idx < 100; idx++)
+        values[idx] = idx;
+    
+    IntervalSetT ptr_set;
+
+    cout << IntervalT::right_open(values,   values+3) << endl;
+
+    ptr_set += IntervalT::right_open(values,   values+3);
+    ptr_set += IntervalT::right_open(values+4, values+7);
+    IntervalSetT::difference_type count = ptr_set.size();
+
+    ICL_const_FORALL(IntervalSetT, it_, ptr_set)
+    {
+        for(T ptr = first(*it_); ptr <= last(*it_); ++ptr)
+            cout << *ptr << " ";
+    }
+    cout << endl;
+
+    cout << ptr_set << endl;
 
     BOOST_CHECK_EQUAL(true, true);
 }

@@ -22,12 +22,13 @@ typedef boost::posix_time::ptime boost_posix_time_ptime;
 #endif
 
 typedef ::boost::mpl::list<
-    unsigned short, unsigned int, unsigned long  
+     unsigned short, unsigned int, unsigned long  
     ,short, int, long, long long
     ,float, double, long double
     ,boost::rational<int>
     ,boost_posix_time_ptime
 //    ,boost::gregorian::date
+    ,int*
 > bicremental_types;
 
 typedef unsigned int             bicremental_type_1;
@@ -35,9 +36,10 @@ typedef          int             bicremental_type_2;
 typedef          double          bicremental_type_3;
 typedef boost::rational<int>     bicremental_type_4;
 typedef boost_posix_time_ptime   bicremental_type_5;
-typedef unsigned short           bicremental_type_6;
-typedef          short           bicremental_type_7;
-typedef          float           bicremental_type_8;
+typedef          short           bicremental_type_6;
+typedef          float           bicremental_type_7;
+typedef          int*            bicremental_type_8;
+
 
 typedef ::boost::mpl::list<
      short, int, long, long long

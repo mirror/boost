@@ -28,9 +28,9 @@ void dynamic_interval_bounds_4_bicremental_types()
 {
     typedef typename icl::interval<T>::type IntervalT;
 
-    BOOST_CHECK_EQUAL( T(), pred(succ(T())));
-    BOOST_CHECK_EQUAL( icl::identity_element<T>::value(), pred(succ(icl::identity_element<T>::value())) );
-    BOOST_CHECK_EQUAL( icl::unit_element<T>::value(),     succ(icl::identity_element<T>::value())        );
+    BOOST_CHECK_EQUAL( T(), icl::pred(icl::succ(T())));
+    BOOST_CHECK_EQUAL( icl::identity_element<T>::value(), icl::pred(icl::succ(icl::identity_element<T>::value())) );
+    BOOST_CHECK_EQUAL( icl::unit_element<T>::value(),     icl::succ(icl::identity_element<T>::value())        );
     BOOST_CHECK_EQUAL( length(IntervalT()), icl::identity_element<typename difference_type_of<T>::type>::value() );
 
     //LAW: I x: borders(x)==closed => contains(x, lower(x)) && contains(x, upper(x))

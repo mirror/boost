@@ -76,6 +76,44 @@ struct test_value<std::string>
     }
 };
 
+
+template <class Type>
+struct test_value<Type*>
+{
+
+    static bool map_integers(int values[], int size)
+    {
+        static const int offset = size/2;
+        for(int idx = 0; idx < size; idx++)
+            values[idx] = idx - offset;
+    
+        return true;
+    }
+
+    static Type* make(int n)
+    {
+        static bool initialized;
+        static const int size   = 100;
+        static const int offset = size/2;
+        static int values[size];
+
+        if(!initialized)
+            initialized = map_integers(values, size);
+
+        Type* value = values + offset;
+        if(n>=0)
+            for(int i=0; i<n; i++)
+                ++value;
+        else
+            for(int i=0; i>n; i--)
+                --value;
+
+        return value;
+    }
+};
+
+
+
 template <class Type>
 struct test_value
 { 
@@ -135,18 +173,18 @@ struct map_val
 // Very short value denotation for intervals
 // Assumption typename T and IntervalT exists in scope
 //I_I : [a,b]
-#define I_I(low,up) icl::interval<T>::closed    (make<T>(low), make<T>(up))
+#define I_I(low,up) icl::interval<T>::closed    (test_value<T>::make(low), test_value<T>::make(up))
 //I_D : [a,b)
-#define I_D(low,up) icl::interval<T>::right_open(make<T>(low), make<T>(up))
+#define I_D(low,up) icl::interval<T>::right_open(test_value<T>::make(low), test_value<T>::make(up))
 //C_I : (a,b]
-#define C_I(low,up) icl::interval<T>::left_open (make<T>(low), make<T>(up))
+#define C_I(low,up) icl::interval<T>::left_open (test_value<T>::make(low), test_value<T>::make(up))
 //C_D : (a,b)
-#define C_D(low,up) icl::interval<T>::open      (make<T>(low), make<T>(up))
+#define C_D(low,up) icl::interval<T>::open      (test_value<T>::make(low), test_value<T>::make(up))
 
-#define MK_I(ItvT,low,up) ItvT(make<T>(low), make<T>(up))
+#define MK_I(ItvT,low,up) ItvT(test_value<T>::make(low), test_value<T>::make(up))
 
-#define MK_v(key)  make<T>(key)
-#define MK_u(key)  make<U>(key)
+#define MK_v(key)  test_value<T>::make(key)
+#define MK_u(key)  test_value<U>::make(key)
 
 // Very short value denotation for interval value pairs
 // Assumption typename IntervalMapT existes in scope
