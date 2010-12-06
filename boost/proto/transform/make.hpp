@@ -61,17 +61,39 @@
             {};
 
             template<typename R, typename Expr, typename State, typename Data
-              , bool IsTransform = is_transform<R>::value
+                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<R>::value)
             >
-            struct make_if_
+            struct make_
             {
                 typedef R type;
                 typedef void not_applied_;
             };
 
+            template<typename R, typename Expr, typename State, typename Data
+              , bool IsTransform = is_transform<R>::value
+            >
+            struct make_if2_
+              : make_<R, Expr, State, Data>
+            {};
+
             template<typename R, typename Expr, typename State, typename Data>
-            struct make_if_<R, Expr, State, Data, true>
+            struct make_if2_<R, Expr, State, Data, true>
               : uncvref<typename R::template impl<Expr, State, Data>::result_type>
+            {};
+
+            template<typename R, typename Expr, typename State, typename Data
+                // HACKHACK This should really be is_transform; however, is_transform
+                // would have the unfortunate side-effect of instantiating R which is
+                // not acceptable in this context. Instead, we first check to see if 
+                // R is callable, which will not instantiate R. If is_callable is true,
+                // it is safe to instantiate R to check if it is a transform.
+              , bool IsCallable = is_callable<R>::value
+            >
+            struct make_if_;
+
+            template<typename R, typename Expr, typename State, typename Data>
+            struct make_if_<R, Expr, State, Data, false>
+              : make_<R, Expr, State, Data>
             {};
 
             #if BOOST_WORKAROUND(__GNUC__, == 3) || (__GNUC__ == 4 && __GNUC_MINOR__ == 0)
@@ -92,11 +114,9 @@
             };
             #endif
 
-            template<typename R, typename Expr, typename State, typename Data
-                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<R>::value)
-            >
-            struct make_
-              : make_if_<R, Expr, State, Data>
+            template<typename R, typename Expr, typename State, typename Data>
+            struct make_if_<R, Expr, State, Data, true>
+              : make_if2_<R, Expr, State, Data>
             {};
 
             template<typename Type, bool IsAggregate = is_aggregate<Type>::value>
@@ -209,7 +229,7 @@
         ///
         /// \li Function types
         /// \li Function pointer types
-        /// \li Types for which <tt>proto::is_transform\< type \>::value</tt> is \c true
+        /// \li Types for which <tt>proto::is_callable\< type \>::value</tt> is \c true
         ///
         /// <tt>boost::result_of\<make\<T\<X0,X1,...\> \>(Expr, State, Data)\>::type</tt>
         /// is evaluated as follows. For each \c X in <tt>X0,X1,...</tt>, do:
@@ -236,7 +256,7 @@
             template<typename Expr, typename State, typename Data>
             struct impl : transform_impl<Expr, State, Data>
             {
-                typedef typename detail::make_<Object, Expr, State, Data>::type result_type;
+                typedef typename detail::make_if_<Object, Expr, State, Data>::type result_type;
 
                 /// \return <tt>result_type()</tt>
                 result_type operator ()(
@@ -291,7 +311,7 @@
                 typedef void not_applied_;
             };
 
-            #define TMP0(Z, M, DATA) make_<BOOST_PP_CAT(A, M), Expr, State, Data>
+            #define TMP0(Z, M, DATA) make_if_<BOOST_PP_CAT(A, M), Expr, State, Data>
             #define TMP1(Z, M, DATA) typename TMP0(Z, M, DATA) ::type
 
             template<
@@ -329,9 +349,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)
               , typename Expr, typename State, typename Data
             >
-            struct make_<R(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data
-                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)
-            >
+            struct make_if_<R(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data, false>
             {
                 typedef
                     typename uncvref<
@@ -346,9 +364,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)
               , typename Expr, typename State, typename Data
             >
-            struct make_<R(*)(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data
-                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)
-            >
+            struct make_if_<R(*)(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data, false>
             {
                 typedef
                     typename uncvref<
@@ -395,7 +411,7 @@
             struct impl : transform_impl<Expr, State, Data>
             {
                 /// \brief <tt>boost::result_of\<make\<Object\>(Expr, State, Data)\>::type</tt>
-                typedef typename detail::make_<Object, Expr, State, Data>::type result_type;
+                typedef typename detail::make_if_<Object, Expr, State, Data>::type result_type;
 
                 /// Let \c ax be <tt>when\<_, Ax\>()(e, s, d)</tt>
                 /// for each \c x in <tt>[0,N]</tt>.
