@@ -43,8 +43,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="boost_serialization-vc71-mt-gd-1_44.lib"
-				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-gd-1_44.dll"
+				AdditionalDependencies="boost_serialization-vc71-mt-gd-1.45.lib"
+				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-gd-1_45.dll"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
 				GenerateDebugInformation="TRUE"
 				SupportUnloadOfDelayLoadedDLL="FALSE"/>
@@ -103,7 +103,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-1_44.dll"/>
+				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-1.45.dll"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -156,7 +156,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ConfigurationName)\libboost_wserialization-vc71-mt-sgd-1_44.lib"/>
+				OutputFile="$(ConfigurationName)\libboost_wserialization-vc71-mt-sgd-1.45.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -208,7 +208,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_wserialization-vc71-s-1_44.lib"/>
+				OutputFile="$(OutDir)/libboost_wserialization-vc71-s-1.45.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -261,7 +261,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-s-1_44.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-s-1.45.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -312,7 +312,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ConfigurationName)\libboost_wserialization-vc71-mt-sgd-1_44.lib"/>
+				OutputFile="$(ConfigurationName)\libboost_wserialization-vc71-mt-sgd-1.45.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
