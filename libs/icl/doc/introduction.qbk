@@ -142,7 +142,7 @@ __itv_map__. This operation propagation is called ['*aggregate on overlap*].
 [h4 Aggregate on Overlap]
 
 This is a first motivating example of a very small party, demonstrating the 
-['*aggregate on overlap*] principle ['*(aggrovering)*] on __itv_maps__:
+['*aggregate on overlap*] principle on __itv_maps__:
 
 In the example Mary enters the party first. She attends during the 
 time interval `[20:00,22:00)`. Harry enters later. He stays within `[21:00,23:00)`.

@@ -51,14 +51,14 @@ BOOST_AUTO_TEST_CASE
 (fastest_itl_partial_enricher_icl_quantifier_check_abelian_monoid_et_4_bicremental_types)
 {                             icl_quantifier_check_abelian_monoid_et_4_bicremental_types<bicremental_type_1, int, partial_enricher, INTERVAL_MAP>();}
 
-// x - x =p= 0 | partial enricher
+// x - x =d= 0 | partial enricher
 BOOST_AUTO_TEST_CASE
 (fastest_itl_partial_enricher_icl_quantifier_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_types)
 {                             icl_quantifier_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_types<bicremental_type_2, int, partial_enricher, INTERVAL_MAP>();}
 
 //            absorber      enricher
-// partial    x - x == 0    x - x =p= 0   partiality of subtraction   
-// total    (-x)+ x == 0  (-x)+ x =p= 0   totality   of subtraction
+// partial    x - x == 0    x - x =d= 0   partiality of subtraction   
+// total    (-x)+ x == 0  (-x)+ x =d= 0   totality   of subtraction
 
 //------------------------------------------------------------------------------
 // Containedness

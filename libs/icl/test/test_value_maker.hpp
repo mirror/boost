@@ -14,16 +14,6 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 namespace boost{ namespace icl
 {
 
-/*FYI completion like that:
-std::string make(int n)
-{
-    std::string value = identity_element<std::string>::value();
-    int abs_n = n<0 ? -n : n;
-    for(int i=1; i<abs_n; i++)
-        value += i%2==1 ? "hello " : "world ";
-}
-*/
-
 struct mono
 {
     mono(){};
@@ -81,11 +71,11 @@ template <class Type>
 struct test_value<Type*>
 {
 
-    static bool map_integers(int values[], int size)
+    static bool map_integers(Type values[], int size)
     {
         static const int offset = size/2;
         for(int idx = 0; idx < size; idx++)
-            values[idx] = idx - offset;
+			values[idx] = test_value<Type>::make(idx - offset);
     
         return true;
     }
@@ -95,7 +85,7 @@ struct test_value<Type*>
         static bool initialized;
         static const int size   = 100;
         static const int offset = size/2;
-        static int values[size];
+        static Type values[size];
 
         if(!initialized)
             initialized = map_integers(values, size);

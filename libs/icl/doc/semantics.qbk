@@ -142,7 +142,7 @@ of `is_element_equal` where a short notation is advantageous.
 
 For the operation ['*set union*] available as 
 `operator +, +=, |, |=` and the neutral element
-`neutron<S>::value()` which is the empty set `S()`
+`identity_element<S>::value()` which is the empty set `S()`
 these laws hold:
 ``
 Associativity<S,+,== >: S a,b,c; a+(b+c) == (a+b)+c
@@ -399,10 +399,10 @@ s == {(1,1),(1,2),(1,3)   //representing 1->{1,2,3}
 This problem can be dealt with in two ways. 
 
 # Deleting value pairs form the Collector, if it's associated value 
-  becomes a neutral value or `neutron`.
-# Using a different equality, called protonic equality in the laws
-  to validate. Protonic equality only 
-  accounts for value pairs that that carry values unequal to the `neutron` value. 
+  becomes a neutral value or `identity_element`.
+# Using a different equality, called distinct equality in the laws
+  to validate. Distinct equality only 
+  accounts for value pairs that that carry values unequal to the `identity_element`. 
 
 Solution (1) led to the introduction of map traits, particularly trait
 ['*partial_absorber*], which is the default setting in all icl's map
@@ -410,10 +410,10 @@ templates.
 
 Solution (2), is applied to check the semantics of icl::Maps for the
 partial_enricher trait that does not delete value pairs that carry
-neutrons. Protonic equality is implemented by a non member function
-called `is_protonic_equal`. Throughout this chapter
-protonic equality in pseudocode and law denotations is denoted
-as `=p=` operator.
+identity elements. Distinct equality is implemented by a non member function
+called `is_distinct_equal`. Throughout this chapter
+distinct equality in pseudocode and law denotations is denoted
+as `=d=` operator.
 
 The validity of the sets of laws that make up `Set` semantics
 should now be quite evident. So the following text shows the
@@ -439,7 +439,7 @@ Inversion<C,-,=v= >     : C a;   a - a =v= C()
 
 All the fundamental laws could be validated for all 
 icl Maps in their instantiation as Maps of Sets or Collectors.
-As expected Inversion only holds for protonic equality,
+As expected, Inversion only holds for distinct equality,
 if the map is not a `partial_absorber`.
 
 ``
@@ -448,7 +448,7 @@ Associativity                ==   ==
 Neutrality                   ==        ==
 Commutativity                ==   ==
 Inversion partial_absorber             ==
-          partial_enricher             =p=
+          partial_enricher             =d=
 ``
 
 [h5 Distributivity Laws]
@@ -494,9 +494,9 @@ SymmetricDifference<C,== > : C a,b,c; (a + b) - (a * b) == (a - b) + (b - a)
 ``
 
 Reviewing the validity tables above shows, that the sets of valid laws for
-`icl Sets` and `icl Maps of Sets` that are /neutron absorbing/ are exactly the same.
+`icl Sets` and `icl Maps of Sets` that are /identity absorbing/ are exactly the same.
 As expected, only for Maps of Sets that represent empty sets as associated values,
-called /neutron enrichers/, there are marginal semantic differences.
+called /identity enrichers/, there are marginal semantic differences.
 
 [endsect][/ Collectors]
 
@@ -632,12 +632,12 @@ the same basic laws apply that are
 valid for `Collectors`:
 
 ``
-                             +    &    -
-Associativity                ==   == 
-Neutrality                   ==        ==
-Commutativity                ==   ==
-Inversion absorbs_neutrons             ==
-          enriches_neutrons            =p=
+                               +    &    -
+Associativity                  ==   == 
+Neutrality                     ==        ==
+Commutativity                  ==   ==
+Inversion absorbs_identities             ==
+          enriches_identities            =d=
 ``
 
 The subset of laws, that relates to `operator +` and the neutral
@@ -656,12 +656,12 @@ For `Quantifiers` of signed numbers, or
 `signed Quantifiers`, the pattern of valid
 laws is somewhat different:
 ``
-                             +    &    -
-Associativity                =v=  =v=  
-Neutrality                   ==        ==
-Commutativity                ==   ==
-Inversion absorbs_neutrons             ==
-          enriches_neutrons            =p=
+                               +    &    -
+Associativity                  =v=  =v=  
+Neutrality                     ==        ==
+Commutativity                  ==   ==
+Inversion absorbs_identities             ==
+          enriches_identities            =d=
 ``
 
 The differences are tagged as `=v=` indicating, that
@@ -682,17 +682,17 @@ only element equality is required.
 
 For `operator &` the associativity is broken for all maps
 that are partial absorbers. For total absorbers associativity
-is valid for element equality. All maps having the neutron enricher
+is valid for element equality. All maps having the /identity enricher/
 Trait are associative wrt. lexicographical equality `==`.
 ``                               
-Associativity                      &
-   absorbs_neutrons && !is_total   false
-   absorbs_neutrons &&  is_total   =e=
-   enriches_neutrons               ==                  
+Associativity                        &
+   absorbs_identities && !is_total   false
+   absorbs_identities &&  is_total   =e=
+   enriches_identities               ==                  
 ``
 
 Note, that all laws that establish a commutative
-monoid for `operator +` and neutron `Q()` are valid
+monoid for `operator +` and identity element `Q()` are valid
 for `signed Quantifiers`.
 In addition symmetric difference that does not
 hold for `unsigned Qunatifiers` is valid
@@ -748,11 +748,11 @@ from the `CodomainT` parameter into the instantiations
 of icl maps.
 
 [table
-[[]                          [is model of]        [if]                       [example]]
-[[`Map<D,Monoid>`]           [`Modoid`]           []                         [`interval_map<int,string>`]]
-[[`Map<D,Set,Trait>`]        [`Set`]              [`Trait::absorbs_neutrons`][`interval_map<int,std::set<int> >`]]
-[[`Map<D,CommutativeMonoid>`][`CommutativeMonoid`][]                         [`interval_map<int,unsigned int>`]]
-[[`Map<D,CommutativeGroup>`] [`CommutativeGroup`] [`Trait::is_total`]  [`interval_map<int,int,total_absorber>`]]
+[[]                          [is model of]        [if]                         [example]]
+[[`Map<D,Monoid>`]           [`Modoid`]           []                           [`interval_map<int,string>`]]
+[[`Map<D,Set,Trait>`]        [`Set`]              [`Trait::absorbs_identities`][`interval_map<int,std::set<int> >`]]
+[[`Map<D,CommutativeMonoid>`][`CommutativeMonoid`][]                           [`interval_map<int,unsigned int>`]]
+[[`Map<D,CommutativeGroup>`] [`CommutativeGroup`] [`Trait::is_total`]    [`interval_map<int,int,total_absorber>`]]
 ]
 
 [endsect][/ Concept Induction]

@@ -321,9 +321,9 @@ inline Type unit_element<Type>::value(){ return succ(identity_element<Type>::val
 ``
 So a type `DomainT` that is `incrementable` will
 also have an `unit_element`. If it does not, a `unit_element` can be provided.
-An `unit_element` can be any value, that is greater as the `neutron` value
+A `unit_element` can be any value, that is greater as the `identity_element` 
 in the `Compare` order given.
-An example of a type, that has a `neutron` but no increment is
+An example of a type, that has an `identity_element` but no increment operation is
 `string`. So for `std::string` a unit_element is implemented like this:
 ``
 // Smallest 'visible' string that is greater than the empty string.
@@ -427,7 +427,7 @@ as inverse functor, that requires `operator -=` on type `CodomainT`.
 In the icl's design we make the assumption,
 in particular for the default setting of parameters
 `Combine = `[classref boost::icl::inplace_minus inplace_plus],
-that type `CodomainT` has a neutral element or `neutron` 
+that type `CodomainT` has a neutral element or `identity_element` 
 with respect to the `Combine` functor.
 
 

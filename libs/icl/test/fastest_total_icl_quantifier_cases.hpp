@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE
 (fastest_itl_total_enricher_icl_quantifier_check_abelian_monoid_et_4_bicremental_types)
 {                           icl_quantifier_check_abelian_monoid_et_4_bicremental_types<bicremental_type_1, double, total_enricher, INTERVAL_MAP>();}
 
-// (0-x) + x =p= 0 | total absorber
+// (0-x) + x =d= 0 | total absorber
 BOOST_AUTO_TEST_CASE
 (fastest_itl_total_enricher_icl_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_domain_discrete_codomain)
 {                           icl_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_types<bicremental_type_2, int, total_enricher, INTERVAL_MAP>();}
@@ -74,8 +74,8 @@ BOOST_AUTO_TEST_CASE
 
 
 //            absorber      enricher
-// partial    x - x == 0    x - x =p= 0   partiality of subtraction   
-// total    (-x)+ x == 0  (-x)+ x =p= 0   totality   of subtraction
+// partial    x - x == 0    x - x =d= 0   partiality of subtraction   
+// total    (-x)+ x == 0  (-x)+ x =d= 0   totality   of subtraction
 
 
 

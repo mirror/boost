@@ -108,7 +108,7 @@ void interval_set_check_partial_invertive_monoid_plus_4_bicremental_types()
 }
 
 //------------------------------------------------------------------------------
-// Abelian partial invertive monoid with protonic equality for inversion
+// Abelian partial invertive monoid with distinct equality for inversion
 //------------------------------------------------------------------------------
 template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
 void interval_set_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_types()
@@ -154,7 +154,7 @@ void interval_set_check_abelian_group_plus_4_bicremental_types()
 }
 
 //------------------------------------------------------------------------------
-// (0 - x) + x =p= 0  |  
+// (0 - x) + x =d= 0  |  
 //------------------------------------------------------------------------------
 template <class T, ICL_IntervalSet_TEMPLATE(_T) IntervalSet>
 void interval_set_check_abelian_group_plus_prot_inv_4_bicremental_types()

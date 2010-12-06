@@ -113,7 +113,7 @@ void itv_quantifier_check_partial_invertive_monoid_plus_4_bicremental_types()
 }
 
 //------------------------------------------------------------------------------
-// Abelian partial invertive monoid with protonic equality for inversion
+// Abelian partial invertive monoid with distinct equality for inversion
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
@@ -161,7 +161,7 @@ void itv_quantifier_check_abelian_group_plus_4_bicremental_types()
 }
 
 //------------------------------------------------------------------------------
-// (0 - x) + x =p= 0  |  
+// (0 - x) + x =d= 0  |  
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>

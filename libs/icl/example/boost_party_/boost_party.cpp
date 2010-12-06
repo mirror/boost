@@ -31,11 +31,11 @@ Copyright (c) 1999-2006: Cortex Software GmbH, Kantstrasse 57, Berlin
     time, where the group of party guests changed.
 
     boost_party.cpp demonstrates a principle that we call 
-    <b><em>aggregate on overlap (aggrovering;)</em></b>:
+    <b><em>aggregate on overlap</em></b>:
     On insertion a value associated to the interval is aggregated (added) to those
     values in the interval_map that overlap with the inserted value.
 
-    There are two behavioral aspects to <b>aggrovering</b>: a <em>decompositional
+    There are two behavioral aspects to <b>aggregate on overlap</b>: a <em>decompositional
     behavior</em> and a <em>accumulative behavior</em>.
 
     The <em>decompositional behavior</em> splits up intervals on the time dimension of the 

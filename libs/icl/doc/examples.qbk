@@ -85,10 +85,10 @@ Finally the interval_map contains the history of attendance and all points in
 time, where the group of party guests changed.
 
 Party demonstrates a principle that we call 
-['*aggregate on overlap (aggrovering)*]:
+['*aggregate on overlap*]:
 On insertion a value associated to the interval is aggregated with those
 values in the interval_map that overlap with the inserted value.
-There are two behavioral aspects to ['*aggrovering*]: a ['*decompositional
+There are two behavioral aspects to ['*aggregate on overlap*]: a ['*decompositional
 behavior*] and an ['*accumulative behavior*].
 
 * The ['*decompositional behavior*] splits up intervals on the /time/ /dimension/ of the 

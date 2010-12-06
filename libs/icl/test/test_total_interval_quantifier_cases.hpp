@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE
 (test_itl_total_enricher_itv_quantifier_check_abelian_monoid_et_4_bicremental_types, T, bicremental_types)
 {                        itv_quantifier_check_abelian_monoid_et_4_bicremental_types<T, float, total_enricher, INTERVAL_MAP>();}
 
-// (0-x) + x =p= 0 | total absorber
+// (0-x) + x =d= 0 | total absorber
 BOOST_AUTO_TEST_CASE_TEMPLATE
 (test_itl_total_enricher_itv_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_domain_and_discrete_codomain, T, bicremental_types)
 {                        itv_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_types<T, int, total_enricher, INTERVAL_MAP>();}
@@ -74,8 +74,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE
 
 
 //            absorber      enricher
-// partial    x - x == 0    x - x =p= 0   partiality of subtraction   
-// total    (-x)+ x == 0  (-x)+ x =p= 0   totality   of subtraction
+// partial    x - x == 0    x - x =d= 0   partiality of subtraction   
+// total    (-x)+ x == 0  (-x)+ x =d= 0   totality   of subtraction
 
 //------------------------------------------------------------------------------
 // Inner complement

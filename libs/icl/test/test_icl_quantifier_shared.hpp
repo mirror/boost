@@ -153,7 +153,7 @@ void icl_quantifier_check_partial_invertive_monoid_plus_4_bicremental_types()
 }
 
 //------------------------------------------------------------------------------
-// Abelian partial invertive monoid with protonic equality for inversion
+// Abelian partial invertive monoid with distinct equality for inversion
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
@@ -195,15 +195,15 @@ void icl_quantifier_check_abelian_group_plus_4_bicremental_types()
 }
 
 //------------------------------------------------------------------------------
-// (0 - x) + x =p= 0 
+// (0 - x) + x =d= 0 
 //------------------------------------------------------------------------------
 template <class T, class U, class Trt,
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
 void icl_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_types()
 {
-    // check abelian group wrt. + and inverability wrt. protonic equality =p= :
+    // check abelian group wrt. + and inverability wrt. distinct equality =d= :
     // (1) (IntervalMapT, +) is an abelian group and
-    // (2) The inverability law: (0 - x) + x =p= 0 holds.
+    // (2) The inverability law: (0 - x) + x =d= 0 holds.
     typedef IntervalMap<T,U,Trt> IntervalMapT;
     typedef icl::map<T,U,Trt>    MapT;
     IntervalMapT aux;

@@ -180,11 +180,11 @@ are implemented as ['*set union*] and ['*set difference*],
 for `Maps` we want to implement ['*aggregation*] on
 the associated values for the case of collision (of key elements)
 or overlap (of key intervals), which has been refered to as 
-['*aggregate on overlap*] or ['*aggrovering*] above.
+['*aggregate on overlap*] above.
 This kind of `Addability` and `Subtractability` allows to compute
 a lot of useful aggregation results on an __itv_map_s__ associated
 values, just by adding and subtracting value pairs. 
-Various examples of ['*aggrovering*] are given in 
+Various examples of ['*aggregate on overlap*] are given in 
 [link boost_icl.examples section examples].
 In addition, this concept of `Addability` and `Subtractability`
 contains the classical `Insertability` and `Erasability` of
@@ -418,7 +418,7 @@ we can model *all* neutral value pairs `(k,0)` as being
 
 A map that is modelled in this way, is one large vector with
 a value `v` for every key `k` of it's domain type `DomainT`.
-But only protonic value are actually stored.
+But only non-identity values are actually stored.
 This is the motivation for the definedness-Trait on `icl Maps`.
 
 A ['*partial*] map models the intuitive view that only value
