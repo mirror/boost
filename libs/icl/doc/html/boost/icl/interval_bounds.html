@@ -1,0 +1,129 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class interval_bounds</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="../../index.html" title="Chapter 1. Boost.Icl">
+<link rel="up" href="../../header/boost/icl/interval_bounds/hpp.html" title="Header &lt;boost/icl/interval_bounds.hpp&gt;">
+<link rel="prev" href="../../header/boost/icl/interval_bounds/hpp.html" title="Header &lt;boost/icl/interval_bounds.hpp&gt;">
+<link rel="next" href="bounded_value.html" title="Class template bounded_value">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../header/boost/icl/interval_bounds/hpp.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../header/boost/icl/interval_bounds/hpp.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="bounded_value.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="boost.icl.interval_bounds"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class interval_bounds</span></h2>
+<p>boost::icl::interval_bounds</p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis">
+<span class="bold"><strong>class</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a> {
+<span class="bold"><strong>public</strong></span>:
+  <span class="emphasis"><em>// <a class="link" href="interval_bounds.html#boost.icl.interval_boundsconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a class="link" href="interval_bounds.html#id668155-bb">interval_bounds</a>();
+  <a class="link" href="interval_bounds.html#id668156-bb">interval_bounds</a>(bound_type);
+
+  <span class="emphasis"><em>// <a class="link" href="interval_bounds.html#id667892-bb">public member functions</a></em></span>
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id667894-bb">BOOST_STATIC_CONSTANT</a>(bound_type, static_open = 0) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id667911-bb">BOOST_STATIC_CONSTANT</a>(bound_type, static_left_open = 1) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id667928-bb">BOOST_STATIC_CONSTANT</a>(bound_type, static_right_open = 2) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id667945-bb">BOOST_STATIC_CONSTANT</a>(bound_type, static_closed = 3) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id667961-bb">BOOST_STATIC_CONSTANT</a>(bound_type, dynamic = 4) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id667978-bb">BOOST_STATIC_CONSTANT</a>(bound_type, undefined = 5) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id667995-bb">BOOST_STATIC_CONSTANT</a>(bound_type, _open = 0) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id668012-bb">BOOST_STATIC_CONSTANT</a>(bound_type, _left_open = 1) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id668029-bb">BOOST_STATIC_CONSTANT</a>(bound_type, _right_open = 2) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id668045-bb">BOOST_STATIC_CONSTANT</a>(bound_type, _closed = 3) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id668062-bb">BOOST_STATIC_CONSTANT</a>(bound_type, _right = 1) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id668079-bb">BOOST_STATIC_CONSTANT</a>(bound_type, _left = 2) ;
+  <span class="type"></span> <a class="link" href="interval_bounds.html#id668096-bb">BOOST_STATIC_CONSTANT</a>(bound_type, _all = 3) ;
+  <span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668113-bb">all</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668120-bb">left</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668127-bb">right</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668134-bb">reverse_left</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668141-bb">reverse_right</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">bound_type</span> <a class="link" href="interval_bounds.html#id668149-bb">bits</a>() <span class="bold"><strong>const</strong></span>;
+
+  <span class="emphasis"><em>// <a class="link" href="interval_bounds.html#id668162-bb">public static functions</a></em></span>
+  <span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668164-bb">open</a>() ;
+  <span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668173-bb">left_open</a>() ;
+  <span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668181-bb">right_open</a>() ;
+  <span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a class="link" href="interval_bounds.html#id668189-bb">closed</a>() ;
+  <span class="type">bound_type</span> _bits;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id970922"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id970925"></a><h3>
+<a name="boost.icl.interval_boundsconstruct-copy-destruct"></a><code class="computeroutput">interval_bounds</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><a name="id668155-bb"></a>interval_bounds();</pre></li>
+<li><pre class="literallayout"><a name="id668156-bb"></a>interval_bounds(bound_type bounds);</pre></li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id970958"></a><h3>
+<a name="id667892-bb"></a><code class="computeroutput">interval_bounds</code> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><span class="type"></span> <a name="id667894-bb"></a>BOOST_STATIC_CONSTANT(bound_type, static_open = 0) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id667911-bb"></a>BOOST_STATIC_CONSTANT(bound_type, static_left_open = 1) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id667928-bb"></a>BOOST_STATIC_CONSTANT(bound_type, static_right_open = 2) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id667945-bb"></a>BOOST_STATIC_CONSTANT(bound_type, static_closed = 3) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id667961-bb"></a>BOOST_STATIC_CONSTANT(bound_type, dynamic = 4) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id667978-bb"></a>BOOST_STATIC_CONSTANT(bound_type, undefined = 5) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id667995-bb"></a>BOOST_STATIC_CONSTANT(bound_type, _open = 0) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id668012-bb"></a>BOOST_STATIC_CONSTANT(bound_type, _left_open = 1) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id668029-bb"></a>BOOST_STATIC_CONSTANT(bound_type, _right_open = 2) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id668045-bb"></a>BOOST_STATIC_CONSTANT(bound_type, _closed = 3) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id668062-bb"></a>BOOST_STATIC_CONSTANT(bound_type, _right = 1) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id668079-bb"></a>BOOST_STATIC_CONSTANT(bound_type, _left = 2) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id668096-bb"></a>BOOST_STATIC_CONSTANT(bound_type, _all = 3) ;</pre></li>
+<li><pre class="literallayout"><span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668113-bb"></a>all() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668120-bb"></a>left() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668127-bb"></a>right() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668134-bb"></a>reverse_left() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type"><a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668141-bb"></a>reverse_right() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">bound_type</span> <a name="id668149-bb"></a>bits() <span class="bold"><strong>const</strong></span>;</pre></li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id971249"></a><h3>
+<a name="id668162-bb"></a><code class="computeroutput">interval_bounds</code> public static functions</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668164-bb"></a>open() ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668173-bb"></a>left_open() ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668181-bb"></a>right_open() ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>static</strong></span> <a class="link" href="interval_bounds.html" title="Class interval_bounds">interval_bounds</a></span> <a name="id668189-bb"></a>closed() ;</pre></li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright © 2007 -2010 Joachim Faulhaber<br>Copyright © 1999 -2006 Cortex Software GmbH<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../header/boost/icl/interval_bounds/hpp.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../header/boost/icl/interval_bounds/hpp.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="bounded_value.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
