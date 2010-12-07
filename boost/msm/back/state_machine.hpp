@@ -2100,6 +2100,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      void start(Event const& incomingEvent)
      {
          region_start_helper< ::boost::mpl::int_<0> >::do_start(this,incomingEvent);
+         // give a chance to handle an anonymous (eventless) transition
+         handle_eventless_transitions_helper<library_sm> eventless_helper(this,true);
+         eventless_helper.process_completion_event();
      }
 
      template <class StateType>
