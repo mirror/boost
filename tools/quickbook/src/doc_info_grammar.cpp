@@ -33,7 +33,7 @@ namespace quickbook
                         doc_info, doc_title, doc_version, doc_id, doc_dirname,
                         doc_copyright, doc_purpose, doc_category, doc_authors,
                         doc_author, space, hard_space, doc_license,
-                        doc_last_revision, doc_source_mode, doc_biblioid,
+                        doc_last_revision, doc_source_mode, doc_biblioid, doc_lang,
                         phrase, quickbook_version, char_, comment, dummy_block;
         phrase_grammar common;
         cl::symbols<> doc_types;
@@ -81,6 +81,7 @@ namespace quickbook
                     | doc_last_revision
                     | doc_source_mode
                     | doc_biblioid
+                    | doc_lang
                     )
                     >> space >> ']' >> +cl::eol_p
                 )
@@ -187,6 +188,12 @@ namespace quickbook
             >>  (+(~cl::eps_p(']') >> char_))
                                             [actions.extract_doc_biblioid]
                                             [cl::push_back_a(actions.doc_biblioid_items, actions.doc_biblioid)]
+            ;
+
+        doc_lang =
+                "lang" >> hard_space
+            >> (*(~cl::eps_p(']') >> char_))
+                                            [actions.extract_doc_lang]
             ;
 
         comment =

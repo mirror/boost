@@ -51,6 +51,7 @@ namespace quickbook
         docinfo_string          doc_license;
         docinfo_string          doc_last_revision;
         biblioid_list           doc_biblioid_items;
+        docinfo_string          doc_lang;
         std::string             include_doc_id;
         //temporary state
         biblioid_item           doc_biblioid;
@@ -136,6 +137,7 @@ namespace quickbook
         phrase_to_docinfo_action extract_doc_last_revision;
         phrase_to_docinfo_action extract_doc_category;
         phrase_to_docinfo_action extract_doc_biblioid;
+        phrase_to_docinfo_action extract_doc_lang;
 
         code_action             code;
         code_action             code_block;

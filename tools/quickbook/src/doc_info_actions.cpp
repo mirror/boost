@@ -143,6 +143,13 @@ namespace quickbook
             << actions.doc_id
             << "\"\n";
         
+        if(!actions.doc_lang.empty())
+        {
+            out << "    lang=\""
+                << actions.doc_lang.get(106)
+                << "\"\n";
+        }
+
         if(actions.doc_type == "library")
         {
             out << "    name=\"" << actions.doc_title.get(106) << "\"\n";

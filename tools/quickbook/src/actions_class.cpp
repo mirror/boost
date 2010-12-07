@@ -83,6 +83,7 @@ namespace quickbook
         , extract_doc_last_revision(doc_last_revision, phrase)
         , extract_doc_category(doc_category, phrase)
         , extract_doc_biblioid(doc_biblioid.second, phrase)
+        , extract_doc_lang(doc_lang, phrase)
         , code(out, phrase, *this)
         , code_block(phrase, phrase, *this)
         , inline_code(phrase, *this)
