@@ -16,6 +16,7 @@ import toolset ;
 import type ;
 
 feature.feature quickbook-testing.quickbook-command : : free dependency ;
+feature.feature <quickbook-test-define> : : free ;
 
 type.register QUICKBOOK_INPUT : quickbook ;
 type.register QUICKBOOK_OUTPUT ;
@@ -94,7 +95,7 @@ rule quickbook-fail-test ( target-name : input ? : requirements * )
 
 ################################################################################
 toolset.flags quickbook-testing.process-quickbook quickbook-command <quickbook-testing.quickbook-command> ;
-toolset.flags quickbook-testing.process-quickbook QB-DEFINES        <quickbook-define> ;
+toolset.flags quickbook-testing.process-quickbook QB-DEFINES        <quickbook-test-define> ;
 
 rule process-quickbook ( target : source : properties * )
 {

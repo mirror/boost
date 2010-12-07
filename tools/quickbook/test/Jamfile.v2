@@ -56,7 +56,7 @@ test-suite quickbook.test :
     [ quickbook-test xml-escape_1_5 ]
     [ quickbook-test blocks ]
     [ quickbook-test newline ]
-    [ quickbook-test command_line_macro : : : <quickbook-define>__macro__=*bold* ]
+    [ quickbook-test command_line_macro : : : <quickbook-test-define>__macro__=*bold* ]
     [ quickbook-fail-test fail-include ]
     [ quickbook-fail-test fail-import ]
     [ quickbook-fail-test fail-template-arguments1 ]
