@@ -633,6 +633,31 @@ Each actual argument can be a word, a text fragment or just about any [link
 quickbook.phrase QuickBook phrase]. Arguments are separated by the
 double dot [^".."] and terminated by the close parenthesis.
 
+Note that templates and template parameters can't be expanded
+everywhere, only where text is interpreted as a phrase. So they can't be
+expanded in places such as table titles and link's urls. If you want to
+use a template to generate a link based of the template parameter, you
+can't use a normal link and will need to use escaped docbook instead.
+Example:
+
+[teletype]
+```
+[template boost_ticket[key] '''<ulink url="https://svn.boost.org/trac/boost/ticket/'''[key]'''">#'''[key]'''</ulink>''']
+
+[boost_ticket 2035]
+```
+
+will expand to:
+
+[template boost_ticket[key] '''<ulink url="https://svn.boost.org/trac/boost/ticket/'''[key]'''">#'''[key]'''</ulink>''']
+
+[boost_ticket 2035]
+
+[caution Since quickbook doesn't understand the context where the
+parameter is being used, it will interpret it as quickbook markup, so
+when writing a template like this, you'll need to escape any meaningful
+punctuation.]
+
 [heading Nullary Templates]
 
 Nullary templates look and act like simple macros. Example:

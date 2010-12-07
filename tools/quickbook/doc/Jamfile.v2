@@ -10,7 +10,7 @@
 
 project boost/quickbook/doc ;
 
-import boostbook : boostbook ;
+using boostbook ;
 using quickbook ;
 
 xml quickbook : quickbook.qbk ;
