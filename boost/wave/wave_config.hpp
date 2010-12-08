@@ -83,6 +83,18 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Decide, whether to support C++0x
+//
+//  To implement C++0x keywords and preprocessor semantics define the following 
+//  to something not equal to zero.
+//
+#if !defined(BOOST_WAVE_SUPPORT_CPP0X)
+#define BOOST_WAVE_SUPPORT_CPP0X 1
+#undef BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS
+#define BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS 1
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 //  Undefine the following, to enable some MS specific language extensions:
 //  __int8, __int16, __int32, __int64, __based, __declspec, __cdecl, 
 //  __fastcall, __stdcall, __try, __except, __finally, __leave, __inline,

@@ -44,6 +44,8 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
     "//"            { goto cppcomment; }
     "."? Digit      { goto pp_number; }
 
+    "alignas"       { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_ALIGNAS : T_IDENTIFIER); }
+    "alignof"       { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_ALIGNOF : T_IDENTIFIER); }
     "asm"           { BOOST_WAVE_RET(T_ASM); }
     "auto"          { BOOST_WAVE_RET(T_AUTO); }
     "bool"          { BOOST_WAVE_RET(T_BOOL); }
@@ -51,10 +53,14 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
     "case"          { BOOST_WAVE_RET(T_CASE); }
     "catch"         { BOOST_WAVE_RET(T_CATCH); }
     "char"          { BOOST_WAVE_RET(T_CHAR); }
+    "char16_t"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_CHAR16_T : T_IDENTIFIER); }
+    "char32_t"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_CHAR32_T : T_IDENTIFIER); }
     "class"         { BOOST_WAVE_RET(T_CLASS); }
     "const"         { BOOST_WAVE_RET(T_CONST); }
+    "constexpr"     { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_CONSTEXPR : T_IDENTIFIER); }
     "const_cast"    { BOOST_WAVE_RET(T_CONSTCAST); }
     "continue"      { BOOST_WAVE_RET(T_CONTINUE); }
+    "decltype"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_DECLTYPE : T_IDENTIFIER); }
     "default"       { BOOST_WAVE_RET(T_DEFAULT); }
     "delete"        { BOOST_WAVE_RET(T_DELETE); }
     "do"            { BOOST_WAVE_RET(T_DO); }
@@ -78,6 +84,8 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
     "mutable"       { BOOST_WAVE_RET(T_MUTABLE); }
     "namespace"     { BOOST_WAVE_RET(T_NAMESPACE); }
     "new"           { BOOST_WAVE_RET(T_NEW); }
+    "noexcept"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_NOEXCEPT : T_IDENTIFIER); }
+    "nullptr"       { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_NULLPTR : T_IDENTIFIER); }
     "operator"      { BOOST_WAVE_RET(T_OPERATOR); }
     "private"       { BOOST_WAVE_RET(T_PRIVATE); }
     "protected"     { BOOST_WAVE_RET(T_PROTECTED); }
@@ -90,10 +98,12 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
     "sizeof"        { BOOST_WAVE_RET(T_SIZEOF); }
     "static"        { BOOST_WAVE_RET(T_STATIC); }
     "static_cast"   { BOOST_WAVE_RET(T_STATICCAST); }
+    "static_assert" { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_STATICASSERT : T_IDENTIFIER); }
     "struct"        { BOOST_WAVE_RET(T_STRUCT); }
     "switch"        { BOOST_WAVE_RET(T_SWITCH); }
     "template"      { BOOST_WAVE_RET(T_TEMPLATE); }
     "this"          { BOOST_WAVE_RET(T_THIS); }
+    "thread_local"  { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_THREADLOCAL : T_IDENTIFIER); }
     "throw"         { BOOST_WAVE_RET(T_THROW); }
     "true"          { BOOST_WAVE_RET(T_TRUE); }
     "try"           { BOOST_WAVE_RET(T_TRY); }

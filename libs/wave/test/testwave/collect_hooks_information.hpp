@@ -10,6 +10,7 @@
 #if !defined(BOOST_WAVE_LIBS_WAVE_TEST_COLLECT_HOOKS_INFORMATION_HPP)
 #define BOOST_WAVE_LIBS_WAVE_TEST_COLLECT_HOOKS_INFORMATION_HPP
 
+#include <boost/config.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -81,6 +82,19 @@ inline String repr(String const& value)
     }
     return result;
 }
+
+#if defined(BOOST_WINDOWS)
+template <typename String>
+inline String replace_slashes(String value)
+{
+    typename String::size_type p = value.find_first_of("\\");
+    while (p != value.npos) {
+        value[p] = '/';
+        p = value.find_first_of("\\", p+1);
+    }
+    return value;
+}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 template <typename Token>
@@ -298,11 +312,19 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     template <typename Context>
     void 
-    opened_include_file(Context const& ctx, std::string const& relname, 
-        std::string const& absname, bool is_system_include) 
+    opened_include_file(Context const& ctx, std::string relname, 
+        std::string absname, bool is_system_include) 
     {
+        using boost::wave::util::impl::escape_lit;
+
+#if defined(BOOST_WINDOWS)
+        relname = replace_slashes(relname);
+        absname = replace_slashes(absname);
+#endif
+
         BOOST_WAVETEST_OSSTREAM strm;
-        strm << "05: " << relname << " (" << absname << ")" << std::endl;
+        strm << "05: " << escape_lit(relname) 
+             << " (" << escape_lit(absname) << ")" << std::endl;
         hooks_trace += BOOST_WAVETEST_GETSTRING(strm);
     }
     
@@ -750,11 +772,18 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContextT>
     void
-    detected_include_guard(ContextT const& ctx, std::string const& filename,
+    detected_include_guard(ContextT const& ctx, std::string filename,
         std::string const& include_guard) 
     {
+        using boost::wave::util::impl::escape_lit;
+
+#if defined(BOOST_WINDOWS)
+        filename = replace_slashes(filename);
+#endif
+
         BOOST_WAVETEST_OSSTREAM strm;
-        strm << "19: " << filename << ": " << include_guard << std::endl;
+        strm << "19: " << escape_lit(filename) << ": " 
+             << include_guard << std::endl;
         hooks_trace += BOOST_WAVETEST_GETSTRING(strm);
     }
 
@@ -782,11 +811,18 @@ public:
     template <typename ContextT, typename TokenT>
     void
     detected_pragma_once(ContextT const& ctx, TokenT const& pragma_token,
-        std::string const& filename) 
+        std::string filename) 
     {
+        using boost::wave::util::impl::escape_lit;
+
+#if defined(BOOST_WINDOWS)
+        filename = replace_slashes(filename);
+#endif
+
         BOOST_WAVETEST_OSSTREAM strm;
         strm << "20: " << repr(pragma_token.get_position()) << ": " 
-             << pragma_token.get_value() << ": " << filename << std::endl;
+             << pragma_token.get_value() << ": " 
+             << escape_lit(filename) << std::endl;
         hooks_trace += BOOST_WAVETEST_GETSTRING(strm);
     }
 #endif 

@@ -57,6 +57,7 @@ namespace lexer {
 #endif
 #define INIT_DATA_CPP_SIZE          15
 #define INIT_DATA_PP_NUMBER_SIZE    2
+#define INIT_DATA_CPP0X_SIZE        11
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
@@ -112,6 +113,7 @@ private:
     static typename base_type::lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
     static typename base_type::lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
     static typename base_type::lexer_data const init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE];  // pp-number only patterns
+    static typename base_type::lexer_data const init_data_cpp0x[INIT_DATA_CPP0X_SIZE];  // C++0X only patterns
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -429,6 +431,25 @@ lexer<IteratorT, PositionT>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] =
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// C++ only token definitions
+template <typename IteratorT, typename PositionT>
+typename lexer_base<IteratorT, PositionT>::lexer_data const 
+lexer<IteratorT, PositionT>::init_data_cpp0x[INIT_DATA_CPP0X_SIZE] = 
+{
+    TOKEN_DATA(ALIGNAS, "alignas"),
+    TOKEN_DATA(ALIGNOF, "alignof"),
+    TOKEN_DATA(CHAR16_T, "char16_t"),
+    TOKEN_DATA(CHAR32_T, "char32_t"),
+    TOKEN_DATA(CONSTEXPR, "constexpr"),
+    TOKEN_DATA(DECLTYPE, "decltype"),
+    TOKEN_DATA(NOEXCEPT, "noexcept"),
+    TOKEN_DATA(NULLPTR, "nullptr"),
+    TOKEN_DATA(STATICASSERT, "static_assert"),
+    TOKEN_DATA(THREADLOCAL, "threadlocal"),
+    { token_id(0) }       // this should be the last entry
+};
+
+///////////////////////////////////////////////////////////////////////////////
 //  undefine macros, required for regular expression definitions
 #undef INCLUDEDEF
 #undef POUNDDEF
@@ -493,6 +514,17 @@ lexer<IteratorT, PositionT>::init_dfa(boost::wave::language_support lang)
         }
     }
     
+// if in C++0x mode, add all new keywords
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+    if (boost::wave::need_cpp0x(lang)) {
+        for (int j = 0; 0 != init_data_cpp0x[j].tokenid; ++j) {
+            this->register_regex(init_data_cpp0x[j].tokenregex, 
+                init_data_cpp0x[j].tokenid, init_data_cpp0x[j].tokencb, 
+                init_data_cpp0x[j].lexerstate);
+        }
+    }
+#endif
+
     for (int i = 0; 0 != init_data[i].tokenid; ++i) {
         this->register_regex(init_data[i].tokenregex, init_data[i].tokenid, 
             init_data[i].tokencb, init_data[i].lexerstate);

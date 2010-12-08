@@ -20,6 +20,14 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.46.0
+- V2.2.0
+- Added recognition of C++0x keywords to Re2C lexers.
+- Added --c++0x command line option to Wave to enabling the recognition of 
+  C++0x keywords, converting those to C++0x tokens.
+- Adapted all of the library to play well with Boost.Filesystem V3 (which is 
+  the default from now on).
+
 Boost V1.45.0
 - V2.1.0
 - Token pasting is well formed only as long as the formed token(s) are 

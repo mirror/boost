@@ -539,7 +539,7 @@ namespace {
         fs::path macronames_file (boost::wave::util::create_path(filename));
 
         if (macronames_file != "-") {
-            macronames_file = fs::complete(macronames_file);
+            macronames_file = boost::wave::util::complete_path(macronames_file);
             fs::create_directories(boost::wave::util::branch_path(macronames_file));
             macronames_out.open(macronames_file.string().c_str());
             if (!macronames_out.is_open()) {
@@ -608,7 +608,7 @@ namespace {
         fs::path macrocounts_file (boost::wave::util::create_path(filename));
 
         if (macrocounts_file != "-") {
-            macrocounts_file = fs::complete(macrocounts_file);
+            macrocounts_file = boost::wave::util::complete_path(macrocounts_file);
             fs::create_directories(boost::wave::util::branch_path(macrocounts_file));
             macrocounts_out.open(macrocounts_file.string().c_str());
             if (!macrocounts_out.is_open()) {
@@ -816,6 +816,24 @@ int error_count = 0;
             ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
         }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+        if (vm.count("c++0x")) {
+            ctx.set_language(
+                boost::wave::language_support(
+                    boost::wave::support_cpp0x
+                 |  boost::wave::support_option_convert_trigraphs 
+                 |  boost::wave::support_option_long_long 
+                 |  boost::wave::support_option_emit_line_directives 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+                 |  boost::wave::support_option_include_guard_detection
+#endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+                 |  boost::wave::support_option_emit_pragma_directives
+#endif
+                 |  boost::wave::support_option_insert_whitespace
+                ));
+        }
+#endif // BOOST_WAVE_SUPPORT_CPP0X != 0
 
     // enable long long support, if appropriate
         if (vm.count("long_long")) {
@@ -961,7 +979,7 @@ int error_count = 0;
                 default_outfile = "-";
             }
             else {
-                out_file = fs::complete(out_file);
+                out_file = boost::wave::util::complete_path(out_file);
                 fs::create_directories(boost::wave::util::branch_path(out_file));
                 output.open(out_file.string().c_str());
                 if (!output.is_open()) {
@@ -1212,6 +1230,9 @@ main (int argc, char *argv[])
             ("variadics", "enable certain C99 extensions in C++ mode")
             ("c99", "enable C99 mode (implies --variadics)")
 #endif 
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+            ("c++0x", "enable C++0x mode (implies --variadics and --long_long)")
+#endif 
             ("listincludes,l", po::value<std::string>(), 
                 "list names of included files to a file [arg] or to stdout [-]")
             ("macronames,m", po::value<std::string>(), 
@@ -1284,7 +1305,7 @@ main (int argc, char *argv[])
     // file for all files in a certain project.
         if (arguments.size() > 0 && arguments[0].value[0] != "-") {
         // construct full path of input file
-            fs::path input_dir (fs::complete(
+          fs::path input_dir (boost::wave::util::complete_path(
                 boost::wave::util::create_path(arguments[0].value[0])));
 
         // chop of file name

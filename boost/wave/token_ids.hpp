@@ -287,6 +287,18 @@ enum token_id {
 // import is needed to be a keyword for the C++ module Standards proposal
     T_IMPORT       = TOKEN_FROM_ID(421, KeywordTokenType),
 
+// C++0x keywords
+    T_ALIGNAS      = TOKEN_FROM_ID(422, KeywordTokenType),
+    T_ALIGNOF      = TOKEN_FROM_ID(423, KeywordTokenType),
+    T_CHAR16_T     = TOKEN_FROM_ID(424, KeywordTokenType),
+    T_CHAR32_T     = TOKEN_FROM_ID(425, KeywordTokenType),
+    T_CONSTEXPR    = TOKEN_FROM_ID(426, KeywordTokenType),
+    T_DECLTYPE     = TOKEN_FROM_ID(427, KeywordTokenType),
+    T_NOEXCEPT     = TOKEN_FROM_ID(428, KeywordTokenType),
+    T_NULLPTR      = TOKEN_FROM_ID(429, KeywordTokenType),
+    T_STATICASSERT = TOKEN_FROM_ID(430, KeywordTokenType),
+    T_THREADLOCAL  = TOKEN_FROM_ID(431, KeywordTokenType),
+
     T_LAST_TOKEN_ID,
     T_LAST_TOKEN = ID_FROM_TOKEN(T_LAST_TOKEN_ID & ~PPTokenFlag),
 

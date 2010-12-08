@@ -192,7 +192,7 @@ testwave_app::got_expected_result(std::string const& filename,
             case 'B':       // same as 'P', but forward slashes on Windows
                 {
                     fs::path fullpath (
-                        fs::complete(
+                        boost::wave::util::complete_path(
                             boost::wave::util::create_path(filename), 
                             boost::wave::util::current_path())
                         );
@@ -216,8 +216,14 @@ testwave_app::got_expected_result(std::string const& filename,
                                     boost::wave::util::normalize(fullpath)));
                         }
                         else {
-                            full_result += escape_lit(
+#if defined(BOOST_WINDOWS)
+                            std::string p = replace_slashes(
                                 boost::wave::util::normalize(fullpath).string());
+#else
+                            std::string p (
+                                boost::wave::util::normalize(fullpath).string());
+#endif
+                            full_result += escape_lit(p);
                         }
                         pos1 = expected.find_first_of ("$", 
                             pos = pos1 + 4 + base.size());
@@ -230,6 +236,11 @@ testwave_app::got_expected_result(std::string const& filename,
                                 boost::wave::util::native_file_string(fullpath));
                         }
                         else {
+#if defined(BOOST_WINDOWS)
+                            std::string p = replace_slashes(fullpath.string());
+#else
+                            std::string p (fullpath.string());
+#endif
                             full_result += escape_lit(fullpath.string());
                         }
                         pos1 = expected.find_first_of ("$", pos = pos1 + 2);
@@ -265,8 +276,14 @@ testwave_app::got_expected_result(std::string const& filename,
                                     boost::wave::util::normalize(relpath)));
                         }
                         else {
-                            full_result += escape_lit(
+#if defined(BOOST_WINDOWS)
+                            std::string p = replace_slashes(
                                 boost::wave::util::normalize(relpath).string());
+#else
+                            std::string p (
+                                boost::wave::util::normalize(relpath).string());
+#endif
+                            full_result += escape_lit(p);
                         }
                         pos1 = expected.find_first_of ("$", 
                             pos = pos1 + 4 + base.size());
@@ -279,7 +296,12 @@ testwave_app::got_expected_result(std::string const& filename,
                                 boost::wave::util::native_file_string(relpath));
                         }
                         else {
-                            full_result += escape_lit(relpath.string());
+#if defined(BOOST_WINDOWS)
+                            std::string p = replace_slashes(relpath.string());
+#else
+                            std::string p (relpath.string());
+#endif
+                            full_result += escape_lit(p);
                         }
                         pos1 = expected.find_first_of ("$", pos = pos1 + 2);
                     }

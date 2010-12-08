@@ -181,7 +181,7 @@ main(int argc, char *argv[])
                          iit != iend; ++iit)
                     {
                     // correct the file name (pre-pend the config file path)
-                        fs::path cfgpath = fs::complete(
+                        fs::path cfgpath = boost::wave::util::complete_path(
                             boost::wave::util::create_path(*cit), 
                             boost::wave::util::current_path());
                         fs::path filepath = 

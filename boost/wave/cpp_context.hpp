@@ -165,7 +165,7 @@ public:
         std::string fname(filename);
         if (filename != "<Unknown>" && filename != "<stdin>") {
             using namespace boost::filesystem;
-            path fpath(complete(path(filename)));
+            path fpath(util::complete_path(path(filename)));
             fname = fpath.string();
         }
         return iterator_type(*this, first, last, position_type(fname.c_str())); 
@@ -177,7 +177,7 @@ public:
         std::string fname(filename);
         if (filename != "<Unknown>" && filename != "<stdin>") {
             using namespace boost::filesystem;
-            path fpath(complete(path(filename)));
+            path fpath(util::complete_path(path(filename)));
             fname = fpath.string();
         }
         return iterator_type(*this, first_, last_, position_type(fname.c_str())); 
@@ -324,7 +324,7 @@ protected:
             std::string fname(filename);
             if (filename != "<Unknown>" && filename != "<stdin>") {
                 using namespace boost::filesystem;
-                path fpath(complete(path(filename)));
+                path fpath(util::complete_path(path(filename)));
                 fname = fpath.string();
                 includes.set_current_directory(fname.c_str());
             }

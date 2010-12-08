@@ -1045,7 +1045,7 @@ protected:
             string_type fname ((*it).get_value());
             fs::path fpath (boost::wave::util::create_path(
                 util::impl::unescape_lit(fname.substr(1, fname.size()-2)).c_str()));
-            fpath = fs::complete(fpath, ctx.get_current_directory());
+            fpath = boost::wave::util::complete_path(fpath, ctx.get_current_directory());
             result = interpret_pragma_option_output_open(fpath, ctx, act_token);
         }
         else if (T_IDENTIFIER == id) {
@@ -1058,8 +1058,8 @@ protected:
                 if (output_options.empty() && current_outfile.empty() &&
                     !default_outfile.empty() && default_outfile != "-")
                 {
-                    current_outfile = fs::complete(default_outfile, 
-                        ctx.get_current_directory());
+                    current_outfile = boost::wave::util::complete_path(
+                        default_outfile, ctx.get_current_directory());
                 }
 
             // push current output option onto the internal option stack
