@@ -39,6 +39,9 @@
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/mpl/plus.hpp>
+#include <boost/mpl/copy_if.hpp>
+#include <boost/mpl/back_inserter.hpp>
+#include <boost/mpl/transform.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -63,6 +66,14 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(wrapped_entry)
 
 namespace boost { namespace msm { namespace back
 {
+template <typename Sequence, typename Range>
+struct set_insert_range
+{
+    typedef typename ::boost::mpl::fold<
+        Range,Sequence, 
+        ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >
+    >::type type;
+};
 
 // returns the current state type of a transition
 template <class Transition>
@@ -320,7 +331,7 @@ struct is_pseudo_exit
         ::boost::mpl::bool_<true>, ::boost::mpl::bool_<false> 
     >::type type;
 };
-// says if a state is an exit pseudo state
+// says if a state is an entry pseudo state or an explicit entry
 template <class State>
 struct is_direct_entry 
 {
@@ -648,21 +659,11 @@ struct build_one_orthogonal_region
                 typename Row::current_state_type, 
                 typename Row::next_state_type
          > {};
-     template<typename Row>
-     struct row_to_incidence2 :
-         ::boost::mpl::vector<
-                ::boost::mpl::pair<
-                    typename Row::transition_event, 
-                    typename Row::next_state_type>, 
-                typename Row::next_state_type, 
-                typename Row::current_state_type
-         > {};
 
      template <class Seq, class Elt>
      struct transition_incidence_list_helper 
      {
-         typedef typename ::boost::mpl::push_back< Seq, row_to_incidence< Elt > >::type one_direction;
-         typedef typename ::boost::mpl::push_back< one_direction, row_to_incidence2< Elt > >::type type;
+         typedef typename ::boost::mpl::push_back< Seq, row_to_incidence< Elt > >::type type;
      };
 
      typedef typename ::boost::mpl::fold<
@@ -693,29 +694,76 @@ struct build_one_orthogonal_region
      >::type type;
 };
 
-// build a vector of regions states (as a set)
-// one set of states for every region
-// version if initial_state is a not sequence
-template <class TransitionTable, class InitStates,class Enable=void>
-struct build_orthogonal_regions 
+template <class Fsm>
+struct find_entry_states 
 {
-    typedef ::boost::mpl::set<typename build_one_orthogonal_region<TransitionTable,InitStates>::type> type;
+    typedef typename ::boost::mpl::copy<
+        typename Fsm::substate_list,
+        ::boost::mpl::inserter< 
+            ::boost::mpl::set0<>,
+            ::boost::mpl::if_<
+                has_explicit_entry_state< ::boost::mpl::placeholders::_2 >,
+                ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2>,
+                ::boost::mpl::placeholders::_1
+            >
+        >
+    >::type type;
 };
 
-// version if initial_state is a sequence
-template <class TransitionTable, class InitStates>
-struct build_orthogonal_regions
-    <TransitionTable,InitStates,
-     typename ::boost::enable_if< 
-        ::boost::mpl::is_sequence< InitStates> >::type > 
+template <class Set1, class Set2>
+struct is_common_element 
+{
+    typedef typename ::boost::mpl::fold<
+        Set1, ::boost::mpl::false_,
+        ::boost::mpl::if_<
+            ::boost::mpl::has_key<
+                Set2,
+                ::boost::mpl::placeholders::_2
+            >,
+            ::boost::mpl::true_,
+            ::boost::mpl::placeholders::_1
+        >
+    >::type type;
+};
+
+template <class EntryRegion, class AllRegions>
+struct add_entry_region 
+{
+    typedef typename ::boost::mpl::transform<
+        AllRegions, 
+        ::boost::mpl::if_<
+            is_common_element<EntryRegion, ::boost::mpl::placeholders::_1>,
+            set_insert_range< ::boost::mpl::placeholders::_1, EntryRegion>,
+            ::boost::mpl::placeholders::_1
+        >
+    >::type type;
+};
+
+// build a vector of regions states (as a set)
+// one set of states for every region
+template <class Fsm, class InitStates>
+struct build_orthogonal_regions 
 {
     typedef typename 
         ::boost::mpl::fold<
-            InitStates, ::boost::mpl::vector<>,
+            InitStates, ::boost::mpl::vector0<>,
             ::boost::mpl::push_back< 
                 ::boost::mpl::placeholders::_1, 
-                build_one_orthogonal_region< TransitionTable, ::boost::mpl::placeholders::_2 > >
-        >::type type;
+                build_one_orthogonal_region< typename Fsm::stt, ::boost::mpl::placeholders::_2 > >
+        >::type without_entries;
+
+    typedef typename 
+        ::boost::mpl::fold<
+        typename find_entry_states<Fsm>::type, ::boost::mpl::vector0<>,
+            ::boost::mpl::push_back< 
+                ::boost::mpl::placeholders::_1, 
+                build_one_orthogonal_region< typename Fsm::stt, ::boost::mpl::placeholders::_2 > >
+        >::type only_entries;
+
+    typedef typename ::boost::mpl::fold<
+        only_entries , without_entries,
+        add_entry_region< ::boost::mpl::placeholders::_2, ::boost::mpl::placeholders::_1>
+    >::type type;
 };
 
 template <class GraphAsSeqOfSets, class StateType>
@@ -740,19 +788,10 @@ struct find_region_index
     enum {value = type::value};
 };
 
-template <typename Sequence, typename Range>
-struct set_insert_range
-{
-    typedef typename ::boost::mpl::fold<
-        Range,Sequence, 
-        ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >
-    >::type type;
-};
-
 template <class Fsm>
 struct check_regions_orthogonality
 {
-    typedef typename build_orthogonal_regions<typename Fsm::stt,typename Fsm::initial_states>::type regions;
+    typedef typename build_orthogonal_regions< Fsm,typename Fsm::initial_states>::type regions;
     
     typedef typename ::boost::mpl::fold<
         regions, ::boost::mpl::int_<0>,

@@ -2118,7 +2118,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          struct In<-1,Dummy>
          {
              typedef typename build_orthogonal_regions<
-                 stt,
+                 library_sm,
                  typename Derived::initial_state 
              >::type all_regions;
              enum {region_index= find_region_index<all_regions,StateType>::value };
