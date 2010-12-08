@@ -41,7 +41,7 @@
   <pre>
 /* Rounding requirements */
 struct rounding {
-  // defaut constructor, destructor
+  // default constructor, destructor
   rounding();
   ~rounding();
   // mathematical operations
@@ -375,7 +375,7 @@ T d; { rounding::unprotected_rounding rnd; d = rnd.add_down(a, b); }
   argument correctly rounded accordingly to the current rounding mode if it
   was not already the case. This function is necessary to handle delayed
   rounding. Indeed, depending on the way the computations are done, the
-  intermediate results may be internaly stored in a more precise format and
+  intermediate results may be internally stored in a more precise format and
   it can lead to a wrong rounding. So the function enforces the rounding.
   <a href="#extreg">Here</a> is an example of what happens when the rounding
   is not enforced.</p>
