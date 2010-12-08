@@ -82,6 +82,15 @@
 #define BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
 #endif
 
+#if defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) > 302 \
+    && !defined(__INTEL_COMPILER)
+// GCC since 3.3 has may_alias attribute that helps to alleviate optimizer issues with
+// regard to violation of the strict aliasing rules. The optional< T > storage type is marked
+// with this attribute in order to let the compiler know that it will alias objects of type T
+// and silence compilation warnings.
+#define BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS
+#endif
+
 // Daniel Wallin discovered that bind/apply.hpp badly interacts with the apply<>
 // member template of a factory as used in the optional<> implementation.
 // He proposed this simple fix which is to move the call to apply<> outside
@@ -102,12 +111,6 @@ class in_place_factory_base ;
 class typed_in_place_factory_base ;
 
 namespace optional_detail {
-
-#if defined(__GNUC__) \
-        && !(__GNUC__ == 3 && __GNUC_MINOR__ == 2) \
-        && !defined(__INTEL_COMPILER)
-#define BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS
-#endif
 
 // This local class is used instead of that in "aligned_storage.hpp"
 // because I've found the 'official' class to ICE BCB5.5
