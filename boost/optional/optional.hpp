@@ -103,6 +103,12 @@ class typed_in_place_factory_base ;
 
 namespace optional_detail {
 
+#if defined(__GNUC__) \
+        && !(__GNUC__ == 3 && __GNUC_MINOR__ == 2) \
+        && !defined(__INTEL_COMPILER)
+#define BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS
+#endif
+
 // This local class is used instead of that in "aligned_storage.hpp"
 // because I've found the 'official' class to ICE BCB5.5
 // when some types are used with optional<>
@@ -112,8 +118,8 @@ class aligned_storage
 {
     // Borland ICEs if unnamed unions are used for this!
     union
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
     // This works around GCC warnings about breaking strict aliasing rules when casting storage address to T*
+#if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
     __attribute__((may_alias))
 #endif
     dummy_u
@@ -125,7 +131,7 @@ class aligned_storage
 
   public:
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+#if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
     void const* address() const { return &dummy_; }
     void      * address()       { return &dummy_; }
 #else
@@ -437,7 +443,7 @@ class optional_base : public optional_tag
   private :
 
     // internal_type can be either T or reference_content<T>
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+#if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
     // This workaround is supposed to silence GCC warnings about broken strict aliasing rules
     internal_type const* get_object() const
     {
