@@ -161,7 +161,7 @@ private:
         execute_return () >                         deferred_fct;
     typedef std::deque<deferred_fct >               deferred_events_queue_t;
     typedef std::queue<transition_fct >             events_queue_t;
-    typedef bool (*flag_handler)(library_sm&);
+    typedef bool (*flag_handler)(library_sm const&);
 
     // all state machines are friend with each other to allow embedding any of them in another fsm
     template <class ,class , class, class
@@ -1233,7 +1233,7 @@ private:
 
     // checks if a flag is active using the BinaryOp as folding function
     template <class Flag,class BinaryOp>
-    bool is_flag_active()
+    bool is_flag_active() const
     {
         flag_handler* flags_entries = get_entries_for_flag<Flag>();
 
@@ -1244,11 +1244,11 @@ private:
                     ::boost::bind(::boost::msm::back::deref<flag_handler>(),
                         ::boost::bind(::boost::msm::back::plus2<flag_handler*,int>(),
                         flags_entries, _2)),
-                        ::boost::ref(*this)), _1));
+                        ::boost::cref(*this)), _1));
     }
     // checks if a flag is active using no binary op if 1 region, or OR if > 1 regions
     template <class Flag>
-    bool is_flag_active()
+    bool is_flag_active() const
     {
         return FlagHelper<Flag,(nr_regions::value>1)>::helper(*this,get_entries_for_flag<Flag>());
     }
@@ -1732,7 +1732,7 @@ private:
     template <class Flag,bool orthogonalStates>
     struct FlagHelper 
     {
-        static bool helper(library_sm& sm,flag_handler* )
+        static bool helper(library_sm const& sm,flag_handler* )
         {
             // by default we use OR to accumulate the flags
             return sm.is_flag_active<Flag,Flag_OR>();
@@ -1741,7 +1741,7 @@ private:
     template <class Flag>
     struct FlagHelper<Flag,false>
     {
-        static bool helper(library_sm& sm,flag_handler* flags_entries)
+        static bool helper(library_sm const& sm,flag_handler* flags_entries)
         {
             // just one active state, so we can call operator[] with 0
             return flags_entries[sm.current_state()[0]](sm);
@@ -1752,15 +1752,15 @@ private:
     template <class StateType,class Flag>
     struct FlagHandler
     {
-        static bool flag_true(library_sm& )
+        static bool flag_true(library_sm const& )
         {
             return true;
         }
-        static bool flag_false(library_sm& )
+        static bool flag_false(library_sm const& )
         {
             return false;
         }
-        static bool forward(library_sm& fsm)
+        static bool forward(library_sm const& fsm)
         {
             return ::boost::fusion::at_key<StateType>(fsm.m_substate_list).template is_flag_active<Flag>();
         }
@@ -1818,7 +1818,7 @@ private:
     };
     // maintains for every flag a static array containing the flag value for every state
     template <class Flag>
-    flag_handler* get_entries_for_flag()
+    flag_handler* get_entries_for_flag() const
     {
         BOOST_STATIC_CONSTANT(int, max_state = (mpl::size<state_list>::value));
 
