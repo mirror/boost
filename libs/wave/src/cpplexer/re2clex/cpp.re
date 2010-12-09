@@ -441,20 +441,14 @@ pp_number:
     /*!re2c
         "."? Digit (Digit | NonDigit | ExponentStart | ".")*
             { BOOST_WAVE_RET(T_PP_NUMBER); }
-
-        any 
-            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
     */
     }
     else {
     /*!re2c
         ((FractionalConstant ExponentPart?) | (Digit+ ExponentPart)) FloatingSuffix?
             { BOOST_WAVE_RET(T_FLOATLIT); }
-            
-        Integer { goto integer_suffix; } 
 
-        any 
-            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
+        Integer { goto integer_suffix; } 
     */
     }
 }
@@ -470,8 +464,6 @@ integer_suffix:
         IntegerSuffix?
             { BOOST_WAVE_RET(T_INTLIT); }
 
-        any 
-            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
     */
     }
     else {
@@ -482,8 +474,6 @@ integer_suffix:
         IntegerSuffix?
             { BOOST_WAVE_RET(T_INTLIT); }
 
-        any 
-            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
     */
     }
 }
