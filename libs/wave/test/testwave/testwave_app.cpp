@@ -360,6 +360,9 @@ testwave_app::testwave_app(po::variables_map const& vm)
         ("noguard,G", "disable include guard detection")
 #endif
         ("skipped_token_hooks", "record skipped_token hook calls")
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+        ("c++0x", "enable C99 mode (implies --variadics and --long_long)")
+#endif
     ;
 }
 
@@ -899,6 +902,28 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
         ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
     }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+
+#if BOOST_WAVE_SUPPORT_CPP0X
+    if (vm.count("c++0x")) {
+        if (9 == debuglevel) {
+            std::cerr << "initialise_options: option: c++0x" << std::endl;
+        }
+        ctx.set_language(
+            boost::wave::language_support(
+                boost::wave::support_cpp0x
+              |  boost::wave::support_option_convert_trigraphs 
+              |  boost::wave::support_option_long_long 
+              |  boost::wave::support_option_emit_line_directives 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+              |  boost::wave::support_option_include_guard_detection
+#endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+              |  boost::wave::support_option_emit_pragma_directives
+#endif
+              |  boost::wave::support_option_insert_whitespace
+            ));
+    }
+#endif
 
 // enable long_long mode, if appropriate
     if (vm.count("long_long")) {

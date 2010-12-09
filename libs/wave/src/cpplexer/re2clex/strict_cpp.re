@@ -248,16 +248,46 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "->"            { BOOST_WAVE_RET(T_ARROW); }
     "??/"           { BOOST_WAVE_RET(T_ANY_TRIGRAPH); }
 
-
-    ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*
-        { BOOST_WAVE_RET(T_IDENTIFIER); }
-
-    "L"? (['] (EscapeSequence|any\[\n\r\\']|UniversalChar)+ ['])
+    "L"? (['] (EscapeSequence | UniversalChar | any\[\n\r\\'])+ ['])
         { BOOST_WAVE_RET(T_CHARLIT); }
     
-    "L"? (["] (EscapeSequence|any\[\n\r\\"]|UniversalChar)* ["])
+    "L"? (["] (EscapeSequence | UniversalChar | any\[\n\r\\"])* ["])
         { BOOST_WAVE_RET(T_STRINGLIT); }
     
+    "L"? "R" ["] 
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extrawstringlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+
+    [uU] [']
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extcharlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+    
+    ([uU] | "u8") ["]
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extstringlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+    
+    ([uU] | "u8") "R" ["]
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extrawstringlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+    
+    ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*
+        { BOOST_WAVE_RET(T_IDENTIFIER); }
 
     Pound PPSpace ( "include" | "include_next") PPSpace "<" (any\[\n\r>])+ ">" 
         { BOOST_WAVE_RET(T_PP_HHEADER); }
@@ -411,6 +441,9 @@ pp_number:
     /*!re2c
         "."? Digit (Digit | NonDigit | ExponentStart | ".")*
             { BOOST_WAVE_RET(T_PP_NUMBER); }
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
     */
     }
     else {
@@ -419,11 +452,14 @@ pp_number:
             { BOOST_WAVE_RET(T_FLOATLIT); }
             
         Integer { goto integer_suffix; } 
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
     */
     }
 }
 
-/* this subscanner is called, whenever a Integer was recognized */
+/* this subscanner is called, whenever an Integer was recognized */
 integer_suffix:
 {
     if (s->enable_ms_extensions) {
@@ -433,6 +469,9 @@ integer_suffix:
 
         IntegerSuffix?
             { BOOST_WAVE_RET(T_INTLIT); }
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
     */
     }
     else {
@@ -442,6 +481,52 @@ integer_suffix:
 
         IntegerSuffix?
             { BOOST_WAVE_RET(T_INTLIT); }
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
     */
     }
+}
+
+/* this subscanner is invoked for C++0x extended character literals */
+extcharlit:
+{
+    /*!re2c
+        ((EscapeSequence | UniversalChar | any\[\n\r\\']) ['])
+            { BOOST_WAVE_RET(T_CHARLIT); }
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
+    */
+}
+
+/* this subscanner is invoked for C++0x extended character string literals */
+extstringlit:
+{
+    /*!re2c
+        ((EscapeSequence | UniversalChar | any\[\n\r\\"])* ["])
+            { BOOST_WAVE_RET(T_STRINGLIT); }
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
+    */
+}
+
+extrawstringlit:
+{
+    /*!re2c
+        (EscapeSequence | UniversalChar | any\[\r\n\\"])
+        {
+            goto extrawstringlit;
+        }
+
+        Newline
+        {
+            s->line += count_backslash_newlines(s, cursor) +1;
+            cursor.column = 1;
+            goto extrawstringlit;
+        }
+
+        ["] { BOOST_WAVE_RET(T_RAWSTRINGLIT); }
+    */
 }

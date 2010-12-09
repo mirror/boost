@@ -64,6 +64,28 @@ namespace util {
         }
         return newlines;
     }
+
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+    ///////////////////////////////////////////////////////////////////////////
+    //  This function returns the number of newlines in the given C++0x style 
+    //  raw string
+    template <typename TokenT>
+    int rawstring_count_newlines(TokenT const& token)
+    {
+        using namespace boost::wave;
+        int newlines = 0;
+        if (T_RAWSTRINGLIT == token_id(token)) {
+        typename TokenT::string_type const& value = token.get_value();
+        typename TokenT::string_type::size_type p = value.find_first_of("\n");
+
+            while (TokenT::string_type::npos != p) {
+                ++newlines;
+                p = value.find_first_of("\n", p+1);
+            } 
+        }
+        return newlines;
+    }
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////

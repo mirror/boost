@@ -192,6 +192,7 @@ lexer<IteratorT, PositionT, TokenT>::get(TokenT& result)
 
     case T_STRINGLIT:
     case T_CHARLIT:
+    case T_RAWSTRINGLIT:
     // test literal characters for validity (throws if invalid chars found)
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
@@ -218,7 +219,7 @@ lexer<IteratorT, PositionT, TokenT>::get(TokenT& result)
       }
 #endif
 
-    case T_LONGINTLIT:  // supported in C99 and long_long mode
+    case T_LONGINTLIT:  // supported in C++0x, C99 and long_long mode
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
         if (!boost::wave::need_long_long(language)) {

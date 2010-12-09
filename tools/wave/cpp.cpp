@@ -797,6 +797,13 @@ int error_count = 0;
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // enable C99 mode, if appropriate (implies variadics)
         if (vm.count("c99")) {
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+            if (vm.count("c++0x")) {
+                cerr << "wave: multiple language options specified: --c99 "
+                        "and --c++0x" << endl;
+                return -1;
+            }
+#endif
             ctx.set_language(
                 boost::wave::language_support(
                     boost::wave::support_c99 
@@ -818,6 +825,11 @@ int error_count = 0;
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
         if (vm.count("c++0x")) {
+            if (vm.count("c99")) {
+                cerr << "wave: multiple language options specified: --c99 "
+                        "and --c++0x" << endl;
+                return -1;
+            }
             ctx.set_language(
                 boost::wave::language_support(
                     boost::wave::support_cpp0x

@@ -298,6 +298,7 @@ enum token_id {
     T_NULLPTR      = TOKEN_FROM_ID(429, KeywordTokenType),
     T_STATICASSERT = TOKEN_FROM_ID(430, KeywordTokenType),
     T_THREADLOCAL  = TOKEN_FROM_ID(431, KeywordTokenType),
+    T_RAWSTRINGLIT = TOKEN_FROM_ID(432, StringLiteralTokenType),
 
     T_LAST_TOKEN_ID,
     T_LAST_TOKEN = ID_FROM_TOKEN(T_LAST_TOKEN_ID & ~PPTokenFlag),

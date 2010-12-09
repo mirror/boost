@@ -221,6 +221,7 @@ static char const *tok_names[] = {
     /* 429 */   "NULLPTR",
     /* 430 */   "STATIC_ASSERT",
     /* 431 */   "THREADLOCAL",
+    /* 432 */   "RAWSTRINGLIT",
     };
 
     // make sure, I have not forgotten any commas (as I did more than once)
@@ -422,6 +423,7 @@ static char const *tok_values[] = {
     /* 429 */   "nullptr",
     /* 430 */   "static_assert",
     /* 431 */   "threadlocal",
+    /* 432 */   "",   // extrawstringlit
     };   
      
     // make sure, I have not forgotten any commas (as I did more than once)
