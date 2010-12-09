@@ -36,12 +36,16 @@ namespace boost { namespace wave { namespace util
     template <typename String>
     inline boost::filesystem::path create_path(String const& p)
     {
+#if BOOST_FILESYSTEM_VERSION >= 3
+        return boost::filesystem::path(p);
+#else
         return boost::filesystem::path(p, boost::filesystem::native);
+#endif
     }
 
     inline std::string leaf(boost::filesystem::path const& p) 
     { 
-#if BOOST_VERSION >= 104600
+#if BOOST_FILESYSTEM_VERSION >= 3
         return p.leaf().string(); 
 #else
         return p.leaf(); 
@@ -60,7 +64,7 @@ namespace boost { namespace wave { namespace util
 
     inline std::string native_file_string(boost::filesystem::path const& p) 
     { 
-#if BOOST_VERSION >= 104600
+#if BOOST_FILESYSTEM_VERSION >= 3
         return p.string(); 
 #else
         return p.native_file_string(); 
@@ -70,7 +74,7 @@ namespace boost { namespace wave { namespace util
     inline boost::filesystem::path complete_path(
         boost::filesystem::path const& p)
     {
-#if BOOST_VERSION >= 104600 && BOOST_FILESYSTEM_VERSION >= 3
+#if BOOST_FILESYSTEM_VERSION >= 3
         return boost::filesystem3::complete(p, initial_path());
 #else
         return boost::filesystem::complete(p, initial_path());
@@ -80,7 +84,7 @@ namespace boost { namespace wave { namespace util
     inline boost::filesystem::path complete_path(
         boost::filesystem::path const& p, boost::filesystem::path const& base)
     {
-#if BOOST_VERSION >= 104600 && BOOST_FILESYSTEM_VERSION >= 3
+#if BOOST_FILESYSTEM_VERSION >= 3
         return boost::filesystem3::complete(p, base);
 #else
         return boost::filesystem::complete(p, base);
@@ -92,7 +96,7 @@ namespace boost { namespace wave { namespace util
 // interface wrappers if deprecated functions do not exist
     inline boost::filesystem::path initial_path()
     { 
-#if BOOST_VERSION >= 104600 && BOOST_FILESYSTEM_VERSION >= 3
+#if BOOST_FILESYSTEM_VERSION >= 3
         return boost::filesystem3::detail::initial_path();
 #else
         return boost::filesystem::initial_path<boost::filesystem::path>();
@@ -101,7 +105,7 @@ namespace boost { namespace wave { namespace util
 
     inline boost::filesystem::path current_path()
     { 
-#if BOOST_VERSION >= 104600 && BOOST_FILESYSTEM_VERSION >= 3
+#if BOOST_FILESYSTEM_VERSION >= 3
         return boost::filesystem3::current_path();
 #else
         return boost::filesystem::current_path<boost::filesystem::path>();
