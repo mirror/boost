@@ -76,7 +76,7 @@ void release_test()
     conn.disconnect();
 
     // earlier release shouldn't affect new connection
-    bs2::connection conn2 = sig.connect(&myslot);
+    conn2 = sig.connect(&myslot);
     scoped = conn2;
   }
   BOOST_CHECK(conn2.connected() == false);

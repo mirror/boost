@@ -32,10 +32,10 @@ public:
     enum wait_type { use_sleep_only, use_mutex, use_condition };
 
     execution_monitor(wait_type type, int secs)
-        : done(false), type(type), secs(secs) { }
+        : done(false), m_type(type), m_secs(secs) { }
     void start()
     {
-        if (type != use_sleep_only) {
+        if (m_type != use_sleep_only) {
             boost::mutex::scoped_lock lock(mutex); done = false;
         } else {
             done = false;
@@ -43,10 +43,10 @@ public:
     }
     void finish()
     {
-        if (type != use_sleep_only) {
+        if (m_type != use_sleep_only) {
             boost::mutex::scoped_lock lock(mutex);
             done = true;
-            if (type == use_condition)
+            if (m_type == use_condition)
                 cond.notify_one();
         } else {
             done = true;
@@ -54,12 +54,12 @@ public:
     }
     bool wait()
     {
-        boost::posix_time::time_duration timeout = boost::posix_time::seconds(secs);
-        if (type != use_condition)
+        boost::posix_time::time_duration timeout = boost::posix_time::seconds(m_secs);
+        if (m_type != use_condition)
             boost::this_thread::sleep(timeout);
-        if (type != use_sleep_only) {
+        if (m_type != use_sleep_only) {
             boost::mutex::scoped_lock lock(mutex);
-            while (type == use_condition && !done) {
+            while (m_type == use_condition && !done) {
                 if (!cond.timed_wait(lock, timeout))
                     break;
             }
@@ -72,8 +72,8 @@ private:
     boost::mutex mutex;
     boost::condition cond;
     bool done;
-    wait_type type;
-    int secs;
+    wait_type m_type;
+    int m_secs;
 };
 
 template <typename F>
@@ -81,25 +81,25 @@ class indirect_adapter
 {
 public:
     indirect_adapter(F func, execution_monitor& monitor)
-        : func(func), monitor(monitor) { }
+        : m_func(func), m_monitor(monitor) { }
     void operator()() const
     {
         try
         {
-            boost::thread thrd(func);
+            boost::thread thrd(m_func);
             thrd.join();
         }
         catch (...)
         {
-            monitor.finish();
+            m_monitor.finish();
             throw;
         }
-        monitor.finish();
+        m_monitor.finish();
     }
 
 private:
-    F func;
-    execution_monitor& monitor;
+    F m_func;
+    execution_monitor& m_monitor;
     void operator=(indirect_adapter&);
 };
 
