@@ -424,6 +424,9 @@ namespace boost { namespace proto
     template<typename T, typename Void = void>
     struct is_domain;
 
+    template<typename SubDomain, typename SuperDomain>
+    struct is_sub_domain_of;
+
     template<typename Expr>
     struct tag_of;
 

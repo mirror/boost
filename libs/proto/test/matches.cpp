@@ -102,6 +102,19 @@ template<typename T>
 struct a_template
 {};
 
+template<typename Expr>
+struct my_expr;
+
+struct my_domain
+  : proto::domain<proto::pod_generator<my_expr> >
+{};
+
+template<typename Expr>
+struct my_expr
+{
+    BOOST_PROTO_BASIC_EXTENDS(Expr, my_expr, my_domain)
+};
+
 void test_matches()
 {
     assert_matches< _ >( lit(1) );
@@ -281,6 +294,12 @@ void test_matches()
     {
         a_template<int[3]> a;
         assert_matches< proto::terminal< a_template<_> > >( lit(a) );
+    }
+
+    // Test that the actual derived expression type makes it through to proto::if_
+    {
+        my_expr<proto::terminal<int>::type> e = {{1}};
+        assert_matches< proto::if_<boost::is_same<domain_of<_>, my_domain>()> >( e );
     }
 }
 
