@@ -25,6 +25,10 @@ namespace boost { namespace msm { namespace back
         static void check_orthogonality()
         {
         }
+        template <class Fsm>
+        static void check_unreachable_states()
+        {
+        }
     };
 
 } } }//boost::msm::back

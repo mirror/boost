@@ -30,6 +30,16 @@ namespace boost { namespace msm { namespace back
                                        ::boost::msm::back::check_regions_orthogonality<Fsm>::cumulated_states_in_regions_raw );
 
         }
+        // checks that all states are reachable or created using the explicit_creation typedef
+        // using the mpl_graph library (part of metagraph)
+        template <class Fsm>
+        static void check_unreachable_states()
+        {
+            BOOST_MPL_ASSERT_RELATION( ::boost::msm::back::check_no_unreachable_state<Fsm>::states_in_fsm,
+                                       ==, 
+                                       ::boost::msm::back::check_no_unreachable_state<Fsm>::cumulated_states_in_regions );
+
+        }
     };
 
 } } }//boost::msm::back

@@ -809,6 +809,24 @@ struct check_regions_orthogonality
     enum {cumulated_states_in_regions_raw = ::boost::mpl::size<one_big_states_set>::value};
 };
 
+template <class Fsm>
+struct check_no_unreachable_state
+{
+    typedef typename check_regions_orthogonality<Fsm>::one_big_states_set states_in_regions;
+
+    typedef typename set_insert_range<
+        states_in_regions, 
+        typename ::boost::mpl::eval_if<
+            typename has_explicit_creation<Fsm>::type,
+            get_explicit_creation<Fsm>,
+            ::boost::mpl::vector0<>
+        >::type
+    >::type with_explicit_creation;
+
+    enum {states_in_fsm = ::boost::mpl::size< typename Fsm::substate_list >::value};
+    enum {cumulated_states_in_regions = ::boost::mpl::size< with_explicit_creation >::value};
+};
+
 // helper to find out if a SM has an active exit state and is therefore waiting for exiting
 template <class StateType,class OwnerFct,class FSM>
 inline

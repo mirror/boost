@@ -2403,6 +2403,8 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     {
         // checks that regions are truly orthogonal
         FsmCheckPolicy::template check_orthogonality<library_sm>();
+        // checks that all states are reachable
+        FsmCheckPolicy::template check_unreachable_states<library_sm>();
 
         BOOST_STATIC_CONSTANT(int, max_state = (mpl::size<state_list>::value));
         // allocate the place without reallocation
