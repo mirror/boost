@@ -463,7 +463,6 @@ integer_suffix:
 
         IntegerSuffix?
             { BOOST_WAVE_RET(T_INTLIT); }
-
     */
     }
     else {
@@ -473,7 +472,6 @@ integer_suffix:
 
         IntegerSuffix?
             { BOOST_WAVE_RET(T_INTLIT); }
-
     */
     }
 }
