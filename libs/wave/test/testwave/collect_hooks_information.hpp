@@ -85,12 +85,13 @@ inline String repr(String const& value)
 
 #if defined(BOOST_WINDOWS)
 template <typename String>
-inline String replace_slashes(String value)
+inline String replace_slashes(String value, char const* lookfor = "\\",
+    char replace_with = '/')
 {
-    typename String::size_type p = value.find_first_of("\\");
+    typename String::size_type p = value.find_first_of(lookfor);
     while (p != value.npos) {
-        value[p] = '/';
-        p = value.find_first_of("\\", p+1);
+        value[p] = replace_with;
+        p = value.find_first_of(lookfor, p+1);
     }
     return value;
 }
@@ -279,7 +280,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     template <typename Context>
     bool 
-    found_include_directive(Context const& ctx, std::string const& filename, 
+    found_include_directive(Context const& ctx, std::string filename, 
         bool include_next) 
     {
         BOOST_WAVETEST_OSSTREAM strm;

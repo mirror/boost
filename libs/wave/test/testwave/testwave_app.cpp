@@ -211,9 +211,17 @@ testwave_app::got_expected_result(std::string const& filename,
                             boost::wave::util::create_path(base);
                         full_result += expected.substr(pos, pos1-pos);
                         if ('P' == expected[pos1+1]) {
-                            full_result += escape_lit(
+#if defined(BOOST_WINDOWS)
+                            std::string p = replace_slashes(
+                                boost::wave::util::native_file_string(
+                                    boost::wave::util::normalize(fullpath)),
+                                "/", '\\');
+#else
+                            std::string p (
                                 boost::wave::util::native_file_string(
                                     boost::wave::util::normalize(fullpath)));
+#endif
+                            full_result += escape_lit(p);
                         }
                         else {
 #if defined(BOOST_WINDOWS)
