@@ -10,6 +10,7 @@
 #include <boost/mpl/min_max.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/proto/transform.hpp>
+#include <boost/proto/functional/fusion.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/fusion/include/cons.hpp>
 #include <boost/fusion/include/tuple.hpp>

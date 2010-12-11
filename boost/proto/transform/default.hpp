@@ -81,7 +81,7 @@
                                                                                                         \
             template<typename Grammar>                                                                  \
             struct default_case<Grammar, tag::TAG>                                                      \
-            : when<unary_expr<tag::TAG, Grammar>, BOOST_PP_CAT(default_, TAG)<Grammar> >                \
+              : when<unary_expr<tag::TAG, Grammar>, BOOST_PP_CAT(default_, TAG)<Grammar> >              \
             {};                                                                                         \
             /**/
 
