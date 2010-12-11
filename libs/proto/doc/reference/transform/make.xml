@@ -182,6 +182,16 @@ struct Foo :
               <para>
                 <itemizedlist>
                   <listitem>
+                    <para>
+                      If <computeroutput><classname>proto::is_transform</classname>&lt;O&gt;::value</computeroutput> is
+                      <computeroutput>true</computeroutput>, then let the result type be
+                      <computeroutput>
+                        boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>_</classname>, O&gt;(Expr, State, Data)&gt;::type
+                      </computeroutput>.
+                      Note that a substitution took place.
+                    </para>
+                  </listitem>
+                  <listitem>
                     If <computeroutput>O</computeroutput> is a template like
                     <computeroutput><classname>proto::noinvoke</classname>&lt;S&lt;X<subscript>0</subscript>,...X<subscript>n</subscript>&gt; &gt;</computeroutput>,
                     then the result type is calculated as follows:
@@ -233,6 +243,18 @@ struct Foo :
                         <para>
                           If any substitutions took place in the above step and
                           <computeroutput>
+                            <classname>is_transform</classname>&lt;S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt; &gt;::value
+                          </computeroutput> is 
+                          <computeroutput>true</computeroutput>, the result type is
+                          <computeroutput>
+                            boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>_</classname>, S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt; &gt;(Expr, State, Data)&gt;::type
+                          </computeroutput>.
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Otherwise, If any substitutions took place in the above step and
+                          <computeroutput>
                             S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt;
                           </computeroutput> has a nested
                           <computeroutput>type</computeroutput> typedef, the result type is
@@ -250,16 +272,6 @@ struct Foo :
                         </para>
                       </listitem>
                     </itemizedlist>
-                  </listitem>
-                  <listitem>
-                    <para>
-                      If <computeroutput><classname>proto::is_transform</classname>&lt;O&gt;::value</computeroutput> is
-                      <computeroutput>true</computeroutput>, then let the result type be
-                      <computeroutput>
-                        boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>_</classname>, O&gt;(Expr, State, Data)&gt;::type
-                      </computeroutput>.
-                      Note that a substitution took place.
-                    </para>
                   </listitem>
                   <listitem>
                     Otherwise, the result type is <computeroutput>O</computeroutput>, and note that no
