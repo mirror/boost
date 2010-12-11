@@ -370,6 +370,7 @@
 
             #undef TMP0
             #undef TMP1
+            #undef TMP2
             #endif
 
             template<
