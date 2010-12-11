@@ -119,4 +119,8 @@
   it's opt-in for now. This, or something like it, will become the
   default in a future version.
 
+[h2 Boost 1.46.0]
+
+* Avoid warning due with gcc's `-Wconversion` flag.
+
 [endsect]

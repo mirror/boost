@@ -113,7 +113,8 @@ void poor_quality_tests(T*)
     if(T(1) != T(2))
         BOOST_TEST(x1(T(1)) !=  x2(T(2)));
     if((limits::max)() != (limits::max)() - 1)
-        BOOST_TEST(x1((limits::max)()) != x2((limits::max)() - 1));
+        BOOST_TEST(x1(static_cast<T>((limits::max)()))
+        	!= x2(static_cast<T>((limits::max)() - 1)));
 }
 
 void bool_test()

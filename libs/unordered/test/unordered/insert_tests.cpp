@@ -52,7 +52,7 @@ void unique_insert_tests1(X*,
 
         tracker.compare_key(x, *it);
 
-        if(x.size() < b * old_bucket_count)
+        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
             BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
@@ -83,7 +83,7 @@ void equivalent_insert_tests1(X*,
 
         tracker.compare_key(x, *it);
 
-        if(x.size() < b * old_bucket_count)
+        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
             BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
@@ -118,7 +118,7 @@ void insert_tests2(X*,
             BOOST_TEST(*r1 == *r2);
             tracker.compare_key(x, *it);
 
-            if(x.size() < b * old_bucket_count)
+            if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
                 BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
@@ -145,7 +145,7 @@ void insert_tests2(X*,
             BOOST_TEST(*r1 == *r2);
             tracker.compare_key(x, *it);
 
-            if(x.size() < b * old_bucket_count)
+            if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
                 BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
@@ -172,7 +172,7 @@ void insert_tests2(X*,
             BOOST_TEST(*pos == *r2);
             tracker.compare_key(x, *it);
 
-            if(x.size() < b * old_bucket_count)
+	        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
                 BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
@@ -197,7 +197,7 @@ void insert_tests2(X*,
             tracker.insert(*it);
             tracker.compare_key(x, *it);
 
-            if(x.size() < b * old_bucket_count)
+	        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
                 BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
@@ -275,7 +275,7 @@ void unique_emplace_tests1(X*,
 
         tracker.compare_key(x, *it);
 
-        if(x.size() < b * old_bucket_count)
+        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
             BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
@@ -306,7 +306,7 @@ void equivalent_emplace_tests1(X*,
 
         tracker.compare_key(x, *it);
 
-        if(x.size() < b * old_bucket_count)
+        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
             BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
@@ -335,7 +335,7 @@ void map_tests(X*, test::random_generator generator = test::default_generator)
 
         tracker.compare_key(x, *it);
 
-        if(x.size() < b * old_bucket_count)
+        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
             BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 

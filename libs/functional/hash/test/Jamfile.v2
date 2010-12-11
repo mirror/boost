@@ -11,8 +11,8 @@ project hash-tests
         <warnings>all
         <toolset>intel:<warnings>on
         <toolset>intel:<cxxflags>-strict-ansi
-        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
-        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
+        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
+        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
         <toolset>msvc:<warnings-as-errors>on
         #<toolset>gcc:<warnings-as-errors>on
         #<toolset>darwin:<warnings-as-errors>on

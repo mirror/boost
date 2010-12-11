@@ -9,8 +9,8 @@ project unordered-test/unordered
     : requirements
         <warnings>all
         <toolset>intel:<warnings>on
-        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
-        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
+        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
+        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
         <toolset>gcc:<define>_GLIBCXX_DEBUG
         #<toolset>darwin:<define>_GLIBCXX_DEBUG
         <toolset>msvc:<warnings-as-errors>on
