@@ -230,7 +230,7 @@ namespace boost
 
             difference_type size() const
             {
-                return std::distance(m_End, m_Begin);
+                return std::distance(m_Begin, m_End);
             }
 
             bool empty() const
