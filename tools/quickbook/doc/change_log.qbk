@@ -170,6 +170,10 @@ the way a document is interpreted or would break existing documentation.
   * XML escape documentation fields, with escapes to allow encoding unicode
     in ASCII.
 
+[heading Version 1.5.4 - Boost 1.46.0]
+
+* Add support for `lang` attribute in documentation info.
+
 [endsect] [/releases]
 
 [endsect] [/Change log]
