@@ -51,12 +51,16 @@ struct CalculatorGrammar
 // is not used, is mpl::void_.
 template<typename Expr>
 struct calculator_arity
-  : boost::result_of<CalculatorGrammar(Expr, mpl::int_<0>, mpl::void_)>
+  : boost::result_of<CalculatorGrammar(Expr)>
 {};
 
-// For expressions in the calculator domain, operator ()
-// will be special; it will evaluate the expression.
-struct calculator_domain;
+template<typename Expr>
+struct calculator_expression;
+
+// Tell proto how to generate expressions in the calculator_domain
+struct calculator_domain
+  : proto::domain<proto::generator<calculator_expression> >
+{};
 
 // Define a calculator context, for evaluating arithmetic expressions
 // (This is as before, in calc1.cpp and calc2.cpp)
@@ -124,11 +128,6 @@ struct calculator_expression
         return proto::eval(*this, ctx);
     }
 };
-
-// Tell proto how to generate expressions in the calculator_domain
-struct calculator_domain
-  : proto::domain<proto::generator<calculator_expression> >
-{};
 
 // Define some placeholders (notice they're wrapped in calculator_expression<>)
 calculator_expression<proto::terminal< placeholder< mpl::int_<1> > >::type> const _1;
