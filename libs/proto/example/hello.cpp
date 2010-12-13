@@ -7,6 +7,7 @@
 #include <iostream>
 #include <boost/proto/core.hpp>
 #include <boost/proto/context.hpp>
+// This #include is only needed for compilers that use typeof emulation:
 #include <boost/typeof/std/ostream.hpp>
 namespace proto = boost::proto;
 

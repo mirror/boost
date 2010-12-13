@@ -80,16 +80,15 @@ struct future_expr
   : proto::extends<E, future_expr<E>, future_dom>
 {
     explicit future_expr(E const &e)
-      : proto::extends<E, future_expr<E>, future_dom>(e)
+      : future_expr::proto_extends(e)
     {}
 
     typename fusion::result_of::as_vector<
-        typename boost::result_of<FutureGroup(E,int,int)>::type
+        typename boost::result_of<FutureGroup(E)>::type
     >::type
     get() const
     {
-        int i = 0;
-        return fusion::as_vector(FutureGroup()(*this, i, i));
+        return fusion::as_vector(FutureGroup()(*this));
     }
 };
 
@@ -100,9 +99,7 @@ struct future
   : future_expr<typename proto::terminal<T>::type>
 {
     future(T const &t = T())
-      : future_expr<typename proto::terminal<T>::type>(
-            proto::terminal<T>::type::make(t)
-        )
+      : future::proto_derived_expr(future::proto_base_expr::make(t))
     {}
 
     T get() const

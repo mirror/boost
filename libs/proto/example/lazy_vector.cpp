@@ -21,6 +21,9 @@ namespace mpl = boost::mpl;
 namespace proto = boost::proto;
 using proto::_;
 
+template<typename Expr>
+struct lazy_vector_expr;
+
 // This grammar describes which lazy vector expressions
 // are allowed; namely, vector terminals and addition
 // and subtraction of lazy vector expressions.
@@ -32,9 +35,12 @@ struct LazyVectorGrammar
     >
 {};
 
-// Expressions in the lazy vector domain must conform
-// to the lazy vector grammar
-struct lazy_vector_domain;
+// Tell proto that in the lazy_vector_domain, all
+// expressions should be wrapped in laxy_vector_expr<>
+// and must conform to the lazy vector grammar.
+struct lazy_vector_domain
+  : proto::domain<proto::generator<lazy_vector_expr>, LazyVectorGrammar>
+{};
 
 // Here is an evaluation context that indexes into a lazy vector
 // expression, and combines the result.
@@ -72,10 +78,8 @@ template<typename Expr>
 struct lazy_vector_expr
   : proto::extends<Expr, lazy_vector_expr<Expr>, lazy_vector_domain>
 {
-    typedef proto::extends<Expr, lazy_vector_expr<Expr>, lazy_vector_domain> base_type;
-
     lazy_vector_expr( Expr const & expr = Expr() )
-      : base_type( expr )
+      : lazy_vector_expr::proto_extends( expr )
     {}
 
     // Use the lazy_subscript_context<> to implement subscripting
@@ -114,12 +118,6 @@ struct lazy_vector
         return *this;
     }
 };
-
-// Tell proto that in the lazy_vector_domain, all
-// expressions should be wrapped in laxy_vector_expr<>
-struct lazy_vector_domain
-  : proto::domain<proto::generator<lazy_vector_expr>, LazyVectorGrammar>
-{};
 
 int main()
 {

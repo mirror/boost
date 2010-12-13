@@ -16,12 +16,16 @@ namespace mpl = boost::mpl;
 namespace proto = boost::proto;
 using proto::_;
 
+template<typename Expr>
+struct calculator_expression;
+
+// Tell proto how to generate expressions in the calculator_domain
+struct calculator_domain
+  : proto::domain<proto::generator<calculator_expression> >
+{};
+
 // Will be used to define the placeholders _1 and _2
 template<int I> struct placeholder {};
-
-// For expressions in the calculator domain, operator ()
-// will be special; it will evaluate the expression.
-struct calculator_domain;
 
 // Define a calculator context, for evaluating arithmetic expressions
 // (This is as before, in calc1.cpp)
@@ -54,12 +58,8 @@ template<typename Expr>
 struct calculator_expression
   : proto::extends<Expr, calculator_expression<Expr>, calculator_domain>
 {
-    typedef
-        proto::extends<Expr, calculator_expression<Expr>, calculator_domain>
-    base_type;
-
     explicit calculator_expression(Expr const &expr = Expr())
-      : base_type(expr)
+      : calculator_expression::proto_extends(expr)
     {}
 
     BOOST_PROTO_EXTENDS_USING_ASSIGN(calculator_expression)
@@ -83,11 +83,6 @@ struct calculator_expression
         return proto::eval(*this, ctx);
     }
 };
-
-// Tell proto how to generate expressions in the calculator_domain
-struct calculator_domain
-  : proto::domain<proto::generator<calculator_expression> >
-{};
 
 // Define some placeholders (notice they're wrapped in calculator_expression<>)
 calculator_expression<proto::terminal< placeholder< 1 > >::type> const _1;
