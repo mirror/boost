@@ -243,18 +243,6 @@ struct Foo :
                         <para>
                           If any substitutions took place in the above step and
                           <computeroutput>
-                            <classname>is_transform</classname>&lt;S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt; &gt;::value
-                          </computeroutput> is 
-                          <computeroutput>true</computeroutput>, the result type is
-                          <computeroutput>
-                            boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>_</classname>, S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt; &gt;(Expr, State, Data)&gt;::type
-                          </computeroutput>.
-                        </para>
-                      </listitem>
-                      <listitem>
-                        <para>
-                          Otherwise, If any substitutions took place in the above step and
-                          <computeroutput>
                             S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt;
                           </computeroutput> has a nested
                           <computeroutput>type</computeroutput> typedef, the result type is

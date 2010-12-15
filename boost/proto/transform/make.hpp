@@ -82,7 +82,7 @@
             template<
                 typename T
               , typename Expr, typename State, typename Data
-              , bool Applied, bool IsTransform = is_transform<T>::value
+              , bool Applied
             >
             struct nested_type_if
             {
@@ -90,15 +90,8 @@
                 static bool const applied = false;
             };
 
-            template<typename T, typename Expr, typename State, typename Data, bool Applied>
-            struct nested_type_if<T, Expr, State, Data, Applied, true>
-              : uncvref<typename T::template impl<Expr, State, Data>::result_type>
-            {
-                static bool const applied = true;
-            };
-
             template<typename T, typename Expr, typename State, typename Data>
-            struct nested_type_if<T, Expr, State, Data, true, false>
+            struct nested_type_if<T, Expr, State, Data, true>
               : nested_type<T>
             {
                 static bool const applied = true;
