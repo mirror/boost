@@ -224,14 +224,14 @@ private:
         visitors                                                      m_state_visitors;
     };
 
-    template <class StateType,class Enable=void>
+    template <class StateType,class Enable=int>
     struct deferred_msg_queue_helper 
     {
     };
     template <class StateType>
     struct deferred_msg_queue_helper<StateType,
         typename ::boost::enable_if< 
-            typename ::boost::msm::back::has_fsm_deferred_events<StateType>::type >::type> 
+            typename ::boost::msm::back::has_fsm_deferred_events<StateType>::type,int >::type> 
     {
     public:
         deferred_msg_queue_helper():m_deferred_events_queue(){}
