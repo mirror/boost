@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class template closed_interval</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="../../index.html" title="Chapter 1. Boost.Icl">
+<link rel="up" href="../../interval_container_library_reference.html#header.boost.icl.closed_interval.hpp" title="Header &lt;boost/icl/closed_interval.hpp&gt;">
+<link rel="prev" href="../../interval_container_library_reference.html#header.boost.icl.closed_interval.hpp" title="Header &lt;boost/icl/closed_interval.hpp&gt;">
+<link rel="next" href="interval_traits_icl_closed_interval__DomainT__Compare___id657928.html" title="Struct template interval_traits&lt;icl::closed_interval&lt; DomainT, Compare &gt;&gt;">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../interval_container_library_reference.html#header.boost.icl.closed_interval.hpp"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../interval_container_library_reference.html#header.boost.icl.closed_interval.hpp"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="interval_traits_icl_closed_interval__DomainT__Compare___id657928.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="boost.icl.closed_interval"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class template closed_interval</span></h2>
+<p>boost::icl::closed_interval</p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="bold"><strong>template</strong></span>&lt;<span class="bold"><strong>class</strong></span> DomainT , 
+         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, DomainT)&gt; 
+<span class="bold"><strong>class</strong></span> <a class="link" href="closed_interval.html" title="Class template closed_interval">closed_interval</a> {
+<span class="bold"><strong>public</strong></span>:
+  <span class="emphasis"><em>// types</em></span>
+  <span class="bold"><strong>typedef</strong></span> <a class="link" href="closed_interval.html" title="Class template closed_interval">closed_interval</a>&lt; DomainT, Compare &gt; <a name="boost.icl.closed_interval.type"></a>type;       
+  <span class="bold"><strong>typedef</strong></span> DomainT                             <a name="boost.icl.closed_interval.domain_type"></a>domain_type;
+
+  <span class="emphasis"><em>// <a class="link" href="closed_interval.html#boost.icl.closed_intervalconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a class="link" href="closed_interval.html#id657882-bb">closed_interval</a>();
+  <a class="link" href="closed_interval.html#id657890-bb">closed_interval</a>(<span class="bold"><strong>const</strong></span> DomainT &amp;);
+  <a class="link" href="closed_interval.html#id657903-bb">closed_interval</a>(<span class="bold"><strong>const</strong></span> DomainT &amp;, <span class="bold"><strong>const</strong></span> DomainT &amp;);
+
+  <span class="emphasis"><em>// <a class="link" href="closed_interval.html#id657855-bb">public member functions</a></em></span>
+  <span class="type">DomainT</span> <a class="link" href="closed_interval.html#id657858-bb">lower</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">DomainT</span> <a class="link" href="closed_interval.html#id657864-bb">upper</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">DomainT</span> <a class="link" href="closed_interval.html#id657870-bb">first</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">DomainT</span> <a class="link" href="closed_interval.html#id657876-bb">last</a>() <span class="bold"><strong>const</strong></span>;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id931854"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id931857"></a><h3>
+<a name="boost.icl.closed_intervalconstruct-copy-destruct"></a><code class="computeroutput">closed_interval</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><a name="id657882-bb"></a>closed_interval();</pre>
+<p>Default constructor; yields an empty interval <code class="computeroutput">[0,0)</code>. </p>
+</li>
+<li>
+<pre class="literallayout"><a name="id657890-bb"></a>closed_interval(<span class="bold"><strong>const</strong></span> DomainT &amp; val);</pre>
+<p>Constructor for a closed singleton interval <code class="computeroutput">[val,val]</code> </p>
+</li>
+<li>
+<pre class="literallayout"><a name="id657903-bb"></a>closed_interval(<span class="bold"><strong>const</strong></span> DomainT &amp; low, <span class="bold"><strong>const</strong></span> DomainT &amp; up);</pre>
+<p>Interval from <code class="computeroutput">low</code> to <code class="computeroutput">up</code> with bounds <code class="computeroutput">bounds</code> </p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id931945"></a><h3>
+<a name="id657855-bb"></a><code class="computeroutput">closed_interval</code> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><span class="type">DomainT</span> <a name="id657858-bb"></a>lower() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">DomainT</span> <a name="id657864-bb"></a>upper() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">DomainT</span> <a name="id657870-bb"></a>first() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">DomainT</span> <a name="id657876-bb"></a>last() <span class="bold"><strong>const</strong></span>;</pre></li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright © 2007 -2010 Joachim Faulhaber<br>Copyright © 1999 -2006 Cortex Software GmbH<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../interval_container_library_reference.html#header.boost.icl.closed_interval.hpp"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../interval_container_library_reference.html#header.boost.icl.closed_interval.hpp"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="interval_traits_icl_closed_interval__DomainT__Compare___id657928.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

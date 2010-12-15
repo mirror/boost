@@ -1,0 +1,293 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Class template interval_base_set</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="../../index.html" title="Chapter 1. Boost.Icl">
+<link rel="up" href="../../header/boost/icl/interval_base_set/hpp.html" title="Header &lt;boost/icl/interval_base_set.hpp&gt;">
+<link rel="prev" href="../../header/boost/icl/interval_base_set/hpp.html" title="Header &lt;boost/icl/interval_base_set.hpp&gt;">
+<link rel="next" href="is_set_icl_interval_base_set__SubType__DomainT__Compare__Interval__Alloc___id667726.html" title="Struct template is_set&lt;icl::interval_base_set&lt; SubType, DomainT, Compare, Interval, Alloc &gt;&gt;">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../header/boost/icl/interval_base_set/hpp.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../header/boost/icl/interval_base_set/hpp.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="is_set_icl_interval_base_set__SubType__DomainT__Compare__Interval__Alloc___id667726.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry" lang="en">
+<a name="boost.icl.interval_base_set"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class template interval_base_set</span></h2>
+<p>boost::icl::interval_base_set &#8212; Implements a set as a set of intervals (base class). </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="bold"><strong>template</strong></span>&lt;<span class="bold"><strong>typename</strong></span> SubType , <span class="bold"><strong>typename</strong></span> DomainT , 
+         ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, DomainT), 
+         ICL_INTERVAL(ICL_COMPARE) Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, DomainT, Compare), 
+         ICL_ALLOC Alloc = std::allocator&gt; 
+<span class="bold"><strong>class</strong></span> <a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a> {
+<span class="bold"><strong>public</strong></span>:
+  <span class="emphasis"><em>// types</em></span>
+  <span class="bold"><strong>typedef</strong></span> <a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a>&lt; SubType, DomainT, Compare, Interval, Alloc &gt;   <a name="boost.icl.interval_base_set.type"></a>type;                          
+  <span class="bold"><strong>typedef</strong></span> SubType                                                           <a name="boost.icl.interval_base_set.sub_type"></a>sub_type;                        <span class="emphasis"><em>// The designated derived or sub_type of this base class. </em></span>
+  <span class="bold"><strong>typedef</strong></span> <a class="link" href="interval_base_set.html#boost.icl.interval_base_set.type">type</a>                                                              <a name="boost.icl.interval_base_set.overloadable_type"></a>overloadable_type;               <span class="emphasis"><em>// Auxilliary type for overloadresolution. </em></span>
+  <span class="bold"><strong>typedef</strong></span> DomainT                                                           <a name="boost.icl.interval_base_set.domain_type"></a>domain_type;                     <span class="emphasis"><em>// The domain type of the set. </em></span>
+  <span class="bold"><strong>typedef</strong></span> DomainT                                                           <a name="boost.icl.interval_base_set.codomain_type"></a>codomain_type;                   <span class="emphasis"><em>// The codomaintype is the same as domain_type. </em></span>
+  <span class="bold"><strong>typedef</strong></span> DomainT                                                           <a name="boost.icl.interval_base_set.element_type"></a>element_type;                    <span class="emphasis"><em>// The element type of the set. </em></span>
+  <span class="bold"><strong>typedef</strong></span> interval_type                                                     <a name="boost.icl.interval_base_set.segment_type"></a>segment_type;                    <span class="emphasis"><em>// The segment type of the set. </em></span>
+  <span class="bold"><strong>typedef</strong></span> difference_type_of&lt; domain_type &gt;::<a class="link" href="interval_base_set.html#boost.icl.interval_base_set.type">type</a>                           <a name="boost.icl.interval_base_set.difference_type"></a>difference_type;                 <span class="emphasis"><em>// The difference type of an interval which is sometimes different form the data_type. </em></span>
+  <span class="bold"><strong>typedef</strong></span> size_type_of&lt; domain_type &gt;::<a class="link" href="interval_base_set.html#boost.icl.interval_base_set.type">type</a>                                 <a name="boost.icl.interval_base_set.size_type"></a>size_type;                       <span class="emphasis"><em>// The size type of an interval which is mostly std::size_t. </em></span>
+  <span class="bold"><strong>typedef</strong></span> exclusive_less_than&lt; interval_type &gt;                              <a name="boost.icl.interval_base_set.interval_compare"></a>interval_compare;                <span class="emphasis"><em>// Comparison functor for intervals. </em></span>
+  <span class="bold"><strong>typedef</strong></span> exclusive_less_than&lt; interval_type &gt;                              <a name="boost.icl.interval_base_set.key_compare"></a>key_compare;                     <span class="emphasis"><em>// Comparison functor for keys. </em></span>
+  <span class="bold"><strong>typedef</strong></span> ICL_IMPL_SPACE::set&lt; DomainT, domain_compare, Alloc&lt; DomainT &gt; &gt;  <a name="boost.icl.interval_base_set.atomized_type"></a>atomized_type;                   <span class="emphasis"><em>// The atomized type representing the corresponding container of elements. </em></span>
+  <span class="bold"><strong>typedef</strong></span> Alloc&lt; interval_type &gt;                                            <a name="boost.icl.interval_base_set.allocator_type"></a>allocator_type;                  <span class="emphasis"><em>// The allocator type of the set. </em></span>
+  <span class="bold"><strong>typedef</strong></span> Alloc&lt; DomainT &gt;                                                  <a name="boost.icl.interval_base_set.domain_allocator_type"></a>domain_allocator_type;           <span class="emphasis"><em>// allocator type of the corresponding element set </em></span>
+  <span class="bold"><strong>typedef</strong></span> ICL_IMPL_SPACE::set&lt; interval_type, key_compare, allocator_type &gt; <a name="boost.icl.interval_base_set.ImplSetT"></a>ImplSetT;                        <span class="emphasis"><em>// Container type for the implementation. </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::key_type                                                <a name="boost.icl.interval_base_set.key_type"></a>key_type;                        <span class="emphasis"><em>// key type of the implementing container </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::key_type                                                <a name="boost.icl.interval_base_set.data_type"></a>data_type;                       <span class="emphasis"><em>// data type of the implementing container </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::value_type                                              <a name="boost.icl.interval_base_set.value_type"></a>value_type;                      <span class="emphasis"><em>// value type of the implementing container </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::pointer                                                 <a name="boost.icl.interval_base_set.pointer"></a>pointer;                         <span class="emphasis"><em>// pointer type </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::const_pointer                                           <a name="boost.icl.interval_base_set.const_pointer"></a>const_pointer;                   <span class="emphasis"><em>// const pointer type </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::reference                                               <a name="boost.icl.interval_base_set.reference"></a>reference;                       <span class="emphasis"><em>// reference type </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::const_reference                                         <a name="boost.icl.interval_base_set.const_reference"></a>const_reference;                 <span class="emphasis"><em>// const reference type </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::iterator                                                <a name="boost.icl.interval_base_set.iterator"></a>iterator;                        <span class="emphasis"><em>// iterator for iteration over intervals </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::const_iterator                                          <a name="boost.icl.interval_base_set.const_iterator"></a>const_iterator;                  <span class="emphasis"><em>// const_iterator for iteration over intervals </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::reverse_iterator                                        <a name="boost.icl.interval_base_set.reverse_iterator"></a>reverse_iterator;                <span class="emphasis"><em>// iterator for reverse iteration over intervals </em></span>
+  <span class="bold"><strong>typedef</strong></span> ImplSetT::const_reverse_iterator                                  <a name="boost.icl.interval_base_set.const_reverse_iterator"></a>const_reverse_iterator;          <span class="emphasis"><em>// const_iterator for iteration over intervals </em></span>
+  <span class="bold"><strong>typedef</strong></span> boost::icl::element_iterator&lt; iterator &gt;                          <a name="boost.icl.interval_base_set.element_iterator"></a>element_iterator;                <span class="emphasis"><em>// element iterator: Depreciated, see documentation. </em></span>
+  <span class="bold"><strong>typedef</strong></span> boost::icl::element_iterator&lt; const_iterator &gt;                    <a name="boost.icl.interval_base_set.element_const_iterator"></a>element_const_iterator;          <span class="emphasis"><em>// element const iterator: Depreciated, see documentation. </em></span>
+  <span class="bold"><strong>typedef</strong></span> boost::icl::element_iterator&lt; reverse_iterator &gt;                  <a name="boost.icl.interval_base_set.element_reverse_iterator"></a>element_reverse_iterator;        <span class="emphasis"><em>// element reverse iterator: Depreciated, see documentation. </em></span>
+  <span class="bold"><strong>typedef</strong></span> boost::icl::element_iterator&lt; const_reverse_iterator &gt;            <a name="boost.icl.interval_base_set.element_const_reverse_iterator"></a>element_const_reverse_iterator;  <span class="emphasis"><em>// element const reverse iterator: Depreciated, see documentation. </em></span>
+
+  <span class="emphasis"><em>// <a class="link" href="interval_base_set.html#boost.icl.interval_base_setconstruct-copy-destruct">construct/copy/destruct</a></em></span>
+  <a class="link" href="interval_base_set.html#id667585-bb">interval_base_set</a>();
+  <a class="link" href="interval_base_set.html#id667589-bb">interval_base_set</a>(<span class="bold"><strong>const</strong></span> <a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a> &amp;);
+  interval_base_set&amp; <a class="link" href="interval_base_set.html#id667603-bb"><span class="bold"><strong>operator</strong></span>=</a>(<span class="bold"><strong>const</strong></span> <a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a> &amp;);
+
+  <span class="emphasis"><em>// <a class="link" href="interval_base_set.html#id667024-bb">public member functions</a></em></span>
+  <span class="type"><span class="bold"><strong>typedef</strong></span></span> <a class="link" href="interval_base_set.html#id667027-bb">ICL_INTERVAL_TYPE</a>(Interval, DomainT, Compare) ;
+  <span class="type"><span class="bold"><strong>typedef</strong></span></span> <a class="link" href="interval_base_set.html#id667049-bb">ICL_COMPARE_DOMAIN</a>(Compare, DomainT) ;
+  <span class="type"><span class="bold"><strong>typedef</strong></span></span> <a class="link" href="interval_base_set.html#id667067-bb">ICL_COMPARE_DOMAIN</a>(Compare, segment_type) ;
+  <span class="type"></span> <a class="link" href="interval_base_set.html#id667083-bb">BOOST_STATIC_CONSTANT</a>(<span class="bold"><strong>int</strong></span>, fineness = 0) ;
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667100-bb">swap</a>(<a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a> &amp;) ;
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667117-bb">clear</a>() ;
+  <span class="type"><span class="bold"><strong>bool</strong></span></span> <a class="link" href="interval_base_set.html#id667126-bb">empty</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">size_type</span> <a class="link" href="interval_base_set.html#id667136-bb">size</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">std::size_t</span> <a class="link" href="interval_base_set.html#id667145-bb">iterative_size</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">const_iterator</span> <a class="link" href="interval_base_set.html#id667155-bb">find</a>(<span class="bold"><strong>const</strong></span> element_type &amp;) <span class="bold"><strong>const</strong></span>;
+  <span class="type">const_iterator</span> <a class="link" href="interval_base_set.html#id667173-bb">find</a>(<span class="bold"><strong>const</strong></span> segment_type &amp;) <span class="bold"><strong>const</strong></span>;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667184-bb">add</a>(<span class="bold"><strong>const</strong></span> element_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667202-bb">add</a>(<span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667220-bb">add</a>(iterator, <span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667250-bb">subtract</a>(<span class="bold"><strong>const</strong></span> element_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667268-bb">subtract</a>(<span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667286-bb">insert</a>(<span class="bold"><strong>const</strong></span> element_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667304-bb">insert</a>(<span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667322-bb">insert</a>(iterator, <span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667352-bb">erase</a>(<span class="bold"><strong>const</strong></span> element_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667370-bb">erase</a>(<span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667388-bb">erase</a>(iterator) ;
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667406-bb">erase</a>(iterator, iterator) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667429-bb">flip</a>(<span class="bold"><strong>const</strong></span> element_type &amp;) ;
+  <span class="type">SubType &amp;</span> <a class="link" href="interval_base_set.html#id667450-bb">flip</a>(<span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667472-bb">begin</a>() ;
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667478-bb">end</a>() ;
+  <span class="type">const_iterator</span> <a class="link" href="interval_base_set.html#id667484-bb">begin</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">const_iterator</span> <a class="link" href="interval_base_set.html#id667490-bb">end</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">reverse_iterator</span> <a class="link" href="interval_base_set.html#id667496-bb">rbegin</a>() ;
+  <span class="type">reverse_iterator</span> <a class="link" href="interval_base_set.html#id667502-bb">rend</a>() ;
+  <span class="type">const_reverse_iterator</span> <a class="link" href="interval_base_set.html#id667508-bb">rbegin</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">const_reverse_iterator</span> <a class="link" href="interval_base_set.html#id667514-bb">rend</a>() <span class="bold"><strong>const</strong></span>;
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667520-bb">lower_bound</a>(<span class="bold"><strong>const</strong></span> value_type &amp;) ;
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667531-bb">upper_bound</a>(<span class="bold"><strong>const</strong></span> value_type &amp;) ;
+  <span class="type">const_iterator</span> <a class="link" href="interval_base_set.html#id667541-bb">lower_bound</a>(<span class="bold"><strong>const</strong></span> value_type &amp;) <span class="bold"><strong>const</strong></span>;
+  <span class="type">const_iterator</span> <a class="link" href="interval_base_set.html#id667552-bb">upper_bound</a>(<span class="bold"><strong>const</strong></span> value_type &amp;) <span class="bold"><strong>const</strong></span>;
+  <span class="type">std::pair&lt; iterator, iterator &gt;</span> <a class="link" href="interval_base_set.html#id667563-bb">equal_range</a>(<span class="bold"><strong>const</strong></span> key_type &amp;) ;
+  <span class="type">std::pair&lt; const_iterator, const_iterator &gt;</span> 
+  <a class="link" href="interval_base_set.html#id667574-bb">equal_range</a>(<span class="bold"><strong>const</strong></span> key_type &amp;) <span class="bold"><strong>const</strong></span>;
+
+  <span class="emphasis"><em>// <a class="link" href="interval_base_set.html#id667616-bb">private member functions</a></em></span>
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667618-bb">_add</a>(<span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+  <span class="type">iterator</span> <a class="link" href="interval_base_set.html#id667629-bb">_add</a>(iterator, <span class="bold"><strong>const</strong></span> segment_type &amp;) ;
+
+  <span class="emphasis"><em>// <a class="link" href="interval_base_set.html#id667645-bb">protected member functions</a></em></span>
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667647-bb">add_front</a>(<span class="bold"><strong>const</strong></span> interval_type &amp;, iterator &amp;) ;
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667663-bb">add_main</a>(interval_type &amp;, iterator &amp;, <span class="bold"><strong>const</strong></span> iterator &amp;) ;
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667683-bb">add_segment</a>(<span class="bold"><strong>const</strong></span> interval_type &amp;, iterator &amp;) ;
+  <span class="type"><span class="bold"><strong>void</strong></span></span> <a class="link" href="interval_base_set.html#id667699-bb">add_rear</a>(<span class="bold"><strong>const</strong></span> interval_type &amp;, iterator &amp;) ;
+  <span class="type">sub_type *</span> <a class="link" href="interval_base_set.html#id667714-bb">that</a>() ;
+  <span class="type"><span class="bold"><strong>const</strong></span> sub_type *</span> <a class="link" href="interval_base_set.html#id667720-bb">that</a>() <span class="bold"><strong>const</strong></span>;
+};</pre></div>
+<div class="refsect1" lang="en">
+<a name="id967557"></a><h2>Description</h2>
+<div class="refsect2" lang="en">
+<a name="id967561"></a><h3>
+<a name="boost.icl.interval_base_setconstruct-copy-destruct"></a><code class="computeroutput">interval_base_set</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol type="1">
+<li>
+<pre class="literallayout"><a name="id667585-bb"></a>interval_base_set();</pre>
+<p>Default constructor for the empty object </p>
+</li>
+<li>
+<pre class="literallayout"><a name="id667589-bb"></a>interval_base_set(<span class="bold"><strong>const</strong></span> <a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a> &amp; src);</pre>
+<p>Copy constructor </p>
+</li>
+<li>
+<pre class="literallayout">interval_base_set&amp; <a name="id667603-bb"></a><span class="bold"><strong>operator</strong></span>=(<span class="bold"><strong>const</strong></span> <a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a> &amp; src);</pre>
+<p>Assignment operator </p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id967634"></a><h3>
+<a name="id667024-bb"></a><code class="computeroutput">interval_base_set</code> public member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>typedef</strong></span></span> <a name="id667027-bb"></a>ICL_INTERVAL_TYPE(Interval, DomainT, Compare) ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>typedef</strong></span></span> <a name="id667049-bb"></a>ICL_COMPARE_DOMAIN(Compare, DomainT) ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>typedef</strong></span></span> <a name="id667067-bb"></a>ICL_COMPARE_DOMAIN(Compare, segment_type) ;</pre></li>
+<li><pre class="literallayout"><span class="type"></span> <a name="id667083-bb"></a>BOOST_STATIC_CONSTANT(<span class="bold"><strong>int</strong></span>, fineness = 0) ;</pre></li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667100-bb"></a>swap(<a class="link" href="interval_base_set.html" title="Class template interval_base_set">interval_base_set</a> &amp; operand) ;</pre>
+<p>swap the content of containers </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667117-bb"></a>clear() ;</pre>
+<p>sets the container empty </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><strong>bool</strong></span></span> <a name="id667126-bb"></a>empty() <span class="bold"><strong>const</strong></span>;</pre>
+<p>is the container empty? </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">size_type</span> <a name="id667136-bb"></a>size() <span class="bold"><strong>const</strong></span>;</pre>
+<p>An interval set's size is it's cardinality </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">std::size_t</span> <a name="id667145-bb"></a>iterative_size() <span class="bold"><strong>const</strong></span>;</pre>
+<p>Size of the iteration over this container </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">const_iterator</span> <a name="id667155-bb"></a>find(<span class="bold"><strong>const</strong></span> element_type &amp; key) <span class="bold"><strong>const</strong></span>;</pre>
+<p>Find the interval value pair, that contains element <code class="computeroutput">key</code> </p>
+</li>
+<li><pre class="literallayout"><span class="type">const_iterator</span> <a name="id667173-bb"></a>find(<span class="bold"><strong>const</strong></span> segment_type &amp; segment) <span class="bold"><strong>const</strong></span>;</pre></li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667184-bb"></a>add(<span class="bold"><strong>const</strong></span> element_type &amp; key) ;</pre>
+<p>Add a single element <code class="computeroutput">key</code> to the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667202-bb"></a>add(<span class="bold"><strong>const</strong></span> segment_type &amp; inter_val) ;</pre>
+<p>Add an interval of elements <code class="computeroutput">inter_val</code> to the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">iterator</span> <a name="id667220-bb"></a>add(iterator prior_, <span class="bold"><strong>const</strong></span> segment_type &amp; inter_val) ;</pre>
+<p>Add an interval of elements <code class="computeroutput">inter_val</code> to the set. Iterator <code class="computeroutput">prior_</code> is a hint to the position <code class="computeroutput">inter_val</code> can be inserted after. </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667250-bb"></a>subtract(<span class="bold"><strong>const</strong></span> element_type &amp; key) ;</pre>
+<p>Subtract a single element <code class="computeroutput">key</code> from the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667268-bb"></a>subtract(<span class="bold"><strong>const</strong></span> segment_type &amp; inter_val) ;</pre>
+<p>Subtract an interval of elements <code class="computeroutput">inter_val</code> from the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667286-bb"></a>insert(<span class="bold"><strong>const</strong></span> element_type &amp; key) ;</pre>
+<p>Insert an element <code class="computeroutput">key</code> into the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667304-bb"></a>insert(<span class="bold"><strong>const</strong></span> segment_type &amp; inter_val) ;</pre>
+<p>Insert an interval of elements <code class="computeroutput">inter_val</code> to the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">iterator</span> <a name="id667322-bb"></a>insert(iterator prior_, <span class="bold"><strong>const</strong></span> segment_type &amp; inter_val) ;</pre>
+<p>Insert an interval of elements <code class="computeroutput">inter_val</code> to the set. Iterator <code class="computeroutput">prior_</code> is a hint to the position <code class="computeroutput">inter_val</code> can be inserted after. </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667352-bb"></a>erase(<span class="bold"><strong>const</strong></span> element_type &amp; key) ;</pre>
+<p>Erase an element <code class="computeroutput">key</code> from the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667370-bb"></a>erase(<span class="bold"><strong>const</strong></span> segment_type &amp; inter_val) ;</pre>
+<p>Erase an interval of elements <code class="computeroutput">inter_val</code> from the set </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667388-bb"></a>erase(iterator position) ;</pre>
+<p>Erase the interval that iterator <code class="computeroutput">position</code> points to. </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667406-bb"></a>erase(iterator first, iterator past) ;</pre>
+<p>Erase all intervals in the range <code class="computeroutput">[first,past)</code> of iterators. </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667429-bb"></a>flip(<span class="bold"><strong>const</strong></span> element_type &amp; key) ;</pre>
+<p>If <code class="computeroutput">*this</code> set contains <code class="computeroutput">key</code> it is erased, otherwise it is added. </p>
+</li>
+<li>
+<pre class="literallayout"><span class="type">SubType &amp;</span> <a name="id667450-bb"></a>flip(<span class="bold"><strong>const</strong></span> segment_type &amp; inter_val) ;</pre>
+<p>If <code class="computeroutput">*this</code> set contains <code class="computeroutput">inter_val</code> it is erased, otherwise it is added. </p>
+</li>
+<li><pre class="literallayout"><span class="type">iterator</span> <a name="id667472-bb"></a>begin() ;</pre></li>
+<li><pre class="literallayout"><span class="type">iterator</span> <a name="id667478-bb"></a>end() ;</pre></li>
+<li><pre class="literallayout"><span class="type">const_iterator</span> <a name="id667484-bb"></a>begin() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">const_iterator</span> <a name="id667490-bb"></a>end() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">reverse_iterator</span> <a name="id667496-bb"></a>rbegin() ;</pre></li>
+<li><pre class="literallayout"><span class="type">reverse_iterator</span> <a name="id667502-bb"></a>rend() ;</pre></li>
+<li><pre class="literallayout"><span class="type">const_reverse_iterator</span> <a name="id667508-bb"></a>rbegin() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">const_reverse_iterator</span> <a name="id667514-bb"></a>rend() <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">iterator</span> <a name="id667520-bb"></a>lower_bound(<span class="bold"><strong>const</strong></span> value_type &amp; interval) ;</pre></li>
+<li><pre class="literallayout"><span class="type">iterator</span> <a name="id667531-bb"></a>upper_bound(<span class="bold"><strong>const</strong></span> value_type &amp; interval) ;</pre></li>
+<li><pre class="literallayout"><span class="type">const_iterator</span> <a name="id667541-bb"></a>lower_bound(<span class="bold"><strong>const</strong></span> value_type &amp; interval) <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">const_iterator</span> <a name="id667552-bb"></a>upper_bound(<span class="bold"><strong>const</strong></span> value_type &amp; interval) <span class="bold"><strong>const</strong></span>;</pre></li>
+<li><pre class="literallayout"><span class="type">std::pair&lt; iterator, iterator &gt;</span> <a name="id667563-bb"></a>equal_range(<span class="bold"><strong>const</strong></span> key_type &amp; interval) ;</pre></li>
+<li><pre class="literallayout"><span class="type">std::pair&lt; const_iterator, const_iterator &gt;</span> 
+<a name="id667574-bb"></a>equal_range(<span class="bold"><strong>const</strong></span> key_type &amp; interval) <span class="bold"><strong>const</strong></span>;</pre></li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id970139"></a><h3>
+<a name="id667616-bb"></a><code class="computeroutput">interval_base_set</code> private member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><span class="type">iterator</span> <a name="id667618-bb"></a>_add(<span class="bold"><strong>const</strong></span> segment_type &amp; addend) ;</pre></li>
+<li><pre class="literallayout"><span class="type">iterator</span> <a name="id667629-bb"></a>_add(iterator prior, <span class="bold"><strong>const</strong></span> segment_type &amp; addend) ;</pre></li>
+</ol></div>
+</div>
+<div class="refsect2" lang="en">
+<a name="id970188"></a><h3>
+<a name="id667645-bb"></a><code class="computeroutput">interval_base_set</code> protected member functions</h3>
+<div class="orderedlist"><ol type="1">
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667647-bb"></a>add_front(<span class="bold"><strong>const</strong></span> interval_type &amp; inter_val, iterator &amp; first_) ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667663-bb"></a>add_main(interval_type &amp; inter_val, iterator &amp; it_, 
+              <span class="bold"><strong>const</strong></span> iterator &amp; last_) ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667683-bb"></a>add_segment(<span class="bold"><strong>const</strong></span> interval_type &amp; inter_val, iterator &amp; it_) ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>void</strong></span></span> <a name="id667699-bb"></a>add_rear(<span class="bold"><strong>const</strong></span> interval_type &amp; inter_val, iterator &amp; it_) ;</pre></li>
+<li><pre class="literallayout"><span class="type">sub_type *</span> <a name="id667714-bb"></a>that() ;</pre></li>
+<li><pre class="literallayout"><span class="type"><span class="bold"><strong>const</strong></span> sub_type *</span> <a name="id667720-bb"></a>that() <span class="bold"><strong>const</strong></span>;</pre></li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright © 2007 -2010 Joachim Faulhaber<br>Copyright © 1999 -2006 Cortex Software GmbH<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../header/boost/icl/interval_base_set/hpp.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../header/boost/icl/interval_base_set/hpp.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="is_set_icl_interval_base_set__SubType__DomainT__Compare__Interval__Alloc___id667726.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
