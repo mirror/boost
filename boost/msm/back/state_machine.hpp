@@ -1517,7 +1517,7 @@ private:
     }
     // handling of deferred events
     // if none is found in the SM, take the following empty main version
-    template <class StateType, class Enable = void> 
+    template <class StateType, class Enable = int> 
     struct handle_defer_helper
     {
         handle_defer_helper(deferred_msg_queue_helper<library_sm>& ){}
@@ -1532,7 +1532,7 @@ private:
     // otherwise the standard version handling the deferred events
     template <class StateType>
     struct handle_defer_helper
-        <StateType, typename enable_if< typename ::boost::msm::back::has_fsm_deferred_events<StateType>::type >::type>
+        <StateType, typename enable_if< typename ::boost::msm::back::has_fsm_deferred_events<StateType>::type,int >::type>
     {
         handle_defer_helper(deferred_msg_queue_helper<library_sm>& a_queue):
             events_queue(a_queue),next_deferred_event(){}
