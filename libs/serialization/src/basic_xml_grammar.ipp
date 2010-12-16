@@ -22,9 +22,9 @@
 #endif
 
 // spirit stuff
-#include <boost/spirit/core/composite/operators.hpp>
-#include <boost/spirit/core/composite/actions.hpp>
-#include <boost/spirit/core/primitives/numerics.hpp>
+#include <boost/spirit/include/classic_operators.hpp>
+#include <boost/spirit/include/classic_actions.hpp>
+#include <boost/spirit/include/classic_numerics.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning(pop)
@@ -42,7 +42,7 @@
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/iterators/xml_unescape.hpp>
 
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 
 namespace boost {
 namespace archive {
@@ -207,7 +207,7 @@ bool basic_xml_grammar<CharType>::my_parse(
     // and transaction data logging in the standard way.
     
     parse_info<BOOST_DEDUCED_TYPENAME std::basic_string<CharType>::iterator> 
-        result = boost::spirit::parse(arg.begin(), arg.end(), rule_);
+        result = boost::spirit::classic::parse(arg.begin(), arg.end(), rule_);
     return result.hit;
 }
 
@@ -426,9 +426,9 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         !S
         >> str_p(L"<boost_serialization")
         >> S
-        >> SignatureAttribute
-        >> S
-        >> VersionAttribute
+        >> ( (SignatureAttribute >> S >> VersionAttribute)
+           | (VersionAttribute >> S >> SignatureAttribute)
+           )
         >> !S
         >> L'>'
     ;
