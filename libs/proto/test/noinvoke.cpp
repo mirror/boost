@@ -43,6 +43,32 @@ struct Test2
     >
 {};
 
+template<typename T, typename U>
+struct select2nd
+{
+    typedef U type;
+};
+
+struct Test3
+  : proto::when<
+        _
+        // This add_pointer gets invoked because a substitution takes place
+        // within it.
+      , select2nd<
+            void
+          , proto::noinvoke<
+                // This remove_pointer invocation is bloked by noinvoke
+                select2nd<
+                    void
+                    // This add_pointer invocation is *not* blocked by noinvoke
+                  , boost::add_pointer<_>
+                >
+            >
+        >()
+    >
+{};
+
+
 void test_noinvoke()
 {
     typedef proto::terminal<int>::type Int;
@@ -65,6 +91,15 @@ void test_noinvoke()
     ));
     
     boost::remove_pointer<Int *> * t2 = Test2()(i);
+
+    BOOST_MPL_ASSERT((
+        boost::is_same<
+            boost::result_of<Test3(Int)>::type
+          , select2nd<void, Int *>
+        >
+    ));
+    
+    select2nd<void, Int *> t3 = Test3()(i);
 }
 
 using namespace boost::unit_test;
