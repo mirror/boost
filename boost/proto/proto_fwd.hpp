@@ -83,6 +83,12 @@
 # endif
 #endif
 
+#ifdef BOOST_PROTO_USE_NORMAL_RESULT_OF
+# define BOOST_PROTO_RESULT_OF boost::result_of
+#else
+# define BOOST_PROTO_RESULT_OF boost::tr1_result_of
+#endif
+
 namespace boost { namespace proto
 {
     namespace detail
@@ -154,8 +160,8 @@ namespace boost { namespace proto
         /// INTERNAL ONLY
         ///
         #define BOOST_PROTO_UNCVREF(X)                                                              \
-			typename boost::proto::detail::uncvref<X>::type											\
-			/**/
+            typename boost::proto::detail::uncvref<X>::type                                         \
+            /**/
 
         struct _default;
 
@@ -744,7 +750,7 @@ namespace boost { namespace proto
     //namespace exops
     //{}
 
-	namespace exops = exprns_;
+    namespace exops = exprns_;
 
 }} // namespace boost::proto
 

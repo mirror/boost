@@ -82,7 +82,7 @@
             template<
                 typename T
               , typename Expr, typename State, typename Data
-              , bool Applied, bool IsTransform = is_transform<T>::value
+              , bool Applied
             >
             struct nested_type_if
             {
@@ -90,15 +90,8 @@
                 static bool const applied = false;
             };
 
-            template<typename T, typename Expr, typename State, typename Data, bool Applied>
-            struct nested_type_if<T, Expr, State, Data, Applied, true>
-              : uncvref<typename T::template impl<Expr, State, Data>::result_type>
-            {
-                static bool const applied = true;
-            };
-
             template<typename T, typename Expr, typename State, typename Data>
-            struct nested_type_if<T, Expr, State, Data, true, false>
+            struct nested_type_if<T, Expr, State, Data, true>
               : nested_type<T>
             {
                 static bool const applied = true;
@@ -345,7 +338,9 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)
               , typename Expr, typename State, typename Data
             >
-            struct make_<R<BOOST_PP_ENUM_PARAMS(N, A)>, Expr, State, Data
+            struct make_<
+                R<BOOST_PP_ENUM_PARAMS(N, A)>
+              , Expr, State, Data
                 BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N)
             >
               : nested_type_if<
@@ -360,8 +355,10 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)
               , typename Expr, typename State, typename Data
             >
-            struct make_<noinvoke<R<BOOST_PP_ENUM_PARAMS(N, A)> >, Expr, State, Data
-                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N)
+            struct make_<
+                noinvoke<R<BOOST_PP_ENUM_PARAMS(N, A)> >
+              , Expr, State, Data
+                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1)
             >
             {
                 typedef R<BOOST_PP_ENUM(N, TMP1, ~)> type;
@@ -378,8 +375,15 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)
               , typename Expr, typename State, typename Data
             >
-            struct make_if_<R(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data, CT_not_callable>
-              : uncvref<typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>::template impl<Expr, State, Data>::result_type>
+            struct make_if_<
+                R(BOOST_PP_ENUM_PARAMS(N, A))
+              , Expr, State, Data
+              , CT_not_callable
+            >
+              : uncvref<
+                    typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>
+                        ::template impl<Expr, State, Data>::result_type
+                >
             {
                 static bool const applied = true;
             };
@@ -389,8 +393,15 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)
               , typename Expr, typename State, typename Data
             >
-            struct make_if_<R(*)(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data, CT_not_callable>
-              : uncvref<typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>::template impl<Expr, State, Data>::result_type>
+            struct make_if_<
+                R(*)(BOOST_PP_ENUM_PARAMS(N, A))
+              , Expr, State, Data
+              , CT_not_callable
+            >
+              : uncvref<
+                    typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>
+                        ::template impl<Expr, State, Data>::result_type
+                >
             {
                 static bool const applied = true;
             };
