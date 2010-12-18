@@ -18,24 +18,25 @@
 #include <new>
 #include <algorithm>
 
-#include "boost/config.hpp"
-#include "boost/assert.hpp"
-#include "boost/type.hpp"
-#include "boost/type_traits/alignment_of.hpp"
-#include "boost/type_traits/has_nothrow_constructor.hpp"
-#include "boost/type_traits/type_with_alignment.hpp"
-#include "boost/type_traits/remove_reference.hpp"
-#include "boost/type_traits/is_reference.hpp"
-#include "boost/mpl/if.hpp"
-#include "boost/mpl/bool.hpp"
-#include "boost/mpl/not.hpp"
-#include "boost/detail/reference_content.hpp"
-#include "boost/none.hpp"
-#include "boost/utility/addressof.hpp"
-#include "boost/utility/compare_pointees.hpp"
-#include "boost/utility/in_place_factory.hpp"
+#include <boost/config.hpp>
+#include <boost/assert.hpp>
+#include <boost/type.hpp>
+#include <boost/type_traits/alignment_of.hpp>
+#include <boost/type_traits/has_nothrow_constructor.hpp>
+#include <boost/type_traits/type_with_alignment.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/is_reference.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/not.hpp>
+#include <boost/detail/reference_content.hpp>
+#include <boost/none.hpp>
+#include <boost/utility/swap.hpp>
+#include <boost/utility/addressof.hpp>
+#include <boost/utility/compare_pointees.hpp>
+#include <boost/utility/in_place_factory.hpp>
 
-#include "boost/optional/optional_fwd.hpp"
+#include <boost/optional/optional_fwd.hpp>
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
 // VC6.0 has the following bug:
@@ -98,7 +99,7 @@
 namespace boost_optional_detail
 {
   template <class T, class Factory>
-  void construct(Factory const& factory, void* address)
+  inline void construct(Factory const& factory, void* address)
   {
     factory.BOOST_NESTED_TEMPLATE apply<T>(address);
   }
@@ -109,6 +110,9 @@ namespace boost {
 
 class in_place_factory_base ;
 class typed_in_place_factory_base ;
+
+// This forward is needed to refer to namespace scope swap from the member swap
+template<class T> void swap ( optional<T>& x, optional<T>& y );
 
 namespace optional_detail {
 
@@ -615,7 +619,7 @@ class optional : public optional_detail::optional_base<T>
     void swap( optional & arg )
       {
         // allow for Koenig lookup
-        using boost::swap ;
+        using boost::swap;
         swap(*this, arg);
       }
 
@@ -914,79 +918,63 @@ inline
 bool operator >= ( none_t x, optional<T> const& y )
 { return !( x < y ) ; }
 
-//
-// The following swap implementation follows the GCC workaround as found in
-//  "boost/detail/compressed_pair.hpp"
-//
 namespace optional_detail {
 
-// GCC < 3.2 gets the using declaration at namespace scope (FLC, DWA)
-#if BOOST_WORKAROUND(__GNUC__, < 3)                             \
-    || BOOST_WORKAROUND(__GNUC__, == 3) && __GNUC_MINOR__ <= 2
-   using std::swap;
-#define BOOST_OPTIONAL_STD_SWAP_INTRODUCED_AT_NS_SCOPE
-#endif
+template<bool use_default_constructor> struct swap_selector;
 
-  template<bool use_default_constructor> struct swap_selector;
-
-  template<>
-  struct swap_selector<true>
-  {
+template<>
+struct swap_selector<true>
+{
     template<class T>
     static void optional_swap ( optional<T>& x, optional<T>& y )
     {
-     bool hasX = x;
-     bool hasY = y;
+        const bool hasX = !!x;
+        const bool hasY = !!y;
 
-     if ( !hasX && !hasY )
-       return;
+        if ( !hasX && !hasY )
+            return;
 
-     if( !hasX )
-         x = boost::in_place();
-     else if ( !hasY )
-         y = boost::in_place();
+        if( !hasX )
+            x = boost::in_place();
+        else if ( !hasY )
+            y = boost::in_place();
 
-   // GCC > 3.2 and all other compilers have the using declaration at function scope (FLC)
-#ifndef BOOST_OPTIONAL_STD_SWAP_INTRODUCED_AT_NS_SCOPE
-     // allow for Koenig lookup
-     using std::swap ;
-#endif
-     swap(*x,*y);
+        // Boost.Utility.Swap will take care of ADL and workarounds for broken compilers
+        boost::swap(x.get(),y.get());
 
-     if( !hasX )
-         y = boost::none ;
-     else if( !hasY )
-         x = boost::none ;
+        if( !hasX )
+            y = boost::none ;
+        else if( !hasY )
+            x = boost::none ;
     }
-  };
+};
 
-  template<>
-  struct swap_selector<false>
-  {
+template<>
+struct swap_selector<false>
+{
     template<class T>
     static void optional_swap ( optional<T>& x, optional<T>& y )
     {
-      if ( !x && !!y )
-      {
-        x = *y;
-        y = boost::none ;
-      }
-      else if ( !!x && !y )
-      {
-        y = *x ;
-        x = boost::none ;
-      }
-      else if ( !!x && !!y )
-      {
-    // GCC > 3.2 and all other compilers have the using declaration at function scope (FLC)
-    #ifndef BOOST_OPTIONAL_STD_SWAP_INTRODUCED_AT_NS_SCOPE
-        // allow for Koenig lookup
-        using std::swap ;
-    #endif
-        swap(*x,*y);
-      }
+        const bool hasX = !!x;
+        const bool hasY = !!y;
+
+        if ( !hasX && hasY )
+        {
+            x = y.get();
+            y = boost::none ;
+        }
+        else if ( hasX && !hasY )
+        {
+            y = x.get();
+            x = boost::none ;
+        }
+        else if ( hasX && hasY )
+        {
+            // Boost.Utility.Swap will take care of ADL and workarounds for broken compilers
+            boost::swap(x.get(),y.get());
+        }
     }
-  };
+};
 
 } // namespace optional_detail
 
@@ -995,10 +983,9 @@ struct optional_swap_should_use_default_constructor : has_nothrow_default_constr
 
 template<class T> inline void swap ( optional<T>& x, optional<T>& y )
 {
-  optional_detail::swap_selector<optional_swap_should_use_default_constructor<T>::value>::optional_swap(x, y);
+    optional_detail::swap_selector<optional_swap_should_use_default_constructor<T>::value>::optional_swap(x, y);
 }
 
 } // namespace boost
 
 #endif
-
