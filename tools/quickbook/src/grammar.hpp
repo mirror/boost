@@ -57,9 +57,10 @@ namespace quickbook
         grammar common;
         grammar simple_phrase;
         grammar block;
+        grammar block_skip_initial_spaces;
         grammar doc_info;
 
-        quickbook_grammar(quickbook::actions&, bool skip_initial_spaces = false);
+        quickbook_grammar(quickbook::actions&);
         ~quickbook_grammar();
     };
 }

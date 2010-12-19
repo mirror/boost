@@ -35,17 +35,18 @@ namespace quickbook
 
         // block
         cl::rule<scanner> block_start;
+        cl::rule<scanner> block_skip_initial_spaces;
         cl::symbols<cl::rule<scanner>*> block_keyword_rules;
         cl::symbols<cl::rule<scanner>*> block_symbol_rules;
         
         // doc_info
         cl::rule<scanner> doc_info_details;
         
-        impl(quickbook::actions&, bool);
+        impl(quickbook::actions&);
 
     private:
 
-        void init_main(bool);
+        void init_main();
         void init_block_markup();
         void init_phrase_markup();
         void init_doc_info();

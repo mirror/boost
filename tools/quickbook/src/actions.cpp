@@ -808,29 +808,30 @@ namespace quickbook
                 (body.is_block ? actions.out : actions.phrase) << body.content;
                 return true;
             }
-            else if (!body.is_block)
+            else
             {
                 quickbook_grammar g(actions);
 
-                //  do a phrase level parse
-                iterator first(body.content.begin(), body.content.end(),
-                    position(body.position.file.c_str(), body.position.line, body.position.column));
-                iterator last(body.content.end(), body.content.end());
-                return cl::parse(first, last, g.simple_phrase).full;
-            }
-            else
-            {
-                quickbook_grammar g(actions, true);
-
-                //  do a block level parse
-                //  ensure that we have enough trailing newlines to eliminate
-                //  the need to check for end of file in the grammar.
-                
-                std::string content = body.content + "\n\n";
-                iterator first(content.begin(), content.end(),
-                    position(body.position.file.c_str(), body.position.line, body.position.column));
-                iterator last(content.end(), content.end());
-                return cl::parse(first, last, g.block).full;
+                if (!body.is_block)
+                {
+                    //  do a phrase level parse
+                    iterator first(body.content.begin(), body.content.end(),
+                        position(body.position.file.c_str(), body.position.line, body.position.column));
+                    iterator last(body.content.end(), body.content.end());
+                    return cl::parse(first, last, g.simple_phrase).full;
+                }
+                else
+                {
+                    //  do a block level parse
+                    //  ensure that we have enough trailing newlines to eliminate
+                    //  the need to check for end of file in the grammar.
+                    
+                    std::string content = body.content + "\n\n";
+                    iterator first(content.begin(), content.end(),
+                        position(body.position.file.c_str(), body.position.line, body.position.column));
+                    iterator last(content.end(), content.end());
+                    return cl::parse(first, last, g.block).full;
+                }
             }
         }
     }

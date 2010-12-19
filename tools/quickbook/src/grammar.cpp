@@ -13,12 +13,13 @@
 
 namespace quickbook
 {
-   quickbook_grammar::quickbook_grammar(quickbook::actions& a, bool skip_initial_spaces)
-        : impl_(new impl(a, skip_initial_spaces))
+   quickbook_grammar::quickbook_grammar(quickbook::actions& a)
+        : impl_(new impl(a))
         , command_line_macro(impl_->command_line, "command_line_macro")
         , common(impl_->common, "phrase")
         , simple_phrase(impl_->simple_phrase, "simple_phrase")
         , block(impl_->block_start, "block")
+        , block_skip_initial_spaces(impl_->block_skip_initial_spaces, "block")
         , doc_info(impl_->doc_info_details, "doc_info")
     {
     }
@@ -27,12 +28,12 @@ namespace quickbook
     {
     }
 
-    quickbook_grammar::impl::impl(quickbook::actions& a, bool skip_initial_spaces)
+    quickbook_grammar::impl::impl(quickbook::actions& a)
         : actions(a)
         , no_eols(true)
         , store_()
     {
-        init_main(skip_initial_spaces);
+        init_main();
         init_block_markup();
         init_phrase_markup();
         init_doc_info();

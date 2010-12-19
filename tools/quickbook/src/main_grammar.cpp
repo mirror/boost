@@ -84,24 +84,19 @@ namespace quickbook
         cl::rule<scanner> phrase_keyword_rule;
     };
 
-    void quickbook_grammar::impl::init_main(bool skip_initial_spaces)
+    void quickbook_grammar::impl::init_main()
     {
         using detail::var;
 
         main_grammar_local& local = store_.create();
 
-        if (skip_initial_spaces)
-        {
-            block_start =
-                *(cl::blank_p | local.comment) >> local.top_level >> local.blank
-                ;
-        }
-        else
-        {
-            block_start =
-                local.top_level >> local.blank
-                ;
-        }
+        block_skip_initial_spaces =
+            *(cl::blank_p | local.comment) >> block_start
+            ;
+
+        block_start =
+            local.top_level >> local.blank
+            ;
 
         local.top_level
             =   local.blocks
