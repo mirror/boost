@@ -88,6 +88,25 @@ namespace boost{namespace icl
     }
 
     // ------------------------------------------------------------------------
+    template<> struct is_discrete<boost::gregorian::date_duration>
+    {
+        typedef is_discrete type;
+        BOOST_STATIC_CONSTANT(bool, value = true);
+    };
+
+    template<> 
+    struct has_difference<boost::gregorian::date_duration> 
+    { 
+        typedef has_difference type;
+        BOOST_STATIC_CONSTANT(bool, value = true);
+    };  
+
+    template<> 
+    struct size_type_of<boost::gregorian::date_duration> 
+    { 
+        typedef boost::gregorian::date_duration type; 
+    };  
+
     boost::gregorian::date_duration operator ++(boost::gregorian::date_duration& x)
     {
         return x += boost::gregorian::date::duration_type::unit();

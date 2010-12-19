@@ -75,7 +75,7 @@ struct test_value<Type*>
     {
         static const int offset = size/2;
         for(int idx = 0; idx < size; idx++)
-			values[idx] = test_value<Type>::make(idx - offset);
+            values[idx] = test_value<Type>::make(idx - offset);
     
         return true;
     }

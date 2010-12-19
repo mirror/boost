@@ -87,6 +87,25 @@ namespace boost{namespace icl
     }
 
     // ------------------------------------------------------------------------
+    template<> struct is_discrete<boost::posix_time::time_duration>
+    {
+        typedef is_discrete type;
+        BOOST_STATIC_CONSTANT(bool, value = true);
+    };
+
+    template<> 
+    struct has_difference<boost::posix_time::time_duration> 
+    { 
+        typedef has_difference type;
+        BOOST_STATIC_CONSTANT(bool, value = true);
+    };  
+
+    template<> 
+    struct size_type_of<boost::posix_time::time_duration> 
+    { 
+        typedef boost::posix_time::time_duration type; 
+    };  
+
     boost::posix_time::time_duration operator ++(boost::posix_time::time_duration& x)
     {
         return x += boost::posix_time::ptime::time_duration_type::unit();
