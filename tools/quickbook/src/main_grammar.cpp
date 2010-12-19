@@ -62,11 +62,10 @@ namespace quickbook
         cl::rule<scanner>
                         top_level, blocks, paragraph_separator,
                         block_markup, block_markup_start,
-                        code, code_line, blank_line,
-                        space, blank, comment, dummy_block, hr,
-                        list, ordered_list, list_item, hard_space, eol,
+                        code, code_line, blank_line, hr,
+                        list, ordered_list, list_item,
                         phrase_markup,
-                        simple_phrase_end, phrase_end,
+                        simple_phrase_end,
                         escape,
                         inline_code, simple_format,
                         simple_bold, simple_italic, simple_underline,
@@ -77,7 +76,8 @@ namespace quickbook
                         template_inner_arg_1_4, brackets_1_4,
                         template_args_1_5, template_arg_1_5,
                         template_inner_arg_1_5, brackets_1_5,
-                        command_line_macro_identifier, command_line_phrase
+                        command_line_macro_identifier, command_line_phrase,
+                        dummy_block
                         ;
 
         cl::rule<scanner> block_keyword_rule;
@@ -91,11 +91,11 @@ namespace quickbook
         main_grammar_local& local = store_.create();
 
         block_skip_initial_spaces =
-            *(cl::blank_p | local.comment) >> block_start
+            *(cl::blank_p | comment) >> block_start
             ;
 
         block_start =
-            local.top_level >> local.blank
+            local.top_level >> blank
             ;
 
         local.top_level
@@ -112,7 +112,7 @@ namespace quickbook
            *(   local.code
             |   local.list                      [actions.list]
             |   local.hr                        [actions.hr]
-            |   +local.eol
+            |   +eol
             )
             ;
 
@@ -122,41 +122,16 @@ namespace quickbook
             >>  cl::eol_p                       [actions.inside_paragraph]
             ;
 
-        local.space =
-            *(cl::space_p | local.comment)
-            ;
-
-        local.blank =
-            *(cl::blank_p | local.comment)
-            ;
-
-        local.eol = local.blank >> cl::eol_p
-            ;
-
-        // Follows after an alphanumeric identifier - ensures that it doesn't
-        // match an empty space in the middle of the identifier.
-        local.hard_space =
-            (cl::eps_p - (cl::alnum_p | '_')) >> local.space
-            ;
-
-        local.comment =
-            "[/" >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
-            ;
-
-        local.dummy_block =
-            '[' >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
-            ;
-
         local.hr =
             cl::str_p("----")
-            >> *(cl::anychar_p - local.eol)
-            >> +local.eol
+            >> *(cl::anychar_p - eol)
+            >> +eol
             ;
 
         local.block_markup
             =   local.block_markup_start        [actions.inside_paragraph]
             >>  (   local.block_keyword_rule
-                >>  (   (local.space >> ']' >> +local.eol)
+                >>  (   (space >> ']' >> +eol)
                     |   cl::eps_p               [actions.error]
                     )
                 |   cl::eps_p                   [actions.error]
@@ -164,7 +139,7 @@ namespace quickbook
             ;
 
         local.block_markup_start
-            =   '[' >> local.space
+            =   '[' >> space
             >>  (   block_keyword_rules         [detail::assign_rule(local.block_keyword_rule)]
                 >>  (cl::eps_p - (cl::alnum_p | '_'))
                 |   block_symbol_rules          [detail::assign_rule(local.block_keyword_rule)]
@@ -176,7 +151,7 @@ namespace quickbook
                 local.code_line
                 >> *(*local.blank_line >> local.code_line)
             )                                   [actions.code]
-            >> *local.eol
+            >> *eol
             ;
 
         local.code_line =
@@ -205,17 +180,8 @@ namespace quickbook
                     )
                 )                               [actions.plain_char]
             )
-            >> +local.eol
+            >> +eol
             ;
-
-        local.phrase_end =
-            ']' |
-            cl::if_p(var(no_eols))
-            [
-                cl::eol_p >> *cl::blank_p >> cl::eol_p
-                                                // Make sure that we don't go
-            ]                                   // past a single block, except
-            ;                                   // when preformatted.
 
         common =
                 local.macro
@@ -224,7 +190,7 @@ namespace quickbook
             |   local.inline_code
             |   local.simple_format
             |   local.escape
-            |   local.comment
+            |   comment
             ;
 
         local.macro =
@@ -252,10 +218,10 @@ namespace quickbook
                 >> !local.template_args
             ) | (
                 (actions.templates.scope
-                    >> cl::eps_p(local.hard_space)
+                    >> cl::eps_p(hard_space)
                 )                               [cl::assign_a(actions.template_identifier)]
                                                 [cl::clear_a(actions.template_args)]
-                >> local.space
+                >> space
                 >> !local.template_args
             ) )
             >> cl::eps_p(']')
@@ -345,7 +311,7 @@ namespace quickbook
             |   local.simple_teletype
             ;
 
-        local.simple_phrase_end = '[' | local.phrase_end;
+        local.simple_phrase_end = '[' | phrase_end;
 
         simple_markup(local.simple_bold,
             '*', actions.simple_bold, local.simple_phrase_end);
@@ -358,9 +324,15 @@ namespace quickbook
 
         phrase =
            *(   common
-            |   local.comment
-            |   (cl::anychar_p - local.phrase_end)    [actions.plain_char]
+            |   (cl::anychar_p - phrase_end)    [actions.plain_char]
             )
+            ;
+
+        inside_paragraph =
+            (*( common
+            |   (cl::anychar_p - phrase_end)    [actions.plain_char]
+            |   (+eol)                          [actions.inside_paragraph]
+            ))                                  [actions.inside_paragraph]
             ;
 
         local.phrase_markup
@@ -385,7 +357,7 @@ namespace quickbook
             |   "\\U" >> cl::repeat_p(8) [cl::chset<>("0-9a-fA-F")]
                                                 [actions.escape_unicode]
             |   (
-                    ("'''" >> !local.eol)       [actions.escape_pre]
+                    ("'''" >> !eol)             [actions.escape_pre]
                 >>  *(cl::anychar_p - "'''")    [actions.raw_char]
                 >>  cl::str_p("'''")            [actions.escape_post]
                 )
@@ -397,7 +369,6 @@ namespace quickbook
 
         simple_phrase =
            *(   common
-            |   local.comment
             |   (cl::anychar_p - ']')       [actions.plain_char]
             )
             ;
@@ -430,5 +401,46 @@ namespace quickbook
             |   (cl::anychar_p - ']')       [actions.plain_char]
             )
             ;
+
+        // Miscellaneous stuff
+
+        // Follows an alphanumeric identifier - ensures that it doesn't
+        // match an empty space in the middle of the identifier.
+        hard_space =
+            (cl::eps_p - (cl::alnum_p | '_')) >> space
+            ;
+
+        space =
+            *(cl::space_p | comment)
+            ;
+
+        blank =
+            *(cl::blank_p | comment)
+            ;
+
+        eol = blank >> cl::eol_p
+            ;
+
+        phrase_end =
+            ']' |
+            cl::if_p(var(no_eols))
+            [
+                cl::eol_p >> *cl::blank_p >> cl::eol_p
+                                                // Make sure that we don't go
+            ]                                   // past a single block, except
+            ;                                   // when preformatted.
+
+        comment =
+            "[/" >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
+            ;
+
+        local.dummy_block =
+            '[' >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
+            ;
+
+        macro_identifier =
+            +(cl::anychar_p - (cl::space_p | ']'))
+            ;
+
     }
 }

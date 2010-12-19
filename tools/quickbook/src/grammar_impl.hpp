@@ -25,21 +25,32 @@ namespace quickbook
         bool no_eols;
         rule_store store_;
 
-        // phrase
+        // Main Grammar
+        cl::rule<scanner> block_start;
+        cl::rule<scanner> block_skip_initial_spaces;
         cl::rule<scanner> common;
         cl::rule<scanner> simple_phrase;
         cl::rule<scanner> phrase;
+        cl::rule<scanner> inside_paragraph;
         cl::rule<scanner> command_line;
+
+        // Miscellaneous stuff
+        cl::rule<scanner> hard_space;
+        cl::rule<scanner> space;
+        cl::rule<scanner> blank;
+        cl::rule<scanner> eol;
+        cl::rule<scanner> phrase_end;
+        cl::rule<scanner> comment;
+        cl::rule<scanner> macro_identifier;
+
+        // Markup Symbols
         cl::symbols<cl::rule<scanner>*> phrase_keyword_rules;
         cl::symbols<cl::rule<scanner>*> phrase_symbol_rules;
 
-        // block
-        cl::rule<scanner> block_start;
-        cl::rule<scanner> block_skip_initial_spaces;
         cl::symbols<cl::rule<scanner>*> block_keyword_rules;
         cl::symbols<cl::rule<scanner>*> block_symbol_rules;
         
-        // doc_info
+        // Doc Info
         cl::rule<scanner> doc_info_details;
         
         impl(quickbook::actions&);

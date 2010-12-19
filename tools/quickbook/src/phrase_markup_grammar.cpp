@@ -23,14 +23,14 @@ namespace quickbook
     struct phrase_markup_grammar_local
     {
         cl::rule<scanner>
-                        space, blank, comment, image,
-                        phrase_end, bold, italic, underline, teletype,
+                        image,
+                        bold, italic, underline, teletype,
                         strikethrough, url, funcref, classref,
                         memberref, enumref, macroref, headerref, conceptref, globalref,
-                        anchor, link, hard_space, eol,
+                        anchor, link,
                         source_mode_cpp, source_mode_python, source_mode_teletype,
                         quote, footnote, replaceable,
-                        dummy_block, cond_phrase, macro_identifier
+                        cond_phrase
                         ;
     };
 
@@ -40,51 +40,13 @@ namespace quickbook
 
         phrase_markup_grammar_local& local = store_.create();
 
-        local.space =
-            *(cl::space_p | local.comment)
-            ;
-
-        local.blank =
-            *(cl::blank_p | local.comment)
-            ;
-
-        local.eol = local.blank >> cl::eol_p
-            ;
-
-        local.phrase_end =
-            ']' |
-            cl::if_p(var(no_eols))
-            [
-                cl::eol_p >> *cl::blank_p >> cl::eol_p
-                                                // Make sure that we don't go
-            ]                                   // past a single block, except
-            ;                                   // when preformatted.
-
-        // Follows an alphanumeric identifier - ensures that it doesn't
-        // match an empty space in the middle of the identifier.
-        local.hard_space =
-            (cl::eps_p - (cl::alnum_p | '_')) >> local.space
-            ;
-
-        local.comment =
-            "[/" >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
-            ;
-
-        local.dummy_block =
-            '[' >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
-            ;
-
-        local.macro_identifier =
-            +(cl::anychar_p - (cl::space_p | ']'))
-            ;
-
         phrase_symbol_rules.add
             ("?", &local.cond_phrase)
             ;
 
         local.cond_phrase =
-                local.blank
-            >>  local.macro_identifier          [actions.cond_phrase_pre]
+                blank
+            >>  macro_identifier                [actions.cond_phrase_pre]
             >>  (!phrase)                       [actions.cond_phrase_post]
             ;
 
@@ -93,24 +55,24 @@ namespace quickbook
             ;
 
         local.image =
-                local.blank                     [cl::clear_a(actions.attributes)]
+                blank                           [cl::clear_a(actions.attributes)]
             >>  cl::if_p(qbk_since(105u)) [
                         (+(
                             *cl::space_p
-                        >>  +(cl::anychar_p - (cl::space_p | local.phrase_end | '['))
+                        >>  +(cl::anychar_p - (cl::space_p | phrase_end | '['))
                         ))                       [cl::assign_a(actions.image_fileref)]
-                    >>  local.hard_space
+                    >>  hard_space
                     >>  *(
                             '['
                         >>  (*(cl::alnum_p | '_'))  [cl::assign_a(actions.attribute_name)]
-                        >>  local.space
-                        >>  (*(cl::anychar_p - (local.phrase_end | '[')))
+                        >>  space
+                        >>  (*(cl::anychar_p - (phrase_end | '[')))
                                                 [actions.attribute]
                         >>  ']'
-                        >>  local.space
+                        >>  space
                         )
                 ].else_p [
-                        (*(cl::anychar_p - local.phrase_end))
+                        (*(cl::anychar_p - phrase_end))
                                                 [cl::assign_a(actions.image_fileref)]
                 ]
             >>  cl::eps_p(']')                  [actions.image]
@@ -122,8 +84,8 @@ namespace quickbook
 
         local.url =
                 (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.url_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))  [actions.url_pre]
+            >>  hard_space
             >>  phrase                          [actions.url_post]
             ;
 
@@ -132,10 +94,10 @@ namespace quickbook
             ;
 
         local.link =
-                local.space
-            >>  (*(cl::anychar_p - (']' | local.hard_space)))
+                space
+            >>  (*(cl::anychar_p - (']' | hard_space)))
                                                 [actions.link_pre]
-            >>  local.hard_space
+            >>  hard_space
             >>  phrase                          [actions.link_post]
             ;
 
@@ -144,8 +106,8 @@ namespace quickbook
             ;
 
         local.anchor =
-                local.blank
-            >>  (*(cl::anychar_p - local.phrase_end)) [actions.anchor]
+                blank
+            >>  (*(cl::anychar_p - phrase_end)) [actions.anchor]
             ;
 
         phrase_keyword_rules.add
@@ -160,66 +122,66 @@ namespace quickbook
             ;
 
         local.funcref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.funcref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.funcref_pre]
+            >>  hard_space
             >>  phrase                          [actions.funcref_post]
             ;
 
         local.classref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.classref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.classref_pre]
+            >>  hard_space
             >>  phrase                          [actions.classref_post]
             ;
 
         local.memberref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.memberref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.memberref_pre]
+            >>  hard_space
             >>  phrase                          [actions.memberref_post]
             ;
 
         local.enumref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.enumref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.enumref_pre]
+            >>  hard_space
             >>  phrase                          [actions.enumref_post]
             ;
 
         local.macroref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.macroref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.macroref_pre]
+            >>  hard_space
             >>  phrase                          [actions.macroref_post]
             ;
 
         local.headerref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.headerref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.headerref_pre]
+            >>  hard_space
             >>  phrase                          [actions.headerref_post]
             ;
 
         local.conceptref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.conceptref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.conceptref_pre]
+            >>  hard_space
             >>  phrase                          [actions.conceptref_post]
             ;
 
         local.globalref =
-                local.space
+                space
             >>  (*(cl::anychar_p -
-                    (']' | local.hard_space)))  [actions.globalref_pre]
-            >>  local.hard_space
+                    (']' | hard_space)))        [actions.globalref_pre]
+            >>  hard_space
             >>  phrase                          [actions.globalref_post]
             ;
 
@@ -234,37 +196,37 @@ namespace quickbook
             ;
 
         local.bold =
-                local.blank                     [actions.bold_pre]
+                blank                           [actions.bold_pre]
             >>  phrase                          [actions.bold_post]
             ;
 
         local.italic =
-                local.blank                     [actions.italic_pre]
+                blank                           [actions.italic_pre]
             >>  phrase                          [actions.italic_post]
             ;
 
         local.underline =
-                local.blank                     [actions.underline_pre]
+                blank                           [actions.underline_pre]
             >>  phrase                          [actions.underline_post]
             ;
 
         local.teletype =
-                local.blank                     [actions.teletype_pre]
+                blank                           [actions.teletype_pre]
             >>  phrase                          [actions.teletype_post]
             ;
 
         local.strikethrough =
-                local.blank                     [actions.strikethrough_pre]
+                blank                           [actions.strikethrough_pre]
             >>  phrase                          [actions.strikethrough_post]
             ;
 
         local.quote =
-                local.blank                     [actions.quote_pre]
+                blank                           [actions.quote_pre]
             >>  phrase                          [actions.quote_post]
             ;
 
         local.replaceable =
-                local.blank                     [actions.replaceable_pre]
+                blank                           [actions.replaceable_pre]
             >>  phrase                          [actions.replaceable_post]
             ;
 
@@ -283,7 +245,7 @@ namespace quickbook
             ;
 
         local.footnote =
-                local.blank                     [actions.footnote_pre]
+                blank                           [actions.footnote_pre]
             >>  phrase                          [actions.footnote_post]
             ;
     }

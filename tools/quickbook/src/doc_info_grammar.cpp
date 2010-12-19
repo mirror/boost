@@ -25,9 +25,9 @@ namespace quickbook
         cl::rule<scanner>
                         doc_title, doc_version, doc_id, doc_dirname,
                         doc_copyright, doc_purpose, doc_category, doc_authors,
-                        doc_author, space, hard_space, doc_license,
+                        doc_author, doc_license,
                         doc_last_revision, doc_source_mode, doc_biblioid, doc_lang,
-                        phrase, quickbook_version, char_, comment, dummy_block;
+                        quickbook_version, char_;
         cl::symbols<> doc_types;
     };
 
@@ -44,21 +44,21 @@ namespace quickbook
         ;
         
         doc_info_details =
-            local.space
-            >> '[' >> local.space
+            space
+            >> '[' >> space
             >> (local.doc_types >> cl::eps_p)
                                             [cl::assign_a(actions.doc_type)]
-            >> local.hard_space
+            >> hard_space
             >>  (  *(~cl::eps_p(cl::ch_p('[') | ']' | cl::eol_p) >> local.char_)
                 )                           [actions.extract_doc_title]
             >>  !(
-                    local.space >> '[' >>
+                    space >> '[' >>
                         local.quickbook_version
-                    >> local.space >> ']'
+                    >> space >> ']'
                 )
             >>
                 *(
-                    local.space >> '[' >>
+                    space >> '[' >>
                     (
                       local.doc_version
                     | local.doc_id
@@ -73,13 +73,13 @@ namespace quickbook
                     | local.doc_biblioid
                     | local.doc_lang
                     )
-                    >> local.space >> ']' >> +cl::eol_p
+                    >> space >> ']' >> +cl::eol_p
                 )
-            >> local.space >> ']' >> +cl::eol_p
+            >> space >> ']' >> +cl::eol_p
             ;
 
         local.quickbook_version =
-                "quickbook" >> local.hard_space
+                "quickbook" >> hard_space
             >>  (   cl::uint_p              [cl::assign_a(qbk_major_version)]
                     >> '.' 
                     >>  uint2_t()           [cl::assign_a(qbk_minor_version)]
@@ -87,54 +87,54 @@ namespace quickbook
             ;
 
         local.doc_version =
-                "version" >> local.hard_space
+                "version" >> hard_space
             >> (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_doc_version]
             ;
 
         // TODO: Restrictions on doc_id?
         local.doc_id =
-                "id" >> local.hard_space
+                "id" >> hard_space
             >> (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_doc_id]
             ;
 
         // TODO: Restrictions on doc_dirname?
         local.doc_dirname =
-                "dirname" >> local.hard_space
+                "dirname" >> hard_space
             >> (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_doc_dirname]
             ;
 
         local.doc_copyright =
                 "copyright"
-            >> local.hard_space             [cl::clear_a(actions.copyright.first)]
+            >> hard_space                   [cl::clear_a(actions.copyright.first)]
             >> +( cl::repeat_p(4)[cl::digit_p]
                                             [cl::push_back_a(actions.copyright.first)]
-                  >> local.space
+                  >> space
                 )
-            >> local.space
+            >> space
             >> (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_copyright_second]
             ;
 
         local.doc_purpose =
-                "purpose" >> local.hard_space
-            >> local.phrase                 [actions.extract_doc_purpose]
+                "purpose" >> hard_space
+            >> simple_phrase                [actions.extract_doc_purpose]
             ;
 
         local.doc_category =
-                "category" >> local.hard_space
+                "category" >> hard_space
             >> (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_doc_category]
                                             [cl::push_back_a(actions.doc_categories, actions.doc_category)]
             ;
 
         local.doc_author =
-                '[' >> local.space
+                '[' >> space
             >>  (*(~cl::eps_p(',') >> local.char_))
                                             [actions.extract_name_second]
-            >>  ',' >> local.space
+            >>  ',' >> space
             >>  (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_name_first]
             >>  ']'
@@ -142,28 +142,28 @@ namespace quickbook
 
         local.doc_authors =
                 "authors"
-            >>  local.hard_space
+            >>  hard_space
             >>  local.doc_author            [cl::push_back_a(actions.doc_authors, actions.name)]
-            >>  local.space
-            >>  *(  !(cl::ch_p(',') >> local.space)
+            >>  space
+            >>  *(  !(cl::ch_p(',') >> space)
                 >>  local.doc_author        [cl::push_back_a(actions.doc_authors, actions.name)]
-                >>  local.space
+                >>  space
                 )
             ;
 
         local.doc_license =
-                "license" >> local.hard_space
-            >> local.phrase                 [actions.extract_doc_license]
+                "license" >> hard_space
+            >> simple_phrase                [actions.extract_doc_license]
             ;
 
         local.doc_last_revision =
-                "last-revision" >> local.hard_space
+                "last-revision" >> hard_space
             >> (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_doc_last_revision]
             ;
 
         local.doc_source_mode =
-                "source-mode" >> local.hard_space
+                "source-mode" >> hard_space
             >>  (
                    cl::str_p("c++") 
                 |  "python"
@@ -173,40 +173,18 @@ namespace quickbook
 
         local.doc_biblioid =
                 "biblioid"
-            >>  local.hard_space
+            >>  hard_space
             >>  (+cl::alnum_p)              [cl::assign_a(actions.doc_biblioid.first)]
-            >>  local.hard_space
+            >>  hard_space
             >>  (+(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_doc_biblioid]
                                             [cl::push_back_a(actions.doc_biblioid_items, actions.doc_biblioid)]
             ;
 
         local.doc_lang =
-                "lang" >> local.hard_space
+                "lang" >> hard_space
             >> (*(~cl::eps_p(']') >> local.char_))
                                             [actions.extract_doc_lang]
-            ;
-
-        local.space =
-            *(cl::space_p | local.comment)
-            ;
-
-        local.hard_space =
-            (cl::eps_p - (cl::alnum_p | '_')) >> local.space  // must not be preceded by
-            ;                                   // alpha-numeric or underscore
-
-        local.comment =
-            "[/" >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
-            ;
-
-        local.dummy_block =
-            '[' >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
-            ;
-
-        local.phrase =
-           *(   common
-            |   (cl::anychar_p - ']')       [actions.plain_char]
-            )
             ;
 
         local.char_ =
