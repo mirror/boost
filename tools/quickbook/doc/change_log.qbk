@@ -173,6 +173,9 @@ the way a document is interpreted or would break existing documentation.
 [heading Version 1.5.4 - Boost 1.46.0]
 
 * Add support for `lang` attribute in documentation info.
+* Fix some bugs when using anchors, including using an anchor
+  just before a section.
+* Rearrange the structure of the grammar.
 
 [endsect] [/releases]
 
