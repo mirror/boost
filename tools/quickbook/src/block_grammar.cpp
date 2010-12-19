@@ -41,7 +41,6 @@ namespace quickbook
                         inside_paragraph,
                         element_id, element_id_1_5, element_id_1_6;
 
-        cl::symbols<>   paragraph_end_markups;
         cl::rule<scanner> block_keyword_rule;
     };
 
@@ -122,6 +121,8 @@ namespace quickbook
                 )
             ;
 
+        // If you update this, make sure local.paragraph_end matches it,
+        // without the actions.
         local.block_markup_start
             =   '[' >> local.space
             >>  (   block_keyword_rules         [detail::assign_rule(local.block_keyword_rule)]
@@ -482,16 +483,13 @@ namespace quickbook
             >> +local.eol
             ;
 
-        local.paragraph_end_markups =
-            "section", "endsect", "heading",
-            "h1", "h2", "h3", "h4", "h5", "h6",
-            "blurb", "pre", "def", "table", "include", "xinclude",
-            "variablelist", "import", "template", "warning", "caution",
-            "important", "note", "tip", ":"
-            ;
-
-        local.paragraph_end =
-                '[' >> local.space >> local.paragraph_end_markups >> local.hard_space
+        // Note: Not using local.block_markup_start here as it would change
+        // block_keyword_rule.
+        local.paragraph_end
+            =   '[' >> local.space
+            >>  (   block_keyword_rules >> (cl::eps_p - (cl::alnum_p | '_'))
+                |   block_symbol_rules
+                )
             |   local.eol >> *cl::blank_p >> cl::eol_p
             ;
 
