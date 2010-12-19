@@ -475,8 +475,8 @@ namespace quickbook
         local.list_item =
            *(   common
             |   (cl::anychar_p -
-                    (   cl::eol_p >> *cl::blank_p >> cl::eps_p(cl::ch_p('*') | '#')
-                    |   (local.eol >> local.eol)
+                    (   cl::eol_p >> *cl::blank_p
+                    >>  (cl::ch_p('*') | '#' | cl::eol_p)
                     )
                 )                               [actions.plain_char]
             )
@@ -490,7 +490,7 @@ namespace quickbook
             >>  (   block_keyword_rules >> (cl::eps_p - (cl::alnum_p | '_'))
                 |   block_symbol_rules
                 )
-            |   local.eol >> *cl::blank_p >> cl::eol_p
+            |   cl::eol_p >> *cl::blank_p >> cl::eol_p
             ;
 
         local.paragraph =

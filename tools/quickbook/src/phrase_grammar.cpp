@@ -101,7 +101,8 @@ namespace quickbook
             ']' |
             cl::if_p(var(no_eols))
             [
-                local.eol >> local.eol          // Make sure that we don't go
+                cl::eol_p >> *cl::blank_p >> cl::eol_p
+                                                // Make sure that we don't go
             ]                                   // past a single block, except
             ;                                   // when preformatted.
 
@@ -213,7 +214,8 @@ namespace quickbook
             (
                *(cl::anychar_p -
                     (   '`'
-                    |   (local.eol >> local.eol)// Make sure that we don't go
+                    |   (cl::eol_p >> *cl::blank_p >> cl::eol_p)
+                                                // Make sure that we don't go
                     )                           // past a single block
                 ) >> cl::eps_p('`')
             )                                   [actions.inline_code]
