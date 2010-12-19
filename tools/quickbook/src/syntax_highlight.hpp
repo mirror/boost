@@ -355,7 +355,7 @@ namespace quickbook
                     =
                     *(  macro
                     |   escape          
-                    |   cl::repeat_p(1)[cl::anychar_p]  [CharProcess(self.out)]
+                    |   cl::repeat_p(1)[cl::anychar_p]  [CharProcess(self.out, self.escape_actions)]
                     )
                     ;
 

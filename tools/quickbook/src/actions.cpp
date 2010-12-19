@@ -47,6 +47,8 @@ namespace quickbook
     // Handles line-breaks (DEPRECATED!!!)
     void break_action::operator()(iterator first, iterator) const
     {
+        actions.output_pre(phrase);
+
         position const pos = first.get_position();
         detail::outwarn(pos.file,pos.line) << "in column:" << pos.column << ", "
             << "[br] and \\n are deprecated" << ".\n";
@@ -63,11 +65,15 @@ namespace quickbook
 
     void tagged_action::operator()(std::string const& str) const
     {
+        actions.output_pre(out);
+
         out << pre << str << post;
     }
 
     void phrase_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(phrase);
+
         std::string str;
         phrase.swap(str);
         out << pre << str << post;
@@ -91,7 +97,10 @@ namespace quickbook
         }
 
         if(pos != end) {
-            out << pre << str << post;
+            out << pre << str;
+            // TODO: Is this right place?
+            actions.output_pre(out);
+            out << post;
         }
     }
 
@@ -100,27 +109,37 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
+        std::string anchor;
+
         if (qbk_version_n < 103) // version 1.2 and below
         {
-            out << "<anchor id=\""
-                << section_id << '.'
-                << detail::make_identifier(str.begin(), str.end())
-                << "\" />"
-                << pre << str << post
-                ;
+            anchor = section_id + '.' +
+                detail::make_identifier(str.begin(), str.end());
         }
-        else // version 1.3 and above
+        else
         {
             std::string id =
                 !element_id.empty() ? element_id :
                 qbk_version_n >= 106 ? detail::make_identifier(first, last) :
                 detail::make_identifier(str.begin(), str.end());
 
-            std::string anchor =
+            anchor =
                 fully_qualified_id(library_id, qualified_section_id, id);
+        }
 
-            out << "<anchor id=\"" << anchor << "\"/>"
-                << pre
+        actions.output_pre(out);
+        actions.anchors.swap(actions.saved_anchors);
+        actions.anchors.push_back(anchor);
+        actions.output_pre(out);
+        
+        if (qbk_version_n < 103)
+        {        
+            out << pre << str << post
+                ;
+        }
+        else // version 1.3 and above
+        {
+            out << pre
                 << "<link linkend=\"" << anchor << "\">"
                 << str
                 << "</link>"
@@ -147,8 +166,12 @@ namespace quickbook
         std::string anchor =
             fully_qualified_id(library_id, qualified_section_id, id);
 
+        actions.output_pre(out);
+        actions.anchors.swap(actions.saved_anchors);
+        actions.anchors.push_back(anchor);
+        actions.output_pre(out);
+
         out
-            << "<anchor id=\"" << anchor << "\"/>"
             << "<bridgehead renderas=\"sect" << level_ << "\">"
             << "<link linkend=\"" << anchor << "\">"
             << str
@@ -159,6 +182,7 @@ namespace quickbook
 
     void simple_phrase_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(out);
         out << pre;
         std::string str(first, last);
         if (std::string const* ptr = find(macro, str.c_str()))
@@ -175,6 +199,10 @@ namespace quickbook
 
     void cond_phrase_action_pre::operator()(iterator first, iterator last) const
     {
+        // TODO: It would probably be better to save the anchors and restore
+        // them if the phrase isn't used.
+        actions.output_pre(out);
+
         std::string str(first, last);
         conditions.push_back(find(macro, str.c_str()));
         out.push(); // save the stream
@@ -187,6 +215,8 @@ namespace quickbook
 
         if (first == last || !symbol_found)
         {
+            // clear any anchors defined in the conditional phrase.
+            actions.anchors.clear();
             out.pop(); // restore the stream
         }
         else
@@ -218,6 +248,11 @@ namespace quickbook
 
     void list_format_action::operator()(iterator first, iterator last) const
     {
+        // I think this will only have an effect on the first item,
+        // it would have been called when outputting the previous
+        // item on other items. But might as well call it every time.
+        actions.output_pre(out);
+    
         int new_indent = 0;
         while (first != last && (*first == ' ' || *first == '\t'))
         {
@@ -315,14 +350,13 @@ namespace quickbook
 
     void anchor_action::operator()(iterator first, iterator last) const
     {
-        out << "<anchor id=\"";
-        while (first != last)
-            detail::print_char(*first++, out.get());
-        out << "\" />\n";
+        actions.anchors.push_back(std::string(first, last));
     }
 
     void do_macro_action::operator()(std::string const& str) const
     {
+        actions.output_pre(phrase);
+
         if (str == quickbook_get_date)
         {
             char strdate[64];
@@ -343,7 +377,6 @@ namespace quickbook
 
     void space::operator()(char ch) const
     {
-
         detail::print_space(ch, out.get());
     }
 
@@ -360,6 +393,7 @@ namespace quickbook
 
     void post_escape_back::operator()(iterator first, iterator last) const
     {
+        escape_actions.output_pre(escape_actions.phrase);
         out << escape_actions.phrase.str();
         escape_actions.phrase.pop(); // restore the stream
     }
@@ -376,6 +410,8 @@ namespace quickbook
         iterator last_(program.end(), program.end());
         first_.set_position(first.get_position());
 
+        // TODO: Shouldn't phrase be empty here? Why would it be output
+        // after the code block?
         std::string save;
         phrase.swap(save);
 
@@ -388,6 +424,7 @@ namespace quickbook
         // We must not place a \n after the <programlisting> tag
         // otherwise PDF output starts code blocks with a blank line:
         //
+        actions.output_pre(out);
         out << "<programlisting>";
         out << str;
         out << "</programlisting>\n";
@@ -403,6 +440,7 @@ namespace quickbook
 
         out.swap(save);
 
+        actions.output_pre(out);
         out << "<code>";
         out << str;
         out << "</code>";
@@ -410,26 +448,32 @@ namespace quickbook
 
     void raw_char_action::operator()(char ch) const
     {
+        actions.output_pre(phrase);
         phrase << ch;
     }
 
     void raw_char_action::operator()(iterator first, iterator /*last*/) const
     {
+        actions.output_pre(phrase);
         phrase << *first;
     }
 
     void plain_char_action::operator()(char ch) const
     {
+        actions.output_pre(phrase);
         detail::print_char(ch, phrase.get());
     }
 
     void plain_char_action::operator()(iterator first, iterator /*last*/) const
     {
+        actions.output_pre(phrase);
         detail::print_char(*first, phrase.get());
     }
 
     void escape_unicode_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(phrase);
+
         while(first != last && *first == '0') ++first;
 
         // Just ignore \u0000
@@ -462,6 +506,8 @@ namespace quickbook
 
     void image_action::operator()(iterator, iterator) const
     {
+        actions.output_pre(phrase);
+
         fs::path const img_path(image_fileref);
         
         attribute_map::iterator it = attributes.find("alt");
@@ -994,6 +1040,8 @@ namespace quickbook
 
     void link_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(phrase);
+
         iterator save = first;
         phrase << tag;
         while (first != last)
@@ -1126,7 +1174,7 @@ namespace quickbook
     }
 
     void begin_section_action::operator()(iterator first, iterator last) const
-    {
+    {    
         section_id = element_id.empty() ?
             detail::make_identifier(first, last) :
             element_id;
@@ -1137,6 +1185,8 @@ namespace quickbook
             BOOST_ASSERT(qualified_section_id.empty());
         qualified_section_id += section_id;
         ++section_level;
+
+        actions.output_pre(out);
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
@@ -1150,6 +1200,9 @@ namespace quickbook
         }
         std::string str;
         phrase.swap(str);
+
+        actions.anchors.swap(actions.saved_anchors);
+        actions.output_pre(out);
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
@@ -1169,6 +1222,8 @@ namespace quickbook
 
     void end_section_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(out);
+
         if (section_level <= min_section_level)
         {
             position const pos = first.get_position();
@@ -1236,6 +1291,8 @@ namespace quickbook
 
     void xinclude_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(out);
+
         fs::path path = calculate_relative_path(first, last, actions);
         out << "\n<xi:include href=\"";
         detail::print_string(detail::escape_uri(path.string()), out.get());
@@ -1275,6 +1332,8 @@ namespace quickbook
 
     void import_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(actions.out);
+
         fs::path path = include_search(actions.filename.parent_path(), std::string(first,last));
         std::string ext = path.extension();
         std::vector<template_symbol> storage;
@@ -1297,6 +1356,8 @@ namespace quickbook
 
     void include_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(actions.out);
+
         fs::path filein = include_search(actions.filename.parent_path(), std::string(first,last));
         std::string doc_type, doc_id;
         docinfo_string doc_dirname, doc_last_revision;
@@ -1367,14 +1428,49 @@ namespace quickbook
 
     void phrase_to_string_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(phrase);
+
         out.clear();
         phrase.swap(out);
     }
 
     void phrase_to_docinfo_action::operator()(iterator first, iterator last) const
     {
+        actions.output_pre(phrase);
+
         out.encoded.clear();
         phrase.swap(out.encoded);
         out.raw = std::string(first, last);
+    }
+    
+    void inner_phrase_action_pre::operator()(iterator, iterator) const
+    {
+        actions.saved_anchors.clear();
+        actions.saved_anchors.swap(actions.anchors);
+    }
+
+    void inner_phrase_action_post::operator()(iterator, iterator) const
+    {
+        actions.output_pre(actions.phrase);
+    }
+
+    void pre_output_action::operator()(collector& tgt) const
+    {
+        for(quickbook::actions::string_list::iterator
+            it = actions.anchors.begin(),
+            end = actions.anchors.end();
+            it != end; ++it)
+        {
+            tgt << "<anchor id=\"";
+            detail::print_string(*it, tgt.get());
+            tgt << "\"/>\n";
+        }
+        
+        actions.anchors.clear();
+    }
+    
+    void pre_output_action::operator()(iterator, iterator) const
+    {
+        (*this)(actions.out);
     }
 }

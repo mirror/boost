@@ -1,0 +1,32 @@
+[article Anchor Test
+]
+
+[section Anchors]
+
+[#a1] A paragraph containing several anchors. [#a2] We want to make sure
+they appear in the correct place. [#a3]
+
+[heading This heading shouldn't pick up the previous anchor]
+
+[#a4]
+
+[heading This heading should pick up the previous anchor]
+
+[#a5]
+[heading And this one]
+
+[#a6][heading Also this one]
+
+[#a7][h3 Finally this]
+
+[#a8]
+
+[endsect]
+
+[#a8]
+[section Section Anchor]
+[section Nested Section]
+[endsect]
+[/ This anchor is invalid, I'm not sure what to do with it]
+[#a9]
+[endsect]

@@ -34,7 +34,7 @@ namespace quickbook
                         start_, blocks, block_markup, code, code_line, blank_line,
                         paragraph, space, blank, comment, headings, h, h1, h2,
                         h3, h4, h5, h6, hr, blurb, blockquote, admonition,
-                        phrase, list, phrase_end, ordered_list, def_macro,
+                        inner_phrase, phrase, list, phrase_end, ordered_list, def_macro,
                         macro_identifier, table, table_row, variablelist,
                         varlistentry, varlistterm, varlistitem, table_cell,
                         preformatted, list_item, begin_section, end_section,
@@ -180,7 +180,7 @@ namespace quickbook
             >> hard_space
             >> element_id
             >> space
-            >> phrase                           [actions.begin_section]
+            >> inner_phrase                     [actions.begin_section]
             ;
 
         end_section =
@@ -191,13 +191,13 @@ namespace quickbook
             h1 | h2 | h3 | h4 | h5 | h6 | h
             ;
 
-        h = "heading" >> hard_space >> element_id_1_6 >> space >> phrase   [actions.h];
-        h1 = "h1" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h1];
-        h2 = "h2" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h2];
-        h3 = "h3" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h3];
-        h4 = "h4" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h4];
-        h5 = "h5" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h5];
-        h6 = "h6" >> hard_space >> element_id_1_6 >> space >> phrase       [actions.h6];
+        h = "heading" >> hard_space >> element_id_1_6 >> space >> inner_phrase   [actions.h];
+        h1 = "h1" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h1];
+        h2 = "h2" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h2];
+        h3 = "h3" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h3];
+        h4 = "h4" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h4];
+        h5 = "h5" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h5];
+        h6 = "h6" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h6];
 
         static const bool true_ = true;
         static const bool false_ = false;
@@ -297,7 +297,7 @@ namespace quickbook
             "variablelist"
             >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | hard_space)
             >>  (*(cl::anychar_p - eol))        [cl::assign_a(actions.table_title)]
-            >>  +eol
+            >>  (+eol)                          [actions.output_pre]
             >>  *varlistentry
             >>  cl::eps_p                       [actions.variablelist]
             ;
@@ -354,7 +354,7 @@ namespace quickbook
             >> element_id_1_5
             >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
             >>  (*(cl::anychar_p - eol))        [cl::assign_a(actions.table_title)]
-            >>  +eol
+            >>  (+eol)                          [actions.output_pre]
             >>  *table_row
             >>  cl::eps_p                       [actions.table]
             ;
@@ -464,11 +464,18 @@ namespace quickbook
 
         paragraph =
            +(   common
-            |   (cl::anychar_p -                // Make sure we don't go past
-                    paragraph_end               // a single block.
-                )                               [actions.plain_char]
+            |   (cl::eps_p - paragraph_end)
+            >>  (   cl::space_p                 [actions.space_char]
+                |   cl::anychar_p               [actions.plain_char]
+                )
             )
             >> (cl::eps_p('[') | +eol)
+            ;
+
+        inner_phrase =
+                cl::eps_p                       [actions.inner_phrase_pre]
+            >>  phrase
+            >>  cl::eps_p                       [actions.inner_phrase_post]
             ;
 
         phrase =
