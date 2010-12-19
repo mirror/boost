@@ -30,6 +30,7 @@ exe quickbook
     code_snippet.cpp
     markups.cpp
     syntax_highlight.cpp
+    grammar.cpp
     block_grammar.cpp
     phrase_grammar.cpp
     doc_info_grammar.cpp

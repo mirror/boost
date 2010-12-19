@@ -8,7 +8,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include "phrase_grammar.hpp"
+#include "grammar_impl.hpp"
 #include "actions_class.hpp"
 #include "utils.hpp"
 #include <boost/spirit/include/classic_core.hpp>
@@ -21,6 +21,8 @@
 
 namespace quickbook
 {
+    namespace cl = boost::spirit::classic;
+
     template <typename Rule, typename Action>
     inline void
     simple_markup(
@@ -55,56 +57,79 @@ namespace quickbook
             ;
     }
 
-    template <typename Scanner>
-    phrase_grammar::definition<Scanner>::definition(phrase_grammar const& self)
+    struct phrase_grammar_local
+    {
+        cl::rule<scanner>
+                        space, blank, comment, phrase_markup, image,
+                        simple_phrase_end, phrase_end, bold, italic, underline, teletype,
+                        strikethrough, escape, url, funcref, classref,
+                        memberref, enumref, macroref, headerref, conceptref, globalref,
+                        anchor, link, hard_space, eol, inline_code, simple_format,
+                        simple_bold, simple_italic, simple_underline,
+                        simple_teletype, template_,
+                        source_mode_cpp, source_mode_python, source_mode_teletype,
+                        quote, code_block, footnote, replaceable, macro,
+                        dummy_block, cond_phrase, macro_identifier, template_args,
+                        template_args_1_4, template_arg_1_4,
+                        template_inner_arg_1_4, brackets_1_4,
+                        template_args_1_5, template_arg_1_5,
+                        template_inner_arg_1_5, brackets_1_5,
+                        command_line_macro_identifier, command_line_phrase
+                        ;
+
+        cl::rule<scanner> phrase_keyword_rule;
+    };
+
+    void quickbook_grammar::impl::init_phrase()
     {
         using detail::var;
-        quickbook::actions& actions = self.actions;
 
-        space =
-            *(cl::space_p | comment)
+        phrase_grammar_local& local = store_.create();
+
+        local.space =
+            *(cl::space_p | local.comment)
             ;
 
-        blank =
-            *(cl::blank_p | comment)
+        local.blank =
+            *(cl::blank_p | local.comment)
             ;
 
-        eol = blank >> cl::eol_p
+        local.eol = local.blank >> cl::eol_p
             ;
 
-        phrase_end =
+        local.phrase_end =
             ']' |
-            cl::if_p(var(self.no_eols))
+            cl::if_p(var(no_eols))
             [
-                eol >> eol                      // Make sure that we don't go
+                local.eol >> local.eol          // Make sure that we don't go
             ]                                   // past a single block, except
             ;                                   // when preformatted.
 
         // Follows an alphanumeric identifier - ensures that it doesn't
         // match an empty space in the middle of the identifier.
-        hard_space =
-            (cl::eps_p - (cl::alnum_p | '_')) >> space
+        local.hard_space =
+            (cl::eps_p - (cl::alnum_p | '_')) >> local.space
             ;
 
-        comment =
-            "[/" >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
+        local.comment =
+            "[/" >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
             ;
 
-        dummy_block =
-            '[' >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
+        local.dummy_block =
+            '[' >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
             ;
 
         common =
-                macro
-            |   phrase_markup
-            |   code_block
-            |   inline_code
-            |   simple_format
-            |   escape
-            |   comment
+                local.macro
+            |   local.phrase_markup
+            |   local.code_block
+            |   local.inline_code
+            |   local.simple_format
+            |   local.escape
+            |   local.comment
             ;
 
-        macro =
+        local.macro =
             // must not be followed by alpha or underscore
             cl::eps_p(actions.macro
                 >> (cl::eps_p - (cl::alpha_p | '_')))
@@ -114,7 +139,7 @@ namespace quickbook
         static const bool true_ = true;
         static const bool false_ = false;
 
-        template_ =
+        local.template_ =
             (
                 cl::ch_p('`')                   [cl::assign_a(actions.template_escape,true_)]
                 |
@@ -126,76 +151,76 @@ namespace quickbook
                     >> actions.templates.scope
                 )                               [cl::assign_a(actions.template_identifier)]
                                                 [cl::clear_a(actions.template_args)]
-                >> !template_args
+                >> !local.template_args
             ) | (
                 (actions.templates.scope
-                    >> cl::eps_p(hard_space)
+                    >> cl::eps_p(local.hard_space)
                 )                               [cl::assign_a(actions.template_identifier)]
                                                 [cl::clear_a(actions.template_args)]
-                >> space
-                >> !template_args
+                >> local.space
+                >> !local.template_args
             ) )
             >> cl::eps_p(']')
             ;
 
-        template_args =
+        local.template_args =
             cl::if_p(qbk_since(105u)) [
-                template_args_1_5
+                local.template_args_1_5
             ].else_p [
-                template_args_1_4
+                local.template_args_1_4
             ]
             ;
 
-        template_args_1_4 = template_arg_1_4 >> *(".." >> template_arg_1_4);
+        local.template_args_1_4 = local.template_arg_1_4 >> *(".." >> local.template_arg_1_4);
 
-        template_arg_1_4 =
+        local.template_arg_1_4 =
                 (   cl::eps_p(*cl::blank_p >> cl::eol_p)
                                                 [cl::assign_a(actions.template_block, true_)]
                 |   cl::eps_p                   [cl::assign_a(actions.template_block, false_)]
                 )
-            >>  template_inner_arg_1_4          [actions.template_arg]
+            >>  local.template_inner_arg_1_4    [actions.template_arg]
             ;
 
-        template_inner_arg_1_4 =
-            +(brackets_1_4 | (cl::anychar_p - (cl::str_p("..") | ']')))
+        local.template_inner_arg_1_4 =
+            +(local.brackets_1_4 | (cl::anychar_p - (cl::str_p("..") | ']')))
             ;
 
-        brackets_1_4 =
-            '[' >> template_inner_arg_1_4 >> ']'
+        local.brackets_1_4 =
+            '[' >> local.template_inner_arg_1_4 >> ']'
             ;
 
-        template_args_1_5 = template_arg_1_5 >> *(".." >> template_arg_1_5);
+        local.template_args_1_5 = local.template_arg_1_5 >> *(".." >> local.template_arg_1_5);
 
-        template_arg_1_5 =
+        local.template_arg_1_5 =
                 (   cl::eps_p(*cl::blank_p >> cl::eol_p)
                                                 [cl::assign_a(actions.template_block, true_)]
                 |   cl::eps_p                   [cl::assign_a(actions.template_block, false_)]
                 )
-            >>  (+(brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p("..") | '[' | ']'))))
+            >>  (+(local.brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p("..") | '[' | ']'))))
                                                 [actions.template_arg]
             ;
 
-        template_inner_arg_1_5 =
-            +(brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p('[') | ']')))
+        local.template_inner_arg_1_5 =
+            +(local.brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p('[') | ']')))
             ;
 
-        brackets_1_5 =
-            '[' >> template_inner_arg_1_5 >> ']'
+        local.brackets_1_5 =
+            '[' >> local.template_inner_arg_1_5 >> ']'
             ;
 
-        inline_code =
+        local.inline_code =
             '`' >>
             (
                *(cl::anychar_p -
                     (   '`'
-                    |   (eol >> eol)            // Make sure that we don't go
+                    |   (local.eol >> local.eol)// Make sure that we don't go
                     )                           // past a single block
                 ) >> cl::eps_p('`')
             )                                   [actions.inline_code]
             >>  '`'
             ;
 
-        code_block =
+        local.code_block =
                 (
                     "```" >>
                     (
@@ -214,45 +239,45 @@ namespace quickbook
                 )
             ;
 
-        simple_format =
-                simple_bold
-            |   simple_italic
-            |   simple_underline
-            |   simple_teletype
+        local.simple_format =
+                local.simple_bold
+            |   local.simple_italic
+            |   local.simple_underline
+            |   local.simple_teletype
             ;
 
-        simple_phrase_end = '[' | phrase_end;
+        local.simple_phrase_end = '[' | local.phrase_end;
 
-        simple_markup(simple_bold,
-            '*', actions.simple_bold, simple_phrase_end);
-        simple_markup(simple_italic,
-            '/', actions.simple_italic, simple_phrase_end);
-        simple_markup(simple_underline,
-            '_', actions.simple_underline, simple_phrase_end);
-        simple_markup(simple_teletype,
-            '=', actions.simple_teletype, simple_phrase_end);
+        simple_markup(local.simple_bold,
+            '*', actions.simple_bold, local.simple_phrase_end);
+        simple_markup(local.simple_italic,
+            '/', actions.simple_italic, local.simple_phrase_end);
+        simple_markup(local.simple_underline,
+            '_', actions.simple_underline, local.simple_phrase_end);
+        simple_markup(local.simple_teletype,
+            '=', actions.simple_teletype, local.simple_phrase_end);
 
         phrase =
            *(   common
-            |   comment
-            |   (cl::anychar_p - phrase_end)    [actions.plain_char]
+            |   local.comment
+            |   (cl::anychar_p - local.phrase_end)    [actions.plain_char]
             )
             ;
 
-        phrase_markup
+        local.phrase_markup
             =   '['
-            >>  (   phrase_keyword_rules        [detail::assign_rule(phrase_keyword_rule)]
+            >>  (   phrase_keyword_rules        [detail::assign_rule(local.phrase_keyword_rule)]
                 >>  (cl::eps_p - (cl::alnum_p | '_'))
-                >>  phrase_keyword_rule
-                |   phrase_symbol_rules         [detail::assign_rule(phrase_keyword_rule)]
-                >>  phrase_keyword_rule
-                |   template_                   [actions.do_template]
+                >>  local.phrase_keyword_rule
+                |   phrase_symbol_rules         [detail::assign_rule(local.phrase_keyword_rule)]
+                >>  local.phrase_keyword_rule
+                |   local.template_             [actions.do_template]
                 |   cl::str_p("br")             [actions.break_]
                 )
             >>  ']'
             ;
 
-        escape =
+        local.escape =
                 cl::str_p("\\n")                [actions.break_]
             |   cl::str_p("\\ ")                // ignore an escaped space
             |   '\\' >> cl::punct_p             [actions.raw_char]
@@ -261,317 +286,263 @@ namespace quickbook
             |   "\\U" >> cl::repeat_p(8) [cl::chset<>("0-9a-fA-F")]
                                                 [actions.escape_unicode]
             |   (
-                    ("'''" >> !eol)             [actions.escape_pre]
+                    ("'''" >> !local.eol)       [actions.escape_pre]
                 >>  *(cl::anychar_p - "'''")    [actions.raw_char]
                 >>  cl::str_p("'''")            [actions.escape_post]
                 )
             ;
 
-        macro_identifier =
+        local.macro_identifier =
             +(cl::anychar_p - (cl::space_p | ']'))
             ;
 
         phrase_symbol_rules.add
-            ("?", &cond_phrase)
+            ("?", &local.cond_phrase)
             ;
 
-        cond_phrase =
-                blank
-            >>  macro_identifier                [actions.cond_phrase_pre]
+        local.cond_phrase =
+                local.blank
+            >>  local.macro_identifier          [actions.cond_phrase_pre]
             >>  (!phrase)                       [actions.cond_phrase_post]
             ;
 
         phrase_symbol_rules.add
-            ("$", &image)
+            ("$", &local.image)
             ;
 
-        image =
-                blank                           [cl::clear_a(actions.attributes)]
+        local.image =
+                local.blank                     [cl::clear_a(actions.attributes)]
             >>  cl::if_p(qbk_since(105u)) [
                         (+(
                             *cl::space_p
-                        >>  +(cl::anychar_p - (cl::space_p | phrase_end | '['))
+                        >>  +(cl::anychar_p - (cl::space_p | local.phrase_end | '['))
                         ))                       [cl::assign_a(actions.image_fileref)]
-                    >>  hard_space
+                    >>  local.hard_space
                     >>  *(
                             '['
                         >>  (*(cl::alnum_p | '_'))  [cl::assign_a(actions.attribute_name)]
-                        >>  space
-                        >>  (*(cl::anychar_p - (phrase_end | '[')))
+                        >>  local.space
+                        >>  (*(cl::anychar_p - (local.phrase_end | '[')))
                                                 [actions.attribute]
                         >>  ']'
-                        >>  space
+                        >>  local.space
                         )
                 ].else_p [
-                        (*(cl::anychar_p - phrase_end))
+                        (*(cl::anychar_p - local.phrase_end))
                                                 [cl::assign_a(actions.image_fileref)]
                 ]
             >>  cl::eps_p(']')                  [actions.image]
             ;
             
         phrase_symbol_rules.add
-            ("@", &url)
+            ("@", &local.url)
             ;
 
-        url =
+        local.url =
                 (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.url_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.url_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.url_post]
             ;
 
         phrase_keyword_rules.add
-            ("link", &link)
+            ("link", &local.link)
             ;
 
-        link =
-                space
-            >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.link_pre]
-            >>  hard_space
+        local.link =
+                local.space
+            >>  (*(cl::anychar_p - (']' | local.hard_space)))
+                                                [actions.link_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.link_post]
             ;
 
         phrase_symbol_rules.add
-            ("#", &anchor)
+            ("#", &local.anchor)
             ;
 
-        anchor =
-                blank
-            >>  (*(cl::anychar_p - phrase_end)) [actions.anchor]
+        local.anchor =
+                local.blank
+            >>  (*(cl::anychar_p - local.phrase_end)) [actions.anchor]
             ;
 
         phrase_keyword_rules.add
-            ("funcref", &funcref)
-            ("classref", &classref)
-            ("memberref", &memberref)
-            ("enumref", &enumref)
-            ("macroref", &macroref)
-            ("headerref", &headerref)
-            ("conceptref", &conceptref)
-            ("globalref", &globalref)
+            ("funcref", &local.funcref)
+            ("classref", &local.classref)
+            ("memberref", &local.memberref)
+            ("enumref", &local.enumref)
+            ("macroref", &local.macroref)
+            ("headerref", &local.headerref)
+            ("conceptref", &local.conceptref)
+            ("globalref", &local.globalref)
             ;
 
-        funcref =
-                space
+        local.funcref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.funcref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.funcref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.funcref_post]
             ;
 
-        classref =
-                space
+        local.classref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.classref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.classref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.classref_post]
             ;
 
-        memberref =
-                space
+        local.memberref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.memberref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.memberref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.memberref_post]
             ;
 
-        enumref =
-                space
+        local.enumref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.enumref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.enumref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.enumref_post]
             ;
 
-        macroref =
-                space
+        local.macroref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.macroref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.macroref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.macroref_post]
             ;
 
-        headerref =
-                space
+        local.headerref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.headerref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.headerref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.headerref_post]
             ;
 
-        conceptref =
-                space
+        local.conceptref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.conceptref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.conceptref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.conceptref_post]
             ;
 
-        globalref =
-                space
+        local.globalref =
+                local.space
             >>  (*(cl::anychar_p -
-                    (']' | hard_space)))        [actions.globalref_pre]
-            >>  hard_space
+                    (']' | local.hard_space)))  [actions.globalref_pre]
+            >>  local.hard_space
             >>  phrase                          [actions.globalref_post]
             ;
 
         phrase_symbol_rules.add
-            ("*", &bold)
-            ("'", &italic)
-            ("_", &underline)
-            ("^", &teletype)
-            ("-", &strikethrough)
-            ("\"", &quote)
-            ("~", &replaceable)
+            ("*", &local.bold)
+            ("'", &local.italic)
+            ("_", &local.underline)
+            ("^", &local.teletype)
+            ("-", &local.strikethrough)
+            ("\"", &local.quote)
+            ("~", &local.replaceable)
             ;
 
-        bold =
-                blank                           [actions.bold_pre]
+        local.bold =
+                local.blank                     [actions.bold_pre]
             >>  phrase                          [actions.bold_post]
             ;
 
-        italic =
-                blank                           [actions.italic_pre]
+        local.italic =
+                local.blank                     [actions.italic_pre]
             >>  phrase                          [actions.italic_post]
             ;
 
-        underline =
-                blank                           [actions.underline_pre]
+        local.underline =
+                local.blank                     [actions.underline_pre]
             >>  phrase                          [actions.underline_post]
             ;
 
-        teletype =
-                blank                           [actions.teletype_pre]
+        local.teletype =
+                local.blank                     [actions.teletype_pre]
             >>  phrase                          [actions.teletype_post]
             ;
 
-        strikethrough =
-                blank                           [actions.strikethrough_pre]
+        local.strikethrough =
+                local.blank                     [actions.strikethrough_pre]
             >>  phrase                          [actions.strikethrough_post]
             ;
 
-        quote =
-                blank                           [actions.quote_pre]
+        local.quote =
+                local.blank                     [actions.quote_pre]
             >>  phrase                          [actions.quote_post]
             ;
 
-        replaceable =
-                blank                           [actions.replaceable_pre]
+        local.replaceable =
+                local.blank                     [actions.replaceable_pre]
             >>  phrase                          [actions.replaceable_post]
             ;
 
         phrase_keyword_rules.add
-            ("c++", &source_mode_cpp)
-            ("python", &source_mode_python)
-            ("teletype", &source_mode_teletype)
+            ("c++", &local.source_mode_cpp)
+            ("python", &local.source_mode_python)
+            ("teletype", &local.source_mode_teletype)
             ;
         
-        source_mode_cpp = cl::eps_p [cl::assign_a(actions.source_mode, "c++")];
-        source_mode_python = cl::eps_p [cl::assign_a(actions.source_mode, "python")];
-        source_mode_teletype = cl::eps_p [cl::assign_a(actions.source_mode, "teletype")];
+        local.source_mode_cpp = cl::eps_p [cl::assign_a(actions.source_mode, "c++")];
+        local.source_mode_python = cl::eps_p [cl::assign_a(actions.source_mode, "python")];
+        local.source_mode_teletype = cl::eps_p [cl::assign_a(actions.source_mode, "teletype")];
 
         phrase_keyword_rules.add
-            ("footnote", &footnote)
+            ("footnote", &local.footnote)
             ;
 
-        footnote =
-                blank                           [actions.footnote_pre]
+        local.footnote =
+                local.blank                     [actions.footnote_pre]
             >>  phrase                          [actions.footnote_post]
             ;
-    }
 
-    template <typename Scanner>
-    struct simple_phrase_grammar::definition
-    {
-        definition(simple_phrase_grammar const& self)
-            : unused(false), common(self.actions, unused)
-        {
-            quickbook::actions& actions = self.actions;
+        //
+        // Simple phrase grammar
+        //
 
-            phrase =
-               *(   common
-                |   comment
-                |   (cl::anychar_p - ']')       [actions.plain_char]
-                )
-                ;
+        simple_phrase =
+           *(   common
+            |   local.comment
+            |   (cl::anychar_p - ']')       [actions.plain_char]
+            )
+            ;
 
-            comment =
-                "[/" >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
-                ;
+        //
+        // Command line
+        //
 
-            dummy_block =
-                '[' >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
-                ;
-        }
-
-        bool unused;
-        cl::rule<Scanner> phrase, comment, dummy_block;
-        phrase_grammar common;
-
-        cl::rule<Scanner> const&
-        start() const { return phrase; }
-    };
-
-    template <typename Scanner>
-    struct command_line_grammar::definition
-    {
-        definition(command_line_grammar const& self)
-            : unused(false), common(self.actions, unused)
-        {
-            quickbook::actions& actions = self.actions;
-
-            macro =
-                    *cl::space_p
-                >>  macro_identifier            [actions.macro_identifier]
+        command_line =
+                *cl::space_p
+            >>  local.command_line_macro_identifier
+                                            [actions.macro_identifier]
+            >>  *cl::space_p
+            >>  (   '='
                 >>  *cl::space_p
-                >>  (   '='
-                    >>  *cl::space_p
-                    >>  phrase                  [actions.macro_definition]
-                    >>  *cl::space_p
-                    )
-                |   cl::eps_p                   [actions.macro_definition]
-                ;
-
-            macro_identifier =
-                +(cl::anychar_p - (cl::space_p | ']' | '='))
-                ;
-
-            phrase =
-               *(   common
-                |   (cl::anychar_p - ']')       [actions.plain_char]
+                >>  local.command_line_phrase
+                                            [actions.macro_definition]
+                >>  *cl::space_p
                 )
-                ;
-        }
+            |   cl::eps_p                   [actions.macro_definition]
+            ;
 
-        bool unused;
-        cl::rule<Scanner> macro, macro_identifier, phrase;
-        phrase_grammar common;
+        local.command_line_macro_identifier =
+            +(cl::anychar_p - (cl::space_p | ']' | '='))
+            ;
 
-        cl::rule<Scanner> const&
-        start() const { return macro; }
-    };
 
-    cl::parse_info<iterator> call_parse(
-        iterator& first, iterator last, phrase_grammar& g)
-    {
-        return boost::spirit::classic::parse(first, last, g);
+        local.command_line_phrase =
+           *(   common
+            |   (cl::anychar_p - ']')       [actions.plain_char]
+            )
+            ;
     }
-
-    cl::parse_info<iterator> call_parse(
-        iterator& first, iterator last, simple_phrase_grammar& g)
-    {
-        return boost::spirit::classic::parse(first, last, g);
-    }
-
-    cl::parse_info<iterator> call_parse(
-        iterator& first, iterator last, command_line_grammar& g)
-    {
-        return boost::spirit::classic::parse(first, last, g);
-    }
-
-    // Explicitly instantiate phrase_grammar definition so that it can be
-    // used in other grammars.
-    template phrase_grammar::definition<scanner>::definition(
-        phrase_grammar const& self);
 }

@@ -44,7 +44,7 @@ namespace quickbook
 
     static void set_macros(actions& actor)
     {
-        quickbook::command_line_grammar grammar(actor);
+        quickbook_grammar g(actor);
 
         for(std::vector<std::string>::const_iterator
                 it = preset_defines.begin(),
@@ -54,7 +54,7 @@ namespace quickbook
             iterator first(it->begin(), it->end(), "command line parameter");
             iterator last(it->end(), it->end());
 
-            call_parse(first, last, grammar);
+            cl::parse(first, last, g.command_line_macro);
             // TODO: Check result?
         }
     }
@@ -81,15 +81,14 @@ namespace quickbook
         iterator first(storage.begin(), storage.end(), filein_);
         iterator last(storage.end(), storage.end());
 
-        doc_info_grammar l(actor);
-        cl::parse_info<iterator> info = call_parse(first, last, l);
+        quickbook_grammar g(actor);
+        cl::parse_info<iterator> info = cl::parse(first, last, g.doc_info);
 
         if (info.hit || ignore_docinfo)
         {
             pre(actor.out, actor, ignore_docinfo);
 
-            block_grammar g(actor);
-            info = call_parse(info.hit ? info.stop : first, last, g);
+            info = cl::parse(info.hit ? info.stop : first, last, g.block);
             if (info.full)
             {
                 post(actor.out, actor, ignore_docinfo);

@@ -17,8 +17,7 @@
 #ifndef BOOST_QUICKBOOK_SCOPED_BLOCK_HPP
 #define BOOST_QUICKBOOK_SCOPED_BLOCK_HPP
 
-#include <boost/spirit/home/classic/namespace.hpp>
-#include <boost/spirit/home/classic/core/composite/composite.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 #include "actions_class.hpp"
 
 namespace quickbook {

@@ -15,7 +15,7 @@
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
-#include "phrase_grammar.hpp"
+#include "grammar.hpp"
 
 namespace quickbook
 {
@@ -41,8 +41,7 @@ namespace quickbook
         struct definition
         {
             definition(cpp_highlight const& self)
-                : common(self.escape_actions, unused)
-                , unused(false)
+                : g(self.escape_actions)
             {
                 program
                     =
@@ -70,7 +69,7 @@ namespace quickbook
                     ;
 
                 qbk_phrase =
-                   *(   common
+                   *(   g.common
                     |   (cl::anychar_p - cl::str_p("``"))
                                         [self.escape_actions.plain_char]
                     )
@@ -158,9 +157,8 @@ namespace quickbook
                             string_char;
 
             cl::symbols<> keyword_;
-            phrase_grammar common;
+            quickbook_grammar g;
             std::string save;
-            bool unused;
 
             cl::rule<Scanner> const&
             start() const { return program; }
@@ -194,8 +192,7 @@ namespace quickbook
         struct definition
         {
             definition(python_highlight const& self)
-                : common(self.escape_actions, unused)
-                , unused(false)
+                : g(self.escape_actions)
             {
                 program
                     =
@@ -221,7 +218,7 @@ namespace quickbook
                     ;
 
                 qbk_phrase =
-                   *(   common
+                   *(   g.common
                     |   (cl::anychar_p - cl::str_p("``"))
                                         [self.escape_actions.plain_char]
                     )
@@ -316,9 +313,8 @@ namespace quickbook
                             qbk_phrase, escape, string_char;
 
             cl::symbols<> keyword_;
-            phrase_grammar common;
+            quickbook_grammar g;
             std::string save;
-            bool unused;
 
             cl::rule<Scanner> const&
             start() const { return program; }
@@ -348,8 +344,7 @@ namespace quickbook
         struct definition
         {
             definition(teletype_highlight const& self)
-                : common(self.escape_actions, unused)
-                , unused(false)
+                : g(self.escape_actions)
             {
                 program
                     =
@@ -367,7 +362,7 @@ namespace quickbook
                     ;
 
                 qbk_phrase =
-                   *(   common
+                   *(   g.common
                     |   (cl::anychar_p - cl::str_p("``"))
                                         [self.escape_actions.plain_char]
                     )
@@ -395,9 +390,8 @@ namespace quickbook
 
             cl::rule<Scanner> program, macro, qbk_phrase, escape;
 
-            phrase_grammar common;
+            quickbook_grammar g;
             std::string save;
-            bool unused;
 
             cl::rule<Scanner> const&
             start() const { return program; }

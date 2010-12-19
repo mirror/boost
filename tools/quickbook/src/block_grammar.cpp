@@ -8,10 +8,10 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include "phrase_grammar.hpp"
+#include "scoped_block.hpp"
 #include "utils.hpp"
 #include "actions_class.hpp"
-#include "scoped_block.hpp"
+#include "grammar_impl.hpp"
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_assign_actor.hpp>
@@ -23,15 +23,10 @@ namespace quickbook
 {
     namespace cl = boost::spirit::classic;
 
-    template <typename Scanner>
-    struct block_grammar::definition
+    struct block_grammar_local
     {
-        definition(block_grammar const&);
-
-        bool no_eols;
-
-        cl::rule<Scanner>
-                        start_, blocks, block_markup, block_markup_start,
+        cl::rule<scanner>
+                        blocks, block_markup, block_markup_start,
                         code, code_line, blank_line,
                         paragraph, space, blank, comment, h, h1, h2,
                         h3, h4, h5, h6, hr, blurb, blockquote,
@@ -47,108 +42,100 @@ namespace quickbook
                         element_id, element_id_1_5, element_id_1_6;
 
         cl::symbols<>   paragraph_end_markups;
-
-        cl::symbols<cl::rule<Scanner>*> block_keyword_rules, block_symbol_rules;
-        cl::rule<Scanner> block_keyword_rule;
-
-        phrase_grammar common;
-
-        cl::rule<Scanner> const&
-        start() const { return start_; }
+        cl::rule<scanner> block_keyword_rule;
     };
 
-    template <typename Scanner>
-    block_grammar::definition<Scanner>::definition(block_grammar const& self)
-        : no_eols(true)
-        , common(self.actions, no_eols)
+    void quickbook_grammar::impl::init_block(bool skip_initial_spaces)
     {
         using detail::var;
-        quickbook::actions& actions = self.actions;
 
-        if (self.skip_initial_spaces)
+        block_grammar_local& local = store_.create();
+
+        if (skip_initial_spaces)
         {
-            start_ =
-                *(cl::blank_p | comment) >> blocks >> blank
+            block_start =
+                *(cl::blank_p | local.comment) >> local.blocks >> local.blank
                 ;
         }
         else
         {
-            start_ =
-                blocks >> blank
+            block_start =
+                local.blocks >> local.blank
                 ;
         }
 
-        blocks =
-           *(   block_markup
-            |   code
-            |   list                            [actions.list]
-            |   hr                              [actions.hr]
-            |   +eol
-            |   paragraph                       [actions.inside_paragraph]
+        local.blocks =
+           *(   local.block_markup
+            |   local.code
+            |   local.list                      [actions.list]
+            |   local.hr                        [actions.hr]
+            |   +local.eol
+            |   local.paragraph                 [actions.inside_paragraph]
             )
             ;
 
-        space =
-            *(cl::space_p | comment)
+        local.space =
+            *(cl::space_p | local.comment)
             ;
 
-        blank =
-            *(cl::blank_p | comment)
+        local.blank =
+            *(cl::blank_p | local.comment)
             ;
 
-        eol = blank >> cl::eol_p
+        local.eol = local.blank >> cl::eol_p
             ;
 
-        phrase_end =
+        local.phrase_end =
             ']' |
             cl::if_p(var(no_eols))
             [
-                eol >> *cl::blank_p >> cl::eol_p
+                local.eol >> *cl::blank_p >> cl::eol_p
                                                 // Make sure that we don't go
             ]                                   // past a single block, except
             ;                                   // when preformatted.
 
         // Follows after an alphanumeric identifier - ensures that it doesn't
         // match an empty space in the middle of the identifier.
-        hard_space =
-            (cl::eps_p - (cl::alnum_p | '_')) >> space  // must not be preceded by
-            ;                                   // alpha-numeric or underscore
-
-        comment =
-            "[/" >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
+        local.hard_space =
+            (cl::eps_p - (cl::alnum_p | '_')) >> local.space
             ;
 
-        dummy_block =
-            '[' >> *(dummy_block | (cl::anychar_p - ']')) >> ']'
+        local.comment =
+            "[/" >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
             ;
 
-        hr =
+        local.dummy_block =
+            '[' >> *(local.dummy_block | (cl::anychar_p - ']')) >> ']'
+            ;
+
+        local.hr =
             cl::str_p("----")
-            >> *(cl::anychar_p - eol)
-            >> +eol
+            >> *(cl::anychar_p - local.eol)
+            >> +local.eol
             ;
 
-        block_markup
-            =   block_markup_start
-            >>  block_keyword_rule
-            >>  (   (space >> ']' >> +eol)
+        local.block_markup
+            =   local.block_markup_start
+            >>  local.block_keyword_rule
+            >>  (   (local.space >> ']' >> +local.eol)
                 |   cl::eps_p                   [actions.error]
                 )
             ;
 
-        block_markup_start
-            =   '[' >> space
-            >>  (   block_keyword_rules         [detail::assign_rule(block_keyword_rule)]
+        local.block_markup_start
+            =   '[' >> local.space
+            >>  (   block_keyword_rules         [detail::assign_rule(local.block_keyword_rule)]
                 >>  (cl::eps_p - (cl::alnum_p | '_'))
-                |   block_symbol_rules          [detail::assign_rule(block_keyword_rule)]
+                |   block_symbol_rules          [detail::assign_rule(local.block_keyword_rule)]
                 )
             ;
 
-        element_id =
+        local.element_id =
                 ':'
             >>
                 (
-                    cl::if_p(qbk_since(105u))   [space]
+                    cl::if_p(qbk_since(105u))
+                        [local.space]
                 >>  (+(cl::alnum_p | '_'))      [cl::assign_a(actions.element_id)]
                 |   cl::eps_p                   [actions.element_id_warning]
                                                 [cl::assign_a(actions.element_id)]
@@ -156,18 +143,18 @@ namespace quickbook
             | cl::eps_p                         [cl::assign_a(actions.element_id)]
             ;
         
-        element_id_1_5 =
+        local.element_id_1_5 =
                 cl::if_p(qbk_since(105u)) [
-                    element_id
+                    local.element_id
                 ]
                 .else_p [
                     cl::eps_p                   [cl::assign_a(actions.element_id)]
                 ]
                 ;
 
-        element_id_1_6 =
+        local.element_id_1_6 =
                 cl::if_p(qbk_since(106u)) [
-                    element_id
+                    local.element_id
                 ]
                 .else_p [
                     cl::eps_p                   [cl::assign_a(actions.element_id)]
@@ -175,326 +162,327 @@ namespace quickbook
                 ;
 
         block_keyword_rules.add
-            ("section", &begin_section)
-            ("endsect", &end_section)
+            ("section", &local.begin_section)
+            ("endsect", &local.end_section)
             ;
 
-        begin_section =
-                space
-            >>  element_id
-            >>  space
-            >>  inner_phrase                          [actions.begin_section]
+        local.begin_section =
+                local.space
+            >>  local.element_id
+            >>  local.space
+            >>  local.inner_phrase              [actions.begin_section]
             ;
 
-        end_section =
+        local.end_section =
                 cl::eps_p                       [actions.end_section]
             ;
 
         block_keyword_rules.add
-            ("heading", &h)
-            ("h1", &h1)
-            ("h2", &h2)
-            ("h3", &h3)
-            ("h4", &h4)
-            ("h5", &h5)
-            ("h6", &h6)
+            ("heading", &local.h)
+            ("h1", &local.h1)
+            ("h2", &local.h2)
+            ("h3", &local.h3)
+            ("h4", &local.h4)
+            ("h5", &local.h5)
+            ("h6", &local.h6)
             ;
 
-        h =  space >> element_id_1_6 >> space >> inner_phrase [actions.h];
-        h1 = space >> element_id_1_6 >> space >> inner_phrase [actions.h1];
-        h2 = space >> element_id_1_6 >> space >> inner_phrase [actions.h2];
-        h3 = space >> element_id_1_6 >> space >> inner_phrase [actions.h3];
-        h4 = space >> element_id_1_6 >> space >> inner_phrase [actions.h4];
-        h5 = space >> element_id_1_6 >> space >> inner_phrase [actions.h5];
-        h6 = space >> element_id_1_6 >> space >> inner_phrase [actions.h6];
+        local.h  = local.space >> local.element_id_1_6 >> local.space >> local.inner_phrase [actions.h];
+        local.h1 = local.space >> local.element_id_1_6 >> local.space >> local.inner_phrase [actions.h1];
+        local.h2 = local.space >> local.element_id_1_6 >> local.space >> local.inner_phrase [actions.h2];
+        local.h3 = local.space >> local.element_id_1_6 >> local.space >> local.inner_phrase [actions.h3];
+        local.h4 = local.space >> local.element_id_1_6 >> local.space >> local.inner_phrase [actions.h4];
+        local.h5 = local.space >> local.element_id_1_6 >> local.space >> local.inner_phrase [actions.h5];
+        local.h6 = local.space >> local.element_id_1_6 >> local.space >> local.inner_phrase [actions.h6];
         
         static const bool true_ = true;
         static const bool false_ = false;
 
-        inside_paragraph =
-            phrase                              [actions.inside_paragraph]
+        local.inside_paragraph =
+            local.phrase                        [actions.inside_paragraph]
             >> *(
-                +eol >> phrase                  [actions.inside_paragraph]
+                +local.eol >> local.phrase      [actions.inside_paragraph]
             )
             ;
 
-        block_keyword_rules.add("blurb", &blurb);
+        block_keyword_rules.add("blurb", &local.blurb);
 
-        blurb =
-            scoped_block(actions)[inside_paragraph]
+        local.blurb =
+            scoped_block(actions)[local.inside_paragraph]
                                                 [actions.blurb]
             ;
 
         block_symbol_rules.add
-            (":", &blockquote)
+            (":", &local.blockquote)
             ;
 
-        blockquote =
-            blank >> scoped_block(actions)[inside_paragraph]
+        local.blockquote =
+            local.blank >> scoped_block(actions)[local.inside_paragraph]
                                                 [actions.blockquote]
             ;
 
         block_keyword_rules.add
-            ("warning", &warning)
-            ("caution", &caution)
-            ("important", &important)
-            ("note", &note)
-            ("tip", &tip)
+            ("warning", &local.warning)
+            ("caution", &local.caution)
+            ("important", &local.important)
+            ("note", &local.note)
+            ("tip", &local.tip)
             ;
 
-        warning =
-            scoped_block(actions)[inside_paragraph]
+        local.warning =
+            scoped_block(actions)[local.inside_paragraph]
                                                 [actions.warning]
             ;
 
-        caution =
-            scoped_block(actions)[inside_paragraph]
+        local.caution =
+            scoped_block(actions)[local.inside_paragraph]
                                                 [actions.caution]
             ;
 
-        important =
-            scoped_block(actions)[inside_paragraph]
+        local.important =
+            scoped_block(actions)[local.inside_paragraph]
                                                 [actions.important]
             ;
 
-        note =
-            scoped_block(actions)[inside_paragraph]
+        local.note =
+            scoped_block(actions)[local.inside_paragraph]
                                                 [actions.note]
             ;
 
-        tip =
-            scoped_block(actions)[inside_paragraph]
+        local.tip =
+            scoped_block(actions)[local.inside_paragraph]
                                                 [actions.tip]
             ;
 
         block_keyword_rules.add
-            ("pre", &preformatted)
+            ("pre", &local.preformatted)
             ;
 
-        preformatted =
-            space                               [cl::assign_a(no_eols, false_)]
-            >> !eol >> phrase                   [actions.preformatted]
+        local.preformatted =
+            local.space                         [cl::assign_a(no_eols, false_)]
+            >> !local.eol >> local.phrase       [actions.preformatted]
             >> cl::eps_p                        [cl::assign_a(no_eols, true_)]
             ;
 
-        macro_identifier =
+        local.macro_identifier =
             +(cl::anychar_p - (cl::space_p | ']'))
             ;
 
         block_keyword_rules.add
-            ("def", &def_macro)
+            ("def", &local.def_macro)
             ;
 
-        def_macro =
-               space
-            >> macro_identifier                 [actions.macro_identifier]
-            >> blank >> phrase                  [actions.macro_definition]
+        local.def_macro =
+               local.space
+            >> local.macro_identifier           [actions.macro_identifier]
+            >> local.blank >> local.phrase      [actions.macro_definition]
             ;
 
-        identifier =
+        local.identifier =
             (cl::alpha_p | '_') >> *(cl::alnum_p | '_')
             ;
 
-        template_id =
-            identifier | (cl::punct_p - (cl::ch_p('[') | ']'))
+        local.template_id =
+            local.identifier | (cl::punct_p - (cl::ch_p('[') | ']'))
             ;
 
         block_keyword_rules.add
-            ("template", &template_)
+            ("template", &local.template_)
             ;
 
-        template_ =
-               space
-            >> template_id                      [cl::assign_a(actions.template_identifier)]
+        local.template_ =
+               local.space
+            >> local.template_id                [cl::assign_a(actions.template_identifier)]
                                                 [cl::clear_a(actions.template_info)]
             >>
             !(
-                space >> '['
+                local.space >> '['
                 >> *(
-                        space >> template_id    [cl::push_back_a(actions.template_info)]
+                        local.space
+                    >>  local.template_id       [cl::push_back_a(actions.template_info)]
                     )
-                >> space >> ']'
+                >> local.space >> ']'
             )
             >>  (   cl::eps_p(*cl::blank_p >> cl::eol_p)
                                                 [cl::assign_a(actions.template_block, true_)]
                 |   cl::eps_p                   [cl::assign_a(actions.template_block, false_)]
                 )
-            >>  template_body                   [actions.template_body]
+            >>  local.template_body             [actions.template_body]
             ;
 
-        template_body =
-           *(('[' >> template_body >> ']') | (cl::anychar_p - ']'))
-            >> cl::eps_p(space >> ']')
-            >> space
+        local.template_body =
+           *(('[' >> local.template_body >> ']') | (cl::anychar_p - ']'))
+            >> cl::eps_p(local.space >> ']')
+            >> local.space
             ;
 
         block_keyword_rules.add
-            ("variablelist", &variablelist)
+            ("variablelist", &local.variablelist)
             ;
 
-        variablelist =
-                (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
-            >>  (*(cl::anychar_p - eol))        [cl::assign_a(actions.table_title)]
-            >>  (+eol)                          [actions.output_pre]
-            >>  *varlistentry
+        local.variablelist =
+                (cl::eps_p(*cl::blank_p >> cl::eol_p) | local.space)
+            >>  (*(cl::anychar_p - local.eol))  [cl::assign_a(actions.table_title)]
+            >>  (+local.eol)                    [actions.output_pre]
+            >>  *local.varlistentry
             >>  cl::eps_p                       [actions.variablelist]
             ;
 
-        varlistentry =
-            space
+        local.varlistentry =
+            local.space
             >>  cl::ch_p('[')                   [actions.start_varlistentry]
             >>
             (
                 (
-                    varlistterm
-                    >>  (   scoped_block(actions) [+varlistitem]
+                    local.varlistterm
+                    >>  (   scoped_block(actions) [+local.varlistitem]
                                                 [actions.varlistitem]
                         |   cl::eps_p           [actions.error]
                         )
                     >>  cl::ch_p(']')           [actions.end_varlistentry]
-                    >>  space
+                    >>  local.space
                 )
                 | cl::eps_p                     [actions.error]
             )
             ;
 
-        varlistterm =
-            space
+        local.varlistterm =
+            local.space
             >>  cl::ch_p('[')                   [actions.start_varlistterm]
             >>
             (
                 (
-                    phrase
+                    local.phrase
                     >>  cl::ch_p(']')           [actions.end_varlistterm]
-                    >>  space
+                    >>  local.space
                 )
                 | cl::eps_p                     [actions.error]
             )
             ;
 
-        varlistitem =
-            space
+        local.varlistitem =
+            local.space
             >>  cl::ch_p('[')
             >>
             (
                 (
-                    inside_paragraph
+                    local.inside_paragraph
                     >>  cl::ch_p(']')
-                    >>  space
+                    >>  local.space
                 )
                 | cl::eps_p                     [actions.error]
             )
             ;
 
         block_keyword_rules.add
-            ("table", &table)
+            ("table", &local.table)
             ;
 
-        table =
-                (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
-            >>  element_id_1_5
-            >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
-            >>  (*(cl::anychar_p - eol))        [cl::assign_a(actions.table_title)]
-            >>  (+eol)                          [actions.output_pre]
-            >>  *table_row
+        local.table =
+                (cl::eps_p(*cl::blank_p >> cl::eol_p) | local.space)
+            >>  local.element_id_1_5
+            >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | local.space)
+            >>  (*(cl::anychar_p - local.eol))  [cl::assign_a(actions.table_title)]
+            >>  (+local.eol)                    [actions.output_pre]
+            >>  *local.table_row
             >>  cl::eps_p                       [actions.table]
             ;
 
-        table_row =
-            space
+        local.table_row =
+            local.space
             >>  cl::ch_p('[')                   [actions.start_row]
             >>
             (
                 (
-                    *table_cell
+                    *local.table_cell
                     >>  cl::ch_p(']')           [actions.end_row]
-                    >>  space
+                    >>  local.space
                 )
                 | cl::eps_p                     [actions.error]
             )
             ;
 
-        table_cell =
-                space
+        local.table_cell =
+                local.space
             >>  cl::ch_p('[')
             >>  (   scoped_block(actions) [
-                        inside_paragraph
+                        local.inside_paragraph
                     >>  cl::ch_p(']')
-                    >>  space
+                    >>  local.space
                     ]                           [actions.cell]
                 | cl::eps_p                     [actions.error]
                 )
             ;
 
         block_keyword_rules.add
-            ("xinclude", &xinclude)
-            ("import", &import)
-            ("include", &include)
+            ("xinclude", &local.xinclude)
+            ("import", &local.import)
+            ("include", &local.include)
             ;
 
-        xinclude =
-               space
-            >> (*(cl::anychar_p -
-                    phrase_end))                [actions.xinclude]
+        local.xinclude =
+               local.space
+            >> (*(cl::anychar_p - local.phrase_end))
+                                                [actions.xinclude]
             ;
 
-        import =
-               space
-            >> (*(cl::anychar_p -
-                    phrase_end))                [actions.import]
+        local.import =
+               local.space
+            >> (*(cl::anychar_p - local.phrase_end))
+                                                [actions.import]
             ;
 
-        include =
-               space
+        local.include =
+               local.space
             >>
            !(
                 ':'
                 >> (*((cl::alnum_p | '_') - cl::space_p))
                                                 [cl::assign_a(actions.include_doc_id)]
-                >> space
+                >> local.space
             )
-            >> (*(cl::anychar_p -
-                    phrase_end))                [actions.include]
+            >> (*(cl::anychar_p - local.phrase_end))
+                                                [actions.include]
             ;
 
-        code =
+        local.code =
             (
-                code_line
-                >> *(*blank_line >> code_line)
+                local.code_line
+                >> *(*local.blank_line >> local.code_line)
             )                                   [actions.code]
-            >> *eol
+            >> *local.eol
             ;
 
-        code_line =
+        local.code_line =
             cl::blank_p >> *(cl::anychar_p - cl::eol_p) >> cl::eol_p
             ;
 
-        blank_line =
+        local.blank_line =
             *cl::blank_p >> cl::eol_p
             ;
 
-        list =
+        local.list =
             cl::eps_p(cl::ch_p('*') | '#') >>
            +(
                 (*cl::blank_p
                 >> (cl::ch_p('*') | '#'))       [actions.list_format]
                 >> *cl::blank_p
-                >> list_item
+                >> local.list_item
             )                                   [actions.list_item]
             ;
 
-        list_item =
+        local.list_item =
            *(   common
             |   (cl::anychar_p -
                     (   cl::eol_p >> *cl::blank_p >> cl::eps_p(cl::ch_p('*') | '#')
-                    |   (eol >> eol)
+                    |   (local.eol >> local.eol)
                     )
                 )                               [actions.plain_char]
             )
-            >> +eol
+            >> +local.eol
             ;
 
-        paragraph_end_markups =
+        local.paragraph_end_markups =
             "section", "endsect", "heading",
             "h1", "h2", "h3", "h4", "h5", "h6",
             "blurb", "pre", "def", "table", "include", "xinclude",
@@ -502,38 +490,34 @@ namespace quickbook
             "important", "note", "tip", ":"
             ;
 
-        paragraph_end =
-            '[' >> space >> paragraph_end_markups >> hard_space | eol >> *cl::blank_p >> cl::eol_p
+        local.paragraph_end =
+                '[' >> local.space >> local.paragraph_end_markups >> local.hard_space
+            |   local.eol >> *cl::blank_p >> cl::eol_p
             ;
 
-        paragraph =
+        local.paragraph =
            +(   common
-            |   (cl::eps_p - paragraph_end)
+            |   (cl::eps_p -                    // Make sure we don't go past
+                    local.paragraph_end)        // a single block.
             >>  (   cl::space_p                 [actions.space_char]
                 |   cl::anychar_p               [actions.plain_char]
                 )
             )
-            >> (cl::eps_p('[') | +eol)
+            >> (cl::eps_p('[') | +local.eol)
             ;
 
-        inner_phrase =
+        local.inner_phrase =
                 cl::eps_p                       [actions.inner_phrase_pre]
-            >>  phrase
+            >>  local.phrase
             >>  cl::eps_p                       [actions.inner_phrase_post]
             ;
 
-        phrase =
+        local.phrase =
            *(   common
-            |   comment
-            |   (cl::anychar_p -
-                    phrase_end)                 [actions.plain_char]
+            |   local.comment
+            |   (cl::anychar_p - local.phrase_end)
+                                                [actions.plain_char]
             )
             ;
-    }
-
-    cl::parse_info<iterator> call_parse(
-        iterator& first, iterator last, block_grammar& g)
-    {
-        return boost::spirit::classic::parse(first, last, g);
     }
 }
