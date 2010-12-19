@@ -249,6 +249,26 @@ namespace boost { namespace fusion
 {
     namespace extension
     {
+        template<typename Tag>
+        struct is_sequence_impl;
+
+        template<>
+        struct is_sequence_impl<proto::tag::proto_flat_view>
+        {
+            template<typename Sequence>
+            struct apply
+              : mpl::true_
+            {};
+        };
+
+        template<>
+        struct is_sequence_impl<proto::tag::proto_expr>
+        {
+            template<typename Sequence>
+            struct apply
+              : mpl::true_
+            {};
+        };
 
         template<typename Tag>
         struct is_view_impl;
