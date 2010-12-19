@@ -45,8 +45,7 @@ namespace quickbook
 
     private:
 
-        void init_block(bool);
-        void init_phrase();
+        void init_main(bool);
         void init_block_markup();
         void init_phrase_markup();
         void init_doc_info();
