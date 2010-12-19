@@ -26,16 +26,17 @@ namespace quickbook
     struct block_grammar_local
     {
         cl::rule<scanner>
-                        blocks, block_markup, block_markup_start,
+                        top_level, blocks, paragraph_separator,
+                        block_markup, block_markup_start,
                         code, code_line, blank_line,
-                        paragraph, space, blank, comment, h, h1, h2,
+                        space, blank, comment, h, h1, h2,
                         h3, h4, h5, h6, hr, blurb, blockquote,
                         warning, caution, important, note, tip,
                         inner_phrase, phrase, list, phrase_end, ordered_list, def_macro,
                         macro_identifier, table, table_row, variablelist,
                         varlistentry, varlistterm, varlistitem, table_cell,
                         preformatted, list_item, begin_section, end_section,
-                        xinclude, include, hard_space, eol, paragraph_end,
+                        xinclude, include, hard_space, eol,
                         template_, template_id, template_formal_arg,
                         template_body, identifier, dummy_block, import,
                         inside_paragraph,
@@ -53,45 +54,38 @@ namespace quickbook
         if (skip_initial_spaces)
         {
             block_start =
-                *(cl::blank_p | local.comment) >> local.blocks >> local.blank
+                *(cl::blank_p | local.comment) >> local.top_level >> local.blank
                 ;
         }
         else
         {
             block_start =
-                local.blocks >> local.blank
+                local.top_level >> local.blank
                 ;
         }
+
+        local.top_level
+            =   local.blocks
+            >>  *(
+                    local.block_markup >> local.blocks
+                |   local.paragraph_separator >> local.blocks
+                |   common
+                |   cl::space_p                 [actions.space_char]
+                |   cl::anychar_p               [actions.plain_char]
+                );
 
         local.blocks =
            *(   local.code
             |   local.list                      [actions.list]
             |   local.hr                        [actions.hr]
             |   +local.eol
-            |   local.block_markup
-            |   local.paragraph                 [actions.inside_paragraph]
             )
             ;
 
-        local.paragraph =
-           +(   common
-            |   (cl::eps_p -                    // Make sure we don't go past
-                    local.paragraph_end)        // a single block.
-            >>  (   cl::space_p                 [actions.space_char]
-                |   cl::anychar_p               [actions.plain_char]
-                )
-            )
-            >> (cl::eps_p('[') | +local.eol)
-            ;
-
-        // Note: Not using local.block_markup_start here as it would change
-        // block_keyword_rule.
-        local.paragraph_end
-            =   '[' >> local.space
-            >>  (   block_keyword_rules >> (cl::eps_p - (cl::alnum_p | '_'))
-                |   block_symbol_rules
-                )
-            |   cl::eol_p >> *cl::blank_p >> cl::eol_p
+        local.paragraph_separator
+            =   cl::eol_p
+            >> *cl::blank_p
+            >>  cl::eol_p                       [actions.inside_paragraph]
             ;
 
         local.space =
@@ -135,15 +129,15 @@ namespace quickbook
             ;
 
         local.block_markup
-            =   local.block_markup_start
-            >>  local.block_keyword_rule
-            >>  (   (local.space >> ']' >> +local.eol)
+            =   local.block_markup_start        [actions.inside_paragraph]
+            >>  (   local.block_keyword_rule
+                >>  (   (local.space >> ']' >> +local.eol)
+                    |   cl::eps_p               [actions.error]
+                    )
                 |   cl::eps_p                   [actions.error]
                 )
             ;
 
-        // If you update this, make sure local.paragraph_end matches it,
-        // without the actions.
         local.block_markup_start
             =   '[' >> local.space
             >>  (   block_keyword_rules         [detail::assign_rule(local.block_keyword_rule)]
