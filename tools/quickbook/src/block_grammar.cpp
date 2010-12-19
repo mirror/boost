@@ -64,13 +64,34 @@ namespace quickbook
         }
 
         local.blocks =
-           *(   local.block_markup
-            |   local.code
+           *(   local.code
             |   local.list                      [actions.list]
             |   local.hr                        [actions.hr]
             |   +local.eol
+            |   local.block_markup
             |   local.paragraph                 [actions.inside_paragraph]
             )
+            ;
+
+        local.paragraph =
+           +(   common
+            |   (cl::eps_p -                    // Make sure we don't go past
+                    local.paragraph_end)        // a single block.
+            >>  (   cl::space_p                 [actions.space_char]
+                |   cl::anychar_p               [actions.plain_char]
+                )
+            )
+            >> (cl::eps_p('[') | +local.eol)
+            ;
+
+        // Note: Not using local.block_markup_start here as it would change
+        // block_keyword_rule.
+        local.paragraph_end
+            =   '[' >> local.space
+            >>  (   block_keyword_rules >> (cl::eps_p - (cl::alnum_p | '_'))
+                |   block_symbol_rules
+                )
+            |   cl::eol_p >> *cl::blank_p >> cl::eol_p
             ;
 
         local.space =
@@ -481,27 +502,6 @@ namespace quickbook
                 )                               [actions.plain_char]
             )
             >> +local.eol
-            ;
-
-        // Note: Not using local.block_markup_start here as it would change
-        // block_keyword_rule.
-        local.paragraph_end
-            =   '[' >> local.space
-            >>  (   block_keyword_rules >> (cl::eps_p - (cl::alnum_p | '_'))
-                |   block_symbol_rules
-                )
-            |   cl::eol_p >> *cl::blank_p >> cl::eol_p
-            ;
-
-        local.paragraph =
-           +(   common
-            |   (cl::eps_p -                    // Make sure we don't go past
-                    local.paragraph_end)        // a single block.
-            >>  (   cl::space_p                 [actions.space_char]
-                |   cl::anychar_p               [actions.plain_char]
-                )
-            )
-            >> (cl::eps_p('[') | +local.eol)
             ;
 
         local.inner_phrase =
