@@ -677,6 +677,11 @@ private:
         { icl::clear(object); }
     };
 
+#ifdef BOOST_MSVC 
+#pragma warning(push)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif                        
+
     template<class Type>
     struct on_total_absorbable<Type, true, false>
     {
@@ -693,6 +698,10 @@ private:
                 icl::join(object);
         }
     };
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
     template<class Type, bool absorbs_identities>
     struct on_total_absorbable<Type, false, absorbs_identities>

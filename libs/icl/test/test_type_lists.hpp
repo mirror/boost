@@ -17,8 +17,14 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 
 #if(_MSC_VER < 1500 && defined(_DEBUG) ) // 1500 = MSVC-9.0
 typedef int boost_posix_time_ptime;
+typedef int boost_posix_time_duration;
+typedef int boost_gregorian_date; 
+typedef int boost_gregorian_date_duration;
 #else
-typedef boost::posix_time::ptime boost_posix_time_ptime;
+typedef boost::posix_time::ptime         boost_posix_time_ptime;
+typedef boost::posix_time::time_duration boost_posix_time_duration;
+typedef boost::gregorian::date           boost_gregorian_date; 
+typedef boost::gregorian::date_duration  boost_gregorian_date_duration;
 #endif
 
 typedef ::boost::mpl::list<
@@ -27,7 +33,9 @@ typedef ::boost::mpl::list<
     ,float, double, long double
     ,boost::rational<int>
     ,boost_posix_time_ptime
-//    ,boost::gregorian::date
+    ,boost_posix_time_duration
+    ,boost_gregorian_date
+    ,boost_gregorian_date_duration
     ,int*
 > bicremental_types;
 
@@ -84,7 +92,11 @@ typedef ::boost::mpl::list<
     ,unsigned long, unsigned long long  
     ,short, int, long
     ,boost_posix_time_ptime
-//    ,boost::gregorian::date
+    ,boost_posix_time_ptime
+    ,boost_posix_time_duration
+    ,boost_gregorian_date
+    ,boost_gregorian_date_duration
+    ,int*
 > discrete_types;
 
 typedef int                      discrete_type_1;
@@ -130,7 +142,10 @@ typedef ::boost::mpl::list<
     ,boost::rational<int>
     ,std::string
     ,boost_posix_time_ptime
-//    ,boost::gregorian::date
+    ,boost_posix_time_duration
+    ,boost_gregorian_date
+    ,boost_gregorian_date_duration
+    ,int*
 > ordered_types;
 
 typedef int                      ordered_type_1;
