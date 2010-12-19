@@ -71,7 +71,8 @@ namespace quickbook
                         memberref, enumref, macroref, headerref, conceptref, globalref,
                         anchor, link, hard_space, eol, inline_code, simple_format,
                         simple_bold, simple_italic, simple_underline,
-                        simple_teletype, source_mode, template_,
+                        simple_teletype, template_,
+                        source_mode_cpp, source_mode_python, source_mode_teletype,
                         quote, code_block, footnote, replaceable, macro,
                         dummy_block, cond_phrase, macro_identifier, template_args,
                         template_args_1_4, template_arg_1_4,
@@ -79,6 +80,9 @@ namespace quickbook
                         template_args_1_5, template_arg_1_5,
                         template_inner_arg_1_5, brackets_1_5
                         ;
+
+        cl::symbols<cl::rule<Scanner>*> phrase_keyword_rules, phrase_symbol_rules;
+        cl::rule<Scanner> phrase_keyword_rule;
 
         cl::rule<Scanner> const&
         start() const { return common; }
@@ -268,30 +272,13 @@ namespace quickbook
             )
             ;
 
-        phrase_markup =
-                '['
-            >>  (   cond_phrase
-                |   image
-                |   url
-                |   link
-                |   anchor
-                |   source_mode
-                |   funcref
-                |   classref
-                |   memberref
-                |   enumref
-                |   macroref
-                |   headerref
-                |   conceptref
-                |   globalref
-                |   bold
-                |   italic
-                |   underline
-                |   teletype
-                |   strikethrough
-                |   quote
-                |   replaceable
-                |   footnote
+        phrase_markup
+            =   '['
+            >>  (   phrase_keyword_rules        [detail::assign_rule(phrase_keyword_rule)]
+                >>  (cl::eps_p - (cl::alnum_p | '_'))
+                >>  phrase_keyword_rule
+                |   phrase_symbol_rules         [detail::assign_rule(phrase_keyword_rule)]
+                >>  phrase_keyword_rule
                 |   template_                   [actions.do_template]
                 |   cl::str_p("br")             [actions.break_]
                 )
@@ -317,14 +304,22 @@ namespace quickbook
             +(cl::anychar_p - (cl::space_p | ']'))
             ;
 
+        phrase_symbol_rules.add
+            ("?", &cond_phrase)
+            ;
+
         cond_phrase =
-                '?' >> blank
+                blank
             >>  macro_identifier                [actions.cond_phrase_pre]
             >>  (!phrase)                       [actions.cond_phrase_post]
             ;
 
+        phrase_symbol_rules.add
+            ("$", &image)
+            ;
+
         image =
-                '$' >> blank                    [cl::clear_a(actions.attributes)]
+                blank                           [cl::clear_a(actions.attributes)]
             >>  cl::if_p(qbk_since(105u)) [
                         (+(
                             *cl::space_p
@@ -347,30 +342,51 @@ namespace quickbook
             >>  cl::eps_p(']')                  [actions.image]
             ;
             
+        phrase_symbol_rules.add
+            ("@", &url)
+            ;
+
         url =
-                '@'
-            >>  (*(cl::anychar_p -
+                (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.url_pre]
             >>  hard_space
             >>  phrase                          [actions.url_post]
             ;
 
+        phrase_keyword_rules.add
+            ("link", &link)
+            ;
+
         link =
-                "link" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.link_pre]
             >>  hard_space
             >>  phrase                          [actions.link_post]
             ;
 
+        phrase_symbol_rules.add
+            ("#", &anchor)
+            ;
+
         anchor =
-                "#"
-            >>  blank
+                blank
             >>  (*(cl::anychar_p - phrase_end)) [actions.anchor]
             ;
 
+        phrase_keyword_rules.add
+            ("funcref", &funcref)
+            ("classref", &classref)
+            ("memberref", &memberref)
+            ("enumref", &enumref)
+            ("macroref", &macroref)
+            ("headerref", &headerref)
+            ("conceptref", &conceptref)
+            ("globalref", &globalref)
+            ;
+
         funcref =
-            "funcref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.funcref_pre]
             >>  hard_space
@@ -378,7 +394,7 @@ namespace quickbook
             ;
 
         classref =
-            "classref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.classref_pre]
             >>  hard_space
@@ -386,7 +402,7 @@ namespace quickbook
             ;
 
         memberref =
-            "memberref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.memberref_pre]
             >>  hard_space
@@ -394,7 +410,7 @@ namespace quickbook
             ;
 
         enumref =
-            "enumref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.enumref_pre]
             >>  hard_space
@@ -402,7 +418,7 @@ namespace quickbook
             ;
 
         macroref =
-            "macroref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.macroref_pre]
             >>  hard_space
@@ -410,7 +426,7 @@ namespace quickbook
             ;
 
         headerref =
-            "headerref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.headerref_pre]
             >>  hard_space
@@ -418,7 +434,7 @@ namespace quickbook
             ;
 
         conceptref =
-            "conceptref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.conceptref_pre]
             >>  hard_space
@@ -426,59 +442,75 @@ namespace quickbook
             ;
 
         globalref =
-            "globalref" >> hard_space
+                space
             >>  (*(cl::anychar_p -
                     (']' | hard_space)))        [actions.globalref_pre]
             >>  hard_space
             >>  phrase                          [actions.globalref_post]
             ;
 
+        phrase_symbol_rules.add
+            ("*", &bold)
+            ("'", &italic)
+            ("_", &underline)
+            ("^", &teletype)
+            ("-", &strikethrough)
+            ("\"", &quote)
+            ("~", &replaceable)
+            ;
+
         bold =
-                cl::ch_p('*')                   [actions.bold_pre]
-            >>  blank >> phrase                 [actions.bold_post]
+                blank                           [actions.bold_pre]
+            >>  phrase                          [actions.bold_post]
             ;
 
         italic =
-                cl::ch_p('\'')                  [actions.italic_pre]
-            >>  blank >> phrase                 [actions.italic_post]
+                blank                           [actions.italic_pre]
+            >>  phrase                          [actions.italic_post]
             ;
 
         underline =
-                cl::ch_p('_')                   [actions.underline_pre]
-            >>  blank >> phrase                 [actions.underline_post]
+                blank                           [actions.underline_pre]
+            >>  phrase                          [actions.underline_post]
             ;
 
         teletype =
-                cl::ch_p('^')                   [actions.teletype_pre]
-            >>  blank >> phrase                 [actions.teletype_post]
+                blank                           [actions.teletype_pre]
+            >>  phrase                          [actions.teletype_post]
             ;
 
         strikethrough =
-                cl::ch_p('-')                   [actions.strikethrough_pre]
-            >>  blank >> phrase                 [actions.strikethrough_post]
+                blank                           [actions.strikethrough_pre]
+            >>  phrase                          [actions.strikethrough_post]
             ;
 
         quote =
-                cl::ch_p('"')                   [actions.quote_pre]
-            >>  blank >> phrase                 [actions.quote_post]
+                blank                           [actions.quote_pre]
+            >>  phrase                          [actions.quote_post]
             ;
 
         replaceable =
-                cl::ch_p('~')                   [actions.replaceable_pre]
-            >>  blank >> phrase                 [actions.replaceable_post]
+                blank                           [actions.replaceable_pre]
+            >>  phrase                          [actions.replaceable_post]
             ;
 
-        source_mode =
-            (
-                cl::str_p("c++")
-            |   "python"
-            |   "teletype"
-            )                                   [cl::assign_a(actions.source_mode)]
+        phrase_keyword_rules.add
+            ("c++", &source_mode_cpp)
+            ("python", &source_mode_python)
+            ("teletype", &source_mode_teletype)
+            ;
+        
+        source_mode_cpp = cl::eps_p [cl::assign_a(actions.source_mode, "c++")];
+        source_mode_python = cl::eps_p [cl::assign_a(actions.source_mode, "python")];
+        source_mode_teletype = cl::eps_p [cl::assign_a(actions.source_mode, "teletype")];
+
+        phrase_keyword_rules.add
+            ("footnote", &footnote)
             ;
 
         footnote =
-                cl::str_p("footnote")           [actions.footnote_pre]
-            >>  blank >> phrase                 [actions.footnote_post]
+                blank                           [actions.footnote_pre]
+            >>  phrase                          [actions.footnote_post]
             ;
     }
 }

@@ -31,9 +31,11 @@ namespace quickbook
         bool no_eols;
 
         cl::rule<Scanner>
-                        start_, blocks, block_markup, code, code_line, blank_line,
-                        paragraph, space, blank, comment, headings, h, h1, h2,
-                        h3, h4, h5, h6, hr, blurb, blockquote, admonition,
+                        start_, blocks, block_markup, block_markup_start,
+                        code, code_line, blank_line,
+                        paragraph, space, blank, comment, h, h1, h2,
+                        h3, h4, h5, h6, hr, blurb, blockquote,
+                        warning, caution, important, note, tip,
                         inner_phrase, phrase, list, phrase_end, ordered_list, def_macro,
                         macro_identifier, table, table_row, variablelist,
                         varlistentry, varlistterm, varlistitem, table_cell,
@@ -45,6 +47,9 @@ namespace quickbook
                         element_id, element_id_1_5, element_id_1_6;
 
         cl::symbols<>   paragraph_end_markups;
+
+        cl::symbols<cl::rule<Scanner>*> block_keyword_rules, block_symbol_rules;
+        cl::rule<Scanner> block_keyword_rule;
 
         phrase_grammar common;
 
@@ -123,28 +128,22 @@ namespace quickbook
             >> +eol
             ;
 
-        block_markup =
-                '[' >> space
-            >>  (   begin_section
-                |   end_section
-                |   headings
-                |   blurb
-                |   blockquote
-                |   admonition
-                |   preformatted
-                |   def_macro
-                |   table
-                |   variablelist
-                |   xinclude
-                |   include
-                |   import
-                |   template_
-                )
+        block_markup
+            =   block_markup_start
+            >>  block_keyword_rule
             >>  (   (space >> ']' >> +eol)
                 |   cl::eps_p                   [actions.error]
                 )
             ;
-        
+
+        block_markup_start
+            =   '[' >> space
+            >>  (   block_keyword_rules         [detail::assign_rule(block_keyword_rule)]
+                >>  (cl::eps_p - (cl::alnum_p | '_'))
+                |   block_symbol_rules          [detail::assign_rule(block_keyword_rule)]
+                )
+            ;
+
         element_id =
                 ':'
             >>
@@ -175,30 +174,40 @@ namespace quickbook
                 ]
                 ;
 
+        block_keyword_rules.add
+            ("section", &begin_section)
+            ("endsect", &end_section)
+            ;
+
         begin_section =
-               "section"
-            >> hard_space
-            >> element_id
-            >> space
-            >> inner_phrase                     [actions.begin_section]
+                space
+            >>  element_id
+            >>  space
+            >>  inner_phrase                          [actions.begin_section]
             ;
 
         end_section =
-            cl::str_p("endsect")                [actions.end_section]
+                cl::eps_p                       [actions.end_section]
             ;
 
-        headings =
-            h1 | h2 | h3 | h4 | h5 | h6 | h
+        block_keyword_rules.add
+            ("heading", &h)
+            ("h1", &h1)
+            ("h2", &h2)
+            ("h3", &h3)
+            ("h4", &h4)
+            ("h5", &h5)
+            ("h6", &h6)
             ;
 
-        h = "heading" >> hard_space >> element_id_1_6 >> space >> inner_phrase   [actions.h];
-        h1 = "h1" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h1];
-        h2 = "h2" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h2];
-        h3 = "h3" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h3];
-        h4 = "h4" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h4];
-        h5 = "h5" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h5];
-        h6 = "h6" >> hard_space >> element_id_1_6 >> space >> inner_phrase       [actions.h6];
-
+        h =  space >> element_id_1_6 >> space >> inner_phrase [actions.h];
+        h1 = space >> element_id_1_6 >> space >> inner_phrase [actions.h1];
+        h2 = space >> element_id_1_6 >> space >> inner_phrase [actions.h2];
+        h3 = space >> element_id_1_6 >> space >> inner_phrase [actions.h3];
+        h4 = space >> element_id_1_6 >> space >> inner_phrase [actions.h4];
+        h5 = space >> element_id_1_6 >> space >> inner_phrase [actions.h5];
+        h6 = space >> element_id_1_6 >> space >> inner_phrase [actions.h6];
+        
         static const bool true_ = true;
         static const bool false_ = false;
 
@@ -209,42 +218,61 @@ namespace quickbook
             )
             ;
 
+        block_keyword_rules.add("blurb", &blurb);
+
         blurb =
-            "blurb" >> hard_space
-            >> scoped_block(actions)[inside_paragraph]
+            scoped_block(actions)[inside_paragraph]
                                                 [actions.blurb]
             ;
 
+        block_symbol_rules.add
+            (":", &blockquote)
+            ;
+
         blockquote =
-            ':' >> blank >>
-            scoped_block(actions)[inside_paragraph]
+            blank >> scoped_block(actions)[inside_paragraph]
                                                 [actions.blockquote]
             ;
 
-        admonition =
-            "warning" >> hard_space >>
+        block_keyword_rules.add
+            ("warning", &warning)
+            ("caution", &caution)
+            ("important", &important)
+            ("note", &note)
+            ("tip", &tip)
+            ;
+
+        warning =
             scoped_block(actions)[inside_paragraph]
                                                 [actions.warning]
-            |
-            "caution" >> hard_space >>
+            ;
+
+        caution =
             scoped_block(actions)[inside_paragraph]
                                                 [actions.caution]
-            |
-            "important" >> hard_space >>
+            ;
+
+        important =
             scoped_block(actions)[inside_paragraph]
                                                 [actions.important]
-            |
-            "note" >> hard_space >>
+            ;
+
+        note =
             scoped_block(actions)[inside_paragraph]
                                                 [actions.note]
-            |
-            "tip" >> hard_space >>
+            ;
+
+        tip =
             scoped_block(actions)[inside_paragraph]
                                                 [actions.tip]
             ;
 
+        block_keyword_rules.add
+            ("pre", &preformatted)
+            ;
+
         preformatted =
-            "pre" >> hard_space                 [cl::assign_a(no_eols, false_)]
+            space                               [cl::assign_a(no_eols, false_)]
             >> !eol >> phrase                   [actions.preformatted]
             >> cl::eps_p                        [cl::assign_a(no_eols, true_)]
             ;
@@ -253,8 +281,12 @@ namespace quickbook
             +(cl::anychar_p - (cl::space_p | ']'))
             ;
 
+        block_keyword_rules.add
+            ("def", &def_macro)
+            ;
+
         def_macro =
-            "def" >> hard_space
+               space
             >> macro_identifier                 [actions.macro_identifier]
             >> blank >> phrase                  [actions.macro_definition]
             ;
@@ -267,9 +299,12 @@ namespace quickbook
             identifier | (cl::punct_p - (cl::ch_p('[') | ']'))
             ;
 
+        block_keyword_rules.add
+            ("template", &template_)
+            ;
+
         template_ =
-            "template"
-            >> hard_space
+               space
             >> template_id                      [cl::assign_a(actions.template_identifier)]
                                                 [cl::clear_a(actions.template_info)]
             >>
@@ -293,9 +328,12 @@ namespace quickbook
             >> space
             ;
 
+        block_keyword_rules.add
+            ("variablelist", &variablelist)
+            ;
+
         variablelist =
-            "variablelist"
-            >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | hard_space)
+                (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
             >>  (*(cl::anychar_p - eol))        [cl::assign_a(actions.table_title)]
             >>  (+eol)                          [actions.output_pre]
             >>  *varlistentry
@@ -348,10 +386,13 @@ namespace quickbook
             )
             ;
 
+        block_keyword_rules.add
+            ("table", &table)
+            ;
+
         table =
-            "table"
-            >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | hard_space)
-            >> element_id_1_5
+                (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
+            >>  element_id_1_5
             >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
             >>  (*(cl::anychar_p - eol))        [cl::assign_a(actions.table_title)]
             >>  (+eol)                          [actions.output_pre]
@@ -385,23 +426,26 @@ namespace quickbook
                 )
             ;
 
+        block_keyword_rules.add
+            ("xinclude", &xinclude)
+            ("import", &import)
+            ("include", &include)
+            ;
+
         xinclude =
-               "xinclude"
-            >> hard_space
+               space
             >> (*(cl::anychar_p -
                     phrase_end))                [actions.xinclude]
             ;
 
         import =
-               "import"
-            >> hard_space
+               space
             >> (*(cl::anychar_p -
                     phrase_end))                [actions.import]
             ;
 
         include =
-               "include"
-            >> hard_space
+               space
             >>
            !(
                 ':'
