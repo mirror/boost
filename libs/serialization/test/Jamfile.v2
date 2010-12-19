@@ -8,6 +8,7 @@
 
 project libs/serialization/test
     : id serialization_test
+    : requirements <source>/boost/filesystem
     ;
 
 # import rules from the boost serialization test
