@@ -34,6 +34,8 @@ namespace quickbook
     {
         init_block(skip_initial_spaces);
         init_phrase();
+        init_block_markup();
+        init_phrase_markup();
         init_doc_info();
     }
 }
