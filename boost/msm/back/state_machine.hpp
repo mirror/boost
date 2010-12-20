@@ -13,7 +13,6 @@
 
 #include <exception>
 #include <vector>
-#include <queue>
 #include <functional>
 #include <numeric>
 #include <utility>
@@ -63,6 +62,7 @@
 #include <boost/msm/back/default_compile_policy.hpp>
 #include <boost/msm/back/dispatch_table.hpp>
 #include <boost/msm/back/no_fsm_check.hpp>
+#include <boost/msm/back/queue_container_deque.hpp>
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(accept_sig)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(no_automatic_create)
@@ -73,6 +73,7 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(do_serialize)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(history_policy)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(fsm_check)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(compile_policy)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(queue_container_policy)
 
 #ifndef BOOST_MSM_CONSTRUCTOR_ARG_SIZE
 #define BOOST_MSM_CONSTRUCTOR_ARG_SIZE 5 // default max number of arguments for constructors
@@ -100,6 +101,7 @@ BOOST_PARAMETER_TEMPLATE_KEYWORD(front_end)
 BOOST_PARAMETER_TEMPLATE_KEYWORD(history_policy)
 BOOST_PARAMETER_TEMPLATE_KEYWORD(compile_policy)
 BOOST_PARAMETER_TEMPLATE_KEYWORD(fsm_check_policy)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(queue_container_policy)
 
 typedef ::boost::parameter::parameters<
     ::boost::parameter::required< ::boost::msm::back::tag::front_end >
@@ -111,6 +113,10 @@ typedef ::boost::parameter::parameters<
     >
   , ::boost::parameter::optional< 
         ::boost::parameter::deduced< ::boost::msm::back::tag::fsm_check_policy>, has_fsm_check< ::boost::mpl::_ > 
+    >
+  , ::boost::parameter::optional< 
+        ::boost::parameter::deduced< ::boost::msm::back::tag::queue_container_policy>, 
+        has_queue_container_policy< ::boost::mpl::_ > 
     >
 > state_machine_signature;
 
@@ -124,16 +130,17 @@ template <
     , class A1 = parameter::void_
     , class A2 = parameter::void_
     , class A3 = parameter::void_
+    , class A4 = parameter::void_
 >
 class state_machine : //public Derived
     public ::boost::parameter::binding<
-            typename state_machine_signature::bind<A0,A1,A2,A3>::type, ::boost::msm::back::tag::front_end
+            typename state_machine_signature::bind<A0,A1,A2,A3,A4>::type, ::boost::msm::back::tag::front_end
     >::type
 {
 public:
     // Create ArgumentPack
     typedef typename
-        state_machine_signature::bind<A0,A1,A2,A3>::type
+        state_machine_signature::bind<A0,A1,A2,A3,A4>::type
         state_machine_args;
 
     // Extract first logical parameter.
@@ -141,30 +148,36 @@ public:
         state_machine_args, ::boost::msm::back::tag::front_end>::type Derived;
 
     typedef typename ::boost::parameter::binding<
-        state_machine_args, ::boost::msm::back::tag::history_policy, NoHistory >::type HistoryPolicy;
+        state_machine_args, ::boost::msm::back::tag::history_policy, NoHistory >::type              HistoryPolicy;
 
     typedef typename ::boost::parameter::binding<
-        state_machine_args, ::boost::msm::back::tag::compile_policy, favor_runtime_speed >::type CompilePolicy;
+        state_machine_args, ::boost::msm::back::tag::compile_policy, favor_runtime_speed >::type    CompilePolicy;
 
     typedef typename ::boost::parameter::binding<
-        state_machine_args, ::boost::msm::back::tag::fsm_check_policy, no_fsm_check >::type FsmCheckPolicy;
+        state_machine_args, ::boost::msm::back::tag::fsm_check_policy, no_fsm_check >::type         FsmCheckPolicy;
 
+    typedef typename ::boost::parameter::binding<
+        state_machine_args, ::boost::msm::back::tag::queue_container_policy, 
+        queue_container_deque >::type                                                               QueueContainerPolicy;
 
 private: 
 
     typedef boost::msm::back::state_machine<
-        A0,A1,A2,A3>                                library_sm;
+        A0,A1,A2,A3,A4>                             library_sm;
 
     typedef ::boost::function<
         execute_return ()>                          transition_fct;
     typedef ::boost::function<
         execute_return () >                         deferred_fct;
-    typedef std::deque<deferred_fct >               deferred_events_queue_t;
-    typedef std::queue<transition_fct >             events_queue_t;
+    typedef typename QueueContainerPolicy::
+        template In<deferred_fct>::type             deferred_events_queue_t;
+    typedef typename QueueContainerPolicy::
+        template In<transition_fct>::type           events_queue_t;
+
     typedef bool (*flag_handler)(library_sm const&);
 
     // all state machines are friend with each other to allow embedding any of them in another fsm
-    template <class ,class , class, class
+    template <class ,class , class, class, class
     > friend class boost::msm::back::state_machine;
 
     // helper to add, if needed, visitors to all states
@@ -1079,7 +1092,7 @@ private:
             &library_sm::process_event; 
 
         transition_fct f = ::boost::bind(pf,this,evt);
-        m_events_queue.m_events_queue.push(f);
+        m_events_queue.m_events_queue.push_back(f);
     }
     template <class EventType>
     void enqueue_event_helper(EventType const& evt, ::boost::mpl::true_ const &)
@@ -1090,7 +1103,7 @@ private:
     void execute_queued_events_helper(::boost::mpl::false_ const &)
     {
         transition_fct to_call = m_events_queue.m_events_queue.front();
-        m_events_queue.m_events_queue.pop();
+        m_events_queue.m_events_queue.pop_front();
         to_call();
     }
     void execute_queued_events_helper(::boost::mpl::true_ const &)
@@ -1117,6 +1130,26 @@ private:
     typename events_queue_t::size_type get_message_queue_size() const
     {
         return m_events_queue.m_events_queue.size();
+    }
+
+    events_queue_t& get_message_queue()
+    {
+        return m_events_queue.m_events_queue;
+    }
+
+    const events_queue_t& get_message_queue() const
+    {
+        return m_events_queue.m_events_queue;
+    }
+
+    deferred_events_queue_t& get_deferred_queue()
+    {
+        return m_deferred_events_queue;
+    }
+
+    const deferred_events_queue_t& get_deferred_queue() const
+    {
+        return m_deferred_events_queue;
     }
 
     // Getter that returns the current state of the FSM
@@ -1323,7 +1356,7 @@ private:
      }
 
      // Construct with the default initial states
-     state_machine<A0,A1,A2,A3 >()
+     state_machine<A0,A1,A2,A3,A4 >()
          :Derived()
          ,m_events_queue() 
          ,m_deferred_events_queue()
@@ -1341,7 +1374,7 @@ private:
          fill_states(this);
      }
      template <class Expr>
-     state_machine<A0,A1,A2,A3 >
+     state_machine<A0,A1,A2,A3,A4 >
          (Expr const& expr,typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* =0)
          :Derived()
          ,m_events_queue() 
@@ -1369,7 +1402,7 @@ private:
 #define MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB(z, n, unused) ARG ## n t ## n
 #define MSM_CONSTRUCTOR_HELPER_EXECUTE(z, n, unused)                                \
         template <BOOST_PP_ENUM_PARAMS(n, class ARG)>                               \
-        state_machine<A0,A1,A2,A3                                                   \
+        state_machine<A0,A1,A2,A3,A4                                                \
         >(BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ),                 \
         typename ::boost::disable_if<typename ::boost::proto::is_expr<ARG0>::type >::type* =0 )                \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
@@ -1387,7 +1420,7 @@ private:
          fill_states(this);                                                         \
      }                                                                              \
         template <class Expr,BOOST_PP_ENUM_PARAMS(n, class ARG)>                    \
-        state_machine<A0,A1,A2,A3                                                   \
+        state_machine<A0,A1,A2,A3,A4                                                \
         >(Expr const& expr,BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ), \
         typename ::boost::enable_if<typename ::boost::proto::is_expr<Expr>::type >::type* =0 ) \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
@@ -1428,7 +1461,7 @@ private:
          }
         return *this;
      }
-     state_machine<A0,A1,A2,A3> 
+     state_machine<A0,A1,A2,A3,A4> 
          (library_sm const& rhs)
          : Derived(rhs)
      {
@@ -1479,7 +1512,7 @@ private:
         {
             // event has to be put into the queue
             transition_fct f = ::boost::bind(pf,this,evt);
-            m_events_queue.m_events_queue.push(f);
+            m_events_queue.m_events_queue.push_back(f);
             return false;
         }
         // event can be handled, processing
@@ -2316,7 +2349,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         if (!m_events_queue.m_events_queue.empty())
         {
             transition_fct to_call = m_events_queue.m_events_queue.front();
-            m_events_queue.m_events_queue.pop();
+            m_events_queue.m_events_queue.pop_front();
             to_call();
         }
     }
