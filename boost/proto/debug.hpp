@@ -92,10 +92,19 @@ namespace boost { namespace proto
             std::ostream &sout_;
         };
 
-        template<typename Tag>
-        std::ostream &operator <<(ostream_wrapper sout_wrap, Tag const &)
+        struct named_any
         {
-            return sout_wrap.sout_ << BOOST_SP_TYPEID(Tag).name();
+            template<typename T>
+            named_any(T const &)
+              : name_(BOOST_SP_TYPEID(T).name())
+            {}
+
+            char const *name_;
+        };
+
+        std::ostream &operator <<(ostream_wrapper sout_wrap, named_any t)
+        {
+            return sout_wrap.sout_ << t.name_;
         }
     }
 
