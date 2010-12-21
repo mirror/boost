@@ -12,10 +12,13 @@ Copyright (c) 2007-2010: Joachim Faulhaber
 
 #if defined(ICL_USE_BOOST_INTERPROCESS_IMPLEMENTATION)
 #include <boost/interprocess/containers/map.hpp>
+#include <boost/interprocess/containers/set.hpp>
 #elif defined(ICL_USE_BOOST_MOVE_IMPLEMENTATION)
 #include <boost/container/map.hpp>
+#include <boost/container/set.hpp>
 #else 
 #include <map>
+#include <set>
 #endif
 
 #include <string>
