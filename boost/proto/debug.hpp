@@ -102,7 +102,7 @@ namespace boost { namespace proto
             char const *name_;
         };
 
-        std::ostream &operator <<(ostream_wrapper sout_wrap, named_any t)
+        inline std::ostream &operator <<(ostream_wrapper sout_wrap, named_any t)
         {
             return sout_wrap.sout_ << t.name_;
         }
