@@ -1247,6 +1247,15 @@ private:
     {
         return m_is_included;
     }
+    // get the history policy class
+    concrete_history& get_history()
+    {
+        return m_history;
+    }
+    concrete_history const& get_history() const
+    {
+        return m_history;
+    }
     // get a state
     // as a pointer
     template <class State>
