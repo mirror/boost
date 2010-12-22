@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [section:utilities Utilities]
 
 Having an abstraction that encapsulates a pair of iterators is very useful. The standard library uses `std::pair` in some circumstances, but that class is cumbersome to use because we need to specify two template arguments, and for all range algorithm purposes we must enforce the two template arguments to be the same. Moreover, `std::pair<iterator,iterator>` is hardly self-documenting whereas more domain specific class names are. Therefore these two classes are provided:

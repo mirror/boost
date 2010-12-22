@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [section:extending Extending the library]
 
 [section:method_1 Method 1: provide member functions and nested types]
@@ -36,6 +41,7 @@ The primary templates in this library are implemented such that certain function
   [[Function              ] [Related concept      ]]
   [[`range_begin(x)`] [__single_pass_range__]]
   [[`range_end(x)`  ] [__single_pass_range__]]
+  [[`range_calculate_size(x)`] [ Optional. This can be used to specify a mechanism for constant-time computation of the size of a range. The default behaviour is to return `boost::end(x) - boost::begin(x)` for random access ranges, and to return `x.size()` for ranges with lesser traversal capability. This behaviour can be changed by implementing `range_calculate_size` in a manner that will be found via ADL. The ability to calculate size in O(1) is often possible even with ranges with traversal categories less than random access.]]
 ]
 
 `range_begin()` and `range_end()` must be overloaded for both `const` and `mutable` reference arguments.

@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [section:history_ack History and Acknowledgement]
 
 [heading Version 1 - before Boost 1.43]
@@ -51,4 +56,3 @@ Regardless of how I write this section it will never truly fairly capture the
 gratitude that I feel to all who have contributed. Thank you everyone.
 
 [endsect]
-

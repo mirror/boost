@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [def __mfc_collections__ [@http://msdn.microsoft.com/en-us/library/942860sh.aspx MFC Collection Classes]]
 [def __atl_collections__ [@http://msdn.microsoft.com/en-us/library/15e672bd.aspx ATL Collection Classes]]
 

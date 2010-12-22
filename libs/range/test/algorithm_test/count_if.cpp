@@ -72,9 +72,9 @@ namespace boost
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cref_cont, false_predicate()) );
             BOOST_CHECK_EQUAL( 0u, boost::count_if(boost::make_iterator_range(cont), false_predicate()) );
 
-            BOOST_CHECK_EQUAL( cont.size(), boost::count_if(cont, true_predicate()) );
-            BOOST_CHECK_EQUAL( cont.size(), boost::count_if(cref_cont, true_predicate()) );
-            BOOST_CHECK_EQUAL( cont.size(), boost::count_if(boost::make_iterator_range(cont), true_predicate()) );
+            BOOST_CHECK_EQUAL( boost::size(cont), boost::count_if(cont, true_predicate()) );
+            BOOST_CHECK_EQUAL( boost::size(cont), boost::count_if(cref_cont, true_predicate()) );
+            BOOST_CHECK_EQUAL( boost::size(cont), boost::count_if(boost::make_iterator_range(cont), true_predicate()) );
         }
 
         void test_count_if()

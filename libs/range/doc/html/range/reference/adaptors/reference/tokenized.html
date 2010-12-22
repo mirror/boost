@@ -24,7 +24,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="range.reference.adaptors.reference.tokenized"></a><a class="link" href="tokenized.html" title="tokenized"> tokenized</a>
+<a name="range.reference.adaptors.reference.tokenized"></a><a class="link" href="tokenized.html" title="tokenized">tokenized</a>
 </h5></div></div></div>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -88,30 +88,32 @@
 </table></div>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Precondition:</strong></span>
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      Let <code class="computeroutput"><span class="identifier">T</span></code> denote
-                      <code class="computeroutput"><span class="keyword">typename</span> <span class="identifier">range_value</span><span class="special">&lt;</span><span class="identifier">decltype</span><span class="special">(</span><span class="identifier">rng</span><span class="special">)&gt;::</span><span class="identifier">type</span></code>,
-                      then <code class="computeroutput"><span class="identifier">regex</span></code>
-                      has the type <code class="computeroutput"><span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span></code> or is implicitly convertible
-                      to one of these types.
-                    </li>
+                    Let <code class="computeroutput"><span class="identifier">T</span></code> denote
+                    <code class="computeroutput"><span class="keyword">typename</span> <span class="identifier">range_value</span><span class="special">&lt;</span><span class="identifier">decltype</span><span class="special">(</span><span class="identifier">rng</span><span class="special">)&gt;::</span><span class="identifier">type</span></code>,
+                    then <code class="computeroutput"><span class="identifier">regex</span></code> has
+                    the type <code class="computeroutput"><span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span></code> or is implicitly convertible
+                    to one of these types.
+                  </li>
 <li class="listitem">
-                      <code class="computeroutput"><span class="identifier">i</span></code> has the type
-                      <code class="computeroutput"><span class="keyword">int</span></code>.
-                    </li>
+                    <code class="computeroutput"><span class="identifier">i</span></code> has the type
+                    <code class="computeroutput"><span class="keyword">int</span></code>.
+                  </li>
 <li class="listitem">
-                      the <code class="computeroutput"><span class="identifier">value_type</span></code>
-                      of <code class="computeroutput"><span class="identifier">rndRng</span></code> is
-                      <code class="computeroutput"><span class="keyword">int</span></code>.
-                    </li>
+                    the <code class="computeroutput"><span class="identifier">value_type</span></code>
+                    of <code class="computeroutput"><span class="identifier">rndRng</span></code> is
+                    <code class="computeroutput"><span class="keyword">int</span></code>.
+                  </li>
 <li class="listitem">
-                      <code class="computeroutput"><span class="identifier">flags</span></code> has the
-                      type <code class="computeroutput"><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">syntax_option_type</span></code>.
-                    </li>
+                    <code class="computeroutput"><span class="identifier">flags</span></code> has the
+                    type <code class="computeroutput"><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">syntax_option_type</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Returns:</strong></span> A range whose iterators
                 behave as if they were the original iterators wrapped in <code class="computeroutput"><span class="identifier">regex_token_iterator</span></code>. The first

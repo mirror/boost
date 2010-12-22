@@ -67,9 +67,8 @@ void check_copy( Rng r )
 }
 
 
-
 template< class Rng >
-void check()
+void check_direct()
 {
     using namespace boost::adaptors;
     
@@ -102,7 +101,6 @@ void check()
     }*/
     
 }
-
 
 
 template< class IndirectRng >
@@ -189,8 +187,8 @@ void check_regex()
 
 void check_adaptors()
 {
-    check< std::vector<int> >();
-    check< std::list<int> >();
+    check_direct< std::vector<int> >();
+    check_direct< std::list<int> >();
     check_indirect< std::vector<int*> >();
     check_indirect< std::list<int*> >();
 
