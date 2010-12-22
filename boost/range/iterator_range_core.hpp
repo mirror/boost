@@ -290,6 +290,20 @@ namespace boost
                return *--last;
            }
 
+           // pop_front() - added to model the SinglePassRangePrimitiveConcept
+           void pop_front()
+           {
+               BOOST_ASSERT( !empty() );
+               ++m_Begin;
+           }
+
+           // pop_back() - added to model the BidirectionalRangePrimitiveConcept
+           void pop_back()
+           {
+               BOOST_ASSERT( !empty() );
+               --m_End;
+           }
+
            reference operator[]( difference_type at ) const
            {
                BOOST_ASSERT( at >= 0 && at < size() );

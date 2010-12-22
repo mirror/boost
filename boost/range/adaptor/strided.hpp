@@ -30,34 +30,34 @@ namespace boost
             friend class iterator_core_access;
 
             typedef iterator_adaptor<strided_iterator<BaseIterator>, BaseIterator> super_t;
-        
+
         public:
             typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<BaseIterator>::difference_type          difference_type;
-                
+
             strided_iterator() : m_stride() { }
-        
+
             strided_iterator(const strided_iterator& other)
                 : super_t(other), m_stride(other.m_stride) { }
-        
+
             explicit strided_iterator(BaseIterator base_it, difference_type stride)
                 : super_t(base_it), m_stride(stride) { }
-        
+
             strided_iterator&
             operator=(const strided_iterator& other)
             {
                 super_t::operator=(other);
-            
+
                 // Is the interoperation of the stride safe?
                 m_stride = other.m_stride;
                 return *this;
             }
-        
+
             void increment() { std::advance(this->base_reference(), m_stride); }
-        
+
             void decrement() { std::advance(this->base_reference(), -m_stride); }
-        
+
             void advance(difference_type n) { std::advance(this->base_reference(), n * m_stride); }
-        
+
             difference_type
             distance_to(const strided_iterator& other) const
             {
@@ -66,11 +66,11 @@ namespace boost
 
             // Using the compiler generated copy constructor and
             // and assignment operator
-        
+
         private:
             difference_type m_stride;
         };
-    
+
         template<class BaseIterator> inline
         strided_iterator<BaseIterator>
         make_strided_iterator(
@@ -89,9 +89,31 @@ namespace boost
         public:
             template< typename Difference >
             strided_range(Difference stride, Rng& rng)
-                : super_t(make_strided_iterator(boost::begin(rng), stride),
-                    make_strided_iterator(boost::end(rng), stride))
+                : super_t(make_first(rng, stride), make_last(rng, stride))
             {
+                BOOST_ASSERT( stride >= 0 );
+            }
+        private:
+            template<typename Difference>
+            static iter_type make_first(Rng& rng, Difference stride)
+            {
+                return make_strided_iterator(boost::begin(rng), stride);
+            }
+
+            template<typename Difference>
+            static iter_type make_last(Rng& rng, Difference stride)
+            {
+                typedef BOOST_DEDUCED_TYPENAME range_iterator<Rng>::type raw_iter_t;
+                typedef BOOST_DEDUCED_TYPENAME range_difference<Rng>::type diff_t;
+
+                if (stride > 0)
+                {
+                    raw_iter_t it = boost::end(rng);
+                    const diff_t count = boost::size(rng);
+                    std::advance(it, -(count % stride));
+                    return iter_type(it, stride);
+                }
+                return make_strided_iterator(boost::end(rng), stride);
             }
         };
 
@@ -99,7 +121,7 @@ namespace boost
         class strided_holder : public holder<Difference>
         {
         public:
-            strided_holder(Difference value) : holder<Difference>(value) {}
+            explicit strided_holder(Difference value) : holder<Difference>(value) {}
         };
 
         template<class Rng, class Difference>
@@ -117,32 +139,32 @@ namespace boost
         }
 
     } // namespace range_detail
-    
+
     using range_detail::strided_range;
 
     namespace adaptors
     {
-    
+
         namespace
         {
             const range_detail::forwarder<range_detail::strided_holder>
                 strided = range_detail::forwarder<range_detail::strided_holder>();
         }
-        
+
         template<class Range, class Difference>
         inline strided_range<Range>
         stride(Range& rng, Difference step)
         {
             return strided_range<Range>(step, rng);
         }
-        
+
         template<class Range, class Difference>
         inline strided_range<const Range>
         stride(const Range& rng, Difference step)
         {
             return strided_range<const Range>(step, rng);
         }
-        
+
     } // namespace 'adaptors'
 } // namespace 'boost'
 
