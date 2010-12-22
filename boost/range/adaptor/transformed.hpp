@@ -22,7 +22,7 @@ namespace boost
     {
 
         template< class F, class R >
-        struct transform_range :
+        struct transformed_range :
             public boost::iterator_range<
                       boost::transform_iterator< F,
                           BOOST_DEDUCED_TYPENAME range_iterator<R>::type
@@ -41,7 +41,7 @@ namespace boost
             typedef F transform_fn_type;
             typedef R source_range_type;
 
-            transform_range( F f, R& r )
+            transformed_range( F f, R& r )
                 : base( make_transform_iterator( boost::begin(r), f ),
                         make_transform_iterator( boost::end(r), f ) )
 
@@ -56,24 +56,24 @@ namespace boost
         };
 
         template< class InputRng, class UnaryFunction >
-        inline transform_range<UnaryFunction,InputRng>
+        inline transformed_range<UnaryFunction,InputRng>
         operator|( InputRng& r,
                    const transform_holder<UnaryFunction>& f )
         {
-            return transform_range<UnaryFunction,InputRng>( f.val, r );
+            return transformed_range<UnaryFunction,InputRng>( f.val, r );
         }
 
         template< class InputRng, class UnaryFunction >
-        inline transform_range<UnaryFunction, const InputRng>
+        inline transformed_range<UnaryFunction, const InputRng>
         operator|( const InputRng& r,
                    const transform_holder<UnaryFunction>& f )
         {
-           return transform_range<UnaryFunction, const InputRng>( f.val, r );
+           return transformed_range<UnaryFunction, const InputRng>( f.val, r );
         }
 
     } // 'range_detail'
 
-    using range_detail::transform_range;
+    using range_detail::transformed_range;
 
     namespace adaptors
     {
@@ -85,17 +85,17 @@ namespace boost
         }
 
         template<class UnaryFunction, class InputRange>
-        inline transform_range<UnaryFunction, InputRange>
+        inline transformed_range<UnaryFunction, InputRange>
         transform(InputRange& rng, UnaryFunction fn)
         {
-            return transform_range<UnaryFunction, InputRange>(fn, rng);
+            return transformed_range<UnaryFunction, InputRange>(fn, rng);
         }
 
         template<class UnaryFunction, class InputRange>
-        inline transform_range<UnaryFunction, const InputRange>
+        inline transformed_range<UnaryFunction, const InputRange>
         transform(const InputRange& rng, UnaryFunction fn)
         {
-            return transform_range<UnaryFunction, const InputRange>(fn, rng);
+            return transformed_range<UnaryFunction, const InputRange>(fn, rng);
         }
     } // 'adaptors'
 

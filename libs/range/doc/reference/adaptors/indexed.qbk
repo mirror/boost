@@ -13,6 +13,7 @@
 
 * [*Returns:] A range adapted to return both the element and the associated index. The returned range consists of iterators that have in addition to the usual iterator member functions an `index()` member function that returns the appropriate index for the element in the sequence corresponding with the iterator.
 * [*Range Category:] __single_pass_range__
+* [*Range Return Type:] `boost::indexed_range<typeof(rng)>`
 * [*Returned Range Category:] The range category of `rng`
 
 [section:indexed_example indexed example]

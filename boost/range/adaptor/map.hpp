@@ -62,11 +62,11 @@ namespace boost
 
         template<class StdPairRng>
         class select_first_range
-            : public transform_range<
+            : public transformed_range<
                         select_first<StdPairRng>,
                         const StdPairRng>
         {
-            typedef transform_range<select_first<StdPairRng>, const StdPairRng> base;
+            typedef transformed_range<select_first<StdPairRng>, const StdPairRng> base;
         public:
             typedef select_first<StdPairRng> transform_fn_type;
             typedef const StdPairRng source_range_type;
@@ -81,11 +81,11 @@ namespace boost
 
         template<class StdPairRng>
         class select_second_mutable_range
-            : public transform_range<
+            : public transformed_range<
                         select_second_mutable<StdPairRng>,
                         StdPairRng>
         {
-            typedef transform_range<select_second_mutable<StdPairRng>, StdPairRng> base;
+            typedef transformed_range<select_second_mutable<StdPairRng>, StdPairRng> base;
         public:
             typedef select_second_mutable<StdPairRng> transform_fn_type;
             typedef StdPairRng source_range_type;
@@ -100,11 +100,11 @@ namespace boost
 
         template<class StdPairRng>
         class select_second_const_range
-            : public transform_range<
+            : public transformed_range<
                         select_second_const<StdPairRng>,
                         const StdPairRng>
         {
-            typedef transform_range<select_second_const<StdPairRng>, const StdPairRng> base;
+            typedef transformed_range<select_second_const<StdPairRng>, const StdPairRng> base;
         public:
             typedef select_second_const<StdPairRng> transform_fn_type;
             typedef const StdPairRng source_range_type;
@@ -122,7 +122,7 @@ namespace boost
         operator|( const StdPairRng& r, map_keys_forwarder )
         {
             return operator|( r,
-              boost::adaptors::transformed( select_first<StdPairRng>() ) );
+                boost::adaptors::transformed( select_first<StdPairRng>() ) );
         }
 
         template< class StdPairRng >
@@ -130,7 +130,7 @@ namespace boost
         operator|( StdPairRng& r, map_values_forwarder )
         {
             return operator|( r,
-          boost::adaptors::transformed( select_second_mutable<StdPairRng>() ) );
+                boost::adaptors::transformed( select_second_mutable<StdPairRng>() ) );
         }
 
         template< class StdPairRng >
@@ -138,7 +138,7 @@ namespace boost
         operator|( const StdPairRng& r, map_values_forwarder )
         {
             return operator|( r,
-           boost::adaptors::transformed( select_second_const<StdPairRng>() ) );
+                boost::adaptors::transformed( select_second_const<StdPairRng>() ) );
         }
 
     } // 'range_detail'
