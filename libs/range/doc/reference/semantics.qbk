@@ -73,6 +73,16 @@
         [`boost::reverse_iterator<range_iterator<const X>::type`]
         [compile time]
     ]
+    [
+        [`has_range_iterator<X>::type`]
+        [`mpl::true_` if `range_mutable_iterator<X>::type` is a valid expression, `mpl::false_` otherwise]
+        [compile time]
+    ]
+    [
+        [`has_range_const_iterator<X>::type`]
+        [`mpl::true_` if `range_const_iterator<X>::type` is a valid expression, `mpl::false_` otherwise]
+        [compile time]
+    ]
 ]
 
 [endsect]

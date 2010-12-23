@@ -138,6 +138,7 @@ test-suite range :
 	[ range-test counting_range ]
 	[ range-test extension_mechanism ]
 	[ range-test extension_size ]
+	[ range-test has_range_iterator ]
 	[ range-test irange ]
 	[ range-test istream_range ]
 	[ range-test iterator_pair ]
