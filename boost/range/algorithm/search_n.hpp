@@ -216,7 +216,7 @@ namespace range_detail
         BOOST_RANGE_CONCEPT_ASSERT((
             BinaryPredicateConcept<
                 BinaryPredicate,
-                typename std::iterator_traits<BinaryPredicate>::value_type,
+                typename std::iterator_traits<ForwardIterator>::value_type,
                 Value>
             ));
 
