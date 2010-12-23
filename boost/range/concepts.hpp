@@ -98,8 +98,9 @@ namespace boost {
         // classes:
         //
         // The Range algorithms often do not require that the iterators are
-        // Assignable, but the correct standard conformant iterators
-        // do require the iterators to be a model of the Assignable concept.
+        // Assignable or default constructable, but the correct standard
+        // conformant iterators do require the iterators to be a model of the
+        // Assignable concept.
         // Iterators that contains a functor that is not assignable therefore
         // are not correct models of the standard iterator concepts,
         // despite being adequate for most algorithms. An example of this
@@ -141,6 +142,23 @@ namespace boost {
                     BOOST_DEDUCED_TYPENAME SinglePassIteratorConcept::traversal_category,
                     single_pass_traversal_tag
                 >));
+
+            BOOST_CONCEPT_USAGE(SinglePassIteratorConcept)
+            {
+                Iterator i2(++i);
+                boost::ignore_unused_variable_warning(i2);
+
+                Iterator i3(i++);
+                boost::ignore_unused_variable_warning(i3);
+
+                BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference r1(*i);
+                boost::ignore_unused_variable_warning(r1);
+
+                BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference r2(*i++);
+                boost::ignore_unused_variable_warning(r2);
+            }
+        private:
+            Iterator i;
 #endif
         };
 
