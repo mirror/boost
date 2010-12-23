@@ -40,6 +40,7 @@
 #include "tab_check.hpp"
 #include "ascii_check.hpp"
 #include "apple_macro_check.hpp"
+#include "assert_macro_check.hpp"
 #include "minmax_check.hpp"
 #include "unnamed_namespace_check.hpp"
 
@@ -548,6 +549,7 @@ namespace
          "  -tab\n"
          "  -ascii\n"
          "  -apple_macro\n"
+         "  -assert_macro\n"
          "  -minmax\n"
          "  -unnamed\n"
          " default is all checks on; otherwise options specify desired checks"
@@ -720,6 +722,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool tab_ck = true;
   bool ascii_ck = true;
   bool apple_ok = true;
+  bool assert_ok = true;
   bool minmax_ck = true;
   bool unnamed_ck = true;
   bool cvs = false;
@@ -753,6 +756,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     tab_ck = false;
     ascii_ck = false;
     apple_ok = false;
+    assert_ok = false;
     minmax_ck = false;
     unnamed_ck = false;
   }
@@ -778,6 +782,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       ascii_ck = true;
     else if ( std::strcmp( argv[1], "-apple_macro" ) == 0 )
       apple_ok = true;
+    else if ( std::strcmp( argv[1], "-assert_macro" ) == 0 )
+      assert_ok = true;
     else if ( std::strcmp( argv[1], "-minmax" ) == 0 )
         minmax_ck = true;
     else if ( std::strcmp( argv[1], "-unnamed" ) == 0 )
@@ -823,6 +829,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       inspectors.push_back( inspector_element( new boost::inspect::ascii_check ) );
   if ( apple_ok )
       inspectors.push_back( inspector_element( new boost::inspect::apple_macro_check ) );
+  if ( assert_ok )
+      inspectors.push_back( inspector_element( new boost::inspect::assert_macro_check ) );
   if ( minmax_ck )
       inspectors.push_back( inspector_element( new boost::inspect::minmax_check ) );
   if ( unnamed_ck )

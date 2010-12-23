@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\assert_macro_check.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\copyright_check.cpp"
 				>
 			</File>

@@ -54,9 +54,13 @@ Usage: inspect \[-cvs\] \[-text\] \[-brief\] \[options...\]
   -license
   -copyright
   -crlf
+  -end
   -link
-  -long_name
+  -path_name
   -tab
+  -ascii
+  -apple_macro
+  -assert_macro
   -minmax
   -unnamed
  default is all checks on; otherwise options specify desired checks
@@ -86,14 +90,26 @@ There are two types of options allowed, ones that control general operation and 
   [ [[^-crlf]]
     [Checks that files use consistent EOL chanracters.] ]
 
+  [ [[^-end]]
+    [Checks that files end with a newline character.] ]
+
   [ [[^-link]]
     [Checks the validity of URIs in HTML files.] ]
 
-  [ [[^-long_name]]
+  [ [[^-path_name]]
     [Checks for long names, and a variety of other file name problems that inhibit portability of files.] ]
 
   [ [[^-tab]]
     [Checks for files with tab characters.] ]
+
+  [ [[^-ascii]]
+    [Checks for files with non-ASCII characters.] ]
+
+  [ [[^-apple_macro]]
+    [Checks for conflicts with to Apple's unfortunately named debugging macros.] ]
+
+  [ [[^-assert_macro]]
+    [Checks for presence of C-style assert macros (instead of BOOST_ASSERT).] ]
 
   [ [[^-minmax]]
     [Checks for violations of the Boost min/max quidelines.] ]
