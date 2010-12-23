@@ -108,9 +108,9 @@ namespace range_detail
     template<typename ForwardIterator, typename Integer, typename Value,
              typename BinaryPredicate>
     inline ForwardIterator
-    search_n_impl(ForwardIterator first, ForwardIterator last,
-                  Integer count, const Value& value,
-                  BinaryPredicate pred, std::forward_iterator_tag)
+    search_n_pred_impl(ForwardIterator first, ForwardIterator last,
+                       Integer count, const Value& value,
+                       BinaryPredicate pred, std::forward_iterator_tag)
     {
         typedef typename std::iterator_traits<ForwardIterator>::difference_type difference_t;
 
@@ -143,9 +143,9 @@ namespace range_detail
     template<typename RandomAccessIterator, typename Integer,
              typename Value, typename BinaryPredicate>
     inline RandomAccessIterator
-    search_n_impl(RandomAccessIterator first, RandomAccessIterator last,
-                  Integer count, const Value& value,
-                  BinaryPredicate pred, std::random_access_iterator_tag)
+    search_n_pred_impl(RandomAccessIterator first, RandomAccessIterator last,
+                       Integer count, const Value& value,
+                       BinaryPredicate pred, std::random_access_iterator_tag)
     {
         typedef typename std::iterator_traits<RandomAccessIterator>::difference_type difference_t;
 
@@ -208,9 +208,9 @@ namespace range_detail
     template<typename ForwardIterator, typename Integer, typename Value,
              typename BinaryPredicate>
     inline ForwardIterator
-    search_n_impl(ForwardIterator first, ForwardIterator last,
-                  Integer count, const Value& value,
-                  BinaryPredicate pred)
+    search_n_pred_impl(ForwardIterator first, ForwardIterator last,
+                       Integer count, const Value& value,
+                       BinaryPredicate pred)
     {
         BOOST_RANGE_CONCEPT_ASSERT((ForwardIteratorConcept<ForwardIterator>));
         BOOST_RANGE_CONCEPT_ASSERT((
@@ -230,8 +230,8 @@ namespace range_detail
                 ++first;
             return first;
         }
-        return range_detail::search_n_impl(first, last, count,
-                                           value, pred, cat_t());
+        return range_detail::search_n_pred_impl(first, last, count,
+                                                value, pred, cat_t());
     }
 } // namespace range_detail
 
@@ -271,7 +271,7 @@ search_n(ForwardRange& rng, Integer count, const Value& value,
     BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
     BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         BOOST_DEDUCED_TYPENAME range_value<ForwardRange>::type, const Value&>));
-    return range_detail::search_n_impl(boost::begin(rng), boost::end(rng),
+    return range_detail::search_n_pred_impl(boost::begin(rng), boost::end(rng),
         count, value, binary_pred);
 }
 
@@ -285,7 +285,7 @@ search_n(const ForwardRange& rng, Integer count, const Value& value,
     BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<const ForwardRange>));
     BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         BOOST_DEDUCED_TYPENAME range_value<const ForwardRange>::type, const Value&>));
-    return range_detail::search_n_impl(boost::begin(rng), boost::end(rng),
+    return range_detail::search_n_pred_impl(boost::begin(rng), boost::end(rng),
         count, value, binary_pred);
 }
 
@@ -329,7 +329,8 @@ search_n(ForwardRange& rng, Integer count, const Value& value,
         BOOST_DEDUCED_TYPENAME range_value<ForwardRange>::type,
         const Value&>));
     return range_return<ForwardRange,re>::
-        pack(range_detail::search_n_impl(boost::begin(rng), boost::end(rng),
+        pack(range_detail::search_n_pred_impl(boost::begin(rng),
+                                              boost::end(rng),
                            count, value, pred),
              rng);
 }
@@ -346,7 +347,8 @@ search_n(const ForwardRange& rng, Integer count, const Value& value,
         BOOST_DEDUCED_TYPENAME range_value<const ForwardRange>::type,
         const Value&>));
     return range_return<const ForwardRange,re>::
-        pack(range_detail::search_n_impl(boost::begin(rng), boost::end(rng),
+        pack(range_detail::search_n_pred_impl(boost::begin(rng),
+                                              boost::end(rng),
                            count, value, pred),
              rng);
 }
