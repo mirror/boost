@@ -92,7 +92,7 @@ namespace archive {
             // (C) Copyright 2010 Dean Michael Berris. <mikhailberis@gmail.com>
             // Instead of using std::tmpnam, we use Boost.Filesystem's unique_path
             boost::filesystem::path tmp_path =
-                boost::filesystem::unique_path("%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                boost::filesystem::unique_path("%%%%%");
             std::strcat(ibuffer, tmp_path.string().c_str());
             chdir(old_dir);
         }
@@ -144,7 +144,7 @@ namespace archive {
         if (name[0] == 0) {
             boost::filesystem::path tempdir(tmpdir());
             boost::filesystem::path tempfilename =
-                boost::filesystem::unique_path("serialization-%%%%%%%%%%%%%%%%");
+                boost::filesystem::unique_path("serialization-%%%%");
             boost::filesystem::path temp = tempdir / tempfilename;
             std::strcat(name, temp.string().c_str());
         }
