@@ -14,6 +14,7 @@
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/value_type.hpp>
+#include <boost/range/reference.hpp>
 
 namespace boost
 {
@@ -25,11 +26,10 @@ namespace boost
         template< class Map >
         struct select_first
         {
-            typedef BOOST_DEDUCED_TYPENAME range_value<Map>::type pair_t;
-            typedef const BOOST_DEDUCED_TYPENAME pair_t::first_type&
-                result_type;
+            typedef BOOST_DEDUCED_TYPENAME range_reference<const Map>::type argument_type;
+            typedef const BOOST_DEDUCED_TYPENAME range_value<const Map>::type::first_type& result_type;
 
-            result_type operator()( const pair_t& r ) const
+            result_type operator()( argument_type r ) const
             {
                 return r.first;
             }
@@ -38,10 +38,10 @@ namespace boost
         template< class Map >
         struct select_second_mutable
         {
-            typedef BOOST_DEDUCED_TYPENAME range_value<Map>::type pair_t;
-            typedef BOOST_DEDUCED_TYPENAME pair_t::second_type& result_type;
+            typedef BOOST_DEDUCED_TYPENAME range_reference<Map>::type argument_type;
+            typedef BOOST_DEDUCED_TYPENAME range_value<Map>::type::second_type& result_type;
 
-            result_type operator()( pair_t& r ) const
+            result_type operator()( argument_type r ) const
             {
                 return r.second;
             }
@@ -50,11 +50,10 @@ namespace boost
         template< class Map >
         struct select_second_const
         {
-            typedef BOOST_DEDUCED_TYPENAME range_value<Map>::type pair_t;
-            typedef const BOOST_DEDUCED_TYPENAME pair_t::second_type&
-                result_type;
+            typedef BOOST_DEDUCED_TYPENAME range_reference<const Map>::type argument_type;
+            typedef const BOOST_DEDUCED_TYPENAME range_value<const Map>::type::second_type& result_type;
 
-            result_type operator()( const pair_t& r ) const
+            result_type operator()( argument_type r ) const
             {
                 return r.second;
             }
