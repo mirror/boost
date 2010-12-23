@@ -438,7 +438,7 @@ struct save_pointer_type {
                 boost::serialization::throw_exception(
                     archive_exception(
                         archive_exception::unregistered_class,
-                        bpos->get_debug_info()
+                        "derived class not registered or exported"
                     )
                 );
             ar.save_pointer(vp, bpos);
