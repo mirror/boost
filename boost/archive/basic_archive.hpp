@@ -254,7 +254,7 @@ BOOST_ARCHIVE_SIGNATURE();
 #define BOOST_ARCHIVE_STRONG_TYPEDEF(T, D)         \
     class D : public T {                           \
     public:                                        \
-        explicit D(const T t) : T(t){}             \
+        explicit D(const T tt) : T(tt){}           \
     };                                             \
 /**/
 

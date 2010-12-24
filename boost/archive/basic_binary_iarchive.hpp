@@ -82,6 +82,19 @@ public:
     // binary files don't include the optional information 
     void load_override(class_id_optional_type & /* t */, int){}
 
+    void load_override(tracking_type & t, int /*version*/){
+        library_version_type lvt = this->get_library_version();
+        if(boost::archive::library_version_type(6) < lvt){
+            int_least8_t x=0;
+            * this->This() >> x;
+            t = boost::archive::tracking_type(x);
+        }
+        else{
+            bool x=0;
+            * this->This() >> x;
+            t = boost::archive::tracking_type(x);
+        }
+    }
     void load_override(class_id_type & t, int version){
         library_version_type lvt = this->get_library_version();
         if(boost::archive::library_version_type(7) < lvt){
