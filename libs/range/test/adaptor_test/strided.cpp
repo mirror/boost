@@ -44,15 +44,13 @@ namespace boost
                 typedef BOOST_DEDUCED_TYPENAME Container::size_type size_type;
                 iterator_t it = c.begin();
 
-                size_type count = c.size();
-                size_type unreachable_element_count = c.size() - ((count / stride_size) * stride_size);
-                diff_t offset = -static_cast<diff_t>(unreachable_element_count);
                 iterator_t last = c.end();
-                std::advance(last, offset);
-
-                for (; it != last; std::advance(it, stride_size))
+                for (; it != last; )
                 {
                     reference.push_back(*it);
+
+                    for (int i = 0; (it != last) && (i < stride_size); ++i)
+                        ++it;
                 }
             }
 
@@ -129,8 +127,8 @@ namespace boost
             strided_range_t rng( boost::adaptors::stride(c, 0) );
             typedef typename boost::range_iterator<strided_range_t>::type iter_t;
 
-            iter_t first(boost::begin(c), 0);
-            iter_t last(boost::end(c), 0);
+            iter_t first(boost::begin(c), 0, 0, boost::size(c));
+            iter_t last(boost::end(c), 0, boost::size(c), boost::size(c));
 
             iter_t it = first;
             for (int i = 0; i < 10; ++i, ++it)
@@ -157,6 +155,108 @@ namespace boost
             strided_test_impl< std::deque<int> >();
             strided_test_impl< std::list<int> >();
         }
+
+        void strided_defect_Trac5014()
+        {
+            using namespace boost::assign;
+
+            std::vector<int> v;
+            for (int i = 0; i < 30; ++i)
+                v.push_back(i);
+
+            std::vector<int> reference;
+            reference += 0,4,8,12,16,20,24,28;
+
+            std::vector<int> output;
+            boost::push_back(output, v | boost::adaptors::strided(4));
+
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           output.begin(), output.end() );
+
+            BOOST_CHECK_EQUAL( output.back(), 28 );
+        }
+
+        template<typename BaseIterator, typename Category>
+        class strided_mock_iterator
+            : public boost::iterator_adaptor<
+                strided_mock_iterator<BaseIterator,Category>
+              , BaseIterator
+              , boost::use_default
+              , Category
+            >
+        {
+            typedef boost::iterator_adaptor<
+                        strided_mock_iterator
+                      , BaseIterator
+                      , boost::use_default
+                      , Category
+                    > super_t;
+        public:
+            explicit strided_mock_iterator(BaseIterator it)
+                : super_t(it)
+            {
+            }
+
+        private:
+            void increment()
+            {
+                ++(this->base_reference());
+            }
+
+            bool equal(const strided_mock_iterator& other) const
+            {
+                return this->base() == other.base();
+            }
+
+            BOOST_DEDUCED_TYPENAME super_t::reference dereference() const
+            {
+                return *(this->base());
+            }
+
+            friend class boost::iterator_core_access;
+        };
+
+        template<typename Category, typename Range>
+        boost::iterator_range<strided_mock_iterator<BOOST_DEDUCED_TYPENAME boost::range_iterator<Range>::type, Category> >
+        as_mock_range(Range& rng)
+        {
+            typedef BOOST_DEDUCED_TYPENAME boost::range_iterator<Range>::type range_iter_t;
+            typedef strided_mock_iterator<range_iter_t, Category> mock_iter_t;
+
+            return boost::iterator_range<mock_iter_t>(
+                      mock_iter_t(boost::begin(rng)),
+                      mock_iter_t(boost::end(rng)));
+        }
+
+        void strided_test_traversal()
+        {
+            using namespace boost::assign;
+
+            std::vector<int> v;
+            for (int i = 0; i < 30; ++i)
+                v.push_back(i);
+
+            std::vector<int> reference;
+            reference += 0,4,8,12,16,20,24,28;
+
+            std::vector<int> output;
+            boost::push_back(output, as_mock_range<boost::forward_traversal_tag>(v) | boost::adaptors::strided(4));
+
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           output.begin(), output.end() );
+
+            output.clear();
+            boost::push_back(output, as_mock_range<boost::bidirectional_traversal_tag>(v) | boost::adaptors::strided(4));
+
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           output.begin(), output.end() );
+
+            output.clear();
+            boost::push_back(output, as_mock_range<boost::random_access_traversal_tag>(v) | boost::adaptors::strided(4));
+
+            BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
+                                           output.begin(), output.end() );
+        }
     }
 }
 
@@ -167,6 +267,8 @@ init_unit_test_suite(int argc, char* argv[])
         = BOOST_TEST_SUITE( "RangeTestSuite.adaptor.strided" );
 
     test->add( BOOST_TEST_CASE( &boost::strided_test ) );
+    test->add( BOOST_TEST_CASE( &boost::strided_defect_Trac5014 ) );
+    test->add( BOOST_TEST_CASE( &boost::strided_test_traversal ) );
 
     return test;
 }
