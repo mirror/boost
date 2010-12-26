@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [section:utilities Utilities]
 
 Having an abstraction that encapsulates a pair of iterators is very useful. The standard library uses `std::pair` in some circumstances, but that class is cumbersome to use because we need to specify two template arguments, and for all range algorithm purposes we must enforce the two template arguments to be the same. Moreover, `std::pair<iterator,iterator>` is hardly self-documenting whereas more domain specific class names are. Therefore these two classes are provided:
@@ -266,24 +271,30 @@ The resultant range will have the lowest common traversal of the two ranges supp
 Note that the joined range incurs a performance cost due to the need to check if the end of a range has been reached internally during traversal.
 
 [h4 Synposis]
+
 ``
 template<typename SinglePassRange1, typename SinglePassRange2>
-iterator_range<range_detail::join_iterator<
-    typename range_iterator<const SinglePassRange1>::type,
-    typename range_iterator<const SinglePassRange2>::type,
-    typename add_const<
-        typename range_value<const SinglePassRange1>::type>::type>
->
+joined_range<const SinglePassRange1, const SinglePassRange2>
 join(const SinglePassRange1& rng1, const SinglePassRange2& rng2)
 
 template<typename SinglePassRange1, typename SinglePassRange2>
-iterator_range<range_detail::join_iterator<
-    typename range_iterator<SinglePassRange1>::type,
-    typename range_iterator<SinglePassRange2>::type,
-    typename range_value<SinglePassRange1>::type>
->
+joined_range<SinglePassRange1, SinglePassRange2>
 join(SinglePassRange1& rng1, SinglePassRange2& rng2);
 ``
+
+For the const version:
+
+* [*Precondition:] The `range_value<SinglePassRange2>::type` must be convertible to `range_value<SinglePassRange1>::type`. The `range_reference<const SinglePassRange2>::type` must be convertible to `range_reference<const SinglePassRange1>::type`.
+* [*Range Category:] Both `rng1` and `rng2` must be a model of __single_pass_range__ or better.
+* [*Range Return Type:] `joined_range<const SinglePassRange1, const SinglePassRange2>` which is a model of the lesser of the two range concepts passed.
+* [*Returned Range Category:] The minimum of the range category of `rng1` and `rng2`.
+
+For the mutable version:
+
+* [*Precondition:] The `range_value<SinglePassRange2>::type` must be convertible to `range_value<SinglePassRange1>::type`. The `range_reference<SinglePassRange2>::type` must be convertible to `range_reference<SinglePassRange1>::type`.
+* [*Range Category:] Both `rng1` and `rng2` must be a model of __single_pass_range__ or better.
+* [*Range Return Type:] `joined_range<SinglePassRange1, SinglePassRange2>` which is a model of the lesser of the two range concepts passed.
+* [*Returned Range Category:] The minimum of the range category of `rng1` and `rng2`.
 
 [h4 Example]
 

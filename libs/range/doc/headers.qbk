@@ -1,6 +1,11 @@
-[section Library Headers]
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+[section:headers Library Headers]
 
-[section General]
+[section:general General]
 [table
     [[Header                              ] [Includes                   ] [Related Concept         ]]
     [[`<boost/range.hpp>`                 ] [everything from Boost.Range version 1 (Boost versions 1.42 and below). Includes the core range functions and metafunctinos, but excludes Range Adaptors and Range Algorithms. ] [-                       ]]
@@ -34,7 +39,7 @@
 ]
 [endsect]
 
-[section Adaptors]
+[section:adaptors Adaptors]
 [table
     [[Header                                        ][Includes                                           ]]
     [[`<boost/range/adaptor/adjacent_filtered.hpp>`] [__range_adaptors_adjacent_filtered__ ]]
@@ -54,7 +59,7 @@
 ]
 [endsect]
 
-[section Algorithm]
+[section:algorithm Algorithm]
 [table
     [[Header                                        ][Includes                                           ]]
     [[`<boost/range/algorithm/adjacent_find.hpp>`]           [__range_algorithms_adjacent_find__]]
@@ -119,7 +124,7 @@
 ]
 [endsect]
 
-[section Algorithm Extensions]
+[section:algorithm_ext Algorithm Extensions]
 [table
     [[Header                                        ][Includes                                           ]]
     [[`<boost/range/algorithm_ext/copy_n.hpp>`]     [__range_algorithm_ext_copy_n__]]

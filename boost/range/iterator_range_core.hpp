@@ -230,7 +230,7 @@ namespace boost
 
             difference_type size() const
             {
-                return m_End - m_Begin;
+                return std::distance(m_Begin, m_End);
             }
 
             bool empty() const
@@ -288,6 +288,20 @@ namespace boost
                BOOST_ASSERT( !empty() );
                IteratorT last( m_End );
                return *--last;
+           }
+
+           // pop_front() - added to model the SinglePassRangePrimitiveConcept
+           void pop_front()
+           {
+               BOOST_ASSERT( !empty() );
+               ++m_Begin;
+           }
+
+           // pop_back() - added to model the BidirectionalRangePrimitiveConcept
+           void pop_back()
+           {
+               BOOST_ASSERT( !empty() );
+               --m_End;
            }
 
            reference operator[]( difference_type at ) const

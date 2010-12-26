@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [section:strided strided]
 
 [table
@@ -6,10 +11,10 @@
     [[Function] [`boost::adaptors::stride(rng, n)`]]
 ]
 
-* [*Precondition:] `0 <= n && n < distance(rng)`
+* [*Precondition:] `0 <= n` and `boost::size(rng)` is a valid expression.
 * [*Returns:] A new range based on `rng` where traversal is performed in steps of `n`.
-* [*Range Category:] __random_access_range__
-* [*Returned Range Category:] __random_access_range__
+* [*Range Category:] __single_pass_range__
+* [*Returned Range Category:] The range category of `rng`.
 
 [section:strided_example strided example]
 ``

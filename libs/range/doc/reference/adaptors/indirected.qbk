@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [section:indirected indirected]
 
 [table
@@ -9,6 +14,7 @@
 * [*Precondition:] The `value_type` of the range defines unary `operator*()`
 * [*Postcondition:] For all elements `x` in the returned range, `x` is the result of `*y` where `y` is the corresponding element in the original range.
 * [*Range Category:] __single_pass_range__
+* [*Range Return Type:] `boost::indirected_range<typeof(rng)>`
 * [*Returned Range Category:] The range category of `rng`
 
 [section:indirected_example indirected example]

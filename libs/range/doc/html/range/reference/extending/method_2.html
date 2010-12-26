@@ -24,7 +24,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="range.reference.extending.method_2"></a><a class="link" href="method_2.html" title="Method 2: provide free-standing functions and specialize metafunctions"> Method 2: provide
+<a name="range.reference.extending.method_2"></a><a class="link" href="method_2.html" title="Method 2: provide free-standing functions and specialize metafunctions">Method 2: provide
         free-standing functions and specialize metafunctions</a>
 </h4></div></div></div>
 <p>
@@ -80,6 +80,26 @@
                   <p>
                     <a class="link" href="../../concepts/single_pass_range.html" title="Single Pass Range">Single Pass
                     Range</a>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">range_calculate_size</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Optional. This can be used to specify a mechanism for constant-time
+                    computation of the size of a range. The default behaviour is
+                    to return <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">-</span>
+                    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code>
+                    for random access ranges, and to return <code class="computeroutput"><span class="identifier">x</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code> for ranges with lesser traversal
+                    capability. This behaviour can be changed by implementing <code class="computeroutput"><span class="identifier">range_calculate_size</span></code> in a manner
+                    that will be found via ADL. The ability to calculate size in
+                    O(1) is often possible even with ranges with traversal categories
+                    less than random access.
                   </p>
                 </td>
 </tr>

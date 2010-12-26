@@ -24,10 +24,10 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="range.reference.adaptors.reference.strided"></a><a class="link" href="strided.html" title="strided"> strided</a>
+<a name="range.reference.adaptors.reference.strided"></a><a class="link" href="strided.html" title="strided">strided</a>
 </h5></div></div></div>
-<div class="toc"><dl><dt><span class="section"><a href="strided.html#range.reference.adaptors.reference.strided.strided_example">
-            strided example</a></span></dt></dl></div>
+<div class="toc"><dl><dt><span class="section"><a href="strided.html#range.reference.adaptors.reference.strided.strided_example">strided
+            example</a></span></dt></dl></div>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -77,27 +77,27 @@
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
                 <span class="bold"><strong>Precondition:</strong></span> <code class="computeroutput"><span class="number">0</span>
-                <span class="special">&lt;=</span> <span class="identifier">n</span>
-                <span class="special">&amp;&amp;</span> <span class="identifier">n</span>
-                <span class="special">&lt;</span> <span class="identifier">distance</span><span class="special">(</span><span class="identifier">rng</span><span class="special">)</span></code>
+                <span class="special">&lt;=</span> <span class="identifier">n</span></code>
+                and <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">size</span><span class="special">(</span><span class="identifier">rng</span><span class="special">)</span></code>
+                is a valid expression.
               </li>
 <li class="listitem">
                 <span class="bold"><strong>Returns:</strong></span> A new range based on <code class="computeroutput"><span class="identifier">rng</span></code> where traversal is performed
                 in steps of <code class="computeroutput"><span class="identifier">n</span></code>.
               </li>
 <li class="listitem">
-                <span class="bold"><strong>Range Category:</strong></span> <a class="link" href="../../../concepts/random_access_range.html" title="Random Access Range">Random
-                Access Range</a>
+                <span class="bold"><strong>Range Category:</strong></span> <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
+                Pass Range</a>
               </li>
 <li class="listitem">
-                <span class="bold"><strong>Returned Range Category:</strong></span> <a class="link" href="../../../concepts/random_access_range.html" title="Random Access Range">Random
-                Access Range</a>
+                <span class="bold"><strong>Returned Range Category:</strong></span> The range
+                category of <code class="computeroutput"><span class="identifier">rng</span></code>.
               </li>
 </ul></div>
 <div class="section">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="range.reference.adaptors.reference.strided.strided_example"></a><a class="link" href="strided.html#range.reference.adaptors.reference.strided.strided_example" title="strided example">
-            strided example</a>
+<a name="range.reference.adaptors.reference.strided.strided_example"></a><a class="link" href="strided.html#range.reference.adaptors.reference.strided.strided_example" title="strided example">strided
+            example</a>
 </h6></div></div></div>
 <p>
               

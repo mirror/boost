@@ -1,6 +1,10 @@
-[section:algorithms Range Algorithm]
-
-[section:range_algorithm_introduction Introduction and motivation]
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+[section:algorithms Range Algorithms]
+[section:introduction Introduction and motivation]
 In its most simple form a [*Range Algorithm] (or range-based algorithm) is simply an iterator-based algorithm where the /two/ iterator arguments have been replaced by /one/ range argument. For example, we may write
 
 ``
@@ -173,6 +177,4 @@ and there is no need to worry about generating an invalid range. Furthermore, if
 [include numeric/inner_product.qbk]
 [include numeric/partial_sum.qbk]
 [endsect]
-
 [endsect]
-

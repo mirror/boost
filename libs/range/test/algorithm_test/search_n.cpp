@@ -21,6 +21,104 @@
 
 namespace
 {
+    template<typename ForwardIterator, typename Integer, typename Value>
+    inline ForwardIterator
+    reference_search_n(ForwardIterator first, ForwardIterator last,
+                       Integer count, const Value& value)
+    {
+        if (count <= 0)
+            return first;
+        else if (count == 1)
+            return std::find(first, last, value);
+        else
+        {
+            first = std::find(first, last, value);
+            while (first != last)
+            {
+                typename std::iterator_traits<ForwardIterator>::difference_type n = count;
+                ForwardIterator i = first;
+                ++i;
+                while (i != last && n != 1 && *i==value)
+                {
+                    ++i;
+                    --n;
+                }
+                if (n == 1)
+                    return first;
+                if (i == last)
+                    return last;
+                first = std::find(++i, last, value);
+            }
+        }
+        return last;
+    }
+
+    template<typename ForwardIterator, typename Integer, typename Value,
+             typename BinaryPredicate>
+    inline ForwardIterator
+    reference_search_n(ForwardIterator first, ForwardIterator last,
+                       Integer count, const Value& value,
+                       BinaryPredicate pred)
+    {
+        typedef typename std::iterator_traits<ForwardIterator>::iterator_category cat_t;
+
+        if (count <= 0)
+            return first;
+        if (count == 1)
+        {
+            while (first != last && !static_cast<bool>(pred(*first, value)))
+                ++first;
+            return first;
+        }
+        else
+        {
+            typedef typename std::iterator_traits<ForwardIterator>::difference_type difference_t;
+
+            while (first != last && !static_cast<bool>(pred(*first, value)))
+                ++first;
+
+            while (first != last)
+            {
+                difference_t n = count;
+                ForwardIterator i = first;
+                ++i;
+                while (i != last && n != 1 && static_cast<bool>(pred(*i, value)))
+                {
+                    ++i;
+                    --n;
+                }
+                if (n == 1)
+                    return first;
+                if (i == last)
+                    return last;
+                first = ++i;
+                while (first != last && !static_cast<bool>(pred(*first, value)))
+                    ++first;
+            }
+        }
+        return last;
+    }
+
+    template< class Container1, class Value, class Pred >
+    void test_search_n_pred_impl(Container1& cont1, Value value, Pred pred)
+    {
+        typedef BOOST_DEDUCED_TYPENAME Container1::const_iterator const_iterator1_t;
+        typedef BOOST_DEDUCED_TYPENAME Container1::iterator iterator1_t;
+
+        const Container1& ccont1 = cont1;
+
+        for (std::size_t n = 0; n < cont1.size(); ++n)
+        {
+            iterator1_t it = boost::search_n(cont1, n, value, pred);
+            BOOST_CHECK( it == boost::search_n(boost::make_iterator_range(cont1), n, value, pred) );
+            BOOST_CHECK( it == reference_search_n(cont1.begin(), cont1.end(), n, value, pred) );
+
+            const_iterator1_t cit = boost::search_n(ccont1, n, value, pred);
+            BOOST_CHECK( cit == boost::search_n(boost::make_iterator_range(ccont1), n, value, pred) );
+            BOOST_CHECK( cit == reference_search_n(ccont1.begin(), ccont1.end(), n, value, pred) );
+        }
+    }
+
     template< class Container1, class Value >
     void test_search_n_impl(Container1& cont1, Value value)
     {
@@ -33,12 +131,17 @@ namespace
         {
             iterator1_t it = boost::search_n(cont1, n, value);
             BOOST_CHECK( it == boost::search_n(boost::make_iterator_range(cont1), n, value) );
-            BOOST_CHECK( it == std::search_n(cont1.begin(), cont1.end(), n, value) );
+            BOOST_CHECK( it == reference_search_n(cont1.begin(), cont1.end(), n, value) );
 
             const_iterator1_t cit = boost::search_n(ccont1, n, value);
             BOOST_CHECK( cit == boost::search_n(boost::make_iterator_range(ccont1), n, value) );
-            BOOST_CHECK( cit == std::search_n(ccont1.begin(), ccont1.end(), n, value) );
+            BOOST_CHECK( cit == reference_search_n(ccont1.begin(), ccont1.end(), n, value) );
         }
+
+        test_search_n_pred_impl(cont1, value, std::less<int>());
+        test_search_n_pred_impl(cont1, value, std::greater<int>());
+        test_search_n_pred_impl(cont1, value, std::equal_to<int>());
+        test_search_n_pred_impl(cont1, value, std::not_equal_to<int>());
     }
 
     template< class Container1, class Container2 >

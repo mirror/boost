@@ -1,3 +1,8 @@
+[/
+    Copyright 2010 Neil Groves
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
 [section:style_guide Terminology and style guidelines]
 
 The use of a consistent terminology is as important for __ranges__ and range-based algorithms as it is for iterators and iterator-based algorithms. If a conventional set of names are adopted, we can avoid misunderstandings and write generic function prototypes that are [*/self-documenting/].

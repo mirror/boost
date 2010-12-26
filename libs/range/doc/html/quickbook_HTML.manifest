@@ -34,7 +34,7 @@ range/reference/adaptors/reference/tokenized.html
 range/reference/adaptors/reference/transformed.html
 range/reference/adaptors/reference/uniqued.html
 range/reference/algorithms.html
-range/reference/algorithms/range_algorithm_introduction.html
+range/reference/algorithms/introduction.html
 range/reference/algorithms/mutating.html
 range/reference/algorithms/mutating/copy.html
 range/reference/algorithms/mutating/copy_backward.html
@@ -132,11 +132,11 @@ range/reference/extending/method_3.html
 range/reference/extending/method_3/method_3_1.html
 range/reference/extending/method_3/method_3_2.html
 range/style_guide.html
-range/library_headers.html
-range/library_headers/general.html
-range/library_headers/adaptors.html
-range/library_headers/algorithm.html
-range/library_headers/algorithm_extensions.html
+range/headers.html
+range/headers/general.html
+range/headers/adaptors.html
+range/headers/algorithm.html
+range/headers/algorithm_ext.html
 range/examples.html
 range/mfc_atl.html
 range/mfc_atl/requirements.html
@@ -145,6 +145,7 @@ range/mfc_atl/atl_ranges.html
 range/mfc_atl/const_ranges.html
 range/mfc_atl/references.html
 range/upgrade.html
+range/upgrade/upgrade_from_1_45.html
 range/upgrade/upgrade_from_1_42.html
 range/upgrade/upgrade_from_1_34.html
 range/portability.html
