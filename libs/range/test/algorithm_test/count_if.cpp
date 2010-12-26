@@ -33,6 +33,7 @@ namespace boost
             using namespace boost::assign;
 
             typedef equal_to_x<int> pred_t;
+            typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<BOOST_DEDUCED_TYPENAME Container::iterator>::difference_type diff_t;
 
             Container cont;
             const Container& cref_cont = cont;
@@ -72,9 +73,9 @@ namespace boost
             BOOST_CHECK_EQUAL( 0u, boost::count_if(cref_cont, false_predicate()) );
             BOOST_CHECK_EQUAL( 0u, boost::count_if(boost::make_iterator_range(cont), false_predicate()) );
 
-            BOOST_CHECK_EQUAL( boost::size(cont), boost::count_if(cont, true_predicate()) );
-            BOOST_CHECK_EQUAL( boost::size(cont), boost::count_if(cref_cont, true_predicate()) );
-            BOOST_CHECK_EQUAL( boost::size(cont), boost::count_if(boost::make_iterator_range(cont), true_predicate()) );
+            BOOST_CHECK_EQUAL( static_cast<diff_t>(cont.size()), boost::count_if(cont, true_predicate()) );
+            BOOST_CHECK_EQUAL( static_cast<diff_t>(cont.size()), boost::count_if(cref_cont, true_predicate()) );
+            BOOST_CHECK_EQUAL( static_cast<diff_t>(cont.size()), boost::count_if(boost::make_iterator_range(cont), true_predicate()) );
         }
 
         void test_count_if()

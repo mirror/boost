@@ -11,7 +11,7 @@
     [[Function] [`boost::adaptors::stride(rng, n)`]]
 ]
 
-* [*Precondition:] `0 <= n` and `boost::size(rng)` is a valid expression.
+* [*Precondition:] `0 <= n`.
 * [*Returns:] A new range based on `rng` where traversal is performed in steps of `n`.
 * [*Range Category:] __single_pass_range__
 * [*Returned Range Category:] The range category of `rng`.

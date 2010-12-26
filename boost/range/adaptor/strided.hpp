@@ -15,156 +15,291 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <iterator>
-
 #include <iostream>
 
 namespace boost
 {
     namespace range_detail
     {
-
-        template<class BaseIterator>
+        // strided_iterator for wrapping a forward traversal iterator
+        template<class BaseIterator, class Category>
         class strided_iterator
             : public iterator_adaptor<
-                strided_iterator<BaseIterator>
+                strided_iterator<BaseIterator, Category>
               , BaseIterator
+              , use_default
+              , boost::forward_traversal_tag
             >
         {
-            friend class iterator_core_access;
+            friend class ::boost::iterator_core_access;
 
-            typedef iterator_adaptor<strided_iterator<BaseIterator>, BaseIterator> super_t;
+            typedef iterator_adaptor<
+                        strided_iterator<BaseIterator, Category>
+                      , BaseIterator
+                      , use_default
+                      , boost::forward_traversal_tag
+                    > super_t;
 
         public:
             typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<BaseIterator>::difference_type difference_type;
+            typedef BaseIterator base_iterator;
 
             strided_iterator()
-                : m_stride(), m_offset(), m_max_offset()
+                : m_last()
+                , m_stride()
             {
             }
 
-            explicit strided_iterator(BaseIterator base_it,
-                                      difference_type stride,
-                                      difference_type offset,
-                                      difference_type max_offset)
-                : super_t(base_it)
+            strided_iterator(base_iterator first, base_iterator it, base_iterator last, difference_type stride)
+                : super_t(it)
+                , m_last(last)
                 , m_stride(stride)
-                , m_offset(offset)
-                , m_max_offset(max_offset)
             {
             }
 
             template<class OtherIterator>
-            strided_iterator(const strided_iterator<OtherIterator>& other,
-                             BOOST_DEDUCED_TYPENAME enable_if_convertible<OtherIterator, BaseIterator>::type* = 0)
+            strided_iterator(const strided_iterator<OtherIterator, Category>& other,
+                             BOOST_DEDUCED_TYPENAME enable_if_convertible<OtherIterator, base_iterator>::type* = 0)
                 : super_t(other)
-                , m_stride(other.m_stride)
-                , m_offset(other.m_offset)
-                , m_max_offset(other.m_max_offset)
+                , m_last(other.base_end())
+                , m_stride(other.get_stride())
             {
             }
 
-            strided_iterator&
-            operator=(const strided_iterator& other)
-            {
-                super_t::operator=(other);
-                m_stride = other.m_stride;
-                m_offset = other.m_offset;
-                m_max_offset = other.m_max_offset;
-                return *this;
-            }
+            base_iterator base_end() const { return m_last; }
+            difference_type get_stride() const { return m_stride; }
 
+        private:
             void increment()
             {
-                m_offset += m_stride;
-                if (m_offset <= m_max_offset)
-                    std::advance(this->base_reference(), m_stride);
+                base_iterator& it = this->base_reference();
+                for (difference_type i = 0; (it != m_last) && (i < m_stride); ++i)
+                    ++it;
+            }
+
+            base_iterator m_last;
+            difference_type m_stride;
+        };
+
+        // strided_iterator for wrapping a bidirectional iterator
+        template<class BaseIterator>
+        class strided_iterator<BaseIterator, bidirectional_traversal_tag>
+            : public iterator_adaptor<
+                strided_iterator<BaseIterator, bidirectional_traversal_tag>
+              , BaseIterator
+              , use_default
+              , bidirectional_traversal_tag
+            >
+        {
+            friend class ::boost::iterator_core_access;
+
+            typedef iterator_adaptor<
+                        strided_iterator<BaseIterator, bidirectional_traversal_tag>
+                      , BaseIterator
+                      , use_default
+                      , bidirectional_traversal_tag
+                    > super_t;
+        public:
+            typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<BaseIterator>::difference_type difference_type;
+            typedef BaseIterator base_iterator;
+
+            strided_iterator()
+                : m_first()
+                , m_last()
+                , m_stride()
+            {
+            }
+
+            strided_iterator(base_iterator first, base_iterator it, base_iterator last, difference_type stride)
+                : super_t(it)
+                , m_first(first)
+                , m_last(last)
+                , m_stride(stride)
+            {
+            }
+
+            template<class OtherIterator>
+            strided_iterator(const strided_iterator<OtherIterator, bidirectional_traversal_tag>& other,
+                             BOOST_DEDUCED_TYPENAME enable_if_convertible<OtherIterator, base_iterator>::type* = 0)
+                : super_t(other.base())
+                , m_first(other.base_begin())
+                , m_last(other.base_end())
+                , m_stride(other.get_stride())
+            {
+            }
+
+            base_iterator base_begin() const { return m_first; }
+            base_iterator base_end() const { return m_last; }
+            difference_type get_stride() const { return m_stride; }
+
+        private:
+            void increment()
+            {
+                base_iterator& it = this->base_reference();
+                for (difference_type i = 0; (it != m_last) && (i < m_stride); ++i)
+                    ++it;
             }
 
             void decrement()
             {
-                m_offset -= m_stride;
-                if (m_offset >= 0)
-                    std::advance(this->base_reference(), -m_stride);
+                base_iterator& it = this->base_reference();
+                for (difference_type i = 0; (it != m_first) && (i < m_stride); ++i)
+                    --it;
             }
 
-            void advance(difference_type n)
-            {
-                n *= m_stride;
-                m_offset += n;
+            base_iterator m_first;
+            base_iterator m_last;
+            difference_type m_stride;
+        };
 
-                if (m_offset >= 0 && m_offset <= m_max_offset)
-                    std::advance(this->base_reference(), n);
+        // strided_iterator implementation for wrapping a random access iterator
+        template<class BaseIterator>
+        class strided_iterator<BaseIterator, random_access_traversal_tag>
+            : public iterator_adaptor<
+                        strided_iterator<BaseIterator, random_access_traversal_tag>
+                      , BaseIterator
+                      , use_default
+                      , random_access_traversal_tag
+                    >
+        {
+            friend class ::boost::iterator_core_access;
+
+            typedef iterator_adaptor<
+                        strided_iterator<BaseIterator, random_access_traversal_tag>
+                      , BaseIterator
+                      , use_default
+                      , random_access_traversal_tag
+                    > super_t;
+        public:
+            typedef BOOST_DEDUCED_TYPENAME super_t::difference_type difference_type;
+            typedef BaseIterator base_iterator;
+
+            strided_iterator()
+                : m_first()
+                , m_last()
+                , m_stride()
+            {
+            }
+
+            strided_iterator(BaseIterator first, BaseIterator it, BaseIterator last, difference_type stride)
+                : super_t(it)
+                , m_first(first)
+                , m_last(last)
+                , m_stride(stride)
+            {
             }
 
             template<class OtherIterator>
-            bool equal(const strided_iterator<OtherIterator>& other,
-                       BOOST_DEDUCED_TYPENAME enable_if_convertible<OtherIterator, BaseIterator>::type* = 0) const
+            strided_iterator(const strided_iterator<OtherIterator, random_access_traversal_tag>& other,
+                             BOOST_DEDUCED_TYPENAME enable_if_convertible<OtherIterator, BaseIterator>::type* = 0)
+                : super_t(other.base())
+                , m_first(other.base_begin())
+                , m_last(other.base_end())
+                , m_stride(other.get_stride())
             {
-                return m_offset == other.m_offset;
             }
 
-            difference_type
-            distance_to(const strided_iterator& other) const
+            base_iterator base_begin() const { return m_first; }
+            base_iterator base_end() const { return m_last; }
+            difference_type get_stride() const { return m_stride; }
+
+        private:
+            void increment()
             {
-                return (other.m_offset - m_offset) / m_stride;
+                std::cout << "increment() - before = " << (this->base_reference() - m_first);
+                base_iterator& it = this->base_reference();
+                if ((m_last - it) > m_stride)
+                    it += m_stride;
+                else
+                    it = m_last;
+
+                std::cout << " after = " << (this->base_reference() - m_first) << std::endl;
+            }
+
+            void decrement()
+            {
+                base_iterator& it = this->base_reference();
+                if ((it - m_first) > m_stride)
+                    it -= m_stride;
+                else
+                    it = m_first;
+            }
+
+            void advance(difference_type offset)
+            {
+                base_iterator& it = this->base_reference();
+                offset *= m_stride;
+                if (offset >= 0)
+                {
+                    if ((m_last - it) > offset)
+                        it += offset;
+                    else
+                        it = m_last;
+                }
+                else
+                {
+                    if ((m_first - it) > offset)
+                        it += offset;
+                    else
+                        it = m_first;
+                }
+            }
+
+            template<class OtherIterator>
+            difference_type distance_to(const strided_iterator<OtherIterator, random_access_traversal_tag>& other,
+                                        BOOST_DEDUCED_TYPENAME enable_if_convertible<OtherIterator, BaseIterator>::type* = 0) const
+            {
+                if (other.base() >= this->base())
+                    return (other.base() - this->base() + (m_stride - 1)) / m_stride;
+                return (other.base() - this->base() - (m_stride - 1)) / m_stride;
+            }
+
+            bool equal(const strided_iterator& other) const
+            {
+                return other.base() == this->base();
             }
 
         private:
+            base_iterator m_first;
+            base_iterator m_last;
             difference_type m_stride;
-            difference_type m_offset;
-            difference_type m_max_offset;
         };
 
         template<class BaseIterator, class Difference> inline
-        strided_iterator<BaseIterator>
-        make_strided_iterator(
-            const BaseIterator& first,
-            Difference          stride,
-            typename std::iterator_traits<BaseIterator>::difference_type offset,
-            typename std::iterator_traits<BaseIterator>::difference_type max_offset
-            )
+        strided_iterator<BaseIterator, BOOST_DEDUCED_TYPENAME iterator_traversal<BaseIterator>::type>
+        make_strided_iterator(BaseIterator first, BaseIterator it,
+                              BaseIterator last, Difference stride)
         {
             BOOST_ASSERT( stride >= 0 );
-            BOOST_ASSERT( (stride == 0) || (offset % stride == 0) );
-            BOOST_ASSERT( (stride == 0) || (max_offset % stride == 0) );
-            BOOST_ASSERT( offset <= max_offset );
-            return strided_iterator<BaseIterator>(first, stride, offset, max_offset);
+            typedef BOOST_DEDUCED_TYPENAME iterator_traversal<BaseIterator>::type traversal_tag;
+            return strided_iterator<BaseIterator, traversal_tag>(first, it, last, stride);
         }
 
-        template< class Rng >
+        template< class Rng
+                , class Category = BOOST_DEDUCED_TYPENAME iterator_traversal<
+                                    BOOST_DEDUCED_TYPENAME range_iterator<Rng>::type
+                                   >::type
+         >
         class strided_range
-            : public iterator_range<range_detail::strided_iterator<BOOST_DEDUCED_TYPENAME range_iterator<Rng>::type> >
+            : public iterator_range<
+                        range_detail::strided_iterator<
+                            BOOST_DEDUCED_TYPENAME range_iterator<Rng>::type,
+                            Category
+                        >
+                     >
         {
-            typedef range_detail::strided_iterator<BOOST_DEDUCED_TYPENAME range_iterator<Rng>::type> iter_type;
+            typedef range_detail::strided_iterator<
+                        BOOST_DEDUCED_TYPENAME range_iterator<Rng>::type,
+                        Category
+                    > iter_type;
             typedef iterator_range<iter_type> super_t;
         public:
             template<class Difference>
             strided_range(Difference stride, Rng& rng)
-                : super_t(make_super(stride, rng))
+                : super_t(make_strided_iterator(boost::begin(rng), boost::begin(rng), boost::end(rng), stride),
+                          make_strided_iterator(boost::begin(rng), boost::end(rng), boost::end(rng), stride))
             {
                 BOOST_ASSERT( stride >= 0 );
-            }
-
-        private:
-            template<class Difference>
-            static super_t make_super(const Difference stride, Rng& rng)
-            {
-                const Difference count = boost::size(rng);
-                const Difference max_count = max_offset(count, stride);
-                return super_t(make_strided_iterator(boost::begin(rng), stride, 0, max_count),
-                               make_strided_iterator(boost::end(rng), stride, max_count, max_count));
-            }
-
-            template<class Difference, class Stride>
-            static Difference max_offset(Difference sz, const Stride stride)
-            {
-                if (stride > 0)
-                {
-                    sz += stride - 1;
-                    sz /= stride;
-                    sz *= stride;
-                }
-                return sz;
             }
         };
 

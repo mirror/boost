@@ -128,10 +128,10 @@ namespace boost
 
             typedef boost::strided_range<Container> strided_range_t;
             strided_range_t rng( boost::adaptors::stride(c, 0) );
-            typedef typename boost::range_iterator<strided_range_t>::type iter_t;
+            typedef BOOST_DEDUCED_TYPENAME boost::range_iterator<strided_range_t>::type iter_t;
 
-            iter_t first(boost::begin(c), 0, 0, boost::size(c));
-            iter_t last(boost::end(c), 0, boost::size(c), boost::size(c));
+            iter_t first(boost::begin(c), boost::begin(c), boost::end(c), 0);
+            iter_t last(boost::begin(c), boost::end(c), boost::end(c), 0);
 
             iter_t it = first;
             for (int i = 0; i < 10; ++i, ++it)
@@ -204,16 +204,6 @@ namespace boost
             void increment()
             {
                 ++(this->base_reference());
-            }
-
-            bool equal(const strided_mock_iterator& other) const
-            {
-                return this->base() == other.base();
-            }
-
-            BOOST_DEDUCED_TYPENAME super_t::reference dereference() const
-            {
-                return *(this->base());
             }
 
             friend class boost::iterator_core_access;
