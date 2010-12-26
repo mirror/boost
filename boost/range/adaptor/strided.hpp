@@ -15,7 +15,6 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <iterator>
-#include <iostream>
 
 namespace boost
 {
@@ -206,14 +205,11 @@ namespace boost
         private:
             void increment()
             {
-                std::cout << "increment() - before = " << (this->base_reference() - m_first);
                 base_iterator& it = this->base_reference();
                 if ((m_last - it) > m_stride)
                     it += m_stride;
                 else
                     it = m_last;
-
-                std::cout << " after = " << (this->base_reference() - m_first) << std::endl;
             }
 
             void decrement()
