@@ -3835,6 +3835,10 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 *  Added `function_hook` option.
 *  Fixed bugs
+  [@https://svn.boost.org/trac/boost/ticket/2611 #2611],
+  [@https://svn.boost.org/trac/boost/ticket/3288 #3288],
+  [@https://svn.boost.org/trac/boost/ticket/3304 #3304],
+  [@https://svn.boost.org/trac/boost/ticket/3489 #3489],
   [@https://svn.boost.org/trac/boost/ticket/3668 #3668],
   [@https://svn.boost.org/trac/boost/ticket/3339 #3688],
   [@https://svn.boost.org/trac/boost/ticket/3698 #3698],
@@ -3843,12 +3847,12 @@ all the objects to be inserted in intrusive containers in containers like `std::
   [@https://svn.boost.org/trac/boost/ticket/3729 #3729],
   [@https://svn.boost.org/trac/boost/ticket/3746 #3746],
   [@https://svn.boost.org/trac/boost/ticket/3781 #3781],
-  [@https://svn.boost.org/trac/boost/ticket/3829 #3829],
   [@https://svn.boost.org/trac/boost/ticket/3840 #3840],
+  [@https://svn.boost.org/trac/boost/ticket/3849 #3849],
   [@https://svn.boost.org/trac/boost/ticket/3339 #3339],
   [@https://svn.boost.org/trac/boost/ticket/3419 #3419],
   [@https://svn.boost.org/trac/boost/ticket/3431 #3431],
-  [@https://svn.boost.org/trac/boost/ticket/4021 #4021],
+  [@https://svn.boost.org/trac/boost/ticket/4021 #4021].
 
 [endsect]
 
