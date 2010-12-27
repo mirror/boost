@@ -9,6 +9,7 @@
 #ifndef BOOST_PROTO_FUNCTIONAL_FUSION_HPP_EAN_11_27_2010
 #define BOOST_PROTO_FUNCTIONAL_FUSION_HPP_EAN_11_27_2010
 
+#include <boost/proto/functional/fusion/at.hpp>
 #include <boost/proto/functional/fusion/pop_back.hpp>
 #include <boost/proto/functional/fusion/pop_front.hpp>
 #include <boost/proto/functional/fusion/push_back.hpp>

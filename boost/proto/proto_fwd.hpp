@@ -584,6 +584,7 @@ namespace boost { namespace proto
         struct make_pair;
         struct first;
         struct second;
+        struct at;
         struct pop_front;
         struct push_front;
         struct pop_back;
@@ -595,6 +596,7 @@ namespace boost { namespace proto
     typedef functional::make_pair   _make_pair;
     typedef functional::first       _first;
     typedef functional::second      _second;
+    typedef functional::pop_front   _at;
     typedef functional::pop_front   _pop_front;
     typedef functional::push_front  _push_front;
     typedef functional::pop_back    _pop_back;
