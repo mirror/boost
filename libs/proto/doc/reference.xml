@@ -292,6 +292,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::at">proto::functional::at</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::child">proto::functional::child</classname>
         </computeroutput>
       </listitem>
@@ -1105,6 +1110,7 @@
   <xi:include href="reference/extends.xml"/>
   <xi:include href="reference/functional.xml"/>
   <xi:include href="reference/functional/fusion.xml"/>
+  <xi:include href="reference/functional/fusion/at.xml"/>
   <xi:include href="reference/functional/fusion/pop_back.xml"/>
   <xi:include href="reference/functional/fusion/pop_front.xml"/>
   <xi:include href="reference/functional/fusion/push_back.xml"/>
