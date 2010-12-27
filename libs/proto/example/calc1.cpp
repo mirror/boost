@@ -7,10 +7,8 @@
 // evaluator with placeholders.
 
 #include <iostream>
-#include <boost/mpl/int.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/proto/context.hpp>
-namespace mpl = boost::mpl;
 namespace proto = boost::proto;
 using proto::_;
 
