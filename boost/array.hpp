@@ -13,6 +13,7 @@
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  *
+ * 28 Dec 2010 - (mtc) Added cbegin and cend for C++Ox compatibility.
  * 10 Mar 2010 - (mtc) fill method added, matching resolution of the standard library working group.
  *      See <http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#776> or Trac issue #3168
  *      Eventually, we should remove "assign" which is now a synonym for "fill" (Marshall Clow)
@@ -69,10 +70,13 @@ namespace boost {
         typedef std::ptrdiff_t difference_type;
 
         // iterator support
-        iterator begin() { return elems; }
-        const_iterator begin() const { return elems; }
-        iterator end() { return elems+N; }
-        const_iterator end() const { return elems+N; }
+        iterator        begin()       { return elems; }
+        const_iterator  begin() const { return elems; }
+        const_iterator cbegin() const { return elems; }
+        
+        iterator        end()       { return elems+N; }
+        const_iterator  end() const { return elems+N; }
+        const_iterator cend() const { return elems+N; }
 
         // reverse iterator support
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
@@ -200,10 +204,13 @@ namespace boost {
         typedef std::ptrdiff_t difference_type;
 
         // iterator support
-        iterator begin() { return iterator( reinterpret_cast< T * >( this ) ); }
-        const_iterator begin() const { return const_iterator(  reinterpret_cast< const T * >( this ) ); }
-        iterator end() { return begin(); }
-        const_iterator end() const { return begin(); }
+        iterator        begin()       { return       iterator( reinterpret_cast<       T * >( this ) ); }
+        const_iterator  begin() const { return const_iterator( reinterpret_cast< const T * >( this ) ); }
+        const_iterator cbegin() const { return const_iterator( reinterpret_cast< const T * >( this ) ); }
+
+        iterator        end()       { return  begin(); }
+        const_iterator  end() const { return  begin(); }
+        const_iterator cend() const { return cbegin(); }
 
         // reverse iterator support
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
