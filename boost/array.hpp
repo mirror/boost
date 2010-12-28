@@ -13,7 +13,7 @@
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  *
- * 28 Dec 2010 - (mtc) Added cbegin and cend for C++Ox compatibility.
+ * 28 Dec 2010 - (mtc) Added cbegin and cend (and crbegin and crend) for C++Ox compatibility.
  * 10 Mar 2010 - (mtc) fill method added, matching resolution of the standard library working group.
  *      See <http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#776> or Trac issue #3168
  *      Eventually, we should remove "assign" which is now a synonym for "fill" (Marshall Clow)
@@ -103,8 +103,15 @@ namespace boost {
         const_reverse_iterator rbegin() const {
             return const_reverse_iterator(end());
         }
+        const_reverse_iterator crbegin() const {
+            return const_reverse_iterator(end());
+        }
+
         reverse_iterator rend() { return reverse_iterator(begin()); }
         const_reverse_iterator rend() const {
+            return const_reverse_iterator(begin());
+        }
+        const_reverse_iterator crend() const {
             return const_reverse_iterator(begin());
         }
 
@@ -237,8 +244,15 @@ namespace boost {
         const_reverse_iterator rbegin() const {
             return const_reverse_iterator(end());
         }
+        const_reverse_iterator crbegin() const {
+            return const_reverse_iterator(end());
+        }
+
         reverse_iterator rend() { return reverse_iterator(begin()); }
         const_reverse_iterator rend() const {
+            return const_reverse_iterator(begin());
+        }
+        const_reverse_iterator crend() const {
             return const_reverse_iterator(begin());
         }
 
