@@ -346,7 +346,34 @@ namespace boost {
         x.swap(y);
     }
 
-    // Specific for boost::array: simply returns its elems data member.
+#if defined(__SUNPRO_CC)
+//	Trac ticket #4757; the Sun Solaris compiler can't handle
+//	syntax like 'T(&get_c_array(boost::array<T,N>& arg))[N]'
+//	
+//	We can't just use this for all compilers, because the 
+//		borland compilers can't handle this form. 
+	namespace detail {
+       template <typename T, std::size_t N> struct c_array
+       {
+           typedef T type[N];
+       };
+	}
+    
+   // Specific for boost::array: simply returns its elems data member.
+   template <typename T, std::size_t N>
+   typename detail::c_array<T,N>::type& get_c_array(boost::array<T,N>& arg)
+   {
+       return arg.elems;
+   }
+
+   // Specific for boost::array: simply returns its elems data member.
+   template <typename T, std::size_t N>
+   typename const detail::c_array<T,N>::type& get_c_array(const boost::array<T,N>& arg)
+   {
+       return arg.elems;
+   }
+#else
+// Specific for boost::array: simply returns its elems data member.
     template <typename T, std::size_t N>
     T(&get_c_array(boost::array<T,N>& arg))[N]
     {
@@ -359,7 +386,8 @@ namespace boost {
     {
         return arg.elems;
     }
-
+#endif
+	
 #if 0
     // Overload for std::array, assuming that std::array will have
     // explicit conversion functions as discussed at the WG21 meeting
