@@ -1,12 +1,13 @@
 /*=============================================================================
-    Copyright (c) 2001-2007 Joel de Guzman
+    Copyright (c) 2010 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_INCLUDE_MAKE_UNFUSED_RVALUE_ARGS)
-#define FUSION_INCLUDE_MAKE_UNFUSED_RVALUE_ARGS
 
-#include <boost/fusion/functional/generation/make_unfused_rvalue_args.hpp>
+#ifndef BOOST_FUSION_INCLUDE_UNFUSED_HPP
+#define BOOST_FUSION_INCLUDE_UNFUSED_HPP
+
+#include <boost/fusion/functional/adapter/unfused.hpp>
 
 #endif

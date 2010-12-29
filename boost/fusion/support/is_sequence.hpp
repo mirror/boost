@@ -7,12 +7,13 @@
 #if !defined(FUSION_IS_SEQUENCE_05052005_1002)
 #define FUSION_IS_SEQUENCE_05052005_1002
 
-#include <boost/type_traits/is_base_of.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace fusion
 {
@@ -29,7 +30,9 @@ namespace boost { namespace fusion
         struct is_sequence_impl
         {
             template <typename Sequence>
-            struct apply : is_base_of<sequence_root, Sequence> {};
+            struct apply
+              : is_convertible<Sequence, detail::from_sequence_convertible_type>
+            {};
         };
 
         template <>

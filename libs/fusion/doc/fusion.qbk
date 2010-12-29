@@ -316,7 +316,7 @@
 [def __note_boost_ref__         [link fusion.notes.boost__ref `boost::ref`]]
 
 [def __quick_start__            [link fusion.quick_start Quick Start]]
-[def __organization__           [link fusion.organization Orgainization]]
+[def __organization__           [link fusion.organization Organization]]
 [def __extension__              [link fusion.extension Extension]]
 [def __sequence_facade__        [link fusion.extension.sequence_facade `sequence_facade`]]
 [def __iterator_facade__        [link fusion.extension.iterator_facade `iterator_facade`]]
