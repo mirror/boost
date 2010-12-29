@@ -70,7 +70,7 @@ namespace boost
       // Check files iff (a) they are in the boost directory, or (b) they
       // are in the src directory under libs.
       if (m_from_boost_root) {
-        path relative( relative_to( full_path, fs::initial_path() ), fs::no_check );
+        path relative( relative_to( full_path, fs::initial_path() ) );
         path::const_iterator pbeg = relative.begin(), pend = relative.end();
         if (pbeg != std::find(pbeg, pend, "boost") &&
           !(pbeg == std::find(pbeg, pend, "libs") && pend != std::find(pbeg, pend, "src")))

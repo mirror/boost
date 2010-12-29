@@ -145,7 +145,7 @@ namespace
   bool visit_predicate( const path & pth )
   {
     string local( boost::inspect::relative_to( pth, fs::initial_path() ) );
-    string leaf( pth.leaf() );
+    string leaf( pth.leaf().string() );
     return
       // so we can inspect a checkout
       leaf != "CVS"
@@ -202,7 +202,7 @@ namespace
   bool find_signature( const path & file_path,
     const boost::inspect::string_set & signatures )
   {
-    string name( file_path.leaf() );
+    string name( file_path.leaf().string() );
     if ( signatures.find( name ) == signatures.end() )
     {
       string::size_type pos( name.rfind( '.' ) );
@@ -675,13 +675,12 @@ namespace boost
     // may return an empty string [gps]
     string impute_library( const path & full_dir_path )
     {
-      path relative( relative_to( full_dir_path, fs::initial_path() ),
-        fs::no_check );
+      path relative( relative_to( full_dir_path, fs::initial_path() ) );
       if ( relative.empty() ) return "boost-root";
-      string first( *relative.begin() );
+      string first( (*relative.begin()).string() );
       string second =  // borland 5.61 requires op=
         ++relative.begin() == relative.end()
-          ? string() : *++relative.begin();
+          ? string() : (*++relative.begin()).string();
 
       if ( first == "boost" )
         return second;

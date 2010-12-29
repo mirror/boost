@@ -62,7 +62,7 @@ namespace hack
         } while ( contents == "D" );
         if ( contents[0] == 'D' ) contents.erase( 0, 1 );
         value_path = dir_path
-          / boost::filesystem::path( contents.substr( 1, contents.find( '/', 1 ) ), boost::filesystem::no_check );
+          / boost::filesystem::path( contents.substr( 1, contents.find( '/', 1 ) ) );
 
       // in case entries file is mistaken, do until value_path actually found
       } while ( !boost::filesystem::exists( value_path ) );
