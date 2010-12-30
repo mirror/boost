@@ -990,6 +990,7 @@
                 BOOST_PP_CAT(Gimpl, N);                                                           \
                 /**/
                 BOOST_PP_REPEAT(N, M0, ~)
+                #undef M0
 
                 typedef typename BOOST_PP_CAT(Gimpl, BOOST_PP_DEC(N))::result_type result_type;
 
@@ -999,11 +1000,15 @@
                   , typename _and_impl::data_param d
                 ) const
                 {
-                    // expands to (G0()(e,s,d),G1()(e,s,d),...);
-                    return (BOOST_PP_ENUM_BINARY_PARAMS(N, Gimpl, ()(e,s,d) BOOST_PP_INTERCEPT));
+                    // Fix: jfalcou - 12/29/2010
+                    // Avoid the use of comma operator here so as not to find Proto's
+                    // by accident.
+                    // expands to G0()(e,s,d); G1()(e,s,d); ... G{N-1}()(e,s,d);
+                    #define M0(Z,N,DATA) BOOST_PP_CAT(Gimpl,N)()(e,s,d);
+                    BOOST_PP_REPEAT(BOOST_PP_DEC(N),M0,~)
+                    return BOOST_PP_CAT(Gimpl,BOOST_PP_DEC(N))()(e,s,d);
+                    #undef M0
                 }
-
-                #undef M0
             };
 
             template<bool B, typename Expr, typename BasicExpr, BOOST_PP_ENUM_PARAMS(N, typename G)>
