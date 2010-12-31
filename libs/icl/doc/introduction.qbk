@@ -292,7 +292,7 @@ __Spl_itv_set__ and __spl_itv_map__ on the contrary
 have an ['*insertion memory*]. They do accumulate interval borders both 
 from additions and intersections. This is specifically useful, if we want
 to enrich an interval container with certain time grids, like e.g. months 
-or calendar weeks or both. See example [link boost_icl.examples.month_and_week_grid time grids for months and weeks].
+or calendar weeks or both. See example [link boost_icl.examples.time_grids time grids for months and weeks].
 
 [h4 Separating interval containers]
 

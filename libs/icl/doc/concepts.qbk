@@ -75,7 +75,7 @@ aspect is called __bi_conceptual__. The second and minor aspect is called __bi_i
 [[Practical][interval_sets(maps) can be used as sets(maps) 
              of elements(element value pairs)             ]
                                                            [Segmentation information is available. 
-                                                            See e.g. [link boost_icl.examples.month_and_week_grid Time grids for months and weeks]]]
+                                                            See e.g. [link boost_icl.examples.time_grids Time grids for months and weeks]]]
 ]
 
 On the __conceptual__ aspect
@@ -173,7 +173,7 @@ and intervals that again serve for implementing
 `operator +=` and `operator -=`.
 [endsect][/ Abstract Sets and Maps]
 
-[section Addability, Subtractability and Aggregate on Overlap]
+[section:aggrovering Addability, Subtractability and Aggregate on Overlap]
 
 While ['*addition*] and ['*subtraction*] on `Sets` 
 are implemented as ['*set union*] and ['*set difference*], 

@@ -37,7 +37,7 @@ are given in the table above.
           the effect of the corresponding addition function.
         
           Find more on 
-          [link boost_icl.concepts.addability__subtractability_and_aggregate_on_overlap ['subtractability of maps]]
+          [link boost_icl.concepts.aggrovering ['subtractability of maps]]
           and related 
           [link boost_icl.semantics.maps ['semantic issues]] 
           following the links. 
