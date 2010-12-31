@@ -49,7 +49,7 @@ a /set union/ semantics is often attached `operators |=` and `|`.
           for element maps and /aggregate on overlap/ for interval maps. 
         
           Find more on 
-          [link boost_icl.concepts.addability__subtractability_and_aggregate_on_overlap ['addability of maps]]
+          [link boost_icl.concepts.aggrovering ['addability of maps]]
           and related 
           [link boost_icl.semantics.maps ['semantic issues]] 
           following the links. 

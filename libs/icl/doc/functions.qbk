@@ -35,7 +35,7 @@ introduced in section [link boost_icl.interface.function_synopsis Function Synop
 This section covers the most important polymorphical and namespace global
 functions of the *icl*. More specific functions can be looked up
 in the doxygen generated
-[link interval_template_library_reference reference documentation].
+[link interval_container_library_reference reference documentation].
 
 [section Overload tables]
 

@@ -34,7 +34,7 @@
 
 [section Less on Intervals]
 
-[
+[table
 [[ ]    [Types][]]
 [[`x < y`]   [__i]   [`x` begins before `y` or, for equal beginnings `x` ends before `y`]]
 ]
@@ -53,13 +53,11 @@ perceived as the sequence of elements between their lower and upper
 bound. This generalized lexicogrphical comparison in intervals
 can also be specified this way:
 
-`x < y := x` begins before `y` or, for equal beginnings `x` ends before `y`
-
-[
+[table
 []
-[[`x < y`]  [`:=`]  [`x` begins before `y` or, for equal beginnings `x` ends before `y`.
+[[`x < y`]  [`:=`]  [`x` begins before `y` or, for equal beginnings `x` ends before `y`.]]
               
-                     The other operators can be deduced in the usual way]]
+[[]         []      [The other operators can be deduced in the usual way]]
 [[`x > y`]  [`:=`]  [`y < x`] ] 
 [[`x <= y`] [`:=`]  [`!(y < x)`] ] 
 [[`x >= y`] [`:=`]  [`!(x < y)`] ] 

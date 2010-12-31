@@ -39,7 +39,7 @@
                      [Using /aggregate on overlap/ the heights of the party's tallest guests are computed.  
                       Associated values are aggregated via a maximum functor, that can 
                       be chosen as template parameter of an interval_map class template.]]
-    [[advanced][[link boost_icl.examples.time_grids_for_months_and_weeks Time grids for months and weeks]]
+    [[advanced][[link boost_icl.examples.time_grids Time grids for months and weeks]]
                                 [__spl_itv_set__]
                                              [Shows how the ['*border preserving*]
                                               __spl_itv_set__ can be used to create time partitions where different
@@ -234,7 +234,7 @@ intervals.
 
 [endsect]
 
-[section Time grids for months and weeks]
+[section:time_grids Time grids for months and weeks]
 
 A __spl_itv_set__ preserves all interval borders on insertion
 and intersection operations. So given a __spl_itv_set__ and an addition of an interval
