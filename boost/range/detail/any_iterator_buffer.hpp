@@ -114,6 +114,4 @@ namespace boost
     typedef any_iterator_buffer<64> any_iterator_default_buffer;
 } // namespace boost
 
-#undef BOOST_TEST_MESSAGE
-
 #endif // include guard
