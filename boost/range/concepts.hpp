@@ -148,13 +148,16 @@ namespace boost {
                 Iterator i2(++i);
                 boost::ignore_unused_variable_warning(i2);
 
-                Iterator i3(i++);
-                boost::ignore_unused_variable_warning(i3);
+                // deliberately we are loose with the postfix version for the single pass
+                // iterator due to the commonly poor adherence to the specification means that
+                // many algorithms would be unusable, whereas actually without the check they
+                // work
+                (void)(i++);
 
                 BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference r1(*i);
                 boost::ignore_unused_variable_warning(r1);
 
-                BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference r2(*i++);
+                BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference r2(*(++i));
                 boost::ignore_unused_variable_warning(r2);
             }
         private:
@@ -178,6 +181,20 @@ namespace boost {
                     BOOST_DEDUCED_TYPENAME ForwardIteratorConcept::traversal_category,
                     forward_traversal_tag
                 >));
+
+            BOOST_CONCEPT_USAGE(ForwardIteratorConcept)
+            {
+                // See the above note in the SinglePassIteratorConcept about the handling of the
+                // postfix increment. Since with forward and better iterators there is no need
+                // for a proxy, we can sensibly require that the dereference result
+                // is convertible to reference.
+                Iterator i2(i++);
+                boost::ignore_unused_variable_warning(i2);
+                BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference r(*(i++));
+                boost::ignore_unused_variable_warning(r);
+            }
+        private:
+            Iterator i;
 #endif
          };
 

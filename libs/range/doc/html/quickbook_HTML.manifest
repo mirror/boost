@@ -30,6 +30,7 @@ range/reference/adaptors/reference/replaced_if.html
 range/reference/adaptors/reference/reversed.html
 range/reference/adaptors/reference/sliced.html
 range/reference/adaptors/reference/strided.html
+range/reference/adaptors/reference/type_erased.html
 range/reference/adaptors/reference/tokenized.html
 range/reference/adaptors/reference/transformed.html
 range/reference/adaptors/reference/uniqued.html
@@ -118,6 +119,7 @@ range/reference/algorithms/numeric/adjacent_difference.html
 range/reference/algorithms/numeric/inner_product.html
 range/reference/algorithms/numeric/partial_sum.html
 range/reference/ranges.html
+range/reference/ranges/any_range.html
 range/reference/ranges/counting_range.html
 range/reference/ranges/istream_range.html
 range/reference/ranges/irange.html
