@@ -24,10 +24,10 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.ref.match_results"></a><a class="link" href="match_results.html" title="match_results"> match_results</a>
+<a name="boost_regex.ref.match_results"></a><a class="link" href="match_results.html" title="match_results">match_results</a>
 </h3></div></div></div>
 <a name="boost_regex.ref.match_results.synopsis"></a><h5>
-<a name="id944351"></a>
+<a name="id1017124"></a>
         <a class="link" href="match_results.html#boost_regex.ref.match_results.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -167,7 +167,7 @@
          <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.match_results.description"></a><h5>
-<a name="id947532"></a>
+<a name="id1021397"></a>
         <a class="link" href="match_results.html#boost_regex.ref.match_results.description">Description</a>
       </h5>
 <p>
@@ -175,9 +175,7 @@
         a copy of the Allocator argument is used for any memory allocation performed
         by the constructor or member functions during the lifetime of the object.
       </p>
-<a name="boost_regex.match_results.construct"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">match_results</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Allocator</span><span class="special">&amp;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">Allocator</span><span class="special">());</span>
+<a name="boost_regex.match_results.construct"></a><pre class="programlisting"><span class="identifier">match_results</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Allocator</span><span class="special">&amp;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">Allocator</span><span class="special">());</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
@@ -240,17 +238,13 @@
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.match_results.copy_construct"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">match_results</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span>
+<a name="boost_regex.match_results.copy_construct"></a><pre class="programlisting"><span class="identifier">match_results</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Constructs an object of class match_results,
         as a copy of m.
       </p>
-<a name="boost_regex.match_results.assign"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">match_results</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span>
+<a name="boost_regex.match_results.assign"></a><pre class="programlisting"><span class="identifier">match_results</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Assigns m to *this. The postconditions
@@ -372,34 +366,26 @@
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.match_results.size"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">size</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.size"></a><pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">size</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the number of <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> elements stored in *this;
         that is the number of marked sub-expressions in the regular expression that
         was matched plus one.
       </p>
-<a name="boost_regex.match_results.max_size"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">max_size</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.max_size"></a><pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">max_size</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the maximum number of
         <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
         elements that can be stored in *this.
       </p>
-<a name="boost_regex.match_results.empty"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">empty</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.empty"></a><pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">empty</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns size() == 0.
       </p>
-<a name="boost_regex.match_results.length"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.length"></a><pre class="programlisting"><span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
@@ -432,9 +418,7 @@
         as an argument, even when the underlying character type of the expression
         being matched may be something more exotic such as a Unicode character type.
       </p>
-<a name="boost_regex.match_results.position"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.position"></a><pre class="programlisting"><span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
@@ -470,9 +454,7 @@
         as an argument, even when the underlying character type of the expression
         being matched may be something more exotic such as a Unicode character type.
       </p>
-<a name="boost_regex.match_results.str"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.str"></a><pre class="programlisting"><span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
 <span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
@@ -508,9 +490,7 @@
         as an argument, even when the underlying character type of the expression
         being matched may be something more exotic such as a Unicode character type.
       </p>
-<a name="boost_regex.match_results.subscript"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.subscript"></a><pre class="programlisting"><span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
 <span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
@@ -553,9 +533,7 @@
         as an argument, even when the underlying character type of the expression
         being matched may be something more exotic such as a Unicode character type.
       </p>
-<a name="boost_regex.match_results.prefix"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">const_reference</span> <span class="identifier">prefix</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.prefix"></a><pre class="programlisting"><span class="identifier">const_reference</span> <span class="identifier">prefix</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Requires</strong></span>: that the match_results object
@@ -570,9 +548,7 @@
         object representing the character sequence from the start of the string being
         matched or searched, to the start of the match found.
       </p>
-<a name="boost_regex.match_results.suffix"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">const_reference</span> <span class="identifier">suffix</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.suffix"></a><pre class="programlisting"><span class="identifier">const_reference</span> <span class="identifier">suffix</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Requires</strong></span>: that the match_results object
@@ -587,25 +563,19 @@
         object representing the character sequence from the end of the match found
         to the end of the string being matched or searched.
       </p>
-<a name="boost_regex.match_results.begin"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">begin</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.begin"></a><pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">begin</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a starting iterator that
         enumerates over all the marked sub-expression matches stored in *this.
       </p>
-<a name="boost_regex.match_results.end"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">end</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.end"></a><pre class="programlisting"><span class="identifier">const_iterator</span> <span class="identifier">end</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a terminating iterator
         that enumerates over all the marked sub-expression matches stored in *this.
       </p>
-<a name="boost_regex.match_results_format"></a><a name="boost_regex.match_results.format"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
+<a name="boost_regex.match_results_format"></a><a name="boost_regex.match_results.format"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">format</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                       <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                       <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">);</span>
@@ -678,9 +648,7 @@
 <p>
         <span class="bold"><strong>Returns</strong></span>: out.
       </p>
-<a name="boost_regex.match_results.format2"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
+<a name="boost_regex.match_results.format2"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">string_type</span> <span class="identifier">format</span><span class="special">(</span><span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                    <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">);</span>
 </pre>
@@ -743,17 +711,13 @@
 <p>
         See the <a class="link" href="../format.html" title="Search and Replace Format String Syntax">format syntax guide for more information</a>.
       </p>
-<a name="boost_regex.match_results.get_allocator"></a><p>
-      </p>
-<pre class="programlisting"><span class="identifier">allocator_type</span> <span class="identifier">get_allocator</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<a name="boost_regex.match_results.get_allocator"></a><pre class="programlisting"><span class="identifier">allocator_type</span> <span class="identifier">get_allocator</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a copy of the Allocator
         that was passed to the object's constructor.
       </p>
-<a name="boost_regex.match_results.swap"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span><span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
+<a name="boost_regex.match_results.swap"></a><pre class="programlisting"><span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span><span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Swaps the contents of the two sequences.
@@ -766,9 +730,7 @@
 <p>
         <span class="bold"><strong>Complexity</strong></span>: constant time.
       </p>
-<a name="boost_regex.match_results.capture_type"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">value_type</span><span class="special">::</span><span class="identifier">capture_sequence_type</span> <span class="identifier">capture_sequence_type</span><span class="special">;</span>
+<a name="boost_regex.match_results.capture_type"></a><pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">value_type</span><span class="special">::</span><span class="identifier">capture_sequence_type</span> <span class="identifier">capture_sequence_type</span><span class="special">;</span>
 </pre>
 <p>
         Defines an implementation-specific type that satisfies the requirements of
@@ -776,9 +738,7 @@
         whose value_type is a <code class="computeroutput"><span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span></code>. This type happens to be <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">sub_match</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> <span class="special">&gt;</span></code>,
         but you shouldn't actually rely on that.
       </p>
-<a name="boost_regex.match_results.captures"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">const</span> <span class="identifier">capture_sequence_type</span><span class="special">&amp;</span> <span class="identifier">captures</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span> 
+<a name="boost_regex.match_results.captures"></a><pre class="programlisting"><span class="keyword">const</span> <span class="identifier">capture_sequence_type</span><span class="special">&amp;</span> <span class="identifier">captures</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span> 
 </pre>
 <p>
         <span class="bold"><strong>Requires</strong></span>: that the match_results object
@@ -821,9 +781,7 @@
             to take place.
           </li>
 </ul></div>
-<a name="boost_regex.match_results.op_eq"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
+<a name="boost_regex.match_results.op_eq"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 </pre>
@@ -831,9 +789,7 @@
         <span class="bold"><strong>Effects</strong></span>: Compares the two sequences for
         equality.
       </p>
-<a name="boost_regex.match_results.op_ne"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
+<a name="boost_regex.match_results.op_ne"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 </pre>
@@ -841,9 +797,7 @@
         <span class="bold"><strong>Effects</strong></span>: Compares the two sequences for
         inequality.
       </p>
-<a name="boost_regex.match_results.op_stream"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
+<a name="boost_regex.match_results.op_stream"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
 <span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span>
    <span class="keyword">operator</span> <span class="special">&lt;&lt;</span> <span class="special">(</span><span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">os</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">);</span>
@@ -854,9 +808,7 @@
         <span class="special">&lt;&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span></code>;
         Returns <span class="emphasis"><em>os</em></span>.
       </p>
-<a name="boost_regex.match_results.op_swap"></a><p>
-      </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
+<a name="boost_regex.match_results.op_swap"></a><pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
          <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 </pre>

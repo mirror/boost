@@ -44,7 +44,7 @@
 [template regfree[] [link boost_regex.ref.posix.regfree `regfree`]]
 
 A printer-friendly 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/regex/release/regex.pdf 
+[@http://sourceforge.net/projects/boost/files/boost-docs/ 
 PDF version of this manual is also available].
 
 [include configuration.qbk]
