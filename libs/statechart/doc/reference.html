@@ -1069,8 +1069,8 @@ void <a name="process_event" id=
     <li>If the return value of <code>ExceptionTranslator::operator()()</code>
     is equal to the one of <code>simple_state&lt;&gt;::defer_event()</code>
     then the return value of <code>currentEvent.<a href=
-    "#intrusive_from_this">intrusive_from_this</a>()</code> is stored in a
-    state-specific queue. Continues with step 11</li>
+    "#intrusive_from_this">intrusive_from_this</a>()</code> is stored in the
+    deferred events queue. Continues with step 11</li>
 
     <li>If the return value of <code>ExceptionTranslator::operator()()</code>
     is equal to the one of <code>simple_state&lt;&gt;::discard_event()</code>
@@ -2160,8 +2160,10 @@ namespace statechart
 <a name="simple_statedtor" id="simple_statedtor">~simple_state</a>();
 </pre>
 
-  <p><b>Effects</b>: Pushes all events deferred by the state into the posted
-  events queue</p>
+  <p><b>Effects</b>: If the state has deferral reactions of which at least
+  one has been triggered during the lifetime of the state then the contents
+  of the deferred events queue is moved to the front of the posted events
+  queue.</p>
 
   <h3>Class template <code>simple_state</code> modifier functions</h3>
   <pre>
@@ -3579,9 +3581,9 @@ namespace statechart
   "../../../doc/images/valid-html401.png" alt="Valid HTML 4.01 Transitional"
   height="31" width="88"></a></p>
 
-  <p>Revised 06 January, 2008</p>
+  <p>Revised 06 November, 2010</p>
 
-  <p><i>Copyright &copy; 2003-2008 <a href="contact.html">Andreas Huber
+  <p><i>Copyright &copy; 2003-2010 <a href="contact.html">Andreas Huber
   D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See

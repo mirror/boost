@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libboost_test_exec_monitor-vc90-mt-gd-1_40.lib"
+				AdditionalDependencies="libboost_test_exec_monitor-vc90-mt-gd-1_45.lib"
 				OutputFile="$(OutDir)/StateIterationTest.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\bin.v2\libs\test\build\msvc-9.0\$(ConfigurationName)\asynch-exceptions-on\link-static\threading-multi&quot;"
@@ -150,7 +150,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libboost_test_exec_monitor-vc90-mt-1_40.lib"
+				AdditionalDependencies="libboost_test_exec_monitor-vc90-mt-1_45.lib"
 				OutputFile="$(OutDir)/StateIterationTest.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\bin.v2\libs\test\build\msvc-9.0\$(ConfigurationName)\asynch-exceptions-on\link-static\threading-multi&quot;"
