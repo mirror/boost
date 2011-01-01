@@ -3,6 +3,24 @@
 # subject to the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+import modules ;
+
+if --enable-index in  [ modules.peek : ARGV ]
+{
+   ECHO "Building the type_traits docs with automatic index generation enabled." ;
+   using auto-index ;
+   project : requirements
+        <auto-index>on <format>pdf:<auto-index-internal>off
+        <format>html:<auto-index-internal>on
+        <auto-index-script>index.idx
+        <auto-index-prefix>../../.. 
+        <quickbook-define>enable_index ;
+}
+else
+{
+   ECHO "Building the type_traits docs with automatic index generation disabled.  Try building with --enable-index." ;
+}
+
 using quickbook ;
 
 path-constant boost-images : ../../../doc/src/images ;
@@ -12,6 +30,7 @@ boostbook standalone
     :
         type_traits
     :
+        # Index generation:
         # Path for links to Boost:
         <xsl:param>boost.root=../../../..
         

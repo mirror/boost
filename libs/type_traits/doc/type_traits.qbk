@@ -6,7 +6,7 @@
 ]
 
 [library Boost.TypeTraits
-    [quickbook 1.4]
+    [quickbook 1.5]
     [copyright 2000 2006 Adobe Systems Inc, David Abrahams, Steve Cleary, 
     Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat Marcus, 
     Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen,
@@ -124,7 +124,7 @@
 [def __decay [link boost_typetraits.reference.decay decay]]
 [def __is_complex [link boost_typetraits.reference.is_complex is_complex]]
 
-A printer-friendly [@http://svn.boost.org/svn/boost/sandbox/pdf/type_traits/release/type_traits.pdf 
+A printer-friendly [@http://sourceforge.net/projects/boost/files/boost-docs/ 
  PDF version of this manual is also available].
 
 [section:intro Introduction]
@@ -260,8 +260,19 @@ See __has_trivial_constructor.
 [include history.qbk]
 [include credits.qbk]
 
-
-
-
+[? enable_index
+'''
+  <index type="class_name">
+  <title>Class Index</title>
+  </index>
+  <index type="typedef_name">
+  <title>Typedef Index</title>
+  </index>
+  <index type="macro_name">
+  <title>Macro Index</title>
+  </index>
+  <index/>
+'''
+]
 
 
