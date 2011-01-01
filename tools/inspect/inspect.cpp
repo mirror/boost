@@ -153,12 +153,13 @@ namespace
       && leaf != "bin"
       && leaf != "bin.v2"
       // this really out of our hands
-      && local.find("tools/jam/src") != 0
       && local.find("tools/build/v2/engine") != 0
+      && local.find("tools\\build\\v2\\engine") != 0
       // too many issues with generated HTML files
       && leaf != "status"
       // no point in checking doxygen xml output
       && local.find("doc/xml") != 0
+      && local.find("doc\\xml") != 0
       // ignore some web files
       && leaf != ".htaccess"
       // ignore svn files:
