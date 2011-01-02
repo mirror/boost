@@ -81,3 +81,7 @@ project
         [ run ../example/display_ex.cpp ]
         ;
 
+    test-suite "ratio.ext"
+        :
+        [ run ratio_extensions/ratio_ext_pass.cpp  ]
+        ;
