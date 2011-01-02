@@ -15,34 +15,11 @@
 
 #include <boost/ratio/ratio_io.hpp>
 #include <boost/detail/lightweight_test.hpp>
-//~ #include <iostream>
 #include <climits>
 
 int main()
 {
-    //~ std::cout << std::hex<< boost::integer_traits<boost::intmax_t>::const_min << std::dec << std::endl;
-    typedef boost::mpl::integral_c<boost::intmax_t, boost::integer_traits<boost::intmax_t>::const_min> tmin;
-    typedef boost::mpl::integral_c<boost::intmax_t, boost::integer_traits<boost::intmax_t>::const_max> tmax;
-    //~ std::cout << std::hex<< boost::integer_traits<boost::intmax_t>::const_max << std::dec << std::endl;
-    typedef boost::mpl::integral_c<boost::intmax_t, 
-    (boost::integer_traits<boost::intmax_t>::const_max <0)? -boost::integer_traits<boost::intmax_t>::const_max:boost::integer_traits<boost::intmax_t>::const_max
-    > tmmax;
-    //~ std::cout << std::hex<< boost::mpl::integral_c<boost::intmax_t, 
-    //~ boost::integer_traits<boost::intmax_t>::const_max 
-    //~ >::value << std::dec << std::endl;
-    
-//    typedef boost::mpl::integral_c<boost::intmax_t, 
-//    (boost::integer_traits<boost::intmax_t>::const_max <0)? -boost::integer_traits<boost::intmax_t>::const_max:boost::integer_traits<boost::intmax_t>::const_max
-//    >::next tmmaxn;
-//    typedef boost::mpl::integral_c<boost::intmax_t, 
-//    (boost::integer_traits<boost::intmax_t>::const_max <0)? -boost::integer_traits<boost::intmax_t>::const_max:boost::integer_traits<boost::intmax_t>::const_max
-//    >::prior tmmaxp;
-        
-            
-    //~ std::cout << std::hex<< -0x7FFFFFFFFFFFFFFFLL+1 << std::dec << std::endl;
-    //~ std::cout << std::hex<< -0x7FFFFFFFFFFFFFFFLL-1 << std::dec << std::endl;
-    //~ std::cout << std::hex<< -0x7FFFFFFFFFFFFFFFLL << std::dec << std::endl;
-    //~ std::cout << std::hex<< 0x7FFFFFFFFFFFFFFFLL-1 << std::dec << std::endl;
+
     {
         BOOST_TEST((
                 boost::ratio_string<boost::atto, char>::long_name() == "atto"

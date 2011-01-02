@@ -84,4 +84,8 @@ project
     test-suite "ratio.ext"
         :
         [ run ratio_extensions/ratio_ext_pass.cpp  ]
+        [ compile ratio_extensions/mpl_plus_pass.cpp  ]
+        [ compile ratio_extensions/mpl_minus_pass.cpp  ]
+        [ compile ratio_extensions/mpl_times_pass.cpp  ]
+        [ compile ratio_extensions/mpl_divides_pass.cpp  ]
         ;
