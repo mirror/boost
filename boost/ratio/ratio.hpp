@@ -33,10 +33,10 @@ time2_demo contained this comment:
 #define BOOST_RATIO_RATIO_HPP
 
 #include <boost/config.hpp>
-#include <boost/mpl/abs.hpp>
-#include <boost/mpl/sign.hpp>
-#include <boost/mpl/gcd.hpp>
-#include <boost/mpl/lcm.hpp>
+#include <boost/ratio/detail/mpl/abs.hpp>
+#include <boost/ratio/detail/mpl/sign.hpp>
+#include <boost/ratio/detail/mpl/gcd.hpp>
+#include <boost/ratio/detail/mpl/lcm.hpp>
 #include <cstdlib>
 #include <climits>
 #include <limits>
