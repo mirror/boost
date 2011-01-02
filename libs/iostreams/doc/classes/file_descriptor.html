@@ -251,16 +251,16 @@
     <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                           std::ios_base::open_mode mode = 
                               std::ios_base::out );
-    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
-
-    <SPAN CLASS='comment'>// Windows-only</SPAN>
-    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
-
-    <SPAN CLASS='comment'>// Deprecated</SPAN>
     <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">file_descriptor_flags</SPAN> );
 
-    <SPAN CLASS='comment'>// Deprecated, Windows-only</SPAN>
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
     <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( HANDLE hFile, <SPAN CLASS="keyword">file_descriptor_flags</SPAN> );
+
+    <SPAN CLASS='comment'>// Deprecated</SPAN>
+    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
+    <SPAN CLASS='comment'>// Deprecated, Windows-only</SPAN>
+    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Path&gt;
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#file_descriptor_sink_open">open</A>( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
@@ -292,16 +292,16 @@
     file_descriptor_sink( <SPAN CLASS="keyword">const</SPAN> Path& pathname, 
                           std::ios_base::open_mode mode = 
                               std::ios_base::out );
-    file_descriptor_sink( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
-
-    <SPAN CLASS='comment'>// Windows-only</SPAN>
-    file_descriptor_sink( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
-
-    <SPAN CLASS='comment'>// Deprecated</SPAN>
     file_descriptor_sink( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">file_descriptor_flags</SPAN> );
 
+    <SPAN CLASS='comment'>// Windows-only</SPAN>
+    file_descriptor_sink( HANDLE hFile, <SPAN CLASS="keyword">file_descriptor_flags</SPAN> );
+
+    <SPAN CLASS='comment'>// Deprecated</SPAN>
+    file_descriptor_sink( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
     <SPAN CLASS='comment'>// Deprecated, Windows-only</SPAN>
-    file_descriptor_sink( HANDLE hFile, <SPAN CLASS="keyword">file_descriptor_flags</SPAN> );</PRE>
+    file_descriptor_sink( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
 
 <P>
     The first member constructs an empty <CODE>file_descriptor_sink</CODE>.
