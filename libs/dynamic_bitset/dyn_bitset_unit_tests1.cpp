@@ -71,8 +71,8 @@ void run_numeric_ctor_tests( BOOST_EXPLICIT_TEMPLATE_TYPE(Tests)
     };
 
     const T numbers[] = {
-           T(-1), T(-3), T(-8), T(-15), mi/2, mi,
-        0,    1,     3,     8,     15,  ma/2, ma
+              T(-1), T(-3), T(-8), T(-15), T(mi/2), T(mi),
+        T(0), T(1),  T(3),  T(8),  T(15),  T(ma/2), T(ma)
     };
 
     for (std::size_t s = 0; s < BOOST_BITSET_TEST_COUNT(sizes); ++s) {
