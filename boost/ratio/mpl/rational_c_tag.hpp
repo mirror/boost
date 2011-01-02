@@ -16,7 +16,7 @@
 namespace boost {
 namespace mpl {
 
-struct rational_c_tag : mpl::int_<10> {};
+struct rational_c_tag : int_<10> {};
 
 }
 }
