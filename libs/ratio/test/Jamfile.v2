@@ -88,4 +88,11 @@ project
         [ compile ratio_extensions/mpl_minus_pass.cpp  ]
         [ compile ratio_extensions/mpl_times_pass.cpp  ]
         [ compile ratio_extensions/mpl_divides_pass.cpp  ]
+        [ compile ratio_extensions/mpl_equal_to_pass.cpp  ]
+        [ compile ratio_extensions/mpl_not_equal_to_pass.cpp  ]
+        [ compile ratio_extensions/mpl_less_pass.cpp  ]
+        [ compile ratio_extensions/mpl_less_equal_pass.cpp  ]
+        [ compile ratio_extensions/mpl_greater_pass.cpp  ]
+        [ compile ratio_extensions/mpl_greater_equal_pass.cpp  ]
+        
         ;
