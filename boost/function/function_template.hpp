@@ -751,9 +751,6 @@ namespace boost {
 
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    // MSVC 6.0 and prior require all definitions to be inline, but
-    // these definitions can become very costly.
     result_type operator()(BOOST_FUNCTION_PARMS) const
     {
       if (this->empty())
@@ -762,9 +759,6 @@ namespace boost {
       return get_vtable()->invoker
                (this->functor BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
     }
-#else
-    result_type operator()(BOOST_FUNCTION_PARMS) const;
-#endif
 
     // The distinction between when to use BOOST_FUNCTION_FUNCTION and
     // when to use self_type is obnoxious. MSVC cannot handle self_type as
@@ -997,22 +991,6 @@ namespace boost {
   {
     f1.swap(f2);
   }
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-  template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
-  typename BOOST_FUNCTION_FUNCTION<
-      R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS>::result_type
-  inline 
-  BOOST_FUNCTION_FUNCTION<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS>
-  ::operator()(BOOST_FUNCTION_PARMS) const
-  {
-    if (this->empty())
-      boost::throw_exception(bad_function_call());
-
-    return get_vtable()->invoker
-             (this->functor BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
-  }
-#endif
 
 // Poison comparisons between boost::function objects of the same type.
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
