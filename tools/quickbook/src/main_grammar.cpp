@@ -100,7 +100,7 @@ namespace quickbook
         local.top_level
             =   local.blocks
             >>  *(
-                    local.block_markup >> local.blocks
+                    local.block_markup >> !(+eol >> local.blocks)
                 |   local.paragraph_separator >> local.blocks
                 |   common
                 |   cl::space_p                 [actions.space_char]
@@ -130,7 +130,7 @@ namespace quickbook
         local.block_markup
             =   local.block_markup_start        [actions.inside_paragraph]
             >>  (   local.block_keyword_rule
-                >>  (   (space >> ']' >> +eol)
+                >>  (   (space >> ']')
                     |   cl::eps_p               [actions.error]
                     )
                 |   cl::eps_p                   [actions.error]

@@ -86,4 +86,27 @@
   <para>
     [tipping point]
   </para>
+  <para>
+    Multiple paragraphs because of the inline blocks.
+  </para>
+  <warning>
+    <para>
+      Warning
+    </para>
+  </warning>
+  <para>
+    This line should appear as a separate paragraph.
+  </para>
+  <warning>
+    <para>
+      Warning
+    </para>
+  </warning>
+  <itemizedlist>
+    <listitem>
+      <simpara>
+        This should be a list item because it's preceded by block markup.
+      </simpara>
+    </listitem>
+  </itemizedlist>
 </article>

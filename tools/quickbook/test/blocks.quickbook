@@ -40,3 +40,7 @@ Warning second paragraph.]
 
 [/ Quickbook shouldn't think that this is a tip]
 [tipping point]
+
+Multiple paragraphs because of the inline blocks. [warning Warning] This
+line should appear as a separate paragraph.[warning Warning]
+* This should be a list item because it's preceded by block markup.
