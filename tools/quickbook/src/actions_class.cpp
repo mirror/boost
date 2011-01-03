@@ -84,6 +84,7 @@ namespace quickbook
         , extract_doc_category(doc_category, phrase, *this)
         , extract_doc_biblioid(doc_biblioid.second, phrase, *this)
         , extract_doc_lang(doc_lang, phrase, *this)
+        , scoped_block(*this)
         , code(out, phrase, *this)
         , code_block(phrase, phrase, *this)
         , inline_code(phrase, *this)
@@ -110,8 +111,8 @@ namespace quickbook
         , escape_unicode(phrase, *this)
         , attribute(attributes, attribute_name, error_count)
         , image(phrase, attributes, image_fileref, *this)
-        , cond_phrase_pre(phrase, conditions, macro, *this)
-        , cond_phrase_post(phrase, conditions, macro, *this)
+        , cond_phrase_pre(condition, macro)
+        , scoped_cond_phrase(*this)
 
         , list(out, list_buffer, list_indent, list_marks, *this)
         , list_format(list_buffer, list_indent, list_marks, error_count, *this)

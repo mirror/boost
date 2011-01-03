@@ -11,7 +11,6 @@
 #include "grammar_impl.hpp"
 #include "actions_class.hpp"
 #include "utils.hpp"
-#include "scoped_block.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>

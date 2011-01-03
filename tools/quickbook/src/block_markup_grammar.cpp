@@ -8,7 +8,6 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include "scoped_block.hpp"
 #include "utils.hpp"
 #include "actions_class.hpp"
 #include "grammar_impl.hpp"
@@ -111,7 +110,7 @@ namespace quickbook
         block_keyword_rules.add("blurb", &local.blurb);
 
         local.blurb =
-            scoped_block(actions)[inside_paragraph]
+            actions.scoped_block[inside_paragraph]
                                                 [actions.blurb]
             ;
 
@@ -120,7 +119,7 @@ namespace quickbook
             ;
 
         local.blockquote =
-            blank >> scoped_block(actions)[inside_paragraph]
+            blank >> actions.scoped_block[inside_paragraph]
                                                 [actions.blockquote]
             ;
 
@@ -133,27 +132,27 @@ namespace quickbook
             ;
 
         local.warning =
-            scoped_block(actions)[inside_paragraph]
+            actions.scoped_block[inside_paragraph]
                                                 [actions.warning]
             ;
 
         local.caution =
-            scoped_block(actions)[inside_paragraph]
+            actions.scoped_block[inside_paragraph]
                                                 [actions.caution]
             ;
 
         local.important =
-            scoped_block(actions)[inside_paragraph]
+            actions.scoped_block[inside_paragraph]
                                                 [actions.important]
             ;
 
         local.note =
-            scoped_block(actions)[inside_paragraph]
+            actions.scoped_block[inside_paragraph]
                                                 [actions.note]
             ;
 
         local.tip =
-            scoped_block(actions)[inside_paragraph]
+            actions.scoped_block[inside_paragraph]
                                                 [actions.tip]
             ;
 
@@ -234,7 +233,7 @@ namespace quickbook
             (
                 (
                     local.varlistterm
-                    >>  (   scoped_block(actions) [+local.varlistitem]
+                    >>  (   actions.scoped_block [+local.varlistitem]
                                                 [actions.varlistitem]
                         |   cl::eps_p           [actions.error]
                         )
@@ -304,7 +303,7 @@ namespace quickbook
         local.table_cell =
                 space
             >>  cl::ch_p('[')
-            >>  (   scoped_block(actions) [
+            >>  (   actions.scoped_block [
                         inside_paragraph
                     >>  cl::ch_p(']')
                     >>  space

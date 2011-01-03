@@ -23,10 +23,14 @@ they appear in the correct place. [#a3]
 
 [endsect]
 
-[#a8]
+[#a9]
 [section Section Anchor]
-[section Nested Section]
+[#a10][section Nested Section]
 [endsect]
 [/ This anchor is invalid, I'm not sure what to do with it]
-[#a9]
+[#a11]
+[endsect]
+
+[#a12][?__not_defined__ #a13]
+[section Conditional Section Anchor]
 [endsect]

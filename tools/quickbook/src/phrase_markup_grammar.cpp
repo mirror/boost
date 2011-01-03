@@ -47,7 +47,7 @@ namespace quickbook
         local.cond_phrase =
                 blank
             >>  macro_identifier                [actions.cond_phrase_pre]
-            >>  (!phrase)                       [actions.cond_phrase_post]
+            >>  actions.scoped_cond_phrase[phrase]
             ;
 
         phrase_symbol_rules.add

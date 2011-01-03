@@ -199,32 +199,35 @@ namespace quickbook
 
     void cond_phrase_action_pre::operator()(iterator first, iterator last) const
     {
-        // TODO: It would probably be better to save the anchors and restore
-        // them if the phrase isn't used.
-        actions.output_pre(out);
-
         std::string str(first, last);
-        conditions.push_back(find(macro, str.c_str()));
-        out.push(); // save the stream
+        condition = find(macro, str.c_str());
     }
 
-    void cond_phrase_action_post::operator()(iterator first, iterator last) const
+    cond_phrase_push::cond_phrase_push(quickbook::actions& actions)
+        : actions(actions)
+        , condition(actions.condition)
+        , saved_anchors(actions.anchors)
+        , popped(false)
     {
-        bool symbol_found = conditions.back();
-        conditions.pop_back();
-
-        if (first == last || !symbol_found)
-        {
-            // clear any anchors defined in the conditional phrase.
-            actions.anchors.clear();
-            out.pop(); // restore the stream
+        actions.phrase.push();
+    }
+    
+    cond_phrase_push::~cond_phrase_push()
+    {
+        if(!popped) {
+            actions.phrase.pop();
+            actions.anchors.swap(saved_anchors);
         }
-        else
-        {
-            std::string save;
-            out.swap(save);
-            out.pop(); // restore the stream
-            out << save; // print the body
+    }
+
+    void cond_phrase_push::success_impl()
+    {
+        if(condition) {
+            std::string tmp;
+            actions.phrase.swap(tmp);
+            actions.phrase.pop();
+            actions.phrase.swap(tmp);
+            popped = true;
         }
     }
 
@@ -1473,5 +1476,24 @@ namespace quickbook
     void pre_output_action::operator()(iterator, iterator) const
     {
         (*this)(actions.out);
+    }
+
+    scoped_block_push::scoped_block_push(quickbook::actions& actions)
+        : actions(actions)
+    {
+        actions.out.push();
+        actions.phrase.push();
+    }
+    
+    scoped_block_push::~scoped_block_push()
+    {
+        actions.phrase.pop();
+        actions.out.pop();
+    }
+
+    std::string const& scoped_block_push::success_impl()
+    {
+        actions.inside_paragraph();
+        return actions.out.str();
     }
 }

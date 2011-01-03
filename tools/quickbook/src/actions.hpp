@@ -73,6 +73,44 @@ namespace quickbook
         actions& escape_actions,
         std::string const& source_mode);        
 
+    template <typename Derived, typename DataT = void>
+    struct scoped_action_base
+    {
+        typedef quickbook::actions data_type;
+        
+        template <typename T>
+        struct result
+        {
+            typedef cl::match<DataT> type;
+        };
+
+        template <typename T>
+        DataT success(T const&)
+        {
+            return static_cast<Derived*>(this)->success_impl();
+        }
+        
+        void failure() {
+            return static_cast<Derived*>(this)->failure_impl();
+        }
+        
+        void failure_impl() {}
+    };
+
+    struct void_type {};
+
+    template <typename Derived>
+    struct scoped_action_base<Derived, void>
+        : scoped_action_base<Derived, void_type>
+    {
+        template <typename T>
+        void_type success(T const&)
+        {
+            static_cast<Derived*>(this)->success_impl();
+            return void_type();
+        }
+    };
+
     struct error_action
     {
         // Prints an error message to std::cerr
@@ -260,43 +298,27 @@ namespace quickbook
         //  Handles conditional phrases
 
         cond_phrase_action_pre(
-            collector& out
-          , std::vector<bool>& conditions
-          , string_symbols const& macro
-          , quickbook::actions& actions)
-        : out(out)
-        , conditions(conditions)
-        , macro(macro)
-        , actions(actions) {}
+            bool& condition
+          , string_symbols const& macro)
+        : condition(condition)
+        , macro(macro) {}
 
         void operator()(iterator first, iterator last) const;
 
-        collector& out;
-        std::vector<bool>& conditions;
+        bool& condition;
         string_symbols const& macro;
-        quickbook::actions& actions;
     };
 
-    struct cond_phrase_action_post
+    struct cond_phrase_push : scoped_action_base<cond_phrase_push>
     {
-        //  Handles conditional phrases
+        cond_phrase_push(quickbook::actions&);
+        ~cond_phrase_push();
+        void success_impl();
 
-        cond_phrase_action_post(
-            collector& out
-          , std::vector<bool>& conditions
-          , string_symbols const& macro
-          , quickbook::actions& actions)
-        : out(out)
-        , conditions(conditions)
-        , macro(macro)
-        , actions(actions) {}
-
-        void operator()(iterator first, iterator last) const;
-
-        collector& out;
-        std::vector<bool>& conditions;
-        string_symbols const& macro;
         quickbook::actions& actions;
+        bool condition;
+        std::vector<std::string> saved_anchors;
+        bool popped;
     };
 
     struct list_action
@@ -914,6 +936,15 @@ namespace quickbook
         void operator()(collector& tgt) const;
         void operator()(iterator, iterator) const;
         
+        quickbook::actions& actions;
+    };
+
+    struct scoped_block_push : scoped_action_base<scoped_block_push, std::string>
+    {
+        scoped_block_push(quickbook::actions&);
+        ~scoped_block_push();
+        std::string const& success_impl();
+
         quickbook::actions& actions;
     };
 }

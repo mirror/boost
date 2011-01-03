@@ -11,6 +11,7 @@
 #define BOOST_SPIRIT_ACTIONS_CLASS_HPP
 
 #include "actions.hpp"
+#include "scoped_parser.hpp"
 #include <boost/tuple/tuple.hpp>
 
 namespace quickbook
@@ -102,7 +103,7 @@ namespace quickbook
         std::string             macro_id;
         std::stack<mark_type>   list_marks;
         int                     list_indent;
-        std::vector<bool>       conditions;
+        bool                    condition;
         std::string             template_identifier;
         string_list             template_info;
         int                     template_depth;
@@ -141,6 +142,9 @@ namespace quickbook
         phrase_to_docinfo_action extract_doc_biblioid;
         phrase_to_docinfo_action extract_doc_lang;
 
+        scoped_parser<scoped_block_push>
+                                scoped_block;
+
         code_action             code;
         code_action             code_block;
         inline_code_action      inline_code;
@@ -158,7 +162,8 @@ namespace quickbook
         attribute_action        attribute;
         image_action            image;
         cond_phrase_action_pre  cond_phrase_pre;
-        cond_phrase_action_post cond_phrase_post;
+        scoped_parser<cond_phrase_push>
+                                scoped_cond_phrase;
 
         list_action             list;
         list_format_action      list_format;

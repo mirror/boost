@@ -34,10 +34,13 @@
     <anchor id="a8"/>
   </section>
   <section id="anchor_test.section_anchor">
-    <anchor id="a8"/> <title>Section Anchor</title>
+    <anchor id="a9"/> <title>Section Anchor</title>
     <section id="anchor_test.nested_section">
-      <title>Nested Section</title>
+      <anchor id="a10"/> <title>Nested Section</title>
     </section>
-    <anchor id="a9"/>
+    <anchor id="a11"/>
+  </section>
+  <section id="anchor_test.conditional_section_anchor">
+    <anchor id="a12"/> <title>Conditional Section Anchor</title>
   </section>
 </article>
