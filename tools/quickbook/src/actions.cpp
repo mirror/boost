@@ -813,15 +813,13 @@ namespace quickbook
             }
             else
             {
-                quickbook_grammar g(actions);
-
                 if (!body.is_block)
                 {
                     //  do a phrase level parse
                     iterator first(body.content.begin(), body.content.end(),
                         position(body.position.file.c_str(), body.position.line, body.position.column));
                     iterator last(body.content.end(), body.content.end());
-                    return cl::parse(first, last, g.simple_phrase).full;
+                    return cl::parse(first, last, actions.grammar().simple_phrase).full;
                 }
                 else
                 {
@@ -833,7 +831,7 @@ namespace quickbook
                     iterator first(content.begin(), content.end(),
                         position(body.position.file.c_str(), body.position.line, body.position.column));
                     iterator last(content.end(), content.end());
-                    return cl::parse(first, last, g.block).full;
+                    return cl::parse(first, last, actions.grammar().block).full;
                 }
             }
         }

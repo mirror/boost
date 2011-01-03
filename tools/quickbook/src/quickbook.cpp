@@ -44,8 +44,6 @@ namespace quickbook
 
     static void set_macros(actions& actor)
     {
-        quickbook_grammar g(actor);
-
         for(std::vector<std::string>::const_iterator
                 it = preset_defines.begin(),
                 end = preset_defines.end();
@@ -54,7 +52,7 @@ namespace quickbook
             iterator first(it->begin(), it->end(), "command line parameter");
             iterator last(it->end(), it->end());
 
-            cl::parse(first, last, g.command_line_macro);
+            cl::parse(first, last, actor.grammar().command_line_macro);
             // TODO: Check result?
         }
     }
@@ -81,14 +79,13 @@ namespace quickbook
         iterator first(storage.begin(), storage.end(), filein_);
         iterator last(storage.end(), storage.end());
 
-        quickbook_grammar g(actor);
-        cl::parse_info<iterator> info = cl::parse(first, last, g.doc_info);
+        cl::parse_info<iterator> info = cl::parse(first, last, actor.grammar().doc_info);
 
         if (info.hit || ignore_docinfo)
         {
             pre(actor.out, actor, ignore_docinfo);
 
-            info = cl::parse(info.hit ? info.stop : first, last, g.block);
+            info = cl::parse(info.hit ? info.stop : first, last, actor.grammar().block);
             if (info.full)
             {
                 post(actor.out, actor, ignore_docinfo);
@@ -110,6 +107,7 @@ namespace quickbook
     parse_document(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
+
         set_macros(actor);
         bool r = parse_file(filein_, actor);
         if (actor.section_level != 0)

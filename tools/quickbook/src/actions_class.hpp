@@ -13,6 +13,7 @@
 #include "actions.hpp"
 #include "scoped_parser.hpp"
 #include <boost/tuple/tuple.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace quickbook
 {
@@ -23,6 +24,10 @@ namespace quickbook
     {
         actions(char const* filein_, fs::path const& outdir, string_stream& out_);
 
+    private:
+        boost::scoped_ptr<quickbook_grammar> grammar_;
+
+    public:
     ///////////////////////////////////////////////////////////////////////////
     // State
     ///////////////////////////////////////////////////////////////////////////
@@ -124,6 +129,7 @@ namespace quickbook
         void copy_macros_for_write();
         void push();
         void pop();
+        quickbook_grammar& grammar() const;
 
     ///////////////////////////////////////////////////////////////////////////
     // actions

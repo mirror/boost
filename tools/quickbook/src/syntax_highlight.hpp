@@ -41,7 +41,7 @@ namespace quickbook
         struct definition
         {
             definition(cpp_highlight const& self)
-                : g(self.escape_actions)
+                : g(self.escape_actions.grammar())
             {
                 program
                     =
@@ -157,7 +157,7 @@ namespace quickbook
                             string_char;
 
             cl::symbols<> keyword_;
-            quickbook_grammar g;
+            quickbook_grammar& g;
             std::string save;
 
             cl::rule<Scanner> const&
@@ -192,7 +192,7 @@ namespace quickbook
         struct definition
         {
             definition(python_highlight const& self)
-                : g(self.escape_actions)
+                : g(self.escape_actions.grammar())
             {
                 program
                     =
@@ -313,7 +313,7 @@ namespace quickbook
                             qbk_phrase, escape, string_char;
 
             cl::symbols<> keyword_;
-            quickbook_grammar g;
+            quickbook_grammar& g;
             std::string save;
 
             cl::rule<Scanner> const&
@@ -344,7 +344,7 @@ namespace quickbook
         struct definition
         {
             definition(teletype_highlight const& self)
-                : g(self.escape_actions)
+                : g(self.escape_actions.grammar())
             {
                 program
                     =
@@ -390,7 +390,7 @@ namespace quickbook
 
             cl::rule<Scanner> program, macro, qbk_phrase, escape;
 
-            quickbook_grammar g;
+            quickbook_grammar& g;
             std::string save;
 
             cl::rule<Scanner> const&

@@ -11,6 +11,7 @@
 #include "actions_class.hpp"
 #include "markups.hpp"
 #include "quickbook.hpp"
+#include "grammar.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -19,8 +20,10 @@
 namespace quickbook
 {
     actions::actions(char const* filein_, fs::path const& outdir_, string_stream& out_)
+        : grammar_()
+
     // header info
-        : doc_type()
+        , doc_type()
         , doc_title()
         , doc_version()
         , doc_id()
@@ -210,8 +213,12 @@ namespace quickbook
             ("__TIME__", std::string(quickbook_get_time))
             ("__FILENAME__", filename_str)
         ;
+        
+        boost::scoped_ptr<quickbook_grammar> g(
+            new quickbook_grammar(*this));
+        grammar_.swap(g);
     }
-
+    
     void actions::push()
     {
         state_stack.push(
@@ -271,5 +278,9 @@ namespace quickbook
         phrase.pop();
         list_buffer.pop();
         templates.pop();
+    }
+    
+    quickbook_grammar& actions::grammar() const {
+        return *grammar_;
     }
 }
