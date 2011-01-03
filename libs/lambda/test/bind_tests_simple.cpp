@@ -80,6 +80,23 @@ void test_member_functions()
   // bind(&A::add, a, _1); 
 }
 
+struct B {
+  B(int n) : i(n) {};
+  int i;
+};
+
+void test_data_members()
+{
+  using boost::ref;
+  B b(10);
+  BOOST_CHECK(bind(&B::i, ref(b))() == 10);
+  BOOST_CHECK(bind(&B::i, b)() == 10);
+  BOOST_CHECK(bind(&B::i, _1)(b) == 10);
+  BOOST_CHECK(bind(&B::i, _1)(B(11)) == 11);
+  bind(&B::i, ref(b))() = 1;
+  BOOST_CHECK(b.i == 1);
+}
+
 int test_main(int, char *[]) {
 
   int i = 1; int j = 2; int k = 3;
