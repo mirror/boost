@@ -212,6 +212,7 @@ public:
 
     bool <a href="#is_subset_of">is_subset_of</a>(const dynamic_bitset&amp; a) const;
     bool <a href="#is_proper_subset_of">is_proper_subset_of</a>(const dynamic_bitset&amp; a) const;
+    bool <a href="#intersects">intersects</a>(const dynamic_bitset&amp; a) const;
 
     size_type <a href="#find_first">find_first</a>() const;
     size_type <a href="#find_next">find_next</a>(size_type pos) const;
@@ -1172,6 +1173,19 @@ bool <a id=
 set in this bitset, the corresponding bit in bitset <tt>a</tt> is
 also set and if <tt>this-&gt;count() &lt; a.count()</tt>.
 Otherwise this function returns false.<br />
+<b>Throws:</b> nothing.
+
+<hr />
+<pre>
+bool <a id=
+"intersects">intersects</a>(const dynamic_bitset&amp; a) const
+</pre>
+
+<b>Requires:</b> <tt>this-&gt;size() == a.size()</tt><br />
+<b>Returns:</b> true if this bitset and <tt>a</tt> intersect.
+That is, it returns true if, there is a bit which is set in this
+bitset, such that the corresponding bit in bitset <tt>a</tt> is
+also set. Otherwise this function returns false.<br />
 <b>Throws:</b> nothing.
 
 <hr />
