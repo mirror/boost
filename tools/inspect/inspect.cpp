@@ -348,6 +348,32 @@ namespace
       std::cout << "</blockquote>\n"; 
   }
 
+//  html_encode  -------------------------------------------------------------//
+
+  std::string html_encode(std::string const& text)
+  {
+    std::string result;
+    
+    for(std::string::const_iterator it = text.begin(),
+        end = text.end(); it != end; ++it)
+    {
+      switch(*it) {
+      case '<':
+        result += "&lt;";
+        break;
+      case '>':
+        result += "&gt;";
+        break;
+      case '&':
+        result += "&amp;";
+        break;
+      default:
+        result += *it;
+      }      
+    }
+    
+    return result;
+  }
 
 //  display_details  ---------------------------------------------------------//
 
@@ -442,8 +468,8 @@ namespace
 
           // print the message
           if (itr->line_number)
-            std::cout << sep << "(line " << itr->line_number << ") " << itr->msg;
-          else std::cout << sep << itr->msg;
+            std::cout << sep << "(line " << itr->line_number << ") " << html_encode(itr->msg);
+          else std::cout << sep << html_encode(itr->msg);
 
           first_sep = false;
         }
