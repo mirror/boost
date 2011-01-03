@@ -11,7 +11,7 @@
 
 #include <boost/ratio.hpp>
 #include <boost/ratio/mpl/numeric_cast.hpp>
-#include <boost/mpl/gcd.hpp>
+#include <boost/ratio/detail/mpl/gcd.hpp>
 
 namespace boost { 
 namespace mpl {

@@ -19,6 +19,16 @@
 #include <boost/mpl/aux_/config/integral.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
+#if    !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC_2) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE) \
+    && ( defined(BOOST_MSVC) \
+        || BOOST_WORKAROUND(__EDG_VERSION__, <= 238) \
+        )
+
+#   define BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC_2
+
+#endif
+
 namespace boost { namespace mpl {
 
 template< typename Tag > struct sign_impl;

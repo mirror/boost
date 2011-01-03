@@ -13,13 +13,23 @@
 #define BOOST_MPL_LCM_HPP_INCLUDED
 
 #include <boost/mpl/integral_c.hpp>
-#include <boost/mpl/abs.hpp>
+#include <boost/ratio/detail/mpl/abs.hpp>
 #include <boost/mpl/aux_/largest_int.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/mpl/aux_/config/eti.hpp>
 #include <boost/mpl/aux_/config/integral.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
+
+#if    !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC_2) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE) \
+    && ( defined(BOOST_MSVC) \
+        || BOOST_WORKAROUND(__EDG_VERSION__, <= 238) \
+        )
+
+#   define BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC_2
+
+#endif
 
 namespace boost { namespace mpl {
 
