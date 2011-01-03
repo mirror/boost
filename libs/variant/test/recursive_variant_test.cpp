@@ -18,6 +18,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <map>
 
 struct vector_printer
     : boost::static_visitor<std::string>
@@ -124,6 +125,12 @@ void test_recursive_variant()
 
     std::cout << "result5: " << result5 << '\n';
     BOOST_CHECK(result5 == "( 3.5 ( 3 5 ( 3 5 ) 7 ) 17.25 ) ");
+
+    typedef boost::make_recursive_variant<
+          int,
+          std::map<int, boost::recursive_variant_>
+        >::type var6_t;
+    var6_t var6;
 }
 
 void test_recursive_variant_over()
