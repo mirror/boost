@@ -63,7 +63,7 @@ namespace quickbook
                         block_markup, block_markup_start,
                         code, code_line, blank_line, hr,
                         list, ordered_list, list_item,
-                        phrase_markup,
+                        phrase_markup, extended_phrase_markup,
                         simple_phrase_end,
                         escape,
                         inline_code, simple_format,
@@ -327,6 +327,13 @@ namespace quickbook
             )
             ;
 
+        extended_phrase =
+           *(   local.extended_phrase_markup
+            |   common
+            |   (cl::anychar_p - phrase_end)    [actions.plain_char]
+            )
+            ;
+
         inside_paragraph =
             (*( common
             |   (cl::anychar_p - phrase_end)    [actions.plain_char]
@@ -336,6 +343,7 @@ namespace quickbook
 
         local.phrase_markup
             =   '['
+            >>  space
             >>  (   phrase_keyword_rules        [detail::assign_rule(local.phrase_keyword_rule)]
                 >>  (cl::eps_p - (cl::alnum_p | '_'))
                 >>  local.phrase_keyword_rule
@@ -345,6 +353,20 @@ namespace quickbook
                 |   cl::str_p("br")             [actions.break_]
                 )
             >>  ']'
+            ;
+
+        local.extended_phrase_markup
+            =   '['
+            >>  space
+            >>  extended_phrase_keyword_rules   [detail::assign_rule(local.block_keyword_rule)]
+            >>  (cl::eps_p - (cl::alnum_p | '_'))
+                                                [actions.inside_paragraph]
+            >>  (   local.block_keyword_rule
+                >>  (   (space >> ']')
+                    |   cl::eps_p               [actions.error]
+                    )
+                |   cl::eps_p                   [actions.error]
+                )
             ;
 
         local.escape =

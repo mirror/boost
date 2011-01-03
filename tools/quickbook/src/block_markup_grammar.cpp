@@ -318,6 +318,12 @@ namespace quickbook
             ("include", &local.include)
             ;
 
+        extended_phrase_keyword_rules.add
+            ("xinclude", &local.xinclude)
+            ("import", &local.import)
+            ("include", &local.include)
+            ;
+
         local.xinclude =
                space
             >> (*(cl::anychar_p - phrase_end))
