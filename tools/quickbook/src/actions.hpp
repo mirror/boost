@@ -132,7 +132,7 @@ namespace quickbook
             collector& out,
             std::string const& pre,
             std::string const& post,
-			quickbook::actions& actions)
+            quickbook::actions& actions)
         : out(out)
         , pre(pre)
         , post(post)
@@ -557,9 +557,9 @@ namespace quickbook
         // A generic markup action
 
         markup_action(
-        	collector& phrase,
-        	std::string const& str,
-        	quickbook::actions& actions)
+            collector& phrase,
+            std::string const& str,
+            quickbook::actions& actions)
         : phrase(phrase), str(str), actions(actions) {}
 
         template <typename T>
@@ -695,9 +695,9 @@ namespace quickbook
         // Handles links (URL, XML refentry, function, class, member)
 
         link_action(
-        	collector& phrase,
-        	char const* tag,
-        	quickbook::actions& actions)
+            collector& phrase,
+            char const* tag,
+            quickbook::actions& actions)
         : phrase(phrase), tag(tag), actions(actions) {}
 
         void operator()(iterator first, iterator last) const;
