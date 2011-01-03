@@ -53,13 +53,15 @@ std::vector<I1> newton_raphson(const I1& xs) {
     if (overlap(x1, x)) x1 = intersect(x, x1);
     else if (x2_used) { x1 = x2; x2_used = false; }
     else continue;
-    if (x2_used)
+    if (x2_used) {
       if (overlap(x2, x)) x2 = intersect(x, x2);
       else x2_used = false;
+    }
     if (x2_used && width(x2) > width(x1)) std::swap(x1, x2);
-    if (!zero_in(f(x1)))
+    if (!zero_in(f(x1))) {
       if (x2_used) { x1 = x2; x2_used = false; }
       else continue;
+    }
     if (width(x1) < max_width) res.push_back(x1);
     else if (width(x1) > alpha * width(x)) {
       std::pair<I1, I1> p = bisect(x);
@@ -67,9 +69,10 @@ std::vector<I1> newton_raphson(const I1& xs) {
       x2 = p.second;
       x2_used = true;
     } else l.push_back(x1);
-    if (x2_used && zero_in(f(x2)))
+    if (x2_used && zero_in(f(x2))) {
       if (width(x2) < max_width) res.push_back(x2);
       else l.push_back(x2);
+    }
   }
   return res;
 }
@@ -98,18 +101,20 @@ std::vector<I2> newton_raphson(const I2& xs) {
       x2 = intersect(x, xx - division_part2(vf, vd, x2_used));
     }
     if (width(x2) > width(x1)) std::swap(x1, x2);
-    if (empty(x1) || !zero_in(f(x1)))
+    if (empty(x1) || !zero_in(f(x1))) {
       if (!empty(x2)) { x1 = x2; x2 = I2::empty(); }
       else continue;
+    }
     if (width(x1) < max_width) res.push_back(x1);
     else if (width(x1) > alpha * width(x)) {
       std::pair<I2, I2> p = bisect(x);
       if (zero_in(f(p.first))) l.push_back(p.first);
       x2 = p.second;
     } else l.push_back(x1);
-    if (!empty(x2) && zero_in(f(x2)))
+    if (!empty(x2) && zero_in(f(x2))) {
       if (width(x2) < max_width) res.push_back(x2);
       else l.push_back(x2);
+    }
   }
   return res;
 }

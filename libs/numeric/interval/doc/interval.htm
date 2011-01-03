@@ -146,10 +146,10 @@
   methods (for instance, toward minus or plus infinity) if we want to
   guarantee the inclusion property. Note that we also may explicitely specify
   no rounding, for instance if the base number type is exact, i.e. the result
-  of a mathematic operation is always computed and represented without loss
+  of a mathematical operation is always computed and represented without loss
   of precision. If the number type is not exact, we may still explicitely
   specify no rounding, with the obvious consequence that the inclusion
-  property is no longuer guaranteed.</p>
+  property is no longer guaranteed.</p>
 
   <p>Finally, because heavy loss of precision is always possible, some
   numbers have to represent infinities or an exceptional behavior must be
@@ -214,7 +214,7 @@
 
   <p>This library provides two quite distinct levels of usage. One is to use
   the basic class template <code>interval&lt;T&gt;</code> without specifying
-  the policy. This only requires to know and understand the concepts
+  the policy. This only requires one to know and understand the concepts
   developed above and the content of the namespace boost. In addition to the
   class <code>interval&lt;T&gt;</code>, this level of usage provides
   arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>,
@@ -233,7 +233,7 @@
   <code>width</code>, <code>median</code>, <code>empty</code>,
   <code>singleton</code>, <code>equal</code>, <code>in</code>,
   <code>zero_in</code>, <code>subset</code>, <code>proper_subset</code>,
-  <code>overlap</code>, <code>intersection</code>, <code>hull</code>,
+  <code>overlap</code>, <code>intersect</code>, <code>hull</code>,
   <code>bisect</code>).</p>
 
   <p>For some functions which take several parameters of type
@@ -358,7 +358,7 @@ template &lt;class T, class Policies&gt;  bool proper_subset(const interval&lt;T
 template &lt;class T, class Policies&gt;  bool overlap(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 
 /* set manipulation interval functions */
-template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; intersection(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
+template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; intersect(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; hull(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; hull(const interval&lt;T, Policies&gt;&amp; x, const T&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; hull(const T&amp; x, const interval&lt;T, Policies&gt;&amp; y);
@@ -480,7 +480,7 @@ class interval
   set of values the intervals contain. E.g. with the default policies,
   intervals are subsets of the set of real numbers. The static functions
   <code>empty</code> and <code>whole</code> produce the intervals/subsets
-  that are repectively the empty subset and the whole set. They are static
+  that are respectively the empty subset and the whole set. They are static
   member functions rather than global functions because they cannot guess
   their return types. Likewise for <code>hull</code>. <code>empty</code> and
   <code>whole</code> involve the checking policy in order to get the bounds
@@ -566,7 +566,7 @@ class interval
   <p>The functions <code>division_part1</code> and
   <code>division_part2</code> are useful when the user expects the division
   to return disjoint intervals if necessary. For example, the narrowest
-  closed set containg [2,3] / [-2,1] is not ]-&infin;,&infin;[ but the union
+  closed set containing [2,3] / [-2,1] is not ]-&infin;,&infin;[ but the union
   of ]-&infin;,-1] and [2,&infin;[. When the result of the division is
   representable by only one interval, <code>division_part1</code> returns
   this interval and sets the boolean reference to <code>false</code>.
@@ -808,7 +808,7 @@ namespace compare {
 
   <h4>Comparisons</h4>
 
-  <p>One of the biggest problems is problably the correct use of the
+  <p>One of the biggest problems is probably the correct use of the
   comparison functions and operators. First, functions and operators do not
   try to know if two intervals are the same mathematical object. So, if the
   comparison used is "certain", then <code>x != x</code> is always true
@@ -831,7 +831,7 @@ namespace compare {
   be equal: <code>x/x</code> and 1, <code>x*x</code> and
   <code>square(x)</code>, <code>x-x</code> and 0, etc. So the main cause of
   wide intervals is that interval arithmetic does not identify different
-  occurences of the same variable. So, whenever possible, the user has to
+  occurrences of the same variable. So, whenever possible, the user has to
   rewrite the formulas to eliminate multiple occurences of the same variable.
   For example, <code>square(x)-2*x</code> is far less precise than
   <code>square(x-1)-1</code>.</p>
@@ -884,7 +884,7 @@ namespace compare {
   implementations of the rounding policy for the primitive types float and
   double. In order for these implementations to be correct and fast, the
   library needs to work a lot with rounding modes. Some processors are
-  directly dealt with and some mecanisms are provided in order to speed up
+  directly dealt with and some mechanisms are provided in order to speed up
   the computations. It seems to be heavy and hazardous optimizations for a
   gain of only a few computer cycles; but in reality, the speed-up factor can
   easily go past 2 or 3 depending on the computer. Moreover, these
