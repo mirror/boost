@@ -172,7 +172,7 @@ void insert_tests2(X*,
             BOOST_TEST(*pos == *r2);
             tracker.compare_key(x, *it);
 
-	        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
+            if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
                 BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
@@ -197,7 +197,7 @@ void insert_tests2(X*,
             tracker.insert(*it);
             tracker.compare_key(x, *it);
 
-	        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
+            if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
                 BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
