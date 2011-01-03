@@ -318,12 +318,9 @@ namespace quickbook
     {
         cond_phrase_push(quickbook::actions&);
         ~cond_phrase_push();
-        void success_impl();
 
         quickbook::actions& actions;
-        bool condition;
-        std::vector<std::string> saved_anchors;
-        bool popped;
+        bool saved_suppress;
     };
 
     struct list_action
@@ -738,8 +735,8 @@ namespace quickbook
     {
         // Handles table rows
 
-        start_row_action(collector& phrase, unsigned& span, std::string& header)
-            : phrase(phrase), span(span), header(header) {}
+        start_row_action(collector& phrase, unsigned& span, std::string& header, quickbook::actions& actions)
+            : phrase(phrase), span(span), header(header), actions(actions) {}
 
         void operator()(char) const;
         void operator()(iterator f, iterator) const;
@@ -747,17 +744,19 @@ namespace quickbook
         collector& phrase;
         unsigned& span;
         std::string& header;
+        quickbook::actions& actions;
     };
 
     struct col_action
     {
-        col_action(collector& phrase, unsigned& span)
-        : phrase(phrase), span(span) {}
+        col_action(collector& phrase, unsigned& span, quickbook::actions& actions)
+        : phrase(phrase), span(span), actions(actions) {}
 
         void operator()(std::string const&) const;
 
         collector& phrase;
         unsigned& span;
+        quickbook::actions& actions;
     };
 
     struct begin_section_action
@@ -938,8 +937,8 @@ namespace quickbook
         pre_output_action(quickbook::actions& actions)
             : actions(actions) {}
             
-        void operator()(collector& tgt) const;
-        void operator()(iterator, iterator) const;
+        bool operator()(collector& tgt) const;
+        bool operator()(iterator, iterator) const;
         
         quickbook::actions& actions;
     };

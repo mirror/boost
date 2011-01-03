@@ -74,6 +74,7 @@ namespace quickbook
         , anchors()
         , saved_anchors()
         , no_eols(true)
+        , suppress(false)
 
     // actions
         , error(error_count)
@@ -184,9 +185,9 @@ namespace quickbook
         , link_pre(phrase, link_pre_, *this)
         , link_post(phrase, link_post_, *this)
         , table(*this)
-        , start_row(phrase, table_span, table_header)
+        , start_row(phrase, table_span, table_header, *this)
         , end_row(phrase, end_row_, *this)
-        , cell(phrase, table_span)
+        , cell(phrase, table_span, *this)
         , anchor(*this)
 
         , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, element_id, *this)

@@ -47,7 +47,7 @@ namespace quickbook
     // Handles line-breaks (DEPRECATED!!!)
     void break_action::operator()(iterator first, iterator) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         position const pos = first.get_position();
         detail::outwarn(pos.file,pos.line) << "in column:" << pos.column << ", "
@@ -65,14 +65,14 @@ namespace quickbook
 
     void tagged_action::operator()(std::string const& str) const
     {
-        actions.output_pre(out);
+        if(!actions.output_pre(out)) return;
 
         out << pre << str << post;
     }
 
     void phrase_action::operator()() const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         std::string str;
         phrase.swap(str);
@@ -81,6 +81,8 @@ namespace quickbook
 
     void implicit_paragraph_action::operator()() const
     {
+        if(actions.suppress) return;
+    
         std::string str;
         phrase.swap(str);
 
@@ -106,6 +108,8 @@ namespace quickbook
 
     void header_action::operator()(iterator first, iterator last) const
     {
+        if(actions.suppress) return;
+
         std::string str;
         phrase.swap(str);
 
@@ -150,6 +154,8 @@ namespace quickbook
 
     void generic_header_action::operator()(iterator first, iterator last) const
     {
+        if(actions.suppress) return;
+
         int level_ = section_level + 2;     // section_level is zero-based. We need to use a
                                             // 0ne-based heading which is one greater
                                             // than the current. Thus: section_level + 2.
@@ -182,7 +188,8 @@ namespace quickbook
 
     void simple_phrase_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(out);
+        if(!actions.output_pre(out)) return;
+
         out << pre;
         std::string str(first, last);
         if (std::string const* ptr = find(macro, str.c_str()))
@@ -205,34 +212,20 @@ namespace quickbook
 
     cond_phrase_push::cond_phrase_push(quickbook::actions& actions)
         : actions(actions)
-        , condition(actions.condition)
-        , saved_anchors(actions.anchors)
-        , popped(false)
+        , saved_suppress(actions.suppress)
     {
-        actions.phrase.push();
+        actions.suppress = actions.suppress || !actions.condition;
     }
     
     cond_phrase_push::~cond_phrase_push()
     {
-        if(!popped) {
-            actions.phrase.pop();
-            actions.anchors.swap(saved_anchors);
-        }
-    }
-
-    void cond_phrase_push::success_impl()
-    {
-        if(condition) {
-            std::string tmp;
-            actions.phrase.swap(tmp);
-            actions.phrase.pop();
-            actions.phrase.swap(tmp);
-            popped = true;
-        }
+        actions.suppress = saved_suppress;
     }
 
     void list_action::operator()(iterator first, iterator last) const
     {
+        if(actions.suppress) return;
+    
         BOOST_ASSERT(!list_marks.empty()); // there must be at least one item in the stack
         out << list_buffer.str();
         list_buffer.clear();
@@ -251,10 +244,7 @@ namespace quickbook
 
     void list_format_action::operator()(iterator first, iterator last) const
     {
-        // I think this will only have an effect on the first item,
-        // it would have been called when outputting the previous
-        // item on other items. But might as well call it every time.
-        actions.output_pre(out);
+        if(!actions.output_pre(out)) return;
     
         int new_indent = 0;
         while (first != last && (*first == ' ' || *first == '\t'))
@@ -327,6 +317,8 @@ namespace quickbook
         }
     }
 
+    // TODO: No need to check suppress since this is only used in the syntax
+    //       highlighter. I should moved this or something.
     void span::operator()(iterator first, iterator last) const
     {
         out << "<phrase role=\"" << name << "\">";
@@ -353,12 +345,13 @@ namespace quickbook
 
     void anchor_action::operator()(iterator first, iterator last) const
     {
-        actions.anchors.push_back(std::string(first, last));
+        if(!actions.suppress)
+            actions.anchors.push_back(std::string(first, last));
     }
 
     void do_macro_action::operator()(std::string const& str) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         if (str == quickbook_get_date)
         {
@@ -403,6 +396,8 @@ namespace quickbook
 
     void code_action::operator()(iterator first, iterator last) const
     {
+        if(!actions.output_pre(out)) return;
+
         // preprocess the code section to remove the initial indentation
         std::string program(first, last);
         detail::unindent(program);
@@ -427,7 +422,6 @@ namespace quickbook
         // We must not place a \n after the <programlisting> tag
         // otherwise PDF output starts code blocks with a blank line:
         //
-        actions.output_pre(out);
         out << "<programlisting>";
         out << str;
         out << "</programlisting>\n";
@@ -435,6 +429,8 @@ namespace quickbook
 
     void inline_code_action::operator()(iterator first, iterator last) const
     {
+        if(!actions.output_pre(out)) return;
+
         std::string save;
         out.swap(save);
 
@@ -443,7 +439,6 @@ namespace quickbook
 
         out.swap(save);
 
-        actions.output_pre(out);
         out << "<code>";
         out << str;
         out << "</code>";
@@ -451,31 +446,31 @@ namespace quickbook
 
     void raw_char_action::operator()(char ch) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
         phrase << ch;
     }
 
     void raw_char_action::operator()(iterator first, iterator /*last*/) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
         phrase << *first;
     }
 
     void plain_char_action::operator()(char ch) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
         detail::print_char(ch, phrase.get());
     }
 
     void plain_char_action::operator()(iterator first, iterator /*last*/) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
         detail::print_char(*first, phrase.get());
     }
 
     void escape_unicode_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         while(first != last && *first == '0') ++first;
 
@@ -509,7 +504,7 @@ namespace quickbook
 
     void image_action::operator()(iterator, iterator) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         fs::path const img_path(image_fileref);
         
@@ -615,12 +610,14 @@ namespace quickbook
 
     void macro_identifier_action::operator()(iterator first, iterator last) const
     {
+        if(actions.suppress) return;
         actions.macro_id.assign(first, last);
         actions.phrase.push(); // save the phrase
     }
 
     void macro_definition_action::operator()(iterator first, iterator last) const
     {
+        if(actions.suppress) return;
         actions.copy_macros_for_write();
         actions.macro.add(
             actions.macro_id.begin()
@@ -631,6 +628,7 @@ namespace quickbook
 
     void template_body_action::operator()(iterator first, iterator last) const
     {
+        if(actions.suppress) return;
         if (!actions.templates.add(
             template_symbol(actions.template_identifier, actions.template_info,
                 std::string(first, last), first.get_position(),
@@ -844,6 +842,8 @@ namespace quickbook
 
     void template_arg_action::operator()(iterator first, iterator last) const
     {
+        if(actions.suppress) return;
+
         actions.template_args.push_back(
             template_body(
                 std::string(first, last),
@@ -853,6 +853,8 @@ namespace quickbook
 
     void do_template_action::operator()(iterator first, iterator) const
     {
+        if(actions.suppress) return;
+
         // Get the arguments and clear values stored in action.
 
         std::vector<template_body> args;
@@ -1042,7 +1044,7 @@ namespace quickbook
 
     void link_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         iterator save = first;
         phrase << tag;
@@ -1065,6 +1067,8 @@ namespace quickbook
 
     void variablelist_action::operator()(iterator, iterator) const
     {
+        if(actions.suppress) return;
+
         actions.out << "<variablelist>\n";
 
         actions.out << "<title>";
@@ -1086,6 +1090,8 @@ namespace quickbook
 
     void table_action::operator()(iterator, iterator) const
     {
+        if(actions.suppress) return;
+
         std::string::iterator first = actions.table_title.begin();
         std::string::iterator last = actions.table_title.end();
         bool has_title = first != last;
@@ -1154,6 +1160,8 @@ namespace quickbook
 
     void start_row_action::operator()(char) const
     {
+        if (actions.suppress) return;
+
         // the first row is the header
         if (header.empty() && !phrase.str().empty())
         {
@@ -1171,12 +1179,15 @@ namespace quickbook
 
     void col_action::operator()(std::string const& contents) const
     {
+        if(actions.suppress) return;
         phrase << start_cell_ << contents << end_cell_;
         ++span;
     }
 
     void begin_section_action::operator()(iterator first, iterator last) const
     {    
+        if(actions.suppress) return;
+
         section_id = element_id.empty() ?
             detail::make_identifier(first, last) :
             element_id;
@@ -1224,7 +1235,7 @@ namespace quickbook
 
     void end_section_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(out);
+        if(!actions.output_pre(out)) return;
 
         if (section_level <= min_section_level)
         {
@@ -1293,7 +1304,7 @@ namespace quickbook
 
     void xinclude_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(out);
+        if(!actions.output_pre(out)) return;
 
         fs::path path = calculate_relative_path(first, last, actions);
         out << "\n<xi:include href=\"";
@@ -1334,7 +1345,7 @@ namespace quickbook
 
     void import_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(actions.out);
+        if(!actions.output_pre(actions.out)) return;
 
         fs::path path = include_search(actions.filename.parent_path(), std::string(first,last));
         std::string ext = path.extension();
@@ -1358,7 +1369,7 @@ namespace quickbook
 
     void include_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(actions.out);
+        if(!actions.output_pre(actions.out)) return;
 
         fs::path filein = include_search(actions.filename.parent_path(), std::string(first,last));
         std::string doc_type, doc_id;
@@ -1430,7 +1441,7 @@ namespace quickbook
 
     void phrase_to_string_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         out.clear();
         phrase.swap(out);
@@ -1438,7 +1449,7 @@ namespace quickbook
 
     void phrase_to_docinfo_action::operator()(iterator first, iterator last) const
     {
-        actions.output_pre(phrase);
+        if(!actions.output_pre(phrase)) return;
 
         out.encoded.clear();
         phrase.swap(out.encoded);
@@ -1447,17 +1458,24 @@ namespace quickbook
     
     void inner_phrase_action_pre::operator()(iterator, iterator) const
     {
+        // TODO: Really?
+        if(actions.suppress) return;
+
         actions.saved_anchors.clear();
         actions.saved_anchors.swap(actions.anchors);
     }
 
     void inner_phrase_action_post::operator()(iterator, iterator) const
     {
+        if(actions.suppress) return;
+
         actions.output_pre(actions.phrase);
     }
 
-    void pre_output_action::operator()(collector& tgt) const
+    bool pre_output_action::operator()(collector& tgt) const
     {
+        if(actions.suppress) return false;
+
         for(quickbook::actions::string_list::iterator
             it = actions.anchors.begin(),
             end = actions.anchors.end();
@@ -1469,11 +1487,13 @@ namespace quickbook
         }
         
         actions.anchors.clear();
+
+        return true;
     }
     
-    void pre_output_action::operator()(iterator, iterator) const
+    bool pre_output_action::operator()(iterator, iterator) const
     {
-        (*this)(actions.out);
+        return (*this)(actions.out);
     }
 
     scoped_block_push::scoped_block_push(quickbook::actions& actions)
@@ -1491,6 +1511,8 @@ namespace quickbook
 
     std::string const& scoped_block_push::success_impl()
     {
+        // TODO: This should probably return an empty string
+        // if actions.suppress is true.
         actions.inside_paragraph();
         return actions.out.str();
     }
