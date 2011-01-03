@@ -109,6 +109,8 @@ namespace quickbook
             static_cast<Derived*>(this)->success_impl();
             return void_type();
         }
+        
+        void success_impl() {}
     };
 
     struct error_action
@@ -161,7 +163,10 @@ namespace quickbook
         , post(post)
         , actions(actions) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator first, iterator last) const { return (*this)(); }
+        template <typename T>
+        void operator()(T const&) const { return (*this)(); }
+        void operator()() const;
 
         collector& out;
         collector& phrase;
@@ -946,6 +951,15 @@ namespace quickbook
         std::string const& success_impl();
 
         quickbook::actions& actions;
+    };
+
+    struct set_no_eols_scoped : scoped_action_base<set_no_eols_scoped>
+    {
+        set_no_eols_scoped(quickbook::actions&);
+        ~set_no_eols_scoped();
+
+        quickbook::actions& actions;
+        bool saved_no_eols;
     };
 }
 

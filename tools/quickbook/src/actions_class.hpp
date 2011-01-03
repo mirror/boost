@@ -118,6 +118,7 @@ namespace quickbook
         attribute_map           attributes;
         string_list             anchors;
         string_list             saved_anchors;
+        bool                    no_eols;
 
     // push/pop the states and the streams
         void copy_macros_for_write();
@@ -153,6 +154,8 @@ namespace quickbook
         header_action           h1, h2, h3, h4, h5, h6;
         markup_action           hr;
         tagged_action           blurb, blockquote;
+        scoped_parser<set_no_eols_scoped>
+                                set_no_eols;
         phrase_action           preformatted;
         tagged_action           warning, caution, important, note, tip;
         space                   space_char;

@@ -68,6 +68,9 @@ namespace quickbook
         , image_fileref()
         , attribute_name()
         , attributes()
+        , anchors()
+        , saved_anchors()
+        , no_eols(true)
 
     // actions
         , error(error_count)
@@ -99,6 +102,7 @@ namespace quickbook
         , hr(out, hr_, *this)
         , blurb(out, blurb_pre, blurb_post, *this)
         , blockquote(out, blockquote_pre, blockquote_post, *this)
+        , set_no_eols(*this)
         , preformatted(out, phrase, preformatted_pre, preformatted_post, *this)
         , warning(out, warning_pre, warning_post, *this)
         , caution(out, caution_pre, caution_post, *this)

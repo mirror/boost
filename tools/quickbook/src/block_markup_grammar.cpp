@@ -161,9 +161,9 @@ namespace quickbook
             ;
 
         local.preformatted =
-            space                               [cl::assign_a(no_eols, false_)]
-            >> !eol >> phrase                   [actions.preformatted]
-            >> cl::eps_p                        [cl::assign_a(no_eols, true_)]
+                space
+            >>  !eol
+            >>  actions.set_no_eols[phrase]     [actions.preformatted]
             ;
 
         block_keyword_rules.add

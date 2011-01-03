@@ -22,7 +22,6 @@ namespace quickbook
     struct quickbook_grammar::impl
     {
         quickbook::actions& actions;
-        bool no_eols;
         rule_store store_;
 
         // Main Grammar

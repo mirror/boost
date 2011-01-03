@@ -422,7 +422,7 @@ namespace quickbook
 
         phrase_end =
             ']' |
-            cl::if_p(var(no_eols))
+            cl::if_p(var(actions.no_eols))
             [
                 cl::eol_p >> *cl::blank_p >> cl::eol_p
                                                 // Make sure that we don't go

@@ -70,7 +70,7 @@ namespace quickbook
         out << pre << str << post;
     }
 
-    void phrase_action::operator()(iterator first, iterator last) const
+    void phrase_action::operator()() const
     {
         actions.output_pre(phrase);
 
@@ -1495,5 +1495,16 @@ namespace quickbook
     {
         actions.inside_paragraph();
         return actions.out.str();
+    }
+
+    set_no_eols_scoped::set_no_eols_scoped(quickbook::actions& actions)
+        : actions(actions), saved_no_eols(actions.no_eols)
+    {
+        actions.no_eols = false;
+    }
+
+    set_no_eols_scoped::~set_no_eols_scoped()
+    {
+        actions.no_eols = saved_no_eols;
     }
 }

@@ -30,7 +30,6 @@ namespace quickbook
 
     quickbook_grammar::impl::impl(quickbook::actions& a)
         : actions(a)
-        , no_eols(true)
         , store_()
     {
         init_main();
