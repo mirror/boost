@@ -13,8 +13,9 @@ boost::intmax_t func(boost::ratio<5,6>  s) {
 }
 
 void test() {
+    boost::ratio<10,12> r;
     BOOST_TEST((
-        func(boost::ratio<10,12>() )==5
+        func(r)==5
     ));
 }
 
