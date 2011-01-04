@@ -19,7 +19,8 @@ test::seed_t seed(2974);
 template <class X>
 bool postcondition(X const& x, BOOST_DEDUCED_TYPENAME X::size_type n)
 {
-    return x.bucket_count() > x.size() / x.max_load_factor() &&
+    return static_cast<double>(x.bucket_count()) >
+        static_cast<double>(x.size()) / x.max_load_factor() &&
         x.bucket_count() >= n;
 }
 

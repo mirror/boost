@@ -51,7 +51,7 @@ void insert_test(X*, float mlf,
         BOOST_DEDUCED_TYPENAME X::size_type old_size = x.size(),
                  old_bucket_count = x.bucket_count();
         x.insert(*it);
-        if(old_size + 1 < b * old_bucket_count)
+        if(static_cast<double>(old_size + 1) < b * static_cast<double>(old_bucket_count))
             BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 }

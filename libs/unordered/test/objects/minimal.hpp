@@ -26,6 +26,8 @@ namespace minimal
     class default_copy_constructible;
     class assignable;
 
+    struct ampersand_operator_used {};
+
     template <class T> class hash;
     template <class T> class equal_to;
     template <class T> class ptr;
@@ -63,6 +65,7 @@ namespace minimal
         copy_constructible_equality_comparable& operator=(
             copy_constructible_equality_comparable const&);
         copy_constructible_equality_comparable() {}
+        ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     bool operator==(
@@ -98,9 +101,11 @@ namespace minimal
         ~default_copy_constructible()
         {
         }
+
     private:
         default_copy_constructible& operator=(
             default_copy_constructible const&);
+        ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     class assignable
@@ -110,8 +115,11 @@ namespace minimal
         assignable(assignable const&) {}
         assignable& operator=(assignable const&) { return *this; }
         ~assignable() {}
+
     private:
         assignable() {}
+        // TODO: This messes up a concept check in the tests.
+        //ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     template <class T>
@@ -125,6 +133,8 @@ namespace minimal
         ~hash() {}
 
         std::size_t operator()(T const&) const { return 0; }
+    private:
+        ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     template <class T>
@@ -138,6 +148,8 @@ namespace minimal
         ~equal_to() {}
 
         bool operator()(T const&, T const&) const { return true; }
+    private:
+        ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     template <class T> class ptr;
@@ -182,6 +194,9 @@ namespace minimal
         bool operator>(const_ptr<T> const& x) const { return ptr_ > x.ptr_; }
         bool operator<=(const_ptr<T> const& x) const { return ptr_ <= x.ptr_; }
         bool operator>=(const_ptr<T> const& x) const { return ptr_ >= x.ptr_; }
+    private:
+        // TODO:
+        //ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     template <class T>
@@ -221,6 +236,9 @@ namespace minimal
         bool operator>(const_ptr const& x) const { return ptr_ > x.ptr_; }
         bool operator<=(const_ptr const& x) const { return ptr_ <= x.ptr_; }
         bool operator>=(const_ptr const& x) const { return ptr_ >= x.ptr_; }
+    private:
+        // TODO:
+        //ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     template <class T>
@@ -278,6 +296,8 @@ namespace minimal
 #else
     private: allocator& operator=(allocator const&);
 #endif
+    private:
+        ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
     template <class T>
