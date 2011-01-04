@@ -399,16 +399,12 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
                   ($boost.include.libraries='' or
                    contains($boost.include.libraries, @id))">
       <chapter>
-        <xsl:attribute name="id">
-          <xsl:choose>
-            <xsl:when test="@id">
-              <xsl:value-of select="@id"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="generate.id"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
+        <xsl:copy-of select="@*[not(contains(' last-revision name dirname html-only url ', concat(' ',local-name(),' ')))]"/>
+        <xsl:if test="not(@id)">
+          <xsl:attribute name="id">
+            <xsl:call-template name="generate.id"/>
+          </xsl:attribute>
+        </xsl:if>
 
         <xsl:if test="@last-revision">
           <xsl:attribute
@@ -437,7 +433,10 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   </xsl:template>
 
   <xsl:template match="boostbook">
-    <book><xsl:copy-of select="@*"/><xsl:apply-templates/></book>
+    <book>
+      <xsl:copy-of select="@*[not(contains(' last-revision name dirname html-only url ', concat(' ',local-name(),' ')))]"/>
+      <xsl:apply-templates/>
+    </book>
   </xsl:template>
 
   <xsl:template match="programlisting">
