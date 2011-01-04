@@ -11,8 +11,8 @@
 #include <numeric>
 #include <functional>
 #include <algorithm>
-#include <boost/filesystem/v2/convenience.hpp>
-#include <boost/filesystem/v2/fstream.hpp>
+#include <boost/filesystem/v3/convenience.hpp>
+#include <boost/filesystem/v3/fstream.hpp>
 #include <boost/lexical_cast.hpp>
 #include "quickbook.hpp"
 #include "actions.hpp"
@@ -509,7 +509,9 @@ namespace quickbook
         fs::path const img_path(image_fileref);
         
         attribute_map::iterator it = attributes.find("alt");
-        std::string alt_text = it != attributes.end() ? it->second : img_path.stem();
+        std::string alt_text = it != attributes.end() ?
+            it->second :
+            img_path.stem().generic_string();
         attributes.erase("alt");
 
         attributes.insert(attribute_map::value_type("fileref", image_fileref));
@@ -1294,9 +1296,9 @@ namespace quickbook
         fs::path path(std::string(first, last));
         if (!path.is_complete())
         {
-            fs::path infile = fs::complete(actions.filename).normalize();
+            fs::path infile = fs::absolute(actions.filename).normalize();
             path = (infile.parent_path() / path).normalize();
-            fs::path outdir = fs::complete(actions.outdir).normalize();
+            fs::path outdir = fs::absolute(actions.outdir).normalize();
             path = path_difference(outdir, path);
         }
         return path;
@@ -1348,7 +1350,7 @@ namespace quickbook
         if(!actions.output_pre(actions.out)) return;
 
         fs::path path = include_search(actions.filename.parent_path(), std::string(first,last));
-        std::string ext = path.extension();
+        std::string ext = path.extension().generic_string();
         std::vector<template_symbol> storage;
         actions.error_count +=
             load_snippets(path.string(), storage, ext, actions.doc_id);
@@ -1412,10 +1414,10 @@ namespace quickbook
         }
 
         // update the __FILENAME__ macro
-        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.file_string();
+        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.native();
 
         // parse the file
-        quickbook::parse_file(actions.filename.file_string().c_str(), actions, true);
+        quickbook::parse_file(actions.filename.native().c_str(), actions, true);
 
         // restore the values
         std::swap(actions.filename, filein);

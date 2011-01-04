@@ -15,7 +15,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
-#include <boost/filesystem/v2/operations.hpp>
+#include <boost/filesystem/v3/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 #include "fwd.hpp"
