@@ -12,7 +12,10 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/ratio.hpp>
+#include <boost/integer_traits.hpp>
 
-typedef boost::ratio<BOOST_RATIO_INTMAX_C(0x7FFFFFFFFFFFFFFF), 1> R1;
+#define BOOST_RATIO_INTMAX_T_MAX boost::integer_traits<boost::intmax_t>::const_max
+
+typedef boost::ratio<BOOST_RATIO_INTMAX_T_MAX, 1> R1;
 typedef boost::ratio<1, 1> R2;
 typedef boost::ratio_add<R1, R2>::type RT;
