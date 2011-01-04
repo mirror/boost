@@ -18,9 +18,9 @@ if ! $(BOOST_ROOT)
 
 project
     : requirements
-        <os>LINUX:<threading>multi
+        #<os>LINUX:<threading>multi
         # uncomment the line above if you build outside the Boost release
-        #<include>$(BOOST_ROOT) 
+        #<include>$(BOOST_ROOT)
         # uncomment the line above if you build outside the Boost release
         #<include>../../..
         <toolset>msvc:<asynch-exceptions>on
@@ -29,9 +29,14 @@ project
         <define>BOOST_MPL_NEXT_PRIOR_EXT
         <warnings>all
         <toolset>gcc:<cxxflags>-Wextra
-        <toolset>gcc:<cxxflags>-Wno-long-long        
-        <toolset>gcc-mingw-4.5.0:<cxxflags>-Wno-missing-field-initializers        
+        <toolset>gcc:<cxxflags>-Wno-long-long
+        <toolset>gcc:<cxxflags>-pedantic
+        <toolset>darwin:<cxxflags>-Wextra
+        <toolset>darwin:<cxxflags>-Wno-long-long
+        <toolset>darwin:<cxxflags>-pedantic
+        <toolset>gcc-mingw-4.5.0:<cxxflags>-Wno-missing-field-initializers
         <toolset>gcc-mingw-4.5.0:<cxxflags>-fdiagnostics-show-option
+        <toolset>gcc-mingw-4.6.0:<cxxflags>-fdiagnostics-show-option
         <toolset>msvc:<cxxflags>/wd4127
     ;
 
@@ -94,5 +99,5 @@ project
         [ compile ratio_extensions/mpl_less_equal_pass.cpp  ]
         [ compile ratio_extensions/mpl_greater_pass.cpp  ]
         [ compile ratio_extensions/mpl_greater_equal_pass.cpp  ]
-        
+
         ;
