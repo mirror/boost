@@ -124,7 +124,7 @@ void gzip_header::process(char c)
         }
         break;
     default:
-        assert(0);
+        BOOST_ASSERT(0);
     }
 }
 
@@ -159,7 +159,7 @@ void gzip_footer::process(char c)
             ++offset_;
         }
     } else {
-        assert(0);
+        BOOST_ASSERT(0);
     }
 }
 

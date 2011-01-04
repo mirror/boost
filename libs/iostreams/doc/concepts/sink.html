@@ -47,7 +47,7 @@
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">struct</SPAN> Sink {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>      char_type;
     <SPAN CLASS="keyword">typedef</SPAN> sink_tag  category;
-    <SPAN CLASS="keyword">void</SPAN> write(<SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
+    std::streamsize write(<SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
     {
         <SPAN CLASS="comment">// Write up to n characters from the buffer
         // s to the output sequence, returning the 
