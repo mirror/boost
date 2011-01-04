@@ -11,8 +11,8 @@ project hash-tests
         <warnings>all
         <toolset>intel:<warnings>on
         <toolset>intel:<cxxflags>-strict-ansi
-        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
-        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
+        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
+        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
         <toolset>msvc:<warnings-as-errors>on
         #<toolset>gcc:<warnings-as-errors>on
         #<toolset>darwin:<warnings-as-errors>on
@@ -25,8 +25,8 @@ test-suite functional/hash
         [ run hash_number_test.cpp ]
         [ run hash_pointer_test.cpp ]
         [ run hash_function_pointer_test.cpp ]
-        [ run hash_float_test.cpp : : : <test-info>always_show_run_output ]
-        [ run hash_long_double_test.cpp : : : <test-info>always_show_run_output ]
+        [ run hash_float_test.cpp ]
+        [ run hash_long_double_test.cpp ]
         [ run hash_string_test.cpp ]
         [ run hash_range_test.cpp ]
         [ run hash_custom_test.cpp ]

@@ -210,8 +210,8 @@ namespace boost
 #endif
     {
 #if defined(__VMS) && __INITIAL_POINTER_SIZE == 64
-	// for some reason ptrdiff_t on OpenVMS compiler with
-	// 64 bit is not 64 bit !!!
+    // for some reason ptrdiff_t on OpenVMS compiler with
+    // 64 bit is not 64 bit !!!
         std::size_t x = static_cast<std::size_t>(
            reinterpret_cast<long long int>(v));
 #else

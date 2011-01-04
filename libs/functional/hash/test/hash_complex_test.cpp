@@ -69,7 +69,7 @@ void complex_float_tests(Float*)
     generic_complex_tests(complex(0.5,0));
     generic_complex_tests(complex(25,0));
     generic_complex_tests(complex(25,0));
-    generic_complex_tests(complex(-67.5324535,56.23578678));
+    generic_complex_tests(complex(static_cast<Float>(-67.5324535),static_cast<Float>(56.23578678)));
 }
 
 template <class Integer>
