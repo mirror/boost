@@ -60,6 +60,8 @@ run test_extreme_value.cpp ;
 run test_extreme_value_distribution.cpp /boost//unit_test_framework ;
 run test_negative_binomial.cpp ;
 run test_negative_binomial_distribution.cpp /boost//unit_test_framework ;
+run test_chi_squared.cpp ;
+run test_chi_squared_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
