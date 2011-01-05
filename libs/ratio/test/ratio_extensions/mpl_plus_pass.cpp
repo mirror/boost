@@ -20,8 +20,6 @@
 #define NOTHING ""
 #endif
 
-void test();
-
 void test()
 {
     {
@@ -82,13 +80,11 @@ void test()
 
 }
 
-boost::intmax_t func(boost::ratio<5,6> s);
 boost::intmax_t func(boost::ratio<5,6> s) {
     return s.num;
 }
 
 
-boost::intmax_t test_conversion();
 boost::intmax_t test_conversion() {
     return func(
             boost::mpl::plus<
