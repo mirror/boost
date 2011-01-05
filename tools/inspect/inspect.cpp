@@ -152,11 +152,6 @@ namespace
       // don't look at binaries
       && leaf != "bin"
       && leaf != "bin.v2"
-      // this really out of our hands
-      && local.find("tools/build/v2/engine") != 0
-      && local.find("tools\\build\\v2\\engine") != 0
-      // too many issues with generated HTML files
-      && leaf != "status"
       // no point in checking doxygen xml output
       && local.find("doc/xml") != 0
       && local.find("doc\\xml") != 0
@@ -169,6 +164,8 @@ namespace
       && leaf != ".bzr"
       // ignore OS X directory info files:
       && leaf != ".DS_Store"
+      // ignore if tag file present
+      && !boost::filesystem::exists(pth / "boost-no-inspect")
       ;
   }
 
