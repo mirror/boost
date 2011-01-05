@@ -313,19 +313,11 @@ BOOST_AUTO_TEST_CASE(test_output_autoprefixed_quantity_name)
     BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::max()*meter_base_unit::unit_type(), "1.79769e+308 meter");
     BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::min()*meter_base_unit::unit_type(), "2.22507e-308 meter");
    // Infinity and NaN
-#if defined(_MSC_VER)
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "1.#INF meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "-1.#INF meter");
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "1.#QNAN meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "-1.#IND meter");
-#elif defined(__GLIBCXX__)
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "inf meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "-inf meter");
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "nan meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "-nan meter");
-#else
-    // TODO infinity on other platforms?
-#endif
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "(1\\.#INF|inf) meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(-std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "-(1\\.#INF|inf) meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "(1\\.#QNAN|nan) meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(-std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "-?(1\\.#IND|nan) meter");
+
     BOOST_UNITS_TEST_OUTPUT(1.5*velocity(), "1.5 meter second^-1");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_length(), "1.5 kilometer");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_velocity1(), "1.5 kilo(meter second^-1)");
