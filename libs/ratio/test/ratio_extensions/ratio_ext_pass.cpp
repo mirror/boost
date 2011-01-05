@@ -8,9 +8,13 @@
 #include <boost/ratio.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
+boost::intmax_t func(boost::ratio<5,6>  s);
+
 boost::intmax_t func(boost::ratio<5,6>  s) {
     return s.num;    
 }
+
+void test();
 
 void test() {
     boost::ratio<10,12> r;

@@ -20,6 +20,8 @@
 #define NOTHING ""
 #endif
 
+void test();
+
 void test()
 {
     {
@@ -71,20 +73,22 @@ void test()
     typedef boost::mpl::plus<R1, R2, R3> R;
     BOOST_RATIO_STATIC_ASSERT(R::num == 127970191639601LL && R::den == 5177331081415LL, NOTHING, ());
     }
-    //~ {
-    //~ typedef boost::ratio<BOOST_RATIO_INTMAX_C(0x7FFFFFFFFFFFFFFF), 1> R1;
-    //~ typedef boost::ratio<-1, 1> R2;
-    //~ typedef boost::mpl::int_<0> R3;
-    //~ typedef boost::mpl::plus<R1, R2, R3>::type RT;
-    //~ }
+    {
+    typedef boost::ratio<BOOST_RATIO_INTMAX_C(0x7FFFFFFFFFFFFFFF), 1> R1;
+    typedef boost::ratio<-1, 1> R2;
+    typedef boost::mpl::int_<0> R3;
+    typedef boost::mpl::plus<R1, R2, R3>::type RT;
+    }
 
 }
 
+boost::intmax_t func(boost::ratio<5,6> s);
 boost::intmax_t func(boost::ratio<5,6> s) {
     return s.num;
 }
 
 
+boost::intmax_t test_conversion();
 boost::intmax_t test_conversion() {
     return func(
             boost::mpl::plus<
