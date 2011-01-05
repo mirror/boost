@@ -81,6 +81,7 @@ namespace boost {
 #include <boost/random/binomial_distribution.hpp>
 #include <boost/random/negative_binomial_distribution.hpp>
 #include <boost/random/chi_squared_distribution.hpp>
+#include <boost/random/fisher_f_distribution.hpp>
 #include <boost/random/uniform_on_sphere.hpp>
 
 #endif // BOOST_RANDOM_HPP
