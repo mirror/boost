@@ -166,7 +166,10 @@ private:                                      // Example value
     //[large_bitset_segment_apply
     large_bitset& segment_apply(segment_combiner combine, const interval_type& operand)
     {
-        using namespace boost;                              // same as
+        using namespace boost;
+        if(icl::is_empty(operand))
+            return *this;
+                                                            // same as
         element_type   base = icl::first(operand) >> shift, // icl::first(operand) / divisor
                        ceil = icl::last (operand) >> shift; // icl::last (operand) / divisor
         word_type base_rest = icl::first(operand) &  mask , // icl::first(operand) % divisor
