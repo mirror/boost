@@ -38,6 +38,10 @@ project
         <toolset>gcc-mingw-4.5.0:<cxxflags>-fdiagnostics-show-option
         <toolset>gcc-mingw-4.6.0:<cxxflags>-fdiagnostics-show-option
         <toolset>msvc:<cxxflags>/wd4127
+# Note: Some of the remarks from the Intel compiler are disabled
+# remark #1418: external function definition with no prior declaration
+# remark #304: access control not specified ("public" by default)
+        <toolset>intel:<cxxflags>-w304,1418
     ;
 
     test-suite "ratio.ratio"
