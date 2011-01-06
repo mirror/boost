@@ -102,7 +102,13 @@ class StoragePolicy
 #include <functional>
 #include <limits>
 #include <stdexcept>
-#include <iosfwd>
+
+#if defined(__PATHSCALE__)
+  #include <ios>
+#else
+  #include <iosfwd>
+#endif
+
 #include <cstddef>
 #include <cstring>
 #include <cstdlib>
