@@ -13,11 +13,6 @@
 
 #include <boost/config.hpp>
 
-
-#if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))
-#undef BOOST_NO_CONSTEXPR
-#endif
-
 //  BOOST_CHRONO_POSIX_API, BOOST_CHRONO_MAC_API, or BOOST_CHRONO_WINDOWS_API
 //  can be defined by the user to specify which API should be used
 

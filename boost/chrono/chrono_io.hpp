@@ -13,6 +13,8 @@
 #ifndef BOOST_CHRONO_CHRONO_IO_HPP
 #define BOOST_CHRONO_CHRONO_IO_HPP
 
+#define BOOST_CHRONO_IO_INPUT
+
 #include <boost/chrono/chrono.hpp>
 #include <boost/ratio/ratio_io.hpp>
 #include <locale>
@@ -263,7 +265,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                     std::ios_base::iostate err = std::ios_base::goodbit;
                     const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
                                   units, units + sizeof(units)/sizeof(units[0]),
-                                  std::use_facet<std::ctype<CharT> >(loc),
+                                  //~ std::use_facet<std::ctype<CharT> >(loc),
                                   err);
                     switch ((k - units) / 2)
                     {
@@ -321,7 +323,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                     std::ios_base::iostate err = std::ios_base::goodbit;
                     const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
                                   units, units + sizeof(units)/sizeof(units[0]),
-                                  std::use_facet<std::ctype<CharT> >(loc),
+                                  //~ std::use_facet<std::ctype<CharT> >(loc),
                                   err);
                     switch ((k - units) / 2)
                     {
@@ -636,7 +638,7 @@ operator>>(std::basic_istream<CharT, Traits>& is,
         in_iterator e;
         std::ptrdiff_t k = chrono_detail::scan_keyword(i, e,
                       &units, &units + 1,
-                      std::use_facet<std::ctype<CharT> >(is.getloc()),
+                      //~ std::use_facet<std::ctype<CharT> >(is.getloc()),
                       err) - &units;
         if (k == 1)
         {
