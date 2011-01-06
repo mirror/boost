@@ -61,7 +61,7 @@ rule chrono-run ( sources )
         :   $(sources[1]:B)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : : 
-        :  <library>/boost/system//boost_system
+        :  <define>BOOST_USE_WINDOWS_H <library>/boost/system//boost_system
         :  $(sources[1]:B)_static ]
 #    [ run $(sources)
 #        : : 
