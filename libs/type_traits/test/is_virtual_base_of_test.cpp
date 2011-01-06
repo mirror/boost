@@ -28,14 +28,14 @@ public:
 class non_virtual_base
 {
 public:
-	non_virtual_base();
+   non_virtual_base();
 };
 class non_virtual_derived : public non_virtual_base
 {
 public:
-	non_virtual_derived();
-	virtual int Y();
-	virtual int X();
+   non_virtual_derived();
+   virtual int Y();
+   virtual int X();
 };
 
 TT_TEST_BEGIN(is_virtual_base_of)

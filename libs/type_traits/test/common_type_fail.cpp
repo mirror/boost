@@ -24,5 +24,4 @@ struct C2 {};
 
 
 typedef tt::common_type<C1, C2>::type AC;
-   
-    
+
