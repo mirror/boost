@@ -15,6 +15,7 @@
 #include <boost/assert.hpp>
 
 #include <sys/time.h> //for gettimeofday and timeval
+#include <sys/times.h> //for times
 # include <unistd.h>
 
 
