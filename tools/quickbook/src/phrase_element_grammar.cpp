@@ -20,7 +20,7 @@ namespace quickbook
 {
     namespace cl = boost::spirit::classic;
 
-    struct phrase_markup_grammar_local
+    struct phrase_element_grammar_local
     {
         cl::rule<scanner>
                         image,
@@ -34,11 +34,11 @@ namespace quickbook
                         ;
     };
 
-    void quickbook_grammar::impl::init_phrase_markup()
+    void quickbook_grammar::impl::init_phrase_elements()
     {
         using detail::var;
 
-        phrase_markup_grammar_local& local = store_.create();
+        phrase_element_grammar_local& local = store_.create();
 
         phrase_symbol_rules.add
             ("?", &local.cond_phrase)

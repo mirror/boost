@@ -19,7 +19,7 @@ namespace quickbook
 {
     namespace cl = boost::spirit::classic;
 
-    struct block_markup_grammar_local
+    struct block_element_grammar_local
     {
         cl::rule<scanner>
                         h, h1, h2, h3, h4, h5, h6, blurb, blockquote,
@@ -34,11 +34,11 @@ namespace quickbook
                         element_id, element_id_1_5, element_id_1_6;
     };
 
-    void quickbook_grammar::impl::init_block_markup()
+    void quickbook_grammar::impl::init_block_elements()
     {
         using detail::var;
 
-        block_markup_grammar_local& local = store_.create();
+        block_element_grammar_local& local = store_.create();
 
         local.element_id =
                 ':'

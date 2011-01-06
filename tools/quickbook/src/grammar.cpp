@@ -33,8 +33,8 @@ namespace quickbook
         , store_()
     {
         init_main();
-        init_block_markup();
-        init_phrase_markup();
+        init_block_elements();
+        init_phrase_elements();
         init_doc_info();
     }
 }

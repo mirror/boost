@@ -60,10 +60,10 @@ namespace quickbook
     {
         cl::rule<scanner>
                         top_level, blocks, paragraph_separator,
-                        block_markup, block_markup_start,
+                        block_element, block_element_start,
                         code, code_line, blank_line, hr,
                         list, ordered_list, list_item,
-                        phrase_markup, extended_phrase_markup,
+                        phrase_element, extended_phrase_element,
                         simple_phrase_end,
                         escape,
                         inline_code, simple_format,
@@ -100,7 +100,7 @@ namespace quickbook
         local.top_level
             =   local.blocks
             >>  *(
-                    local.block_markup >> !(+eol >> local.blocks)
+                    local.block_element >> !(+eol >> local.blocks)
                 |   local.paragraph_separator >> local.blocks
                 |   common
                 |   cl::space_p                 [actions.space_char]
@@ -127,8 +127,8 @@ namespace quickbook
             >> +eol
             ;
 
-        local.block_markup
-            =   local.block_markup_start        [actions.inside_paragraph]
+        local.block_element
+            =   local.block_element_start       [actions.inside_paragraph]
             >>  (   local.block_keyword_rule
                 >>  (   (space >> ']')
                     |   cl::eps_p               [actions.error]
@@ -137,7 +137,7 @@ namespace quickbook
                 )
             ;
 
-        local.block_markup_start
+        local.block_element_start
             =   '[' >> space
             >>  (   block_keyword_rules         [detail::assign_rule(local.block_keyword_rule)]
                 >>  (cl::eps_p - (cl::alnum_p | '_'))
@@ -184,7 +184,7 @@ namespace quickbook
 
         common =
                 local.macro
-            |   local.phrase_markup
+            |   local.phrase_element
             |   local.code_block
             |   local.inline_code
             |   local.simple_format
@@ -328,7 +328,7 @@ namespace quickbook
             ;
 
         extended_phrase =
-           *(   local.extended_phrase_markup
+           *(   local.extended_phrase_element
             |   common
             |   (cl::anychar_p - phrase_end)    [actions.plain_char]
             )
@@ -341,7 +341,7 @@ namespace quickbook
             ))                                  [actions.inside_paragraph]
             ;
 
-        local.phrase_markup
+        local.phrase_element
             =   '['
             >>  space
             >>  (   phrase_keyword_rules        [detail::assign_rule(local.phrase_keyword_rule)]
@@ -355,7 +355,7 @@ namespace quickbook
             >>  ']'
             ;
 
-        local.extended_phrase_markup
+        local.extended_phrase_element
             =   '['
             >>  space
             >>  extended_phrase_keyword_rules   [detail::assign_rule(local.block_keyword_rule)]

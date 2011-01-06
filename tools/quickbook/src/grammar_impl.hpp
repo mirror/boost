@@ -60,8 +60,8 @@ namespace quickbook
     private:
 
         void init_main();
-        void init_block_markup();
-        void init_phrase_markup();
+        void init_block_elements();
+        void init_phrase_elements();
         void init_doc_info();
     };
 }
