@@ -126,6 +126,7 @@ EOF
 }
 
 is_stlport="no"
+build_static="yes"
 
 function vc6_gen()
 {
@@ -139,7 +140,7 @@ function vc6_gen()
 	rm -f $iout
 	stlport_suffix=""
 	
-	if test ${subdir} != "vc80" ; then
+	if test ${build_static} == "yes" ; then
 	libname="libboost_regex-${subdir}-s-${boost_version}"
 	opts='/c /nologo /ML /W3 '$EH_OPTS' /O2 '$PROC_OPTS' /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD '"$release_extra"' '
 	vc6_gen_lib
@@ -149,7 +150,7 @@ function vc6_gen()
 	opts='/nologo /MT /W3 '$EH_OPTS' /O2 '$PROC_OPTS' /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD '"$release_extra"' /c'
 	vc6_gen_lib
 	
-	if test ${subdir} != "vc80" ; then
+	if test ${build_static} == "yes" ; then
 	debug="yes"
 	libname="libboost_regex-${subdir}-sgd-${boost_version}"
 	opts='/nologo /MLd /W3 /Gm '$EH_OPTS' /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD '"$debug_extra"' /c '
@@ -193,6 +194,10 @@ function vc6_gen()
 	   VC8_CHECK='MSVCDIR=$(VS90COMNTOOLS)..\..\VC'
 	   echo setting VC9 setup to: ${VC8_CHECK}
 	fi
+	if test ${subdir} = "vc100" ; then
+	   VC8_CHECK='MSVCDIR=$(VS100COMNTOOLS)..\..\VC'
+	   echo setting VC10 setup to: ${VC8_CHECK}
+	fi
     fi
    	
 	cat > $out << EOF
@@ -201,7 +206,7 @@ function vc6_gen()
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
 #
-# auto generated makefile for VC6 compiler
+# auto generated makefile for MSVC compiler
 #
 # usage:
 # make
@@ -473,7 +478,8 @@ no_single="no"
 subdir="vc80"
 vc6_gen
 #
-# generate vc8 makefile:
+# generate vc9 makefile:
+build_static="no"
 EH_OPTS="/EHsc"
 PROC_OPTS=""
 debug_extra="$EH_OPTS"
@@ -482,28 +488,22 @@ out="vc9.mak"
 no_single="no"
 subdir="vc90"
 vc6_gen
+#
+# generate vc10 makefile:
+build_static="no"
+EH_OPTS="/EHsc"
+PROC_OPTS=""
+debug_extra="$EH_OPTS"
+is_stlport="no"
+out="vc10.mak"
+no_single="no"
+subdir="vc100"
+vc6_gen
 
 
 #
 # remove tmep files;
 rm -f $tout $iout
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
