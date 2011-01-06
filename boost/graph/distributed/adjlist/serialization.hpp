@@ -9,6 +9,7 @@
 #error "Parallel BGL files should not be included unless <boost/graph/use_mpi.hpp> has been included"
 #endif
 
+# include <boost/assert.hpp>
 # include <boost/lexical_cast.hpp>
 # include <boost/foreach.hpp>
 # include <boost/filesystem/path.hpp>
@@ -301,7 +302,7 @@ namespace detail { namespace parallel
           if (is_root())
               std::cout << i << " used to be " << old_ids[i] << "\n"; 
 # endif
-          assert(m_id_mapping[old_ids[i]] == -1);
+          BOOST_ASSERT(m_id_mapping[old_ids[i]] == -1);
           m_id_mapping[old_ids[i]] = i;
       }
 
@@ -509,7 +510,7 @@ namespace detail { namespace parallel
           detail::parallel::add_local_edge(
               local(u), local(v)
             , m_g.build_edge_property(property), m_g.base());
-      assert(inserted.second);
+      BOOST_ASSERT(inserted.second);
       put(edge_target_processor_id, m_g.base(), inserted.first, owner(v));
 
       edge_descriptor e(owner(u), owner(v), true, inserted.first);
@@ -613,7 +614,7 @@ namespace detail { namespace parallel
       boost::parallel::inplace_all_to_all(m_pg, m_remote_vertices);
 
       for (int i = 0; i < num_processes(m_pg); ++i)
-          assert(m_remote_vertices[i].size() == m_requested_vertices[i].size());
+          BOOST_ASSERT(m_remote_vertices[i].size() == m_requested_vertices[i].size());
   }
 
   template <class Graph, class Archive, class VertexListS>
@@ -663,7 +664,7 @@ namespace detail { namespace parallel
           if (i == m_property_ptrs[owner(u)].end()
               || i->first != e.property_ptr)
           {
-              assert(false);
+              BOOST_ASSERT(false);
           }
 
           local_edge_descriptor local_edge(local(u), local(v), i->second);
@@ -694,7 +695,7 @@ namespace detail { namespace parallel
       if (i == m_requested_vertices[owner(u)].end()
           || *i != local(u))
       {
-          assert(false);
+          BOOST_ASSERT(false);
       }
 
       local_vertex_descriptor local =
