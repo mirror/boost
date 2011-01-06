@@ -1,11 +1,14 @@
-// discrete_distribution.hpp
-//
-// Copyright (c) 2009-2010
-// Steven Watanabe
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+/* boost random/discrete_distribution.hpp header file
+ *
+ * Copyright Steven Watanabe 2009-2011
+ * Distributed under the Boost Software License, Version 1.0. (See
+ * accompanying file LICENSE_1_0.txt or copy at
+ * http://www.boost.org/LICENSE_1_0.txt)
+ *
+ * See http://www.boost.org for most recent version including documentation.
+ *
+ * $Id$
+ */
 
 #ifndef BOOST_RANDOM_DISCRETE_DISTRIBUTION_HPP_INCLUDED
 #define BOOST_RANDOM_DISCRETE_DISTRIBUTION_HPP_INCLUDED
@@ -19,6 +22,8 @@
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/detail/config.hpp>
+#include <boost/random/detail/operators.hpp>
+#include <boost/random/detail/vector_io.hpp>
 
 #ifndef BOOST_NO_INITIALIZER_LISTS
 #include <initializer_list>
@@ -112,37 +117,31 @@ public:
             return _probabilities;
         }
 
-#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
         /** Writes the parameters to a @c std::ostream. */
-        template<class CharT, class Traits>
-        friend std::basic_ostream<CharT, Traits>&
-        operator<<(std::basic_ostream<CharT, Traits>& os,
-                   const param_type& parm)
+        BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, param_type, parm)
         {
-            parm.print(os);
+            detail::print_vector(os, parm._probabilities);
             return os;
         }
         
         /** Reads the parameters from a @c std::istream. */
-        template<class CharT, class Traits>
-        friend std::basic_istream<CharT, Traits>&
-        operator>>(std::basic_istream<CharT, Traits>& is, param_type& parm)
+        BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, param_type, parm)
         {
-            parm.read(is);
+            std::vector<WeightType> temp;
+            detail::read_vector(is, temp);
+            if(is) {
+                parm._probabilities.swap(temp);
+            }
             return is;
         }
-#endif
 
         /** Returns true if the two sets of parameters are the same. */
-        friend bool operator==(const param_type& lhs, const param_type& rhs)
+        BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(param_type, lhs, rhs)
         {
             return lhs._probabilities == rhs._probabilities;
         }
         /** Returns true if the two sets of parameters are different. */
-        friend bool operator!=(const param_type& lhs, const param_type& rhs)
-        {
-            return !(lhs == rhs);
-        }
+        BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(param_type)
     private:
         /// @cond
         friend class discrete_distribution;
@@ -161,52 +160,6 @@ public:
             {
                 *iter /= sum;
             }
-        }
-        template<class CharT, class Traits>
-        void print(std::basic_ostream<CharT, Traits>& os) const
-        {
-            typename std::vector<WeightType>::const_iterator
-                iter = _probabilities.begin(),
-                end =  _probabilities.end();
-            os << '[';
-            if(iter != end) {
-                os << *iter;
-                ++iter;
-                for(; iter != end; ++iter)
-                {
-                    os << ' ' << *iter;
-                }
-            }
-            os << ']';
-        }
-        template<class CharT, class Traits>
-        void read(std::basic_istream<CharT, Traits>& is)
-        {
-            std::vector<WeightType> result;
-            char ch;
-            if(!(is >> ch)) {
-                return;
-            }
-            if(ch != '[') {
-                is.putback(ch);
-                is.setstate(std::ios_base::failbit);
-                return;
-            }
-            WeightType val;
-            while(is >> std::ws >> val) {
-                result.push_back(val);
-            }
-            if(is.fail()) {
-                is.clear();
-                if(!(is >> ch)) {
-                    return;
-                }
-                if(ch != ']') {
-                    is.putback(ch);
-                    is.setstate(std::ios_base::failbit);
-                }
-            }
-            _probabilities.swap(result);
         }
         std::vector<WeightType> _probabilities;
         /// @endcond
@@ -297,7 +250,8 @@ public:
      * discrete_distribution.
      */
     template<class URNG>
-    IntType operator()(URNG& urng) const {
+    IntType operator()(URNG& urng) const
+    {
         assert(!_alias_table.empty());
         WeightType test = uniform_01<WeightType>()(urng);
         IntType result = uniform_int<IntType>((min)(), (max)())(urng);
@@ -384,33 +338,28 @@ public:
      */
     void reset() {}
 
-#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
     /** Writes a distribution to a @c std::ostream. */
-    template<class CharT, class Traits>
-    friend std::basic_ostream<CharT, Traits>&
-    operator<<(std::basic_ostream<CharT, Traits>& os,
-               const discrete_distribution& dd)
+    BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, discrete_distribution, dd)
     {
         os << dd.param();
         return os;
     }
 
     /** Reads a distribution from a @c std::istream */
-    template<class CharT, class Traits>
-    friend std::basic_istream<CharT, Traits>&
-    operator>>(std::basic_istream<CharT, Traits>& is, discrete_distribution& dd)
+    BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, discrete_distribution, dd)
     {
-        dd.read(is);
+        param_type parm;
+        if(is >> parm) {
+            dd.param(parm);
+        }
         return is;
     }
-#endif
 
     /**
      * Returns true if the two distributions will return the
      * same sequence of values, when passed equal generators.
      */
-    friend bool operator==(const discrete_distribution& lhs,
-                           const discrete_distribution& rhs)
+    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(discrete_distribution, lhs, rhs)
     {
         return lhs._alias_table == rhs._alias_table;
     }
@@ -418,23 +367,11 @@ public:
      * Returns true if the two distributions may return different
      * sequences of values, when passed equal generators.
      */
-    friend bool operator!=(const discrete_distribution& lhs,
-                           const discrete_distribution& rhs)
-    {
-        return !(lhs == rhs);
-    }
+    BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(discrete_distribution)
 
 private:
 
     /// @cond
-
-    template<class CharT, class Traits>
-    void read(std::basic_istream<CharT, Traits>& is) {
-        param_type parm;
-        if(is >> parm) {
-            param(parm);
-        }
-    }
 
     template<class Iter>
     void init(Iter first, Iter last, std::input_iterator_tag)

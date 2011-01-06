@@ -68,6 +68,8 @@ run test_student_t.cpp ;
 run test_student_t_distribution.cpp /boost//unit_test_framework ;
 run test_normal.cpp ;
 run test_normal_distribution.cpp /boost//unit_test_framework ;
+run test_piecewise_constant.cpp ;
+run test_piecewise_constant_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
