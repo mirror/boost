@@ -458,7 +458,7 @@ namespace chrono {
             // have to support both approaches.
             ;
 #else
-            : rep_(boost::duration_cast<duration>(d).count()) {}
+            : rep_(chrono::duration_cast<duration>(d).count()) {}
 #endif
 
         // observer
