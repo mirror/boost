@@ -324,7 +324,7 @@ namespace boost
 
         static type make(Reference x)
         {
-            return implicit_cast<type>(&x);
+            return boost::implicit_cast<type>(&x);
         }
     };
 
