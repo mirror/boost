@@ -20,6 +20,7 @@
 #include <iterator>
 #include <algorithm>
 #include <string>
+#include <iomanip>
 
 #if defined BOOST_NO_STRINGSTREAM
 #include <strstream>
@@ -77,6 +78,11 @@ int test_main(int argc, char * argv[] ) {
   os3 << set_close(']');
   os3 << make_tuple();
   BOOST_CHECK (os3.str() == std::string("()[]") );
+  
+  // check width
+  useThisOStringStream os4;
+  os4 << std::setw(10) << make_tuple(1, 2, 3);
+  BOOST_CHECK (os4.str() == std::string("   (1 2 3)") );
 
   std::ofstream tmp("temp.tmp");
 
