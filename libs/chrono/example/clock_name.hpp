@@ -16,8 +16,8 @@
 
 template <typename Clock,
           bool = boost::is_same<Clock, boost::chrono::system_clock>::value,
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    bool = boost::is_same<Clock, boost::chrono::monotonic_clock>::value,
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    bool = boost::is_same<Clock, boost::chrono::steady_clock>::value,
 #else
     bool = false,
 #endif
@@ -37,7 +37,7 @@ struct name<Clock, true, false, false>  {
 
 template <typename Clock>
 struct name<Clock, false, true, false>  {
-    static const char* apply() { return "monotonic_clock";}
+    static const char* apply() { return "steady_clock";}
 };
 
 template <typename Clock>
@@ -47,7 +47,7 @@ struct name<Clock, false, false, true>  {
 
 template <typename Clock>
 struct name<Clock, false, true, true>  {
-    static const char* apply() { return "monotonic_clock and high_resolution_clock";}
+    static const char* apply() { return "steady_clock and high_resolution_clock";}
 };
 
 template <typename Clock>
@@ -57,12 +57,12 @@ struct name<Clock, true, false, true>  {
 
 template <typename Clock>
 struct name<Clock, true, true, false>  {
-    static const char* apply() { return "system_clock and monotonic_clock";}
+    static const char* apply() { return "system_clock and steady_clock";}
 };
 
 template <typename Clock>
 struct name<Clock, true, true, true>  {
-    static const char* apply() { return "system_clock, monotonic_clock and high_resolution_clock";}
+    static const char* apply() { return "system_clock, steady_clock and high_resolution_clock";}
 };
 
 #endif

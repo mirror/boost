@@ -13,8 +13,8 @@
 int main()
 {
     std::cout << name<boost::chrono::system_clock>::apply() << '\n';
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    std::cout << name<boost::chrono::monotonic_clock>::apply() << '\n';
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    std::cout << name<boost::chrono::steady_clock>::apply() << '\n';
 #endif
     std::cout << name<boost::chrono::high_resolution_clock>::apply() << '\n';
 }

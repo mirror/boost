@@ -21,9 +21,9 @@ int main()
     using namespace boost;
     using namespace boost::chrono;
 
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    typedef time_point<monotonic_clock, duration<double, ratio<3600> > > T;
-    T tp = monotonic_clock::now();
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    typedef time_point<steady_clock, duration<double, ratio<3600> > > T;
+    T tp = steady_clock::now();
     std::cout << tp << '\n';
 #endif
     return 0;

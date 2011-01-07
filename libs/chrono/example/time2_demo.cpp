@@ -1325,19 +1325,19 @@ void test_system_clock()
     cout << "system_clock resolution estimate: " << nanoseconds(stop-start).count() << " nanoseconds\n";
 }
 
-void test_monotonic_clock()
+void test_steady_clock()
 {
-    cout << "monotonic_clock test" << endl;
-    monotonic_clock::duration delay = milliseconds(5);
-    monotonic_clock::time_point start = monotonic_clock::now();
-    while (monotonic_clock::now() - start <= delay)
+    cout << "steady_clock test" << endl;
+    steady_clock::duration delay = milliseconds(5);
+    steady_clock::time_point start = steady_clock::now();
+    while (steady_clock::now() - start <= delay)
         ;
-    monotonic_clock::time_point stop = monotonic_clock::now();
-    monotonic_clock::duration elapsed = stop - start;
+    steady_clock::time_point stop = steady_clock::now();
+    steady_clock::duration elapsed = stop - start;
     cout << "paused " << nanoseconds(elapsed).count() << " nanoseconds\n";
-    start = monotonic_clock::now();
-    stop = monotonic_clock::now();
-    cout << "monotonic_clock resolution estimate: " << nanoseconds(stop-start).count() << " nanoseconds\n";
+    start = steady_clock::now();
+    stop = steady_clock::now();
+    cout << "steady_clock resolution estimate: " << nanoseconds(stop-start).count() << " nanoseconds\n";
 }
 
 void test_hi_resolution_clock()
@@ -1360,12 +1360,12 @@ void test_hi_resolution_clock()
 //    cout << "mixed clock test" << endl;
 //    high_resolution_clock::time_point hstart = high_resolution_clock::now();
 //    cout << "Add 5 milliseconds to a high_resolution_clock::time_point\n";
-//    monotonic_clock::time_point mend = hstart + milliseconds(5);
+//    steady_clock::time_point mend = hstart + milliseconds(5);
 //    bool b = hstart == mend;
 //    system_clock::time_point sstart = system_clock::now();
-//    std::cout << "Subtracting system_clock::time_point from monotonic_clock::time_point doesn't compile\n";
+//    std::cout << "Subtracting system_clock::time_point from steady_clock::time_point doesn't compile\n";
 ////  mend - sstart; // doesn't compile
-//    cout << "subtract high_resolution_clock::time_point from monotonic_clock::time_point"
+//    cout << "subtract high_resolution_clock::time_point from steady_clock::time_point"
 //            " and add that to a system_clock::time_point\n";
 //    system_clock::time_point send = sstart + duration_cast<system_clock::duration>(mend - hstart);
 //    cout << "subtract two system_clock::time_point's and output that in microseconds:\n";
@@ -1490,8 +1490,8 @@ void explore_limits()
 {
     typedef duration<long long, boost::ratio_multiply<boost::ratio<24*3652425,10000>,
       hours::period>::type> Years;
-    monotonic_clock::time_point t1( Years(250));
-    monotonic_clock::time_point t2(-Years(250));
+    steady_clock::time_point t1( Years(250));
+    steady_clock::time_point t2(-Years(250));
     // nanosecond resolution is likely to overflow.  "up cast" to microseconds.
     //   The "up cast" trades precision for range.
     microseconds d = time_point_cast<microseconds>(t1) - time_point_cast<microseconds>(t2);
@@ -1630,7 +1630,7 @@ int main()
     test_milliseconds();
     test_with_xtime();
     test_system_clock();
-    test_monotonic_clock();
+    test_steady_clock();
     test_hi_resolution_clock();
     //test_mixed_clock();
     timeval_demo::test_xtime_clock();

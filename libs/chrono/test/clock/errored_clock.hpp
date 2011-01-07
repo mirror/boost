@@ -23,7 +23,7 @@
       typedef duration::rep                        rep;
       typedef duration::period                     period;
       typedef boost::chrono::time_point<errored_clock>  time_point;
-      static const bool is_monotonic =             true;
+      static const bool is_steady =             true;
       static int errno_;
 
       static void set_errno(int err) {

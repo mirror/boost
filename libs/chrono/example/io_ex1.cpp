@@ -45,8 +45,8 @@ int main()
          <<  ClockTick(3) + nanoseconds(10) << '\n';
 
     cout << "\nsystem_clock::now() = " << system_clock::now() << '\n';
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    cout << "monotonic_clock::now() = " << monotonic_clock::now() << '\n';
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    cout << "steady_clock::now() = " << steady_clock::now() << '\n';
 #endif
     cout << "\nSet cout to use long names:\n" << duration_long
          << "high_resolution_clock::now() = " << high_resolution_clock::now() << '\n';

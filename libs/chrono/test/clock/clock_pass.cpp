@@ -28,8 +28,8 @@ void check_clock_invariants()
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Clock::rep, typename Clock::duration::rep>::value), NOTHING, ());
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Clock::period, typename Clock::duration::period>::value), NOTHING, ());
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Clock::duration, typename Clock::time_point::duration>::value), NOTHING, ());
-    BOOST_CHRONO_STATIC_ASSERT(Clock::is_monotonic || !Clock::is_monotonic, NOTHING, ());
-    // to be replaced by has static member bool is_monotonic
+    BOOST_CHRONO_STATIC_ASSERT(Clock::is_steady || !Clock::is_steady, NOTHING, ());
+    // to be replaced by has static member bool is_steady
 }
 
 template <typename Clock>
@@ -99,16 +99,16 @@ int main()
     check_clock_now_ec<boost::chrono::high_resolution_clock>();
     check_clock_now_throws<boost::chrono::high_resolution_clock>();
     
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    check_clock_invariants<boost::chrono::monotonic_clock>();
-    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::monotonic_clock::is_monotonic, NOTHING, ());
-    check_clock_now<boost::chrono::monotonic_clock>();
-    check_clock_now_ec<boost::chrono::monotonic_clock>();
-    check_clock_now_throws<boost::chrono::monotonic_clock>();
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    check_clock_invariants<boost::chrono::steady_clock>();
+    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::steady_clock::is_steady, NOTHING, ());
+    check_clock_now<boost::chrono::steady_clock>();
+    check_clock_now_ec<boost::chrono::steady_clock>();
+    check_clock_now_throws<boost::chrono::steady_clock>();
 #endif
     
     check_clock_invariants<boost::chrono::system_clock>();
-    BOOST_CHRONO_STATIC_ASSERT(!boost::chrono::system_clock::is_monotonic, NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT(!boost::chrono::system_clock::is_steady, NOTHING, ());
     check_clock_now<boost::chrono::system_clock>();
     check_clock_now_ec<boost::chrono::system_clock>();
     check_clock_now_throws<boost::chrono::system_clock>();
@@ -131,32 +131,32 @@ int main()
 
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
     check_clock_invariants<boost::chrono::thread_clock>();
-    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::thread_clock::is_monotonic, NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::thread_clock::is_steady, NOTHING, ());
     check_clock_now<boost::chrono::thread_clock>();
     check_clock_now_ec<boost::chrono::thread_clock>();
     check_clock_now_throws<boost::chrono::thread_clock>();
 #endif
     
     check_clock_invariants<boost::chrono::process_real_cpu_clock>();
-    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_real_cpu_clock::is_monotonic, NOTHING, ());   
+    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_real_cpu_clock::is_steady, NOTHING, ());   
     check_clock_now<boost::chrono::process_real_cpu_clock>();
     check_clock_now_ec<boost::chrono::process_real_cpu_clock>();
     check_clock_now_throws<boost::chrono::process_real_cpu_clock>();
 
     check_clock_invariants<boost::chrono::process_user_cpu_clock>();
-    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_user_cpu_clock::is_monotonic, NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_user_cpu_clock::is_steady, NOTHING, ());
     check_clock_now<boost::chrono::process_user_cpu_clock>();
     check_clock_now_ec<boost::chrono::process_user_cpu_clock>();
     check_clock_now_throws<boost::chrono::process_user_cpu_clock>();
 
     check_clock_invariants<boost::chrono::process_system_cpu_clock>();
-    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_system_cpu_clock::is_monotonic, NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_system_cpu_clock::is_steady, NOTHING, ());
     check_clock_now<boost::chrono::process_system_cpu_clock>();
     check_clock_now_ec<boost::chrono::process_system_cpu_clock>();
     check_clock_now_throws<boost::chrono::process_system_cpu_clock>();
 
     check_clock_invariants<boost::chrono::process_cpu_clock>();
-    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_cpu_clock::is_monotonic, NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_cpu_clock::is_steady, NOTHING, ());
     check_clock_now<boost::chrono::process_cpu_clock>();
     check_clock_now_ec<boost::chrono::process_cpu_clock>();
     check_clock_now_throws<boost::chrono::process_cpu_clock>();

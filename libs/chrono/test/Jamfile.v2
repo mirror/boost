@@ -246,7 +246,6 @@ rule chrono-compile2 ( sources : name )
     test-suite "win32"
         :
         [ chrono-run win32_test.cpp  ]
-        [ compile intmax_c.cpp  ]
         ;
 
 #    test-suite "static_string"

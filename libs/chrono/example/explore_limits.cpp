@@ -38,9 +38,9 @@ void explore_limits()
 {
     typedef duration<long long, boost::ratio_multiply<boost::ratio<24*3652425,10000>,
       hours::period>::type> Years;
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    monotonic_clock::time_point t1( Years(250));
-    monotonic_clock::time_point t2(-Years(250));
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    steady_clock::time_point t1( Years(250));
+    steady_clock::time_point t2(-Years(250));
 #else
     system_clock::time_point t1( Years(250));
     system_clock::time_point t2(-Years(250));

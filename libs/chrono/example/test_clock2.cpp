@@ -35,17 +35,17 @@ time2_demo contained this comment:
 
 namespace boost {
     namespace detail_chrono {
-        class monotonic_clock {};
+        class steady_clock {};
         class system_clock {};
     }
     namespace chrono {
         namespace chrono_detail {
             using namespace detail_chrono;
-            struct has_monotonic_clock {
+            struct has_steady_clock {
                 template< class T > static char sfinae( typename T::rep );
                 template< class >   static int sfinae( ... );
 
-                enum { value = sizeof sfinae< monotonic_clock >( 0 ) == sizeof(char) };
+                enum { value = sizeof sfinae< steady_clock >( 0 ) == sizeof(char) };
             };
             struct has_system_clock {
                 template< class T > static char sfinae( typename T::rep );
@@ -54,8 +54,8 @@ namespace boost {
                 enum { value = sizeof sfinae< system_clock >( 0 ) == sizeof(char) };
             };
         }
-        struct has_monotonic_clock
-            : integral_constant<bool, chrono_detail::has_monotonic_clock::value> {};
+        struct has_steady_clock
+            : integral_constant<bool, chrono_detail::has_steady_clock::value> {};
         struct has_system_clock
             : integral_constant<bool, chrono_detail::has_system_clock::value> {};
     }
@@ -63,10 +63,10 @@ namespace boost {
 }
 
 BOOST_STATIC_ASSERT(boost::chrono::has_system_clock::value);
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-BOOST_STATIC_ASSERT(boost::chrono::has_monotonic_clock::value);
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+BOOST_STATIC_ASSERT(boost::chrono::has_steady_clock::value);
 #else
-BOOST_STATIC_ASSERT(!boost::chrono::has_monotonic_clock::value);
+BOOST_STATIC_ASSERT(!boost::chrono::has_steady_clock::value);
 #endif
 
 using namespace boost::chrono;
@@ -126,20 +126,20 @@ void test_system_clock()
     std::cout << "system_clock resolution estimate: " << nanoseconds(stop-start).count() << " nanoseconds\n";
 }
 
-void test_monotonic_clock()
+void test_steady_clock()
 {
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    std::cout << "monotonic_clock test" << std::endl;
-    monotonic_clock::duration delay = milliseconds(5);
-    monotonic_clock::time_point start = monotonic_clock::now();
-    while (monotonic_clock::now() - start <= delay)
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    std::cout << "steady_clock test" << std::endl;
+    steady_clock::duration delay = milliseconds(5);
+    steady_clock::time_point start = steady_clock::now();
+    while (steady_clock::now() - start <= delay)
         ;
-    monotonic_clock::time_point stop = monotonic_clock::now();
-    monotonic_clock::duration elapsed = stop - start;
+    steady_clock::time_point stop = steady_clock::now();
+    steady_clock::duration elapsed = stop - start;
     std::cout << "paused " << nanoseconds(elapsed).count() << " nanoseconds\n";
-    start = monotonic_clock::now();
-    stop = monotonic_clock::now();
-    std::cout << "monotonic_clock resolution estimate: " << nanoseconds(stop-start).count() << " nanoseconds\n";
+    start = steady_clock::now();
+    stop = steady_clock::now();
+    std::cout << "steady_clock resolution estimate: " << nanoseconds(stop-start).count() << " nanoseconds\n";
 #endif
 }
 void test_hi_resolution_clock()
@@ -162,12 +162,12 @@ void test_hi_resolution_clock()
 //    std::cout << "mixed clock test" << std::endl;
 //    high_resolution_clock::time_point hstart = high_resolution_clock::now();
 //    std::cout << "Add 5 milliseconds to a high_resolution_clock::time_point\n";
-//    monotonic_clock::time_point mend = hstart + milliseconds(5);
+//    steady_clock::time_point mend = hstart + milliseconds(5);
 //    bool b = hstart == mend;
 //    system_clock::time_point sstart = system_clock::now();
-//    std::cout << "Subtracting system_clock::time_point from monotonic_clock::time_point doesn't compile\n";
+//    std::cout << "Subtracting system_clock::time_point from steady_clock::time_point doesn't compile\n";
 ////  mend - sstart; // doesn't compile
-//    std::cout << "subtract high_resolution_clock::time_point from monotonic_clock::time_point"
+//    std::cout << "subtract high_resolution_clock::time_point from steady_clock::time_point"
 //            " and add that to a system_clock::time_point\n";
 //    system_clock::time_point send = sstart + duration_cast<system_clock::duration>(mend - hstart);
 //    std::cout << "subtract two system_clock::time_point's and output that in microseconds:\n";
@@ -194,12 +194,12 @@ void test_hi_resolution_clock()
 int main()
 {
     test_system_clock();
-    test_monotonic_clock();
+    test_steady_clock();
     test_hi_resolution_clock();
     //test_mixed_clock();
     test_clock<system_clock>();
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    test_clock<monotonic_clock>();
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    test_clock<steady_clock>();
 #endif
     test_clock<high_resolution_clock>();
 
