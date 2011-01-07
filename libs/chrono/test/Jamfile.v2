@@ -39,6 +39,7 @@ project
         <toolset>msvc:<asynch-exceptions>on
         <define>BOOST_CHRONO_USES_MPL_ASSERT
         <define>BOOST_SYSTEM_NO_DEPRECATED
+        <toolset>sun:<define>BOOST_TYPEOF_EMULATION
         <warnings>all
         <toolset>gcc:<cxxflags>-Wextra
         <toolset>gcc:<cxxflags>-pedantic
@@ -245,6 +246,7 @@ rule chrono-compile2 ( sources : name )
     test-suite "win32"
         :
         [ chrono-run win32_test.cpp  ]
+        [ compile intmax_c.cpp  ]
         ;
 
 #    test-suite "static_string"
