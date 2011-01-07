@@ -53,8 +53,8 @@ class object_pool: protected pool<UserAllocator>
 
   public:
     // This constructor parameter is an extension!
-    explicit object_pool(const size_type next_size = 32)
-    :pool<UserAllocator>(sizeof(T), next_size) { }
+    explicit object_pool(const size_type next_size = 32, const size_type max_size = 0)
+    :pool<UserAllocator>(sizeof(T), next_size, max_size) { }
 
     ~object_pool();
 

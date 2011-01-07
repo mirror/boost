@@ -27,7 +27,8 @@ namespace boost {
 template <typename Tag, unsigned RequestedSize,
     typename UserAllocator,
     typename Mutex,
-    unsigned NextSize>
+    unsigned NextSize,
+    unsigned MaxSize>
 struct singleton_pool
 {
   public:
