@@ -496,10 +496,10 @@ struct clock_string<system_clock, CharT>
         return str;
     }
 };
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
 
 template <class CharT>
-struct clock_string<monotonic_clock, CharT>
+struct clock_string<steady_clock, CharT>
 {
     static std::basic_string<CharT> name()
     {

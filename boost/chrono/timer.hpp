@@ -51,8 +51,8 @@ namespace boost
     };
 
     typedef boost::chrono::timer< boost::chrono::system_clock > system_timer;
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-    typedef boost::chrono::timer< boost::chrono::monotonic_clock > monotonic_timer;
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    typedef boost::chrono::timer< boost::chrono::steady_clock > steady_timer;
 #endif
     typedef boost::chrono::timer< boost::chrono::high_resolution_clock > high_resolution_timer;
 

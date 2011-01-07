@@ -91,12 +91,12 @@ namespace chrono {
 
   // Clocks
   class BOOST_CHRONO_DECL system_clock;
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-  class BOOST_CHRONO_DECL monotonic_clock; // as permitted by [time.clock.monotonic]
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+  class BOOST_CHRONO_DECL steady_clock; // as permitted by [time.clock.steady]
 #endif
 
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-  typedef monotonic_clock high_resolution_clock;  // as permitted by [time.clock.hires]
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+  typedef steady_clock high_resolution_clock;  // as permitted by [time.clock.hires]
 #else
   typedef system_clock high_resolution_clock;  // as permitted by [time.clock.hires]
 #endif
@@ -125,7 +125,7 @@ namespace chrono {
       typedef duration::rep                        rep;
       typedef duration::period                     period;
       typedef chrono::time_point<system_clock>     time_point;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_monotonic =             false;
+      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             false;
 
       static BOOST_CHRONO_INLINE time_point  now();                         // throws on error
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);  // never throws
@@ -135,21 +135,21 @@ namespace chrono {
   };
 
 //----------------------------------------------------------------------------//
-//      20.9.5.2 Class monotonic_clock [time.clock.monotonic]                 //
+//      20.9.5.2 Class steady_clock [time.clock.steady]                 //
 //----------------------------------------------------------------------------//
 
-// As permitted  by [time.clock.monotonic]
-// The class monotonic_clock is conditionally supported.
+// As permitted  by [time.clock.steady]
+// The class steady_clock is conditionally supported.
 
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-  class BOOST_CHRONO_DECL monotonic_clock
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+  class BOOST_CHRONO_DECL steady_clock
   {
   public:
       typedef nanoseconds                          duration;
       typedef duration::rep                        rep;
       typedef duration::period                     period;
-      typedef chrono::time_point<monotonic_clock>  time_point;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_monotonic =             true;
+      typedef chrono::time_point<steady_clock>  time_point;
+      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
       static BOOST_CHRONO_INLINE time_point  now();                         // throws on error
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);  // never throws
@@ -159,7 +159,7 @@ namespace chrono {
 //      20.9.5.3 Class high_resolution_clock [time.clock.hires]               //
 //----------------------------------------------------------------------------//
 
-//  As permitted, monotonic_clock or system_clock is a typedef for high_resolution_clock.
+//  As permitted, steady_clock or system_clock is a typedef for high_resolution_clock.
 //  See synopsis.
 
 

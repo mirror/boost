@@ -32,7 +32,7 @@ void process_clock::now( process_times & times_, system::error_code & ec )
     //  note that Windows uses 100 nanosecond ticks for FILETIME
     boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
 
-    times_.real = duration( monotonic_clock::now().time_since_epoch().count() );
+    times_.real = duration( steady_clock::now().time_since_epoch().count() );
        
     if ( boost::detail::win32::GetProcessTimes(
             boost::detail::win32::GetCurrentProcess(), &creation, &exit,

@@ -30,7 +30,7 @@ namespace boost { namespace chrono {
         typedef duration::rep                        rep;
         typedef duration::period                     period;
         typedef chrono::time_point<process_real_cpu_clock>    time_point;
-        BOOST_CHRONO_STATIC_CONSTEXPR bool is_monotonic =             true;
+        BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
         static BOOST_CHRONO_INLINE time_point now(
                 system::error_code & ec = BOOST_CHRONO_THROWS );
@@ -42,7 +42,7 @@ namespace boost { namespace chrono {
         typedef duration::rep                        rep;
         typedef duration::period                     period;
         typedef chrono::time_point<process_user_cpu_clock>    time_point;
-        BOOST_CHRONO_STATIC_CONSTEXPR bool is_monotonic =             true;
+        BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
         static BOOST_CHRONO_INLINE time_point now( 
                 system::error_code & ec = BOOST_CHRONO_THROWS );
@@ -54,7 +54,7 @@ namespace boost { namespace chrono {
         typedef duration::rep                        rep;
         typedef duration::period                     period;
         typedef chrono::time_point<process_system_cpu_clock>    time_point;
-        BOOST_CHRONO_STATIC_CONSTEXPR bool is_monotonic =             true;
+        BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
         static BOOST_CHRONO_INLINE time_point now( 
                 system::error_code & ec = BOOST_CHRONO_THROWS );
@@ -178,7 +178,7 @@ namespace boost { namespace chrono {
         typedef duration::rep                       rep;
         typedef duration::period                    period;
         typedef chrono::time_point<process_cpu_clock>  time_point;
-        BOOST_CHRONO_STATIC_CONSTEXPR bool is_monotonic =           true;
+        BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =           true;
 
         static BOOST_CHRONO_INLINE time_point now( 
                 system::error_code & ec = BOOST_CHRONO_THROWS );

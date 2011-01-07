@@ -24,8 +24,8 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::chrono::duration, (typename)(typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::chrono::time_point, (typename)(typename))
 #if 0
 BOOST_TYPEOF_REGISTER_TYPE(boost::chrono::system_clock)
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-BOOST_TYPEOF_REGISTER_TYPE(boost::chrono::monotonic_clock)
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+BOOST_TYPEOF_REGISTER_TYPE(boost::chrono::steady_clock)
 #endif
 BOOST_TYPEOF_REGISTER_TYPE(boost::chrono::high_resolution_clock)
 

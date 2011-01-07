@@ -39,7 +39,7 @@ namespace chrono
         typedef duration::rep                        rep;
         typedef duration::period                     period;
         typedef chrono::time_point<process_clock>    time_point;
-        BOOST_CHRONO_STATIC_CONSTEXPR bool is_monotonic =             true;
+        BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
         struct durations
         {

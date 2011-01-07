@@ -1,7 +1,7 @@
 //  boost thread_clock.cpp  -----------------------------------------------------------//
 
 //  Copyright Beman Dawes 1994, 2006, 2008
-//  Copyright Vicente J. Botet Escriba 2009
+//  Copyright Vicente J. Botet Escriba 2009-2011
 
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt

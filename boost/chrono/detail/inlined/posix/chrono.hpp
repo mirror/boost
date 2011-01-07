@@ -71,9 +71,9 @@ namespace chrono
       return time_point(duration(static_cast<system_clock::rep>(t) * 1000000000));
   }
 
-#ifdef BOOST_CHRONO_HAS_CLOCK_MONOTONIC
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
 
-  monotonic_clock::time_point monotonic_clock::now()
+  steady_clock::time_point steady_clock::now()
   {
     timespec ts;
     if ( ::clock_gettime( CLOCK_MONOTONIC, &ts ) )
@@ -82,14 +82,14 @@ namespace chrono
                 system::system_error( 
                         errno, 
                         BOOST_CHRONO_SYSTEM_CATEGORY, 
-                        "chrono::monotonic_clock" ));
+                        "chrono::steady_clock" ));
     }
 
     return time_point(duration(
-      static_cast<monotonic_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
+      static_cast<steady_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
   }
 
-  monotonic_clock::time_point monotonic_clock::now(system::error_code & ec)
+  steady_clock::time_point steady_clock::now(system::error_code & ec)
   {
     timespec ts;
     if ( ::clock_gettime( CLOCK_MONOTONIC, &ts ) )
@@ -100,7 +100,7 @@ namespace chrono
                     system::system_error( 
                             errno, 
                             BOOST_CHRONO_SYSTEM_CATEGORY, 
-                            "chrono::monotonic_clock" ));
+                            "chrono::steady_clock" ));
         }
         else
         {
@@ -114,7 +114,7 @@ namespace chrono
         ec.clear();
     }
     return time_point(duration(
-      static_cast<monotonic_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
+      static_cast<steady_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
   }
 #endif
 

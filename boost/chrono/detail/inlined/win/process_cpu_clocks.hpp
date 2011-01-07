@@ -41,7 +41,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
         {
             ec.clear();
         }
-        return time_point(monotonic_clock::now().time_since_epoch());
+        return time_point(steady_clock::now().time_since_epoch());
     }
     else
     {
@@ -156,7 +156,7 @@ process_cpu_clock::time_point process_cpu_clock::now(
             ec.clear();
         }
         time_point::rep r(
-                monotonic_clock::now().time_since_epoch().count(), 
+                steady_clock::now().time_since_epoch().count(), 
                 ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
                         | user_time.dwLowDateTime
                 ) * 100, 

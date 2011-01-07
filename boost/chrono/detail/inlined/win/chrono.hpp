@@ -33,7 +33,7 @@ namespace chrono_detail
 
 }
 
-  monotonic_clock::time_point monotonic_clock::now()
+  steady_clock::time_point steady_clock::now()
   {
     static double nanosecs_per_tic = chrono_detail::get_nanosecs_per_tic();
 
@@ -49,15 +49,15 @@ namespace chrono_detail
                 system::system_error( 
                         cause, 
                         BOOST_CHRONO_SYSTEM_CATEGORY, 
-                        "chrono::monotonic_clock" ));
+                        "chrono::steady_clock" ));
     }
 
-    return monotonic_clock::time_point(monotonic_clock::duration(
-      static_cast<monotonic_clock::rep>((nanosecs_per_tic) * pcount.QuadPart)));
+    return steady_clock::time_point(steady_clock::duration(
+      static_cast<steady_clock::rep>((nanosecs_per_tic) * pcount.QuadPart)));
   }
 
 
-  monotonic_clock::time_point monotonic_clock::now( system::error_code & ec )
+  steady_clock::time_point steady_clock::now( system::error_code & ec )
   {
     static double nanosecs_per_tic = chrono_detail::get_nanosecs_per_tic();
 
@@ -74,12 +74,12 @@ namespace chrono_detail
                     system::system_error( 
                             cause, 
                             BOOST_CHRONO_SYSTEM_CATEGORY, 
-                            "chrono::monotonic_clock" ));
+                            "chrono::steady_clock" ));
         } 
         else 
         {
             ec.assign( cause, BOOST_CHRONO_SYSTEM_CATEGORY );
-            return monotonic_clock::time_point(duration(0));
+            return steady_clock::time_point(duration(0));
         }
     }
 
@@ -88,7 +88,7 @@ namespace chrono_detail
         ec.clear();
     }
     return time_point(duration(
-      static_cast<monotonic_clock::rep>(nanosecs_per_tic * pcount.QuadPart)));
+      static_cast<steady_clock::rep>(nanosecs_per_tic * pcount.QuadPart)));
   }
 
   BOOST_CHRONO_INLINE

@@ -33,13 +33,13 @@
 # elif !defined( BOOST_CHRONO_WINDOWS_API ) && !defined( BOOST_CHRONO_MAC_API ) && !defined( BOOST_CHRONO_POSIX_API )
 #   if (defined(_WIN32) || defined(__WIN32__) || defined(WIN32))
 #     define BOOST_CHRONO_WINDOWS_API
-#     define BOOST_CHRONO_HAS_CLOCK_MONOTONIC
+#     define BOOST_CHRONO_HAS_CLOCK_STEADY
 #     define BOOST_CHRONO_HAS_THREAD_CLOCK
-#     define BOOST_CHRONO_THREAD_CLOCK_IS_MONOTONIC true
+#     define BOOST_CHRONO_THREAD_CLOCK_IS_STEADY true
 #   elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
 #     define BOOST_CHRONO_MAC_API
-#     define BOOST_CHRONO_HAS_CLOCK_MONOTONIC
-#     define BOOST_CHRONO_THREAD_CLOCK_IS_MONOTONIC true
+#     define BOOST_CHRONO_HAS_CLOCK_STEADY
+#     define BOOST_CHRONO_THREAD_CLOCK_IS_STEADY true
 #   else
 #     define BOOST_CHRONO_POSIX_API
 #   endif
@@ -49,14 +49,14 @@
 #   include <time.h>  //to check for CLOCK_REALTIME and CLOCK_MONOTONIC and _POSIX_THREAD_CPUTIME
 #   if defined(CLOCK_REALTIME)
 #     if defined(CLOCK_MONOTONIC)
-#        define BOOST_CHRONO_HAS_CLOCK_MONOTONIC
+#        define BOOST_CHRONO_HAS_CLOCK_STEADY
 #     endif
 #   else
 #     error <time.h> does not supply CLOCK_REALTIME
 #   endif
 #   if defined(_POSIX_THREAD_CPUTIME)
 #     define BOOST_CHRONO_HAS_THREAD_CLOCK
-#     define BOOST_CHRONO_THREAD_CLOCK_IS_MONOTONIC true
+#     define BOOST_CHRONO_THREAD_CLOCK_IS_STEADY true
 #   endif
 # endif
 
