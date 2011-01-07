@@ -64,9 +64,9 @@ system_clock::from_time_t(time_t t)
 namespace chrono_detail
 {
 
-// monotonic_clock
+// steady_clock
 
-// Note, in this implementation monotonic_clock and high_resolution_clock
+// Note, in this implementation steady_clock and high_resolution_clock
 //   are the same clock.  They are both based on mach_absolute_time().
 //   mach_absolute_time() * MachInfo.numer / MachInfo.denom is the number of
 //   nanoseconds since the computer booted up.  MachInfo.numer and MachInfo.denom
@@ -76,17 +76,18 @@ namespace chrono_detail
 // MachInfo.numer / MachInfo.denom is often 1 on the latest equipment.  Specialize
 //   for that case as an optimization.
 BOOST_CHRONO_STATIC
-monotonic_clock::rep
-monotonic_simplified()
+steady_clock::rep
+steady_simplified()
 {
     return mach_absolute_time();
 }
 
 BOOST_CHRONO_STATIC
-monotonic_clock::rep
-monotonic_simplified_ec(system::error_code & ec)
+steady_clock::rep
+steady_simplified_ec(system::error_code & ec)
 {
-    if (!BOOST_CHRONO_IS_THROWS(ec))
+    if (!BOOST_CHRONO_IS_THROWS(ec)) 
+    {
         ec.clear();
     }
     return mach_absolute_time();
@@ -95,117 +96,130 @@ monotonic_simplified_ec(system::error_code & ec)
 
 BOOST_CHRONO_STATIC
 double
-compute_monotonic_factor(kern_return_t& err)
+compute_steady_factor(kern_return_t& err)
 {
     mach_timebase_info_data_t MachInfo;
     err = mach_timebase_info(&MachInfo);
-    if( err != 0  ) {
+    if ( err != 0  ) {
         return 0;
     }
     return static_cast<double>(MachInfo.numer) / MachInfo.denom;
 }
 
 BOOST_CHRONO_STATIC
-monotonic_clock::rep
-monotonic_full()
+steady_clock::rep
+steady_full()
 {
     static kern_return_t err;
-    static const double factor = chrono_detail::compute_monotonic_factor(err);
-    if (err != 0)
-      boost::throw_exception(
-        system::system_error( err, BOOST_CHRONO_SYSTEM_CATEGORY, "chrono::monotonic_clock" ));
-    return static_cast<monotonic_clock::rep>(mach_absolute_time() * factor);
+    static const double factor = chrono_detail::compute_steady_factor(err);
+    if (err != 0) 
+    {
+        boost::throw_exception(
+            system::system_error( err, BOOST_CHRONO_SYSTEM_CATEGORY, "chrono::steady_clock" ));
+    }
+    return static_cast<steady_clock::rep>(mach_absolute_time() * factor);
 }
 
 BOOST_CHRONO_STATIC
-monotonic_clock::rep
-monotonic_full_ec(system::error_code & ec)
+steady_clock::rep
+steady_full_ec(system::error_code & ec)
 {
     static kern_return_t err;
-    static const double factor = chrono_detail::compute_monotonic_factor(err);
-    if (err != 0) {
+    static const double factor = chrono_detail::compute_steady_factor(err);
+    if (err != 0) 
+    {
         if (BOOST_CHRONO_IS_THROWS(ec))
         {
             boost::throw_exception(
                     system::system_error( 
                             err, 
                             BOOST_CHRONO_SYSTEM_CATEGORY, 
-                            "chrono::monotonic_clock" ));
+                            "chrono::steady_clock" ));
         } 
         else
         {
             ec.assign( errno, BOOST_CHRONO_SYSTEM_CATEGORY );
-            return monotonic_clock::rep();
+            return steady_clock::rep();
         }
     }
-    if (!BOOST_CHRONO_IS_THROWS(ec))
+    if (!BOOST_CHRONO_IS_THROWS(ec)) 
+    {
         ec.clear();
     }
-    return static_cast<monotonic_clock::rep>(mach_absolute_time() * factor);
+    return static_cast<steady_clock::rep>(mach_absolute_time() * factor);
 }
 
-typedef monotonic_clock::rep (*FP)();
-typedef monotonic_clock::rep (*FP_ec)(system::error_code &);
+typedef steady_clock::rep (*FP)();
+typedef steady_clock::rep (*FP_ec)(system::error_code &);
 
 
 BOOST_CHRONO_STATIC
 FP
-init_monotonic_clock(kern_return_t & err)
+init_steady_clock(kern_return_t & err)
 {
     mach_timebase_info_data_t MachInfo;
     err = mach_timebase_info(&MachInfo);
-    if( err != 0  ) {
-    return 0;
+    if ( err != 0  ) 
+    {
+        return 0;
     }
 
     if (MachInfo.numer == MachInfo.denom)
-        return &chrono_detail::monotonic_simplified;
-    return &chrono_detail::monotonic_full;
+    {
+        return &chrono_detail::steady_simplified;
+    }
+    return &chrono_detail::steady_full;
 }
 
 BOOST_CHRONO_STATIC
 FP_ec
-init_monotonic_clock_ec(kern_return_t & err)
+init_steady_clock_ec(kern_return_t & err)
 {
     mach_timebase_info_data_t MachInfo;
     err = mach_timebase_info(&MachInfo);
-    if( err != 0  ) {
-    return 0;
+    if ( err != 0  ) 
+    {
+        return 0;
     }
 
-    if (MachInfo.numer == MachInfo.denom)
-        return &chrono_detail::monotonic_simplified_ec;
-    return &chrono_detail::monotonic_full_ec;
+    if (MachInfo.numer == MachInfo.denom) 
+    {
+        return &chrono_detail::steady_simplified_ec;
+    }
+    return &chrono_detail::steady_full_ec;
 }
 }
-monotonic_clock::time_point
-monotonic_clock::now()
+
+steady_clock::time_point
+steady_clock::now()
 {
     static kern_return_t err;
-    static chrono_detail::FP_ec fp = chrono_detail::init_monotonic_clock(err);
-    if( err != 0  ) {     
+    static chrono_detail::FP_ec fp = chrono_detail::init_steady_clock(err);
+    if ( err != 0  ) 
+    {     
         boost::throw_exception(
                 system::system_error( 
                         err, 
                         BOOST_CHRONO_SYSTEM_CATEGORY, 
-                        "chrono::monotonic_clock" ));
+                        "chrono::steady_clock" ));
     }
     return time_point(duration(fp()));
 }
 
-monotonic_clock::time_point
-monotonic_clock::now(system::error_code & ec)
+steady_clock::time_point
+steady_clock::now(system::error_code & ec)
 {
     static kern_return_t err;
-    static chrono_detail::FP_ec fp = chrono_detail::init_monotonic_clock(err);
-    if( err != 0  ) {
+    static chrono_detail::FP_ec fp = chrono_detail::init_steady_clock(err);
+    if ( err != 0  ) 
+    {
         if (BOOST_CHRONO_IS_THROWS(ec))
         {
             boost::throw_exception(
                     system::system_error( 
                             err, 
                             BOOST_CHRONO_SYSTEM_CATEGORY, 
-                            "chrono::monotonic_clock" ));
+                            "chrono::steady_clock" ));
         }
         else
         {
@@ -213,7 +227,8 @@ monotonic_clock::now(system::error_code & ec)
             return time_point();
         }
     }
-    if (!BOOST_CHRONO_IS_THROWS(ec))
+    if (!BOOST_CHRONO_IS_THROWS(ec)) 
+    {
         ec.clear();
     }
     return time_point(duration(fp(ec)));

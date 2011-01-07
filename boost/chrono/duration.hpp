@@ -412,7 +412,7 @@ namespace chrono {
     public:
 
         BOOST_CHRONO_CONSTEXPR
-        duration() { } ;
+        duration() { }
         template <class Rep2>
         BOOST_CHRONO_CONSTEXPR
         explicit duration(const Rep2& r,
@@ -493,7 +493,7 @@ namespace chrono {
         duration& operator%=(const duration& rhs)
         {
             rep_ %= rhs.count(); return *this;
-        };
+        }
         // 20.9.3.4 duration special values [time.duration.special]
 
         static BOOST_CHRONO_CONSTEXPR duration zero()

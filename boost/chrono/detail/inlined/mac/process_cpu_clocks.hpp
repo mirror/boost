@@ -20,25 +20,25 @@
 
 
 namespace boost { namespace chrono {
-namespace chrono_detail
-{
-  inline long tick_factor()        // multiplier to convert ticks
+namespace chrono_detail {
+    
+    inline long tick_factor()        // multiplier to convert ticks
                             //  to nanoseconds; -1 if unknown
-  {
-    static long factor = 0;
-    if ( !factor )
     {
-      if ( (factor = ::sysconf( _SC_CLK_TCK )) <= 0 )
-        factor = -1;
-      else
-      {
-        BOOST_ASSERT( factor <= 1000000l ); // doesn't handle large ticks
-        factor = 1000000l / factor;  // compute factor
-        if ( !factor ) factor = -1;
-      }
+        static long factor = 0;
+        if ( !factor )
+        {
+            if ( (factor = ::sysconf( _SC_CLK_TCK )) <= 0 )
+                factor = -1;
+            else
+            {
+                BOOST_ASSERT( factor <= 1000000l ); // doesn't handle large ticks
+                factor = 1000000l / factor;  // compute factor
+                if ( !factor ) factor = -1;
+            }
+        }
+        return factor;
     }
-    return factor;
-  }
 }
 
 process_real_cpu_clock::time_point process_real_cpu_clock::now(
@@ -247,5 +247,5 @@ process_cpu_clock::time_point process_cpu_clock::now(
     }
     
 }
-
-} }
+} 
+}
