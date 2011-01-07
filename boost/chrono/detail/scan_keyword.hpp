@@ -19,37 +19,17 @@
 
 #include <boost/chrono/config.hpp>
 
-//#define BOOST_CORONO_IO_USES_LEX
-
-#ifdef BOOST_CORONO_IO_USES_LEX
-#else
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 #include <ios>
 #include <exception>
+#include <cstdlib>
 
 namespace boost {
     using interprocess::unique_ptr;
-#endif
+    
 namespace chrono {
 namespace chrono_detail {
 
-#ifdef BOOST_CORONO_IO_USES_LEX
-
-template <class Lexer>
-struct keywords : lex::lexer<Lexer>
-{
-    template <class ForwardIterator>
-    keywords(ForwardIterator kb, ForwardIterator ke)
-    {
-        // define tokens (the keyword to match and the corresponding index
-        // and add them to the lexer
-        for (int indx=0, ForwardIterator it=kb; it!=ke; ++it, ++i)
-        {
-            this->self.add(*it, i);
-        }
-    }
-};
-#endif
 // scan_keyword
 // Scans [b, e) until a match is found in the basic_strings range
 //  [kb, ke) or until it can be shown that there is no match in [kb, ke).
