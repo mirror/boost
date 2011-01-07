@@ -1,6 +1,7 @@
 /* boost validate.cpp
  *
  * Copyright Jens Maurer 2000
+ * Copyright Steven Watanabe 2010-2011
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -8,145 +9,78 @@
  * $Id$
  */
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
-#pragma warning( disable : 4786 )
-#endif
-
-#include <iostream>
-#include <sstream>
-#include <string>
 #include <cmath>
-#include <iterator>
-#include <vector>
 #include <boost/random.hpp>
 #include <boost/config.hpp>
 
 #include <boost/test/test_tools.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 
-#ifdef BOOST_NO_STDC_NAMESPACE
-  namespace std { using ::abs; using ::fabs; using ::pow; }
-#endif
-
-
-/*
- * General portability note:
- * MSVC mis-compiles explicit function template instantiations.
- * For example, f<A>() and f<B>() are both compiled to call f<A>().
- * BCC is unable to implicitly convert a "const char *" to a std::string
- * when using explicit function template instantiations.
- *
- * Therefore, avoid explicit function template instantiations.
- */
-
 /*
  * Validate correct implementation
  */
 
-// own run
-bool check_(unsigned long x, const boost::mt11213b&) { return x == 3809585648U; }
-
-// validation by experiment from mt19937.c
-bool check_(unsigned long x, const boost::mt19937&) { return x == 4123659995U; }
-
-#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-// validation from the C++0x draft (n3090)
-bool check_(boost::uint64_t x, const boost::mt19937_64&) { return x == UINT64_C(9981545732273789042); }
-#endif
-
-// validation values from the publications
-bool check_(int x, const boost::minstd_rand0&) { return x == 1043618065; }
-
-// validation values from the publications
-bool check_(int x, const boost::minstd_rand&) { return x == 399268537; }
-
-#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-// by experiment from lrand48()
-bool check_(unsigned long x, const boost::rand48&) { return x == 1993516219; }
-#endif
-
-// ????
-bool check_(unsigned long x, const boost::taus88&) { return x == 3535848941U; }
-
-// ????
-bool check_(int x, const boost::ecuyer1988&) { return x == 2060321752; }
-
-// validation by experiment from Harry Erwin's generator.h (private e-mail)
-bool check_(unsigned int x, const boost::kreutzer1986&) { return x == 139726; }
-
-// validation from the C++0x draft (n3090)
-bool check_(unsigned int x, const boost::random::knuth_b&) { return x == 1112339016; }
-
-bool check_(double x, const boost::lagged_fibonacci607&) { return std::abs(x-0.401269) < 1e-5; }
-
-// principal operation validated with CLHEP, values by experiment
-bool check_(unsigned long x, const boost::ranlux3&) { return x == 5957620; }
-bool check_(unsigned long x, const boost::ranlux4&) { return x == 8587295; }
-
-bool check_(float x, const boost::ranlux3_01&)
-{ return std::abs(x-5957620/std::pow(2.0f,24)) < 1e-6; }
-bool check_(float x, const boost::ranlux4_01&)
-{ return std::abs(x-8587295/std::pow(2.0f,24)) < 1e-6; }
-
-bool check_(double x, const boost::ranlux64_3_01&)
-{ return std::abs(x-0.838413) < 1e-6; }
-bool check_(double x, const boost::ranlux64_4_01&)
-{ return std::abs(x-0.59839) < 1e-6; }
-
-bool check_(boost::uint32_t x, const boost::random::ranlux24&) { return x == 9901578; }
-#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-bool check_(boost::uint64_t x, const boost::random::ranlux48&) { return x == UINT64_C(249142670248501); }
-#endif
-
 template<class PRNG>
-void validate(const std::string & name, const PRNG &)
+typename PRNG::result_type validation_value(PRNG rng)
 {
-  std::cout << "validating " << name << ": ";
-  PRNG rng;  // default ctor
-  for(int i = 0; i < 9999; i++)
-    rng();
-  typename PRNG::result_type val = rng();
-  // make sure the validation function is a static member
-  bool result = check_(val, rng);
-  
-  // allow for a simple eyeball check for MSVC instantiation brokenness
-  // (if the numbers for all generators are the same, it's obviously broken)
-  std::cout << val << std::endl;
-  BOOST_CHECK(result);
-}
-
-void validate_all()
-{
-  using namespace boost;
-#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-  validate("rand48", rand48());
-#endif
-  validate("minstd_rand", minstd_rand());
-  validate("minstd_rand0", minstd_rand0());
-  validate("ecuyer combined", ecuyer1988());
-  validate("mt11213b", mt11213b());
-  validate("mt19937", mt19937());
-#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-  validate("mt19937_64", mt19937_64());
-#endif
-  validate("kreutzer1986", kreutzer1986());
-  validate("knuth_b", boost::random::knuth_b());
-  validate("ranlux3", ranlux3());
-  validate("ranlux4", ranlux4());
-  validate("ranlux3_01", ranlux3_01());
-  validate("ranlux4_01", ranlux4_01());
-  validate("ranlux64_3_01", ranlux64_3_01());
-  validate("ranlux64_4_01", ranlux64_4_01());
-  validate("ranlux24", boost::random::ranlux24());
-#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-  validate("ranlux48", boost::random::ranlux48());
-#endif
-  validate("taus88", taus88());
-  validate("lagged_fibonacci607", lagged_fibonacci607());
+    for(int i = 0; i < 9999; i++)
+        rng();
+    return rng();
 }
 
 int test_main(int, char*[])
 {
-  validate_all();
-  return 0;
+    // own run
+    BOOST_CHECK_EQUAL(validation_value(boost::mt11213b()), 3809585648U);
+
+    // validation by experiment from mt19937.c
+    BOOST_CHECK_EQUAL(validation_value(boost::mt19937()), 4123659995U);
+
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+    // validation from the C++0x draft (n3090)
+    BOOST_CHECK_EQUAL(validation_value(boost::mt19937_64()), UINT64_C(9981545732273789042));
+#endif
+
+    // validation values from the publications
+    BOOST_CHECK_EQUAL(validation_value(boost::minstd_rand0()), 1043618065);
+
+    // validation values from the publications
+    BOOST_CHECK_EQUAL(validation_value(boost::minstd_rand()), 399268537);
+
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+    // by experiment from lrand48()
+    BOOST_CHECK_EQUAL(validation_value(boost::rand48()), 1993516219);
+#endif
+
+    // ????
+    BOOST_CHECK_EQUAL(validation_value(boost::taus88()), 3535848941U);
+
+    // ????
+    BOOST_CHECK_EQUAL(validation_value(boost::ecuyer1988()), 2060321752);
+
+    // validation by experiment from Harry Erwin's generator.h (private e-mail)
+    BOOST_CHECK_EQUAL(validation_value(boost::kreutzer1986()), 139726);
+
+    // validation from the C++0x draft (n3090)
+    BOOST_CHECK_EQUAL(validation_value(boost::random::knuth_b()), 1112339016);
+
+    BOOST_CHECK_CLOSE_FRACTION(validation_value(boost::lagged_fibonacci607()), 0.401269, 1e-5);
+
+    // principal operation validated with CLHEP, values by experiment
+    BOOST_CHECK_EQUAL(validation_value(boost::ranlux3()), 5957620);
+    BOOST_CHECK_EQUAL(validation_value(boost::ranlux4()), 8587295);
+
+    BOOST_CHECK_CLOSE_FRACTION(validation_value(boost::ranlux3_01()), 5957620/std::pow(2.0f,24), 1e-6);
+    BOOST_CHECK_CLOSE_FRACTION(validation_value(boost::ranlux4_01()), 8587295/std::pow(2.0f,24), 1e-6);
+
+    BOOST_CHECK_CLOSE_FRACTION(validation_value(boost::ranlux64_3_01()), 0.838413, 1e-6);
+    BOOST_CHECK_CLOSE_FRACTION(validation_value(boost::ranlux64_4_01()), 0.59839, 1e-6);
+
+    BOOST_CHECK_EQUAL(validation_value(boost::random::ranlux24()), 9901578);
+
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+    BOOST_CHECK_EQUAL(validation_value(boost::random::ranlux48()), UINT64_C(249142670248501));
+#endif
+
+    return 0;
 }

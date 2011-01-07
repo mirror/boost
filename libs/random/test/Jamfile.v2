@@ -24,7 +24,6 @@ local all-urngs =
     kreutzer1986
     hellekalek1995
     mt11213b
-    mt19937
     mt19937_64
     lagged_fibonacci
     lagged_fibonacci607
@@ -43,6 +42,8 @@ for urng in $(all-urngs)
 {
     run instantiate.cpp : : : <define>BOOST_RANDOM_URNG_TEST=$(urng) : test_$(urng) ;
 }
+
+run test_mt19937.cpp /boost//unit_test_framework ;
 
 run test_seed_seq.cpp /boost//unit_test_framework ;
 
@@ -77,7 +78,7 @@ run test_piecewise_constant_distribution.cpp /boost//unit_test_framework ;
 # run statistic_tests.cpp ;
 
 exe statistic_tests.exe : statistic_tests.cpp ;
-explicit statistics_tests ;
+explicit statistics_tests.exe ;
 
 install statistic_tests : statistic_tests.exe : <install-type>EXE <location>. ;
 explicit statistic_tests ;
