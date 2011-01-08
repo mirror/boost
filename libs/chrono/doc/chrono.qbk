@@ -99,6 +99,8 @@
 
 [def __BOOST_CHRONO_HAS_CLOCK_STEADY [link boost_chrono.reference.cpp0x.system_clocks_hpp.BOOST_CHRONO_HAS_CLOCK_STEADY `BOOST_CHRONO_HAS_CLOCK_STEADY`]]
 
+[def __BOOST_CHRONO_HAS_THREAD_CLOCK [link boost_chrono.reference.other_clocks.thread_clock_hpp.BOOST_CHRONO_HAS_THREAD_CLOCK `BOOST_CHRONO_HAS_THREAD_CLOCK`]]
+
 
 
 [template clock_concept_link[link_text] [link boost_chrono.reference.cpp0x.clock [link_text]]]
@@ -269,7 +271,7 @@ Lastly, __Boost_Chrono__ includes [@http://www.boost.org/libs/typeof typeof] reg
 It provides I/O for __duration and __time_point. It builds on `<boost/ratio/ratio_io.hpp>` to provide readable and flexible formatting and parsing for types in `<boost/chrono.hpp>`. The __duration unit names can be customized through a new facet: __duration_punct.
 
 
-[heading Caveat emptor]
+[heading Caveat Emptor]
 
 The underlying clocks provided by operating systems are subject to many seemingly arbitrary policies and implementation irregularities. That's a polite way of saying they tend to be flakey, and each operating system or even each clock has its own cruel and unusual forms of flakiness. Don't bet the farm on their accuracy, unless you have become deeply familiar with exactly what the specific operating system is guaranteeing, which is often very little.
 
@@ -355,7 +357,7 @@ In particular, __Boost_Chrono__ depends on:
 
 
 [/=========================================================]
-[heading Building an executable that uses Boost.Chrono ]
+[heading Building an Executable that Uses Boost.Chrono ]
 [/=========================================================]
 
 In addition to link with the __Boost_Chrono__ library you need also to link with the [*Boost.System] library.
@@ -516,7 +518,7 @@ These __duration_s have very simple, very predictable, and very observable behav
 It won't compile. The rationale is that implicit truncation error should not be allowed to happen. If this were to compile, then `m4` would hold `5`, the same value as `m3`. The value associated with `us3` has been effectively ignored. This is similar to the problem of assigning a double to an `int`: the fractional part gets silently discarded.
 [endsect]
 
-[section But what if the truncation behavior is what I want to do?]
+[section But What if the Truncation Behavior is What I Want to Do?]
 
 There is a __duration_cast facility to explicitly ask for this behavior:
 
@@ -651,7 +653,7 @@ Clients with floating point __duration_s who want to use f will now have to conv
 In summary, the author of f has quite a bit of flexibility and control in the interface he wants to provide his clients with, and easy options for manipulating that __duration internal to his function.
 [endsect]
 
-[section Can durations overflow?]
+[section Can Durations Overflow?]
 
 This depend on the representation. The default typedefs uses a representation that don't handle overflows. The user can define his own representation that manage overflow as required by its application.
 
@@ -687,11 +689,11 @@ Given a clock named Clock, it will have:
 
     class Clock {
     public:
-        typedef an arithmetic-like type            rep;
-        typedef an instantiation of ratio          period;
+        typedef an arithmetic-like type        rep;
+        typedef an instantiation of ratio      period;
         typedef bchrono::__duration<rep, period> __duration;
         typedef bchrono::__time_point<Clock>     time_point;
-        static constexpr bool is_steady =           true or false;
+        static constexpr bool is_steady =      true or false;
 
         static time_point now();
     };
@@ -773,11 +775,11 @@ On posix systems for which the macro _POSIX_THREAD_CPUTIME is defined we can get
 
     class thread_clock {
     public:
-        typedef nanoseconds                          duration;
+        typedef __nanoseconds                          duration;
         typedef duration::rep                        rep;
         typedef duration::period                     period;
         typedef chrono::__time_point<thread_clock>    time_point;
-        static constexpr bool is_steady =             BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
+        static constexpr bool is_steady =            BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
 
         static time_point now( ) {
             // get the current thread
@@ -833,7 +835,7 @@ __system_clock is useful when you need to correlate the time with a known epoch 
 [endsect]
 [section steady_clock]
 
-__steady_clock is useful when you need to wait for a specific amount of time. __steady_clock time can not be reset. As other steady clocks, it is based on the processor tick.
+__steady_clock is useful when you need to wait for a specific amount of time. __steady_clock time can not be reset. As other steady clocks, it is usualy based on the processor tick.
 
 Next is presented a polling solution, which will however be too inefficient:
 
@@ -875,7 +877,7 @@ If you need seconds with a floating point representation you can do:
     sec d = end - start;
     std::cout << sec.count() << "s\n";
 
-If you would like to programmatically inspect `__thread_clock::duration`, you can get the representation type with `__thread_clock::rep`, and the tick period with `__thread_clock::period` (which should be a type __ratio which has nested values `__ratio::num` and `__ratio::den`).  The tick period of __thread_clock is `__thread_clock::period::num / __thread_clock::period::den` seconds: 1/1000000000 in this case (`1` billionth of a second), stored in a `long long`.
+If you would like to programmatically inspect `__thread_clock::duration`, you can get the representation type with `__thread_clock::rep`, and the tick period with `__thread_clock::period` (which should be a type __ratio which has nested values `__ratio::num` and `__ratio::den`).  The tick period of __thread_clock is `__thread_clock::period::num / __thread_clock::period::den` seconds: `1/1000000000` in this case (`1` billionth of a second), stored in a `long long`.
 
 [endsect]
 [endsect]
@@ -939,15 +941,15 @@ The output could be
     ClockTick(3) + nanoseconds(10) = 56 [1/5000000000]seconds
 
     Set cout to use short names:
-    milliseconds(3) + microseconds(10) = 3010 us
+    milliseconds(3) + microseconds(10) = 3010 µs
     hours(3) + minutes(10) = 190 m
     ClockTick(3) + nanoseconds(10) = 56 [1/5000000000]s
 
-    system_clock::now() = 1284923218301231 us since Jan 1, 1970
-    steady_clock::now() = 18588963676886 ns since boot
+    system_clock::now() = 129387415616250000 [1/10000000]s since Jan 1, 1970
+    monotonic_clock::now() = 37297387636417 ns since boot
 
     Set cout to use long names:
-    high_resolution_clock::now() = 18588963785548 nanoseconds since boot
+    high_resolution_clock::now() = 37297387655134 nanoseconds since boot
 
 Parsing a __duration follows rules analogous to the __duration converting constructor. A value and a unit (short or long) are read from the `basic_istream`. If the __duration has an integral representation, then the value parsed must be exactly representable in the target __duration (after conversion to the target __duration units), else `failbit` is set. __duration_s based on floating point representations can be parsed using any units that do not cause overflow.
 
@@ -1865,6 +1867,38 @@ Next follows how simple is the usage of this functions:
 
 [endsect]
 [section IO]
+
+Example use of output in French
+
+    #include <boost/chrono/chrono_io.hpp>
+    #include <iostream>
+    #include <locale>
+
+    int main()
+    {
+        using namespace std;
+        using namespace boost;
+        using namespace boost::chrono;
+
+        cout.imbue(locale(locale(), new duration_punct<char>
+            (
+                duration_punct<char>::use_long,
+                "secondes", "minutes", "heures",
+                "s", "m", "h"
+            )));
+        hours h(5);
+        minutes m(45);
+        seconds s(15);
+        milliseconds ms(763);
+        cout << h << ", " << m << ", " << s << " et " << ms << '\n';
+    }
+
+Output is: 
+
+    5 heures, 45 minutes, 15 secondes et 763 millisecondes
+
+['See the source file [@../../example/french.cpp example/french.cpp]]
+
 [endsect]
 
 [endsect]
@@ -1891,6 +1925,11 @@ Next follows how simple is the usage of this functions:
     [From Terry Golubiewski. Is very informative and provides motivation for key design decisions]
 ]
 
+[
+    [[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3135.html#935 [*LGW 935. clock error handling needs to be specified]]]
+    [From Beman Dawes. This issue has been stated as NAD Future.]
+]
+
 ]
 
 [endsect]
@@ -1901,7 +1940,7 @@ Next follows how simple is the usage of this functions:
 [section:reference Reference ]
 [/=================]
 
-As `constexpr` will not be supported by some compilers, it is replaced in the code by BOOST_CHRONO_CONSTEXPR for constexpr functions and BOOST_CHRONO_CONSTEXPR_V for struct/class fields. THe documentation doesn't use these macros.
+As `constexpr` will not be supported by some compilers, it is replaced in the code by BOOST_CHRONO_CONSTEXPR for constexpr functions and BOOST_CHRONO_STATIC_CONSTEXPR for struct/class static fields. The documentation doesn't use these macros.
 
 [section:cpp0x Included on the C++0x Recommendation]
 
@@ -1913,8 +1952,6 @@ As `constexpr` will not be supported by some compilers, it is replaced in the co
     #include <boost/chrono/duration.hpp>
     #include <boost/chrono/time_point.hpp>
     #include <boost/chrono/system_clocks.hpp>
-    #include <boost/chrono/process_cpu_clocks.hpp>
-    #include <boost/chrono/thread_clock.hpp>
     #include <boost/chrono/typeof/boost/chrono/chrono.hpp>
 
 [section:limitations Limitations and Extensions]
@@ -1926,7 +1963,7 @@ Next follows limitation respect to the C++0x recomendations:
 
 The current implementation provides in addition:
 
-* clock error handling as specified in [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3135.html#3155 clock error handling needs to be specified].
+* clock error handling as specified in [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3135.html#935 clock error handling needs to be specified].
 * process and thread clocks.
 
 
@@ -2033,11 +2070,14 @@ This file contains duration specific classes and non-member functions.
             const duration<Rep1, Period1>& lhs,
             const duration<Rep2, Period2>& rhs);
 
+        #ifdef BOOST_CHRONO_EXTENSIONS
+        // Used to get frecuency of events
         template <class Rep1, class Rep2, class Period>
         double operator/(
             const Rep1& s,
             const duration<Rep2, Period>& d);
-
+        #endif
+        
         // duration comparisons
         template <class Rep1, class Period1, class Rep2, class Period2>
         constexpr bool operator==(
@@ -2451,6 +2491,8 @@ __returns Let `CD` represent the __common_type of the two __duration arguments. 
 [endsect]
 
 [section:duration_operator_d_3 Non-Member Function `operator/(Rep1,duration)`]
+
+Included only if BOOST_CHRONO_EXTENSIONS is defined.
 
 This overloading could be used to get the frequency of an event counted by `Rep1`.
 
@@ -2948,8 +2990,8 @@ which returns a `time_t` type that is based on midnight UTC of January 1, 1970.
         typedef __see_bellow__          duration;
         typedef duration::rep                        rep;
         typedef duration::period                     period;
-        typedef chrono::time_point<system_clock>     time_point;
-        static constexpr bool is_steady =             false;
+        typedef chrono::__time_point<system_clock>     time_point;
+        static constexpr bool is_steady =            false;
 
         static time_point  now();                         // throws on error
         static time_point  now(system::error_code & ec);  // never throws
@@ -2996,11 +3038,11 @@ __steady_clock class provides access to the system-wide steady clock. The curren
     #ifdef BOOST_HAS_CLOCK_STEADY
         class steady_clock {
         public:
-            typedef nanoseconds                          duration;
+            typedef __nanoseconds                          duration;
             typedef duration::rep                        rep;
             typedef duration::period                     period;
-            typedef chrono::time_point<steady_clock>  time_point;
-            static constexpr bool is_steady =             true;
+            typedef chrono::__time_point<steady_clock>  time_point;
+            static constexpr bool is_steady =            true;
 
             static time_point  now();                         // throws on error
             static time_point  now(system::error_code & ec);  // never throws
@@ -3353,11 +3395,11 @@ __process_real_cpu_clock class provides access to the real process wall-clock st
 
         class process_real_cpu_clock {
         public:
-            typedef nanoseconds                          duration;
+            typedef __nanoseconds                          duration;
             typedef duration::rep                        rep;
             typedef duration::period                     period;
-            typedef chrono::time_point<process_real_cpu_clock>    time_point;
-            static constexpr bool is_steady =             true;
+            typedef chrono::__time_point<process_real_cpu_clock>    time_point;
+            static constexpr bool is_steady =            true;
 
             static time_point now( system::error_code & ec = system::throws );
         };
@@ -3372,11 +3414,11 @@ __process_user_cpu_clock class provides access to the user CPU-time steady clock
 
         class process_user_cpu_clock {
         public:
-            typedef nanoseconds                          duration;
+            typedef __nanoseconds                          duration;
             typedef duration::rep                        rep;
             typedef duration::period                     period;
-            typedef chrono::time_point<process_user_cpu_clock>    time_point;
-            static constexpr bool is_steady =             true;
+            typedef chrono::__time_point<process_user_cpu_clock>    time_point;
+            static constexpr bool is_steady =            true;
 
             static time_point now( system::error_code & ec = system::throws );
         };
@@ -3392,11 +3434,11 @@ __process_system_cpu_clock class provides access to the system CPU-time steady c
 
         class process_system_cpu_clock {
         public:
-            typedef nanoseconds                          duration;
+            typedef __nanoseconds                          duration;
             typedef duration::rep                        rep;
             typedef duration::period                     period;
-            typedef chrono::time_point<process_system_cpu_clock>    time_point;
-            static constexpr bool is_steady =             true;
+            typedef chrono::__time_point<process_system_cpu_clock>    time_point;
+            static constexpr bool is_steady =            true;
 
             static time_point now( system::error_code & ec = system::throws );
         };
@@ -3417,11 +3459,11 @@ The process relative real, user and system current time can be obtained at once 
     public:
         struct times ;
 
-        typedef duration<times,  nano>                  duration;
+        typedef __duration<times,  nano>                  duration;
         typedef duration::rep                           rep;
         typedef duration::period                        period;
-        typedef chrono::time_point<process_cpu_clock>   time_point;
-        static constexpr bool is_steady =                true;
+        typedef chrono::__time_point<process_cpu_clock>   time_point;
+        static constexpr bool is_steady =               true;
 
         static time_point now( system::error_code & ec = system::throws );
     };
@@ -3549,7 +3591,7 @@ This macro is defined if the platform supports thread clocks.
 
 [section:BOOST_CHRONO_THREAD_CLOCK_IS_STEADY Macro `BOOST_CHRONO_THREAD_CLOCK_IS_STEADY`]
 
-This macro is defined if the platform has a thread clockIts value is true if it is steady and false otherwise.
+This macro is defined if the platform has a thread clock. Its value is true if it is steady and false otherwise.
 
 [endsect]
 
@@ -3561,11 +3603,11 @@ __thread_clock class provides access to the real thread wall-clock, i.e. the rea
 
         class thread_clock {
         public:
-            typedef nanoseconds                          duration;
+            typedef __nanoseconds                          duration;
             typedef duration::rep                        rep;
             typedef duration::period                     period;
-            typedef chrono::time_point<thread_clock>    time_point;
-            static constexpr bool is_steady =             BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
+            typedef chrono::__time_point<thread_clock>     time_point;
+            static constexpr bool is_steady =            BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
 
             static time_point now( system::error_code & ec = system::throws );
         };
@@ -3675,11 +3717,11 @@ The process relative real, user and system current time can be obtained at once 
 
         class process_clock {
         public:
-            typedef nanoseconds                          duration;
+            typedef __nanoseconds                          duration;
             typedef duration::rep                        rep;
             typedef duration::period                     period;
             typedef chrono::__time_point<process_clock>    time_point;
-            static constexpr bool is_steady =             true;
+            static constexpr bool is_steady =            true;
 
             struct process_times;
             static void now( process_times & times,
@@ -4175,7 +4217,7 @@ The following table presents a resume of which API is uused for each clock on ea
     [[__process_system_cpu_clock]         [GetProcessTimes]           [times]                         [times]    ]
     [[__process_user_cpu_clock]           [GetProcessTimes]           [times]                         [times]  ]
     [[__process_cpu_clock]                [GetProcessTimes]           [times]                         [times]   ]
-    [[__thread_clock]                     [GetThreadTimes]            [clock_gettime(pthread_getcpuclockid)]         [pthread_getcpuclockid]       ]
+    [[__thread_clock]                     [GetThreadTimes]            [clock_gettime(pthread_getcpuclockid)]         [clock_gettime(pthread_getcpuclockid)]       ]
 ]
 
 [endsect]
@@ -4192,10 +4234,13 @@ Ask your operating system supplier. The results have been inspected with a debug
 
 [*Boost.Ratio] avoids all kind of overflow that could result of arithmetic operation and that can be simplified. The typedefs durations don't detect overflow. You will need a representation that handles with.
 
-[heading What clock should be used to benchmarking?]
+[heading Which clocks should be used to benchmarking?]
 
-Each clock has his own features. It depends on what do you need to benchmark. Most of the time, you could be interested in using a thread clock, but if you need to measure code subject to synchronization a process clock would be better. If you have a multi-process application, a system-wide clock will be needed.
+Each clock has his own features. It depends on what do you need to benchmark. Most of the time, you could be interested in using a thread clock, but if you need to measure code subject to synchronization a process clock would be better. If you have a multi-process application, a system-wide clock could be needed.
 
+[heading Which clocsk should be used to watching?]
+
+For trace purposes it seems better to use a system-wide clock.
 
 [endsect]
 
@@ -4501,7 +4546,7 @@ boost::chrono::duration<boost::chrono::process_cpu_clock::times, boost::ratio<1l
 
 [heading For later releases]
 
-* Implement `steady_clock` if accepted by the standard.
+* Add chrono utilities as defined By Howard Hinnant in [@http://home.roadrunner.com/~hinnant/duration_io/chrono_util.html here].
 
 [endsect]
 [endsect]
