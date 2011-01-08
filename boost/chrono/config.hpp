@@ -54,7 +54,7 @@
 #   else
 #     error <time.h> does not supply CLOCK_REALTIME
 #   endif
-#   if defined(_POSIX_THREAD_CPUTIME)
+#   if defined(_POSIX_THREAD_CPUTIME) && !defined(BOOST_DISABLE_THREADS)
 #     define BOOST_CHRONO_HAS_THREAD_CLOCK
 #     define BOOST_CHRONO_THREAD_CLOCK_IS_STEADY true
 #   endif
