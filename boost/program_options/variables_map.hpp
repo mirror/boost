@@ -153,6 +153,9 @@ namespace boost { namespace program_options {
         // Resolve conflict between inherited operators.
         const variable_value& operator[](const std::string& name) const
         { return abstract_variables_map::operator[](name); }
+
+        // Override to clear some extra fields.
+        void clear(); 
         
         void notify();
 

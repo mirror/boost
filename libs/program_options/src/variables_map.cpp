@@ -182,6 +182,13 @@ namespace boost { namespace program_options {
     : abstract_variables_map(next)
     {}
 
+    void variables_map::clear()
+    {
+        std::map<std::string, variable_value>::clear();
+        m_final.clear();
+        m_required.clear();
+    }
+
     const variable_value&
     variables_map::get(const std::string& name) const
     {
