@@ -45,7 +45,10 @@
 // See: http://article.gmane.org/gmane.comp.lib.boost.devel/103843
 // See: http://lists.gnu.org/archive/html/bug-guile/2004-01/msg00013.html
 #if defined(__APPLE__) && defined(__DYNAMIC__)
-#include <crt_externs.h>
+// The proper include for this is crt_externs.h, however it's not
+// available on iOS. The right replacement is not known. See
+// https://svn.boost.org/trac/boost/ticket/5053
+extern "C" { extern char ***_NSGetEnviron(void); }
 #define environ (*_NSGetEnviron()) 
 #else
 #if defined(__MWERKS__)
