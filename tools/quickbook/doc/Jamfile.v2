@@ -23,7 +23,7 @@ boostbook standalone
     :
         <xsl:param>boost.root=../../../..
         <xsl:param>generate.section.toc.level=3
-        <xsl:param>chunk.section.depth=2
+        <xsl:param>chunk.section.depth=1
         <xsl:param>chunk.first.sections=1
 
         #<xsl:param>callout.graphics.path=../../images/callouts//

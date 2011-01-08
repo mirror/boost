@@ -77,7 +77,7 @@ namespace quickbook
             qbk_major_version = 1;
             qbk_minor_version = 1;
             qbk_version_n = 101;
-            detail::outwarn(actions.filename.file_string(),1)
+            detail::outwarn(actions.filename.native(),1)
                 << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
@@ -89,13 +89,13 @@ namespace quickbook
         
         if (qbk_version_n == 106)
         {
-            detail::outwarn(actions.filename.file_string(),1)
+            detail::outwarn(actions.filename.native(),1)
                 << "Quickbook 1.6 is still under development and is "
                 "likely to change in the future." << std::endl;
         }
         else if(qbk_version_n < 100 || qbk_version_n > 106)
         {
-            detail::outerr(actions.filename.file_string(),1)
+            detail::outerr(actions.filename.native(),1)
                 << "Unknown version of quickbook: quickbook "
                 << qbk_major_version
                 << "."
@@ -121,7 +121,7 @@ namespace quickbook
 
             if(!invalid_attributes.empty())
             {
-                detail::outwarn(actions.filename.file_string(),1)
+                detail::outwarn(actions.filename.native(),1)
                     << (invalid_attributes.size() > 1 ?
                         "Invalid attributes" : "Invalid attribute")
                     << " for '" << actions.doc_type << " document info': "
@@ -143,6 +143,13 @@ namespace quickbook
             << actions.doc_id
             << "\"\n";
         
+        if(!actions.doc_lang.empty())
+        {
+            out << "    lang=\""
+                << actions.doc_lang.get(106)
+                << "\"\n";
+        }
+
         if(actions.doc_type == "library")
         {
             out << "    name=\"" << actions.doc_title.get(106) << "\"\n";

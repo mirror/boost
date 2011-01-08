@@ -51,6 +51,31 @@ namespace quickbook { namespace detail
         return var_wrapper<T>(t);
     }
 
+    template <typename Rule>
+    struct assign_rule_impl
+    {
+        assign_rule_impl(Rule& the_rule)
+            : m_the_rule(the_rule)
+        {
+        }
+    
+        void operator()(Rule* new_rule) const
+        {
+            m_the_rule = *new_rule;
+        }
+    
+    private:
+    
+        Rule& m_the_rule;
+    };
+
+    template <typename Rule>
+    assign_rule_impl<Rule> assign_rule(Rule& the_rule)
+    {
+        return assign_rule_impl<Rule>(the_rule);
+    }
+
+
     // un-indent a code segment
     void unindent(std::string& program);
 

@@ -173,5 +173,65 @@
         </tbody>
       </tgroup>
     </table>
+    <table frame="all" id="table_1_5.section1.empty_table">
+      <title>Empty Table</title>
+      <tgroup cols="0">
+        <tbody>
+        </tbody>
+      </tgroup>
+    </table>
+    <table frame="all" id="table_1_5.section1.table_with_an_empty_cell">
+      <title>Table with an empty cell</title>
+      <tgroup cols="1">
+        <tbody>
+          <row>
+            <entry>
+              <para>
+                x
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table frame="all" id="table_1_5.section1.indentation">
+      <title>Indentation</title>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>
+              <para>
+                Header 1. Paragraph 1
+              </para>
+              <para>
+                Header 1. Paragraph 2
+              </para>
+            </entry>
+            <entry>
+              <para>
+                Header 2
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>
+              <para>
+                Row 1. Cell 1.
+              </para>
+            </entry>
+            <entry>
+              <para>
+                Row 1. Cell 2.
+              </para>
+              <para>
+                Row 1. Cell 2. Paragraph 2.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </section>
 </article>

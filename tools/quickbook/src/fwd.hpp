@@ -18,6 +18,7 @@
 namespace quickbook
 {
     struct actions;
+    struct quickbook_grammar;
 
     typedef boost::spirit::classic::file_position_base<char const*> position;
     typedef boost::spirit::classic::position_iterator<

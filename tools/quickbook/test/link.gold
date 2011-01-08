@@ -3,18 +3,19 @@
 <article id="link_tests" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Link tests</title>
   <section id="link_tests.different_types_of_links">
-    <title>Different types of links</title> <anchor id="link-id" />
+    <title>Different types of links</title>
     <para>
       <ulink url="http://www.boost.org/">http://www.boost.org/</ulink> <ulink url="http://www.boost.org/">Boost</ulink>
       <link linkend="link-id">link-id</link> <link linkend="link-id">Link Text</link>
-      <functionname alt="foo">foo</functionname> <functionname alt="foo">link text</functionname>
-      <classname alt="foo">foo</classname> <classname alt="foo">link text</classname>
-      <methodname alt="foo">foo</methodname> <methodname alt="foo">link text</methodname>
-      <enumname alt="foo">foo</enumname> <enumname alt="foo">link text</enumname>
-      <macroname alt="foo">foo</macroname> <macroname alt="foo">link text</macroname>
-      <headername alt="foo">foo</headername> <headername alt="foo">link text</headername>
-      <conceptname alt="foo">foo</conceptname> <conceptname alt="foo">link text</conceptname>
-      <globalname alt="foo">foo</globalname> <globalname alt="foo">link text</globalname>
+      <anchor id="link-id"/> <functionname alt="foo">foo</functionname> <functionname
+      alt="foo">link text</functionname> <classname alt="foo">foo</classname> <classname
+      alt="foo">link text</classname> <methodname alt="foo">foo</methodname> <methodname
+      alt="foo">link text</methodname> <enumname alt="foo">foo</enumname> <enumname
+      alt="foo">link text</enumname> <macroname alt="foo">foo</macroname> <macroname
+      alt="foo">link text</macroname> <headername alt="foo">foo</headername> <headername
+      alt="foo">link text</headername> <conceptname alt="foo">foo</conceptname>
+      <conceptname alt="foo">link text</conceptname> <globalname alt="foo">foo</globalname>
+      <globalname alt="foo">link text</globalname>
     </para>
   </section>
   <section id="link_tests.side_by_side_links">

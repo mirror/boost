@@ -17,77 +17,52 @@ namespace quickbook
 {
     namespace cl = boost::spirit::classic;
 
-    struct doc_info_grammar
-    : public cl::grammar<doc_info_grammar>
+    // The spirit scanner for explicitly instantiating grammars. This is a
+    // spirit implementation detail, but since classic is no longer under
+    // development, it won't change. And spirit 2 won't require such a hack.
+
+    typedef cl::scanner<iterator, cl::scanner_policies <
+        cl::iteration_policy, cl::match_policy, cl::action_policy> > scanner;
+
+    struct grammar
+        : public cl::grammar<grammar>
     {
-        doc_info_grammar(quickbook::actions& actions)
-            : actions(actions) {}
+        grammar(cl::rule<scanner> const& start_rule, char const* /* name */)
+            : start_rule(start_rule) {}
 
         template <typename Scanner>
-        struct definition;
+        struct definition {
+            // TODO: Statically assert that Scanner == scanner.
+        
+            definition(grammar const& self) : start_rule(self.start_rule) {}
+            
+            cl::rule<Scanner> const& start() const { return start_rule; }
 
-        quickbook::actions& actions;
+            cl::rule<Scanner> const& start_rule;
+        };
+
+        cl::rule<scanner> const& start_rule;
     };
 
-    struct block_grammar : cl::grammar<block_grammar>
+    class quickbook_grammar
     {
-        block_grammar(quickbook::actions& actions_, bool skip_initial_spaces = false)
-            : actions(actions_), skip_initial_spaces(skip_initial_spaces) { }
+    public:
+        struct impl;
 
-        template <typename Scanner>
-        struct definition;
+    private:
+        boost::scoped_ptr<impl> impl_;
 
-        quickbook::actions& actions;
-        bool const skip_initial_spaces;
+    public:
+        grammar command_line_macro;
+        grammar common;
+        grammar simple_phrase;
+        grammar block;
+        grammar block_skip_initial_spaces;
+        grammar doc_info;
+
+        quickbook_grammar(quickbook::actions&);
+        ~quickbook_grammar();
     };
-
-    struct phrase_grammar
-        : cl::grammar<phrase_grammar>
-    {
-        phrase_grammar(quickbook::actions& actions, bool& no_eols)
-            : no_eols(no_eols), actions(actions) {}
-
-        template <typename Scanner>
-        struct definition;
-
-        bool& no_eols;
-        quickbook::actions& actions;
-    };
-
-    struct simple_phrase_grammar
-        : public cl::grammar<simple_phrase_grammar >
-    {
-        simple_phrase_grammar(quickbook::actions& actions)
-            : actions(actions) {}
-
-        template <typename Scanner>
-        struct definition;
-
-        quickbook::actions& actions;
-    };
-
-    struct command_line_grammar
-        : public cl::grammar<command_line_grammar>
-    {
-        command_line_grammar(quickbook::actions& actions)
-            : actions(actions) {}
-
-        template <typename Scanner>
-        struct definition;
-
-        quickbook::actions& actions;
-    };
-
-    cl::parse_info<iterator> call_parse(
-        iterator&, iterator, doc_info_grammar&);
-    cl::parse_info<iterator> call_parse(
-        iterator&, iterator, block_grammar&);
-    cl::parse_info<iterator> call_parse(
-        iterator&, iterator, phrase_grammar&);
-    cl::parse_info<iterator> call_parse(
-        iterator&, iterator, simple_phrase_grammar&);
-    cl::parse_info<iterator> call_parse(
-        iterator&, iterator, command_line_grammar&);
 }
 
 #endif

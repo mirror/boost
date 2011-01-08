@@ -2,7 +2,9 @@
     [quickbook 1.5]
 ]
 
-[def defined]
+[def __defined__]
 
-[?defined This should show]
-[?undefined This should not show]
+[? __defined__ This should show]
+[? __undefined__ This should not show]
+
+The should be no sp[?__undefined__ just some junk]ace inserted.

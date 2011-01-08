@@ -26,42 +26,11 @@ namespace quickbook { namespace detail
     }
 }}
 
-#elif defined(QUICKBOOK_CYGWIN_1_5)
-
-// Cygwin 1.5.x
-
-#include <boost/filesystem/v2/config.hpp>
-#include <windows.h>
-#include <sys/cygwin.h>
-
-namespace quickbook { namespace detail
-{
-    void validate(boost::any& v,
-            const std::vector<std::string>& values,
-            input_path*, int)
-    {
-        std::string path
-            = boost::program_options::validators::get_single_string(values);
-
-        char result[MAX_PATH + 1];
-
-#if defined(BOOST_WINDOWS_PATH)
-        cygwin_conv_to_win32_path(path.c_str(), result);
-#elif defined(BOOST_POSIX_PATH)
-        cygwin_conv_to_posix_path(path.c_str(), result);
-#else
-#    error "Boost filesystem path type doesn't seem to be set."
-#endif
-
-        v = input_path(result);
-    }
-}}
-
 #else
 
 // Cygwin 1.7.x
     
-#include <boost/filesystem/v2/config.hpp>
+#include <boost/filesystem/v3/config.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/program_options/errors.hpp>
 #include <windows.h>

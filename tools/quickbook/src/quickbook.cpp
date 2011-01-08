@@ -15,8 +15,8 @@
 #include "input_path.hpp"
 #include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/program_options.hpp>
-#include <boost/filesystem/v2/path.hpp>
-#include <boost/filesystem/v2/operations.hpp>
+#include <boost/filesystem/v3/path.hpp>
+#include <boost/filesystem/v3/operations.hpp>
 #include <boost/ref.hpp>
 
 #include <stdexcept>
@@ -28,7 +28,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.5.3"
+#define QUICKBOOK_VERSION "Quickbook Version 1.5.4"
 
 namespace quickbook
 {
@@ -44,8 +44,6 @@ namespace quickbook
 
     static void set_macros(actions& actor)
     {
-        quickbook::command_line_grammar grammar(actor);
-
         for(std::vector<std::string>::const_iterator
                 it = preset_defines.begin(),
                 end = preset_defines.end();
@@ -54,7 +52,7 @@ namespace quickbook
             iterator first(it->begin(), it->end(), "command line parameter");
             iterator last(it->end(), it->end());
 
-            call_parse(first, last, grammar);
+            cl::parse(first, last, actor.grammar().command_line_macro);
             // TODO: Check result?
         }
     }
@@ -81,15 +79,13 @@ namespace quickbook
         iterator first(storage.begin(), storage.end(), filein_);
         iterator last(storage.end(), storage.end());
 
-        doc_info_grammar l(actor);
-        cl::parse_info<iterator> info = call_parse(first, last, l);
+        cl::parse_info<iterator> info = cl::parse(first, last, actor.grammar().doc_info);
 
         if (info.hit || ignore_docinfo)
         {
             pre(actor.out, actor, ignore_docinfo);
 
-            block_grammar g(actor);
-            info = call_parse(info.hit ? info.stop : first, last, g);
+            info = cl::parse(info.hit ? info.stop : first, last, actor.grammar().block);
             if (info.full)
             {
                 post(actor.out, actor, ignore_docinfo);
@@ -111,6 +107,7 @@ namespace quickbook
     parse_document(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
+
         set_macros(actor);
         bool r = parse_file(filein_, actor);
         if (actor.section_level != 0)
