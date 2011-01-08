@@ -8,18 +8,25 @@
 // file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MSM_BACK_DEFAULT_COMPILE_POLICY_HPP
-#define BOOST_MSM_BACK_DEFAULT_COMPILE_POLICY_HPP
+#ifndef BOOST_MSM_BACK_QUEUE_CONTAINER_CIRCULAR_H
+#define BOOST_MSM_BACK_QUEUE_CONTAINER_CIRCULAR_H
 
-#include <boost/mpl/bool.hpp>
+#include <boost/circular_buffer.hpp>
 
 namespace boost { namespace msm { namespace back
 {
-struct favor_runtime_speed 
-{
-    typedef int compile_policy;
-    typedef ::boost::mpl::true_ add_forwarding_rows;
-};
+    struct queue_container_circular
+    {
+        typedef int queue_container_policy;
 
-}}}// boost::msm::back
-#endif // BOOST_MSM_BACK_DEFAULT_COMPILE_POLICY_HPP
+        template <class Element>
+        struct In 
+        {
+            typedef typename boost::circular_buffer<Element> type;
+        };
+    };
+
+} } }//boost::msm::back
+
+
+#endif //BOOST_MSM_BACK_QUEUE_CONTAINER_CIRCULAR_H
