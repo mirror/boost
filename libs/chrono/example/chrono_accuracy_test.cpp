@@ -8,7 +8,9 @@
 
 //  See http://www.boost.org/libs/chrono for documentation.
 
-//#include <boost/chrono/process_cpu_clocks.hpp>
+#include <boost/chrono/chrono.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
+#include <boost/chrono/thread_clock.hpp>
 #include <boost/chrono/timer.hpp>
 #include <cstdlib> // for atol()
 #include <iostream>

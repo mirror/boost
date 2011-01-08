@@ -7,25 +7,27 @@
 
 // Adapted to Boost from the original Hawards's code
 
-    #include <boost/chrono/chrono_io.hpp>
-    #include <iostream>
-    #include <locale>
+#include <boost/chrono/chrono_io.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
+#include <boost/chrono/thread_clock.hpp>
+#include <iostream>
+#include <locale>
 
-    int main()
-    {
-        using namespace std;
-        using namespace boost;
-        using namespace boost::chrono;
+int main()
+{
+    using namespace std;
+    using namespace boost;
+    using namespace boost::chrono;
 
-        cout.imbue(locale(locale(), new duration_punct<char>
-            (
-                duration_punct<char>::use_long,
-                "secondes", "minutes", "heures",
-                "s", "m", "h"
-            )));
-        hours h(5);
-        minutes m(45);
-        seconds s(15);
-        milliseconds ms(763);
-        cout << h << ", " << m << ", " << s << " et " << ms << '\n';
-    }
+    cout.imbue(locale(locale(), new duration_punct<char>
+        (
+            duration_punct<char>::use_long,
+            "secondes", "minutes", "heures",
+            "s", "m", "h"
+        )));
+    hours h(5);
+    minutes m(45);
+    seconds s(15);
+    milliseconds ms(763);
+    cout << h << ", " << m << ", " << s << " et " << ms << '\n';
+}
