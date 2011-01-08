@@ -22,7 +22,8 @@
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 #include <ios>
 #include <exception>
-#include <cstdlib>
+//~ #include <cstdlib>
+#include <stdlib.h>
 
 namespace boost {
     using interprocess::unique_ptr;
