@@ -567,7 +567,7 @@ private:
 // NOTE: This needs to be a friend of variant, as it needs access to
 // indicate_which, indicate_backup_which, etc.
 //
-template <typename Variant, typename RhsT>
+template <typename Variant>
 class backup_assigner
     : public static_visitor<>
 {
@@ -575,18 +575,27 @@ private: // representation
 
     Variant& lhs_;
     int rhs_which_;
-    const RhsT& rhs_content_;
+    const void* rhs_content_;
+    void (*copy_rhs_content_)(void*, const void*);
 
 public: // structors
 
+    template<class RhsT>
     backup_assigner(Variant& lhs, int rhs_which, const RhsT& rhs_content)
         : lhs_(lhs)
         , rhs_which_(rhs_which)
-        , rhs_content_(rhs_content)
+        , rhs_content_(&rhs_content)
+        , copy_rhs_content_(&construct_impl<RhsT>)
     {
     }
 
 private: // helpers, for visitor interface (below)
+
+    template<class RhsT>
+    static void construct_impl(void* addr, const void* obj)
+    {
+        new(addr) RhsT(*static_cast<const RhsT*>(obj));
+    }
 
     template <typename LhsT>
     void backup_assign_impl(
@@ -605,7 +614,7 @@ private: // helpers, for visitor interface (below)
         try
         {
             // ...and attempt to copy rhs content into lhs storage:
-            new(lhs_.storage_.address()) RhsT(rhs_content_);
+            copy_rhs_content_(lhs_.storage_.address(), rhs_content_);
         }
         catch (...)
         {
@@ -638,7 +647,7 @@ private: // helpers, for visitor interface (below)
         try
         {
             // ...and attempt to copy rhs content into lhs storage:
-            new(lhs_.storage_.address()) RhsT(rhs_content_);
+            copy_rhs_content_(lhs_.storage_.address(), rhs_content_);
         }
         catch (...)
         {
@@ -1448,7 +1457,7 @@ public: // structors, cont.
 private: // helpers, for modifiers (below)
 
 #   if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-    template <typename Variant, typename RhsT>
+    template <typename Variant>
     friend class detail::variant::backup_assigner;
 #   endif
 
@@ -1561,7 +1570,7 @@ private: // helpers, for modifiers (below)
             , mpl::false_// has_fallback_type
             )
         {
-            detail::variant::backup_assigner<wknd_self_t, RhsT>
+            detail::variant::backup_assigner<wknd_self_t>
                 visitor(lhs_, rhs_which_, rhs_content);
             lhs_.internal_apply_visitor(visitor);
         }
