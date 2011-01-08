@@ -194,7 +194,7 @@ steady_clock::time_point
 steady_clock::now()
 {
     static kern_return_t err;
-    static chrono_detail::FP_ec fp = chrono_detail::init_steady_clock(err);
+    static chrono_detail::FP fp = chrono_detail::init_steady_clock(err);
     if ( err != 0  ) 
     {     
         boost::throw_exception(
@@ -210,7 +210,7 @@ steady_clock::time_point
 steady_clock::now(system::error_code & ec)
 {
     static kern_return_t err;
-    static chrono_detail::FP_ec fp = chrono_detail::init_steady_clock(err);
+    static chrono_detail::FP_ec fp = chrono_detail::init_steady_clock_ec(err);
     if ( err != 0  ) 
     {
         if (BOOST_CHRONO_IS_THROWS(ec))
