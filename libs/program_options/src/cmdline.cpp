@@ -277,7 +277,7 @@ namespace boost { namespace program_options { namespace detail {
         }
 
         /* If an key option is followed by a positional option,
-           can can consume more tokens (e.g. it's multitoke option),
+           can can consume more tokens (e.g. it's multitoken option),
            give those tokens to it.  */
         vector<option> result2;
         for (unsigned i = 0; i < result.size(); ++i)
