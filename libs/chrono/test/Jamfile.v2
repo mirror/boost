@@ -170,6 +170,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run ../example/manipulate_clock_object.cpp ]
         [ chrono-run ../example/chrono_accuracy_test.cpp ]
         [ chrono-run ../example/test_thread_clock.cpp  ]
+        [ chrono-run ../example/french.cpp  ]
         ;
 
 #    test-suite "timer"
