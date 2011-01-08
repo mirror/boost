@@ -16,6 +16,8 @@
 #define BOOST_CHRONO_IO_INPUT
 
 #include <boost/chrono/chrono.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
+#include <boost/chrono/thread_clock.hpp>
 #include <boost/ratio/ratio_io.hpp>
 #include <locale>
 #include <boost/type_traits/is_scalar.hpp>
