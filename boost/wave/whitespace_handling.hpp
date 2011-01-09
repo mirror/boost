@@ -5,7 +5,7 @@
     http://www.boost.org/
 
     Copyright (c) 2003 Paul Mensonides
-    Copyright (c) 2001-2010 Hartmut Kaiser. 
+    Copyright (c) 2001-2011 Hartmut Kaiser. 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -99,6 +99,10 @@ public:
     template <typename ContextT>
     bool may_skip_whitespace(ContextT const& ctx, TokenT &token, 
         bool &skipped_newline);
+    template <typename ContextT>
+    bool may_skip_whitespace(ContextT const& ctx, TokenT &token, 
+        bool preserve_comments_, bool preserve_bol_whitespace_,
+        bool &skipped_newline);
 
 protected:
     bool skip_cppcomment(boost::wave::token_id id)
@@ -109,14 +113,16 @@ protected:
 private:
     typedef bool state_t(TokenT &token, bool &skipped_newline);
     state_t eat_whitespace::* state;
-    state_t general, newline, newline_2nd, whitespace;
+    state_t general, newline, newline_2nd, whitespace, bol_whitespace;
     bool preserve_comments;
+    bool preserve_bol_whitespace;
 };
 
 template <typename TokenT>
 inline 
 eat_whitespace<TokenT>::eat_whitespace()
-:   state(&eat_whitespace::newline), preserve_comments(false)
+:   state(&eat_whitespace::newline), preserve_comments(false),
+    preserve_bol_whitespace(false)
 {
 }
 
@@ -128,6 +134,19 @@ eat_whitespace<TokenT>::may_skip_whitespace(ContextT const& ctx, TokenT &token,
 {
     // re-initialize the preserve comments state
     preserve_comments = boost::wave::need_preserve_comments(ctx.get_language());
+    return (this->*state)(token, skipped_newline);
+}
+
+template <typename TokenT>
+template <typename ContextT>
+inline bool 
+eat_whitespace<TokenT>::may_skip_whitespace(ContextT const& ctx, TokenT &token, 
+    bool preserve_comments_, bool preserve_bol_whitespace_,
+    bool &skipped_newline) 
+{
+    // re-initialize the preserve comments state
+    preserve_comments = preserve_comments_;
+    preserve_bol_whitespace = preserve_bol_whitespace_;
     return (this->*state)(token, skipped_newline);
 }
 
@@ -164,16 +183,16 @@ inline bool
 eat_whitespace<TokenT>::newline(TokenT &token, bool &skipped_newline) 
 {
     using namespace boost::wave;
-    
+
     token_id id = token_id(token);
     if (T_NEWLINE == id || T_CPPCOMMENT == id) {
         skipped_newline = true;
         state = &eat_whitespace::newline_2nd;
         return T_NEWLINE == id || skip_cppcomment(id);
     }
-    else if (T_SPACE != id && T_SPACE2 != id && T_CCOMMENT != id) {
+
+    if (T_SPACE != id && T_SPACE2 != id && T_CCOMMENT != id) 
         return general(token, skipped_newline);
-    }
 
     if (T_CCOMMENT == id) {
         if (util::ccomment_has_newline(token)) {
@@ -184,8 +203,14 @@ eat_whitespace<TokenT>::newline(TokenT &token, bool &skipped_newline)
             state = &eat_whitespace::general;
             return false;
         }
-        // fall through...
+        return true;
     }
+
+    if (preserve_bol_whitespace) {
+        state = &eat_whitespace::bol_whitespace;
+        return false;
+    }
+
     return true;
 }
 
@@ -196,8 +221,14 @@ eat_whitespace<TokenT>::newline_2nd(TokenT &token, bool &skipped_newline)
     using namespace boost::wave;
 
     token_id id = token_id(token);
-    if (T_SPACE == id || T_SPACE2 == id)
+    if (T_SPACE == id || T_SPACE2 == id) {
+        if (preserve_bol_whitespace) {
+            state = &eat_whitespace::bol_whitespace;
+            return false;
+        }
         return true;
+    }
+
     if (T_CCOMMENT == id) {
         if (util::ccomment_has_newline(token))
             skipped_newline = true;
@@ -208,11 +239,25 @@ eat_whitespace<TokenT>::newline_2nd(TokenT &token, bool &skipped_newline)
         }
         return  true;
     }
+
     if (T_NEWLINE != id && T_CPPCOMMENT != id) 
         return general(token, skipped_newline);
 
     skipped_newline = true;
     return T_NEWLINE == id || skip_cppcomment(id);
+}
+
+template <typename TokenT>
+inline bool 
+eat_whitespace<TokenT>::bol_whitespace(TokenT &token, bool &skipped_newline) 
+{
+    using namespace boost::wave;
+
+    token_id id = token_id(token);
+    if (T_SPACE == id || T_SPACE2 == id) 
+        return !preserve_bol_whitespace;
+
+    return general(token, skipped_newline);
 }
 
 template <typename TokenT>
