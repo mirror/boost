@@ -11,7 +11,7 @@
 
 #include <boost/concept_check.hpp>
 #include <boost/concept_archetype.hpp>
-# include <boost/concept/requires.hpp>
+#include <boost/concept/requires.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/cstdint.hpp>
@@ -124,7 +124,7 @@ struct RandomNumberEngine :
 
     // Type deduction will fail unless the arguments have the same type.
     template <typename T>
-    void same_type(T const&, T const&);
+    void same_type(T const&, T const&) {}
 };
 
 }
