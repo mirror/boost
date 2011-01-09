@@ -54,7 +54,7 @@ like this:
     [copyright 2000 2002 2003 Joe Blow, Jane Doe]
     [authors [Blow, Joe] [Doe, Jane]]
     [license The document's license]
-    [source-mode source-type]
+    [source-mode c++]
 ]
 ''']
 
@@ -82,26 +82,78 @@ So the documentation for the 'foo' library might start:
 [pre'''
 [library Foo
     [quickbook 1.5]
-    [version 1.0]
     [id foo]
+    [version 1.0]
 ]
 ''']
 
 [section:attributes Document Info Attributes]
 
-quickbook 1.5 declares the version of quickbook the document is written for.
-In its absence, version 1.1 is assumed.
+The document info block has a few different types of attributes.
+They are all optional.
 
-=version=, =id=, =dirname=, =copyright=, =purpose=, =category=, =authors=,
-=license=, =last-revision= and =source-mode= are optional information.
+[heading Quickbook specific meta data]
 
-=dirname=, =purpose= and =category= are boostbook attributes which are only
+[pre'''
+    [quickbook 1.5]
+''']
+
+The `quickbook` attribute declares the version of quickbook
+the document is written for.
+In its absence, version 1.1 is assumed. It's recommended that
+you use `[quickbook 1.5]` which is the version described here.
+
+[pre'''
+    [source-mode teletype]
+''']
+
+The `source-mode` attribute sets the initial __source_mode__. If
+it is omitted, the default value of =c++= will be used.
+
+[heading Boostbook/Docbook root element attributes]
+
+[pre'''
+[id foo]
+''']
+
+`id` specifies the id of the document element. If it isn't specified
+the id is automatically generated from the title. This id is also
+used to generate the nested ids.
+
+[pre'''
+[lang en]
+''']
+
+`lang` specifies the document language. This is used by docbook to
+localize the documentation. Note that Boostbook doesn't have any
+localization support so if you use it to generate the reference
+documentation it will be in English regardless.
+
+It should be a language code
+drawn from ISO 639 (perhaps extended with a country code drawn from
+ISO 3166, as en-US).
+
+[pre'''
+[dirname foo]
+''']
+
+`dirname` is used to specify the directory name of the library in the
+repository. This is a boostbook extension so it's only valid for
+`library` documentation blocks.  It's used for some boostbook
+functionality, but for pure quickbook documentation has no practical
+effect.
+
+[heading Docbook Metadata]
+
+=version=, =copyright=, =authors=,
+=license=, =last-revision= and =bibliod= are optional information.
+
+[heading Boostbook Metadata]
+
+=purpose= and =category= are boostbook attributes which are only
 valid for =library= documents. If you use them for other document types,
 quickbook will warn about them, but still use them, generating invalid markup,
 that's just ignored by the style sheets.
-
-=source-type= is a lowercase string setting the initial __source_mode__. If
-the =source-mode= field is omitted, a default value of =c++= will be used.
 
 [endsect] [/attributes]
 
