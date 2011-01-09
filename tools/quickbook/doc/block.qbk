@@ -9,56 +9,6 @@
 
 [section:block Block Level Elements]
 
-[section Document]
-
-Every document must begin with a Document Info section, which should look
-like this:
-
-[pre'''
-[document-type The Document Title
-    [quickbook 1.5]
-    [version 1.0]
-    [id the_document_name]
-    [dirname the_document_dir]
-    [copyright 2000 2002 2003 Joe Blow, Jane Doe]
-    [purpose The document's reason for being]
-    [category The document's category]
-    [authors [Blow, Joe] [Doe, Jane]]
-    [license The document's license]
-    [source-mode source-type]
-]
-''']
-
-Where document-type is one of:
-
-* book
-* article
-* library
-* chapter
-* part
-* appendix
-* preface
-* qandadiv
-* qandaset
-* reference
-* set
-
-quickbook 1.5 declares the version of quickbook the document is written for.
-In its absence, version 1.1 is assumed.
-
-=version=, =id=, =dirname=, =copyright=, =purpose=, =category=, =authors=,
-=license=, =last-revision= and =source-mode= are optional information.
-
-=dirname=, =purpose= and =category= are boostbook attributes which are only
-valid for =library= documents. If you use them for other document types,
-quickbook will warn about them, but still use them, generating invalid markup,
-that's just ignored by the style sheets.
-
-=source-type= is a lowercase string setting the initial __source_mode__. If
-the =source-mode= field is omitted, a default value of =c++= will be used.
-
-[endsect] [/Document]
-
 [section Section]
 
 Starting a new section is accomplished with:
