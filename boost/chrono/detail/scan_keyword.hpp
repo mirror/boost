@@ -22,7 +22,6 @@
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 #include <ios>
 #include <exception>
-//~ #include <cstdlib>
 #include <stdlib.h>
 
 namespace boost {
@@ -30,6 +29,8 @@ namespace boost {
     
 namespace chrono {
 namespace chrono_detail {
+
+void free_aux(void* ptr) { free(ptr); }    
 
 // scan_keyword
 // Scans [b, e) until a match is found in the basic_strings range
@@ -57,16 +58,15 @@ scan_keyword(InputIterator& b, InputIterator e,
                )
 {
     typedef typename std::iterator_traits<InputIterator>::value_type CharT;
-#ifdef BOOST_CORONO_IO_USES_LEX
-    
-#else
     size_t nkw = std::distance(kb, ke);
     const unsigned char doesnt_match = '\0';
     const unsigned char might_match = '\1';
     const unsigned char does_match = '\2';
     unsigned char statbuf[100];
     unsigned char* status = statbuf;
-    unique_ptr<unsigned char, void(*)(void*)> stat_hold(0, free);
+    //  Change free by free_aux to avoid
+    // Error: Could not find a match for boost::interprocess::unique_ptr<unsigned char, void(*)(void*)>::unique_ptr(int, extern "C" void(void*)) 
+    unique_ptr<unsigned char, void(*)(void*)> stat_hold(0, free_aux);
     if (nkw > sizeof(statbuf))
     {
         status = (unsigned char*)malloc(nkw);
@@ -155,7 +155,6 @@ scan_keyword(InputIterator& b, InputIterator e,
     if (kb == ke)
         err |= std::ios_base::failbit;
     return kb;
-#endif
 }
 }
 }
