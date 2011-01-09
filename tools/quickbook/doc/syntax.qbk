@@ -107,25 +107,47 @@ the =source-mode= field is omitted, a default value of =c++= will be used.
 
 [endsect] [/docinfo]
 
-[section Section]
+[section:section Sections]
 
-Starting a new section is accomplished with:
+Quickbook documents are structured using 'sections'. These are used
+to generate the table of contents, and, when generating html, to
+split the document into pages. This is optional but a good idea for
+all but the simplest of documents.
+
+A sectioned document might look like:
+
+[pre'''
+    [book Title
+        [quickbook 1.5]
+    ]
+    
+    [section First Section]
+    
+    [/...]
+    
+    [endsect]
+
+    [section Second Section]
+    
+    [/...]
+    
+    [endsect]
+''']
+
+Sections start with the `section` tag, and end with the `[endsect]` tag.
+(`[/...]` is a comment, [link quickbook.syntax.comments described later]).
+
+Sections can be given an optional id:
 
 [pre'''
 [section:id The Section Title]
 ''']
 
-where /id/ is optional. id will be the filename of the generated section.
+`id` will be the filename of the generated section.
 If it is not present, "The Section Title" will be normalized and become the id.
 Valid characters are =a-Z=, =A-Z=, =0-9= and =_=. All non-valid characters are
 converted to underscore and all upper-case are converted to lower case.
 Thus: "The Section Title" will be normalized to "the_section_title".
-
-End a section with:
-
-[pre'''
-[endsect]
-''']
 
 Sections can nest, and that results in a hierarchy in the table of contents.
 
