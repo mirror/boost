@@ -44,8 +44,8 @@
 [def __images__             [link quickbook.phrase.images Images]]
 [def __cond__               [link quickbook.phrase.cond Conditional Generation]]
 
-[def __document__           [link quickbook.block.document Document]]
-[def __section__            [link quickbook.block.section Section]]
+[def __document__           [link quickbook.syntax.docinfo Document]]
+[def __section__            [link quickbook.syntax.section Section]]
 [def __xinclude__           [link quickbook.block.xinclude  xinclude]]
 [def __paragraphs__         [link quickbook.block.paragraphs Paragraphs]]
 [def __ordered_lists__      [link quickbook.block.lists.ordered_lists Ordered lists]]
