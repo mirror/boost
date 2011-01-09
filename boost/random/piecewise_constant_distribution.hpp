@@ -93,9 +93,9 @@ public:
          * distribution will produce values uniformly distributed
          * in the range [0, 1).
          */
-        template<class F>
-        param_type(const std::initializer_list<RealType>& il, F f)
-          : _intervals(il)
+        template<class T, class F>
+        param_type(const std::initializer_list<T>& il, F f)
+          : _intervals(il.begin(), il.end())
         {
             if(_intervals.size() < 2) {
                 _intervals.clear();
@@ -282,9 +282,9 @@ public:
      * distribution will produce values uniformly distributed
      * in the range [0, 1).
      */
-    template<class F>
-    piecewise_constant_distribution(std::initializer_list<RealType> il, F f)
-      : _intervals(il)
+    template<class T, class F>
+    piecewise_constant_distribution(std::initializer_list<T> il, F f)
+      : _intervals(il.begin(), il.end())
     {
         if(_intervals.size() < 2) {
             _intervals.clear();

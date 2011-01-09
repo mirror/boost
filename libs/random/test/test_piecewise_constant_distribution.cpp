@@ -113,8 +113,8 @@ BOOST_AUTO_TEST_CASE(test_param) {
         { 99, 103, 107, 111, 115 },
         gen()
     };
-    CHECK_SEQUENCE(param_il.intervals(), list_of(99)(103)(107)(111)(115));
-    CHECK_SEQUENCE(param_il.densities(), list_of(.03125)(.0625)(.03125)(.125));
+    CHECK_SEQUENCE(parm_il.intervals(), list_of(99)(103)(107)(111)(115));
+    CHECK_SEQUENCE(parm_il.densities(), list_of(.03125)(.0625)(.03125)(.125));
 #endif
 
     boost::random::piecewise_constant_distribution<>::param_type
