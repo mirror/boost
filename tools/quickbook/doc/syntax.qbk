@@ -47,39 +47,53 @@ Can be placed anywhere.
 
 [endsect] [/Comments]
 
-[section Document Info]
+[section:docinfo Document Info]
 
-Every document must begin with a Document Info section, which should look
+Every document must begin with a Document Info section, which looks something
 like this:
 
 [pre'''
-[document-type The Document Title
+[article The Document Title
     [quickbook 1.5]
     [version 1.0]
     [id the_document_name]
-    [dirname the_document_dir]
     [copyright 2000 2002 2003 Joe Blow, Jane Doe]
-    [purpose The document's reason for being]
-    [category The document's category]
     [authors [Blow, Joe] [Doe, Jane]]
     [license The document's license]
     [source-mode source-type]
 ]
 ''']
 
-Where document-type is one of:
+`article` is the document type. There are several possible document types,
+most of these are based on docbook document elements. These are fully
+described in
+[@http://www.docbook.org/tdg/ DocBook: The Definitive Guide]:
 
-* book
-* article
-* library
-* chapter
-* part
-* appendix
-* preface
-* qandadiv
-* qandaset
-* reference
-* set
+* [@http://www.docbook.org/tdg/en/html/book.html book]
+* [@http://www.docbook.org/tdg/en/html/article.html article]
+* [@http://www.docbook.org/tdg/en/html/chapter.html chapter]
+* [@http://www.docbook.org/tdg/en/html/part.html part]
+* [@http://www.docbook.org/tdg/en/html/appendix.html appendix]
+* [@http://www.docbook.org/tdg/en/html/preface.html preface]
+* [@http://www.docbook.org/tdg/en/html/qandadiv.html qandadiv]
+* [@http://www.docbook.org/tdg/en/html/qandaset.html qandaset]
+* [@http://www.docbook.org/tdg/en/html/reference.html reference]
+* [@http://www.docbook.org/tdg/en/html/set.html set]
+
+Boostbook also adds another document type [^[link boostbook.defining library]]
+for documenting software libraries.
+
+So the documentation for the 'foo' library might start:
+
+[pre'''
+[library Foo
+    [quickbook 1.5]
+    [version 1.0]
+    [id foo]
+]
+''']
+
+[section:attributes Document Info Attributes]
 
 quickbook 1.5 declares the version of quickbook the document is written for.
 In its absence, version 1.1 is assumed.
@@ -95,7 +109,8 @@ that's just ignored by the style sheets.
 =source-type= is a lowercase string setting the initial __source_mode__. If
 the =source-mode= field is omitted, a default value of =c++= will be used.
 
+[endsect] [/attributes]
 
-[endsect]
+[endsect] [/docinfo]
 
 [endsect] [/Syntax Summary]
