@@ -13,7 +13,7 @@ namespace search_colors {
     struct White {};
     struct Gray {};
     struct Black {};
-};
+}
 
 struct create_search_color_map : mpl::map<> {};
 
