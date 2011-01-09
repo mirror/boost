@@ -49,7 +49,7 @@ bool do_test(int n, double p, long long max) {
     }
     double chsqr = chi_squared_test(results, expected, max);
 
-    bool result = chsqr < 0.99;
+    bool result = chsqr < 0.995;
     const char* err = result? "" : "*";
     std::cout << std::setprecision(17) << chsqr << err << std::endl;
 
