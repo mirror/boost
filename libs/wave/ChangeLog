@@ -1,7 +1,7 @@
 Boost.Wave: A Standard compliant C++ preprocessor library
 http://www.boost.org/
 
-Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
+Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost
 Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -------------------------------------------------------------------------------
@@ -32,6 +32,16 @@ Boost V1.46.0
 - Fixed a problem with object like macros, which when being adjacent to a 
   parenthesis, caused the parenthesis to disappear when the macro expansion
   was suppressed by the expanding_object_like_macro() hook function.
+- Fixed a bug in pragma option(preserve), missing to set to preserve=1 if 
+  after the previous value was preserve=2.
+- Changed the --preserve option of the wave tool to interprete the integer 
+  argument in a slightly different way: 
+      0: no whitespace is preserved, 
+      1: only begin of line whitespace is preserved, 
+      2: only begin of line whitespace and comments are preserved, 
+      3: all whitespace is preserved
+  The #pragma wave option(preserve) now supports these arguments: 
+  [0|1|2|3|push|pop].
 
 Boost V1.45.0
 - V2.1.0
