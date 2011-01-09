@@ -9,8 +9,26 @@
 
 [section:syntax Syntax Summary]
 
-A QuickBook document is composed of one or more blocks. An example of
-a block is the paragraph or a C++ code snippet. Some blocks have
+A simple quickbook document might look something like:
+
+[pre'''
+    [book A sweet little horror story
+        [quickbook 1.5]
+        [author Brown, Fredric]
+    ]
+    
+    The last man on Earth sat alone in a room. There was a knock on
+    the door...
+''']
+
+The document starts with the
+[link quickbook.syntax.docinfo document info block].
+This describes the type of the document, it's title and document
+metadata. In this case just the version of quickbook to be used.
+
+This is then followed by one or more blocks. An example of
+a block is the paragraph or a C++ code snippet. In this example we just
+have a single paragraph. Some blocks have
 special mark-ups. Blocks, except code snippets which have their own
 grammar (C++ or Python), are composed of one or more phrases. A phrase
 can be a simple contiguous run of characters. Phrases can have special
