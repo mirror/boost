@@ -23,7 +23,7 @@ void
 test()
 {
     typedef typename boost::common_type<D1, D2>::type Dc;
-    BOOST_CHRONO_STATIC_ASSERT((boost::is_same<Dc, De>::value), NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT((boost::is_same<Dc, De>::value), NOTHING, (D1, D2, Dc, De));
 }
 
 void testall()
