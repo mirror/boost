@@ -41,30 +41,6 @@ Phrases in each block cannot contain a block terminator. This way, syntax errors
 such as un-matched closing brackets do not go haywire and corrupt anything past
 a single block.
 
-[section Comments]
-
-Can be placed anywhere.
-
-[pre
-'''[/ comment (no output generated) ]'''
-]
-
-[/ for testing only... ]
-
-[pre
-'''[/ comments can be nested [/ some more here] ]'''
-]
-
-[/ for testing [/ only ] ]
-
-[pre
-'''[/ Quickbook blocks can nest inside comments. [*Comment this out too!] ]'''
-]
-
-[/ for testing [*only ] ]
-
-[endsect] [/Comments]
-
 [section:docinfo Document Info]
 
 Every document must begin with a Document Info section, which looks something
@@ -130,5 +106,29 @@ the =source-mode= field is omitted, a default value of =c++= will be used.
 [endsect] [/attributes]
 
 [endsect] [/docinfo]
+
+[section Comments]
+
+Can be placed anywhere.
+
+[pre
+'''[/ comment (no output generated) ]'''
+]
+
+[/ for testing only... ]
+
+[pre
+'''[/ comments can be nested [/ some more here] ]'''
+]
+
+[/ for testing [/ only ] ]
+
+[pre
+'''[/ Quickbook blocks can nest inside comments. [*Comment this out too!] ]'''
+]
+
+[/ for testing [*only ] ]
+
+[endsect] [/Comments]
 
 [endsect] [/Syntax Summary]
