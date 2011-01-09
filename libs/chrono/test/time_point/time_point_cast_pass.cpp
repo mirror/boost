@@ -28,12 +28,12 @@ test(const FromDuration& df, const ToDuration& d)
     typedef boost::chrono::time_point<Clock, ToDuration> ToTimePoint;
     FromTimePoint f(df);
     ToTimePoint t(d);
-#if defined(BOOST_NO_DECLTYPE)
-    typedef BOOST_TYPEOF_TPL(boost::chrono::time_point_cast<ToDuration>(f)) R;
-#else
-    typedef decltype(boost::chrono::time_point_cast<ToDuration>(f)) R;
-#endif        
-    BOOST_CHRONO_STATIC_ASSERT((boost::is_same<R, ToTimePoint>::value), NOTHING, ());
+//~ #if defined(BOOST_NO_DECLTYPE)
+    //~ typedef BOOST_TYPEOF_TPL(boost::chrono::time_point_cast<ToDuration>(f)) R;
+//~ #else
+    //~ typedef decltype(boost::chrono::time_point_cast<ToDuration>(f)) R;
+//~ #endif        
+    //~ BOOST_CHRONO_STATIC_ASSERT((boost::is_same<R, ToTimePoint>::value), NOTHING, ());
     BOOST_TEST(boost::chrono::time_point_cast<ToDuration>(f) == t);
 }
 
