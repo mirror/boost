@@ -31,6 +31,11 @@ time2_demo contained this comment:
 #include <boost/type_traits.hpp>
 
 #include <iostream>
+
+#if defined(BOOST_CHRONO_MAC_API)
+#include <sys/time.h> //for gettimeofday and timeval
+#endif
+
 #if defined(BOOST_CHRONO_WINDOWS_API)
 #    include <windows.h>
 #endif
