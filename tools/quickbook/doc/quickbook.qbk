@@ -1,8 +1,10 @@
 [article Quickbook
     [quickbook 1.5]
     [version 1.5]
-    [authors [de Guzman, Joel], [Niebler, Eric]]
+    [authors [de Guzman, Joel], [Niebler, Eric], [James, Daniel]]
     [copyright 2002 2004 2006 Joel de Guzman, Eric Niebler]
+    [copyright 2010 2011 Daniel James]
+    [source-mode teletype]
     [purpose /WikiWiki/ style documentation tool]
     [license
         Distributed under the Boost Software License, Version 1.0.
