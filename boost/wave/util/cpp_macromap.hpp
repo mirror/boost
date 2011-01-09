@@ -1844,20 +1844,33 @@ position_type pos("<built-in>");
     else 
 #endif 
     {
-    // define C++ specifics
-        for (int i = 0; 0 != predef.static_data_cpp(i).name; ++i) {
-            predefined_macros::static_macros const& m = predef.static_data_cpp(i);
-            predefine_macro(current_scope, m.name, 
-                token_type(m.token_id, m.value, pos));
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+        if (boost::wave::need_cpp0x(ctx.get_language())) {
+        // define C++0x specifics
+            for (int i = 0; 0 != predef.static_data_cpp0x(i).name; ++i) {
+                predefined_macros::static_macros const& m = predef.static_data_cpp0x(i);
+                predefine_macro(current_scope, m.name, 
+                    token_type(m.token_id, m.value, pos));
+            }
         }
+        else 
+#endif 
+        {
+        // define C++ specifics
+            for (int i = 0; 0 != predef.static_data_cpp(i).name; ++i) {
+                predefined_macros::static_macros const& m = predef.static_data_cpp(i);
+                predefine_macro(current_scope, m.name, 
+                    token_type(m.token_id, m.value, pos));
+            }
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-    // define __WAVE_HAS_VARIADICS__, if appropriate
-        if (boost::wave::need_variadics(ctx.get_language())) {
-            predefine_macro(current_scope, "__WAVE_HAS_VARIADICS__",
-                token_type(T_INTLIT, "1", pos));
-        }
+        // define __WAVE_HAS_VARIADICS__, if appropriate
+            if (boost::wave::need_variadics(ctx.get_language())) {
+                predefine_macro(current_scope, "__WAVE_HAS_VARIADICS__",
+                    token_type(T_INTLIT, "1", pos));
+            }
 #endif 
+        }
     }
 
 // predefine the __BASE_FILE__ macro which contains the main file name 

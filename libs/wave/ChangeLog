@@ -29,6 +29,8 @@ Boost V1.46.0
   the default from now on).
 - Added support for extended character and string literals, added test case
   (which required to add C++0x support to the test application).
+- Added proper predefined macros fro --c++0x mode. __cplusplus is currently 
+  defined to 201101L, but this will change when the Standard is finalized.
 - Fixed a problem with object like macros, which when being adjacent to a 
   parenthesis, caused the parenthesis to disappear when the macro expansion
   was suppressed by the expanding_object_like_macro() hook function.

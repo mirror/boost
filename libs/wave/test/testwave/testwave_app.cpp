@@ -54,7 +54,7 @@ namespace fs = boost::filesystem;
 ///////////////////////////////////////////////////////////////////////////////
 // testwave version definitions
 #define TESTWAVE_VERSION_MAJOR           0
-#define TESTWAVE_VERSION_MINOR           5
+#define TESTWAVE_VERSION_MINOR           6
 #define TESTWAVE_VERSION_SUBMINOR        0
 
 namespace {
