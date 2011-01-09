@@ -9,30 +9,6 @@
 
 [section:block Block Level Elements]
 
-[section Section]
-
-Starting a new section is accomplished with:
-
-[pre'''
-[section:id The Section Title]
-''']
-
-where /id/ is optional. id will be the filename of the generated section.
-If it is not present, "The Section Title" will be normalized and become the id.
-Valid characters are =a-Z=, =A-Z=, =0-9= and =_=. All non-valid characters are
-converted to underscore and all upper-case are converted to lower case.
-Thus: "The Section Title" will be normalized to "the_section_title".
-
-End a section with:
-
-[pre'''
-[endsect]
-''']
-
-Sections can nest, and that results in a hierarchy in the table of contents.
-
-[endsect] [/Section]
-
 [section xinclude]
 
 You can include another XML file with:
