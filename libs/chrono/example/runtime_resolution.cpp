@@ -32,6 +32,11 @@ time2_demo contained this comment:
 
 #include <iostream>
 
+#if defined(BOOST_CHRONO_MAC_API)
+#include <sys/time.h> //for gettimeofday and timeval
+#include <mach/mach_time.h>  // mach_absolute_time, mach_timebase_info_data_t
+#endif
+
 #if defined(BOOST_CHRONO_WINDOWS_API)
 #include <windows.h>
 
