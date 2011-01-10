@@ -206,7 +206,7 @@ namespace quickbook
         // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ?
             std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") :
-            filename.native();
+            filename.string();
 
         // add the predefined macros
         macro.add

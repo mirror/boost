@@ -1414,10 +1414,10 @@ namespace quickbook
         }
 
         // update the __FILENAME__ macro
-        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.native();
+        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.string();
 
         // parse the file
-        quickbook::parse_file(actions.filename.native().c_str(), actions, true);
+        quickbook::parse_file(actions.filename.string().c_str(), actions, true);
 
         // restore the values
         std::swap(actions.filename, filein);
