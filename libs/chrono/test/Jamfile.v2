@@ -39,6 +39,7 @@ project
         <toolset>msvc:<asynch-exceptions>on
         <define>BOOST_CHRONO_USES_MPL_ASSERT
         <define>BOOST_SYSTEM_NO_DEPRECATED
+        <toolset>sun:<define>BOOST_COMMON_TYPE_DONT_USE_TYPEOF
         <toolset>sun:<define>BOOST_TYPEOF_EMULATION
         <warnings>all
         <toolset>gcc:<cxxflags>-Wextra
@@ -175,6 +176,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run ../example/chrono_accuracy_test.cpp ]
         [ chrono-run ../example/test_thread_clock.cpp  ]
         [ chrono-run ../example/french.cpp  ]
+        #[ chrono-run ../example/await_keystroke.cpp  ]
         ;
 
 #    test-suite "timer"
@@ -220,7 +222,7 @@ rule chrono-compile2 ( sources : name )
 
     test-suite "time_point"
         :
-        [ chrono-compile2 time_point/default_duration_pass.cpp : time_point.default_duration_pass ]
+        [ chrono-compile2 time_point/default_duration_pass.cpp : time_point_default_duration_pass ]
         [ compile-fail time_point/not_duration_fail.cpp : : time_point_not_duration_fail   ]
         [ chrono-run2 time_point/arithmetic_pass.cpp  : time_point_arithmetic_pass ]
         [ chrono-run2 time_point/time_point_cast_pass.cpp  : time_point_time_point_cast_pass ]
