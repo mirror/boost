@@ -52,22 +52,46 @@ BOOST_AUTO_TEST_CASE(test_constructors) {
     };
     CHECK_SEQUENCE(dist_il.intervals(), list_of(99)(103)(107)(111)(115));
     CHECK_SEQUENCE(dist_il.densities(), list_of(.03125)(.0625)(.03125)(.125));
+
+    boost::random::piecewise_constant_distribution<> dist_il2 = {
+        { 99 },
+        gen()
+    };
+    CHECK_SEQUENCE(dist_il2.intervals(), list_of(0.0)(1.0));
+    CHECK_SEQUENCE(dist_il2.densities(), list_of(1.0));
 #endif
     std::vector<double> intervals = boost::assign::list_of(0)(1)(2)(3)(5);
     std::vector<double> weights = boost::assign::list_of(1)(2)(1)(4);
+    std::vector<double> intervals2 = boost::assign::list_of(99);
+    std::vector<double> weights2;
 
     boost::random::piecewise_constant_distribution<> dist_r(intervals, weights);
     CHECK_SEQUENCE(dist_r.intervals(), list_of(0)(1)(2)(3)(5));
     CHECK_SEQUENCE(dist_r.densities(), list_of(.125)(.25)(.125)(.25));
+
+    boost::random::piecewise_constant_distribution<>
+        dist_r2(intervals2, weights2);
+    CHECK_SEQUENCE(dist_r2.intervals(), list_of(0.0)(1.0));
+    CHECK_SEQUENCE(dist_r2.densities(), list_of(1.0));
     
     boost::random::piecewise_constant_distribution<> dist_it(
         intervals.begin(), intervals.end(), weights.begin());
     CHECK_SEQUENCE(dist_it.intervals(), list_of(0)(1)(2)(3)(5));
     CHECK_SEQUENCE(dist_it.densities(), list_of(.125)(.25)(.125)(.25));
     
+    boost::random::piecewise_constant_distribution<> dist_it2(
+        intervals2.begin(), intervals2.end(), weights2.begin());
+    CHECK_SEQUENCE(dist_it2.intervals(), list_of(0.0)(1.0));
+    CHECK_SEQUENCE(dist_it2.densities(), list_of(1.0));
+    
     boost::random::piecewise_constant_distribution<> dist_fun(4, 99,115, gen());
     CHECK_SEQUENCE(dist_fun.intervals(), list_of(99)(103)(107)(111)(115));
     CHECK_SEQUENCE(dist_fun.densities(), list_of(.03125)(.0625)(.03125)(.125));
+    
+    boost::random::piecewise_constant_distribution<>
+        dist_fun2(1, 99, 115, gen());
+    CHECK_SEQUENCE(dist_fun2.intervals(), list_of(99)(115));
+    CHECK_SEQUENCE(dist_fun2.densities(), list_of(0.0625));
 
     boost::random::piecewise_constant_distribution<> copy(dist);
     BOOST_CHECK_EQUAL(dist, copy);
@@ -86,6 +110,8 @@ BOOST_AUTO_TEST_CASE(test_constructors) {
 BOOST_AUTO_TEST_CASE(test_param) {
     std::vector<double> intervals = boost::assign::list_of(0)(1)(2)(3)(5);
     std::vector<double> weights = boost::assign::list_of(1)(2)(1)(4);
+    std::vector<double> intervals2 = boost::assign::list_of(0);
+    std::vector<double> weights2;
     boost::random::piecewise_constant_distribution<> dist(intervals, weights);
     boost::random::piecewise_constant_distribution<>::param_type
         param = dist.param();
@@ -115,12 +141,24 @@ BOOST_AUTO_TEST_CASE(test_param) {
     };
     CHECK_SEQUENCE(parm_il.intervals(), list_of(99)(103)(107)(111)(115));
     CHECK_SEQUENCE(parm_il.densities(), list_of(.03125)(.0625)(.03125)(.125));
+
+    boost::random::piecewise_constant_distribution<>::param_type parm_il2 = {
+        { 99 },
+        gen()
+    };
+    CHECK_SEQUENCE(parm_il2.intervals(), list_of(0.0)(1.0));
+    CHECK_SEQUENCE(parm_il2.densities(), list_of(1.0));
 #endif
 
     boost::random::piecewise_constant_distribution<>::param_type
         parm_r(intervals, weights);
     CHECK_SEQUENCE(parm_r.intervals(), list_of(0)(1)(2)(3)(5));
     CHECK_SEQUENCE(parm_r.densities(), list_of(.125)(.25)(.125)(.25));
+
+    boost::random::piecewise_constant_distribution<>::param_type
+        parm_r2(intervals2, weights2);
+    CHECK_SEQUENCE(parm_r2.intervals(), list_of(0.0)(1.0));
+    CHECK_SEQUENCE(parm_r2.densities(), list_of(1.0));
     
     boost::random::piecewise_constant_distribution<>::param_type
         parm_it(intervals.begin(), intervals.end(), weights.begin());
@@ -128,9 +166,19 @@ BOOST_AUTO_TEST_CASE(test_param) {
     CHECK_SEQUENCE(parm_it.densities(), list_of(.125)(.25)(.125)(.25));
     
     boost::random::piecewise_constant_distribution<>::param_type
+        parm_it2(intervals2.begin(), intervals2.end(), weights2.begin());
+    CHECK_SEQUENCE(parm_it2.intervals(), list_of(0.0)(1.0));
+    CHECK_SEQUENCE(parm_it2.densities(), list_of(1.0));
+    
+    boost::random::piecewise_constant_distribution<>::param_type
         parm_fun(4, 99, 115, gen());
     CHECK_SEQUENCE(parm_fun.intervals(), list_of(99)(103)(107)(111)(115));
     CHECK_SEQUENCE(parm_fun.densities(), list_of(.03125)(.0625)(.03125)(.125));
+    
+    boost::random::piecewise_constant_distribution<>::param_type
+        parm_fun2(1, 99, 115, gen());
+    CHECK_SEQUENCE(parm_fun2.intervals(), list_of(99)(115));
+    CHECK_SEQUENCE(parm_fun2.densities(), list_of(0.0625));
 }
 
 BOOST_AUTO_TEST_CASE(test_min_max) {

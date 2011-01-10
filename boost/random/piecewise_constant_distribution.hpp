@@ -73,6 +73,7 @@ public:
                 _intervals.clear();
                 _intervals.push_back(RealType(0));
                 _intervals.push_back(RealType(1));
+                _weights.push_back(WeightType(1));
             } else {
                 _weights.reserve(_intervals.size() - 1);
                 for(std::size_t i = 0; i < _intervals.size() - 1; ++i) {
@@ -101,6 +102,7 @@ public:
                 _intervals.clear();
                 _intervals.push_back(RealType(0));
                 _intervals.push_back(RealType(1));
+                _weights.push_back(WeightType(1));
             } else {
                 _weights.reserve(_intervals.size() - 1);
                 for(std::size_t i = 0; i < _intervals.size() - 1; ++i) {
@@ -129,6 +131,7 @@ public:
                 _intervals.clear();
                 _intervals.push_back(RealType(0));
                 _intervals.push_back(RealType(1));
+                _weights.push_back(WeightType(1));
             }
         }
 
