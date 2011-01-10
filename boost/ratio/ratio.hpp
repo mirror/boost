@@ -119,6 +119,13 @@ public:
     typedef ratio<num, den> type;
 };
 
+#if defined(BOOST_NO_CONSTEXPR)
+template <boost::intmax_t N, boost::intmax_t D>
+const    boost::intmax_t ratio<N, D>::num;
+template <boost::intmax_t N, boost::intmax_t D>
+const    boost::intmax_t ratio<N, D>::den;
+#endif
+
 //----------------------------------------------------------------------------//
 //                                                                            //
 //                20.6.2 Arithmetic on ratio types [ratio.arithmetic]                   //
