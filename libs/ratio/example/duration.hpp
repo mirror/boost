@@ -41,7 +41,7 @@ time2_demo contained this comment:
 
 #include <boost/mpl/logical.hpp>
 #include <boost/ratio.hpp>
-#include "type_traits/common_type.hpp"
+#include <boost/type_traits/common_type.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_unsigned.hpp>
@@ -95,9 +95,9 @@ namespace chrono {
     template <class Duration, class Rep2,
         bool = (
                     (boost::is_convertible<typename Duration::rep,
-                        typename common_type<typename Duration::rep, Rep2>::type>::value)
+                        typename boost::common_type<typename Duration::rep, Rep2>::type>::value)
                 &&  (boost::is_convertible<Rep2,
-                        typename common_type<typename Duration::rep, Rep2>::type>::value)
+                        typename boost::common_type<typename Duration::rep, Rep2>::type>::value)
                 )
         >
     struct duration_divide_imp
@@ -107,7 +107,7 @@ namespace chrono {
     template <class Rep1, class Period, class Rep2>
     struct duration_divide_imp<duration<Rep1, Period>, Rep2, true>
     {
-        typedef duration<typename common_type<Rep1, Rep2>::type, Period> type;
+        typedef duration<typename boost::common_type<Rep1, Rep2>::type, Period> type;
     };
 
     template <class Rep1, class Period, class Rep2>
@@ -125,9 +125,9 @@ namespace chrono {
     template <class Rep, class Duration,
         bool = (
                     (boost::is_convertible<typename Duration::rep,
-                        typename common_type<typename Duration::rep, Rep>::type>::value)
+                        typename boost::common_type<typename Duration::rep, Rep>::type>::value)
                 &&  (boost::is_convertible<Rep,
-                        typename common_type<typename Duration::rep, Rep>::type>::value)
+                        typename boost::common_type<typename Duration::rep, Rep>::type>::value)
                 )
         >
     struct duration_divide_imp2
@@ -137,7 +137,7 @@ namespace chrono {
     template <class Rep1, class Rep2, class Period >
     struct duration_divide_imp2<Rep1, duration<Rep2, Period>, true>
     {
-        //typedef typename common_type<Rep1, Rep2>::type type;
+        //typedef typename boost::common_type<Rep1, Rep2>::type type;
         typedef double type;
     };
 
@@ -156,10 +156,10 @@ namespace chrono {
     template <class Duration, class Rep2,
         bool = (
                     //boost::is_convertible<typename Duration::rep,
-                        //typename common_type<typename Duration::rep, Rep2>::type>::value
+                        //typename boost::common_type<typename Duration::rep, Rep2>::type>::value
                 //&&
     boost::is_convertible<Rep2,
-                        typename common_type<typename Duration::rep, Rep2>::type>::value
+                        typename boost::common_type<typename Duration::rep, Rep2>::type>::value
                 )
         >
     struct duration_modulo_imp
@@ -169,7 +169,7 @@ namespace chrono {
     template <class Rep1, class Period, class Rep2>
     struct duration_modulo_imp<duration<Rep1, Period>, Rep2, true>
     {
-        typedef duration<typename common_type<Rep1, Rep2>::type, Period> type;
+        typedef duration<typename boost::common_type<Rep1, Rep2>::type, Period> type;
     };
 
     template <class Rep1, class Period, class Rep2>
@@ -180,14 +180,17 @@ namespace chrono {
 
   } // namespace detail
 } // namespace chrono
+}
 
-
+namespace boost {
 // common_type trait specializations
 
 template <class Rep1, class Period1, class Rep2, class Period2>
-  struct common_type<chrono::duration<Rep1, Period1>,
-                     chrono::duration<Rep2, Period2> >;
+  struct common_type<boost_ex::chrono::duration<Rep1, Period1>,
+                     boost_ex::chrono::duration<Rep2, Period2> >;
 
+}
+namespace boost_ex {
 
 namespace chrono {
 
@@ -305,7 +308,7 @@ namespace chrono {
     {
         ToDuration operator()(const FromDuration& fd) const
         {
-            typedef typename common_type<
+            typedef typename boost::common_type<
                 typename ToDuration::rep,
                 typename FromDuration::rep,
                 boost::intmax_t>::type C;
@@ -324,7 +327,7 @@ namespace chrono {
     {
         ToDuration operator()(const FromDuration& fd) const
         {
-            typedef typename common_type<
+            typedef typename boost::common_type<
               typename ToDuration::rep,
               typename FromDuration::rep,
               boost::intmax_t>::type C;
@@ -344,7 +347,7 @@ namespace chrono {
     {
         ToDuration operator()(const FromDuration& fd) const
         {
-            typedef typename common_type<
+            typedef typename boost::common_type<
               typename ToDuration::rep,
               typename FromDuration::rep,
               boost::intmax_t>::type C;
@@ -415,26 +418,27 @@ namespace chrono {
   };
 
 }  // namespace chrono
-
+}
 //----------------------------------------------------------------------------//
 //      20.9.2.3 Specializations of common_type [time.traits.specializations] //
 //----------------------------------------------------------------------------//
-
+namespace boost {
 template <class Rep1, class Period1, class Rep2, class Period2>
-struct common_type<chrono::duration<Rep1, Period1>,
-                   chrono::duration<Rep2, Period2> >
+struct common_type<boost_ex::chrono::duration<Rep1, Period1>,
+                   boost_ex::chrono::duration<Rep2, Period2> >
 {
-  typedef chrono::duration<typename common_type<Rep1, Rep2>::type,
+  typedef boost_ex::chrono::duration<typename common_type<Rep1, Rep2>::type,
                       typename boost::ratio_gcd<Period1, Period2>::type> type;
 };
 
-
+}
 //----------------------------------------------------------------------------//
 //                                                                            //
 //         20.9.3 Class template duration [time.duration]                     //
 //                                                                            //
 //----------------------------------------------------------------------------//
 
+namespace boost_ex {
     
 namespace chrono {
 
@@ -534,10 +538,10 @@ namespace chrono {
 
   template <class Rep1, class Period1, class Rep2, class Period2>
   inline
-  typename common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
+  typename boost::common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
   operator+(const duration<Rep1, Period1>& lhs, const duration<Rep2, Period2>& rhs)
   {
-      typename common_type<duration<Rep1, Period1>,
+      typename boost::common_type<duration<Rep1, Period1>,
         duration<Rep2, Period2> >::type result = lhs;
       result += rhs;
       return result;
@@ -547,10 +551,10 @@ namespace chrono {
 
   template <class Rep1, class Period1, class Rep2, class Period2>
   inline
-  typename common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
+  typename boost::common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
   operator-(const duration<Rep1, Period1>& lhs, const duration<Rep2, Period2>& rhs)
   {
-      typename common_type<duration<Rep1, Period1>,
+      typename boost::common_type<duration<Rep1, Period1>,
         duration<Rep2, Period2> >::type result = lhs;
       result -= rhs;
       return result;
@@ -562,14 +566,14 @@ namespace chrono {
   inline
   typename boost::enable_if <
     boost::mpl::and_ < 
-        boost::is_convertible<Rep1, typename common_type<Rep1, Rep2>::type>, 
-        boost::is_convertible<Rep2, typename common_type<Rep1, Rep2>::type>
+        boost::is_convertible<Rep1, typename boost::common_type<Rep1, Rep2>::type>, 
+        boost::is_convertible<Rep2, typename boost::common_type<Rep1, Rep2>::type>
     >,
-    duration<typename common_type<Rep1, Rep2>::type, Period>
+    duration<typename boost::common_type<Rep1, Rep2>::type, Period>
   >::type
   operator*(const duration<Rep1, Period>& d, const Rep2& s)
   {
-      typedef typename common_type<Rep1, Rep2>::type CR;
+      typedef typename boost::common_type<Rep1, Rep2>::type CR;
       duration<CR, Period> r = d;
       r *= static_cast<CR>(s);
       return r;
@@ -579,10 +583,10 @@ namespace chrono {
   inline
   typename boost::enable_if <
     boost::mpl::and_ < 
-        boost::is_convertible<Rep1, typename common_type<Rep1, Rep2>::type>,
-        boost::is_convertible<Rep2, typename common_type<Rep1, Rep2>::type>
+        boost::is_convertible<Rep1, typename boost::common_type<Rep1, Rep2>::type>,
+        boost::is_convertible<Rep2, typename boost::common_type<Rep1, Rep2>::type>
     >,
-    duration<typename common_type<Rep1, Rep2>::type, Period>
+    duration<typename boost::common_type<Rep1, Rep2>::type, Period>
   >::type
   operator*(const Rep1& s, const duration<Rep2, Period>& d)
   {
@@ -598,7 +602,7 @@ namespace chrono {
   >::type
   operator/(const duration<Rep1, Period>& d, const Rep2& s)
   {
-      typedef typename common_type<Rep1, Rep2>::type CR;
+      typedef typename boost::common_type<Rep1, Rep2>::type CR;
       duration<CR, Period> r = d;
       r /= static_cast<CR>(s);
       return r;
@@ -606,10 +610,10 @@ namespace chrono {
 
   template <class Rep1, class Period1, class Rep2, class Period2>
   inline
-  typename common_type<Rep1, Rep2>::type
+  typename boost::common_type<Rep1, Rep2>::type
   operator/(const duration<Rep1, Period1>& lhs, const duration<Rep2, Period2>& rhs)
   {
-      typedef typename common_type<duration<Rep1, Period1>,
+      typedef typename boost::common_type<duration<Rep1, Period1>,
                                    duration<Rep2, Period2> >::type CD;
       return CD(lhs).count() / CD(rhs).count();
   }
@@ -621,7 +625,7 @@ namespace chrono {
   >::type
   operator/(const Rep1& s, const duration<Rep2, Period>& d)
   {
-      typedef typename common_type<Rep1, Rep2>::type CR;
+      typedef typename boost::common_type<Rep1, Rep2>::type CR;
       duration<CR, Period> r = d;
       //return static_cast<CR>(r.count()) / static_cast<CR>(s);
       return  static_cast<CR>(s)/r.count();
@@ -634,16 +638,16 @@ namespace chrono {
     typename boost_ex::chrono::detail::duration_modulo_result<duration<Rep1, Period>, Rep2>::type
   >::type
   operator%(const duration<Rep1, Period>& d, const Rep2& s) {
-    typedef typename common_type<Rep1, Rep2>::type CR;
+    typedef typename boost::common_type<Rep1, Rep2>::type CR;
     duration<CR, Period> r = d;
     r %= static_cast<CR>(s);
     return r;
   }
 
   template <class Rep1, class Period1, class Rep2, class Period2>
-  typename common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
+  typename boost::common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
   operator%(const duration<Rep1, Period1>& lhs, const duration<Rep2, Period2>& rhs) {
-    typedef typename common_type<duration<Rep1, Period1>,
+    typedef typename boost::common_type<duration<Rep1, Period1>,
                                  duration<Rep2, Period2> >::type CD;
     CD r(lhs);
     r%=CD(rhs);
@@ -662,7 +666,7 @@ namespace chrono {
     {
         bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
             {
-                typedef typename common_type<LhsDuration, RhsDuration>::type CD;
+                typedef typename boost::common_type<LhsDuration, RhsDuration>::type CD;
                 return CD(lhs).count() == CD(rhs).count();
             }
     };
@@ -679,7 +683,7 @@ namespace chrono {
     {
         bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
             {
-                typedef typename common_type<LhsDuration, RhsDuration>::type CD;
+                typedef typename boost::common_type<LhsDuration, RhsDuration>::type CD;
                 return CD(lhs).count() < CD(rhs).count();
             }
     };
