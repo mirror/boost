@@ -29,7 +29,6 @@ namespace  // Concrete FSM implementation
 {
     struct iPod_;
     typedef msm::back::state_machine<iPod_, 
-        ::boost::msm::back::NoHistory, 
         ::boost::msm::back::favor_compile_time> iPod;
 
     // Concrete FSM implementation 
