@@ -1,8 +1,9 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>eUML (experimental)</title><link rel="stylesheet" href="boostbook.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Meta State Machine (MSM) V2.12"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Tutorial"><link rel="prev" href="ch03s03.html" title="Functor front-end"><link rel="next" href="ch03s05.html" title="Back-end"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eUML (experimental)</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Tutorial</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s05.html">Next</a></td></tr></table><hr></div><div class="sect1" title="eUML (experimental)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1362"></a><span class="command"><strong><a name="eUML-front-end"></a></strong></span>eUML (experimental)</h2></div></div></div><p><span class="underline">Important note</span>: eUML requires a compiler
+   <title>eUML (experimental)</title><link rel="stylesheet" href="boostbook.css" type="text/css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Meta State Machine (MSM) V2.20"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Tutorial"><link rel="prev" href="ch03s03.html" title="Functor front-end"><link rel="next" href="ch03s05.html" title="Back-end"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eUML (experimental)</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Tutorial</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s05.html">Next</a></td></tr></table><hr></div><div class="sect1" title="eUML (experimental)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1426"></a><span class="command"><strong><a name="eUML-front-end"></a></strong></span>eUML (experimental)</h2></div></div></div><p><span class="underline">Important note</span>: eUML requires a compiler
                     supporting Boost.Typeof. More generally, eUML has experimental status because
-                    most compilers will start crashing when a state machine becomes too big.</p><p>The previous front-ends are simple to write but still force an amount of
+                    some compilers will start crashing when a state machine becomes too big (usually
+                    when you write huge actions).</p><p>The previous front-ends are simple to write but still force an amount of
                     noise, mostly MPL types, so it would be nice to write code looking like C++
                     (with a C++ action language) directly inside the transition table, like UML
                     designers like to do on their state machine diagrams. If it were functional
@@ -13,13 +14,13 @@
                     events, initial states.</p><p>It also relies on Boost.Typeof as a wrapper around the new decltype C++0x
                     feature to provide a compile-time evaluation of all the grammars. Unfortunately,
                     all the underlying Boost libraries are not Typeof-enabled, so for the moment,
-                    you will need a compiler where Typeof is natively implemented (like VC8-9-10,
-                    g++ &gt;= 4.3).</p><p>Examples will be provided in the next paragraphs. You need to include eUML
+                    you will need a compiler where Typeof is supported (like VC9-10, g++ &gt;=
+                    4.3).</p><p>Examples will be provided in the next paragraphs. You need to include eUML
                     basic features: </p><p>
                     </p><pre class="programlisting">#include &lt;msm/front/euml/euml.hpp&gt;</pre><p>
                 </p><p>To add STL support (at possible cost of longer compilation times), include: </p><p>
                     </p><pre class="programlisting">#include &lt;msm/front/euml/stl.hpp&gt;</pre><p>
-                </p><p>eUML is defined in the namespace <code class="code">msm::front::euml</code>.</p><div class="sect2" title="Transition table"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1395"></a>Transition table</h3></div></div></div><p>A transition can be defined using eUML as: </p><p>
+                </p><p>eUML is defined in the namespace <code class="code">msm::front::euml</code>.</p><div class="sect2" title="Transition table"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1459"></a>Transition table</h3></div></div></div><p>A transition can be defined using eUML as: </p><p>
                         </p><pre class="programlisting">source + event [guard] / action == target</pre><p>
                     </p><p>or as</p><p>
                         </p><pre class="programlisting">target == source + event [guard] / action</pre><p>
@@ -46,7 +47,7 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         separated by a comma. The first transition does just this: two actions
                         separated by a comma and enclosed inside parenthesis to respect C++ operator
                         precedence.</p><p>If this seems to you like it will cost you run-time performance, don't
-                        worry, eUML is based on typeof (decltype) which only evaluates the
+                        worry, eUML is based on typeof (or decltype) which only evaluates the
                         parameters to BOOST_MSM_EUML_TRANSITION_TABLE and no run-time cost occurs.
                         Actually, eUML is only a metaprogramming layer on top of "standard" MSM
                         metaprogramming and this first layer generates the previously-introduced
@@ -55,7 +56,14 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         [good_disk_format &amp;&amp; (some_condition || some_other_condition)]. This
                         was possible with our previously defined functors, but using a complicated
                         template syntax. This syntax is now possible exactly as written, which means
-                        without any syntactic noise at all.</p></div><div class="sect2" title="Defining events, actions and states with entry/exit actions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1436"></a>Defining events, actions and states with entry/exit actions</h3></div></div></div><div class="sect3" title="Events"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1439"></a>Events</h4></div></div></div><p>Events must be proto-enabled. To achieve this, they must inherit from
+                        without any syntactic noise at all.</p></div><div class="sect2" title="A simple example: rewriting only our transition table"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1500"></a>A simple example: rewriting only our transition table</h3></div></div></div><p>As an introduction to eUML, we will rewrite our tutorial's transition
+                        table using eUML. This will require two or three changes, depending on the compiler:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>events must inherit from msm::front::euml::euml_event&lt;
+                                    event_name &gt;</p></li><li class="listitem"><p>states must inherit from msm::front::euml::euml_state&lt;
+                                    state_name &gt;</p></li><li class="listitem"><p>with VC, states must be declared before the front-end</p></li></ul></div><p>We now can write the transition table like just shown, using
+                        BOOST_MSM_EUML_DECLARE_TRANSITION_TABLE instead of
+                        BOOST_MSM_EUML_TRANSITION_TABLE. The <a class="link" href="examples/SimpleTutorialWithEumlTable.cpp" target="_top">implementation</a> is pretty
+                        straightforward.</p><p>We now have a new, more readable transition table with few changes to our
+                        example. eUML can do much more so please follow the guide.</p></div><div class="sect2" title="Defining events, actions and states with entry/exit actions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1522"></a>Defining events, actions and states with entry/exit actions</h3></div></div></div><div class="sect3" title="Events"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1525"></a>Events</h4></div></div></div><p>Events must be proto-enabled. To achieve this, they must inherit from
                             a proto terminal (euml_event&lt;event-name&gt;). eUML also provides a macro
                             to make this easier:</p><p>
                             </p><pre class="programlisting">BOOST_MSM_EUML_EVENT(play)</pre><p>
@@ -70,7 +78,7 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                                 <code class="code">fsm.process_event(play());</code> or do we have to write:
                                 <code class="code">fsm.process_event(play);</code></p><p>The answer is you can do both. The second one is easier but unlike
                             other front-ends, the second uses a defined operator(), which creates an
-                            event on the fly.</p></div><div class="sect3" title="Actions"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1470"></a>Actions</h4></div></div></div><p>Actions (returning void) and guards (returning a bool) are defined
+                            event on the fly.</p></div><div class="sect3" title="Actions"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1556"></a>Actions</h4></div></div></div><p>Actions (returning void) and guards (returning a bool) are defined
                             like previous functors, with the difference that they also must be
                             proto-enabled. This can be done by inheriting from euml_action&lt;
                             functor-name &gt;. eUML also provides a macro:</p><pre class="programlisting">BOOST_MSM_EUML_ACTION(some_condition)
@@ -101,7 +109,7 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
 BOOST_MSM_EUML_TRANSITION_TABLE((
 Playing   == Stopped  + play        / start_playback() ,
 ...
-),transition_table)</pre></div><div class="sect3" title="States"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1493"></a>States</h4></div></div></div><p>There is also a macro for states. This macro has 2 arguments, first
+),transition_table)</pre></div><div class="sect3" title="States"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1579"></a>States</h4></div></div></div><p>There is also a macro for states. This macro has 2 arguments, first
                             the expression defining the state, then the state (instance)
                             name:</p><pre class="programlisting">BOOST_MSM_EUML_STATE((),Paused)</pre><p>This defines a simple state without entry or exit action. You can
                             provide in the expression parameter the state behaviors (entry and exit)
@@ -142,7 +150,7 @@ Empty_impl const Empty;</pre><p>Notice also that we defined a method named activ
                             could use with the functor front-end, the second is the state method
                             name, the third is the eUML-generated function, the fourth and fifth the
                             return value when used inside a transition or a state behavior. You can
-                            now use this inside a transition:</p><pre class="programlisting">Empty == Open + open_close / (close_drawer,activate_empty_(target_))</pre></div></div><div class="sect2" title="Defining a simple state machine"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1549"></a>Defining a simple state machine</h3></div></div></div><p>You can reuse the state machine definition method from the standard
+                            now use this inside a transition:</p><pre class="programlisting">Empty == Open + open_close / (close_drawer,activate_empty_(target_))</pre></div></div><div class="sect2" title="Defining a simple state machine"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1635"></a>Defining a simple state machine</h3></div></div></div><p>You can reuse the state machine definition method from the standard
                         front-end and simply replace the transition table by this new one. You can
                         also use eUML to define a state machine "on the fly" (if, for example, you
                         need to provide an on_entry/on_exit for this state machine as a functor).
@@ -172,7 +180,7 @@ Empty_impl const Empty;</pre><p>Notice also that we defined a method named activ
                         BOOST_MSM_EUML_DECLARE_ATTRIBUTE macro, to which we will get back shortly,
                         declares attributes given to an eUML type (state or event) using the
                             <span class="command"><strong><a class="command" href="ch03s04.html#eUML-attributes">attribute
-                        syntax</a></strong></span>.</p></div><div class="sect2" title="Defining a submachine"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1597"></a>Defining a submachine</h3></div></div></div><p>Defining a submachine (see <a class="link" href="examples/CompositeTutorialEuml.cpp" target="_top">tutorial</a>) with
+                        syntax</a></strong></span>.</p></div><div class="sect2" title="Defining a submachine"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1683"></a>Defining a submachine</h3></div></div></div><p>Defining a submachine (see <a class="link" href="examples/CompositeTutorialEuml.cpp" target="_top">tutorial</a>) with
                         other front-ends simply means using a state which is a state machine in the
                         transition table of another state machine. This is the same with eUML. One
                         only needs define a second state machine and reference it in the transition
@@ -183,7 +191,7 @@ Empty_impl const Empty;</pre><p>Notice also that we defined a method named activ
                         machine, for example:</p><pre class="programlisting">BOOST_MSM_EUML_DECLARE_STATE_MACHINE(...,Playing_)
 typedef msm::back::state_machine&lt;Playing_&gt; Playing_type;
 Playing_type const Playing;</pre><p>We can now use this instance inside the transition table of the containing
-                        state machine:</p><pre class="programlisting">Paused == Playing + pause / pause_playback</pre></div><div class="sect2" title="Attributes / Function call"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1613"></a>
+                        state machine:</p><pre class="programlisting">Paused == Playing + pause / pause_playback</pre></div><div class="sect2" title="Attributes / Function call"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1699"></a>
                         <span class="command"><strong><a name="eUML-attributes"></a></strong></span>Attributes / Function call</h3></div></div></div><p>We now want to make our grammar more useful. Very often, one needs only
                         very simple action methods, for example ++Counter or Counter &gt; 5 where
                         Counter is usually defined as some attribute of the class containing the
@@ -237,7 +245,7 @@ BOOST_MSM_EUML_DECLARE_ATTRIBUTE(DiskTypeEnum,cd_type)</pre><p>This declares two
                         This method could also have an (or several) argument(s), for example the
                         event, we could then call activate_empty_(target_ , event_).</p><p>More examples can be found in the <a class="link" href="examples/CompilerStressTestEuml.cpp" target="_top">terrible compiler
                             stress test</a>, the <a class="link" href="examples/SimpleTimer.cpp" target="_top">timer example</a> or in the <a class="link" href="examples/iPodSearchEuml.cpp" target="_top">iPodSearch with eUML</a>
-                        (for String_ and more).</p></div><div class="sect2" title="Orthogonal regions, flags, event deferring"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1713"></a>Orthogonal regions, flags, event deferring</h3></div></div></div><p>Defining orthogonal regions really means providing more initial states. To
+                        (for String_ and more).</p></div><div class="sect2" title="Orthogonal regions, flags, event deferring"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1799"></a>Orthogonal regions, flags, event deferring</h3></div></div></div><p>Defining orthogonal regions really means providing more initial states. To
                         add more initial states, &#8220;shift left&#8221; some, for example, if we had another
                         initial state named AllOk :</p><pre class="programlisting">BOOST_MSM_EUML_DECLARE_STATE_MACHINE((transition_table,
                                      init_ &lt;&lt; Empty &lt;&lt; AllOk ),
@@ -289,7 +297,7 @@ BOOST_MSM_EUML_DECLARE_ATTRIBUTE(DiskTypeEnum,cd_type)</pre><p>This declares two
                                       attributes_ &lt;&lt; no_attributes_,
                                       configure_&lt;&lt; deferred_events ),
                                     player_)</pre><p>A <a class="link" href="examples/OrthogonalDeferredEuml2.cpp" target="_top">tutorial</a>
-                        illustrates this possibility.</p></div><div class="sect2" title="Customizing a state machine / Getting more speed"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1825"></a>
+                        illustrates this possibility.</p></div><div class="sect2" title="Customizing a state machine / Getting more speed"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1911"></a>
                         <span class="command"><strong><a name="eUML-Configuration"></a></strong></span>Customizing a state machine / Getting
                         more speed</h3></div></div></div><p>We just saw how to use configure_ to define deferred events or flags. We
                         can also use it to configure our state machine like we did with the other front-ends:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">configure_ &lt;&lt; no_exception</code>: disables
@@ -301,7 +309,7 @@ BOOST_MSM_EUML_DECLARE_ATTRIBUTE(DiskTypeEnum,cd_type)</pre><p>This declares two
                         with eUML does this for the best performance.</p><p><span class="underline">Important note</span>: As exit pseudo
                         states are using the message queue to forward events out of a submachine,
                         the <code class="code">no_message_queue</code> option cannot be used with state machines
-                        containing an exit pseudo state.</p></div><div class="sect2" title="Completion / Anonymous transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1860"></a>Completion / Anonymous transitions</h3></div></div></div><p>Anonymous transitions (See <span class="command"><strong><a class="command" href="ch02s02.html#uml-anonymous">UML
+                        containing an exit pseudo state.</p></div><div class="sect2" title="Completion / Anonymous transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1946"></a>Completion / Anonymous transitions</h3></div></div></div><p>Anonymous transitions (See <span class="command"><strong><a class="command" href="ch02s02.html#uml-anonymous">UML
                             tutorial</a></strong></span>) are transitions without a named event, which are
                         therefore triggered immediately when the source state becomes active,
                         provided a guard allows it. As there is no event, to define such a
@@ -309,7 +317,7 @@ BOOST_MSM_EUML_DECLARE_ATTRIBUTE(DiskTypeEnum,cd_type)</pre><p>This declares two
                         example: </p><pre class="programlisting">State3 == State4 [always_true] / State3ToState4
 State4 [always_true] / State3ToState4 == State3</pre><p>Please have a look at <a class="link" href="examples/AnonymousTutorialEuml.cpp" target="_top">this example</a>,
                         which implements the <span class="command"><strong><a class="command" href="ch03s02.html#anonymous-transitions">previously
-                            defined</a></strong></span> state machine with eUML.</p></div><div class="sect2" title="Internal transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1878"></a><span class="command"><strong><a name="eUML-internal"></a></strong></span>Internal transitions</h3></div></div></div><p>Like both other front-ends, eUML supports two ways of defining internal transitions:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>in the state machine's transition table. In this case, you
+                            defined</a></strong></span> state machine with eUML.</p></div><div class="sect2" title="Internal transitions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1964"></a><span class="command"><strong><a name="eUML-internal"></a></strong></span>Internal transitions</h3></div></div></div><p>Like both other front-ends, eUML supports two ways of defining internal transitions:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>in the state machine's transition table. In this case, you
                                     need to specify a source state, event, actions and guards but no
                                     target state, which eUML will interpret as an internal
                                     transition, for example this defines a transition internal to
@@ -330,7 +338,7 @@ struct Open_impl : public Open_def
                                     the standard alternative, adding orthogonal regions, because
                                     event dispatching will, if accepted by the internal table, not
                                     continue to the subregions. This gives you a O(1) dispatch
-                                    instead of O(number of regions).</p></li></ul></div></div><div class="sect2" title="Other state types"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1909"></a>Other state types</h3></div></div></div><p>We saw the <span class="command"><strong><a class="command" href="ch03s04.html#eUML-build-state">build_state</a></strong></span>
+                                    instead of O(number of regions).</p></li></ul></div></div><div class="sect2" title="Other state types"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1995"></a>Other state types</h3></div></div></div><p>We saw the <span class="command"><strong><a class="command" href="ch03s04.html#eUML-build-state">build_state</a></strong></span>
                         function, which creates a simple state. Likewise, eUML provides other
                         state-building macros for other types of states:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>BOOST_MSM_EUML_TERMINATE_STATE takes the same arguments as
                                     BOOST_MSM_EUML_STATE and defines, well, a terminate
@@ -370,7 +378,7 @@ struct Open_impl : public Open_def
                         </p><pre class="programlisting">entry_pt_(SubFsm2,PseudoEntry1) == State1 + event4</pre><p>For exit points, it is again the same syntax except that exit points are
                         used as source of the transition:
                         </p><pre class="programlisting">State2 == exit_pt_(SubFsm2,PseudoExit1) + event6 </pre><p>The <a class="link" href="examples/DirectEntryEuml.cpp" target="_top">entry tutorial</a>
-                        is also available with eUML.</p></div><div class="sect2" title="Helper functions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1973"></a>Helper functions</h3></div></div></div><p>We saw a few helpers but there are more, so let us have a more complete description:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>event_ : used inside any action, the event triggering the
+                        is also available with eUML.</p></div><div class="sect2" title="Helper functions"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2059"></a>Helper functions</h3></div></div></div><p>We saw a few helpers but there are more, so let us have a more complete description:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>event_ : used inside any action, the event triggering the
                                     transition</p></li><li class="listitem"><p>state_: used inside entry and exit actions, the entered /
                                     exited state</p></li><li class="listitem"><p>source_: used inside a transition action, the source
                                     state</p></li><li class="listitem"><p>target_: used inside a transition action, the target
@@ -407,7 +415,7 @@ struct Open_impl : public Open_def
                         MSM_EUML_METHOD or MSM_EUML_FUNCTION will create a correct functor. Your own
                         eUML functors written as described at the beginning of this section will
                         also work well, <span class="underline">except</span>, for the
-                        moment, with the while_, if_then_, if_then_else_ functions.</p></div><div class="sect2" title="Phoenix-like STL support"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2070"></a>Phoenix-like STL support</h3></div></div></div><p>eUML supports most C++ operators (except address-of). For example it is
+                        moment, with the while_, if_then_, if_then_else_ functions.</p></div><div class="sect2" title="Phoenix-like STL support"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2156"></a>Phoenix-like STL support</h3></div></div></div><p>eUML supports most C++ operators (except address-of). For example it is
                         possible to write event_(some_attribute)++ or [source_(some_bool) &amp;&amp;
                         fsm_(some_other_bool)]. But a programmer needs more than operators in his
                         daily programming. The STL is clearly a must have. Therefore, eUML comes in

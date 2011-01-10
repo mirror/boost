@@ -2,7 +2,7 @@
 <?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0/rng/docbook.rng" type="xml"?>
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
     <info>
-        <title>Meta State Machine (MSM) V2.12</title>
+        <title>Meta State Machine (MSM) V2.20</title>
         <author>
             <personname>Christophe Henry</personname>
             <email>christophe.j.henry@googlemail.com</email>
@@ -627,6 +627,80 @@ struct Empty : public msm::front::state&lt;>
                         sections.</para>
                 </sect2>
                 <sect2>
+                    <title>What do you actually do inside actions / guards?</title>
+                    <para>State machines define a structure and important parts of the complete
+                        behavior, but not all. For example if you need to send a rocket to Alpha
+                        Centauri, you can have a transition to a state "SendRocketToAlphaCentauri"
+                        but no code actually sending the rocket. This is where you need actions. So
+                        a simple action could be:</para>
+                    <programlisting>template &lt;class Fire> void send_rocket(Fire const&amp;)
+{
+  fire_rocket();
+}</programlisting>
+                <para>Ok, this was simple. Now, we might want to give a direction. Let us suppose
+                        this information is externally given when needed, it makes sense do use the
+                        event for this:</para>
+                <programlisting>// Event
+struct Fire {Direction direction;};
+template &lt;class Fire> void send_rocket(Fire const&amp; evt)
+{
+  fire_rocket(evt.direction);
+}</programlisting>
+                    <para>We might want to calculate the direction based not only on external data
+                        but also on data accumulated during previous work. In this case, you might
+                        want to have this data in the state machine itself. As transition actions
+                        are members of the front-end, you can directly access the data:</para>
+                    <programlisting>// Event
+struct Fire {Direction direction;};
+//front-end definition, see down
+struct launcher_ : public msm::front::state_machine_def&lt;launcher_>{
+Data current_calculation; 
+template &lt;class Fire> void send_rocket(Fire const&amp; evt)
+{
+  fire_rocket(evt.direction, current_calculation);
+}
+...
+};</programlisting>
+                    <para>Entry and exit actions represent a behavior common to a state, no matter
+                        through which transition it is entered or left. States being reusable, it
+                        might make sense to locate your data there instead of in the state machine,
+                        to maximize reuse and make code more readable. Entry and exit actions have
+                        access to the state data (being state members) but also to the event and
+                        state machine, like transition actions. This happens through the Event and
+                        Fsm template parameters:</para>
+                    <programlisting>struct Launching : public msm::front::state&lt;> 
+{
+    template &lt;class Event, class Fsm> 
+    void on_entry(Event const&amp; evt, Fsm&amp; fsm) 
+    {
+       fire_rocket(evt.direction, fsm.current_calculation);
+    } 
+};</programlisting>
+                    <para>Exit actions are also ideal for clanup when the state becomes
+                        inactive.</para>
+                    <para>Another possible use of the entry action is to pass data to substates /
+                        submachines. Launching is a substate containing  a <code>data</code> attribute:</para>
+                    <programlisting>struct launcher_ : public msm::front::state_machine_def&lt;launcher_>{
+Data current_calculation;
+// state machines also have entry/exit actions 
+template &lt;class Event, class Fsm> 
+void on_entry(Event const&amp; evt, Fsm&amp; fsm) 
+{
+   launcher_::Launching&amp; s = fsm.get_state&lt;launcher_::Launching&amp;>();
+   s.data = fsm.current_calculation;
+} 
+...
+};</programlisting>
+                    <para>The <command xlink:href="#backend-fsm-constructor-args">set_states</command> back-end method allows you to replace a complete
+                        state.</para>
+                    <para>The <command xlink:href="#functor-front-end-actions">functor</command> front-end and eUML offer more capabilities.</para>
+                    <para>However, this basic front-end also has special capabilities using the row2
+                        / irow2 transitions.<command xlink:href="#basic-row2">_row2, a_row2, row2,
+                            g_row2, a_irow2, irow2, g_irow2</command> let you call an action located
+                        in any state of the current fsm or in the front-end itself, thus letting you
+                        place useful data anywhere you see fit.</para>
+                </sect2>
+                <sect2>
                     <title>Defining a simple state machine</title>
                     <para>Declaring a state machine is straightforward and is done with a high
                         signal / noise ratio. In our player example, we declare the state machine
@@ -1183,6 +1257,18 @@ g_row &lt; Empty , play , Playing , &amp;player_::condition2 ></programlisting>
                             The containing machine (containing State1 and SubFsm2) refers to the
                             backend instance (SubFsm2). SubFsm2::direct states that an explicit
                             entry is desired.</para>
+                        <para><command xml:id="explicit-entry-no-region-id"/>Thanks to the <command xlink:href="#backend-compile-time-analysis"
+                                >mpl_graph</command> library you can also omit to provide the region
+                            index and let MSM find out for you. The are however two points to note:<itemizedlist>
+                                <listitem>
+                                    <para>MSM can only find out the region index if the explicit
+                                        entry state is somehow connected to an initial state through
+                                        a transition, no matter the direction.</para>
+                                </listitem>
+                                <listitem>
+                                    <para>There is a compile-time cost for this feature.</para>
+                                </listitem>
+                            </itemizedlist></para>
                         <para><emphasis role="underline">Note (also valid for forks)</emphasis>: in
                             order to make compile time more bearable for the more standard cases,
                             and unlike initial states, explicit entry states which are also not
@@ -1590,6 +1676,26 @@ struct Empty : public msm::front::euml::func_state&lt;Empty_Entry,Empty_Exit>{};
                         programming.</para>
                 </sect2>
                 <sect2>
+                    <title><command xml:id="functor-front-end-actions"/>What do you actually do inside actions / guards (Part 2)?</title>
+                    <para>Using the basic front-end, we saw how to pass data to actions through the
+                        event, that data common to all states could be stored in the state machine,
+                        state relevant data could be stored in the state and access as template
+                        parameter in the entry / exit actions. What was however missing was the
+                        capability to access relevant state data in the transition action. This is
+                        possible with this front-end. A transition's source and target state are
+                        also given as arguments. If the current calculation's state was to be found
+                        in the transition's source state (whatever it is), we could access
+                        it:</para>
+                    <programlisting>struct send_rocket 
+{ 
+    template &lt;class Fsm,class Evt,class SourceState,class TargetState> 
+    void operator()(Evt const&amp;, Fsm&amp; fsm, SourceState&amp; src,TargetState&amp; ) 
+    {
+        fire_rocket(evt.direction, src.current_calculation);
+    } 
+}; </programlisting>
+                </sect2>
+                <sect2>
                     <title>Defining a simple state machine</title>
                     <para>Like states, state machines can be defined using the previous front-end,
                         as the previous example showed, or with the functor front-end, which allows
@@ -1660,7 +1766,8 @@ struct Empty : public msm::front::euml::func_state&lt;Empty_Entry,Empty_Exit>{};
                 <title><command xml:id="eUML-front-end"/>eUML (experimental)</title>
                 <para><emphasis role="underline">Important note</emphasis>: eUML requires a compiler
                     supporting Boost.Typeof. More generally, eUML has experimental status because
-                    most compilers will start crashing when a state machine becomes too big.</para>
+                    some compilers will start crashing when a state machine becomes too big (usually
+                    when you write huge actions).</para>
                 <para>The previous front-ends are simple to write but still force an amount of
                     noise, mostly MPL types, so it would be nice to write code looking like C++
                     (with a C++ action language) directly inside the transition table, like UML
@@ -1674,8 +1781,8 @@ struct Empty : public msm::front::euml::func_state&lt;Empty_Entry,Empty_Exit>{};
                 <para>It also relies on Boost.Typeof as a wrapper around the new decltype C++0x
                     feature to provide a compile-time evaluation of all the grammars. Unfortunately,
                     all the underlying Boost libraries are not Typeof-enabled, so for the moment,
-                    you will need a compiler where Typeof is natively implemented (like VC8-9-10,
-                    g++ >= 4.3).</para>
+                    you will need a compiler where Typeof is supported (like VC9-10, g++ >=
+                    4.3).</para>
                 <para>Examples will be provided in the next paragraphs. You need to include eUML
                     basic features: </para>
                 <para>
@@ -1727,7 +1834,7 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         separated by a comma and enclosed inside parenthesis to respect C++ operator
                         precedence.</para>
                     <para>If this seems to you like it will cost you run-time performance, don't
-                        worry, eUML is based on typeof (decltype) which only evaluates the
+                        worry, eUML is based on typeof (or decltype) which only evaluates the
                         parameters to BOOST_MSM_EUML_TRANSITION_TABLE and no run-time cost occurs.
                         Actually, eUML is only a metaprogramming layer on top of "standard" MSM
                         metaprogramming and this first layer generates the previously-introduced
@@ -1738,6 +1845,30 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         was possible with our previously defined functors, but using a complicated
                         template syntax. This syntax is now possible exactly as written, which means
                         without any syntactic noise at all.</para>
+                </sect2>
+                <sect2>
+                    <title>A simple example: rewriting only our transition table</title>
+                    <para>As an introduction to eUML, we will rewrite our tutorial's transition
+                        table using eUML. This will require two or three changes, depending on the compiler:<itemizedlist>
+                            <listitem>
+                                <para>events must inherit from msm::front::euml::euml_event&lt;
+                                    event_name ></para>
+                            </listitem>
+                            <listitem>
+                                <para>states must inherit from msm::front::euml::euml_state&lt;
+                                    state_name ></para>
+                            </listitem>
+                            <listitem>
+                                <para>with VC, states must be declared before the front-end</para>
+                            </listitem>
+                        </itemizedlist></para>
+                    <para>We now can write the transition table like just shown, using
+                        BOOST_MSM_EUML_DECLARE_TRANSITION_TABLE instead of
+                        BOOST_MSM_EUML_TRANSITION_TABLE. The <link
+                            xlink:href="examples/SimpleTutorialWithEumlTable.cpp">implementation</link> is pretty
+                        straightforward.</para>
+                    <para>We now have a new, more readable transition table with few changes to our
+                        example. eUML can do much more so please follow the guide.</para>
                 </sect2>
                 <sect2>
                     <title>Defining events, actions and states with entry/exit actions</title>
@@ -2823,9 +2954,9 @@ player p(boost::ref(data),3);
                                 <para>submachines</para>
                             </listitem>
                         </itemizedlist></para>
-                    <para>The back-end <code>msm::back::state_machine</code> has a third template
-                        argument (first is the front-end, second is the history policy) defaulting
-                        to <code>favor_runtime_speed</code>. To switch to
+                    <para>The back-end <code>msm::back::state_machine</code> has a policy argument
+                        (first is the front-end, then the history policy) defaulting to
+                            <code>favor_runtime_speed</code>. To switch to
                             <code>favor_compile_time</code>, which is declared in
                             <code>&lt;msm/back/favor_compile_time.hpp></code>, you need to:<itemizedlist>
                             <listitem>
@@ -2886,6 +3017,79 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</programlisting>
                         </itemizedlist>
                     </para>
                 </sect2>
+                <sect2>
+                    <title><command xml:id="backend-compile-time-analysis"/>Compile-time state machine analysis </title>
+                    <para>A MSM state machine being a metaprogram, it is only logical that cheking
+                        for the validity of a concrete state machine happens compile-time. To this
+                        aim, using the compile-time graph library mpl_graph (delivered at the moment
+                        with MSM) from Gordon Woodhull, MSM provides several compile-time checks:<itemizedlist>
+                            <listitem>
+                                <para>Check that orthogonal regions ar truly orthogonal.</para>
+                            </listitem>
+                            <listitem>
+                                <para>Check that all states are either reachable from the initial
+                                    states or are explicit entries / pseudo-entry states.</para>
+                            </listitem>
+                        </itemizedlist></para>
+                    <para>To make use of this feature, the back-end provides a policy (default is no
+                        analysis), <code>msm::back::mpl_graph_fsm_check</code>. For example:</para>
+                    <programlisting> typedef msm::back::state_machine&lt; player_,msm::back::mpl_graph_fsm_check> player;           </programlisting>
+                    <para>As MSM is now using Boost.Parameter to declare policies, the policy choice
+                        can be made at any position after the front-end type (in this case
+                        <code>player_</code>).</para>
+                    <para>In case an error is detected, a compile-time assertion is provoked.</para>
+                    <para>This feature is not enabled by default because it has a non-neglectable
+                        compile-time cost. The algorithm is linear if no explicit or pseudo entry
+                        states are found in the state machine, unfortunately still O(number of
+                        states * number of entry states) otherwise. This will be improved in future
+                        versions of MSM.</para>
+                    <para>The same algorithm is also used in case you want to omit providing the
+                        region index in the <command xlink:href="#explicit-entry-no-region-id">explicit entry / pseudo entry state</command> declaration.</para>
+                    <para>The author's advice is to enable the checks after any state machine
+                        structure change and disable it again after sucessful analysis.</para>
+                    <para>The <link xlink:href="examples/TestErrorOrthogonality.cpp">following example</link> provokes an assertion if one of the first two lines
+                        of the transition table is used.</para>
+                </sect2>
+                <sect2>
+                    <title><command xml:id="backend-enqueueing"/> Enqueueing events for later
+                        processing </title>
+                    <para>Calling <code>process_event(Event const&amp;)</code> will immediately
+                        process the event with run-to-completion semantics. You can also enqueue the
+                        events and delay their processing by calling <code>enqueue_event(Event
+                            const&amp;)</code> instead. Calling <code>execute_queued_events()</code> will then
+                        process all enqueued events (in FIFO order).</para>
+                    <para>You can query the queue size by calling <code>get_message_queue_size()</code>.</para>
+                </sect2>  
+                <sect2>
+                    <title><command xml:id="backend-queues"/> Customizing the message queues </title>
+                    <para>MSM uses by default a std::deque for its queues (one message queue for
+                        events generated during run-to-completion or with
+                        <code>enqueue_event</code>, one for deferred events). Unfortunately, on some
+                        STL implementations, it is a very expensive container in size and copying
+                        time. Should this be a problem, MSM offers an alternative based on
+                        boost::circular_buffer. The policy is msm::back::queue_container_circular.
+                        To use it, you need to provide it to the back-end definition:</para>
+                        <programlisting> typedef msm::back::state_machine&lt; player_,msm::back::queue_container_circular> player;           </programlisting>
+                    <para>You can access the queues with get_message_queue and get_deferred_queue,
+                        both returning a reference or a const reference to the queues themselves.
+                        Boost::circular_buffer is outside of the scope of this documentation. What
+                        you will however need to define is the queue capacity (initially is 0) to
+                        what you think your queue will at most grow, for example (size 1 is
+                        common):</para>
+                    <programlisting> fsm.get_message_queue().set_capacity(1);           </programlisting>
+                </sect2>                  
+                <sect2>
+                    <title><command xml:id="backend-boost-parameter"/>Policy definition with Boost.Parameter </title>
+                    <para>MSM uses Boost.Parameter to allow easier definition of
+                        back::state_machine&lt;> policy arguments (all except the front-end). This
+                        allows you to define policy arguments (history, compile-time / run-time,
+                        state machine analysis, container for the queues) at any position, in any
+                        number. For example: </para> 
+                    <programlisting> typedef msm::back::state_machine&lt; player_,msm::back::mpl_graph_fsm_check> player;  
+ typedef msm::back::state_machine&lt; player_,msm::back::AlwaysHistory> player;  
+ typedef msm::back::state_machine&lt; player_,msm::back::mpl_graph_fsm_check,msm::back::AlwaysHistory> player; 
+ typedef msm::back::state_machine&lt; player_,msm::back::AlwaysHistory,msm::back::mpl_graph_fsm_check> player;      </programlisting>                    
+                </sect2>                    
             </sect1>
         </chapter>
         <chapter>
@@ -3512,6 +3716,60 @@ typename ::boost::enable_if&lt;
         <chapter>
             <title>Version history</title>
             <sect1>
+                <title>From V2.12 to V2.20</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>Compile-time state machine analysis using mpl_graph:</para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para><command xlink:href="#backend-compile-time-analysis">checking of region orthogonality</command>.</para>
+                                </listitem>
+                                <listitem>
+                                    <para><command xlink:href="#backend-compile-time-analysis">search for unreachable states</command>.</para>
+                                </listitem>
+                                <listitem>
+                                    <para><command xlink:href="#explicit-entry-no-region-id">automatic region index search for pseudo entry or explicit
+                                        entry states</command>.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para><command xlink:href="#backend-boost-parameter">Boost.Parameter interface definition</command> for
+                                msm::back::state_machine&lt;> template arguments.</para>
+                        </listitem>
+                        <listitem>
+                            <para><command xlink:href="#backend-queues">Possibility to provide a
+                                    container</command> for the event and deferred event queues. A
+                                policy implementation based on a more efficient Boost.CircularBuffer
+                                is provided.</para>
+                        </listitem>
+                        <listitem>
+                            <para>msm::back::state_machine&lt;>::is_flag_active method made
+                                const.</para>
+                        </listitem>
+                        <listitem>
+                            <para>added possibility to <command xlink:href="#backend-enqueueing"
+                                    >enqueue events</command> for delayed processing.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfixes<itemizedlist>
+                                    <listitem>
+                                        <para>Trac 4926</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>stack overflow using the Defer functor</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>anonymous transition of a submachine not called for
+                                            the initial state</para>
+                                    </listitem>
+                                </itemizedlist></para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+            </sect1>
+            <sect1>
                 <title>From V2.10 to V2.12</title>
                 <para>
                     <itemizedlist>
@@ -3520,7 +3778,7 @@ typename ::boost::enable_if&lt;
                         </listitem>
                         <listitem>
                             <para><command xlink:href="#eUML-reuse-functor">Possibility to use
-                                    normal functors</command> (from functor front-end) in
+                                normal functors</command> (from functor front-end) in
                                 eUML.</para>
                         </listitem>
                         <listitem>
