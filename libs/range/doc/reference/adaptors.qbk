@@ -177,6 +177,7 @@ rng | boost::adaptors::adaptor_generator
 [include adaptors/reversed.qbk]
 [include adaptors/sliced.qbk]
 [include adaptors/strided.qbk]
+[include adaptors/type_erased.qbk]
 [include adaptors/tokenized.qbk]
 [include adaptors/transformed.qbk]
 [include adaptors/uniqued.qbk]

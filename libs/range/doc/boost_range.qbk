@@ -78,6 +78,7 @@
 [def __range_adaptors_reversed__          [link range.reference.adaptors.reference.reversed reversed]]
 [def __range_adaptors_sliced__            [link range.reference.adaptors.reference.sliced sliced]]
 [def __range_adaptors_strided__           [link range.reference.adaptors.reference.strided strided]]
+[def __range_adaptors_type_erased__       [link range.reference.adaptors.reference.type_erased type_erased]]
 [def __range_adaptors_tokenized__         [link range.reference.adaptors.reference.tokenized tokenized]]
 [def __range_adaptors_transformed__       [link range.reference.adaptors.reference.transformed transformed]]
 [def __range_adaptors_uniqued__           [link range.reference.adaptors.reference.uniqued uniqued]]
@@ -174,6 +175,7 @@
 
 [def __sgi_inner_product__      [@http://www.sgi.com/tech/stl/inner_product.html inner_product]]
 [def __sgi_partial_sum__        [@http://www.sgi.com/tech/stl/partial_sum.html partial_sum]]
+[def __type_erasure_article__   [@http://www.artima.com/cppsource/type_erasure.html type erasure article]]
 
 Boost.Range is a collection of concepts and utilities, range-based algorithms,
 as well as range adaptors that allow for efficient and expressive code.

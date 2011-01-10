@@ -168,27 +168,10 @@
                   </td>
 <td>
                     <p>
-                      <code class="computeroutput"><span class="identifier">The</span> <span class="identifier">size</span>
-                      <span class="identifier">of</span> <span class="identifier">the</span>
-                      <span class="identifier">range</span> <span class="identifier">with</span>
-                      <span class="identifier">complexity</span> <span class="identifier">O</span><span class="special">(</span><span class="number">1</span><span class="special">).</span> <span class="identifier">For</span>
-                      <span class="identifier">RandomAccessRanges</span> <span class="keyword">this</span> <span class="identifier">is</span>
-                      <span class="identifier">achieved</span> <span class="identifier">via</span>
-                      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span>
-                      <span class="special">-</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">x</span><span class="special">).</span> <span class="identifier">For</span>
-                      <span class="identifier">other</span> <span class="identifier">traversal</span>
-                      <span class="identifier">categories</span> <span class="identifier">range_calculate_size</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="identifier">is</span>
-                      <span class="identifier">returned</span><span class="special">.</span>
-                      <span class="identifier">Note</span> <span class="identifier">that</span>
-                      <span class="identifier">unless</span> <span class="identifier">range_calculate_size</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="identifier">has</span>
-                      <span class="identifier">been</span> <span class="identifier">implemented</span>
-                      <span class="identifier">by</span> <span class="identifier">the</span>
-                      <span class="identifier">user</span> <span class="identifier">as</span>
-                      <span class="identifier">an</span> <span class="identifier">extension</span>
-                      <span class="identifier">then</span> <span class="identifier">the</span>
-                      <span class="identifier">Argument</span> <span class="identifier">Dependent</span>
-                      <span class="identifier">Lookup</span> <span class="identifier">will</span>
-                      <span class="keyword">return</span> <span class="identifier">x</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+                      <code class="computeroutput"><span class="identifier">range_calculate_size</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> which by default is <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span>
+                      <span class="special">-</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code>. Users may supply alternative
+                      implementations by implementing <code class="computeroutput"><span class="identifier">range_calculate_size</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> so that it will be found via
+                      ADL
                     </p>
                   </td>
 <td>

@@ -1,6 +1,6 @@
 // Boost.Range library
 //
-//  Copyright Thorsten Ottosen, Neil Groves 2006 - 2008. Use, modification and
+//  Copyright Neil Groves 2010. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -10,79 +10,173 @@
 #ifndef BOOST_RANGE_ADAPTOR_TYPE_ERASED_HPP_INCLUDED
 #define BOOST_RANGE_ADAPTOR_TYPE_ERASED_HPP_INCLUDED
 
-#include <boost/iterator/iterator_facade.hpp>
-#include <boost/range/range_reference.hpp>
-#include <boost/range/range_value.hpp>
+#include <boost/range/reference.hpp>
+#include <boost/range/value_type.hpp>
+#include <boost/range/iterator_range_core.hpp>
+#include <boost/range/any_range.hpp>
+#include <boost/cast.hpp>
 
 namespace boost
 {
-    namespace range_detail
-    {
-        template<
-            class Value,
-            class CategoryOrTraversal,
-            class Reference,
-            class Difference
-            >
-        class any_range
-            : public iterator_range<
-                        IteratorTypeErasure::any_iterator<
-                            Value, CategoryOrTraversal, Reference, Difference> >
-        {
-            typedef typename IteratorTypeErasure::any_iterator<
-                Value, CategoryOrTraversal, Reference, Difference> iterator_t;
-
-            typedef iterator_range<iterator_t> base_t;
-        public:
-            template<class Range>
-            explicit any_range(Range& r) : base_t(r) {}
-
-            template<class Range>
-            explicit any_range(const Range& r) : base_t(r) {}
-        };
-
-            template<class Range>
-            class any_range_generator
-            {
-            public:
-                typedef any_range<
-                            BOOST_DEDUCED_TYPENAME range_value<Range>::type,
-                            BOOST_DEDUCED_TYPENAME iterator_traversal<
-                                BOOST_DEDUCED_TYPENAME range_iterator<Range>::type
-                            >::type,
-                            BOOST_DEDUCED_TYPENAME range_reference<Range>::type,
-                            BOOST_DEDUCED_TYPENAME range_difference<Range>::type
-                        > type;
-            };
-
-            class type_erased_tag {};
-
-
-    } // namespace range_detail
-
-    using range_detail::any_range;
-
     namespace adaptors
     {
-        namespace
+        template<
+            class Value = use_default
+          , class Traversal = use_default
+          , class Reference = use_default
+          , class Difference = use_default
+          , class Buffer = use_default
+        >
+        struct type_erased
         {
-            const range_detail::type_erased_tag type_erased = range_detail::type_erased_tag();
+        };
+
+        template<
+            class SinglePassRange
+          , class Value
+          , class Traversal
+          , class Reference
+          , class Difference
+          , class Buffer
+        >
+        typename any_range_type_generator<
+            SinglePassRange
+          , Value
+          , Traversal
+          , Reference
+          , Difference
+          , Buffer
+        >::type
+        operator|(SinglePassRange& rng,
+                  type_erased<
+                        Value
+                      , Traversal
+                      , Reference
+                      , Difference
+                      , Buffer
+                    >)
+        {
+            typedef typename any_range_type_generator<
+                SinglePassRange
+              , Value
+              , Traversal
+              , Reference
+              , Difference
+              , Buffer
+            >::type range_type;
+            return range_type(boost::begin(rng), boost::end(rng));
         }
 
-        template<class SinglePassRange>
-        typename range_detail::any_range_generator<SinglePassRange>::type
-        operator|(SinglePassRange& rng, range_detail::type_erased_tag)
+        template<
+            class SinglePassRange
+          , class Value
+          , class Traversal
+          , class Reference
+          , class Difference
+          , class Buffer
+        >
+        typename any_range_type_generator<
+            const SinglePassRange
+          , Value
+          , Traversal
+          , Reference
+          , Difference
+          , Buffer
+        >::type
+        operator|(const SinglePassRange& rng,
+                  type_erased<
+                            Value
+                          , Traversal
+                          , Reference
+                          , Difference
+                          , Buffer
+                    >)
         {
-            typedef typename range_detail::any_range_generator<SinglePassRange>::type range_t;
-            return range_t(rng);
+            typedef typename any_range_type_generator<
+                const SinglePassRange
+              , Value
+              , Traversal
+              , Reference
+              , Difference
+              , Buffer
+            >::type range_type;
+            return range_type(boost::begin(rng), boost::end(rng));
         }
 
-        template<class SinglePassRange>
-        typename range_detail::any_range_generator<const SinglePassRange>::type
-        operator|(const SinglePassRange& rng, range_detail::type_erased_tag)
+        template<
+            class SinglePassRange
+          , class Value
+          , class Traversal
+          , class Reference
+          , class Difference
+          , class Buffer
+        >
+        typename any_range_type_generator<
+            SinglePassRange
+          , Value
+          , Traversal
+          , Reference
+          , Difference
+          , Buffer
+        >::type
+        type_erase(SinglePassRange& rng
+                 , type_erased<
+                            Value
+                          , Traversal
+                          , Reference
+                          , Difference
+                          , Buffer
+                    > = type_erased<>()
+                )
         {
-            typedef typename range_detail::any_range_generator<const SinglePassRange>::type range_t;
-            return range_t(rng);
+            typedef typename any_range_type_generator<
+                SinglePassRange
+              , Value
+              , Traversal
+              , Reference
+              , Difference
+              , Buffer
+            >::type range_type;
+
+            return range_type(boost::begin(rng), boost::end(rng));
+        }
+
+        template<
+            class SinglePassRange
+          , class Value
+          , class Traversal
+          , class Reference
+          , class Difference
+          , class Buffer
+        >
+        typename any_range_type_generator<
+            const SinglePassRange
+          , Value
+          , Traversal
+          , Reference
+          , Difference
+          , Buffer
+        >::type
+        type_erase(const SinglePassRange& rng
+                 , type_erased<
+                            Value
+                          , Traversal
+                          , Reference
+                          , Difference
+                          , Buffer
+                    > = type_erased<>()
+                )
+        {
+            typedef typename any_range_type_generator<
+                const SinglePassRange
+              , Value
+              , Traversal
+              , Reference
+              , Difference
+              , Buffer
+            >::type range_type;
+
+            return range_type(boost::begin(rng), boost::end(rng));
         }
     }
 } // namespace boost

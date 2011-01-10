@@ -5,6 +5,7 @@
 /]
 [section:ranges Provided Ranges]
 
+[include ranges/any_range.qbk]
 [include ranges/counting_range.qbk]
 [include ranges/istream_range.qbk]
 [include ranges/irange.qbk]

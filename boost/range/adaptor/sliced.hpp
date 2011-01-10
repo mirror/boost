@@ -76,6 +76,7 @@ namespace boost
         }
 
     } // namespace adaptors
+    using adaptors::sliced_range;
 } // namespace boost
 
 #endif
