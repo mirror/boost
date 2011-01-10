@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
@@ -50,13 +51,29 @@
         requires a working <a class="link" href="is_base_of.html" title="is_base_of">is_base_of</a>
         trait.
       </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top">
 <p>
-        <span class="bold"><strong>Examples:</strong></span>
-      </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-          Given: <code class="computeroutput"> <span class="keyword">class</span> <span class="identifier">Base</span><span class="special">{};</span> <span class="keyword">class</span> <span class="identifier">Derived</span> <span class="special">:</span> <span class="keyword">public</span> <span class="keyword">virtual</span>
+          There are a small number of cases where it's simply not possible for this
+          trait to work, and where attempting to instantiate the trait will cause
+          compiler errors (see bug report <a href="https://svn.boost.org/trac/boost/ticket/3730" target="_top">#3730).
+          Further more the issues may well be compiler specific. In this situation
+          the user should supply a full specialization of the trait to work around
+          the problem.</a>
+        </p>
+<p>
+          <span class="bold"><strong>Examples:</strong></span>
+        </p>
+<p>
+          [:Given: <code class="computeroutput"> <span class="keyword">class</span> <span class="identifier">Base</span><span class="special">{};</span> <span class="keyword">class</span> <span class="identifier">Derived</span> <span class="special">:</span> <span class="keyword">public</span> <span class="keyword">virtual</span>
           <span class="identifier">Base</span><span class="special">{};</span></code>
-        </p></blockquote></div>
+        </p>
+</td></tr>
+</table></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <code class="computeroutput"><span class="identifier">is_virtual_base_of</span><span class="special">&lt;</span><span class="identifier">Base</span><span class="special">,</span> <span class="identifier">Derived</span><span class="special">&gt;</span></code>
           inherits from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
