@@ -72,38 +72,38 @@ BOOST_AUTO_TEST_CASE(interface_sample_identifiers)
 
 BOOST_AUTO_TEST_CASE(function_reference_element_iteration)
 {
-	// begin of doc code -------------------------------------------------------
+    // begin of doc code -------------------------------------------------------
     interval_set<int> inter_set;
     inter_set.add(interval<int>::right_open(0,3))
-		     .add(interval<int>::right_open(7,9));
+             .add(interval<int>::right_open(7,9));
 
     for(interval_set<int>::element_const_iterator creeper = elements_begin(inter_set); 
         creeper != elements_end(inter_set); ++creeper)
         cout << *creeper << " ";
     cout << endl;
-	//Program output: 0 1 2 7 8
+    //Program output: 0 1 2 7 8
 
     for(interval_set<int>::element_reverse_iterator repeerc = elements_rbegin(inter_set); 
         repeerc != elements_rend(inter_set); ++repeerc)
         cout << *repeerc << " ";
     cout << endl;
-	//Program output: 8 7 2 1 0
-	// end of doc code ---------------------------------------------------------
+    //Program output: 8 7 2 1 0
+    // end of doc code ---------------------------------------------------------
 
-	// Testcode
-	std::stringstream result;
+    // Testcode
+    std::stringstream result;
     for(interval_set<int>::element_iterator creeper2 = elements_begin(inter_set); 
         creeper2 != elements_end(inter_set); ++creeper2)
         result << *creeper2 << " ";
 
-	BOOST_CHECK_EQUAL(result.str(), std::string("0 1 2 7 8 "));
+    BOOST_CHECK_EQUAL(result.str(), std::string("0 1 2 7 8 "));
 
-	std::stringstream tluser;
+    std::stringstream tluser;
     for(interval_set<int>::element_const_reverse_iterator repeerc2 
-			= elements_rbegin(const_cast<const interval_set<int>&>(inter_set)); 
+            = elements_rbegin(const_cast<const interval_set<int>&>(inter_set)); 
         repeerc2 != elements_rend(const_cast<const interval_set<int>&>(inter_set)); ++repeerc2)
         tluser << *repeerc2 << " ";
 
-	BOOST_CHECK_EQUAL(tluser.str(), std::string("8 7 2 1 0 "));
+    BOOST_CHECK_EQUAL(tluser.str(), std::string("8 7 2 1 0 "));
 }
 
