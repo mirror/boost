@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     Copyright (c) 2001 Daniel C. Nuffer
-    Copyright (c) 2001-2010 Hartmut Kaiser. 
+    Copyright (c) 2001-2011 Hartmut Kaiser. 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -44,6 +44,8 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "//"            { goto cppcomment; }
     "."? Digit      { goto pp_number; }
 
+    "alignas"       { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_ALIGNAS : T_IDENTIFIER); }
+    "alignof"       { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_ALIGNOF : T_IDENTIFIER); }
     "asm"           { BOOST_WAVE_RET(T_ASM); }
     "auto"          { BOOST_WAVE_RET(T_AUTO); }
     "bool"          { BOOST_WAVE_RET(T_BOOL); }
@@ -51,10 +53,14 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "case"          { BOOST_WAVE_RET(T_CASE); }
     "catch"         { BOOST_WAVE_RET(T_CATCH); }
     "char"          { BOOST_WAVE_RET(T_CHAR); }
+    "char16_t"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_CHAR16_T : T_IDENTIFIER); }
+    "char32_t"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_CHAR32_T : T_IDENTIFIER); }
     "class"         { BOOST_WAVE_RET(T_CLASS); }
     "const"         { BOOST_WAVE_RET(T_CONST); }
+    "constexpr"     { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_CONSTEXPR : T_IDENTIFIER); }
     "const_cast"    { BOOST_WAVE_RET(T_CONSTCAST); }
     "continue"      { BOOST_WAVE_RET(T_CONTINUE); }
+    "decltype"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_DECLTYPE : T_IDENTIFIER); }
     "default"       { BOOST_WAVE_RET(T_DEFAULT); }
     "delete"        { BOOST_WAVE_RET(T_DELETE); }
     "do"            { BOOST_WAVE_RET(T_DO); }
@@ -78,6 +84,8 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "mutable"       { BOOST_WAVE_RET(T_MUTABLE); }
     "namespace"     { BOOST_WAVE_RET(T_NAMESPACE); }
     "new"           { BOOST_WAVE_RET(T_NEW); }
+    "noexcept"      { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_NOEXCEPT : T_IDENTIFIER); }
+    "nullptr"       { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_NULLPTR : T_IDENTIFIER); }
     "operator"      { BOOST_WAVE_RET(T_OPERATOR); }
     "private"       { BOOST_WAVE_RET(T_PRIVATE); }
     "protected"     { BOOST_WAVE_RET(T_PROTECTED); }
@@ -90,10 +98,12 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "sizeof"        { BOOST_WAVE_RET(T_SIZEOF); }
     "static"        { BOOST_WAVE_RET(T_STATIC); }
     "static_cast"   { BOOST_WAVE_RET(T_STATICCAST); }
+    "static_assert" { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_STATICASSERT : T_IDENTIFIER); }
     "struct"        { BOOST_WAVE_RET(T_STRUCT); }
     "switch"        { BOOST_WAVE_RET(T_SWITCH); }
     "template"      { BOOST_WAVE_RET(T_TEMPLATE); }
     "this"          { BOOST_WAVE_RET(T_THIS); }
+    "thread_local"  { BOOST_WAVE_RET(s->act_in_cpp0x_mode ? T_THREADLOCAL : T_IDENTIFIER); }
     "throw"         { BOOST_WAVE_RET(T_THROW); }
     "true"          { BOOST_WAVE_RET(T_TRUE); }
     "try"           { BOOST_WAVE_RET(T_TRY); }
@@ -238,16 +248,46 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "->"            { BOOST_WAVE_RET(T_ARROW); }
     "??/"           { BOOST_WAVE_RET(T_ANY_TRIGRAPH); }
 
-
-    ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*
-        { BOOST_WAVE_RET(T_IDENTIFIER); }
-
-    "L"? (['] (EscapeSequence|any\[\n\r\\']|UniversalChar)+ ['])
+    "L"? (['] (EscapeSequence | UniversalChar | any\[\n\r\\'])+ ['])
         { BOOST_WAVE_RET(T_CHARLIT); }
     
-    "L"? (["] (EscapeSequence|any\[\n\r\\"]|UniversalChar)* ["])
+    "L"? (["] (EscapeSequence | UniversalChar | any\[\n\r\\"])* ["])
         { BOOST_WAVE_RET(T_STRINGLIT); }
     
+    "L"? "R" ["] 
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extrawstringlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+
+    [uU] [']
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extcharlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+    
+    ([uU] | "u8") ["]
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extstringlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+    
+    ([uU] | "u8") "R" ["]
+        { 
+            if (s->act_in_cpp0x_mode) 
+                goto extrawstringlit; 
+            --YYCURSOR;
+            BOOST_WAVE_RET(T_IDENTIFIER);
+        }
+    
+    ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*
+        { BOOST_WAVE_RET(T_IDENTIFIER); }
 
     Pound PPSpace ( "include" | "include_next") PPSpace "<" (any\[\n\r>])+ ">" 
         { BOOST_WAVE_RET(T_PP_HHEADER); }
@@ -407,13 +447,13 @@ pp_number:
     /*!re2c
         ((FractionalConstant ExponentPart?) | (Digit+ ExponentPart)) FloatingSuffix?
             { BOOST_WAVE_RET(T_FLOATLIT); }
-            
+
         Integer { goto integer_suffix; } 
     */
     }
 }
 
-/* this subscanner is called, whenever a Integer was recognized */
+/* this subscanner is called, whenever an Integer was recognized */
 integer_suffix:
 {
     if (s->enable_ms_extensions) {
@@ -434,4 +474,47 @@ integer_suffix:
             { BOOST_WAVE_RET(T_INTLIT); }
     */
     }
+}
+
+/* this subscanner is invoked for C++0x extended character literals */
+extcharlit:
+{
+    /*!re2c
+        ((EscapeSequence | UniversalChar | any\[\n\r\\']) ['])
+            { BOOST_WAVE_RET(T_CHARLIT); }
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
+    */
+}
+
+/* this subscanner is invoked for C++0x extended character string literals */
+extstringlit:
+{
+    /*!re2c
+        ((EscapeSequence | UniversalChar | any\[\n\r\\"])* ["])
+            { BOOST_WAVE_RET(T_STRINGLIT); }
+
+        any 
+            { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
+    */
+}
+
+extrawstringlit:
+{
+    /*!re2c
+        (EscapeSequence | UniversalChar | any\[\r\n\\"])
+        {
+            goto extrawstringlit;
+        }
+
+        Newline
+        {
+            s->line += count_backslash_newlines(s, cursor) +1;
+            cursor.column = 1;
+            goto extrawstringlit;
+        }
+
+        ["] { BOOST_WAVE_RET(T_RAWSTRINGLIT); }
+    */
 }

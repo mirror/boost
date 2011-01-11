@@ -8,7 +8,7 @@
 
     http://www.boost.org/
 
-    Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost 
+    Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost 
     Software License, Version 1.0. (See accompanying file 
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -87,7 +87,7 @@ main(int argc, char *argv[])
 // during iteration over the context_type::iterator_type stream.
     context_type ctx (teststr.begin(), teststr.end(), argv[1]);
 
-    ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
+    ctx.set_language(boost::wave::support_cpp0x);
     ctx.set_language(boost::wave::enable_preserve_comments(ctx.get_language()));
     ctx.set_language(boost::wave::enable_prefer_pp_numbers(ctx.get_language()));
 

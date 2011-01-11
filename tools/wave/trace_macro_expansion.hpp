@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
     http://www.boost.org/
 
-    Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -145,7 +145,8 @@ class trace_macro_expansion
     typedef boost::wave::context_policies::eat_whitespace<TokenT> base_type;
 
 public:
-    trace_macro_expansion(bool preserve_whitespace_, 
+    trace_macro_expansion(
+            bool preserve_whitespace_, bool preserve_bol_whitespace_,
             std::ofstream &output_, std::ostream &tracestrm_, 
             std::ostream &includestrm_, std::ostream &guardstrm_, 
             trace_flags flags_, bool enable_system_command_, 
@@ -155,6 +156,7 @@ public:
         level(0), flags(flags_), logging_flags(trace_nothing), 
         enable_system_command(enable_system_command_),
         preserve_whitespace(preserve_whitespace_),
+        preserve_bol_whitespace(preserve_bol_whitespace_),
         generate_output(generate_output_),
         default_outfile(default_outfile_),
         emit_relative_filenames(false)
@@ -741,7 +743,9 @@ public:
     bool may_skip_whitespace(ContextT const &ctx, TokenT &token, 
         bool &skipped_newline)
     {
-        return this->base_type::may_skip_whitespace(ctx, token, skipped_newline) ?
+        return this->base_type::may_skip_whitespace(
+                ctx, token, need_preserve_comments(ctx.get_language()), 
+                preserve_bol_whitespace, skipped_newline) ?
             !preserve_whitespace : false;
     }
 
@@ -781,7 +785,7 @@ protected:
         using namespace boost::wave;
         if (e.get_errorcode() != preprocess_exception::ill_formed_directive)
             return false;
-            
+
         // the error string is formatted as 'severity: error: directive'
         std::string error(e.description());
         std::string::size_type p = error.find_last_of(":");
@@ -841,24 +845,44 @@ protected:
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    //  interpret the pragma wave option(preserve: [0|1|2|push|pop]) directive
+    //  interpret the pragma wave option(preserve: [0|1|2|3|push|pop]) directive
     template <typename ContextT>
     static bool 
     interpret_pragma_option_preserve_set(int mode, bool &preserve_whitespace, 
-        ContextT &ctx)
+        bool& preserve_bol_whitespace, ContextT &ctx)
     {
         switch(mode) {
-        case 0:   
+        // preserve no whitespace
+        case 0:
             preserve_whitespace = false;
+            preserve_bol_whitespace = false;
             ctx.set_language(
                 enable_preserve_comments(ctx.get_language(), false),
                 false);
             break;
 
-        case 2:
-            preserve_whitespace = true;
-              /* fall through */
+        // preserve BOL whitespace only
         case 1:
+            preserve_whitespace = false;
+            preserve_bol_whitespace = true;
+            ctx.set_language(
+                enable_preserve_comments(ctx.get_language(), false),
+                false);
+            break;
+
+        // preserve comments and BOL whitespace only
+        case 2:
+            preserve_whitespace = false;
+            preserve_bol_whitespace = true;
+            ctx.set_language(
+                enable_preserve_comments(ctx.get_language()),
+                false);
+            break;
+
+        // preserve all whitespace
+        case 3:
+            preserve_whitespace = true;
+            preserve_bol_whitespace = true;
             ctx.set_language(
                 enable_preserve_comments(ctx.get_language()),
                 false);
@@ -885,15 +909,18 @@ protected:
         if (T_IDENTIFIER == id) {
             if ((*it).get_value() == "push") {
             // push current preserve option onto the internal option stack
-                if (preserve_whitespace) {
-                    if (need_preserve_comments(ctx.get_language()))
-                        preserve_options.push(2);
+                if (need_preserve_comments(ctx.get_language())) {
+                    if (preserve_whitespace)
+                        preserve_options.push(3);
                     else
-                        preserve_options.push(1);
+                        preserve_options.push(2);
+                }
+                else if (preserve_bol_whitespace) {
+                    preserve_options.push(1);
                 }
                 else {
                     preserve_options.push(0);
-                }                    
+                }
                 return true;
             }
             else if ((*it).get_value() == "pop") {
@@ -903,10 +930,11 @@ protected:
                         pragma_mismatched_push_pop, "preserve", 
                         act_token.get_position());
                 }
-                
+
             // pop output preserve from the internal option stack
                 bool result = interpret_pragma_option_preserve_set(
-                    preserve_options.top(), preserve_whitespace, ctx);
+                    preserve_options.top(), preserve_whitespace, 
+                    preserve_bol_whitespace, ctx);
                 preserve_options.pop();
                 return result;
             }
@@ -918,10 +946,11 @@ protected:
 
         using namespace std;    // some platforms have atoi in namespace std
         return interpret_pragma_option_preserve_set(
-            atoi((*it).get_value().c_str()), preserve_whitespace, ctx);
+            atoi((*it).get_value().c_str()), preserve_whitespace, 
+            preserve_bol_whitespace, ctx);
     }
 
-    //  interpret the pragma wave option(line: [0|1|push|pop]) directive
+    //  interpret the pragma wave option(line: [0|1|2|push|pop]) directive
     template <typename ContextT, typename IteratorT>
     bool 
     interpret_pragma_option_line(ContextT &ctx, IteratorT &it,
@@ -970,7 +999,7 @@ protected:
 
         using namespace std;    // some platforms have atoi in namespace std
         int emit_lines = atoi((*it).get_value().c_str());
-        if (0 == emit_lines || 1 == emit_lines) {
+        if (0 == emit_lines || 1 == emit_lines || 2 == emit_lines) {
             // set the new emit #line directive mode
             ctx.set_language(
                 enable_emit_line_directives(ctx.get_language(), emit_lines),
@@ -1045,7 +1074,7 @@ protected:
             string_type fname ((*it).get_value());
             fs::path fpath (boost::wave::util::create_path(
                 util::impl::unescape_lit(fname.substr(1, fname.size()-2)).c_str()));
-            fpath = fs::complete(fpath, ctx.get_current_directory());
+            fpath = boost::wave::util::complete_path(fpath, ctx.get_current_directory());
             result = interpret_pragma_option_output_open(fpath, ctx, act_token);
         }
         else if (T_IDENTIFIER == id) {
@@ -1058,8 +1087,8 @@ protected:
                 if (output_options.empty() && current_outfile.empty() &&
                     !default_outfile.empty() && default_outfile != "-")
                 {
-                    current_outfile = fs::complete(default_outfile, 
-                        ctx.get_current_directory());
+                    current_outfile = boost::wave::util::complete_path(
+                        default_outfile, ctx.get_current_directory());
                 }
 
             // push current output option onto the internal option stack
@@ -1133,12 +1162,12 @@ protected:
 
             token_type const &value = *it;
             if (value.get_value() == "preserve") {
-            // #pragma wave option(preserve: [0|1|2|push|pop])
+            // #pragma wave option(preserve: [0|1|2|3|push|pop])
                 valid_option = interpret_pragma_option_preserve(ctx, it, end, 
                     act_token);
             }
             else if (value.get_value() == "line") {
-            // #pragma wave option(line: [0|1|push|pop])
+            // #pragma wave option(line: [0|1|2|push|pop])
                 valid_option = interpret_pragma_option_line(ctx, it, end, 
                     act_token);
             }
@@ -1336,6 +1365,7 @@ private:
     trace_flags logging_flags;      // enabled by a #pragma
     bool enable_system_command;     // enable #pragma wave system() command
     bool preserve_whitespace;       // enable whitespace preservation
+    bool preserve_bol_whitespace;   // enable begin of line whitespace preservation
     bool& generate_output;          // allow generated tokens to be streamed to output
     std::string const& default_outfile;         // name of the output file given on command line
     boost::filesystem::path current_outfile;    // name of the current output file 

@@ -56,6 +56,7 @@
     --long_long:                 enable long long support if C++ mode
     --variadics:                 enable variadics and placemarkers in C++ mode
     --c99:                       enable C99 mode (implies variadics and placemarkers)
+    --c++0x                      enable C++0x mode (implies --variadics and --long_long)
     -l [ --listincludes ] arg:   list included file to a file [arg] or to stdout [-]
     -m [ --macronames ] arg:     list names of all defined macros to a file [arg] or 
                                  to stdout [-]
@@ -63,8 +64,9 @@
                                  stdout [-]
     -p [ --preserve ] arg (=0):  preserve whitespace
                                  0: no whitespace is preserved (default),
-                                 1: comments are preserved,
-                                 2: all whitespace is preserved
+                                 1: begin of line whitespace is preserved,
+                                 2: comments and begin of line whitespace is preserved,
+                                 3: all whitespace is preserved
     -L [ --line ] arg (=1):      control the generation of #line directives
                                  0: no #line directives are generated
                                  1: #line directives will be emitted (default)
@@ -182,13 +184,21 @@
 </blockquote>
 <p dir="ltr">--c99</p>
 <blockquote> 
-  <p dir="ltr">Enable the C99 mode. This mode enables certain C99 specific features 
+  <p dir="ltr">Enable the C99 mode. This mode enables certain C99 specific features, such
     as variadics (macros with variable parameter lists), placemarkers (empty macro 
     arguments) and <tt>operator&nbsp;_Pragma</tt> support and disables some C++ 
     specific token types as for instance <tt>'::'</tt>, <tt>'-&gt;*'</tt> and <tt>'-&gt;.'</tt>. 
     Several predefined macros are different for this mode, for more information 
     about predefined macros you may look <a href="predefined_macros.html">here</a>. 
   </p>
+</blockquote>
+<p dir="ltr">--c++0x</p>
+<blockquote>
+  <p dir="ltr">Enable the C++0x mode. This mode enables C++0x specific keywords and features, such
+    as variadics (macros with variable parameter lists), placemarkers (empty macro 
+    arguments) and <tt>operator&nbsp;_Pragma</tt> support. 
+    Several predefined macros are different for this mode, for more information 
+    about predefined macros you may look <a href="predefined_macros.html">here</a>. </p>
 </blockquote>
 <p dir="ltr">-l [--listincludes] path</p>
 <blockquote>
@@ -204,7 +214,7 @@
 </blockquote>
 <p dir="ltr">-p [--preserve] arg </p>
 <blockquote>
-  <p dir="ltr">Preserve the whitespace from the input stream not located inside of macro definitions. The argument defines the amount of whitespace to be preserved. A value of '0' (zero) skips all whitespace, a value of '1' preserves all the comments and a value of '2' will preserve all whitespace in the output.</p>
+  <p dir="ltr">Preserve the whitespace from the input stream not located inside of macro definitions. The argument defines the amount of whitespace to be preserved. A value of '0' (zero) skips all whitespace, a value of '1' preserves begin of line whitespace only, a value of '2' preserves all the comments andd all begin of line whitespace, and a value of '3' will preserve all whitespace in the output.</p>
   <p dir="ltr">The comments located inside macro definitions are skipped even if this option is specified with an argument not '0' (zero) . If this option is not specified on the command line only essential whitespace is preserved (equivalent to '0' as the argument value). </p>
 </blockquote>
 <p dir="ltr">-L [--line]</p>
@@ -283,12 +293,12 @@ is now disabled by default because it may cause a potential security threat. The
   </tr>
 </table>
 <hr size="1">
-<p class="copyright">Copyright &copy; 2003-2010 Hartmut Kaiser<br>
+<p class="copyright">Copyright &copy; 2003-2011 Hartmut Kaiser<br>
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Thursday, September 17, 2009 12:40<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Sunday, January 9, 2011  16:12<!-- #EndDate -->
 </span></p>
 </body>
 </html>

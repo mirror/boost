@@ -3,7 +3,7 @@
 
     http://www.boost.org/
 
-    Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -138,7 +138,7 @@ int print_copyright()
         "Wave: A Standard conformant C++ preprocessor based on the Boost.Wave library",
         "http://www.boost.org/",
         "",
-        "Copyright (c) 2001-2010 Hartmut Kaiser, Distributed under the Boost",
+        "Copyright (c) 2001-2011 Hartmut Kaiser, Distributed under the Boost",
         "Software License, Version 1.0. (See accompanying file",
         "LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)",
         0
@@ -539,7 +539,7 @@ namespace {
         fs::path macronames_file (boost::wave::util::create_path(filename));
 
         if (macronames_file != "-") {
-            macronames_file = fs::complete(macronames_file);
+            macronames_file = boost::wave::util::complete_path(macronames_file);
             fs::create_directories(boost::wave::util::branch_path(macronames_file));
             macronames_out.open(macronames_file.string().c_str());
             if (!macronames_out.is_open()) {
@@ -608,7 +608,7 @@ namespace {
         fs::path macrocounts_file (boost::wave::util::create_path(filename));
 
         if (macrocounts_file != "-") {
-            macrocounts_file = fs::complete(macrocounts_file);
+            macrocounts_file = boost::wave::util::complete_path(macrocounts_file);
             fs::create_directories(boost::wave::util::branch_path(macrocounts_file));
             macrocounts_out.open(macrocounts_file.string().c_str());
             if (!macrocounts_out.is_open()) {
@@ -752,22 +752,31 @@ int error_count = 0;
     // enable preserving comments mode
     bool preserve_comments = false;
     bool preserve_whitespace = false;
+    bool preserve_bol_whitespace = false;
 
         if (vm.count("preserve")) {
         int preserve = vm["preserve"].as<int>();
 
             switch(preserve) {
-            case 0:   break;
-            case 2:
+            case 0:   break;                // preserve no whitespace
+            case 3:                         // preserve all whitespace
                 preserve_whitespace = true;
-                /* fall through */
-            case 1:
                 preserve_comments = true;
+                preserve_bol_whitespace = true;
+                break;
+
+            case 2:                         // preserve comments and BOL whitespace only
+                preserve_comments = true;
+                preserve_bol_whitespace = true;
+                break;
+
+            case 1:                         // preserve BOL whitespace only
+                preserve_bol_whitespace = true;
                 break;
 
             default:
                 cerr << "wave: bogus preserve whitespace option value: " 
-                     << preserve << ", should be 0, 1, or 2" << endl;
+                     << preserve << ", should be 0, 1, 2, or 3" << endl;
                 return -1;
             }
         }
@@ -785,8 +794,9 @@ int error_count = 0;
     bool allow_output = true;   // will be manipulated from inside the hooks object
     std::string default_outfile;  // will be used from inside the hooks object
     trace_macro_expansion<token_type> hooks(preserve_whitespace, 
-        output, traceout, includelistout, listguardsout, enable_trace, 
-        enable_system_command, allow_output, default_outfile);
+        preserve_bol_whitespace, output, traceout, includelistout, 
+        listguardsout, enable_trace, enable_system_command, allow_output, 
+        default_outfile);
 
     // enable macro invocation count, if appropriate
         if (vm.count("macrocounts")) 
@@ -797,6 +807,13 @@ int error_count = 0;
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // enable C99 mode, if appropriate (implies variadics)
         if (vm.count("c99")) {
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+            if (vm.count("c++0x")) {
+                cerr << "wave: multiple language options specified: --c99 "
+                        "and --c++0x" << endl;
+                return -1;
+            }
+#endif
             ctx.set_language(
                 boost::wave::language_support(
                     boost::wave::support_c99 
@@ -816,6 +833,29 @@ int error_count = 0;
             ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
         }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+        if (vm.count("c++0x")) {
+            if (vm.count("c99")) {
+                cerr << "wave: multiple language options specified: --c99 "
+                        "and --c++0x" << endl;
+                return -1;
+            }
+            ctx.set_language(
+                boost::wave::language_support(
+                    boost::wave::support_cpp0x
+                 |  boost::wave::support_option_convert_trigraphs 
+                 |  boost::wave::support_option_long_long 
+                 |  boost::wave::support_option_emit_line_directives 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+                 |  boost::wave::support_option_include_guard_detection
+#endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+                 |  boost::wave::support_option_emit_pragma_directives
+#endif
+                 |  boost::wave::support_option_insert_whitespace
+                ));
+        }
+#endif // BOOST_WAVE_SUPPORT_CPP0X != 0
 
     // enable long long support, if appropriate
         if (vm.count("long_long")) {
@@ -961,7 +1001,7 @@ int error_count = 0;
                 default_outfile = "-";
             }
             else {
-                out_file = fs::complete(out_file);
+                out_file = boost::wave::util::complete_path(out_file);
                 fs::create_directories(boost::wave::util::branch_path(out_file));
                 output.open(out_file.string().c_str());
                 if (!output.is_open()) {
@@ -1212,6 +1252,9 @@ main (int argc, char *argv[])
             ("variadics", "enable certain C99 extensions in C++ mode")
             ("c99", "enable C99 mode (implies --variadics)")
 #endif 
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+            ("c++0x", "enable C++0x mode (implies --variadics and --long_long)")
+#endif 
             ("listincludes,l", po::value<std::string>(), 
                 "list names of included files to a file [arg] or to stdout [-]")
             ("macronames,m", po::value<std::string>(), 
@@ -1221,8 +1264,9 @@ main (int argc, char *argv[])
             ("preserve,p", po::value<int>()->default_value(0), 
                 "preserve whitespace\n"
                             "0: no whitespace is preserved (default),\n"
-                            "1: comments are preserved,\n" 
-                            "2: all whitespace is preserved")
+                            "1: begin of line whitespace is preserved,\n" 
+                            "2: comments and begin of line whitespace is preserved,\n" 
+                            "3: all whitespace is preserved")
             ("line,L", po::value<int>()->default_value(1), 
                 "control the generation of #line directives\n"
                             "0: no #line directives are generated,\n"
@@ -1284,7 +1328,7 @@ main (int argc, char *argv[])
     // file for all files in a certain project.
         if (arguments.size() > 0 && arguments[0].value[0] != "-") {
         // construct full path of input file
-            fs::path input_dir (fs::complete(
+          fs::path input_dir (boost::wave::util::complete_path(
                 boost::wave::util::create_path(arguments[0].value[0])));
 
         // chop of file name

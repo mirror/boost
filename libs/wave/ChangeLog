@@ -1,7 +1,7 @@
 Boost.Wave: A Standard compliant C++ preprocessor library
 http://www.boost.org/
 
-Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
+Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost
 Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -------------------------------------------------------------------------------
@@ -20,6 +20,31 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.46.0
+- V2.2.0
+- Added recognition of C++0x keywords to Re2C lexers.
+- Added --c++0x command line option to Wave to enabling the recognition of 
+  C++0x keywords, converting those to C++0x tokens.
+- Adapted all of the library to play well with Boost.Filesystem V3 (which is 
+  the default from now on).
+- Added support for extended character and string literals, added test case
+  (which required to add C++0x support to the test application).
+- Added proper predefined macros fro --c++0x mode. __cplusplus is currently 
+  defined to 201101L, but this will change when the Standard is finalized.
+- Fixed a problem with object like macros, which when being adjacent to a 
+  parenthesis, caused the parenthesis to disappear when the macro expansion
+  was suppressed by the expanding_object_like_macro() hook function.
+- Fixed a bug in pragma option(preserve), missing to set to preserve=1 if 
+  after the previous value was preserve=2.
+- Changed the --preserve option of the wave tool to interprete the integer 
+  argument in a slightly different way: 
+      0: no whitespace is preserved, 
+      1: only begin of line whitespace is preserved, 
+      2: only begin of line whitespace and comments are preserved, 
+      3: all whitespace is preserved
+  The #pragma wave option(preserve) now supports these arguments: 
+  [0|1|2|3|push|pop].
+
 Boost V1.45.0
 - V2.1.0
 - Token pasting is well formed only as long as the formed token(s) are 
@@ -37,6 +62,8 @@ Boost V1.45.0
   preprocessing instead of just inhibiting the expansion of the macro.
 - Fixed a duplicated call to the pp hook skipped_token for preprocessing 
   directives inside inactive conditional branches.
+- Changing exception handling to fix clang++ regression errors.
+- Replaced assert() with BOOST_ASSERT to pacify the Boost inspect tool.
 
 Boost V1.44.0
 - V2.0.6

@@ -5,7 +5,7 @@
     
     http://www.boost.org/
 
-    Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -210,6 +210,18 @@ static char const *tok_names[] = {
     /* 420 */   "MSEXT_ENDREGION",
     
     /* 421 */   "IMPORT",
+    
+    /* 422 */   "ALIGNAS",
+    /* 423 */   "ALIGNOF",
+    /* 424 */   "CHAR16_T",
+    /* 425 */   "CHAR32_T",
+    /* 426 */   "CONSTEXPR",
+    /* 427 */   "DECLTYPE",
+    /* 428 */   "NOEXCEPT",
+    /* 429 */   "NULLPTR",
+    /* 430 */   "STATIC_ASSERT",
+    /* 431 */   "THREADLOCAL",
+    /* 432 */   "RAWSTRINGLIT",
     };
 
     // make sure, I have not forgotten any commas (as I did more than once)
@@ -400,6 +412,18 @@ static char const *tok_values[] = {
     /* 420 */   "#endregion",
     
     /* 421 */   "import",
+    
+    /* 422 */   "alignas",
+    /* 423 */   "alignof",
+    /* 424 */   "char16_t",
+    /* 425 */   "char32_t",
+    /* 426 */   "constexpr",
+    /* 427 */   "decltype",
+    /* 428 */   "noexcept",
+    /* 429 */   "nullptr",
+    /* 430 */   "static_assert",
+    /* 431 */   "threadlocal",
+    /* 432 */   "",   // extrawstringlit
     };   
      
     // make sure, I have not forgotten any commas (as I did more than once)

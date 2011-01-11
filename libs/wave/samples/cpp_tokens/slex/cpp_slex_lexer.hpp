@@ -5,7 +5,7 @@
     
     http://www.boost.org/
 
-    Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost 
+    Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost 
     Software License, Version 1.0. (See accompanying file 
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -57,6 +57,7 @@ namespace lexer {
 #endif
 #define INIT_DATA_CPP_SIZE          15
 #define INIT_DATA_PP_NUMBER_SIZE    2
+#define INIT_DATA_CPP0X_SIZE        15
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
@@ -112,6 +113,7 @@ private:
     static typename base_type::lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
     static typename base_type::lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
     static typename base_type::lexer_data const init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE];  // pp-number only patterns
+    static typename base_type::lexer_data const init_data_cpp0x[INIT_DATA_CPP0X_SIZE];  // C++0X only patterns
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -150,6 +152,7 @@ private:
 #endif
 #define FLOAT_SUFFIX        "(" "[fF][lL]?" OR "[lL][fF]?" ")"
 #define CHAR_SPEC           "L?"
+#define EXTCHAR_SPEC        "(" "[uU]" OR "u8" ")"
 
 #define BACKSLASH           "(" Q("\\") OR TRI(Q("/")) ")"
 #define ESCAPESEQ           "(" BACKSLASH "(" \
@@ -366,17 +369,17 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
         "(" DIGIT "*" Q(".") DIGIT "+" OR DIGIT "+" Q(".") ")" 
         EXPONENT "?" FLOAT_SUFFIX "?" OR
         DIGIT "+" EXPONENT FLOAT_SUFFIX "?"),
+    TOKEN_DATA(CCOMMENT, CCOMMENT),
+    TOKEN_DATA(CPPCOMMENT, Q("/") Q("/[^\\n\\r]*") NEWLINEDEF ),
+    TOKEN_DATA(CHARLIT, CHAR_SPEC "'" 
+                "(" ESCAPESEQ OR UNIVERSALCHAR OR "[^\\n\\r\\\\']" ")+" "'"),
+    TOKEN_DATA(STRINGLIT, CHAR_SPEC Q("\"") 
+                "(" ESCAPESEQ OR UNIVERSALCHAR OR "[^\\n\\r\\\\\"]" ")*" Q("\"")),
 #if BOOST_WAVE_USE_STRICT_LEXER != 0
     TOKEN_DATA(IDENTIFIER, "([a-zA-Z_]" OR UNIVERSALCHAR ")([a-zA-Z0-9_]" OR UNIVERSALCHAR ")*"),
 #else
     TOKEN_DATA(IDENTIFIER, "([a-zA-Z_$]" OR UNIVERSALCHAR ")([a-zA-Z0-9_$]" OR UNIVERSALCHAR ")*"),
 #endif
-    TOKEN_DATA(CCOMMENT, CCOMMENT),
-    TOKEN_DATA(CPPCOMMENT, Q("/") Q("/[^\\n\\r]*") NEWLINEDEF ),
-    TOKEN_DATA(CHARLIT, CHAR_SPEC "'" 
-                "(" ESCAPESEQ OR "[^\\n\\r\\\\']" OR UNIVERSALCHAR ")+" "'"),
-    TOKEN_DATA(STRINGLIT, CHAR_SPEC Q("\"") 
-                "(" ESCAPESEQ OR "[^\\n\\r\\\\\"]" OR UNIVERSALCHAR ")*" Q("\"")),
     TOKEN_DATA(SPACE, "[ \t\v\f]+"),
 //    TOKEN_DATA(SPACE2, "[\\v\\f]+"),
     TOKEN_DATA(CONTLINE, "\\" "\\n"), 
@@ -425,6 +428,38 @@ typename lexer_base<IteratorT, PositionT>::lexer_data const
 lexer<IteratorT, PositionT>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] = 
 {
     TOKEN_DATA(PP_NUMBER, PP_NUMBERDEF),
+    { token_id(0) }       // this should be the last entry
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// C++ only token definitions
+
+#define T_EXTCHARLIT      token_id(T_CHARLIT|AltTokenType)
+#define T_EXTSTRINGLIT    token_id(T_STRINGLIT|AltTokenType)
+#define T_EXTRAWSTRINGLIT token_id(T_RAWSTRINGLIT|AltTokenType)
+
+template <typename IteratorT, typename PositionT>
+typename lexer_base<IteratorT, PositionT>::lexer_data const 
+lexer<IteratorT, PositionT>::init_data_cpp0x[INIT_DATA_CPP0X_SIZE] = 
+{
+    TOKEN_DATA(EXTCHARLIT, EXTCHAR_SPEC "'" 
+                "(" ESCAPESEQ OR UNIVERSALCHAR OR "[^\\n\\r\\\\']" ")+" "'"),
+    TOKEN_DATA(EXTSTRINGLIT, EXTCHAR_SPEC Q("\"") 
+                "(" ESCAPESEQ OR UNIVERSALCHAR OR "[^\\n\\r\\\\\"]" ")*" Q("\"")),
+    TOKEN_DATA(RAWSTRINGLIT, CHAR_SPEC "R" Q("\"") 
+                "(" ESCAPESEQ OR UNIVERSALCHAR OR "[^\\\\\"]" ")*" Q("\"")),
+    TOKEN_DATA(EXTRAWSTRINGLIT, EXTCHAR_SPEC "R" Q("\"") 
+                "(" ESCAPESEQ OR UNIVERSALCHAR OR "[^\\\\\"]" ")*" Q("\"")),
+    TOKEN_DATA(ALIGNAS, "alignas"),
+    TOKEN_DATA(ALIGNOF, "alignof"),
+    TOKEN_DATA(CHAR16_T, "char16_t"),
+    TOKEN_DATA(CHAR32_T, "char32_t"),
+    TOKEN_DATA(CONSTEXPR, "constexpr"),
+    TOKEN_DATA(DECLTYPE, "decltype"),
+    TOKEN_DATA(NOEXCEPT, "noexcept"),
+    TOKEN_DATA(NULLPTR, "nullptr"),
+    TOKEN_DATA(STATICASSERT, "static_assert"),
+    TOKEN_DATA(THREADLOCAL, "threadlocal"),
     { token_id(0) }       // this should be the last entry
 };
 
@@ -493,6 +528,17 @@ lexer<IteratorT, PositionT>::init_dfa(boost::wave::language_support lang)
         }
     }
     
+// if in C++0x mode, add all new keywords
+#if BOOST_WAVE_SUPPORT_CPP0X != 0
+    if (boost::wave::need_cpp0x(lang)) {
+        for (int j = 0; 0 != init_data_cpp0x[j].tokenid; ++j) {
+            this->register_regex(init_data_cpp0x[j].tokenregex, 
+                init_data_cpp0x[j].tokenid, init_data_cpp0x[j].tokencb, 
+                init_data_cpp0x[j].lexerstate);
+        }
+    }
+#endif
+
     for (int i = 0; 0 != init_data[i].tokenid; ++i) {
         this->register_regex(init_data[i].tokenregex, init_data[i].tokenid, 
             init_data[i].tokencb, init_data[i].lexerstate);
@@ -606,8 +652,15 @@ public:
                         }
                         break;
 
-                    case T_STRINGLIT:
+                    case T_EXTCHARLIT:
+                    case T_EXTSTRINGLIT:
+                    case T_EXTRAWSTRINGLIT:
+                        id = token_id(id & ~AltTokenType);
+                        // fall through
+
                     case T_CHARLIT:
+                    case T_STRINGLIT:
+                    case T_RAWSTRINGLIT:
                     // test literal characters for validity (throws if invalid 
                     // chars found)
                         if (boost::wave::need_convert_trigraphs(language)) {
@@ -712,6 +765,10 @@ private:
 
 template <typename IteratorT, typename PositionT>
 lexer::lexer<IteratorT, PositionT> slex_functor<IteratorT, PositionT>::lexer;
+
+#undef T_EXTCHARLIT     
+#undef T_EXTSTRINGLIT   
+#undef T_EXTRAWSTRINGLIT
 
 ///////////////////////////////////////////////////////////////////////////////
 //

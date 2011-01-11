@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
     http://www.boost.org/
 
-    Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2011 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -181,7 +181,7 @@ main(int argc, char *argv[])
                          iit != iend; ++iit)
                     {
                     // correct the file name (pre-pend the config file path)
-                        fs::path cfgpath = fs::complete(
+                        fs::path cfgpath = boost::wave::util::complete_path(
                             boost::wave::util::create_path(*cit), 
                             boost::wave::util::current_path());
                         fs::path filepath = 
