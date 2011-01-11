@@ -215,6 +215,13 @@ void test_alloc()
   //  clean up memory leak
   tmp->~tester();
   boost::pool_allocator<tester>::deallocate(tmp, 1);
+
+  // test allocating zero elements
+  {
+      boost::pool_allocator<tester> alloc;
+      tester* ip = alloc.allocate(0);
+      alloc.deallocate(ip, 0);
+  }
 }
 
 // This is a wrapper around a UserAllocator.  It just registers alloc/dealloc
@@ -229,18 +236,18 @@ struct TrackAlloc
 
   static std::set<char *> allocated_blocks;
 
-  static char * malloc(const size_type bytes)
+  static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes)
   {
-    char * const ret = UserAllocator::malloc(bytes);
+    char * const ret = (UserAllocator::malloc)(bytes);
     allocated_blocks.insert(ret);
     return ret;
   }
-  static void free(char * const block)
+  static void free BOOST_PREVENT_MACRO_SUBSTITUTION(char * const block)
   {
     if (allocated_blocks.find(block) == allocated_blocks.end())
       std::cout << "Free'd non-malloc'ed block: " << (void *) block << std::endl;
     allocated_blocks.erase(block);
-    UserAllocator::free(block);
+    (UserAllocator::free)(block);
   }
 
   static bool ok() { return allocated_blocks.empty(); }
@@ -269,7 +276,7 @@ void test_mem_usage()
       std::cout << "Pool purged memory" << std::endl;
 
     // Should allocate from system
-    pool.free(pool.malloc());
+    (pool.free)((pool.malloc)());
     if (track_alloc::ok())
       std::cout << "Memory error" << std::endl;
 
@@ -280,7 +287,7 @@ void test_mem_usage()
       std::cout << "Memory error" << std::endl;
 
     // Should allocate from system again
-    pool.malloc(); // loses the pointer to the returned chunk (*A*)
+    (pool.malloc)(); // loses the pointer to the returned chunk (*A*)
 
     // Ask pool to give up memory it's not using; this should fail
     if (pool.release_memory())
@@ -294,7 +301,7 @@ void test_mem_usage()
       std::cout << "Memory error" << std::endl;
 
     // Should allocate from system again
-    pool.malloc(); // loses the pointer to the returned chunk (*B*)
+    (pool.malloc)(); // loses the pointer to the returned chunk (*B*)
 
     // pool's destructor should purge the memory
     //  This will clean up the memory leak from (*B*)
