@@ -94,11 +94,7 @@ namespace detail { namespace parallel
               if (!filesystem::is_regular(*i))
                   boost::throw_exception(std::runtime_error("directory contains non-regular entries"));
 
-#if BOOST_FILESYSTEM_VERSION == 3
               std::string process_name = i->path().filename().string();
-#else
-              std::string process_name = i->path().filename();
-#endif
               for (std::string::size_type i = 0; i < process_name.size(); ++i)
                 if (!is_digit(process_name[i]))
                   boost::throw_exception(std::runtime_error("directory contains files with invalid names"));
