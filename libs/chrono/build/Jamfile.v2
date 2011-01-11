@@ -7,23 +7,10 @@
 
 # See library home page at http://www.boost.org/libs/chrono
 
-# uncomment one if the above lines if you build outside the Boost release
-#local BOOST_ROOT = /boost_1_41_0 ;
-#local BOOST_ROOT = c:/cygwin/boost_1_41_0 ;
-
-if ! $(BOOST_ROOT)
-{
-    BOOST_ROOT = [ modules.peek : BOOST_ROOT ] ;
-}
-
 project boost/chrono
     : source-location ../src
     : requirements
-        <os>LINUX:<threading>multi
-        # uncomment the line above if you build outside the Boost release
-        #<include>$(BOOST_ROOT)
-        # uncomment the line above if you build outside the Boost release
-        #<include>../../..
+        <threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
         #<define>BOOST_SYSTEM_INLINED
         <define>BOOST_USE_WINDOWS_H
@@ -59,7 +46,7 @@ project boost/chrono
         <toolset>intel:<cxxflags>-wd304,1418
 
     : usage-requirements  # pass these requirement to dependents (i.e. users)
-        #<os>LINUX:<threading>multi
+        <threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
         #<define>BOOST_SYSTEM_INLINED
         #<define>BOOST_COMMON_TYPE_USES_STATIC_ASSERT
@@ -84,14 +71,11 @@ project boost/chrono
 
 SOURCES = chrono thread_clock process_cpu_clocks ;
 
-#process_clock run_timer run_timer_static 
  
 lib boost_chrono
     : $(SOURCES).cpp
-    #$(BOOST_ROOT)/libs/system/build//boost_system
     :
     <link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
     <link>static:<define>BOOST_All_STATIC_LINK=1 # tell source we're building static lib's
     ;
 
-#boost-install boost_chrono ;
