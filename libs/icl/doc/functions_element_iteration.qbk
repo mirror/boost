@@ -64,14 +64,14 @@ or iteration over segments first.]
 
 [table
 [[['*Element iteration*]]                                      [Description]     ]
-[[``      T::element_iterator elements_begin(T&)
-T::element_const_iterator elements_begin(const T&)``]          [Returns an element iterator to the first element of the container.]                        ]
-[[``      T::element_iterator elements_end(T&)
-T::element_const_iterator elements_end(const T&)``]            [Returns an element iterator to a position `elements_end(c)` after the last element of the container.]]
-[[``      T::element_reverse_iterator elements_rbegin(T&)
-T::element_const_reverse_iterator elements_rbegin(const T&)``] [Returns a reverse element iterator to the last element of the container.]                  ]
-[[``      T::element_reverse_iterator elements_rend(T&)
-T::element_const_reverse_iterator elements_rend(const T&)``]   [Returns a reverse element iterator to a position `elements_rend(c)` before the first element of the container.]]
+[[``      element_iterator elements_begin(T&)
+element_const_iterator elements_begin(const T&)``]          [Returns an element iterator to the first element of the container.]                        ]
+[[``      element_iterator elements_end(T&)
+element_const_iterator elements_end(const T&)``]            [Returns an element iterator to a position `elements_end(c)` after the last element of the container.]]
+[[``      element_reverse_iterator elements_rbegin(T&)
+element_const_reverse_iterator elements_rbegin(const T&)``] [Returns a reverse element iterator to the last element of the container.]                  ]
+[[``      element_reverse_iterator elements_rend(T&)
+element_const_reverse_iterator elements_rend(const T&)``]   [Returns a reverse element iterator to a position `elements_rend(c)` before the first element of the container.]]
 ]
 
 ['*Example*]
