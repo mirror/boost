@@ -60,6 +60,10 @@
 #   endif
 # endif
 
+#if defined(BOOST_CHRONO_THREAD_DISABLED) && defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
+#undef BOOST_CHRONO_HAS_THREAD_CLOCK
+#undef BOOST_CHRONO_THREAD_CLOCK_IS_STEADY
+#endif
 // unicode support
 
 #if defined(BOOST_NO_UNICODE_LITERALS) || defined(BOOST_NO_CHAR16_T) || defined(BOOST_NO_CHAR32_T)
