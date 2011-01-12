@@ -10,8 +10,15 @@ Copyright (c) 2008-2010: Joachim Faulhaber
 
 #include "portability.hpp"
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itl_map_contains_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -39,8 +46,15 @@ void itl_map_contains_4_bicremental_types()
 }
 
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itl_map_find_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -64,8 +78,15 @@ void itl_map_find_4_bicremental_types()
 }
 
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itl_map_inclusion_compare_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
