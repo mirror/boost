@@ -1867,6 +1867,8 @@ Next follows how simple is the usage of this functions:
 
 [endsect]
 [section IO]
+[/=======================================================]
+[section:french French Output]
 
 Example use of output in French
 
@@ -1899,9 +1901,11 @@ Output is:
 
 ['See the source file [@../../example/french.cpp example/french.cpp]]
 
-[endsect]
+[endsect] [/section:french French Output]
+[endsect] [/section IO]
 
-[endsect]
+[endsect] [/section Examples]
+
 
 [/================================]
 [section:ext_references External Resources]
@@ -3851,12 +3855,11 @@ All the units are given using the suffix "s" following the System International 
 
 * Boost_Chrono is now a configurable header-only library version (that also allows the user to choose if the `windows.h` file is included or not).
 * Added clock_string<> traits.
-* Define chrono-io for all the clocks
-* Add input of process_times representation
+* Define chrono-io for all the clocks.
+* Add input of process_times representation.
 
 [*Implementation:]
 
-* Moved some details to static_integer directory.
 * Use of detail/win files to avoid the use of windows.h file.
 * Completed the error_code handling.
 * Works now with BOOST_SYSTEM_NO_DEPRECATED.
@@ -3864,7 +3867,7 @@ All the units are given using the suffix "s" following the System International 
 [*Fixes:]
 
 * Fix some warnings.
-* Fix original error on Mac
+* Fix original errors on Mac
 * Dont fix the link with boost_system to static.
 
 [*Test:]
@@ -4227,7 +4230,7 @@ Ask your operating system supplier. The results have been inspected with a debug
 
 [heading Are integer overflows in the duration arithmetic detected and reported?]
 
-[*Boost.Ratio] avoids all kind of overflow that could result of arithmetic operation and that can be simplified. The typedefs durations don't detect overflow. You will need a representation that handles with.
+[*Boost.Ratio] avoids all kind of overflow that could result of arithmetic operation and that can be simplified. The typedefs durations don't detect overflow. You will need a duration representation that handles overflow.
 
 [heading Which clocks should be used to benchmarking?]
 
