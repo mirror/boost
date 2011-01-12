@@ -113,10 +113,10 @@ public:
     RealType n() const { return _chi_squared.n(); }
 
     /** Returns the smallest value that the distribution can produce. */
-    RealType min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    RealType min BOOST_PREVENT_MACRO_SUBSTITUTION () const
     { return -std::numeric_limits<RealType>::infinity(); }
     /** Returns the largest value that the distribution can produce. */
-    RealType max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    RealType max BOOST_PREVENT_MACRO_SUBSTITUTION () const
     { return std::numeric_limits<RealType>::infinity(); }
 
     /** Returns the parameters of the distribution. */

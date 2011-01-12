@@ -119,10 +119,9 @@ public:
     RealType n() const { return _impl_n.n(); }
 
     /** Returns the smallest value that the distribution can produce. */
-    RealType min BOOST_PREVENT_MACRO_SUBSTITUTION ()
-    { return 0; }
+    RealType min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
     /** Returns the largest value that the distribution can produce. */
-    RealType max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    RealType max BOOST_PREVENT_MACRO_SUBSTITUTION () const
     { return std::numeric_limits<RealType>::infinity(); }
 
     /** Returns the parameters of the distribution. */
@@ -136,6 +135,12 @@ public:
         typename impl_type::param_type n_param(parm.n());
         _impl_n.param(n_param);
     }
+
+    /**
+     * Effects: Subsequent uses of the distribution do not depend
+     * on values produced by any engine prior to invoking reset.
+     */
+    void reset() { }
 
     /** Writes an @c fisher_f_distribution to a @c std::ostream. */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, fisher_f_distribution, fd)

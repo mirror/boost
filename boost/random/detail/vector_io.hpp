@@ -28,26 +28,26 @@ void print_vector(std::basic_ostream<CharT, Traits>& os,
     typename std::vector<T>::const_iterator
         iter = vec.begin(),
         end =  vec.end();
-    os << '[';
+    os << os.widen('[');
     if(iter != end) {
         os << *iter;
         ++iter;
         for(; iter != end; ++iter)
         {
-            os << ' ' << *iter;
+            os << os.widen(' ') << *iter;
         }
     }
-    os << ']';
+    os << os.widen(']');
 }
 
 template<class CharT, class Traits, class T>
 void read_vector(std::basic_istream<CharT, Traits>& is, std::vector<T>& vec)
 {
-    char ch;
+    CharT ch;
     if(!(is >> ch)) {
         return;
     }
-    if(ch != '[') {
+    if(ch != is.widen('[')) {
         is.putback(ch);
         is.setstate(std::ios_base::failbit);
         return;
@@ -61,7 +61,7 @@ void read_vector(std::basic_istream<CharT, Traits>& is, std::vector<T>& vec)
         if(!(is >> ch)) {
             return;
         }
-        if(ch != ']') {
+        if(ch != is.widen(']')) {
             is.putback(ch);
             is.setstate(std::ios_base::failbit);
         }

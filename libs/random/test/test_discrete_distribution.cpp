@@ -14,9 +14,14 @@
 #include <boost/assign/list_of.hpp>
 #include <sstream>
 #include <vector>
+#include "concepts.hpp"
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+
+using boost::random::test::RandomNumberDistribution;
+using boost::random::discrete_distribution;
+BOOST_CONCEPT_ASSERT((RandomNumberDistribution< discrete_distribution<> >));
 
 struct gen {
     double operator()(double arg) {

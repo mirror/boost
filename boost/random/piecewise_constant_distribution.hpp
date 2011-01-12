@@ -43,6 +43,9 @@ public:
 
     class param_type {
     public:
+
+        typedef piecewise_constant_distribution distribution_type;
+
         /**
          * Constructs a @c param_type object, representing a distribution
          * that produces values uniformly distributed in the range [0, 1).

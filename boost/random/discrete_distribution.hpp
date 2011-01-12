@@ -49,6 +49,9 @@ public:
 
     class param_type {
     public:
+
+        typedef discrete_distribution distribution_type;
+
         /**
          * Constructs a @c param_type object, representing a distribution
          * with \f$p(0) = 1\f$ and \f$p(k|k>0) = 0\f$.

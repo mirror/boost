@@ -11,9 +11,13 @@
 
 #include <boost/random/linear_congruential.hpp>
 #include <sstream>
+#include "concepts.hpp"
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+
+using boost::random::test::RandomNumberDistribution;
+BOOST_CONCEPT_ASSERT((RandomNumberDistribution< BOOST_RANDOM_DISTRIBUTION >));
 
 BOOST_AUTO_TEST_CASE(test_constructors) {
     BOOST_RANDOM_DISTRIBUTION dist;

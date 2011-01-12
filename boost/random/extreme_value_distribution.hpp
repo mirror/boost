@@ -115,10 +115,10 @@ public:
     RealType b() const { return _b; }
 
     /** Returns the smallest value that the distribution can produce. */
-    RealType min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    RealType min BOOST_PREVENT_MACRO_SUBSTITUTION () const
     { return -std::numeric_limits<RealType>::infinity(); }
     /** Returns the largest value that the distribution can produce. */
-    RealType max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    RealType max BOOST_PREVENT_MACRO_SUBSTITUTION () const
     { return std::numeric_limits<RealType>::infinity(); }
 
     /** Returns the parameters of the distribution. */
@@ -129,6 +129,12 @@ public:
         _a = parm.a();
         _b = parm.b();
     }
+
+    /**
+     * Effects: Subsequent uses of the distribution do not depend
+     * on values produced by any engine prior to invoking reset.
+     */
+    void reset() { }
 
     /** Writes an @c extreme_value_distribution to a @c std::ostream. */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, extreme_value_distribution, wd)
