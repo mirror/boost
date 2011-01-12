@@ -24,4 +24,5 @@ typedef boost::ratio<BOOST_RATIO_INTMAX_T_MAX, 1> R1;
 typedef boost::ratio<1, 1> R2;
 typedef boost::ratio_add<R1, R2>::type RT;
 
-BOOST_RATIO_STATIC_ASSERT(RT::num==0, NOTHING, (RT));
+BOOST_RATIO_STATIC_ASSERT(RT::num==BOOST_RATIO_INTMAX_T_MAX+1, NOTHING, (RT));
+BOOST_RATIO_STATIC_ASSERT(RT::den==1, NOTHING, (RT));
