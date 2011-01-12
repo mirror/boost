@@ -40,7 +40,7 @@ namespace boost
       string::size_type pos;
       
       //  called for each file and directory, so only the leaf need be tested
-      string const leaf( full_path.leaf() );
+      string const leaf( full_path.leaf().string() );
 
       //  includes only allowable characters
       if ( (pos = leaf.find_first_not_of( allowable )) != string::npos )

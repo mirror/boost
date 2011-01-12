@@ -424,7 +424,7 @@ namespace boost
       // url is relative source_path.branch()
       // convert to target_path, which is_complete()
       path target_path;
-      try { target_path = source_path.branch_path() /= path( decoded_path, fs::no_check ); }
+      try { target_path = source_path.branch_path() /= path( decoded_path ); }
       catch ( const fs::filesystem_error & )
       {
         if(!no_link_errors) {
@@ -476,7 +476,7 @@ namespace boost
          && itr->first.rfind( "index.htm" ) == string::npos )
        {
          ++m_unlinked_errors;
-         path full_path( fs::initial_path() / path(itr->first, fs::no_check) );
+         path full_path( fs::initial_path() / path(itr->first) );
          error( impute_library( full_path ), full_path, "Unlinked file" );
        }
      }
