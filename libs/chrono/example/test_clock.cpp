@@ -53,18 +53,18 @@ void test_clock()
 {
     typename Clock::time_point start = Clock::now();
     typename Clock::time_point stop;
-    std::size_t count=1;
+    std::size_t counter=1;
     while ((stop=Clock::now()) == start) {
-        ++count;
+        ++counter;
     }
     //typename Clock::duration elapsed = stop - start;
-    std::cout << "After " << count << " trials, elapsed time " << nanoseconds(stop - start).count() << " nanoseconds\n";
+    std::cout << "After " << counter << " trials, elapsed time " << nanoseconds(stop - start).count() << " nanoseconds\n";
 
     start = Clock::now();
-    for (std::size_t c=count; c>0; --c) {
+    for (std::size_t c=counter; c>0; --c) {
         stop=Clock::now();;
     }
-    std::cout << "After " << count << " trials, elapsed time " << nanoseconds(stop - start).count() << " nanoseconds\n";
+    std::cout << "After " << counter << " trials, elapsed time " << nanoseconds(stop - start).count() << " nanoseconds\n";
 
 
 }
