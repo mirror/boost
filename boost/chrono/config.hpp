@@ -64,7 +64,8 @@
 #undef BOOST_CHRONO_HAS_THREAD_CLOCK
 #undef BOOST_CHRONO_THREAD_CLOCK_IS_STEADY
 #endif
-// unicode support
+
+// unicode support  ------------------------------//
 
 #if defined(BOOST_NO_UNICODE_LITERALS) || defined(BOOST_NO_CHAR16_T) || defined(BOOST_NO_CHAR32_T)
 //~ #define BOOST_CHRONO_HAS_UNICODE_SUPPORT
@@ -97,10 +98,6 @@
 #define BOOST_CHRONO_STATIC static
 
 //  enable dynamic linking on Windows  ---------------------------------------//
-
-//#  if (defined(BOOST_ALL_DYN_LINK) || defined(BOOST_CHRONO_DYN_LINK)) && defined(__BORLANDC__) && defined(__WIN32__)
-//#    error Dynamic linking Boost.System does not work for Borland; use static linking instead
-//#  endif
 
 #ifdef BOOST_HAS_DECLSPEC // defined by boost.config
 // we need to import/export our code only if the user has specifically

@@ -601,6 +601,7 @@ namespace chrono {
         return CD(lhs).count() / CD(rhs).count();
     }
 
+    #ifdef BOOST_CHRONO_EXTENSIONS
     template <class Rep1, class Rep2, class Period>
     inline
     typename boost::disable_if <boost::chrono::detail::is_duration<Rep1>,
@@ -611,10 +612,9 @@ namespace chrono {
     {
         typedef typename common_type<Rep1, Rep2>::type CR;
         duration<CR, Period> r = d;
-        //return static_cast<CR>(r.count()) / static_cast<CR>(s);
         return  static_cast<CR>(s)/r.count();
     }
-
+    #endif
     // Duration %
 
     template <class Rep1, class Period, class Rep2>
