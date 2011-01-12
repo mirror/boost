@@ -5,6 +5,8 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
+#define BOOST_COMMON_TYPE_DONT_USE_TYPEOF 1
+
 #include "test.hpp"
 #include "check_type.hpp"
 #ifdef TEST_STD

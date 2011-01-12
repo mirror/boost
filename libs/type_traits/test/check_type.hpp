@@ -40,6 +40,32 @@ do{\
          << BOOST_STRINGIZE(expression) << "\"");\
 }while(0)
 
+#define BOOST_CHECK_TYPE3(type_expression, type_expression_suffix, expected_type)\
+do{\
+   if(!::boost::is_same< type_expression, type_expression_suffix, expected_type >::value){\
+   BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression)\
+      << "\" did not have the expected type:\n\tevaluating:   boost::is_same<"\
+      << BOOST_STRINGIZE((type_expression, type_expression_suffix)) << ", " << BOOST_STRINGIZE(expected_type)\
+      << ">" << "\n\tfound:        "\
+      << typeid(::boost::is_same< type_expression, type_expression_suffix, expected_type >).name());\
+   }else\
+      BOOST_CHECK_MESSAGE(true, "Validating Type Expression: \""\
+         << BOOST_STRINGIZE(expression) << "\"");\
+}while(0)
+
+#define BOOST_CHECK_TYPE4(type_expression, suffix1, suffix2, expected_type)\
+do{\
+   if(!::boost::is_same< type_expression, suffix1, suffix2, expected_type >::value){\
+   BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression)\
+      << "\" did not have the expected type:\n\tevaluating:   boost::is_same<"\
+      << BOOST_STRINGIZE((type_expression, suffix1, suffix2)) << ", " << BOOST_STRINGIZE(expected_type)\
+      << ">" << "\n\tfound:        "\
+      << typeid(::boost::is_same< type_expression, suffix1, suffix2, expected_type >).name());\
+   }else\
+      BOOST_CHECK_MESSAGE(true, "Validating Type Expression: \""\
+         << BOOST_STRINGIZE(expression) << "\"");\
+}while(0)
+
 #endif
 
 
