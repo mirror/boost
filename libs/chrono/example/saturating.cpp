@@ -143,7 +143,7 @@ public:
 };
 
 template <class I>
-saturate<I>::operator saturate<I>::int_type() const
+saturate<I>::operator I() const
 {
     switch (i_)
     {
