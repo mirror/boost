@@ -10,8 +10,15 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 
 #include "portability.hpp"
     
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void make_3_itv_maps_and_derivatives_1
                    (ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& itv_map_a, 
                     ICL_PORT_msvc_7_1_IntervalMap(T,U,Trt)& itv_map_b, 
@@ -33,8 +40,15 @@ void make_3_itv_maps_and_derivatives_1
 //------------------------------------------------------------------------------
 // Monoid EAN
 //------------------------------------------------------------------------------
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_monoid_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -48,8 +62,15 @@ void itv_quantifier_check_monoid_plus_4_bicremental_types()
 }
 
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_monoid_et_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -66,8 +87,15 @@ void itv_quantifier_check_monoid_et_4_bicremental_types()
 // Abelian monoid EANC
 //------------------------------------------------------------------------------
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_abelian_monoid_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -81,8 +109,15 @@ void itv_quantifier_check_abelian_monoid_plus_4_bicremental_types()
 }
 
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_abelian_monoid_et_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -99,8 +134,15 @@ void itv_quantifier_check_abelian_monoid_et_4_bicremental_types()
 //------------------------------------------------------------------------------
 // Abelian partial invertive monoid 
 //------------------------------------------------------------------------------
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_partial_invertive_monoid_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -116,8 +158,15 @@ void itv_quantifier_check_partial_invertive_monoid_plus_4_bicremental_types()
 //------------------------------------------------------------------------------
 // Abelian partial invertive monoid with distinct equality for inversion
 //------------------------------------------------------------------------------
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -139,8 +188,15 @@ void itv_quantifier_check_partial_invertive_monoid_plus_prot_inv_4_bicremental_t
 //------------------------------------------------------------------------------
 // Abelian group EANIC
 //------------------------------------------------------------------------------
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_abelian_group_plus_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -156,8 +212,15 @@ void itv_quantifier_check_abelian_group_plus_4_bicremental_types()
 //------------------------------------------------------------------------------
 // (0 - x) + x =d= 0 
 //------------------------------------------------------------------------------
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_types()
 {
     // check abelian group wrt. + and inverability wrt. distinct equality =d= :
@@ -182,8 +245,15 @@ void itv_quantifier_check_abelian_group_plus_prot_inv_4_bicremental_types()
 //------------------------------------------------------------------------------
 // Inner complement
 //------------------------------------------------------------------------------
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_inner_complementarity_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -198,8 +268,15 @@ void itv_quantifier_check_inner_complementarity_4_bicremental_types()
     has_inner_complementarity<IntervalMapT,IntervalSetT>(map_c);
 }
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void itv_quantifier_check_length_complementarity_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;

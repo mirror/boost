@@ -25,7 +25,11 @@ namespace boost{namespace icl
 {
 
 template <class T, class U, class Trt, 
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+          ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap,
+#else
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap,
+#endif
           class SequenceT
 >
 void itl_map_copy(const SequenceT& segments, 
@@ -37,7 +41,11 @@ void itl_map_copy(const SequenceT& segments,
 
 
 template <class T, class U, class Trt,
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+          ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap,
+#else
           ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap,
+#endif
           class SequenceT
 >
 void test_interval_map_copy_via_inserter(const SequenceT& segments, 

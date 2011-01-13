@@ -10,8 +10,15 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 
 #include "portability.hpp"
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_fundamentals_4_ordered_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -155,8 +162,15 @@ void interval_map_fundamentals_4_ordered_types()
 
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_ctor_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -213,8 +227,15 @@ void interval_map_ctor_4_bicremental_types()
 }
 
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_add_sub_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -260,8 +281,15 @@ void interval_map_add_sub_4_bicremental_types()
     BOOST_CHECK_EQUAL( map_A2, map_B2 );
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_distinct_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -288,8 +316,15 @@ void interval_map_distinct_4_bicremental_types()
     BOOST_CHECK_EQUAL( iterative_size(is_1_3_5),   3 );
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_distinct_4_bicremental_continuous_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -335,8 +370,15 @@ void interval_map_distinct_4_bicremental_continuous_types()
 
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_isolate_4_bicremental_continuous_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -384,8 +426,15 @@ void interval_map_isolate_4_bicremental_continuous_types()
 }
 
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_contains_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -420,8 +469,15 @@ void interval_map_contains_4_bicremental_types()
     BOOST_CHECK_EQUAL( icl::contains(itv_map, itv_set2), true );    
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_contains_key_objects_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -455,8 +511,15 @@ void interval_map_contains_key_objects_4_bicremental_types()
 }
 
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_operators_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -491,8 +554,15 @@ void interval_map_operators_4_bicremental_types()
 
 
 // Test for nontrivial intersection of interval maps with intervals and values
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_base_intersect_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -591,8 +661,15 @@ void interval_map_base_intersect_4_bicremental_types()
 
 
 // Test for nontrivial erasure of interval maps with intervals and interval sets
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_base_erase_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -702,8 +779,15 @@ void interval_map_base_erase_4_bicremental_types()
 
 
 // Test first_collision
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_base_is_disjoint_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -780,8 +864,15 @@ void interval_map_base_is_disjoint_4_bicremental_types()
     BOOST_CHECK_EQUAL( intersects(map_B, set_A), true );
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_flip_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -801,8 +892,15 @@ void interval_map_flip_4_bicremental_types()
     BOOST_CHECK_EQUAL(set_a ^= IDv(1,3,1), IMap(IDv(0,1,1)) + IDv(2,3,1));
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_infix_plus_overload_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -822,8 +920,15 @@ void interval_map_infix_plus_overload_4_bicremental_types()
     BOOST_CHECK_EQUAL(map_b + map_pair, map_pair + map_b);
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_infix_pipe_overload_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -845,8 +950,15 @@ void interval_map_infix_pipe_overload_4_bicremental_types()
 
 
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_infix_minus_overload_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -891,8 +1003,15 @@ void interval_map_infix_minus_overload_4_bicremental_types()
 }
 
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_infix_et_overload_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -934,8 +1053,15 @@ void interval_map_infix_et_overload_4_bicremental_types()
 }
 
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_infix_caret_overload_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -967,8 +1093,15 @@ void interval_map_infix_caret_overload_4_bicremental_types()
     BOOST_CHECK_EQUAL(map_b ^ map_pair,  map_pair ^ map_b);
 }
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_find_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -993,8 +1126,15 @@ void interval_map_find_4_bicremental_types()
 }
 
 
-template <ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
-          class T, class U>
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
 void interval_map_set_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
@@ -1013,8 +1153,15 @@ void interval_map_set_4_bicremental_types()
 }
 
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt,
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void interval_map_inclusion_compare_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;
@@ -1077,8 +1224,15 @@ void interval_map_inclusion_compare_4_bicremental_types()
 
 }
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt,
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void interval_map_std_copy_via_inserter_4_bicremental_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT; //Nedded for the test value generator
@@ -1111,8 +1265,15 @@ void interval_map_std_copy_via_inserter_4_bicremental_types()
 }
 
 
-template <class T, class U, class Trt,
-          ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap>
+template 
+<
+    class T, class U, class Trt,
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,Trt) IntervalMap
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,Trt) IntervalMap
+#endif
+>
 void interval_map_element_iter_4_discrete_types()
 {
     typedef IntervalMap<T,U,Trt> IntervalMapT;

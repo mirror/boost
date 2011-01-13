@@ -678,6 +678,37 @@ void interval_set_find_4_bicremental_types()
 }
 
 template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
+void interval_bitset_find_4_integral_types()
+{
+    typedef IntervalSet<T> IntervalSetT;
+    typedef typename IntervalSetT::interval_type IntervalT;
+    typedef typename IntervalSetT::bitset_type BitsT;
+
+    IntervalT itv = I_D(3,5);
+
+    IntervalSetT set_a;
+    set_a.add(C_D(1,3)).add(I_I(6,11));
+
+    typename IntervalSetT::const_iterator found = set_a.find(MK_v(6));
+
+    BOOST_CHECK( (found->second).contains(6) );
+
+    found = set_a.find(MK_v(5));
+    BOOST_CHECK( found == set_a.end() );
+
+    set_a.add(MK_v(64));
+    found = set_a.find(MK_v(64));
+    BOOST_CHECK( (found->second).contains(0) );
+
+    set_a.add(MK_v(65));
+    found = set_a.find(MK_v(65));
+    BOOST_CHECK( (found->second).contains(1) );
+
+    found = set_a.find(MK_v(66));
+    BOOST_CHECK( found == set_a.end() );
+}
+
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_set_element_iter_4_discrete_types()
 {
     typedef IntervalSet<T> IntervalSetT;
