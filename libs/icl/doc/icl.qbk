@@ -50,6 +50,7 @@ Distributed under the Boost Software License, Version 1.0.
 [def __icl_set__      [@http://www.cplusplus.com/reference/stl/set/ `std::set` ]]
 [def __icl_sets__     [@http://www.cplusplus.com/reference/stl/set/ `std::sets`]]
 [def __std_set__      [@http://www.cplusplus.com/reference/stl/set/ `std::set` ]]
+[def __Std_set__      [@http://www.cplusplus.com/reference/stl/set/ `Std::set` ]]
 [def __std_sets__     [@http://www.cplusplus.com/reference/stl/set/ `std::sets`]]
 [def __std_map__      [@http://www.cplusplus.com/reference/stl/set/ `std::map` ]]
 [def __std_maps__     [@http://www.cplusplus.com/reference/stl/set/ `std::maps`]]
@@ -173,6 +174,7 @@ Distributed under the Boost Software License, Version 1.0.
 [def __biLIntervalConstruct__  [link boost_icl.function_reference.interval_construction ['*Construction*]]]
 [def __biLIntervalOrderings__  [link boost_icl.function_reference.additional_interval_orderings ['*Orderings*]]]
 [def __biLIntervalMiscellaneous__  [link boost_icl.function_reference.miscellaneous_interval_functions ['*Miscellaneous*]]]
+
 
 [/ column headers]
 [def __ch_itvs__       intervals]

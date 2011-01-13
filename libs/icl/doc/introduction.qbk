@@ -178,33 +178,59 @@ interval insertion.
 
 [section Icl's class templates]
 
-In addition to interval containers the *icl* provides element containers
-__icl_set__ and __icl_map__. 
+In addition to interval containers we can work with
+containers of elements that are ['*behavioral equal*]
+to the interval containers: On the fundamental aspect
+they have exactly the same functionality.
+An __std_set__ of the STL is such an equivalent set implementation.
+Due to the aggregation facilities of the icl's interval maps
+__std_map__ is fundamentally not completely equivalent to an __itv_map__.
+Therefore there is an extra __icl_map__ class template for maps of 
+elements in the icl.
 
-* An __icl_set__ is behavioral equal to __itv_bsets__ on the __bi_conceptual__ aspect.
+
+* The __std_set__ is behavioral equal to __itv_bsets__ on the __bi_conceptual__ aspect.
 
 * An __icl_map__ is behavioral equal to __itv_bmaps__ on the __bi_conceptual__  aspect. 
   Specifically an __icl_map__
   implements ['*aggregate on overlap*], which is
   named ['*aggregate on collision*] for an element container.
 
-The following table gives an overview over the main
+The following tables give an overview over the main
 class templates provided by the *icl*.  
 
-[table Synopsis over the icl's class templates
+[table Interval class templates
+[[group]              [form]      [template]          ]
+[[statically bounded] [asymmetric][__ro_itv__]        ]
+[[ ]                  []          [__lo_itv__]        ]
+[[ ]                  [symmetric] [__cl_itv__]        ]
+[[ ]                  []          [__op_itv__]        ]
+[[dynamically bounded][]          [__dc_itv__]        ]
+[[ ]                  []          [__ct_itv__]        ]
+]
+
+Statically bounded intervals always have the same kind of interval borders, 
+e.g. right open borders`[a..b)` for __ro_itv__. Dynamically bounded intervals
+can have different borders. Refer to the chapter about
+[link boost_icl.interface.class_templates.intervals ['*intervals*]] 
+for details.
+
+[table Container class templates
 [[granularity][style]     [sets]           [maps]           ]
-[[interval]   []          [__itv__]        []               ]            
-[[]           [joining]   [__itv_set__]    [__itv_map__]    ]
+[[interval]   [joining]   [__itv_set__]    [__itv_map__]    ]
 [[]           [separating][__sep_itv_set__][]               ]
 [[]           [splitting] [__spl_itv_set__][__spl_itv_map__]]
-[[element]    []          [__ele_set__]    [__ele_map__]    ]
+[[element]    []          [(__ele_set__)]  [__ele_map__]    ]
 ]                                   
 
-__Itv__ is placed deliberately in column *sets* because an
-interval is a set as well. Column ['*style*] refers to
+__Std_set__ is placed in paretheses, because it is not a class template
+of the *ICL*. It can be used as element container though that is
+behavioral equal to the ICL's interval sets on their fundamental aspect.
+Column ['*style*] refers to
 the different ways in which interval containers combine added
 intervals. These ['*combining styles*] are described in the next
 section.
+
 
 [endsect]
 
