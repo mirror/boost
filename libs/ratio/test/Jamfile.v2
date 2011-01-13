@@ -106,5 +106,8 @@ project
         [ compile ratio_extensions/mpl_less_equal_pass.cpp  ]
         [ compile ratio_extensions/mpl_greater_pass.cpp  ]
         [ compile ratio_extensions/mpl_greater_equal_pass.cpp  ]
+        [ compile ratio_extensions/mpl_arithmetic_pass.cpp  ]
+        [ compile ratio_extensions/mpl_comparison_pass.cpp  ]
+        [ compile ratio_extensions/mpl_rational_constant_pass.cpp  ]
 
         ;
