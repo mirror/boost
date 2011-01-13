@@ -39,6 +39,13 @@ int main()
            =seasons.rbegin(); pos<seasons.rend(); ++pos) {
         std::cout << " " << *pos;
     }
+
+    // try constant reverse iterators
+    std::cout << "reverse:   ";
+    for (boost::array<std::string,4>::const_reverse_iterator pos
+           =seasons.crbegin(); pos<seasons.crend(); ++pos) {
+        std::cout << " " << *pos;
+    }
     std::cout << std::endl;
 
     return 0;  // makes Visual-C++ compiler happy

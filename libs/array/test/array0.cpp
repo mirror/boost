@@ -56,7 +56,13 @@ void    RunTests()
     if( test_case.begin() != test_case.end() ) {
         fail_test( "Not an empty range" );
     }
+    if( test_case.cbegin() != test_case.cend() ) {
+        fail_test( "Not an empty range" );
+    }
     if( const_test_case.begin() != const_test_case.end() ) {
+        fail_test( "Not an empty range" );
+    }
+    if( const_test_case.cbegin() != const_test_case.cend() ) {
         fail_test( "Not an empty range" );
     }
 
@@ -73,8 +79,10 @@ void    RunTests()
     //  Check can safely use all iterator types with std algorithms
     std::for_each( test_case.begin(), test_case.end(), BadValue< T > );
     std::for_each( test_case.rbegin(), test_case.rend(), BadValue< T > );
+    std::for_each( test_case.cbegin(), test_case.cend(), BadValue< T > );
     std::for_each( const_test_case.begin(), const_test_case.end(), BadValue< T > );
     std::for_each( const_test_case.rbegin(), const_test_case.rend(), BadValue< T > );
+    std::for_each( const_test_case.cbegin(), const_test_case.cend(), BadValue< T > );
 
     //  Check swap is well formed
     std::swap( test_case, test_case );
