@@ -28,7 +28,7 @@
 <div><p class="copyright">Copyright &#169; 2007 -2010 Joachim Faulhaber</p></div>
 <div><p class="copyright">Copyright &#169; 1999 -2006 Cortex Software GmbH</p></div>
 <div><div class="legalnotice">
-<a name="id819376"></a><p>
+<a name="id799716"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -248,7 +248,7 @@
         </li>
 </ul></div>
 <a name="boost_icl.introduction.definition_and_basic_example.two_aspects"></a><h5>
-<a name="id819560"></a>
+<a name="id799899"></a>
         <a class="link" href="index.html#boost_icl.introduction.definition_and_basic_example.two_aspects">Two
         Aspects</a>
       </h5>
@@ -311,7 +311,7 @@
         related to date and time.
       </p>
 <a name="boost_icl.introduction.definition_and_basic_example.addabitlity_and_subtractability"></a><h5>
-<a name="id827780"></a>
+<a name="id808119"></a>
         <a class="link" href="index.html#boost_icl.introduction.definition_and_basic_example.addabitlity_and_subtractability">Addabitlity
         and Subtractability</a>
       </h5>
@@ -336,7 +336,7 @@
         on overlap</strong></span></em></span>.
       </p>
 <a name="boost_icl.introduction.definition_and_basic_example.aggregate_on_overlap"></a><h5>
-<a name="id827930"></a>
+<a name="id808269"></a>
         <a class="link" href="index.html#boost_icl.introduction.definition_and_basic_example.aggregate_on_overlap">Aggregate
         on Overlap</a>
       </h5>
@@ -392,13 +392,19 @@
       templates</a>
 </h3></div></div></div>
 <p>
-        In addition to interval containers the <span class="bold"><strong>icl</strong></span>
-        provides element containers <a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span></code>
-        </a> and <code class="computeroutput"><a class="link" href="boost/icl/map.html" title="Class template map">icl::map</a></code>.
+        In addition to interval containers we can work with containers of elements
+        that are <span class="emphasis"><em><span class="bold"><strong>behavioral equal</strong></span></em></span>
+        to the interval containers: On the fundamental aspect they have exactly the
+        same functionality. An <a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span></code>
+        </a> of the STL is such an equivalent set implementation. Due to the
+        aggregation facilities of the icl's interval maps <a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span></code>
+        </a> is fundamentally not completely equivalent to an <code class="computeroutput"><a class="link" href="boost/icl/interval_map.html" title="Class template interval_map">interval_map</a></code>.
+        Therefore there is an extra <code class="computeroutput"><a class="link" href="boost/icl/map.html" title="Class template map">icl::map</a></code>
+        class template for maps of elements in the icl.
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-          An <a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span></code> </a> is behavioral equal to
+          The <a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span></code> </a> is behavioral equal to
           <code class="computeroutput"><a class="link" href="boost/icl/interval_base_set.html" title="Class template interval_base_set">interval_sets</a></code>
           on the <span class="emphasis"><em><span class="bold"><strong>fundamental</strong></span></em></span>
           aspect.
@@ -414,12 +420,142 @@
         </li>
 </ul></div>
 <p>
-        The following table gives an overview over the main class templates provided
+        The following tables give an overview over the main class templates provided
         by the <span class="bold"><strong>icl</strong></span>.
       </p>
 <div class="table">
-<a name="id828711"></a><p class="title"><b>Table&#160;1.1.&#160;Synopsis over the icl's class templates</b></p>
-<div class="table-contents"><table class="table" summary="Synopsis over the icl's class templates">
+<a name="id809078"></a><p class="title"><b>Table&#160;1.1.&#160;Interval class templates</b></p>
+<div class="table-contents"><table class="table" summary="Interval class templates">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            <p>
+              group
+            </p>
+            </th>
+<th>
+            <p>
+              form
+            </p>
+            </th>
+<th>
+            <p>
+              template
+            </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+            <p>
+              statically bounded
+            </p>
+            </td>
+<td>
+            <p>
+              asymmetric
+            </p>
+            </td>
+<td>
+            <p>
+              <code class="computeroutput"><a class="link" href="boost/icl/right_open_interval.html" title="Class template right_open_interval">right_open_interval</a></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+              <code class="computeroutput"><a class="link" href="boost/icl/right_open_interval.html" title="Class template right_open_interval">left_open_interval</a></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+              symmetric
+            </p>
+            </td>
+<td>
+            <p>
+              <code class="computeroutput"><a class="link" href="boost/icl/closed_interval.html" title="Class template closed_interval">closed_interval</a></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+              <code class="computeroutput"><a class="link" href="boost/icl/open_interval.html" title="Class template open_interval">open_interval</a></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              dynamically bounded
+            </p>
+            </td>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+              <code class="computeroutput"><a class="link" href="boost/icl/discrete_interval.html" title="Class template discrete_interval">discrete_interval</a></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+            </p>
+            </td>
+<td>
+            <p>
+              <code class="computeroutput"><a class="link" href="boost/icl/continuous_interval.html" title="Class template continuous_interval">continuous_interval</a></code>
+            </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><p>
+        Statically bounded intervals always have the same kind of interval borders,
+        e.g. right open borders<code class="computeroutput"><span class="special">[</span><span class="identifier">a</span><span class="special">..</span><span class="identifier">b</span><span class="special">)</span></code>
+        for <code class="computeroutput"><a class="link" href="boost/icl/right_open_interval.html" title="Class template right_open_interval">right_open_interval</a></code>.
+        Dynamically bounded intervals can have different borders. Refer to the chapter
+        about <a class="link" href="boost_icl/interface.html#boost_icl.interface.class_templates.intervals" title="Intervals"><span class="emphasis"><em><span class="bold"><strong>intervals</strong></span></em></span></a> for details.
+      </p>
+<div class="table">
+<a name="id809342"></a><p class="title"><b>Table&#160;1.2.&#160;Container class templates</b></p>
+<div class="table-contents"><table class="table" summary="Container class templates">
 <colgroup>
 <col>
 <col>
@@ -453,25 +589,6 @@
 <td>
             <p>
               interval
-            </p>
-            </td>
-<td>
-            <p>
-            </p>
-            </td>
-<td>
-            <p>
-              <code class="computeroutput"><a class="link" href="boost/icl/interval.html" title="Struct template interval">interval</a></code>
-            </p>
-            </td>
-<td>
-            <p>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
             </p>
             </td>
 <td>
@@ -543,7 +660,7 @@
             </td>
 <td>
             <p>
-              <a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span></code> </a>
+              (<a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">set</span></code> </a>)
             </p>
             </td>
 <td>
@@ -556,9 +673,11 @@
 </table></div>
 </div>
 <br class="table-break"><p>
-        <code class="computeroutput"><a class="link" href="boost/icl/interval.html" title="Struct template interval">Interval</a></code> is placed deliberately
-        in column <span class="bold"><strong>sets</strong></span> because an interval is a
-        set as well. Column <span class="emphasis"><em><span class="bold"><strong>style</strong></span></em></span>
+        <a href="http://www.cplusplus.com/reference/stl/set/" target="_top"><code class="computeroutput"><span class="identifier">Std</span><span class="special">::</span><span class="identifier">set</span></code>
+        </a> is placed in paretheses, because it is not a class template of the
+        <span class="bold"><strong>ICL</strong></span>. It can be used as element container
+        though that is behavioral equal to the ICL's interval sets on their fundamental
+        aspect. Column <span class="emphasis"><em><span class="bold"><strong>style</strong></span></em></span>
         refers to the different ways in which interval containers combine added intervals.
         These <span class="emphasis"><em><span class="bold"><strong>combining styles</strong></span></em></span>
         are described in the next section.
@@ -576,7 +695,7 @@
         in the tables below.
       </p>
 <div class="table">
-<a name="id829015"></a><p class="title"><b>Table&#160;1.2.&#160;Interval container's ways to combine intervals</b></p>
+<a name="id809620"></a><p class="title"><b>Table&#160;1.3.&#160;Interval container's ways to combine intervals</b></p>
 <div class="table-contents"><table class="table" summary="Interval container's ways to combine intervals">
 <colgroup>
 <col>
@@ -675,7 +794,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id829192"></a><p class="title"><b>Table&#160;1.3.&#160;Interval combining styles by example</b></p>
+<a name="id809798"></a><p class="title"><b>Table&#160;1.4.&#160;Interval combining styles by example</b></p>
 <div class="table-contents"><table class="table" summary="Interval combining styles by example">
 <colgroup>
 <col>
@@ -838,7 +957,7 @@
         container</a> for an additional demo.
       </p>
 <a name="boost_icl.introduction.interval_combining_styles.joining_interval_containers"></a><h5>
-<a name="id831225"></a>
+<a name="id810738"></a>
         <a class="link" href="index.html#boost_icl.introduction.interval_combining_styles.joining_interval_containers">Joining
         interval containers</a>
       </h5>
@@ -851,7 +970,7 @@
         be the first choice for an interval container.
       </p>
 <a name="boost_icl.introduction.interval_combining_styles.splitting_interval_containers"></a><h5>
-<a name="id831277"></a>
+<a name="id810790"></a>
         <a class="link" href="index.html#boost_icl.introduction.interval_combining_styles.splitting_interval_containers">Splitting
         interval containers</a>
       </h5>
@@ -865,7 +984,7 @@
         <a class="link" href="boost_icl/examples/time_grids.html" title="Time grids for months and weeks">time grids for months and weeks</a>.
       </p>
 <a name="boost_icl.introduction.interval_combining_styles.separating_interval_containers"></a><h5>
-<a name="id831319"></a>
+<a name="id810832"></a>
         <a class="link" href="index.html#boost_icl.introduction.interval_combining_styles.separating_interval_containers">Separating
         interval containers</a>
       </h5>
@@ -884,7 +1003,7 @@
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: December 31, 2010 at 16:49:00 GMT</small></p></td>
+<td align="left"><p><small>Last revised: January 13, 2011 at 10:53:18 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
