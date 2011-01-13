@@ -36,7 +36,9 @@ namespace
     std::cout << "accuracy test for " << timeout_in_secs << " second(s)...";
 
     std::clock_t timeout_in_clock_t = std::clock();
+    std::cout << "accuracy test. Now=" << timeout_in_clock_t << " ticks...";
     timeout_in_clock_t += (timeout_in_secs * CLOCKS_PER_SEC);
+    std::cout << "accuracy test. Timeout=" << timeout_in_clock_t << " ticks...";
 
     boost::chrono::system_timer           sys;
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
@@ -58,6 +60,7 @@ namespace
     boost::chrono::high_resolution_timer::duration hires_dur = hires.elapsed();
     boost::chrono::process_cpu_clock::duration times;
     times = process.elapsed();
+    std::cout << "accuracy test. Now=" << now << " ticks...";
 
     std::cout << std::endl;
 
