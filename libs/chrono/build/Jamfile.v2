@@ -46,6 +46,7 @@ project boost/chrono
         <toolset>intel:<cxxflags>-wd304,1418
 
     : usage-requirements  # pass these requirement to dependents (i.e. users)
+        <os>LINUX:<threading>multi
         <threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
         #<define>BOOST_SYSTEM_INLINED
