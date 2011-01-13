@@ -17,7 +17,6 @@ project
         <toolset>msvc:<asynch-exceptions>on
         <define>BOOST_CHRONO_USES_MPL_ASSERT
         <define>BOOST_SYSTEM_NO_DEPRECATED
-        <toolset>sun:<define>BOOST_COMMON_TYPE_DONT_USE_TYPEOF
         <toolset>sun:<define>BOOST_TYPEOF_EMULATION
         <warnings>all
         <toolset>gcc:<cxxflags>-Wextra
