@@ -25,14 +25,13 @@ int main()
     high_resolution_clock::time_point t0 = high_resolution_clock::now();
     stringstream io;
     io << t0;
+    BOOST_ASSERT(!io.fail());
+    cout << io.str() << '\n';
+    BOOST_ASSERT(!io.fail());
     high_resolution_clock::time_point t1;
-#ifdef BOOST_CHRONO_IO_INPUT
     io >> t1;
     BOOST_ASSERT(!io.fail());
     cout << io.str() << '\n';
-#else
-    t1=t0;
-#endif
     cout << t0 << '\n';
     cout << t1 << '\n';
     high_resolution_clock::time_point t = high_resolution_clock::now();
