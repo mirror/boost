@@ -10,10 +10,10 @@
 #define BOOST_DETAIL_WIN_BASIC_TYPES_HPP
 #include <boost/config.hpp>
 #include <cstdarg>
-
+#include <boost/cstdint.hpp>
 #if defined( BOOST_USE_WINDOWS_H )
 # include <windows.h>
-#elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) 
+#elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) ||  defined(__CYGWIN__)
 # include <WinError.h>
 // @FIXME Which condition must be tested
 # ifdef UNDER_CE
@@ -64,16 +64,18 @@ extern "C" {
     typedef long LONG_;
 
 // @FIXME Which condition must be tested
-#if !defined(_M_IX86)
-#if defined(__CYGWIN__)
-    typedef double LONGLONG_;
-#else
-    typedef __int64 LONGLONG_;
-#endif
-#else
-    typedef double LONGLONG_;
-#endif
+//~ #if !defined(_M_IX86)
+//~ #if defined(BOOST_NO_INT64_T)
+    //~ typedef double LONGLONG_;
+//~ #else
+    //~ typedef __int64 LONGLONG_;
+//~ #endif
+//~ #else
+    //~ typedef double LONGLONG_;
+//~ #endif
+    typedef boost::int64_t LONGLONG_;
 
+// @FIXME Which condition must be tested
 # ifdef _WIN64
 #if defined(__CYGWIN__)
     typedef unsigned long ULONG_PTR_;
