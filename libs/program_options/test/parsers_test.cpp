@@ -131,7 +131,7 @@ void test_command_line()
     // Regression test: check that '0' as style is interpreted as 
     // 'default_style'
     vector<option> a4 = 
-        parse_command_line(sizeof(cmdline3_)/sizeof(const char*), const_cast<char**>(cmdline3_), 
+        parse_command_line(sizeof(cmdline3_)/sizeof(const char*), cmdline3_, 
                                                                desc, 0, additional_parser).options;
 
     BOOST_CHECK_EQUAL(a4.size(), 4u);
