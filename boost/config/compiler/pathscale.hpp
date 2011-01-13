@@ -9,7 +9,7 @@
 // PathScale EKOPath C++ Compiler
 
 #ifndef BOOST_COMPILER
-#  define BOOST_COMPILER "PathScale EKOPath C++ Compiler version" __PATHSCALE__
+#  define BOOST_COMPILER "PathScale EKOPath C++ Compiler version " __PATHSCALE__
 #endif
 
 #if __PATHCC__ >= 4
