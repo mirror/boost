@@ -10,6 +10,7 @@
 project boost/chrono
     : source-location ../src
     : requirements
+        <os>FREEBSD:<threading>multi
         <os>LINUX:<threading>multi
         <threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
