@@ -102,6 +102,16 @@ int mult_2(int arg)
   return arg*2;
 }
 
+struct polymorphic_mult_functor
+{
+    //Implement result_of protocol
+    template <class FArgs> struct result;
+    template <class F, class T> struct result<F(T)> {typedef T type;};
+
+    template <class T> 
+    typename result<polymorphic_mult_functor(T)>::type
+    operator()(const T& _arg) const {return _arg*2;}
+};
 
 int
 main()
@@ -242,6 +252,26 @@ main()
         ++boost::make_transform_iterator((pair_t*)values, select_first())
       , boost::make_transform_iterator((pair_t*)values, const_select_first())
     );
+  }
+
+  // Test transform_iterator with polymorphic object function
+  {
+    int x[N], y[N];
+    for (int k = 0; k < N; ++k)
+      x[k] = k;
+    std::copy(x, x + N, y);
+    
+    for (int k2 = 0; k2 < N; ++k2)
+      x[k2] = x[k2] * 2;
+    
+    boost::input_iterator_test(
+        boost::make_transform_iterator(y, polymorphic_mult_functor()), x[0], x[1]);
+
+    boost::input_iterator_test(
+        boost::make_transform_iterator(&y[0], polymorphic_mult_functor()), x[0], x[1]);
+ 
+    boost::random_access_readable_iterator_test(
+        boost::make_transform_iterator(y, polymorphic_mult_functor()), N, x);
   }
 
   return boost::report_errors();
