@@ -19,6 +19,27 @@ namespace quickbook
 {
     namespace cl = boost::spirit::classic;
 
+    struct element_info
+    {
+        enum context {
+            in_block = 1,
+            in_phrase = 2,
+            in_conditional = 4,
+        };
+
+        enum type_enum {
+            block = 1,
+            phrase = 2,
+            conditional_or_block = 5
+        };
+
+        element_info(type_enum t, cl::rule<scanner>* r)
+            : type(t), rule(r) {}
+
+        type_enum type;
+        cl::rule<scanner>* rule;
+    };
+
     struct quickbook_grammar::impl
     {
         quickbook::actions& actions;
@@ -43,14 +64,8 @@ namespace quickbook
         cl::rule<scanner> comment;
         cl::rule<scanner> macro_identifier;
 
-        // Markup Symbols
-        cl::symbols<cl::rule<scanner>*> phrase_keyword_rules;
-        cl::symbols<cl::rule<scanner>*> phrase_symbol_rules;
-
-        cl::symbols<cl::rule<scanner>*> block_keyword_rules;
-        cl::symbols<cl::rule<scanner>*> block_symbol_rules;
-        
-        cl::symbols<cl::rule<scanner>*> extended_phrase_keyword_rules;
+        // Element Symbols       
+        cl::symbols<element_info> elements;
         
         // Doc Info
         cl::rule<scanner> doc_info_details;

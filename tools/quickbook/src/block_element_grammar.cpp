@@ -70,9 +70,9 @@ namespace quickbook
                 ]
                 ;
 
-        block_keyword_rules.add
-            ("section", &local.begin_section)
-            ("endsect", &local.end_section)
+        elements.add
+            ("section", element_info(element_info::block, &local.begin_section))
+            ("endsect", element_info(element_info::block, &local.end_section))
             ;
 
         local.begin_section =
@@ -86,14 +86,14 @@ namespace quickbook
                 cl::eps_p                       [actions.end_section]
             ;
 
-        block_keyword_rules.add
-            ("heading", &local.h)
-            ("h1", &local.h1)
-            ("h2", &local.h2)
-            ("h3", &local.h3)
-            ("h4", &local.h4)
-            ("h5", &local.h5)
-            ("h6", &local.h6)
+        elements.add
+            ("heading", element_info(element_info::block, &local.h))
+            ("h1", element_info(element_info::block, &local.h1))
+            ("h2", element_info(element_info::block, &local.h2))
+            ("h3", element_info(element_info::block, &local.h3))
+            ("h4", element_info(element_info::block, &local.h4))
+            ("h5", element_info(element_info::block, &local.h5))
+            ("h6", element_info(element_info::block, &local.h6))
             ;
 
         local.h  = space >> local.element_id_1_6 >> space >> local.inner_phrase [actions.h];
@@ -107,15 +107,15 @@ namespace quickbook
         static const bool true_ = true;
         static const bool false_ = false;
 
-        block_keyword_rules.add("blurb", &local.blurb);
+        elements.add("blurb", element_info(element_info::block, &local.blurb));
 
         local.blurb =
             actions.scoped_block[inside_paragraph]
                                                 [actions.blurb]
             ;
 
-        block_symbol_rules.add
-            (":", &local.blockquote)
+        elements.add
+            (":", element_info(element_info::block, &local.blockquote))
             ;
 
         local.blockquote =
@@ -123,12 +123,12 @@ namespace quickbook
                                                 [actions.blockquote]
             ;
 
-        block_keyword_rules.add
-            ("warning", &local.warning)
-            ("caution", &local.caution)
-            ("important", &local.important)
-            ("note", &local.note)
-            ("tip", &local.tip)
+        elements.add
+            ("warning", element_info(element_info::block, &local.warning))
+            ("caution", element_info(element_info::block, &local.caution))
+            ("important", element_info(element_info::block, &local.important))
+            ("note", element_info(element_info::block, &local.note))
+            ("tip", element_info(element_info::block, &local.tip))
             ;
 
         local.warning =
@@ -156,8 +156,8 @@ namespace quickbook
                                                 [actions.tip]
             ;
 
-        block_keyword_rules.add
-            ("pre", &local.preformatted)
+        elements.add
+            ("pre", element_info(element_info::block, &local.preformatted))
             ;
 
         local.preformatted =
@@ -166,8 +166,8 @@ namespace quickbook
             >>  actions.set_no_eols[phrase]     [actions.preformatted]
             ;
 
-        block_keyword_rules.add
-            ("def", &local.def_macro)
+        elements.add
+            ("def", element_info(element_info::block, &local.def_macro))
             ;
 
         local.def_macro =
@@ -184,8 +184,8 @@ namespace quickbook
             local.identifier | (cl::punct_p - (cl::ch_p('[') | ']'))
             ;
 
-        block_keyword_rules.add
-            ("template", &local.template_)
+        elements.add
+            ("template", element_info(element_info::block, &local.template_))
             ;
 
         local.template_ =
@@ -214,8 +214,8 @@ namespace quickbook
             >> space
             ;
 
-        block_keyword_rules.add
-            ("variablelist", &local.variablelist)
+        elements.add
+            ("variablelist", element_info(element_info::block, &local.variablelist))
             ;
 
         local.variablelist =
@@ -272,8 +272,8 @@ namespace quickbook
             )
             ;
 
-        block_keyword_rules.add
-            ("table", &local.table)
+        elements.add
+            ("table", element_info(element_info::block, &local.table))
             ;
 
         local.table =
@@ -312,16 +312,10 @@ namespace quickbook
                 )
             ;
 
-        block_keyword_rules.add
-            ("xinclude", &local.xinclude)
-            ("import", &local.import)
-            ("include", &local.include)
-            ;
-
-        extended_phrase_keyword_rules.add
-            ("xinclude", &local.xinclude)
-            ("import", &local.import)
-            ("include", &local.include)
+        elements.add
+            ("xinclude", element_info(element_info::conditional_or_block, &local.xinclude))
+            ("import", element_info(element_info::conditional_or_block, &local.import))
+            ("include", element_info(element_info::conditional_or_block, &local.include))
             ;
 
         local.xinclude =

@@ -40,8 +40,8 @@ namespace quickbook
 
         phrase_element_grammar_local& local = store_.create();
 
-        phrase_symbol_rules.add
-            ("?", &local.cond_phrase)
+        elements.add
+            ("?", element_info(element_info::phrase, &local.cond_phrase))
             ;
 
         local.cond_phrase =
@@ -50,8 +50,8 @@ namespace quickbook
             >>  actions.scoped_cond_phrase[extended_phrase]
             ;
 
-        phrase_symbol_rules.add
-            ("$", &local.image)
+        elements.add
+            ("$", element_info(element_info::phrase, &local.image))
             ;
 
         local.image =
@@ -78,8 +78,8 @@ namespace quickbook
             >>  cl::eps_p(']')                  [actions.image]
             ;
             
-        phrase_symbol_rules.add
-            ("@", &local.url)
+        elements.add
+            ("@", element_info(element_info::phrase, &local.url))
             ;
 
         local.url =
@@ -89,8 +89,8 @@ namespace quickbook
             >>  phrase                          [actions.url_post]
             ;
 
-        phrase_keyword_rules.add
-            ("link", &local.link)
+        elements.add
+            ("link", element_info(element_info::phrase, &local.link))
             ;
 
         local.link =
@@ -101,8 +101,8 @@ namespace quickbook
             >>  phrase                          [actions.link_post]
             ;
 
-        phrase_symbol_rules.add
-            ("#", &local.anchor)
+        elements.add
+            ("#", element_info(element_info::phrase, &local.anchor))
             ;
 
         local.anchor =
@@ -110,15 +110,15 @@ namespace quickbook
             >>  (*(cl::anychar_p - phrase_end)) [actions.anchor]
             ;
 
-        phrase_keyword_rules.add
-            ("funcref", &local.funcref)
-            ("classref", &local.classref)
-            ("memberref", &local.memberref)
-            ("enumref", &local.enumref)
-            ("macroref", &local.macroref)
-            ("headerref", &local.headerref)
-            ("conceptref", &local.conceptref)
-            ("globalref", &local.globalref)
+        elements.add
+            ("funcref", element_info(element_info::phrase, &local.funcref))
+            ("classref", element_info(element_info::phrase, &local.classref))
+            ("memberref", element_info(element_info::phrase, &local.memberref))
+            ("enumref", element_info(element_info::phrase, &local.enumref))
+            ("macroref", element_info(element_info::phrase, &local.macroref))
+            ("headerref", element_info(element_info::phrase, &local.headerref))
+            ("conceptref", element_info(element_info::phrase, &local.conceptref))
+            ("globalref", element_info(element_info::phrase, &local.globalref))
             ;
 
         local.funcref =
@@ -185,14 +185,14 @@ namespace quickbook
             >>  phrase                          [actions.globalref_post]
             ;
 
-        phrase_symbol_rules.add
-            ("*", &local.bold)
-            ("'", &local.italic)
-            ("_", &local.underline)
-            ("^", &local.teletype)
-            ("-", &local.strikethrough)
-            ("\"", &local.quote)
-            ("~", &local.replaceable)
+        elements.add
+            ("*", element_info(element_info::phrase, &local.bold))
+            ("'", element_info(element_info::phrase, &local.italic))
+            ("_", element_info(element_info::phrase, &local.underline))
+            ("^", element_info(element_info::phrase, &local.teletype))
+            ("-", element_info(element_info::phrase, &local.strikethrough))
+            ("\"", element_info(element_info::phrase, &local.quote))
+            ("~", element_info(element_info::phrase, &local.replaceable))
             ;
 
         local.bold =
@@ -230,18 +230,18 @@ namespace quickbook
             >>  phrase                          [actions.replaceable_post]
             ;
 
-        phrase_keyword_rules.add
-            ("c++", &local.source_mode_cpp)
-            ("python", &local.source_mode_python)
-            ("teletype", &local.source_mode_teletype)
+        elements.add
+            ("c++", element_info(element_info::phrase, &local.source_mode_cpp))
+            ("python", element_info(element_info::phrase, &local.source_mode_python))
+            ("teletype", element_info(element_info::phrase, &local.source_mode_teletype))
             ;
         
         local.source_mode_cpp = cl::eps_p [cl::assign_a(actions.source_mode, "c++")];
         local.source_mode_python = cl::eps_p [cl::assign_a(actions.source_mode, "python")];
         local.source_mode_teletype = cl::eps_p [cl::assign_a(actions.source_mode, "teletype")];
 
-        phrase_keyword_rules.add
-            ("footnote", &local.footnote)
+        elements.add
+            ("footnote", element_info(element_info::phrase, &local.footnote))
             ;
 
         local.footnote =

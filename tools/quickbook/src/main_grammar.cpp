@@ -60,10 +60,10 @@ namespace quickbook
     {
         cl::rule<scanner>
                         top_level, blocks, paragraph_separator,
-                        block_element, block_element_start,
+                        block_element,
                         code, code_line, blank_line, hr,
                         list, ordered_list, list_item,
-                        phrase_element, extended_phrase_element,
+                        phrase_element, extended_phrase_element, element,
                         simple_phrase_end,
                         escape,
                         inline_code, simple_format,
@@ -79,8 +79,39 @@ namespace quickbook
                         dummy_block
                         ;
 
-        cl::rule<scanner> block_keyword_rule;
-        cl::rule<scanner> phrase_keyword_rule;
+        struct assign_element_type {
+            assign_element_type(main_grammar_local& l) : l(l) {}
+
+            void operator()(element_info& t) const {
+                l.element_type = t.type;
+                l.element_rule = *t.rule;
+            }
+            
+            main_grammar_local& l;
+        };
+
+        struct check_element_type {
+            check_element_type(main_grammar_local const& l, element_info::context t)
+                : l(l), t(t) {}
+
+            bool operator()() const {
+                return l.element_type & t;
+            }
+
+            main_grammar_local const& l;
+            element_info::context t;
+        };
+
+        element_info::type_enum element_type;
+        cl::rule<scanner> element_rule;
+        assign_element_type assign_element;
+
+        main_grammar_local()
+            : assign_element(*this) {}
+        
+        check_element_type check_element(element_info::context t) const {
+            return check_element_type(*this, t);
+        }
     };
 
     void quickbook_grammar::impl::init_main()
@@ -128,20 +159,15 @@ namespace quickbook
             ;
 
         local.block_element
-            =   local.block_element_start       [actions.inside_paragraph]
-            >>  (   local.block_keyword_rule
+            =   '[' >> space
+            >>  local.element
+            >>  cl::eps_p(local.check_element(element_info::in_block))
+                                                [actions.inside_paragraph]
+            >>  (   local.element_rule
                 >>  (   (space >> ']')
                     |   cl::eps_p               [actions.error]
                     )
                 |   cl::eps_p                   [actions.error]
-                )
-            ;
-
-        local.block_element_start
-            =   '[' >> space
-            >>  (   block_keyword_rules         [detail::assign_rule(local.block_keyword_rule)]
-                >>  (cl::eps_p - (cl::alnum_p | '_'))
-                |   block_symbol_rules          [detail::assign_rule(local.block_keyword_rule)]
                 )
             ;
         
@@ -344,11 +370,9 @@ namespace quickbook
         local.phrase_element
             =   '['
             >>  space
-            >>  (   phrase_keyword_rules        [detail::assign_rule(local.phrase_keyword_rule)]
-                >>  (cl::eps_p - (cl::alnum_p | '_'))
-                >>  local.phrase_keyword_rule
-                |   phrase_symbol_rules         [detail::assign_rule(local.phrase_keyword_rule)]
-                >>  local.phrase_keyword_rule
+            >>  (   local.element
+                >>  cl::eps_p(local.check_element(element_info::in_phrase))
+                >>  local.element_rule
                 |   local.template_             [actions.do_template]
                 |   cl::str_p("br")             [actions.break_]
                 )
@@ -356,17 +380,24 @@ namespace quickbook
             ;
 
         local.extended_phrase_element
-            =   '['
-            >>  space
-            >>  extended_phrase_keyword_rules   [detail::assign_rule(local.block_keyword_rule)]
-            >>  (cl::eps_p - (cl::alnum_p | '_'))
+            =   '[' >> space
+            >>  local.element
+            >>  cl::eps_p(local.check_element(element_info::in_conditional))
                                                 [actions.inside_paragraph]
-            >>  (   local.block_keyword_rule
+            >>  (   local.element_rule
                 >>  (   (space >> ']')
                     |   cl::eps_p               [actions.error]
                     )
                 |   cl::eps_p                   [actions.error]
                 )
+            ;
+
+
+        local.element
+            =   cl::eps_p(cl::punct_p)
+            >>  elements                    [local.assign_element]
+            |   elements                    [local.assign_element]
+            >>  (cl::eps_p - (cl::alnum_p | '_'))
             ;
 
         local.escape =

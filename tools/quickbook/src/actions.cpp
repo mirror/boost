@@ -157,7 +157,7 @@ namespace quickbook
         if(actions.suppress) return;
 
         int level_ = section_level + 2;     // section_level is zero-based. We need to use a
-                                            // 0ne-based heading which is one greater
+                                            // one-based heading which is one greater
                                             // than the current. Thus: section_level + 2.
         if (level_ > 6)                     // The max is h6, clip it if it goes
             level_ = 6;                     // further than that
@@ -1414,10 +1414,10 @@ namespace quickbook
         }
 
         // update the __FILENAME__ macro
-        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.native();
+        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.string();
 
         // parse the file
-        quickbook::parse_file(actions.filename.native().c_str(), actions, true);
+        quickbook::parse_file(actions.filename.string().c_str(), actions, true);
 
         // restore the values
         std::swap(actions.filename, filein);
