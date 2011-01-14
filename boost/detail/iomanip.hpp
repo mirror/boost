@@ -1,9 +1,9 @@
-/*<-============================================================================
-    Copyright (c) 2010      Bryce Lelbach
+/*==============================================================================
+    Copyright (c) 2010-2011 Bryce Lelbach
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-============================================================================->*/
+==============================================================================*/
 
 #ifndef BOOST_DETAIL_IOMANIP_HPP
 #define BOOST_DETAIL_IOMANIP_HPP
@@ -26,7 +26,8 @@ class resetiosflags_manip {
   template<class CharT, class Traits>
   friend std::basic_istream<CharT, Traits>&
   operator>> (std::basic_istream<CharT, Traits>& is,
-              resetiosflags_manip const& x) {
+              resetiosflags_manip const& x)
+  {
     is.unsetf(x.mask);
     return is;
   }
@@ -34,7 +35,8 @@ class resetiosflags_manip {
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT, Traits>&
   operator<< (std::basic_ostream<CharT, Traits>& os,
-              resetiosflags_manip const& x) {
+              resetiosflags_manip const& x)
+  {
     os.unsetf(x.mask);
     return os;
   }
