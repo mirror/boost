@@ -23,8 +23,8 @@ local all-urngs =
     ecuyer1988
     kreutzer1986
     hellekalek1995
-#    mt11213b
-#    mt19937_64
+    mt11213b
+    mt19937_64
     lagged_fibonacci
     lagged_fibonacci607
     ranlux3
@@ -35,7 +35,7 @@ local all-urngs =
     ranlux64_4_01
     ranlux24
     ranlux48
-#    taus88
+    taus88
 ;
 
 for urng in $(all-urngs)
