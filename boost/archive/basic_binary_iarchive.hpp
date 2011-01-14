@@ -146,6 +146,12 @@ public:
         }
         else
         if(boost::archive::library_version_type(6) < lvt){
+            uint_least8_t x=0;
+            * this->This() >> x;
+            t = boost::archive::version_type(x);
+        }
+        else
+        if(boost::archive::library_version_type(5) < lvt){
             uint_least16_t x=0;
             * this->This() >> x;
             t = boost::archive::version_type(x);
@@ -159,7 +165,8 @@ public:
 
     void load_override(boost::serialization::item_version_type & t, int version){
         library_version_type lvt = this->get_library_version();
-        if(boost::archive::library_version_type(7) < lvt){
+//        if(boost::archive::library_version_type(7) < lvt){
+        if(boost::archive::library_version_type(6) < lvt){
             this->detail_common_iarchive::load_override(t, version);
         }
         else
