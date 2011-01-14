@@ -290,18 +290,18 @@ void collection_comp_test()
 
 void dissect_format_test()
 {
-	BOOST_CHECK(
-		find_format_all_copy(
-			string("aBc123Abc"), 
-			first_finder("abc", is_iequal()), 
-			dissect_formatter(token_finder(is_upper())))=="B123A");
+    BOOST_CHECK(
+        find_format_all_copy(
+            string("aBc123Abc"), 
+            first_finder("abc", is_iequal()), 
+            dissect_formatter(token_finder(is_upper())))=="B123A");
 
 
-	BOOST_CHECK(
-		find_format_all_copy(
-			string("abc   123   abc"),
-			token_finder(is_space(), token_compress_on),
-			dissect_formatter(head_finder(1)))=="abc 123 abc");
+    BOOST_CHECK(
+        find_format_all_copy(
+            string("abc   123   abc"),
+            token_finder(is_space(), token_compress_on),
+            dissect_formatter(head_finder(1)))=="abc 123 abc");
 
 }
 
@@ -317,7 +317,7 @@ int test_main( int, char*[] )
     replace_tail_test();
     replace_range_test();
     collection_comp_test();
-	dissect_format_test();
+    dissect_format_test();
 
     return 0;
 }

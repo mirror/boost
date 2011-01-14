@@ -112,15 +112,15 @@ void trim_test()
 
 void trim_all_test()
 {
-	string str1("     1x   x   x   x1     ");
-    string str2("     2x	  x		 x		x2     ");
+    string str1("     1x   x   x   x1     ");
+    string str2("     2x      x      x      x2     ");
     string str3("    ");
 
     // *** value passing tests *** //
 
     // general string test
     BOOST_CHECK( trim_all_copy( str1 )=="1x x x x1" ) ;
-	BOOST_CHECK( trim_all_copy( str2 )=="2x	x	x	x2" ) ;
+    BOOST_CHECK( trim_all_copy( str2 )=="2x x   x   x2" ) ;
 
     // spaces-only string test
     BOOST_CHECK( trim_all_copy( str3 )=="" );
@@ -129,10 +129,10 @@ void trim_all_test()
     BOOST_CHECK( trim_all_copy( string("") )=="" );
 
     // general string test
-	trim_all( str1 );
-	BOOST_CHECK( str1=="1x x x x1" ) ;
-	trim_all( str2 );
-	BOOST_CHECK( str2=="2x	x	x	x2" ) ;
+    trim_all( str1 );
+    BOOST_CHECK( str1=="1x x x x1" ) ;
+    trim_all( str2 );
+    BOOST_CHECK( str2=="2x  x   x   x2" ) ;
     
     // spaces-only string test
     str3 = "    "; trim_all( str3 );
@@ -155,7 +155,7 @@ void trim_all_test()
 int test_main( int, char*[] )
 {
     trim_test();
-	trim_all_test();
+    trim_all_test();
     
     return 0;
 }

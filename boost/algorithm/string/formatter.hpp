@@ -89,21 +89,21 @@ namespace boost {
                 BOOST_STRING_TYPENAME range_value<RangeT>::type>();
         }
 
-		//! Empty formatter
-		/*!
-			Constructs a \c dissect_formatter. Dissect formatter uses a specified finder
-			to extract a portion of the formatted sequence. The first finder's match is returned 
-			as a result
+        //! Empty formatter
+        /*!
+            Constructs a \c dissect_formatter. Dissect formatter uses a specified finder
+            to extract a portion of the formatted sequence. The first finder's match is returned 
+            as a result
 
-			\param Finder a finder used to select a portion of the formated sequence
-			\return An instance of the \c dissect_formatter object.
-		*/
-		template<typename FinderT>
-		inline detail::dissect_formatF< FinderT >
-		dissect_formatter(const FinderT& Finder)
-		{
-			return detail::dissect_formatF<FinderT>(Finder);
-		}
+            \param Finder a finder used to select a portion of the formated sequence
+            \return An instance of the \c dissect_formatter object.
+        */
+        template<typename FinderT>
+        inline detail::dissect_formatF< FinderT >
+        dissect_formatter(const FinderT& Finder)
+        {
+            return detail::dissect_formatF<FinderT>(Finder);
+        }
 
 
     } // namespace algorithm
@@ -112,7 +112,7 @@ namespace boost {
     using algorithm::const_formatter;
     using algorithm::identity_formatter;
     using algorithm::empty_formatter;
-	using algorithm::dissect_formatter;
+    using algorithm::dissect_formatter;
 
 } // namespace boost
 
