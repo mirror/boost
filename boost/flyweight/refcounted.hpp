@@ -14,6 +14,7 @@
 #endif
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
+#include <functional>
 #include <algorithm>
 #include <boost/detail/atomic_count.hpp>
 #include <boost/detail/workaround.hpp>
