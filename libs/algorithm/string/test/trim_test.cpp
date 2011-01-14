@@ -8,6 +8,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string/trim_all.hpp>
 
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -109,10 +110,52 @@ void trim_test()
     BOOST_CHECK( trim_copy_if( string("<>abc<>"), is_any_of( "<<>>" ) )=="abc" );
 }
 
+void trim_all_test()
+{
+	string str1("     1x   x   x   x1     ");
+    string str2("     2x	  x		 x		x2     ");
+    string str3("    ");
+
+    // *** value passing tests *** //
+
+    // general string test
+    BOOST_CHECK( trim_all_copy( str1 )=="1x x x x1" ) ;
+	BOOST_CHECK( trim_all_copy( str2 )=="2x	x	x	x2" ) ;
+
+    // spaces-only string test
+    BOOST_CHECK( trim_all_copy( str3 )=="" );
+
+    // empty string check 
+    BOOST_CHECK( trim_all_copy( string("") )=="" );
+
+    // general string test
+	trim_all( str1 );
+	BOOST_CHECK( str1=="1x x x x1" ) ;
+	trim_all( str2 );
+	BOOST_CHECK( str2=="2x	x	x	x2" ) ;
+    
+    // spaces-only string test
+    str3 = "    "; trim_all( str3 );
+    BOOST_CHECK( str3=="" );
+
+    // empty string check 
+    str3 = ""; trim_all( str3 );
+    BOOST_CHECK( str3=="" );
+    BOOST_CHECK( str3=="" );
+
+    // *** non-standard predicate tests *** //
+    BOOST_CHECK( 
+        trim_all_copy_if( 
+            string("123abc127deb456"), 
+            is_classified(std::ctype_base::digit) )=="abc1deb" );
+    BOOST_CHECK( trim_all_copy_if( string("<>abc<>def<>"), is_any_of( "<<>>" ) )=="abc<def" );
+}
+
 // test main 
 int test_main( int, char*[] )
 {
     trim_test();
+	trim_all_test();
     
     return 0;
 }
