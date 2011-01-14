@@ -46,7 +46,7 @@ boost_throw_exception_test()
         int const * line=boost::get_error_info<boost::throw_line>(x);
         BOOST_TEST( file && *file );
         BOOST_TEST( function && *function );
-        BOOST_TEST( line && *line==32 );
+        BOOST_TEST( line && *line==38 );
         }
     catch(
     ... )
@@ -67,7 +67,7 @@ boost_throw_exception_test()
         int const * data=boost::get_error_info<test_data>(x);
         BOOST_TEST( file && *file );
         BOOST_TEST( function && *function );
-        BOOST_TEST( line && *line==52 );
+        BOOST_TEST( line && *line==58 );
         BOOST_TEST( data && *data==42 );
         }
     catch(
