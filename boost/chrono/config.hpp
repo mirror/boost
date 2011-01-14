@@ -13,6 +13,10 @@
 
 #include <boost/config.hpp>
 
+#if defined(BOOST_CHRONO_SOURCE) && !defined(BOOST_USE_WINDOWS_H)
+#define BOOST_USE_WINDOWS_H
+#endif
+
 //  BOOST_CHRONO_POSIX_API, BOOST_CHRONO_MAC_API, or BOOST_CHRONO_WINDOWS_API
 //  can be defined by the user to specify which API should be used
 
