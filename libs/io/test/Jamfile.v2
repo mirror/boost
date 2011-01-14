@@ -21,4 +21,6 @@ test-suite "io"
               : # input files
               # : std::locale-support
         ]
+        
+        [ run quoted_manip_test.cpp ]
   ;
