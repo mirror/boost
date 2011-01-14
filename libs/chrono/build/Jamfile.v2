@@ -15,7 +15,6 @@ project boost/chrono
         <threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
         #<define>BOOST_SYSTEM_INLINED
-        <define>BOOST_USE_WINDOWS_H
         #<define>BOOST_COMMON_TYPE_USES_STATIC_ASSERT
         #<define>BOOST_RATIO_USES_STATIC_ASSERT
         #<define>BOOST_CHRONO_USES_STATIC_ASSERT

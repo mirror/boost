@@ -40,13 +40,14 @@ rule chrono-run ( sources )
     return
     [ run $(sources) ../build//boost_chrono
         : : 
-        :   <define>BOOST_USE_WINDOWS_H 
+        :   
             <library>/boost/system//boost_system
         :   $(sources[1]:B)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : : 
-        :  <define>BOOST_USE_WINDOWS_H <library>/boost/system//boost_system
-        :  $(sources[1]:B)_static ]
+        :   
+            <library>/boost/system//boost_system
+        :   $(sources[1]:B)_static ]
     [ run $(sources)
         : : 
         :   <define>BOOST_CHRONO_INLINED
@@ -55,14 +56,6 @@ rule chrono-run ( sources )
             <library>/boost/system//boost_system
             <os>LINUX:<threading>multi
         :   $(sources[1]:B)_header ]
-#    [ run $(sources)
-#        : : 
-#        :  <define>BOOST_CHRONO_INLINED 
-#           <define>BOOST_USE_WINDOWS_H 
-#            # comment one of the following lines 
-#            #<define>BOOST_SYSTEM_INLINED
-#            <library>/boost/system//boost_system
-#        : $(sources[1]:B)_header_win ]
     ;
 }
 rule chrono-run2 ( sources : name )
@@ -70,12 +63,13 @@ rule chrono-run2 ( sources : name )
     return
     [ run $(sources) ../build//boost_chrono
         : : 
-        :   <define>BOOST_USE_WINDOWS_H 
+        :   
             <library>/boost/system//boost_system
         :   $(name)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : : 
-        : <library>/boost/system//boost_system
+        :   
+            <library>/boost/system//boost_system
         : $(name)_static ]
     [ run $(sources)
         : : 
@@ -85,14 +79,6 @@ rule chrono-run2 ( sources : name )
             <library>/boost/system//boost_system
             <os>LINUX:<threading>multi
         : $(name)_header ]
-#    [ run $(sources)
-#        : : 
-#        :  <define>BOOST_CHRONO_INLINED 
-#           <define>BOOST_USE_WINDOWS_H 
-#            # comment one of the following lines 
-#            #<define>BOOST_SYSTEM_INLINED
-#            <library>/boost/system//boost_system
-#        : $(name)_header_win ]
     ;
 }
 
@@ -102,13 +88,14 @@ rule chrono-run-mt ( sources )
     return
     [ run $(sources) ../build//boost_chrono
         : : 
-        :   <define>BOOST_USE_WINDOWS_H 
+        :   
             <library>/boost/system//boost_system 
             <os>LINUX:<threading>multi
         :   $(sources[1]:B)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : : 
-        :  <define>BOOST_USE_WINDOWS_H <library>/boost/system//boost_system 
+        :  
+            <library>/boost/system//boost_system 
             <os>LINUX:<threading>multi
         :  $(sources[1]:B)_static ]
     [ run $(sources)
@@ -119,14 +106,6 @@ rule chrono-run-mt ( sources )
             <library>/boost/system//boost_system
             <os>LINUX:<threading>multi
         :   $(sources[1]:B)_header ]
-#    [ run $(sources)
-#        : : 
-#        :  <define>BOOST_CHRONO_INLINED 
-#           <define>BOOST_USE_WINDOWS_H 
-#            # comment one of the following lines 
-#            #<define>BOOST_SYSTEM_INLINED
-#            <library>/boost/system//boost_system
-#        : $(sources[1]:B)_header_win ]
     ;
 }
 rule chrono-run2-mt ( sources : name )
@@ -134,13 +113,14 @@ rule chrono-run2-mt ( sources : name )
     return
     [ run $(sources) ../build//boost_chrono
         : : 
-        :   <define>BOOST_USE_WINDOWS_H 
+        :   
             <library>/boost/system//boost_system
             <os>LINUX:<threading>multi
         :   $(name)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : : 
-        : <library>/boost/system//boost_system
+        :   
+            <library>/boost/system//boost_system
             <os>LINUX:<threading>multi
         : $(name)_static ]
     [ run $(sources)
@@ -151,14 +131,6 @@ rule chrono-run2-mt ( sources : name )
             <library>/boost/system//boost_system
             <os>LINUX:<threading>multi
         : $(name)_header ]
-#    [ run $(sources)
-#        : : 
-#        :  <define>BOOST_CHRONO_INLINED 
-#           <define>BOOST_USE_WINDOWS_H 
-#            # comment one of the following lines 
-#            #<define>BOOST_SYSTEM_INLINED
-#            <library>/boost/system//boost_system
-#        : $(name)_header_win ]
     ;
 }
 rule chrono-compile ( sources )
@@ -172,12 +144,6 @@ rule chrono-compile ( sources )
             # comment the following line 
             <define>BOOST_SYSTEM_INLINED
         : $(sources[1]:B)_header ]
-#    [ compile $(sources)
-#        :  <define>BOOST_CHRONO_INLINED 
-#            <define>BOOST_USE_WINDOWS_H 
-#            # comment the following line 
-#            <define>BOOST_SYSTEM_INLINED
-#        : $(sources[1]:B)_header_win ]
     ;
 }
 
@@ -192,12 +158,6 @@ rule chrono-compile2 ( sources : name )
             # comment the following line 
             <define>BOOST_SYSTEM_INLINED
         : $(name)_header ]
-#    [ compile $(sources)
-#        :   <define>BOOST_CHRONO_INLINED 
-#            <define>BOOST_USE_WINDOWS_H
-#            # comment the following line 
-#            <define>BOOST_SYSTEM_INLINED
-#        : $(name)_header_win ]
     ;
 }
 
