@@ -341,7 +341,7 @@ namespace boost
     }
 
 #if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
-    std::size_t hash_value(std::type_index v)
+    inline std::size_t hash_value(std::type_index v)
     {
         return v.hash_code();
     }
