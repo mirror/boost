@@ -7,7 +7,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <ostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <algorithm>
 #include <string>
 

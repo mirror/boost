@@ -11,7 +11,7 @@
 // ----------------------------------------------------------------------------
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 #include "boost/format.hpp"
 
@@ -26,8 +26,8 @@ namespace MyNS_ForOutput {
 }
 
 namespace MyNS_Manips {
-  using std::setfill;
-  using std::setw;
+  using boost::detail::setfill;
+  using boost::detail::setw;
   using std::hex ;
   using std::dec ;
   using std::showbase ;
@@ -82,7 +82,7 @@ int main(){
 
     // modify the formatting options for a given directive :
     fmter = format("%1% %2% %3% %2% %1% \n");
-    fmter.modify_item(4, group(setfill('_'), hex, showbase, setw(5)) );
+    fmter.modify_item(4, group(boost::detail::setfill('_'), hex, showbase, boost::detail::setw(5)) );
     cout << fmter % 1 % 2 % 3;
     //          prints  "1 2 3 __0x2 1 \n"
     
@@ -92,7 +92,7 @@ int main(){
     //          prints  "18 0x14 30  _0x14 18 \n"
     
     
-    fmter.modify_item(4, setw(0)); // cancels previous width-5
+    fmter.modify_item(4, boost::detail::setw(0)); // cancels previous width-5
     fmter.bind_arg(1, 77); // replace 18 with 77 for first argument.
     cout << fmter % 10 % 20;
     //          prints  "77 10 20 0xa 77 \n"
@@ -139,9 +139,9 @@ int main(){
 
 
     // manipulators conflicting with format-string : manipulators win.
-    cout << format("%2s")  % group(setfill('0'), setw(6), 1) << endl;
+    cout << format("%2s")  % group(boost::detail::setfill('0'), boost::detail::setw(6), 1) << endl;
     //          prints  "000001"
-    cout << format("%2$5s %1% %2$3s\n")  % 1    % group(setfill('X'), setw(4), 2) ;
+    cout << format("%2$5s %1% %2$3s\n")  % 1    % group(boost::detail::setfill('X'), boost::detail::setw(4), 2) ;
     //          prints  "XXX2 1 XXX2\n"  
     //          width is 4, as set by manip, not the format-string.
     

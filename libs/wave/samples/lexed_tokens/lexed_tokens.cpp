@@ -8,8 +8,9 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+#include <ios>
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -39,9 +40,9 @@ operator<< (std::ostream &stream,
     using namespace boost::wave;
     
     token_id id = token_id(t);
-    stream << setw(16) 
+    stream << boost::detail::setw(16) 
         << left << boost::wave::get_token_name(id) << " ("
-        << "#" << setw(3) << BASEID_FROM_TOKEN(id);
+        << "#" << boost::detail::setw(3) << BASEID_FROM_TOKEN(id);
 
     if (ExtTokenTypeMask & id) {
     // this is an extended token id
@@ -58,8 +59,8 @@ operator<< (std::ostream &stream,
     
     stream 
         << ") at " << t.get_position().get_file() << " (" 
-        << setw(3) << right << t.get_position().get_line() << "/" 
-        << setw(2) << right << t.get_position().get_column() 
+        << boost::detail::setw(3) << right << t.get_position().get_line() << "/" 
+        << boost::detail::setw(2) << right << t.get_position().get_column() 
         << "): >";
     
     typedef typename boost::wave::cpplexer::lex_token<PositionT>::string_type 

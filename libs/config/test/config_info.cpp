@@ -17,7 +17,7 @@
 #include <boost/config.hpp>
 #include <boost/version.hpp>
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <string.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -44,7 +44,7 @@ void print_macro(const char* name, const char* value)
    if(0 != strcmp(name, value+1))
    {
       for(unsigned i = 0; i < indent; ++i) std::cout.put(' ');
-      std::cout << std::setw(width);
+      std::cout << boost::detail::setw(width);
       cout.setf(istream::left, istream::adjustfield);
       std::cout << name;
       if(value[1])
@@ -66,7 +66,7 @@ template <class T>
 void print_expression(const char* expression, T val)
 {
    for(unsigned i = 0; i < indent; ++i) std::cout.put(' ');
-   std::cout << std::setw(width);
+   std::cout << boost::detail::setw(width);
    std::cout.setf(istream::left, istream::adjustfield);
    std::cout << expression << "=" << val << std::endl;
 }
@@ -85,7 +85,7 @@ void print_byte_order(const char* what, T /* t */ )
    const char* p = reinterpret_cast<const char*>(&val);
 
    for(i = 0; i < indent; ++i) std::cout.put(' ');
-   std::cout << std::setw(width);
+   std::cout << boost::detail::setw(width);
    std::cout.setf(istream::left, istream::adjustfield);
    std::cout << what << "=";
    for(i = 0; i < sizeof(T); ++i)

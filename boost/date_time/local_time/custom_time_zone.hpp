@@ -106,15 +106,15 @@ namespace local_time {
       // offset
       if(base_utc_offset().is_negative()) {
         // inverting the sign guarantees we get two digits
-        ss << '-' << std::setw(2) << base_utc_offset().invert_sign().hours();
+        ss << '-' << boost::detail::setw(2) << base_utc_offset().invert_sign().hours();
       }
       else {
-        ss << '+' << std::setw(2) << base_utc_offset().hours();
+        ss << '+' << boost::detail::setw(2) << base_utc_offset().hours();
       }
       if(base_utc_offset().minutes() != 0 || base_utc_offset().seconds() != 0) {
-        ss << ':' << std::setw(2) << base_utc_offset().minutes();
+        ss << ':' << boost::detail::setw(2) << base_utc_offset().minutes();
         if(base_utc_offset().seconds() != 0) {
-          ss << ':' << std::setw(2) << base_utc_offset().seconds();
+          ss << ':' << boost::detail::setw(2) << base_utc_offset().seconds();
         }
       }
       if(dst_calc_rules_ != no_rules) {
@@ -123,30 +123,30 @@ namespace local_time {
         // dst offset
         if(dst_offset().is_negative()) {
           // inverting the sign guarantees we get two digits
-          ss << '-' << std::setw(2) << dst_offset().invert_sign().hours();
+          ss << '-' << boost::detail::setw(2) << dst_offset().invert_sign().hours();
         }
         else {
-          ss << '+' << std::setw(2) << dst_offset().hours();
+          ss << '+' << boost::detail::setw(2) << dst_offset().hours();
         }
         if(dst_offset().minutes() != 0 || dst_offset().seconds() != 0) {
-          ss << ':' << std::setw(2) << dst_offset().minutes();
+          ss << ':' << boost::detail::setw(2) << dst_offset().minutes();
           if(dst_offset().seconds() != 0) {
-            ss << ':' << std::setw(2) << dst_offset().seconds();
+            ss << ':' << boost::detail::setw(2) << dst_offset().seconds();
           }
         }
         // start/time
         ss << ',' << date_time::convert_string_type<char, char_type>(dst_calc_rules_->start_rule_as_string()) << '/'
-           << std::setw(2) << dst_offsets_.dst_start_offset_.hours() << ':'
-           << std::setw(2) << dst_offsets_.dst_start_offset_.minutes();
+           << boost::detail::setw(2) << dst_offsets_.dst_start_offset_.hours() << ':'
+           << boost::detail::setw(2) << dst_offsets_.dst_start_offset_.minutes();
         if(dst_offsets_.dst_start_offset_.seconds() != 0) {
-          ss << ':' << std::setw(2) << dst_offsets_.dst_start_offset_.seconds();
+          ss << ':' << boost::detail::setw(2) << dst_offsets_.dst_start_offset_.seconds();
         }
         // end/time
         ss << ',' << date_time::convert_string_type<char, char_type>(dst_calc_rules_->end_rule_as_string()) << '/'
-           << std::setw(2) << dst_offsets_.dst_end_offset_.hours() << ':'
-           << std::setw(2) << dst_offsets_.dst_end_offset_.minutes();
+           << boost::detail::setw(2) << dst_offsets_.dst_end_offset_.hours() << ':'
+           << boost::detail::setw(2) << dst_offsets_.dst_end_offset_.minutes();
         if(dst_offsets_.dst_end_offset_.seconds() != 0) {
-          ss << ':' << std::setw(2) << dst_offsets_.dst_end_offset_.seconds();
+          ss << ':' << boost::detail::setw(2) << dst_offsets_.dst_end_offset_.seconds();
         }
       }
 

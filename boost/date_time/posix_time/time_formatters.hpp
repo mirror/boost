@@ -57,11 +57,11 @@ namespace posix_time {
       if(td.is_negative()) {
         ss << '-';
       }
-      ss  << std::setw(2) << std::setfill(fill_char)
+      ss  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
           << date_time::absolute_value(td.hours()) << ":";
-      ss  << std::setw(2) << std::setfill(fill_char)
+      ss  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
           << date_time::absolute_value(td.minutes()) << ":";
-      ss  << std::setw(2) << std::setfill(fill_char)
+      ss  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
           << date_time::absolute_value(td.seconds());
       //TODO the following is totally non-generic, yelling FIXME
 #if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
@@ -75,8 +75,8 @@ namespace posix_time {
         date_time::absolute_value(td.fractional_seconds());
 #endif
       if (frac_sec != 0) {
-        ss  << "." << std::setw(time_duration::num_fractional_digits())
-            << std::setfill(fill_char)
+        ss  << "." << boost::detail::setw(time_duration::num_fractional_digits())
+            << boost::detail::setfill(fill_char)
 
           // JDG [7/6/02 VC++ compatibility]
 #if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
@@ -126,11 +126,11 @@ namespace posix_time {
       if(td.is_negative()) {
         ss << '-';
       }
-      ss  << std::setw(2) << std::setfill(fill_char)
+      ss  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
           << date_time::absolute_value(td.hours());
-      ss  << std::setw(2) << std::setfill(fill_char)
+      ss  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
           << date_time::absolute_value(td.minutes());
-      ss  << std::setw(2) << std::setfill(fill_char)
+      ss  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
           << date_time::absolute_value(td.seconds());
       //TODO the following is totally non-generic, yelling FIXME
 #if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
@@ -144,8 +144,8 @@ namespace posix_time {
         date_time::absolute_value(td.fractional_seconds());
 #endif
       if (frac_sec != 0) {
-        ss  << "." << std::setw(time_duration::num_fractional_digits())
-            << std::setfill(fill_char)
+        ss  << "." << boost::detail::setw(time_duration::num_fractional_digits())
+            << boost::detail::setfill(fill_char)
 
           // JDG [7/6/02 VC++ compatibility]
 #if (defined(BOOST_MSVC) && (_MSC_VER < 1300))

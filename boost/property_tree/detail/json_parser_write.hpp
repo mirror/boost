@@ -15,7 +15,7 @@
 #include <boost/type_traits/make_unsigned.hpp>
 #include <string>
 #include <ostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 namespace boost { namespace property_tree { namespace json_parser
 {

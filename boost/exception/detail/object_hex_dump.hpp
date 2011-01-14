@@ -13,7 +13,7 @@
 #endif
 
 #include <boost/exception/detail/type_info.hpp>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <ios>
 #include <string>
 #include <sstream>
@@ -36,9 +36,9 @@ boost
             s.fill('0');
             s.width(2);
             unsigned char const * b=reinterpret_cast<unsigned char const *>(&x);
-            s << std::setw(2) << std::hex << (unsigned int)*b;
+            s << boost::detail::setw(2) << std::hex << (unsigned int)*b;
             for( unsigned char const * e=b+n; ++b!=e; )
-                s << " " << std::setw(2) << std::hex << (unsigned int)*b;
+                s << " " << boost::detail::setw(2) << std::hex << (unsigned int)*b;
             return s.str();
             }
         }

@@ -9,7 +9,7 @@
 
 #include <boost/chrono/chrono.hpp>
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 using namespace boost::chrono;
 
@@ -41,7 +41,7 @@ int main()
   std::cout << "Strike any key: ";
   std::cin.get();
 
-  std::cout << std::fixed << std::setprecision(9);
+  std::cout << std::fixed << boost::detail::setprecision(9);
   std::cout << "system_clock-----------: "
             << t1.seconds() << " seconds\n";
   std::cout << "steady_clock--------: "

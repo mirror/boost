@@ -10,7 +10,7 @@
 // ----------------------------------------------------------------------------
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <cassert>
 
 #include "boost/format.hpp"
@@ -27,8 +27,8 @@ namespace MyNS_ForOutput {
 }
 
 namespace MyNS_Manips {
-  using std::setfill;
-  using std::setw;
+  using boost::detail::setfill;
+  using boost::detail::setw;
   using std::hex ;
   using std::dec ;
 // gcc-2.95 doesnt define the next ones
@@ -62,7 +62,7 @@ int main(){
 
 
     // Using manipulators, via 'group' :
-    cout << format("%2% %1% %2%\n")  % 1   % group(setfill('X'), hex, setw(4), 16+3) ;
+    cout << format("%2% %1% %2%\n")  % 1   % group(boost::detail::setfill('X'), hex, boost::detail::setw(4), 16+3) ;
     // prints "XX13 1 XX13\n"
 
 

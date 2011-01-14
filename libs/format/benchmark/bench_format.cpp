@@ -23,7 +23,7 @@
 
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <cstdio>  // sprintf
 #include <cstring>
 #include <fstream>
@@ -169,7 +169,7 @@ void test_snprintf()
       sprintf(buf, fstring.c_str(), arg1, arg2, arg3);
     }
     tpf=chrono.elapsed();
-    cout  << left << setw(20) <<"printf time"<< right <<":" << tpf  << endl;
+    cout  << left << boost::detail::setw(20) <<"printf time"<< right <<":" << tpf  << endl;
 }
 
 void test_try1()
@@ -183,7 +183,7 @@ void test_try1()
       dummy += oss.cur_size();
   }
   double t = chrono.elapsed();
-  cout  << left << setw(20) <<"try1 time"<< right <<":" << setw(5) << t
+  cout  << left << boost::detail::setw(20) <<"try1 time"<< right <<":" << boost::detail::setw(5) << t
         << ",  = " << t / tpf << " * printf "
         << ",  = " << t / tstream << " * nullStream \n";
 }
@@ -205,7 +205,7 @@ void test_try2()
       dummy += oss.cur_size();
   }
   double t = chrono.elapsed();
-  cout  << left << setw(20) <<"try2 time"<< right <<":" << setw(5) << t
+  cout  << left << boost::detail::setw(20) <<"try2 time"<< right <<":" << boost::detail::setw(5) << t
         << ",  = " << t / tpf << " * printf "
         << ",  = " << t / tstream << " * nullStream \n";
 }
@@ -213,14 +213,14 @@ void test_try2()
 void do_stream(std::ostream& os) {
     using namespace std;
     std::ios_base::fmtflags f = os.flags();
-    os << hex << showbase << internal << setfill('0') << setw(6) << arg3
-       << dec << noshowbase << right << setfill(' ') 
+    os << hex << showbase << internal << boost::detail::setfill('0') << boost::detail::setw(6) << arg3
+       << dec << noshowbase << right << boost::detail::setfill(' ') 
        << " " 
-       << scientific << setw(20) << setprecision(10) << uppercase << arg1 
-       << setprecision(6) << nouppercase ;
+       << scientific << boost::detail::setw(20) << boost::detail::setprecision(10) << uppercase << arg1 
+       << boost::detail::setprecision(6) << nouppercase ;
     os.flags(f);
     os << " " << arg2 << " " 
-       << showpos << setw(5) << internal << setfill('0') << arg3 << " \n" ;
+       << showpos << boost::detail::setw(5) << internal << boost::detail::setfill('0') << arg3 << " \n" ;
     os.flags(f);
 }
 
@@ -245,14 +245,14 @@ void test_nullstream()
 //       std::ios_base::fmtflags f0 = nullStream.flags();
 //       nullStream << hex << showbase << arg3
 //                  << dec << noshowbase << " " 
-//                  << scientific << setw(20) << setprecision(10) << uppercase <<  arg1 
-//                  << setprecision(0);
+//                  << scientific << boost::detail::setw(20) << boost::detail::setprecision(10) << uppercase <<  arg1 
+//                  << boost::detail::setprecision(0);
 //       nullStream.flags(f0);
 //       nullStream << " " << arg2 << " " << arg3 << " \n" ;
 
 //     }
     double t = chrono.elapsed();
-    cout  << left << setw(20) <<"ostream time"<< right <<":" << setw(5) << t  
+    cout  << left << boost::detail::setw(20) <<"ostream time"<< right <<":" << boost::detail::setw(5) << t  
           << ",  = " << t / tpf << " * printf \n";
     tstream = t;
 }
@@ -272,7 +272,7 @@ void test_opti_nullstream()
       oss << arg3;
 
       oss.flags(f0);
-      oss << " " << scientific << setw(20) << setprecision(10) << uppercase;
+      oss << " " << scientific << boost::detail::setw(20) << boost::detail::setprecision(10) << uppercase;
       f2 = oss.flags();
       oss << arg1;
 
@@ -288,7 +288,7 @@ void test_opti_nullstream()
       nullStream.flags(f1);
       nullStream << arg3;
 
-      nullStream << setw(20) << setprecision(10);
+      nullStream << boost::detail::setw(20) << boost::detail::setprecision(10);
       nullStream.flags(f2);
       nullStream << arg1;
 
@@ -296,7 +296,7 @@ void test_opti_nullstream()
       nullStream << " " << arg2 << " " << arg3 << " \n" ;
     }
     double t = chrono.elapsed();
-    cout  << left << setw(20) <<"opti-stream time"<< right <<":" << setw(5) << t  
+    cout  << left << boost::detail::setw(20) <<"opti-stream time"<< right <<":" << boost::detail::setw(5) << t  
           << ",  = " << t / tpf << " * printf \n";
     //    tstream = t;
 }
@@ -320,7 +320,7 @@ void test_parsed_once_format()
         nullStream << boost::format(fmter) % arg1 % arg2 % arg3;
     }
     double t=chrono.elapsed();
-    cout  << left << setw(20) <<"parsed-once time"<< right <<":" << setw(5) << t 
+    cout  << left << boost::detail::setw(20) <<"parsed-once time"<< right <<":" << boost::detail::setw(5) << t 
           << ",  = " << t / tpf << " * printf "
           << ",  = " << t / tstream << " * nullStream \n";
 }
@@ -340,7 +340,7 @@ void test_reused_format()
     nullStream << fmter.parse(fstring) % arg1 % arg2 % arg3;
   }
   double t = chrono.elapsed();
-  cout  << left << setw(20) <<"reused format time"<< right <<":" << setw(5) << t
+  cout  << left << boost::detail::setw(20) <<"reused format time"<< right <<":" << boost::detail::setw(5) << t
         << ",  = " << t / tpf << " * printf "
         << ",  = " << t / tstream << " * nullStream \n";
 }
@@ -359,7 +359,7 @@ void test_format()
     nullStream << boost::format(fstring) % arg1 % arg2 % arg3;
   }
   double t = chrono.elapsed();
-  cout  << left << setw(20) <<"format time"<< right <<":" << setw(5) << t
+  cout  << left << boost::detail::setw(20) <<"format time"<< right <<":" << boost::detail::setw(5) << t
         << ",  = " << t / tpf << " * printf "
         << ",  = " << t / tstream << " * nullStream \n";
 }
@@ -380,7 +380,7 @@ void test_format3()
     nullStream << KNelson::boost::format(fstring.c_str(), arg1, arg2, arg3);
   }
   double t = chrono.elapsed();
-  cout  << left << setw(20) <<"format3 time"<< right <<":" << setw(5) << t
+  cout  << left << boost::detail::setw(20) <<"format3 time"<< right <<":" << boost::detail::setw(5) << t
         << ",  = " << t / tpf << " * printf "
         << ",  = " << t / tstream << " * nullStream \n" ;
 }

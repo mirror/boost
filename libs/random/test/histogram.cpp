@@ -12,7 +12,7 @@
  */
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <vector>
 #include <algorithm>
 #include <cmath>
@@ -29,7 +29,7 @@ void plot_histogram(const std::vector<int>& slots, int samples,
   std::cout.precision(5);
   for(int r = 0; r < nRows; r++) {
     double y = ((nRows - r) * double(m))/(nRows * samples);
-    std::cout << std::setw(10) << y << "  ";
+    std::cout << boost::detail::setw(10) << y << "  ";
     for(unsigned int col = 0; col < slots.size(); col++) {
       char out = ' ';
       if(slots[col]/double(samples) >= y)
@@ -38,10 +38,10 @@ void plot_histogram(const std::vector<int>& slots, int samples,
     }
     std::cout << std::endl;
   }
-  std::cout << std::setw(12) << " "
-            << std::setw(10) << from;
+  std::cout << boost::detail::setw(12) << " "
+            << boost::detail::setw(10) << from;
   std::cout.setf(std::ios::right, std::ios::adjustfield);
-  std::cout << std::setw(slots.size()-10) << to << std::endl;
+  std::cout << boost::detail::setw(slots.size()-10) << to << std::endl;
 }
 
 // I am not sure whether these two should be in the library as well

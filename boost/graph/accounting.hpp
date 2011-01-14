@@ -9,7 +9,7 @@
 #ifndef BOOST_GRAPH_ACCOUNTING_HPP
 #define BOOST_GRAPH_ACCOUNTING_HPP
 
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -27,7 +27,7 @@ inline time_type get_time()
 inline std::string print_time(time_type t)
 {
   std::ostringstream out;
-  out << std::setiosflags(std::ios::fixed) << std::setprecision(2) << t;
+  out << boost::detail::setiosflags(std::ios::fixed) << boost::detail::setprecision(2) << t;
   return out.str();
 }
 

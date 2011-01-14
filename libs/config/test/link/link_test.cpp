@@ -10,7 +10,7 @@
 
 #include "link_test.hpp"
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 bool BOOST_CONFIG_DECL check_options(
                    bool m_dyn_link,

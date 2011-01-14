@@ -6,7 +6,7 @@
 //
 //
 #include<iostream>
-#include<iomanip>
+#include<boost/detail/iomanip.hpp>
 #include<string>
 #include<typeinfo>
 #include<vector>
@@ -331,7 +331,7 @@ void test_traits()
 
 int test_main( int, char * [])
 {
-  std::cout << std::setprecision( std::numeric_limits<long double>::digits10 ) ;
+  std::cout << boost::detail::setprecision( std::numeric_limits<long double>::digits10 ) ;
   
   test_traits();
 

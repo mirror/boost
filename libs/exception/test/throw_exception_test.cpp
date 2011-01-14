@@ -15,6 +15,9 @@ struct
 exception1:
     std::exception
     {
+    #if defined(__PATHSCALE__)
+    ~exception1() throw() {}
+    #endif
     };
 
 struct
@@ -22,6 +25,9 @@ exception2:
     std::exception,
     boost::exception
     {
+    #if defined(__PATHSCALE__)
+    ~exception2() throw() {}
+    #endif
     };
 
 void

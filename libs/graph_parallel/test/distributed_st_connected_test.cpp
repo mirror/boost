@@ -19,7 +19,7 @@
 #include <boost/graph/small_world_generator.hpp>
 #include <iostream>
 #include <cstdlib>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <boost/random.hpp>
 #include <boost/test/minimal.hpp>
 

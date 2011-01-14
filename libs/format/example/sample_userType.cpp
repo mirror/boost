@@ -12,7 +12,7 @@
 
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include "boost/format.hpp"
 
 
@@ -114,7 +114,7 @@ std::ostream& operator<<(std::ostream& os, const Rational& r) {
     else {
       n2 -= s2-s1; // adjust for '/',   n2 is still w/2.
     }
-    os << setw(n1) << r.n_ << "/" << noshowpos << setw(n2) << r.d_;
+    os << boost::detail::setw(n1) << r.n_ << "/" << noshowpos << boost::detail::setw(n2) << r.d_;
   }
   else {
     if(! (os.flags() & std::ios_base::left)) { 

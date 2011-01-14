@@ -9,7 +9,7 @@
  */
 
 #include <string>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <sstream>
 #include <stdexcept>
 #include <boost/shared_ptr.hpp>
@@ -510,10 +510,10 @@ namespace local_time {
       else {
         ss << "+";
       }
-      ss  << std::setw(2) << std::setfill('0')
+      ss  << boost::detail::setw(2) << boost::detail::setfill('0')
           << date_time::absolute_value(td.hours())
           << separator
-          << std::setw(2) << std::setfill('0')
+          << boost::detail::setw(2) << boost::detail::setfill('0')
           << date_time::absolute_value(td.minutes());
       return ss.str();
     }

@@ -32,7 +32,7 @@ Output:
 @endverbatim
 **/
 
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 
 #include <boost/units/absolute.hpp>

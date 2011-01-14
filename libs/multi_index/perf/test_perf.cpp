@@ -19,7 +19,7 @@
 #include <boost/next_prior.hpp>
 #include <climits>
 #include <ctime>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 #include <list>
 #include <set>
@@ -344,17 +344,17 @@ void run_tests(
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(IndexedTest)
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(ManualTest))
 {
-  cout<<fixed<<setprecision(2);
+  cout<<fixed<<boost::detail::setprecision(2);
   cout<<title<<endl;
   int n=1000;
   for(int i=0;i<3;++i){
     double indexed_t=measure(IndexedTest(n));
     double manual_t=measure(ManualTest(n));
     cout<<"  10^"<<i+3<<" elmts: "
-        <<setw(6)<<100.0*indexed_t/manual_t<<"% "
+        <<boost::detail::setw(6)<<100.0*indexed_t/manual_t<<"% "
         <<"("
-          <<setw(6)<<1000.0*indexed_t/CLOCKS_PER_SEC<<" ms / "
-          <<setw(6)<<1000.0*manual_t/CLOCKS_PER_SEC<<" ms)"
+          <<boost::detail::setw(6)<<1000.0*indexed_t/CLOCKS_PER_SEC<<" ms / "
+          <<boost::detail::setw(6)<<1000.0*manual_t/CLOCKS_PER_SEC<<" ms)"
         <<endl;
     n*=10;
   }
@@ -364,7 +364,7 @@ void run_tests(
 
   if(manual_t_node_size){
     cout<<"  space gain: "
-        <<setw(6)<<100.0*indexed_t_node_size/manual_t_node_size<<"%"<<endl;
+        <<boost::detail::setw(6)<<100.0*indexed_t_node_size/manual_t_node_size<<"%"<<endl;
   }
 }
 

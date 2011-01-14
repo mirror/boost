@@ -19,7 +19,7 @@
 #include "boost/date_time/parse_format_base.hpp"
 //#include <string>
 #include <sstream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 
 namespace boost {
@@ -57,7 +57,7 @@ namespace date_time {
         case month_as_integer:
         {
           charT fill_char = '0';
-          os << std::setw(2) << std::setfill(fill_char) << month.as_number();
+          os << boost::detail::setw(2) << boost::detail::setfill(fill_char) << month.as_number();
           break;
         }
 
@@ -144,7 +144,7 @@ namespace date_time {
           if (f.has_date_sep_chars()) {
             f.day_sep_char(oitr);
           }
-          os  << std::setw(2) << std::setfill(fill_char)
+          os  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
               << ymd.day;
           break;
         }
@@ -153,7 +153,7 @@ namespace date_time {
           if (f.has_date_sep_chars()) {
           f.day_sep_char(oitr);
           }
-          os  << std::setw(2) << std::setfill(fill_char)
+          os  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
             << ymd.day;
           if (f.has_date_sep_chars()) {
             f.month_sep_char(oitr);
@@ -162,7 +162,7 @@ namespace date_time {
           break;
         }
         case ymd_order_dmy: {
-          os  << std::setw(2) << std::setfill(fill_char)
+          os  << boost::detail::setw(2) << boost::detail::setfill(fill_char)
               << ymd.day;
           if (f.has_date_sep_chars()) {
             f.day_sep_char(oitr);

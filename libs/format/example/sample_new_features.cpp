@@ -11,7 +11,7 @@
 // ----------------------------------------------------------------------------
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 #include "boost/format.hpp"
 

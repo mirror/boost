@@ -9,7 +9,7 @@
 //
 #include<cstdlib>
 #include<iostream>
-#include<iomanip>
+#include<boost/detail/iomanip.hpp>
 #include<string>
 #include<typeinfo>
 #include<vector>
@@ -547,7 +547,7 @@ void test_optimizations()
 
 int test_main( int, char* argv[] )
 {
-  std::cout << std::setprecision( std::numeric_limits<long double>::digits10 ) ;
+  std::cout << boost::detail::setprecision( std::numeric_limits<long double>::digits10 ) ;
 
   test_conversions();
   test_overflow_handlers( SET_FNTPL_ARG(boost::int16_t), SET_FNTPL_ARG(boost::int32_t));

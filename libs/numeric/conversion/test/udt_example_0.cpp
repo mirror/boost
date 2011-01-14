@@ -11,7 +11,7 @@
 #include "boost/utility.hpp"
 
 #include<iostream>
-#include<iomanip>
+#include<boost/detail/iomanip.hpp>
 #include<string>
 #include<cmath>
 
@@ -224,7 +224,7 @@ void custom_raw_converter2()
 
 int test_main( int, char* [] )
 {
-  cout << setprecision( numeric_limits<long double>::digits10 ) ;
+  cout << boost::detail::setprecision( numeric_limits<long double>::digits10 ) ;
 
   simplest_case();
   rounding();

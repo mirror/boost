@@ -24,7 +24,7 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 #ifdef BOOST_NO_EXCEPTIONS
 void
@@ -48,7 +48,7 @@ inline time_type get_time()
 std::string print_time(time_type t)
 {
   std::ostringstream out;
-  out << std::setiosflags(std::ios::fixed) << std::setprecision(2) << t;
+  out << boost::detail::setiosflags(std::ios::fixed) << boost::detail::setprecision(2) << t;
   return out.str();
 }
 

@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <utility>
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 template <class I> I f(const I& x)
 { return x * (x - 1.) * (x - 2.) * (x - 3.) * (x - 4.); }
@@ -130,7 +130,7 @@ int main() {
   {
     I1_aux::traits_type::rounding rnd;
     std::vector<I1> res = newton_raphson(I1(-1, 5.1));
-    std::cout << "Results: " << std::endl << std::setprecision(12);
+    std::cout << "Results: " << std::endl << boost::detail::setprecision(12);
     for(std::vector<I1>::const_iterator i = res.begin(); i != res.end(); ++i)
       std::cout << "  " << *i << std::endl;
     std::cout << std::endl;
@@ -138,7 +138,7 @@ int main() {
   {
     I2_aux::traits_type::rounding rnd;
     std::vector<I2> res = newton_raphson(I2(-1, 5.1));
-    std::cout << "Results: " << std::endl << std::setprecision(12);
+    std::cout << "Results: " << std::endl << boost::detail::setprecision(12);
     for(std::vector<I2>::const_iterator i = res.begin(); i != res.end(); ++i)
       std::cout << "  " << *i << std::endl;
     std::cout << std::endl;

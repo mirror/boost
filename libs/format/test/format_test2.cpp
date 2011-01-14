@@ -10,10 +10,10 @@
 
 // ------------------------------------------------------------------------------
 
-#include "boost/format.hpp"
+#include <boost/format.hpp>
 
 #include <iostream> 
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 
 #define BOOST_INCLUDE_MAIN 
 #include <boost/test/test_tools.hpp>
@@ -41,7 +41,7 @@ int test_main(int, char* [])
 
     string s;
     s = str(format("%5%. %5$=6s . %1% format %5%, c'%3% %1% %2%.\n") 
-            % "le" % "bonheur" % "est" % "trop" % group(setfill('_'), "bref") );
+            % "le" % "bonheur" % "est" % "trop" % group(boost::detail::setfill('_'), "bref") );
 
     if(s  != "bref. _bref_ . le format bref, c'est le bonheur.\n") {
       cerr << s;
@@ -78,12 +78,12 @@ int test_main(int, char* [])
       BOOST_ERROR("(truncation) formatting result incorrect");
     }
 
-   // width in format-string is overridden by setw manipulator :
-    s = str( format("%|1$4| %|1$|") % group(setfill('0'), setw(6), 1) );
+   // width in format-string is overridden by boost::detail::setw manipulator :
+    s = str( format("%|1$4| %|1$|") % group(boost::detail::setfill('0'), boost::detail::setw(6), 1) );
     if( s!= "000001 000001")
       BOOST_ERROR("width in format VS in argument misbehaved");
 
-    s = str( format("%|=s|") % group(setfill('_'), setw(6), r) );
+    s = str( format("%|=s|") % group(boost::detail::setfill('_'), boost::detail::setw(6), r) );
     if( s!= "_16/9_") {
       cerr << s << endl;
       BOOST_ERROR("width in group context is not handled correctly");
@@ -99,7 +99,7 @@ int test_main(int, char* [])
     // and hex in argument overrrides type-char d (->decimal) :
     s = str( format("%2$#4d %|1$4| %|2$#4| %|3$|")  
              % 101
-             % group(setfill('_'), hex, 2)
+             % group(boost::detail::setfill('_'), hex, 2)
              % 103 );
     if(s != "_0x2  101 _0x2 103")
       BOOST_ERROR("formatting error. (not-restoring state ?)");
