@@ -8,6 +8,7 @@
 #ifndef BOOST_DETAIL_IOMANIP_HPP
 #define BOOST_DETAIL_IOMANIP_HPP
 
+#include <ios>
 #include <istream>
 #include <ostream>
 
@@ -93,13 +94,13 @@ class setbase_manip {
     using namespace std;
     switch (x.base) {
       case 8:
-        is.setf(ios_base::oct, ios_base::basefield);
+        is << std::oct; 
         return is;
       case 10:
-        is.setf(ios_base::dec, ios_base::basefield);
+        is << std::dec;
         return is;
       case 16:
-        is.setf(ios_base::hex, ios_base::basefield);
+        is << std::hex; 
         return is;
       default:
         is.setf(ios_base::fmtflags(0), ios_base::basefield);
@@ -113,13 +114,13 @@ class setbase_manip {
     using namespace std;
     switch (x.base) {
       case 8:
-        os.setf(ios_base::oct, ios_base::basefield);
+        os << std::oct; 
         return os;
       case 10:
-        os.setf(ios_base::dec, ios_base::basefield);
+        os << std::dec;
         return os;
       case 16:
-        os.setf(ios_base::hex, ios_base::basefield);
+        os << std::hex; 
         return os;
       default:
         os.setf(ios_base::fmtflags(0), ios_base::basefield);
