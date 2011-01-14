@@ -71,9 +71,10 @@ struct tracking_greater_equal: std::binary_function <T, T, bool> {
   }
 };
 
+
 int main (void) {
-  using boost::detail::is_sorted;
-  using boost::detail::is_sorted_until;
+  #define IS_SORTED ::boost::detail::is_sorted
+  #define IS_SORTED_UNTIL ::boost::detail::is_sorted_until
   using boost::array;
   using boost::report_errors;
 
@@ -88,41 +89,41 @@ int main (void) {
   tracking_greater<int> gt;
   tracking_greater_equal<int> gte;
 
-  BOOST_TEST_EQ(is_sorted_until(a.begin(), a.end()),          a.end());
-  BOOST_TEST_EQ(is_sorted_until(a.begin(), a.end(), lt),      a.end());
-  BOOST_TEST_EQ(is_sorted_until(a.begin(), a.end(), lte),     a.end());
-  BOOST_TEST_EQ(*is_sorted_until(a.rbegin(), a.rend(), gt),   *a.rend());
-  BOOST_TEST_EQ(*is_sorted_until(a.rbegin(), a.rend(), gte),  *a.rend());
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(a.begin(), a.end()),          a.end());
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(a.begin(), a.end(), lt),      a.end());
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(a.begin(), a.end(), lte),     a.end());
+  BOOST_TEST_EQ(*IS_SORTED_UNTIL(a.rbegin(), a.rend(), gt),   *a.rend());
+  BOOST_TEST_EQ(*IS_SORTED_UNTIL(a.rbegin(), a.rend(), gte),  *a.rend());
   
-  BOOST_TEST_EQ(is_sorted(a.begin(), a.end()),        true);
-  BOOST_TEST_EQ(is_sorted(a.begin(), a.end(), lt),    true);
-  BOOST_TEST_EQ(is_sorted(a.begin(), a.end(), lte),   true);
-  BOOST_TEST_EQ(is_sorted(a.rbegin(), a.rend(), gt),  true);
-  BOOST_TEST_EQ(is_sorted(a.rbegin(), a.rend(), gte), true);
+  BOOST_TEST_EQ(IS_SORTED(a.begin(), a.end()),        true);
+  BOOST_TEST_EQ(IS_SORTED(a.begin(), a.end(), lt),    true);
+  BOOST_TEST_EQ(IS_SORTED(a.begin(), a.end(), lte),   true);
+  BOOST_TEST_EQ(IS_SORTED(a.rbegin(), a.rend(), gt),  true);
+  BOOST_TEST_EQ(IS_SORTED(a.rbegin(), a.rend(), gte), true);
 
-  BOOST_TEST_EQ(is_sorted_until(b.begin(), b.end()),          b.end());
-  BOOST_TEST_EQ(is_sorted_until(b.begin(), b.end(), lt),      b.end());
-  BOOST_TEST_EQ(is_sorted_until(b.begin(), b.end(), lte),     &b[2]);
-  BOOST_TEST_EQ(*is_sorted_until(b.rbegin(), b.rend(), gt),   *b.rend());
-  BOOST_TEST_EQ(*is_sorted_until(b.rbegin(), b.rend(), gte),  b[2]);
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(b.begin(), b.end()),          b.end());
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(b.begin(), b.end(), lt),      b.end());
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(b.begin(), b.end(), lte),     &b[2]);
+  BOOST_TEST_EQ(*IS_SORTED_UNTIL(b.rbegin(), b.rend(), gt),   *b.rend());
+  BOOST_TEST_EQ(*IS_SORTED_UNTIL(b.rbegin(), b.rend(), gte),  b[2]);
   
-  BOOST_TEST_EQ(is_sorted(b.begin(), b.end()),        true); 
-  BOOST_TEST_EQ(is_sorted(b.begin(), b.end(), lt),    true); 
-  BOOST_TEST_EQ(is_sorted(b.begin(), b.end(), lte),   false); 
-  BOOST_TEST_EQ(is_sorted(b.rbegin(), b.rend(), gt),  true);
-  BOOST_TEST_EQ(is_sorted(b.rbegin(), b.rend(), gte), false); 
+  BOOST_TEST_EQ(IS_SORTED(b.begin(), b.end()),        true); 
+  BOOST_TEST_EQ(IS_SORTED(b.begin(), b.end(), lt),    true); 
+  BOOST_TEST_EQ(IS_SORTED(b.begin(), b.end(), lte),   false); 
+  BOOST_TEST_EQ(IS_SORTED(b.rbegin(), b.rend(), gt),  true);
+  BOOST_TEST_EQ(IS_SORTED(b.rbegin(), b.rend(), gte), false); 
 
-  BOOST_TEST_EQ(is_sorted_until(c.begin(), c.end()),          &c[2]);
-  BOOST_TEST_EQ(is_sorted_until(c.begin(), c.end(), lt),      &c[2]);
-  BOOST_TEST_EQ(is_sorted_until(c.begin(), c.end(), lte),     &c[2]);
-  BOOST_TEST_EQ(*is_sorted_until(c.rbegin(), c.rend(), gt),   c[7]);
-  BOOST_TEST_EQ(*is_sorted_until(c.rbegin(), c.rend(), gte),  c[7]);
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(c.begin(), c.end()),          &c[2]);
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(c.begin(), c.end(), lt),      &c[2]);
+  BOOST_TEST_EQ(IS_SORTED_UNTIL(c.begin(), c.end(), lte),     &c[2]);
+  BOOST_TEST_EQ(*IS_SORTED_UNTIL(c.rbegin(), c.rend(), gt),   c[7]);
+  BOOST_TEST_EQ(*IS_SORTED_UNTIL(c.rbegin(), c.rend(), gte),  c[7]);
   
-  BOOST_TEST_EQ(is_sorted(c.begin(), c.end()),        false);
-  BOOST_TEST_EQ(is_sorted(c.begin(), c.end(), lt),    false);
-  BOOST_TEST_EQ(is_sorted(c.begin(), c.end(), lte),   false);
-  BOOST_TEST_EQ(is_sorted(c.rbegin(), c.rend(), gt),  false);
-  BOOST_TEST_EQ(is_sorted(c.rbegin(), c.rend(), gte), false);
+  BOOST_TEST_EQ(IS_SORTED(c.begin(), c.end()),        false);
+  BOOST_TEST_EQ(IS_SORTED(c.begin(), c.end(), lt),    false);
+  BOOST_TEST_EQ(IS_SORTED(c.begin(), c.end(), lte),   false);
+  BOOST_TEST_EQ(IS_SORTED(c.rbegin(), c.rend(), gt),  false);
+  BOOST_TEST_EQ(IS_SORTED(c.rbegin(), c.rend(), gte), false);
 
   return report_errors();
 }
