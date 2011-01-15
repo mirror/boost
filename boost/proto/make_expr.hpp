@@ -33,7 +33,6 @@
     #include <boost/mpl/assert.hpp>
     #include <boost/mpl/eval_if.hpp>
     #include <boost/utility/enable_if.hpp>
-    #include <boost/type_traits/is_same.hpp>
     #include <boost/type_traits/add_const.hpp>
     #include <boost/type_traits/add_reference.hpp>
     #include <boost/type_traits/remove_cv.hpp>
