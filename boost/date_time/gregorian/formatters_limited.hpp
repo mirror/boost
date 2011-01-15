@@ -65,10 +65,10 @@ namespace gregorian {
     date::ymd_type ymd = d.year_month_day();
     std::ostringstream ss;
     ss << ymd.year << "-"
-       << boost::detail::setw(2) << boost::detail::setfill('0') 
+       << std::setw(2) << std::setfill('0') 
        << ymd.month.as_number() //solves problem with gcc 3.1 hanging
        << "-"
-       << boost::detail::setw(2) << boost::detail::setfill('0') 
+       << std::setw(2) << std::setfill('0') 
        << ymd.day;
     return ss.str();
   }

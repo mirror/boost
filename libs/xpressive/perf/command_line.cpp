@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <fstream>
 #include <deque>
 #include <sstream>
@@ -138,7 +138,7 @@ struct xml_double
     friend std::ostream & operator<<( std::ostream & out, xml_double const & xd )
     {
         std::ostringstream tmp;
-        tmp << boost::detail::setprecision(out.precision()) << xd.d_;
+        tmp << std::setprecision(out.precision()) << xd.d_;
         std::string str = tmp.str();
         std::string::size_type i = str.find( '-' );
         if( i != std::string::npos )
@@ -168,12 +168,12 @@ void print_result(std::ostream& os, double time, double best)
     if(highlight)
         os << "<phrase role=\"highlight\">";
     if(rel <= 1000)
-        os << boost::detail::setprecision(3) << xml_double(rel);
+        os << std::setprecision(3) << xml_double(rel);
     else
         os << (int)rel;
     os << "<para/>(";
     if(time <= 1000)
-        os << boost::detail::setprecision(3) << xml_double(time);
+        os << std::setprecision(3) << xml_double(time);
     else
         os << (int)time;
     os << suffixes[suffix] << ")";

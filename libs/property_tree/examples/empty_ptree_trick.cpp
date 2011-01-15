@@ -11,7 +11,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <string>
 
 using namespace boost::property_tree;

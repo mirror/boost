@@ -10,7 +10,7 @@
  */
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <fstream>
 #include <deque>
 #include <sstream>
@@ -232,12 +232,12 @@ void print_result(std::ostream& os, double time, double best)
    if(highlight)
       os << "<font color=\"#008000\">";
    if(rel <= 1000)
-      os << boost::detail::setprecision(3) << rel;
+      os << std::setprecision(3) << rel;
    else
       os << (int)rel;
    os << "<BR>(";
    if(time <= 1000)
-      os << boost::detail::setprecision(3) << time;
+      os << std::setprecision(3) << time;
    else
       os << (int)time;
    os << suffixes[suffix] << ")";

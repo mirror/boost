@@ -19,7 +19,7 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/tokenizer.hpp>
 #include <algorithm>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <string>
@@ -66,9 +66,9 @@ int main()
 
   ordered_text& ot=get<1>(tc);
   for(ordered_text::iterator it=ot.begin();it!=ot.end();){
-    std::cout<<std::left<<boost::detail::setw(14)<<*it<<":";  /* print the word */
+    std::cout<<std::left<<std::setw(14)<<*it<<":";  /* print the word */
     ordered_text::iterator it2=ot.upper_bound(*it); /* jump to next   */
-    std::cout<<std::right<<boost::detail::setw(3)   /* and compute the distance */
+    std::cout<<std::right<<std::setw(3)   /* and compute the distance */
              <<std::distance(it,it2)<<" times"<<std::endl;
     it=it2;
   }

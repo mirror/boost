@@ -16,7 +16,7 @@
 #include <boost/lexical_cast.hpp>
 #include <string>
 #include <sstream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #ifndef BOOST_NO_STD_WSTRING
 namespace std {
@@ -56,11 +56,11 @@ int main(int, char*[])
         BOOST_TEST_EQ(ss4.str(), "12345678-90AB-CDEF-1234-567890ABCDEF");
         
         std::stringstream ss5;
-        ss5 << 'a' << std::right << boost::detail::setfill('*') << boost::detail::setw(40) << u1 << 'a';
+        ss5 << 'a' << std::right << std::setfill('*') << std::setw(40) << u1 << 'a';
         BOOST_TEST_EQ(ss5.str(), "a****00000000-0000-0000-0000-000000000000a");
         
         std::stringstream ss6;
-        ss6 << std::left << boost::detail::setfill('*') << boost::detail::setw(45) << u1;
+        ss6 << std::left << std::setfill('*') << std::setw(45) << u1;
         BOOST_TEST_EQ(ss6.str(), "00000000-0000-0000-0000-000000000000*********");
     }
 
@@ -83,11 +83,11 @@ int main(int, char*[])
         BOOST_TEST_EQ(ss4.str(), L"12345678-90AB-CDEF-1234-567890ABCDEF");
         
         std::wstringstream ss5;
-        ss5 << L'a' << std::right << boost::detail::setfill(L'*') << boost::detail::setw(40) << u1 << L'a';
+        ss5 << L'a' << std::right << std::setfill(L'*') << std::setw(40) << u1 << L'a';
         BOOST_TEST_EQ(ss5.str(), L"a****00000000-0000-0000-0000-000000000000a");
         
         std::wstringstream ss6;
-        ss6 << std::left << boost::detail::setfill(L'*') << boost::detail::setw(45) << u1;
+        ss6 << std::left << std::setfill(L'*') << std::setw(45) << u1;
         BOOST_TEST_EQ(ss6.str(), L"00000000-0000-0000-0000-000000000000*********");
     }
 #endif

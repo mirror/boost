@@ -21,12 +21,12 @@ std::string tm_out(const tm& ptr){
 
   ss 
     << ptr.tm_wday << ' ' << ptr.tm_yday << ' '
-    << boost::detail::setw(2) << boost::detail::setfill('0') << ptr.tm_mon + 1 << '/'
-    << boost::detail::setw(2) << boost::detail::setfill('0') << ptr.tm_mday << '/'
-    << boost::detail::setw(2) << boost::detail::setfill('0') << ptr.tm_year + 1900 << ' '
-    << boost::detail::setw(2) << boost::detail::setfill('0') << ptr.tm_hour << ':'
-    << boost::detail::setw(2) << boost::detail::setfill('0') << ptr.tm_min << ':'
-    << boost::detail::setw(2) << boost::detail::setfill('0') << ptr.tm_sec << ' ';
+    << std::setw(2) << std::setfill('0') << ptr.tm_mon + 1 << '/'
+    << std::setw(2) << std::setfill('0') << ptr.tm_mday << '/'
+    << std::setw(2) << std::setfill('0') << ptr.tm_year + 1900 << ' '
+    << std::setw(2) << std::setfill('0') << ptr.tm_hour << ':'
+    << std::setw(2) << std::setfill('0') << ptr.tm_min << ':'
+    << std::setw(2) << std::setfill('0') << ptr.tm_sec << ' ';
   if(ptr.tm_isdst >= 0){
     ss << (ptr.tm_isdst ? "DST" : "STD");
   }

@@ -9,7 +9,7 @@
 // 
 #include<typeinfo>
 #include<iostream>
-#include<boost/detail/iomanip.hpp>    
+#include<iomanip>    
 
 #include "boost/numeric/conversion/bounds.hpp"
 
@@ -92,7 +92,7 @@ void test_bounds()
 
 int test_main( int, char * [] )
 {
-  cout << boost::detail::setprecision( std::numeric_limits<long double>::digits10 ) ;
+  cout << setprecision( std::numeric_limits<long double>::digits10 ) ;
 
   test_bounds();
 

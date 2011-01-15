@@ -67,7 +67,7 @@
 #include <boost/intrusive_ptr.hpp>
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <cstddef> // size_t
 
 #ifdef BOOST_INTEL
@@ -126,7 +126,7 @@ void DisplayBits( unsigned int number )
     buffer[ bit ] = number & ( 1 << ( NO_OF_BITS - bit - 1 ) ) ? '1' : '0';
   }
 
-  std::cout << "Current state: " << boost::detail::setw( 4 ) <<
+  std::cout << "Current state: " << std::setw( 4 ) <<
     number << " (" << buffer << ")" << std::endl;
 }
 

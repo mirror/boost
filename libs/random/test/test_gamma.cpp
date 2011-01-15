@@ -36,9 +36,9 @@ bool do_test(double alpha, double beta, int max) {
 
     bool result = prob < 0.99;
     const char* err = result? "" : "*";
-    std::cout << boost::detail::setprecision(17) << prob << err << std::endl;
+    std::cout << std::setprecision(17) << prob << err << std::endl;
 
-    std::cout << boost::detail::setprecision(6);
+    std::cout << std::setprecision(6);
 
     return result;
 }

@@ -13,7 +13,7 @@
 #include <set>
 #include <iostream>
 // What's the proper BOOST_ flag for <iomanip.h> vs <ios>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #include <boost/timer.hpp>
 #include <boost/algorithm/minmax.hpp>
@@ -58,14 +58,14 @@ int repeats = 10;
 #define TIMER( n, cmd , cmdname ) \
   t.restart(); \
   for (int i=0; i<repeats; ++i) { cmd ; } \
-  std::cout << "    " << boost::detail::setprecision(4) \
+  std::cout << "    " << std::setprecision(4) \
             << (double)n*repeats/t.elapsed()/1.0E6 \
             << "M items/sec  " << cmdname << "\n"
 
 #define CTIMER( n, cmd , cmdname, count, opt ) \
   t.restart(); lc.reset(); \
   for (int i=0; i<repeats; ++i) { cmd ; } \
-  std::cout << "    " << boost::detail::setprecision(4) \
+  std::cout << "    " << std::setprecision(4) \
             << (double)n*repeats/t.elapsed()/1.0E6 \
             << "M items/sec  " << cmdname \
             << " ("<< (count)/repeats << " vs " << opt << ")\n"

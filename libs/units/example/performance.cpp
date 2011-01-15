@@ -35,7 +35,7 @@ solving y' = 1 - x + 4 * y with quantity: 1.84 seconds
 #include <ctime>
 #include <algorithm>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #include <boost/config.hpp>
 #include <boost/timer.hpp>
@@ -332,7 +332,7 @@ int main() {
             double diff =
                 std::abs(ublas_result(i,j) - cresult[i * max_value + j]);
             if(diff > ublas_result(i,j) /1e14) {
-                std::cout << boost::detail::setprecision(15) << "Uh Oh. ublas_result("
+                std::cout << std::setprecision(15) << "Uh Oh. ublas_result("
                           << i << "," << j << ") = " << ublas_result(i,j)
                           << std::endl
                           << "cresult[" << i << " * " << max_value << " + "
@@ -355,7 +355,7 @@ int main() {
             double x = .1 * i;
             double value = 1.0/4.0 * x - 3.0/16.0 + 19.0/16.0 * std::exp(4 * x);
             if(std::abs(values[i] - value) > value / 1e9) {
-                std::cout << boost::detail::setprecision(15) << "i = : " << i
+                std::cout << std::setprecision(15) << "i = : " << i
                           << ", value = " << value << " approx = "  << values[i]
                           << std::endl;
                 return(EXIT_FAILURE);
@@ -383,7 +383,7 @@ int main() {
             quantity<si::length> value =
                 (1.0/4.0 * x - 3.0/16.0 + 19.0/16.0 * std::exp(4 * x)) * meters;
             if(abs(values[i] - value) > value / 1e9) {
-                std::cout << boost::detail::setprecision(15) << "i = : " << i
+                std::cout << std::setprecision(15) << "i = : " << i
                           << ", value = " << value << " approx = "
                           << values[i] << std::endl;
                 return(EXIT_FAILURE);

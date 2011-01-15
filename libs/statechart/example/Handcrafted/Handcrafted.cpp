@@ -17,7 +17,7 @@
 #include <boost/config.hpp>
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <ctime>
 
 #ifdef BOOST_NO_STDC_NAMESPACE

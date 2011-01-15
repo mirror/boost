@@ -12,10 +12,9 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include <ios>
 #include <iostream>
 #include <fstream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <string>
 #include <vector>
 
@@ -45,9 +44,9 @@ operator<< (std::ostream &stream, lex_token<PositionT> const &t)
     using namespace boost::wave;
 
     token_id id = token_id(t);
-    stream << boost::detail::setw(16) 
+    stream << setw(16) 
         << left << boost::wave::get_token_name(id) << " ("
-        << "#" << boost::detail::setw(3) << BASEID_FROM_TOKEN(id);
+        << "#" << setw(3) << BASEID_FROM_TOKEN(id);
 
     if (ExtTokenTypeMask & id) {
     // this is an extended token id
@@ -79,12 +78,12 @@ operator<< (std::ostream &stream, lex_token<PositionT> const &t)
     }
     stream << "<" << std::endl;
     stream << "    at:  " << t.get_position().get_file() << " (" 
-        << boost::detail::setw(3) << right << t.get_position().get_line() << "/" 
-        << boost::detail::setw(2) << right << t.get_position().get_column() 
+        << setw(3) << right << t.get_position().get_line() << "/" 
+        << setw(2) << right << t.get_position().get_column() 
         << ")" << std::endl;
     stream << "    and: " << t.get_corrected_position().get_file() << " (" 
-        << boost::detail::setw(3) << right << t.get_corrected_position().get_line() << "/" 
-        << boost::detail::setw(2) << right << t.get_corrected_position().get_column() 
+        << setw(3) << right << t.get_corrected_position().get_line() << "/" 
+        << setw(2) << right << t.get_corrected_position().get_column() 
         << ")";
 
     return stream;

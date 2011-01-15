@@ -13,7 +13,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 
 #include <boost/io/ios_state.hpp>

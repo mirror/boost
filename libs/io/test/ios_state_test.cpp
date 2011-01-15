@@ -16,7 +16,7 @@
 #include <boost/io/ios_state.hpp>  // for boost::io::ios_flags_saver, etc.
 
 #include <cstddef>    // for std::size_t
-#include <boost/detail/iomanip.hpp>    // for boost::detail::setw
+#include <iomanip>    // for std::setw
 #include <ios>        // for std::ios_base, std::streamsize, etc.
 #include <iostream>   // for std::cout, etc.
 #include <istream>    // for std::istream
@@ -143,7 +143,7 @@ saver_tests_1
 {
     using std::locale;
     using std::ios_base;
-    using boost::detail::setw;
+    using std::setw;
 
     boost::io::ios_flags_saver const      ifls( output );
     boost::io::ios_precision_saver const  iprs( output );
@@ -168,8 +168,8 @@ saver_tests_1
     output.fill( '@' );
     output.precision( 9 );
     output << '\t' << test_string << '\n';
-    output << '\t' << boost::detail::setw( 10 ) << test_num1 << '\n';
-    output << '\t' << boost::detail::setw( 15 ) << test_num2 << '\n';
+    output << '\t' << setw( 10 ) << test_num1 << '\n';
+    output << '\t' << setw( 15 ) << test_num2 << '\n';
     output.imbue( loc );
     output << '\t' << test_bool << '\n';
 

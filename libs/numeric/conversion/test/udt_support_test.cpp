@@ -6,7 +6,7 @@
 //
 //
 #include<iostream>
-#include<boost/detail/iomanip.hpp>
+#include<iomanip>
 #include<string>
 #include<typeinfo>
 #include<vector>
@@ -294,7 +294,7 @@ void test_udt_conversions_with_custom_range_checking()
 
 int test_main( int, char* [] )
 {
-  cout << boost::detail::setprecision( numeric_limits<long double>::digits10 ) ;
+  cout << setprecision( numeric_limits<long double>::digits10 ) ;
 
   test_udt_conversions_with_defaults();
   test_udt_conversions_with_custom_range_checking();

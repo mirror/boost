@@ -24,7 +24,7 @@
 // in such cases.   So we can't use basic_ostream<OStream::char_type> but rather
 // use two template parameters
 
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <locale>
 #include <boost/config/no_tr1/cmath.hpp> // isnan
 #include <boost/assert.hpp>
@@ -130,7 +130,7 @@ public:
             boost::serialization::throw_exception(
                 archive_exception(archive_exception::output_stream_error)
             );
-        os << boost::detail::setprecision(std::numeric_limits<float>::digits10 + 2);
+        os << std::setprecision(std::numeric_limits<float>::digits10 + 2);
         os << t;
     }
     void save(const double t)
@@ -140,7 +140,7 @@ public:
             boost::serialization::throw_exception(
                 archive_exception(archive_exception::output_stream_error)
             );
-        os << boost::detail::setprecision(std::numeric_limits<double>::digits10 + 2);
+        os << std::setprecision(std::numeric_limits<double>::digits10 + 2);
         os << t;
     }
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())

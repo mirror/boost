@@ -50,9 +50,9 @@ bool do_test(double mean, long long max) {
 
     bool result = chsqr < 0.99;
     const char* err = result? "" : "*";
-    std::cout << boost::detail::setprecision(17) << chsqr << err << std::endl;
+    std::cout << std::setprecision(17) << chsqr << err << std::endl;
 
-    std::cout << boost::detail::setprecision(6);
+    std::cout << std::setprecision(6);
 
     return result;
 }

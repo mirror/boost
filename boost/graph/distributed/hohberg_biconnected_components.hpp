@@ -611,7 +611,7 @@ hohberg_vertex_processor<Graph>::operator()(Edge e, edges_size_type name,
   BGL_FORALL_OUTEDGES_T(alpha, e, g, Graph) {
     per_edge_data& edata = edge_data[idx++];
     if (edata.is_tree_edge
-        && std::find(edata.M.begin(), edata.M.end(), parent) != edata.M.end()
+        && find(edata.M.begin(), edata.M.end(), parent) != edata.M.end()
         && target(e, g) != parent) {
       // Notify our children in the spanning tree of this name
       name_header<Edge> header;
@@ -640,7 +640,7 @@ num_starting_bicomponents(Vertex alpha, const Graph& g)
   BGL_FORALL_OUTEDGES_T(alpha, e, g, Graph) {
     per_edge_data& edata = edge_data[idx++];
     if (edata.is_tree_edge
-        && std::find(edata.M.begin(), edata.M.end(), parent) == edata.M.end()) {
+        && find(edata.M.begin(), edata.M.end(), parent) == edata.M.end()) {
       // Map from local partition numbers to global bicomponent numbers
       if (local_to_global_partitions[edata.partition] == not_mapped)
         local_to_global_partitions[edata.partition] = result++;
@@ -706,7 +706,7 @@ start_naming_phase(Vertex alpha, const Graph& g, edges_size_type offset)
   BGL_FORALL_OUTEDGES_T(alpha, e, g, Graph) {
     per_edge_data& edata = edge_data[idx++];
     if (edata.is_tree_edge
-        && std::find(edata.M.begin(), edata.M.end(), parent) == edata.M.end()) {
+        && find(edata.M.begin(), edata.M.end(), parent) == edata.M.end()) {
       // Notify our children in the spanning tree of this new name
       name_header<Edge> header;
       header.edge = e;
@@ -758,7 +758,7 @@ hohberg_vertex_processor<Graph>::echo_phase(Vertex alpha, const Graph& g)
     BGL_FORALL_OUTEDGES_T(alpha, e, g, Graph) {
       if (target(e, g) == parent && parent == eta) {
         edge_to_parent = e;
-        if (std::find(bicomp.begin(), bicomp.end(), alpha) == bicomp.end()) {
+        if (find(bicomp.begin(), bicomp.end(), alpha) == bicomp.end()) {
 #if defined(PBGL_HOHBERG_DEBUG) && PBGL_HOHBERG_DEBUG > 1
           std::cerr << local(alpha) << '@' << owner(alpha) << ' ';
 #endif
@@ -776,7 +776,7 @@ hohberg_vertex_processor<Graph>::echo_phase(Vertex alpha, const Graph& g)
           if (pos != edata.msg.path_or_bicomp.end()) {
             ++pos;
             if (pos != edata.msg.path_or_bicomp.end()
-                && std::find(bicomp.begin(), bicomp.end(), *pos) == bicomp.end()) {
+                && find(bicomp.begin(), bicomp.end(), *pos) == bicomp.end()) {
 #if defined(PBGL_HOHBERG_DEBUG) && PBGL_HOHBERG_DEBUG > 1
               std::cerr << local(*pos) << '@' << owner(*pos) << ' ';
 #endif
@@ -786,7 +786,7 @@ hohberg_vertex_processor<Graph>::echo_phase(Vertex alpha, const Graph& g)
         } else if (edata.msg.is_tree() && edata.msg.gamma == eta) {
           for (path_iterator i = edata.msg.path_or_bicomp.begin();
                i != edata.msg.path_or_bicomp.end(); ++i) {
-            if (std::find(bicomp.begin(), bicomp.end(), *i) == bicomp.end()) {
+            if (find(bicomp.begin(), bicomp.end(), *i) == bicomp.end()) {
 #if defined(PBGL_HOHBERG_DEBUG) && PBGL_HOHBERG_DEBUG > 1
               std::cerr << local(*i) << '@' << owner(*i) << ' ';
 #endif

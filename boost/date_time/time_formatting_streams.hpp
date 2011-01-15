@@ -14,7 +14,7 @@
 #ifndef BOOST_DATE_TIME_NO_LOCALE
 
 #include <locale>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 #include <boost/date_time/date_formatting_locales.hpp>
 #include <boost/date_time/time_resolution_traits.hpp>
@@ -44,18 +44,18 @@ namespace date_time {
         if(td.is_negative()) {
           os << '-';
         }
-        os  << boost::detail::setw(2) << boost::detail::setfill(fill_char) 
+        os  << std::setw(2) << std::setfill(fill_char) 
             << absolute_value(td.hours()) << ":";
-        os  << boost::detail::setw(2) << boost::detail::setfill(fill_char) 
+        os  << std::setw(2) << std::setfill(fill_char) 
             << absolute_value(td.minutes()) << ":";
-        os  << boost::detail::setw(2) << boost::detail::setfill(fill_char) 
+        os  << std::setw(2) << std::setfill(fill_char) 
             << absolute_value(td.seconds());
         fractional_seconds_type frac_sec = 
           absolute_value(td.fractional_seconds());
         if (frac_sec != 0) {
           os  << "." 
-              << boost::detail::setw(time_duration_type::num_fractional_digits())
-              << boost::detail::setfill(fill_char)
+              << std::setw(time_duration_type::num_fractional_digits())
+              << std::setfill(fill_char)
               << frac_sec;
         }
       } // else

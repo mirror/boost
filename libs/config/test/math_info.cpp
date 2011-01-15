@@ -19,7 +19,7 @@
 #include <cmath>
 #include <float.h>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <cstring>
 #include <boost/type_traits/alignment_of.hpp>
 
@@ -37,7 +37,7 @@ void print_macro(const char* name, const char* value)
    if(0 != std::strcmp(name, value+1))
    {
       for(unsigned i = 0; i < indent; ++i) std::cout.put(' ');
-      std::cout << boost::detail::setw(width);
+      std::cout << std::setw(width);
       std::cout.setf(std::istream::left, std::istream::adjustfield);
       std::cout << name;
       if(value[1])
@@ -59,9 +59,9 @@ template <class T>
 void print_expression(const char* expression, T val)
 {
    for(unsigned i = 0; i < indent; ++i) std::cout.put(' ');
-   std::cout << boost::detail::setw(width);
+   std::cout << std::setw(width);
    std::cout.setf(std::istream::left, std::istream::adjustfield);
-   std::cout << boost::detail::setprecision(std::numeric_limits<T>::digits10+2);
+   std::cout << std::setprecision(std::numeric_limits<T>::digits10+2);
    std::cout << expression << "=" << val << std::endl;
 }
 
@@ -81,9 +81,9 @@ void print_limits(T, const char* name)
    std::cout << 
       "    is_specialized       = " << std::numeric_limits<T>::is_specialized << std::endl;
    std::cout << 
-      "    min" "()                = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::min)() << std::endl;
+      "    min" "()                = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::min)() << std::endl;
    std::cout << 
-      "    max" "()                = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::max)() << std::endl;
+      "    max" "()                = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::max)() << std::endl;
    std::cout << 
       "    digits               = " << std::numeric_limits<T>::digits << std::endl;
    std::cout << 
@@ -98,9 +98,9 @@ void print_limits(T, const char* name)
       "    radix                = " << std::numeric_limits<T>::radix << std::endl;
 
    std::cout << 
-      "    epsilon()            = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::epsilon)() << std::endl;
+      "    epsilon()            = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::epsilon)() << std::endl;
    std::cout << 
-      "    round_error()        = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::round_error)() << std::endl;
+      "    round_error()        = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::round_error)() << std::endl;
 
    std::cout << 
       "    min_exponent         = " << std::numeric_limits<T>::min_exponent << std::endl;
@@ -122,13 +122,13 @@ void print_limits(T, const char* name)
       "    has_denorm_loss      = " << std::numeric_limits<T>::has_denorm_loss << std::endl;
 
    std::cout << 
-      "    infinity()           = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::infinity)() << std::endl;
+      "    infinity()           = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::infinity)() << std::endl;
    std::cout << 
-      "    quiet_NaN()          = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::quiet_NaN)() << std::endl;
+      "    quiet_NaN()          = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::quiet_NaN)() << std::endl;
    std::cout << 
-      "    signaling_NaN()      = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::signaling_NaN)() << std::endl;
+      "    signaling_NaN()      = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::signaling_NaN)() << std::endl;
    std::cout << 
-      "    denorm_min()         = " << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::denorm_min)() << std::endl;
+      "    denorm_min()         = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::denorm_min)() << std::endl;
    
 
    std::cout << 

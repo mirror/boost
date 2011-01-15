@@ -13,7 +13,7 @@
 
 #include <boost/config/no_tr1/cmath.hpp>
 #include <iosfwd>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #include <boost/io/ios_state.hpp>
 
@@ -154,7 +154,7 @@ std::basic_ostream<Char,Traits>& operator<<(std::basic_ostream<Char,Traits>& os,
     //boost::io::ios_width_saver width_saver(os);
     boost::io::ios_flags_saver flags_saver(os);
 
-    //os << boost::detail::setw(21);
+    //os << std::setw(21);
     typedef typename Y::value_type value_type;
     
     if (val.uncertainty() > value_type())
@@ -165,15 +165,15 @@ std::basic_ostream<Char,Traits>& operator<<(std::basic_ostream<Char,Traits>& os,
         const long digits_of_precision = static_cast<long>(std::ceil(std::abs(exponent)))+3;
         
         // should try to replicate NIST CODATA syntax 
-        os << boost::detail::setprecision(digits_of_precision) 
-           //<< boost::detail::setw(digits_of_precision+8) 
+        os << std::setprecision(digits_of_precision) 
+           //<< std::setw(digits_of_precision+8) 
            //<< std::scientific
            << val.value();
 //           << long(10*(relative_uncertainty/std::pow(Y(10),Y(exponent))));
 
         os << " (rel. unc. = " 
-           << boost::detail::setprecision(1) 
-           //<< boost::detail::setw(7) 
+           << std::setprecision(1) 
+           //<< std::setw(7) 
            << std::scientific
            << relative_uncertainty << ")";
     }

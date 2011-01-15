@@ -61,7 +61,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <ios>
 #include <string>
 #include <algorithm>
@@ -495,9 +495,9 @@ void TestAndWriteResults()
   for ( PerfResultList::const_iterator pResult = results.begin();
     pResult != results.end(); ++pResult )
   {
-    output << std::fixed << boost::detail::setprecision( 0 ) <<
-      boost::detail::setw( 8 ) << pResult->inStateRatio_ * 100 << ',' <<
-      boost::detail::setw( 8 ) << pResult->nanoSecondsPerReaction_ << "\n";
+    output << std::fixed << std::setprecision( 0 ) <<
+      std::setw( 8 ) << pResult->inStateRatio_ * 100 << ',' <<
+      std::setw( 8 ) << pResult->nanoSecondsPerReaction_ << "\n";
   }
 }
 

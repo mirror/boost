@@ -40,11 +40,10 @@
 #ifdef PBGL_SCC_DEBUG
   #include <iostream>
   #include <cstdlib>
-  #include <boost/detail/iomanip.hpp>
+  #include <iomanip>
   #include <sys/time.h>
   #include <boost/graph/distributed/graphviz.hpp> // for ostringstream
 #endif
-#include <algorithm>
 #include <vector>
 #include <map>
 #include <boost/graph/parallel/container_traits.hpp>
@@ -689,11 +688,11 @@ namespace boost { namespace graph { namespace distributed {
            vertex_descriptor v = vertex_sets[i][j];
            if (get(owner, v) == id) {
              boost::tie(estart, eend) = out_edges(v, g);
-             while (estart != eend && std::find(vertex_sets[i].begin(), vertex_sets[i].end(),
+             while (estart != eend && find(vertex_sets[i].begin(), vertex_sets[i].end(),
                                            target(*estart,g)) == vertex_sets[i].end()) estart++;
              if (estart != eend) {
                boost::tie(restart, reend) = out_edges(get(fr, v), gr);
-               while (restart != reend && std::find(vertex_sets[i].begin(), vertex_sets[i].end(),
+               while (restart != reend && find(vertex_sets[i].begin(), vertex_sets[i].end(),
                                                get(rf, target(*restart,g))) == vertex_sets[i].end()) restart++;
                if (restart != reend)
                  new_set.push_back(v);
@@ -817,7 +816,7 @@ namespace boost { namespace graph { namespace distributed {
       vertex_iterator vstart, vend;
 
       for( boost::tie(vstart, vend) = vertices(g); vstart != vend; vstart++ )
-        if( std::find( my_roots.begin(), my_roots.end(), get(r, *vstart) ) == my_roots.end() )
+        if( find( my_roots.begin(), my_roots.end(), get(r, *vstart) ) == my_roots.end() )
           my_roots.push_back( get(r, *vstart) );
 
       all_gather( process_group(g), my_roots.begin(), my_roots.end(), all_roots );

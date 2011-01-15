@@ -11,7 +11,7 @@
  */
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <string>
 #include <functional>
 #include <vector>

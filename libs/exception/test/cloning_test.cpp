@@ -27,10 +27,6 @@ may_throw_on_copy
         if( throw_ )
             throw T();
         }
-    
-    #if defined(__PATHSCALE__)
-    ~may_throw_on_copy() throw() {}
-    #endif
 
     bool throw_;
     };
@@ -63,9 +59,6 @@ struct
 derives_std_exception:
     std::exception
     {
-    #if defined(__PATHSCALE__)
-    ~derives_std_exception() throw() {}
-    #endif
     };
 
 struct
@@ -84,19 +77,12 @@ derives_std_boost_exception:
         {
         return wh_;
         }
-    
-    #if defined(__PATHSCALE__)
-    ~derives_std_boost_exception() throw() {}
-    #endif
     };
 
 struct
 derives_boost_exception:
     boost::exception
     {
-    #if defined(__PATHSCALE__)
-    ~derives_boost_exception() throw() {}
-    #endif
     };
 
 template <class T>

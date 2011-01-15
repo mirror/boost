@@ -14,7 +14,7 @@
 #include "boost/format.hpp"
 
 #include <iostream> 
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #define BOOST_INCLUDE_MAIN 
 #include <boost/test/test_tools.hpp>
@@ -40,10 +40,10 @@ int test_main(int, char* [])
     // special paddings 
     s = str( format("[%=6s] [%+6s] [%+6s] [% 6s] [%+6s]\n") 
                       % 123
-                      % group(internal, boost::detail::setfill('W'), 234)
-                      % group(internal, boost::detail::setfill('X'), -345)
-                      % group(boost::detail::setfill('Y'), 456)
-                      % group(boost::detail::setfill('Z'), -10 ) );
+                      % group(internal, setfill('W'), 234)
+                      % group(internal, setfill('X'), -345)
+                      % group(setfill('Y'), 456)
+                      % group(setfill('Z'), -10 ) );
 
     if(s != "[  123 ] [+WW234] [-XX345] [YY 456] [ZZZ-10]\n" ) {
       cerr << s ;
@@ -51,9 +51,9 @@ int test_main(int, char* [])
     }
 
     s = str( format("[% 6.8s] [% 8.6s] [% 7.7s]\n") 
-                      % group(internal, boost::detail::setfill('x'), Rational(12345,54321))
-                      % group(internal, boost::detail::setfill('x'), Rational(123,45))
-                      % group(internal, boost::detail::setfill('x'), Rational(123,321))
+                      % group(internal, setfill('x'), Rational(12345,54321))
+                      % group(internal, setfill('x'), Rational(123,45))
+                      % group(internal, setfill('x'), Rational(123,321))
              );
     if(s != (s2="[ 12345/5] [ xx123/4] [ 123/32]\n" )) {
         cerr << s << s2;
@@ -62,10 +62,10 @@ int test_main(int, char* [])
 
     s = str( format("[% 6.8s] [% 6.8s] [% 6.8s] [% 6.8s] [%6.8s]\n") 
                       % 1234567897
-                      % group(boost::detail::setfill('x'), 12)
-                      % group(internal, boost::detail::setfill('x'), 12)
-                      % group(internal, boost::detail::setfill('x'), 1234567890)
-                      % group(internal, boost::detail::setfill('x'), 123456) 
+                      % group(setfill('x'), 12)
+                      % group(internal, setfill('x'), 12)
+                      % group(internal, setfill('x'), 1234567890)
+                      % group(internal, setfill('x'), 123456) 
              );
     if(s != (s2="[ 1234567] [xxx 12] [ xxx12] [ 1234567] [123456]\n") ) {
         cerr << s << s2;
@@ -74,10 +74,10 @@ int test_main(int, char* [])
 
     s = str( format("[% 8.6s] [% 6.4s] [% 6.4s] [% 8.6s] [% 8.6s]\n")
                       % 1234567897
-                      % group(boost::detail::setfill('x'), 12)
-                      % group(internal, boost::detail::setfill('x'), 12)
-                      % group(internal, boost::detail::setfill('x'), 1234567890)
-                      % group(internal, boost::detail::setfill('x'), 12345) 
+                      % group(setfill('x'), 12)
+                      % group(internal, setfill('x'), 12)
+                      % group(internal, setfill('x'), 1234567890)
+                      % group(internal, setfill('x'), 12345) 
              );
     if(s != (s2="[   12345] [xxx 12] [ xxx12] [ xx12345] [ xx12345]\n") ) {
         cerr << s << s2;

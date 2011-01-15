@@ -12,7 +12,7 @@
 
 
 #include <string>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 

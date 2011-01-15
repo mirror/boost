@@ -8,7 +8,7 @@
 #include <cctype>
 #include <string>
 #include <cstring>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>

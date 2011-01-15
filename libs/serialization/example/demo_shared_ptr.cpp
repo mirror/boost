@@ -9,7 +9,7 @@
 //
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 #include <cstddef> // NULL
 #include <fstream>

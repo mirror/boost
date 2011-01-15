@@ -21,7 +21,7 @@
 #include <boost/graph/distributed/graphviz.hpp>
 #include <iostream>
 #include <cstdlib>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <boost/random.hpp>
 #include <boost/test/minimal.hpp>
 
@@ -50,7 +50,7 @@ inline time_type get_time()
 std::string print_time(time_type t)
 {
   std::ostringstream out;
-  out << boost::detail::setiosflags(std::ios::fixed) << boost::detail::setprecision(2) << t;
+  out << std::setiosflags(std::ios::fixed) << std::setprecision(2) << t;
   return out.str();
 }
 

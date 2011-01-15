@@ -30,10 +30,6 @@ error1:
     std::exception,
     boost::exception
     {
-    #if defined(__PATHSCALE__)
-    ~error1() throw() {}
-    #endif
-
     char const *
     what() const throw()
         {
@@ -45,9 +41,6 @@ struct
 error2:
     boost::exception
     {
-    #if defined(__PATHSCALE__)
-    ~error2() throw() {}
-    #endif
     };
 
 struct
@@ -59,9 +52,6 @@ error3:
         {
         return "error3";
         }
-    #if defined(__PATHSCALE__)
-    ~error3() throw() {}
-    #endif
     };
 
 struct
@@ -74,9 +64,6 @@ error4:
         {
         return diagnostic_information_what(*this);
         }
-    #if defined(__PATHSCALE__)
-    ~error4() throw() {}
-    #endif
     };
 
 void

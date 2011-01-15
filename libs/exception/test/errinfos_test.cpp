@@ -22,9 +22,6 @@ test_exception:
     virtual boost::exception,
     virtual std::exception
     {
-    #if defined(__PATHSCALE__)
-    ~test_exception() throw() {}
-    #endif
     };
 
 int

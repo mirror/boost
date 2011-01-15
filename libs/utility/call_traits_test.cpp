@@ -13,7 +13,7 @@
 //    Enabled extra tests for VC6.
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <algorithm>
 #include <typeinfo>
 #include <boost/call_traits.hpp>

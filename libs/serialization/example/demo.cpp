@@ -8,7 +8,7 @@
 
 
 #include <cstddef> // NULL
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <string>

@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
@@ -125,9 +125,9 @@ void DisplayStateConfiguration( const Keyboard & keyboard )
       }
 
       #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
-      std::cout << boost::detail::setw( 15 ) << typeid( *pState ).name();
+      std::cout << std::setw( 15 ) << typeid( *pState ).name();
       #else
-      std::cout << boost::detail::setw( 15 ) <<
+      std::cout << std::setw( 15 ) <<
         pState->custom_dynamic_type_ptr< char >();
       #endif
       pState = pState->outer_state_ptr();

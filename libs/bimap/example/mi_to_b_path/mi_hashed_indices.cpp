@@ -15,9 +15,8 @@ Boost.MultiIndex
 
 //[ code_mi_to_b_path_mi_hashed_indices
 
-#include <ios>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #include <boost/tokenizer.hpp>
 
@@ -85,13 +84,13 @@ int main()
 
     // list words by frequency of appearance
 
-    std::cout << std::fixed << boost::detail::setprecision(2);
+    std::cout << std::fixed << std::setprecision(2);
 
     for( word_counter::iterator wit = wc.begin(), wit_end=wc.end();
          wit != wit_end; ++wit )
     {
-        std::cout << boost::detail::setw(11) << wit->word << ": "
-                  << boost::detail::setw(5)
+        std::cout << std::setw(11) << wit->word << ": "
+                  << std::setw(5)
                   << 100.0 * wit->occurrences / total_occurrences << "%"
                   << std::endl;
     }

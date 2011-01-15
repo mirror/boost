@@ -13,7 +13,7 @@
 #include "boost/date_time/compiler_config.hpp"
 #include <string>
 #include <sstream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 
 namespace boost {
@@ -46,7 +46,7 @@ namespace date_time {
         }
         case month_as_integer: 
         { 
-          os << boost::detail::setw(2) << boost::detail::setfill('0') << month.as_number();
+          os << std::setw(2) << std::setfill('0') << month.as_number();
           break;
         }
      
@@ -83,7 +83,7 @@ namespace date_time {
       if (format_type::has_date_sep_chars()) {
         ss << format_type::day_sep_char();
       }
-      ss  << boost::detail::setw(2) << boost::detail::setfill('0') 
+      ss  << std::setw(2) << std::setfill('0') 
           << ymd.day;
       return ss.str();
     }

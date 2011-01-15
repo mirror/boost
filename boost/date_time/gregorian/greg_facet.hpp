@@ -76,7 +76,7 @@ namespace gregorian {
     }
     else { //default to numeric
       charT fill_char = '0';
-      os  << boost::detail::setw(2) << boost::detail::setfill(fill_char) << m.as_number();
+      os  << std::setw(2) << std::setfill(fill_char) << m.as_number();
     }
 
     return os;
@@ -141,7 +141,7 @@ namespace gregorian {
   std::basic_ostream<charT, traits>&
   operator<<(std::basic_ostream<charT, traits>& os, const partial_date& pd)
   {
-    os << boost::detail::setw(2) << boost::detail::setfill('0') << pd.day() << ' ' 
+    os << std::setw(2) << std::setfill('0') << pd.day() << ' ' 
        << pd.month().as_short_string() ; 
     return os;
   }

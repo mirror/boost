@@ -15,7 +15,7 @@
 #include <limits>
 #include <string>
 #include <sstream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iterator> // i/ostreambuf_iterator
 #include <exception>
 #include <boost/assert.hpp>
@@ -578,8 +578,8 @@ namespace date_time {
     {
       std::basic_ostringstream<char_type> ss;
       ss.imbue(std::locale::classic()); // don't want any formatting
-      ss << boost::detail::setw(width)
-        << boost::detail::setfill(static_cast<char_type>('0'));
+      ss << std::setw(width)
+        << std::setfill(static_cast<char_type>('0'));
 #if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
       // JDG [7/6/02 VC++ compatibility]
       char_type buff[34];

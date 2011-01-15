@@ -18,9 +18,8 @@
 
 //[ code_mi_to_b_path_hashed_indices
 
-#include <ios>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 #include <boost/tokenizer.hpp>
 
@@ -76,7 +75,7 @@ int main()
 
     // list words by frequency of appearance
 
-    std::cout << std::fixed << boost::detail::setprecision(2);
+    std::cout << std::fixed << std::setprecision(2);
 
     for( word_counter::map_by<occurrences>::const_iterator
             wit     = wc.by<occurrences>().begin(),
@@ -84,8 +83,8 @@ int main()
 
          wit != wit_end; ++wit )
     {
-        std::cout << boost::detail::setw(15) << wit->get<word>() << ": "
-                  << boost::detail::setw(5)
+        std::cout << std::setw(15) << wit->get<word>() << ": "
+                  << std::setw(5)
                   << 100.0 * wit->get<occurrences>() / total_occurrences << "%"
                   << std::endl;
     }

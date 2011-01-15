@@ -14,7 +14,7 @@
 #include <boost/property_tree/detail/xml_parser_utils.hpp>
 #include <string>
 #include <ostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 namespace boost { namespace property_tree { namespace xml_parser
 {

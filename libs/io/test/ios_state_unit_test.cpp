@@ -13,7 +13,7 @@
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK, etc.
 
 #include <cstddef>   // for NULL
-#include <boost/detail/iomanip.hpp>   // for boost::detail::setiosflags, etc.
+#include <iomanip>   // for std::setiosflags, etc.
 #include <ios>       // for std::ios_base
 #include <iostream>  // for std::cout, std::cerr, etc.
 #include <istream>   // for std::iostream
@@ -77,7 +77,7 @@ ios_flags_saver_unit_test
         BOOST_CHECK_EQUAL( (ios_base::showbase | ios_base::internal),
          ss.flags() );
 
-        ss << boost::detail::setiosflags( ios_base::unitbuf );
+        ss << setiosflags( ios_base::unitbuf );
         BOOST_CHECK_EQUAL( (ios_base::showbase | ios_base::internal
          | ios_base::unitbuf), ss.flags() );
     }
@@ -102,7 +102,7 @@ ios_precision_saver_unit_test
 
         BOOST_CHECK_EQUAL( 6, ss.precision() );
 
-        ss << boost::detail::setprecision( 4 );
+        ss << setprecision( 4 );
         BOOST_CHECK_EQUAL( 4, ss.precision() );
     }
 
@@ -113,7 +113,7 @@ ios_precision_saver_unit_test
 
         BOOST_CHECK_EQUAL( 8, ss.precision() );
 
-        ss << boost::detail::setprecision( 10 );
+        ss << setprecision( 10 );
         BOOST_CHECK_EQUAL( 10, ss.precision() );
     }
 
@@ -137,7 +137,7 @@ ios_width_saver_unit_test
 
         BOOST_CHECK_EQUAL( 0, ss.width() );
 
-        ss << boost::detail::setw( 4 );
+        ss << setw( 4 );
         BOOST_CHECK_EQUAL( 4, ss.width() );
     }
 
@@ -148,7 +148,7 @@ ios_width_saver_unit_test
 
         BOOST_CHECK_EQUAL( 8, ss.width() );
 
-        ss << boost::detail::setw( 10 );
+        ss << setw( 10 );
         BOOST_CHECK_EQUAL( 10, ss.width() );
     }
 
@@ -507,7 +507,7 @@ ios_base_all_saver_unit_test
         BOOST_CHECK_EQUAL( 6, ss.precision() );
         BOOST_CHECK_EQUAL( 0, ss.width() );
 
-        ss << hex << unitbuf << boost::detail::setprecision( 5 ) << boost::detail::setw( 7 );
+        ss << hex << unitbuf << setprecision( 5 ) << setw( 7 );
         BOOST_CHECK_EQUAL( (ios_base::unitbuf | ios_base::hex
          | ios_base::skipws), ss.flags() );
         BOOST_CHECK_EQUAL( 5, ss.precision() );
@@ -560,10 +560,10 @@ ios_all_saver_unit_test
         ss << oct << showpos << noskipws;
         BOOST_CHECK_EQUAL( (ios_base::showpos | ios_base::oct), ss.flags() );
 
-        ss << boost::detail::setprecision( 3 );
+        ss << setprecision( 3 );
         BOOST_CHECK_EQUAL( 3, ss.precision() );
 
-        ss << boost::detail::setw( 9 );
+        ss << setw( 9 );
         BOOST_CHECK_EQUAL( 9, ss.width() );
 
         ss.setstate( ios_base::eofbit );
@@ -586,7 +586,7 @@ ios_all_saver_unit_test
         ss.rdbuf( cerr.rdbuf() );
         BOOST_CHECK_EQUAL( cerr.rdbuf(), ss.rdbuf() );
 
-        ss << boost::detail::setfill( 'x' );
+        ss << setfill( 'x' );
         BOOST_CHECK_EQUAL( 'x', ss.fill() );
 
         ss.imbue( locale(locale::classic(), new backward_bool_names) );
