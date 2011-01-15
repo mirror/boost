@@ -13,6 +13,8 @@
 
 //  GNU C++ compiler setup:
 
+#define BOOST_GCC 1
+
 #if __GNUC__ < 3
 #   if __GNUC_MINOR__ == 91
        // egcs 1.1 won't parse shared_ptr.hpp without this:
