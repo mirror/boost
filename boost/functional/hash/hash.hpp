@@ -92,7 +92,6 @@ namespace boost
         std::basic_string<Ch, std::BOOST_HASH_CHAR_TRAITS<Ch>, A> const&);
 
 #if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
-    template <class Ch, class A>
     std::size_t hash_value(std::type_index);
 #endif
 
