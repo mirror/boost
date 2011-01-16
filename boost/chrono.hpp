@@ -14,8 +14,7 @@
 #define BOOST_CHRONO_HPP
 
 //-----------------------------------------------------------------------------
-#include <boost/chrono/chrono.hpp>
-#include <boost/chrono/typeof/boost/chrono/chrono.hpp>
+#include <boost/chrono/include.hpp>
 //-----------------------------------------------------------------------------
 
 #endif // BOOST_CHRONO_HPP
