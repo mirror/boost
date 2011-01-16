@@ -14,7 +14,7 @@
 // test ratio:  The static data members num and den shall have thcommon
 //    divisor of the absolute values of N and D:
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 
 #if !defined(BOOST_NO_STATIC_ASSERT)
 #define NOTHING ""

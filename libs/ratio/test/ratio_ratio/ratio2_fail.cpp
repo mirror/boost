@@ -14,7 +14,7 @@
 // test ratio:  the absolute values of the template arguments N and D
 //               must be representable by type intmax_t.
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include <cstdint>
 
 void test()

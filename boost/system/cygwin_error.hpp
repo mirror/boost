@@ -7,8 +7,8 @@
 
 //  See library home page at http://www.boost.org/libs/system
 
-#ifndef BOOST_CYGWIN_ERROR_HPP
-#define BOOST_CYGWIN_ERROR_HPP
+#ifndef BOOST_SYSTEM_CYGWIN_ERROR_HPP
+#define BOOST_SYSTEM_CYGWIN_ERROR_HPP
 
 //  This header is effectively empty for compiles on operating systems where
 //  it is not applicable.
@@ -27,7 +27,7 @@ namespace boost
 
     //  User code should use the portable "posix" enums for POSIX errors; this
     //  allows such code to be portable to non-POSIX systems. For the non-POSIX
-    //  errno values that POSIX-based systems typically provide in addition to 
+    //  errno values that POSIX-based systems typically provide in addition to
     //  POSIX values, use the system specific enums below.
 
    namespace cygwin_error
@@ -53,4 +53,4 @@ namespace boost
 
 #endif  // __CYGWIN__
 
-#endif  // BOOST_CYGWIN_ERROR_HPP
+#endif  // BOOST_SYSTEM_CYGWIN_ERROR_HPP

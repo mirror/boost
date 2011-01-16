@@ -9,7 +9,7 @@
 #ifndef BOOST_RATIO_MPL_GREATER_EQUAL_HPP
 #define BOOST_RATIO_MPL_GREATER_EQUAL_HPP
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include <boost/ratio/mpl/numeric_cast.hpp>
 #include <boost/mpl/greater_equal.hpp>
 

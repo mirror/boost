@@ -33,7 +33,7 @@ struct ratio_static_string
 */
 
 #include <boost/config.hpp>
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include <boost/static_string/basic_str.hpp>
 //#include <sstream>
 

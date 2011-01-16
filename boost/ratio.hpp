@@ -9,6 +9,6 @@
 #ifndef BOOST_RATIO_HPP
 #define BOOST_RATIO_HPP
 
-#include <boost/ratio/ratio.hpp>
+#include <boost/ratio/include.hpp>
 
 #endif  // BOOST_RATIO_HPP

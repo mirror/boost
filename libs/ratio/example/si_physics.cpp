@@ -7,7 +7,7 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <iostream>
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include "duration.hpp"
 
 namespace User1

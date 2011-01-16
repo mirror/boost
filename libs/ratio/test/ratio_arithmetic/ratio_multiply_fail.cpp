@@ -13,7 +13,7 @@
 
 // test ratio_multiply
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 
 typedef boost::ratio<BOOST_RATIO_INTMAX_C(0x7FFFFFFFFFFFFFFF), 1> R1;
 typedef boost::ratio<2,1> R2;

@@ -5,7 +5,7 @@
 // test ratio:  equivalent ratios convert with BOOST_RATIO_EXTENSIONS
 
 #define BOOST_RATIO_EXTENSIONS
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 boost::intmax_t func(boost::ratio<5,6>  s);

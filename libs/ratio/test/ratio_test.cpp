@@ -6,7 +6,7 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include <iostream>
 
 typedef boost::ratio<5, 3>   five_thirds;       // five_thirds::num == 5, five_thirds::den == 3

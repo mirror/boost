@@ -13,7 +13,7 @@
 
 // test ratio:  The template argument D mus not be zero
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include <boost/cstdint.hpp>
 
 void test()

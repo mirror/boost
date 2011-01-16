@@ -13,7 +13,7 @@
 
 // test ratio_divide
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #if !defined(BOOST_NO_STATIC_ASSERT)
 #define NOTHING ""
 #endif

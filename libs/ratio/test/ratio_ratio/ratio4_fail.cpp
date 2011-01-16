@@ -13,7 +13,7 @@
 
 //#define BOOST_RATIO_EXTENSIONS
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 
 boost::intmax_t func(boost::ratio<5,6> const& s) {
     return s.num;    

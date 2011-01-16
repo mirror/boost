@@ -9,7 +9,7 @@
 #ifndef BOOST_RATIO_MPL_EQUAL_TO_HPP
 #define BOOST_RATIO_MPL_EQUAL_TO_HPP
 
-#include <boost/ratio.hpp>
+#include <boost/ratio/ratio.hpp>
 #include <boost/ratio/mpl/numeric_cast.hpp>
 #include <boost/mpl/equal_to.hpp>
 
