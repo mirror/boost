@@ -92,7 +92,7 @@
 
 [template chrono_conf[link_text] [link boost_chrono.reference.cpp0x.chrono_chrono_hpp.conf [link_text]]]
 
-[def __BOOST_CHRONO_INLINED [link boost_chrono.reference.cpp0x.chrono_hpp.conf.header_only `BOOST_CHRONO_INLINED`]]
+[def __BOOST_CHRONO_HEADER_ONLY [link boost_chrono.reference.cpp0x.chrono_hpp.conf.header_only `BOOST_CHRONO_HEADER_ONLY`]]
 [def __BOOST_SYSTEM_INLINED `BOOST_SYSTEM_INLINED`]
 
 [def __BOOST_CHRONO_USES_STATIC_ASSERT [chrono_conf `BOOST_CHRONO_USES_STATIC_ASSERT`]]
@@ -188,7 +188,6 @@ Finally, you can mentally add the following to any code fragments in this docume
 
     // Include all of Chrono files
     #include <boost/chrono.hpp>
-    namespace bchrono=boost::chrono;
 
 [/=================]
 [section Motivation]
@@ -315,7 +314,7 @@ The simple way is to decompress (or checkout from SVN) the files in your BOOST_R
 [heading Building Boost.Chrono ]
 [/=================================]
 
-__Boost_Chrono__ can be configured as a header-only library. When __BOOST_CHRONO_INLINED is defined the Boost.Chrono is a header-only library. Otherwise is not a header only library and you need to compile it and build the library before use, for example using:
+__Boost_Chrono__ can be configured as a header-only library. When __BOOST_CHRONO_HEADER_ONLY is defined the Boost.Chrono is a header-only library. Otherwise is not a header only library and you need to compile it and build the library before use, for example using:
 
     bjam libs/chrono/build
 
@@ -431,12 +430,12 @@ If all you want to do is to time a program's execution, here is a complete progr
 
     int main()
     {
-        bchrono::system_clock::time_point start = bchrono::system_clock::now();
+        boost::chrono::system_clock::time_point start = boost::chrono::system_clock::now();
 
         for ( long i = 0; i < 10000000; ++i )
         std::sqrt( 123.456L ); // burn some time
 
-        bchrono::__duration<double> sec = bchrono::system_clock::now() - start;
+        boost::chrono::__duration<double> sec = boost::chrono::system_clock::now() - start;
         std::cout << "took " << sec.count() << " seconds\n";
         return 0;
     }
@@ -491,12 +490,12 @@ The representation is simply any arithmetic type, or an emulation of such a type
 
 __example
 
-    typedef bchrono::__duration<long, boost::ratio<60> > minutes;
+    typedef boost::chrono::__duration<long, boost::ratio<60> > minutes;
     minutes m1(3);                 // m1 stores 3
     minutes m2(2);                 // m2 stores 2
     minutes m3 = m1 + m2;          // m3 stores 5
 
-    typedef bchrono::__duration<long long, boost::micro> microseconds;
+    typedef boost::chrono::__duration<long long, boost::micro> microseconds;
     microseconds us1(3);           // us1 stores 3
     microseconds us2(2);           // us2 stores 2
     microseconds us3 = us1 + us2;  // us3 stores 5
@@ -524,16 +523,16 @@ It won't compile! The rationale is that implicit truncation error should not be 
 
 There is a __duration_cast facility to explicitly ask for this behavior:
 
-    minutes m4 = bchrono::__duration_cast<minutes>(m3 + us3);  // m4.count() == 5
+    minutes m4 = boost::chrono::__duration_cast<minutes>(m3 + us3);  // m4.count() == 5
 
 In general, one can perform __duration arithmetic at will. If __duration_cast isn't used, and it compiles, the arithmetic is exact. If one wants to override this exact arithmetic behavior, __duration_cast can be used to explicitly specify that desire. The __duration_cast has the same efficiency as the implicit conversion, and will even be exact as often as it can.
 
 You can use __duration_cast`<>` to convert the __duration into whatever units you desire.  This facility will round down (truncate) if an exact conversion is not possible.  For example:
 
-    bchrono::__nanoseconds start;
-    bchrono::__nanoseconds end;
-    typedef bchrono::__milliseconds__ ms;
-    ms d = bchrono::__duration_cast<ms>(end - start);
+    boost::chrono::__nanoseconds start;
+    boost::chrono::__nanoseconds end;
+    typedef boost::chrono::__milliseconds__ ms;
+    ms d = boost::chrono::__duration_cast<ms>(end - start);
 
     // d now holds the number of milliseconds from start to end.
 
@@ -541,13 +540,13 @@ You can use __duration_cast`<>` to convert the __duration into whatever units yo
 
 We can convert to __nanoseconds, or some integral-based duration which __nanoseconds will always exactly convert to, then __duration_cast`<>` is unnecessary:
 
-    typedef bchrono::__nanoseconds ns;
+    typedef boost::chrono::__nanoseconds ns;
     ns d = end - start;
     std::cout << ns.count() << "ns\n";
 
 If you need seconds with a floating-point representation you can also eliminate the __duration_cast`<>`:
 
-    typedef bchrono::__duration<double> sec;  // seconds, stored with a double
+    typedef boost::chrono::__duration<double> sec;  // seconds, stored with a double
     sec d = end - start;
     std::cout << sec.count() << "s\n";
 
@@ -558,16 +557,16 @@ If you need to use __duration_cast`<>`, but want to round up, instead of down wh
 
     template <class ToDuration, class Rep, class Period>
     ToDuration
-    round_up(bchrono::__duration<Rep, Period> d)
+    round_up(boost::chrono::__duration<Rep, Period> d)
     {
         // first round down
-        ToDuration result = bchrono::__duration_cast<ToDuration>(d);
+        ToDuration result = boost::chrono::__duration_cast<ToDuration>(d);
         if (result < d)  // comparisons are *always* exact
            ++result;     // increment by one tick period
         return result;
     }
 
-    typedef bchrono::__milliseconds__ ms;
+    typedef boost::chrono::__milliseconds__ ms;
     ms d = round_up<ms>(end - start);
     // d now holds the number of milliseconds from start to end, rounded up.
     std::cout << ms.count() << "ms\n";
@@ -580,7 +579,7 @@ I don't want to deal with writing `duration_cast` all over the place. I'm conten
 
 Not a problem. When the destination of a conversion has floating-point representation, all conversions are allowed to happen implicitly.
 
-    typedef bchrono::__duration<double, __ratio<60> > dminutes;
+    typedef boost::chrono::__duration<double, __ratio<60> > dminutes;
     dminutes dm4 = m3 + us3;  // dm4.count() == 5.000000083333333
 
 [endsect]
@@ -597,26 +596,26 @@ There are several options open to the user:
 
 * If the author of the function wants to accept any __duration, and is willing to work in floating-point __durations, he can simply use any floating-point __duration as the parameter:
 
-          void f(bchrono::duration<double> d)  // accept floating-point seconds
+          void f(boost::chrono::duration<double> d)  // accept floating-point seconds
           {
-              // d.count() == 3.e-6 when passed bchrono::microseconds(3)
+              // d.count() == 3.e-6 when passed boost::chrono::microseconds(3)
           }
 
-          f(bchrono::microseconds(3));
+          f(boost::chrono::microseconds(3));
 
 * If the author of the function wants to traffic only in integral __durations, and is content with handling nothing finer than say nanoseconds (just as an example), he can simply specify nanoseconds as the parameter:
 
-          void f(bchrono::nanoseconds d)
+          void f(boost::chrono::nanoseconds d)
           {
-              // d.count() == 3000 when passed bchrono::microseconds(3)
+              // d.count() == 3000 when passed boost::chrono::microseconds(3)
           }
 
-          f(bchrono::microseconds(3));
+          f(boost::chrono::microseconds(3));
 
 In this design, if the client wants to pass in a floating-point __duration, or a __duration of finer precision than nanoseconds, then the client is responsible for choosing his own rounding mode in the conversion to nanoseconds.
 
-          bchrono::__duration<double> s(1./3);  // 1/3 of a second
-          f(bchrono::duration_cast<bchrono::nanoseconds>(s));  // round towards zero in conversion to nanoseconds
+          boost::chrono::__duration<double> s(1./3);  // 1/3 of a second
+          f(boost::chrono::duration_cast<boost::chrono::nanoseconds>(s));  // round towards zero in conversion to nanoseconds
 
 In the example above, the client of f has chosen "round towards zero" as the desired rounding mode to nanoseconds. If the client has a __duration that won't exactly convert to nanoseconds, and fails to choose how the conversion will take place, the compiler will refuse the call:
 
@@ -625,30 +624,30 @@ In the example above, the client of f has chosen "round towards zero" as the des
 * If the author of the function wants to accept any __duration, but wants to work with integral representations and wants to control the rounding mode internally, then he can template the function:
 
         template <class Rep, class Period>
-        void f(bchrono::__duration<Rep, Period> d)
+        void f(boost::chrono::__duration<Rep, Period> d)
         {
             // convert d to nanoseconds, rounding up if it is not an exact conversion
-            bchrono::nanoseconds ns = bchrono::duration_cast<bchrono::nanoseconds>(d);
+            boost::chrono::nanoseconds ns = boost::chrono::duration_cast<boost::chrono::nanoseconds>(d);
             if (ns < d)
                 ++ns;
             // ns.count() == 333333334 when passed 1/3 of a floating-point second
         }
 
-          f(bchrono::__duration<double>(1./3));
+          f(boost::chrono::__duration<double>(1./3));
 
 *  If the author in the example does not want to accept floating-point based __durations, he can enforce that behavior like so:
 
         template <class Period>
-        void f(bchrono::__duration<long long, Period> d)
+        void f(boost::chrono::__duration<long long, Period> d)
         {
             // convert d to nanoseconds, rounding up if it is not an exact conversion
-            bchrono::nanoseconds ns = bchrono::duration_cast<nanoseconds>(d);
+            boost::chrono::nanoseconds ns = boost::chrono::duration_cast<nanoseconds>(d);
             if (ns < d)
                 ++ns;
             // ns.count() == 333333334 when passed 333333333333 picoseconds
         }
         // About 1/3 of a second worth of picoseconds
-        f(bchrono::__duration<long long, boost::pico>(333333333333));
+        f(boost::chrono::__duration<long long, boost::pico>(333333333333));
 
 Clients with floating-point __durations who want to use f will now have to convert to an integral __duration themselves before passing the result to f.
 
@@ -693,8 +692,8 @@ Given a clock named Clock, it will have:
     public:
         typedef an arithmetic-like type        rep;
         typedef an instantiation of ratio      period;
-        typedef bchrono::__duration<rep, period> __duration;
-        typedef bchrono::__time_point<Clock>     time_point;
+        typedef boost::chrono::__duration<rep, period> __duration;
+        typedef boost::chrono::__time_point<Clock>     time_point;
         static constexpr bool is_steady =      true or false;
 
         static time_point now();
@@ -747,10 +746,10 @@ A timer example:
 
     void f()
     {
-        bchrono::steady_clock::time_point start = bchrono::steady_clock::now();
+        boost::chrono::steady_clock::time_point start = boost::chrono::steady_clock::now();
         g();
         h();
-        __duration<double> sec = bchrono::steady_clock::now() - start;
+        __duration<double> sec = boost::chrono::steady_clock::now() - start;
         cout << "f() took " << sec.count() << " seconds\n";
     }
 
@@ -759,8 +758,8 @@ Note that if one is using the __duration between two clock __time_points in a wa
 A delay loop example:
 
     // delay for at least 500 nanoseconds:
-    auto go = bchrono::steady_clock::now() + bchrono::nanoseconds(500);
-    while (bchrono::steady_clock::now() < go)
+    auto go = boost::chrono::steady_clock::now() + boost::chrono::nanoseconds(500);
+    while (boost::chrono::steady_clock::now() < go)
         ;
 
 The above code will delay as close as possible to half a microsecond, no matter what the precision of __steady_clock is. The more precise __steady_clock becomes, the more accurate will be the delay to 500 nanoseconds.
@@ -841,9 +840,9 @@ __steady_clock is useful when you need to wait for a specific amount of time. __
 
 Here is a polling solution, but it will probably be too inefficient:
 
-    bchrono::__steady_clock::time_point start= chrono::__steady_clock::now();
-    bchrono::__steady_clock::duration delay= chrono::seconds(5);
-    while (bchrono::__steady_clock::now() - start <= delay) {}
+    boost::chrono::__steady_clock::time_point start= chrono::__steady_clock::now();
+    boost::chrono::__steady_clock::duration delay= chrono::seconds(5);
+    while (boost::chrono::__steady_clock::now() - start <= delay) {}
 
 [endsect]
 
@@ -863,17 +862,17 @@ Process and thread clocks are used usually to measure the time spent by code blo
 
 You can use __thread_clock whenever you want to measure the time spent by the current thread. For example:
 
-    bchrono::__thread_clock::time_point start=bchrono::__thread_clock::now();
+    boost::chrono::__thread_clock::time_point start=boost::chrono::__thread_clock::now();
     // ... do something ...
 
-    typedef bchrono::__milliseconds__ ms;
-    ms d = bchrono::__thread_clock::now() - start;
+    typedef boost::chrono::__milliseconds__ ms;
+    ms d = boost::chrono::__thread_clock::now() - start;
     // d now holds the number of milliseconds from start to end.
     std::cout << ms.count() << "ms\n";
 
 If you need seconds with a floating-point representation you can do:
 
-    typedef bchrono::__duration<double> sec;  // seconds, stored with a double.
+    typedef boost::chrono::__duration<double> sec;  // seconds, stored with a double.
     sec d = end - start;
     std::cout << sec.count() << "s\n";
 
@@ -899,38 +898,37 @@ __example
     {
         using namespace std;
         using namespace boost;
-        namespace bchrono=boost::chrono;
 
         cout << "milliseconds(3) + microseconds(10) = "
-             <<  bchrono::milliseconds(3) + bchrono::microseconds(10) << '\n';
+             <<  boost::chrono::milliseconds(3) + boost::chrono::microseconds(10) << '\n';
 
         cout << "hours(3) + minutes(10) = "
-             <<  bchrono::hours(3) + bchrono::minutes(10) << '\n';
+             <<  boost::chrono::hours(3) + boost::chrono::minutes(10) << '\n';
 
-        typedef bchrono::duration<long long, boost::ratio<1, 2500000000> > ClockTick;
-        cout << "ClockTick(3) + bchrono::nanoseconds(10) = "
-             <<  ClockTick(3) + bchrono::nanoseconds(10) << '\n';
+        typedef boost::chrono::duration<long long, boost::ratio<1, 2500000000> > ClockTick;
+        cout << "ClockTick(3) + boost::chrono::nanoseconds(10) = "
+             <<  ClockTick(3) + boost::chrono::nanoseconds(10) << '\n';
 
         cout << "\nSet cout to use short names:\n";
-        cout << bchrono::duration_short;
+        cout << boost::chrono::duration_short;
 
         cout << "milliseconds(3) + microseconds(10) = "
-             <<  bchrono::milliseconds(3) + bchrono::microseconds(10) << '\n';
+             <<  boost::chrono::milliseconds(3) + boost::chrono::microseconds(10) << '\n';
 
         cout << "hours(3) + minutes(10) = "
-             <<  bchrono::hours(3) + bchrono::minutes(10) << '\n';
+             <<  boost::chrono::hours(3) + boost::chrono::minutes(10) << '\n';
 
         cout << "ClockTick(3) + nanoseconds(10) = "
-             <<  ClockTick(3) + bchrono::nanoseconds(10) << '\n';
+             <<  ClockTick(3) + boost::chrono::nanoseconds(10) << '\n';
 
-        cout << "\nsystem_clock::now() = " << bchrono::system_clock::now() << '\n';
+        cout << "\nsystem_clock::now() = " << boost::chrono::system_clock::now() << '\n';
     #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-        cout << "steady_clock::now() = " << bchrono::steady_clock::now() << '\n';
+        cout << "steady_clock::now() = " << boost::chrono::steady_clock::now() << '\n';
     #endif
         cout << "\nSet cout to use long names:\n"
-                << bchrono::duration_long
+                << boost::chrono::duration_long
                 << "high_resolution_clock::now() = "
-                << bchrono::high_resolution_clock::now() << '\n';
+                << boost::chrono::high_resolution_clock::now() << '\n';
         return 0;
     }
 
@@ -964,10 +962,9 @@ __example
     int main()
     {
         using namespace std;
-        namespace bchrono=boost::chrono;
 
         istringstream in("5000 milliseconds 4000 ms 3001 ms");
-        bchrono::seconds d(0);
+        boost::chrono::seconds d(0);
         in >> d;
         assert(in.good());
         assert(d == seconds(5));
@@ -996,18 +993,17 @@ __example
     int main()
     {
         using namespace std;
-        namespace bchrono=boost::chrono;
 
-        bchrono::high_resolution_clock::time_point t0 = bchrono::high_resolution_clock::now();
+        boost::chrono::high_resolution_clock::time_point t0 = boost::chrono::high_resolution_clock::now();
         stringstream io;
         io << t0;
-        bchrono::high_resolution_clock::time_point t1;
+        boost::chrono::high_resolution_clock::time_point t1;
         io >> t1;
         assert(!io.fail());
         cout << io.str() << '\n';
         cout << t0 << '\n';
         cout << t1 << '\n';
-        bchrono::high_resolution_clock::time_point t = bchrono::high_resolution_clock::now();
+        boost::chrono::high_resolution_clock::time_point t = boost::chrono::high_resolution_clock::now();
         cout << t << '\n';
 
         cout << "That took " << t - t0 << '\n';
@@ -1030,10 +1026,9 @@ Here's a simple example to find out how many hours the computer has been up (on 
     {
         using namespace std;
         using namespace boost;
-        namespace bchrono=boost::chrono;
 
-        typedef bchrono::time_point<bchrono::steady_clock, bchrono::duration<double, boost::ratio<3600> > > T;
-        T tp = bchrono::steady_clock::now();
+        typedef boost::chrono::time_point<boost::chrono::steady_clock, boost::chrono::duration<double, boost::ratio<3600> > > T;
+        T tp = boost::chrono::steady_clock::now();
         std::cout << tp << '\n';
         return 0;
     }
@@ -1097,12 +1092,12 @@ Next we show how to override the __duration_s default constructor to do anything
         friend bool operator>=(zero_default x, zero_default y) {return !(x < y);}
     };
 
-    typedef bchrono::__duration<zero_default<long long>, boost::nano        > nanoseconds;
-    typedef bchrono::__duration<zero_default<long long>, boost::micro       > microseconds;
-    typedef bchrono::__duration<zero_default<long long>, boost::milli       > milliseconds;
-    typedef bchrono::__duration<zero_default<long long>                      > seconds;
-    typedef bchrono::__duration<zero_default<long long>, boost::ratio<60>   > minutes;
-    typedef bchrono::__duration<zero_default<long long>, boost::ratio<3600> > hours;
+    typedef boost::chrono::__duration<zero_default<long long>, boost::nano        > nanoseconds;
+    typedef boost::chrono::__duration<zero_default<long long>, boost::micro       > microseconds;
+    typedef boost::chrono::__duration<zero_default<long long>, boost::milli       > milliseconds;
+    typedef boost::chrono::__duration<zero_default<long long>                      > seconds;
+    typedef boost::chrono::__duration<zero_default<long long>, boost::ratio<60>   > minutes;
+    typedef boost::chrono::__duration<zero_default<long long>, boost::ratio<3600> > hours;
     }
 
 Usage
@@ -1131,7 +1126,7 @@ This example shows how to handle duration with resolution not known until run-ti
         static const double ticks_per_nanosecond;
 
     public:
-        typedef bchrono::duration<double, boost::nano> tonanosec;
+        typedef boost::chrono::duration<double, boost::nano> tonanosec;
 
         duration() {} // = default;
         explicit duration(const rep& r) : rep_(r) {}
@@ -1182,7 +1177,7 @@ This example shows how to handle duration with resolution not known until run-ti
 [/================]
 [section Saturating]
 
-A "saturating" signed integral type is developed.  This type has +/- infinity and a NaN (like IEEE floating-point) but otherwise obeys signed integral arithmetic. This class is subsequently used as the template parameter Rep in bchrono::__duration to demonstrate a duration class that does not silently ignore overflow.
+A "saturating" signed integral type is developed.  This type has +/- infinity and a NaN (like IEEE floating-point) but otherwise obeys signed integral arithmetic. This class is subsequently used as the template parameter Rep in boost::chrono::__duration to demonstrate a duration class that does not silently ignore overflow.
 
 ['See the source file [@../../example/saturating.cpp example/saturating.cpp]]
 
@@ -1201,13 +1196,11 @@ Being able to *easily* write this function is a major feature!
 
     #include <iostream>
 
-    namespace bchrono=boost::chrono;
-
     template <class To, class Rep, class Period>
     To
-    round_up(bchrono::duration<Rep, Period> d)
+    round_up(boost::chrono::duration<Rep, Period> d)
     {
-        To result = bchrono::duration_cast<To>(d);
+        To result = boost::chrono::duration_cast<To>(d);
         if (result < d)
             ++result;
         return result;
@@ -1224,28 +1217,28 @@ To demonstrate interaction with an xtime-like facility:
 
     template <class Rep, class Period>
     xtime
-    to_xtime_truncate(bchrono::__duration<Rep, Period> d)
+    to_xtime_truncate(boost::chrono::__duration<Rep, Period> d)
     {
         xtime xt;
-        xt.sec = static_cast<long>(bchrono::__duration_cast<__seconds>(d).count());
-        xt.usec = static_cast<long>(bchrono::__duration_cast<__microseconds>(d - __seconds(xt.sec)).count());
+        xt.sec = static_cast<long>(boost::chrono::__duration_cast<__seconds>(d).count());
+        xt.usec = static_cast<long>(boost::chrono::__duration_cast<__microseconds>(d - __seconds(xt.sec)).count());
         return xt;
     }
 
     template <class Rep, class Period>
     xtime
-    to_xtime_round_up(bchrono::__duration<Rep, Period> d)
+    to_xtime_round_up(boost::chrono::__duration<Rep, Period> d)
     {
         xtime xt;
-        xt.sec = static_cast<long>(bchrono::__duration_cast<__seconds>(d).count());
-        xt.usec = static_cast<unsigned long>(round_up<bchrono::__microseconds>(d - bchrono::__seconds(xt.sec)).count());
+        xt.sec = static_cast<long>(boost::chrono::__duration_cast<__seconds>(d).count());
+        xt.usec = static_cast<unsigned long>(round_up<boost::chrono::__microseconds>(d - boost::chrono::__seconds(xt.sec)).count());
         return xt;
     }
 
     microseconds
     from_xtime(xtime xt)
     {
-        return bchrono::__seconds(xt.sec) + bchrono::__microseconds(xt.usec);
+        return boost::chrono::__seconds(xt.sec) + boost::chrono::__microseconds(xt.usec);
     }
 
     void print(xtime xt)
@@ -1255,15 +1248,15 @@ To demonstrate interaction with an xtime-like facility:
 
 Usage
 
-        xtime xt = to_xtime_truncate(seconds(3) + bchrono::__milliseconds__(251));
+        xtime xt = to_xtime_truncate(seconds(3) + boost::chrono::__milliseconds__(251));
         print(xt);
-        bchrono::milliseconds ms = bchrono::__duration_cast<bchrono::__milliseconds__>(from_xtime(xt));
+        boost::chrono::milliseconds ms = boost::chrono::__duration_cast<boost::chrono::__milliseconds__>(from_xtime(xt));
         std::cout << ms.count() << " milliseconds\n";
         xt = to_xtime_round_up(ms);
         print(xt);
-        xt = to_xtime_truncate(bchrono::seconds(3) + __nanoseconds(999));
+        xt = to_xtime_truncate(boost::chrono::seconds(3) + __nanoseconds(999));
         print(xt);
-        xt = to_xtime_round_up(bchrono::seconds(3) + __nanoseconds(999));
+        xt = to_xtime_round_up(boost::chrono::seconds(3) + __nanoseconds(999));
         print(xt);
 
 
@@ -1283,11 +1276,7 @@ Users can easily create their own clocks, with both points in time and time dura
 
     #include <boost/chrono.hpp>
     #include <boost/type_traits.hpp>
-
     #include <iostream>
-
-    namespace bchrono=boost::chrono;
-
 
     template <long long speed>
     struct cycle_count
@@ -1296,8 +1285,8 @@ Users can easily create their own clocks, with both points in time and time dura
             frequency;  // Mhz
         typedef typename boost::__ratio_divide__<boost::__ratio<1>, frequency>::type period;
         typedef long long rep;
-        typedef bchrono::__duration<rep, period> duration;
-        typedef bchrono::__time_point<cycle_count> time_point;
+        typedef boost::chrono::__duration<rep, period> duration;
+        typedef boost::chrono::__time_point<cycle_count> time_point;
 
         static time_point now()
         {
@@ -1315,7 +1304,7 @@ Users can easily create their own clocks, with both points in time and time dura
         typedef duration::rep rep;
         typedef duration::period period;
         static const long long nanosec_per_sec = period::den;
-        typedef bchrono::__time_point<approx_cycle_count> time_point;
+        typedef boost::chrono::__time_point<approx_cycle_count> time_point;
 
         static time_point now()
         {
@@ -1423,8 +1412,8 @@ Clock based on timeval-like struct.
     public:
         typedef xtime                                  rep;
         typedef boost::micro                           period;
-        typedef bchrono::duration<rep, period>   duration;
-        typedef bchrono::time_point<xtime_clock> time_point;
+        typedef boost::chrono::duration<rep, period>   duration;
+        typedef boost::chrono::time_point<xtime_clock> time_point;
 
         static time_point now()
         {
@@ -1457,12 +1446,12 @@ Usage of xtime_clock
         std::cout << "sizeof xtime_clock::time_point = " << sizeof(xtime_clock::time_point) << '\n';
         std::cout << "sizeof xtime_clock::duration = " << sizeof(xtime_clock::duration) << '\n';
         std::cout << "sizeof xtime_clock::rep = " << sizeof(xtime_clock::rep) << '\n';
-        xtime_clock::duration delay(bchrono::milliseconds(5));
+        xtime_clock::duration delay(boost::chrono::milliseconds(5));
         xtime_clock::time_point start = xtime_clock::now();
         while (xtime_clock::now() - start <= delay) {}
         xtime_clock::time_point stop = xtime_clock::now();
         xtime_clock::duration elapsed = stop - start;
-        std::cout << "paused " << bchrono::::nanoseconds(elapsed).count() << " nanoseconds\n";
+        std::cout << "paused " << boost::chrono::::nanoseconds(elapsed).count() << " nanoseconds\n";
 
 
 ['See the source file [@../../example/timeval_demo.cpp example/timeval_demo.cpp]]
@@ -1618,7 +1607,7 @@ The output of this program run looks like this:
       if ( verbose )
         { std::cout << "command: \"" << s.c_str() << "\"\n"; }
 
-      bchrono::__stopclock__<> t;
+      boost::chrono::__stopclock__<> t;
 
       return std::system( s.c_str() );
     }
@@ -1653,50 +1642,49 @@ Where:
     template <class CharT, class Traits, class Rep, class Period>
     std::basic_ostream<CharT, Traits>&
     display(std::basic_ostream<CharT, Traits>& os,
-            bchrono::duration<Rep, Period> d)
+            boost::chrono::duration<Rep, Period> d)
     {
         using namespace std;
         using namespace boost;
-        namespace bchrono=boost::chrono;
 
-        typedef bchrono::duration<long long, boost::ratio<86400> > days;
-        typedef bchrono::duration<long long, boost:centi> centiseconds;
+        typedef boost::chrono::duration<long long, boost::ratio<86400> > days;
+        typedef boost::chrono::duration<long long, boost:centi> centiseconds;
 
         // if negative, print negative sign and negate
-        if (d < bchrono::duration<Rep, Period>(0))
+        if (d < boost::chrono::duration<Rep, Period>(0))
         {
             d = -d;
             os << '-';
         }
         // round d to nearest centiseconds, to even on tie
-        centiseconds cs = bchrono::duration_cast<centiseconds>(d);
-        if (d - cs > bchrono::milliseconds(5)
-            || (d - cs == bchrono::milliseconds(5) && cs.count() & 1))
+        centiseconds cs = boost::chrono::duration_cast<centiseconds>(d);
+        if (d - cs > boost::chrono::milliseconds(5)
+            || (d - cs == boost::chrono::milliseconds(5) && cs.count() & 1))
             ++cs;
         // separate seconds from centiseconds
-        bchrono::seconds s = bchrono::duration_cast<bchrono::seconds>(cs);
+        boost::chrono::seconds s = boost::chrono::duration_cast<boost::chrono::seconds>(cs);
         cs -= s;
         // separate minutes from seconds
-        bchrono::minutes m = bchrono::duration_cast<bchrono::minutes>(s);
+        boost::chrono::minutes m = boost::chrono::duration_cast<boost::chrono::minutes>(s);
         s -= m;
         // separate hours from minutes
-        bchrono::hours h = bchrono::duration_cast<bchrono::hours>(m);
+        boost::chrono::hours h = boost::chrono::duration_cast<boost::chrono::hours>(m);
         m -= h;
         // separate days from hours
-        days dy = bchrono::duration_cast<days>(h);
+        days dy = boost::chrono::duration_cast<days>(h);
         h -= dy;
         // print d/hh:mm:ss.cc
         os << dy.count() << '/';
-        if (h < bchrono::hours(10))
+        if (h < boost::chrono::hours(10))
             os << '0';
         os << h.count() << ':';
-        if (m < bchrono::minutes(10))
+        if (m < boost::chrono::minutes(10))
             os << '0';
         os << m.count() << ':';
-        if (s < bchrono::seconds(10))
+        if (s < boost::chrono::seconds(10))
             os << '0';
         os << s.count() << '.';
-        if (cs < bchrono::centiseconds(10))
+        if (cs < boost::chrono::centiseconds(10))
             os << '0';
         os << cs.count();
         return os;
@@ -1706,13 +1694,12 @@ Where:
     {
         using namespace std;
         using namespace boost;
-        namespace bchrono=boost::chrono;
 
-        display(cout, bchrono::steady_clock::now().time_since_epoch()
-                      + bchrono::duration<long, boost::mega>(1)) << '\n';
-        display(cout, -bchrono::milliseconds(6)) << '\n';
-        display(cout, bchrono::duration<long, boost::mega>(1)) << '\n';
-        display(cout, -bchrono::duration<long, boost::mega>(1)) << '\n';
+        display(cout, boost::chrono::steady_clock::now().time_since_epoch()
+                      + boost::chrono::duration<long, boost::mega>(1)) << '\n';
+        display(cout, -boost::chrono::milliseconds(6)) << '\n';
+        display(cout, boost::chrono::duration<long, boost::mega>(1)) << '\n';
+        display(cout, -boost::chrono::duration<long, boost::mega>(1)) << '\n';
     }
 
 The output could be:
@@ -1994,7 +1981,7 @@ When `BOOST_CHRONO_USES_MPL_ASSERT` is not defined the following symbols are def
     #define BOOST_CHRONO_DURATION_PERIOD_MUST_BE_POSITIVE \
         "duration period must be positive"
     #define BOOST_CHRONO_SECOND_TEMPLATE_PARAMETER_OF_TIME_POINT_MUST_BE_A_BOOST_CHRONO_DURATION \
-        "Second template parameter of time_point must be a bchrono::duration"
+        "Second template parameter of time_point must be a boost::chrono::duration"
 
 Depending on the static assertion used system you will have an hint of the failing assertion either through the symbol or through the text.
 
@@ -2002,7 +1989,7 @@ Depending on the static assertion used system you will have an hint of the faili
 
 [section:header_only How to Build Boost.Chrono as a Header Only Library?]
 
-When `BOOST_CHRONO_INLINED` is defined the lib is header-only.
+When `BOOST_CHRONO_HEADER_ONLY` is defined the lib is header-only.
 
 If in addition `BOOST_USE_WINDOWS_H` is defined `<windows.h>` is included, otherwise files in `boost/detail/win` are used to reduce the impact of including `<windows.h>`.
 
@@ -2630,7 +2617,6 @@ __remarks This function does not rely on any implicit conversions. All conversio
         typedef __duration<boost::int_least32_t, __ratio<3600> > hours;  // at least 23 bits needed
 
 [endsect]
-
 
 [endsect]
 

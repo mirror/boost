@@ -50,7 +50,7 @@ rule chrono-run ( sources )
         :   $(sources[1]:B)_static ]
     [ run $(sources)
         : : 
-        :   <define>BOOST_CHRONO_INLINED
+        :   <define>BOOST_CHRONO_HEADER_ONLY
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
@@ -73,7 +73,7 @@ rule chrono-run2 ( sources : name )
         : $(name)_static ]
     [ run $(sources)
         : : 
-        :   <define>BOOST_CHRONO_INLINED 
+        :   <define>BOOST_CHRONO_HEADER_ONLY 
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
@@ -100,7 +100,7 @@ rule chrono-run-mt ( sources )
         :  $(sources[1]:B)_static ]
     [ run $(sources)
         : : 
-        :   <define>BOOST_CHRONO_INLINED
+        :   <define>BOOST_CHRONO_HEADER_ONLY
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
@@ -125,7 +125,7 @@ rule chrono-run2-mt ( sources : name )
         : $(name)_static ]
     [ run $(sources)
         : : 
-        :   <define>BOOST_CHRONO_INLINED 
+        :   <define>BOOST_CHRONO_HEADER_ONLY 
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
@@ -140,7 +140,7 @@ rule chrono-compile ( sources )
         : 
         : $(sources[1]:B)_lib ]
     [ compile $(sources)
-        :   <define>BOOST_CHRONO_INLINED 
+        :   <define>BOOST_CHRONO_HEADER_ONLY 
             # comment the following line 
             <define>BOOST_SYSTEM_INLINED
         : $(sources[1]:B)_header ]
@@ -154,7 +154,7 @@ rule chrono-compile2 ( sources : name )
         :
         : $(name)_lib ]
     [ compile $(sources)
-        :  <define>BOOST_CHRONO_INLINED
+        :  <define>BOOST_CHRONO_HEADER_ONLY
             # comment the following line 
             <define>BOOST_SYSTEM_INLINED
         : $(name)_header ]
