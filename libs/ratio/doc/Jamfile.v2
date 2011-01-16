@@ -71,3 +71,5 @@ boostbook standalone
         <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/regex/doc/html
    ;
+
+install pdf-install : standalone : <location>. <install-type>PDF ;
