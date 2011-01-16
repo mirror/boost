@@ -28,7 +28,7 @@
 #include <boost/proto/traits.hpp>
 #include <boost/proto/eval.hpp>
 
-#if BOOST_MSVC
+#ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable : 4510) // default constructor could not be generated
 #pragma warning(disable : 4512) // assignment operator could not be generated
@@ -653,7 +653,7 @@ namespace boost { namespace mpl
     };
 }} 
 
-#if BOOST_MSVC
+#ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
 

@@ -5,6 +5,8 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <iostream>
+#include <boost/utility/addressof.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -33,6 +35,11 @@ void test1()
     plus<terminal<void(&)()>::type, terminal<int>::type>::type r4 = deep_copy(t4 + t1);
     BOOST_CHECK_EQUAL(42, value(right(r4)));
     BOOST_CHECK_EQUAL(&foo, &value(left(r4)));
+
+    terminal<std::ostream &>::type cout_ = {std::cout};
+    shift_left<terminal<std::ostream &>::type, terminal<int>::type>::type r5 = deep_copy(cout_ << t1);
+    BOOST_CHECK_EQUAL(42, value(right(r5)));
+    BOOST_CHECK_EQUAL(boost::addressof(std::cout), boost::addressof(value(left(r5))));
 }
 
 using namespace unit_test;
