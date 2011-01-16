@@ -13,7 +13,7 @@
 
 // Duration shall be an instance of duration.
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/chrono.hpp>
 
 void test()
 {

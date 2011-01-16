@@ -13,7 +13,7 @@
 
 // ToDuration must be an instantiation of duration.
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 void test()
 {

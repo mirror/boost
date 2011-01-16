@@ -17,7 +17,7 @@
 // template <class Rep, class Period = ratio<1>>
 // class duration;
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 #include <boost/type_traits.hpp>
 #if !defined(BOOST_NO_STATIC_ASSERT)
 #define NOTHING ""

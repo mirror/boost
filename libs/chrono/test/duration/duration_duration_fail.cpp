@@ -15,7 +15,7 @@
 // If a program instantiates duration with a duration type for the template
 // argument Rep a diagnostic is required.
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 void test()
 {

@@ -14,7 +14,7 @@
 // duration
 // Period::num must be positive, diagnostic required.
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 void test()
 {

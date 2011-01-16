@@ -11,7 +11,7 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #if !defined(BOOST_NO_STATIC_ASSERT)

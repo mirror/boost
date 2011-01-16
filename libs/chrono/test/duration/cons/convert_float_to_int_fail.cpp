@@ -13,7 +13,7 @@
 
 //  conversions from floating point to integral durations disallowed
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 void test()
 {

@@ -13,7 +13,7 @@
 
 // time_points with different clocks should not compare
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/chrono.hpp>
 
 #include "../../clock.h"
 

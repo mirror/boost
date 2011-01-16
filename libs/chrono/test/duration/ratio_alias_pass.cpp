@@ -14,7 +14,7 @@
 // duration
 // Period shall be a specialization of ratio, diagnostic required.
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 void test()
 {

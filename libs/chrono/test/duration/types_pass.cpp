@@ -17,7 +17,7 @@
 // typedef Rep rep;
 // typedef Period period;
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 #include <boost/type_traits.hpp>
 #if !defined(BOOST_NO_STATIC_ASSERT)
 #define NOTHING ""

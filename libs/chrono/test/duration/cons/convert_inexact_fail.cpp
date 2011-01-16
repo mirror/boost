@@ -13,7 +13,7 @@
 
 // inexact conversions disallowed for integral reps
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 void test()
 {

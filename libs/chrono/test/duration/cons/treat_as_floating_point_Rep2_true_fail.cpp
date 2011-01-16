@@ -13,7 +13,7 @@
 
 // treat_as_floating_point<Rep2>::value must be false
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 void test()
 {

@@ -14,7 +14,7 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/chrono.hpp>
 
 class Clock
 {

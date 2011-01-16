@@ -13,7 +13,7 @@
 
 // test for explicit
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/chrono.hpp>
 
 void test()
 {

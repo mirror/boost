@@ -5,7 +5,6 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
-#if 0
 #include <boost/cstdint.hpp>
 
 #ifdef INTMAX_C
@@ -17,14 +16,4 @@
 boost::intmax_t i = BOOST_INTMAX_C(1000000000);
 int main() {
     return (i);
-}
-
-#endif
-#include <windows.h>
-#include <algorithm>
-
-
-int main() {
-    LONGLONG i = std::max(2,3);
-    return i;
 }

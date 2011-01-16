@@ -12,7 +12,7 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono.hpp>
+#include <boost/chrono/chrono.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/thread_clock.hpp>
 #include <boost/system/system_error.hpp>

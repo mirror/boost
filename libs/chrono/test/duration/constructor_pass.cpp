@@ -12,7 +12,7 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 

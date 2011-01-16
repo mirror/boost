@@ -13,7 +13,7 @@
 
 // Rep2 shall be implicitly convertible to rep
 
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>
 
 #include "../../rep.h"
 
