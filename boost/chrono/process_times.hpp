@@ -19,7 +19,7 @@
 #include <ostream>
 #include <boost/chrono/detail/system.hpp>
 
-#ifndef BOOST_CHRONO_INLINED
+#ifndef BOOST_CHRONO_HEADER_ONLY
 #include <boost/config/abi_prefix.hpp> // must be the last #include
 #endif
 
@@ -201,7 +201,7 @@ namespace chrono
   } // namespace chrono
 } // namespace boost
 
-#ifndef BOOST_CHRONO_INLINED
+#ifndef BOOST_CHRONO_HEADER_ONLY
 #include <boost/config/abi_suffix.hpp> // pops abi_prefix.hpp pragmas
 #else
 #include <boost/chrono/detail/inlined/process_clock.hpp>

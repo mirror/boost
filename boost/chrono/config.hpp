@@ -92,7 +92,7 @@
 #define BOOST_CHRONO_STATIC_CONSTEXPR  static BOOST_CHRONO_CONSTEXPR_OR_CONST
 
 
-#ifdef BOOST_CHRONO_INLINED
+#ifdef BOOST_CHRONO_HEADER_ONLY
 #define BOOST_CHRONO_INLINE inline
 #define BOOST_CHRONO_STATIC
 #define BOOST_CHRONO_DECL
@@ -143,6 +143,6 @@
 //
 #include <boost/config/auto_link.hpp>
 #endif  // auto-linking disabled
-#endif // BOOST_CHRONO_INLINED
+#endif // BOOST_CHRONO_HEADER_ONLY
 #endif // BOOST_CHRONO_CONFIG_HPP
 
