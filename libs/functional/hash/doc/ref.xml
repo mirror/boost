@@ -406,6 +406,29 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         </method>
       </struct-specialization>
 
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>std::type_index</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>std::type_index</paramtype>
+          </parameter>
+          <returns>
+            <para><code>val.hash_code()</code></para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+        <notes>
+          <para>
+            Only available if it's in your standard library and Boost.Config
+            is aware of it.
+          </para>
+        </notes>
+      </struct-specialization>
+
       <free-function-group name="Support functions (Boost extension)."> 
 
       <!--
@@ -716,6 +739,11 @@ for(; first != last; ++first)
           <parameter name="val"><paramtype>std::complex&lt;T&gt; const&amp;</paramtype></parameter>
         </signature>
 
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::type_index</paramtype></parameter>
+        </signature>
+
         <description><para>
           Generally shouldn't be called directly by users, instead they should use
           <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
@@ -797,6 +825,12 @@ return seed;</programlisting></entry>
                     <code>std::complex&lt;T&gt;</code>
                   </entry>
                   <entry>When <code>T</code> is a built in type and <code>val.imag() == 0</code>, the result is equal to <code>hash_value(val.real())</code>. Otherwise an unspecified value, except that equal arguments shall yield the same result.</entry>
+                </row>
+                <row>
+                  <entry>
+                    <code>std::type_index</code>
+                  </entry>
+                  <entry><code>val.hash_code()</code></entry>
                 </row>
               </tbody>
             </tgroup>
