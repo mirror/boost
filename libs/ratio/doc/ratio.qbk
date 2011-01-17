@@ -160,7 +160,9 @@ The __Boost_Ratio library provides:
 
 Boost.Ratio is in the latest Boost release in the folder `/boost/ratio`.  Documentation, tests and examples folder are at `boost/libs/ratio/`.
 
-You can also access the latest (unstable?) state from the [@https://svn.boost.org/svn/boost-trunk Boost trunk] directories boost/ratio and libs/ratio. Just go to [@http://svn.boost.org/trac/boost/wiki/BoostSubversion here] and follow the instructions there for anonymous SVN access.
+You can also access the latest (unstable?) state from the [@http://svn.boost.org/svn/boost/trunk Boost trunk] directories `boost/ratio` and `libs/ratio`. 
+
+Just go to [@http://svn.boost.org/trac/boost/wiki/BoostSubversion the wiki] and follow the instructions there for anonymous SVN access.
 
 [/==========================================]
 [heading Where to install Boost.Ratio? ]
