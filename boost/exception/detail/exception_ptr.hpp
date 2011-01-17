@@ -29,9 +29,41 @@
 namespace
 boost
     {
-    typedef shared_ptr<exception_detail::clone_base const> exception_ptr;
-
+    class exception_ptr;
+    void rethrow_exception( exception_ptr const & );
     exception_ptr current_exception();
+
+    class
+    exception_ptr
+        {
+        typedef boost::shared_ptr<exception_detail::clone_base const> impl;
+        impl ptr_;
+        friend void rethrow_exception( exception_ptr const & );
+        typedef exception_detail::clone_base const * (impl::*unspecified_bool_type)() const;
+        public:
+        exception_ptr()
+            {
+            }
+        explicit
+        exception_ptr( impl const & ptr ):
+            ptr_(ptr)
+            {
+            }
+        bool
+        operator==( exception_ptr const & other ) const
+            {
+            return ptr_==other.ptr_;
+            }
+        bool
+        operator!=( exception_ptr const & other ) const
+            {
+            return ptr_!=other.ptr_;
+            }
+        operator unspecified_bool_type() const
+            {
+            return ptr_?&impl::get:0;
+            }
+        };
 
     template <class T>
     inline
@@ -89,7 +121,7 @@ boost
                 throw_function(BOOST_CURRENT_FUNCTION) <<
                 throw_file(__FILE__) <<
                 throw_line(__LINE__);
-            static exception_ptr ep(new exception_detail::clone_impl<Exception>(c));
+            static exception_ptr ep(shared_ptr<exception_detail::clone_base const>(new exception_detail::clone_impl<Exception>(c)));
             return ep;
             }
 
@@ -272,7 +304,7 @@ boost
                 success:
                     {
                     BOOST_ASSERT(e!=0);
-                    return exception_ptr(e);
+                    return exception_ptr(shared_ptr<exception_detail::clone_base const>(e));
                     }
                 case exception_detail::clone_current_exception_result::
                 bad_alloc:
@@ -299,7 +331,7 @@ boost
                     catch(
                     exception_detail::clone_base & e )
                         {
-                        return exception_ptr(e.clone());
+                        return exception_ptr(shared_ptr<exception_detail::clone_base const>(e.clone()));
                         }
                     catch(
                     std::domain_error & e )
@@ -421,7 +453,7 @@ boost
     rethrow_exception( exception_ptr const & p )
         {
         BOOST_ASSERT(p);
-        p->rethrow();
+        p.ptr_->rethrow();
         }
 
     inline
