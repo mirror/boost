@@ -770,31 +770,6 @@ namespace chrono {
       return boost_ex::chrono::detail::duration_cast<duration<Rep, Period>, ToDuration>()(fd);
   }
 
-
-//----------------------------------------------------------------------------//
-//                 duration constructor implementation                        //
-//              See comment in the class duration synopsis                    //
-//----------------------------------------------------------------------------//
-
-#if 0
-#ifdef __GNUC__
-    // see comment above in section 20.9.3 Class template duration [time.duration]
-    template <class Rep, class Period>
-    template <class Rep2, class Period2>
-     duration<Rep, Period>::duration(const duration<Rep2, Period2>& d,
-        typename boost::enable_if <
-            boost::mpl::or_ < 
-                treat_as_floating_point<rep>,
-                boost::mpl::and_ <
-                    boost::mpl::bool_ <boost::ratio_divide<Period2, period>::type::den == 1>,
-                    boost::mpl::not_ <treat_as_floating_point<Rep2> >
-                >
-            >
-            >::type*)
-          : rep_(duration_cast<duration>(d).count()) {}
-#endif
-#endif
-
 } 
 }
 #endif // BOOST_EX_CHRONO_DURATION_HPP
