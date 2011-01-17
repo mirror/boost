@@ -106,11 +106,12 @@ struct polymorphic_mult_functor
 {
     //Implement result_of protocol
     template <class FArgs> struct result;
-    template <class F, class T> struct result<F(T)> {typedef T type;};
+    template <class F, class T> struct result<F(T       )> {typedef T type;};
+    template <class F, class T> struct result<F(T&      )> {typedef T type;};
+    template <class F, class T> struct result<F(const T&)> {typedef T type;};
 
     template <class T> 
-    typename result<polymorphic_mult_functor(T)>::type
-    operator()(const T& _arg) const {return _arg*2;}
+    T operator()(const T& _arg) const {return _arg*2;}
 };
 
 int

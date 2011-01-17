@@ -42,13 +42,11 @@ namespace boost
     struct transform_iterator_base
     {
      private:
-        typedef typename std::iterator_traits<Iterator>::reference Arg1;
-
         // By default, dereferencing the iterator yields the same as
         // the function.
         typedef typename ia_dflt_help<
             Reference
-          , result_of<UnaryFunc(typename std::iterator_traits<Iterator>::value_type)>
+          , result_of<UnaryFunc(typename std::iterator_traits<Iterator>::reference)>
         >::type reference;
 
         // To get the default for Value: remove any reference on the
