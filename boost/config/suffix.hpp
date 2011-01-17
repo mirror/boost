@@ -639,10 +639,6 @@ namespace std{ using ::typeinfo; }
 #     if defined(unix) || defined(__unix) || defined(_XOPEN_SOURCE) \
          || defined(_POSIX_SOURCE)
 #        define BOOST_PLATFORM "Generic Unix"
-#        define BOOST_NIX            1 
-//#        define BOOST_GENETIC_NIX    1
-//#        define BOOST_TRADEMARK_NIX  1
-#        define BOOST_FUNCTIONAL_NIX 1
 #     else
 #        define BOOST_PLATFORM "Unknown"
 #     endif

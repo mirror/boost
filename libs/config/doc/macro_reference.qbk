@@ -71,11 +71,6 @@ The Platform does not provide `<wchar.h>` and `<cwchar>`.
 [[`BOOST_NO_CWCTYPE`][Platform][
 The Platform does not provide `<wctype.h>` and `<cwctype>`.
 ]]
-[[`BOOST_NO_FENV_H`][Platform, Standard library][
-The C standard library doesn't provide `<fenv.h>`. [@../../../../boost/detail/fenv.hpp
-`<boost/detail/fenv.hpp>`] should be included instead of `<fenv.h>` for maximum
-portability on platforms which do provide `<fenv.h>`. 
-]]
 [[`BOOST_NO_DEPENDENT_NESTED_DERIVATIONS`][Compiler][
 The compiler fails to compile a nested class that has a dependent base class:
 ``
@@ -403,6 +398,11 @@ The platform has the POSIX API `sched_yield`.
 ]]
 [[`BOOST_HAS_SGI_TYPE_TRAITS`][Compiler, Standard library][
 The compiler has native support for SGI style type traits.
+]]
+[[`BOOST_HAS_FENV_H`][Platform, Standard library][
+The platform has a `<fenv.h>`. [@../../../../boost/detail/fenv.hpp
+`<boost/detail/fenv.hpp>`] should be included instead of `<fenv.h>` for maximum
+portability. 
 ]]
 [[`BOOST_HAS_STDINT_H`][Platform][
 The platform has a `<stdint.h>`
@@ -881,26 +881,6 @@ Defined to 1 if the compiler is the Clang compiler.
 ]]
 [[`BOOST_WINDOWS`][`<boost/config.hpp>`][
 Defined if the Windows platfrom API is available.
-]]
-[[`BOOST_LINUX`][`<boost/config.hpp>`][
-Defined if the system kernel is Linux 
-]]
-[[`BOOST_NIX`][`<boost/config.hpp>`][
-Defined if the system is POSIX compliant
-]]
-[[`BOOST_GENETIC_NIX`][`<boost/config.hpp>`][
-Defined if the system can trace its ancestry to the original AT&T codebase or
-designs, but is not certified by the Open Group. This is the case for modern
-open-source BSD systems.
-]]
-[[`BOOST_TRADEMARK_NIX`][`<boost/config.hpp>`][
-Systems certified as POSIX compliant by the Open Group. These systems can use
-the UNIX trademark. Most commercially developed *nix systems fall into this 
-category.
-]]
-[[`BOOST_FUNCTIONAL_NIX`][`<boost/config.hpp>`][
-Systems which behave in a manner roughly consistent with POSIX standards. Linux
-and Minix fall into this category. 
 ]]
 [[`BOOST_DINKUMWARE_STDLIB`][`<boost/config.hpp>`][
 Defined if the dinkumware standard library is in use, takes the same value
