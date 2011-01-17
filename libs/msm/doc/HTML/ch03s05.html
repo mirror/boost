@@ -238,7 +238,7 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</pre></li><li class="listite
                                     it</a></p></li></ul></div><p>
                     </p></div><div class="sect2" title="Compile-time state machine analysis"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2528"></a><span class="command"><strong><a name="backend-compile-time-analysis"></a></strong></span>Compile-time state machine analysis </h3></div></div></div><p>A MSM state machine being a metaprogram, it is only logical that cheking
                         for the validity of a concrete state machine happens compile-time. To this
-                        aim, using the compile-time graph library mpl_graph (delivered at the moment
+                        aim, using the compile-time graph library <a class="link" href="http://www.dynagraph.org/mpl_graph/" target="_top">mpl_graph</a> (delivered at the moment
                         with MSM) from Gordon Woodhull, MSM provides several compile-time checks:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Check that orthogonal regions ar truly orthogonal.</p></li><li class="listitem"><p>Check that all states are either reachable from the initial
                                     states or are explicit entries / pseudo-entry states.</p></li></ul></div><p>To make use of this feature, the back-end provides a policy (default is no
                         analysis), <code class="code">msm::back::mpl_graph_fsm_check</code>. For example:</p><pre class="programlisting"> typedef msm::back::state_machine&lt; player_,msm::back::mpl_graph_fsm_check&gt; player;           </pre><p>As MSM is now using Boost.Parameter to declare policies, the policy choice
@@ -250,12 +250,12 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</pre></li><li class="listite
                         versions of MSM.</p><p>The same algorithm is also used in case you want to omit providing the
                         region index in the <span class="command"><strong><a class="command" href="ch03s02.html#explicit-entry-no-region-id">explicit entry / pseudo entry state</a></strong></span> declaration.</p><p>The author's advice is to enable the checks after any state machine
                         structure change and disable it again after sucessful analysis.</p><p>The <a class="link" href="examples/TestErrorOrthogonality.cpp" target="_top">following example</a> provokes an assertion if one of the first two lines
-                        of the transition table is used.</p></div><div class="sect2" title="Enqueueing events for later processing"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2569"></a><span class="command"><strong><a name="backend-enqueueing"></a></strong></span> Enqueueing events for later
+                        of the transition table is used.</p></div><div class="sect2" title="Enqueueing events for later processing"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2572"></a><span class="command"><strong><a name="backend-enqueueing"></a></strong></span> Enqueueing events for later
                         processing </h3></div></div></div><p>Calling <code class="code">process_event(Event const&amp;)</code> will immediately
                         process the event with run-to-completion semantics. You can also enqueue the
                         events and delay their processing by calling <code class="code">enqueue_event(Event
                             const&amp;)</code> instead. Calling <code class="code">execute_queued_events()</code> will then
-                        process all enqueued events (in FIFO order).</p><p>You can query the queue size by calling <code class="code">get_message_queue_size()</code>.</p></div><div class="sect2" title="Customizing the message queues"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2589"></a><span class="command"><strong><a name="backend-queues"></a></strong></span> Customizing the message queues </h3></div></div></div><p>MSM uses by default a std::deque for its queues (one message queue for
+                        process all enqueued events (in FIFO order).</p><p>You can query the queue size by calling <code class="code">get_message_queue_size()</code>.</p></div><div class="sect2" title="Customizing the message queues"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2592"></a><span class="command"><strong><a name="backend-queues"></a></strong></span> Customizing the message queues </h3></div></div></div><p>MSM uses by default a std::deque for its queues (one message queue for
                         events generated during run-to-completion or with
                         <code class="code">enqueue_event</code>, one for deferred events). Unfortunately, on some
                         STL implementations, it is a very expensive container in size and copying
@@ -266,7 +266,7 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</pre></li><li class="listite
                         Boost::circular_buffer is outside of the scope of this documentation. What
                         you will however need to define is the queue capacity (initially is 0) to
                         what you think your queue will at most grow, for example (size 1 is
-                        common):</p><pre class="programlisting"> fsm.get_message_queue().set_capacity(1);           </pre></div><div class="sect2" title="Policy definition with Boost.Parameter"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2604"></a><span class="command"><strong><a name="backend-boost-parameter"></a></strong></span>Policy definition with Boost.Parameter </h3></div></div></div><p>MSM uses Boost.Parameter to allow easier definition of
+                        common):</p><pre class="programlisting"> fsm.get_message_queue().set_capacity(1);           </pre></div><div class="sect2" title="Policy definition with Boost.Parameter"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2607"></a><span class="command"><strong><a name="backend-boost-parameter"></a></strong></span>Policy definition with Boost.Parameter </h3></div></div></div><p>MSM uses Boost.Parameter to allow easier definition of
                         back::state_machine&lt;&gt; policy arguments (all except the front-end). This
                         allows you to define policy arguments (history, compile-time / run-time,
                         state machine analysis, container for the queues) at any position, in any
