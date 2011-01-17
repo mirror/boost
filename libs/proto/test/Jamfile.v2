@@ -12,6 +12,7 @@ project
         <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
         <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
         <toolset>msvc-9.0:<define>_SCL_SECURE_NO_DEPRECATE
+        <toolset>msvc-10.0:<define>_SCL_SECURE_NO_DEPRECATE
         <toolset>gcc:<cxxflags>-ftemplate-depth-1024
         <library>/boost/test//boost_unit_test_framework
         <link>static
@@ -20,6 +21,7 @@ project
 test-suite "proto"
     :
         [ run calculator.cpp ]
+        [ run constrained_ops.cpp ]
         [ run deep_copy.cpp ]
         [ run display_expr.cpp ]
         [ run deduce_domain.cpp ]
