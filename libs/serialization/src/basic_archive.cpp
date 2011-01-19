@@ -73,7 +73,7 @@ BOOST_ARCHIVE_SIGNATURE(){
 
 BOOST_ARCHIVE_DECL(library_version_type)
 BOOST_ARCHIVE_VERSION(){
-    return library_version_type(8);
+    return library_version_type(9);
 }
 
 } // namespace archive
