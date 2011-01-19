@@ -11,8 +11,10 @@
 
 #include <boost/config.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/bool.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/sequence_tag_fwd.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/fusion/include/is_view.hpp>
 #include <boost/fusion/include/tag_of_fwd.hpp>
 #include <boost/fusion/include/category_of.hpp>
@@ -23,6 +25,7 @@
 #include <boost/fusion/support/ext_/is_segmented.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
+#include <boost/fusion/sequence/comparison/enable_comparison.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/traits.hpp>
@@ -634,6 +637,37 @@ namespace boost { namespace fusion
             {};
         };
 
+    }
+
+    namespace traits
+    {
+        template<typename Seq1, typename Seq2>
+        struct enable_equality<
+            Seq1
+          , Seq2
+          , typename enable_if_c<
+                mpl::or_<
+                    proto::is_expr<Seq1>
+                  , proto::is_expr<Seq2>
+                >::value
+            >::type
+        >
+            : mpl::false_
+        {};
+
+        template<typename Seq1, typename Seq2>
+        struct enable_comparison<
+            Seq1
+          , Seq2
+          , typename enable_if_c<
+                mpl::or_<
+                    proto::is_expr<Seq1>
+                  , proto::is_expr<Seq2>
+                >::value
+            >::type
+        >
+          : mpl::false_
+        {};
     }
 
 }}
