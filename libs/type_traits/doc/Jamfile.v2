@@ -14,7 +14,8 @@ if --enable-index in  [ modules.peek : ARGV ]
         <format>html:<auto-index-internal>on
         <auto-index-script>index.idx
         <auto-index-prefix>../../.. 
-        <quickbook-define>enable_index ;
+        <quickbook-define>enable_index
+        <format>pdf:<xsl:param>index.on.type=1 ;
 }
 else
 {
@@ -76,8 +77,10 @@ boostbook standalone
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/type_traits/doc/html
     ;
 
-#install html : ../../../doc/html/boostbook.css ;
-#install ../ : ../../../boost.png ;
+install pdf-install : standalone : <install-type>PDF <location>. <name>type_traits.pdf ;
+
+
+
 
 
 
