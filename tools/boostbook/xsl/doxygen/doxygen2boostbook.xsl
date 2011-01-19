@@ -1242,6 +1242,9 @@
   <xsl:template match="copydoc" mode="passthrough">
     <xsl:apply-templates mode="passthrough"/>
   </xsl:template>
+  <xsl:template match="verbatim" mode="passthrough">
+    <xsl:copy-of select="node()"/>
+  </xsl:template>
 
   <xsl:template match="para/simplesect" mode="passthrough">
     <xsl:if test="not (@kind='pre') and
