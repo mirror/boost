@@ -13,7 +13,7 @@
 # pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <cstddef> // NULL
 #ifdef BOOST_SERIALIZATION_LOG
 #include <iostream>
@@ -23,7 +23,7 @@
 #include <set>
 #include <functional>
 #include <algorithm>
-#include <cassert>
+#include <boost/assert.hpp>
 
 // BOOST
 #define BOOST_SERIALIZATION_SOURCE
@@ -185,16 +185,16 @@ class void_caster_argument : public void_caster
 {
     virtual void const *
     upcast(void const * const /*t*/) const {
-        assert(false);
+        BOOST_ASSERT(false);
         return NULL;
     }
     virtual void const *
     downcast( void const * const /*t*/) const {
-        assert(false);
+        BOOST_ASSERT(false);
         return NULL;
     }
     virtual bool has_virtual_base() const {
-        assert(false);
+        BOOST_ASSERT(false);
         return false;
     }
 public:

@@ -11,7 +11,7 @@
 
 #include <cstring>
 #include <cstddef> // NULL
-#include <cassert>
+#include <boost/assert.hpp>
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -52,8 +52,8 @@ extended_type_info_no_rtti_0::is_less_than(
     // through a pointer to the to most derived class.  OR make sure
     // that the BOOST_CLASS_EXPORT is included in every file
     // which does this.
-    assert(NULL != l);
-    assert(NULL != r);
+    BOOST_ASSERT(NULL != l);
+    BOOST_ASSERT(NULL != r);
     return std::strcmp(l, r) < 0;
 }
 
@@ -66,11 +66,11 @@ extended_type_info_no_rtti_0::is_equal(
         return true;
     // null keys don't match with anything
     const char * l = get_key();
-    assert(NULL != l);
+    BOOST_ASSERT(NULL != l);
     if(NULL == l)
         return false;
     const char * r = rhs.get_key();
-    assert(NULL != r);
+    BOOST_ASSERT(NULL != r);
     if(NULL == r)
         return false;
     return 0 == std::strcmp(l, r);

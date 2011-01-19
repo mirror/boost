@@ -14,7 +14,7 @@
 
 
 #include <exception>
-#include <cassert>
+#include <boost/assert.hpp>
 #include <string>
 
 #define BOOST_ARCHIVE_SOURCE
@@ -47,7 +47,7 @@ xml_archive_exception::xml_archive_exception(
             m_msg = "Invalid XML tag name";
             break;
         default:
-            assert(false);
+            BOOST_ASSERT(false);
             break;
         }
     }

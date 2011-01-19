@@ -13,7 +13,7 @@
 #endif
 
 #include <exception>
-#include <cassert>
+#include <boost/assert.hpp>
 #include <string>
 
 #define BOOST_ARCHIVE_SOURCE
@@ -93,7 +93,7 @@ archive_exception::archive_exception(
         m_msg = "output stream error";
         break;
     default:
-        assert(false);
+        BOOST_ASSERT(false);
         break;
     }
 }

@@ -1,6 +1,9 @@
 #ifndef BOOST_SERIALIZATION_TEST_TOOLS_HPP
 #define BOOST_SERIALIZATION_TEST_TOOLS_HPP
 
+#define BOOST_FILESYSTEM_VERSION 3
+#include <boost/filesystem.hpp>
+
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
@@ -16,7 +19,6 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cstdio> // remove, tmpnam
 #include <cstddef> // size_t
 #ifndef BOOST_NO_EXCEPTION_STD_NAMESPACE
     #include <exception>
@@ -87,7 +89,11 @@ namespace archive {
             char old_dir[256];
             _getcwd(old_dir, sizeof(old_dir) - 1);
             chdir(dir);
-            std::tmpnam(ibuffer + i);
+            // (C) Copyright 2010 Dean Michael Berris. <mikhailberis@gmail.com>
+            // Instead of using std::tmpnam, we use Boost.Filesystem's unique_path
+            boost::filesystem::path tmp_path =
+                boost::filesystem::unique_path("%%%%%");
+            std::strcat(ibuffer, tmp_path.string().c_str());
             chdir(old_dir);
         }
         else{
@@ -118,15 +124,33 @@ namespace archive {
  
 namespace boost {
 namespace archive {
-    using ::tempnam;
+    using ::tmpnam;
 } // archive
 } // boost
 
 #else // defined(__hpux)
 
+// (C) Copyright 2010 Dean Michael Berris.
+// Instead of using the potentially dangrous tempnam function that's part
+// of the C standard library, on Unix/Linux we use the more portable and
+// "safe" unique_path function provided in the Boost.Filesystem library.
+
+#include <boost/archive/tmpdir.hpp>
+
 namespace boost {
 namespace archive {
-    using std::tmpnam;
+    char const * tmpnam(char * buffer) {
+        static char name[512] = {0};
+        if (name[0] == 0) {
+            boost::filesystem::path tempdir(tmpdir());
+            boost::filesystem::path tempfilename =
+                boost::filesystem::unique_path("serialization-%%%%");
+            boost::filesystem::path temp = tempdir / tempfilename;
+            std::strcat(name, temp.string().c_str());
+        }
+        if (buffer != 0) std::strcpy(buffer, name);
+        return name;
+    }
 } // archive
 } // boost
 

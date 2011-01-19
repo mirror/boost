@@ -29,6 +29,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="index">
+    <dt><a href="#differences_1_45">Differences from version 1.45</a></dt> 
     <dt><a href="#differences_1_43">Differences from version 1.43</a></dt> 
     <dt><a href="#differences_1_42">Differences from version 1.42</a></dt> 
     <dt><a href="#differences_1_41">Differences from version 1.41</a></dt> 
@@ -44,6 +45,13 @@ http://www.boost.org/LICENSE_1_0.txt)
 As of this writing, there are no known bugs. However, due to compiler/library 
 quirks and or bugs, some tests fail with some combinations of compilers and 
 libraries.
+<h2><a name="differences_1_45"></a>Differences from Boost 1.45</h2>
+Since the release of version 1.42, it has been discovered that binary
+archives created by versions 1.42-1.44 cannot always be read by the
+recent binary archive code.  Work has proceeded in detecting the source
+of these anomolies and those which have been reported with test cases
+have been fixed.  As of this writing, it is not known whether all
+binary archives created with these versions can be loaded.
 <h2><a name="differences_1_43"></a>Differences from Boost 1.43</h2>
 <ul>
     <li>fixed bug in the serialization of virtual base classes.  Due
