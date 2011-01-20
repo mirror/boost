@@ -12,6 +12,7 @@
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/comparison/enable_comparison.hpp>
+#include <boost/fusion/support/is_sequence.hpp>
 
 #if defined(FUSION_DIRECT_OPERATOR_USAGE)
 #include <boost/fusion/sequence/comparison/detail/less_equal.hpp>
