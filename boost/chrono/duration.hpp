@@ -215,18 +215,17 @@ namespace detail
     //   the use of common_type ensures that the most logical "intermediate"
     //   representation is used.
     template <class FromDuration, class ToDuration,
-              class Period = typename ratio_divide<typename FromDuration::period,
-              typename ToDuration::period>::type,
-              bool = Period::num == 1,
-              bool = Period::den == 1>
-    struct duration_cast;
+              class Period,
+              bool PeriodNumEq1,
+              bool PeriodDenEq1>
+    struct duration_cast_aux;
 
     // When the two periods are the same, all that is left to do is static_cast from
     //   the source representation to the target representation (which may be a no-op).
     //   This conversion is always exact as long as the static_cast from the source
     //   representation to the destination representation is exact.
     template <class FromDuration, class ToDuration, class Period>
-    struct duration_cast<FromDuration, ToDuration, Period, true, true>
+    struct duration_cast_aux<FromDuration, ToDuration, Period, true, true>
     {
         BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
@@ -241,7 +240,7 @@ namespace detail
     //   This conversion is generally not exact because of the division (but could be
     //   if you get lucky on the run time value of fd.count()).
     template <class FromDuration, class ToDuration, class Period>
-    struct duration_cast<FromDuration, ToDuration, Period, true, false>
+    struct duration_cast_aux<FromDuration, ToDuration, Period, true, false>
     {
         BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
@@ -260,7 +259,7 @@ namespace detail
     //   static_cast'ing to the destination.
     //   This conversion is always exact as long as the static_cast's involved are exact.
     template <class FromDuration, class ToDuration, class Period>
-    struct duration_cast<FromDuration, ToDuration, Period, false, true>
+    struct duration_cast_aux<FromDuration, ToDuration, Period, false, true>
     {
         BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
@@ -280,7 +279,7 @@ namespace detail
     //   This conversion is generally not exact because of the division (but could be
     //   if you get lucky on the run time value of fd.count()).
     template <class FromDuration, class ToDuration, class Period>
-    struct duration_cast<FromDuration, ToDuration, Period, false, false>
+    struct duration_cast_aux<FromDuration, ToDuration, Period, false, false>
     {
         BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
@@ -291,6 +290,23 @@ namespace detail
             return ToDuration(static_cast<typename ToDuration::rep>(
                static_cast<C>(fd.count()) * static_cast<C>(Period::num)
                  / static_cast<C>(Period::den)));
+        }
+    };
+
+    template <class FromDuration, class ToDuration>
+    struct duration_cast {
+        typedef typename ratio_divide<typename FromDuration::period,
+              typename ToDuration::period>::type Period;
+        typedef duration_cast_aux<
+            FromDuration,
+            ToDuration,
+            Period,
+            Period::num == 1,
+            Period::den == 1
+        > Aux;
+        BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
+        {
+            return Aux()(fd);
         }
     };
 
@@ -413,6 +429,9 @@ namespace chrono {
 
         BOOST_CHRONO_CONSTEXPR
         duration() { }
+//#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+//        duration(const rep& r) : rep_(r) { }
+//#endif        
         template <class Rep2>
         BOOST_CHRONO_CONSTEXPR
         explicit duration(const Rep2& r,
@@ -438,6 +457,11 @@ namespace chrono {
         }
 
         // conversions
+//#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+//        BOOST_CHRONO_CONSTEXPR
+//        duration(const duration& d)
+//            : rep_(d.rep_) {}
+//#endif                
         template <class Rep2, class Period2>
         BOOST_CHRONO_CONSTEXPR
         duration(const duration<Rep2, Period2>& d,
@@ -450,17 +474,7 @@ namespace chrono {
                         >
                     >
                 >::type* = 0)
-//~ #ifdef        __GNUC__
-            // GCC 4.2.4 refused to accept a definition at this point,
-            // yet both VC++ 9.0 SP1 and Intel ia32 11.0 accepted the definition
-            // without complaint. VC++ 9.0 SP1 refused to accept a later definition,
-            // although that was fine with GCC 4.2.4 and Intel ia32 11.0. Thus we
-            // have to support both approaches.
-            //~ ;
-//~ #else
-            //~ : rep_(chrono::detail::duration_cast<duration>(d).count()) {}
             : rep_(chrono::detail::duration_cast<duration<Rep2, Period2>, duration>()(d).count()) {}
-//~ #endif
 
         // observer
 
@@ -654,7 +668,15 @@ namespace detail
         bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
         {
             typedef typename common_type<LhsDuration, RhsDuration>::type CD;
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+            // trying to simplify expression so enable_if is not used (Pb. with MSVC.9.0)
+            return
+                chrono::detail::duration_cast<LhsDuration, CD>()(lhs).count()
+            ==
+                chrono::detail::duration_cast<RhsDuration, CD>()(rhs).count();
+#else
             return CD(lhs).count() == CD(rhs).count();
+#endif
         }
     };
 
@@ -770,31 +792,6 @@ namespace detail
         return boost::chrono::detail::duration_cast<
           duration<Rep, Period>, ToDuration>()(fd);
     }
-
-//----------------------------------------------------------------------------//
-//                 duration constructor implementation                        //
-//              See comment in the class duration synopsis                    //
-//----------------------------------------------------------------------------//
-#if 0
-#ifdef __GNUC__
-  // see comment above in section 20.9.3 Class template duration [time.duration]
-    template <class Rep, class Period>
-    template <class Rep2, class Period2>
-    BOOST_CHRONO_CONSTEXPR duration<Rep, Period>::duration(
-        const duration<Rep2, Period2>& d,
-        typename boost::enable_if <
-            mpl::or_ <
-                treat_as_floating_point<rep>,
-                mpl::and_ <
-                    mpl::bool_ <ratio_divide<Period2, period>::type::den == 1>,
-                    mpl::not_ <treat_as_floating_point<Rep2> >
-                >
-            >
-            >::type*)
-          : rep_(duration_cast<duration>(d).count())
-   {}
-#endif
-#endif
 
 } // namespace chrono
 } // namespace boost
