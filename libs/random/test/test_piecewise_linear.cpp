@@ -14,28 +14,76 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/range/algorithm/lower_bound.hpp>
+#include <boost/range/numeric.hpp>
 #include <vector>
 #include <iostream>
-#include <numeric>
+#include <iomanip>
 
-#include "chi_squared_test.hpp"
+#include "statistic_tests.hpp"
+
+class piecewise_linear
+{
+public:
+    piecewise_linear(const std::vector<double>& intervals, const std::vector<double>& weights)
+      : intervals(intervals),
+        weights(weights),
+        cumulative(1, 0.0)
+    {
+        for(std::size_t i = 0; i < weights.size() - 1; ++i) {
+            cumulative.push_back((weights[i] + weights[i + 1]) / 2);
+        }
+        boost::partial_sum(cumulative, cumulative.begin());
+        double sum = cumulative.back();
+        for(std::vector<double>::iterator iter = cumulative.begin(), end = cumulative.end();
+            iter != end; ++iter)
+        {
+            *iter /= sum;
+        }
+        for(std::vector<double>::iterator iter = this->weights.begin(), end = this->weights.end();
+            iter != end; ++iter)
+        {
+            *iter /= sum;
+        }
+        assert(this->weights.size() == this->intervals.size());
+        assert(this->weights.size() == this->cumulative.size());
+    }
+
+    double cdf(double x) const
+    {
+        std::size_t index = boost::lower_bound(intervals, x) - intervals.begin();
+        if(index == 0) return 0;
+        else if(index == intervals.size()) return 1;
+        else {
+            double start = cumulative[index - 1];
+            double lower_weight = weights[index - 1];
+            double upper_weight = weights[index];
+            double lower = intervals[index - 1];
+            double upper = intervals[index];
+            double mid_weight = (lower_weight * (upper - x) + upper_weight * (x - lower)) / (upper - lower);
+            double segment_area = (x - lower) * (mid_weight + lower_weight) / 2;
+            return start + segment_area;
+        }
+    }
+private:
+    std::vector<double> intervals;
+    std::vector<double> weights;
+    std::vector<double> cumulative;
+};
+
+double cdf(const piecewise_linear& dist, double x)
+{
+    return dist.cdf(x);
+}
 
 bool do_test(int n, long long max) {
     std::cout << "running piecewise_linear(p0, p1, ..., p" << n-1 << ")" << " " << max << " times: " << std::flush;
 
     std::vector<double> weights;
-    std::vector<double> expected;
     {
         boost::mt19937 egen;
         for(int i = 0; i < n; ++i) {
             weights.push_back(egen());
-        }
-        for(int i = 0; i < n - 1; ++i) {
-            expected.push_back((weights[i] + weights[i + 1]) / 2);
-        }
-        double sum = std::accumulate(expected.begin(), expected.end(), 0.0);
-        for(std::vector<double>::iterator iter = expected.begin(), end = expected.end(); iter != end; ++iter) {
-            *iter /= sum;
         }
     }
     std::vector<double> intervals;
@@ -43,23 +91,18 @@ bool do_test(int n, long long max) {
         intervals.push_back(i);
     }
     
+    piecewise_linear expected(intervals, weights);
+    
     boost::random::piecewise_linear_distribution<> dist(intervals, weights);
     boost::mt19937 gen;
-    std::vector<long long> results(expected.size());
-    for(long long i = 0; i < max; ++i) {
-        ++results[static_cast<std::size_t>(dist(gen))];
-    }
+    kolmogorov_experiment test(max);
+    boost::variate_generator<boost::mt19937&, boost::random::piecewise_linear_distribution<> > vgen(gen, dist);
 
-    long long sum = std::accumulate(results.begin(), results.end(), 0ll);
-    if(sum != max) {
-        std::cout << "*** Failed: incorrect total: " << sum << " ***" << std::endl;
-        return false;
-    }
-    double chsqr = chi_squared_test(results, expected, max);
+    double prob = test.probability(test.run(vgen, expected));
 
-    bool result = chsqr < 0.99;
+    bool result = prob < 0.99;
     const char* err = result? "" : "*";
-    std::cout << std::setprecision(17) << chsqr << err << std::endl;
+    std::cout << std::setprecision(17) << prob << err << std::endl;
 
     std::cout << std::setprecision(6);
 
