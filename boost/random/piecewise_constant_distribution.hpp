@@ -38,7 +38,7 @@ namespace random {
 template<class RealType = double, class WeightType = double>
 class piecewise_constant_distribution {
 public:
-    typedef RealType input_type;
+    typedef std::size_t input_type;
     typedef RealType result_type;
 
     class param_type {

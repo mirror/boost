@@ -14,48 +14,79 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/range/algorithm/lower_bound.hpp>
+#include <boost/range/numeric.hpp>
 #include <vector>
 #include <iostream>
-#include <numeric>
+#include <iomanip>
 
-#include "chi_squared_test.hpp"
+#include "statistic_tests.hpp"
+
+class piecewise_constant
+{
+public:
+    piecewise_constant(const std::vector<double>& intervals, const std::vector<double>& weights)
+      : intervals(intervals),
+        cumulative(1, 0.0)
+    {
+        boost::partial_sum(weights, std::back_inserter(cumulative));
+        for(std::vector<double>::iterator iter = cumulative.begin(), end = cumulative.end();
+            iter != end; ++iter)
+        {
+            *iter /= cumulative.back();
+        }
+    }
+
+    double cdf(double x) const
+    {
+        std::size_t index = boost::lower_bound(intervals, x) - intervals.begin();
+        if(index == 0) return 0;
+        else if(index == intervals.size()) return 1;
+        else {
+            double lower_weight = cumulative[index - 1];
+            double upper_weight = cumulative[index];
+            double lower = intervals[index - 1];
+            double upper = intervals[index];
+            return lower_weight + (x - lower) / (upper - lower) * (upper_weight - lower_weight);
+        }
+    }
+private:
+    std::vector<double> intervals;
+    std::vector<double> cumulative;
+};
+
+double cdf(const piecewise_constant& dist, double x)
+{
+    return dist.cdf(x);
+}
 
 bool do_test(int n, long long max) {
     std::cout << "running piecewise_constant(p0, p1, ..., p" << n-1 << ")" << " " << max << " times: " << std::flush;
 
-    std::vector<double> expected;
+    std::vector<double> weights;
     {
         boost::mt19937 egen;
         for(int i = 0; i < n; ++i) {
-            expected.push_back(egen());
-        }
-        double sum = std::accumulate(expected.begin(), expected.end(), 0.0);
-        for(std::vector<double>::iterator iter = expected.begin(), end = expected.end(); iter != end; ++iter) {
-            *iter /= sum;
+            weights.push_back(egen());
         }
     }
     std::vector<double> intervals;
     for(int i = 0; i <= n; ++i) {
         intervals.push_back(i);
     }
+
+    piecewise_constant expected(intervals, weights);
     
-    boost::random::piecewise_constant_distribution<> dist(intervals, expected);
+    boost::random::piecewise_constant_distribution<> dist(intervals, weights);
     boost::mt19937 gen;
-    std::vector<long long> results(expected.size());
-    for(long long i = 0; i < max; ++i) {
-        ++results[static_cast<std::size_t>(dist(gen))];
-    }
+    kolmogorov_experiment test(max);
+    boost::variate_generator<boost::mt19937&, boost::random::piecewise_constant_distribution<> > vgen(gen, dist);
 
-    long long sum = std::accumulate(results.begin(), results.end(), 0ll);
-    if(sum != max) {
-        std::cout << "*** Failed: incorrect total: " << sum << " ***" << std::endl;
-        return false;
-    }
-    double chsqr = chi_squared_test(results, expected, max);
+    double prob = test.probability(test.run(vgen, expected));
 
-    bool result = chsqr < 0.99;
+    bool result = prob < 0.99;
     const char* err = result? "" : "*";
-    std::cout << std::setprecision(17) << chsqr << err << std::endl;
+    std::cout << std::setprecision(17) << prob << err << std::endl;
 
     std::cout << std::setprecision(6);
 
@@ -96,7 +127,7 @@ bool handle_option(int& argc, char**& argv, char opt, T& value) {
 
 int main(int argc, char** argv) {
     int repeat = 10;
-    int max_n = 100000;
+    int max_n = 10;
     long long trials = 1000000ll;
 
     if(argc > 0) {
