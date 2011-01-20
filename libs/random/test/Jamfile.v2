@@ -80,7 +80,7 @@ run test_piecewise_linear_distribution.cpp /boost//unit_test_framework ;
 # run statistic_tests.cpp ;
 
 exe statistic_tests.exe : statistic_tests.cpp ;
-explicit statistics_tests.exe ;
+explicit statistic_tests.exe ;
 
 install statistic_tests : statistic_tests.exe : <install-type>EXE <location>. ;
 explicit statistic_tests ;
