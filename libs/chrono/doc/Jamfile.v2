@@ -69,6 +69,7 @@ boostbook standalone
         # better use SVG's instead:
         <format>pdf:<xsl:param>admon.graphics.extension=".svg"
         <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
+        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/chrono/doc/html
    ;
 
 install pdf-install : standalone : <location>. <install-type>PDF ;
