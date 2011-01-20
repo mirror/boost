@@ -111,7 +111,7 @@ bool do_test(int n, long long max) {
 
 bool do_tests(int repeat, int max_n, long long trials) {
     boost::mt19937 gen;
-    boost::uniform_int<> idist(1, max_n);
+    boost::uniform_int<> idist(2, max_n);
     int errors = 0;
     for(int i = 0; i < repeat; ++i) {
         if(!do_test(idist(gen), trials)) {
@@ -143,7 +143,7 @@ bool handle_option(int& argc, char**& argv, char opt, T& value) {
 
 int main(int argc, char** argv) {
     int repeat = 10;
-    int max_n = 100000;
+    int max_n = 10;
     long long trials = 1000000ll;
 
     if(argc > 0) {
