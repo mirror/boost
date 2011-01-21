@@ -1310,7 +1310,7 @@ namespace quickbook
 
         fs::path path = calculate_relative_path(first, last, actions);
         out << "\n<xi:include href=\"";
-        detail::print_string(detail::escape_uri(path.string()), out.get());
+        detail::print_string(detail::escape_uri(path.generic_string()), out.get());
         out << "\" />\n";
     }
 
