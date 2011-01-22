@@ -78,14 +78,14 @@ int x = '''); -->
 <tbody valign="top">
 <tr class="field"><th class="field-name">Authors:</th><td class="field-body">David Abrahams, Daniel Wallin</td>
 </tr>
-<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference external" href="mailto:dalwan01&#64;student.umu.se">dalwan01&#64;student.umu.se</a></td>
+<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference external" href="mailto:daniel&#64;boostpro.com">daniel&#64;boostpro.com</a></td>
 </tr>
-<tr class="field"><th class="field-name">Organization:</th><td class="field-body"><a class="reference external" href="http://www.boost-consulting.com">Boost Consulting</a></td>
+<tr class="field"><th class="field-name">organization:</th><td class="field-body"><a class="reference external" href="http://www.boostpro.com">BoostPro Computing</a></td>
 </tr>
-<tr class="field"><th class="field-name">Date:</th><td class="field-body">$Date: 2005/07/18 20:34:31 $</td>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">$Date: 2005/07/17 19:53:01 $</td>
 </tr>
-<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Copyright David Abrahams, Daniel Wallin 2005.
-Distributed under the Boost Software License,
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Copyright David Abrahams, Daniel Wallin
+2005-2009. Distributed under the Boost Software License,
 Version 1.0. (See accompanying file LICENSE_1_0.txt
 or copy at <a class="reference external" href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</td>
 </tr>
@@ -508,7 +508,7 @@ tuple:</p>
 (required <strong>(graph, *)</strong> )
 </pre>
 <p class="compound-last">Since <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> doesn't require any particular type
-for its <tt class="docutils literal"><span class="pre">graph</span></tt> parameter, we use an asterix to indicate that
+for its <tt class="docutils literal"><span class="pre">graph</span></tt> parameter, we use an asterisk to indicate that
 any type is allowed.  Required parameters must always precede any
 optional parameters in a signature, but if there are <em>no</em>
 required parameters, the <tt class="docutils literal"><span class="pre">(required</span> <span class="pre">…</span> <span class="pre">)</span></tt> clause can be omitted
@@ -791,7 +791,7 @@ Metafunctions</a>.  There's no space to give a complete description
 of metafunctions or of graph library details here, but we'll show
 you the complete signature with maximal checking, just to give you
 a feel for how it's done.  Each predicate metafunction is enclosed
-in parentheses <em>and preceded by an asterix</em>, as follows:</p>
+in parentheses <em>and preceded by an asterisk</em>, as follows:</p>
 <pre class="literal-block">
 BOOST_PARAMETER_FUNCTION(
     (void), depth_first_search, graphs
@@ -1026,7 +1026,7 @@ BOOST_PARAMETER_NAME(arg2)
 struct callable2
 {
     BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-        (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
+        (void), call, tag, (required (arg1,(int))(arg2,(int))))
     {
         std::cout &lt;&lt; arg1 &lt;&lt; &quot;, &quot; &lt;&lt; arg2 &lt;&lt; std::endl;
     }
@@ -1034,7 +1034,9 @@ struct callable2
 </pre>
 <!-- @example.prepend('''
 #include <boost/parameter.hpp>
-#include <iostream>''') -->
+#include <iostream>
+using namespace boost::parameter;
+''') -->
 <!-- @test('compile') -->
 <p>These macros don't directly allow a function's interface to be
 separated from its implementation, but you can always forward
@@ -1043,7 +1045,7 @@ arguments on to a separate implementation function:</p>
 struct callable2
 {
     BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-        (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
+        (void), call, tag, (required (arg1,(int))(arg2,(int))))
     {
         call_impl(arg1,arg2);
     }
@@ -1055,8 +1057,33 @@ struct callable2
 #include <boost/parameter.hpp>
 
 BOOST_PARAMETER_NAME(arg1)
-BOOST_PARAMETER_NAME(arg2)''') -->
+BOOST_PARAMETER_NAME(arg2)
+using namespace boost::parameter;
+''') -->
 <!-- @test('compile') -->
+<div class="section" id="static-member-functions">
+<h3>2.2.1&nbsp;&nbsp;&nbsp;Static Member Functions</h3>
+<p>To expose a static member function, simply insert the keyword
+“<tt class="docutils literal"><span class="pre">static</span></tt>” before the function name:</p>
+<pre class="literal-block">
+BOOST_PARAMETER_NAME(arg1)
+
+struct somebody
+{
+    BOOST_PARAMETER_MEMBER_FUNCTION(
+        (void), <strong>static</strong> f, tag, (optional (arg1,(int),0)))
+    {
+        std::cout &lt;&lt; arg1 &lt;&lt; std::endl;
+    }
+};
+</pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <iostream>
+using namespace boost::parameter;
+''') -->
+<!-- @test('compile') -->
+</div>
 </div>
 <div class="section" id="parameter-enabled-constructors">
 <h2><a class="toc-backref" href="#id29">2.3&nbsp;&nbsp;&nbsp;Parameter-Enabled Constructors</a></h2>
@@ -1224,10 +1251,10 @@ namespace boost { namespace python {
 using boost::mpl::_;
 
 typedef parameter::parameters&lt;
-    required&lt;tag::class_type, is_class&lt;_&gt; &gt;
-  , optional&lt;tag::base_list, mpl::is_sequence&lt;_&gt; &gt;
-  , optional&lt;tag::held_type&gt;
-  , optional&lt;tag::copyable&gt;
+    required&lt;tag::class_type, boost::is_class&lt;_&gt; &gt;
+  , parameter::optional&lt;tag::base_list, mpl::is_sequence&lt;_&gt; &gt;
+  , parameter::optional&lt;tag::held_type&gt;
+  , parameter::optional&lt;tag::copyable&gt;
 &gt; class_signature;
 
 }}
@@ -1236,6 +1263,7 @@ typedef parameter::parameters&lt;
 #include <boost/parameter.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/type_traits/is_class.hpp>
 #include <memory>
 
 using namespace boost::parameter;
@@ -1255,11 +1283,13 @@ struct bases
 </div>
 <div class="section" id="argument-packs-and-parameter-extraction">
 <span id="binding-intro"></span><h4>2.4.1.4&nbsp;&nbsp;&nbsp;Argument Packs and Parameter Extraction</h4>
-<p>Next, within the body of <tt class="docutils literal"><span class="pre">class_</span></tt> , we use the <span class="concept">ParameterSpec</span>'s nested <tt class="docutils literal"><span class="pre">::bind&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> template to bundle the actual arguments
-into an <a class="reference external" href="reference.html#argumentpack"><span class="concept">ArgumentPack</span></a> type, and then use the library's <tt class="docutils literal"><span class="pre">binding&lt;</span>
-<span class="pre">…</span> <span class="pre">&gt;</span></tt> metafunction to extract “logical parameters”.  Note that
-defaults are specified by supplying an optional third argument to
-<tt class="docutils literal"><span class="pre">binding&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt>:</p>
+<p>Next, within the body of <tt class="docutils literal"><span class="pre">class_</span></tt> , we use the <span class="concept">ParameterSpec</span>'s
+nested <tt class="docutils literal"><span class="pre">::bind&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> template to bundle the actual arguments into an
+<a class="reference external" href="reference.html#argumentpack"><span class="concept">ArgumentPack</span></a> type, and then use the library's <tt class="docutils literal"><span class="pre">value_type&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt>
+metafunction to extract “logical parameters”.  <tt class="docutils literal"><span class="pre">value_type&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> is
+a lot like <tt class="docutils literal"><span class="pre">binding&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt>, but no reference is added to the actual
+argument type.  Note that defaults are specified by passing it an
+optional third argument:</p>
 <pre class="literal-block">
 namespace boost { namespace python {
 
@@ -1277,16 +1307,16 @@ struct class_
     args;
 
     // Extract first logical parameter.
-    typedef typename parameter::binding&lt;
+    typedef typename parameter::value_type&lt;
       args, tag::class_type&gt;::type class_type;
 
-    typedef typename parameter::binding&lt;
+    typedef typename parameter::value_type&lt;
       args, tag::base_list, bases&lt;&gt; &gt;::type base_list;
 
-    typedef typename parameter::binding&lt;
+    typedef typename parameter::value_type&lt;
       args, tag::held_type, class_type&gt;::type held_type;
 
-    typedef typename parameter::binding&lt;
+    typedef typename parameter::value_type&lt;
       args, tag::copyable, void&gt;::type copyable;
 };
 
@@ -1381,12 +1411,12 @@ parameters deducible:</p>
 typedef parameter::parameters&lt;
     required&lt;tag::class_type, is_class&lt;_&gt; &gt;
 
-  , optional&lt;
+  , parameter::optional&lt;
         deduced&lt;tag::base_list&gt;
       , is_base_and_derived&lt;detail::bases_base,_&gt;
     &gt;
 
-  , optional&lt;
+  , parameter::optional&lt;
         deduced&lt;tag::held_type&gt;
       , mpl::not_&lt;
             mpl::or_&lt;
@@ -1396,11 +1426,12 @@ typedef parameter::parameters&lt;
         &gt;
     &gt;
 
-  , optional&lt;deduced&lt;tag::copyable&gt;, is_same&lt;noncopyable,_&gt; &gt;
+  , parameter::optional&lt;deduced&lt;tag::copyable&gt;, is_same&lt;noncopyable,_&gt; &gt;
 
 &gt; class_signature;
 </pre>
 <!-- @example.prepend('''
+#include <boost/type_traits/is_class.hpp>
 namespace boost { namespace python {''') -->
 <!-- @example.append('''
 template <
@@ -1417,16 +1448,16 @@ struct class_
     args;
 
     // Extract first logical parameter.
-    typedef typename parameter::binding<
+    typedef typename parameter::value_type<
       args, tag::class_type>::type class_type;
 
-    typedef typename parameter::binding<
+    typedef typename parameter::value_type<
       args, tag::base_list, bases<> >::type base_list;
 
-    typedef typename parameter::binding<
+    typedef typename parameter::value_type<
       args, tag::held_type, class_type>::type held_type;
 
-    typedef typename parameter::binding<
+    typedef typename parameter::value_type<
       args, tag::copyable, void>::type copyable;
 };
 
@@ -1613,15 +1644,13 @@ int main()
 <p>Occasionally one needs to deduce argument types without an extra
 layer of function call.  For example, suppose we wanted to return
 twice the value of the <tt class="docutils literal"><span class="pre">index</span></tt> parameter?  In that
-case we can use the <tt class="docutils literal"><span class="pre">binding&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> metafunction introduced
+case we can use the <tt class="docutils literal"><span class="pre">value_type&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> metafunction introduced
 <a class="reference internal" href="#binding-intro">earlier</a>:</p>
 <pre class="literal-block">
 BOOST_PARAMETER_NAME(index)
 
 template &lt;class ArgumentPack&gt;
-typename remove_reference&lt;
-    typename parameter::binding&lt;ArgumentPack, tag::index, int&gt;::type
-&gt;::type
+typename parameter::value_type&lt;ArgumentPack, tag::index, int&gt;::type
 twice_index(ArgumentPack const&amp; args)
 {
     return 2 * args[_index|42];
@@ -1635,32 +1664,16 @@ int six = twice_index(_index = 3);
 #include <cassert>
 
 namespace parameter = boost::parameter;
-using boost::remove_reference;''') -->
-<p>Note that the <tt class="docutils literal"><span class="pre">remove_reference&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> dance is necessary because
-<tt class="docutils literal"><span class="pre">binding&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> will return a reference type when the argument
-is bound in the argument pack. If we don't strip the reference we
-end up returning a reference to the temporary created in the <tt class="docutils literal"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">…</span></tt>
-expression. A convenient shortcut would be to use the <tt class="docutils literal"><span class="pre">value_type&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt>
-metafunction:</p>
-<pre class="literal-block">
-template &lt;class ArgumentPack&gt;
-typename <strong>parameter::value_type&lt;ArgumentPack, tag::index, int&gt;</strong>::type
-twice_index(ArgumentPack const&amp; args)
-{
-    return 2 * args[_index|42];
-}
-</pre>
-<!-- @example.wrap('namespace with_value_type {', '''
-int six = twice_index(_index = 3);
-}''') -->
-<!-- TODO: binding<> returns a reference. We should use value_type<> here. -->
+''') -->
 <!-- @example.append('''
 int main()
 {
     assert(six == 6);
-    assert(with_value_type::six == 6);
 }''') -->
 <!-- @test('run', howmany='all') -->
+<p>Note that if we had used <tt class="docutils literal"><span class="pre">binding&lt;</span> <span class="pre">…</span> <span class="pre">&gt;</span></tt> rather than <tt class="docutils literal"><span class="pre">value_type&lt;</span> <span class="pre">…</span>
+<span class="pre">&gt;</span></tt>, we would end up returning a reference to the temporary created in
+the <tt class="docutils literal"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">…</span></tt> expression.</p>
 </div>
 <div class="section" id="lazy-default-computation">
 <h3>3.2.3&nbsp;&nbsp;&nbsp;Lazy Default Computation</h3>
