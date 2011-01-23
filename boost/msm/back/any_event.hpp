@@ -25,14 +25,13 @@ template<class EventType,class FsmType>
 class holder : public placeholder
 {
 public:
-    holder(EventType const& evt, FsmType& fsm): event_(evt),fsm_(fsm){}
+    holder(EventType const& evt, FsmType& fsm){}
     virtual ::boost::msm::back::HandledEnum process_event() const
     {
-        return fsm_.process_event(event_);
+        //default. Will not be called
+        return HANDLED_TRUE;
     }
 private:
-    EventType const& event_;
-    FsmType& fsm_;
 };
 
 class any_event
