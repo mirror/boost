@@ -429,9 +429,9 @@ namespace chrono {
 
         BOOST_CHRONO_CONSTEXPR
         duration() { }
-//#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-//        duration(const rep& r) : rep_(r) { }
-//#endif        
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+        duration(const rep& r) : rep_(r) { }
+#endif        
         template <class Rep2>
         BOOST_CHRONO_CONSTEXPR
         explicit duration(const Rep2& r,
@@ -457,11 +457,6 @@ namespace chrono {
         }
 
         // conversions
-//#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-//        BOOST_CHRONO_CONSTEXPR
-//        duration(const duration& d)
-//            : rep_(d.rep_) {}
-//#endif                
         template <class Rep2, class Period2>
         BOOST_CHRONO_CONSTEXPR
         duration(const duration<Rep2, Period2>& d,
