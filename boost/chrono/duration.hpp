@@ -695,7 +695,15 @@ namespace detail
         bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
         {
             typedef typename common_type<LhsDuration, RhsDuration>::type CD;
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+            // trying to simplify expression so enable_if is not used (Pb. with MSVC.9.0)
+            return
+                chrono::detail::duration_cast<LhsDuration, CD>()(lhs).count()
+            <
+                chrono::detail::duration_cast<RhsDuration, CD>()(rhs).count();
+#else
             return CD(lhs).count() < CD(rhs).count();
+#endif            
         }
     };
 
