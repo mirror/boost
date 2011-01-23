@@ -38,7 +38,7 @@ namespace chrono_detail
     static double nanosecs_per_tic = chrono_detail::get_nanosecs_per_tic();
 
     boost::detail::win32::LARGE_INTEGER_ pcount;
-    if ( (nanosecs_per_tic <= 0.0L) || 
+    if ( (nanosecs_per_tic <= 0.0L) ||
             (!boost::detail::win32::QueryPerformanceCounter( &pcount )) )
     {
         boost::detail::win32::DWORD_ cause =
@@ -46,14 +46,21 @@ namespace chrono_detail
                     ? ERROR_NOT_SUPPORTED
                     : boost::detail::win32::GetLastError());
         boost::throw_exception(
-                system::system_error( 
-                        cause, 
-                        BOOST_CHRONO_SYSTEM_CATEGORY, 
+                system::system_error(
+                        cause,
+                        BOOST_CHRONO_SYSTEM_CATEGORY,
                         "chrono::steady_clock" ));
     }
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+    // trying to simplify expression (Pb. with MSVC.9.0)
+    steady_clock::rep r = static_cast<steady_clock::rep>((nanosecs_per_tic) * pcount.QuadPart);
+    steady_clock::duration d(r);
+    return steady_clock::time_point(d);
+#else
     return steady_clock::time_point(steady_clock::duration(
       static_cast<steady_clock::rep>((nanosecs_per_tic) * pcount.QuadPart)));
+#endif
   }
 
 
@@ -62,28 +69,28 @@ namespace chrono_detail
     static double nanosecs_per_tic = chrono_detail::get_nanosecs_per_tic();
 
     boost::detail::win32::LARGE_INTEGER_ pcount;
-    if ( (nanosecs_per_tic <= 0.0L) 
+    if ( (nanosecs_per_tic <= 0.0L)
             || (!boost::detail::win32::QueryPerformanceCounter( &pcount )) )
     {
-        boost::detail::win32::DWORD_ cause = 
-            ((nanosecs_per_tic <= 0.0L) 
-                    ? ERROR_NOT_SUPPORTED 
+        boost::detail::win32::DWORD_ cause =
+            ((nanosecs_per_tic <= 0.0L)
+                    ? ERROR_NOT_SUPPORTED
                     : boost::detail::win32::GetLastError());
         if (BOOST_CHRONO_IS_THROWS(ec)) {
             boost::throw_exception(
-                    system::system_error( 
-                            cause, 
-                            BOOST_CHRONO_SYSTEM_CATEGORY, 
+                    system::system_error(
+                            cause,
+                            BOOST_CHRONO_SYSTEM_CATEGORY,
                             "chrono::steady_clock" ));
-        } 
-        else 
+        }
+        else
         {
             ec.assign( cause, BOOST_CHRONO_SYSTEM_CATEGORY );
             return steady_clock::time_point(duration(0));
         }
     }
 
-    if (!BOOST_CHRONO_IS_THROWS(ec)) 
+    if (!BOOST_CHRONO_IS_THROWS(ec))
     {
         ec.clear();
     }
@@ -105,7 +112,7 @@ namespace chrono_detail
   {
     boost::detail::win32::FILETIME_ ft;
     boost::detail::win32::GetSystemTimeAsFileTime( &ft );  // never fails
-    if (!BOOST_CHRONO_IS_THROWS(ec)) 
+    if (!BOOST_CHRONO_IS_THROWS(ec))
     {
         ec.clear();
     }
