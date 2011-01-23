@@ -52,7 +52,7 @@
 //  Comeau C++
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/comeau.hpp"
 
-#elif defined __PATHSCALE__
+#elif defined(__PATHSCALE__) && (__PATHSCALE__ >= 4)
 // PathScale EKOPath compiler (has to come before clang and gcc)
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/pathscale.hpp"
 
