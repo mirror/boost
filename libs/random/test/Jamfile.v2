@@ -77,6 +77,8 @@ run test_exponential.cpp ;
 run test_exponential_distribution.cpp /boost//unit_test_framework ;
 run test_bernoulli.cpp ;
 run test_bernoulli_distribution.cpp /boost//unit_test_framework ;
+run test_cauchy.cpp ;
+run test_cauchy_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
