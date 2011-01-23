@@ -156,6 +156,13 @@ public:
             * this->This() >> x;
             t = boost::archive::version_type(x);
         }
+        else
+        if(boost::archive::library_version_type(2) < lvt){
+            // upto 255 versions
+            unsigned char x=0;
+            * this->This() >> x;
+            t = version_type(x);
+        }
         else{
             unsigned int x=0;
             * this->This() >> x;
