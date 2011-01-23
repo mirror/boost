@@ -75,6 +75,8 @@ run test_piecewise_linear.cpp ;
 run test_piecewise_linear_distribution.cpp /boost//unit_test_framework ;
 run test_exponential.cpp ;
 run test_exponential_distribution.cpp /boost//unit_test_framework ;
+run test_bernoulli.cpp ;
+run test_bernoulli_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
