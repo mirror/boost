@@ -26,7 +26,22 @@
 #  define BOOST_INTEL_CXX_VERSION __ECC
 #endif
 
+// Flags determined by comparing output of 'icpc -dM -E' with and without '-std=c++0x'
+#if (BOOST_INTEL_CXX_VERSION >= 1200)
+#  if defined(BOOST_INTEL_LINUX) && defined(__STDC_HOSTED__)
+#    define BOOST_INTEL_STDCXX0X
+#  endif
+#elif (BOOST_INTEL_CXX_VERSION >= 1100)
+#  if defined(__GXX_EXPERIMENTAL_CPP0X__)
+#    define BOOST_INTEL_STDCXX0X
+#  endif
+#endif
+
+#ifdef BOOST_INTEL_STDCXX0X
+#define BOOST_COMPILER "Intel C++ C++0x mode version " BOOST_STRINGIZE(BOOST_INTEL_CXX_VERSION)
+#else
 #define BOOST_COMPILER "Intel C++ version " BOOST_STRINGIZE(BOOST_INTEL_CXX_VERSION)
+#endif
 #define BOOST_INTEL BOOST_INTEL_CXX_VERSION
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -178,6 +193,23 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define BOOST_SYMBOL_EXPORT __attribute__((visibility("default")))
 #  define BOOST_SYMBOL_IMPORT
 #  define BOOST_SYMBOL_VISIBLE __attribute__((visibility("default")))
+#endif
+//
+// C++0x features
+//     - ICC added static_assert in 11.0 (first version with C++0x support)
+//
+#if defined(BOOST_INTEL_STDCXX0X)
+#  undef  BOOST_NO_STATIC_ASSERT
+#  define BOOST_HAS_STATIC_ASSERT
+#endif
+//
+//      - decltype and && did not work properly before version 12.0
+//
+#if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1200)
+#  undef  BOOST_NO_DECLTYPE
+#  undef  BOOST_NO_RVALUE_REFERENCES
+#  define BOOST_HAS_DECLTYPE
+#  define BOOST_HAS_RVALUE_REFS
 #endif
 
 //
