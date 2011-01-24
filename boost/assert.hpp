@@ -61,7 +61,7 @@ namespace boost
 
   #define BOOST_ASSERT_MSG(expr, msg) ((void)0)
 
-#elif defined(BOOST_ENABLE_ASSERT_MSG_HANDLER)
+#elif defined(BOOST_ENABLE_ASSERT_HANDLER)
 
   #include <boost/current_function.hpp>
 

@@ -66,7 +66,7 @@
 		<P> <tt>BOOST_ASSERT_MSG(expr, msg)</tt> is equivalent to <code>
         ((void)0)</code> if <b>BOOST_DISABLE_ASSERTS</b> or <b>NDEBUG</b> are 
         defined or <code>expr</code> evaluates to <code>true</code>. If those 
-        macros and <STRONG>BOOST_ENABLE_ASSERT_MSG_HANDLER</STRONG> are not 
+        macros and <STRONG>BOOST_ENABLE_ASSERT_HANDLER</STRONG> are not 
         defined, and <code>expr</code> evaluates to <code>false</code>, an error 
         message that includes <tt>#expr</tt>, <tt>msg</tt>, <tt> <a href="current_function.html">BOOST_CURRENT_FUNCTION</a></tt>, <tt>
         __FILE__</tt>, and <tt>__LINE__</tt> is sent to output stream <b>
@@ -77,7 +77,7 @@
         may produce easier to understand output if messages go to a different 
         stream, such as <code>std::cout</code>. Users may define <b>BOOST_ASSERT_MSG_OSTREAM</b> before including <STRONG>&lt;boost/assert.hpp&gt;</STRONG> 
         to specify a different output stream.&nbsp; </P>
-		<P>If the macro <STRONG>BOOST_ENABLE_ASSERT_MSG_HANDLER</STRONG> is defined when <STRONG>&lt;boost/assert.hpp&gt;</STRONG>
+		<P>If the macro <STRONG>BOOST_ENABLE_ASSERT_HANDLER</STRONG> is defined when <STRONG>&lt;boost/assert.hpp&gt;</STRONG>
 			is included, instead of sending a error message to an output 
         stream, this expression is evaluated</P>
 		<blockquote>

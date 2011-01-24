@@ -66,7 +66,6 @@ void test_disabled()
 #undef BOOST_DISABLE_ASSERTS
 
 #define BOOST_ENABLE_ASSERT_HANDLER
-#define BOOST_ENABLE_ASSERT_MSG_HANDLER
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <cstdio>
