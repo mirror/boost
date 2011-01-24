@@ -69,6 +69,8 @@ doxygen reference :
     <doxygen:param>"ALIASES= \\
         xmlnote=\"@xmlonly <note><para> @endxmlonly\" \\
         endxmlnote=\"@xmlonly </para></note> @endxmlonly\" \\
+        xmlwarning=\"@xmlonly <warning><para> @endxmlonly\" \\
+        endxmlwarning=\"@xmlonly </para></warning> @endxmlonly\" \\
         blockquote=\"@xmlonly <blockquote><para> @endxmlonly\" \\
         endblockquote=\"@xmlonly </para></blockquote> @endxmlonly\" \\
         boost=\"$(BOOST_ROOT)\" \\

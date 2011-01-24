@@ -22,14 +22,17 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <iostream>
+#include <numeric>
+#include <vector>
 
 #include "statistic_tests.hpp"
+#include "chi_squared_test.hpp"
 
 bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
 #ifdef BOOST_RANDOM_ARG2_TYPE
              BOOST_RANDOM_ARG2_TYPE BOOST_RANDOM_ARG2_NAME,
 #endif
-             int max) {
+             long long max) {
     std::cout << "running " BOOST_PP_STRINGIZE(BOOST_RANDOM_DISTRIBUTION_NAME) "("
         << BOOST_RANDOM_ARG1_NAME;
 #ifdef BOOST_RANDOM_ARG2_NAME
@@ -45,10 +48,39 @@ bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
 #endif
         );
     boost::mt19937 gen;
+
+#ifdef BOOST_RANDOM_DISTRIBUTION_MAX
+
+    BOOST_RANDOM_DISTRIBUTION::result_type max_value = BOOST_RANDOM_DISTRIBUTION_MAX;
+
+    std::vector<double> expected_counts(max_value+1);
+    {
+        for(int i = 0; i <= max_value; ++i) {
+            expected_counts[i] = pdf(expected, i);
+        }
+        expected_counts.back() += 1 - cdf(expected, max_value);
+    }
+    
+    std::vector<long long> results(max_value + 1);
+    for(long long i = 0; i < max; ++i) {
+        ++results[std::min(dist(gen), max_value)];
+    }
+
+    long long sum = std::accumulate(results.begin(), results.end(), 0ll);
+    if(sum != max) {
+        std::cout << "*** Failed: incorrect total: " << sum << " ***" << std::endl;
+        return false;
+    }
+    double prob = chi_squared_test(results, expected_counts, max);
+
+#else
+
     kolmogorov_experiment test(max);
     boost::variate_generator<boost::mt19937&, BOOST_RANDOM_DISTRIBUTION > vgen(gen, dist);
 
     double prob = test.probability(test.run(vgen, expected));
+
+#endif
 
     bool result = prob < 0.99;
     const char* err = result? "" : "*";
@@ -68,7 +100,7 @@ bool do_tests(int repeat, Dist1 d1,
 #ifdef BOOST_RANDOM_ARG2_NAME
               Dist2 d2,
 #endif
-              int trials) {
+              long long trials) {
     boost::mt19937 gen;
     int errors = 0;
     for(int i = 0; i < repeat; ++i) {
@@ -117,7 +149,7 @@ int main(int argc, char** argv) {
 #ifdef BOOST_RANDOM_ARG2_TYPE
     BOOST_RANDOM_ARG2_TYPE max_arg2 = BOOST_RANDOM_ARG2_DEFAULT;
 #endif
-    int trials = 1000000;
+    long long trials = 1000000;
 
     if(argc > 0) {
         --argc;
