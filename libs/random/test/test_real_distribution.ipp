@@ -17,6 +17,14 @@
 #endif
 #endif
 
+#ifndef BOOST_RANDOM_DISTRIBUTION_INIT
+#ifdef BOOST_RANDOM_ARG2_TYPE
+#define BOOST_RANDOM_DISTRIBUTION_INIT (BOOST_RANDOM_ARG1_NAME, BOOST_RANDOM_ARG2_NAME)
+#else
+#define BOOST_RANDOM_DISTRIBUTION_INIT (BOOST_RANDOM_ARG1_NAME)
+#endif
+#endif
+
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/exception/diagnostic_information.hpp>
@@ -42,11 +50,7 @@ bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
 
     BOOST_MATH_DISTRIBUTION expected BOOST_MATH_DISTRIBUTION_INIT;
     
-    BOOST_RANDOM_DISTRIBUTION dist(BOOST_RANDOM_ARG1_NAME
-#ifdef BOOST_RANDOM_ARG2_NAME
-        , BOOST_RANDOM_ARG2_NAME
-#endif
-        );
+    BOOST_RANDOM_DISTRIBUTION dist BOOST_RANDOM_DISTRIBUTION_INIT;
     boost::mt19937 gen;
 
 #ifdef BOOST_RANDOM_DISTRIBUTION_MAX
