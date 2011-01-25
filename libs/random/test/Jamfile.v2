@@ -87,6 +87,8 @@ run test_triangle.cpp ;
 run test_triangle_distribution.cpp /boost//unit_test_framework ;
 run test_uniform_int.cpp ;
 run test_uniform_int_distribution.cpp /boost//unit_test_framework ;
+run test_uniform_real.cpp ;
+run test_uniform_real_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
