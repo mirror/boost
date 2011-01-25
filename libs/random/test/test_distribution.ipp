@@ -10,6 +10,7 @@
  */
 
 #include <boost/random/linear_congruential.hpp>
+#include <boost/random/lagged_fibonacci.hpp>
 #include <sstream>
 #include "concepts.hpp"
 
@@ -239,3 +240,41 @@ BOOST_AUTO_TEST_CASE(test_generation) {
 #endif
     }
 }
+
+BOOST_AUTO_TEST_CASE(test_generation_float) {
+    boost::lagged_fibonacci607 gen;
+    BOOST_RANDOM_DISTRIBUTION dist BOOST_RANDOM_TEST1_PARAMS;
+    BOOST_RANDOM_DISTRIBUTION dist_two BOOST_RANDOM_TEST2_PARAMS;
+	typedef BOOST_RANDOM_DISTRIBUTION::result_type result_type;
+    for(int i = 0; i < 10; ++i) {
+        result_type value = dist(gen);
+#ifdef BOOST_RANDOM_TEST1_MIN
+        BOOST_CHECK_GE(value, BOOST_RANDOM_TEST1_MIN);
+#endif
+#ifdef BOOST_RANDOM_TEST1_MAX
+        BOOST_CHECK_LE(value, BOOST_RANDOM_TEST1_MAX);
+#endif
+        result_type value_two = dist_two(gen);
+#ifdef BOOST_RANDOM_TEST2_MIN
+        BOOST_CHECK_GE(value_two, BOOST_RANDOM_TEST2_MIN);
+#endif
+#ifdef BOOST_RANDOM_TEST2_MAX
+        BOOST_CHECK_LE(value_two, BOOST_RANDOM_TEST2_MAX);
+#endif
+        result_type value_param = dist_two(gen, dist.param());
+#ifdef BOOST_RANDOM_TEST1_MIN
+        BOOST_CHECK_GE(value_param, BOOST_RANDOM_TEST1_MIN);
+#endif
+#ifdef BOOST_RANDOM_TEST1_MAX
+        BOOST_CHECK_LE(value_param, BOOST_RANDOM_TEST1_MAX);
+#endif
+        result_type value_two_param = dist(gen, dist_two.param());
+#ifdef BOOST_RANDOM_TEST2_MIN
+        BOOST_CHECK_GE(value_two_param, BOOST_RANDOM_TEST2_MIN);
+#endif
+#ifdef BOOST_RANDOM_TEST2_MAX
+        BOOST_CHECK_LE(value_two_param, BOOST_RANDOM_TEST2_MAX);
+#endif
+    }
+}
+

@@ -29,8 +29,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/preprocessor/stringize.hpp>
+#include <boost/range/numeric.hpp>
 #include <iostream>
-#include <numeric>
 #include <vector>
 
 #include "statistic_tests.hpp"
@@ -57,12 +57,12 @@ bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
 
     BOOST_RANDOM_DISTRIBUTION::result_type max_value = BOOST_RANDOM_DISTRIBUTION_MAX;
 
-    std::vector<double> expected_counts(max_value+1);
+    std::vector<double> expected_pdf(max_value+1);
     {
         for(int i = 0; i <= max_value; ++i) {
-            expected_counts[i] = pdf(expected, i);
+            expected_pdf[i] = pdf(expected, i);
         }
-        expected_counts.back() += 1 - cdf(expected, max_value);
+        expected_pdf.back() += 1 - boost::accumulate(expected_pdf, 0.0);
     }
     
     std::vector<long long> results(max_value + 1);
@@ -70,12 +70,12 @@ bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
         ++results[std::min(dist(gen), max_value)];
     }
 
-    long long sum = std::accumulate(results.begin(), results.end(), 0ll);
+    long long sum = boost::accumulate(results, 0ll);
     if(sum != max) {
         std::cout << "*** Failed: incorrect total: " << sum << " ***" << std::endl;
         return false;
     }
-    double prob = chi_squared_test(results, expected_counts, max);
+    double prob = chi_squared_test(results, expected_pdf, max);
 
 #else
 
