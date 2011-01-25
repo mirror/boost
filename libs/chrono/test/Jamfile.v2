@@ -13,8 +13,8 @@ import feature ;
 
 project
     : requirements
-        <os>FREEBSD:<threading>multi
-        <os>LINUX:<threading>multi
+        <target-os>FREEBSD:<threading>multi
+        <target-os>LINUX:<threading>multi
         <toolset>msvc:<asynch-exceptions>on
         <define>BOOST_CHRONO_USES_MPL_ASSERT
         <define>BOOST_SYSTEM_NO_DEPRECATED
@@ -33,9 +33,10 @@ project
         <toolset>gcc-mingw-4.5.0:<cxxflags>-fdiagnostics-show-option
         <toolset>msvc:<cxxflags>/wd4127
 # Note: Some of the remarks from the Intel compiler are disabled
-# remark #1418: external function definition with no prior declaration
 # remark #304: access control not specified ("public" by default)
-        <toolset>intel:<cxxflags>-wd304,1418
+# remark #383: value copied to temporary, reference to temporary used
+# remark #1418: external function definition with no prior declaration
+        <toolset>intel:<cxxflags>-wd304,383,1418
     ;
 
 rule chrono-run ( sources )
@@ -57,7 +58,6 @@ rule chrono-run ( sources )
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
-            <os>LINUX:<threading>multi
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -80,7 +80,6 @@ rule chrono-run2 ( sources : name )
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
-            <os>LINUX:<threading>multi
         : $(name)_header ]
     ;
 }
@@ -93,13 +92,11 @@ rule chrono-run-mt ( sources )
         : : 
         :   
             <library>/boost/system//boost_system 
-            <os>LINUX:<threading>multi
         :   $(sources[1]:B)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : : 
         :  
             <library>/boost/system//boost_system 
-            <os>LINUX:<threading>multi
         :  $(sources[1]:B)_static ]
     [ run $(sources)
         : : 
@@ -107,7 +104,6 @@ rule chrono-run-mt ( sources )
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
-            <os>LINUX:<threading>multi
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -118,13 +114,11 @@ rule chrono-run2-mt ( sources : name )
         : : 
         :   
             <library>/boost/system//boost_system
-            <os>LINUX:<threading>multi
         :   $(name)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : : 
         :   
             <library>/boost/system//boost_system
-            <os>LINUX:<threading>multi
         : $(name)_static ]
     [ run $(sources)
         : : 
@@ -132,7 +126,6 @@ rule chrono-run2-mt ( sources : name )
             # comment one of the following lines 
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
-            <os>LINUX:<threading>multi
         : $(name)_header ]
     ;
 }
