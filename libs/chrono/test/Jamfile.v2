@@ -13,8 +13,8 @@ import feature ;
 
 project
     : requirements
-        <target-os>FREEBSD:<threading>multi
-        <target-os>LINUX:<threading>multi
+        <target-os>freebsd:<threading>multi
+        <target-os>linux:<threading>multi
         <toolset>msvc:<asynch-exceptions>on
         <define>BOOST_CHRONO_USES_MPL_ASSERT
         <define>BOOST_SYSTEM_NO_DEPRECATED

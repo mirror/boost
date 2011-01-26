@@ -10,8 +10,8 @@
 project boost/chrono
     : source-location ../src
     : requirements
-        <target-os>FREEBSD:<threading>multi
-        <target-os>LINUX:<threading>multi
+        <target-os>freebsd:<threading>multi
+        <target-os>linux:<threading>multi
         <threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
         #<define>BOOST_SYSTEM_INLINED
