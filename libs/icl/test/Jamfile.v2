@@ -1,4 +1,4 @@
-# (C) Copyright 2008-2009: Joachim Faulhaber
+# (C) Copyright 2008-2011: Joachim Faulhaber
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -10,6 +10,7 @@ project
     : requirements
       <library>/boost/test//boost_unit_test_framework
       <library>/boost/date_time//boost_date_time
+      <library>/boost/thread//boost_thread
       <link>static
       <include>../../..
     ;
@@ -59,4 +60,7 @@ test-suite "itl"
       # test_combinable is too slow or too large for some compilers
       #[ run test_combinable_/test_combinable.cpp ]   
       [ run test_changing_interval_defaults_/test_changing_interval_defaults.cpp ]   
+      
+      # Bug fixes --------------------------------------------------------------
+      [ run fix_include_after_thread_/fix_include_after_thread.cpp ]   
     ;
