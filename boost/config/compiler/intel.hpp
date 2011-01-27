@@ -27,14 +27,11 @@
 #endif
 
 // Flags determined by comparing output of 'icpc -dM -E' with and without '-std=c++0x'
-#if (BOOST_INTEL_CXX_VERSION >= 1200)
-#  if defined(BOOST_INTEL_LINUX) && defined(__STDC_HOSTED__)
-#    define BOOST_INTEL_STDCXX0X
-#  endif
-#elif (BOOST_INTEL_CXX_VERSION >= 1100)
-#  if defined(__GXX_EXPERIMENTAL_CPP0X__)
-#    define BOOST_INTEL_STDCXX0X
-#  endif
+#if (!(defined(_WIN32) || defined(_WIN64)) && defined(__STDC_HOSTED__) && __STDC_HOSTED__) || defined(__GXX_EXPERIMENTAL_CPP0X__)
+#  define BOOST_INTEL_STDCXX0X
+#endif
+#if defined(_MSC_VER) && (_MSC_VER >= 1600)
+#  define BOOST_INTEL_STDCXX0X
 #endif
 
 #ifdef BOOST_INTEL_STDCXX0X
@@ -114,7 +111,7 @@
 #     define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #  endif
 #endif
-#if (defined(__GNUC__) && (__GNUC__ < 4)) || defined(_WIN32) || (BOOST_INTEL_CXX_VERSION <= 1110)
+#if (defined(__GNUC__) && (__GNUC__ < 4)) || defined(_WIN32) || (BOOST_INTEL_CXX_VERSION <= 1200)
 // GCC or VC emulation:
 #define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #endif
@@ -200,16 +197,25 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 //
 #if defined(BOOST_INTEL_STDCXX0X)
 #  undef  BOOST_NO_STATIC_ASSERT
-#  define BOOST_HAS_STATIC_ASSERT
+//
+// These pass our test cases, but aren't officially supported according to:
+// http://software.intel.com/en-us/articles/c0x-features-supported-by-intel-c-compiler/
+//
+//#  undef  BOOST_NO_LAMBDAS
+//#  undef  BOOST_NO_DECLTYPE
+//#  undef  BOOST_NO_AUTO_DECLARATIONS
+//#  undef  BOOST_NO_AUTO_MULTIDECLARATIONS
 #endif
-//
-//      - decltype and && did not work properly before version 12.0
-//
+
 #if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1200)
-#  undef  BOOST_NO_DECLTYPE
 #  undef  BOOST_NO_RVALUE_REFERENCES
-#  define BOOST_HAS_DECLTYPE
-#  define BOOST_HAS_RVALUE_REFS
+#  undef  BOOST_NO_SCOPED_ENUMS
+#  undef  BOOST_NO_DELETED_FUNCTIONS
+#  undef  BOOST_NO_DEFAULTED_FUNCTIONS
+#  undef  BOOST_NO_LAMBDAS
+#  undef  BOOST_NO_DECLTYPE
+#  undef  BOOST_NO_AUTO_DECLARATIONS
+#  undef  BOOST_NO_AUTO_MULTIDECLARATIONS
 #endif
 
 //
