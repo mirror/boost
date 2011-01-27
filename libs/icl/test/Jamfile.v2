@@ -63,4 +63,5 @@ test-suite "itl"
       
       # Bug fixes --------------------------------------------------------------
       [ run fix_include_after_thread_/fix_include_after_thread.cpp ]   
+      [ run fix_icl_after_thread_/fix_icl_after_thread.cpp ]   
     ;
