@@ -1923,7 +1923,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
 // the IBM compiler seems to have problems with nested classes
 // the same seems to apply to the Apple version of gcc 4.0.1 (just in case we do for < 4.1)
 // and also to MS VC < 8
-#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1)) || (defined(_MSC_VER) && (_MSC_VER < 1400))
+#if defined (__IBMCPP__) || (__GNUC__ == 4 && __GNUC_MINOR__ < 1) || (defined(_MSC_VER) && (_MSC_VER < 1400))
      public:
 #endif
     template<class ContainingSM>
@@ -1932,7 +1932,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         m_is_included=true;
         ::boost::fusion::for_each(m_substate_list,add_state<ContainingSM>(this,sm));
     }
-#if defined (__IBMCPP__) || (defined (__APPLE_CC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 1)) || (defined(_MSC_VER) && (_MSC_VER < 1400))
+#if defined (__IBMCPP__) || (__GNUC__ == 4 && __GNUC_MINOR__ < 1) || (defined(_MSC_VER) && (_MSC_VER < 1400))
      private:
 #endif
     // A function object for use with mpl::for_each that stuffs
@@ -2348,8 +2348,8 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     }
     // removes one event from the message queue and processes it
     template <class StateType>
-    typename ::boost::disable_if<typename is_no_message_queue<StateType>::type,void >::type
-    process_message_queue(StateType*)
+    void process_message_queue(StateType*, 
+                               typename ::boost::disable_if<typename is_no_message_queue<StateType>::type,void >::type* = 0)
     {
         if (!m_events_queue.m_events_queue.empty())
         {
@@ -2359,8 +2359,8 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         }
     }
     template <class StateType>
-    typename ::boost::enable_if<typename is_no_message_queue<StateType>::type,void >::type
-        process_message_queue(StateType*)
+    void process_message_queue(StateType*, 
+                               typename ::boost::enable_if<typename is_no_message_queue<StateType>::type,void >::type* = 0)
     {
         // nothing to process
     }
