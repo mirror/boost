@@ -696,6 +696,12 @@ namespace boost { namespace proto
     template<typename Fun>
     struct lazy;
 
+    template<
+        BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename Local, void)
+      , typename Transform = void
+    >
+    struct let;
+
     template<typename Sequence, typename State, typename Fun>
     struct fold;
 
@@ -753,6 +759,18 @@ namespace boost { namespace proto
     //{}
 
     namespace exops = exprns_;
+
+    template<typename Tag>
+    struct local;
+
+    // Define some placeholders to be used to define local variables
+    typedef local<struct _a_tag> _a;
+    typedef local<struct _b_tag> _b;
+    typedef local<struct _c_tag> _c;
+    typedef local<struct _d_tag> _d;
+    typedef local<struct _e_tag> _e;
+    typedef local<struct _f_tag> _f;
+    typedef local<struct _g_tag> _g;
 
 }} // namespace boost::proto
 

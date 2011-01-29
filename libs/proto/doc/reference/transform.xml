@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/proto/transform.hpp">
+  <para>Includes all the built-in transforms of Proto.</para>
+</header>

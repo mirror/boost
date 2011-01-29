@@ -27,6 +27,7 @@ test-suite "proto"
         [ run deduce_domain.cpp ]
         [ run examples.cpp ]
         [ run lambda.cpp ]
+        [ run let.cpp ]
         [ run make_expr.cpp ]
         [ run matches.cpp ]
         [ run proto_fusion.cpp : : : <toolset>gcc:<cxxflags>-ftemplate-depth-1024 ]

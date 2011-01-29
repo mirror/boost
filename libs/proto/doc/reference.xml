@@ -467,12 +467,22 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::let">proto::let</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::listN">proto::list1&lt;&gt;, proto::list2&lt;&gt;, ...</classname>
         </computeroutput>
       </listitem>
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::literal">proto::literal</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::local">proto::local</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -1137,6 +1147,7 @@
   <xi:include href="reference/transform/fold_tree.xml"/>
   <xi:include href="reference/transform/impl.xml"/>
   <xi:include href="reference/transform/lazy.xml"/>
+  <xi:include href="reference/transform/let.xml"/>
   <xi:include href="reference/transform/make.xml"/>
   <xi:include href="reference/transform/pass_through.xml"/>
   <xi:include href="reference/transform/when.xml"/>
