@@ -26,7 +26,7 @@ template <class Type> struct is_interval
 { 
     typedef is_interval<Type> type;
     BOOST_STATIC_CONSTANT(bool, 
-        value = (interval_bound_type<Type>::value < interval_bounds::undefined)); 
+        value = ((interval_bound_type<Type>::value) < interval_bounds::undefined)); 
 };
 
 
@@ -34,7 +34,7 @@ template <class Type> struct has_static_bounds
 { 
     typedef has_static_bounds<Type> type;
     BOOST_STATIC_CONSTANT(bool, 
-        value = (interval_bound_type<Type>::value < interval_bounds::dynamic)); 
+        value = ((interval_bound_type<Type>::value) < interval_bounds::dynamic)); 
 };
 
 template <class Type> struct has_dynamic_bounds
