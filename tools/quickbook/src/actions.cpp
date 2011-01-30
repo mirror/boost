@@ -1216,23 +1216,25 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
+        out << "<title>";
+
         actions.anchors.swap(actions.saved_anchors);
         actions.output_pre(out);
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
-            out << "<title>" << str << "</title>\n";
+            out << str;
         }
         else // version 1.3 and above
         {
-            out << "<title>"
-                << "<link linkend=\"" << library_id
+            out << "<link linkend=\"" << library_id
                     << "." << qualified_section_id << "\">"
                 << str
                 << "</link>"
-                << "</title>\n"
                 ;
         }
+        
+        out << "</title>\n";
     }
 
     void end_section_action::operator()(iterator first, iterator last) const
