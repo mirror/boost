@@ -1969,8 +1969,9 @@ not take any effect.
 The simplest way to install on OS X is to use macports.
 If you don't want to use macports and are using Snow Leopard or later,
 there are instructions [link quickbook.install.macosx.native later].
-Earlier versions of OS X have an old version of `xsltproc` which can't
-handle boostbook's xsl stylesheets.
+Earlier versions of OS X need to use something like macports to install
+`xsltproc` because the version they come with is very old, and doesn't have
+good enough XSL support for boostbook's stylesheets.
 
 [section:macports Mac OS X, using macports]
 
