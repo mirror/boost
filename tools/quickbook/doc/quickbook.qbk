@@ -238,6 +238,18 @@ Features include:
   * XML escape documentation fields, with escapes to allow encoding unicode
     in ASCII.
 
+[heading Version 1.5.4 - Boost 1.46.0]
+
+* Add support for `lang` attribute in documentation info.
+* Improved anchor implementation. Especially for using an anchor
+  before a section or heading.
+* Fixed some more issues where lines containing comments were treated
+  as blank lines.
+* Allow import, include and xinclude in conditional phrases. Will
+  allow more block elements in a future version.
+* Rearrange the structure of the grammar.
+* Use filesystem 3. Remove cygwin support.
+
 [endsect] [/Change log]
 
 [section:syntax Syntax Summary]
