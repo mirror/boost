@@ -9,6 +9,7 @@
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
+    [source-mode teletype]
 ]
 
 [/ QuickBook Document version 1.5 ]
@@ -520,6 +521,8 @@ will generate:
 Python's [python] `import` is rather like C++'s [c++] `#include`. A
 C++ comment `// looks like this` whereas a Python comment [python]
 `#looks like this`.
+
+[teletype]
 
 [table Supported Source Modes
     [[Mode]                 [Source Mode Markup]]
@@ -1075,7 +1078,7 @@ syntax highlighted according to the current __source_mode__:
 
         return cgi.escape(text)
 
-[c++]
+[teletype]
 
 Macros that are already defined are expanded in source code. Example:
 
@@ -2119,8 +2122,6 @@ case, check out [@http://www.pkgsrc.org pkgsrc].
 
 [section:windows Windows 2000, XP, 2003, Vista]
 
-[python]
-
 [:['Section contributed by Julio M. Merino Vidal]]
 
 The following instructions apply to any Windows system based on Windows
@@ -2341,7 +2342,7 @@ QuickBook (which IMO is a whole lot easier to edit and maintain).
 
 [section:ref Quick Reference]
 
-[c++]
+[teletype]
 
 [template ordered_list_sample[]
 [pre'''
