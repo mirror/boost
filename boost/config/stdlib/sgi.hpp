@@ -40,11 +40,14 @@
 #  define BOOST_NO_STRINGSTREAM
 #endif
 
-#if !defined(CYGWIN) && (defined(unix) || defined(__unix) || defined(__unix__))
+// Apple doesn't seem to reliably defined a *unix* macro
+#if !defined(CYGWIN) && (  defined(__unix__)  \
+                        || defined(__unix)    \
+                        || defined(unix)      \
+                        || defined(__APPLE__) \
+                        || defined(__APPLE)   \
+                        || defined(APPLE))
 #  include <unistd.h>
-#  if defined(_POSIX_VERSION) || defined(_XOPEN_VERSION)
-#     define BOOST_HAS_FENV_H
-#  endif
 #endif
 
 
