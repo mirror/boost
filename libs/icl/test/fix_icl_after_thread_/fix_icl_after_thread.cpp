@@ -7,14 +7,7 @@ Copyright (c) 2011-2011: Joachim Faulhaber
 +-----------------------------------------------------------------------------*/
 #define BOOST_TEST_MODULE icl::fix_icl_after_thread unit test
 #include <libs/icl/test/disable_test_warnings.hpp>
-#include <string>
-#include <boost/mpl/list.hpp>
 #include "../unit_test_unwarned.hpp"
-
-// interval instance types
-#include "../test_type_lists.hpp"
-#include "../test_value_maker.hpp"
-#include "../test_functions.hpp"
 
 #include <boost/thread.hpp>
 #include <boost/icl/interval_map.hpp>
