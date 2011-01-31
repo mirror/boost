@@ -63,5 +63,10 @@ test-suite "itl"
       
       # Bug fixes --------------------------------------------------------------
       [ run fix_include_after_thread_/fix_include_after_thread.cpp ]   
-      [ run fix_icl_after_thread_/fix_icl_after_thread.cpp ]   
+      [ run fix_icl_after_thread_/fix_icl_after_thread.cpp ] 
+      
+      # Check for compiler bugs ------------------------------------------------
+      # compile-fail-tests  
+      [ run cmp_msvc_value_born_error_/cmp_msvc_value_born_error.cpp ]   
+      [ run cmp_clang_ttp_passing_/cmp_clang_ttp_passing.cpp ]   
     ;
