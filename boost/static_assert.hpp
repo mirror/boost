@@ -17,6 +17,12 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
+#ifndef BOOST_NO_STATIC_ASSERT
+#  define BOOST_STATIC_ASSERT_MSG( B, Msg ) static_assert(B, Msg)
+#else
+#  define BOOST_STATIC_ASSERT_MSG( B, Msg ) BOOST_STATIC_ASSERT( B )
+#endif
+
 #ifdef __BORLANDC__
 //
 // workaround for buggy integral-constant expression support:
