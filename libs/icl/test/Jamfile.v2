@@ -69,4 +69,5 @@ test-suite "itl"
       # compile-fail-tests  
       [ run cmp_msvc_value_born_error_/cmp_msvc_value_born_error.cpp ]   
       [ run cmp_clang_ttp_passing_/cmp_clang_ttp_passing.cpp ]   
+      [ run cmp_clang_ttp_passing2_/cmp_clang_ttp_passing2.cpp ]   
     ;
