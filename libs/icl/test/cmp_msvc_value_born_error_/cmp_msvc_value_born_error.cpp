@@ -10,8 +10,8 @@ Copyright (c) 2011-2011: Joachim Faulhaber
 #include "../unit_test_unwarned.hpp"
 
 namespace unhelpful{
-	// This declaration of a class template will cause
-	// the compilation of line 17 to fail with syntax error C2059
+    // This declaration of a class template will cause
+    // the compilation of line 17 to fail with syntax error C2059
     template<class T> class value{};
 }
 
@@ -34,6 +34,6 @@ template <class Type> struct meta_predicate
 
 BOOST_AUTO_TEST_CASE(dummy)
 {
-	BOOST_CHECK( meta_predicate<int>::value );
+    BOOST_CHECK( meta_predicate<int>::value );
 }
 

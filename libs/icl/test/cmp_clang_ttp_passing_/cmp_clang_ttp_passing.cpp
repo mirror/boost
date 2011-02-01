@@ -18,20 +18,27 @@ template<class T>class less{};
 
 template
 <
-	class T, 
+    class T, 
     template<class>class less_T = sep::less
 >
-class cont{};
+class cont
+{
+public:
+    boost test()const { return true; }
+};
 
 template
 <
-	class T, 
+    class T, 
     template<class T2, 
-	template<class>class less_T2 = sep::less>class Cont
+             template<class>class less_T2 = sep::less>
+    class Cont
 >
-void func()
+bool func()
 {
-	typedef Cont<T> cont_type; 
+    typedef Cont<T> cont_type; 
+    cont_type x;
+    return x.test();
 }
 
 }//namespace sep
@@ -39,7 +46,7 @@ void func()
 
 BOOST_AUTO_TEST_CASE(dummy)
 {
-	sep::func<int, sep::cont>();
-	BOOST_CHECK( true );
+    bool executed = sep::func<int, sep::cont>();
+    BOOST_CHECK( executed );
 }
 
