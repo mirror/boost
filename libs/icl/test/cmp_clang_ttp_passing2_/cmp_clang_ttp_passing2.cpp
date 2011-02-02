@@ -12,28 +12,29 @@ Copyright (c) 2011-2011: Joachim Faulhaber
 
 template 
 <
-	template
-	<
-		class _T,
-		ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, _T), 
-		ICL_INTERVAL(ICL_COMPARE)  Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, _T, Compare), 
-		ICL_ALLOC   Alloc   = std::allocator
-	>
-	class IntervalSet,
-	class T
+    template
+    <
+        class                _T,
+        template<class>class Compare  = std::less, 
+        class                Interval = typename boost::icl::
+                                        interval_type_default<_T,Compare>::type, 
+        template<class>class Alloc    = std::allocator
+    >
+    class IntervalSet,
+    class T
 >
 bool test_ttp()
 {
     typedef IntervalSet<T> IntervalSetT;
     IntervalSetT test_set;
     test_set.clear();
-	return true;
+    return true;
 }
 
 
 BOOST_AUTO_TEST_CASE(dummy)
 {
-	bool result = test_ttp<boost::icl::interval_set, int>();
+    bool result = test_ttp<boost::icl::interval_set, int>();
     BOOST_CHECK( result );
 }
 

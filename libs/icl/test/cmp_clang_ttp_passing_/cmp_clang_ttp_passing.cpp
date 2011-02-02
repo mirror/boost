@@ -13,26 +13,40 @@ Copyright (c) 2011-2011: Joachim Faulhaber
 
 namespace sep
 {
+    template<class T>class less{};
 
-template<class T>class less{};
+    template
+    <
+        class T, 
+        template<class>class Less = sep::less
+    >
+    class interv
+    {
+    public:
+        typedef interv<T,Less> type;
+    };
 
-template
-<
-    class T, 
-    template<class>class Less = sep::less
->
-class cont
-{
-public:
-    bool test()const { return true; }
-};
-
+    template
+    <
+        class T, 
+        template<class>class Less = sep::less,
+        class I = typename sep::interv<T,Less>::type
+    >
+    class cont
+    {
+    public:
+        bool test()const { return true; }
+    };
 }//namespace sep
 
 template
 <
-    template<class _T, 
-             template<class>class _Less = sep::less>
+    template
+    <
+        class _T, 
+        template<class>class _Less = sep::less,
+        class I = typename sep::interv<_T,_Less>::type
+    >
     class Cont,
     class T 
 >
@@ -41,7 +55,7 @@ bool test_ttp()
     typedef Cont<T> cont_type; 
     cont_type test_cont;
     return test_cont.test();
-}
+};
 
 BOOST_AUTO_TEST_CASE(dummy)
 {
