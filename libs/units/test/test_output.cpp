@@ -33,6 +33,8 @@ Tests for output from various units, name, symbol and raw formats, and automatic
 #include <boost/units/physical_dimensions/acceleration.hpp>
 #include <boost/units/physical_dimensions/area.hpp>
 
+#include <boost/regex.hpp>
+
 #include <sstream>
 #include <boost/config.hpp>
 #include <limits>
@@ -115,6 +117,21 @@ typedef boost::units::make_scaled_unit<custom2, boost::units::scale<10, boost::u
     BOOST_CHECK(ss.str() == BOOST_PP_CAT(L, expected));     \
 }
 
+#define BOOST_UNITS_TEST_OUTPUT_REGEX(v, expected)          \
+{                                                           \
+    std::ostringstream ss;                                  \
+    ss FORMATTERS << v;                                     \
+    boost::regex r(expected);                               \
+    BOOST_CHECK_MESSAGE(boost::regex_match(ss.str(), r),    \
+        ss.str() + " does not match " + expected);          \
+}                                                           \
+{                                                           \
+    std::wostringstream ss;                                 \
+    ss FORMATTERS << v;                                     \
+    boost::wregex r(BOOST_PP_CAT(L, expected));             \
+    BOOST_CHECK(boost::regex_match(ss.str(), r));           \
+}
+
 #else
 
 #define BOOST_UNITS_TEST_OUTPUT(v, expected)                \
@@ -122,6 +139,15 @@ typedef boost::units::make_scaled_unit<custom2, boost::units::scale<10, boost::u
     std::ostringstream ss;                                  \
     ss FORMATTERS << v;                                     \
     BOOST_CHECK_EQUAL(ss.str(), expected);                  \
+}
+
+#define BOOST_UNITS_TEST_OUTPUT_REGEX(v, expected)          \
+{                                                           \
+    std::ostringstream ss;                                  \
+    ss FORMATTERS << v;                                     \
+    boost::regex r(expected);                               \
+    BOOST_CHECK_MESSAGE(boost::regex_match(ss.str(), r),    \
+        ss.str() + " does not match " + expected);          \
 }
 
 #endif
@@ -277,29 +303,21 @@ BOOST_AUTO_TEST_CASE(test_output_autoprefixed_quantity_name)
     BOOST_UNITS_TEST_OUTPUT(0.0000000012345 * meter_base_unit::unit_type(), "1.2345 nanometer");
 
   // Too small or large for a multiple name.
-    BOOST_UNITS_TEST_OUTPUT(9.99999e-25 * meter_base_unit::unit_type(), "9.99999e-025 meter"); // Just too small for multiple.
-    BOOST_UNITS_TEST_OUTPUT(1e+28 * meter_base_unit::unit_type(), "1e+028 meter"); // Just too large for multiple.
-    BOOST_UNITS_TEST_OUTPUT(1.5e-25 * meter_base_unit::unit_type(), "1.5e-025 meter"); // Too small for multiple.
-    BOOST_UNITS_TEST_OUTPUT(1.5e+28 * meter_base_unit::unit_type(), "1.5e+028 meter"); // Too large for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(9.99999e-25 * meter_base_unit::unit_type(), "9\\.99999e-0?25 meter"); // Just too small for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(1e+28 * meter_base_unit::unit_type(), "1e\\+0?28 meter"); // Just too large for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(1.5e-25 * meter_base_unit::unit_type(), "1\\.5e-0?25 meter"); // Too small for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(1.5e+28 * meter_base_unit::unit_type(), "1\\.5e\\+0?28 meter"); // Too large for multiple.
   // Too 'biggest or too smallest'.
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::max()*meter_base_unit::unit_type(), "3.40282e+038 meter");
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::min()*meter_base_unit::unit_type(), "1.17549e-038 meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<float>::max()*meter_base_unit::unit_type(), "3\\.40282e\\+0?38 meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<float>::min()*meter_base_unit::unit_type(), "1\\.17549e-0?38 meter");
     BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::max()*meter_base_unit::unit_type(), "1.79769e+308 meter");
     BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::min()*meter_base_unit::unit_type(), "2.22507e-308 meter");
    // Infinity and NaN
-#if defined(_MSC_VER)
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "1.#INF meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "-1.#INF meter");
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "1.#QNAN meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "-1.#IND meter");
-#elif defined(__GLIBCXX__)
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "inf meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "-inf meter");
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "nan meter");
-    BOOST_UNITS_TEST_OUTPUT(-std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "nan meter");
-#else
-    // TODO infinity on other platforms?
-#endif
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "(1\\.#INF|inf) meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(-std::numeric_limits<float>::infinity()*meter_base_unit::unit_type(), "-(1\\.#INF|inf) meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "(1\\.#QNAN|nan) meter");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(-std::numeric_limits<double>::quiet_NaN()*meter_base_unit::unit_type(), "-?(1\\.#IND|nan) meter");
+
     BOOST_UNITS_TEST_OUTPUT(1.5*velocity(), "1.5 meter second^-1");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_length(), "1.5 kilometer");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_velocity1(), "1.5 kilo(meter second^-1)");
@@ -338,13 +356,13 @@ BOOST_AUTO_TEST_CASE(test_output_autoprefixed_quantity_symbol)
     BOOST_UNITS_TEST_OUTPUT(1.5e-8*meter_base_unit::unit_type(), "15 nm");
     BOOST_UNITS_TEST_OUTPUT(1.5e-10*meter_base_unit::unit_type(), "150 pm");
   // Too small or large for a multiple name.
-    BOOST_UNITS_TEST_OUTPUT(9.99999e-25 * meter_base_unit::unit_type(), "9.99999e-025 m"); // Just too small for multiple.
-    BOOST_UNITS_TEST_OUTPUT(1e+28 * meter_base_unit::unit_type(), "1e+028 m"); // Just too large for multiple.
-    BOOST_UNITS_TEST_OUTPUT(1.5e-25 * meter_base_unit::unit_type(), "1.5e-025 m"); // Too small for multiple.
-    BOOST_UNITS_TEST_OUTPUT(1.5e+28 * meter_base_unit::unit_type(), "1.5e+028 m"); // Too large for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(9.99999e-25 * meter_base_unit::unit_type(), "9\\.99999e-0?25 m"); // Just too small for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(1e+28 * meter_base_unit::unit_type(), "1e\\+0?28 m"); // Just too large for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(1.5e-25 * meter_base_unit::unit_type(), "1\\.5e-0?25 m"); // Too small for multiple.
+    BOOST_UNITS_TEST_OUTPUT_REGEX(1.5e+28 * meter_base_unit::unit_type(), "1\\.5e\\+0?28 m"); // Too large for multiple.
   // 
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::max()*meter_base_unit::unit_type(), "3.40282e+038 m");
-    BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<float>::min()*meter_base_unit::unit_type(), "1.17549e-038 m");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<float>::max()*meter_base_unit::unit_type(), "3\\.40282e\\+0?38 m");
+    BOOST_UNITS_TEST_OUTPUT_REGEX(std::numeric_limits<float>::min()*meter_base_unit::unit_type(), "1\\.17549e-0?38 m");
     BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::max()*meter_base_unit::unit_type(), "1.79769e+308 m");
     BOOST_UNITS_TEST_OUTPUT(std::numeric_limits<double>::min()*meter_base_unit::unit_type(), "2.22507e-308 m");
 
