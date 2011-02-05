@@ -22,6 +22,7 @@
 #include <boost/limits.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
+#include <boost/random/uniform_01.hpp>
 
 namespace boost {
 namespace random {
@@ -154,7 +155,8 @@ public:
         // Can we have a boost::mathconst please?
         const result_type pi = result_type(3.14159265358979323846);
         using std::tan;
-        return _median + _sigma * tan(pi*(eng()-result_type(0.5)));
+        RealType val = uniform_01<RealType>()(eng)-result_type(0.5);
+        return _median + _sigma * tan(pi*val);
     }
 
     /**
