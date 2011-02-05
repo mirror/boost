@@ -18,15 +18,19 @@
 #define BOOST_RANDOM_UNIFORM_SMALLINT_HPP
 
 #include <cassert>
-#include <iostream>
+#include <istream>
+#include <iosfwd>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/random/detail/config.hpp>
+#include <boost/random/detail/operators.hpp>
+#include <boost/random/detail/signed_unsigned_tools.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/detail/workaround.hpp>
 
 namespace boost {
+namespace random {
 
 // uniform integer distribution on a small range [min, max]
 
@@ -97,78 +101,185 @@ template<class IntType = int>
 class uniform_smallint
 {
 public:
-  typedef IntType input_type;
-  typedef IntType result_type;
+    typedef IntType input_type;
+    typedef IntType result_type;
 
-  /**
-   * Constructs a @c uniform_smallint. @c min and @c max are the
-   * lower and upper bounds of the output range, respectively.
-   */
-  explicit uniform_smallint(IntType min_arg = 0, IntType max_arg = 9)
-    : _min(min_arg), _max(max_arg)
-  {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
-    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-#endif
- }
+    class param_type
+    {
+    public:
 
-  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
-  void reset() { }
+        typedef uniform_smallint distribution_type;
 
-  template<class Engine>
-  result_type operator()(Engine& eng)
-  {
-    typedef typename Engine::result_type base_result;
-    base_result _range = static_cast<base_result>(_max-_min)+1;
-    base_result _factor = 1;
+        /** constructs the parameters of a @c uniform_smallint distribution. */
+        param_type(IntType min_arg = 0, IntType max_arg = 9)
+          : _min(min_arg), _max(max_arg)
+        {
+            assert(_min <= _max);
+        }
+
+        /** Returns the minimum value. */
+        IntType a() const { return _min; }
+        /** Returns the maximum value. */
+        IntType b() const { return _max; }
+        
+
+        /** Writes the parameters to a @c std::ostream. */
+        BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, param_type, parm)
+        {
+            os << parm._min << " " << parm._max;
+            return os;
+        }
     
-    // LCGs get bad when only taking the low bits.
-    // (probably put this logic into a partial template specialization)
-    // Check how many low bits we can ignore before we get too much
-    // quantization error.
-    base_result r_base = (eng.max)() - (eng.min)();
-    if(r_base == (std::numeric_limits<base_result>::max)()) {
-      _factor = 2;
-      r_base /= 2;
+        /** Reads the parameters from a @c std::istream. */
+        BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, param_type, parm)
+        {
+            is >> parm._min >> std::ws >> parm._max;
+            return is;
+        }
+
+        /** Returns true if the two sets of parameters are equal. */
+        BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(param_type, lhs, rhs)
+        { return lhs._min == rhs._min && lhs._max == rhs._max; }
+
+        /** Returns true if the two sets of parameters are different. */
+        BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(param_type)
+
+    private:
+        IntType _min;
+        IntType _max;
+    };
+
+    /**
+     * Constructs a @c uniform_smallint. @c min and @c max are the
+     * lower and upper bounds of the output range, respectively.
+     */
+    explicit uniform_smallint(IntType min_arg = 0, IntType max_arg = 9)
+      : _min(min_arg), _max(max_arg) {}
+
+    /**
+     * Constructs a @c uniform_smallint from its parameters.
+     */
+    explicit uniform_smallint(const param_type& parm)
+      : _min(parm.a()), _max(parm.b()) {}
+
+    /** Returns the minimum value of the distribution. */
+    result_type a() const { return _min; }
+    /** Returns the maximum value of the distribution. */
+    result_type b() const { return _max; }
+    /** Returns the minimum value of the distribution. */
+    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
+    /** Returns the maximum value of the distribution. */
+    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
+
+    /** Returns the parameters of the distribution. */
+    param_type param() const { return param_type(_min, _max); }
+    /** Sets the parameters of the distribution. */
+    void param(const param_type& parm)
+    {
+        _min = parm.a();
+        _max = parm.b();
     }
-    r_base += 1;
-    if(r_base % _range == 0) {
-      // No quantization effects, good
-      _factor = r_base / _range;
-    } else {
-      // carefully avoid overflow; pessimizing here
-      for( ; r_base/_range/32 >= _range; _factor *= 2)
-        r_base /= 2;
+
+    /**
+     * Effects: Subsequent uses of the distribution do not depend
+     * on values produced by any engine prior to invoking reset.
+     */
+    void reset() { }
+
+    /** Returns a value uniformly distributed in the range [min(), max()]. */
+    template<class Engine>
+    result_type operator()(Engine& eng) const
+    {
+        typedef typename Engine::result_type base_result;
+        return generate(eng, boost::is_integral<base_result>());
     }
 
-    return static_cast<result_type>(((eng() - (eng.min)()) / _factor) % _range + _min);
-  }
+    /** Returns a value uniformly distributed in the range [param.a(), param.b()]. */
+    template<class Engine>
+    result_type operator()(Engine& eng, const param_type& parm) const
+    { return uniform_smallint(parm)(eng); }
 
-#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_smallint& ud)
-  {
-    os << ud._min << " " << ud._max;
-    return os;
-  }
+    /** Writes the distribution to a @c std::ostream. */
+    BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, uniform_smallint, ud)
+    {
+        os << ud._min << " " << ud._max;
+        return os;
+    }
+    
+    /** Reads the distribution from a @c std::istream. */
+    BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, uniform_smallint, ud)
+    {
+        is >> ud._min >> std::ws >> ud._max;
+        return is;
+    }
 
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, uniform_smallint& ud)
-  {
-    is >> std::ws >> ud._min >> std::ws >> ud._max;
-    return is;
-  }
-#endif
+    /**
+     * Returns true if the two distributions will produce identical
+     * sequences of values given equal generators.
+     */
+    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(uniform_smallint, lhs, rhs)
+    { return lhs._min == rhs._min && lhs._max == rhs._max; }
+    
+    /**
+     * Returns true if the two distributions may produce different
+     * sequences of values given equal generators.
+     */
+    BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(uniform_smallint)
 
 private:
+    
+    // \cond
+    template<class Engine>
+    result_type generate(Engine& eng, boost::mpl::true_) const
+    {
+        // equivalent to (eng() - eng.min()) % (_max - _min + 1) + _min,
+        // but guarantees no overflow.
+        typedef typename Engine::result_type base_result;
+        typedef typename boost::make_unsigned<base_result>::type base_unsigned;
+        typedef typename boost::make_unsigned<result_type>::type range_type;
+        range_type range = random::detail::subtract<result_type>()(_max, _min);
+        base_unsigned base_range =
+            random::detail::subtract<result_type>()((eng.max)(), (eng.min)());
+        base_unsigned val =
+            random::detail::subtract<base_result>()(eng(), (eng.min)());
+        if(range >= base_range) {
+            return boost::random::detail::add<range_type, result_type>()(
+                static_cast<range_type>(val), _min);
+        } else {
+            base_unsigned modulus = static_cast<base_unsigned>(range) + 1;
+            return boost::random::detail::add<range_type, result_type>()(
+                static_cast<range_type>(val % modulus), _min);
+        }
+    }
+    
+    template<class Engine>
+    result_type generate(Engine& eng, boost::mpl::false_) const
+    {
+        typedef typename Engine::result_type base_result;
+        typedef typename boost::make_unsigned<result_type>::type range_type;
+        range_type range = random::detail::subtract<result_type>()(_max, _min);
+        base_result val = boost::uniform_01<base_result>()(eng);
+        // what is the worst that can possibly happen here?
+        // base_result may not be able to represent all the values in [0, range]
+        // exactly.  If this happens, it will cause round off error and we
+        // won't be able to produce all the values in the range.  We don't
+        // care about this because the user has already told us not to by
+        // using uniform_smallint.  However, we do need to be careful
+        // to clamp the result, or floating point rounding can produce
+        // an out of range result.
+        range_type offset = static_cast<range_type>(val * (static_cast<base_result>(range) + 1));
+        if(offset > range) return _max;
+        return boost::random::detail::add<range_type, result_type>()(offset , _min);
+    }
+    // \endcond
 
-  result_type _min;
-  result_type _max;
+    result_type _min;
+    result_type _max;
 };
+
+} // namespace random
+
+using random::uniform_smallint;
 
 } // namespace boost
 

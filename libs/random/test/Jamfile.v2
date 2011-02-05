@@ -90,6 +90,8 @@ run test_uniform_int_distribution.cpp /boost//unit_test_framework ;
 run test_uniform_real.cpp ;
 run test_uniform_real_distribution.cpp /boost//unit_test_framework ;
 run test_uniform_on_sphere_distribution.cpp /boost//unit_test_framework ;
+run test_uniform_smallint.cpp ;
+run test_uniform_smallint_distribution.cpp /boost//unit_test_framework ;
 
 # run nondet_random_speed.cpp ;
 # run random_device.cpp ;
