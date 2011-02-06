@@ -20,19 +20,19 @@ int main()
     using namespace boost;
 
     cout << "ratio_string<deca, char>::long_name() = "
-             <<  ratio_string<deca, char>::long_name() << '\n';
+             <<  ratio_string<boost::deca, char>::long_name() << '\n';
     cout << "ratio_string<deca, char>::short_name() = "
-             <<  ratio_string<deca, char>::short_name() << '\n';
+             <<  ratio_string<boost::deca, char>::short_name() << '\n';
 
     cout << "ratio_string<giga, char>::long_name() = "
-             <<  ratio_string<giga, char>::long_name() << '\n';
+             <<  ratio_string<boost::giga, char>::long_name() << '\n';
     cout << "ratio_string<giga, char>::short_name() = "
-             <<  ratio_string<giga, char>::short_name() << '\n';
+             <<  ratio_string<boost::giga, char>::short_name() << '\n';
 
     cout << "ratio_string<ratio<4, 6>, char>::long_name() = "
-             <<  ratio_string<ratio<4, 6>, char>::long_name() << '\n';
+             <<  ratio_string<boost::ratio<4, 6>, char>::long_name() << '\n';
     cout << "ratio_string<ratio<4, 6>, char>::short_name() = "
-             <<  ratio_string<ratio<4, 6>, char>::short_name() << '\n';
+             <<  ratio_string<boost::ratio<4, 6>, char>::short_name() << '\n';
         
     return 0;
 }
