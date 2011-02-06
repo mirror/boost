@@ -40,6 +40,9 @@ project boost/chrono
         <toolset>pathscale:<cxxflags>-Wextra
         <toolset>pathscale:<cxxflags>-Wno-long-long
         <toolset>pathscale:<cxxflags>-pedantic
+        <toolset>clang:<cxxflags>-Wextra
+        <toolset>clang:<cxxflags>-pedantic
+        <toolset>clang:<cxxflags>-Wno-long-long
         <toolset>gcc-mingw-4.4.0:<cxxflags>-fdiagnostics-show-option
         <toolset>gcc-mingw-4.5.0:<cxxflags>-fdiagnostics-show-option
         <toolset>gcc-mingw-4.6.0:<cxxflags>-fdiagnostics-show-option
