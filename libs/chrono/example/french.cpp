@@ -15,7 +15,8 @@
 
 int main()
 {
-    using namespace std;
+    using std::cout;
+    using std::locale;
     using namespace boost;
     using namespace boost::chrono;
 

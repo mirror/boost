@@ -19,11 +19,11 @@ Many thanks to Howard for making his code available under the Boost license.
 
 int main()
 {
-    using namespace std;
     using namespace boost::chrono;
+    using std::cout;
 
     high_resolution_clock::time_point t0 = high_resolution_clock::now();
-    stringstream io;
+    std::stringstream io;
     io << t0;
     BOOST_ASSERT(!io.fail());
     cout << io.str() << '\n';

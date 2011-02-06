@@ -18,10 +18,9 @@ Many thanks to Howard for making his code available under the Boost license.
 
 int main()
 {
-    using namespace std;
     using namespace boost::chrono;
 
-    istringstream in("5000 milliseconds 4000 ms 3001 ms");
+    std::istringstream in("5000 milliseconds 4000 ms 3001 ms");
     seconds d(0);
     in >> d;
     BOOST_ASSERT(in.good());

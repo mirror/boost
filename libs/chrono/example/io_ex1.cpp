@@ -18,7 +18,7 @@ Many thanks to Howard for making his code available under the Boost license.
 
 int main()
 {
-    using namespace std;
+    using std::cout;
     using namespace boost;
     using namespace boost::chrono;
 

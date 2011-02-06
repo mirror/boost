@@ -22,7 +22,7 @@ std::basic_ostream<CharT, Traits>&
 display(std::basic_ostream<CharT, Traits>& os,
         boost::chrono::duration<Rep, Period> d)
 {
-    using namespace std;
+    using std::cout;
     using namespace boost;
     using namespace boost::chrono;
 
@@ -71,7 +71,7 @@ display(std::basic_ostream<CharT, Traits>& os,
 
 int main()
 {
-    using namespace std;
+    using std::cout;
     using namespace boost;
     using namespace boost::chrono;
 
