@@ -20,7 +20,6 @@ local all-urngs =
     rand48
     minstd_rand0
     minstd_rand
-    ecuyer1988
     kreutzer1986
     hellekalek1995
     mt11213b
@@ -44,6 +43,7 @@ for urng in $(all-urngs)
 }
 
 run test_mt19937.cpp /boost//unit_test_framework ;
+run test_ecuyer1988.cpp /boost//unit_test_framework ;
 
 run test_seed_seq.cpp /boost//unit_test_framework ;
 

@@ -89,6 +89,8 @@ public:
       return mult_small(a, x);
     else if(traits::is_signed && (m%a < m/a))
       return mult_schrage(a, x);
+    else if(x == 1)
+      return a;
     else {
       // difficult
       assert(!"const_mod::mult with a too large");
