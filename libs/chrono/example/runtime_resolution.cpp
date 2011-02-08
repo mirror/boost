@@ -209,7 +209,6 @@ public:
 
 void test()
 {
-    using namespace boost::chrono;
     std::cout << "runtime_resolution test\n";
     clock::duration delay(boost::chrono::milliseconds(5));
     clock::time_point start = clock::now();
@@ -217,7 +216,9 @@ void test()
       ;
     clock::time_point stop = clock::now();
     clock::duration elapsed = stop - start;
-    std::cout << "paused " << nanoseconds(duration_cast<nanoseconds>(duration::tonanosec(elapsed))).count()
+    std::cout << "paused " << 
+	boost::chrono::nanoseconds(
+		boost::chrono::duration_cast<boost::chrono::nanoseconds>(duration::tonanosec(elapsed))).count()
                            << " nanoseconds\n";
 }
 
