@@ -1105,6 +1105,9 @@
   <!-- Handle constructors -->
   <xsl:template name="constructor">
     <constructor>
+      <xsl:if test="@explicit = 'yes'">
+        <xsl:attribute name="specifiers">explicit</xsl:attribute>
+      </xsl:if>
       <xsl:call-template name="function.children"/>
     </constructor>
   </xsl:template>
