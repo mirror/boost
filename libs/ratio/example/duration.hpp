@@ -47,7 +47,10 @@ time2_demo contained this comment:
 #include <boost/type_traits/is_unsigned.hpp>
 
 #include <boost/cstdint.hpp>
+#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1500)) || defined(__IBMCPP__)
+#else
 #include <boost/utility/enable_if.hpp>
+#endif
 #include <boost/detail/workaround.hpp>
 #include <boost/integer_traits.hpp>
 
@@ -458,7 +461,7 @@ namespace chrono {
          duration() { } // = default;
         template <class Rep2>
          explicit duration(const Rep2& r
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1500)) || defined(__IBMCPP__)
 #else
 	 , typename boost::enable_if <
                     boost::mpl::and_ <   
@@ -486,7 +489,7 @@ namespace chrono {
         // conversions
         template <class Rep2, class Period2>
          duration(const duration<Rep2, Period2>& d
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1500)) || defined(__IBMCPP__)
 #else
 		, typename boost::enable_if <
                     boost::mpl::or_ < 
@@ -572,7 +575,7 @@ namespace chrono {
 
   template <class Rep1, class Period, class Rep2>
   inline
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1500)) || defined(__IBMCPP__)
     duration<typename boost::common_type<Rep1, Rep2>::type, Period>
 #else
 typename boost::enable_if <
@@ -593,7 +596,7 @@ typename boost::enable_if <
 
   template <class Rep1, class Period, class Rep2>
   inline
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1500)) || defined(__IBMCPP__)
     duration<typename boost::common_type<Rep1, Rep2>::type, Period>
 #else
   typename boost::enable_if <
@@ -780,7 +783,7 @@ typename boost::enable_if <
   // Compile-time select the most efficient algorithm for the conversion...
   template <class ToDuration, class Rep, class Period>
   inline
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1500)) || defined(__IBMCPP__)
     ToDuration
 #else
   typename boost::enable_if <boost_ex::chrono::detail::is_duration<ToDuration>, ToDuration>::type
