@@ -457,8 +457,10 @@ namespace chrono {
 
          duration() { } // = default;
         template <class Rep2>
-         explicit duration(const Rep2& r,
-            typename boost::enable_if <
+         explicit duration(const Rep2& r
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+#else
+	 , typename boost::enable_if <
                     boost::mpl::and_ <   
                         boost::is_convertible<Rep2, rep>,
                         boost::mpl::or_ <
@@ -469,7 +471,9 @@ namespace chrono {
                             >
                         >
                     >
-                >::type* = 0)
+                >::type* = 0
+#endif
+	 )
                   : rep_(r) { }
         ~duration() {} //= default;
         duration(const duration& rhs) : rep_(rhs.rep_) {} // = default;
@@ -481,8 +485,10 @@ namespace chrono {
 
         // conversions
         template <class Rep2, class Period2>
-         duration(const duration<Rep2, Period2>& d,
-            typename boost::enable_if <
+         duration(const duration<Rep2, Period2>& d
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+#else
+		, typename boost::enable_if <
                     boost::mpl::or_ < 
                         treat_as_floating_point<rep>,
                         boost::mpl::and_ < 
@@ -490,7 +496,9 @@ namespace chrono {
                             boost::mpl::not_ < treat_as_floating_point<Rep2> >
                         >
                     >
-                >::type* = 0)
+                >::type* = 0
+#endif
+		)
 //~ #ifdef        __GNUC__
             // GCC 4.2.4 refused to accept a definition at this point,
             // yet both VC++ 9.0 SP1 and Intel ia32 11.0 accepted the definition
@@ -564,13 +572,17 @@ namespace chrono {
 
   template <class Rep1, class Period, class Rep2>
   inline
-  typename boost::enable_if <
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+    duration<typename boost::common_type<Rep1, Rep2>::type, Period>
+#else
+typename boost::enable_if <
     boost::mpl::and_ < 
         boost::is_convertible<Rep1, typename boost::common_type<Rep1, Rep2>::type>, 
         boost::is_convertible<Rep2, typename boost::common_type<Rep1, Rep2>::type>
     >,
     duration<typename boost::common_type<Rep1, Rep2>::type, Period>
   >::type
+#endif  
   operator*(const duration<Rep1, Period>& d, const Rep2& s)
   {
       typedef typename boost::common_type<Rep1, Rep2>::type CR;
@@ -581,6 +593,9 @@ namespace chrono {
 
   template <class Rep1, class Period, class Rep2>
   inline
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+    duration<typename boost::common_type<Rep1, Rep2>::type, Period>
+#else
   typename boost::enable_if <
     boost::mpl::and_ < 
         boost::is_convertible<Rep1, typename boost::common_type<Rep1, Rep2>::type>,
@@ -588,6 +603,7 @@ namespace chrono {
     >,
     duration<typename boost::common_type<Rep1, Rep2>::type, Period>
   >::type
+#endif  
   operator*(const Rep1& s, const duration<Rep2, Period>& d)
   {
       return d * s;
@@ -764,7 +780,11 @@ namespace chrono {
   // Compile-time select the most efficient algorithm for the conversion...
   template <class ToDuration, class Rep, class Period>
   inline
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
+    ToDuration
+#else
   typename boost::enable_if <boost_ex::chrono::detail::is_duration<ToDuration>, ToDuration>::type
+#endif  
   duration_cast(const duration<Rep, Period>& fd)
   {
       return boost_ex::chrono::detail::duration_cast<duration<Rep, Period>, ToDuration>()(fd);
