@@ -20,6 +20,11 @@ BOOST_CONCEPT_ASSERT((RandomNumberEngine< BOOST_RANDOM_URNG >));
 
 typedef BOOST_RANDOM_URNG::result_type result_type;
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4244)
+#endif
+
 template<class Converted, class URNG, class T>
 void test_seed_conversion(URNG & urng, const T & t)
 {
@@ -33,6 +38,10 @@ void test_seed_conversion(URNG & urng, const T & t)
         BOOST_CHECK_MESSAGE(urng == urng2, msg.str());
     }
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 void test_seed(result_type value)
 {

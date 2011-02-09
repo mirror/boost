@@ -22,7 +22,6 @@ local all-urngs =
     minstd_rand0
     minstd_rand
     kreutzer1986
-    hellekalek1995
     mt11213b
     mt19937_64
     lagged_fibonacci
@@ -45,6 +44,7 @@ for urng in $(all-urngs)
 
 run test_mt19937.cpp /boost//unit_test_framework ;
 run test_ecuyer1988.cpp /boost//unit_test_framework ;
+run test_hellekalek1995.cpp /boost//unit_test_framework ;
 
 run test_seed_seq.cpp /boost//unit_test_framework ;
 
