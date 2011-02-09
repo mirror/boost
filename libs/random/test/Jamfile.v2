@@ -1,5 +1,5 @@
 # Copyright 2003 Jens Maurer
-# Copyright 2009-2010 Steven Watanabe
+# Copyright 2009-2011 Steven Watanabe
 # Distributed under the Boost Software License, Version 1.0. (See accompany-
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -24,8 +24,6 @@ local all-urngs =
     kreutzer1986
     mt11213b
     mt19937_64
-    lagged_fibonacci
-    lagged_fibonacci607
     ranlux3
     ranlux4
     ranlux3_01
@@ -45,6 +43,8 @@ for urng in $(all-urngs)
 run test_mt19937.cpp /boost//unit_test_framework ;
 run test_ecuyer1988.cpp /boost//unit_test_framework ;
 run test_hellekalek1995.cpp /boost//unit_test_framework ;
+run test_lagged_fibonacci.cpp /boost//unit_test_framework ;
+run test_lagged_fibonacci607.cpp /boost//unit_test_framework ;
 
 run test_seed_seq.cpp /boost//unit_test_framework ;
 
