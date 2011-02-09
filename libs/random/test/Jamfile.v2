@@ -11,6 +11,7 @@ import testing ;
 project /boost/random/test ;
 
 run random_test.cpp ;
+run test_const_mod.cpp /boost//unit_test_framework ;
 run ../example/random_demo.cpp ;
 run validate.cpp ;
 run test_random_device.cpp /boost//random : : : <link>static : test_random_device ;
