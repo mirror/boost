@@ -12,5 +12,6 @@
 #include <boost/random/inversive_congruential.hpp>
 
 #define BOOST_RANDOM_URNG boost::random::hellekalek1995
+#define BOOST_RANDOM_VALIDATION_VALUE 1187812169
 
 #include "test_generator.ipp"

@@ -12,5 +12,6 @@
 #include <boost/random/lagged_fibonacci.hpp>
 
 #define BOOST_RANDOM_URNG boost::random::lagged_fibonacci607
+#define BOOST_RANDOM_VALIDATION_VALUE 0.40126853196520074
 
 #include "test_generator.ipp"

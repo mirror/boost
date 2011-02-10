@@ -201,3 +201,13 @@ BOOST_AUTO_TEST_CASE(test_comparison)
     BOOST_CHECK(urng != urng2);
     BOOST_CHECK(!(urng == urng2));
 }
+
+BOOST_AUTO_TEST_CASE(validate)
+{
+    BOOST_RANDOM_URNG urng;
+    for(int i = 0; i < 9999; ++i) {
+        urng();
+    }
+    BOOST_CHECK_EQUAL(urng(), BOOST_RANDOM_VALIDATION_VALUE);
+}
+

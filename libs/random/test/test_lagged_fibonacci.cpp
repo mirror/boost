@@ -13,5 +13,6 @@
 
 typedef boost::random::lagged_fibonacci_engine<boost::uint32_t, 24, 607, 273> lagged_fibonacci;
 #define BOOST_RANDOM_URNG lagged_fibonacci
+#define BOOST_RANDOM_VALIDATION_VALUE 3543833
 
 #include "test_generator.ipp"

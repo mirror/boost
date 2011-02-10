@@ -12,5 +12,6 @@
 #include <boost/random/additive_combine.hpp>
 
 #define BOOST_RANDOM_URNG boost::random::ecuyer1988
+#define BOOST_RANDOM_VALIDATION_VALUE 2060321752
 
 #include "test_generator.ipp"
