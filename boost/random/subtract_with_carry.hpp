@@ -29,7 +29,7 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/seed.hpp>
 #include <boost/random/detail/operators.hpp>
-#include <boost/random/detail/generator_seed_seq.hpp>
+#include <boost/random/detail/seed_impl.hpp>
 #include <boost/random/linear_congruential.hpp>
 
 
@@ -107,17 +107,7 @@ public:
     /** Seeds the generator with values produced by @c seq.generate(). */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(subtract_with_carry, SeedSeq, seq)
     {
-        uint32_t storage[((w+31)/32) * long_lag];
-        seq.generate(&storage[0], &storage[0] + ((w+31)/32) * long_lag);
-        for(std::size_t j = 0; j < long_lag; j++) {
-            IntType val = 0;
-            for(std::size_t k = 0; k < (w+31)/32; ++k) {
-                result_type inc =
-                    static_cast<result_type>(storage[(w+31)/32*j + k]);
-                val += inc << 32*k;
-            }
-            x[j] = val % modulus;
-        }
+        detail::seed_array_int<w>(seq, x);
         carry = (x[long_lag-1] == 0);
         k = 0;
     }

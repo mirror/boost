@@ -25,6 +25,7 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/ptr_helper.hpp>
 #include <boost/random/detail/seed.hpp>
+#include <boost/random/detail/seed_impl.hpp>
 #include <boost/random/detail/generator_seed_seq.hpp>
 
 namespace boost {
@@ -152,15 +153,7 @@ public:
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(mersenne_twister_engine, SeeqSeq, seq)
     {
-        boost::uint_least32_t storage[((w+31)/32) * n];
-        seq.generate(&storage[0], &storage[0] + ((w+31)/32) * n);
-        for(std::size_t j = 0; j < n; j++) {
-            UIntType val = 0;
-            for(std::size_t k = 0; k < (w+31)/32; ++k) {
-                val += storage[(w+31)/32*j + k] << 32*k;
-            }
-            x[j] = val;
-        }
+        detail::seed_array_int<w>(seq, x);
         i = n;
 
         // fix up the state if it's all zeroes.

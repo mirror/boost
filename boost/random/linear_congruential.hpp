@@ -28,6 +28,7 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/const_mod.hpp>
 #include <boost/random/detail/seed.hpp>
+#include <boost/random/detail/seed_impl.hpp>
 #include <boost/detail/workaround.hpp>
 
 #include <boost/random/detail/disable_warnings.hpp>
@@ -146,20 +147,7 @@ public:
      * Seeds a @c linear_congruential_engine using values from a SeedSeq.
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(linear_congruential_engine, SeedSeq, seq)
-    {
-        static const int log = ::boost::static_log2<m>::value;
-        static const int k =
-            (log + ((~(static_cast<IntType>(1) << log) & m)? 32 : 31)) / 32;
-        boost::uint32_t array[k + 3];
-        seq.generate(&array[0], &array[0] + k + 3);
-        IntType s = 0;
-        IntType mul = 1;
-        for(int j = 0; j < k; ++j) {
-            s = const_mod<IntType, m>::mult_add(array[j + 3], mul, s);
-            mul <<= 32;
-        }
-        seed(s);
-    }
+    { seed(detail::seed_one_int<IntType, m>(seq)); }
 
     /**
      * seeds a @c linear_congruential_engine with values taken

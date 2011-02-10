@@ -25,6 +25,7 @@
 #include <boost/random/detail/const_mod.hpp>
 #include <boost/random/detail/seed.hpp>
 #include <boost/random/detail/operators.hpp>
+#include <boost/random/detail/seed_impl.hpp>
 
 namespace boost {
 namespace random {
@@ -141,20 +142,7 @@ public:
      * Seeds an @c inversive_congruential_engine using values from a SeedSeq.
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(inversive_congruential_engine, SeedSeq, seq)
-    {
-        static const int log = ::boost::static_log2<modulus>::value;
-        static const int k =
-            (log + ((~(static_cast<IntType>(1) << log) & modulus)? 32 : 31)) / 32;
-        boost::uint32_t array[k + 3];
-        seq.generate(&array[0], &array[0] + k + 3);
-        IntType s = 0;
-        IntType mul = 1;
-        for(int j = 0; j < k; ++j) {
-            s = const_mod<IntType, modulus>::mult_add(array[j + 3], mul, s);
-            mul <<= 32;
-        }
-        seed(s);
-    }
+    { seed(detail::seed_one_int<IntType, modulus>(seq)); }
     
     /**
      * seeds an @c inversive_congruential_engine with values taken
