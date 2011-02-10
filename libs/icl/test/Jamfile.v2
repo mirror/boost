@@ -12,6 +12,7 @@ project
       <library>/boost/date_time//boost_date_time
       <library>/boost/thread//boost_thread
       <link>static
+      <threading>multi
       <include>../../..
     ;
 
