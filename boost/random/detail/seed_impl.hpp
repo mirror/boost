@@ -116,7 +116,7 @@ IntType seed_one_int(SeedSeq& seq)
     static const int log = ::boost::static_log2<m>::value;
     static const int k =
         (log + ((~(static_cast<IntType>(1) << log) & m)? 32 : 31)) / 32;
-    boost::uint_least32_t array[k + 3];
+    boost::uint_least32_t array[log / 32 + 4];
     seq.generate(&array[0], &array[0] + k + 3);
     IntType s = 0;
     for(int j = 0; j < k; ++j) {
