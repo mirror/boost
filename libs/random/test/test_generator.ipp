@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(test_arithmetic_seed)
    
 BOOST_AUTO_TEST_CASE(test_iterator_seed)
 {
-    const std::vector<int> v(9999u, 0x41);
+    const std::vector<int> v(std::max(std::size_t(9999u), sizeof(BOOST_RANDOM_URNG) / 4), 0x41);
     std::vector<int>::const_iterator it = v.begin();
     std::vector<int>::const_iterator it_end = v.end();
     BOOST_RANDOM_URNG urng(it, it_end);
