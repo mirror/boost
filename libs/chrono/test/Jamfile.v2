@@ -26,7 +26,7 @@ project
         <toolset>darwin:<cxxflags>-Wextra
         <toolset>darwin:<cxxflags>-pedantic
         <toolset>darwin:<cxxflags>-Wno-long-long
-        <toolset>pathscale:<cxxflags>-Wextra
+        #<toolset>pathscale:<cxxflags>-Wextra
         <toolset>pathscale:<cxxflags>-Wno-long-long
         <toolset>pathscale:<cxxflags>-pedantic
         <toolset>clang:<cxxflags>-Wextra
