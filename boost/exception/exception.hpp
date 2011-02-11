@@ -224,8 +224,7 @@ boost
 #endif
             ;
 
-#if (defined(__MWERKS__) && __MWERKS__<=0x3207) || (defined(_MSC_VER) && _MSC_VER<=1310) || \
-  defined(__BORLANDC__)  // Tested at Embarcadero/CodeGear C++ version 6.21.
+#if (defined(__MWERKS__) && __MWERKS__<=0x3207) || (defined(_MSC_VER) && _MSC_VER<=1310)
         public:
 #else
         private:
