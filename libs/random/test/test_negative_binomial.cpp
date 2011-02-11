@@ -26,6 +26,5 @@
 #define BOOST_RANDOM_ARG2_DEFAULT 1000.0
 #define BOOST_RANDOM_ARG2_DISTRIBUTION(n) boost::uniform_01<>()
 #define BOOST_RANDOM_DISTRIBUTION_MAX n
-#define BOOST_RANDOM_P_CUTOFF 0.995
 
 #include "test_real_distribution.ipp"
