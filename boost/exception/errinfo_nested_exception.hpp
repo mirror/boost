@@ -9,7 +9,7 @@
 namespace
 boost
     {
-    namespace exception_detail { class clone_base; };
+    namespace exception_detail { class clone_base; }
     template <class Tag,class T> class error_info;
     template <class T> class shared_ptr;
     class exception_ptr;
