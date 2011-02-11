@@ -105,7 +105,7 @@ void generate_from_int(Engine& eng, Iter begin, Iter end)
                 if(begin == end) break;
             }
             remaining_bits = available_bits;
-            saved_bits = val;
+            saved_bits = static_cast<boost::uint32_t>(val);
         }
     }
 }

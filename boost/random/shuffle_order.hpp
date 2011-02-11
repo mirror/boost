@@ -112,7 +112,15 @@ public:
      * Complexity: Exactly k+1 invocations of the base generator.
      */
     template<class T>
-    void seed(T s) { _rng.seed(s); init(); }
+    void seed(T& s) { _rng.seed(s); init(); }
+    /**
+     * Invokes the one-argument seed method of the base generator
+     * with the parameter seed and re-initializes the internal buffer array.
+     *
+     * Complexity: Exactly k+1 invocations of the base generator.
+     */
+    template<class T>
+    void seed(const T& s) { _rng.seed(s); init(); }
     template<class It> void seed(It& first, It last)
     { _rng.seed(first, last); init(); }
 
