@@ -191,7 +191,7 @@ public:
     template<class It>
     xor_combine(It& first, It last) : base_type(first, last) {}
     xor_combine(const URNG1 & rng1, const URNG2 & rng2)
-      : _rng1(rng1), _rng2(rng2) { }
+      : base_type(rng1, rng2) { }
 
     result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (std::min)((this->base1().min)(), (this->base2().min)()); }
     result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (std::max)((this->base1().min)(), (this->base2().max)()); }
