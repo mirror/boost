@@ -45,21 +45,7 @@
 #include <boost/random/discard_block.hpp>
 #include <boost/random/subtract_with_carry.hpp>
 #include <boost/random/variate_generator.hpp>
-
-namespace boost {
-  /** 
-   * The specialization taus88 was suggested in
-   *
-   *  @blockquote
-   *  "Maximally Equidistributed Combined Tausworthe Generators",
-   *  Pierre L'Ecuyer, Mathematics of Computation, Volume 65,
-   *  Number 213, January 1996, Pages 203-213
-   *  @endblockquote
-   */
-  typedef random::xor_combine<random::xor_combine<random::linear_feedback_shift<uint32_t, 32, 31, 13, 12, 0>, 0,
-    random::linear_feedback_shift<uint32_t, 32, 29, 2, 4, 0>, 0, 0>, 0,
-                      random::linear_feedback_shift<uint32_t, 32, 28, 3, 17, 0>, 0, 0> taus88;
-} // namespace  boost
+#include <boost/random/taus88.hpp>
 
 // misc
 #include <boost/random/random_number_generator.hpp>

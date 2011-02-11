@@ -32,7 +32,6 @@ local all-urngs =
     ranlux64_4_01
     ranlux24
     ranlux48
-    taus88
 ;
 
 for urng in $(all-urngs)
@@ -46,6 +45,7 @@ run test_hellekalek1995.cpp /boost//unit_test_framework ;
 run test_lagged_fibonacci.cpp /boost//unit_test_framework ;
 run test_lagged_fibonacci607.cpp /boost//unit_test_framework ;
 run test_linear_feedback_shift.cpp /boost//unit_test_framework ;
+run test_taus88.cpp /boost//unit_test_framework ;
 
 run test_seed_seq.cpp /boost//unit_test_framework ;
 
