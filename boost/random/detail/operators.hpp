@@ -1,6 +1,6 @@
 /* boost random/detail/operators.hpp header file
  *
- * Copyright Steven Watanabe 2010
+ * Copyright Steven Watanabe 2010-2011
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -40,6 +40,19 @@
     template<class CharT, class Traits>                                 \
     static std::basic_istream<CharT,Traits>&                            \
     read(std::basic_istream<CharT,Traits>& is, T& t)
+
+#endif
+
+#if defined(__BORLANDC__)
+
+#define BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(T, lhs, rhs)              \
+    bool operator==(const T& rhs) const                                 \
+    { return T::is_equal(*this, rhs); }                                 \
+    static bool is_equal(const T& lhs, const T& rhs)
+
+#define BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(T)                      \
+    bool operator!=(const T& rhs) const                                 \
+    { return !T::is_equal(*this, rhs); }
 
 #endif
 

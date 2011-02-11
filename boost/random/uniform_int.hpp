@@ -72,13 +72,25 @@ public:
     /** Sets the parameters of the distribution. */
     void param(const param_type& parm) { this->base_type::param(parm); }
 
-    using base_type::operator();
+    // Codergear seems to have trouble with a using declaration here
 
     template<class Engine>
-    IntType operator()(Engine& eng, IntType n)
+    IntType operator()(Engine& eng) const
+    {
+        return static_cast<const base_type&>(*this)(eng);
+    }
+
+    template<class Engine>
+    IntType operator()(Engine& eng, const param_type& parm) const
+    {
+        return static_cast<const base_type&>(*this)(eng, parm);
+    }
+
+    template<class Engine>
+    IntType operator()(Engine& eng, IntType n) const
     {
         assert(n > 0);
-        return (*this)(eng, param_type(0, n - 1));
+        return static_cast<const base_type&>(*this)(eng, param_type(0, n - 1));
     }
 };
 

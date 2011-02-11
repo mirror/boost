@@ -78,7 +78,10 @@ public:
      */
     BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(additive_combine_engine,
         result_type, seed_arg)
-      : _mlcg1(seed_arg), _mlcg2(seed_arg) { }
+    {
+        _mlcg1.seed(seed_arg);
+        _mlcg2.seed(seed_arg);
+    }
     /**
      * Constructs an @c additive_combine_engine, using seq as
      * the constructor argument for both base generators.
@@ -93,7 +96,10 @@ public:
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(additive_combine_engine,
         SeedSeq, seq)
-      : _mlcg1(seq), _mlcg2(seq) { }
+    {
+        _mlcg1.seed(seq);
+        _mlcg2.seed(seq);
+    }
     /**
      * Constructs an @c additive_combine_engine, using
      * @c seed1 and @c seed2 as the constructor argument to
