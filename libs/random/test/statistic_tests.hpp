@@ -19,9 +19,10 @@
 #include <algorithm>
 #include <cmath>
 
-#include <boost/random.hpp>
 #include <boost/config.hpp>
 #include <boost/bind.hpp>
+#include <boost/random/uniform_01.hpp>
+#include <boost/random/variate_generator.hpp>
 
 #include "integrate.hpp"
 

@@ -12,6 +12,7 @@
 #include <boost/random/piecewise_linear_distribution.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/mersenne_twister.hpp>
+#include <boost/random/variate_generator.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/range/algorithm/lower_bound.hpp>

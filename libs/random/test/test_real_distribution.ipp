@@ -25,6 +25,10 @@
 #endif
 #endif
 
+#ifndef BOOST_RANDOM_P_CUTOFF
+#define BOOST_RANDOM_P_CUTOFF 0.99
+#endif
+
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/exception/diagnostic_information.hpp>
@@ -86,7 +90,7 @@ bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
 
 #endif
 
-    bool result = prob < 0.99;
+    bool result = prob < BOOST_RANDOM_P_CUTOFF;
     const char* err = result? "" : "*";
     std::cout << std::setprecision(17) << prob << err << std::endl;
 

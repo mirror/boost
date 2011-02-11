@@ -10,7 +10,6 @@
  */
 
 #include <boost/random/uniform_real.hpp>
-#include <boost/random/uniform_real.hpp>
 #include <boost/math/distributions/uniform.hpp>
 
 #define BOOST_RANDOM_DISTRIBUTION boost::uniform_real<>

@@ -12,111 +12,19 @@
 #include <boost/random/binomial_distribution.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/uniform_01.hpp>
-#include <boost/random/mersenne_twister.hpp>
 #include <boost/math/distributions/binomial.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/exception/diagnostic_information.hpp>
-#include <vector>
-#include <iostream>
-#include <numeric>
 
-#include "chi_squared_test.hpp"
+#define BOOST_RANDOM_DISTRIBUTION boost::random::binomial_distribution<>
+#define BOOST_RANDOM_DISTRIBUTION_NAME binomial
+#define BOOST_MATH_DISTRIBUTION boost::math::binomial
+#define BOOST_RANDOM_ARG1_TYPE int
+#define BOOST_RANDOM_ARG1_NAME n
+#define BOOST_RANDOM_ARG1_DEFAULT 100000
+#define BOOST_RANDOM_ARG1_DISTRIBUTION(n) boost::uniform_int<>(0, n)
+#define BOOST_RANDOM_ARG2_TYPE double
+#define BOOST_RANDOM_ARG2_NAME p
+#define BOOST_RANDOM_ARG2_DEFAULT 1000.0
+#define BOOST_RANDOM_ARG2_DISTRIBUTION(n) boost::uniform_01<>()
+#define BOOST_RANDOM_DISTRIBUTION_MAX n
 
-bool do_test(int n, double p, long long max) {
-    std::cout << "running binomial(" << n << ", " << p << ")" << " " << max << " times: " << std::flush;
-
-    std::vector<double> expected(n+1);
-    {
-        boost::math::binomial dist(n, p);
-        for(int i = 0; i <= n; ++i) {
-            expected[i] = pdf(dist, i);
-        }
-    }
-    
-    boost::random::binomial_distribution<int, double> dist(n, p);
-    boost::mt19937 gen;
-    std::vector<long long> results(n + 1);
-    for(long long i = 0; i < max; ++i) {
-        ++results[dist(gen)];
-    }
-
-    long long sum = std::accumulate(results.begin(), results.end(), 0ll);
-    if(sum != max) {
-        std::cout << "*** Failed: incorrect total: " << sum << " ***" << std::endl;
-        return false;
-    }
-    double chsqr = chi_squared_test(results, expected, max);
-
-    bool result = chsqr < 0.99;
-    const char* err = result? "" : "*";
-    std::cout << std::setprecision(17) << chsqr << err << std::endl;
-
-    std::cout << std::setprecision(6);
-
-    return result;
-}
-
-bool do_tests(int repeat, int max_n, long long trials) {
-    boost::mt19937 gen;
-    boost::uniform_int<> idist(0, max_n);
-    boost::uniform_01<> rdist;
-    int errors = 0;
-    for(int i = 0; i < repeat; ++i) {
-        if(!do_test(idist(gen), rdist(gen), trials)) {
-            ++errors;
-        }
-    }
-    if(errors != 0) {
-        std::cout << "*** " << errors << " errors detected ***" << std::endl;
-    }
-    return errors == 0;
-}
-
-int usage() {
-    std::cerr << "Usage: test_binomial_distribution -r <repeat> -n <max n> -t <trials>" << std::endl;
-    return 2;
-}
-
-template<class T>
-bool handle_option(int& argc, char**& argv, char opt, T& value) {
-    if(argv[0][1] == opt && argc > 1) {
-        --argc;
-        ++argv;
-        value = boost::lexical_cast<T>(argv[0]);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-int main(int argc, char** argv) {
-    int repeat = 10;
-    int max_n = 100000;
-    long long trials = 1000000ll;
-
-    if(argc > 0) {
-        --argc;
-        ++argv;
-    }
-    while(argc > 0) {
-        if(argv[0][0] != '-') return usage();
-        else if(!handle_option(argc, argv, 'r', repeat)
-             && !handle_option(argc, argv, 'n', max_n)
-             && !handle_option(argc, argv, 't', trials)) {
-            return usage();
-        }
-        --argc;
-        ++argv;
-    }
-
-    try {
-        if(do_tests(repeat, max_n, trials)) {
-            return 0;
-        } else {
-            return EXIT_FAILURE;
-        }
-    } catch(...) {
-        std::cerr << boost::current_exception_diagnostic_information() << std::endl;
-        return EXIT_FAILURE;
-    }
-}
+#include "test_real_distribution.ipp"
