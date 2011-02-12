@@ -40,6 +40,8 @@ run test_ranlux24.cpp /boost//unit_test_framework ;
 run test_ranlux48_base.cpp /boost//unit_test_framework ;
 run test_ranlux48.cpp /boost//unit_test_framework ;
 run test_knuth_b.cpp /boost//unit_test_framework ;
+run test_independent_bits31.cpp /boost//unit_test_framework ;
+run test_independent_bits32.cpp /boost//unit_test_framework ;
 run test_lagged_fibonacci.cpp /boost//unit_test_framework ;
 run test_lagged_fibonacci607.cpp /boost//unit_test_framework ;
 run test_lagged_fibonacci1279.cpp /boost//unit_test_framework ;
