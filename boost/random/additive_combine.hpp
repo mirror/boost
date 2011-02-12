@@ -149,7 +149,7 @@ public:
      * See the warning on the corresponding constructor.
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(additive_combine_engine,
-        result_type, seq)
+        SeedSeq, seq)
     {
         _mlcg1.seed(seq);
         _mlcg2.seed(seq);
