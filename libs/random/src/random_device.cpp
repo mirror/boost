@@ -1,7 +1,7 @@
 /* boost random_device.cpp implementation
  *
  * Copyright Jens Maurer 2000
- * Copyright Steven Watanabe 2010
+ * Copyright Steven Watanabe 2010-2011
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -12,16 +12,15 @@
 
 #define BOOST_RANDOM_SOURCE
 
-#include <boost/nondet_random.hpp>
+#include <boost/random/random_device.hpp>
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <string>
 #include <cassert>
 
-
-#if defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) && !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
+#if !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) && !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
 //  A definition is required even for integral static constants
-const bool boost::random_device::has_fixed_range;
-const boost::random_device::result_type boost::random_device::min_value;
-const boost::random_device::result_type boost::random_device::max_value;
+const bool boost::random::random_device::has_fixed_range;
 #endif
 
 
@@ -56,9 +55,13 @@ CryptEnumProvidersA(
 
 #endif
 
-BOOST_RANDOM_DECL const char * const boost::random_device::default_token = MS_DEF_PROV_A;
+namespace {
 
-class boost::random_device::impl
+const char * const default_token = MS_DEF_PROV_A;
+
+}
+
+class boost::random::random_device::impl
 {
 public:
   impl(const std::string & token) : provider(token) {
@@ -120,9 +123,11 @@ private:
 
 #else
 
+namespace {
 // the default is the unlimited capacity device, using some secure hash
 // try "/dev/random" for blocking when the entropy pool has drained
-const char * const boost::random_device::default_token = "/dev/urandom";
+const char * const default_token = "/dev/urandom";
+}
 
 /*
  * This uses the POSIX interface for unbuffered reading.
@@ -153,7 +158,7 @@ extern int close(int __fd);
 #include <stdexcept>  // std::invalid_argument
 
 
-class boost::random_device::impl
+class boost::random::random_device::impl
 {
 public:
   impl(const std::string & token) : path(token) {
@@ -188,16 +193,16 @@ private:
 
 #endif // BOOST_WINDOWS
 
-BOOST_RANDOM_DECL boost::random_device::random_device(const std::string& token)
+BOOST_RANDOM_DECL boost::random::random_device::random_device()
+  : pimpl(new impl(default_token))
+{}
+
+BOOST_RANDOM_DECL boost::random::random_device::random_device(const std::string& token)
   : pimpl(new impl(token))
-{
-  assert((std::numeric_limits<result_type>::max)() == max_value);
-}
+{}
 
 BOOST_RANDOM_DECL boost::random_device::~random_device()
 {
-  // the complete class impl is now visible, so we're safe
-  // (see comment in random.hpp)
   delete pimpl;
 }
 
