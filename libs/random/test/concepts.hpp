@@ -14,6 +14,7 @@
 #include <boost/concept/requires.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
@@ -111,6 +112,8 @@ public:
         same_type(E::min(), result_type());
         same_type(E::max(), result_type());
 
+        check_extra(boost::is_integral<result_type>());
+
         (void)E();
         (void)E(s);
         (void)E(q);
@@ -133,6 +136,15 @@ private:
     seed_seq_archetype<> q;
     result_type s;
     unsigned long long z;
+
+    void check_extra(boost::mpl::true_ /*is_integral*/) {}
+
+    void check_extra(boost::mpl::false_ /*is_integral*/)
+    {
+        // This is an undocumented extension, but we still need
+        // to check for it.
+        same_type(E::precision(), std::size_t(0));
+    }
     
     input_iterator_archetype<boost::uint32_t> sb, se;
 };

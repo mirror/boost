@@ -143,6 +143,16 @@ public:
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     { return (base_type::max)(); }
 
+    /**
+     * INTERNAL ONLY
+     * Returns the number of random bits.
+     * This is not part of the standard, and I'm not sure that
+     * it's the best solution, but something like this is needed
+     * to implement generate_canonical.  For now, mark it as
+     * an implementation detail.
+     */
+    static std::size_t precision() { return base_type::precision(); }
+
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
     /** Writes a \discard_block_engine to a @c std::ostream. */
     template<class CharT, class Traits>
