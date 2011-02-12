@@ -10,10 +10,11 @@
  */
 
 #include <boost/random/ranlux.hpp>
+#include <boost/cstdint.hpp>
 #include <cmath>
 
 #define BOOST_RANDOM_URNG boost::random::ranlux64_3
 // principal operation validated with CLHEP, values by experiment
-#define BOOST_RANDOM_VALIDATION_VALUE 141789170949364
+#define BOOST_RANDOM_VALIDATION_VALUE INT64_C(141789170949364)
 
 #include "test_generator.ipp"
