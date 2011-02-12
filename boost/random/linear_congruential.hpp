@@ -17,8 +17,8 @@
 #define BOOST_RANDOM_LINEAR_CONGRUENTIAL_HPP
 
 #include <iostream>
-#include <cassert>
 #include <stdexcept>
+#include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
@@ -139,8 +139,8 @@ public:
         if(increment == 0 && _x == 0) {
             _x = 1;
         }
-        assert(_x >= (min)());
-        assert(_x <= (max)());
+        BOOST_ASSERT(_x >= (min)());
+        BOOST_ASSERT(_x <= (max)());
     }
 
     /**

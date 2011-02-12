@@ -17,7 +17,7 @@
 #ifndef BOOST_RANDOM_UNIFORM_REAL_HPP
 #define BOOST_RANDOM_UNIFORM_REAL_HPP
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/random/uniform_real_distribution.hpp>
@@ -63,7 +63,7 @@ public:
                           RealType max_arg = RealType(1.0))
       : base_type(min_arg, max_arg)
     {
-        assert(min_arg <= max_arg);
+        BOOST_ASSERT(min_arg <= max_arg);
     }
 
     /** Constructs a uniform_real distribution from its parameters. */

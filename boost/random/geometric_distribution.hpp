@@ -18,9 +18,9 @@
 #define BOOST_RANDOM_GEOMETRIC_DISTRIBUTION_HPP
 
 #include <boost/config/no_tr1/cmath.hpp>          // std::log
-#include <cassert>
 #include <iosfwd>
 #include <ios>
+#include <boost/assert.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/uniform_01.hpp>
@@ -60,7 +60,7 @@ public:
         explicit param_type(RealType p_arg = RealType(0.5))
           : _p(p_arg)
         {
-            assert(RealType(0) < _p && _p < RealType(1));
+            BOOST_ASSERT(RealType(0) < _p && _p < RealType(1));
         }
 
         /** Returns the p parameter of the distribution. */
@@ -107,7 +107,7 @@ public:
     explicit geometric_distribution(const RealType& p = RealType(0.5))
       : _p(p)
     {
-        assert(RealType(0) < _p && _p < RealType(1));
+        BOOST_ASSERT(RealType(0) < _p && _p < RealType(1));
         init();
     }
 

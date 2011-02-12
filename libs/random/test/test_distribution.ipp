@@ -208,7 +208,7 @@ BOOST_AUTO_TEST_CASE(test_generation) {
     boost::minstd_rand0 gen;
     BOOST_RANDOM_DISTRIBUTION dist BOOST_RANDOM_TEST1_PARAMS;
     BOOST_RANDOM_DISTRIBUTION dist_two BOOST_RANDOM_TEST2_PARAMS;
-	typedef BOOST_RANDOM_DISTRIBUTION::result_type result_type;
+    typedef BOOST_RANDOM_DISTRIBUTION::result_type result_type;
     for(int i = 0; i < 10; ++i) {
         result_type value = dist(gen);
 #ifdef BOOST_RANDOM_TEST1_MIN
@@ -245,7 +245,7 @@ BOOST_AUTO_TEST_CASE(test_generation_float) {
     boost::lagged_fibonacci607 gen;
     BOOST_RANDOM_DISTRIBUTION dist BOOST_RANDOM_TEST1_PARAMS;
     BOOST_RANDOM_DISTRIBUTION dist_two BOOST_RANDOM_TEST2_PARAMS;
-	typedef BOOST_RANDOM_DISTRIBUTION::result_type result_type;
+    typedef BOOST_RANDOM_DISTRIBUTION::result_type result_type;
     for(int i = 0; i < 10; ++i) {
         result_type value = dist(gen);
 #ifdef BOOST_RANDOM_TEST1_MIN

@@ -17,9 +17,9 @@
 #ifndef BOOST_RANDOM_UNIFORM_SMALLINT_HPP
 #define BOOST_RANDOM_UNIFORM_SMALLINT_HPP
 
-#include <cassert>
 #include <istream>
 #include <iosfwd>
+#include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/type_traits/is_integral.hpp>
@@ -114,7 +114,7 @@ public:
         param_type(IntType min_arg = 0, IntType max_arg = 9)
           : _min(min_arg), _max(max_arg)
         {
-            assert(_min <= _max);
+            BOOST_ASSERT(_min <= _max);
         }
 
         /** Returns the minimum value. */

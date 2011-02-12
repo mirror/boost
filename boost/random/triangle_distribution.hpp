@@ -18,10 +18,10 @@
 #define BOOST_RANDOM_TRIANGLE_DISTRIBUTION_HPP
 
 #include <boost/config/no_tr1/cmath.hpp>
-#include <cassert>
 #include <iosfwd>
 #include <ios>
 #include <istream>
+#include <boost/assert.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/uniform_01.hpp>
@@ -54,7 +54,7 @@ public:
                             RealType c_arg = RealType(1.0))
           : _a(a_arg), _b(b_arg), _c(c_arg)
         {
-            assert(_a <= _b && _b <= _c);
+            BOOST_ASSERT(_a <= _b && _b <= _c);
         }
 
         /** Returns the minimum value of the distribution. */
@@ -111,7 +111,7 @@ public:
                                    RealType c_arg = RealType(1.0))
       : _a(a_arg), _b(b_arg), _c(c_arg)
     {
-        assert(_a <= _b && _b <= _c);
+        BOOST_ASSERT(_a <= _b && _b <= _c);
         init();
     }
 

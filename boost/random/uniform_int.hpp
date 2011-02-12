@@ -17,7 +17,7 @@
 #ifndef BOOST_RANDOM_UNIFORM_INT_HPP
 #define BOOST_RANDOM_UNIFORM_INT_HPP
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
 namespace boost {
@@ -89,7 +89,7 @@ public:
     template<class Engine>
     IntType operator()(Engine& eng, IntType n) const
     {
-        assert(n > 0);
+        BOOST_ASSERT(n > 0);
         return static_cast<const base_type&>(*this)(eng, param_type(0, n - 1));
     }
 };

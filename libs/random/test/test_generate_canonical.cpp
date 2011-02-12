@@ -91,7 +91,7 @@ struct max_engine
     static result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     { return ~boost::uint32_t(0); }
-    result_type operator()() { return max(); }
+    result_type operator()() { return (max)(); }
 };
 
 BOOST_AUTO_TEST_CASE(test_max)

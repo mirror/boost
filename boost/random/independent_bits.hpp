@@ -14,9 +14,9 @@
 #ifndef BOOST_RANDOM_INDEPENDENT_BITS_HPP
 #define BOOST_RANDOM_INDEPENDENT_BITS_HPP
 
-#include <cassert>
 #include <istream>
 #include <iosfwd>
+#include <boost/assert.hpp>
 #include <boost/limits.hpp>
 #include <boost/config.hpp>
 #include <boost/integer/integer_mask.hpp>
@@ -193,7 +193,7 @@ public:
             calc_params(n, range, w0, n0, y0, y1, y0_mask, y1_mask);
         }
 
-        assert(n0*w0 + (n - n0)*(w0 + 1) == w);
+        BOOST_ASSERT(n0*w0 + (n - n0)*(w0 + 1) == w);
 
         result_type S = 0;
         for(std::size_t k = 0; k < n0; ++k) {
@@ -275,14 +275,14 @@ private:
         base_unsigned& y0, base_unsigned& y1,
         base_unsigned& y0_mask, base_unsigned& y1_mask)
     {
-        assert(w >= n);
+        BOOST_ASSERT(w >= n);
         w0 = w/n;
         n0 = n - w % n;
         y0_mask = (base_unsigned(2) << (w0 - 1)) - 1;
         y1_mask = (y0_mask << 1) | 1;
         y0 = (range + 1) & ~y0_mask;
         y1 = (range + 1) & ~y1_mask;
-        assert(y0 != 0 || base_unsigned(range + 1) == 0);
+        BOOST_ASSERT(y0 != 0 || base_unsigned(range + 1) == 0);
     }
     /// \endcond
 

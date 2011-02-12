@@ -17,8 +17,8 @@
 #ifndef BOOST_RANDOM_BERNOULLI_DISTRIBUTION_HPP
 #define BOOST_RANDOM_BERNOULLI_DISTRIBUTION_HPP
 
-#include <cassert>
 #include <iosfwd>
+#include <boost/assert.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
 
@@ -55,8 +55,8 @@ public:
         explicit param_type(RealType p_arg = RealType(0.5))
           : _p(p_arg)
         {
-            assert(_p >= 0);
-            assert(_p <= 1);
+            BOOST_ASSERT(_p >= 0);
+            BOOST_ASSERT(_p <= 1);
         }
 
         /** Returns the p parameter of the distribution. */
@@ -96,8 +96,8 @@ public:
     explicit bernoulli_distribution(const RealType& p_arg = RealType(0.5)) 
       : _p(p_arg)
     {
-        assert(_p >= 0);
-        assert(_p <= 1);
+        BOOST_ASSERT(_p >= 0);
+        BOOST_ASSERT(_p <= 1);
     }
     /**
      * Constructs \bernoulli_distribution from its parameters

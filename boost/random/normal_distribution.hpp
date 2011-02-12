@@ -18,9 +18,9 @@
 #define BOOST_RANDOM_NORMAL_DISTRIBUTION_HPP
 
 #include <boost/config/no_tr1/cmath.hpp>
-#include <cassert>
 #include <istream>
 #include <iosfwd>
+#include <boost/assert.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/config.hpp>
@@ -101,7 +101,7 @@ public:
       : _mean(mean_arg), _sigma(sigma_arg),
         _r1(0), _r2(0), _cached_rho(0), _valid(false)
     {
-        assert(_sigma >= RealType(0));
+        BOOST_ASSERT(_sigma >= RealType(0));
     }
 
     /**

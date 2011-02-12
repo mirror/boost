@@ -70,7 +70,7 @@ bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
     
     std::vector<long long> results(max_value + 1);
     for(long long i = 0; i < max; ++i) {
-        ++results[std::min(dist(gen), max_value)];
+        ++results[(std::min)(dist(gen), max_value)];
     }
 
     long long sum = boost::accumulate(results, 0ll);

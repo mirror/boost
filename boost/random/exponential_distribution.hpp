@@ -18,8 +18,8 @@
 #define BOOST_RANDOM_EXPONENTIAL_DISTRIBUTION_HPP
 
 #include <boost/config/no_tr1/cmath.hpp>
-#include <cassert>
 #include <iosfwd>
+#include <boost/assert.hpp>
 #include <boost/limits.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
@@ -53,7 +53,7 @@ public:
          * Requires: lambda > 0
          */
         param_type(RealType lambda_arg = RealType(1.0))
-          : _lambda(lambda_arg) { assert(_lambda > RealType(0)); }
+          : _lambda(lambda_arg) { BOOST_ASSERT(_lambda > RealType(0)); }
 
         /** Returns the lambda parameter of the distribution. */
         RealType lambda() const { return _lambda; }
@@ -89,7 +89,7 @@ public:
      * Requires: lambda > 0
      */
     explicit exponential_distribution(RealType lambda_arg = RealType(1.0))
-      : _lambda(lambda_arg) { assert(_lambda > RealType(0)); }
+      : _lambda(lambda_arg) { BOOST_ASSERT(_lambda > RealType(0)); }
 
     /**
      * Constructs an exponential_distribution from its parameters

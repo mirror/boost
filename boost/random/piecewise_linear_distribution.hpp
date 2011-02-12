@@ -15,9 +15,9 @@
 
 #include <vector>
 #include <algorithm>
-#include <cassert>
 #include <cmath>
 #include <cstdlib>
+#include <boost/assert.hpp>
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/discrete_distribution.hpp>
 #include <boost/random/detail/config.hpp>
@@ -159,7 +159,7 @@ public:
         {
             std::size_t n = (nw == 0) ? 1 : nw;
             double delta = (xmax - xmin) / n;
-            assert(delta > 0);
+            BOOST_ASSERT(delta > 0);
             for(std::size_t k = 0; k < n; ++k) {
                 _weights.push_back(f(xmin + k*delta));
                 _intervals.push_back(xmin + k*delta);
@@ -383,9 +383,9 @@ public:
         if(is_in_rectangle) {
             return dist(urng);
         } else if(_weights[i] < _weights[i+1]) {
-            return std::max(dist(urng), dist(urng));
+            return (std::max)(dist(urng), dist(urng));
         } else {
-            return std::min(dist(urng), dist(urng));
+            return (std::min)(dist(urng), dist(urng));
         }
     }
     
@@ -498,7 +498,7 @@ private:
             RealType width = intervals_arg[i + 1] - intervals_arg[i];
             WeightType w1 = weights_arg[i];
             WeightType w2 = weights_arg[i + 1];
-            bin_weights.push_back(std::min(w1, w2) * width);
+            bin_weights.push_back((std::min)(w1, w2) * width);
             bin_weights.push_back(std::abs(w1 - w2) * width / 2);
         }
         typedef discrete_distribution<std::size_t, WeightType> bins_type;

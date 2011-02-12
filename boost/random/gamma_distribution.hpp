@@ -16,7 +16,9 @@
 #define BOOST_RANDOM_GAMMA_DISTRIBUTION_HPP
 
 #include <boost/config/no_tr1/cmath.hpp>
-#include <cassert>
+#include <istream>
+#include <iosfwd>
+#include <boost/assert.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/config.hpp>
@@ -112,8 +114,8 @@ public:
                                 const result_type& beta_arg = result_type(1.0))
       : _exp(result_type(1)), _alpha(alpha_arg), _beta(beta_arg)
     {
-        assert(_alpha > result_type(0));
-        assert(_beta > result_type(0));
+        BOOST_ASSERT(_alpha > result_type(0));
+        BOOST_ASSERT(_beta > result_type(0));
         init();
     }
 

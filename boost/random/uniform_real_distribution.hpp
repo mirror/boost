@@ -15,10 +15,10 @@
 #ifndef BOOST_RANDOM_UNIFORM_REAL_DISTRIBUTION_HPP
 #define BOOST_RANDOM_UNIFORM_REAL_DISTRIBUTION_HPP
 
-#include <cassert>
 #include <iosfwd>
 #include <ios>
 #include <istream>
+#include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
@@ -39,8 +39,8 @@ T generate_uniform_real(
         typedef typename Engine::result_type base_result;
         result_type numerator = static_cast<T>(eng() - (eng.min)());
         result_type divisor = static_cast<T>((eng.max)() - (eng.min)());
-        assert(divisor > 0);
-        assert(numerator >= 0 && numerator <= divisor);
+        BOOST_ASSERT(divisor > 0);
+        BOOST_ASSERT(numerator >= 0 && numerator <= divisor);
         T result = numerator / divisor * (max_value - min_value) + min_value;
         if(result < max_value) return result;
     }
@@ -56,8 +56,8 @@ T generate_uniform_real(
         typedef typename Engine::result_type base_result;
         result_type numerator = static_cast<T>(subtract<base_result>()(eng(), (eng.min)()));
         result_type divisor = static_cast<T>(subtract<base_result>()((eng.max)(), (eng.min)())) + 1;
-        assert(divisor > 0);
-        assert(numerator >= 0 && numerator <= divisor);
+        BOOST_ASSERT(divisor > 0);
+        BOOST_ASSERT(numerator >= 0 && numerator <= divisor);
         T result = numerator / divisor * (max_value - min_value) + min_value;
         if(result < max_value) return result;
     }
@@ -100,7 +100,7 @@ public:
                             RealType max_arg = RealType(1.0))
           : _min(min_arg), _max(max_arg)
         {
-            assert(_min <= _max);
+            BOOST_ASSERT(_min <= _max);
         }
 
         /** Returns the minimum value of the distribution. */
@@ -154,7 +154,7 @@ public:
         RealType max_arg = RealType(1.0))
       : _min(min_arg), _max(max_arg)
     {
-        assert(min_arg <= max_arg);
+        BOOST_ASSERT(min_arg <= max_arg);
     }
     /** Constructs a uniform_real_distribution from its parameters. */
     explicit uniform_real_distribution(const param_type& parm)

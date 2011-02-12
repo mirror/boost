@@ -18,12 +18,12 @@
 #ifndef BOOST_RANDOM_UNIFORM_INT_DISTRIBUTION_HPP
 #define BOOST_RANDOM_UNIFORM_INT_DISTRIBUTION_HPP
 
-#include <cassert>
 #include <iosfwd>
 #include <ios>
 #include <istream>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
+#include <boost/assert.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/detail/uniform_int_float.hpp>
@@ -263,7 +263,7 @@ public:
             IntType max_arg = (std::numeric_limits<IntType>::max)())
           : _min(min_arg), _max(max_arg)
         {
-            assert(_min <= _max);
+            BOOST_ASSERT(_min <= _max);
         }
 
         /** Returns the minimum value of the distribution. */
@@ -317,7 +317,7 @@ public:
         IntType max_arg = (std::numeric_limits<IntType>::max)())
       : _min(min_arg), _max(max_arg)
     {
-        assert(min_arg <= max_arg);
+        BOOST_ASSERT(min_arg <= max_arg);
     }
     /** Constructs a uniform_int_distribution from its parameters. */
     explicit uniform_int_distribution(const param_type& parm)

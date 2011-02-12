@@ -14,9 +14,9 @@
 
 #include <boost/random/random_device.hpp>
 #include <boost/config.hpp>
+#include <boost/assert.hpp>
 #include <boost/detail/workaround.hpp>
 #include <string>
-#include <cassert>
 
 #if !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) && !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
 //  A definition is required even for integral static constants

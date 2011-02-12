@@ -20,6 +20,7 @@
 #include <vector>
 #include <algorithm>     // std::transform
 #include <functional>    // std::bind2nd, std::divides
+#include <boost/assert.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/normal_distribution.hpp>
@@ -54,7 +55,7 @@ public:
          */
         explicit param_type(int dim_arg = 2) : _dim(dim_arg)
         {
-            assert(_dim >= 0);
+            BOOST_ASSERT(_dim >= 0);
         }
 
         /** Returns the dimension of the sphere. */

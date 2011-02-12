@@ -17,8 +17,8 @@
 #define BOOST_RANDOM_INVERSIVE_CONGRUENTIAL_HPP
 
 #include <iosfwd>
-#include <cassert>
 #include <stdexcept>
+#include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/integer/static_log2.hpp>
 #include <boost/random/detail/config.hpp>
@@ -134,8 +134,8 @@ public:
         if(increment == 0 && _value == 0) {
             _value = 1;
         }
-        assert(_value >= (min)());
-        assert(_value <= (max)());
+        BOOST_ASSERT(_value >= (min)());
+        BOOST_ASSERT(_value <= (max)());
     }
 
     /**

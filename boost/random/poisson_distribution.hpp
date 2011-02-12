@@ -17,8 +17,8 @@
 
 #include <boost/config/no_tr1/cmath.hpp>
 #include <cstdlib>
-#include <cassert>
 #include <iosfwd>
+#include <boost/assert.hpp>
 #include <boost/limits.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/detail/config.hpp>
@@ -79,7 +79,7 @@ public:
         explicit param_type(RealType mean_arg = RealType(1))
           : _mean(mean_arg)
         {
-            assert(_mean > 0);
+            BOOST_ASSERT(_mean > 0);
         }
         /* Returns the "mean" parameter of the distribution. */
         RealType mean() const { return _mean; }
@@ -125,7 +125,7 @@ public:
     explicit poisson_distribution(RealType mean_arg = RealType(1))
       : _mean(mean_arg)
     {
-        assert(_mean > 0);
+        BOOST_ASSERT(_mean > 0);
         init();
     }
     
@@ -242,8 +242,8 @@ private:
 
     static RealType log_factorial(IntType k)
     {
-        assert(k >= 0);
-        assert(k < 10);
+        BOOST_ASSERT(k >= 0);
+        BOOST_ASSERT(k < 10);
         return detail::poisson_table<RealType>::value[k];
     }
 
