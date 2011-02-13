@@ -966,7 +966,7 @@ struct True_ : euml::euml_action<True_>
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-    bool operator()(EVT const& evt,FSM&,SourceState& ,TargetState& )
+    bool operator()(EVT const&,FSM&,SourceState& ,TargetState& )
     {
         return true;
     }
@@ -996,7 +996,7 @@ struct False_ : euml::euml_action<False_>
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-    bool operator()(EVT const& evt,FSM&,SourceState& ,TargetState& )
+    bool operator()(EVT const&,FSM&,SourceState& ,TargetState& )
     {
         return false;
     }

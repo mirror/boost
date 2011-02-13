@@ -2334,7 +2334,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     // called for completion events. Default address set in the dispatch_table at init
     // prevents no-transition detection for completion events
     template <class Event>
-    static HandledEnum default_eventless_transition(library_sm& fsm, int, int , Event const& e)
+    static HandledEnum default_eventless_transition(library_sm& fsm, int, int , Event const&)
     {
         return HANDLED_FALSE;
     }
