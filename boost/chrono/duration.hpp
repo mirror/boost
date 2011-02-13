@@ -429,9 +429,6 @@ namespace chrono {
 
         BOOST_CHRONO_CONSTEXPR
         duration() { }
-//#if defined(BOOST_MSVCBOOST_MSVC) && (BOOST_MSVC == 1500)
-//        duration(const rep& r) : rep_(r) { }
-//#endif        
         template <class Rep2>
         BOOST_CHRONO_CONSTEXPR
         explicit duration(const Rep2& r
