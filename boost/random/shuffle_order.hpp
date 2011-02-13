@@ -233,7 +233,7 @@ public:
 
 private:
 
-    /// \cond
+    /// \cond show_private
 
     void init()
     {
@@ -260,7 +260,6 @@ template<class URNG, std::size_t k>
 const std::size_t shuffle_order_engine<URNG, k>::buffer_size;
 #endif
 
-// validation by experiment from Harry Erwin's generator.h (private e-mail)
 /**
  * According to Harry Erwin (private e-mail), the specialization
  * @c kreutzer1986 was suggested in:
@@ -274,6 +273,15 @@ typedef shuffle_order_engine<
     linear_congruential_engine<uint32_t, 1366, 150889, 714025>,
     97> kreutzer1986;
 
+/**
+ * The specialization @c knuth_b is specified by the C++ standard.
+ * It is described in
+ *
+ * @blockquote
+ * "The Art of Computer Programming, Second Edition, Volume 2,
+ * Seminumerical Algorithms", Donald Knuth, Addison-Wesley, 1981.
+ * @endblockquote
+ */
 typedef shuffle_order_engine<minstd_rand0, 256> knuth_b;
 
 } // namespace random

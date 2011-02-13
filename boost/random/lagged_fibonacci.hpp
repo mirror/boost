@@ -35,7 +35,7 @@ namespace boost {
 namespace random {
 
 /** 
- * Instantiations of class template \lagged_fibonacci model a
+ * Instantiations of class template \lagged_fibonacci_engine model a
  * \pseudo_random_number_generator. It uses a lagged Fibonacci
  * algorithm with two lags @c p and @c q:
  * x(i) = x(i-p) + x(i-q) (mod 2<sup>w</sup>) with p > q.
@@ -184,7 +184,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(lagged_fibonacci_engine)
 
 private:
-    /// \cond hide_private_members
+    /// \cond show_private
     void fill();
     /// \endcond
 
@@ -202,7 +202,7 @@ template<class UIntType, int w, unsigned int p, unsigned int q>
 const unsigned int lagged_fibonacci_engine<UIntType, w, p, q>::short_lag;
 #endif
 
-/// \cond
+/// \cond show_private
 
 template<class UIntType, int w, unsigned int p, unsigned int q>
 void lagged_fibonacci_engine<UIntType, w, p, q>::fill()
@@ -219,7 +219,7 @@ void lagged_fibonacci_engine<UIntType, w, p, q>::fill()
 
 /// \endcond
 
-/// \cond
+/// \cond show_deprecated
 
 // provided for backwards compatibility
 template<class UIntType, int w, unsigned int p, unsigned int q, UIntType v = 0>
@@ -432,7 +432,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(lagged_fibonacci_01_engine)
 
 private:
-    /// \cond
+    /// \cond show_private
     void fill();
     static RealType modulus()
     {
@@ -457,7 +457,7 @@ const int lagged_fibonacci_01_engine<RealType,w,p,q>::word_size;
 
 #endif
 
-/// \cond
+/// \cond show_private
 template<class RealType, int w, unsigned int p, unsigned int q>
 void lagged_fibonacci_01_engine<RealType, w, p, q>::fill()
 {
@@ -480,7 +480,7 @@ void lagged_fibonacci_01_engine<RealType, w, p, q>::fill()
 }
 /// \endcond
 
-/// \cond
+/// \cond show_deprecated
 
 // provided for backwards compatibility
 template<class RealType, int w, unsigned int p, unsigned int q>

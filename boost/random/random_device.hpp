@@ -77,7 +77,7 @@ namespace random {
  *
  * <table cols="2">
  *   <tr><th>class</th><th>time per invocation [usec]</th></tr>
- *   <tr><td> @xmlonly <classname alt="boost::random_device">random_device</classname> @endxmlonly </td><td>92.0</td></tr>
+ *   <tr><td> \random_device </td><td>92.0</td></tr>
  * </table>
  *
  * The measurement error is estimated at +/- 1 usec.

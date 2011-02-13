@@ -208,14 +208,9 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(normal_distribution)
 
 private:
-
-    /// @cond
-
     RealType _mean, _sigma;
     RealType _r1, _r2, _cached_rho;
     bool _valid;
-
-    /// @endcond
 
 };
 

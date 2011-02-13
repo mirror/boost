@@ -170,9 +170,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(exponential_distribution)
 
 private:
-    /// \cond
     result_type _lambda;
-    /// \endcond
 };
 
 } // namespace random

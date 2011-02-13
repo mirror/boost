@@ -26,6 +26,7 @@
 #include <boost/random/detail/disable_warnings.hpp>
 
 namespace boost {
+namespace random {
 
 #ifdef BOOST_RANDOM_DOXYGEN
 
@@ -265,6 +266,10 @@ public:
 };
 
 #endif
+
+} // namespace random
+
+using random::uniform_01;
 
 } // namespace boost
 

@@ -176,7 +176,7 @@ template<class URNG1, int s1, class URNG2, int s2>
 const int xor_combine_engine<URNG1, s1, URNG2, s2>::shift2;
 #endif
 
-/// \cond
+/// \cond show_private
 
 /** Provided for backwards compatibility. */
 template<class URNG1, int s1, class URNG2, int s2,

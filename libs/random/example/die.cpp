@@ -12,11 +12,10 @@
     For the source of this example see
     [@boost://libs/random/example/die.cpp die.cpp].
     First we include the headers we need for __mt19937
-    and __uniform_int.
+    and __uniform_int_distribution.
 */
 #include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int.hpp>
-#include <boost/random/variate_generator.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 /*`
   We use __mt19937 with the default seed as a source of
@@ -38,24 +37,17 @@ boost::random::mt19937 gen;
 int roll_die() {
     /*<< __mt19937 produces integers in the range [0, 2[sup 32]-1].
         However, we want numbers in the range [1, 6].  The distribution
-        __uniform_int performs this transformation.
-        [warning Contrary to common C++ usage __uniform_int
+        __uniform_int_distribution performs this transformation.
+        [warning Contrary to common C++ usage __uniform_int_distribution
         does not take a /half-open range/.  Instead it takes a /closed range/.
-        Given the parameters 1 and 6, __uniform_int can
+        Given the parameters 1 and 6, __uniform_int_distribution can
         can produce any of the values 1, 2, 3, 4, 5, or 6.]
     >>*/
-    boost::uniform_int<> dist(1, 6);
-    /*<< __variate_generator combines a generator with a distribution.
-        [important We pass [classref boost::random::mt19937 boost::mt19937&] to
-        __variate_generator instead of just [classref boost::random::mt19937]
-        (note the reference).  Without the reference, __variate_generator
-        would make a copy of the generator and would leave the global
-        `gen` unchanged.  Consequently, `roll_die` would produce *the same value*
-        every time it was called.]
+    boost::random::uniform_int_distribution<> dist(1, 6);
+    /*<< A distribution is a function object.  We generate a random
+        number by calling `dist` with the generator.
     >>*/
-    boost::variate_generator<boost::random::mt19937&, boost::uniform_int<> > die(gen, dist);
-    /*<< A __variate_generator is a function object. >>*/
-    return die();
+    return dist(gen);
 }
 //]
 

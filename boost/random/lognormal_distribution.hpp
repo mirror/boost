@@ -188,12 +188,14 @@ private:
 
 } // namespace random
 
+/// \cond show_deprecated
+
 /**
  * Provided for backwards compatibility.  This class is
  * deprecated.  It provides the old behavior of lognormal_distribution with
  * \f$\displaystyle p(x) = \frac{1}{x \sigma_N \sqrt{2\pi}} e^{\frac{-\left(\log(x)-\mu_N\right)^2}{2\sigma_N^2}}\f$
  * for x > 0, where \f$\displaystyle \mu_N = \log\left(\frac{\mu^2}{\sqrt{\sigma^2 + \mu^2}}\right)\f$ and
- * \f$\displaystyle \sigma_N = \sqrt{\log\left(1 + \frac{\sigma^2}{\mu^2}\right)}.
+ * \f$\displaystyle \sigma_N = \sqrt{\log\left(1 + \frac{\sigma^2}{\mu^2}\right)}\f$.
  */
 template<class RealType = double>
 class lognormal_distribution
@@ -229,7 +231,7 @@ public:
         return is;
     }
 private:
-    /// \cond
+    /// \cond show_private
     void init()
     {
         using std::log;
@@ -244,6 +246,8 @@ private:
     normal_distribution<RealType> _normal;
     /// \endcond
 };
+
+/// \endcond
 
 } // namespace boost
 

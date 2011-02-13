@@ -199,7 +199,7 @@ public:
 
 private:
 
-    /// \cond
+    /// \cond show_private
 
     void init()
     {
@@ -214,6 +214,8 @@ private:
 };
 
 } // namespace random
+
+/// \cond show_deprecated
 
 /**
  * Provided for backwards compatibility.  This class is
@@ -257,6 +259,8 @@ private:
     typedef random::geometric_distribution<IntType, RealType> impl_type;
     impl_type _impl;
 };
+
+/// \endcond
 
 } // namespace boost
 

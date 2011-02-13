@@ -247,7 +247,8 @@ template<class MLCG1, class MLCG2>
 const bool additive_combine_engine<MLCG1, MLCG2>::has_fixed_range;
 #endif
 
-/// \cond
+/// \cond show_deprecated
+
 /** Provided for backwards compatibility. */
 template<class MLCG1, class MLCG2, typename MLCG1::result_type val = 0>
 class additive_combine : public additive_combine_engine<MLCG1, MLCG2>
@@ -263,6 +264,7 @@ public:
     template<class It>
     additive_combine(It& first, It last) : base_t(first, last) {}
 };
+
 /// \endcond
 
 /**

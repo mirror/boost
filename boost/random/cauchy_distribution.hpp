@@ -201,11 +201,8 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(cauchy_distribution)
 
 private:
-  
-    /// \cond
     RealType _median;
     RealType _sigma;
-    /// \endcond
 };
 
 } // namespace random

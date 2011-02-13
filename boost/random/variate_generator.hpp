@@ -33,9 +33,6 @@ namespace random {
  * Boost.Random provides a vast choice of \generators as well
  * as \distributions.
  *
- * Instantations of class template @c variate_generator model
- * a \number_generator.
- *
  * The argument for the template parameter Engine shall be of
  * the form U, U&, or U*, where U models a
  * \uniform_random_number_generator.  Then, the member

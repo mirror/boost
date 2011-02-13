@@ -84,14 +84,10 @@ public:
     // Required by old Boost.Random concept
     BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
-    /**
-     * Returns the smallest value that the generator can produce
-     */
+    /** Returns the smallest value that the generator can produce. */
     static result_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()
     { return 0; }
-    /**
-     * Returns the largest value that the generator can produce
-     */
+    /** Returns the largest value that the generator can produce. */
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     { return boost::low_bits_mask_t<w>::sig_bits; }
 
@@ -265,7 +261,7 @@ public:
 
 private:
 
-    /// \cond
+    /// \cond show_private
     typedef typename base_type::result_type base_result;
     typedef typename make_unsigned<base_result>::type base_unsigned;
 

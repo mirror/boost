@@ -187,7 +187,7 @@ public:
 
 private:
 
-    /// @cond
+    /// @cond show_private
 
     template<class CharT, class Traits>
     void read(std::basic_istream<CharT, Traits>& is) {

@@ -207,7 +207,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(triangle_distribution)
 
 private:
-    /// \cond
+    /// \cond show_private
     void init()
     {
         using std::sqrt;

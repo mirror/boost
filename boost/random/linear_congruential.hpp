@@ -234,7 +234,7 @@ public:
 
 private:
 
-    /// \cond
+    /// \cond show_private
 
     template<class CharT, class Traits>
     void read(std::basic_istream<CharT, Traits>& is) {
@@ -267,7 +267,7 @@ template<class IntType, IntType a, IntType c, IntType m>
 const IntType linear_congruential_engine<IntType,a,c,m>::default_seed;
 #endif
 
-/// \cond
+/// \cond show_deprecated
 
 // provided for backwards compatibility
 template<class IntType, IntType a, IntType c, IntType m, IntType val = 0>
@@ -421,7 +421,7 @@ public:
     friend bool operator!=(const rand48& x, const rand48& y)
     { return !(x == y); }
 private:
-    /// \cond
+    /// \cond show_private
     typedef random::linear_congruential_engine<uint64_t,
         // xxxxULL is not portable
         uint64_t(0xDEECE66DUL) | (uint64_t(0x5) << 32),

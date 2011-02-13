@@ -262,7 +262,7 @@ public:
     { return !(x == y); }
 
 private:
-    /// \cond hide_private_members
+    /// \cond show_private
 
     void twist();
 
@@ -361,7 +361,7 @@ private:
     std::size_t i;
 };
 
-/// \cond
+/// \cond show_private
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
@@ -498,8 +498,7 @@ typedef mersenne_twister_engine<uint64_t,64,312,156,31,
     UINT64_C(6364136223846793005)> mt19937_64;
 #endif
 
-
-/// \cond
+/// \cond show_deprecated
 
 template<class UIntType,
          int w, int n, int m, int r,

@@ -63,7 +63,8 @@ namespace random {
  *
  * The template parameter IntType shall denote an integer-like value type.
  *
- * Note: The property above is the square sum of the relative differences
+ * @xmlnote
+ * The property above is the square sum of the relative differences
  * in probabilities between the desired uniform distribution
  * \f$p_{\mathtt{out}}(i)\f$ and the generated distribution
  * \f$p_{\mathtt{out\_s}}(i)\f$.
@@ -85,6 +86,7 @@ namespace random {
  * {r_{\mathtt{out}}}\right\rfloor/r_{\mathtt{base}}\f$ otherwise.
  * Substituting this in the
  * above sum formula leads to the desired result.
+ * @endxmlnote
  *
  * Note: The upper bound for
  * \f$(r_{\mathtt{base}} \mbox{ mod } r_{\mathtt{out}})
@@ -228,7 +230,7 @@ public:
 
 private:
     
-    // \cond
+    // \cond show_private
     template<class Engine>
     result_type generate(Engine& eng, boost::mpl::true_) const
     {

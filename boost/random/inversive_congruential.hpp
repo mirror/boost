@@ -235,7 +235,7 @@ template<class IntType, IntType a, IntType b, IntType p>
 const typename inversive_congruential_engine<IntType, a, b, p>::result_type inversive_congruential_engine<IntType, a, b, p>::default_seed;
 #endif
 
-/// \cond
+/// \cond show_deprecated
 
 // provided for backwards compatibility
 template<class IntType, IntType a, IntType b, IntType p, IntType val = 0>

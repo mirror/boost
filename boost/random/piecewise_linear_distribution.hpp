@@ -225,15 +225,10 @@ public:
         BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(param_type)
 
     private:
-
-        /// @cond
-
         friend class piecewise_linear_distribution;
 
         std::vector<RealType> _intervals;
         std::vector<WeightType> _weights;
-
-        /// @endcond
     };
 
     /**
@@ -487,7 +482,7 @@ public:
 
 private:
 
-    /// @cond
+    /// @cond \show_private
 
     void init(const std::vector<RealType>& intervals_arg,
               const std::vector<WeightType>& weights_arg)

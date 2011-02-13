@@ -185,10 +185,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(bernoulli_distribution)
 
 private:
-
-    /// \cond
     RealType _p;
-    /// \endcond
 };
 
 } // namespace random

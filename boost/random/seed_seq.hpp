@@ -30,21 +30,37 @@
 namespace boost {
 namespace random {
 
+/**
+ * The class @c seed_seq stores a sequence of 32-bit words
+ * for seeding a \pseudo_random_number_generator.  These
+ * words will be combined to fill the entire state of the
+ * generator.
+ */
 class seed_seq {
 public:
     typedef boost::uint_least32_t result_type;
 
+    /** Initializes a seed_seq to hold an empty sequence. */
     seed_seq() {}
 #ifndef BOOST_NO_INITIALIZER_LISTS
+    /** Initializes the sequence from an initializer_list. */
     template<class T>
     seed_seq(const std::initializer_list<T>& il) : v(il.begin(), il.end()) {}
 #endif
+    /** Initializes the sequence from an iterator range. */
     template<class Iter>
     seed_seq(Iter first, Iter last) : v(first, last) {}
+    /** Initializes the sequence from Boost.Range range. */
     template<class Range>
     explicit seed_seq(const Range& range)
       : v(boost::begin(range), boost::end(range)) {}
 
+    /**
+     * Fills a range with 32-bit values based on the stored sequence.
+     *
+     * Requires: Iter must be a Random Access Iterator whose value type
+     * is an unsigned integral type at least 32 bits wide.
+     */
     template<class Iter>
     void generate(Iter first, Iter last) const
     {
@@ -87,7 +103,9 @@ public:
             *(first + k%n) = r4;
         }
     }
+    /** Returns the size of the sequence. */
     std::size_t size() const { return v.size(); }
+    /** Writes the stored sequence to iter. */
     template<class Iter>
     void param(Iter out) { std::copy(v.begin(), v.end(), out); }
 private:

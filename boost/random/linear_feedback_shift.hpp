@@ -170,7 +170,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(linear_feedback_shift_engine)
 
 private:
-    /// \cond
+    /// \cond show_private
     static UIntType wordmask() { return boost::low_bits_mask_t<w>::sig_bits; }
     /// \endcond
     UIntType value;
@@ -192,7 +192,7 @@ template<class UIntType, int w, int k, int q, int s>
 const UIntType linear_feedback_shift_engine<UIntType, w, k, q, s>::default_seed;
 #endif
 
-/// \cond
+/// \cond show_deprecated
 
 /** Provided for backwards compatibility. */
 template<class UIntType, int w, int k, int q, int s, UIntType v = 0>

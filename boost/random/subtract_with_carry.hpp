@@ -225,7 +225,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(subtract_with_carry_engine)
 
 private:
-    /// \cond
+    /// \cond show_private
     // returns x(i-r+index), where index is in 0..r-1
     IntType compute(unsigned int index) const
     {
@@ -270,7 +270,17 @@ const uint32_t subtract_with_carry_engine<IntType, w, s, r>::default_seed;
 
 
 // use a floating-point representation to produce values in [0..1)
-/** @copydoc boost::random::subtract_with_carry_engine */
+/**
+ * Instantiations of \subtract_with_carry_01_engine model a
+ * \pseudo_random_number_generator.  The algorithm is
+ * described in
+ *
+ *  @blockquote
+ *  "A New Class of Random Number Generators", George
+ *  Marsaglia and Arif Zaman, Annals of Applied Probability,
+ *  Volume 1, Number 3 (1991), 462-480.
+ *  @endblockquote
+ */
 template<class RealType, std::size_t w, std::size_t s, std::size_t r>
 class subtract_with_carry_01_engine
 {
@@ -284,21 +294,21 @@ public:
 
     BOOST_STATIC_ASSERT(!std::numeric_limits<result_type>::is_integer);
 
-    /** Creates a new subtract_with_carry_01_engine using the default seed. */
+    /** Creates a new \subtract_with_carry_01_engine using the default seed. */
     subtract_with_carry_01_engine() { init_modulus(); seed(); }
     /** Creates a new subtract_with_carry_01_engine and seeds it with value. */
     BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(subtract_with_carry_01_engine,
                                                uint32_t, value)
     { init_modulus(); seed(value); }
     /**
-     * Creates a new subtract_with_carry_01_engine and seeds with with values
+     * Creates a new \subtract_with_carry_01_engine and seeds with with values
      * produced by seq.generate().
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(subtract_with_carry_01_engine,
                                              SeedSeq, seq)
     { init_modulus(); seed(seq); }
     /**
-     * Creates a new subtract_with_carry_01_engine and seeds it with values
+     * Creates a new \subtract_with_carry_01_engine and seeds it with values
      * from a range.  Advances first to point one past the last consumed
      * value.  If the range does not contain enough elements to fill the
      * entire state, throws @c std::invalid_argument.
@@ -307,7 +317,7 @@ public:
     { init_modulus(); seed(first,last); }
 
 private:
-    /// \cond
+    /// \cond show_private
     void init_modulus()
     {
 #ifndef BOOST_NO_STDC_NAMESPACE
@@ -433,7 +443,7 @@ public:
         }
     }
 
-    /** Writes a subtract_with_carry_01_engine to a @c std::ostream. */
+    /** Writes a \subtract_with_carry_01_engine to a @c std::ostream. */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, subtract_with_carry_01_engine, f)
     {
         std::ios_base::fmtflags oldflags =
@@ -445,7 +455,7 @@ public:
         return os;
     }
     
-    /** Reads a subtract_with_carry_01_engine from a @c std::istream. */
+    /** Reads a \subtract_with_carry_01_engine from a @c std::istream. */
     BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, subtract_with_carry_01_engine, f)
     {
         RealType value;
@@ -472,7 +482,7 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(subtract_with_carry_01_engine)
 
 private:
-    /// \cond
+    /// \cond show_private
     RealType compute(unsigned int index) const
     {
         return x[(k+index) % long_lag];
@@ -499,7 +509,7 @@ const uint32_t subtract_with_carry_01_engine<RealType, w, s, r>::default_seed;
 #endif
 
 
-/// \cond
+/// \cond show_deprecated
 
 template<class IntType, IntType m, unsigned s, unsigned r, IntType v>
 class subtract_with_carry :

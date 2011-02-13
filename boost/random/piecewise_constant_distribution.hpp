@@ -211,19 +211,15 @@ public:
 
     private:
 
-        /// @cond
-
         friend class piecewise_constant_distribution;
 
         std::vector<RealType> _intervals;
         std::vector<WeightType> _weights;
-
-        /// @endcond
     };
 
     /**
      * Creates a new @c piecewise_constant_distribution with
-     * a single interval, [0, 1)$.
+     * a single interval, [0, 1).
      */
     piecewise_constant_distribution()
     {
@@ -460,13 +456,8 @@ public:
     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(piecewise_constant_distribution)
 
 private:
-
-    /// @cond
-
     discrete_distribution<std::size_t, WeightType> _bins;
     std::vector<RealType> _intervals;
-
-    /// @endcond
 };
 
 }

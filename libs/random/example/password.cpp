@@ -17,9 +17,8 @@
  */
 
 
-#include <boost/nondet_random.hpp>
-#include <boost/random/variate_generator.hpp>
-#include <boost/random/uniform_int.hpp>
+#include <boost/random/random_device.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 int main() {
     /*<< We first define the characters that we're going
@@ -35,14 +34,13 @@ int main() {
     /*<< We use __random_device as a source of entropy, since we want
          passwords that are not predictable.
     >>*/
-    boost::random_device rng;
+    boost::random::random_device rng;
     /*<< Finally we select 8 random characters from the
          string and print them to cout.
     >>*/
-    boost::variate_generator<boost::random_device&, boost::uniform_int<> >
-        gen(rng, boost::uniform_int<>(0, chars.size()));
+    boost::random::uniform_int_distribution<> index_dist(0, chars.size() - 1);
     for(int i = 0; i < 8; ++i) {
-        std::cout << chars[gen()];
+        std::cout << chars[index_dist(rng)];
     }
     std::cout << std::endl;
 }

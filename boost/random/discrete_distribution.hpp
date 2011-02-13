@@ -146,7 +146,7 @@ public:
         /** Returns true if the two sets of parameters are different. */
         BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(param_type)
     private:
-        /// @cond
+        /// @cond show_private
         friend class discrete_distribution;
         explicit param_type(const discrete_distribution& dist)
           : _probabilities(dist.probabilities())
@@ -374,7 +374,7 @@ public:
 
 private:
 
-    /// @cond
+    /// @cond show_private
 
     template<class Iter>
     void init(Iter first, Iter last, std::input_iterator_tag)

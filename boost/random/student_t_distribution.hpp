@@ -31,7 +31,7 @@ namespace random {
  * It has \f$\displaystyle p(x) =
  *   \frac{1}{\sqrt{n\pi}}
  *   \frac{\Gamma((n+1)/2)}{\Gamma(n/2)}
- *   \left(1}\frac{x^2}{n}\right)^{-(n+1)/2}
+ *   \left(1+\frac{x^2}{n}\right)^{-(n+1)/2}
  * \f$.
  */
 template<class RealType = double>

@@ -202,6 +202,8 @@ template<class URNG, std::size_t p, std::size_t r>
 const std::size_t discard_block_engine<URNG, p, r>::used_block;
 #endif
 
+/// \cond \show_deprecated
+
 template<class URNG, int p, int r>
 class discard_block : public discard_block_engine<URNG, p, r>
 {
@@ -220,6 +222,8 @@ public:
     result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     { return (this->base().max)(); }
 };
+
+/// \endcond
 
 } // namespace random
 
