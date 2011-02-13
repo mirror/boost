@@ -299,7 +299,7 @@ public:
  *  the ACM, Vol. 31, No. 10, October 1988, pp. 1192-1201 
  *  @endblockquote
  */
-typedef linear_congruential_engine<int32_t, 16807, 0, 2147483647> minstd_rand0;
+typedef linear_congruential_engine<uint32_t, 16807, 0, 2147483647> minstd_rand0;
 
 /** The specialization \minstd_rand was suggested in
  *
@@ -309,7 +309,7 @@ typedef linear_congruential_engine<int32_t, 16807, 0, 2147483647> minstd_rand0;
  *  the ACM, Vol. 31, No. 10, October 1988, pp. 1192-1201
  *  @endblockquote
  */
-typedef linear_congruential_engine<int32_t, 48271, 0, 2147483647> minstd_rand;
+typedef linear_congruential_engine<uint32_t, 48271, 0, 2147483647> minstd_rand;
 
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
@@ -326,21 +326,21 @@ typedef linear_congruential_engine<int32_t, 48271, 0, 2147483647> minstd_rand;
 class rand48 
 {
 public:
-    typedef int32_t result_type;
+    typedef uint32_t result_type;
 
     BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
     /**
      * Returns the smallest value that the generator can produce
      */
-    static int32_t min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }
+    static uint32_t min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }
     /**
      * Returns the largest value that the generator can produce
      */
-    static int32_t max BOOST_PREVENT_MACRO_SUBSTITUTION ()
-    { return (std::numeric_limits<int32_t>::max)(); }
+    static uint32_t max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    { return 0x7FFFFFFF; }
   
     /** Seeds the generator with the default seed. */
-    rand48() : lcf(cnv(static_cast<int32_t>(1))) {}
+    rand48() : lcf(cnv(static_cast<uint32_t>(1))) {}
     /**
      * If T is an integral type smaller than int64_t, constructs
      * a \rand48 generator with x(0) := (x0 << 16) | 0x330e.  Otherwise
@@ -360,7 +360,7 @@ public:
     // compiler-generated copy ctor and assignment operator are fine
 
     /** Seeds the generator with the default seed. */
-    void seed() { seed(static_cast<int32_t>(1)); }
+    void seed() { seed(static_cast<uint32_t>(1)); }
     /**
      * If T is an integral type smaller than int64_t, changes
      * the current value x(n) of the generator to (x0 << 16) | 0x330e.
@@ -378,7 +378,7 @@ public:
     template<class SeedSeq> void seed(SeedSeq& seq) { lcf.seed(cnv(seq)); }
 
     /**  Returns the next value of the generator. */
-    int32_t operator()() { return static_cast<int32_t>(lcf() >> 17); }
+    uint32_t operator()() { return static_cast<uint32_t>(lcf() >> 17); }
     
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */

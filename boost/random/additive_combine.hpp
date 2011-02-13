@@ -184,10 +184,10 @@ public:
 
     /** Returns the next value of the generator. */
     result_type operator()() {
-        result_type z = _mlcg1() - _mlcg2();
-        if(z < 1)
-            z += MLCG1::modulus-1;
-        return z;
+        result_type val1 = _mlcg1();
+        result_type val2 = _mlcg2();
+        if(val2 < val1) return val1 - val2;
+        else return val1 - val2 + MLCG1::modulus - 1;
     }
   
     /** Fills a range with random values */
@@ -276,8 +276,8 @@ public:
  *  @endblockquote
  */
 typedef additive_combine_engine<
-    linear_congruential_engine<int32_t, 40014, 0, 2147483563>,
-    linear_congruential_engine<int32_t, 40692, 0, 2147483399>
+    linear_congruential_engine<uint32_t, 40014, 0, 2147483563>,
+    linear_congruential_engine<uint32_t, 40692, 0, 2147483399>
 > ecuyer1988;
 
 } // namespace random

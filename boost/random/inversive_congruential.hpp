@@ -260,7 +260,7 @@ public:
  *  (editors), 1995, pp. 255-262. ftp://random.mat.sbg.ac.at/pub/data/wsc95.ps
  *  @endblockquote
  */
-typedef inversive_congruential_engine<int32_t, 9102, 2147483647-36884165,
+typedef inversive_congruential_engine<uint32_t, 9102, 2147483647-36884165,
   2147483647> hellekalek1995;
 
 } // namespace random
