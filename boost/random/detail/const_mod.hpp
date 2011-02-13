@@ -81,6 +81,19 @@ public:
       return add(mult(a, x), c);
   }
 
+  static IntType pow(IntType a, boost::uintmax_t exponent)
+  {
+      IntType result = 1;
+      while(exponent != 0) {
+          if(exponent % 2 == 1) {
+              result = mult(result, a);
+          }
+          a = mult(a, a);
+          exponent /= 2;
+      }
+      return result;
+  }
+
   static IntType invert(IntType x)
   { return x == 0 ? 0 : (m == 0? invert_euclidian0(x) : invert_euclidian(x)); }
 

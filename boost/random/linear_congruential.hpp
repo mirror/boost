@@ -198,8 +198,38 @@ public:
     /** Advances the state of the generator by @c z. */
     void discard(boost::ulong_long_type z)
     {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
-            (*this)();
+        typedef const_mod<IntType, m> mod_type;
+        IntType b_inv = mod_type::invert(a-1);
+        IntType b_gcd = mod_type::mult(a-1, b_inv);
+        if(b_gcd == 1) {
+            IntType a_z = mod_type::pow(a, z);
+            _x = mod_type::mult_add(a_z, _x, 
+                mod_type::mult(mod_type::mult(c, b_inv), a_z - 1));
+        } else {
+            // compute (a^z - 1)*c % (b_gcd * m) / (b / b_gcd) * inv(b / b_gcd)
+            // we're storing the intermediate result / b_gcd
+            IntType a_zm1_over_gcd = 0;
+            IntType a_km1_over_gcd = (a - 1) / b_gcd;
+            boost::ulong_long_type exponent = z;
+            while(exponent != 0) {
+                if(exponent % 2 == 1) {
+                    a_zm1_over_gcd =
+                        mod_type::mult_add(
+                            b_gcd,
+                            mod_type::mult(a_zm1_over_gcd, a_km1_over_gcd),
+                            mod_type::add(a_zm1_over_gcd, a_km1_over_gcd));
+                }
+                a_km1_over_gcd = mod_type::mult_add(
+                    b_gcd,
+                    mod_type::mult(a_km1_over_gcd, a_km1_over_gcd),
+                    mod_type::add(a_km1_over_gcd, a_km1_over_gcd));
+                exponent /= 2;
+            }
+            
+            IntType a_z = mod_type::mult_add(b_gcd, a_zm1_over_gcd, 1);
+            IntType num = mod_type::mult(c, a_zm1_over_gcd);
+            b_inv = mod_type::invert((a-1)/b_gcd);
+            _x = mod_type::mult_add(a_z, _x, mod_type::mult(b_inv, num));
         }
     }
 #endif
