@@ -21,7 +21,7 @@
  */
 
 // define if your C library supports the non-standard drand48 family
-#define HAVE_DRAND48
+//#define HAVE_DRAND48
 
 // define if you have the original mt19937int.c (with commented out main())
 #undef HAVE_MT19937INT_C
@@ -29,8 +29,8 @@
 // define if you have the original mt19937ar.c (with commented out main())
 #define HAVE_MT19937AR_C
 
-// set to your CPU frequency in MHz
-static const double cpu_frequency = 3.66 * 1e9;
+// set to your CPU frequency
+static const double cpu_frequency = 1.87 * 1e9;
 
 /*
  * End of Configuration Section
@@ -244,97 +244,70 @@ void distrib(int iter, const std::string & name, const Gen &)
 {
   Gen gen;
 
-  timing(make_gen(gen, boost::uniform_int<>(-2, 4)),
+  timing(make_gen(gen, boost::random::uniform_int_distribution<>(-2, 4)),
          iter, name + " uniform_int");
 
-  timing(make_gen(gen, boost::geometric_distribution<>(0.5)),
+  timing(make_gen(gen, boost::random::uniform_smallint<>(-2, 4)),
+         iter, name + " uniform_smallint");
+
+  timing(make_gen(gen, boost::random::bernoulli_distribution<>(0.5)),
+         iter, name + " bernoulli");
+
+  timing(make_gen(gen, boost::random::geometric_distribution<>(0.5)),
          iter, name + " geometric");
 
-  timing(make_gen(gen, boost::binomial_distribution<int>(4, 0.8)),
+  timing(make_gen(gen, boost::random::binomial_distribution<int>(4, 0.8)),
          iter, name + " binomial");
 
-  timing(make_gen(gen, boost::poisson_distribution<>(1)),
+  timing(make_gen(gen, boost::random::negative_binomial_distribution<int>(4, 0.8)),
+         iter, name + " negative_binomial");
+
+  timing(make_gen(gen, boost::random::poisson_distribution<>(1)),
          iter, name + " poisson");
 
 
-  timing(make_gen(gen, boost::uniform_real<>(-5.3, 4.8)),
+  timing(make_gen(gen, boost::random::uniform_real_distribution<>(-5.3, 4.8)),
          iter, name + " uniform_real");
 
-  timing(make_gen(gen, boost::triangle_distribution<>(1, 2, 7)),
+  timing(make_gen(gen, boost::random::uniform_01<>()),
+         iter, name + " uniform_01");
+
+  timing(make_gen(gen, boost::random::triangle_distribution<>(1, 2, 7)),
          iter, name + " triangle");
 
-  timing(make_gen(gen, boost::exponential_distribution<>(3)),
+  timing(make_gen(gen, boost::random::exponential_distribution<>(3)),
          iter, name + " exponential");
 
-  timing(make_gen(gen, boost::normal_distribution<>()),
+  timing(make_gen(gen, boost::random::normal_distribution<>()),
                   iter, name + " normal polar");
 
-  timing(make_gen(gen, boost::lognormal_distribution<>()),
+  timing(make_gen(gen, boost::random::lognormal_distribution<>()),
          iter, name + " lognormal");
 
-  timing(make_gen(gen, boost::cauchy_distribution<>()),
+  timing(make_gen(gen, boost::random::chi_squared_distribution<>(4)),
+         iter, name + " chi squared");
+
+  timing(make_gen(gen, boost::random::cauchy_distribution<>()),
          iter, name + " cauchy");
 
-  timing(make_gen(gen, boost::cauchy_distribution<>()),
+  timing(make_gen(gen, boost::random::fisher_f_distribution<>(4, 5)),
+         iter, name + " fisher f");
+
+  timing(make_gen(gen, boost::random::student_t_distribution<>(7)),
+         iter, name + " student t");
+
+  timing(make_gen(gen, boost::random::gamma_distribution<>(2.8)),
          iter, name + " gamma");
 
-  timing_sphere(make_gen(gen, boost::uniform_on_sphere<>(3)),
+  timing(make_gen(gen, boost::random::weibull_distribution<>(3)),
+         iter, name + " weibull");
+
+  timing(make_gen(gen, boost::random::extreme_value_distribution<>()),
+         iter, name + " extreme value");
+
+  timing_sphere(make_gen(gen, boost::random::uniform_on_sphere<>(3)),
                 iter/10, name + " uniform_on_sphere");
 }
-
-
-template<class URNG, class Dist>
-inline boost::shared_ptr<DynamicRandomGenerator<URNG, Dist> >
-make_dynamic(URNG & rng, const Dist& d)
-{
-  typedef DynamicRandomGenerator<URNG, Dist> type;
-  return boost::shared_ptr<type>(new type(rng, d));
-}
-
-template<class Gen>
-void distrib_runtime(int iter, const std::string & n, const Gen &)
-{
-  std::string name = n + " virtual function ";
-  Gen gen;
-
-  GenericRandomGenerator<int> g_int;
-
-  g_int.set(make_dynamic(gen, boost::uniform_int<>(-2,4)));
-  timing(g_int, iter, name + "uniform_int");
-
-  g_int.set(make_dynamic(gen, boost::geometric_distribution<>(0.5)));
-  timing(g_int, iter, name + "geometric");
-
-  g_int.set(make_dynamic(gen,  boost::binomial_distribution<>(4, 0.8)));
-  timing(g_int, iter, name + "binomial");
-
-  g_int.set(make_dynamic(gen, boost::poisson_distribution<>(1)));
-  timing(g_int, iter, name + "poisson");
-
-  GenericRandomGenerator<double> g;
-
-  g.set(make_dynamic(gen, boost::uniform_real<>(-5.3, 4.8)));
-  timing(g, iter, name + "uniform_real");
-
-  g.set(make_dynamic(gen, boost::triangle_distribution<>(1, 2, 7)));
-  timing(g, iter, name + "triangle");
-
-  g.set(make_dynamic(gen, boost::exponential_distribution<>(3)));
-  timing(g, iter, name + "exponential");
-
-  g.set(make_dynamic(gen, boost::normal_distribution<>()));
-  timing(g, iter, name + "normal polar");
-
-  g.set(make_dynamic(gen, boost::lognormal_distribution<>()));
-  timing(g, iter, name + "lognormal");
-
-  g.set(make_dynamic(gen, boost::cauchy_distribution<>()));
-  timing(g, iter, name + "cauchy");
-
-  g.set(make_dynamic(gen, boost::gamma_distribution<>(0.4)));
-  timing(g, iter, name + "gamma");
-}
-
 
 int main(int argc, char*argv[])
 {
@@ -370,11 +343,15 @@ int main(int argc, char*argv[])
   run(iter, "ecuyer combined", boost::ecuyer1988());
   run(iter, "kreutzer1986", boost::kreutzer1986());
   run(iter, "taus88", boost::taus88());
+  run(iter, "knuth_b", boost::random::knuth_b());
 
   run(iter, "hellekalek1995 (inversive)", boost::hellekalek1995());
 
   run(iter, "mt11213b", boost::mt11213b());
   run(iter, "mt19937", boost::mt19937());
+#if !defined(BOOST_NO_INT64_T)
+  run(iter, "mt19937_64", boost::mt19937_64());
+#endif
 
   run(iter, "lagged_fibonacci607", boost::lagged_fibonacci607());
   run(iter, "lagged_fibonacci1279", boost::lagged_fibonacci1279());
@@ -396,6 +373,8 @@ int main(int argc, char*argv[])
   run(iter, "ranlux64_4", boost::ranlux4());
   run(iter, "ranlux64_3_01", boost::ranlux3_01());
   run(iter, "ranlux64_4_01", boost::ranlux4_01());
+  run(iter, "ranlux24", boost::ranlux3());
+  run(iter, "ranlux48", boost::ranlux4());
 
   run(iter, "counting", counting());
 
@@ -409,7 +388,6 @@ int main(int argc, char*argv[])
 #endif
 
   distrib(iter, "counting", counting());
-  distrib_runtime(iter, "counting", counting());
 
   distrib(iter, "minstd_rand", boost::minstd_rand());
 
@@ -418,6 +396,4 @@ int main(int argc, char*argv[])
   distrib(iter, "mt19937", boost::mt19937());
   
   distrib(iter, "lagged_fibonacci607", boost::lagged_fibonacci607());
-
-  distrib_runtime(iter, "mt19937", boost::mt19937());
 }

@@ -71,13 +71,16 @@ namespace random {
  *
  * The test program <a href="\boost/libs/random/performance/nondet_random_speed.cpp">
  * nondet_random_speed.cpp</a> measures the execution times of the
- * nondet_random.hpp implementation of the above algorithms in a tight
- * loop. The performance has been evaluated on a Pentium Pro 200 MHz
- * with gcc 2.95.2, Linux 2.2.13, glibc 2.1.2.
+ * random_device.hpp implementation of the above algorithms in a tight
+ * loop. The performance has been evaluated on an
+ * Intel(R) Core(TM) i7 CPU Q 840 \@ 1.87GHz, 1867 Mhz with
+ * Visual C++ 2010, Microsoft Windows 7 Professional and with gcc 4.4.5,
+ * Ubuntu Linux 2.6.35-25-generic.
  *
  * <table cols="2">
- *   <tr><th>class</th><th>time per invocation [usec]</th></tr>
- *   <tr><td> \random_device </td><td>92.0</td></tr>
+ *   <tr><th>Platform</th><th>time per invocation [microseconds]</th></tr>
+ *   <tr><td> Windows </td><td>2.9</td></tr>
+ *   <tr><td> Linux </td><td>1.7</td></tr>
  * </table>
  *
  * The measurement error is estimated at +/- 1 usec.
