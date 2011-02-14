@@ -28,4 +28,7 @@
 #    define BOOST_NO_0X_HDR_TUPLE
 #endif
 
+// libc++ uses a non-standard messages_base
+#define BOOST_NO_STD_MESSAGES
+
 //  --- end ---
