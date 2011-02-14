@@ -22,6 +22,7 @@
 #include <stdexcept>
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/integer/integer_mask.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/ptr_helper.hpp>
 #include <boost/random/detail/seed.hpp>
@@ -182,13 +183,7 @@ public:
     { return 0; }
     /** Returns the largest value that the generator can produce. */
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
-    {
-        // avoid "left shift count >= width of type" warning
-        result_type res = 0;
-        for(std::size_t j = 0; j < w; ++j)
-            res |= (static_cast<result_type>(1) << j);
-        return res;
-    }
+    { return boost::low_bits_mask_t<w>::sig_bits; }
     
     /** Produces the next value of the generator. */
     result_type operator()();
