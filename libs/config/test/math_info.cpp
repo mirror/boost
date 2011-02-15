@@ -181,7 +181,8 @@ bool is_same_type(T, U)
 // the floating point types or not:
 //
 namespace std{
-#if !BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1300) && \
+    !defined(_LIBCPP_VERSION)
 template <class T>
 char abs(T)
 {
