@@ -254,6 +254,14 @@ MinGW with
 * GCC 4.6.0
 * GCC 4.6.0 -std=c++0x
 
+Ubuntu 10.10
+
+* GCC 4.4.5
+* GCC 4.4.5 -std=c++0x
+* GCC 4.5.1
+* GCC 4.5.1 -std=c++0x
+* clang 2.8
+
 Initial versions were tested on:
 
 MacOS with GCC 4.2.4
