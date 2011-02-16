@@ -408,6 +408,14 @@ MinGW with
 * GCC 4.6.0
 * GCC 4.6.0 -std=c++0x
 
+Ubuntu 10.10
+
+* GCC 4.4.5
+* GCC 4.4.5 -std=c++0x
+* GCC 4.5.1
+* GCC 4.5.1 -std=c++0x
+* clang 2.8
+
 Initial versions were tested on:
 
 MacOS with GCC 4.2.4 (Some test are needed for the specific Mac files).
@@ -652,6 +660,14 @@ In the example above, the client of f has chosen "round towards zero" as the des
 Clients with floating-point __durations who want to use f will now have to convert to an integral __duration themselves before passing the result to f.
 
 In summary, the author of f has quite a bit of flexibility and control in the interface he wants to provide his clients with, and easy options for manipulating that __duration internal to his function.
+[endsect]
+
+[section Is it possible for the user to pass a __duration to a function with the units being ambiguous?]
+
+No. No matter which option the author of `f` chooses above, the following client code will not compile:
+
+    f(3);  // Will not compile, 3 is not implicitly convertible to any __duration
+
 [endsect]
 
 [section Can Durations Overflow?]
@@ -3854,7 +3870,7 @@ All the units are given using the suffix "s" following the System International 
 
 * Fix some warnings.
 * Fix original errors on Mac
-* Dont fix the link with boost_system to static.
+* Don't fix the link with boost_system to static.
 
 [*Test:]
 
@@ -3864,10 +3880,11 @@ All the units are given using the suffix "s" following the System International 
 
 [*Doc:]
 
-* Removed some not useful parts as the history, the test and the tickets.
+* Removed some not useful parts as the test and the tickets.
 
 [endsect] [/section [*Version 1.0.0, January 6, 2011] ]
 
+[/
 [section [*Version 0.6.0, September 22, 2010] ]
 
 [*Features:]
@@ -4154,12 +4171,6 @@ More updated documentation.
 [section:rationale Appendix B: Rationale]
 
 See [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2661.htm [*N2661 - A Foundation to Sleep On]] which is very informative and provides motivation for key design decisions. This section contains some extracts from this document.
-
-[heading Is it possible for the user to pass a __duration to a function with the units being ambiguous?]
-
-No. No matter which option the author of `f` chooses above, the following client code will not compile:
-
-    f(3);  // Will not compile, 3 is not implicitly convertible to any __duration
 
 [heading Why duration needs operator%]
 
@@ -4530,7 +4541,7 @@ boost::chrono::duration<boost::chrono::process_cpu_clock::times, boost::ratio<1l
 
 [heading For later releases]
 
-* Add chrono utilities as defined By Howard Hinnant in [@http://home.roadrunner.com/~hinnant/duration_io/chrono_util.html here].
+* Add chrono utilities as defined By Howard Hinnant [@http://home.roadrunner.com/~hinnant/duration_io/chrono_util.html here].
 
 [endsect]
 
