@@ -23,6 +23,7 @@
 #include "write_bidir_filter_test.hpp"
 #include "seek_test.hpp"
 #include "putback_test.hpp"
+#include "filtering_stream_flush_test.hpp"
 
 using boost::unit_test::test_suite;
 
@@ -46,5 +47,6 @@ test_suite* init_unit_test_suite(int, char* [])
     test->add(BOOST_TEST_CASE(&write_bidirectional_filter_test));
     test->add(BOOST_TEST_CASE(&seek_test));
     test->add(BOOST_TEST_CASE(&putback_test));
+    test->add(BOOST_TEST_CASE(&test_filtering_ostream_flush));
     return test;
 }
