@@ -37,7 +37,7 @@ namespace random {
 /**
  * The class @c piecewise_linear_distribution models a \random_distribution.
  */
-template<class RealType = double, class WeightType = double>
+template<class RealType = double>
 class piecewise_linear_distribution {
 public:
     typedef std::size_t input_type;
@@ -54,8 +54,8 @@ public:
          */
         param_type()
         {
-            _weights.push_back(WeightType(1));
-            _weights.push_back(WeightType(1));
+            _weights.push_back(RealType(1));
+            _weights.push_back(RealType(1));
             _intervals.push_back(RealType(0));
             _intervals.push_back(RealType(1));
         }
@@ -78,8 +78,8 @@ public:
         {
             if(_intervals.size() < 2) {
                 _intervals.clear();
-                _weights.push_back(WeightType(1));
-                _weights.push_back(WeightType(1));
+                _weights.push_back(RealType(1));
+                _weights.push_back(RealType(1));
                 _intervals.push_back(RealType(0));
                 _intervals.push_back(RealType(1));
             } else {
@@ -107,8 +107,8 @@ public:
         {
             if(_intervals.size() < 2) {
                 _intervals.clear();
-                _weights.push_back(WeightType(1));
-                _weights.push_back(WeightType(1));
+                _weights.push_back(RealType(1));
+                _weights.push_back(RealType(1));
                 _intervals.push_back(RealType(0));
                 _intervals.push_back(RealType(1));
             } else {
@@ -139,8 +139,8 @@ public:
         {
             if(_intervals.size() < 2) {
                 _weights.clear();
-                _weights.push_back(WeightType(1));
-                _weights.push_back(WeightType(1));
+                _weights.push_back(RealType(1));
+                _weights.push_back(RealType(1));
                 _intervals.clear();
                 _intervals.push_back(RealType(0));
                 _intervals.push_back(RealType(1));
@@ -175,16 +175,16 @@ public:
          * Returns a vector containing the probability densities
          * at all the interval boundaries.
          */
-        std::vector<WeightType> densities() const
+        std::vector<RealType> densities() const
         {
-            WeightType sum = static_cast<WeightType>(0);
+            RealType sum = static_cast<RealType>(0);
             for(std::size_t i = 0; i < _intervals.size() - 1; ++i) {
                 RealType width = _intervals[i + 1] - _intervals[i];
                 sum += (_weights[i] + _weights[i + 1]) * width / 2;
             }
-            std::vector<WeightType> result;
+            std::vector<RealType> result;
             result.reserve(_weights.size());
-            for(typename std::vector<WeightType>::const_iterator
+            for(typename std::vector<RealType>::const_iterator
                 iter = _weights.begin(), end = _weights.end();
                 iter != end; ++iter)
             {
@@ -205,7 +205,7 @@ public:
         BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, param_type, parm)
         {
             std::vector<RealType> new_intervals;
-            std::vector<WeightType> new_weights;
+            std::vector<RealType> new_weights;
             detail::read_vector(is, new_intervals);
             detail::read_vector(is, new_weights);
             if(is) {
@@ -228,7 +228,7 @@ public:
         friend class piecewise_linear_distribution;
 
         std::vector<RealType> _intervals;
-        std::vector<WeightType> _weights;
+        std::vector<RealType> _weights;
     };
 
     /**
@@ -405,16 +405,16 @@ public:
      * Returns a vector containing the probability densities
      * at the interval boundaries.
      */
-    std::vector<WeightType> densities() const
+    std::vector<RealType> densities() const
     {
-        WeightType sum = static_cast<WeightType>(0);
+        RealType sum = static_cast<RealType>(0);
         for(std::size_t i = 0; i < _intervals.size() - 1; ++i) {
             RealType width = _intervals[i + 1] - _intervals[i];
             sum += (_weights[i] + _weights[i + 1]) * width / 2;
         }
-        std::vector<WeightType> result;
+        std::vector<RealType> result;
         result.reserve(_weights.size());
-        for(typename std::vector<WeightType>::const_iterator
+        for(typename std::vector<RealType>::const_iterator
             iter = _weights.begin(), end = _weights.end();
             iter != end; ++iter)
         {
@@ -434,7 +434,7 @@ public:
     void param(const param_type& parm)
     {
         std::vector<RealType> new_intervals(parm._intervals);
-        std::vector<WeightType> new_weights(parm._weights);
+        std::vector<RealType> new_weights(parm._weights);
         init(new_intervals, new_weights);
         _intervals.swap(new_intervals);
         _weights.swap(new_weights);
@@ -485,18 +485,18 @@ private:
     /// @cond \show_private
 
     void init(const std::vector<RealType>& intervals_arg,
-              const std::vector<WeightType>& weights_arg)
+              const std::vector<RealType>& weights_arg)
     {
-        std::vector<WeightType> bin_weights;
+        std::vector<RealType> bin_weights;
         bin_weights.reserve((intervals_arg.size() - 1) * 2);
         for(std::size_t i = 0; i < intervals_arg.size() - 1; ++i) {
             RealType width = intervals_arg[i + 1] - intervals_arg[i];
-            WeightType w1 = weights_arg[i];
-            WeightType w2 = weights_arg[i + 1];
+            RealType w1 = weights_arg[i];
+            RealType w2 = weights_arg[i + 1];
             bin_weights.push_back((std::min)(w1, w2) * width);
             bin_weights.push_back(std::abs(w1 - w2) * width / 2);
         }
-        typedef discrete_distribution<std::size_t, WeightType> bins_type;
+        typedef discrete_distribution<std::size_t, RealType> bins_type;
         typename bins_type::param_type bins_param(bin_weights);
         _bins.param(bins_param);
     }
@@ -512,14 +512,14 @@ private:
         _intervals.push_back(RealType(0));
         _intervals.push_back(RealType(1));
         _weights.clear();
-        _weights.push_back(WeightType(1));
-        _weights.push_back(WeightType(1));
+        _weights.push_back(RealType(1));
+        _weights.push_back(RealType(1));
         init();
     }
 
-    discrete_distribution<std::size_t, WeightType> _bins;
+    discrete_distribution<std::size_t, RealType> _bins;
     std::vector<RealType> _intervals;
-    std::vector<WeightType> _weights;
+    std::vector<RealType> _weights;
 
     /// @endcond
 };

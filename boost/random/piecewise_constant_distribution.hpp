@@ -165,11 +165,11 @@ public:
          * Returns a vector containing the probability densities
          * over all the intervals of the distribution.
          */
-        std::vector<WeightType> densities() const
+        std::vector<RealType> densities() const
         {
-            WeightType sum = std::accumulate(_weights.begin(), _weights.end(),
-                                             static_cast<WeightType>(0));
-            std::vector<WeightType> result;
+            RealType sum = std::accumulate(_weights.begin(), _weights.end(),
+                                             static_cast<RealType>(0));
+            std::vector<RealType> result;
             result.reserve(_weights.size());
             for(std::size_t i = 0; i < _weights.size(); ++i) {
                 RealType width = _intervals[i + 1] - _intervals[i];
@@ -389,9 +389,9 @@ public:
      * Returns a vector containing the probability density
      * over each interval.
      */
-    std::vector<WeightType> densities() const
+    std::vector<RealType> densities() const
     {
-        std::vector<WeightType> result(_bins.probabilities());
+        std::vector<RealType> result(_bins.probabilities());
         for(std::size_t i = 0; i < result.size(); ++i) {
             result[i] /= (_intervals[i+1] - _intervals[i]);
         }
