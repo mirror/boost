@@ -434,7 +434,7 @@ namespace chrono {
         explicit duration(const Rep2& r
 #if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
 #else
-		, typename boost::enable_if <
+        , typename boost::enable_if <
                     mpl::and_ <
                         boost::is_convertible<Rep2, rep>,
                         mpl::or_ <
@@ -446,8 +446,8 @@ namespace chrono {
                         >
                     >
                 >::type* = 0
-#endif	
-	)
+#endif    
+    )
                   : rep_(r) { }
         ~duration() {} //= default;
         duration(const duration& rhs) : rep_(rhs.rep_) {} // = default;
@@ -463,7 +463,7 @@ namespace chrono {
         duration(const duration<Rep2, Period2>& d
 #if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
 #else
-		, typename boost::enable_if <
+        , typename boost::enable_if <
                     mpl::or_ <
                         treat_as_floating_point<rep>,
                         mpl::and_ <
@@ -472,8 +472,8 @@ namespace chrono {
                         >
                     >
                 >::type* = 0
-#endif	
-	)
+#endif    
+    )
             : rep_(chrono::detail::duration_cast<duration<Rep2, Period2>, duration>()(d).count()) {}
 
         // observer
@@ -561,7 +561,7 @@ namespace chrono {
     template <class Rep1, class Period, class Rep2>
     inline
 #if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-	duration<typename common_type<Rep1, Rep2>::type, Period>    
+    duration<typename common_type<Rep1, Rep2>::type, Period>    
 #else
     typename boost::enable_if <
         mpl::and_ <
