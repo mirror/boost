@@ -1701,16 +1701,26 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         ///////////////////////////////////////////////////////////////////////
         // Internal parsing functions
         
-        // Parse BOM, if any
+        // Parse UTF-8 BOM, if any
         template<int Flags>
-        void parse_bom(Ch *&text)
+        void parse_bom(char *&text)
         {
-            // UTF-8?
             if (static_cast<unsigned char>(text[0]) == 0xEF && 
                 static_cast<unsigned char>(text[1]) == 0xBB && 
                 static_cast<unsigned char>(text[2]) == 0xBF)
             {
-                text += 3;      // Skip utf-8 bom
+                text += 3;
+            }
+        }
+        
+        // Parse UTF-16/32 BOM, if any
+        template<int Flags>
+        void parse_bom(wchar_t *&text)
+        {
+            const wchar_t bom = 0xFEFF;
+            if (text[0] == bom)
+            {
+                ++text;
             }
         }
 
