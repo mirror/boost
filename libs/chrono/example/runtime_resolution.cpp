@@ -217,8 +217,8 @@ void test()
     clock::time_point stop = clock::now();
     clock::duration elapsed = stop - start;
     std::cout << "paused " << 
-	boost::chrono::nanoseconds(
-		boost::chrono::duration_cast<boost::chrono::nanoseconds>(duration::tonanosec(elapsed))).count()
+    boost::chrono::nanoseconds(
+        boost::chrono::duration_cast<boost::chrono::nanoseconds>(duration::tonanosec(elapsed))).count()
                            << " nanoseconds\n";
 }
 
