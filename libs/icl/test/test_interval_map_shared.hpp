@@ -1334,7 +1334,7 @@ void interval_map_intersects_4_bicremental_types()
 
     BOOST_CHECK( icl::is_interval_container<IntervalMapT>::value );
     BOOST_CHECK( icl::has_domain_type<IntervalMapT>::value );
-    BOOST_CHECK( (is_same<T, typename domain_type_of<IntervalMapT>::type>::value) );
+    BOOST_CHECK( (boost::is_same<T, typename domain_type_of<IntervalMapT>::type>::value) );
 
     BOOST_CHECK( icl::intersects(map_a,  MK_v(2) ) );
     BOOST_CHECK( icl::intersects(map_a,  MK_v(11)) );
