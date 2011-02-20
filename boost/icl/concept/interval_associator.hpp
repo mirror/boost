@@ -220,23 +220,25 @@ hull(const Type& object)
 
 template<class Type>
 typename enable_if<is_interval_container<Type>, 
-                   typename Type::interval_type>::type
+                   typename domain_type_of<Type>::type>::type
 lower(const Type& object)
 {
+    typedef typename domain_type_of<Type>::type DomainT;
     return 
         icl::is_empty(object) 
-            ? identity_element<typename Type::interval_type>::value()
+            ? unit_element<DomainT>::value()
             : icl::lower( key_value<Type>(object.begin()) );
 }
 
 template<class Type>
 typename enable_if<is_interval_container<Type>, 
-                   typename Type::interval_type>::type
+                   typename domain_type_of<Type>::type>::type
 upper(const Type& object)
 {
+    typedef typename domain_type_of<Type>::type DomainT;
     return 
         icl::is_empty(object) 
-            ? identity_element<typename Type::interval_type>::value()
+            ? identity_element<DomainT>::value()
             : icl::upper( key_value<Type>(object.rbegin()) );
 }
 
@@ -244,26 +246,28 @@ upper(const Type& object)
 template<class Type>
 typename enable_if
 < mpl::and_< is_interval_container<Type>
-           , is_discrete<typename Type::domain_type> >
-, typename Type::interval_type>::type
+           , is_discrete<typename domain_type_of<Type>::type> > 
+, typename domain_type_of<Type>::type>::type
 first(const Type& object)
 {
+    typedef typename domain_type_of<Type>::type DomainT;
     return 
         icl::is_empty(object) 
-            ? identity_element<typename Type::interval_type>::value()
+            ? unit_element<DomainT>::value()
             : icl::first( key_value<Type>(object.begin()) );
 }
 
 template<class Type>
 typename enable_if
 < mpl::and_< is_interval_container<Type>
-           , is_discrete<typename Type::domain_type> >
-, typename Type::interval_type>::type
+           , is_discrete<typename domain_type_of<Type>::type> >
+, typename domain_type_of<Type>::type>::type
 last(const Type& object)
 {
+    typedef typename domain_type_of<Type>::type DomainT;
     return 
         icl::is_empty(object) 
-            ? identity_element<typename Type::interval_type>::value()
+            ? identity_element<DomainT>::value()
             : icl::last( key_value<Type>(object.rbegin()) );
 }
 
@@ -646,7 +650,7 @@ operator & (Type object, const Type& operand)
 //------------------------------------------------------------------------------
 template<class Type, class CoType>
 typename enable_if<mpl::and_< is_interval_container<Type>
-                            , is_same<CoType, domain_type_of<Type> > >, 
+                            , is_same<CoType, typename domain_type_of<Type>::type> >, 
                    bool>::type
 intersects(const Type& left, const CoType& right)
 {
@@ -655,12 +659,13 @@ intersects(const Type& left, const CoType& right)
 
 template<class Type, class CoType>
 typename enable_if<mpl::and_< is_interval_container<Type>
-                            , is_same<CoType, interval_type_of<Type> > >, 
+                            , is_same<CoType, typename interval_type_of<Type>::type> >, 
                    bool>::type
 intersects(const Type& left, const CoType& right)
 {
     return left.find(right) != left.end();
 }
+
 
 template<class LeftT, class RightT>
 typename enable_if< mpl::and_< is_intra_combinable<LeftT, RightT> 
@@ -720,14 +725,15 @@ intersects(const LeftT& left, const RightT& right)
     return false; 
 }
 
-template<class Type, class AssociateT>
-typename enable_if<mpl::and_< is_interval_map<Type>
-                            , is_inter_derivative<Type, AssociateT> >, 
-                   bool>::type
-intersects(const Type& left, const AssociateT& right)
-{
-    return icl::intersects(left, right);
-}
+//CL?
+//template<class Type, class AssociateT>
+//typename enable_if<mpl::and_< is_interval_map<Type>
+//                            , is_inter_derivative<Type, AssociateT> >, 
+//                   bool>::type
+//intersects(const Type& left, const AssociateT& right)
+//{
+//    return icl::intersects(left, right);
+//}
 
 /** \b Returns true, if \c left and \c right have no common elements.
     Intervals are interpreted as sequence of elements.
@@ -749,6 +755,7 @@ disjoint(const Type& left, const AssociateT& right)
 {
     return !intersects(left,right);
 }
+
 
 //==============================================================================
 //= Symmetric difference<IntervalSet|IntervalSet>

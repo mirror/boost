@@ -1309,5 +1309,51 @@ void interval_map_element_iter_4_discrete_types()
 
 }
 
+
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
+void interval_map_intersects_4_bicremental_types()
+{
+    // Test of intersects and disjoint for domain_type and interval_type.
+    typedef IntervalMap<T,U> IntervalMapT;
+    typedef typename IntervalMapT::interval_type   IntervalT;
+
+    typename IntervalMapT::interval_mapping_type val_pair1 = IDv(6,9,1);
+    std::pair<const IntervalT, U> val_pair2 = IDv(3,5,3);
+    mapping_pair<T,U> map_pair = K_v(4,3);
+
+    IntervalMapT map_a;
+    map_a.add(CDv(1,3,1)).add(IDv(8,9,1)).add(IIv(6,11,3));
+
+    BOOST_CHECK( icl::is_interval_container<IntervalMapT>::value );
+    BOOST_CHECK( icl::has_domain_type<IntervalMapT>::value );
+    BOOST_CHECK( (is_same<T, typename domain_type_of<IntervalMapT>::type>::value) );
+
+    BOOST_CHECK( icl::intersects(map_a,  MK_v(2) ) );
+    BOOST_CHECK( icl::intersects(map_a,  MK_v(11)) );
+    BOOST_CHECK( icl::disjoint(map_a, MK_v(1) ) );
+    BOOST_CHECK( icl::disjoint(map_a, MK_v(12)) );
+
+    BOOST_CHECK( icl::intersects(map_a, I_D(2,3)) );
+    BOOST_CHECK( icl::intersects(map_a, I_D(6,8)) );
+    BOOST_CHECK( icl::disjoint(map_a,   I_D(3,5)) );
+    BOOST_CHECK( icl::disjoint(map_a,  I_D(12,14)) );
+
+    //-------------------------------------+
+    //   (1   3)      [6   8)[8 9)[9    11]
+    //      1            3     4      3
+    //mapping_pair<T,U> map_pair_2_1  = K_v(2,1);
+    //BOOST_CHECK( icl::intersects(map_a,  map_pair_2_1 ) ); //JODO
+    
+}
+
+
 #endif // LIBS_ICL_TEST_TEST_INTERVAL_MAP_SHARED_HPP_JOFA_081005
 

@@ -47,6 +47,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vc9_test_partial_icl_quanti
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vc9_test_total_icl_quantifier", "test_total_icl_quantifier_\vc9_test_total_icl_quantifier.vcproj", "{EE61B7EF-EC45-4165-8B4B-FD5B7D5A9F9F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vc9_test_casual", "test_casual_\vc9_test_casual.vcproj", "{EE61B7EF-EC45-4165-8B49-FD5B8D3A9FA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -145,6 +147,10 @@ Global
 		{EE61B7EF-EC45-4165-8B4B-FD5B7D5A9F9F}.Debug|Win32.Build.0 = Debug|Win32
 		{EE61B7EF-EC45-4165-8B4B-FD5B7D5A9F9F}.Release|Win32.ActiveCfg = Release|Win32
 		{EE61B7EF-EC45-4165-8B4B-FD5B7D5A9F9F}.Release|Win32.Build.0 = Release|Win32
+		{EE61B7EF-EC45-4165-8B49-FD5B8D3A9FA0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EE61B7EF-EC45-4165-8B49-FD5B8D3A9FA0}.Debug|Win32.Build.0 = Debug|Win32
+		{EE61B7EF-EC45-4165-8B49-FD5B8D3A9FA0}.Release|Win32.ActiveCfg = Release|Win32
+		{EE61B7EF-EC45-4165-8B49-FD5B8D3A9FA0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

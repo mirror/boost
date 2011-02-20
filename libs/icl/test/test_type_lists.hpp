@@ -8,12 +8,20 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #ifndef BOOST_ICL_TEST_TYPE_LISTS_HPP_JOFA_080916
 #define BOOST_ICL_TEST_TYPE_LISTS_HPP_JOFA_080916
 
+//#define BOOST_ICL_TEST_XINT
+
 #include <boost/mpl/list.hpp>
 
 // interval instance types
 #include <boost/icl/gregorian.hpp> 
 #include <boost/icl/ptime.hpp> 
+
+#ifdef BOOST_ICL_TEST_XINT
+#include <boost/icl/xint.hpp>
+#endif
+
 #include <boost/icl/rational.hpp> 
+
 
 #if(_MSC_VER < 1500 && defined(_DEBUG) ) // 1500 = MSVC-9.0
 typedef int boost_posix_time_ptime;
@@ -23,8 +31,10 @@ typedef int boost_gregorian_date_duration;
 #else
 typedef boost::posix_time::ptime         boost_posix_time_ptime;
 typedef boost::posix_time::time_duration boost_posix_time_duration;
-typedef boost::gregorian::date           boost_gregorian_date; 
-typedef boost::gregorian::date_duration  boost_gregorian_date_duration;
+typedef int                              boost_gregorian_date; 
+typedef int                              boost_gregorian_date_duration;
+//typedef boost::gregorian::date           boost_gregorian_date; //JODO URG REV
+//typedef boost::gregorian::date_duration  boost_gregorian_date_duration;
 #endif
 
 typedef ::boost::mpl::list<
@@ -32,6 +42,10 @@ typedef ::boost::mpl::list<
     ,short, int, long, long long
     ,float, double, long double
     ,boost::rational<int>
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::xint::integer
+    ,boost::rational<boost::xint::integer>
+#endif
     ,boost_posix_time_ptime
     ,boost_posix_time_duration
     ,boost_gregorian_date
@@ -53,6 +67,10 @@ typedef ::boost::mpl::list<
      short, int, long, long long
     ,float, double, long double
     ,boost::rational<int>
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::xint::integer
+    ,boost::rational<boost::xint::integer>
+#endif
 > signed_bicremental_types;
 
 typedef          int             signed_bicremental_type_1;
@@ -69,6 +87,9 @@ typedef ::boost::mpl::list<
 typedef ::boost::mpl::list<
     float, double, long double
     ,boost::rational<int>
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::rational<boost::xint::integer>
+#endif
 > bicremental_continuous_types;
 
 typedef float                bicremental_continuous_type_1;
@@ -80,6 +101,9 @@ typedef ::boost::mpl::list<
     unsigned short, unsigned int
     ,unsigned long, unsigned long long  
     ,short, int, long, long long
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::xint::integer
+#endif
 > integral_types;
 
 typedef int           integral_type_1;
@@ -91,6 +115,9 @@ typedef ::boost::mpl::list<
     unsigned short, unsigned int
     ,unsigned long, unsigned long long  
     ,short, int, long
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::xint::integer
+#endif
     ,boost_posix_time_ptime
     ,boost_posix_time_ptime
     ,boost_posix_time_duration
@@ -116,6 +143,9 @@ typedef long                     signed_discrete_type_3;
 typedef ::boost::mpl::list<
     float, double, long double
     ,boost::rational<int>
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::rational<boost::xint::integer>
+#endif
 > numeric_continuous_types;
 
 typedef double               numeric_continuous_type_1;
@@ -126,6 +156,9 @@ typedef long double          numeric_continuous_type_4;
 typedef ::boost::mpl::list<
     float, double, long double
     ,boost::rational<int>
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::rational<boost::xint::integer>
+#endif
     ,std::string
 > continuous_types;
 
@@ -140,6 +173,9 @@ typedef ::boost::mpl::list<
     ,short, int, long, long long
     ,float, double, long double
     ,boost::rational<int>
+#ifdef BOOST_ICL_TEST_XINT
+    ,boost::xint::integer
+#endif
     ,std::string
     ,boost_posix_time_ptime
     ,boost_posix_time_duration

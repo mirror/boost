@@ -26,8 +26,8 @@ template <class Type> struct some_attribute
 template <class Type> struct some_predicate
 { 
     BOOST_STATIC_CONSTANT(bool, 
-        value = ((some_attribute<Type>::value) < 0) 
-    //  value = ( some_attribute<Type>::value  < 0) 
+    //  value = ((some_attribute<Type>::value) < 0) 
+        value = ( some_attribute<Type>::value  < 0) 
                 //error C2059: syntax error : ')' ONLY
                 //IF <boost/thread.hpp> is included before
         ); 

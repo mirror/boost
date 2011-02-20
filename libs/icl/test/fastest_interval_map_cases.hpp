@@ -79,6 +79,10 @@ BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_element_iter_4_discrete_types)
 {            interval_map_element_iter_4_discrete_types<discrete_type_2, int, partial_absorber, INTERVAL_MAP>();}
 
+BOOST_AUTO_TEST_CASE
+(fastest_icl_interval_map_intersects_4_bicremental_types)
+{            interval_map_intersects_4_bicremental_types<INTERVAL_MAP, bicremental_type_3, int>();}
+
 
 #endif // BOOST_ICL_FASTEST_INTERVAL_MAP_CASES_HPP_JOFA_090702
 
