@@ -53,7 +53,7 @@ namespace boost { namespace fusion
     }
 
     template <typename Seq1, typename Seq2>
-    inline bool
+    inline void
     assign(Seq1 const& src, Seq2& dest)
     {
         BOOST_STATIC_ASSERT(
