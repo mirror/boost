@@ -37,7 +37,10 @@ Expression semantics
 --------------------
 
 In the following table, ``s`` is an instance of ``set``, ``pos`` is an iterator into ``s``, 
-and ``x``, ``k``, and |t1...tn| are arbitrary types.
+and ``x``, ``k``, and |t1...tn| is a set of *unique* arbitrary types. [*Note:* See `below`__ for
+an example of how to construct a ``set`` from a list of potentially non-unique types |--| *end note*\]
+
+__ nonunique-set-example_
 
 +---------------------------------------+-----------------------------------------------------------+
 | Expression                            | Semantics                                                 |
@@ -105,6 +108,8 @@ and ``x``, ``k``, and |t1...tn| are arbitrary types.
 Example
 -------
 
+Basic ``set`` invariants:
+
 .. parsed-literal::
 
     typedef set< int,long,double,int_<5> > s;
@@ -118,12 +123,27 @@ Example
     BOOST_MPL_ASSERT(( is_same< at<s,char>::type, void\_ > ));
 
 
+.. _nonunique-set-example:
+
+Constructing a ``set`` from a list of potentially non-unique types:
+
+.. parsed-literal::
+
+    typedef fold<
+          vector<int,int,long,long>
+        , set0<>
+        , insert<_1,_2>
+        >::type s;
+
+    BOOST_MPL_ASSERT_RELATION( size<s>::value, ==, 2 );
+
+
 See also
 --------
 
 |Sequences|, |Variadic Sequence|, |Associative Sequence|, |Extensible Associative Sequence|, |set_c|, |map|, |vector|
 
 
-.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+.. copyright:: Copyright ©  2001-2011 Aleksey Gurtovoy and David Abrahams
    Distributed under the Boost Software License, Version 1.0. (See accompanying
    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
