@@ -1349,9 +1349,17 @@ void interval_map_intersects_4_bicremental_types()
     //-------------------------------------+
     //   (1   3)      [6   8)[8 9)[9    11]
     //      1            3     4      3
-    //mapping_pair<T,U> map_pair_2_1  = K_v(2,1);
-    //BOOST_CHECK( icl::intersects(map_a,  map_pair_2_1 ) ); //JODO
-    
+    mapping_pair<T,U> map_pair_2_1  = K_v(2,1);
+    BOOST_CHECK( icl::intersects(map_a,  map_pair_2_1 ) );
+    BOOST_CHECK( icl::intersects(map_a,  K_v(6,3) ) );
+    BOOST_CHECK( icl::intersects(map_a,  IDv(6,8,3) ) );
+    BOOST_CHECK( icl::intersects(map_a,  CIv(8,11,3) ) );
+    BOOST_CHECK( icl::intersects(map_a,  IIv(6,11,3) ) );
+    BOOST_CHECK( icl::intersects(map_a,  IIv(6,11,5) ) );
+    BOOST_CHECK(!icl::intersects(map_a,  IDv(4,6,5) ) );
+
+    BOOST_CHECK( icl::disjoint(map_a,  IDv(4,6,5) ) );
+    BOOST_CHECK(!icl::disjoint(map_a,  IDv(0,12,1) ) );
 }
 
 

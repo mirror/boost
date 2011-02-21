@@ -54,6 +54,30 @@ BOOST_AUTO_TEST_CASE(float_infinity)
     BOOST_CHECK_EQUAL(true, true);
 }
 
+BOOST_AUTO_TEST_CASE(ticket_5207)
+{
+    icl::interval< int >::type int_interval;
+    icl::interval_set< int > int_set;
+    icl::interval_map< int, int > int_map;
+    icl::interval_map< int, int >::element_type int_element;
+    icl::interval_map< int, int >::segment_type int_segment;
+
+    /// AFAICT none of the following lines compiles and they all should:
+    icl::lower( int_interval );
+    icl::upper( int_interval );
+    icl::first( int_interval );
+    icl::last( int_interval );
+    //icl::add( int_set, int_set );
+    //icl::add( int_map, int_map );
+    //icl::subtract( int_set, int_set );
+    //icl::subtract( int_map, int_map );
+    int_set += int_interval;
+    icl::disjoint( int_map, int_element );
+    icl::disjoint( int_map, int_segment );
+    icl::intersects( int_map, int_segment );
+    icl::intersects( int_map, int_element );
+}
+
 BOOST_AUTO_TEST_CASE(casual)
 {
     //typedef int T;

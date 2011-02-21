@@ -448,7 +448,7 @@ typename enable_if<mpl::and_< is_interval_map<Type>
 intersects(const Type& object, const OperandT& operand)
 {
     Type intersection;
-    icl::add_intersection(intersection, left, operand);
+    icl::add_intersection(intersection, object, operand);
     return !icl::is_empty(intersection); 
 }
 
