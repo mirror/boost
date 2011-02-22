@@ -4,8 +4,8 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_ASSIGN_02162011_2308)
-#define FUSION_ASSIGN_02162011_2308
+#if !defined(FUSION_COPY_02162011_2308)
+#define FUSION_COPY_02162011_2308
 
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
@@ -23,7 +23,7 @@ namespace boost { namespace fusion
     namespace detail
     {
         template <typename Seq1, typename Seq2>
-        struct sequence_assign
+        struct sequence_copy
         {
             typedef typename result_of::end<Seq1>::type end1_type;
             typedef typename result_of::end<Seq2>::type end2_type;
@@ -54,12 +54,12 @@ namespace boost { namespace fusion
 
     template <typename Seq1, typename Seq2>
     inline void
-    assign(Seq1 const& src, Seq2& dest)
+    copy(Seq1 const& src, Seq2& dest)
     {
         BOOST_STATIC_ASSERT(
             result_of::size<Seq1>::value == result_of::size<Seq2>::value);
 
-        detail::sequence_assign<
+        detail::sequence_copy<
             Seq1 const, Seq2>::
             call(fusion::begin(src), fusion::begin(dest));
     }
