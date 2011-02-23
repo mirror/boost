@@ -600,7 +600,7 @@ namespace boost{
 // the global definition into std namespace:
 #ifdef BOOST_NO_STD_TYPEINFO
 #include <typeinfo>
-namespace std{ using ::typeinfo; }
+namespace std{ using ::type_info; }
 #endif
 
 // ---------------------------------------------------------------------------//
