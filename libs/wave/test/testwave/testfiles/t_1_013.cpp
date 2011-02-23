@@ -79,7 +79,7 @@ xglue(HIGH, LOW)
 //H 01: t_1_013.cpp(21): LOW
 //H 02: LOW ", world"
 //H 03: LOW ", world"
-//H 02: glue(HIGH, LOW ", world")
+//H 02: glue(HIGH,  LOW ", world")
 //H 00: t_1_013.cpp(19): glue(HIGH, LOW ", world"), [t_1_013.cpp(18): glue(a, b)=a ## b]
 //H 02: HIGHLOW ", world"
 //H 01: t_1_013.cpp(20): HIGHLOW

@@ -24,6 +24,8 @@ Boost V1.47.0
 - V2.3.0
 - After preprocessing the body of any #pragma wave option() the wave tool now 
   concatenates all adjacent string literals into a single string literal.
+- Fixed whitespace handling, added a corresponding set of test cases 
+  (t_9_020.cpp)
 
 Boost V1.46.0
 - V2.2.0

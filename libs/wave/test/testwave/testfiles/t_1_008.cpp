@@ -78,8 +78,8 @@ PARTIAL_CAT(3)( PARTIAL X, Y PARTIAL )
 //H 01: t_1_008.cpp(23): PARTIAL
 //H 02: 
 //H 03: _
-//H 02: CAT(Token1, Token2)
-//H 00: t_1_008.cpp(18): CAT(Token1, Token2), [t_1_008.cpp(14): CAT(a, b)=a ## b]
+//H 02: CAT(  Token1,  Token2  )
+//H 00: t_1_008.cpp(18): CAT( Token1, Token2 ), [t_1_008.cpp(14): CAT(a, b)=a ## b]
 //H 02: Token1Token2
 //H 03: Token1Token2
 //H 03: Token1Token2
@@ -96,8 +96,8 @@ PARTIAL_CAT(3)( PARTIAL X, Y PARTIAL )
 //H 01: t_1_008.cpp(23): PARTIAL
 //H 02: 
 //H 03: _
-//H 02: CAT(PARTIALPARTIAL X, Token2)
-//H 00: t_1_008.cpp(19): CAT(PARTIALPARTIAL X, Token2), [t_1_008.cpp(14): CAT(a, b)=a ## b]
+//H 02: CAT(PARTIALPARTIAL X,  Token2  )
+//H 00: t_1_008.cpp(19): CAT(PARTIALPARTIAL X, Token2 ), [t_1_008.cpp(14): CAT(a, b)=a ## b]
 //H 02: PARTIALPARTIAL XToken2
 //H 01: t_1_008.cpp(24): PARTIALPARTIAL
 //H 02: 
@@ -117,8 +117,8 @@ PARTIAL_CAT(3)( PARTIAL X, Y PARTIAL )
 //H 01: t_1_008.cpp(26): X
 //H 02: Token1
 //H 03: Token1
-//H 02: CAT(Token1, Y PARTIALPARTIAL)
-//H 00: t_1_008.cpp(20): CAT(Token1, Y PARTIALPARTIAL), [t_1_008.cpp(14): CAT(a, b)=a ## b]
+//H 02: CAT(  Token1, Y PARTIALPARTIAL)
+//H 00: t_1_008.cpp(20): CAT( Token1, Y PARTIALPARTIAL), [t_1_008.cpp(14): CAT(a, b)=a ## b]
 //H 02: Token1Y PARTIALPARTIAL
 //H 01: t_1_008.cpp(24): PARTIALPARTIAL
 //H 02: 
