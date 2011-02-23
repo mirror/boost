@@ -52,15 +52,8 @@ namespace chrono_detail
                         "chrono::steady_clock" ));
     }
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-    // trying to simplify expression (Pb. with MSVC.9.0)
-    steady_clock::rep r = static_cast<steady_clock::rep>((nanosecs_per_tic) * pcount.QuadPart);
-    steady_clock::duration d(r);
-    return steady_clock::time_point(d);
-#else
     return steady_clock::time_point(steady_clock::duration(
       static_cast<steady_clock::rep>((nanosecs_per_tic) * pcount.QuadPart)));
-#endif
   }
 
 

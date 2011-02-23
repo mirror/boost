@@ -43,6 +43,7 @@ time2_demo contained this comment:
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_unsigned.hpp>
+#include <boost/chrono/detail/is_evenly_divisible_by.hpp>
 
 #include <boost/cstdint.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -432,8 +433,6 @@ namespace chrono {
         template <class Rep2>
         BOOST_CHRONO_CONSTEXPR
         explicit duration(const Rep2& r
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-#else
         , typename boost::enable_if <
                     mpl::and_ <
                         boost::is_convertible<Rep2, rep>,
@@ -446,8 +445,7 @@ namespace chrono {
                         >
                     >
                 >::type* = 0
-#endif    
-    )
+		)
                   : rep_(r) { }
         ~duration() {} //= default;
         duration(const duration& rhs) : rep_(rhs.rep_) {} // = default;
@@ -461,19 +459,16 @@ namespace chrono {
         template <class Rep2, class Period2>
         BOOST_CHRONO_CONSTEXPR
         duration(const duration<Rep2, Period2>& d
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-#else
         , typename boost::enable_if <
                     mpl::or_ <
                         treat_as_floating_point<rep>,
                         mpl::and_ <
-                            mpl::bool_ < ratio_divide<Period2, period>::type::den == 1>,
+                            chrono_detail::is_evenly_divisible_by<Period2, period>,
                             mpl::not_ < treat_as_floating_point<Rep2> >
                         >
                     >
                 >::type* = 0
-#endif    
-    )
+        )
             : rep_(chrono::detail::duration_cast<duration<Rep2, Period2>, duration>()(d).count()) {}
 
         // observer
@@ -560,9 +555,6 @@ namespace chrono {
 
     template <class Rep1, class Period, class Rep2>
     inline
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-    duration<typename common_type<Rep1, Rep2>::type, Period>    
-#else
     typename boost::enable_if <
         mpl::and_ <
         boost::is_convertible<Rep1, typename common_type<Rep1, Rep2>::type>,
@@ -570,7 +562,6 @@ namespace chrono {
         >,
         duration<typename common_type<Rep1, Rep2>::type, Period>
     >::type
-#endif    
     operator*(const duration<Rep1, Period>& d, const Rep2& s)
     {
         typedef typename common_type<Rep1, Rep2>::type CR;
@@ -581,9 +572,6 @@ namespace chrono {
 
     template <class Rep1, class Period, class Rep2>
     inline
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-        duration<typename common_type<Rep1, Rep2>::type, Period>
-#else
     typename boost::enable_if <
         mpl::and_ <
         boost::is_convertible<Rep1, typename common_type<Rep1, Rep2>::type>,
@@ -591,7 +579,6 @@ namespace chrono {
         >,
         duration<typename common_type<Rep1, Rep2>::type, Period>
     >::type
-#endif
     operator*(const Rep1& s, const duration<Rep2, Period>& d)
     {
         return d * s;
@@ -676,15 +663,7 @@ namespace detail
         bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
         {
             typedef typename common_type<LhsDuration, RhsDuration>::type CD;
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-            // trying to simplify expression so enable_if is not used (Pb. with MSVC.9.0)
-            return
-                chrono::detail::duration_cast<LhsDuration, CD>()(lhs).count()
-            ==
-                chrono::detail::duration_cast<RhsDuration, CD>()(rhs).count();
-#else
             return CD(lhs).count() == CD(rhs).count();
-#endif
         }
     };
 
@@ -703,15 +682,7 @@ namespace detail
         bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
         {
             typedef typename common_type<LhsDuration, RhsDuration>::type CD;
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-            // trying to simplify expression so enable_if is not used (Pb. with MSVC.9.0)
-            return
-                chrono::detail::duration_cast<LhsDuration, CD>()(lhs).count()
-            <
-                chrono::detail::duration_cast<RhsDuration, CD>()(rhs).count();
-#else
             return CD(lhs).count() < CD(rhs).count();
-#endif            
         }
     };
 
@@ -801,12 +772,8 @@ namespace detail
     // Compile-time select the most efficient algorithm for the conversion...
     template <class ToDuration, class Rep, class Period>
     inline BOOST_CHRONO_CONSTEXPR
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-    ToDuration
-#else
     typename boost::enable_if <
       boost::chrono::detail::is_duration<ToDuration>, ToDuration>::type
-#endif    
     duration_cast(const duration<Rep, Period>& fd)
     {
         return boost::chrono::detail::duration_cast<

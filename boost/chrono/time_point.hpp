@@ -170,13 +170,10 @@ namespace chrono {
         template <class Duration2>
         BOOST_CHRONO_CONSTEXPR
         time_point(const time_point<clock, Duration2>& t
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
-#else
                 , typename boost::enable_if
                 <
                     boost::is_convertible<Duration2, duration>
                 >::type* = 0
-#endif
         )
             : d_(t.time_since_epoch())
         {
