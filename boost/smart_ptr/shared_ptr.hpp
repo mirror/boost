@@ -41,6 +41,7 @@
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
 #include <typeinfo>             // for std::bad_cast
+#include <cstddef>              // for std::size_t
 
 #if !defined(BOOST_NO_IOSTREAM)
 #if !defined(BOOST_NO_IOSFWD)
@@ -722,7 +723,16 @@ template<class T> inline bool atomic_compare_exchange_explicit( shared_ptr<T> * 
     return atomic_compare_exchange( p, v, w ); // std::move( w )
 }
 
-#endif
+#endif // !defined(BOOST_SP_NO_ATOMIC_ACCESS)
+
+// hash_value
+
+template< class T > struct hash;
+
+template< class T > std::size_t hash_value( boost::shared_ptr<T> const & p )
+{
+    return boost::hash< T* >()( p.get() );
+}
 
 } // namespace boost
 
