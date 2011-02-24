@@ -30,6 +30,8 @@ namespace quickbook
     int qbk_minor_version = -1;
     unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
 
+    void assign_qbk_version::operator()(int value) const { v_ = value; }
+
     namespace {
         std::string fully_qualified_id(std::string const& library_id,
             std::string const& qualified_section_id,
