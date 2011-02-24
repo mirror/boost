@@ -50,11 +50,6 @@
 #endif
 #endif
 
-#ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
-# pragma warning(push)
-# pragma warning(disable:4284) // odd return type for operator->
-#endif
-
 namespace boost
 {
 
@@ -730,10 +725,6 @@ template<class T> inline bool atomic_compare_exchange_explicit( shared_ptr<T> * 
 #endif
 
 } // namespace boost
-
-#ifdef BOOST_MSVC
-# pragma warning(pop)
-#endif
 
 #endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
