@@ -12,14 +12,14 @@
 #include <boost/make_shared.hpp>
 #include <boost/shared_ptr.hpp>
 
-#if !defined( BOOST_HAS_RVALUE_REFS ) || !defined( BOOST_HAS_VARIADIC_TMPL )
+#if !defined( BOOST_HAS_RVALUE_REFS )
 
 int main()
 {
     return 0;
 }
 
-#else // BOOST_HAS_RVALUE_REFS, BOOST_HAS_VARIADIC_TMPL
+#else // BOOST_HAS_RVALUE_REFS
 
 class myarg
 {
