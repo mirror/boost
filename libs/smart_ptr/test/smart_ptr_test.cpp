@@ -33,10 +33,7 @@
 # pragma warn -8092 // template argument passed to 'find' is not an iterator
 #endif
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/shared_array.hpp>
+#include <boost/smart_ptr.hpp>
 
 #include <boost/detail/lightweight_test.hpp>
 
