@@ -23,7 +23,9 @@ namespace win32 {
     typedef SYSTEMTIME SYSTEMTIME_;
     typedef SYSTEMTIME* PSYSTEMTIME_;
 
+	#ifndef UNDER_CE	// Windows CE does not define GetSystemTimeAsFileTime
     using ::GetSystemTimeAsFileTime;
+	#endif
     using ::FileTimeToLocalFileTime;
     using ::GetSystemTime;
     using ::SystemTimeToFileTime;
@@ -47,8 +49,10 @@ extern "C" {
       WORD_ wMilliseconds;
     } SYSTEMTIME_, *PSYSTEMTIME_;
 
+	#ifndef UNDER_CE	// Windows CE does not define GetSystemTimeAsFileTime
     __declspec(dllimport) void WINAPI
         GetSystemTimeAsFileTime(FILETIME_* lpFileTime);
+	#endif
     __declspec(dllimport) int WINAPI
         FileTimeToLocalFileTime(const FILETIME_* lpFileTime, 
                 FILETIME_* lpLocalFileTime);

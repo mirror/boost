@@ -42,15 +42,25 @@ time2_demo contained this comment:
 
 namespace
 {
-  //struct timeval {
-  //        long    tv_sec;         /* seconds */
-  //        long    tv_usec;        /* and microseconds */
-  //};
+  #ifdef UNDER_CE
+  // Windows CE does not define timeval
+  struct timeval {
+          long    tv_sec;         /* seconds */
+          long    tv_usec;        /* and microseconds */
+  };
+  #endif
 
   int gettimeofday(struct timeval * tp, void *)
   {
     FILETIME ft;
-    ::GetSystemTimeAsFileTime( &ft );  // never fails
+	#if defined(UNDER_CE)
+		// Windows CE does not define GetSystemTimeAsFileTime so we do it in two steps.
+		SYSTEMTIME st;
+		::GetSystemTime( &st );
+		::SystemTimeToFileTime( &st, &ft );
+	#else
+		::GetSystemTimeAsFileTime( &ft );  // never fails
+	#endif
     long long t = (static_cast<long long>(ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
   # if !defined( BOOST_MSVC ) || BOOST_MSVC > 1300 // > VC++ 7.0
     t -= 116444736000000000LL;
@@ -92,7 +102,7 @@ public:
             : rep_(static_cast<rep>(d.count() * ticks_per_nanosecond)) {}
 
     // explicit
-       operator tonanosec() const {return tonanosec(rep_/ticks_per_nanosecond);}
+    tonanosec convert_to_nanosec() const {return tonanosec(rep_/ticks_per_nanosecond);}
 
     // observer
 
@@ -218,7 +228,7 @@ void test()
     clock::duration elapsed = stop - start;
     std::cout << "paused " << 
     boost::chrono::nanoseconds(
-        boost::chrono::duration_cast<boost::chrono::nanoseconds>(duration::tonanosec(elapsed))).count()
+        boost::chrono::duration_cast<boost::chrono::nanoseconds>( elapsed.convert_to_nanosec() )).count()
                            << " nanoseconds\n";
 }
 

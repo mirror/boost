@@ -95,7 +95,14 @@ namespace chrono_detail
   system_clock::time_point system_clock::now()
   {
     boost::detail::win32::FILETIME_ ft;
-    boost::detail::win32::GetSystemTimeAsFileTime( &ft );  // never fails
+	#if defined(UNDER_CE)
+		// Windows CE does not define GetSystemTimeAsFileTime so we do it in two steps.
+		boost::detail::win32::SYSTEMTIME_ st;
+		boost::detail::win32::GetSystemTime( &st );
+		boost::detail::win32::SystemTimeToFileTime( &st, &ft );
+	#else
+		boost::detail::win32::GetSystemTimeAsFileTime( &ft );  // never fails
+	#endif
     return system_clock::time_point(system_clock::duration(
       (static_cast<__int64>( ft.dwHighDateTime ) << 32) | ft.dwLowDateTime));
   }
@@ -104,7 +111,14 @@ namespace chrono_detail
   system_clock::time_point system_clock::now( system::error_code & ec )
   {
     boost::detail::win32::FILETIME_ ft;
-    boost::detail::win32::GetSystemTimeAsFileTime( &ft );  // never fails
+	#if defined(UNDER_CE)
+		// Windows CE does not define GetSystemTimeAsFileTime so we do it in two steps.
+		boost::detail::win32::SYSTEMTIME_ st;
+		boost::detail::win32::GetSystemTime( &st );
+		boost::detail::win32::SystemTimeToFileTime( &st, &ft );
+	#else
+		boost::detail::win32::GetSystemTimeAsFileTime( &ft );  // never fails
+	#endif
     if (!BOOST_CHRONO_IS_THROWS(ec))
     {
         ec.clear();

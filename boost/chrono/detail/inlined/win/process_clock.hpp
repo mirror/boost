@@ -34,6 +34,11 @@ void process_clock::now( process_times & times_, system::error_code & ec )
 
     times_.real = duration( steady_clock::now().time_since_epoch().count() );
        
+	#ifdef UNDER_CE
+	// Windows CE does not support GetProcessTimes
+    assert( 0 && "GetProcessTimes not supported under Windows CE" );
+	times_.real = times_.system = times_.user = nanoseconds(-1);
+	#else
     if ( boost::detail::win32::GetProcessTimes(
             boost::detail::win32::GetCurrentProcess(), &creation, &exit,
             &system_time, &user_time ) )
@@ -67,7 +72,7 @@ void process_clock::now( process_times & times_, system::error_code & ec )
             times_.real = times_.system = times_.user = nanoseconds(-1);
         }
     }
-
+	#endif
 }
 } // namespace chrono
 } // namespace boost
