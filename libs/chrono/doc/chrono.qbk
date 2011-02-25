@@ -7,7 +7,7 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[article Boost.Chrono
+[library Boost.Chrono
     [quickbook 1.5]
     [version 1.0.0]
     [authors [Hinnant, Howard]]
@@ -16,6 +16,12 @@
     [copyright 2008 Howard Hinnant]
     [copyright 2006, 2008 Beman Dawes]
     [copyright 2009-2011 Vicente J. Botet Escriba]
+    [category utilities system]
+    [id chrono]
+    [dirname chrono]
+    [purpose 
+        Useful time utilities.
+    ]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
@@ -90,74 +96,74 @@
 [/==================]
 
 
-[template chrono_conf[link_text] [link boost_chrono.reference.cpp0x.chrono_chrono_hpp.conf [link_text]]]
+[template chrono_conf[link_text] [link chrono.reference.cpp0x.chrono_chrono_hpp.conf [link_text]]]
 
-[def __BOOST_CHRONO_HEADER_ONLY [link boost_chrono.reference.cpp0x.chrono_hpp.conf.header_only `BOOST_CHRONO_HEADER_ONLY`]]
+[def __BOOST_CHRONO_HEADER_ONLY [link chrono.reference.cpp0x.chrono_hpp.conf.header_only `BOOST_CHRONO_HEADER_ONLY`]]
 [def __BOOST_SYSTEM_INLINED `BOOST_SYSTEM_INLINED`]
 
 [def __BOOST_CHRONO_USES_STATIC_ASSERT [chrono_conf `BOOST_CHRONO_USES_STATIC_ASSERT`]]
 [def __BOOST_CHRONO_USES_MPL_ASSERT [chrono_conf `BOOST_CHRONO_USES_MPL_ASSERT`]]
 [def __BOOST_CHRONO_USES_ARRAY_ASSERT [chrono_conf `BOOST_CHRONO_USES_ARRAY_ASSERT`]]
 
-[def __BOOST_CHRONO_HAS_CLOCK_STEADY [link boost_chrono.reference.cpp0x.system_clocks_hpp.BOOST_CHRONO_HAS_CLOCK_STEADY `BOOST_CHRONO_HAS_CLOCK_STEADY`]]
+[def __BOOST_CHRONO_HAS_CLOCK_STEADY [link chrono.reference.cpp0x.system_clocks_hpp.BOOST_CHRONO_HAS_CLOCK_STEADY `BOOST_CHRONO_HAS_CLOCK_STEADY`]]
 
-[def __BOOST_CHRONO_HAS_THREAD_CLOCK [link boost_chrono.reference.other_clocks.thread_clock_hpp.BOOST_CHRONO_HAS_THREAD_CLOCK `BOOST_CHRONO_HAS_THREAD_CLOCK`]]
+[def __BOOST_CHRONO_HAS_THREAD_CLOCK [link chrono.reference.other_clocks.thread_clock_hpp.BOOST_CHRONO_HAS_THREAD_CLOCK `BOOST_CHRONO_HAS_THREAD_CLOCK`]]
 
 
 
-[template clock_concept_link[link_text] [link boost_chrono.reference.cpp0x.clock [link_text]]]
+[template clock_concept_link[link_text] [link chrono.reference.cpp0x.clock [link_text]]]
 [def __clock_req [clock_concept_link `Clock`] requirements]
 [def __Clock [clock_concept_link `Clock`]]
 [def __Clock_s [clock_concept_link `Clock`'s]]
 
-[def __duration [link boost_chrono.reference.cpp0x.duration_hpp.duration `duration`]]
-[def __durations [link boost_chrono.reference.cpp0x.duration_hpp.duration `duration`]s]
-[def __duration_s [link boost_chrono.reference.cpp0x.duration_hpp.duration `duration`]'s]
+[def __duration [link chrono.reference.cpp0x.duration_hpp.duration `duration`]]
+[def __durations [link chrono.reference.cpp0x.duration_hpp.duration `duration`]s]
+[def __duration_s [link chrono.reference.cpp0x.duration_hpp.duration `duration`]'s]
 
 [/==================]
-[def __time_point [link boost_chrono.reference.cpp0x.time_point_hpp.time_point `time_point`]]
-[def __time_points [link boost_chrono.reference.cpp0x.time_point_hpp.time_point `time_point`]s]
-[def __time_point_s [link boost_chrono.reference.cpp0x.time_point_hpp.time_point `time_point`]'s]
+[def __time_point [link chrono.reference.cpp0x.time_point_hpp.time_point `time_point`]]
+[def __time_points [link chrono.reference.cpp0x.time_point_hpp.time_point `time_point`]s]
+[def __time_point_s [link chrono.reference.cpp0x.time_point_hpp.time_point `time_point`]'s]
 
 [/==================]
-[def __system_clock [link boost_chrono.reference.cpp0x.system_clocks_hpp.system_clock `system_clock`]]
-[def __steady_clock [link boost_chrono.reference.cpp0x.system_clocks_hpp.steady_clock `steady_clock`]]
-[def __high_resolution_clock [link boost_chrono.reference.cpp0x.system_clocks_hpp.high_resolution_clock `high_resolution_clock`]]
-
-[/==================]
-
-[def __process_real_cpu_clock [link boost_chrono.reference.other_clocks.process_cpu_clocks_hpp.process_real_cpu_clock `process_real_cpu_clock`]]
-[def __process_system_cpu_clock [link boost_chrono.reference.other_clocks.process_cpu_clocks_hpp.process_system_cpu_clock `process_system_cpu_clock`]]
-[def __process_user_cpu_clock [link boost_chrono.reference.other_clocks.process_cpu_clocks_hpp.process_user_cpu_clock `process_user_cpu_clock`]]
-[def __process_cpu_clock [link boost_chrono.reference.other_clocks.process_cpu_clocks_hpp.process_cpu_clock `process_cpu_clock`]]
-[def __thread_clock [link boost_chrono.reference.other_clocks.thread_clock_hpp.thread_clock `thread_clock`]]
-
-[/==================]
-[def __duration_cast [link boost_chrono.reference.cpp0x.duration_hpp.duration_cast `duration_cast`]]
-[def __time_point_cast [link boost_chrono.reference.cpp0x.time_point_hpp.time_point_cast `time_point_cast`]]
-
-
-[def __nanoseconds [link boost_chrono.reference.cpp0x.duration_hpp.duration_typedefs `nanoseconds`]]
-[def __microseconds [link boost_chrono.reference.cpp0x.duration_hpp.duration_typedefs `microseconds`]]
-[def __milliseconds__ [link boost_chrono.reference.cpp0x.duration_hpp.duration_typedefs `milliseconds`]]
-[def __seconds [link boost_chrono.reference.cpp0x.duration_hpp.duration_typedefs `seconds`]]
-[def __minutes [link boost_chrono.reference.cpp0x.duration_hpp.duration_typedefs `minutes`]]
-[def __hours [link boost_chrono.reference.cpp0x.duration_hpp.duration_typedefs `hours`]]
-
-[def __common_type_spe [link boost_chrono.reference.cpp0x.duration_hpp.common_type_spe `common_type`]]
-
-[/==================]
-[def __treat_as_floating_point [link boost_chrono.reference.cpp0x.duration_hpp.traits.treat_as_floating_point `treat_as_floating_point`]]
-[def __duration_values [link boost_chrono.reference.cpp0x.duration_hpp.traits.duration_values `duration_values`]]
-[def __zero [link boost_chrono.reference.cpp0x.duration_hpp.traits.duration_values.zero `zero`]]
-[def __max [link boost_chrono.reference.cpp0x.duration_hpp.traits.duration_values.max `max`]]
-[def __min [link boost_chrono.reference.cpp0x.duration_hpp.traits.duration_values.min `min`]]
-
-
+[def __system_clock [link chrono.reference.cpp0x.system_clocks_hpp.system_clock `system_clock`]]
+[def __steady_clock [link chrono.reference.cpp0x.system_clocks_hpp.steady_clock `steady_clock`]]
+[def __high_resolution_clock [link chrono.reference.cpp0x.system_clocks_hpp.high_resolution_clock `high_resolution_clock`]]
 
 [/==================]
 
-[def __duration_punct [link boost_chrono.reference.io.chrono_io_hpp.duration_punct `duration_punct`]]
+[def __process_real_cpu_clock [link chrono.reference.other_clocks.process_cpu_clocks_hpp.process_real_cpu_clock `process_real_cpu_clock`]]
+[def __process_system_cpu_clock [link chrono.reference.other_clocks.process_cpu_clocks_hpp.process_system_cpu_clock `process_system_cpu_clock`]]
+[def __process_user_cpu_clock [link chrono.reference.other_clocks.process_cpu_clocks_hpp.process_user_cpu_clock `process_user_cpu_clock`]]
+[def __process_cpu_clock [link chrono.reference.other_clocks.process_cpu_clocks_hpp.process_cpu_clock `process_cpu_clock`]]
+[def __thread_clock [link chrono.reference.other_clocks.thread_clock_hpp.thread_clock `thread_clock`]]
+
+[/==================]
+[def __duration_cast [link chrono.reference.cpp0x.duration_hpp.duration_cast `duration_cast`]]
+[def __time_point_cast [link chrono.reference.cpp0x.time_point_hpp.time_point_cast `time_point_cast`]]
+
+
+[def __nanoseconds [link chrono.reference.cpp0x.duration_hpp.duration_typedefs `nanoseconds`]]
+[def __microseconds [link chrono.reference.cpp0x.duration_hpp.duration_typedefs `microseconds`]]
+[def __milliseconds__ [link chrono.reference.cpp0x.duration_hpp.duration_typedefs `milliseconds`]]
+[def __seconds [link chrono.reference.cpp0x.duration_hpp.duration_typedefs `seconds`]]
+[def __minutes [link chrono.reference.cpp0x.duration_hpp.duration_typedefs `minutes`]]
+[def __hours [link chrono.reference.cpp0x.duration_hpp.duration_typedefs `hours`]]
+
+[def __common_type_spe [link chrono.reference.cpp0x.duration_hpp.common_type_spe `common_type`]]
+
+[/==================]
+[def __treat_as_floating_point [link chrono.reference.cpp0x.duration_hpp.traits.treat_as_floating_point `treat_as_floating_point`]]
+[def __duration_values [link chrono.reference.cpp0x.duration_hpp.traits.duration_values `duration_values`]]
+[def __zero [link chrono.reference.cpp0x.duration_hpp.traits.duration_values.zero `zero`]]
+[def __max [link chrono.reference.cpp0x.duration_hpp.traits.duration_values.max `max`]]
+[def __min [link chrono.reference.cpp0x.duration_hpp.traits.duration_values.min `min`]]
+
+
+
+[/==================]
+
+[def __duration_punct [link chrono.reference.io.chrono_io_hpp.duration_punct `duration_punct`]]
 
 
 [/===============]
