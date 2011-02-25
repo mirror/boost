@@ -7,7 +7,7 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[article Boost.Ratio
+[library Boost.Ratio
     [quickbook 1.5]
     [version 1.0.1]
     [authors [Hinnant, Howard]]
@@ -16,6 +16,12 @@
     [copyright 2008 Howard Hinnant]
     [copyright 2006, 2008 Beman Dawes]
     [copyright 2009-2011 Vicente J. Botet Escriba]
+    [category math]
+    [id ratio]
+    [dirname ratio]
+    [purpose 
+        Compile time rational arithmetic.
+    ]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
@@ -32,60 +38,60 @@
 [def __hours `hours`]
 
 [/===============================================]
-[def __ratio [link boost_ratio.reference.std.ratio_hpp.ratio `ratio`]]
+[def __ratio [link ratio.reference.std.ratio_hpp.ratio `ratio`]]
 
-[template ratio_conf[link_text] [link boost_ratio.reference.std.ratio_hpp.conf [link_text]]]
+[template ratio_conf[link_text] [link ratio.reference.std.ratio_hpp.conf [link_text]]]
 
-[def __BOOST_RATIO_USES_STATIC_ASSERT [link boost_ratio.reference.std.ratio_hpp.conf `BOOST_RATIO_USES_STATIC_ASSERT`]]
-[def __BOOST_RATIO_USES_MPL_ASSERT [link boost_ratio.reference.std.ratio_hpp.conf `BOOST_RATIO_USES_MPL_ASSERT`]]
-[def __BOOST_RATIO_USES_ARRAY_ASSERT [link boost_ratio.reference.std.ratio_hpp.conf `BOOST_RATIO_USES_ARRAY_ASSERT`]]
+[def __BOOST_RATIO_USES_STATIC_ASSERT [link ratio.reference.std.ratio_hpp.conf `BOOST_RATIO_USES_STATIC_ASSERT`]]
+[def __BOOST_RATIO_USES_MPL_ASSERT [link ratio.reference.std.ratio_hpp.conf `BOOST_RATIO_USES_MPL_ASSERT`]]
+[def __BOOST_RATIO_USES_ARRAY_ASSERT [link ratio.reference.std.ratio_hpp.conf `BOOST_RATIO_USES_ARRAY_ASSERT`]]
 
-[def __BOOST_RATIO_EXTENSIONS [link boost_ratio.reference.std.ratio_hpp.extensions `BOOST_RATIO_EXTENSIONS`]]
-
-
-
-[template ratio_arithmetic[link_text] [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic [link_text]]]
-[def __ratio_add [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_add`]]
-[def __ratio_subtract [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_subtract`]]
-[def __ratio_multiply [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_multiply`]]
-[def __ratio_divide [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_divide`]]
-[def __ratio_negate [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_negate`]]
-[def __ratio_abs [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_abs`]]
-[def __ratio_sign [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_sign`]]
-[def __ratio_gcd [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_gcd`]]
-[def __ratio_lcm [link boost_ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_lcm`]]
+[def __BOOST_RATIO_EXTENSIONS [link ratio.reference.std.ratio_hpp.extensions `BOOST_RATIO_EXTENSIONS`]]
 
 
-[template ratio_comparison[link_text] [link boost_ratio.reference.std.ratio_hpp.ratio_comparison [link_text]]]
-[def __ratio_equal [link boost_ratio.reference.std.ratio_hpp.ratio_comparison `ratio_equal`]]
-[def __ratio_not_equal [link boost_ratio.reference.std.ratio_hpp.ratio_comparison `ratio_not_equal`]]
-[def __ratio_less [link boost_ratio.reference.std.ratio_hpp.ratio_comparison `ratio_less`]]
-[def __ratio_less_equal [link boost_ratio.reference.std.ratio_hpp.ratio_comparison `ratio_less_equal`]]
-[def __ratio_greater [link boost_ratio.reference.std.ratio_hpp.ratio_comparison `ratio_greater`]]
-[def __ratio_greater_equal [link boost_ratio.reference.std.ratio_hpp.ratio_comparison `ratio_greater_equal`]]
+
+[template ratio_arithmetic[link_text] [link ratio.reference.std.ratio_hpp.ratio_arithmetic [link_text]]]
+[def __ratio_add [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_add`]]
+[def __ratio_subtract [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_subtract`]]
+[def __ratio_multiply [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_multiply`]]
+[def __ratio_divide [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_divide`]]
+[def __ratio_negate [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_negate`]]
+[def __ratio_abs [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_abs`]]
+[def __ratio_sign [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_sign`]]
+[def __ratio_gcd [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_gcd`]]
+[def __ratio_lcm [link ratio.reference.std.ratio_hpp.ratio_arithmetic `ratio_lcm`]]
 
 
-[template ratio_si_typedefs[link_text] [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs [link_text]]]
-[def __atto [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `atto`]]
-[def __femto [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `femto`]]
-[def __pico [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `pico`]]
-[def __nano [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `nano`]]
-[def __micro [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `micro`]]
-[def __milli [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `milli`]]
-[def __centi [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `centi`]]
-[def __deci [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `deci`]]
-[def __deca [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `deca`]]
-[def __hecto [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `hecto`]]
-[def __kilo [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `kilo`]]
-[def __mega [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `mega`]]
-[def __giga [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `giga`]]
-[def __tera [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `tera`]]
-[def __peta [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `peta`]]
-[def __exa [link boost_ratio.reference.std.ratio_hpp.ratio_si_typedefs `exa`]]
+[template ratio_comparison[link_text] [link ratio.reference.std.ratio_hpp.ratio_comparison [link_text]]]
+[def __ratio_equal [link ratio.reference.std.ratio_hpp.ratio_comparison `ratio_equal`]]
+[def __ratio_not_equal [link ratio.reference.std.ratio_hpp.ratio_comparison `ratio_not_equal`]]
+[def __ratio_less [link ratio.reference.std.ratio_hpp.ratio_comparison `ratio_less`]]
+[def __ratio_less_equal [link ratio.reference.std.ratio_hpp.ratio_comparison `ratio_less_equal`]]
+[def __ratio_greater [link ratio.reference.std.ratio_hpp.ratio_comparison `ratio_greater`]]
+[def __ratio_greater_equal [link ratio.reference.std.ratio_hpp.ratio_comparison `ratio_greater_equal`]]
+
+
+[template ratio_si_typedefs[link_text] [link ratio.reference.std.ratio_hpp.ratio_si_typedefs [link_text]]]
+[def __atto [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `atto`]]
+[def __femto [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `femto`]]
+[def __pico [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `pico`]]
+[def __nano [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `nano`]]
+[def __micro [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `micro`]]
+[def __milli [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `milli`]]
+[def __centi [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `centi`]]
+[def __deci [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `deci`]]
+[def __deca [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `deca`]]
+[def __hecto [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `hecto`]]
+[def __kilo [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `kilo`]]
+[def __mega [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `mega`]]
+[def __giga [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `giga`]]
+[def __tera [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `tera`]]
+[def __peta [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `peta`]]
+[def __exa [link ratio.reference.std.ratio_hpp.ratio_si_typedefs `exa`]]
 
 [template mu[]'''&#x3BC;'''] [/ µ Greek small letter mu]
 
-[def __Rational_Constant [link boost_ratio.reference.mpl.rational_constant Rational Constant]]
+[def __Rational_Constant [link ratio.reference.mpl.rational_constant Rational Constant]]
 
 
 [/warning Ratio is not part of the Boost libraries.]
