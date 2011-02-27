@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>set_of Reference</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="up" href="../reference.html" title="Reference">
 <link rel="prev" href="bimap_reference.html" title="Bimap Reference">
@@ -36,7 +36,7 @@
 <dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views">[multi]set_of
         Views</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature">Complexity
+<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature"> Complexity
           signature</a></span></dt>
 <dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.instantiation_types">Instantiation
           types</a></span></dt>
@@ -125,7 +125,7 @@
         Views</a>
 </h4></div></div></div>
 <div class="toc"><dl>
-<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature">Complexity
+<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature"> Complexity
           signature</a></span></dt>
 <dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.instantiation_types">Instantiation
           types</a></span></dt>
@@ -372,9 +372,9 @@
 
 <span class="keyword">typedef</span> <span class="identifier">signature</span><span class="special">-</span><span class="identifier">compatible</span> <span class="identifier">with</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span> <span class="special">...</span> <span class="special">,</span><span class="keyword">const</span> <span class="identifier">Left</span> <span class="special">&gt;</span> <span class="identifier">value_type</span><span class="special">;</span>
 </pre>
-<a name="set_of_complexity_signature"></a><div class="section">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature"></a><a class="link" href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature" title="Complexity signature">Complexity
+<a name="boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature"></a><a name="set_of_complexity_signature"></a> <a class="link" href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.complexity_signature" title="Complexity signature">Complexity
           signature</a>
 </h5></div></div></div>
 <p>
@@ -466,20 +466,22 @@
 </pre>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Effects:</strong></span> Inserts <code class="computeroutput"><span class="identifier">x</span></code>
                 into the <code class="computeroutput"><span class="identifier">bimap</span></code> to
                 which the set view belongs if
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      the set view is non-unique OR no other element with equivalent
-                      key exists,
-                    </li>
+                    the set view is non-unique OR no other element with equivalent
+                    key exists,
+                  </li>
 <li class="listitem">
-                      AND insertion is allowed by the other set specifications the
-                      <code class="computeroutput"><span class="identifier">bimap</span></code>.
-                    </li>
+                    AND insertion is allowed by the other set specifications the
+                    <code class="computeroutput"><span class="identifier">bimap</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Returns:</strong></span> The return value is a pair
                 <code class="computeroutput"><span class="identifier">p</span></code>. <code class="computeroutput"><span class="identifier">p</span><span class="special">.</span><span class="identifier">second</span></code> is <code class="computeroutput"><span class="keyword">true</span></code>
@@ -504,20 +506,22 @@
                 is a valid iterator of the view.
               </li>
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Effects: </strong></span> <code class="computeroutput"><span class="identifier">position</span></code>
                 is used as a hint to improve the efficiency of the operation. Inserts
                 <code class="computeroutput"><span class="identifier">x</span></code> into the <code class="computeroutput"><span class="identifier">bimap</span></code> to which the view belongs
                 if
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      the set view is non-unique OR no other element with equivalent
-                      key exists,
-                    </li>
+                    the set view is non-unique OR no other element with equivalent
+                    key exists,
+                  </li>
 <li class="listitem">
-                      AND insertion is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
-                    </li>
+                    AND insertion is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Returns:</strong></span> On successful insertion,
                 an iterator to the newly inserted element. Otherwise, an iterator
@@ -644,20 +648,22 @@
                 is a valid dereferenceable iterator of the set view.
               </li>
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Effects:</strong></span> Assigns the value <code class="computeroutput"><span class="identifier">x</span></code> to the element pointed to by
                 <code class="computeroutput"><span class="identifier">position</span></code> into the
                 <code class="computeroutput"><span class="identifier">bimap</span></code> to which the
                 set view belongs if, for the value <code class="computeroutput"><span class="identifier">x</span></code>
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      the set view is non-unique OR no other element with equivalent
-                      key exists (except possibly <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code>),
-                    </li>
+                    the set view is non-unique OR no other element with equivalent
+                    key exists (except possibly <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code>),
+                  </li>
 <li class="listitem">
-                      AND replacing is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
-                    </li>
+                    AND replacing is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Postconditions:</strong></span> Validity of position
                 is preserved in all cases.
@@ -687,21 +693,23 @@
                 <code class="computeroutput"><span class="identifier">key_type</span></code>.
               </li>
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Effects:</strong></span> Assigns the value <code class="computeroutput"><span class="identifier">x</span></code> to <code class="computeroutput"><span class="identifier">e</span><span class="special">.</span><span class="identifier">first</span></code>,
                 where <code class="computeroutput"><span class="identifier">e</span></code> is the element
                 pointed to by <code class="computeroutput"><span class="identifier">position</span></code>
                 into the <code class="computeroutput"><span class="identifier">bimap</span></code> to
                 which the set view belongs if,
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      the map view is non-unique OR no other element with equivalent
-                      key exists (except possibly <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code>),
-                    </li>
+                    the map view is non-unique OR no other element with equivalent
+                    key exists (except possibly <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code>),
+                  </li>
 <li class="listitem">
-                      AND replacing is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
-                    </li>
+                    AND replacing is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Postconditions:</strong></span> Validity of position
                 is preserved in all cases.
@@ -731,21 +739,23 @@
                 <code class="computeroutput"><span class="identifier">data_type</span></code>.
               </li>
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Effects:</strong></span> Assigns the value <code class="computeroutput"><span class="identifier">x</span></code> to <code class="computeroutput"><span class="identifier">e</span><span class="special">.</span><span class="identifier">second</span></code>,
                 where <code class="computeroutput"><span class="identifier">e</span></code> is the element
                 pointed to by <code class="computeroutput"><span class="identifier">position</span></code>
                 into the <code class="computeroutput"><span class="identifier">bimap</span></code> to
                 which the set view belongs if,
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      the map view is non-unique OR no other element with equivalent
-                      key exists (except possibly <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code>),
-                    </li>
+                    the map view is non-unique OR no other element with equivalent
+                    key exists (except possibly <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code>),
+                  </li>
 <li class="listitem">
-                      AND replacing is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
-                    </li>
+                    AND replacing is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Postconditions:</strong></span> Validity of position
                 is preserved in all cases.
@@ -776,21 +786,23 @@
                 is a valid dereferenceable iterator of the view.
               </li>
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Effects:</strong></span> Calls <code class="computeroutput"><span class="identifier">mod</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span></code> where e is the element pointed to
                 by position and rearranges <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code> into all the views of
                 the <code class="computeroutput"><span class="identifier">bimap</span></code>. If the
                 rearrangement fails, the element is erased. Rearrangement is successful
                 if
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      the map view is non-unique OR no other element with equivalent
-                      key exists,
-                    </li>
+                    the map view is non-unique OR no other element with equivalent
+                    key exists,
+                  </li>
 <li class="listitem">
-                      AND rearrangement is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
-                    </li>
+                    AND rearrangement is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Postconditions:</strong></span> Validity of <code class="computeroutput"><span class="identifier">position</span></code> is preserved if the operation
                 succeeds.
@@ -824,21 +836,23 @@
                 is a valid dereferenceable iterator of the view.
               </li>
 <li class="listitem">
+<p class="simpara">
                 <span class="bold"><strong>Effects:</strong></span> Calls <code class="computeroutput"><span class="identifier">mod</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span></code> where e is the element pointed to
                 by position and rearranges <code class="computeroutput"><span class="special">*</span><span class="identifier">position</span></code> into all the views of
                 the <code class="computeroutput"><span class="identifier">bimap</span></code>. If the
                 rearrangement fails, the element is erased. Rearrangement is successful
                 if
-                <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
-                      the oppositte map view is non-unique OR no other element with
-                      equivalent key in that view exists,
-                    </li>
+                    the oppositte map view is non-unique OR no other element with
+                    equivalent key in that view exists,
+                  </li>
 <li class="listitem">
-                      AND rearrangement is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
-                    </li>
+                    AND rearrangement is allowed by all other views of the <code class="computeroutput"><span class="identifier">bimap</span></code>.
+                  </li>
 </ul></div>
-              </li>
+</li>
 <li class="listitem">
                 <span class="bold"><strong>Postconditions:</strong></span> Validity of <code class="computeroutput"><span class="identifier">position</span></code> is preserved if the operation
                 succeeds.
@@ -1183,7 +1197,7 @@
             serialization section.
           </p>
 <div class="sidebar">
-<p class="title"><b></b></p>
+<div class="titlepage"></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> saving of a <code class="computeroutput"><span class="identifier">bimap</span></code> m to an output archive (XML archive)
             ar.
@@ -1194,7 +1208,7 @@
                 to those imposed by the container.
               </li></ul></div>
 <div class="sidebar">
-<p class="title"><b></b></p>
+<div class="titlepage"></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> loading of a <code class="computeroutput"><span class="identifier">bimap</span></code> m' from an input archive (XML
             archive) ar.
@@ -1215,7 +1229,7 @@
               </li>
 </ul></div>
 <div class="sidebar">
-<p class="title"><b></b></p>
+<div class="titlepage"></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> saving of an iterator or
             <code class="computeroutput"><span class="identifier">const_iterator</span></code> it to
@@ -1228,7 +1242,7 @@
                 has been previously saved.
               </li></ul></div>
 <div class="sidebar">
-<p class="title"><b></b></p>
+<div class="titlepage"></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> loading of an <code class="computeroutput"><span class="identifier">iterator</span></code> or <code class="computeroutput"><span class="identifier">const_iterator</span></code>
             <code class="computeroutput"><span class="identifier">it</span></code>' from an input archive
