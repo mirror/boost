@@ -9,6 +9,7 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #define BOOST_ICL_TEST_TYPE_LISTS_HPP_JOFA_080916
 
 //#define BOOST_ICL_TEST_XINT
+//#define BOOST_ICL_TEST_CHRONO
 
 #include <boost/mpl/list.hpp>
 
@@ -18,6 +19,11 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 
 #ifdef BOOST_ICL_TEST_XINT
 #include <boost/icl/xint.hpp>
+#endif
+
+#ifdef BOOST_ICL_TEST_CHRONO
+//JODO not working: #define BOOST_CHRONO_INLINED
+#include <boost/icl/chrono.hpp>
 #endif
 
 #include <boost/icl/rational.hpp> 
@@ -31,10 +37,8 @@ typedef int boost_gregorian_date_duration;
 #else
 typedef boost::posix_time::ptime         boost_posix_time_ptime;
 typedef boost::posix_time::time_duration boost_posix_time_duration;
-typedef int                              boost_gregorian_date; 
-typedef int                              boost_gregorian_date_duration;
-//typedef boost::gregorian::date           boost_gregorian_date; //JODO URG REV
-//typedef boost::gregorian::date_duration  boost_gregorian_date_duration;
+typedef boost::gregorian::date           boost_gregorian_date;
+typedef boost::gregorian::date_duration  boost_gregorian_date_duration;
 #endif
 
 typedef ::boost::mpl::list<
@@ -45,6 +49,10 @@ typedef ::boost::mpl::list<
 #ifdef BOOST_ICL_TEST_XINT
     ,boost::xint::integer
     ,boost::rational<boost::xint::integer>
+#endif
+#ifdef BOOST_ICL_TEST_CHRONO
+	,boost::chrono::duration<int>
+	,boost::chrono::duration<double>
 #endif
     ,boost_posix_time_ptime
     ,boost_posix_time_duration
@@ -71,6 +79,10 @@ typedef ::boost::mpl::list<
     ,boost::xint::integer
     ,boost::rational<boost::xint::integer>
 #endif
+#ifdef BOOST_ICL_TEST_CHRONO
+	,boost::chrono::duration<int>
+	,boost::chrono::duration<float>
+#endif
 > signed_bicremental_types;
 
 typedef          int             signed_bicremental_type_1;
@@ -89,6 +101,9 @@ typedef ::boost::mpl::list<
     ,boost::rational<int>
 #ifdef BOOST_ICL_TEST_XINT
     ,boost::rational<boost::xint::integer>
+#endif
+#ifdef BOOST_ICL_TEST_CHRONO
+	,boost::chrono::duration<double>
 #endif
 > bicremental_continuous_types;
 
@@ -118,6 +133,9 @@ typedef ::boost::mpl::list<
 #ifdef BOOST_ICL_TEST_XINT
     ,boost::xint::integer
 #endif
+#ifdef BOOST_ICL_TEST_CHRONO
+	,boost::chrono::duration<unsigned short>
+#endif
     ,boost_posix_time_ptime
     ,boost_posix_time_ptime
     ,boost_posix_time_duration
@@ -146,6 +164,9 @@ typedef ::boost::mpl::list<
 #ifdef BOOST_ICL_TEST_XINT
     ,boost::rational<boost::xint::integer>
 #endif
+#ifdef BOOST_ICL_TEST_CHRONO
+	,boost::chrono::duration<long double>
+#endif
 > numeric_continuous_types;
 
 typedef double               numeric_continuous_type_1;
@@ -158,6 +179,9 @@ typedef ::boost::mpl::list<
     ,boost::rational<int>
 #ifdef BOOST_ICL_TEST_XINT
     ,boost::rational<boost::xint::integer>
+#endif
+#ifdef BOOST_ICL_TEST_CHRONO
+	,boost::chrono::duration<double>
 #endif
     ,std::string
 > continuous_types;
@@ -176,12 +200,16 @@ typedef ::boost::mpl::list<
 #ifdef BOOST_ICL_TEST_XINT
     ,boost::xint::integer
 #endif
-    ,std::string
+#ifdef BOOST_ICL_TEST_CHRONO
+	,boost::chrono::duration<short>
+	,boost::chrono::duration<long double>
+#endif
     ,boost_posix_time_ptime
     ,boost_posix_time_duration
     ,boost_gregorian_date
     ,boost_gregorian_date_duration
     ,int*
+    ,std::string
 > ordered_types;
 
 typedef int                      ordered_type_1;

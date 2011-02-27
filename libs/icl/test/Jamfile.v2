@@ -10,9 +10,7 @@ project
     : requirements
       <library>/boost/test//boost_unit_test_framework
       <library>/boost/date_time//boost_date_time
-      <library>/boost/thread//boost_thread
       <link>static
-      <threading>multi
       <include>../../..
     ;
 
@@ -63,12 +61,15 @@ test-suite "itl"
       [ run test_changing_interval_defaults_/test_changing_interval_defaults.cpp ]   
       
       # Bug fixes --------------------------------------------------------------
-      [ run fix_include_after_thread_/fix_include_after_thread.cpp ]   
       [ run fix_icl_after_thread_/fix_icl_after_thread.cpp ] 
       
       # Check for compiler bugs ------------------------------------------------
       # compile-fail-tests  
       [ run cmp_msvc_value_born_error_/cmp_msvc_value_born_error.cpp ]   
       [ run cmp_clang_ttp_passing_/cmp_clang_ttp_passing.cpp ]   
-      [ run cmp_clang_ttp_passing2_/cmp_clang_ttp_passing2.cpp ]   
+      [ run cmp_clang_ttp_passing2_/cmp_clang_ttp_passing2.cpp ]
+      
+      # Ad hoc -----------------------------------------------------------------
+      #[ run test_casual_/test_casual.cpp ]
+         
     ;
