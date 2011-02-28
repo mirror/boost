@@ -26,7 +26,7 @@ template<class Type>
 typename enable_if<is_interval_set<Type>, bool>::type
 contains(const Type& super, const typename Type::element_type& element)
 {
-    return !(super.find(element) == super.end());
+	return !(icl::find(super, element) == super.end());
 }
 
 template<class Type>
@@ -173,7 +173,7 @@ add_intersection(Type& section, const Type& object,
                  const typename Type::element_type& operand)
 {
     typedef typename Type::const_iterator const_iterator;
-    const_iterator found = object.find(operand);
+	const_iterator found = icl::find(object, operand);
     if(found != object.end())
         icl::add(section, operand);
 }

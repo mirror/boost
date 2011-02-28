@@ -47,7 +47,7 @@ typename enable_if<is_interval_map<Type>, bool>::type
 contains(const Type& super, const typename Type::element_type& key_value_pair)
 {
     typedef typename Type::const_iterator const_iterator;
-    const_iterator it_ = super.find(key_value_pair.key);
+	const_iterator it_ = icl::find(super, key_value_pair.key);
     return it_ != super.end() && it_->second == key_value_pair.data;
 }
 

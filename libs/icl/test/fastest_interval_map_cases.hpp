@@ -59,6 +59,7 @@ BOOST_AUTO_TEST_CASE
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_flip_4_bicremental_types)
 {            interval_map_flip_4_bicremental_types<INTERVAL_MAP, bicremental_type_1, int>();}
+
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_find_4_bicremental_types)
 {            interval_map_find_4_bicremental_types<INTERVAL_MAP, bicremental_type_2, int>();}

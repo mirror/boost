@@ -33,6 +33,12 @@ test-suite "itl"
       
       # maps
       [ run fastest_interval_map_/fastest_interval_map.cpp ]
+      #[ run fast_stat_interval_map_/fast_stat_interval_map.cpp 
+      #      : : : <define>BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS : interval_map_right_open ]
+      #[ run fast_stat_interval_map_/fast_stat_interval_map.cpp 
+      #      : : : <define>BOOST_ICL_DISCRETE_STATIC_INTERVAL_DEFAULT=left_open_interval
+      #            <define>BOOST_ICL_CONTINUOUS_STATIC_INTERVAL_DEFAULT=left_open_interval
+      #      : interval_map_left_open ]
       [ run fastest_interval_map_infix_/fastest_interval_map_infix.cpp ]
       [ run fastest_split_interval_map_/fastest_split_interval_map.cpp ]
       [ run fastest_split_interval_map_infix_/fastest_split_interval_map_infix.cpp ]
