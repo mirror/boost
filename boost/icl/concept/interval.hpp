@@ -131,7 +131,7 @@ template<class Type>
 typename enable_if
 <
     mpl::and_< is_static_right_open<Type>
-	         , boost::detail::is_incrementable<typename interval_traits<Type>::domain_type> >
+             , boost::detail::is_incrementable<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
 unit_closure(const typename interval_traits<Type>::domain_type& value)
@@ -143,7 +143,7 @@ template<class Type>
 typename enable_if
 <
     mpl::and_< is_static_left_open<Type>
-	         , boost::detail::is_incrementable<typename interval_traits<Type>::domain_type> >
+             , boost::detail::is_incrementable<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
 unit_closure(const typename interval_traits<Type>::domain_type& value)
@@ -158,7 +158,7 @@ template<class Type>
 typename enable_if
 <
     mpl::and_< is_static_open<Type>
-	         , is_discrete<typename interval_traits<Type>::domain_type> >
+             , is_discrete<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
 unit_closure(const typename interval_traits<Type>::domain_type& value)
@@ -173,7 +173,7 @@ template<class Type>
 typename enable_if
 <
     mpl::and_< is_static_closed<Type>
-	         , is_discrete<typename interval_traits<Type>::domain_type> >
+             , is_discrete<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
 unit_closure(const typename interval_traits<Type>::domain_type& value)

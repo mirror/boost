@@ -255,7 +255,7 @@ public:
     /** Find the interval value pair, that contains \c key */
     const_iterator find(const domain_type& key_value)const
     { 
-		return icl::find(*this, key_value);
+        return icl::find(*this, key_value);
         //CL return _map.find(interval_type(key_value)); 
     }
 

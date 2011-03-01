@@ -81,11 +81,6 @@ BOOST_AUTO_TEST_CASE
 (fastest_cover_left_open_interval_4_bicremental_types)
 {    coverable_asymmetric_interval_4_bicremental_types<left_open_interval<numeric_continuous_type_3> >(); }
 
-//BOOST_AUTO_TEST_CASE
-//(fastest_cover_closed_interval_4_bicremental_types)
-//{    coverable_closed_interval_4_bicremental_types<closed_interval<numeric_continuous_type_2> >(); }
-
-
 //- dyn.dis --------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE
 (fastest_itl_discrete_interval_ctor_4_discrete_types_base)

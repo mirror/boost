@@ -22,11 +22,6 @@ Copyright (c) 2010-2010: Joachim Faulhaber
 namespace boost{ namespace icl
 {
 
-template<class Type> 
-typename enable_if<is_interval_container<Type>, Type>::type&
-join(Type&);
-
-
 template<class Type>
 inline typename enable_if<is_interval_map<Type>, typename Type::segment_type>::type
 make_segment(const typename Type::element_type& element)
@@ -35,59 +30,6 @@ make_segment(const typename Type::element_type& element)
     typedef typename Type::segment_type  segment_type;
     return segment_type(icl::singleton<interval_type>(element.key), element.data);
 }
-
-
-//==============================================================================
-//= Selection<IntervalMap>
-//==============================================================================
-template<class Type>
-typename enable_if<mpl::and_< is_interval_map<Type>
-                            , is_discrete<typename domain_type_of<Type>::type> 
-                            > 
-                   , typename Type::const_iterator>::type
-find(const Type& object, const typename domain_type_of<Type>::type& key_val)
-{
-    typedef typename Type::const_iterator const_iterator;
-    typedef typename Type::interval_type  interval_type;
-    return object.find(icl::unit_closure<interval_type>(key_val));
-}
-
-template<class Type>
-typename enable_if<mpl::and_< is_interval_map<Type>
-                            , is_continuous<typename domain_type_of<Type>::type> 
-                            , has_dynamic_bounds<typename interval_type_of<Type>::type> 
-                            > 
-                   , typename Type::const_iterator>::type
-find(const Type& object, const typename domain_type_of<Type>::type& key_val)
-{
-    typedef typename Type::const_iterator const_iterator;
-    typedef typename Type::interval_type  interval_type;
-    return object.find(icl::singleton<interval_type>(key_val));
-}
-
-template<class Type>
-typename enable_if<mpl::and_< is_interval_map<Type>
-                            , is_continuous<typename domain_type_of<Type>::type> 
-                            , has_static_bounds<typename interval_type_of<Type>::type> 
-							, boost::detail::is_incrementable<typename domain_type_of<Type>::type>
-                            > 
-                   , typename Type::const_iterator>::type
-find(const Type& object, const typename domain_type_of<Type>::type& key_val)
-{
-    typedef typename Type::const_iterator const_iterator;
-    typedef typename Type::interval_type  interval_type;
-    const_iterator collision = object.find(icl::unit_closure<interval_type>(key_val));
-	// A part of the cover(key_value)-interval may be found in the container, that
-	// does not contain key_value. Therefore we have to check for its existence:
-    return (  collision == object.end() 
-	       || icl::contains(key_value<Type>(collision), key_val) ) 
-            ? collision 
-            : object.end();
-}
-
-// NOTE: find(object, key) won't compile if key is of continuous type that does
-// not implement in(de)crementation (e.g. std::string).
-
 
 
 //==============================================================================
@@ -101,7 +43,7 @@ typename enable_if<is_interval_map<Type>, bool>::type
 contains(const Type& super, const typename Type::element_type& key_value_pair)
 {
     typedef typename Type::const_iterator const_iterator;
-	const_iterator it_ = icl::find(super, key_value_pair.key);
+    const_iterator it_ = icl::find(super, key_value_pair.key);
     return it_ != super.end() && it_->second == key_value_pair.data;
 }
 

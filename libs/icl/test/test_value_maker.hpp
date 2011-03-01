@@ -133,6 +133,12 @@ struct map_val
     typedef typename ItvMapT::domain_mapping_type domain_mapping_type;
     typedef std::pair<domain_type, codomain_type> std_pair_type; 
 
+    static segment_type mk_segment(const interval_type& inter_val, int val)
+    {
+        return segment_type(inter_val, test_value<codomain_type>::make(val)); 
+    }
+
+    /*CL?
     static interval_type interval_(int lower, int upper, int bounds = 2)
     {
         return interval_type(test_value<domain_type>::make(lower), 
@@ -145,6 +151,7 @@ struct map_val
         return segment_type( interval_(lower, upper, static_cast<bound_type>(bounds)), 
                              test_value<codomain_type>::make(val) );
     }
+    */
 
     static domain_mapping_type map_pair(int key, int val)
     {
@@ -178,12 +185,14 @@ struct map_val
 
 // Very short value denotation for interval value pairs
 // Assumption typename IntervalMapT existes in scope
-#define IIv(low,up,val) map_val<IntervalMapT>::val_pair(low,up,val, interval_bounds::_closed)
-#define IDv(low,up,val) map_val<IntervalMapT>::val_pair(low,up,val, interval_bounds::_right_open)
-#define CIv(low,up,val) map_val<IntervalMapT>::val_pair(low,up,val, interval_bounds::_left_open)
-#define CDv(low,up,val) map_val<IntervalMapT>::val_pair(low,up,val, interval_bounds::_open)
+#define IIv(low,up,val) map_val<IntervalMapT>::mk_segment(I_I(low,up), val)
+#define IDv(low,up,val) map_val<IntervalMapT>::mk_segment(I_D(low,up), val)
+#define CIv(low,up,val) map_val<IntervalMapT>::mk_segment(C_I(low,up), val)
+#define CDv(low,up,val) map_val<IntervalMapT>::mk_segment(C_D(low,up), val)
 #define K_v(key,val)    map_val<IntervalMapT>::map_pair(key,val)
 #define sK_v(key,val)   map_val<IntervalMapT>::std_pair(key,val)
+
+#define MK_seg(itv,val) map_val<IntervalMapT>::mk_segment(itv, val)
 
 
 }} // namespace boost icl

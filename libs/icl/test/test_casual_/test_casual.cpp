@@ -43,24 +43,24 @@ BOOST_AUTO_TEST_CASE(casual)
     //typedef interval_set<T>                   IntervalSetT;
     //typedef IntervalMapT::interval_type       IntervalT;
 
-	/*
-	int i;
-	int j = int();
-	chrono::duration<int> cd1 = chrono::duration<int>();
-	chrono::duration<int> cd2(0);
-	chrono::duration<int> dur1(0);
-	chrono::duration<int> dur2, dur3, dur4;
-	dur2 = dur3 = dur4 = dur1;
-	int itg1(0);
-	int itg2, itg3, itg4;
-	itg2 = itg3 = itg4 = itg1;
+    /*
+    int i;
+    int j = int();
+    chrono::duration<int> cd1 = chrono::duration<int>();
+    chrono::duration<int> cd2(0);
+    chrono::duration<int> dur1(0);
+    chrono::duration<int> dur2, dur3, dur4;
+    dur2 = dur3 = dur4 = dur1;
+    int itg1(0);
+    int itg2, itg3, itg4;
+    itg2 = itg3 = itg4 = itg1;
 
-	cout << "uninitialized       i = " << i << endl;
-	cout << "default constructed j = " << j << endl;
-	cout << (cd1==cd2 ? "eq" : "!eq") << endl;
-	cout << "chrono::duration cd1()  = " << cd1 << endl;
-	cout << "chrono::duration cd2(0) = " << cd2 << endl;
-	*/
+    cout << "uninitialized       i = " << i << endl;
+    cout << "default constructed j = " << j << endl;
+    cout << (cd1==cd2 ? "eq" : "!eq") << endl;
+    cout << "chrono::duration cd1()  = " << cd1 << endl;
+    cout << "chrono::duration cd2(0) = " << cd2 << endl;
+    */
 
     BOOST_CHECK_EQUAL(true, true);
 }

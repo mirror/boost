@@ -51,8 +51,8 @@ typedef ::boost::mpl::list<
     ,boost::rational<boost::xint::integer>
 #endif
 #ifdef BOOST_ICL_TEST_CHRONO
-	,boost::chrono::duration<int>
-	,boost::chrono::duration<double>
+    ,boost::chrono::duration<int>
+    ,boost::chrono::duration<double>
 #endif
     ,boost_posix_time_ptime
     ,boost_posix_time_duration
@@ -80,8 +80,8 @@ typedef ::boost::mpl::list<
     ,boost::rational<boost::xint::integer>
 #endif
 #ifdef BOOST_ICL_TEST_CHRONO
-	,boost::chrono::duration<int>
-	,boost::chrono::duration<float>
+    ,boost::chrono::duration<int>
+    ,boost::chrono::duration<float>
 #endif
 > signed_bicremental_types;
 
@@ -103,7 +103,7 @@ typedef ::boost::mpl::list<
     ,boost::rational<boost::xint::integer>
 #endif
 #ifdef BOOST_ICL_TEST_CHRONO
-	,boost::chrono::duration<double>
+    ,boost::chrono::duration<double>
 #endif
 > bicremental_continuous_types;
 
@@ -134,7 +134,7 @@ typedef ::boost::mpl::list<
     ,boost::xint::integer
 #endif
 #ifdef BOOST_ICL_TEST_CHRONO
-	,boost::chrono::duration<unsigned short>
+    ,boost::chrono::duration<unsigned short>
 #endif
     ,boost_posix_time_ptime
     ,boost_posix_time_ptime
@@ -165,7 +165,7 @@ typedef ::boost::mpl::list<
     ,boost::rational<boost::xint::integer>
 #endif
 #ifdef BOOST_ICL_TEST_CHRONO
-	,boost::chrono::duration<long double>
+    ,boost::chrono::duration<long double>
 #endif
 > numeric_continuous_types;
 
@@ -181,7 +181,7 @@ typedef ::boost::mpl::list<
     ,boost::rational<boost::xint::integer>
 #endif
 #ifdef BOOST_ICL_TEST_CHRONO
-	,boost::chrono::duration<double>
+    ,boost::chrono::duration<double>
 #endif
     ,std::string
 > continuous_types;
@@ -201,8 +201,8 @@ typedef ::boost::mpl::list<
     ,boost::xint::integer
 #endif
 #ifdef BOOST_ICL_TEST_CHRONO
-	,boost::chrono::duration<short>
-	,boost::chrono::duration<long double>
+    ,boost::chrono::duration<short>
+    ,boost::chrono::duration<long double>
 #endif
     ,boost_posix_time_ptime
     ,boost_posix_time_duration

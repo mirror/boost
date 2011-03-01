@@ -35,7 +35,11 @@ void interval_map_fundamentals_4_ordered_types()
     T v1 = unit_element<T>::value();
     IntervalT I0_0I(v0);
     IntervalT I1_1I(v1);
+#ifndef BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
     IntervalT I0_1I(v0, v1, interval_bounds::closed());
+#else
+    IntervalT I0_1I = icl::interval<T>::closed(v0, v1);
+#endif
     U u1 = unit_element<U>::value();
 
     //-------------------------------------------------------------------------
@@ -246,14 +250,20 @@ void interval_map_add_sub_4_bicremental_types()
     T v6 = make<T>(6);
     T v9 = make<T>(9);
     U u1 = make<U>(1);
+#ifndef BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
     IntervalT I5_6I(v5,v6, interval_bounds::closed());
     IntervalT I5_9I(v5,v9, interval_bounds::closed());
     IntervalT I0_9I = IntervalT::closed(v0, v9);
+#else
+    IntervalT I5_6I = icl::interval<T>::closed(v5,v6); 
+    IntervalT I5_9I = icl::interval<T>::closed(v5,v9); 
+    IntervalT I0_9I = icl::interval<T>::closed(v0,v9);
+#endif
     typename IntervalMapT::domain_mapping_type v0_u1 = make_pair(v0, u1);
     typename IntervalMapT::domain_mapping_type v9_u1 = make_pair(v9, u1);
     typename IntervalMapT::value_type I5_6I_u1 = make_pair(I5_6I, u1);
     typename IntervalMapT::value_type I5_9I_u1 = make_pair(I5_9I, u1);
-    typename IntervalMapT::value_type I0_9I_u1 = make_pair(IntervalT::closed(v0, v9), u1);
+    typename IntervalMapT::value_type I0_9I_u1 = make_pair(icl::interval<T>::closed(v0, v9), u1);
 
     BOOST_CHECK_EQUAL( IntervalMapT(I5_6I_u1).add(v0_u1).add(v9_u1), 
                        IntervalMapT().add(v9_u1).add(I5_6I_u1).add(v0_u1) );
@@ -327,6 +337,8 @@ template
 >
 void interval_map_distinct_4_bicremental_continuous_types()
 {
+#ifndef BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
+
     typedef IntervalMap<T,U> IntervalMapT;
     typedef typename IntervalMapT::interval_type   IntervalT;
     typedef typename IntervalMapT::size_type       size_T;
@@ -347,11 +359,11 @@ void interval_map_distinct_4_bicremental_continuous_types()
     is_1_3_5.add(v1_u1).add(v3_u1).add(v5_u1);
 
     BOOST_CHECK_EQUAL( cardinality(is_1_3_5),      s3 );
-    BOOST_CHECK_EQUAL( is_1_3_5.size(),             s3 );
+    BOOST_CHECK_EQUAL( is_1_3_5.size(),            s3 );
     icl::length(is_1_3_5);
-    BOOST_CHECK_EQUAL( icl::length(is_1_3_5),           d0 );
+    BOOST_CHECK_EQUAL( icl::length(is_1_3_5),      d0 );
     BOOST_CHECK_EQUAL( interval_count(is_1_3_5),   3 );
-    BOOST_CHECK_EQUAL( is_1_3_5.iterative_size(),   3 );
+    BOOST_CHECK_EQUAL( is_1_3_5.iterative_size(),  3 );
     BOOST_CHECK_EQUAL( iterative_size(is_1_3_5),   3 );
 
 
@@ -361,13 +373,14 @@ void interval_map_distinct_4_bicremental_continuous_types()
     //is_123_5 += make_pair(IntervalT::open(v1,v3),u1);                 //error C2593: 'operator +=' is ambiguous
     //is_123_5 += make_pair<IntervalT, U>(IntervalT::open(v1,v3),u1); //error C2593: 'operator +=' is ambiguous
     //USASO: unsatisfctory solution 1: explicit IntervalMapT::value_type instead of make_pair
-    is_123_5 += typename IntervalMapT::value_type(IntervalT::open(v1,v3),u1);
+    is_123_5 += typename IntervalMapT::value_type(icl::interval<T>::open(v1,v3),u1);
     //USASO: unsatisfctory solution 2: not implementing mapping_type version of o=
 
     BOOST_CHECK_EQUAL( cardinality(is_123_5),      icl::infinity<size_T>::value() );
     BOOST_CHECK_EQUAL( is_123_5.size(),            icl::infinity<size_T>::value() );
     BOOST_CHECK_EQUAL( icl::length(is_123_5),      d2 );
 
+#endif //BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
 }
 
 template 
@@ -381,6 +394,8 @@ template
 >
 void interval_map_isolate_4_bicremental_continuous_types()
 {
+#ifndef BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
+
     typedef IntervalMap<T,U> IntervalMapT;
     typedef typename IntervalMapT::interval_type   IntervalT;
     typedef typename IntervalMapT::size_type       size_T;
@@ -390,9 +405,9 @@ void interval_map_isolate_4_bicremental_continuous_types()
     T v2 = make<T>(2);
     T v4 = make<T>(4);
     U u1 = make<U>(1);
-    IntervalT I0_4I = IntervalT::closed(v0,v4);
-    IntervalT C0_2D = IntervalT::open(v0,v2);
-    IntervalT C2_4D = IntervalT::open(v2,v4);
+    IntervalT I0_4I = icl::interval<T>::closed(v0,v4);
+    IntervalT C0_2D = icl::interval<T>::open(v0,v2);
+    IntervalT C2_4D = icl::interval<T>::open(v2,v4);
     typename IntervalMapT::value_type I0_4I_u1(I0_4I,u1);
     typename IntervalMapT::value_type C0_2D_u1(C0_2D,u1);
     typename IntervalMapT::value_type C2_4D_u1(C2_4D,u1);
@@ -423,6 +438,7 @@ void interval_map_isolate_4_bicremental_continuous_types()
     BOOST_CHECK_EQUAL( iso_map, iso_map2 );
     BOOST_CHECK_EQUAL( iso_map, iso_map3 );
     BOOST_CHECK_EQUAL( iso_map, iso_map4 );
+#endif //BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
 }
 
 
@@ -440,7 +456,10 @@ void interval_map_contains_4_bicremental_types()
     typedef IntervalMap<T,U> IntervalMapT;
     typedef typename IntervalMapT::interval_type   IntervalT;
     typedef typename IntervalMapT::set_type IntervalSetT;
-    IntervalMapT itv_map; itv_map.add(K_v(3,1));    
+
+    IntervalMapT itv_map; 
+    itv_map.add(K_v(3,1));    
+
     BOOST_CHECK_EQUAL( icl::contains(itv_map, MK_v(3)), true );
     BOOST_CHECK_EQUAL( icl::contains(itv_map, K_v(3,1)), true );
 
@@ -531,10 +550,10 @@ void interval_map_operators_4_bicremental_types()
     T v7 = make<T>(7);
     T v8 = make<T>(8);
     U u1 = make<U>(1);
-    typename IntervalMapT::interval_type I3_5I(IntervalT::closed(v3,v5));
-    typename IntervalMapT::value_type I0_1I_u1(IntervalT::closed(v0,v1),u1);
-    typename IntervalMapT::value_type I3_5I_u1(IntervalT::closed(v3,v5),u1);
-    typename IntervalMapT::value_type I7_8I_u1(IntervalT::closed(v7,v8),u1);
+    typename IntervalMapT::interval_type I3_5I(icl::interval<T>::closed(v3,v5));
+    typename IntervalMapT::value_type I0_1I_u1(icl::interval<T>::closed(v0,v1),u1);
+    typename IntervalMapT::value_type I3_5I_u1(icl::interval<T>::closed(v3,v5),u1);
+    typename IntervalMapT::value_type I7_8I_u1(icl::interval<T>::closed(v7,v8),u1);
     
     IntervalMapT left, left2, right, all, section, complement;
     left.add(I0_1I_u1).add(I3_5I_u1);
@@ -581,16 +600,16 @@ void interval_map_base_intersect_4_bicremental_types()
 
     U u1 = make<U>(1);
 
-    IntervalT I0_3D = IntervalT::right_open(v0,v3);
-    IntervalT I1_3D = IntervalT::right_open(v1,v3);
-    IntervalT I1_4D = IntervalT::right_open(v1,v4);
-    IntervalT I1_8D = IntervalT::right_open(v1,v8);
-    IntervalT I2_7D = IntervalT::right_open(v2,v7);
-    IntervalT I2_3D = IntervalT::right_open(v2,v3);
-    IntervalT I5_8D = IntervalT::right_open(v5,v8);
-    IntervalT I6_7D = IntervalT::right_open(v6,v7);
-    IntervalT I6_8D = IntervalT::right_open(v6,v8);
-    IntervalT I6_9D = IntervalT::right_open(v6,v9);
+    IntervalT I0_3D = icl::interval<T>::right_open(v0,v3);
+    IntervalT I1_3D = icl::interval<T>::right_open(v1,v3);
+    IntervalT I1_4D = icl::interval<T>::right_open(v1,v4);
+    IntervalT I1_8D = icl::interval<T>::right_open(v1,v8);
+    IntervalT I2_7D = icl::interval<T>::right_open(v2,v7);
+    IntervalT I2_3D = icl::interval<T>::right_open(v2,v3);
+    IntervalT I5_8D = icl::interval<T>::right_open(v5,v8);
+    IntervalT I6_7D = icl::interval<T>::right_open(v6,v7);
+    IntervalT I6_8D = icl::interval<T>::right_open(v6,v8);
+    IntervalT I6_9D = icl::interval<T>::right_open(v6,v9);
 
     typename IntervalMapT::value_type I0_3D_1(I0_3D, u1);
     typename IntervalMapT::value_type I6_9D_1(I6_9D, u1);
@@ -688,22 +707,22 @@ void interval_map_base_erase_4_bicremental_types()
 
     U u1 = make<U>(1);
 
-    IntervalT I0_1D = IntervalT::right_open(v0,v1);
-    IntervalT I0_2D = IntervalT::right_open(v0,v2);
-    IntervalT I0_3D = IntervalT::right_open(v0,v3);
-    IntervalT I1_3D = IntervalT::right_open(v1,v3);
-    IntervalT I1_4D = IntervalT::right_open(v1,v4);
-    IntervalT I1_8D = IntervalT::right_open(v1,v8);
-    IntervalT I2_4D = IntervalT::right_open(v2,v4);
-    IntervalT I2_7D = IntervalT::right_open(v2,v7);
-    IntervalT I2_3D = IntervalT::right_open(v2,v3);
-    IntervalT I5_7D = IntervalT::right_open(v5,v7);
-    IntervalT I5_8D = IntervalT::right_open(v5,v8);
-    IntervalT I6_7D = IntervalT::right_open(v6,v7);
-    IntervalT I6_8D = IntervalT::right_open(v6,v8);
-    IntervalT I6_9D = IntervalT::right_open(v6,v9);
-    IntervalT I7_9D = IntervalT::right_open(v7,v9);
-    IntervalT I8_9D = IntervalT::right_open(v8,v9);
+    IntervalT I0_1D = icl::interval<T>::right_open(v0,v1);
+    IntervalT I0_2D = icl::interval<T>::right_open(v0,v2);
+    IntervalT I0_3D = icl::interval<T>::right_open(v0,v3);
+    IntervalT I1_3D = icl::interval<T>::right_open(v1,v3);
+    IntervalT I1_4D = icl::interval<T>::right_open(v1,v4);
+    IntervalT I1_8D = icl::interval<T>::right_open(v1,v8);
+    IntervalT I2_4D = icl::interval<T>::right_open(v2,v4);
+    IntervalT I2_7D = icl::interval<T>::right_open(v2,v7);
+    IntervalT I2_3D = icl::interval<T>::right_open(v2,v3);
+    IntervalT I5_7D = icl::interval<T>::right_open(v5,v7);
+    IntervalT I5_8D = icl::interval<T>::right_open(v5,v8);
+    IntervalT I6_7D = icl::interval<T>::right_open(v6,v7);
+    IntervalT I6_8D = icl::interval<T>::right_open(v6,v8);
+    IntervalT I6_9D = icl::interval<T>::right_open(v6,v9);
+    IntervalT I7_9D = icl::interval<T>::right_open(v7,v9);
+    IntervalT I8_9D = icl::interval<T>::right_open(v8,v9);
 
     typename IntervalMapT::value_type I0_1D_1(I0_1D, u1);
     typename IntervalMapT::value_type I0_3D_1(I0_3D, u1);
@@ -805,12 +824,12 @@ void interval_map_base_is_disjoint_4_bicremental_types()
 
     U u1 = make<U>(1);
 
-    IntervalT I0_1D = IntervalT::right_open(v0,v1);
-    IntervalT I1_3D = IntervalT::right_open(v1,v3);
-    IntervalT I3_6D = IntervalT::right_open(v3,v6);
-    IntervalT I5_7D = IntervalT::right_open(v5,v7);
-    IntervalT I6_8D = IntervalT::right_open(v6,v8);
-    IntervalT I8_9D = IntervalT::right_open(v8,v9);
+    IntervalT I0_1D = icl::interval<T>::right_open(v0,v1);
+    IntervalT I1_3D = icl::interval<T>::right_open(v1,v3);
+    IntervalT I3_6D = icl::interval<T>::right_open(v3,v6);
+    IntervalT I5_7D = icl::interval<T>::right_open(v5,v7);
+    IntervalT I6_8D = icl::interval<T>::right_open(v6,v8);
+    IntervalT I8_9D = icl::interval<T>::right_open(v8,v9);
 
     typename IntervalMapT::value_type I0_1D_1(I0_1D, u1);
     typename IntervalMapT::value_type I1_3D_1(I1_3D, u1);
@@ -1105,7 +1124,8 @@ template
 void interval_map_find_4_bicremental_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
-    typedef typename IntervalMapT::interval_type   IntervalT;
+    typedef typename IntervalMapT::interval_type  IntervalT;
+    typedef typename IntervalMapT::const_iterator c_iterator;
 
     typename IntervalMapT::interval_mapping_type val_pair1 = IDv(6,9,1);
     std::pair<const IntervalT, U> val_pair2 = IDv(3,5,3);
@@ -1113,16 +1133,95 @@ void interval_map_find_4_bicremental_types()
 
     IntervalMapT map_a;
     map_a.add(CDv(1,3,1)).add(IDv(8,9,1)).add(IIv(6,11,3));
+    // {(1  3)    [6  8)[8 9)[9  11) 
+    //     1         3    4     3
+    //          5? 6?
+    c_iterator found1 = map_a.find(MK_v(6));
+    c_iterator found2 = icl::find(map_a, MK_v(6));
 
-    typename IntervalMapT::const_iterator found = map_a.find(MK_v(6));
-
-    BOOST_CHECK_EQUAL( found->second, MK_u(3) );
+    BOOST_CHECK      ( found1 == found2 );
+    BOOST_CHECK_EQUAL( found1->second, found2->second );
+    BOOST_CHECK_EQUAL( found1->second, MK_u(3) );
     BOOST_CHECK_EQUAL( map_a(MK_v(6)), MK_u(3) );
 
-    found = map_a.find(MK_v(5));
+    found1 = map_a.find(MK_v(5));
 
-    BOOST_CHECK_EQUAL( found == map_a.end(), true );
+    BOOST_CHECK_EQUAL( found1 == map_a.end(), true );
     BOOST_CHECK_EQUAL( map_a(MK_v(5)), MK_u(0) );
+    BOOST_CHECK_EQUAL( map_a(MK_v(8)), MK_u(4) );
+
+    //LAW map c; key k: k in dom(c) => contains(c, (k, find(c, k)->second))
+    BOOST_CHECK( icl::contains(map_a, K_v(2, icl::find(map_a, 2)->second)) );
+    BOOST_CHECK( icl::contains(map_a, K_v(11, map_a.find(11)->second)) );
+
+    BOOST_CHECK(  icl::contains(map_a, 2) );
+    BOOST_CHECK(  icl::contains(map_a, 10) );
+    BOOST_CHECK( !icl::contains(map_a, 1) );
+    BOOST_CHECK( !icl::contains(map_a, 3) );
+    BOOST_CHECK( !icl::contains(map_a, 12) );
+
+    BOOST_CHECK(  icl::intersects(map_a, 2) );
+    BOOST_CHECK(  icl::intersects(map_a, 10) );
+    BOOST_CHECK( !icl::intersects(map_a, 1) );
+    BOOST_CHECK( !icl::intersects(map_a, 3) );
+    BOOST_CHECK( !icl::intersects(map_a, 12) );
+}
+
+
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
+void interval_map_find_4_numeric_continuous_types()
+{
+    typedef IntervalMap<T,U> IntervalMapT;
+    typedef typename IntervalMapT::interval_type  IntervalT;
+    typedef typename IntervalMapT::const_iterator c_iterator;
+
+    T q_1_2 = MK_v(1) / MK_v(2);
+    T q_3_2 = MK_v(3) / MK_v(2);
+    T q_1_3 = MK_v(1) / MK_v(3);
+    T q_2_3 = MK_v(2) / MK_v(3);
+    T q_4_3 = MK_v(4) / MK_v(3);
+    T q_5_3 = MK_v(5) / MK_v(3);
+
+    IntervalMapT map_a;
+    map_a.add(MK_seg(IntervalT(q_1_3, q_2_3), 1)).add(MK_seg(IntervalT(q_4_3, q_5_3), 2));
+    // {[1/3   2/3)    [4/3   5/3)} 
+    //       1              2
+     
+    c_iterator found1 = map_a.find(q_1_2);
+    c_iterator found2 = icl::find(map_a, q_1_2);
+    BOOST_CHECK      ( found1 == found2 );
+    BOOST_CHECK_EQUAL( found1->second, found2->second );
+    BOOST_CHECK_EQUAL( found1->second, MK_u(1) );
+
+    found1 = map_a.find(q_3_2);
+    found2 = icl::find(map_a, q_3_2);
+    BOOST_CHECK      ( found1 == found2 );
+    BOOST_CHECK_EQUAL( found1->second, found2->second );
+    BOOST_CHECK_EQUAL( found1->second, MK_u(2) );
+
+    found1 = map_a.find(MK_v(0));
+    found2 = icl::find(map_a, MK_v(0));
+    BOOST_CHECK      ( found1 == found2 );
+    BOOST_CHECK      ( found1 == map_a.end() );
+
+    found1 = map_a.find(MK_v(1));
+    found2 = icl::find(map_a, MK_v(1));
+    BOOST_CHECK      ( found1 == found2 );
+    BOOST_CHECK      ( found1 == map_a.end() );
+
+    BOOST_CHECK( !icl::contains(map_a, MK_v(0)) );
+    BOOST_CHECK(  icl::contains(map_a, q_1_2) );
+    BOOST_CHECK( !icl::contains(map_a, MK_v(1)) );
+    BOOST_CHECK(  icl::contains(map_a, q_3_2) );
+    BOOST_CHECK( !icl::contains(map_a, MK_v(2)) );
 }
 
 

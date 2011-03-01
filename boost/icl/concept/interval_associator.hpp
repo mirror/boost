@@ -662,7 +662,7 @@ typename enable_if<mpl::and_< is_interval_container<Type>
                    bool>::type
 intersects(const Type& left, const CoType& right)
 {
-	return left.find(right) != left.end();
+    return left.find(right) != left.end();
 }
 
 
@@ -900,51 +900,6 @@ elements_rend(const Type& object)
 { 
     return typename Type::element_const_reverse_iterator(object.rend());
 }
-
-//==============================================================================
-//= Morphisms
-//==============================================================================
-template<class Type>
-typename enable_if<is_interval_container<Type>, Type>::type&
-join(Type& object)
-{
-    typedef typename Type::interval_type interval_type;
-    typedef typename Type::iterator      iterator;
-
-    iterator it_ = object.begin();
-    if(it_ == object.end()) 
-        return object;
-
-    iterator next_ = it_; next_++;
-
-    while(next_ != object.end())
-    {
-        if( segmental::is_joinable<Type>(it_, next_) )
-        {
-            iterator fst_mem = it_;  // hold the first member
-            
-            // Go on while touching members are found
-            it_++; next_++;
-            while(     next_ != object.end()
-                    && segmental::is_joinable<Type>(it_, next_) )
-            { it_++; next_++; }
-
-            // finally we arrive at the end of a sequence of joinable intervals
-            // and it points to the last member of that sequence
-            const_cast<interval_type&>(key_value<Type>(it_)) 
-                = hull(key_value<Type>(it_), key_value<Type>(fst_mem));
-            object.erase(fst_mem, it_);
-
-            it_++; next_=it_; 
-            if(next_!=object.end())
-                next_++;
-        }
-        else { it_++; next_++; }
-    }
-    return object;
-}
-
-
 
 }} // namespace boost icl
 

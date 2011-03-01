@@ -204,7 +204,7 @@ public:
     /** Find the interval, that contains element \c key_value */
     const_iterator find(const element_type& key_value)const
     { 
-		return icl::find(*this, key_value);
+        return icl::find(*this, key_value);
         //CL return this->_set.find(icl::singleton<segment_type>(key)); 
     }
 
