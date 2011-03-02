@@ -80,9 +80,9 @@ namespace quickbook
 
         local.quickbook_version =
                 "quickbook" >> hard_space
-            >>  (   cl::uint_p              [cl::assign_a(qbk_major_version)]
+            >>  (   cl::uint_p              [assign_qbk_version(qbk_major_version)]
                     >> '.' 
-                    >>  uint2_t()           [cl::assign_a(qbk_minor_version)]
+                    >>  uint2_t()           [assign_qbk_version(qbk_minor_version)]
                 )
             ;
 
