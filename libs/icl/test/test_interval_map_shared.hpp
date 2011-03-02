@@ -219,8 +219,16 @@ void interval_map_ctor_4_bicremental_types()
         BOOST_CHECK_EQUAL( hull(_I4_4I_u2).lower(), v4 );
         BOOST_CHECK_EQUAL( hull(_I4_4I_u2).upper(), v4 );
     }
-    BOOST_CHECK_EQUAL( icl::first(hull(_I4_4I_u2)), v4 );
-    BOOST_CHECK_EQUAL( icl::last(hull(_I4_4I_u2)),  v4 );
+
+    if(is_discrete<T>::value)
+    {
+        if(is_same<float, T>::value)
+        {
+            BOOST_CHECK( false );
+        }
+        //BOOST_CHECK_EQUAL( icl::first(hull(_I4_4I_u2)), v4 );
+        //BOOST_CHECK_EQUAL( icl::last(hull(_I4_4I_u2)),  v4 );
+    }
 
     IntervalMapT _I4_4I_u2_copy(_I4_4I_u2);
     IntervalMapT _I4_4I_u2_assigned;
@@ -1157,20 +1165,20 @@ void interval_map_find_4_bicremental_types()
     BOOST_CHECK_EQUAL( map_a(MK_v(8)), MK_u(4) );
 
     //LAW map c; key k: k in dom(c) => contains(c, (k, find(c, k)->second))
-    BOOST_CHECK( icl::contains(map_a, K_v(2, icl::find(map_a, 2)->second)) );
-    BOOST_CHECK( icl::contains(map_a, K_v(11, map_a.find(11)->second)) );
+    BOOST_CHECK( icl::contains(map_a, K_v(2, icl::find(map_a, MK_v(2))->second)) );
+    BOOST_CHECK( icl::contains(map_a, K_v(11, map_a.find(MK_v(11))->second)) );
 
-    BOOST_CHECK(  icl::contains(map_a, 2) );
-    BOOST_CHECK(  icl::contains(map_a, 10) );
-    BOOST_CHECK( !icl::contains(map_a, 1) );
-    BOOST_CHECK( !icl::contains(map_a, 3) );
-    BOOST_CHECK( !icl::contains(map_a, 12) );
+    BOOST_CHECK(  icl::contains(map_a, MK_v(2)) );
+    BOOST_CHECK(  icl::contains(map_a, MK_v(10)) );
+    BOOST_CHECK( !icl::contains(map_a, MK_v(1)) );
+    BOOST_CHECK( !icl::contains(map_a, MK_v(3)) );
+    BOOST_CHECK( !icl::contains(map_a, MK_v(12)) );
 
-    BOOST_CHECK(  icl::intersects(map_a, 2) );
-    BOOST_CHECK(  icl::intersects(map_a, 10) );
-    BOOST_CHECK( !icl::intersects(map_a, 1) );
-    BOOST_CHECK( !icl::intersects(map_a, 3) );
-    BOOST_CHECK( !icl::intersects(map_a, 12) );
+    BOOST_CHECK(  icl::intersects(map_a, MK_v(2)) );
+    BOOST_CHECK(  icl::intersects(map_a, MK_v(10)) );
+    BOOST_CHECK( !icl::intersects(map_a, MK_v(1)) );
+    BOOST_CHECK( !icl::intersects(map_a, MK_v(3)) );
+    BOOST_CHECK( !icl::intersects(map_a, MK_v(12)) );
 }
 
 
@@ -1235,6 +1243,48 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK(  icl::contains(map_a, q_3_2) );
     BOOST_CHECK( !icl::contains(map_a, MK_v(2)) );
 
+}
+
+
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
+void interval_map_range_4_bicremental_types()
+{
+    typedef IntervalMap<T,U> IntervalMapT;
+    typedef typename IntervalMapT::interval_type  IntervalT;
+    typedef typename IntervalMapT::const_iterator c_iterator;
+
+    typename IntervalMapT::interval_mapping_type val_pair1 = IDv(6,9,1);
+    std::pair<const IntervalT, U> val_pair2 = IDv(3,5,3);
+    mapping_pair<T,U> map_pair = K_v(4,3);
+
+    IntervalMapT map_a;
+    map_a.add(CDv(1,3,1)).add(IDv(8,9,1)).add(IIv(6,11,3));
+    // {(1  3)    [6  8)[8 9)[9  11) 
+    //     1         3    4     3
+    //    [2        7) := itv
+
+    IntervalT itv = I_D(2, 7);
+    c_iterator lwb1 = icl::find(map_a, itv);
+    c_iterator lwb2 = map_a.lower_bound(itv);
+
+    BOOST_CHECK      ( lwb1 == lwb2 );
+    BOOST_CHECK_EQUAL( lwb1->second, lwb2->second );
+    BOOST_CHECK_EQUAL( lwb1->second, MK_u(1) );
+
+    c_iterator upb1 = map_a.upper_bound(itv);
+    BOOST_CHECK_EQUAL( upb1->second, MK_u(4) );
+
+    std::pair<c_iterator,c_iterator> exterior =  map_a.equal_range(itv);
+    BOOST_CHECK      ( lwb1 == exterior.first );
+    BOOST_CHECK      ( upb1 == exterior.second );
 }
 
 

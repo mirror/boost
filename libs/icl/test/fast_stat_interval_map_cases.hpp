@@ -50,11 +50,15 @@ BOOST_AUTO_TEST_CASE
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_find_4_bicremental_types)
-{            interval_map_find_4_bicremental_types<INTERVAL_MAP, bicremental_type_2, int>();}
+{            interval_map_find_4_bicremental_types<INTERVAL_MAP, discrete_type_1, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_find_4_numeric_continuous_types)
 {            interval_map_find_4_numeric_continuous_types<INTERVAL_MAP, numeric_continuous_type_1, int>();}
+
+BOOST_AUTO_TEST_CASE
+(fastest_icl_interval_map_range_4_bicremental_types)
+{            interval_map_range_4_bicremental_types<INTERVAL_MAP, discrete_type_2, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_set_4_bicremental_types)

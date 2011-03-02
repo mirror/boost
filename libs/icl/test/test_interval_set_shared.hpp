@@ -662,6 +662,7 @@ void interval_set_find_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
     typedef typename IntervalSetT::interval_type IntervalT;
+    typedef typename IntervalSetT::const_iterator c_iterator;
 
     IntervalT itv = I_D(3,5);
 
@@ -675,6 +676,31 @@ void interval_set_find_4_bicremental_types()
     found = set_a.find(MK_v(5));
 
     BOOST_CHECK_EQUAL( found == set_a.end(), true );
+
+    c_iterator found1 = set_a.find(MK_v(6));
+    c_iterator found2 = icl::find(set_a, MK_v(6));
+
+    BOOST_CHECK      ( found1 == found2 );
+    BOOST_CHECK_EQUAL( *found1, *found2 );
+    BOOST_CHECK_EQUAL( *found1, I_I(6,11) );
+
+    found1 = set_a.find(MK_v(5));
+
+    BOOST_CHECK_EQUAL( found1 == set_a.end(), true );
+
+    //LAW map c; key k: k in dom(c) => contains(c, *find(c, k))
+    BOOST_CHECK( icl::contains(set_a, *icl::find(set_a, MK_v(2))) );
+    BOOST_CHECK( icl::contains(set_a, *set_a.find(MK_v(11))) );
+
+    BOOST_CHECK(  icl::contains(set_a, MK_v(2)) );
+    BOOST_CHECK(  icl::contains(set_a, MK_v(10)) );
+    BOOST_CHECK( !icl::contains(set_a, MK_v(1)) );
+    BOOST_CHECK( !icl::contains(set_a, MK_v(3)) );
+
+    BOOST_CHECK(  icl::intersects(set_a, MK_v(2)) );
+    BOOST_CHECK(  icl::intersects(set_a, MK_v(10)) );
+    BOOST_CHECK( !icl::intersects(set_a, MK_v(1)) );
+    BOOST_CHECK( !icl::intersects(set_a, MK_v(3)) );
 }
 
 

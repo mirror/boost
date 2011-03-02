@@ -91,6 +91,14 @@ find(const Type& object, const typename domain_type_of<Type>::type& key_val)
 // NOTE: find(object, key) won't compile if key is of continuous type that does
 // not implement in(de)crementation (e.g. std::string).
 
+template<class Type>
+typename enable_if< is_interval_container<Type>
+                  , typename Type::const_iterator>::type
+find(const Type& object, const typename interval_type_of<Type>::type& inter_val)
+{
+    return object.find(inter_val);
+}
+
 //==============================================================================
 //= Morphisms
 //==============================================================================
