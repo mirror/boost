@@ -208,13 +208,19 @@ void interval_map_ctor_4_bicremental_types()
     _I4_4I_u2.insert(I4_4I_u2).insert(I4_4I_u2);
     BOOST_CHECK_EQUAL( _I4_4I_u2, _I4_4I_u2_1 );
 
-    BOOST_CHECK_EQUAL( cardinality(_I4_4I_u2),      unit_element<typename IntervalMapT::size_type>::value()  );
-    BOOST_CHECK_EQUAL( _I4_4I_u2.size(),             unit_element<typename IntervalMapT::size_type>::value()  );
+    BOOST_CHECK_EQUAL( cardinality(_I4_4I_u2), unit_element<typename IntervalMapT::size_type>::value()  );
+    BOOST_CHECK_EQUAL( _I4_4I_u2.size(),       unit_element<typename IntervalMapT::size_type>::value()  );
     BOOST_CHECK_EQUAL( interval_count(_I4_4I_u2),   1  );
-    BOOST_CHECK_EQUAL( _I4_4I_u2.iterative_size(),   1  );
+    BOOST_CHECK_EQUAL( _I4_4I_u2.iterative_size(),  1  );
     BOOST_CHECK_EQUAL( iterative_size(_I4_4I_u2),   1  );
-    BOOST_CHECK_EQUAL( hull(_I4_4I_u2).lower(),            v4 );
-    BOOST_CHECK_EQUAL( hull(_I4_4I_u2).upper(),            v4 );
+
+    if(has_dynamic_bounds<IntervalT>::value)
+    {
+        BOOST_CHECK_EQUAL( hull(_I4_4I_u2).lower(), v4 );
+        BOOST_CHECK_EQUAL( hull(_I4_4I_u2).upper(), v4 );
+    }
+    BOOST_CHECK_EQUAL( icl::first(hull(_I4_4I_u2)), v4 );
+    BOOST_CHECK_EQUAL( icl::last(hull(_I4_4I_u2)),  v4 );
 
     IntervalMapT _I4_4I_u2_copy(_I4_4I_u2);
     IntervalMapT _I4_4I_u2_assigned;
@@ -1207,21 +1213,28 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK_EQUAL( found1->second, found2->second );
     BOOST_CHECK_EQUAL( found1->second, MK_u(2) );
 
-    found1 = map_a.find(MK_v(0));
-    found2 = icl::find(map_a, MK_v(0));
-    BOOST_CHECK      ( found1 == found2 );
-    BOOST_CHECK      ( found1 == map_a.end() );
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, is_signed<T> >::value )
+    {
+        found1 = map_a.find(MK_v(0));
+        found2 = icl::find(map_a, MK_v(0));
+        BOOST_CHECK      ( found1 == found2 );
+        BOOST_CHECK      ( found1 == map_a.end() );
+    }
 
     found1 = map_a.find(MK_v(1));
     found2 = icl::find(map_a, MK_v(1));
     BOOST_CHECK      ( found1 == found2 );
     BOOST_CHECK      ( found1 == map_a.end() );
 
-    BOOST_CHECK( !icl::contains(map_a, MK_v(0)) );
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, is_signed<T> >::value )
+    {
+        BOOST_CHECK( !icl::contains(map_a, MK_v(0)) );
+    }
     BOOST_CHECK(  icl::contains(map_a, q_1_2) );
     BOOST_CHECK( !icl::contains(map_a, MK_v(1)) );
     BOOST_CHECK(  icl::contains(map_a, q_3_2) );
     BOOST_CHECK( !icl::contains(map_a, MK_v(2)) );
+
 }
 
 

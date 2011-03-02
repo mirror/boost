@@ -11,8 +11,6 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include <boost/mpl/list.hpp>
 #include "../unit_test_unwarned.hpp"
 
-//#define BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
-
 // interval instance types
 #include "../test_type_lists.hpp"
 #include "../test_value_maker.hpp"

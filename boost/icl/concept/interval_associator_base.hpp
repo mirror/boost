@@ -30,7 +30,7 @@ find(const Type& object, const typename domain_type_of<Type>::type& key_val)
 {
     typedef typename Type::const_iterator const_iterator;
     typedef typename Type::interval_type  interval_type;
-    return object.find(icl::unit_closure<interval_type>(key_val));
+    return object.find(icl::detail::unit_trail<interval_type>(key_val));
 }
 
 template<class Type>
@@ -49,7 +49,7 @@ find(const Type& object, const typename domain_type_of<Type>::type& key_val)
 template<class Type>
 typename enable_if<mpl::and_< is_interval_container<Type>
                             , is_continuous<typename domain_type_of<Type>::type> 
-                            , has_static_bounds<typename interval_type_of<Type>::type> 
+                            , is_static_right_open<typename interval_type_of<Type>::type> 
                             , boost::detail::is_incrementable<typename domain_type_of<Type>::type>
                             > 
                    , typename Type::const_iterator>::type
@@ -57,12 +57,34 @@ find(const Type& object, const typename domain_type_of<Type>::type& key_val)
 {
     typedef typename Type::const_iterator const_iterator;
     typedef typename Type::interval_type  interval_type;
-    const_iterator collision = object.find(icl::unit_closure<interval_type>(key_val));
-    // A part of the cover(key_value)-interval may be found in the container, that
+    const_iterator first_collision = object.lower_bound(icl::detail::unit_trail<interval_type>(key_val));
+    // A part of the unit_trail(key_value)-interval may be found in the container, that
     // does not contain key_value. Therefore we have to check for its existence:
-    return (  collision == object.end() 
-           || icl::contains(key_value<Type>(collision), key_val) ) 
-            ? collision 
+    return (  first_collision == object.end() 
+           || icl::contains(key_value<Type>(first_collision), key_val) ) 
+            ? first_collision 
+            : object.end();
+}
+
+template<class Type>
+typename enable_if<mpl::and_< is_interval_container<Type>
+                            , is_continuous<typename domain_type_of<Type>::type> 
+                            , is_static_left_open<typename interval_type_of<Type>::type> 
+                            , boost::detail::is_incrementable<typename domain_type_of<Type>::type>
+                            > 
+                   , typename Type::const_iterator>::type
+find(const Type& object, const typename domain_type_of<Type>::type& key_val)
+{
+    typedef typename Type::const_iterator const_iterator;
+    typedef typename Type::interval_type  interval_type;
+    const_iterator last_collision = object.upper_bound(icl::detail::unit_trail<interval_type>(key_val));
+    if(last_collision != object.begin())
+        --last_collision;
+    // A part of the unit_trail(key_value)-interval may be found in the container, that
+    // does not contain key_value. Therefore we have to check for its existence:
+    return (  last_collision == object.end() 
+           || icl::contains(key_value<Type>(last_collision), key_val) ) 
+            ? last_collision 
             : object.end();
 }
 

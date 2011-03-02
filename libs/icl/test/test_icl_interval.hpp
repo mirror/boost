@@ -97,9 +97,9 @@ void coverable_asymmetric_interval_4_bicremental_types()
     //JODO BOOST_CHECK( is_incremental_coverable<IntervalT>::value ); 
     BOOST_CHECK( has_difference<T>::value ); 
 
-    BOOST_CHECK_EQUAL( icl::contains(icl::unit_closure<IntervalT>(MK_v(4)), MK_v(4)), true ); 
-    BOOST_CHECK_EQUAL( icl::length  (icl::unit_closure<IntervalT>(MK_v(3))), d_1 ); 
-    BOOST_CHECK      ( icl::touches (icl::unit_closure<IntervalT>(MK_v(2)), icl::unit_closure<IntervalT>(MK_v(3))) );
+    BOOST_CHECK_EQUAL( icl::contains(icl::detail::unit_trail<IntervalT>(MK_v(4)), MK_v(4)), true ); 
+    BOOST_CHECK_EQUAL( icl::length  (icl::detail::unit_trail<IntervalT>(MK_v(3))), d_1 ); 
+    BOOST_CHECK      ( icl::touches (icl::detail::unit_trail<IntervalT>(MK_v(2)), icl::detail::unit_trail<IntervalT>(MK_v(3))) );
 }
 
 

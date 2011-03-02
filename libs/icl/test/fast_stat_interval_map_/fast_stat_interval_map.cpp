@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------+    
-Copyright (c) 2008-2009: Joachim Faulhaber
+Copyright (c) 2008-2011: Joachim Faulhaber
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENCE.txt or copy at
@@ -12,6 +12,8 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include "../unit_test_unwarned.hpp"
 
 #define BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
+//#define BOOST_ICL_CONTINUOUS_STATIC_INTERVAL_DEFAULT left_open_interval
+
 // interval instance types
 #include "../test_type_lists.hpp"
 #include "../test_value_maker.hpp"

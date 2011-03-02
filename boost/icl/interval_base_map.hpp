@@ -256,7 +256,6 @@ public:
     const_iterator find(const domain_type& key_value)const
     { 
         return icl::find(*this, key_value);
-        //CL return _map.find(interval_type(key_value)); 
     }
 
     /** Find the first interval value pair, that collides with interval 

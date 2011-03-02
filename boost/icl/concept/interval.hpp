@@ -119,12 +119,15 @@ singleton(const typename interval_traits<Type>::domain_type& value)
     return dynamic_interval_traits<Type>::construct(value, value, interval_bounds::closed());
 }
 
+namespace detail
+{
+
 //==============================================================================
-//= Construct<Interval> unit_closure == generalized singleton
+//= Construct<Interval> unit_trail == generalized singleton
 // The smallest interval on an incrementable (and decrementable) type that can 
 // be constructed using ++ and -- and such that it contains a given value.
-// If 'Type' is discrete, 'unit_closure' and 'singleton' are identical. So we 
-// can view 'unit_closure' as a generalized singleton for static intervals of 
+// If 'Type' is discrete, 'unit_trail' and 'singleton' are identical. So we 
+// can view 'unit_trail' as a generalized singleton for static intervals of 
 // continuous types.
 //==============================================================================
 template<class Type>
@@ -134,7 +137,7 @@ typename enable_if
              , boost::detail::is_incrementable<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
-unit_closure(const typename interval_traits<Type>::domain_type& value)
+unit_trail(const typename interval_traits<Type>::domain_type& value)
 {
     return interval_traits<Type>::construct(value, icl::succ(value));
 }
@@ -146,7 +149,7 @@ typename enable_if
              , boost::detail::is_incrementable<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
-unit_closure(const typename interval_traits<Type>::domain_type& value)
+unit_trail(const typename interval_traits<Type>::domain_type& value)
 {
     typedef typename interval_traits<Type>::domain_type domain_type;
     BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(value) )); 
@@ -161,7 +164,7 @@ typename enable_if
              , is_discrete<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
-unit_closure(const typename interval_traits<Type>::domain_type& value)
+unit_trail(const typename interval_traits<Type>::domain_type& value)
 {
     typedef typename interval_traits<Type>::domain_type domain_type;
     BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(value))); 
@@ -176,7 +179,7 @@ typename enable_if
              , is_discrete<typename interval_traits<Type>::domain_type> >
   , Type
 >::type
-unit_closure(const typename interval_traits<Type>::domain_type& value)
+unit_trail(const typename interval_traits<Type>::domain_type& value)
 {
     return interval_traits<Type>::construct(value, value);
 }
@@ -188,11 +191,12 @@ unit_closure(const typename interval_traits<Type>::domain_type& value)
 
 template<class Type>
 typename enable_if<has_dynamic_bounds<Type>, Type>::type
-unit_closure(const typename interval_traits<Type>::domain_type& value)
+unit_trail(const typename interval_traits<Type>::domain_type& value)
 {
     return dynamic_interval_traits<Type>::construct(value, value, interval_bounds::closed());
 }
 
+} //namespace detail
 
 //==============================================================================
 //= Construct<Interval> multon
