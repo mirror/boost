@@ -429,7 +429,8 @@ add_intersection(Type& section, const Type& object, const KeySetT& key_set)
 template<class Type, class OperandT>
 typename enable_if<mpl::and_< is_interval_map<Type>
                             , is_total<Type>
-                            , is_same<OperandT, typename segment_type_of<Type>::type> >, 
+                            , boost::is_same< OperandT
+                                            , typename segment_type_of<Type>::type> >, 
                    bool>::type
 intersects(const Type&, const OperandT&)
 {
@@ -439,7 +440,7 @@ intersects(const Type&, const OperandT&)
 template<class Type, class OperandT>
 typename enable_if<mpl::and_< is_interval_map<Type>
                             , mpl::not_<is_total<Type> >
-                            , is_same<OperandT, typename segment_type_of<Type>::type> >, 
+                            , boost::is_same<OperandT, typename segment_type_of<Type>::type> >, 
                    bool>::type
 intersects(const Type& object, const OperandT& operand)
 {
@@ -450,7 +451,7 @@ intersects(const Type& object, const OperandT& operand)
 
 template<class Type, class OperandT>
 typename enable_if<mpl::and_< is_interval_map<Type>
-                            , is_same<OperandT, typename element_type_of<Type>::type> >, 
+                            , boost::is_same<OperandT, typename element_type_of<Type>::type> >, 
                    bool>::type
 intersects(const Type& object, const OperandT& operand)
 {

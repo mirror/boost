@@ -220,16 +220,6 @@ void interval_map_ctor_4_bicremental_types()
         BOOST_CHECK_EQUAL( hull(_I4_4I_u2).upper(), v4 );
     }
 
-    if(is_discrete<T>::value)
-    {
-        if(is_same<float, T>::value)
-        {
-            BOOST_CHECK( false );
-        }
-        //BOOST_CHECK_EQUAL( icl::first(hull(_I4_4I_u2)), v4 );
-        //BOOST_CHECK_EQUAL( icl::last(hull(_I4_4I_u2)),  v4 );
-    }
-
     IntervalMapT _I4_4I_u2_copy(_I4_4I_u2);
     IntervalMapT _I4_4I_u2_assigned;
     _I4_4I_u2_assigned = _I4_4I_u2;
@@ -1221,7 +1211,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK_EQUAL( found1->second, found2->second );
     BOOST_CHECK_EQUAL( found1->second, MK_u(2) );
 
-    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, is_signed<T> >::value )
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
     {
         found1 = map_a.find(MK_v(0));
         found2 = icl::find(map_a, MK_v(0));
@@ -1234,7 +1224,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK      ( found1 == found2 );
     BOOST_CHECK      ( found1 == map_a.end() );
 
-    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, is_signed<T> >::value )
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
     {
         BOOST_CHECK( !icl::contains(map_a, MK_v(0)) );
     }

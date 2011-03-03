@@ -205,7 +205,6 @@ public:
     const_iterator find(const element_type& key_value)const
     { 
         return icl::find(*this, key_value);
-        //CL return this->_set.find(icl::singleton<segment_type>(key)); 
     }
 
     /** Find the first interval, that collides with interval \c key_interval */

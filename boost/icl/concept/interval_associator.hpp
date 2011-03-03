@@ -649,7 +649,7 @@ operator & (Type object, const Type& operand)
 //------------------------------------------------------------------------------
 template<class Type, class CoType>
 typename enable_if<mpl::and_< is_interval_container<Type>
-                            , is_same<CoType, typename domain_type_of<Type>::type> >, 
+                            , boost::is_same<CoType, typename domain_type_of<Type>::type> >, 
                    bool>::type
 intersects(const Type& left, const CoType& right)
 {
@@ -658,7 +658,7 @@ intersects(const Type& left, const CoType& right)
 
 template<class Type, class CoType>
 typename enable_if<mpl::and_< is_interval_container<Type>
-                            , is_same<CoType, typename interval_type_of<Type>::type> >, 
+                            , boost::is_same<CoType, typename interval_type_of<Type>::type> >, 
                    bool>::type
 intersects(const Type& left, const CoType& right)
 {
@@ -723,16 +723,6 @@ intersects(const LeftT& left, const RightT& right)
 
     return false; 
 }
-
-//CL?
-//template<class Type, class AssociateT>
-//typename enable_if<mpl::and_< is_interval_map<Type>
-//                            , is_inter_derivative<Type, AssociateT> >, 
-//                   bool>::type
-//intersects(const Type& left, const AssociateT& right)
-//{
-//    return icl::intersects(left, right);
-//}
 
 /** \b Returns true, if \c left and \c right have no common elements.
     Intervals are interpreted as sequence of elements.
