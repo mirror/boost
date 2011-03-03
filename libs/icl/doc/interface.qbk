@@ -585,7 +585,7 @@ overloaded implementations for the function of that row is shown.
 [[`size_type interval_count(const T&)`]           [ ]       [1]      [1]     [ ]      [ ]   ]
                                                 
 [[__biLSelection__ ]                              [ ]       [ ]      [ ]     [ ]      [ ]   ]
-[[`J T::find(const domain_type&)`]                [ ]       [1]      [1]     [2]      [2]   ]
+[[`J T::find(const P&)`]                          [ ]    [__ei]   [__ei]     [2]      [2]   ]
 [[`codomain_type& operator[] (const domain_type&)`][ ]      [ ]      [ ]     [ ]      [1]   ]
 [[`codomain_type operator() (const domain_type&)const`][ ]  [ ]      [1]     [ ]      [1]   ]
 
