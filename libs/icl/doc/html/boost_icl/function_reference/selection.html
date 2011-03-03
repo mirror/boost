@@ -71,6 +71,35 @@
 <tr>
 <td>
               <p>
+                <code class="computeroutput"><span class="identifier">iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">domain_type</span><span class="special">&amp;)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em>O(log n)</em></span>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em>O(log n)</em></span>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">domain_type</span><span class="special">&amp;)</span><span class="keyword">const</span></code>
               </p>
               </td>
@@ -102,15 +131,8 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">domain_type</span><span class="special">&amp;)</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
-              </td>
-<td>
-              <p>
+                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">find</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;,</span> <span class="keyword">const</span>
+                <span class="identifier">domain_type</span><span class="special">&amp;)</span></code>
               </p>
               </td>
 <td>
@@ -121,6 +143,73 @@
 <td>
               <p>
                 <span class="emphasis"><em>O(log n)</em></span>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">interval_type</span><span class="special">&amp;)</span><span class="keyword">const</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em>O(log n)</em></span>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em>O(log n)</em></span>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">find</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;,</span> <span class="keyword">const</span>
+                <span class="identifier">interval_type</span><span class="special">&amp;)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em>O(log n)</em></span>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em>O(log n)</em></span>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
+<td>
+              <p>
               </p>
               </td>
 <td>
@@ -199,6 +288,10 @@
 <code class="computeroutput"><span class="keyword">operator</span><span class="special">()</span></code>
           is available for total maps only.
         </li>
+<li>
+<code class="computeroutput"><span class="identifier">interval_type</span></code> is also the
+          interval container's <code class="computeroutput"><span class="identifier">key_type</span></code>
+</li>
 </ul></div>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -249,7 +342,9 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">domain_type</span><span class="special">&amp;</span>
+                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span></code><br>
+                <code class="computeroutput"><span class="special">(</span><span class="keyword">const</span>
+                <span class="identifier">domain_type</span><span class="special">&amp;</span>
                 <span class="identifier">x</span><span class="special">)</span><span class="keyword">const</span></code>
               </p>
               </td>
@@ -269,8 +364,13 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">domain_type</span><span class="special">&amp;</span>
-                <span class="identifier">x</span><span class="special">)</span><span class="keyword">const</span></code>
+                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span></code><br>
+                <code class="computeroutput"><span class="special">(</span><span class="keyword">const</span>
+                <span class="identifier">domain_type</span><span class="special">&amp;</span>
+                <span class="identifier">x</span><span class="special">)</span><span class="keyword">const</span></code><br> <br> <code class="computeroutput"><span class="identifier">const_iterator</span>
+                <span class="identifier">find</span></code><br> <code class="computeroutput"><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;,</span> <span class="keyword">const</span>
+                <span class="identifier">domain_type</span><span class="special">&amp;</span>
+                <span class="identifier">x</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -281,8 +381,40 @@
               </td>
 <td>
               <p>
-                For interval containers <code class="computeroutput"><span class="identifier">find</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> searches a key element <code class="computeroutput"><span class="identifier">x</span></code> but returns an iterator to an
-                interval containing the element.
+                For interval containers <code class="computeroutput"><span class="identifier">c</span></code>,
+                <code class="computeroutput"><span class="identifier">c</span><span class="special">.</span><span class="identifier">find</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code>
+                or <code class="computeroutput"><span class="identifier">icl</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="identifier">c</span><span class="special">,</span><span class="identifier">x</span><span class="special">)</span></code>
+                searches a key element <code class="computeroutput"><span class="identifier">x</span></code>
+                and returns an iterator to the interval containing the element <code class="computeroutput"><span class="identifier">x</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">const_iterator</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">find</span></code><br>
+                <code class="computeroutput"><span class="special">(</span><span class="keyword">const</span>
+                <span class="identifier">interval_type</span><span class="special">&amp;</span>
+                <span class="identifier">x</span><span class="special">)</span><span class="keyword">const</span></code><br> <br> <code class="computeroutput"><span class="identifier">const_iterator</span>
+                <span class="identifier">find</span></code><br> <code class="computeroutput"><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;,</span> <span class="keyword">const</span>
+                <span class="identifier">interval_type</span><span class="special">&amp;</span>
+                <span class="identifier">x</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                <a class="link" href="../interface/function_synopsis.html#interval_set_types"><span class="bold"><strong>S</strong></span></a>
+                <a class="link" href="../interface/function_synopsis.html#interval_map_types"><span class="bold"><strong>M</strong></span></a>
+              </p>
+              </td>
+<td>
+              <p>
+                For interval containers <code class="computeroutput"><span class="identifier">c</span></code>,
+                <code class="computeroutput"><span class="identifier">c</span><span class="special">.</span><span class="identifier">find</span><span class="special">(</span><span class="identifier">y</span><span class="special">)</span></code>
+                or <code class="computeroutput"><span class="identifier">icl</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span><span class="identifier">c</span><span class="special">,</span><span class="identifier">y</span><span class="special">)</span></code>
+                searches an interval <code class="computeroutput"><span class="identifier">y</span></code>
+                and returns an iterator to the first interval in <code class="computeroutput"><span class="identifier">c</span></code>
+                that overlaps with <code class="computeroutput"><span class="identifier">y</span></code>.
               </p>
               </td>
 </tr>
@@ -290,8 +422,8 @@
 <td>
               <p>
                 <code class="computeroutput"><span class="identifier">codomain_type</span><span class="special">&amp;</span>
-                <span class="keyword">operator</span><span class="special">[]</span>
-                <span class="special">(</span><span class="keyword">const</span>
+                <span class="keyword">operator</span><span class="special">[]</span></code><br>
+                <code class="computeroutput"><span class="special">(</span><span class="keyword">const</span>
                 <span class="identifier">domain_type</span><span class="special">&amp;</span>
                 <span class="identifier">x</span><span class="special">)</span></code>
               </p>
@@ -313,7 +445,7 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">codomain_type</span> <span class="keyword">operator</span><span class="special">()</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">domain_type</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span><span class="keyword">const</span></code>
+                <code class="computeroutput"><span class="identifier">codomain_type</span> <span class="keyword">operator</span><span class="special">()</span></code><br> <code class="computeroutput"><span class="special">(</span><span class="keyword">const</span> <span class="identifier">domain_type</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span><span class="keyword">const</span></code>
               </p>
               </td>
 <td>

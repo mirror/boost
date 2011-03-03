@@ -583,9 +583,10 @@ overloaded implementations for the function of that row is shown.
 [[`difference_type length(const T&)`]             [1]       [1]      [1]     [ ]      [ ]   ]
 [[`size_type iterative_size(const T&)`]           [ ]       [1]      [1]     [1]      [1]   ]
 [[`size_type interval_count(const T&)`]           [ ]       [1]      [1]     [ ]      [ ]   ]
-                                                
+                                           
 [[__biLSelection__ ]                              [ ]       [ ]      [ ]     [ ]      [ ]   ]
 [[`J T::find(const P&)`]                          [ ]    [__ei]   [__ei]     [2]      [2]   ]
+[[`J find(T&, const P&)`]                         [ ]    [__ei]   [__ei]     [ ]      [ ]   ]
 [[`codomain_type& operator[] (const domain_type&)`][ ]      [ ]      [ ]     [ ]      [1]   ]
 [[`codomain_type operator() (const domain_type&)const`][ ]  [ ]      [1]     [ ]      [1]   ]
 
