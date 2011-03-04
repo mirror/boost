@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2011 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -13,6 +13,8 @@
 #pragma once
 #endif
 
+#include <boost/detail/no_exceptions_support.hpp>
+
 namespace boost{
 
 namespace multi_index{
@@ -24,12 +26,10 @@ namespace detail{
  * ScopeGuard.h as defined in:
  *   Alexandrescu, A., Marginean, P.:"Generic<Programming>: Change the Way You
  *     Write Exception-Safe Code - Forever", C/C++ Users Jornal, Dec 2000,
- *     http://www.cuj.com/documents/s=8000/cujcexp1812alexandr/
+ *     http://www.drdobbs.com/184403758
  * with the following modifications:
  *   - General pretty formatting (pretty to my taste at least.)
  *   - Naming style changed to standard C++ library requirements.
- *   - safe_execute does not feature a try-catch protection, so we can
- *     use this even if BOOST_NO_EXCEPTIONS is defined.
  *   - Added scope_guard_impl4 and obj_scope_guard_impl3, (Boost.MultiIndex
  *     needs them). A better design would provide guards for many more
  *     arguments through the Boost Preprocessor Library.
@@ -65,7 +65,13 @@ protected:
   }
 
   template<typename J>
-  static void safe_execute(J& j){if(!j.dismissed_)j.execute();}
+  static void safe_execute(J& j){
+    BOOST_TRY{
+      if(!j.dismissed_)j.execute();
+    }
+    BOOST_CATCH(...){}
+    BOOST_CATCH_END
+  }
   
   mutable bool dismissed_;
 
