@@ -1010,6 +1010,11 @@ than those required by TR1: Boost.Hash acts as a testbed for issue 6.18
 in the [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf 
 Library Extension Technical Report Issues List].
 
+[note There are portability issues with this template - in particular the `hash` template
+might not actually be defined inside namespace std::tr1, making user-defined specializations
+of the template non-portable.  For example Visual C++ 2010 defines `hash` in namespace `std`
+and then imports this into `std::tr1` with a using declaration.]
+
 [endsect]
 
 [section:regex Regular Expressions.]
