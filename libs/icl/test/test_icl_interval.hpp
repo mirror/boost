@@ -84,6 +84,24 @@ void singelizable_interval_4_bicremental_types()
     BOOST_CHECK_EQUAL( icl::contains(IntervalT(MK_v(1)), MK_v(1)), true ); 
 }
 
+template <class IntervalT> 
+void coverable_asymmetric_interval_4_bicremental_types()
+{
+    typedef typename domain_type_of<interval_traits<IntervalT> >::type T;
+    typedef typename icl::size_type_of<T>::type SizeT;
+    typedef typename icl::difference_type_of<T>::type DiffT;
+    //T t_0     = icl::identity_element<T>::value();
+    SizeT s_1 = icl::unit_element<SizeT>::value();
+    DiffT d_1 = icl::unit_element<DiffT>::value();
+
+    //JODO BOOST_CHECK( is_incremental_coverable<IntervalT>::value ); 
+    BOOST_CHECK( has_difference<T>::value ); 
+
+    BOOST_CHECK_EQUAL( icl::contains(icl::detail::unit_trail<IntervalT>(MK_v(4)), MK_v(4)), true ); 
+    BOOST_CHECK_EQUAL( icl::length  (icl::detail::unit_trail<IntervalT>(MK_v(3))), d_1 ); 
+    BOOST_CHECK      ( icl::touches (icl::detail::unit_trail<IntervalT>(MK_v(2)), icl::detail::unit_trail<IntervalT>(MK_v(3))) );
+}
+
 
 
 #endif // BOOST_ICL_TEST_ICL_INTERVAL_HPP_JOFA_100930

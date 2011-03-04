@@ -60,6 +60,14 @@ BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_set_element_iter_4_discrete_types)
 {            interval_set_element_iter_4_discrete_types<INTERVAL_SET, discrete_type_2>();}
 
+BOOST_AUTO_TEST_CASE
+(fastest_icl_interval_set_intersects_4_bicremental_types)
+{            interval_set_intersects_4_bicremental_types<INTERVAL_SET, bicremental_type_3>();}
+
+BOOST_AUTO_TEST_CASE
+(fastest_icl_interval_set_range_4_discrete_types)
+{            interval_set_range_4_discrete_types<INTERVAL_SET, discrete_type_3>();}
+
 #endif // BOOST_ICL_FASTEST_INTERVAL_SET_CASES_HPP_JOFA_090702
 
 

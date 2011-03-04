@@ -59,9 +59,18 @@ BOOST_AUTO_TEST_CASE_TEMPLATE
 BOOST_AUTO_TEST_CASE_TEMPLATE
 (test_icl_interval_map_flip_4_bicremental_types, T, bicremental_types)
 {         interval_map_flip_4_bicremental_types<INTERVAL_MAP, T, int>();}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE
 (test_icl_interval_map_find_4_bicremental_types, T, bicremental_types)
 {         interval_map_find_4_bicremental_types<INTERVAL_MAP, T, int>();}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE
+(test_icl_interval_map_find_4_numeric_continuous_types, T, numeric_continuous_types)
+{         interval_map_find_4_numeric_continuous_types<INTERVAL_MAP, T, int>();}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE
+(test_icl_interval_map_range_4_bicremental_types, T, bicremental_types)
+{         interval_map_range_4_bicremental_types<INTERVAL_MAP, T, int>();}
 
 BOOST_AUTO_TEST_CASE_TEMPLATE
 (test_icl_interval_map_set_4_bicremental_types, T, bicremental_types)

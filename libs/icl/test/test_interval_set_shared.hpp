@@ -662,6 +662,7 @@ void interval_set_find_4_bicremental_types()
 {
     typedef IntervalSet<T> IntervalSetT;
     typedef typename IntervalSetT::interval_type IntervalT;
+    typedef typename IntervalSetT::const_iterator c_iterator;
 
     IntervalT itv = I_D(3,5);
 
@@ -675,7 +676,86 @@ void interval_set_find_4_bicremental_types()
     found = set_a.find(MK_v(5));
 
     BOOST_CHECK_EQUAL( found == set_a.end(), true );
+
+    c_iterator found1 = set_a.find(MK_v(6));
+    c_iterator found2 = icl::find(set_a, MK_v(6));
+
+    BOOST_CHECK      ( found1 == found2 );
+    BOOST_CHECK_EQUAL( *found1, *found2 );
+    BOOST_CHECK_EQUAL( *found1, I_I(6,11) );
+
+    found1 = set_a.find(MK_v(5));
+
+    BOOST_CHECK_EQUAL( found1 == set_a.end(), true );
+
+    //LAW map c; key k: k in dom(c) => contains(c, *find(c, k))
+    BOOST_CHECK( icl::contains(set_a, *icl::find(set_a, MK_v(2))) );
+    BOOST_CHECK( icl::contains(set_a, *set_a.find(MK_v(11))) );
+
+    BOOST_CHECK(  icl::contains(set_a, MK_v(2)) );
+    BOOST_CHECK(  icl::contains(set_a, MK_v(10)) );
+    BOOST_CHECK( !icl::contains(set_a, MK_v(1)) );
+    BOOST_CHECK( !icl::contains(set_a, MK_v(3)) );
+
+    BOOST_CHECK(  icl::intersects(set_a, MK_v(2)) );
+    BOOST_CHECK(  icl::intersects(set_a, MK_v(10)) );
+    BOOST_CHECK( !icl::intersects(set_a, MK_v(1)) );
+    BOOST_CHECK( !icl::intersects(set_a, MK_v(3)) );
 }
+
+
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
+void interval_set_intersects_4_bicremental_types()
+{
+    typedef IntervalSet<T> IntervalSetT;
+    typedef typename IntervalSetT::interval_type IntervalT;
+    typedef typename IntervalSetT::key_type      KeyT;
+
+    IntervalT between = I_D(3,5);
+
+    IntervalSetT set_a;
+    set_a.add(C_D(1,3)).add(I_I(6,11));
+    //         (1   3)         [6    11]
+    BOOST_CHECK( icl::intersects(set_a, MK_v(2)) );
+    BOOST_CHECK( icl::intersects(set_a, MK_v(11)) );
+    BOOST_CHECK( icl::disjoint(set_a, MK_v(3)) );
+    BOOST_CHECK( icl::disjoint(set_a, MK_v(5)) );
+
+    BOOST_CHECK( icl::intersects(set_a, C_D(1,3)) );
+    BOOST_CHECK( icl::intersects(set_a, I_D(8,10)) );
+    BOOST_CHECK( icl::disjoint(set_a, between) );
+    BOOST_CHECK( icl::disjoint(set_a, I_I(0,1)) );
+
+    IntervalSetT to_12 = IntervalSetT(I_D(0, 13));
+    IntervalSetT complement_a = to_12 - set_a;
+    BOOST_CHECK( icl::disjoint(set_a, complement_a) );
+    BOOST_CHECK( icl::intersects(to_12, set_a) );
+
+    BOOST_CHECK_EQUAL( icl::lower(set_a), icl::lower(*(set_a.begin())) );
+    BOOST_CHECK_EQUAL( icl::lower(set_a), MK_v(1) );
+    BOOST_CHECK_EQUAL( icl::upper(set_a), icl::upper(*(set_a.rbegin())) );
+    BOOST_CHECK_EQUAL( icl::upper(set_a), MK_v(11) );
+}
+
+
+template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
+void interval_set_range_4_discrete_types()
+{
+    typedef IntervalSet<T> IntervalSetT;
+    typedef typename IntervalSetT::interval_type IntervalT;
+    typedef typename IntervalSetT::key_type      KeyT;
+
+    IntervalT between = I_D(3,5);
+
+    IntervalSetT set_a;
+    set_a.add(C_D(1,3)).add(I_I(6,11));
+    //         (1   3)         [6    11]
+    BOOST_CHECK_EQUAL( icl::first(set_a), icl::first(*(set_a.begin())) );
+    BOOST_CHECK_EQUAL( icl::first(set_a), MK_v(2) );
+    BOOST_CHECK_EQUAL( icl::last(set_a), icl::last(*(set_a.rbegin())) );
+    BOOST_CHECK_EQUAL( icl::last(set_a), MK_v(11) );
+}
+
 
 template <ICL_IntervalSet_TEMPLATE(_T) IntervalSet, class T>
 void interval_bitset_find_4_integral_types()

@@ -11,8 +11,6 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include <boost/mpl/list.hpp>
 #include "../unit_test_unwarned.hpp"
 
-//#define BOOST_ICL_USE_STATIC_BOUNDED_INTERVALS
-
 // interval instance types
 #include "../test_type_lists.hpp"
 #include "../test_value_maker.hpp"
@@ -50,28 +48,36 @@ BOOST_AUTO_TEST_CASE
 //- sta.asy.{dis|con} ----------------------------------------------------------
 BOOST_AUTO_TEST_CASE
 (fastest_itl_right_open_interval_ctor_4_ordered_types)
-{                      interval_ctor_4_ordered_types<right_open_interval<ordered_type_1> >(); }
+{                       interval_ctor_4_ordered_types<right_open_interval<ordered_type_1> >(); }
 
 BOOST_AUTO_TEST_CASE
 (fastest_itl_right_open_interval_4_ordered_types)
-{         singelizable_interval_4_ordered_types<right_open_interval<discrete_type_1> >(); }
+{          singelizable_interval_4_ordered_types<right_open_interval<discrete_type_1> >(); }
 
 BOOST_AUTO_TEST_CASE
 (fastest_itl_right_open_interval_4_bicremental_types)
-{         singelizable_interval_4_bicremental_types<right_open_interval<discrete_type_2> >(); }
+{          singelizable_interval_4_bicremental_types<right_open_interval<discrete_type_2> >(); }
 
 BOOST_AUTO_TEST_CASE
 (fastest_itl_left_open_interval_ctor_4_ordered_types)
-{                     interval_ctor_4_ordered_types<left_open_interval<ordered_type_2> >(); }
+{                      interval_ctor_4_ordered_types<left_open_interval<ordered_type_2> >(); }
 
 BOOST_AUTO_TEST_CASE
 (fastest_itl_left_open_interval_4_ordered_types_singelizable)
-{        singelizable_interval_4_ordered_types<left_open_interval<signed_discrete_type_1> >(); }
+{         singelizable_interval_4_ordered_types<left_open_interval<signed_discrete_type_1> >(); }
 
 BOOST_AUTO_TEST_CASE
 (fastest_itl_left_open_interval_4_bicremental_types)
-{        singelizable_interval_4_bicremental_types<left_open_interval<discrete_type_4> >(); }
+{         singelizable_interval_4_bicremental_types<left_open_interval<discrete_type_4> >(); }
 
+//- coverables -----------------------------------------------------------------
+BOOST_AUTO_TEST_CASE
+(fastest_cover_right_open_interval_4_bicremental_types)
+{    coverable_asymmetric_interval_4_bicremental_types<right_open_interval<numeric_continuous_type_1> >(); }
+
+BOOST_AUTO_TEST_CASE
+(fastest_cover_left_open_interval_4_bicremental_types)
+{    coverable_asymmetric_interval_4_bicremental_types<left_open_interval<numeric_continuous_type_3> >(); }
 
 //- dyn.dis --------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE

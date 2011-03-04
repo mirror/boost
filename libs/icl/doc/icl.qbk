@@ -18,6 +18,7 @@ Distributed under the Boost Software License, Version 1.0.
 ]
 
 
+
 [/ Macros will be used for links so we have a central place to change them ]
 [def __itv__          [classref boost::icl::interval interval]]
 [def __Itv__          [classref boost::icl::interval Interval]]
@@ -26,7 +27,7 @@ Distributed under the Boost Software License, Version 1.0.
 [def __Itv_tr__       [classref boost::icl::interval_traits Interval_traits]]
 
 [def __ro_itv__       [classref boost::icl::right_open_interval right_open_interval]]
-[def __lo_itv__       [classref boost::icl::right_open_interval left_open_interval]]
+[def __lo_itv__       [classref boost::icl::left_open_interval  left_open_interval]]
 [def __op_itv__       [classref boost::icl::open_interval       open_interval]]
 [def __cl_itv__       [classref boost::icl::closed_interval     closed_interval]]
 
