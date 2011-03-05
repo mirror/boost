@@ -12,7 +12,6 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/detail/lightweight_test.hpp>
-#include "lightweight_test_ex.hpp"
 
 class object
 {

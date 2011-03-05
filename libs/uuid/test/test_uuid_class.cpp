@@ -14,7 +14,6 @@
 #include <boost/uuid/uuid_io.hpp>
 
 #include <boost/detail/lightweight_test.hpp>
-#include "lightweight_test_ex.hpp"
 
 class uuid_class : public boost::uuids::uuid
 {

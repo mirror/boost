@@ -13,7 +13,6 @@
 #include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/detail/lightweight_test.hpp>
-#include "lightweight_test_ex.hpp"
 #include <boost/random.hpp>
 
 template <typename RandomUuidGenerator>
