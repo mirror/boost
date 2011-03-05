@@ -38,7 +38,7 @@ namespace boost { namespace fusion
             static void
             call(I1 const& src, I2 const& dest, mpl::false_)
             {
-                *src = *dest;
+                *dest = *src;
                 call(fusion::next(src), fusion::next(dest));
             }
 
