@@ -108,7 +108,9 @@ template<
 inline
 void for_each(F f, Sequence* = 0)
 {
-    for_each<Sequence, identity<> >(f);
+  // jfalcou: fully qualifying this call so it doesnt clash with phoenix::for_each
+  // ons ome compilers -- done on 02/28/2011
+  boost::mpl::for_each<Sequence, identity<> >(f);
 }
 
 }}
