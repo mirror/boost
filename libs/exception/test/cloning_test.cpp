@@ -180,7 +180,7 @@ test_std_exception_what()
         catch(
         T & x )
             {
-            BOOST_TEST(std::string("what")==x.what());
+            BOOST_TEST(std::string(x.what()).find("what")!=std::string::npos);
             boost::exception_ptr p = boost::current_exception();
             BOOST_TEST(!(p==boost::exception_ptr()));
             BOOST_TEST(p!=boost::exception_ptr());
@@ -193,7 +193,7 @@ test_std_exception_what()
             catch(
             T & x )
                 {
-                BOOST_TEST(std::string("what")==x.what());
+                BOOST_TEST(std::string(x.what()).find("what")!=std::string::npos);
                 }
             catch(
             ... )
