@@ -20,12 +20,13 @@
 
 #ifdef BOOST_NO_SFINAE
 #else
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_void.hpp>
 #include <boost/utility/result_of.hpp>
+#include <boost/pointee.hpp>
 #endif // BOOST_NO_SFINAE
 
 #include <boost/assert.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_void.hpp>
 #include <functional>
 
 
@@ -62,8 +63,7 @@ namespace boost
 #ifdef BOOST_NO_SFINAE
         Result    
 #else            
-       typename ptr_container_detail::make_lazy<
-           boost::result_of<const Fun(const T&)>, T>::type 
+        typename boost::result_of< const Fun( typename pointee<T>::type& ) >::type 
 #endif            
         operator()( const T& r ) const
         { 
@@ -74,8 +74,8 @@ namespace boost
 #ifdef BOOST_NO_SFINAE
         Result    
 #else                        
-        typename ptr_container_detail::make_lazy<
-               boost::result_of<const Fun(const T&, const U&)>, T>::type
+        typename boost::result_of< const Fun( typename pointee<T>::type&,
+                                              typename pointee<U>::type& ) >::type
 #endif            
         operator()( const T& r, const U& r2 ) const
         { 
