@@ -6,15 +6,37 @@
 #include <boost/exception_ptr.hpp>
 #include <boost/exception/get_error_info.hpp>
 #include <boost/thread.hpp>
+#include <boost/detail/atomic_count.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 typedef boost::error_info<struct tag_answer,int> answer;
+
+boost::detail::atomic_count exc_count(0);
 
 struct
 err:
     virtual boost::exception,
     virtual std::exception
     {
+    err()
+        {
+        ++exc_count;
+        }
+
+    err( err const & )
+        {
+        ++exc_count;
+        }
+
+    virtual
+    ~err() throw()
+        {
+        --exc_count;
+        }
+
+    private:
+
+    err & operator=( err const & );
     };
 
 class
@@ -116,7 +138,9 @@ simple_test()
 int
 main()
     {
+    BOOST_TEST(++exc_count==1);
     simple_test();
     thread_test();
+    BOOST_TEST(!--exc_count);
     return boost::report_errors();
     }
