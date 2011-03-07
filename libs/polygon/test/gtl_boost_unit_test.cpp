@@ -13,6 +13,18 @@ using namespace boost::polygon::operators;
 #include <stdlib.h>
 
 namespace boost { namespace polygon{
+    void addpoly(polygon_45_set_data<int>& pset,
+                 int* pts, int numpts) {
+      std::vector<point_data<int> > mppts;
+      for(unsigned int i = 0; i < numpts*2; i += 2) {
+        point_data<int>  pt(pts[i], pts[i+1]);
+        mppts.push_back(pt);
+      }
+      polygon_45_data<int> poly;
+      poly.set(mppts.begin(), mppts.end());
+      pset += poly;
+    }
+     
 
   template <class T>
   std::ostream& operator << (std::ostream& o, const interval_data<T>& i)
