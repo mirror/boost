@@ -69,14 +69,9 @@ geometry regions.&nbsp; A Polygon Set Concept may be defined with floating point
 coordinates, but a snap rounding distance of one integer unit will still be 
 applied, furthermore, geometry outside the domain where one integer unit is 
 sufficient to provide robustness may lead to undefined behavior in algorithms.&nbsp; 
-It is recommended to use integer coordinates for robust operations.&nbsp; In the 
-case that data represented contains only Manhattan geometry a runtime check will 
-default to the Manhattan algorithm.&nbsp; The results of which are identical to 
-what the general algorithm would do, but obtained more efficiently.&nbsp; In the 
-case that the data represented contains only Manhattan and 45-degree geometry a 
-runtime check will default to the faster 45-degree algorithm.&nbsp; The results 
-of which may differ slight from what the general algorithm would do because 
-non-integer intersections will be handled differently.</font><p>Users are recommended to use std::vector and std::list of user defined polygons 
+It is recommended to use 32-bit integer coordinates for robust operations.
+
+</font><p>Users are recommended to use std::vector and std::list of user defined polygons 
 or library provided polygon_set_data&lt;coordinate_type&gt; objects.&nbsp; Lists 
 and vectors of models of polygon_concept or polygon_with_holes_concept are automatically models of polygon_set_concept.</p>
 <p>Example code <a href="gtl_custom_polygon_set.htm">custom_polygon_set.cpp</a> 
