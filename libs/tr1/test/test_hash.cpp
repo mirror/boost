@@ -31,7 +31,29 @@ void check_hash(T t)
    verify_return_type(ch(t), std::size_t(0));
 }
 
-class UDT;
+class UDT
+{
+   int m_value;
+public:
+   UDT(int v) : m_value(v) {}
+   int value()const { return m_value; }
+};
+
+namespace std{ namespace tr1{
+
+template<>
+struct hash<UDT> : public std::unary_function<UDT, std::size_t>
+{
+   typedef UDT argument_type;
+   typedef std::size_t result_type;
+   std::size_t operator()(const UDT& u)const
+   {
+      std::tr1::hash<int> h;
+      return h(u.value());
+   }
+};
+
+}}
 
 int main()
 {
@@ -55,6 +77,7 @@ int main()
    check_hash(static_cast<const UDT*>(0));
    check_hash(static_cast<volatile UDT*>(0));
    check_hash(static_cast<const volatile UDT*>(0));
+   check_hash(UDT(1));
    return 0;
 }
 

@@ -172,9 +172,11 @@ int main(int argc, const char* [])
       verify_return_type((std::tr1::nextafter)(ld, ld), ld);
       verify_return_type((std::tr1::nextafterf)(f, f), f);
       verify_return_type((std::tr1::nextafterl)(ld, ld), ld);
-      verify_return_type((std::tr1::nexttoward)(d, ld), d);
-      verify_return_type((std::tr1::nexttoward)(f, ld), f);
+      verify_return_type((std::tr1::nexttoward)(d, d), d);
+      verify_return_type((std::tr1::nexttoward)(f, f), f);
       verify_return_type((std::tr1::nexttoward)(ld, ld), ld);
+      verify_return_type((std::tr1::nexttoward)(f, ld), ld);
+      verify_return_type((std::tr1::nexttoward)(f, d), d);
       verify_return_type((std::tr1::nexttowardf)(f, ld), f);
       verify_return_type((std::tr1::nexttowardl)(ld, ld), ld);
 #if 0
