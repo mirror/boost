@@ -182,7 +182,7 @@ private:
 public:
     bool has_pragma_once(std::string const &filename)
     {
-      using boost::multi_index::get;
+        using boost::multi_index::get;
         return get<from>(pragma_once_files).find(filename) != pragma_once_files.end();
     }
     bool add_pragma_once_header(std::string const &filename, 
@@ -198,7 +198,7 @@ public:
         
         range_type r = pragma_once_files.get<to>().equal_range(guard_name);
         if (r.first != r.second) {
-          using boost::multi_index::get;
+            using boost::multi_index::get;
             get<to>(pragma_once_files).erase(r.first, r.second);
             return true;
         }
