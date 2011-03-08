@@ -363,7 +363,7 @@ template<typename C, class Obj,typename MemFun,typename P1>
 inline typename null_guard_return<C::value,obj_scope_guard_impl1<Obj,MemFun,P1> >::type 
 make_obj_guard_if( Obj& obj,MemFun mem_fun,P1 p1)
 {
-  return make_obj_guard_of_c<C::value>(obj,mem_fun,p1);
+  return make_obj_guard_if_c<C::value>(obj,mem_fun,p1);
 }
 
 template<class Obj,typename MemFun,typename P1,typename P2>
