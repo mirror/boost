@@ -337,6 +337,7 @@ void test_options2()
    TEST_REGEX_SEARCH("(?s).", perl, "\n", match_default|match_not_dot_newline, make_array(0, 1, -2, -2));
    TEST_REGEX_SEARCH("(?-s).", perl, "\n", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("(?-s).", perl, "\n", match_default|match_not_dot_newline, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?-xism)d", perl, "d", match_default, make_array(0, 1, -2, -2));
    test_options3();
 }
 
