@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Arguments</title>
+<link rel="stylesheet" href="../../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Phoenix 3.0">
+<link rel="up" href="../primitives.html" title="Primitives">
+<link rel="prev" href="references.html" title="References">
+<link rel="next" href="../composites.html" title="Composites">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="references.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../primitives.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../composites.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="phoenix.starter_kit.primitives.arguments"></a><a class="link" href="arguments.html" title="Arguments">Arguments</a>
+</h4></div></div></div>
+<p>
+          Arguments are also functions? You bet!
+        </p>
+<p>
+          Until now, we have been dealing with expressions returning a nullary function.
+          Arguments, on the other hand, evaluate to an N-ary function. An argument
+          represents the Nth argument. There are a few predefined arguments arg1,
+          arg2, arg3, arg4 and so on (and it's <a href="http://www.boost.org/libs/lambda/doc/index.html" target="_top">BLL</a>
+          counterparts: _1, _2, _3, _4 and so on). Examples:
+        </p>
+<pre class="programlisting"><span class="identifier">arg1</span> <span class="comment">// one-or-more argument function that returns its first argument
+</span><span class="identifier">arg2</span> <span class="comment">// two-or-more argument function that returns its second argument
+</span><span class="identifier">arg3</span> <span class="comment">// three-or-more argument function that returns its third argument
+</span></pre>
+<p>
+          <code class="computeroutput"><span class="identifier">argN</span></code> returns the Nth argument.
+          Examples:
+        </p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">3</span><span class="special">;</span>
+<span class="keyword">char</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">s</span> <span class="special">=</span> <span class="string">"Hello World"</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">arg1</span><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>        <span class="comment">// prints 3
+</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">arg2</span><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">s</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>     <span class="comment">// prints "Hello World"
+</span></pre>
+<p>
+          (See <a href="../../../../../example/arguments.cpp" target="_top">arguments.cpp</a>)
+        </p>
+<div class="sidebar">
+<div class="titlepage"></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../images/tip.png" alt="tip"></span> Learn more about arguments <a class="link" href="../../modules/core/arguments.html" title="Arguments">here.</a>
+        </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2002-2005, 2010 Joel de Guzman, Dan Marsden, Thomas Heller<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="references.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../primitives.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../composites.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+[/==============================================================================
+    Copyright (C) 2001-2010 Joel de Guzman
+    Copyright (C) 2001-2005 Dan Marsden
+    Copyright (C) 2001-2010 Thomas Heller
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
+
+[section Function]
+
+    #include <boost/phoenix/function.hpp>
+
+The `function` class template provides a mechanism for implementing lazily
+evaluated functions. Syntactically, a lazy function looks like an ordinary C/C++
+function. The function call looks familiar and feels the same as ordinary C++
+functions. However, unlike ordinary functions, the actual function execution is
+deferred.
+
+Unlike ordinary function pointers or functor objects that need to be explicitly
+bound through the bind function (see [link phoenix.modules.bind Bind]),
+the argument types of these functions are automatically lazily bound.
+
+In order to create a lazy function, we need to implement a model of the
+__PFO__ concept. For a function that takes `N` arguments, a model of __PFO__ must
+provide:
+
+* An `operator()` that takes `N` arguments, and implements
+the function logic. This is also true for ordinary function pointers.
+* A nested metafunction `result<Signature>` or nested typedef `result_type`, following the __boost_result_of__ Protocol
+
+[/
+* A nested metafunction `result<A1, ... AN>` that takes the types of the `N` arguments to
+the function and returns the result type of the function. (There is a special case for function
+objects that accept no arguments. Such nullary functors are only required to define a typedef
+`result_type` that reflects the return type of its `operator()`).
+]
+
+For example, the following type implements the FunctionEval concept, in order to provide a
+lazy factorial function:
+
+    struct factorial_impl
+    {
+        template <typename Sig>
+        struct result;
+        
+        template <typename This, typename Arg>
+        struct result<This(Arg const &)>
+        {
+            typedef Arg type;
+        };
+
+        template <typename Arg>
+        Arg operator()(Arg const & n) const
+        {
+            return (n <= 0) ? 1 : n * (*this)(n-1);
+        }
+    };
+
+(See [@../../example/factorial.cpp factorial.cpp])
+
+[/note The type of Arg is either a const-reference or non-const-reference
+(depending on whether your argument to the actor evaluation is a const-ref or
+non-const-ref).]
+
+Having implemented the `factorial_impl` type, we can declare and instantiate a lazy
+`factorial` function this way:
+
+    function<factorial_impl> factorial;
+
+Invoking a lazy function such as `factorial` does not immediately execute the function
+object `factorial_impl`. Instead, an [link phoenix.actor actor] object is
+created and returned to the caller. Example:
+
+    factorial(arg1)
+
+does nothing more than return an actor. A second function call will invoke
+the actual factorial function. Example:
+
+    std::cout << factorial(arg1)(4);
+
+will print out "24".
+
+Take note that in certain cases (e.g. for function objects with state), an
+instance of the model of __PFO__ may be passed on to the constructor. Example:
+
+    function<factorial_impl> factorial(ftor);
+
+where ftor is an instance of factorial_impl (this is not necessary in this case
+as `factorial_impl` does not require any state).
+
+[important Take care though when using function objects with state because they are
+often copied repeatedly, and state may change in one of the copies, rather than the
+original.]
+
+[endsect]
