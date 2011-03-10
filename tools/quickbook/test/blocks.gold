@@ -3,7 +3,7 @@
 <article id="various_blocks" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Various blocks</title> <anchor id="various_blocks.blockquotes"/>
-  <bridgehead renderas="sect2">
+  <bridgehead renderas="sect2" id="various_blocks.blockquotes-heading">
     <link linkend="various_blocks.blockquotes">Blockquotes</link>
   </bridgehead>
   <para>
@@ -26,7 +26,7 @@
     </para>
   </blockquote>
   <anchor id="various_blocks.admonitions"/>
-  <bridgehead renderas="sect2">
+  <bridgehead renderas="sect2" id="various_blocks.admonitions-heading">
     <link linkend="various_blocks.admonitions">Admonitions</link>
   </bridgehead>
   <warning>
@@ -63,7 +63,7 @@
     </para>
   </warning>
   <anchor id="various_blocks.blurb"/>
-  <bridgehead renderas="sect2">
+  <bridgehead renderas="sect2" id="various_blocks.blurb-heading">
     <link linkend="various_blocks.blurb">Blurb</link>
   </bridgehead>
   <sidebar role="blurb">
@@ -71,7 +71,7 @@
     Blurb
   </para>
   </sidebar> <anchor id="various_blocks.inline_blocks"/>
-  <bridgehead renderas="sect2">
+  <bridgehead renderas="sect2" id="various_blocks.inline_blocks-heading">
     <link linkend="various_blocks.inline_blocks">Inline blocks</link>
   </bridgehead>
   <blockquote>

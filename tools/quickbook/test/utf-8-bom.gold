@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <article id="utf_8_test" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>UTF-8 test</title> <anchor id="utf_8_test.i__t__rn__ti__n__liz__ti__n"/>
-  <bridgehead renderas="sect2">
+  <bridgehead renderas="sect2" id="utf_8_test.i__t__rn__ti__n__liz__ti__n-heading">
     <link linkend="utf_8_test.i__t__rn__ti__n__liz__ti__n">Iñtërnâtiônàlizætiøn</link>
   </bridgehead>
   <itemizedlist>

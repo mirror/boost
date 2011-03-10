@@ -10,25 +10,25 @@
       We want to make sure they appear in the correct place. <anchor id="a3"/>
     </para>
     <anchor id="anchor_test.anchors.this_heading_shouldn_t_pick_up_the_previous_anchor"/>
-    <bridgehead renderas="sect3">
+    <bridgehead renderas="sect3" id="anchor_test.anchors.this_heading_shouldn_t_pick_up_the_previous_anchor-heading">
       <link linkend="anchor_test.anchors.this_heading_shouldn_t_pick_up_the_previous_anchor">This
       heading shouldn't pick up the previous anchor</link>
     </bridgehead>
     <anchor id="a4"/> <anchor id="anchor_test.anchors.this_heading_should_pick_up_the_previous_anchor"/>
-    <bridgehead renderas="sect3">
+    <bridgehead renderas="sect3" id="anchor_test.anchors.this_heading_should_pick_up_the_previous_anchor-heading">
       <link linkend="anchor_test.anchors.this_heading_should_pick_up_the_previous_anchor">This
       heading should pick up the previous anchor</link>
     </bridgehead>
     <anchor id="a5"/> <anchor id="anchor_test.anchors.and_this_one"/>
-    <bridgehead renderas="sect3">
+    <bridgehead renderas="sect3" id="anchor_test.anchors.and_this_one-heading">
       <link linkend="anchor_test.anchors.and_this_one">And this one</link>
     </bridgehead>
     <anchor id="a6"/> <anchor id="anchor_test.anchors.also_this_one"/>
-    <bridgehead renderas="sect3">
+    <bridgehead renderas="sect3" id="anchor_test.anchors.also_this_one-heading">
       <link linkend="anchor_test.anchors.also_this_one">Also this one</link>
     </bridgehead>
     <anchor id="a7"/> <anchor id="anchors.finally_this"/>
-    <bridgehead renderas="sect3">
+    <bridgehead renderas="sect3" id="anchors.finally_this-heading">
       Finally this
     </bridgehead>
     <anchor id="a8"/>
