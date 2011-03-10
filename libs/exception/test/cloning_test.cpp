@@ -146,10 +146,6 @@ test_std_exception()
 #endif
             }
         catch(
-        T & )
-            {
-            }
-        catch(
         ... )
             {
             BOOST_TEST(false);
@@ -180,7 +176,7 @@ test_std_exception_what()
         catch(
         T & x )
             {
-            BOOST_TEST(std::string(x.what()).find("what")!=std::string::npos);
+            BOOST_TEST(std::string("what")==x.what());
             boost::exception_ptr p = boost::current_exception();
             BOOST_TEST(!(p==boost::exception_ptr()));
             BOOST_TEST(p!=boost::exception_ptr());
@@ -193,7 +189,7 @@ test_std_exception_what()
             catch(
             T & x )
                 {
-                BOOST_TEST(std::string(x.what()).find("what")!=std::string::npos);
+                BOOST_TEST(std::string("what")==x.what());
                 }
             catch(
             ... )
@@ -218,10 +214,6 @@ test_std_exception_what()
             std::type_info const * const * t=boost::get_error_info<boost::original_exception_type>(x);
             BOOST_TEST(t!=0 && *t!=0 && **t==typeid(T));
 #endif
-            }
-        catch(
-        T & )
-            {
             }
         catch(
         ... )
@@ -393,11 +385,6 @@ main()
             BOOST_TEST(false);
             }
         catch(
-        derives_std_exception & )
-            {
-            //Yay! Non-intrusive cloning supported!
-            }
-        catch(
         boost::unknown_exception & e )
             {
 #ifndef BOOST_NO_RTTI
@@ -445,14 +432,6 @@ main()
             {
             rethrow_exception(p);
             BOOST_TEST(false);
-            }
-        catch(
-        derives_std_boost_exception & x )
-            {
-            //Yay! Non-intrusive cloning supported!
-            BOOST_TEST(boost::get_error_info<my_info>(x));
-            if( int const * p=boost::get_error_info<my_info>(x) )
-                BOOST_TEST(*p==42);
             }
         catch(
         boost::unknown_exception & x )
@@ -514,14 +493,6 @@ main()
             {
             rethrow_exception(p);
             BOOST_TEST(false);
-            }
-        catch(
-        derives_boost_exception & x )
-            {
-            //Yay! Non-intrusive cloning supported!
-            BOOST_TEST(boost::get_error_info<my_info>(x));
-            if( int const * p=boost::get_error_info<my_info>(x) )
-                BOOST_TEST(*p==42);
             }
         catch(
         boost::unknown_exception & x )

@@ -10,7 +10,6 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
-#include <boost/detail/atomic_count.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <iostream>
 
@@ -67,34 +66,7 @@ join( thread_handle & t )
         rethrow_exception(t.err_);
     }
 
-boost::detail::atomic_count exc_count(0);
-
-struct
-exc:
-    virtual boost::exception,
-    virtual std::exception
-    {
-    exc()
-        {
-        ++exc_count;
-        }
-
-    exc( exc const & )
-        {
-        ++exc_count;
-        }
-
-    virtual
-    ~exc() throw()
-        {
-        --exc_count;
-        }
-
-    private:
-
-    exc & operator=( exc const & );
-    };
-
+struct exc: boost::exception, std::exception { };
 typedef boost::error_info<struct answer_,int> answer;
 
 void
@@ -121,7 +93,6 @@ check( boost::shared_ptr<thread_handle> const & t )
 int
 main()
     {
-    BOOST_TEST(++exc_count==1);
     try
         {
         std::vector< boost::shared_ptr<thread_handle> > threads;
@@ -138,5 +109,4 @@ main()
             boost::current_exception_diagnostic_information() << std::endl;
         return 42;
         }
-    BOOST_TEST(!--exc_count);
     }
