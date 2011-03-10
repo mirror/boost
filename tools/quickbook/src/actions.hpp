@@ -221,8 +221,7 @@ namespace quickbook
             std::string const& library_id,
             std::string const& section_id,
             std::string const& qualified_section_id,
-            std::string const& pre,
-            std::string const& post,
+            int level,
             quickbook::actions& actions)
         : out(out)
         , phrase(phrase)
@@ -230,8 +229,7 @@ namespace quickbook
         , library_id(library_id)
         , section_id(section_id)
         , qualified_section_id(qualified_section_id)
-        , pre(pre)
-        , post(post)
+        , level(level)
         , actions(actions) {}
 
         void operator()(iterator first, iterator last) const;
@@ -242,8 +240,7 @@ namespace quickbook
         std::string const& library_id;
         std::string const& section_id;
         std::string const& qualified_section_id;
-        std::string pre;
-        std::string post;
+        int level;
         quickbook::actions& actions;
     };
 

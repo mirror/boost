@@ -107,6 +107,20 @@ namespace quickbook
             out << post;
         }
     }
+    
+    namespace {
+        void write_bridgehead(collector& out, int level,
+            std::string const& str, std::string const& id, std::string const& linkend)
+        {
+            out << "<bridgehead renderas=\"sect" << level << "\"";
+            if(!id.empty()) out << " id=\"" << id << "\"";
+            out << ">";
+            if(!linkend.empty()) out << "<link linkend=\"" << linkend << "\">";
+            out << str;
+            if(!linkend.empty()) out << "</link>";
+            out << "</bridgehead>";
+        }
+    }
 
     void header_action::operator()(iterator first, iterator last) const
     {
@@ -138,20 +152,8 @@ namespace quickbook
         actions.anchors.push_back(anchor);
         actions.output_pre(out);
         
-        if (qbk_version_n < 103)
-        {        
-            out << pre << str << post
-                ;
-        }
-        else // version 1.3 and above
-        {
-            out << pre
-                << "<link linkend=\"" << anchor << "\">"
-                << str
-                << "</link>"
-                << post
-                ;
-        }
+        std::string linkend = qbk_version_n < 103 ? std::string() : anchor;
+        write_bridgehead(out, level, str, anchor + "-heading", linkend);
     }
 
     void generic_header_action::operator()(iterator first, iterator last) const
@@ -179,13 +181,7 @@ namespace quickbook
         actions.anchors.push_back(anchor);
         actions.output_pre(out);
 
-        out
-            << "<bridgehead renderas=\"sect" << level_ << "\">"
-            << "<link linkend=\"" << anchor << "\">"
-            << str
-            << "</link>"
-            << "</bridgehead>"
-            ;
+        write_bridgehead(out, level_, str, anchor + "-heading", anchor);
     }
 
     void simple_phrase_action::operator()(iterator first, iterator last) const

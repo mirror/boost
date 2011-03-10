@@ -16,18 +16,6 @@ namespace quickbook
     const char* comment_post        = "-->";
     const char* paragraph_pre       = "<para>\n";
     const char* paragraph_post      = "</para>\n";
-    const char* h1_pre              = "<bridgehead renderas=\"sect1\">";
-    const char* h1_post             = "</bridgehead>";
-    const char* h2_pre              = "<bridgehead renderas=\"sect2\">";
-    const char* h2_post             = "</bridgehead>";
-    const char* h3_pre              = "<bridgehead renderas=\"sect3\">";
-    const char* h3_post             = "</bridgehead>";
-    const char* h4_pre              = "<bridgehead renderas=\"sect4\">";
-    const char* h4_post             = "</bridgehead>";
-    const char* h5_pre              = "<bridgehead renderas=\"sect5\">";
-    const char* h5_post             = "</bridgehead>";
-    const char* h6_pre              = "<bridgehead renderas=\"sect6\">";
-    const char* h6_post             = "</bridgehead>";
     const char* hr_                 = "<para/>";
     const char* blurb_pre           = "<sidebar role=\"blurb\">\n";
     const char* blurb_post          = "</sidebar>\n";
