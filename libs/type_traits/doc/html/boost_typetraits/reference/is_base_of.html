@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
@@ -32,17 +31,16 @@
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> If Base is base class of type
-        Derived or if both types are the same then inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
+        Derived or if both types are the same class type then inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
         otherwise inherits from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
       </p>
 <p>
         This template will detect non-public base classes, and ambiguous base classes.
       </p>
 <p>
-        Note that <code class="computeroutput"><span class="identifier">is_base_of</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">,</span><span class="identifier">X</span><span class="special">&gt;</span></code> will always inherit from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>.
-        <span class="bold"><strong>This is the case even if <code class="computeroutput"><span class="identifier">X</span></code>
-        is not a class type</strong></span>. This is a change in behaviour from Boost-1.33
-        in order to track the Technical Report on C++ Library Extensions.
+        Note that <code class="computeroutput"><span class="identifier">is_base_of</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">,</span><span class="identifier">X</span><span class="special">&gt;</span></code> will inherit from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>
+        if X is a class type. This is a change in behaviour from Boost-1.39.0 in
+        order to track the emerging C++0x standard.
       </p>
 <p>
         Types <code class="computeroutput"><span class="identifier">Base</span></code> and <code class="computeroutput"><span class="identifier">Derived</span></code> must not be incomplete types.

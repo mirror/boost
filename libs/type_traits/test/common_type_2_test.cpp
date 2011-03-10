@@ -87,6 +87,7 @@ bool declval_bool(){return true;}
 
 TT_TEST_BEGIN(common_type)
 {
+#ifndef __SUNPRO_CC
     assignation_2<C1C2, C1>();
     typedef tt::common_type<C1C2&, C1&>::type T1;
     typedef tt::common_type<C3*, C2*>::type T2;
@@ -105,6 +106,10 @@ TT_TEST_BEGIN(common_type)
     assignation_3<C2, C1C2, C1>();
     assignation_3<C1C2, C2, C1>();
     //assignation_3<C1, C2, C1C2>(); // fails because the common type is the third
+#endif
+
+    typedef tt::common_type<C1C2, C1>::type t1;
+    BOOST_CHECK_TYPE(t1, C1C2);
 
     BOOST_CHECK_TYPE(tt::common_type<int>::type, int);
     BOOST_CHECK_TYPE(tt::common_type<char>::type, char);
