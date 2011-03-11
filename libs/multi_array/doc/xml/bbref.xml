@@ -6,8 +6,9 @@
  <!ENTITY multi_array_ref SYSTEM "multi_array_ref.xml">
  <!ENTITY const_multi_array_ref SYSTEM "const_multi_array_ref.xml">
 ]>
-<library name="MultiArray" dirname="multi_array" xmlns:xi="http://www.w3.org/2001/XInclude"
-  id="any" last-revision="$Date$">
+<library name="MultiArray" dirname="multi_array" id="multi_array"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   last-revision="$Date$">
   <libraryinfo>
     <author>
       <firstname>Ronald</firstname>
@@ -27,6 +28,8 @@
        <librarycategory name="category:math"/>
        <librarycategory name="category:containers"/>
   </libraryinfo>
+
+<title>Boost.MultiArray Reference Manual</title>
 
 
 <para>Boost.MultiArray is composed of several components.
