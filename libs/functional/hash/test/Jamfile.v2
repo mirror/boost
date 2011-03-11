@@ -47,7 +47,6 @@ test-suite functional/hash
         [ compile-fail hash_no_ext_fail_test.cpp ]
         [ compile-fail namespace_fail_test.cpp ]
         [ compile-fail implicit_fail_test.cpp ]
-        [ compile-fail shared_ptr_fail_test.cpp ]
         [ run hash_no_ext_macro_1.cpp ]
         [ run hash_no_ext_macro_2.cpp ]
     ;
