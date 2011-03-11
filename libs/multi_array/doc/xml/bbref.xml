@@ -22,10 +22,10 @@
       <year>2002</year>
       <holder>The Trustees of Indiana University</holder>
     </copyright>
-    <librarypurpose>
-      Generic interfact to multidimensional containers
-    </librarypurpose> 
-    <librarycategory name="category:data-structures"/>
+       <librarypurpose>Multidimensional containers and adaptors for
+       arrays of contiguous data</librarypurpose>
+       <librarycategory name="category:math"/>
+       <librarycategory name="category:containers"/>
   </libraryinfo>
 
 
