@@ -13,9 +13,10 @@
 # (MAINTANERS: please, keep in synch with setup_boostbook.sh)
 DOCBOOK_XSL_VERSION = "1.75.2"
 DOCBOOK_DTD_VERSION = "4.2"
-FOP_VERSION = "1.0"
+FOP_VERSION = "0.94"
 FOP_JDK_VERSION="1.4"
-FOP_MIRROR = "http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries"
+# FOP_MIRROR = "http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries"
+FOP_MIRROR = "http://archive.apache.org/dist/xmlgraphics/fop/binaries/"
 SOURCEFORGE_DOWNLOAD = "http://sourceforge.net/projects/docbook/files"
 
 # No user configuration below this point-------------------------------------
