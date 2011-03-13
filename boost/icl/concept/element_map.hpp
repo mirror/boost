@@ -284,13 +284,6 @@ operator &=(Type& object, const Type& operand)
 
 template<class Type>
 inline typename enable_if<is_element_map<Type>, Type>::type
-operator & (Type object, const Type& operand)
-{
-    return object &= operand;
-}
-
-template<class Type>
-inline typename enable_if<is_element_map<Type>, Type>::type
 operator & (Type object, const typename Type::key_object_type& operand)
 {
     return object &= operand;

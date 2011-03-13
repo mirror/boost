@@ -15,13 +15,13 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 // interval instance types
 #include "../test_type_lists.hpp"
 #include "../test_value_maker.hpp"
-#include "../test_laws.hpp"
 
 #include <set>
 #include <boost/icl/associative_element_container.hpp>
 #include <boost/icl/map.hpp>
 #include <boost/icl/interval_map.hpp>
 #include <boost/icl/detail/interval_morphism.hpp>
+#include "../test_laws.hpp"
 
 using namespace std;
 using namespace boost;

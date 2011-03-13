@@ -102,7 +102,7 @@ typename enable_if< mpl::and_< is_interval_map<Type>
             , bool>::type
 contains(const Type& super, const typename Type::domain_type& key)    
 {
-    return super.find(key) != super.end();
+    return icl::find(super, key) != super.end();
 }
 
 template<class Type>
@@ -372,7 +372,7 @@ add_intersection(Type& section, const Type& object,
     typedef typename Type::segment_type   segment_type;
     typedef typename Type::const_iterator const_iterator;
 
-    const_iterator it_ = object.find(key_value);
+    const_iterator it_ = icl::find(object, key_value);
     if(it_ != object.end())
         add(section, segment_type(interval_type(key_value),it_->second));
 }

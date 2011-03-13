@@ -662,7 +662,7 @@ typename enable_if<mpl::and_< is_interval_container<Type>
                    bool>::type
 intersects(const Type& left, const CoType& right)
 {
-    return left.find(right) != left.end();
+    return icl::find(left, right) != left.end();
 }
 
 
