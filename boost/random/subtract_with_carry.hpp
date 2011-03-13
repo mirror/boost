@@ -101,8 +101,10 @@ public:
     BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry_engine,
                                         uint32_t, value)
     {
-        linear_congruential_engine<int32_t,40014,0,2147483563> intgen(value);
-        seed(intgen);
+        typedef linear_congruential_engine<uint32_t,40014,0,2147483563> gen_t;
+        gen_t intgen(value);
+        detail::generator_seed_seq<gen_t> gen(intgen);
+        seed(gen);
     }
 
     /** Seeds the generator with values produced by @c seq.generate(). */
@@ -122,11 +124,7 @@ public:
     template<class It>
     void seed(It& first, It last)
     {
-        unsigned int j;
-        for(j = 0; j < long_lag && first != last; ++j, ++first)
-            x[j] = *first % modulus;
-        if(first == last && j < long_lag)
-            throw std::invalid_argument("subtract_with_carry::seed");
+        detail::fill_array_int<w>(first, last, x);
         carry = (x[long_lag-1] == 0);
         k = 0;
     }
@@ -181,11 +179,7 @@ public:
     /** Fills a range with random values. */
     template<class It>
     void generate(It first, It last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate_from_int(*this, first, last); }
  
     /** Writes a @c subtract_with_carry_engine to a @c std::ostream. */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, subtract_with_carry_engine, f)
@@ -338,7 +332,9 @@ public:
     BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry_01_engine,
                                         uint32_t, value)
     {
-        random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> gen(value);
+        typedef linear_congruential_engine<uint32_t, 40014, 0, 2147483563> gen_t;
+        gen_t intgen(value);
+        detail::generator_seed_seq<gen_t> gen(intgen);
         seed(gen);
     }
 
@@ -346,12 +342,9 @@ public:
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(subtract_with_carry_01_engine,
                                       SeedSeq, seq)
     {
-        uint32_t array[(w+31)/32 * long_lag];
-
-        seq.generate(&array[0], &array[0] + sizeof(array)/sizeof(array[0]));
-
-        uint32_t* start = &array[0];
-        seed(start, &array[0] + sizeof(array)/sizeof(array[0]));
+        detail::seed_array_real<w>(seq, x);
+        carry = (x[long_lag-1] ? 0 : 1 / _modulus);
+        k = 0;
     }
 
     /**
@@ -363,25 +356,7 @@ public:
     template<class It>
     void seed(It& first, It last)
     {
-#ifndef BOOST_NO_STDC_NAMESPACE
-        // allow for Koenig lookup
-        using std::fmod;
-        using std::pow;
-#endif
-        uint32_t mask = ~((~0u) << (w%32));   // now lowest (w%32) bits set
-        RealType two32 = pow(RealType(2), 32);
-        std::size_t j;
-        for(j = 0; j < long_lag && first != last; ++j) {
-            x[j] = RealType(0);
-            for(std::size_t i = 0; i < w/32 && first != last; ++i, ++first)
-                x[j] += *first / pow(two32,RealType(i+1));
-            if(first != last && mask != 0) {
-                x[j] += fmod((*first & mask) / _modulus, RealType(1));
-                ++first;
-            }
-        }
-        if(first == last && j < long_lag)
-            throw std::invalid_argument("subtract_with_carry_01::seed");
+        detail::fill_array_real<w>(first, last, x);
         carry = (x[long_lag-1] ? 0 : 1 / _modulus);
         k = 0;
     }
@@ -437,11 +412,7 @@ public:
     /** Fills a range with random values. */
     template<class Iter>
     void generate(Iter first, Iter last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate_from_real(*this, first, last); }
 
     /** Writes a \subtract_with_carry_01_engine to a @c std::ostream. */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, subtract_with_carry_01_engine, f)

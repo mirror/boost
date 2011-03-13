@@ -13,7 +13,14 @@
 #include <boost/cstdint.hpp>
 
 #define BOOST_RANDOM_URNG boost::random::kreutzer1986
+
+#define BOOST_RANDOM_SEED_WORDS 1
+
 // validation by experiment from Harry Erwin's generator.h (private e-mail)
 #define BOOST_RANDOM_VALIDATION_VALUE 139726
+#define BOOST_RANDOM_SEED_SEQ_VALIDATION_VALUE 227233
+#define BOOST_RANDOM_ITERATOR_VALIDATION_VALUE 163138
+
+#define BOOST_RANDOM_GENERATE_VALUES { 0x3EADAB08U, 0x85E481CEU, 0xCF84AEA5U, 0x39D4395BU }
 
 #include "test_generator.ipp"

@@ -159,11 +159,7 @@ public:
      */
     template<class It>
     void seed(It& first, It last)
-    {
-        if(first == last)
-            throw std::invalid_argument("linear_congruential::seed");
-        seed(*first++);
-    }
+    { seed(detail::get_one_int<IntType, m>(first, last)); }
 
     /**
      * Returns the smallest value that the @c linear_congruential_engine
@@ -188,11 +184,7 @@ public:
     /** Fills a range with random values */
     template<class Iter>
     void generate(Iter first, Iter last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate_from_int(*this, first, last); }
 
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */

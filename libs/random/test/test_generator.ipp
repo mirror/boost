@@ -95,6 +95,7 @@ BOOST_AUTO_TEST_CASE(test_iterator_seed)
     BOOST_CHECK(it != v.begin());
     std::iterator_traits<std::vector<int>::const_iterator>::difference_type n_words = (it - v.begin());
     BOOST_CHECK_GT(n_words, 0);
+    BOOST_CHECK_EQUAL(n_words, BOOST_RANDOM_SEED_WORDS);
 
     it = v.begin();
     BOOST_RANDOM_URNG urng2;
@@ -211,3 +212,34 @@ BOOST_AUTO_TEST_CASE(validate)
     BOOST_CHECK_EQUAL(urng(), BOOST_RANDOM_VALIDATION_VALUE);
 }
 
+BOOST_AUTO_TEST_CASE(validate_seed_seq)
+{
+    boost::random::seed_seq seed;
+    BOOST_RANDOM_URNG urng(seed);
+    for(int i = 0; i < 9999; ++i) {
+        urng();
+    }
+    BOOST_CHECK_EQUAL(urng(), BOOST_RANDOM_SEED_SEQ_VALIDATION_VALUE);
+}
+
+BOOST_AUTO_TEST_CASE(validate_iter)
+{
+    const std::vector<int> v((std::max)(std::size_t(9999u), sizeof(BOOST_RANDOM_URNG) / 4), 0x41);
+    std::vector<int>::const_iterator it = v.begin();
+    std::vector<int>::const_iterator it_end = v.end();
+    BOOST_RANDOM_URNG urng(it, it_end);
+    for(int i = 0; i < 9999; ++i) {
+        urng();
+    }
+    BOOST_CHECK_EQUAL(urng(), BOOST_RANDOM_ITERATOR_VALIDATION_VALUE);
+}
+
+BOOST_AUTO_TEST_CASE(test_generate)
+{
+    BOOST_RANDOM_URNG urng;
+    boost::uint32_t expected[] = BOOST_RANDOM_GENERATE_VALUES;
+    static const std::size_t N = sizeof(expected)/sizeof(expected[0]); 
+    boost::uint32_t actual[N];
+    urng.generate(&actual[0], &actual[0] + N);
+    BOOST_CHECK_EQUAL_COLLECTIONS(actual, actual + N, expected, expected + N);
+}

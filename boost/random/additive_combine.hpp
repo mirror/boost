@@ -193,11 +193,7 @@ public:
     /** Fills a range with random values */
     template<class Iter>
     void generate(Iter first, Iter last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate_from_int(*this, first, last); }
 
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */

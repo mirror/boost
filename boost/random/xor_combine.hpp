@@ -59,6 +59,10 @@ public:
     /**
      * Constructs a @c xor_combine_engine, seeding both base generators
      * with @c v.
+     *
+     * @xmlwarning
+     * The exact algorithm used by this function may change in the future.
+     * @endxmlwarning
      */
     BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(xor_combine_engine,
         result_type, v)

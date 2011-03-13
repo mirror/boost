@@ -170,12 +170,16 @@ public:
     template<class It>
     void seed(It& first, It last)
     {
-        std::size_t j;
-        for(j = 0; j < n && first != last; ++j, ++first)
-            x[j] = *first;
+        detail::fill_array_int<w>(first, last, x);
         i = n;
-        if(first == last && j < n)
-            throw std::invalid_argument("mersenne_twister_engine::seed");
+
+        // fix up the state if it's all zeroes.
+        if((x[0] & (~static_cast<UIntType>(0) << r)) == 0) {
+            for(std::size_t j = 1; i < n; ++j) {
+                if(x[j] != 0) return;
+            }
+            x[0] = static_cast<UIntType>(1) << (w-1);
+        }
     }
   
     /** Returns the smallest value that the generator can produce. */

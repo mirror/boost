@@ -13,7 +13,14 @@
 #include <boost/cstdint.hpp>
 
 #define BOOST_RANDOM_URNG boost::random::knuth_b
+
+#define BOOST_RANDOM_SEED_WORDS 1
+
 // validation from the C++0x draft (n3090)
 #define BOOST_RANDOM_VALIDATION_VALUE 1112339016
+#define BOOST_RANDOM_SEED_SEQ_VALIDATION_VALUE 160100893
+#define BOOST_RANDOM_ITERATOR_VALIDATION_VALUE 1692601883
+
+#define BOOST_RANDOM_GENERATE_VALUES { 0x5D189C63U, 0xD0544F0EU, 0x15B0E78FU, 0xD814D654U }
 
 #include "test_generator.ipp"

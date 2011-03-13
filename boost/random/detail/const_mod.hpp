@@ -39,6 +39,14 @@ template<class IntType, IntType m>
 class const_mod
 {
 public:
+  static IntType apply(IntType x)
+  {
+    if(((unsigned_m() - 1) & unsigned_m()) == 0)
+      return (unsigned_type(x)) & (unsigned_m() - 1);
+    else
+      return x % m;
+  }
+
   static IntType add(IntType x, IntType c)
   {
     if(((unsigned_m() - 1) & unsigned_m()) == 0)

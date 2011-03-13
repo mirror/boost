@@ -14,6 +14,13 @@
 
 typedef boost::random::independent_bits_engine<boost::random::minstd_rand0, 31, boost::uint32_t> independent_bits31;
 #define BOOST_RANDOM_URNG independent_bits31
+
+#define BOOST_RANDOM_SEED_WORDS 1
+
 #define BOOST_RANDOM_VALIDATION_VALUE 26292962
+#define BOOST_RANDOM_SEED_SEQ_VALIDATION_VALUE 1147343739
+#define BOOST_RANDOM_ITERATOR_VALIDATION_VALUE 1399154219
+
+#define BOOST_RANDOM_GENERATE_VALUES { 0xC1A63AF0U, 0xD66C0614U, 0xADE076B1U, 0xC1DAE13FU }
 
 #include "test_generator.ipp"

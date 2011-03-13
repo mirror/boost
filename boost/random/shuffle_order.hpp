@@ -192,11 +192,7 @@ public:
     /** Fills a range with pseudo-random values. */
     template<class Iter>
     void generate(Iter first, Iter last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate_from_int(*this, first, last); }
 
     /** Returns the smallest value that the generator can produce. */
     static result_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()

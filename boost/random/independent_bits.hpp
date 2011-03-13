@@ -20,9 +20,9 @@
 #include <boost/limits.hpp>
 #include <boost/config.hpp>
 #include <boost/integer/integer_mask.hpp>
-#include <boost/pending/integer_log2.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
 #include <boost/random/detail/config.hpp>
+#include <boost/random/detail/integer_log2.hpp>
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/detail/seed.hpp>
 #include <boost/random/detail/seed_impl.hpp>
@@ -30,41 +30,6 @@
 
 namespace boost {
 namespace random {
-
-namespace detail {
-
-template<int Shift>
-struct integer_log2_impl
-{
-    template<class T>
-    static int apply(T t, int accum)
-    {
-        int update = ((t >> Shift) != 0) * Shift;
-        return integer_log2_impl<Shift / 2>::apply(t >> update, accum + update);
-    }
-};
-
-template<>
-struct integer_log2_impl<1>
-{
-    template<class T>
-    static int apply(T t, int accum)
-    {
-        return int(t >> 1) + accum;
-    }
-};
-
-template<class T>
-inline int integer_log2(T t)
-{
-    return integer_log2_impl<
-        ::boost::detail::max_pow2_less<
-            ::std::numeric_limits<T>::digits, 4
-        >::value
-    >::apply(t, 0);
-}
-
-}
 
 /**
  * An instantiation of class template @c independent_bits_engine

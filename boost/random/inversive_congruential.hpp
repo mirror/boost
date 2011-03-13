@@ -153,11 +153,7 @@ public:
      * @c first and @c last must be input iterators.
      */
     template<class It> void seed(It& first, It last)
-    {
-        if(first == last)
-            throw std::invalid_argument("inversive_congruential::seed");
-        seed(*first++);
-    }
+    { seed(detail::get_one_int<IntType, modulus>(first, last)); }
 
     /** Returns the next output of the generator. */
     IntType operator()()
@@ -170,11 +166,7 @@ public:
     /** Fills a range with random values */
     template<class Iter>
     void generate(Iter first, Iter last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate_from_int(*this, first, last); }
 
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */

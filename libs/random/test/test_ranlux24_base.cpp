@@ -12,7 +12,14 @@
 #include <boost/random/ranlux.hpp>
 
 #define BOOST_RANDOM_URNG boost::random::ranlux24_base
+
+#define BOOST_RANDOM_SEED_WORDS 24
+
 // validation from the C++0x draft (n3126).
 #define BOOST_RANDOM_VALIDATION_VALUE 7937952
+#define BOOST_RANDOM_SEED_SEQ_VALIDATION_VALUE 836370
+#define BOOST_RANDOM_ITERATOR_VALIDATION_VALUE 7739608
+
+#define BOOST_RANDOM_GENERATE_VALUES { 0x55E57B2CU, 0xF2DEF915U, 0x6D1A0CD9U, 0xCA0109F9U }
 
 #include "test_generator.ipp"

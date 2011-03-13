@@ -101,7 +101,7 @@ public:
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(linear_feedback_shift_engine,
         SeedSeq, seq)
-    { seed(detail::seed_one_int<UIntType, low_bits_mask_t<w>::sig_bits>(seq)); }
+    { seed(detail::seed_one_int<UIntType, (UIntType(2) << (w - 1))>(seq)); }
     
     /**
      * Seeds a @c linear_feedback_shift_engine with values
@@ -109,9 +109,7 @@ public:
      */
     template<class It> void seed(It& first, It last)
     {
-        if(first == last)
-            throw std::invalid_argument("linear_feedback_shift::seed");
-        seed(*first++);
+        seed(detail::get_one_int<UIntType, (UIntType(2) << (w - 1))>(first, last));
     }
 
     /** Returns the next value of the generator. */

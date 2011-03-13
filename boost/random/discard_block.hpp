@@ -124,11 +124,7 @@ public:
 
     template<class It>
     void generate(It first, It last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate(*this, first, last); }
 
     /**
      * Returns the smallest value that the generator can produce.

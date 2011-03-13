@@ -30,6 +30,7 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/seed.hpp>
 #include <boost/random/detail/operators.hpp>
+#include <boost/random/detail/generator_seed_seq.hpp>
 
 namespace boost {
 namespace random {
@@ -87,10 +88,9 @@ public:
     BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(lagged_fibonacci_engine,
         uint32_t, value)
     {
-        minstd_rand0 gen(value);
-        for(unsigned int j = 0; j < long_lag; ++j)
-            x[j] = gen() & low_bits_mask_t<w>::sig_bits;
-        i = long_lag;
+        minstd_rand0 intgen(value);
+        detail::generator_seed_seq<minstd_rand0> gen(intgen);
+        seed(gen);
     }
 
     /**
@@ -98,10 +98,8 @@ public:
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(lagged_fibonacci_engine, SeedSeq, seq)
     {
-        boost::uint32_t temp[long_lag];
-        seq.generate(&temp[0], &temp[0] + long_lag);
-        boost::uint32_t* iter = temp;
-        seed(iter, iter + long_lag);
+        detail::seed_array_int<w>(seq, x);
+        i = long_lag;
     }
 
     /**
@@ -112,13 +110,8 @@ public:
     template<class It>
     void seed(It& first, It last)
     {
-        // word size could be smaller than the seed values
-        unsigned int j;
-        for(j = 0; j < long_lag && first != last; ++j, ++first)
-            x[j] = *first & low_bits_mask_t<w>::sig_bits;
+        detail::fill_array_int<w>(first, last, x);
         i = long_lag;
-        if(first == last && j < long_lag)
-            throw std::invalid_argument("lagged_fibonacci::seed");
     }
 
     /** Returns the next value of the generator. */
@@ -132,11 +125,7 @@ public:
     /** Fills a range with random values */
     template<class Iter>
     void generate(Iter first, Iter last)
-    {
-        for(; first != last; ++first) {
-            *first = (*this)();
-        }
-    }
+    { detail::generate_from_int(*this, first, last); }
 
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
@@ -300,10 +289,8 @@ public:
     BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(lagged_fibonacci_01_engine, uint32_t, value)
     {
         minstd_rand0 intgen(value);
-        uniform_01<RealType> dist;
-        for(unsigned j = 0; j < long_lag; ++j)
-            x[j] = dist(intgen);
-        i = long_lag;
+        detail::generator_seed_seq<minstd_rand0> gen(intgen);
+        seed(gen);
     }
 
     /**
@@ -312,11 +299,7 @@ public:
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(lagged_fibonacci_01_engine, SeedSeq, seq)
     {
-        static const int words = (w+31)/32 * long_lag;
-        boost::uint32_t buffer[words];
-        seq.generate(&buffer[0], &buffer[0] + words);
-        boost::uint32_t* iter = buffer;
-        seed(iter, iter + words);
+        detail::seed_array_real<w>(seq, x);
         i = long_lag;
     }
     
@@ -328,23 +311,8 @@ public:
     template<class It>
     void seed(It& first, It last)
     {
-        using std::fmod;
-        using std::pow;
-        unsigned long mask = ~((~0u) << (w%32));   // now lowest w bits set
-        RealType two32 = pow(RealType(2), 32);
-        unsigned int j;
-        for(j = 0; j < long_lag && first != last; ++j) {
-            x[j] = RealType(0);
-            for(int k = 0; k < w/32 && first != last; ++k, ++first)
-                x[j] += *first / pow(two32,k+1);
-            if(first != last && mask != 0) {
-                x[j] += fmod((*first & mask) / modulus(), RealType(1));
-                ++first;
-            }
-        }
+        detail::fill_array_real<w>(first, last, x);
         i = long_lag;
-        if(first == last && j < long_lag)
-            throw std::invalid_argument("lagged_fibonacci_01::seed");
     }
     
     /** Returns the smallest value that the generator can produce. */
@@ -373,11 +341,7 @@ public:
     /** Fills a range with random values */
     template<class Iter>
     void generate(Iter first, Iter last)
-    {
-        for(; first != last; ++first) {
-            *first = static_cast<boost::uint32_t>((*this)() * modulus());
-        }
-    }
+    { return detail::generate_from_real(*this, first, last); }
 
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
