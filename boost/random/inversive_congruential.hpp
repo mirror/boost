@@ -20,6 +20,7 @@
 #include <stdexcept>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/integer/static_log2.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/const_mod.hpp>
@@ -168,15 +169,13 @@ public:
     void generate(Iter first, Iter last)
     { detail::generate_from_int(*this, first, last); }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
+        for(boost::uintmax_t j = 0; j < z; ++j) {
             (*this)();
         }
     }
-#endif
 
     /**
      * Writes the textual representation of the generator to a @c std::ostream.

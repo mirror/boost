@@ -19,6 +19,7 @@
 #include <boost/assert.hpp>
 #include <boost/limits.hpp>
 #include <boost/config.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/integer/integer_mask.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
 #include <boost/random/detail/config.hpp>
@@ -179,15 +180,13 @@ public:
     void generate(Iter first, Iter last)
     { detail::generate_from_int(*this, first, last); }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
-        for(boost::ulong_long_type i = 0; i < z; ++i) {
+        for(boost::uintmax_t i = 0; i < z; ++i) {
             (*this)();
         }
     }
-#endif
 
     const base_type& base() const { return _base; }
 

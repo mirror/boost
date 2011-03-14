@@ -20,6 +20,7 @@
 #include <stdexcept>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/integer/static_log2.hpp>
@@ -186,9 +187,8 @@ public:
     void generate(Iter first, Iter last)
     { detail::generate_from_int(*this, first, last); }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
         typedef const_mod<IntType, m> mod_type;
         IntType b_inv = mod_type::invert(a-1);
@@ -202,7 +202,7 @@ public:
             // we're storing the intermediate result / b_gcd
             IntType a_zm1_over_gcd = 0;
             IntType a_km1_over_gcd = (a - 1) / b_gcd;
-            boost::ulong_long_type exponent = z;
+            boost::uintmax_t exponent = z;
             while(exponent != 0) {
                 if(exponent % 2 == 1) {
                     a_zm1_over_gcd =
@@ -224,7 +224,6 @@ public:
             _x = mod_type::mult_add(a_z, _x, mod_type::mult(b_inv, num));
         }
     }
-#endif
 
     friend bool operator==(const linear_congruential_engine& x,
                            const linear_congruential_engine& y)
@@ -402,10 +401,8 @@ public:
     /**  Returns the next value of the generator. */
     uint32_t operator()() { return static_cast<uint32_t>(lcf() >> 17); }
     
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z) { lcf.discard(z); }
-#endif
+    void discard(boost::uintmax_t z) { lcf.discard(z); }
   
     /** Fills a range with random values */
     template<class Iter>

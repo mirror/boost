@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <boost/config.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/config.hpp>
@@ -112,14 +113,12 @@ public:
         return _rng();
     }
 
-#ifndef BOOST_NO_LONG_LONG
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
+        for(boost::uintmax_t j = 0; j < z; ++j) {
             (*this)();
         }
     }
-#endif
 
     template<class It>
     void generate(It first, It last)

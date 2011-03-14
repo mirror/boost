@@ -40,8 +40,8 @@ namespace random {
 
 namespace detail {
     
-template<class Engine, class UIntType>
-void subtract_with_carry_discard(Engine& eng, UIntType z) {
+template<class Engine>
+void subtract_with_carry_discard(Engine& eng, boost::uintmax_t z) {
     typedef typename Engine::result_type IntType;
     const std::size_t short_lag = Engine::short_lag;
     const std::size_t long_lag = Engine::long_lag;
@@ -204,13 +204,11 @@ public:
         return result;
     }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
         detail::subtract_with_carry_discard(*this, z);
     }
-#endif
 
     /** Fills a range with random values. */
     template<class It>
@@ -262,7 +260,7 @@ private:
         return x[(k+index) % long_lag];
     }
 
-    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_engine&, boost::ulong_long_type);
+    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_engine&, boost::uintmax_t);
 
     IntType do_update(std::size_t current, std::size_t short_index, IntType carry)
     {
@@ -448,11 +446,9 @@ public:
         return result;
     }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     { detail::subtract_with_carry_discard(*this, z); }
-#endif
 
     /** Fills a range with random values. */
     template<class Iter>
@@ -504,7 +500,7 @@ private:
         return x[(k+index) % long_lag];
     }
 
-    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_01_engine&, boost::ulong_long_type);
+    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_01_engine&, boost::uintmax_t);
 
     RealType do_update(std::size_t current, std::size_t short_index, RealType carry)
     {

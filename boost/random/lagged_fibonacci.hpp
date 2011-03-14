@@ -127,15 +127,13 @@ public:
     void generate(Iter first, Iter last)
     { detail::generate_from_int(*this, first, last); }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
+        for(boost::uintmax_t j = 0; j < z; ++j) {
             (*this)();
         }
     }
-#endif
   
     /**
      * Writes the textual representation of the generator to a @c std::ostream.
@@ -343,15 +341,13 @@ public:
     void generate(Iter first, Iter last)
     { return detail::generate_from_real(*this, first, last); }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
+        for(boost::uintmax_t j = 0; j < z; ++j) {
             (*this)();
         }
     }
-#endif
     
     /**
      * Writes the textual representation of the generator to a @c std::ostream.

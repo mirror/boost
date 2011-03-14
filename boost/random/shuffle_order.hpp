@@ -179,15 +179,13 @@ public:
         return y;
     }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the generator by z steps. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
+        for(boost::uintmax_t j = 0; j < z; ++j) {
             (*this)();
         }
     }
-#endif
 
     /** Fills a range with pseudo-random values. */
     template<class Iter>

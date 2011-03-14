@@ -195,14 +195,12 @@ public:
     void generate(Iter first, Iter last)
     { detail::generate_from_int(*this, first, last); }
 
-#ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
-    void discard(boost::ulong_long_type z)
+    void discard(boost::uintmax_t z)
     {
         _mlcg1.discard(z);
         _mlcg2.discard(z);
     }
-#endif
 
     /**
      * Writes the state of an @c additive_combine_engine to a @c
