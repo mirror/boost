@@ -9,7 +9,7 @@
 
 using quickbook ;
 using doxygen ;
-import boostbook ;
+using boostbook ;
 import regex ;
 import os ;
 import path ;
