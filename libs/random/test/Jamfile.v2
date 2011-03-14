@@ -10,7 +10,6 @@ import testing ;
 
 project /boost/random/test ;
 
-run random_test.cpp ;
 run test_const_mod.cpp /boost//unit_test_framework ;
 run test_generate_canonical.cpp /boost//unit_test_framework ;
 run test_random_number_generator.cpp /boost//unit_test_framework ;
