@@ -13,6 +13,7 @@ project /boost/random/test ;
 run random_test.cpp ;
 run test_const_mod.cpp /boost//unit_test_framework ;
 run test_generate_canonical.cpp /boost//unit_test_framework ;
+run test_random_number_generator.cpp /boost//unit_test_framework ;
 run ../example/random_demo.cpp ;
 run test_random_device.cpp /boost//random : : : <link>static : test_random_device ;
 run test_random_device.cpp /boost//random : : : <link>shared : test_random_device_dll ;
