@@ -21,7 +21,7 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/config.hpp>
-#include <boost/random/detail/pass_through_engine.hpp>
+#include <boost/random/detail/ptr_helper.hpp>
 
 #include <boost/random/detail/disable_warnings.hpp>
 
@@ -122,7 +122,6 @@ template<class UniformRandomNumberGenerator, class RealType>
 class backward_compatible_uniform_01
 {
   typedef boost::random::detail::ptr_helper<UniformRandomNumberGenerator> traits;
-  typedef boost::random::detail::pass_through_engine<UniformRandomNumberGenerator> internal_engine_type;
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
@@ -136,7 +135,7 @@ public:
   explicit backward_compatible_uniform_01(typename traits::rvalue_type rng)
     : _rng(rng),
       _factor(result_type(1) /
-              (result_type((_rng.max)()-(_rng.min)()) +
+              (result_type((base().max)()-(base().min)()) +
                result_type(std::numeric_limits<base_result>::is_integer ? 1 : 0)))
   {
   }
@@ -144,13 +143,13 @@ public:
 
   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(0); }
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(1); }
-  typename traits::value_type& base() { return _rng.base(); }
-  const typename traits::value_type& base() const { return _rng.base(); }
+  typename traits::value_type& base() { return traits::ref(_rng); }
+  const typename traits::value_type& base() const { return traits::ref(_rng); }
   void reset() { }
 
   result_type operator()() {
     for (;;) {
-      result_type result = result_type(_rng() - (_rng.min)()) * _factor;
+      result_type result = result_type(base()() - (base().min)()) * _factor;
       if (result < result_type(1))
         return result;
     }
@@ -175,8 +174,8 @@ public:
 #endif
 
 private:
-  typedef typename internal_engine_type::result_type base_result;
-  internal_engine_type _rng;
+  typedef typename traits::value_type::result_type base_result;
+  UniformRandomNumberGenerator _rng;
   result_type _factor;
 };
 

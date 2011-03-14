@@ -1,6 +1,7 @@
 /* boost random/detail/uniform_int_float.hpp header file
  *
  * Copyright Jens Maurer 2000-2001
+ * Copyright Steven Watanabe 2011
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -14,43 +15,52 @@
 #ifndef BOOST_RANDOM_DETAIL_UNIFORM_INT_FLOAT_HPP
 #define BOOST_RANDOM_DETAIL_UNIFORM_INT_FLOAT_HPP
 
+#include <boost/limits.hpp>
 #include <boost/config.hpp>
+#include <boost/integer.hpp>
 #include <boost/random/detail/config.hpp>
-#include <boost/random/uniform_01.hpp>
-
 
 namespace boost {
 namespace random {
 namespace detail {
 
-template<class UniformRandomNumberGenerator, class IntType = unsigned long>
+template<class URNG>
 class uniform_int_float
 {
 public:
-    typedef UniformRandomNumberGenerator base_type;
-    typedef IntType result_type;
+    typedef URNG base_type;
+    typedef typename base_type::result_type base_result;
 
-    uniform_int_float(base_type rng, IntType min_arg = 0, IntType max_arg = 0xffffffff)
-      : _rng(rng), _min(min_arg), _max(max_arg) {}
+    typedef typename boost::uint_t<
+        (std::numeric_limits<boost::uintmax_t>::digits <
+            std::numeric_limits<base_result>::digits)?
+        std::numeric_limits<boost::uintmax_t>::digits :
+        std::numeric_limits<base_result>::digits
+    >::fast result_type;
 
-    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
-    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
+    uniform_int_float(base_type& rng)
+      : _rng(rng) {}
+
+    static result_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    { return 0; }
+    static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    {
+        std::size_t digits = std::numeric_limits<result_type>::digits;
+        if(URNG::precision() < digits) digits = URNG::precision();
+        return (result_type(2) << (digits - 1)) - 1;
+    }
     base_type& base() { return _rng; }
     const base_type& base() const { return _rng; }
 
     result_type operator()()
     {
-        typedef typename base_type::result_type base_result;
-        base_result range = static_cast<base_result>(_max-_min)+1;
-        uniform_01<typename base_type::result_type> dist;
-        return static_cast<IntType>(dist(_rng) * range) + _min;
+        base_result range = static_cast<base_result>(max())+1;
+        return static_cast<result_type>(_rng() * range);
     }
 
 private:
-    base_type _rng;
-    result_type _min, _max;
+    base_type& _rng;
 };
-
 
 } // namespace detail
 } // namespace random

@@ -27,7 +27,6 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/detail/uniform_int_float.hpp>
-#include <boost/random/detail/pass_through_engine.hpp>
 #include <boost/random/detail/signed_unsigned_tools.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
 #include <boost/type_traits/is_integral.hpp>
@@ -218,8 +217,7 @@ inline T generate_uniform_int(
     Engine& eng, T min_value, T max_value,
     boost::mpl::false_ /** is_integral<Engine::result_type> */)
 {
-    pass_through_engine<Engine&> ref_wrapper(eng);
-    uniform_int_float<pass_through_engine<Engine&> > wrapper(ref_wrapper);
+    uniform_int_float<Engine> wrapper(eng);
     return generate_uniform_int(wrapper, min_value, max_value, boost::mpl::true_());
 }
 

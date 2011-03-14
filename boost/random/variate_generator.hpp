@@ -15,7 +15,7 @@
 #ifndef BOOST_RANDOM_RANDOM_GENERATOR_HPP
 #define BOOST_RANDOM_RANDOM_GENERATOR_HPP
 
-#include <boost/random/detail/pass_through_engine.hpp>
+#include <boost/random/detail/ptr_helper.hpp>
 
 #include <boost/random/detail/disable_warnings.hpp>
 
@@ -51,10 +51,9 @@ template<class Engine, class Distribution>
 class variate_generator
 {
 private:
-    typedef random::detail::pass_through_engine<Engine> decorated_engine;
-
+    typedef boost::random::detail::ptr_helper<Engine> helper_type;
 public:
-    typedef typename decorated_engine::base_type engine_value_type;
+    typedef typename helper_type::value_type engine_value_type;
     typedef Engine engine_type;
     typedef Distribution distribution_type;
     typedef typename Distribution::result_type result_type;
@@ -71,21 +70,21 @@ public:
       : _eng(e), _dist(d) { }
 
     /** Returns: distribution()(engine()) */
-    result_type operator()() { return _dist(_eng.base()); }
+    result_type operator()() { return _dist(engine()); }
     /**
      * Returns: distribution()(engine(), value).
      */
     template<class T>
-    result_type operator()(const T& value) { return _dist(_eng, value); }
+    result_type operator()(const T& value) { return _dist(engine(), value); }
 
     /**
      * Returns: A reference to the associated uniform random number generator.
      */
-    engine_value_type& engine() { return _eng.base(); }
+    engine_value_type& engine() { return helper_type::ref(_eng); }
     /**
      * Returns: A reference to the associated uniform random number generator.
      */
-    const engine_value_type& engine() const { return _eng.base(); }
+    const engine_value_type& engine() const { return helper_type::ref(_eng); }
 
     /** Returns: A reference to the associated \random_distribution. */
     distribution_type& distribution() { return _dist; }
@@ -108,7 +107,7 @@ public:
     result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (distribution().max)(); }
 
 private:
-    decorated_engine _eng;
+    Engine _eng;
     distribution_type _dist;
 };
 
