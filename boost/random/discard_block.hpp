@@ -105,8 +105,7 @@ public:
     {
         if(_n >= returned_block) {
             // discard values of random number generator
-            for( ; _n < total_block; ++_n)
-                _rng();
+            _rng.discard(total_block - _n);
             _n = 0;
         }
         ++_n;

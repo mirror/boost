@@ -25,6 +25,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/integer/static_log2.hpp>
+#include <boost/integer/integer_mask.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/seed.hpp>
@@ -36,6 +37,58 @@
 
 namespace boost {
 namespace random {
+
+namespace detail {
+    
+template<class Engine, class UIntType>
+void subtract_with_carry_discard(Engine& eng, UIntType z) {
+    typedef typename Engine::result_type IntType;
+    const std::size_t short_lag = Engine::short_lag;
+    const std::size_t long_lag = Engine::long_lag;
+    std::size_t k = eng.k;
+    IntType carry = eng.carry;
+    if(k != 0) {
+        // increment k until it becomes 0.
+        if(k < short_lag) {
+            std::size_t limit = (short_lag - k) < z? short_lag : (k + static_cast<std::size_t>(z));
+            for(std::size_t j = k; j < limit; ++j) {
+                carry = eng.do_update(j, j + long_lag - short_lag, carry);
+            }
+        }
+        std::size_t limit = (long_lag - k) < z? long_lag : (k + static_cast<std::size_t>(z));
+        std::size_t start = (k < short_lag ? short_lag : k);
+        for(std::size_t j = start; j < limit; ++j) {
+            carry = eng.do_update(j, j - short_lag, carry);
+        }
+    }
+
+    k = ((z % long_lag) + k) % long_lag;
+
+    if(k < z) {
+        // main loop: update full blocks from k = 0 to long_lag
+        for(int i = 0; i < (z - k) / long_lag; ++i) {
+            for(std::size_t j = 0; j < short_lag; ++j) {
+                carry = eng.do_update(j, j + long_lag - short_lag, carry);
+            }
+            for(std::size_t j = short_lag; j < long_lag; ++j) {
+                carry = eng.do_update(j, j - short_lag, carry);
+            }
+        }
+
+        // Update the last partial block
+        std::size_t limit = short_lag < k? short_lag : k; 
+        for(std::size_t j = 0; j < limit; ++j) {
+            carry = eng.do_update(j, j + long_lag - short_lag, carry);
+        }
+        for(std::size_t j = short_lag; j < k; ++j) {
+            carry = eng.do_update(j, j - short_lag, carry);
+        }
+    }
+    eng.carry = carry;
+    eng.k = k;
+}
+
+}
 
 /**
  * Instantiations of @c subtract_with_carry_engine model a
@@ -134,13 +187,7 @@ public:
     { return 0; }
     /** Returns the largest value that the generator can produce. */
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
-    {
-        // avoid "left shift count >= width of type" warning
-        result_type res = 0;
-        for(std::size_t j = 0; j < w; ++j)
-            res |= (static_cast<result_type>(1) << j);
-        return res;
-    }
+    { return boost::low_bits_mask_t<w>::sig_bits; }
 
     /** Returns the next value of the generator. */
     result_type operator()()
@@ -149,30 +196,19 @@ public:
             (k < short_lag)?
                 (k + long_lag - short_lag) :
                 (k - short_lag);
-        IntType delta;
-        if (x[short_index] >= x[k] + carry) {
-            // x(n) >= 0
-            delta =  x[short_index] - (x[k] + carry);
-            carry = 0;
-        } else {
-            // x(n) < 0
-            delta = modulus - x[k] - carry + x[short_index];
-            carry = 1;
-        }
-        x[k] = delta;
+        carry = do_update(k, short_index, carry);
+        IntType result = x[k];
         ++k;
         if(k >= long_lag)
             k = 0;
-        return delta;
+        return result;
     }
 
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
     void discard(boost::ulong_long_type z)
     {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
-            (*this)();
-        }
+        detail::subtract_with_carry_discard(*this, z);
     }
 #endif
 
@@ -224,6 +260,25 @@ private:
     IntType compute(unsigned int index) const
     {
         return x[(k+index) % long_lag];
+    }
+
+    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_engine&, boost::ulong_long_type);
+
+    IntType do_update(std::size_t current, std::size_t short_index, IntType carry)
+    {
+        IntType delta;
+        IntType temp = x[current] + carry;
+        if (x[short_index] >= temp) {
+            // x(n) >= 0
+            delta =  x[short_index] - temp;
+            carry = 0;
+        } else {
+            // x(n) < 0
+            delta = modulus - temp + x[short_index];
+            carry = 1;
+        }
+        x[current] = delta;
+        return carry;
     }
     /// \endcond
 
@@ -385,28 +440,18 @@ public:
             (k < short_lag) ?
                 (k + long_lag - short_lag) :
                 (k - short_lag);
-        RealType delta = x[short_index] - x[k] - carry;
-        if(delta < 0) {
-            delta += RealType(1);
-            carry = RealType(1)/_modulus;
-        } else {
-            carry = 0;
-        }
-        x[k] = delta;
+        carry = do_update(k, short_index, carry);
+        RealType result = x[k];
         ++k;
         if(k >= long_lag)
             k = 0;
-        return delta;
+        return result;
     }
 
 #ifndef BOOST_NO_LONG_LONG
     /** Advances the state of the generator by @c z. */
     void discard(boost::ulong_long_type z)
-    {
-        for(boost::ulong_long_type j = 0; j < z; ++j) {
-            (*this)();
-        }
-    }
+    { detail::subtract_with_carry_discard(*this, z); }
 #endif
 
     /** Fills a range with random values. */
@@ -457,6 +502,21 @@ private:
     RealType compute(unsigned int index) const
     {
         return x[(k+index) % long_lag];
+    }
+
+    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_01_engine&, boost::ulong_long_type);
+
+    RealType do_update(std::size_t current, std::size_t short_index, RealType carry)
+    {
+        RealType delta = x[short_index] - x[current] - carry;
+        if(delta < 0) {
+            delta += RealType(1);
+            carry = RealType(1)/_modulus;
+        } else {
+            carry = 0;
+        }
+        x[current] = delta;
+        return carry;
     }
     /// \endcond
     std::size_t k;
