@@ -27,7 +27,7 @@
 #undef HAVE_MT19937INT_C
 
 // define if you have the original mt19937ar.c (with commented out main())
-#define HAVE_MT19937AR_C
+// #define HAVE_MT19937AR_C
 
 // set to your CPU frequency
 static const double cpu_frequency = 1.87 * 1e9;
