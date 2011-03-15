@@ -45,36 +45,80 @@ struct seed_type
     >::type type;
 };
 
+template<int N>
+struct const_pow_impl
+{
+    template<class T>
+    static T call(T arg, int n, T result)
+    {
+        return const_pow_impl<N / 2>::call(arg * arg, n / 2,
+            n%2 == 0? result : result * arg);
+    }
+};
+
+template<>
+struct const_pow_impl<0>
+{
+    template<class T>
+    static T call(T arg, int n, T result)
+    {
+        return result;
+    }
+};
+
+// requires N is an upper bound on n
+template<int N, class T>
+inline T const_pow(T arg, int n) { return const_pow_impl<N>::call(arg, n, T(1)); }
+
+template<class T>
+inline T pow2(int n)
+{
+    typedef unsigned int_type;
+    const int max_bits = std::numeric_limits<int_type>::digits;
+    T multiplier = T(int_type(1) << (max_bits - 1)) * 2;
+    return (int_type(1) << (n % max_bits)) *
+        const_pow<std::numeric_limits<T>::digits / max_bits>(multiplier, n / max_bits);
+}
+
 template<class Engine, class Iter>
 void generate_from_real(Engine& eng, Iter begin, Iter end)
 {
-    using std::ldexp;
     typedef typename Engine::result_type RealType;
     const int Bits = Engine::precision();
     int remaining_bits = 0;
     boost::uint_least32_t saved_bits = 0;
-    RealType multiplier = ldexp(RealType(1), Bits);
-    RealType mult32 = 4294967296.0; // 2^32
+    RealType multiplier = pow2<RealType>( Bits);
+    RealType mult32 = RealType(4294967296.0); // 2^32
     while(true) {
         RealType val = eng() * multiplier;
         int available_bits = Bits;
-        if(available_bits < 32 - remaining_bits) {
+        // Make sure the compiler can optimize this out
+        // if it isn't possible.
+        if(Bits < 32 && available_bits < 32 - remaining_bits) {
             saved_bits |= boost::uint_least32_t(val) << remaining_bits;
             remaining_bits += Bits;
         } else {
-            if(remaining_bits != 0) {
-                boost::uint_least32_t extra_bits = boost::uint_least32_t(val) & ((boost::uint_least32_t(1) << (32 - remaining_bits)) - 1);
-                val = ldexp(val, -(32 - remaining_bits));
+            // If Bits < 32, then remaining_bits != 0, since
+            // if remaining_bits == 0, available_bits < 32 - 0,
+            // and we won't get here to begin with.
+            if(Bits < 32 || remaining_bits != 0) {
+                boost::uint_least32_t divisor =
+                    (boost::uint_least32_t(1) << (32 - remaining_bits));
+                boost::uint_least32_t extra_bits = boost::uint_least32_t(val) & (divisor - 1);
+                val = val / divisor;
                 *begin++ = saved_bits | (extra_bits << remaining_bits);
                 if(begin == end) return;
                 available_bits -= 32 - remaining_bits;
                 remaining_bits = 0;
             }
-            for(; available_bits >= 32; available_bits -= 32) {
-                boost::uint_least32_t word = boost::uint_least32_t(val);
-                val /= mult32;
-                *begin++ = word;
-                if(begin == end) return;
+            // If Bits < 32 we should never enter this loop
+            if(Bits >= 32) {
+                for(; available_bits >= 32; available_bits -= 32) {
+                    boost::uint_least32_t word = boost::uint_least32_t(val);
+                    val /= mult32;
+                    *begin++ = word;
+                    if(begin == end) return;
+                }
             }
             remaining_bits = available_bits;
             saved_bits = static_cast<boost::uint_least32_t>(val);
@@ -97,7 +141,7 @@ void generate_from_int(Engine& eng, Iter begin, Iter end)
             detail::integer_log2(range + 1);
 
     {
-        int discarded_bits = detail::integer_log2(static_cast<unsigned_type>(bits));
+        int discarded_bits = detail::integer_log2(bits);
         unsigned_type excess = (range + 1) >> (bits - discarded_bits);
         if(excess != 0) {
             int extra_bits = detail::integer_log2((excess - 1) ^ excess);
@@ -112,14 +156,24 @@ void generate_from_int(Engine& eng, Iter begin, Iter end)
         unsigned_type val;
         do {
             val = boost::random::detail::subtract<IntType>()(eng(), (eng.min)());
-        } while(val > limit);
+        } while(limit != range && val > limit);
         val &= mask;
         int available_bits = bits;
-        if(available_bits < 32 - remaining_bits) {
+        if(available_bits == 32) {
+            *begin++ = static_cast<boost::uint_least32_t>(val) & 0xFFFFFFFFu;
+            if(begin == end) return;
+        } else if(available_bits % 32 == 0) {
+            for(int i = 0; i < available_bits / 32; ++i) {
+                boost::uint_least32_t word = boost::uint_least32_t(val) & 0xFFFFFFFFu;
+                val >>= 32;
+                *begin++ = word;
+                if(begin == end) return;
+            }
+        } else if(bits < 32 && available_bits < 32 - remaining_bits) {
             saved_bits |= boost::uint_least32_t(val) << remaining_bits;
             remaining_bits += bits;
         } else {
-            if(remaining_bits != 0) {
+            if(bits < 32 || remaining_bits != 0) {
                 boost::uint_least32_t extra_bits = boost::uint_least32_t(val) & ((boost::uint_least32_t(1) << (32 - remaining_bits)) - 1);
                 val >>= 32 - remaining_bits;
                 *begin++ = saved_bits | (extra_bits << remaining_bits);
@@ -127,11 +181,13 @@ void generate_from_int(Engine& eng, Iter begin, Iter end)
                 available_bits -= 32 - remaining_bits;
                 remaining_bits = 0;
             }
-            for(; available_bits >= 32; available_bits -= 32) {
-                boost::uint_least32_t word = boost::uint_least32_t(val);
-                val >>= 32;
-                *begin++ = word;
-                if(begin == end) return;
+            if(bits >= 32) {
+                for(; available_bits >= 32; available_bits -= 32) {
+                    boost::uint_least32_t word = boost::uint_least32_t(val) & 0xFFFFFFFFu;
+                    val >>= 32;
+                    *begin++ = word;
+                    if(begin == end) return;
+                }
             }
             remaining_bits = available_bits;
             saved_bits = static_cast<boost::uint_least32_t>(val);
