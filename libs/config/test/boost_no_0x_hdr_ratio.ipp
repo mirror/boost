@@ -16,6 +16,21 @@ namespace boost_no_0x_hdr_ratio {
 
 int test()
 {
+  using std::atto;
+  using std::femto;
+  using std::pico;
+  using std::nano;
+  using std::micro;
+  using std::milli;
+  using std::centi;
+  using std::deci;
+  using std::deca;
+  using std::hecto;
+  using std::kilo;
+  using std::mega;
+  using std::tera;
+  using std::peta;
+  using std::exa;
   return 0;
 }
 

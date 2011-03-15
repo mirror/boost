@@ -78,7 +78,6 @@
 #  define BOOST_NO_CHAR16_T
 #  define BOOST_NO_CHAR32_T
 #endif
-#define BOOST_NO_CONCEPTS
 #define BOOST_NO_CONSTEXPR
 #if ! __IBMCPP_DECLTYPE
 #  define BOOST_NO_DECLTYPE

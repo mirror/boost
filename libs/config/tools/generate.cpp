@@ -124,7 +124,7 @@ void write_test_file(const fs::path& file,
 {
    if(!fs::exists(file))
    {
-      std::cout << "Writing test file " << file.native_directory_string() << std::endl;
+      std::cout << "Writing test file " << file.string() << std::endl;
 
       fs::ofstream ofs(file);
       std::time_t t = std::time(0);
@@ -180,13 +180,13 @@ void write_test_file(const fs::path& file,
    }
    else
    {
-      std::cout << "Skipping existing test file " << file.native_directory_string() << std::endl;
+      std::cout << "Skipping existing test file " << file.string() << std::endl;
    }
 }
 
 void process_ipp_file(const fs::path& file, bool positive_test)
 {
-   std::cout << "Info: Scanning file: " << file.native_directory_string() << std::endl;
+   std::cout << "Info: Scanning file: " << file.string() << std::endl;
 
    // our variables:
    std::string file_text;
@@ -210,7 +210,7 @@ void process_ipp_file(const fs::path& file, bool positive_test)
    }
    if(macro_name.empty())
    {
-      std::cout << "Error: no macro definition found in " << file.native_directory_string();
+      std::cout << "Error: no macro definition found in " << file.string();
    }
    else
    {
@@ -219,10 +219,10 @@ void process_ipp_file(const fs::path& file, bool positive_test)
 
    // get the output filesnames:
    boost::regex file_regex("boost_([^.]+)\\.ipp");
-   positive_file = file.branch_path() / boost::regex_replace(file.leaf(), file_regex, "$1_pass.cpp");
-   negative_file = file.branch_path() / boost::regex_replace(file.leaf(), file_regex, "$1_fail.cpp");
-   write_test_file(positive_file, macro_name, namespace_name, file.leaf(), positive_test, true);
-   write_test_file(negative_file, macro_name, namespace_name, file.leaf(), positive_test, false);
+   positive_file = file.branch_path() / boost::regex_replace(file.leaf().string(), file_regex, "$1_pass.cpp");
+   negative_file = file.branch_path() / boost::regex_replace(file.leaf().string(), file_regex, "$1_fail.cpp");
+   write_test_file(positive_file, macro_name, namespace_name, file.leaf().string(), positive_test, true);
+   write_test_file(negative_file, macro_name, namespace_name, file.leaf().string(), positive_test, false);
    
    // always create config_test data,
    // positive and negative tests go to separate streams, because for some
@@ -232,7 +232,7 @@ void process_ipp_file(const fs::path& file, bool positive_test)
    if(!positive_test)
       *pout << "n";
    *pout << "def " << macro_name 
-      << "\n#include \"" << file.leaf() << "\"\n#else\nnamespace "
+      << "\n#include \"" << file.leaf().string() << "\"\n#else\nnamespace "
       << namespace_name << " = empty_boost;\n#endif\n";
 
    config_test2 << "   if(0 != " << namespace_name << "::test())\n"
@@ -243,12 +243,12 @@ void process_ipp_file(const fs::path& file, bool positive_test)
 
    // always generate the jamfile data:
    jamfile << "test-suite \"" << macro_name << "\" : \n"
-      "[ run " << positive_file.leaf() << " <template>config_options ]\n"
-      "[ compile-fail " << negative_file.leaf() << " <template>config_options ] ;\n";
+      "[ run " << positive_file.leaf().string() << " <template>config_options ]\n"
+      "[ compile-fail " << negative_file.leaf().string() << " <template>config_options ] ;\n";
 
    jamfile_v2 << "test-suite \"" << macro_name << "\" : \n"
-      "[ run ../" << positive_file.leaf() << " ]\n"
-      "[ compile-fail ../" << negative_file.leaf() << " ] ;\n";
+      "[ run ../" << positive_file.leaf().string() << " ]\n"
+      "[ compile-fail ../" << negative_file.leaf().string() << " ] ;\n";
 
 }
 
@@ -268,7 +268,7 @@ int cpp_main(int argc, char* argv[])
       fs::path p(__FILE__, fs::native);
       config_path = p.branch_path().branch_path() / "test";
    }
-   std::cout << "Info: Boost.Config test path set as: " << config_path.native_directory_string() << std::endl;
+   std::cout << "Info: Boost.Config test path set as: " << config_path.string() << std::endl;
 
    // enumerate *.ipp files:
    boost::regex ipp_mask("boost_(?:(has)|no).*\\.ipp");
@@ -276,7 +276,7 @@ int cpp_main(int argc, char* argv[])
    fs::directory_iterator i(config_path), j;
    while(i != j)
    {
-      if(boost::regex_match(i->path().leaf(), ipp_match, ipp_mask))
+      if(boost::regex_match(i->path().leaf().string(), ipp_match, ipp_mask))
       {
          process_ipp_file(*i, ipp_match[1].matched);
       }

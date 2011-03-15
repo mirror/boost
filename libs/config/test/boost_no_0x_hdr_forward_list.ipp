@@ -16,7 +16,8 @@ namespace boost_no_0x_hdr_forward_list {
 
 int test()
 {
-  return 0;
+  std::forward_list<int> l(2u, 2);
+  return *l.begin() == 2 ? 0 : 1;
 }
 
 }

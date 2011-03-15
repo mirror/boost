@@ -29,7 +29,6 @@
 #define BOOST_NO_AUTO_MULTIDECLARATIONS
 #define BOOST_NO_CHAR16_T
 #define BOOST_NO_CHAR32_T
-#define BOOST_NO_CONCEPTS
 #define BOOST_NO_CONSTEXPR
 
 #if !__has_feature(cxx_decltype)

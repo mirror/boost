@@ -16,6 +16,15 @@ namespace boost_no_0x_hdr_random {
 
 int test()
 {
+  using std::minstd_rand0;
+  using std::mt19937;
+  using std::mt19937_64;
+  using std::ranlux24_base;
+  using std::ranlux48_base;
+  using std::ranlux24;
+  using std::ranlux48;
+  using std::knuth_b;
+  using std::default_random_engine;
   return 0;
 }
 

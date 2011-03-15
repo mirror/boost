@@ -16,6 +16,8 @@ namespace boost_no_0x_hdr_regex {
 
 int test()
 {
+  using std::regex;
+  using std::wregex;
   return 0;
 }
 

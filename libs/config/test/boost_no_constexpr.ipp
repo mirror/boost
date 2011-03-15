@@ -14,6 +14,26 @@ namespace boost_no_constexpr {
 
 constexpr int square(int x) { return x * x; }  // from N2235
 
+// from 5.19:
+constexpr const int* addr(const int& ir) { return &ir; }
+static const int x = 5;
+constexpr const int* xp = addr(x);
+
+struct A 
+{
+   constexpr A(int i) : val(i) { }
+   constexpr operator int() { return val; }
+   constexpr operator long() { return 43; }
+private:
+   int val;
+};
+
+template<int> struct X { };
+
+constexpr A a = 42;
+
+X<a> x; // OK: unique conversion to int
+
 int test()
 {
   int i = square(5);

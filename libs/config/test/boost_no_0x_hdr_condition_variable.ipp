@@ -16,6 +16,8 @@ namespace boost_no_0x_hdr_condition_variable {
 
 int test()
 {
+  using std::condition_variable;
+  using std::condition_variable_any;
   return 0;
 }
 

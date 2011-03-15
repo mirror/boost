@@ -16,6 +16,15 @@ namespace boost_no_0x_hdr_chrono {
 
 int test()
 {
+  using std::chrono::nanoseconds;
+  using std::chrono::microseconds;
+  using std::chrono::milliseconds;
+  using std::chrono::seconds;
+  using std::chrono::minutes;
+  using std::chrono::hours;
+  using std::chrono::system_clock;
+  using std::chrono::monotonic_clock;
+  using std::chrono::high_resolution_clock;
   return 0;
 }
 

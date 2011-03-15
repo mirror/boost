@@ -68,6 +68,7 @@
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
 #include <boost/config/posix_features.hpp>
+#define BOOST_HAS_PTHREAD_YIELD
 
 #ifndef __GNUC__
 //
