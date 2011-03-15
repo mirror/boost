@@ -12,6 +12,7 @@
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/comparison/detail/equal_to.hpp>
 #include <boost/config.hpp>
+#include <boost/static_assert.hpp>
 
 #if defined (BOOST_MSVC)
 #  pragma warning(push)
