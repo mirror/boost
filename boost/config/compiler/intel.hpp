@@ -209,7 +209,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 
 #if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1200)
 #  undef  BOOST_NO_RVALUE_REFERENCES
-#  undef  BOOST_NO_SCOPED_ENUMS
+//#  undef  BOOST_NO_SCOPED_ENUMS  // doesn't really work!!
 #  undef  BOOST_NO_DELETED_FUNCTIONS
 #  undef  BOOST_NO_DEFAULTED_FUNCTIONS
 #  undef  BOOST_NO_LAMBDAS
