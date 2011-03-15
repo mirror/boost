@@ -260,7 +260,7 @@ private:
         return x[(k+index) % long_lag];
     }
 
-    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_engine&, boost::uintmax_t);
+    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_engine<IntType, w, s, r>&, boost::uintmax_t);
 
     IntType do_update(std::size_t current, std::size_t short_index, IntType carry)
     {
@@ -500,7 +500,7 @@ private:
         return x[(k+index) % long_lag];
     }
 
-    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_01_engine&, boost::uintmax_t);
+    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_01_engine<RealType, w, s, r>&, boost::uintmax_t);
 
     RealType do_update(std::size_t current, std::size_t short_index, RealType carry)
     {
