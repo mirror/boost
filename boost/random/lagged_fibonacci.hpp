@@ -51,6 +51,8 @@ public:
     BOOST_STATIC_CONSTANT(unsigned int, long_lag = p);
     BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
+    BOOST_STATIC_CONSTANT(UIntType, default_seed = 331u);
+
     /** Returns the smallest value that the generator can produce. */
     static result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }
     /** Returns the largest value that the generator can produce. */
@@ -62,7 +64,7 @@ public:
 
     /** Creates a new @c lagged_fibonacci_engine and calls @c seed(value). */
     BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(lagged_fibonacci_engine,
-        uint32_t, value)
+        UIntType, value)
     { seed(value); }
 
     /** Creates a new @c lagged_fibonacci_engine and calls @c seed(seq). */
@@ -78,17 +80,17 @@ public:
 
     // compiler-generated copy ctor and assignment operator are fine
     
-    /** Calls @c seed(331). */
-    void seed() { seed(331u); }
+    /** Calls @c seed(default_seed). */
+    void seed() { seed(default_seed); }
 
     /**
      * Sets the state of the generator to values produced by
      * a \minstd_rand0 generator.
      */
     BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(lagged_fibonacci_engine,
-        uint32_t, value)
+        UIntType, value)
     {
-        minstd_rand0 intgen(value);
+        minstd_rand0 intgen(static_cast<boost::uint32_t>(value));
         detail::generator_seed_seq<minstd_rand0> gen(intgen);
         seed(gen);
     }
@@ -187,6 +189,8 @@ template<class UIntType, int w, unsigned int p, unsigned int q>
 const unsigned int lagged_fibonacci_engine<UIntType, w, p, q>::long_lag;
 template<class UIntType, int w, unsigned int p, unsigned int q>
 const unsigned int lagged_fibonacci_engine<UIntType, w, p, q>::short_lag;
+template<class UIntType, int w, unsigned int p, unsigned int q>
+const UIntType lagged_fibonacci_engine<UIntType, w, p, q>::default_seed;
 #endif
 
 /// \cond show_private
@@ -215,7 +219,7 @@ class lagged_fibonacci : public lagged_fibonacci_engine<UIntType, w, p, q>
     typedef lagged_fibonacci_engine<UIntType, w, p, q> base_type;
 public:
     lagged_fibonacci() {}
-    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(lagged_fibonacci, uint32_t, val)
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(lagged_fibonacci, UIntType, val)
     { this->seed(val); }
     BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(lagged_fibonacci, SeedSeq, seq)
     { this->seed(seq); }
@@ -261,6 +265,8 @@ public:
     BOOST_STATIC_CONSTANT(unsigned int, long_lag = p);
     BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
+    BOOST_STATIC_CONSTANT(boost::uint32_t, default_seed = 331u);
+
     /** Constructs a @c lagged_fibonacci_01 generator and calls @c seed(). */
     lagged_fibonacci_01_engine() { seed(); }
     /** Constructs a @c lagged_fibonacci_01 generator and calls @c seed(value). */
@@ -274,8 +280,8 @@ public:
 
     // compiler-generated copy ctor and assignment operator are fine
 
-    /** Calls seed(331u). */
-    void seed() { seed(331u); }
+    /** Calls seed(default_seed). */
+    void seed() { seed(default_seed); }
 
     /**
      * Constructs a \minstd_rand0 generator with the constructor parameter
@@ -284,7 +290,7 @@ public:
      * seeds will be equivalent to some seed within this range. See
      * \linear_congruential_engine for details.
      */
-    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(lagged_fibonacci_01_engine, uint32_t, value)
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(lagged_fibonacci_01_engine, boost::uint32_t, value)
     {
         minstd_rand0 intgen(value);
         detail::generator_seed_seq<minstd_rand0> gen(intgen);
@@ -414,7 +420,8 @@ template<class RealType, int w, unsigned int p, unsigned int q>
 const unsigned int lagged_fibonacci_01_engine<RealType, w, p, q>::short_lag;
 template<class RealType, int w, unsigned int p, unsigned int q>
 const int lagged_fibonacci_01_engine<RealType,w,p,q>::word_size;
-
+template<class RealType, int w, unsigned int p, unsigned int q>
+const boost::uint32_t lagged_fibonacci_01_engine<RealType,w,p,q>::default_seed;
 #endif
 
 /// \cond show_private
@@ -449,7 +456,7 @@ class lagged_fibonacci_01 : public lagged_fibonacci_01_engine<RealType, w, p, q>
     typedef lagged_fibonacci_01_engine<RealType, w, p, q> base_type;
 public:
     lagged_fibonacci_01() {}
-    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(lagged_fibonacci_01, uint32_t, val)
+    BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(lagged_fibonacci_01, boost::uint32_t, val)
     { this->seed(val); }
     BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(lagged_fibonacci_01, SeedSeq, seq)
     { this->seed(seq); }

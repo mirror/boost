@@ -23,11 +23,4 @@
 
 #define BOOST_RANDOM_GENERATE_VALUES { 0x55424A4U, 0x3A2CCEF5U, 0x6ADB4A65U, 0x2B019719U }
 
-// rand48 uses non-standard seeding
-template<class Converted, class T>
-void test_seed_conversion(boost::rand48 & urng, const T & t) {
-    boost::rand48 urng2(t);
-    urng2.seed(t);
-}
-
 #include "test_generator.ipp"

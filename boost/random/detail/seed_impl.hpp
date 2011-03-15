@@ -32,6 +32,19 @@ namespace boost {
 namespace random {
 namespace detail {
 
+// finds the seed type of an engine, given its
+// result_type.  If the result_type is integral
+// the seed type is the same.  If the result_type
+// is floating point, the seed type is uint32_t
+template<class T>
+struct seed_type
+{
+    typedef typename boost::mpl::if_<boost::is_integral<T>,
+        T,
+        boost::uint32_t
+    >::type type;
+};
+
 template<class Engine, class Iter>
 void generate_from_real(Engine& eng, Iter begin, Iter end)
 {

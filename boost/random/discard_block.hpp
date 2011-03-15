@@ -41,6 +41,8 @@ namespace random {
 template<class UniformRandomNumberGenerator, std::size_t p, std::size_t r>
 class discard_block_engine
 {
+    typedef typename detail::seed_type<
+        typename UniformRandomNumberGenerator::result_type>::type seed_type;
 public:
     typedef UniformRandomNumberGenerator base_type;
     typedef typename base_type::result_type result_type;
@@ -69,7 +71,7 @@ public:
      * generator with @c value
      */
     BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(discard_block_engine,
-                                               result_type, value)
+                                               seed_type, value)
     { _rng.seed(value); _n = 0; }
     
     /**
@@ -89,7 +91,7 @@ public:
     /** default seeds the underlying generator. */
     void seed() { _rng.seed(); _n = 0; }
     /** Seeds the underlying generator with s. */
-    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(discard_block_engine, result_type, s)
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(discard_block_engine, seed_type, s)
     { _rng.seed(s); _n = 0; }
     /** Seeds the underlying generator with seq. */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(discard_block_engine, SeedSeq, seq)
