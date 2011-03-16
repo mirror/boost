@@ -12,12 +12,13 @@
 #ifndef BOOST_RANGE_SUB_RANGE_HPP
 #define BOOST_RANGE_SUB_RANGE_HPP
 
+#include <boost/detail/workaround.hpp>
+
 #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500)) 
     #pragma warning( push )
     #pragma warning( disable : 4996 )
 #endif
 
-#include <boost/detail/workaround.hpp>
 #include <boost/range/config.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/value_type.hpp>
