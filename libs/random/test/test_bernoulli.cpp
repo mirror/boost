@@ -25,7 +25,7 @@
 bool do_test(double p, long long max) {
     std::cout << "running bernoulli(" << p << ")" << " " << max << " times: " << std::flush;
 
-    boost::math::binomial expected(max, p);
+    boost::math::binomial expected(static_cast<double>(max), p);
     
     boost::random::bernoulli_distribution<> dist(p);
     boost::mt19937 gen;

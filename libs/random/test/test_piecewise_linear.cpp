@@ -77,7 +77,7 @@ double cdf(const piecewise_linear& dist, double x)
     return dist.cdf(x);
 }
 
-bool do_test(int n, long long max) {
+bool do_test(int n, int max) {
     std::cout << "running piecewise_linear(p0, p1, ..., p" << n-1 << ")" << " " << max << " times: " << std::flush;
 
     std::vector<double> weights;
@@ -110,7 +110,7 @@ bool do_test(int n, long long max) {
     return result;
 }
 
-bool do_tests(int repeat, int max_n, long long trials) {
+bool do_tests(int repeat, int max_n, int trials) {
     boost::mt19937 gen;
     boost::uniform_int<> idist(2, max_n);
     int errors = 0;
@@ -145,7 +145,7 @@ bool handle_option(int& argc, char**& argv, char opt, T& value) {
 int main(int argc, char** argv) {
     int repeat = 10;
     int max_n = 10;
-    long long trials = 1000000ll;
+    int trials = 1000000;
 
     if(argc > 0) {
         --argc;

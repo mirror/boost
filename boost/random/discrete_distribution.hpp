@@ -32,6 +32,8 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 namespace random {
 
@@ -445,5 +447,7 @@ private:
 
 }
 }
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif

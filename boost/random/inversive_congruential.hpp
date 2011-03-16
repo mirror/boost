@@ -28,6 +28,8 @@
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/detail/seed_impl.hpp>
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 namespace random {
 
@@ -259,5 +261,7 @@ typedef inversive_congruential_engine<uint32_t, 9102, 2147483647-36884165,
 using random::hellekalek1995;
 
 } // namespace boost
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_INVERSIVE_CONGRUENTIAL_HPP

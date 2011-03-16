@@ -94,7 +94,7 @@ public:
     for(int i = 0; i < n; ++i)
       count(f());
   }
-  double probability(int i) const { return 1.0/classes(); }
+  double probability(int /*i*/) const { return 1.0/classes(); }
 };
 
 // two-dimensional equidistribution experiment

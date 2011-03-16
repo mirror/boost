@@ -34,6 +34,7 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/range/numeric.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 #include <iostream>
 #include <vector>
 
@@ -82,7 +83,7 @@ bool do_test(BOOST_RANDOM_ARG1_TYPE BOOST_RANDOM_ARG1_NAME,
 
 #else
 
-    kolmogorov_experiment test(max);
+    kolmogorov_experiment test(boost::numeric_cast<int>(max));
     boost::variate_generator<boost::mt19937&, BOOST_RANDOM_DISTRIBUTION > vgen(gen, dist);
 
     double prob = test.probability(test.run(vgen, expected));

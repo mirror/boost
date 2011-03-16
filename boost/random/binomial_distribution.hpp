@@ -13,12 +13,14 @@
 #ifndef BOOST_RANDOM_BINOMIAL_DISTRIBUTION_HPP_INCLUDED
 #define BOOST_RANDOM_BINOMIAL_DISTRIBUTION_HPP_INCLUDED
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <cstdlib>
 #include <iosfwd>
 
 #include <boost/random/detail/config.hpp>
 #include <boost/random/uniform_01.hpp>
+
+#include <boost/random/detail/disable_warnings.hpp>
 
 namespace boost {
 namespace random {
@@ -414,5 +416,7 @@ private:
 using random::binomial_distribution;
 
 }
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif

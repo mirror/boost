@@ -111,16 +111,17 @@ public:
      *
      * Complexity: Exactly k+1 invocations of the base generator.
      */
-    template<class T>
-    void seed(T& s) { _rng.seed(s); init(); }
+    BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(shuffle_order_engine,
+        result_type, seed_arg)
+    { _rng.seed(seed_arg); init(); }
     /**
      * Invokes the one-argument seed method of the base generator
-     * with the parameter seed and re-initializes the internal buffer array.
+     * with the parameter seq and re-initializes the internal buffer array.
      *
      * Complexity: Exactly k+1 invocations of the base generator.
      */
-    template<class T>
-    void seed(const T& s) { _rng.seed(s); init(); }
+    BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(shuffle_order_engine, SeedSeq, seq)
+    { _rng.seed(seq); init(); }
     template<class It> void seed(It& first, It last)
     { _rng.seed(first, last); init(); }
 
@@ -203,7 +204,7 @@ public:
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, shuffle_order_engine, s)
     {
         os << s._rng;
-        for(int i = 0; i < k; ++i)
+        for(std::size_t i = 0; i < k; ++i)
             os << ' ' << s.v[i];
         os << ' ' << s.y;
         return os;
@@ -213,7 +214,7 @@ public:
     BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, shuffle_order_engine, s)
     {
         is >> s._rng;
-        for(int i = 0; i < k; ++i)
+        for(std::size_t i = 0; i < k; ++i)
             is >> std::ws >> s.v[i];
         is >> std::ws >> s.y;
         return is;

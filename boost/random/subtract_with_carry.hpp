@@ -66,7 +66,7 @@ void subtract_with_carry_discard(Engine& eng, boost::uintmax_t z) {
 
     if(k < z) {
         // main loop: update full blocks from k = 0 to long_lag
-        for(int i = 0; i < (z - k) / long_lag; ++i) {
+        for(std::size_t i = 0; i < (z - k) / long_lag; ++i) {
             for(std::size_t j = 0; j < short_lag; ++j) {
                 carry = eng.do_update(j, j + long_lag - short_lag, carry);
             }

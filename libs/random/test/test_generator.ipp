@@ -19,6 +19,7 @@ using boost::random::test::RandomNumberEngine;
 BOOST_CONCEPT_ASSERT((RandomNumberEngine< BOOST_RANDOM_URNG >));
 
 typedef BOOST_RANDOM_URNG::result_type result_type;
+typedef boost::random::detail::seed_type<result_type>::type seed_type;
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -43,7 +44,7 @@ void test_seed_conversion(URNG & urng, const T & t)
 #pragma warning(pop)
 #endif
 
-void test_seed(result_type value)
+void test_seed(seed_type value)
 {
     BOOST_RANDOM_URNG urng(value);
 
@@ -80,10 +81,10 @@ BOOST_AUTO_TEST_CASE(test_default_seed)
 
 BOOST_AUTO_TEST_CASE(test_arithmetic_seed)
 {
-    test_seed(static_cast<result_type>(0));
-    test_seed(static_cast<result_type>(127));
-    test_seed(static_cast<result_type>(539157235));
-    test_seed(static_cast<result_type>(~0u));
+    test_seed(static_cast<seed_type>(0));
+    test_seed(static_cast<seed_type>(127));
+    test_seed(static_cast<seed_type>(539157235));
+    test_seed(static_cast<seed_type>(~0u));
 }
    
 BOOST_AUTO_TEST_CASE(test_iterator_seed)

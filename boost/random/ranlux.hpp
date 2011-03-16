@@ -45,7 +45,7 @@ namespace detail {
 class ranlux_documentation {};
 }
 
-typedef subtract_with_carry_engine<int, 24, 10, 24> ranlux_base;
+typedef subtract_with_carry_engine<uint32_t, 24, 10, 24> ranlux_base;
 typedef subtract_with_carry_01_engine<float, 24, 10, 24> ranlux_base_01;
 typedef subtract_with_carry_01_engine<double, 48, 10, 24> ranlux64_base_01;
 
@@ -66,7 +66,7 @@ typedef discard_block_engine<ranlux64_base_01, 223, 24> ranlux64_3_01;
 typedef discard_block_engine<ranlux64_base_01, 389, 24> ranlux64_4_01;
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-typedef subtract_with_carry_engine<int64_t, 48, 10, 24> ranlux64_base;
+typedef subtract_with_carry_engine<uint64_t, 48, 10, 24> ranlux64_base;
 /** @copydoc boost::random::detail::ranlux_documentation */
 typedef discard_block_engine<ranlux64_base, 223, 24> ranlux64_3;
 /** @copydoc boost::random::detail::ranlux_documentation */

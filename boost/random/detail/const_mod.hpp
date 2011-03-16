@@ -43,8 +43,11 @@ public:
   {
     if(((unsigned_m() - 1) & unsigned_m()) == 0)
       return (unsigned_type(x)) & (unsigned_m() - 1);
-    else
-      return x % m;
+    else {
+      IntType supress_warnings = (m == 0);
+      BOOST_ASSERT(supress_warnings == 0);
+      return x % (m + supress_warnings);
+    }
   }
 
   static IntType add(IntType x, IntType c)
@@ -83,9 +86,11 @@ public:
       return (unsigned_type(a) * unsigned_type(x) + unsigned_type(c)) & (unsigned_m() - 1);
     else if(a == 0)
       return c;
-    else if(m <= (traits::const_max-c)/a)   // i.e. a*m+c <= max
-      return (a*x+c) % m;
-    else
+    else if(m <= (traits::const_max-c)/a) {  // i.e. a*m+c <= max
+      IntType supress_warnings = (m == 0);
+      BOOST_ASSERT(supress_warnings == 0);
+      return (a*x+c) % (m + supress_warnings);
+    } else
       return add(mult(a, x), c);
   }
 
@@ -113,7 +118,9 @@ private:
 
   static IntType mult_small(IntType a, IntType x)
   {
-    return a*x % m;
+    IntType supress_warnings = (m == 0);
+    BOOST_ASSERT(supress_warnings == 0);
+    return a*x % (m + supress_warnings);
   }
 
   static IntType mult_schrage(IntType a, IntType value)
@@ -130,9 +137,12 @@ private:
     IntType q, r;
     IntType value = 0;
 
+    IntType supress_warnings = (m == 0);
+    BOOST_ASSERT(supress_warnings == 0);
+
     while(true) {
       if(a == 0 || b <= traits::const_max/a)
-        return add(value, IntType(a * b % m));
+        return add(value, IntType(a * b % (m + supress_warnings)));
 
       if(b < a) std::swap(a, b);
       q = m / a;
@@ -143,7 +153,7 @@ private:
       a = r;
       b = IntType(b/q);
       if(a == 0 || b <= traits::const_max/a)
-        return sub(value, IntType(a * b % m));
+        return sub(value, IntType(a * b % (m + supress_warnings)));
         
       if(b < a) std::swap(a, b);
       q = m / a;

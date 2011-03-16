@@ -9,8 +9,22 @@
  *
  */
 
+#ifndef BOOST_RANDOM_TEST_CONCEPTS_HPP
+#define BOOST_RANDOM_TEST_CONCEPTS_HPP
+
 #include <boost/config.hpp>
+
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4100)
+#endif
+
 #include <boost/concept_check.hpp>
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+
 #include <boost/concept_archetype.hpp>
 #include <boost/concept/requires.hpp>
 #include <boost/mpl/assert.hpp>
@@ -22,8 +36,11 @@
 #include <istream>
 #include <ostream>
 
-#ifndef BOOST_RANDOM_TEST_CONCEPTS_HPP
-#define BOOST_RANDOM_TEST_CONCEPTS_HPP
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4510)
+#pragma warning(disable:4610)
+#endif
 
 namespace boost {
 namespace random {
@@ -135,7 +152,7 @@ private:
     E v;
     const E x;
     seed_seq_archetype<> q;
-    result_type s;
+    typename detail::seed_type<result_type>::type s;
     unsigned long long z;
 
     void check_extra(boost::mpl::true_ /*is_integral*/) {}
@@ -196,5 +213,9 @@ private:
 }
 }
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif

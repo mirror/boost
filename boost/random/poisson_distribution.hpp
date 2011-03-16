@@ -23,6 +23,8 @@
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/detail/config.hpp>
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 namespace random {
 
@@ -352,5 +354,7 @@ private:
 using random::poisson_distribution;
 
 } // namespace boost
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_POISSON_DISTRIBUTION_HPP

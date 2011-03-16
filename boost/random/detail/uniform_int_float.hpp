@@ -20,6 +20,8 @@
 #include <boost/integer.hpp>
 #include <boost/random/detail/config.hpp>
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 namespace random {
 namespace detail {
@@ -65,5 +67,7 @@ private:
 } // namespace detail
 } // namespace random
 } // namespace boost
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_DETAIL_UNIFORM_INT_FLOAT_HPP

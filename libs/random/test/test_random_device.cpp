@@ -13,7 +13,7 @@
 #include <boost/test/test_tools.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 
-int test_main(int argc, char** argv) {
+int test_main(int, char**) {
     boost::random_device rng;
     double entropy = rng.entropy();
     BOOST_CHECK_GE(entropy, 0);
