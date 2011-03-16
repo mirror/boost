@@ -10,6 +10,10 @@
 //  TITLE:         C++0x =delete functions unavailable
 //  DESCRIPTION:   The compiler does not support C++0x =delete functions
 
+#if defined(__GNUC__) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  error Deleted functions aren't really supported in non-C++0x mode
+#endif
+
 namespace boost_no_deleted_functions {
 
   struct foo {

@@ -168,7 +168,7 @@
 
 // Variadic templates compiler: 
 //   http://www.generic-programming.org/~dgregor/cpp/variadic-templates.html
-#  if defined(__VARIADIC_TEMPLATES) || (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 4))
+#  if defined(__VARIADIC_TEMPLATES) || (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 4) && defined(__GXX_EXPERIMENTAL_CXX0X__))
 #    define BOOST_HAS_VARIADIC_TMPL
 #  else
 #    define BOOST_NO_VARIADIC_TEMPLATES
@@ -183,14 +183,8 @@
 #  define BOOST_NO_CHAR16_T
 #  define BOOST_NO_CHAR32_T
 #  define BOOST_NO_INITIALIZER_LISTS
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4)
-// 
-// These appear to always be available in GCC-4.4.x regardless of
-// whether we are in C++ 0x mode or not:
-//
 #  define BOOST_NO_DEFAULTED_FUNCTIONS
 #  define BOOST_NO_DELETED_FUNCTIONS
-#endif
 #endif
 
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4)
@@ -200,11 +194,8 @@
 // C++0x features in 4.5.0 and later
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5)
-// These two appear to be always available:
 #  define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS
 #  define BOOST_NO_LAMBDAS
-#endif
 #  define BOOST_NO_RAW_LITERALS
 #  define BOOST_NO_UNICODE_LITERALS
 #endif

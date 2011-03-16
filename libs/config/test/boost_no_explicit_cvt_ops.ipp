@@ -10,6 +10,10 @@
 //  TITLE:         C++0x explicit conversion operators unavailable
 //  DESCRIPTION:   The compiler does not support C++0x explicit conversion operators
 
+#if defined(__GNUC__) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  error This feature isn't really available in non-C++0x mode
+#endif
+
 namespace boost_no_explicit_conversion_operators {
 
   struct foo {
