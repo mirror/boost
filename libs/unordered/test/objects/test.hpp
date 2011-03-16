@@ -20,11 +20,13 @@ namespace test
     // Note that the default hash function will work for any equal_to (but not
     // very well).
     class object;
+    class implicitly_convertible;
     class hash;
     class less;
     class equal_to;
     template <class T> class allocator;
     object generate(object const*);
+    implicitly_convertible generate(implicitly_convertible const*);
 
     class object : globally_counted_object
     {
@@ -59,6 +61,31 @@ namespace test
         }
 
         friend std::ostream& operator<<(std::ostream& out, object const& o)
+        {
+            return out<<"("<<o.tag1_<<","<<o.tag2_<<")";
+        }
+    };
+
+    class implicitly_convertible : globally_counted_object
+    {
+        int tag1_, tag2_;
+    public:
+
+        explicit implicitly_convertible(int t1 = 0, int t2 = 0)
+            : tag1_(t1), tag2_(t2)
+            {}
+
+        operator object() const
+        {
+            return object(tag1_, tag2_);
+        }
+
+        friend implicitly_convertible generate(implicitly_convertible const*) {
+            int* x = 0;
+            return implicitly_convertible(generate(x), generate(x));
+        }
+
+        friend std::ostream& operator<<(std::ostream& out, implicitly_convertible const& o)
         {
             return out<<"("<<o.tag1_<<","<<o.tag2_<<")";
         }
