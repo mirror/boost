@@ -279,44 +279,6 @@ namespace test
     {
         return x == y;
     }
-
-#if BOOST_WORKAROUND(__GNUC__, < 3)
-    void swap(test::object& x, test::object& y) {
-        test::object tmp;
-        tmp = x;
-        x = y;
-        y = tmp;
-    }
-
-    void swap(test::hash& x, test::hash& y) {
-        test::hash tmp;
-        tmp = x;
-        x = y;
-        y = tmp;
-    }
-
-    void swap(test::less& x, test::less& y) {
-        test::less tmp;
-        tmp = x;
-        x = y;
-        y = tmp;
-    }
-
-    void swap(test::equal_to& x, test::equal_to& y) {
-        test::equal_to tmp;
-        tmp = x;
-        x = y;
-        y = tmp;
-    }
-
-    template <class T>
-    void swap(test::allocator<T>& x, test::allocator<T>& y) {
-        test::allocator<T> tmp;
-        tmp = x;
-        x = y;
-        y = tmp;
-    }
-#endif
 }
 
 #endif
