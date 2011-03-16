@@ -371,7 +371,7 @@ namespace boost
 
                 Container reference(cont);
                 Container test(cont);
-                
+
                 iterator_t range_result = policy.test_iter(test);
                 iterator_t reference_it = policy.reference(reference);
 
@@ -391,7 +391,8 @@ namespace boost
                     Container reference(cont);
                     Container test_cont(cont);
 
-                    range_return_t range_result = test_range_t()(policy, test_cont);
+                    test_range_t test_range_fn;
+                    range_return_t range_result = test_range_fn(policy, test_cont);
                     iterator_t reference_it = policy.reference(reference);
 
                     check_results<result_type>::test(test_cont, reference,

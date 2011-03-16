@@ -24,6 +24,7 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
 
 void check_reference_type();
 
@@ -102,16 +103,126 @@ void check_iterator_range()
     check_reference_type();
 }
 
+namespace iterator_range_test_detail
+{
+    struct less
+    {
+        template< class Left, class Right >
+        bool operator()(const Left& l, const Right& r) const
+        {
+            return l < r;
+        }
+    };
+    
+    struct greater
+    {
+        template< class Left, class Right >
+        bool operator()(const Left& l, const Right& r) const
+        {
+            return l > r;
+        }
+    };
+    
+    struct less_or_equal
+    {
+        template< class Left, class Right >
+        bool operator()(const Left& l, const Right& r) const
+        {
+            return l <= r;
+        }
+    };
+    
+    struct greater_or_equal
+    {
+        template< class Left, class Right >
+        bool operator()(const Left& l, const Right& r) const
+        {
+            return l >= r;
+        }
+    };
+    
+    struct equal_to
+    {
+        template< class Left, class Right >
+        bool operator()(const Left& l, const Right& r) const
+        {
+            return l == r;
+        }
+    };
+    
+    struct not_equal_to
+    {
+        template< class Left, class Right >
+        bool operator()(const Left& l, const Right& r) const
+        {
+            return l != r;
+        }
+    };
+    
+    template< class Pred >
+    void check_iterator_range_operators_impl(Pred pred)
+    {
+        std::vector<std::string> vals;
+        vals.push_back(std::string());
+        vals.push_back("a");
+        vals.push_back("b");
+        vals.push_back("z");
+        vals.push_back("ab");
+        vals.push_back("ba");
+        vals.push_back("abc");
+        vals.push_back("cba");
+        vals.push_back("aa");
+        vals.push_back("aaa");
+        vals.push_back("aab");
+        vals.push_back("bba");
+
+        typedef std::string::const_iterator citer;
+        typedef boost::iterator_range<citer> iter_range;
+
+        typedef std::vector<std::string>::const_iterator value_const_iterator;
+        value_const_iterator first_val = vals.begin();
+        value_const_iterator last_val = vals.end();
+        
+        for (value_const_iterator left_it = first_val; left_it != last_val; ++left_it)
+        {
+            const std::string& leftValue = *left_it;
+            for (value_const_iterator right_it = first_val; right_it != last_val; ++right_it)
+            {
+                const std::string& rightValue = *right_it;
+                iter_range left = boost::make_iterator_range(leftValue);
+                iter_range right = boost::make_iterator_range(rightValue);
+                
+                const bool reference = pred(leftValue, rightValue);
+                
+                BOOST_CHECK_EQUAL( pred(left, right), reference );
+                BOOST_CHECK_EQUAL( pred(left, rightValue), reference );
+                BOOST_CHECK_EQUAL( pred(leftValue, right), reference );
+            }
+        }
+    }
+} // namespace iterator_range_test_detail
+
+template<typename Pred>
+inline void check_iterator_range_operator()
+{
+    iterator_range_test_detail::check_iterator_range_operators_impl(
+        Pred());
+}
 
 boost::unit_test::test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
     boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "Range Test Suite" );
 
-    test->add( BOOST_TEST_CASE( &check_iterator_range ) );
+    test->add(BOOST_TEST_CASE(&check_iterator_range));
+    test->add(BOOST_TEST_CASE(&check_iterator_range_operator<iterator_range_test_detail::less>));
+    test->add(BOOST_TEST_CASE(&check_iterator_range_operator<iterator_range_test_detail::less_or_equal>));
+    test->add(BOOST_TEST_CASE(&check_iterator_range_operator<iterator_range_test_detail::greater>));
+    test->add(BOOST_TEST_CASE(&check_iterator_range_operator<iterator_range_test_detail::greater_or_equal>));
+    test->add(BOOST_TEST_CASE(&check_iterator_range_operator<iterator_range_test_detail::equal_to>));
+    test->add(BOOST_TEST_CASE(&check_iterator_range_operator<iterator_range_test_detail::not_equal_to>));
 
     return test;
 }
-
 
 //
 //
