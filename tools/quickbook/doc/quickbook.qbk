@@ -239,7 +239,9 @@ Features include:
   * XML escape documentation fields, with escapes to allow encoding unicode
     in ASCII.
 
-[heading Version 1.5.4 - Boost 1.46.0]
+[heading Version 1.5.4 - Boost 1.46.1]
+
+Boost 1.46.0:
 
 * Add support for `lang` attribute in documentation info.
 * Improved anchor implementation. Especially for using an anchor
@@ -250,6 +252,22 @@ Features include:
   allow more block elements in a future version.
 * Rearrange the structure of the grammar.
 * Use filesystem 3. Remove cygwin support.
+
+Boost 1.46.1:
+
+* Work around optimization bug in g++ 4.4 on 64 bit linux.
+
+[heading Version 1.5.5 - Boost 1.47]
+
+* Tweak anchor placement for titles.
+* Hard code the quickbook path into the quickbook testing tools. This
+  means that they can be used from multiple locations.
+* Generate an id for boostbook `bridgehead` elements. This results in
+  more consistent html, since docbook generates a random id if they
+  don't have one.
+* Improved unicode support on windows. Unicode can now be used from the
+  command line, and unicode filenames are supported. Unicode output is
+  a bit weak.
 
 [endsect] [/Change log]
 
