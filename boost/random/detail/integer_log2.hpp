@@ -28,6 +28,8 @@ namespace detail {
 #define BOOST_RANDOM_DETAIL_CONSTEXPR __forceinline
 #elif defined(__GNUC__)
 #define BOOST_RANDOM_DETAIL_CONSTEXPR __attribute__((const)) __attribute__((always_inline))
+#else
+#define BOOST_RANDOM_DETAIL_CONSTEXPR inline
 #endif
 
 template<int Shift>
