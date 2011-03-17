@@ -200,8 +200,8 @@ namespace chrono {
         time_point& operator--()      {--d_; return *this;}
         time_point  operator--(int)   {return time_point(d_--);}      
 
-        time_point& operator+=(const rep& r) {d_ += r; return *this;}
-        time_point& operator-=(const rep& r) {d_ -= r; return *this;}
+        time_point& operator+=(const rep& r) {d_ += duration(r); return *this;}
+        time_point& operator-=(const rep& r) {d_ -= duration(r); return *this;}
 
 #endif
       
