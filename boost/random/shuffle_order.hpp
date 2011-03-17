@@ -143,36 +143,15 @@ public:
             // try to do it in the native type if we know that it won't
             // overflow
             j = k * off / (brange + 1);
-        }
-#if !defined(BOOST_NO_INT64_T)
-        else if(brange < (std::numeric_limits<uint64_t>::max)() / k) {
+        } else if(brange < (std::numeric_limits<uintmax_t>::max)() / k) {
             // Otherwise try to use uint64_t
             j = static_cast<base_unsigned>(
-                static_cast<uint64_t>(off) * k /
-                (static_cast<uint64_t>(brange) + 1));
-        }
-#endif
-        else {
-            // If all else fails, fall back to a general algorithm that
-            // never overflows.
-
-            const base_unsigned r_mod_k = ((brange % k) + 1) % k;
-            const base_unsigned bucket_size = (brange - k + 1)/k + 1;
-            // if the candidate from the first round is zero, we're safe.
-            base_unsigned candidate = 0;
-            base_unsigned old_candidate;
-            base_unsigned error = 0;
-            do {
-                old_candidate = candidate;
-                candidate = (off - error) / bucket_size;
-                base_unsigned possible = (off - error + 1) / bucket_size;
-                error = possible - possible * (k - r_mod_k) / k;
-            } while(old_candidate != candidate);
-
-            j = candidate;
-
-            // Would cause overflow
-            // assert(j == uint64_t(off)*k/(uint64_t(brange)+1));
+                static_cast<uintmax_t>(off) * k /
+                (static_cast<uintmax_t>(brange) + 1));
+        } else {
+            boost::uintmax_t divisor =
+                static_cast<boost::uintmax_t>(brange) + 1;
+            j = static_cast<base_unsigned>(detail::muldiv(off, k, divisor));
         }
         // assert(0 <= j && j < k);
         y = v[j];

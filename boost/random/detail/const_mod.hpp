@@ -16,24 +16,16 @@
 #ifndef BOOST_RANDOM_CONST_MOD_HPP
 #define BOOST_RANDOM_CONST_MOD_HPP
 
-#include <algorithm>
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
-#include <boost/detail/workaround.hpp>
+#include <boost/random/detail/large_arithmetic.hpp>
 
 #include <boost/random/detail/disable_warnings.hpp>
 
 namespace boost {
 namespace random {
-
-/*
- * Some random number generators require modular arithmetic.  Put
- * everything we need here.
- * IntType must be an integral type.
- */
 
 template<class IntType, IntType m>
 class const_mod
@@ -74,8 +66,6 @@ public:
       return mult_small(a, x);
     else if(traits::is_signed && (m%a < m/a))
       return mult_schrage(a, x);
-    else if(x == 1)
-      return a;
     else
       return mult_general(a, x);
   }
@@ -133,36 +123,18 @@ private:
     return sub(a*(value%q), r*(value/q));
   }
 
-  static IntType mult_general(IntType a, IntType b) {
-    IntType q, r;
-    IntType value = 0;
-
-    IntType supress_warnings = (m == 0);
-    BOOST_ASSERT(supress_warnings == 0);
-
-    while(true) {
-      if(a == 0 || b <= traits::const_max/a)
-        return add(value, IntType(a * b % (m + supress_warnings)));
-
-      if(b < a) std::swap(a, b);
-      q = m / a;
-      r = m % a;
-
-      value = add(value, IntType(a*(b%q)));
-        
-      a = r;
-      b = IntType(b/q);
-      if(a == 0 || b <= traits::const_max/a)
-        return sub(value, IntType(a * b % (m + supress_warnings)));
-        
-      if(b < a) std::swap(a, b);
-      q = m / a;
-      r = m % a;
-      
-      value = sub(value, IntType(a*(b%q)));
-          
-      a = r;
-      b = IntType(b/q);
+  static IntType mult_general(IntType a, IntType b)
+  {
+    IntType suppress_warnings = (m == 0);
+    BOOST_ASSERT(suppress_warnings == 0);
+    IntType modulus = m + suppress_warnings;
+    BOOST_ASSERT(modulus == m);
+    if(::boost::uintmax_t(modulus) <=
+        (::std::numeric_limits< ::boost::uintmax_t>::max)() / modulus)
+    {
+      return static_cast<IntType>(boost::uintmax_t(a) * b % modulus);
+    } else {
+      return static_cast<IntType>(detail::mulmod(a, b, modulus));
     }
   }
 
