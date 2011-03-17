@@ -8,8 +8,6 @@
 #   http://www.boost.org/LICENSE_1_0.txt)
 #==============================================================================
 
-import os ;
-
 project quickbook
     : requirements
         <toolset>gcc:<c++-template-depth>300
@@ -18,10 +16,7 @@ project quickbook
         <toolset>darwin:<cflags>-g0
     ;
 
-if [ os.name ] = NT
-{
-  lib shell32 ;
-}
+lib shell32 ;
 
 exe quickbook
     :
@@ -57,5 +52,5 @@ exe quickbook
       <toolset>msvc:<cxxflags>/wd4800
       <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
       <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-      <os>NT:<library>shell32
+      <target-os>NT:<library>shell32
     ;
