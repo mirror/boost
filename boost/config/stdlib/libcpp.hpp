@@ -23,6 +23,12 @@
 #    define BOOST_NO_0X_HDR_TUPLE
 #endif
 
+//
+// These appear to be unusable/incomplete so far:
+//
+#  define BOOST_NO_0X_HDR_CHRONO
+#  define BOOST_NO_0X_HDR_TYPE_TRAITS
+
 // libc++ uses a non-standard messages_base
 #define BOOST_NO_STD_MESSAGES
 

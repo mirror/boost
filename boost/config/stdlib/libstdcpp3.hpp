@@ -126,6 +126,11 @@
 #  define BOOST_HAS_TR1_COMPLEX_OVERLOADS 
 #endif
 
+#if (!defined(_GLIBCXX_HAS_GTHREADS) || !defined(_GLIBCXX_USE_C99_STDINT_TR1)) && (!defined(BOOST_NO_0X_HDR_CONDITION_VARIABLE) || !defined(BOOST_NO_0X_HDR_MUTEX))
+#  define BOOST_NO_0X_HDR_CONDITION_VARIABLE
+#  define BOOST_NO_0X_HDR_MUTEX
+#endif
+
 //  C++0x features in GCC 4.5.0 and later
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
