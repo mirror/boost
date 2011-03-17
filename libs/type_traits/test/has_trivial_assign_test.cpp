@@ -185,7 +185,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int[3][2]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int[2][4][5][6][3]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<empty_UDT>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<void>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<void>::value, false);
 // cases we would like to succeed but can't implement in the language:
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_assign<empty_POD_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_assign<POD_UDT>::value, true, false);

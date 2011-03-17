@@ -24,7 +24,7 @@ struct base2 { };
 struct middle2 : public virtual base2 { };
 struct derived2 : public middle2 { };
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
 
 template<typename T>
 struct test_bug_4530

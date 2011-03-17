@@ -19,7 +19,8 @@ __header ` #include <boost/type_traits/is_empty.hpp>` or ` #include <boost/type_
 __compat In order to correctly detect empty classes this trait relies on either:
 
 * the compiler implementing zero sized empty base classes, or
-* the compiler providing __intrinsics to detect empty classes. 
+* the compiler providing __intrinsics to detect empty classes - this latter case can be tested for
+by checking to see if the macro BOOST_IS_EMPTY is defined.
 
 Can not be used with incomplete types.
 
