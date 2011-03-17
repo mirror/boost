@@ -155,6 +155,8 @@ namespace chrono {
         typedef Duration                  duration;
         typedef typename duration::rep    rep;
         typedef typename duration::period period;
+        typedef Duration                  difference_type;
+      
     private:
         duration d_;
 
@@ -188,6 +190,21 @@ namespace chrono {
 
         // arithmetic
 
+#ifdef BOOST_CHRONO_EXTENSIONS      
+        BOOST_CHRONO_CONSTEXPR
+        time_point  operator+() const {return *this;}
+        BOOST_CHRONO_CONSTEXPR
+        time_point  operator-() const {return time_point(-d_);}
+        time_point& operator++()      {++d_; return *this;}
+        time_point  operator++(int)   {return time_point(d_++);}
+        time_point& operator--()      {--d_; return *this;}
+        time_point  operator--(int)   {return time_point(d_--);}      
+
+        time_point& operator+=(const rep& r) {d_ += r; return *this;}
+        time_point& operator-=(const rep& r) {d_ -= r; return *this;}
+
+#endif
+      
         time_point& operator+=(const duration& d) {d_ += d; return *this;}
         time_point& operator-=(const duration& d) {d_ -= d; return *this;}
 

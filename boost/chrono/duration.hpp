@@ -430,7 +430,7 @@ namespace chrono {
     public:
 
         BOOST_CHRONO_CONSTEXPR
-        duration() { }
+      duration() : rep_(duration_values<rep>::zero()) { }
         template <class Rep2>
         BOOST_CHRONO_CONSTEXPR
         explicit duration(const Rep2& r
@@ -446,8 +446,7 @@ namespace chrono {
                         >
                     >
                 >::type* = 0
-		)
-                  : rep_(r) { }
+		    ) : rep_(r) { }
         ~duration() {} //= default;
         duration(const duration& rhs) : rep_(rhs.rep_) {} // = default;
         duration& operator=(const duration& rhs) // = default;
