@@ -39,54 +39,60 @@ namespace boost {
 namespace random {
 
 namespace detail {
-    
-template<class Engine>
-void subtract_with_carry_discard(Engine& eng, boost::uintmax_t z) {
-    typedef typename Engine::result_type IntType;
-    const std::size_t short_lag = Engine::short_lag;
-    const std::size_t long_lag = Engine::long_lag;
-    std::size_t k = eng.k;
-    IntType carry = eng.carry;
-    if(k != 0) {
-        // increment k until it becomes 0.
-        if(k < short_lag) {
-            std::size_t limit = (short_lag - k) < z? short_lag : (k + static_cast<std::size_t>(z));
-            for(std::size_t j = k; j < limit; ++j) {
-                carry = eng.do_update(j, j + long_lag - short_lag, carry);
+   
+struct subtract_with_carry_discard
+{
+    template<class Engine>
+    static void apply(Engine& eng, boost::uintmax_t z)
+    {
+        typedef typename Engine::result_type IntType;
+        const std::size_t short_lag = Engine::short_lag;
+        const std::size_t long_lag = Engine::long_lag;
+        std::size_t k = eng.k;
+        IntType carry = eng.carry;
+        if(k != 0) {
+            // increment k until it becomes 0.
+            if(k < short_lag) {
+                std::size_t limit = (short_lag - k) < z?
+                    short_lag : (k + static_cast<std::size_t>(z));
+                for(std::size_t j = k; j < limit; ++j) {
+                    carry = eng.do_update(j, j + long_lag - short_lag, carry);
+                }
             }
-        }
-        std::size_t limit = (long_lag - k) < z? long_lag : (k + static_cast<std::size_t>(z));
-        std::size_t start = (k < short_lag ? short_lag : k);
-        for(std::size_t j = start; j < limit; ++j) {
-            carry = eng.do_update(j, j - short_lag, carry);
-        }
-    }
-
-    k = ((z % long_lag) + k) % long_lag;
-
-    if(k < z) {
-        // main loop: update full blocks from k = 0 to long_lag
-        for(std::size_t i = 0; i < (z - k) / long_lag; ++i) {
-            for(std::size_t j = 0; j < short_lag; ++j) {
-                carry = eng.do_update(j, j + long_lag - short_lag, carry);
-            }
-            for(std::size_t j = short_lag; j < long_lag; ++j) {
+            std::size_t limit = (long_lag - k) < z?
+                long_lag : (k + static_cast<std::size_t>(z));
+            std::size_t start = (k < short_lag ? short_lag : k);
+            for(std::size_t j = start; j < limit; ++j) {
                 carry = eng.do_update(j, j - short_lag, carry);
             }
         }
 
-        // Update the last partial block
-        std::size_t limit = short_lag < k? short_lag : k; 
-        for(std::size_t j = 0; j < limit; ++j) {
-            carry = eng.do_update(j, j + long_lag - short_lag, carry);
+        k = ((z % long_lag) + k) % long_lag;
+
+        if(k < z) {
+            // main loop: update full blocks from k = 0 to long_lag
+            for(std::size_t i = 0; i < (z - k) / long_lag; ++i) {
+                for(std::size_t j = 0; j < short_lag; ++j) {
+                    carry = eng.do_update(j, j + long_lag - short_lag, carry);
+                }
+                for(std::size_t j = short_lag; j < long_lag; ++j) {
+                    carry = eng.do_update(j, j - short_lag, carry);
+                }
+            }
+
+            // Update the last partial block
+            std::size_t limit = short_lag < k? short_lag : k; 
+            for(std::size_t j = 0; j < limit; ++j) {
+                carry = eng.do_update(j, j + long_lag - short_lag, carry);
+            }
+            for(std::size_t j = short_lag; j < k; ++j) {
+                carry = eng.do_update(j, j - short_lag, carry);
+            }
         }
-        for(std::size_t j = short_lag; j < k; ++j) {
-            carry = eng.do_update(j, j - short_lag, carry);
-        }
+        eng.carry = carry;
+        eng.k = k;
     }
-    eng.carry = carry;
-    eng.k = k;
-}
+};
 
 }
 
@@ -207,7 +213,7 @@ public:
     /** Advances the state of the generator by @c z. */
     void discard(boost::uintmax_t z)
     {
-        detail::subtract_with_carry_discard(*this, z);
+        detail::subtract_with_carry_discard::apply(*this, z);
     }
 
     /** Fills a range with random values. */
@@ -260,7 +266,7 @@ private:
         return x[(k+index) % long_lag];
     }
 
-    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_engine<IntType, w, s, r>&, boost::uintmax_t);
+    friend struct detail::subtract_with_carry_discard;
 
     IntType do_update(std::size_t current, std::size_t short_index, IntType carry)
     {
@@ -448,7 +454,7 @@ public:
 
     /** Advances the state of the generator by @c z. */
     void discard(boost::uintmax_t z)
-    { detail::subtract_with_carry_discard(*this, z); }
+    { detail::subtract_with_carry_discard::apply(*this, z); }
 
     /** Fills a range with random values. */
     template<class Iter>
@@ -500,7 +506,7 @@ private:
         return x[(k+index) % long_lag];
     }
 
-    friend void detail::subtract_with_carry_discard<>(subtract_with_carry_01_engine<RealType, w, s, r>&, boost::uintmax_t);
+    friend struct detail::subtract_with_carry_discard;
 
     RealType do_update(std::size_t current, std::size_t short_index, RealType carry)
     {
