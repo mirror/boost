@@ -37,6 +37,7 @@
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/intrusive/slist.hpp>
 #include <boost/intrusive/detail/mpl.hpp>
+#include <boost/type_traits.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -123,7 +124,7 @@ struct get_slist_impl
       < typename NodeTraits::node
       , boost::intrusive::value_traits<trivial_traits>
       , boost::intrusive::constant_time_size<false>
-      , boost::intrusive::size_type<std::size_t>
+	  , boost::intrusive::size_type<typename boost::make_unsigned<typename std::iterator_traits<typename NodeTraits::node_ptr>::difference_type>::type>
       >::type
    {};
 };
@@ -1677,7 +1678,8 @@ class hashtable_impl
    //! <b>Throws</b>: If the internal hash function throws.
    const_iterator iterator_to(const_reference value) const
    {
-      return const_iterator(bucket_type::s_iterator_to(priv_value_to_node(const_cast<reference>(value))), this);
+      siterator sit = bucket_type::s_iterator_to(const_cast<node &>(this->priv_value_to_node(value)));
+      return const_iterator(sit, this);
    }
 
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
@@ -2147,7 +2149,7 @@ class hashtable_impl
    {
       const std::size_t *primes     = &detail::prime_list_holder<0>::prime_list[0];
       const std::size_t *primes_end = primes + detail::prime_list_holder<0>::prime_list_size;
-      size_type const* bound = std::lower_bound(primes, primes_end, n);
+      std::size_t const* bound = std::lower_bound(primes, primes_end, n);
       if(bound == primes_end)
          --bound;
       return size_type(*bound);

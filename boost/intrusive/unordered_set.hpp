@@ -39,7 +39,7 @@ namespace intrusive {
 //! The container supports the following options:
 //! \c base_hook<>/member_hook<>/value_traits<>,
 //! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<>
-//! \c bucket_traits<>, power_2_buckets<> and cache_begin<>.
+//! \c bucket_traits<>, \c power_2_buckets<> and \c cache_begin<>.
 //!
 //! unordered_set only provides forward iterators but it provides 4 iterator types:
 //! iterator and const_iterator to navigate through the whole container and
@@ -1096,7 +1096,7 @@ class unordered_set
 //! The container supports the following options:
 //! \c base_hook<>/member_hook<>/value_traits<>,
 //! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<>
-//! \c bucket_traits<>, power_2_buckets<> and cache_begin<>.
+//! \c bucket_traits<>, \c power_2_buckets<> and \c cache_begin<>.
 //!
 //! unordered_multiset only provides forward iterators but it provides 4 iterator types:
 //! iterator and const_iterator to navigate through the whole container and
