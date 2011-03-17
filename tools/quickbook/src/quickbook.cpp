@@ -19,6 +19,7 @@
 #include <boost/filesystem/v3/fstream.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/ref.hpp>
+#include <boost/version.hpp>
 
 #include <stdexcept>
 #include <vector>
@@ -252,7 +253,15 @@ main(int argc, char* argv[])
 
         if (vm.count("version"))
         {
-            quickbook::detail::out() << QUICKBOOK_VERSION << std::endl;
+            std::string boost_version = BOOST_LIB_VERSION;
+            boost::replace(boost_version, '_', '.');
+        
+            quickbook::detail::out()
+                << QUICKBOOK_VERSION
+                << " (Boost "
+                << boost_version
+                << ")"
+                << std::endl;
             return 0;
         }
 
