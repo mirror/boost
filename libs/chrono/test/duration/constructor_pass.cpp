@@ -17,12 +17,15 @@
 
 
 #include <libs/chrono/test/rep.h>
+#include <iostream>
 
 template <class D>
 void
 check_default()
 {
-    D d;
+    D d=D();
+  //std::cout << d.count() << std::endl;
+  //std::cout << typename D::rep() <<  std::endl;
     BOOST_TEST(d.count() == typename D::rep());
 }
 

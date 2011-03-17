@@ -18,7 +18,7 @@ class Rep
 {
 public:
     int data_;
-    Rep() : data_(-1) {}
+    Rep() : data_() {}
     explicit Rep(int i) : data_(i) {}
 
     bool operator==(int i) const {return data_ == i;}
@@ -28,4 +28,38 @@ public:
     Rep& operator/=(Rep x) {data_ /= x.data_; return *this;}
 };
 
+#if 0
+namespace std {
+  
+  template <>
+  struct numeric_limits<Rep>
+  {
+    static BOOST_CHRONO_CONSTEXPR Rep max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    {
+      return Rep((std::numeric_limits<int>::max)());
+    }
+    
+  };
+}  // namespace std
+
+namespace boost {
+namespace chrono {
+template <>
+struct duration_values<Rep>
+{
+  static BOOST_CHRONO_CONSTEXPR Rep zero() {return Rep(0);}
+  static BOOST_CHRONO_CONSTEXPR Rep max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+  {
+    return Rep((std::numeric_limits<int>::max)());
+  }
+  
+  static BOOST_CHRONO_CONSTEXPR Rep min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+  {
+    return Rep(detail::numeric_limits<Rep>::lowest());
+  }
+};
+
+}  // namespace chrono
+}  // namespace boost
+#endif
 #endif  // REP_H

@@ -9,7 +9,7 @@
 
 [library Boost.Chrono
     [quickbook 1.5]
-    [version 1.0.0]
+    [version 1.1.0]
     [authors [Hinnant, Howard]]
     [authors [Dawes, Beman]]
     [authors [Botet Escriba, Vicente J.]]
@@ -2774,6 +2774,18 @@ A __time_point represents a point in time with respect to a specific clock.
 
         // arithmetic
 
+        #ifdef BOOST_CHRONO_EXTENSIONS      
+        constexpr time_point  operator+();
+        constexpr time_point  operator-();
+        time_point& operator++();
+        time_point  operator++(int);
+        time_point& operator--();
+        time_point  operator--(int);
+
+        time_point& operator+=(const rep& d);
+        time_point& operator-=(const rep& d);
+        #endif
+
         time_point& operator+=(const duration& d);
         time_point& operator-=(const duration& d);
 
@@ -2818,6 +2830,74 @@ __effects  Constructs an object of __time_point, initializing `d_` with `t.time_
 __returns `d_`.
 
 [endsect]
+
+[section:operator_p Member Function `operator+() const`]
+
+    constexpr __time_point operator+() const;
+
+__returns `*this`.
+
+[endsect]
+[section:operator_m Member Function `operator-() const`]
+
+    constexpr __time_point operator-() const;
+
+__returns `__time_point(-d_)`.
+
+[endsect]
+[section:operator_pp Member Function `operator++()`]
+
+    __time_point& operator++();
+
+__effects  `++d_`.
+
+__returns `*this`.
+
+[endsect]
+[section:operator_pp2 Member Function `operator++(int)`]
+
+    __time_point operator++(int);
+
+__returns `__time_point(d_++)`.
+
+[endsect]
+[section:operator_mm Member Function `operator--()`]
+
+    __time_point& operator--();
+
+__effects  `--d_`.
+
+__returns `*this`.
+
+[endsect]
+[section:operator_mm2 Member Function `operator--(int)`]
+
+    __time_point operator--(int);
+
+__returns `__time_point(d_--)`.
+
+[endsect]
+
+[section:time_point_operator_per Member Function `operator+=`]
+
+    __time_point& operator+=(const rep& r);
+
+__effects  `d_ += duration(r)`.
+
+__returns `*this`.
+
+[endsect]
+[section:time_point_operator_mer Member Function `operator-=`]
+
+    __time_point& operator-=(const rep& r);
+
+__effects  `d_ -= duration(r)`
+
+__returns `*this`.
+
+[endsect]
+
+
 [section:time_point_operator_pe Member Function `operator+=`]
 
     time_point& operator+=(const duration& d);
@@ -3853,6 +3933,20 @@ All the units are given using the suffix "s" following the System International 
 [/==================================]
 [section:history Appendix A: History]
 [/==================================]
+
+[section [*Version 1.1.0, Mars 17, 2011] ]
+
+[*New Features:]
+
+* [@http://svn.boost.org/trac/boost/ticket/???? #????] Added time_point unary operators +,-,++,-- and binary operators +=,-= with Rep al RHS.
+* [@http://svn.boost.org/trac/boost/ticket/5323 #5323] 	Add Associated type difference_type for chrono::time_point.
+
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/5322 #5322] Explicit default constructed chrono::durations are uninitialized
+ 
+
+[endsect] [/section [*Version 1.1.0, Mars 17, 2011] ]
 
 [section [*Version 1.0.0, January 6, 2011] ]
 
