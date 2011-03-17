@@ -60,18 +60,6 @@ namespace boost { namespace phoenix
                 const_cast_<detail::target<T>, U>::
                     make(detail::target<T>(), u);
     }
-    
-    template <typename T, typename U>
-    inline
-    typename expression::const_cast_<detail::target<T>, U>::type const
-    const_cast_(U & u)
-    {
-        return
-            expression::
-                const_cast_<detail::target<T>, U>::
-                    make(detail::target<T>(), u);
-    }
-
 }}
 
 #endif

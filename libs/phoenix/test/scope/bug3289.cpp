@@ -14,6 +14,7 @@
 #include <boost/phoenix/scope.hpp>
 #include <boost/phoenix/stl.hpp>
 
+namespace phx = boost::phoenix;
 using namespace boost::phoenix;
 using namespace boost::phoenix::arg_names;
 using namespace boost::phoenix::local_names;
@@ -24,11 +25,11 @@ int main()
     std::vector<int> w(11,2);
     std::vector<int>::const_iterator it=w.begin();
 
-    boost::phoenix::generate(ref(u), lambda(_a=*ref(it)++)[_a*2])();
+    boost::phoenix::generate(phx::ref(u), lambda(_a=*phx::ref(it)++)[_a*2])();
 
     BOOST_TEST(std::accumulate(u.begin(), u.end(), 0) == 44);
 
-    BOOST_TEST(lambda(_a=*ref(it)++)[_a*2]()() == 4);
+    BOOST_TEST(lambda(_a=*phx::ref(it)++)[_a*2]()() == 4);
     
     return boost::report_errors();
 }

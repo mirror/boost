@@ -802,9 +802,9 @@ namespace boost { namespace phoenix
     //  The lazy functions themselves.
     //
     ///////////////////////////////////////////////////////////////////////////////
-    BOOST_PHOENIX_ADAPT_FUNCTION(assign, stl::assign, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(assign, stl::assign, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(assign, stl::assign, 4)
+    BOOST_PHOENIX_ADAPT_FUNCTION(assign, boost::phoenix::stl::assign, 2)
+    BOOST_PHOENIX_ADAPT_FUNCTION(assign, boost::phoenix::stl::assign, 3)
+    BOOST_PHOENIX_ADAPT_FUNCTION(assign, boost::phoenix::stl::assign, 4)
     BOOST_PHOENIX_ADAPT_FUNCTION(at, stl::at, 2)
     BOOST_PHOENIX_ADAPT_FUNCTION(back, stl::back, 1)
     BOOST_PHOENIX_ADAPT_FUNCTION(begin, stl::begin, 1)

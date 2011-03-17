@@ -61,18 +61,6 @@ namespace boost { namespace phoenix
                 reinterpret_cast_<detail::target<T>, U>::
                     make(detail::target<T>(), u);
     }
-    
-    template <typename T, typename U>
-    inline
-    typename expression::reinterpret_cast_<detail::target<T>, U>::type const
-    reinterpret_cast_(U & u)
-    {
-        return
-            expression::
-                reinterpret_cast_<detail::target<T>, U>::
-                    make(detail::target<T>(), u);
-    }
-
 }}
 
 #endif

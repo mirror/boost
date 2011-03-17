@@ -60,17 +60,6 @@ namespace boost { namespace phoenix
                 dynamic_cast_<detail::target<T>, U>::
                     make(detail::target<T>(), u);
     }
-    
-    template <typename T, typename U>
-    inline
-    typename expression::dynamic_cast_<detail::target<T>, U>::type const
-    dynamic_cast_(U & u)
-    {
-        return
-            expression::
-                dynamic_cast_<detail::target<T>, U>::
-                    make(detail::target<T>(), u);
-    }
 }}
 
 #endif

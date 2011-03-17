@@ -50,7 +50,7 @@ main()
         using boost::shared_ptr;
         vector<shared_ptr<X> > v(10);
         for_each(v.begin(), v.end(),
-            arg1 = construct<shared_ptr<X> >(new_<X>())
+            arg1 = boost::phoenix::construct<shared_ptr<X> >(new_<X>())
         );
     }
 

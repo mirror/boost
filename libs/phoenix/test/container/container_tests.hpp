@@ -43,14 +43,13 @@ template <typename Container>
 void test_assign(Container c)
 {
     using phx::arg_names::arg1;
-    using phx::assign;
 
     typename Container::size_type count = 2;
     typename Container::const_iterator first = c.begin();
     typename Container::const_iterator second = first;
     typename Container::value_type value = *first;
 
-    assign(arg1, count, value)(c);
+    phx::assign(arg1, count, value)(c);
 
     // iterators may be invalidated!
     first = c.begin();
@@ -64,7 +63,7 @@ void test_assign(Container c)
 #if defined(BOOST_PHOENIX_COMPILE_FAIL_TEST)
     // Should not --- does not, Yay! --- compile.
     Container const const_c = c;
-    assign(const_c, count, value);
+    phx::assign(const_c, count, value);
 #endif
 }
 
@@ -74,7 +73,6 @@ void test_assign2(Container c)
     using phx::arg_names::arg1;
     using phx::arg_names::arg2;
     using phx::arg_names::arg3;
-    using phx::assign;
 
     Container c2 = c;
     typename Container::const_iterator first = c2.begin();
@@ -82,7 +80,7 @@ void test_assign2(Container c)
     typename Container::size_type size = c2.size();
 
     c.clear();
-    assign(arg1, arg2, arg3)(c, first, last);
+    phx::assign(arg1, arg2, arg3)(c, first, last);
     if (test(c.size() != size)) {
         cerr << "Failed " << typeid(Container).name()
        << " test_assign2 1\n"
@@ -93,7 +91,7 @@ void test_assign2(Container c)
 #if defined(BOOST_PHOENIX_COMPILE_FAIL_TEST)
     // Should not --- does not, Yay! --- compile.
     Container const const_c = c;
-    assign(const_c, first, second);
+    phx::assign(const_c, first, second);
 #endif
 }
 
