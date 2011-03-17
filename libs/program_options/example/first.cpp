@@ -29,7 +29,7 @@ int main(int ac, char* av[])
 
         if (vm.count("help")) {
             cout << desc << "\n";
-            return 1;
+            return 0;
         }
 
         if (vm.count("compression")) {
