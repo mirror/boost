@@ -29,7 +29,7 @@ struct div_t {
     boost::uintmax_t remainder;
 };
 
-div_t muldivmod(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
+inline div_t muldivmod(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
 {
     static const int bits =
         ::std::numeric_limits< ::boost::uintmax_t>::digits / 2;
@@ -107,10 +107,10 @@ div_t muldivmod(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
     return result;
 }
 
-boost::uintmax_t muldiv(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
+inline boost::uintmax_t muldiv(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
 { return detail::muldivmod(a, b, m).quotient; }
 
-boost::uintmax_t mulmod(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
+inline boost::uintmax_t mulmod(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
 { return detail::muldivmod(a, b, m).remainder; }
 
 } // namespace detail
