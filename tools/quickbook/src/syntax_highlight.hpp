@@ -57,7 +57,7 @@ namespace quickbook
                     |   char_           [Process("char", self.out)]
                     |   number          [Process("number", self.out)]
                     |   cl::repeat_p(1)[cl::anychar_p]
-                                        [Unexpected(self.out)]
+                                        [Unexpected(self.out, self.escape_actions)]
                     )
                     ;
 
@@ -206,7 +206,7 @@ namespace quickbook
                     |   string_         [Process("string", self.out)]
                     |   number          [Process("number", self.out)]
                     |   cl::repeat_p(1)[cl::anychar_p]
-                                        [Unexpected(self.out)]
+                                        [Unexpected(self.out, self.escape_actions)]
                     )
                     ;
 

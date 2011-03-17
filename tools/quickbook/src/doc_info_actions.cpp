@@ -13,6 +13,7 @@
 #include <boost/algorithm/string/join.hpp>
 #include "quickbook.hpp"
 #include "utils.hpp"
+#include "input_path.hpp"
 #include "actions_class.hpp"
 
 namespace quickbook
@@ -77,7 +78,7 @@ namespace quickbook
             qbk_major_version = 1;
             qbk_minor_version = 1;
             qbk_version_n = 101;
-            detail::outwarn(actions.filename.string(),1)
+            detail::outwarn(actions.filename,1)
                 << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
@@ -89,13 +90,13 @@ namespace quickbook
         
         if (qbk_version_n == 106)
         {
-            detail::outwarn(actions.filename.string(),1)
+            detail::outwarn(actions.filename,1)
                 << "Quickbook 1.6 is still under development and is "
                 "likely to change in the future." << std::endl;
         }
         else if(qbk_version_n < 100 || qbk_version_n > 106)
         {
-            detail::outerr(actions.filename.string(),1)
+            detail::outerr(actions.filename,1)
                 << "Unknown version of quickbook: quickbook "
                 << qbk_major_version
                 << "."
@@ -121,11 +122,11 @@ namespace quickbook
 
             if(!invalid_attributes.empty())
             {
-                detail::outwarn(actions.filename.string(),1)
+                detail::outwarn(actions.filename,1)
                     << (invalid_attributes.size() > 1 ?
                         "Invalid attributes" : "Invalid attribute")
-                    << " for '" << actions.doc_type << " document info': "
-                    << boost::algorithm::join(invalid_attributes, ", ")
+                    << " for '" << detail::utf8(actions.doc_type) << " document info': "
+                    << detail::utf8(boost::algorithm::join(invalid_attributes, ", "))
                     << "\n"
                     ;
             }

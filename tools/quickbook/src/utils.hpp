@@ -11,12 +11,16 @@
 #define BOOST_SPIRIT_QUICKBOOK_UTILS_HPP
 
 #include <string>
-#include <iostream>
 #include <cctype>
 #include <boost/ref.hpp>
 #include <boost/assert.hpp>
+#include <boost/filesystem/v3/path.hpp>
 
-namespace quickbook { namespace detail
+namespace quickbook {
+
+    namespace fs = boost::filesystem;
+
+namespace detail
 {
     void print_char(char ch, std::ostream& out);
     void print_string(std::basic_string<char> const& str, std::ostream& out);
@@ -54,21 +58,11 @@ namespace quickbook { namespace detail
     // un-indent a code segment
     void unindent(std::string& program);
 
-    // remove the extension from a filename
-    std::string remove_extension(std::string const& filename);
-
     std::string escape_uri(std::string uri);
-
-    // Preformats an error/warning message so that it can be parsed by
-    // common IDEs. Uses the ms_errors global to determine if VS format
-    // or GCC format. Returns the stream to continue ouput of the verbose
-    // error message.
-    std::ostream & outerr(std::string const& file, int line = -1);
-    std::ostream & outwarn(std::string const& file, int line = -1);
 
     // load file into memory with extra trailing newlines to eliminate
     //  the need to check for end of file in the grammar.
-    int load(std::string const& filename, std::string& storage);
+    int load(fs::path const& filename, std::string& storage);
 
     // given a file extension, return the type of the source file
     // we'll have an internal database for known file types.

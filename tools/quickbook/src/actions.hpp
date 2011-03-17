@@ -125,13 +125,12 @@ namespace quickbook
     {
         // Prints an error message to std::cerr
 
-        error_action(
-            int& error_count)
-        : error_count(error_count) {}
+        error_action(quickbook::actions& actions)
+        : actions(actions) {}
 
         void operator()(iterator first, iterator /*last*/) const;
 
-        int& error_count;
+        quickbook::actions& actions;
     };
 
     struct tagged_action
@@ -397,12 +396,16 @@ namespace quickbook
     {
         // Handles unexpected chars in c++ syntax
 
-        unexpected_char(collector& out)
-        : out(out) {}
+        unexpected_char(
+            collector& out
+          , quickbook::actions& actions)
+        : out(out)
+        , actions(actions) {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& out;
+        quickbook::actions& actions;
     };
 
     struct anchor_action
@@ -523,16 +526,16 @@ namespace quickbook
         attribute_action(
             attribute_map& attributes
           , std::string& attribute_name
-          , int& error_count)
+          , quickbook::actions& actions)
         : attributes(attributes)
         , attribute_name(attribute_name)
-        , error_count(error_count) {}
+        , actions(actions) {}
 
         void operator()(iterator first, iterator last) const;
 
         attribute_map& attributes;
         std::string& attribute_name;
-        int& error_count;
+        quickbook::actions& actions;
     };
 
     struct image_action
@@ -826,7 +829,12 @@ namespace quickbook
    
    struct element_id_warning_action
    {
-       void operator()(iterator first, iterator last) const;
+        element_id_warning_action(quickbook::actions& actions_)
+            : actions(actions_) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        quickbook::actions& actions;
    };
 
     struct xinclude_action

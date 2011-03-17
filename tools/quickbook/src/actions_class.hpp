@@ -22,7 +22,7 @@ namespace quickbook
 
     struct actions
     {
-        actions(char const* filein_, fs::path const& outdir, string_stream& out_);
+        actions(fs::path const& filein_, fs::path const& outdir, string_stream& out_);
 
     private:
         boost::scoped_ptr<quickbook_grammar> grammar_;

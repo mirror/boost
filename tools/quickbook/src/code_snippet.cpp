@@ -22,10 +22,12 @@ namespace quickbook
     struct code_snippet_actions
     {
         code_snippet_actions(std::vector<template_symbol>& storage,
+                                 std::string const& filename,
                                  std::string const& doc_id,
                                  char const* source_type)
             : callout_id(0)
             , storage(storage)
+            , filename(filename)
             , doc_id(doc_id)
             , source_type(source_type)
         {}
@@ -63,6 +65,7 @@ namespace quickbook
         std::string code;
         std::string id;
         std::vector<template_symbol>& storage;
+        fs::path filename;
         std::string const doc_id;
         char const* const source_type;
     };
@@ -271,13 +274,13 @@ namespace quickbook
         if (err != 0)
             return err; // return early on error
 
-        iterator first(code.begin(), code.end(), file.c_str());
-        iterator last(code.end(), code.end());
+        iterator first(code.begin());
+        iterator last(code.end());
 
         size_t fname_len = file.size();
         bool is_python = fname_len >= 3
             && file[--fname_len]=='y' && file[--fname_len]=='p' && file[--fname_len]=='.';
-        code_snippet_actions a(storage, doc_id, is_python ? "[python]" : "[c++]");
+        code_snippet_actions a(storage, file, doc_id, is_python ? "[python]" : "[c++]");
         // TODO: Should I check that parse succeeded?
         if(is_python) {
             boost::spirit::classic::parse(first, last, python_code_snippet_grammar(a));
@@ -346,7 +349,7 @@ namespace quickbook
         code += "``[[callout" + boost::lexical_cast<std::string>(callout_id) + "]]``";
     
         snippet_stack.top().callouts.push_back(
-            template_body(std::string(first, last), first.get_position(), true));
+            template_body(std::string(first, last), filename, first.get_position(), true));
         ++callout_id;
     }
 
@@ -400,7 +403,7 @@ namespace quickbook
         }
         
         // TODO: Save position in start_snippet
-        template_symbol symbol(snippet.id, params, body, first.get_position(), true);
+        template_symbol symbol(snippet.id, params, body, filename, first.get_position(), true);
         symbol.callout = true;
         symbol.callouts = snippet.callouts;
         storage.push_back(symbol);

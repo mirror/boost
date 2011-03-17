@@ -7,7 +7,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "post_process.hpp"
-#include "utils.hpp"
+#include "input_path.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/bind.hpp>
 #include <set>
@@ -444,7 +444,7 @@ namespace quickbook
             else
             {
                 // fallback!
-                ::quickbook::detail::outerr("")
+                ::quickbook::detail::outerr()
                     << "Warning: Post Processing Failed."
                     << std::endl;
                 out << in;
@@ -455,7 +455,7 @@ namespace quickbook
         catch(...)
         {
             // fallback!
-            ::quickbook::detail::outerr("")
+            ::quickbook::detail::outerr()
                 << "Post Processing Failed."
                 << std::endl;
             out << in;

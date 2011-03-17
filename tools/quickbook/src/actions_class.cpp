@@ -12,6 +12,7 @@
 #include "markups.hpp"
 #include "quickbook.hpp"
 #include "grammar.hpp"
+#include "input_path.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -19,7 +20,7 @@
 
 namespace quickbook
 {
-    actions::actions(char const* filein_, fs::path const& outdir_, string_stream& out_)
+    actions::actions(fs::path const& filein_, fs::path const& outdir_, string_stream& out_)
         : grammar_()
 
     // header info
@@ -44,7 +45,7 @@ namespace quickbook
         , list_buffer()
 
     // state
-        , filename(fs::absolute(fs::path(filein_)))
+        , filename(fs::absolute(filein_))
         , outdir(outdir_)
         , macro_change_depth(0)
         , macro()
@@ -77,7 +78,7 @@ namespace quickbook
         , suppress(false)
 
     // actions
-        , error(error_count)
+        , error(*this)
         , extract_doc_title(doc_title, phrase, *this)
         , extract_doc_license(doc_license, phrase, *this)
         , extract_doc_purpose(doc_purpose, phrase, *this)
@@ -117,7 +118,7 @@ namespace quickbook
         , plain_char(phrase, *this)
         , raw_char(phrase, *this)
         , escape_unicode(phrase, *this)
-        , attribute(attributes, attribute_name, error_count)
+        , attribute(attributes, attribute_name, *this)
         , image(phrase, attributes, image_fileref, *this)
         , cond_phrase_pre(condition, macro)
         , scoped_cond_phrase(*this)
@@ -192,6 +193,7 @@ namespace quickbook
 
         , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, element_id, *this)
         , end_section(out, section_level, min_section_level, qualified_section_id, error_count, *this)
+        , element_id_warning(*this)
         , xinclude(out, *this)
         , include(*this)
         , import(out, *this)
@@ -206,7 +208,7 @@ namespace quickbook
         // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ?
             std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") :
-            filename.string();
+            detail::path_to_generic(filename);
 
         // add the predefined macros
         macro.add
