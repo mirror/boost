@@ -103,7 +103,13 @@ namespace boost { namespace phoenix
         : proto::call<
             proto::functional::at(
                 _env
-              , detail::placeholder_idx<boost::is_placeholder<proto::_value>()>()
+              , proto::make<
+                    detail::placeholder_idx<
+                        proto::make<
+                            boost::is_placeholder<proto::_value>()
+                        >
+                    >()
+                >
             )
         >
     {};
