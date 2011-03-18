@@ -13,14 +13,14 @@
 
 namespace boost { namespace phoenix
 {
-	BOOST_PHOENIX_UNARY_OPERATORS(
-		(address_of)
-		(dereference)
-	)
-	BOOST_PHOENIX_BINARY_OPERATORS(
-		(assign)
-		(subscript)
-	)
+    BOOST_PHOENIX_UNARY_OPERATORS(
+        (address_of)
+        (dereference)
+    )
+    BOOST_PHOENIX_BINARY_OPERATORS(
+        (assign)
+        (subscript)
+    )
 }}
 
 #include <boost/phoenix/operator/detail/undef_operator.hpp>

@@ -85,9 +85,9 @@ namespace boost { namespace phoenix
         : proto::lazy<
             custom_terminal<proto::_value>(
                 proto::_value
-			  , _context
-			)
-		>
+              , _context
+            )
+        >
     {};
 
     namespace detail

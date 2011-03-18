@@ -9,7 +9,7 @@
 #define BOOST_PHOENIX_FUNCTION_ADAPT_FUNCTION_HPP
 
 #include <boost/phoenix/core/limits.hpp>
-#include <boost/phoenix/function/function.hpp>
+#include <boost/phoenix/function/function_handling.hpp>
 #include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/facilities/identity.hpp>
@@ -17,20 +17,20 @@
 #include <boost/preprocessor/repetition/repeat.hpp>
 
 #define BOOST_PHOENIX_ADAPT_FUNCTION_NULLARY(NAME, FUNC)                        \
-    expression::function<FUNC>::type const                                      \
+    boost::phoenix::expression::function<FUNC>::type const                      \
     inline NAME()                                                               \
     {                                                                           \
-        return expression::function<FUNC>::make(FUNC());                        \
+        return boost::phoenix::expression::function<FUNC>::make(FUNC());                        \
     }                                                                           \
 /**/
 
 
 #define BOOST_PHOENIX_ADAPT_FUNCTION(NAME, FUNC, N)                             \
     template <BOOST_PHOENIX_typename_A(N)>                                      \
-    typename expression::function<FUNC, BOOST_PHOENIX_A(N)>::type const         \
+    typename boost::phoenix::expression::function<FUNC, BOOST_PHOENIX_A(N)>::type const         \
     inline NAME(BOOST_PHOENIX_A_const_ref_a(N))                                 \
     {                                                                           \
-        return expression::                                                     \
+        return boost::phoenix::expression::                                                     \
             function<FUNC, BOOST_PHOENIX_A(N)>::                                \
                 make(FUNC(), BOOST_PHOENIX_a(N));                               \
     }                                                                           \

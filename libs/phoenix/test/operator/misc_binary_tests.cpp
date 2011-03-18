@@ -16,9 +16,9 @@ int
 main()
 {
     using phoenix::ref;
-	 using phoenix::val;
-	 using phoenix::arg_names::arg1;
-	 using phoenix::arg_names::arg2;
+    using phoenix::val;
+    using phoenix::arg_names::arg1;
+    using phoenix::arg_names::arg2;
     using std::string;
     {   // From Phoenix 1.1 binary tests
 

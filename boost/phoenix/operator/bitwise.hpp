@@ -13,22 +13,22 @@
 
 namespace boost { namespace phoenix
 {
-	BOOST_PHOENIX_UNARY_OPERATORS(
-		(complement)
-	)
-	
-	BOOST_PHOENIX_BINARY_OPERATORS(
-		(bitwise_and_assign)
-		(bitwise_or_assign)
-		(bitwise_xor_assign)
-		(shift_left_assign)
-		(shift_right_assign)
-		(bitwise_and)
-		(bitwise_or)
-		(bitwise_xor)
-		(shift_left)
-		(shift_right)
-	)
+    BOOST_PHOENIX_UNARY_OPERATORS(
+        (complement)
+    )
+    
+    BOOST_PHOENIX_BINARY_OPERATORS(
+        (bitwise_and_assign)
+        (bitwise_or_assign)
+        (bitwise_xor_assign)
+        (shift_left_assign)
+        (shift_right_assign)
+        (bitwise_and)
+        (bitwise_or)
+        (bitwise_xor)
+        (shift_left)
+        (shift_right)
+    )
 }}
 
 #include <boost/phoenix/operator/detail/undef_operator.hpp>

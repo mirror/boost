@@ -21,20 +21,20 @@ namespace boost { namespace phoenix
         template <typename Fun, typename Expr, typename State, typename Data, long Arity = proto::arity_of<Expr>::value>
         struct call_impl;
         
-		  template <typename Fun, typename Expr, typename State, typename Data>
+        template <typename Fun, typename Expr, typename State, typename Data>
         struct call_impl<Fun, Expr, State, Data, 0>
             : proto::transform_impl<Expr, State, Data>
-		  {
+        {
             typedef
                 typename boost::phoenix::result_of::context<State, Data>::type
                 context_type;
-
+            
             typedef
                 typename boost::result_of<
                     Fun(context_type, Expr)
                 >::type
                 result_type;
-
+            
             result_type operator()(
                 typename call_impl::expr_param e
               , typename call_impl::state_param s
@@ -43,7 +43,7 @@ namespace boost { namespace phoenix
             {
                 return Fun()(boost::phoenix::context(s, d), e);
             }
-		  };
+        };
     }
 
     template <typename Fun, typename Dummy = void>

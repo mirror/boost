@@ -13,15 +13,15 @@
 
 namespace boost { namespace phoenix
 {
-	
-	BOOST_PHOENIX_BINARY_OPERATORS(
-		(equal_to)
-		(not_equal_to)
-		(less_equal)
-		(greater_equal)
-		(less)
-		(greater)
-	)
+    
+    BOOST_PHOENIX_BINARY_OPERATORS(
+        (equal_to)
+        (not_equal_to)
+        (less_equal)
+        (greater_equal)
+        (less)
+        (greater)
+    )
 }}
 
 #include <boost/phoenix/operator/detail/undef_operator.hpp>

@@ -96,7 +96,7 @@ namespace boost { namespace phoenix
                 >
               , proto::when<proto::_, mpl::int_<1>()>
             >
-	    {};
+        {};
     }
 }}
 

@@ -24,20 +24,20 @@ namespace boost { namespace phoenix
         {};
     }
 
-	namespace rule
-	{
+    namespace rule
+    {
         struct sequence
             : expression::sequence<
                 meta_grammar
               , meta_grammar
             >
         {};
-	}
+    }
 
-	template <typename Dummy>
-	struct meta_grammar::case_<proto::tag::comma, Dummy>
-		: enable_rule<rule::sequence, Dummy>
-	{};
+    template <typename Dummy>
+    struct meta_grammar::case_<proto::tag::comma, Dummy>
+        : enable_rule<rule::sequence, Dummy>
+    {};
 
 }}
 

@@ -14,8 +14,8 @@ int
 main()
 {
     using phoenix::val;
-	 using phoenix::ref;
-	 using phoenix::arg_names::arg1;
+    using phoenix::ref;
+    using phoenix::arg_names::arg1;
     {
         BOOST_TEST((-val(123))() == -123);
         BOOST_TEST((- -val(123))() == 123);

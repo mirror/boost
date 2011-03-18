@@ -13,14 +13,14 @@
 
 namespace boost { namespace phoenix
 {
-	
-	BOOST_PHOENIX_UNARY_OPERATORS(
-		(logical_not)
-	)
-	BOOST_PHOENIX_BINARY_OPERATORS(
-		(logical_and)
-		(logical_or)
-	)
+    
+    BOOST_PHOENIX_UNARY_OPERATORS(
+        (logical_not)
+    )
+    BOOST_PHOENIX_BINARY_OPERATORS(
+        (logical_and)
+        (logical_or)
+    )
 }}
 
 #include <boost/phoenix/operator/detail/undef_operator.hpp>

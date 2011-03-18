@@ -790,13 +790,13 @@ void test_splice(Container c)
     c2_begin = c2.begin();
     c2_end = c2.end();
     size = c.size() + c2.size();
-	/*
+    /*
     splice(arg1, arg2, arg3, arg4, arg5)(c, c_end, c2, c2_begin, c2_end);
     if (test(c.size() != size)) {
         cerr << "Failed " << typeid(Container).name() << " test_splice 3\n";
         return;
     }
-	*/
+    */
 }
 
 template <typename Container>

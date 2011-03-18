@@ -13,27 +13,27 @@
 
 namespace boost { namespace phoenix
 {
-	BOOST_PHOENIX_UNARY_OPERATORS(
-		(negate)
-		(unary_plus)
-		(pre_inc)
-		(pre_dec)
-		(post_inc)
-		(post_dec)
-	)
-	
-	BOOST_PHOENIX_BINARY_OPERATORS(
-		(plus_assign)
-		(minus_assign)
-		(multiplies_assign)
-		(divides_assign)
-		(modulus_assign)
-		(plus)
-		(minus)
-		(multiplies)
-		(divides)
-		(modulus)
-	)
+    BOOST_PHOENIX_UNARY_OPERATORS(
+        (negate)
+        (unary_plus)
+        (pre_inc)
+        (pre_dec)
+        (post_inc)
+        (post_dec)
+    )
+    
+    BOOST_PHOENIX_BINARY_OPERATORS(
+        (plus_assign)
+        (minus_assign)
+        (multiplies_assign)
+        (divides_assign)
+        (modulus_assign)
+        (plus)
+        (minus)
+        (multiplies)
+        (divides)
+        (modulus)
+    )
 }}
 
 #include <boost/phoenix/operator/detail/undef_operator.hpp>

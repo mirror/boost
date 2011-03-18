@@ -135,7 +135,7 @@ namespace boost { namespace phoenix
                     mpl::true_()
                   , detail::scope_is_nullary_actions()
                 )>
-			  , proto::make<int()>
+              , proto::make<int()>
             )
         >
     {};

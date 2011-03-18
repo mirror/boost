@@ -28,23 +28,23 @@ namespace boost { namespace phoenix
         {};
     }
 
-	namespace rule
-	{
-		struct if_else_operator
+    namespace rule
+    {
+        struct if_else_operator
             : expression::if_else_operator<
                 meta_grammar
               , meta_grammar
               , meta_grammar
             >
-		{};
-	}
+        {};
+    }
 
-	template <typename Dummy>
-	struct meta_grammar::case_<tag::if_else_operator, Dummy>
-		: enable_rule<rule::if_else_operator, Dummy>
-	{};
+    template <typename Dummy>
+    struct meta_grammar::case_<tag::if_else_operator, Dummy>
+        : enable_rule<rule::if_else_operator, Dummy>
+    {};
 
-	using proto::if_else;
+    using proto::if_else;
 }}
 
 #endif
