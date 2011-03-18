@@ -484,7 +484,8 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       //
       static const boost::regex lib1("boost/([^\\./]+)(?!detail).*");
       boost::smatch swhat;
-      if(boost::regex_match(p.string(), swhat, lib1))
+      std::string gs(p.generic_string());
+      if(boost::regex_match(gs, swhat, lib1))
       {
          add_dependent_lib(swhat.str(1), p, view);
       }
@@ -492,7 +493,8 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       // and this one catches boost/x/y/whatever (for example numeric/ublas):
       //
       static const boost::regex lib2("boost/([^/]+/[^/]+)/(?!detail).*");
-      if(boost::regex_match(p.string(), swhat, lib2))
+      gs = p.generic_string();
+      if(boost::regex_match(gs, swhat, lib2))
       {
          add_dependent_lib(swhat.str(1), p, view);
       }
