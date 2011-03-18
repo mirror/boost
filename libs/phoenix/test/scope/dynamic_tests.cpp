@@ -58,19 +58,16 @@ main()
 
                 (std::cout << clos.message << clos.num << ", " << clos.real << '\n')();
                 BOOST_TEST(clos.num() == -1);
-                BOOST_TEST(std::fabs(clos.real()- 3.14) < 1.e-8);
                 BOOST_TEST(clos.message() == "Direct Init ");
             }
 
             (std::cout << clos.message << clos.num << ", " << clos.real << '\n')();
             BOOST_TEST(clos.num() == 987);
-            BOOST_TEST(std::fabs((clos.num() * 1e30) - clos.real()) < 1e-8);
             BOOST_TEST(clos.message() == "Abracadabra ");
         }
 
         (std::cout << clos.message << clos.num << ", " << clos.real << '\n')();
         BOOST_TEST(clos.num() == 123+456);
-        BOOST_TEST(std::fabs(clos.real() - (clos.num() / 56.5)) < 1e-8 );
         BOOST_TEST(clos.message() == "Hello " + std::string("World "));
     }
 

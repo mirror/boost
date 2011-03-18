@@ -464,7 +464,7 @@ inline void test_multimap_insert(std::multimap<int, int> c)
     Multimap::iterator it =
         phx::insert(arg1, arg2, arg3)(c, c_begin, value);
 
-    if (test(it != c.begin() || *it != *(++it))) {
+    if (test(it != c.begin())) {
         cerr << "Failed " << typeid(Multimap).name()
        << " test_multimap_insert 1\n";
         return;

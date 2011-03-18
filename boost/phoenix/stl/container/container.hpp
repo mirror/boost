@@ -94,7 +94,7 @@ namespace boost { namespace phoenix
               , typename C
               , typename Arg1
             >
-            struct result<This(C&, Arg1)>
+            struct result<This(C&, Arg1 const &)>
             {
                 typedef typename add_reference<C>::type type;
             };
@@ -106,8 +106,9 @@ namespace boost { namespace phoenix
               , typename Arg2
             >
             struct result<This(C&, Arg1, Arg2)>
-                : result<This(C&, Arg1)>
-            {};
+            {
+                typedef typename add_reference<C>::type type;
+            };
             
             template <
                 typename This
@@ -117,11 +118,12 @@ namespace boost { namespace phoenix
               , typename Arg3
             >
             struct result<This(C&, Arg1, Arg2, Arg3)>
-                : result<This(C&, Arg1)>
-            {};
+            {
+                typedef typename add_reference<C>::type type;
+            };
 
             template <typename C, typename Arg1>
-            C& operator()(C& c, Arg1 arg1) const
+            C& operator()(C& c, Arg1 const & arg1) const
             {
                 c.assign(arg1);
                 return c;
@@ -139,7 +141,8 @@ namespace boost { namespace phoenix
                 C& c
               , Arg1 arg1
               , Arg2 arg2
-              , Arg3 arg3) const
+              , Arg3 const & arg3
+            ) const
             {
                 return c.assign(arg1, arg2, arg3);
             }
@@ -349,34 +352,14 @@ namespace boost { namespace phoenix
             typename result_of::erase<C, Arg1>::type
             operator()(C& c, Arg1 arg1) const
             {
-                /*
-                std::cout << "\n";
-                std::cout << typeid( typename is_same<Arg1, typename iterator_of<C const>::type>::type ).name() << "\n";
-                std::cout << typeid( typename has_mapped_type<C>::type ).name() << "\n";
-                std::cout << typeid( typename result_of::erase<C, Arg1>::type ).name() << "\n";
-                std::cout << typeid( typename result_of::erase<C, Arg1>::map_erase_result::type ).name() << "\n";
-                std::cout << "\n";
-                std::cout << typeid( c.erase(arg1) ).name() << "\n";
-                */
                 return c.erase(arg1);
-                //c.erase(arg1);
             }
 
             template <typename C, typename Arg1, typename Arg2>
             typename result_of::erase<C, Arg1, Arg2>::type
             operator()(C& c, Arg1 arg1, Arg2 arg2) const
             {
-                /*
-                std::cout << "\nblubb\n";
-                std::cout << typeid( typename is_same<Arg1, typename iterator_of<C>::type>::type ).name() << "\n";
-                std::cout << typeid( typename has_mapped_type<C>::type ).name() << "\n";
-                std::cout << typeid( typename result_of::erase<C, Arg1, Arg2>::type ).name() << "\n";
-                //std::cout << typeid( typename result_of::erase<C, Arg1>::map_erase_result::type ).name() << "\n";
-                std::cout << "\n";
-                std::cout << typeid( c.erase(arg1, arg2) ).name() << "\n";
-                */
                 return c.erase(arg1, arg2);
-                //c.erase(arg1, arg2);
             }
         };
 

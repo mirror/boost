@@ -57,8 +57,8 @@ namespace boost { namespace phoenix
         result_type
         operator()(Context const & ctx, Cond const & cond, Then const & then) const
         {
-            if( eval( cond, ctx ) )
-                eval( then, ctx );
+            if(eval(cond, ctx))
+                eval(then, ctx);
         }
         
         template<typename Context, typename Cond, typename Then, typename Else>
@@ -67,12 +67,13 @@ namespace boost { namespace phoenix
               Context const & ctx
             , Cond const & cond
             , Then const & then
-            , Else const & else_) const
+            , Else const & else_
+        ) const
         {
-            if( eval( cond, ctx ) )
-                eval( then, ctx );
+            if(eval(cond, ctx))
+                eval(then, ctx);
             else
-                eval( else_, ctx );
+                eval(else_, ctx);
         }
     };
     
@@ -92,8 +93,8 @@ namespace boost { namespace phoenix
     struct else_gen
     {
         else_gen(Cond const & cond, Then const & then)
-            : cond( cond )
-            , then( then ) {}
+            : cond(cond)
+            , then(then) {}
 
         template<typename Else>
         typename expression::if_else_statement<Cond, Then, Else>::type const
@@ -102,19 +103,19 @@ namespace boost { namespace phoenix
             return expression::if_else_statement<Cond, Then, Else>::make(cond, then, else_);
         }
 
-        Cond const & cond;
-        Then const & then;
+        Cond cond;
+        Then then;
     };
 
     // We subclass actor so we can provide the member else_ (which is an
     // else_gen responsible for the .else_[ expr ] branch).
     template<typename Expr>
-    struct if_actor : actor< Expr >
+    struct if_actor : actor<Expr>
     {
-        typedef actor< Expr > base_type;
+        typedef actor<Expr> base_type;
 
         if_actor(base_type const & base)
-            : base_type( base )
+            : base_type(base)
             , else_(proto::child_c<0>(*this), proto::child_c<1>(*this))
         {}
 
@@ -129,7 +130,7 @@ namespace boost { namespace phoenix
     struct if_gen
     {
         if_gen(Cond const & cond)
-            : cond( cond ) {}
+            : cond(cond) {}
 
         template<typename Then>
         typename expression::if_<Cond, Then>::type const
@@ -138,7 +139,7 @@ namespace boost { namespace phoenix
             return expression::if_<Cond, Then>::make(cond, then);
         }
 
-        Cond const & cond;
+        Cond cond;
     };
 
     template<typename Cond>
