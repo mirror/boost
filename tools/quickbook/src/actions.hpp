@@ -170,7 +170,7 @@ namespace quickbook
         cond_phrase_push(quickbook::actions& x)
             : actions(x) {}
 
-        void start();
+        bool start();
         void cleanup();
 
         quickbook::actions& actions;
@@ -451,7 +451,7 @@ namespace quickbook
         scoped_output_push(quickbook::actions& actions)
             : actions(actions) {}
 
-        void start();
+        bool start();
         void cleanup();
 
         quickbook::actions& actions;
@@ -463,11 +463,24 @@ namespace quickbook
         set_no_eols_scoped(quickbook::actions& actions)
             : actions(actions) {}
 
-        void start();
+        bool start();
         void cleanup();
 
         quickbook::actions& actions;
         bool saved_no_eols;
+    };
+    
+    struct scoped_context_impl : scoped_action_base
+    {
+        scoped_context_impl(quickbook::actions& actions)
+            : actions_(actions) {}
+
+        bool start(int);
+        void cleanup();
+
+    private:
+        quickbook::actions& actions_;
+        int saved_context_;
     };
 }
 

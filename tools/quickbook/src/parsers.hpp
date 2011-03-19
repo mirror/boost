@@ -65,24 +65,24 @@ namespace quickbook {
             typedef phoenix::tuple_index<0> t0;
             typedef phoenix::tuple_index<1> t1;
             
-            void start(phoenix::tuple<> const&)
+            bool start(phoenix::tuple<> const&)
             {
-                impl_.start();
-                in_progress_ = true;
+                in_progress_ = impl_.start();
+                return in_progress_;
             }
             
             template <typename Arg1>
-            void start(phoenix::tuple<Arg1> const& x)
+            bool start(phoenix::tuple<Arg1> const& x)
             {
-                impl_.start(x[t0()]);
-                in_progress_ = true;
+                in_progress_ = impl_.start(x[t0()]);
+                return in_progress_;
             }
 
             template <typename Arg1, typename Arg2>
-            void start(phoenix::tuple<Arg1, Arg2> const& x)
+            bool start(phoenix::tuple<Arg1, Arg2> const& x)
             {
-                impl_.start(x[t0()], x[t1()]);
-                in_progress_ = true;
+                in_progress_ = impl_.start(x[t0()], x[t1()]);
+                return in_progress_;
             }
             
             void success()
@@ -114,16 +114,22 @@ namespace quickbook {
             iterator_t save = scan.first;
 
             scoped scope(impl_);
-            scope.start(arguments_);
+            if (!scope.start(arguments_))
+                return scan.no_match();
 
             typename cl::parser_result<ParserT, ScannerT>::type result
                 = this->subject().parse(scan);
 
-            //result = scope.match(result);
+            bool success = scope.impl_.result(result, scan);
 
-            if (result) {
+            if (success) {
                 scope.success();
-                return scan.create_match(result.length(), cl::nil_t(), save, scan.first);
+                if (result) {
+                    return scan.create_match(result.length(), cl::nil_t(), save, scan.first);
+                }
+                else {
+                    return scan.create_match(scan.first.base() - save.base(), cl::nil_t(), save, scan.first);
+                }
             }
             else {
                 scope.failure();

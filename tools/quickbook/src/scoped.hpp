@@ -15,10 +15,16 @@ namespace quickbook {
 
     struct scoped_action_base
     {
-        void start() {}
+        bool start() { return true; }
         void success() {}
         void failure() {}
         void cleanup() {}
+        
+        template <typename ResultT, typename ScannerT>
+        bool result(ResultT result, ScannerT const&)
+        {
+            return result;
+        }
     };
 }
 

@@ -329,7 +329,7 @@ namespace quickbook
         out << post;
     }
 
-    void cond_phrase_push::start()
+    bool cond_phrase_push::start()
     {
         saved_suppress = actions.suppress;
     
@@ -338,6 +338,8 @@ namespace quickbook
             values.consume().get_quickbook().c_str());
     
         actions.suppress = actions.suppress || !condition;
+
+        return true;
     }
     
     void cond_phrase_push::cleanup()
@@ -1733,11 +1735,13 @@ namespace quickbook
         return (*this)(actions.out);
     }
 
-    void scoped_output_push::start()
+    bool scoped_output_push::start()
     {
         actions.out.push();
         actions.phrase.push();
         actions.anchors.swap(saved_anchors);
+
+        return true;
     }
     
     void scoped_output_push::cleanup()
@@ -1747,14 +1751,29 @@ namespace quickbook
         actions.anchors.swap(saved_anchors);
     }
 
-    void set_no_eols_scoped::start()
+    bool set_no_eols_scoped::start()
     {
         saved_no_eols = actions.no_eols;
         actions.no_eols = false;
+
+        return true;
     }
 
     void set_no_eols_scoped::cleanup()
     {
         actions.no_eols = saved_no_eols;
+    }
+
+    bool scoped_context_impl::start(int new_context)
+    {
+        saved_context_ = actions_.context;
+        actions_.context = new_context;
+
+        return true;
+    }
+
+    void scoped_context_impl::cleanup()
+    {
+        actions_.context = saved_context_;
     }
 }

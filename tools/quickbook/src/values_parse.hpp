@@ -11,6 +11,7 @@
 
 #include "values.hpp"
 #include "parsers.hpp"
+#include "scoped.hpp"
 #include <boost/spirit/include/phoenix1_functions.hpp>
 
 #include <iostream>
@@ -18,28 +19,33 @@
 namespace quickbook {
     namespace ph = phoenix;
 
-    struct value_builder_save
+    struct value_builder_save : scoped_action_base
     {
         value_builder_save(value_builder& builder) : builder(builder) {}
 
-        void start() { builder.save(); }
-        void success() {}
-        void failure() {}
+        bool start()
+        {
+            builder.save();
+            return true;
+        }
+
         void cleanup() { builder.restore(); }
 
         value_builder& builder;
     };
 
-    struct value_builder_list
+    struct value_builder_list : scoped_action_base
     {
         value_builder_list(value_builder& builder) : builder(builder) {}
 
-        void start(value::tag_type tag = value::default_tag)
-        { builder.start_list(tag); }
+        bool start(value::tag_type tag = value::default_tag)
+        {
+            builder.start_list(tag);
+            return true;
+        }
 
         void success() { builder.finish_list(); }
         void failure() { builder.clear_list(); }
-        void cleanup() {}
 
         value_builder& builder;
     };

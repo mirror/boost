@@ -69,4 +69,28 @@
   ]
 ]
 
+[table Nested Tables
+  [
+    [
+      Header 1
+    ]
+    [
+      Header 2
+    ]
+  ]
+  [
+    [
+      [table Inner Table
+        [[1.1][1.2]]
+        [[2.1][2.2]]
+      ]
+    ]
+  ]
+  [
+    [
+      Something.
+    ]
+  ]
+]
+
 [endsect]

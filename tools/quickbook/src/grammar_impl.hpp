@@ -26,12 +26,15 @@ namespace quickbook
             in_block = 1,
             in_phrase = 2,
             in_conditional = 4,
+            in_nested_block = 8
         };
 
         enum type_enum {
-            block = 1,
-            phrase = 2,
-            conditional_or_block = 5
+            nothing = 0,
+            block = in_block,
+            conditional_or_block = block | in_conditional,
+            nested_block = conditional_or_block | in_nested_block,
+            phrase = nested_block | in_phrase
         };
 
         element_info(

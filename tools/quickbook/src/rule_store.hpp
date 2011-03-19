@@ -72,6 +72,16 @@ namespace quickbook
             instantiate i(*this);
             return i;
         }
+        
+        template <typename T>
+        T& add(T* new_)
+        {
+            std::auto_ptr<T> obj(new_);
+            store_.push_back(detail::scoped_void());
+            store_.back().store(obj.release(), &detail::delete_impl<T>);
+
+            return *new_;
+        }
 
         std::deque<detail::scoped_void> store_;
     private:

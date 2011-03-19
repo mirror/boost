@@ -60,6 +60,8 @@ namespace quickbook
                                 scoped_output;
         scoped_parser<set_no_eols_scoped>
                                 scoped_no_eols;
+        scoped_parser<scoped_context_impl>
+                                scoped_context;
 
     // state
         fs::path                filename;
@@ -95,6 +97,7 @@ namespace quickbook
         bool                    no_eols;
         bool                    suppress;
         bool                    warned_about_breaks;
+        int                     context;
 
     // push/pop the states and the streams
         void copy_macros_for_write();

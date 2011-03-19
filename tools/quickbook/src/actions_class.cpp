@@ -42,6 +42,7 @@ namespace quickbook
         , scoped_cond_phrase(*this)
         , scoped_output(*this)
         , scoped_no_eols(*this)
+        , scoped_context(*this)
 
     // state
         , filename(fs::absolute(filein_))

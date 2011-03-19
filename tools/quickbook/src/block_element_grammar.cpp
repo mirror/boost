@@ -88,27 +88,27 @@ namespace quickbook
             ;
 
         elements.add
-            ("heading", element_info(element_info::block, &local.heading, block_tags::generic_heading))
-            ("h1", element_info(element_info::block, &local.heading, block_tags::heading1))
-            ("h2", element_info(element_info::block, &local.heading, block_tags::heading2))
-            ("h3", element_info(element_info::block, &local.heading, block_tags::heading3))
-            ("h4", element_info(element_info::block, &local.heading, block_tags::heading4))
-            ("h5", element_info(element_info::block, &local.heading, block_tags::heading5))
-            ("h6", element_info(element_info::block, &local.heading, block_tags::heading6))
+            ("heading", element_info(element_info::conditional_or_block, &local.heading, block_tags::generic_heading))
+            ("h1", element_info(element_info::conditional_or_block, &local.heading, block_tags::heading1))
+            ("h2", element_info(element_info::conditional_or_block, &local.heading, block_tags::heading2))
+            ("h3", element_info(element_info::conditional_or_block, &local.heading, block_tags::heading3))
+            ("h4", element_info(element_info::conditional_or_block, &local.heading, block_tags::heading4))
+            ("h5", element_info(element_info::conditional_or_block, &local.heading, block_tags::heading5))
+            ("h6", element_info(element_info::conditional_or_block, &local.heading, block_tags::heading6))
             ;
 
         elements.add
-            ("blurb", element_info(element_info::block, &local.inner_block, block_tags::blurb))
-            (":", element_info(element_info::block, &local.inner_block, block_tags::blockquote))
-            ("warning", element_info(element_info::block, &local.inner_block, block_tags::warning))
-            ("caution", element_info(element_info::block, &local.inner_block, block_tags::caution))
-            ("important", element_info(element_info::block, &local.inner_block, block_tags::important))
-            ("note", element_info(element_info::block, &local.inner_block, block_tags::note))
-            ("tip", element_info(element_info::block, &local.inner_block, block_tags::tip))
+            ("blurb", element_info(element_info::nested_block, &local.inner_block, block_tags::blurb))
+            (":", element_info(element_info::nested_block, &local.inner_block, block_tags::blockquote))
+            ("warning", element_info(element_info::nested_block, &local.inner_block, block_tags::warning))
+            ("caution", element_info(element_info::nested_block, &local.inner_block, block_tags::caution))
+            ("important", element_info(element_info::nested_block, &local.inner_block, block_tags::important))
+            ("note", element_info(element_info::nested_block, &local.inner_block, block_tags::note))
+            ("tip", element_info(element_info::nested_block, &local.inner_block, block_tags::tip))
             ;
 
         elements.add
-            ("pre", element_info(element_info::block, &local.preformatted, block_tags::preformatted))
+            ("pre", element_info(element_info::nested_block, &local.preformatted, block_tags::preformatted))
             ;
 
         local.preformatted =
@@ -120,7 +120,7 @@ namespace quickbook
             ;
 
         elements.add
-            ("def", element_info(element_info::block, &local.def_macro, block_tags::macro_definition))
+            ("def", element_info(element_info::conditional_or_block, &local.def_macro, block_tags::macro_definition))
             ;
 
         local.def_macro =
@@ -139,7 +139,7 @@ namespace quickbook
             ;
 
         elements.add
-            ("template", element_info(element_info::block, &local.template_, block_tags::template_definition))
+            ("template", element_info(element_info::conditional_or_block, &local.template_, block_tags::template_definition))
             ;
 
         local.template_ =
@@ -168,7 +168,7 @@ namespace quickbook
             ;
 
         elements.add
-            ("variablelist", element_info(element_info::block, &local.variablelist, block_tags::variable_list))
+            ("variablelist", element_info(element_info::nested_block, &local.variablelist, block_tags::variable_list))
             ;
 
         local.variablelist =
@@ -206,7 +206,7 @@ namespace quickbook
             ;
 
         elements.add
-            ("table", element_info(element_info::block, &local.table, block_tags::table))
+            ("table", element_info(element_info::nested_block, &local.table, block_tags::table))
             ;
 
         local.table =
