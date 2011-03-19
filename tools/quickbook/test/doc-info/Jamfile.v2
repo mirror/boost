@@ -23,4 +23,5 @@ test-suite quickbook.test :
     [ quickbook-test source-mode-1.6 ]
     [ quickbook-test copyright1 ]
     [ quickbook-fail-test copyright-fail1 ]
+    [ quickbook-fail-test copyright-fail2 ]
     ;

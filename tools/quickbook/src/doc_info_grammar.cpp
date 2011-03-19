@@ -167,7 +167,7 @@ namespace quickbook
                 );
 
         local.doc_copyright =
-            +(  +(  local.doc_copyright_year
+            *(  +(  local.doc_copyright_year
                                             [actions.values.entry(ph::arg1, ph::arg2, doc_info_tags::copyright_year)]
                 >>  space
                 >>  !(  '-'
@@ -203,12 +203,10 @@ namespace quickbook
             ;
 
         local.doc_authors =
-                local.doc_author
+            *(  local.doc_author
             >>  space
-            >>  *(  !(cl::ch_p(',') >> space)
-                >>  local.doc_author
-                >>  space
-                )
+            >>  !(cl::ch_p(',') >> space)
+            )
             ;
 
         local.attribute_rules[doc_info_attributes::authors] = &local.doc_authors;
