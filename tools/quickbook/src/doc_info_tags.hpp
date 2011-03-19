@@ -14,6 +14,7 @@
 namespace quickbook
 {
     QUICKBOOK_VALUE_TAGS(doc_info_tags, 0x400,
+        (qbk_version)
         (type)
         (title)
         (author_surname)(author_first)

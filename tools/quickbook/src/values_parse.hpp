@@ -74,6 +74,12 @@ namespace quickbook {
         {
             b.insert(qbk_value(v, begin.get_position(), tag));
         }
+        
+        void operator()(int v,
+            value::tag_type tag = value::default_tag) const
+        {
+            b.insert(int_value(v, tag));
+        }
 
         value_builder& b;
     };

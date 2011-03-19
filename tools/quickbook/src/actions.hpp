@@ -37,17 +37,7 @@ namespace quickbook
     namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
 
-    extern int qbk_major_version;
-    extern int qbk_minor_version;
     extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
-    
-    // This struct is used to avoid an optimization bug
-    // in g++ 4.4 on 64-bit linux.
-    struct assign_qbk_version {
-        assign_qbk_version(int& v) : v_(v) {}
-        void operator()(int value) const;
-        int& v_;
-    };
 
     struct quickbook_range {
         template <typename Arg>

@@ -9,6 +9,7 @@
 #include "values.hpp"
 #include <boost/intrusive_ptr.hpp>
 #include <boost/current_function.hpp>
+#include <boost/lexical_cast.hpp>
 
 #define UNDEFINED_ERROR() \
     throw value_error( \
@@ -41,6 +42,7 @@ namespace quickbook
         value_node* value_node::store() { return this; }
 
         file_position value_node::get_position() const { UNDEFINED_ERROR(); }
+        int value_node::get_int() const { UNDEFINED_ERROR(); }
         std::string value_node::get_quickbook() const { UNDEFINED_ERROR(); }
         std::string value_node::get_boostbook() const {  UNDEFINED_ERROR(); }
         value_node* value_node::get_list() const {  UNDEFINED_ERROR(); }
@@ -193,6 +195,62 @@ namespace quickbook
     value empty_value(value::tag_type t)
     {
         return value(detail::value_empty_impl::new_(t));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Integers
+
+    namespace detail
+    {
+        struct value_int_impl : public value_node
+        {
+        public:
+            explicit value_int_impl(int, value::tag_type);
+        private:
+            char const* type_name() const { return "integer"; }
+            virtual value_node* clone() const;
+            virtual int get_int() const;
+            virtual std::string get_quickbook() const;
+            virtual std::string get_boostbook() const;
+            virtual bool empty() const;
+    
+            int value_;
+        };
+
+        value_int_impl::value_int_impl(int v, value::tag_type t)
+            : value_node(t)
+            , value_(v)
+        {}
+
+        value_node* value_int_impl::clone() const
+        {
+            return new value_int_impl(value_, tag_);
+        }
+
+        int value_int_impl::get_int() const
+        {
+            return value_;
+        }
+
+        std::string value_int_impl::get_quickbook() const
+        {
+            return boost::lexical_cast<std::string>(value_);
+        }
+
+        std::string value_int_impl::get_boostbook() const
+        {
+            return boost::lexical_cast<std::string>(value_);
+        }
+
+        bool value_int_impl::empty() const
+        {
+            return false;
+        }
+    }
+
+    value int_value(int v, value::tag_type t)
+    {
+        return value(new detail::value_int_impl(v, t));
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -673,11 +731,6 @@ namespace quickbook
         {
             return head_;
         }
-    }
-
-    value list_value(value::tag_type t)
-    {
-        return value(new detail::value_list_impl(t));
     }
 
     //////////////////////////////////////////////////////////////////////////

@@ -51,6 +51,7 @@ namespace quickbook
             virtual file_position get_position() const;
             virtual std::string get_quickbook() const;
             virtual std::string get_boostbook() const;
+            virtual int get_int() const;
 
             virtual bool empty() const;
             virtual bool is_list() const;
@@ -110,6 +111,8 @@ namespace quickbook
             { return value_->get_quickbook(); }
             std::string get_boostbook() const
             { return value_->get_boostbook(); }
+            int get_int() const
+            { return value_->get_int(); }
 
         protected:
             value_node* value_;
@@ -219,8 +222,13 @@ namespace quickbook
         explicit value(detail::value_node*);
     };
 
+    // Empty
     value empty_value(value::tag_type = value::default_tag);
-    value list_value(value::tag_type = value::default_tag);
+
+    // Integers
+    value int_value(int, value::tag_type = value::default_tag);
+
+    // Boostbook and quickbook strings
     value qbk_value(iterator, iterator, value::tag_type = value::default_tag);
     value qbk_value(std::string const&,
             file_position = file_position(),

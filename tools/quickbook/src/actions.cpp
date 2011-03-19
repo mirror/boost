@@ -33,11 +33,7 @@ namespace quickbook
     char const* quickbook_get_date = "__quickbook_get_date__";
     char const* quickbook_get_time = "__quickbook_get_time__";
 
-    int qbk_major_version = -1;
-    int qbk_minor_version = -1;
     unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
-
-    void assign_qbk_version::operator()(int value) const { v_ = value; }
 
     namespace {
         std::string fully_qualified_id(std::string const& library_id,
@@ -1646,8 +1642,6 @@ namespace quickbook
         
         // save the source mode and version info (only restored for 1.6+)
         std::string source_mode = actions.source_mode;
-        unsigned qbk_major_version_store = qbk_major_version;
-        unsigned qbk_minor_version_store = qbk_minor_version;
         unsigned qbk_version_n_store = qbk_version_n;
 
         // scope the macros
@@ -1683,8 +1677,6 @@ namespace quickbook
         {
             actions.source_mode = source_mode;
 
-            qbk_major_version = qbk_major_version_store;
-            qbk_minor_version = qbk_minor_version_store;
             qbk_version_n = qbk_version_n_store;
         }
 

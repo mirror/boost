@@ -16,6 +16,7 @@
 #include <boost/spirit/include/classic_loops.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
+#include <boost/spirit/include/classic_numerics.hpp>
 #include <boost/spirit/include/phoenix1_primitives.hpp>
 
 namespace quickbook
@@ -65,9 +66,10 @@ namespace quickbook
         cl::rule<scanner>
                         doc_title, doc_simple, doc_phrase, doc_fallback,
                         doc_authors, doc_author,
-                        doc_copyright, doc_copyright_year, doc_copyright_holder,
+                        doc_copyright, doc_copyright_holder,
                         doc_source_mode, doc_biblioid,
                         quickbook_version, char_;
+        cl::uint_parser<int, 10, 4, 4> doc_copyright_year;
         cl::symbols<> doc_types;
         cl::symbols<value::tag_type> doc_attributes;
         std::map<value::tag_type, cl::rule<scanner>* > attribute_rules;
@@ -135,11 +137,14 @@ namespace quickbook
             ;
 
         local.quickbook_version =
-                "quickbook" >> hard_space
-            >>  (   cl::uint_p              [assign_qbk_version(qbk_major_version)]
+            actions.values.list(doc_info_tags::qbk_version)
+            [   "quickbook"
+            >>  hard_space
+            >>  (   cl::uint_p              [actions.values.entry(ph::arg1)]
                     >> '.' 
-                    >>  uint2_t()           [assign_qbk_version(qbk_minor_version)]
+                    >>  uint2_t()           [actions.values.entry(ph::arg1)]
                 )
+            ]
             ;
 
         // TODO: Clear phrase afterwards?
@@ -156,8 +161,6 @@ namespace quickbook
         local.attribute_rules[doc_info_attributes::last_revision] = &local.doc_simple;
         local.attribute_rules[doc_info_attributes::lang] = &local.doc_simple;
 
-        local.doc_copyright_year = cl::repeat_p(4)[cl::digit_p];
-
         local.doc_copyright_holder
             =   *(  ~cl::eps_p
                     (   ']'
@@ -168,12 +171,12 @@ namespace quickbook
 
         local.doc_copyright =
             *(  +(  local.doc_copyright_year
-                                            [actions.values.entry(ph::arg1, ph::arg2, doc_info_tags::copyright_year)]
+                                            [actions.values.entry(ph::arg1, doc_info_tags::copyright_year)]
                 >>  space
                 >>  !(  '-'
                     >>  space
                     >>  local.doc_copyright_year
-                                            [actions.values.entry(ph::arg1, ph::arg2, doc_info_tags::copyright_year_end)]
+                                            [actions.values.entry(ph::arg1, doc_info_tags::copyright_year_end)]
                     >>  space
                     )
                 >>  !cl::ch_p(',')
