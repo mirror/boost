@@ -94,7 +94,7 @@ namespace quickbook
         
         struct utf8_proxy
         {
-            std::string const& value;
+            std::string value;
             
             explicit utf8_proxy(std::string const& v) : value(v) {}
         };
