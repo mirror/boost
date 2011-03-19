@@ -293,7 +293,7 @@ main(int argc, char* argv[])
             quickbook::detail::out()
                 << QUICKBOOK_VERSION
                 << " (Boost "
-                << boost_version
+                << quickbook::detail::utf8(boost_version)
                 << ")"
                 << std::endl;
             return 0;

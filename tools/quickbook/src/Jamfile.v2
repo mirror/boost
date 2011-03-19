@@ -53,5 +53,5 @@ exe quickbook
       <toolset>msvc:<cxxflags>/wd4800
       <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
       <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-      <target-os>NT:<library>shell32
+      <target-os>windows:<library>shell32
     ;
