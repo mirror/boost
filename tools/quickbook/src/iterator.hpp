@@ -11,6 +11,8 @@
 
 #include <boost/operators.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+#include <boost/range/iterator_range.hpp>
+#include <iterator>
 
 namespace quickbook
 {
@@ -35,9 +37,9 @@ namespace quickbook
     {
         position_iterator() {}
         explicit position_iterator(Iterator base)
-            : base_(base), previous_('\0'), position_() {}
+            : original_(base), base_(base), previous_('\0'), position_() {}
         explicit position_iterator(Iterator base, file_position const& position)
-            : base_(base), previous_('\0'), position_(position) {}
+            : original_(base), base_(base), previous_('\0'), position_(position) {}
     
         friend bool operator==(
             position_iterator const& x,
@@ -82,8 +84,17 @@ namespace quickbook
         Iterator base() const {
             return base_;
         }
+
+        typedef boost::iterator_range<std::reverse_iterator<Iterator> >
+            lookback_range;
+
+        lookback_range lookback() const
+        {
+            return lookback_range(base_, original_);
+        }
     
     private:
+        Iterator original_;
         Iterator base_;
         char previous_;
         file_position position_;

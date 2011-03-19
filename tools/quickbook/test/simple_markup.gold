@@ -10,10 +10,23 @@
       role="underline">underline</emphasis> <literal>teletype</literal>
     </para>
     <para>
-      /all<emphasis>italic</emphasis> * not bold*
+      <emphasis>/italic/</emphasis> <emphasis role="bold">*bold*</emphasis> <emphasis
+      role="underline">_underline_</emphasis> <literal>=teletype=</literal>
+    </para>
+    <para>
+      not__underlined__hopefully
+    </para>
+    <para>
+      (<emphasis role="bold">bold</emphasis>)
+    </para>
+    <para>
+      <emphasis>all/italic</emphasis> * not bold*
     </para>
     <para>
       /not italic <ulink url="http://www.boost.org/"><emphasis role="bold">bold</emphasis></ulink>
+    </para>
+    <para>
+      not_underlined_
     </para>
   </section>
 </article>

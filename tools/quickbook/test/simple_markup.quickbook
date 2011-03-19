@@ -6,8 +6,16 @@
 
 /italic/ *bold* _underline_ =teletype=
 
+//italic// **bold** __underline__ ==teletype==
+
+not__underlined__hopefully
+
+(*bold*)
+
 /all/italic/ * not bold*
 
 /not italic [@http://www.boost.org/ *bold*]
+
+not_underlined_
 
 [endsect]

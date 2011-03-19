@@ -11,7 +11,7 @@
 #define BOOST_SPIRIT_ACTIONS_CLASS_HPP
 
 #include "actions.hpp"
-#include "scoped_parser.hpp"
+#include "parsers.hpp"
 #include "values_parse.hpp"
 #include <boost/tuple/tuple.hpp>
 #include <boost/scoped_ptr.hpp>

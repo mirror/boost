@@ -12,6 +12,7 @@
 #include "actions_class.hpp"
 #include "utils.hpp"
 #include "template_tags.hpp"
+#include "parsers.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
@@ -22,7 +23,7 @@
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
-
+    
     template <typename Rule, typename Action>
     inline void
     simple_markup(
@@ -33,26 +34,33 @@ namespace quickbook
     )
     {
         simple =
-            mark >>
-            (
-                (
-                    cl::graph_p                 // A single char. e.g. *c*
-                    >> cl::eps_p(mark
-                        >> (cl::space_p | cl::punct_p | cl::end_p))
-                                                // space_p, punct_p or end_p
-                )                               // must follow mark
-            |
-                (   cl::graph_p >>              // graph_p must follow mark
-                    *(cl::anychar_p -
-                        (   (cl::graph_p >> mark) // Make sure that we don't go
-                        |   close                 // past a single block
+                mark
+            >>  lookback
+                [   cl::anychar_p
+                >>  ~cl::eps_p(mark)            // first mark not be preceeded by
+                                                // the same character.
+                >>  (cl::space_p | cl::punct_p | cl::end_p)
+                                                // first mark must be preceeded
+                                                // by space or punctuation or the
+                                                // mark character or a the start.
+                ]
+            >>  (   cl::graph_p                 // graph_p must follow first mark
+                >>  *(  cl::anychar_p -
+                        (   lookback[cl::graph_p]
+                                                // final mark must be preceeded by
+                                                // graph_p
+                        >>  mark
+                        >>  ~cl::eps_p(mark)    // final mark not be followed by
+                                                // the same character.
+                        >>  (cl::space_p | cl::punct_p | cl::end_p)
+                                                // final mark must be followed by
+                                                // space or punctuation
+                        |   close               // Make sure that we don't go
+                                                // past a single block
                         )
-                    ) >> cl::graph_p            // graph_p must precede mark
-                    >> cl::eps_p(mark
-                        >> (cl::space_p | cl::punct_p | cl::end_p))
-                                                // space_p, punct_p or end_p
-                )                               // must follow mark
-            )                                   [action]
+                    )
+                >>  cl::eps_p(mark)
+                )                               [action]
             >> mark
             ;
     }
