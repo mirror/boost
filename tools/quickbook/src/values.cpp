@@ -710,8 +710,7 @@ namespace quickbook
     
     value_builder::value_builder()
         : current()
-        , list_tag(value::no_tag)
-        , next_tag(value::default_tag)
+        , list_tag(value::default_tag)
         , saved()
     {
     }
@@ -719,7 +718,6 @@ namespace quickbook
     void value_builder::swap(value_builder& other) {
         current.swap(other.current);
         std::swap(list_tag, other.list_tag);
-        std::swap(next_tag, other.next_tag);
         saved.swap(other.saved);
     }
     
@@ -742,18 +740,7 @@ namespace quickbook
     void value_builder::reset() {
         detail::value_list_builder new_builder;
         current.swap(new_builder);
-        list_tag = value::no_tag;
-        next_tag = value::default_tag;
-    }
-
-    void value_builder::set_tag(value::tag_type tag) {
-        next_tag = tag;
-    }
-
-    value::tag_type value_builder::release_tag(value::tag_type t) {
-        value::tag_type r = t != value::no_tag ? t : next_tag;
-        next_tag = value::default_tag;
-        return r;
+        list_tag = value::default_tag;
     }
 
     void value_builder::insert(value const& item) {
@@ -761,7 +748,7 @@ namespace quickbook
     }
 
     void value_builder::start_list(value::tag_type tag) {
-        value::tag_type saved_tag = release_tag(tag);
+        value::tag_type saved_tag = tag;
         save();
         list_tag = saved_tag;
     }

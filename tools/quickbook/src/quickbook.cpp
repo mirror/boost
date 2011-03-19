@@ -189,8 +189,9 @@ main(int argc, char* argv[])
         // First thing, the filesystem should record the current working directory.
         fs::initial_path<fs::path>();
         
-        // Setup out output stream.
+        // Various initialisation methods
         quickbook::detail::initialise_output();
+        quickbook::detail::initialise_markups();
 
         options_description desc("Allowed options");
 

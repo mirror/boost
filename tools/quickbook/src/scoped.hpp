@@ -6,21 +6,20 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#if !defined(BOOST_SPIRIT_QUICKBOOK_TABLE_TAGS_HPP)
-#define BOOST_SPIRIT_QUICKBOOK_TABLE_TAGS_HPP
+#if !defined(BOOST_QUICKBOOK_SCOPED_HPP)
+#define BOOST_QUICKBOOK_SCOPED_HPP
 
-#include "value_tags.hpp"
+#include <cassert>
 
-namespace quickbook
-{
-    QUICKBOOK_VALUE_TAGS(table_tags, 0x200,
-        (title)(row)(cell)
-    )
+namespace quickbook {
 
-    QUICKBOOK_VALUE_TAGS(general_tags, 0x300,
-        (element_id)
-    )
-
+    struct scoped_action_base
+    {
+        void start() {}
+        void success() {}
+        void failure() {}
+        void cleanup() {}
+    };
 }
 
 #endif

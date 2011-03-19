@@ -18,7 +18,7 @@
 
 #define QUICKBOOK_VALUE_TAGS(tags_name, start_index, values) \
     struct tags_name { \
-        enum { \
+        enum tags_name##_enum { \
             previous_index = start_index - 1, \
             BOOST_PP_SEQ_ENUM(values), \
             end_index \
@@ -43,7 +43,7 @@
 
 #define QUICKBOOK_VALUE_NAMED_TAGS(tags_name, start_index, values) \
     struct tags_name { \
-        enum { \
+        enum tags_name##_enum { \
             previous_index = start_index - 1 \
             BOOST_PP_SEQ_FOR_EACH(QUICKBOOK_VALUE_NAMED_ENUM, _, values), \
             end_index \

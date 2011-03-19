@@ -210,6 +210,35 @@
       </simpara>
     </listitem>
   </orderedlist>
+  <para>
+    Markup in list:
+  </para>
+  <itemizedlist>
+    <listitem>
+      <simpara>
+        <emphasis role="bold">Bold</emphasis>
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        <emphasis role="bold">Bold</emphasis>
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        <quote>Quoted</quote>
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        <footnote>
+        <para>
+          Footnote
+        </para>
+        </footnote>
+      </simpara>
+    </listitem>
+  </itemizedlist>
   <section id="list_test.list_immediately_following_markup">
     <title><link linkend="list_test.list_immediately_following_markup">List immediately
     following markup</link></title>

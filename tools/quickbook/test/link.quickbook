@@ -4,7 +4,7 @@
 [section Different types of links]
 
 [@http://www.boost.org/]
-[@http://www.boost.org/ Boost]
+[@  http://www.boost.org/ Boost]
 [link link-id]
 [link link-id Link Text]
 [#link-id]

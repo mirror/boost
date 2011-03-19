@@ -14,39 +14,115 @@
 
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_nil.hpp>
+#include <boost/spirit/include/phoenix1_tuples.hpp>
 
 namespace quickbook {
     namespace cl = boost::spirit::classic;
     
-    // Used to store variables/state while parsing 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // scoped_parser<Impl>
+    //
+    // Impl is a struct with the methods:
+    //
+    // void start();
+    // void success();
+    // void failure();
+    // void cleanup();
+    //
+    ///////////////////////////////////////////////////////////////////////////
 
-    template <typename ScopeT, typename DataT, typename ParserT>
+    template <typename Impl, typename Arguments, typename ParserT>
     struct scoped_parser_impl
-        : public cl::unary< ParserT, cl::parser< scoped_parser_impl<ScopeT, DataT, ParserT> > >
+        : public cl::unary< ParserT, cl::parser< scoped_parser_impl<Impl, Arguments, ParserT> > >
     {
-        typedef scoped_parser_impl<ScopeT, DataT, ParserT> self_t;
-        typedef cl::unary< ParserT, cl::parser< scoped_parser_impl<ScopeT, DataT, ParserT> > > base_t;
+        typedef scoped_parser_impl<Impl, Arguments, ParserT> self_t;
+        typedef cl::unary< ParserT, cl::parser< scoped_parser_impl<Impl, Arguments, ParserT> > > base_t;
 
         template <typename ScannerT>
         struct result { typedef cl::match<> type; };
 
-        scoped_parser_impl(DataT& actions, ParserT const &p)
+        scoped_parser_impl(
+                Impl const& impl,
+                Arguments const& arguments,
+                ParserT const &p)
             : base_t(p)
-            , actions(actions)
+            , impl_(impl)
+            , arguments_(arguments)
         {}
 
+        struct scoped
+        {
+            typedef void result_type;
+            template <typename Arg1 = void, typename Arg2 = void>
+            struct result { typedef void type; };
+        
+            explicit scoped(Impl const& impl)
+                : impl_(impl)
+                , in_progress_(false)
+            {}
+            
+            typedef phoenix::tuple_index<0> t0;
+            typedef phoenix::tuple_index<1> t1;
+            
+            void start(phoenix::tuple<> const&)
+            {
+                impl_.start();
+                in_progress_ = true;
+            }
+            
+            template <typename Arg1>
+            void start(phoenix::tuple<Arg1> const& x)
+            {
+                impl_.start(x[t0()]);
+                in_progress_ = true;
+            }
+
+            template <typename Arg1, typename Arg2>
+            void start(phoenix::tuple<Arg1, Arg2> const& x)
+            {
+                impl_.start(x[t0()], x[t1()]);
+                in_progress_ = true;
+            }
+            
+            void success()
+            {
+                in_progress_ = false;
+                impl_.success();
+            }
+
+            void failure()
+            {
+                in_progress_ = false;
+                impl_.failure();
+            }
+
+            ~scoped()
+            {
+                if (in_progress_) impl_.failure();
+                impl_.cleanup();
+            }
+            
+            Impl impl_;
+            bool in_progress_;
+        };
+    
         template <typename ScannerT>
         typename result<ScannerT>::type parse(ScannerT const &scan) const
         {
             typedef typename ScannerT::iterator_t iterator_t;
             iterator_t save = scan.first;
 
-            ScopeT scope(actions);
+            scoped scope(impl_);
+            scope.start(arguments_);
+
             typename cl::parser_result<ParserT, ScannerT>::type result
                 = this->subject().parse(scan);
 
+            //result = scope.match(result);
+
             if (result) {
-                scope.success(result);
+                scope.success();
                 return scan.create_match(result.length(), cl::nil_t(), save, scan.first);
             }
             else {
@@ -55,30 +131,21 @@ namespace quickbook {
             }
         }
         
-        DataT& actions;
+        Impl impl_;
+        Arguments arguments_;
     };
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // scoped_parser
-    //
-    //      generator for scoped_parser_impl objects
-    //      operator[] returns scoped_parser_impl according to its argument
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename ScopeT>
-    struct scoped_parser
-    {
-        typedef typename ScopeT::data_type data_type;
-    
-        explicit scoped_parser(data_type& actions)
-            : actions(actions) {}
+    template <typename Impl, typename Arguments>
+    struct scoped_parser_gen
+    {    
+        explicit scoped_parser_gen(Impl impl, Arguments const& arguments)
+            : impl_(impl), arguments_(arguments) {}
 
         template<typename ParserT>
         scoped_parser_impl
         <
-            ScopeT,
-            data_type,
+            Impl,
+            Arguments,
             typename cl::as_parser<ParserT>::type
         >
         operator[](ParserT const &p) const
@@ -86,17 +153,56 @@ namespace quickbook {
             typedef cl::as_parser<ParserT> as_parser_t;
             typedef typename as_parser_t::type parser_t;
 
-            return scoped_parser_impl<ScopeT, data_type, parser_t>
-                (actions, as_parser_t::convert(p));
+            return scoped_parser_impl<Impl, Arguments, parser_t>
+                (impl_, arguments_, p);
         }
+
+        Impl impl_;
+        Arguments arguments_;
+    };
+
+    template <typename Impl>
+    struct scoped_parser
+    {
+        scoped_parser(Impl const& impl)
+            : impl_(impl) {}
+    
+        scoped_parser_gen<Impl, phoenix::tuple<> >
+            operator()() const
+        {
+            typedef phoenix::tuple<> tuple;
+            return scoped_parser_gen<Impl, tuple>(impl_, tuple());
+        };
+
+        template <typename Arg1>
+        scoped_parser_gen<Impl, phoenix::tuple<Arg1> >
+            operator()(Arg1 x1) const
+        {
+            typedef phoenix::tuple<Arg1> tuple;
+            return scoped_parser_gen<Impl, tuple>(impl_, tuple(x1));
+        };
+    
+        template <typename Arg1, typename Arg2>
+        scoped_parser_gen<Impl, phoenix::tuple<Arg1, Arg2> >
+            operator()(Arg1 x1, Arg2 x2) const
+        {
+            typedef phoenix::tuple<Arg1, Arg2> tuple;
+            return scoped_parser_gen<Impl, tuple>(impl_, tuple(x1, x2));
+        };
         
-        data_type& actions;
+        Impl impl_;
     };
     
+    ///////////////////////////////////////////////////////////////////////////
+    //
     // Lookback parser
+    //
+    // usage: lookback[body]
     //
     // Requires that iterator has typedef 'lookback_range' and function
     // 'lookback' returning a 'lookback_range'.
+    //
+    ///////////////////////////////////////////////////////////////////////////
 
     template <typename ParserT>
     struct lookback_parser

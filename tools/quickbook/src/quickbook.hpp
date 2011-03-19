@@ -29,6 +29,14 @@ namespace quickbook
     extern std::vector<std::string> preset_defines;
 
     int parse_file(fs::path const& filein_, actions& actor, bool ignore_docinfo = false);
+    
+    // Some initialisation methods
+    //
+    // Declared here to avoid including other headers
+    namespace detail
+    {
+        void initialise_markups();
+    }
 }
 
 #endif

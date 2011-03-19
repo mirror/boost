@@ -16,6 +16,7 @@
 #include <boost/spirit/include/classic_loops.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
+#include <boost/spirit/include/phoenix1_primitives.hpp>
 
 namespace quickbook
 {
@@ -41,6 +42,7 @@ namespace quickbook
 
             void operator()(value::tag_type& t) const {
                 l.attribute_rule = *l.attribute_rules[t];
+                l.attribute_tag = t;
             }
             
             doc_info_grammar_local& l;
@@ -54,6 +56,7 @@ namespace quickbook
 
             void operator()(iterator, iterator) const {
                 l.attribute_rule = l.doc_fallback;
+                l.attribute_tag = value::default_tag;
             }
             
             doc_info_grammar_local& l;
@@ -68,6 +71,7 @@ namespace quickbook
         cl::symbols<> doc_types;
         cl::symbols<value::tag_type> doc_attributes;
         std::map<value::tag_type, cl::rule<scanner>* > attribute_rules;
+        value::tag_type attribute_tag;
         cl::rule<scanner> attribute_rule;
         assign_attribute_type assign_attribute;
         fallback_attribute_type fallback_attribute;
@@ -98,12 +102,11 @@ namespace quickbook
             space
             >> '[' >> space
             >> (local.doc_types >> cl::eps_p)
-                                            [actions.values.reset]
-                                            [actions.values.entry(doc_info_tags::type)]
+                                            [actions.values.reset()]
+                                            [actions.values.entry(ph::arg1, ph::arg2, doc_info_tags::type)]
             >> hard_space
             >>  (  *(~cl::eps_p(cl::ch_p('[') | ']' | cl::eol_p) >> local.char_)
-                )                           [actions.values.tag(doc_info_tags::title)]
-                                            [actions.docinfo_value]
+                )                           [actions.docinfo_value(ph::arg1, ph::arg2, doc_info_tags::title)]
             >>  !(
                     space >> '[' >>
                         local.quickbook_version
@@ -115,18 +118,18 @@ namespace quickbook
                 >>  space
                 >>  (   local.doc_attributes
                                             [local.assign_attribute]
-                                            [actions.values.tag]
                     |   (+(cl::alnum_p | '_' | '-'))
                                             [local.fallback_attribute]
                                             [actions.error("Unrecognized document attribute: '%s'.")]
                     )
                 >>  hard_space
-                >>  local.attribute_rule
+                >>  actions.values.list(detail::var(local.attribute_tag))
+                    [local.attribute_rule]
                 >>  space
                 >>  ']'
                 >>  +cl::eol_p
                 )
-            >>  space                       [actions.values.sort]
+            >>  space                       [actions.values.sort()]
             >>  ']'
             >>  +cl::eol_p
             ;
@@ -145,7 +148,7 @@ namespace quickbook
 
         // TODO: Restrictions on doc_id and doc_dirname?
 
-        local.doc_simple = (*(~cl::eps_p(']') >> local.char_)) [actions.docinfo_value];
+        local.doc_simple = (*(~cl::eps_p(']') >> local.char_)) [actions.docinfo_value(ph::arg1, ph::arg2)];
         local.attribute_rules[doc_info_attributes::version] = &local.doc_simple;
         local.attribute_rules[doc_info_attributes::id] = &local.doc_simple;
         local.attribute_rules[doc_info_attributes::dirname] = &local.doc_simple;
@@ -154,6 +157,7 @@ namespace quickbook
         local.attribute_rules[doc_info_attributes::lang] = &local.doc_simple;
 
         local.doc_copyright_year = cl::repeat_p(4)[cl::digit_p];
+
         local.doc_copyright_holder
             =   *(  ~cl::eps_p
                     (   ']'
@@ -163,30 +167,27 @@ namespace quickbook
                 );
 
         local.doc_copyright =
-            *actions.values.scoped(doc_info_attributes::copyright)
-            [
-                +(  local.doc_copyright_year
-                                            [actions.values.entry(doc_info_tags::copyright_year)]
+            +(  +(  local.doc_copyright_year
+                                            [actions.values.entry(ph::arg1, ph::arg2, doc_info_tags::copyright_year)]
                 >>  space
                 >>  !(  '-'
                     >>  space
                     >>  local.doc_copyright_year
-                                            [actions.values.entry(doc_info_tags::copyright_year_end)]
+                                            [actions.values.entry(ph::arg1, ph::arg2, doc_info_tags::copyright_year_end)]
+                    >>  space
                     )
                 >>  !cl::ch_p(',')
+                >>  space
                 )
-            >>  space
-            >>  local.doc_copyright_holder
-                                            [actions.values.tag(doc_info_tags::copyright_name)]
-                                            [actions.docinfo_value]
+            >>  local.doc_copyright_holder  [actions.docinfo_value(ph::arg1, ph::arg2, doc_info_tags::copyright_name)]
             >>  !cl::ch_p(',')
             >>  space
-            ]
+            )
             ;
 
         local.attribute_rules[doc_info_attributes::copyright] = &local.doc_copyright;
 
-        local.doc_phrase = simple_phrase[actions.docinfo_value];
+        local.doc_phrase = simple_phrase [actions.docinfo_value(ph::arg1, ph::arg2)];
         local.attribute_rules[doc_info_attributes::purpose] = &local.doc_phrase;
         local.attribute_rules[doc_info_attributes::license] = &local.doc_phrase;
 
@@ -194,25 +195,20 @@ namespace quickbook
                 '['
             >>   space
             >>  (*(~cl::eps_p(',') >> local.char_))
-                                            [actions.values.tag(doc_info_tags::author_surname)]
-                                            [actions.docinfo_value]
+                                            [actions.docinfo_value(ph::arg1, ph::arg2, doc_info_tags::author_surname)]
             >>  ',' >> space
             >>  (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.values.tag(doc_info_tags::author_first)]
-                                            [actions.docinfo_value]
+                                            [actions.docinfo_value(ph::arg1, ph::arg2, doc_info_tags::author_first)]
             >>  ']'
             ;
 
         local.doc_authors =
-                actions.values.scoped(doc_info_attributes::authors)
-                [
-                    local.doc_author
+                local.doc_author
+            >>  space
+            >>  *(  !(cl::ch_p(',') >> space)
+                >>  local.doc_author
                 >>  space
-                >>  *(  !(cl::ch_p(',') >> space)
-                    >>  local.doc_author
-                    >>  space
-                    )
-                ]
+                )
             ;
 
         local.attribute_rules[doc_info_attributes::authors] = &local.doc_authors;
@@ -228,14 +224,10 @@ namespace quickbook
         local.attribute_rules[doc_info_attributes::source_mode] = &local.doc_source_mode;
 
         local.doc_biblioid =
-                actions.values.scoped(doc_info_attributes::biblioid)
-                [
-                    (+cl::alnum_p)          [actions.values.entry(doc_info_tags::biblioid_class)]
-                >>  hard_space
-                >>  (+(~cl::eps_p(']') >> local.char_))
-                                            [actions.values.tag(doc_info_tags::biblioid_value)]
-                                            [actions.docinfo_value]
-                ]
+                (+cl::alnum_p)              [actions.values.entry(ph::arg1, ph::arg2, doc_info_tags::biblioid_class)]
+            >>  hard_space
+            >>  (+(~cl::eps_p(']') >> local.char_))
+                                            [actions.docinfo_value(ph::arg1, ph::arg2, doc_info_tags::biblioid_value)]
             ;
 
         local.attribute_rules[doc_info_attributes::biblioid] = &local.doc_biblioid;

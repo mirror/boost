@@ -23,22 +23,25 @@ namespace quickbook
     actions::actions(fs::path const& filein_, fs::path const& outdir_, string_stream& out_)
         : grammar_()
 
-        , values()
-        , phrase_value(*this)
-        , docinfo_value(*this)
-
     // header info
         , doc_type()
         , doc_title_qbk()
         , doc_id()
-        , include_doc_id()
 
     // main output stream
         , out(out_)
 
     // auxilliary streams
         , phrase()
-        , list_buffer()
+
+    // value actions
+        , values()
+        , phrase_value(*this, phrase)
+        , out_value(*this, out)
+        , docinfo_value(*this)
+        , scoped_cond_phrase(*this)
+        , scoped_output(*this)
+        , scoped_no_eols(*this)
 
     // state
         , filename(fs::absolute(filein_))
@@ -53,86 +56,26 @@ namespace quickbook
 
     // temporary or global state
         , macro_id()
-        , list_marks()
-        , list_indent(-1)
         , template_depth(0)
         , templates()
         , error_count(0)
         , anchors()
-        , saved_anchors()
         , no_eols(true)
         , suppress(false)
         , warned_about_breaks(false)
 
     // actions
+        , element(*this)
         , error(*this)
-        , scoped_block(*this)
         , code(out, phrase, *this)
         , code_block(phrase, phrase, *this)
         , inline_code(phrase, *this)
-        , inside_paragraph(out, phrase, paragraph_pre, paragraph_post, *this)
-        , h(out, phrase, doc_id, section_id, qualified_section_id, section_level, *this)
-        , h1(out, phrase, doc_id, section_id, qualified_section_id, 1, *this)
-        , h2(out, phrase, doc_id, section_id, qualified_section_id, 2, *this)
-        , h3(out, phrase, doc_id, section_id, qualified_section_id, 3, *this)
-        , h4(out, phrase, doc_id, section_id, qualified_section_id, 4, *this)
-        , h5(out, phrase, doc_id, section_id, qualified_section_id, 5, *this)
-        , h6(out, phrase, doc_id, section_id, qualified_section_id, 6, *this)
+        , paragraph(*this)
         , hr(out, hr_, *this)
-        , blurb(out, blurb_pre, blurb_post, *this)
-        , blockquote(out, blockquote_pre, blockquote_post, *this)
-        , set_no_eols(*this)
-        , preformatted(out, phrase, preformatted_pre, preformatted_post, *this)
-        , warning(out, warning_pre, warning_post, *this)
-        , caution(out, caution_pre, caution_post, *this)
-        , important(out, important_pre, important_post, *this)
-        , note(out, note_pre, note_post, *this)
-        , tip(out, tip_pre, tip_post, *this)
         , space_char(phrase)
         , plain_char(phrase, *this)
         , raw_char(phrase, *this)
         , escape_unicode(phrase, *this)
-        , image(phrase, *this)
-        , cond_phrase_pre(condition, macro)
-        , scoped_cond_phrase(*this)
-
-        , list(out, list_buffer, list_indent, list_marks, *this)
-        , list_format(list_buffer, list_indent, list_marks, error_count, *this)
-        , list_item(list_buffer, phrase, list_item_pre, list_item_post, *this)
-
-        , funcref_pre(phrase, funcref_pre_, *this)
-        , funcref_post(phrase, funcref_post_, *this)
-        , classref_pre(phrase, classref_pre_, *this)
-        , classref_post(phrase, classref_post_, *this)
-        , memberref_pre(phrase, memberref_pre_, *this)
-        , memberref_post(phrase, memberref_post_, *this)
-        , enumref_pre(phrase, enumref_pre_, *this)
-        , enumref_post(phrase, enumref_post_, *this)
-        , macroref_pre(phrase, macroref_pre_, *this)
-        , macroref_post(phrase, macroref_post_, *this)
-        , headerref_pre(phrase, headerref_pre_, *this)
-        , headerref_post(phrase, headerref_post_, *this)
-        , conceptref_pre(phrase, conceptref_pre_, *this)
-        , conceptref_post(phrase, conceptref_post_, *this)
-        , globalref_pre(phrase, globalref_pre_, *this)
-        , globalref_post(phrase, globalref_post_, *this)
-
-        , bold_pre(phrase, bold_pre_, *this)
-        , bold_post(phrase, bold_post_, *this)
-        , italic_pre(phrase, italic_pre_, *this)
-        , italic_post(phrase, italic_post_, *this)
-        , underline_pre(phrase, underline_pre_, *this)
-        , underline_post(phrase, underline_post_, *this)
-        , teletype_pre(phrase, teletype_pre_, *this)
-        , teletype_post(phrase, teletype_post_, *this)
-        , strikethrough_pre(phrase, strikethrough_pre_, *this)
-        , strikethrough_post(phrase, strikethrough_post_, *this)
-        , quote_pre(phrase, quote_pre_, *this)
-        , quote_post(phrase, quote_post_, *this)
-        , replaceable_pre(phrase, replaceable_pre_, *this)
-        , replaceable_post(phrase, replaceable_post_, *this)
-        , footnote_pre(phrase, footnote_pre_, *this)
-        , footnote_post(phrase, footnote_post_, *this)
 
         , simple_bold(phrase, bold_pre_, bold_post_, macro, *this)
         , simple_italic(phrase, italic_pre_, italic_post_, macro, *this)
@@ -140,33 +83,15 @@ namespace quickbook
         , simple_teletype(phrase, teletype_pre_, teletype_post_, macro, *this)
         , simple_strikethrough(phrase, strikethrough_pre_, strikethrough_post_, macro, *this)
 
-        , variablelist(*this)
-
         , break_(phrase, *this)
-        , macro_identifier(*this)
-        , macro_definition(*this)
         , do_macro(phrase, *this)
-        , template_body(*this)
         , do_template(*this)
-        , url_pre(phrase, url_pre_, *this)
-        , url_post(phrase, url_post_, *this)
-        , link_pre(phrase, link_pre_, *this)
-        , link_post(phrase, link_post_, *this)
-        , table(*this)
-        , anchor(*this)
 
-        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, *this)
-        , end_section(out, section_level, min_section_level, qualified_section_id, error_count, *this)
         , element_id_warning(*this)
-        , xinclude(out, *this)
-        , include(*this)
-        , import(out, *this)
 
         , escape_pre(phrase, escape_pre_, *this)
         , escape_post(phrase, escape_post_, *this)
         
-        , inner_phrase_pre(*this)
-        , inner_phrase_post(*this)
         , output_pre(*this)
     {
         // turn off __FILENAME__ macro on debug mode = true
@@ -203,7 +128,6 @@ namespace quickbook
 
         out.push();
         phrase.push();
-        list_buffer.push();
         templates.push();
         values.builder.save();
     }
@@ -244,7 +168,6 @@ namespace quickbook
 
         out.pop();
         phrase.pop();
-        list_buffer.pop();
         templates.pop();
         values.builder.restore();
     }

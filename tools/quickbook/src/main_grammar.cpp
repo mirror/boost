@@ -12,6 +12,7 @@
 #include "actions_class.hpp"
 #include "utils.hpp"
 #include "template_tags.hpp"
+#include "block_tags.hpp"
 #include "parsers.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
@@ -19,11 +20,13 @@
 #include <boost/spirit/include/classic_clear_actor.hpp>
 #include <boost/spirit/include/classic_if.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
+#include <boost/spirit/include/phoenix1_primitives.hpp>
+#include <boost/spirit/include/phoenix1_casts.hpp>
 
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
-    
+
     template <typename Rule, typename Action>
     inline void
     simple_markup(
@@ -67,6 +70,30 @@ namespace quickbook
 
     struct main_grammar_local
     {
+        struct assign_element_type {
+            assign_element_type(main_grammar_local& l) : l(l) {}
+
+            void operator()(element_info& t) const {
+                l.element_type = t.type;
+                l.element_rule = *t.rule;
+                l.element_tag = t.tag;
+            }
+            
+            main_grammar_local& l;
+        };
+
+        struct check_element_type {
+            check_element_type(main_grammar_local const& l, element_info::context t)
+                : l(l), t(t) {}
+
+            bool operator()() const {
+                return l.element_type & t;
+            }
+
+            main_grammar_local const& l;
+            element_info::context t;
+        };
+
         cl::rule<scanner>
                         top_level, blocks, paragraph_separator,
                         block_element,
@@ -88,31 +115,9 @@ namespace quickbook
                         dummy_block
                         ;
 
-        struct assign_element_type {
-            assign_element_type(main_grammar_local& l) : l(l) {}
-
-            void operator()(element_info& t) const {
-                l.element_type = t.type;
-                l.element_rule = *t.rule;
-            }
-            
-            main_grammar_local& l;
-        };
-
-        struct check_element_type {
-            check_element_type(main_grammar_local const& l, element_info::context t)
-                : l(l), t(t) {}
-
-            bool operator()() const {
-                return l.element_type & t;
-            }
-
-            main_grammar_local const& l;
-            element_info::context t;
-        };
-
         element_info::type_enum element_type;
         cl::rule<scanner> element_rule;
+        value::tag_type element_tag;
         assign_element_type assign_element;
 
         main_grammar_local()
@@ -149,7 +154,7 @@ namespace quickbook
 
         local.blocks =
            *(   local.code
-            |   local.list                      [actions.list]
+            |   local.list
             |   local.hr                        [actions.hr]
             |   +eol
             )
@@ -158,7 +163,7 @@ namespace quickbook
         local.paragraph_separator
             =   cl::eol_p
             >> *cl::blank_p
-            >>  cl::eol_p                       [actions.inside_paragraph]
+            >>  cl::eol_p                       [actions.paragraph]
             ;
 
         local.hr =
@@ -171,16 +176,18 @@ namespace quickbook
             =   '[' >> space
             >>  local.element
             >>  cl::eps_p(local.check_element(element_info::in_block))
-                                                [actions.inside_paragraph]
-                                                [actions.values.reset]
-            >>  (   local.element_rule
-                >>  (   (space >> ']')
-                    |   cl::eps_p               [actions.error]
-                    )
+                                                [actions.paragraph]
+                                                [actions.values.reset()]
+            >>  (   actions.values.list(detail::var(local.element_tag))
+                    [   local.element_rule
+                    >>  (   (space >> ']')
+                        |   cl::eps_p           [actions.error]
+                        )
+                    ]                           [actions.element]
                 |   cl::eps_p                   [actions.error]
                 )
             ;
-        
+
         local.code =
             (
                 local.code_line
@@ -198,23 +205,30 @@ namespace quickbook
             ;
 
         local.list =
-            cl::eps_p(cl::ch_p('*') | '#') >>
-           +(
-                (*cl::blank_p
-                >> (cl::ch_p('*') | '#'))       [actions.list_format]
-                >> *cl::blank_p
-                >> local.list_item
-            )                                   [actions.list_item]
+                cl::eps_p(cl::ch_p('*') | '#')
+                                            [actions.values.reset()]
+            >>  actions.values.list(block_tags::list)
+                [   +actions.values.list()
+                    [   (*cl::blank_p)      [actions.values.entry(ph::arg1, ph::arg2, general_tags::list_indent)]
+                    >>  (cl::ch_p('*') | '#')
+                                            [actions.values.entry(ph::arg1, ph::arg2, general_tags::list_mark)]
+                    >>  *cl::blank_p
+                    >>  local.list_item     [actions.phrase_value]
+                    ]
+                ]                           [actions.element]
             ;
 
         local.list_item =
-           *(   common
-            |   (cl::anychar_p -
-                    (   cl::eol_p >> *cl::blank_p
-                    >>  (cl::ch_p('*') | '#' | cl::eol_p)
-                    )
-                )                               [actions.plain_char]
-            )
+            actions.values.save()
+            [
+                *(  common
+                |   (cl::anychar_p -
+                        (   cl::eol_p >> *cl::blank_p
+                        >>  (cl::ch_p('*') | '#' | cl::eol_p)
+                        )
+                    )                       [actions.plain_char]
+                )
+            ]
             >> +eol
             ;
 
@@ -236,18 +250,18 @@ namespace quickbook
             ;
 
         local.template_ =
-                cl::eps_p                       [actions.values.reset]
-            >>  !cl::str_p("`")                 [actions.values.entry(template_tags::escape)]
+                cl::eps_p                       [actions.values.reset()]
+            >>  !cl::str_p("`")                 [actions.values.entry(ph::arg1, ph::arg2, template_tags::escape)]
             >>
             ( (
                 (cl::eps_p(cl::punct_p)
                     >> actions.templates.scope
-                )                               [actions.values.entry(template_tags::identifier)]
+                )                               [actions.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
                 >> !local.template_args
             ) | (
                 (actions.templates.scope
                     >> cl::eps_p(hard_space)
-                )                               [actions.values.entry(template_tags::identifier)]
+                )                               [actions.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
                 >> space
                 >> !local.template_args
             ) )
@@ -267,8 +281,8 @@ namespace quickbook
 
         local.template_arg_1_4 =
             (   cl::eps_p(*cl::blank_p >> cl::eol_p)
-            >>  local.template_inner_arg_1_4    [actions.values.entry(template_tags::block)]
-            |   local.template_inner_arg_1_4    [actions.values.entry(template_tags::phrase)]
+            >>  local.template_inner_arg_1_4    [actions.values.entry(ph::arg1, ph::arg2, template_tags::block)]
+            |   local.template_inner_arg_1_4    [actions.values.entry(ph::arg1, ph::arg2, template_tags::phrase)]
             )                               
             ;
 
@@ -284,8 +298,8 @@ namespace quickbook
 
         local.template_arg_1_5 =
             (   cl::eps_p(*cl::blank_p >> cl::eol_p)
-            >>  local.template_arg_1_5_content  [actions.values.entry(template_tags::block)]
-            |   local.template_arg_1_5_content  [actions.values.entry(template_tags::phrase)]
+            >>  local.template_arg_1_5_content  [actions.values.entry(ph::arg1, ph::arg2, template_tags::block)]
+            |   local.template_arg_1_5_content  [actions.values.entry(ph::arg1, ph::arg2, template_tags::phrase)]
             )
             ;
 
@@ -351,28 +365,29 @@ namespace quickbook
         simple_markup(local.simple_teletype,
             '=', actions.simple_teletype, local.simple_phrase_end);
 
-        phrase =
+        phrase = actions.values.save()[
            *(   common
             |   (cl::anychar_p - phrase_end)    [actions.plain_char]
             )
+            ]
             ;
 
-        extended_phrase =
+        extended_phrase = actions.values.save()[
            *(   local.extended_phrase_element
             |   common
             |   (cl::anychar_p - phrase_end)    [actions.plain_char]
             )
+            ]
             ;
 
         inside_paragraph =
-            actions.scoped_block[
-            actions.values.save[
-            (*( common
-            |   (cl::anychar_p - phrase_end)    [actions.plain_char]
-            |   (+eol)                          [actions.inside_paragraph]
-            ))                                  [actions.inside_paragraph]
-            ]
-            ]
+            actions.values.save()
+            [   *(  local.paragraph_separator   [actions.paragraph]
+                |   common
+                |   (cl::anychar_p - phrase_end)
+                                                [actions.plain_char]
+                )
+            ]                                   [actions.paragraph]
             ;
 
         local.phrase_element
@@ -380,7 +395,11 @@ namespace quickbook
             >>  space
             >>  (   local.element
                 >>  cl::eps_p(local.check_element(element_info::in_phrase))
-                >>  local.element_rule
+                                                [actions.values.reset()]
+                >>  actions.values.list(detail::var(local.element_tag))
+                    [   local.element_rule
+                    >>  cl::eps_p(space >> ']')
+                    ]                           [actions.element]
                 |   local.template_
                 |   cl::str_p("br")             [actions.break_]
                 )
@@ -391,20 +410,22 @@ namespace quickbook
             =   '[' >> space
             >>  local.element
             >>  cl::eps_p(local.check_element(element_info::in_conditional))
-                                                [actions.inside_paragraph]
-            >>  (   local.element_rule
-                >>  (   (space >> ']')
+                                                [actions.paragraph]
+                                                [actions.values.reset()]
+            >>  (   actions.values.list(detail::var(local.element_tag))
+                    [   local.element_rule
+                    >>  (   (space >> ']')          
+                        |   cl::eps_p           [actions.error]
+                        )
+                    ]                           [actions.element]
                     |   cl::eps_p               [actions.error]
-                    )
-                |   cl::eps_p                   [actions.error]
                 )
             ;
 
-
         local.element
             =   cl::eps_p(cl::punct_p)
-            >>  elements                    [local.assign_element]
-            |   elements                    [local.assign_element]
+            >>  elements                        [local.assign_element]
+            |   elements                        [local.assign_element]
             >>  (cl::eps_p - (cl::alnum_p | '_'))
             ;
 
@@ -427,10 +448,11 @@ namespace quickbook
         // Simple phrase grammar
         //
 
-        simple_phrase =
+        simple_phrase = actions.values.save()[
            *(   common
-            |   (cl::anychar_p - ']')       [actions.plain_char]
+            |   (cl::anychar_p - ']')           [actions.plain_char]
             )
+            ]
             ;
 
         //
@@ -438,17 +460,18 @@ namespace quickbook
         //
 
         command_line =
-                *cl::space_p
+            actions.values.list(block_tags::macro_definition)
+            [   *cl::space_p
             >>  local.command_line_macro_identifier
-                                            [actions.macro_identifier]
+                                                [actions.values.entry(ph::arg1, ph::arg2)]
             >>  *cl::space_p
             >>  (   '='
                 >>  *cl::space_p
                 >>  local.command_line_phrase
-                                            [actions.macro_definition]
                 >>  *cl::space_p
-                )
-            |   cl::eps_p                   [actions.macro_definition]
+                |   cl::eps_p
+                )                               [actions.phrase_value]
+            ]                                   [actions.element]
             ;
 
         local.command_line_macro_identifier =
@@ -457,9 +480,11 @@ namespace quickbook
 
 
         local.command_line_phrase =
-           *(   common
-            |   (cl::anychar_p - ']')       [actions.plain_char]
-            )
+            actions.values.save()
+            [   *(   common
+                |   (cl::anychar_p - ']')       [actions.plain_char]
+                )
+            ]
             ;
 
         // Miscellaneous stuff

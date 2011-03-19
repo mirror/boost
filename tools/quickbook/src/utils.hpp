@@ -15,6 +15,9 @@
 #include <boost/ref.hpp>
 #include <boost/assert.hpp>
 #include <boost/filesystem/v3/path.hpp>
+#include <boost/range/algorithm_ext/push_back.hpp>
+#include <boost/range/adaptor/transformed.hpp>
+
 
 namespace quickbook {
 
@@ -27,13 +30,15 @@ namespace detail
     void print_space(char ch, std::ostream& out);
     char filter_identifier_char(char ch);
 
-    template <typename Iterator>
+    template <typename Range>
     inline std::string
-    make_identifier(Iterator const& first, Iterator const& last)
+    make_identifier(Range const& range)
     {
         std::string out_name;
-        for (Iterator i = first; i != last; ++i)
-            out_name += filter_identifier_char(*i);
+
+        boost::push_back(out_name,
+            range | boost::adaptors::transformed(filter_identifier_char));
+
         return out_name;
     }
 

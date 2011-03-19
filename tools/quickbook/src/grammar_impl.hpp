@@ -13,6 +13,7 @@
 
 #include "grammar.hpp"
 #include "rule_store.hpp"
+#include "values.hpp"
 #include <boost/spirit/include/classic_symbols.hpp>
 
 namespace quickbook
@@ -33,11 +34,15 @@ namespace quickbook
             conditional_or_block = 5
         };
 
-        element_info(type_enum t, cl::rule<scanner>* r)
-            : type(t), rule(r) {}
+        element_info(
+                type_enum t,
+                cl::rule<scanner>* r,
+                value::tag_type tag = value::default_tag)
+            : type(t), rule(r), tag(tag) {}
 
         type_enum type;
         cl::rule<scanner>* rule;
+        value::tag_type tag;
     };
 
     struct quickbook_grammar::impl

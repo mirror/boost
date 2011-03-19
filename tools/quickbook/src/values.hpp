@@ -77,7 +77,7 @@ namespace quickbook
 
             typedef iterator const_iterator;
             typedef value_node::tag_type tag_type;
-            enum { no_tag = -1, default_tag = 0 };
+            enum { default_tag = 0 };
 
         protected:
             explicit value_base(value_node* base)
@@ -243,17 +243,16 @@ namespace quickbook
 
         void reset();
         void set_tag(value::tag_type);
-        value::tag_type release_tag(value::tag_type = value::no_tag);
         void insert(value const&);
 
-        void start_list(value::tag_type);
+        void start_list(value::tag_type = value::default_tag);
         void finish_list();
         void clear_list();
         void sort_list();
 
     private:
         detail::value_list_builder current;
-        value::tag_type list_tag, next_tag;
+        value::tag_type list_tag;
         boost::scoped_ptr<value_builder> saved;
     };
 
@@ -280,13 +279,29 @@ namespace quickbook
             , end_(x.end())
         {}
 
-        reference consume(value::tag_type t = value::no_tag)
+        reference consume()
+        {
+            assert(is());
+            return *pos_++;
+        }
+
+        reference consume(value::tag_type t)
         {
             assert(is(t));
             return *pos_++;
         }
 
-        value optional_consume(value::tag_type t = value::no_tag)
+        value optional_consume()
+        {
+            if(is()) {
+                return *pos_++;
+            }
+            else {
+                return value();
+            }
+        }
+
+        value optional_consume(value::tag_type t)
         {
             if(is(t)) {
                 return *pos_++;
@@ -296,10 +311,14 @@ namespace quickbook
             }
         }
 
-        bool is(value::tag_type t = value::no_tag)
+        bool is()
         {
-            return (pos_ != end_ &&
-                (t == value::no_tag || t == pos_->get_tag()));
+            return pos_ != end_;
+        }
+
+        bool is(value::tag_type t)
+        {
+            return pos_ != end_ && t == pos_->get_tag();
         }
 
         iterator begin() const { return pos_; }
