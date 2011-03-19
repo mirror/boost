@@ -280,6 +280,7 @@ Boost 1.46.1:
 * Richer copyright syntax. Now understands:
   `[copyright 2001-2006, 2010 One person, 2008 Another person]`.
 * Fix delimeter checking for simple markup.
+* Allow more block elements to be nested.
 * Quickbook 1.6:
   * Scope source mode changes to the file they're made in.
 
