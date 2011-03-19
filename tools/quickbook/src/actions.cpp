@@ -405,15 +405,14 @@ namespace quickbook
                 {
                     char mark = list_marks.top().first;
                     list_marks.pop();
-                    actions.out << "</listitem>";
+                    actions.out << "</simpara></listitem>";
                     actions.out << ((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
                 }
-
-                actions.out << "</listitem>";
+                actions.out << "</simpara></listitem>";
             }
             else
             {
-                actions.out << "</listitem>";
+                actions.out << "</simpara></listitem>";
             }
 
             if (mark != list_marks.top().first) // new_indent == list_indent
@@ -426,10 +425,8 @@ namespace quickbook
                 ++actions.error_count;
             }
             
-            actions.out << "<listitem>";
-            actions.out << "<simpara>\n";
+            actions.out << "<listitem><simpara>";
             actions.out << content;
-            actions.out << "\n</simpara>";
         }
 
         assert(!list_marks.empty());
@@ -437,7 +434,7 @@ namespace quickbook
         {
             char mark = list_marks.top().first;
             list_marks.pop();
-            actions.out << "</listitem>";
+            actions.out << "</simpara></listitem>";
             actions.out << ((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
         }
     }

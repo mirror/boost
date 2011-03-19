@@ -1272,48 +1272,48 @@ escape (no processing/formatting)
             <listitem>
               <simpara>
                 Three
+                <orderedlist>
+                  <listitem>
+                    <simpara>
+                      Three.a
+                    </simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>
+                      Three.b
+                    </simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>
+                      Three.c
+                    </simpara>
+                  </listitem>
+                </orderedlist>
               </simpara>
-              <orderedlist>
-                <listitem>
-                  <simpara>
-                    Three.a
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    Three.b
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    Three.c
-                  </simpara>
-                </listitem>
-              </orderedlist>
             </listitem>
             <listitem>
               <simpara>
                 Fourth
+                <orderedlist>
+                  <listitem>
+                    <simpara>
+                      Four.a
+                      <orderedlist>
+                        <listitem>
+                          <simpara>
+                            Four.a.i
+                          </simpara>
+                        </listitem>
+                        <listitem>
+                          <simpara>
+                            Four.a.ii
+                          </simpara>
+                        </listitem>
+                      </orderedlist>
+                    </simpara>
+                  </listitem>
+                </orderedlist>
               </simpara>
-              <orderedlist>
-                <listitem>
-                  <simpara>
-                    Four.a
-                  </simpara>
-                  <orderedlist>
-                    <listitem>
-                      <simpara>
-                        Four.a.i
-                      </simpara>
-                    </listitem>
-                    <listitem>
-                      <simpara>
-                        Four.a.ii
-                      </simpara>
-                    </listitem>
-                  </orderedlist>
-                </listitem>
-              </orderedlist>
             </listitem>
             <listitem>
               <simpara>
@@ -1418,24 +1418,24 @@ escape (no processing/formatting)
             <listitem>
               <simpara>
                 Three
+                <itemizedlist>
+                  <listitem>
+                    <simpara>
+                      Three.a
+                    </simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>
+                      Three.b
+                    </simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>
+                      Three.c
+                    </simpara>
+                  </listitem>
+                </itemizedlist>
               </simpara>
-              <itemizedlist>
-                <listitem>
-                  <simpara>
-                    Three.a
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    Three.b
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    Three.c
-                  </simpara>
-                </listitem>
-              </itemizedlist>
             </listitem>
             <listitem>
               <simpara>
@@ -1467,72 +1467,72 @@ escape (no processing/formatting)
             <listitem>
               <simpara>
                 1
+                <itemizedlist>
+                  <listitem>
+                    <simpara>
+                      1.a
+                      <orderedlist>
+                        <listitem>
+                          <simpara>
+                            1.a.1
+                          </simpara>
+                        </listitem>
+                        <listitem>
+                          <simpara>
+                            1.a.2
+                          </simpara>
+                        </listitem>
+                      </orderedlist>
+                    </simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>
+                      1.b
+                    </simpara>
+                  </listitem>
+                </itemizedlist>
               </simpara>
-              <itemizedlist>
-                <listitem>
-                  <simpara>
-                    1.a
-                  </simpara>
-                  <orderedlist>
-                    <listitem>
-                      <simpara>
-                        1.a.1
-                      </simpara>
-                    </listitem>
-                    <listitem>
-                      <simpara>
-                        1.a.2
-                      </simpara>
-                    </listitem>
-                  </orderedlist>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    1.b
-                  </simpara>
-                </listitem>
-              </itemizedlist>
             </listitem>
             <listitem>
               <simpara>
                 2
+                <itemizedlist>
+                  <listitem>
+                    <simpara>
+                      2.a
+                    </simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>
+                      2.b
+                      <orderedlist>
+                        <listitem>
+                          <simpara>
+                            2.b.1
+                          </simpara>
+                        </listitem>
+                        <listitem>
+                          <simpara>
+                            2.b.2
+                            <itemizedlist>
+                              <listitem>
+                                <simpara>
+                                  2.b.2.a
+                                </simpara>
+                              </listitem>
+                              <listitem>
+                                <simpara>
+                                  2.b.2.b
+                                </simpara>
+                              </listitem>
+                            </itemizedlist>
+                          </simpara>
+                        </listitem>
+                      </orderedlist>
+                    </simpara>
+                  </listitem>
+                </itemizedlist>
               </simpara>
-              <itemizedlist>
-                <listitem>
-                  <simpara>
-                    2.a
-                  </simpara>
-                </listitem>
-                <listitem>
-                  <simpara>
-                    2.b
-                  </simpara>
-                  <orderedlist>
-                    <listitem>
-                      <simpara>
-                        2.b.1
-                      </simpara>
-                    </listitem>
-                    <listitem>
-                      <simpara>
-                        2.b.2
-                      </simpara>
-                      <itemizedlist>
-                        <listitem>
-                          <simpara>
-                            2.b.2.a
-                          </simpara>
-                        </listitem>
-                        <listitem>
-                          <simpara>
-                            2.b.2.b
-                          </simpara>
-                        </listitem>
-                      </itemizedlist>
-                    </listitem>
-                  </orderedlist>
-                </listitem>
-              </itemizedlist>
             </listitem>
           </orderedlist>
         </section>
