@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <boost/filesystem/v3/convenience.hpp>
 #include <boost/filesystem/v3/fstream.hpp>
+#include <boost/range/algorithm/replace.hpp>
 #include <boost/lexical_cast.hpp>
 #include "quickbook.hpp"
 #include "actions.hpp"
@@ -53,9 +54,23 @@ namespace quickbook
         if(!actions.output_pre(phrase)) return;
 
         file_position const pos = first.get_position();
-        detail::outwarn(actions.filename, pos.line)
-            << "in column:" << pos.column << ", "
-            << "[br] and \\n are deprecated" << ".\n";
+        if(*first == '\\')
+        {
+            detail::outwarn(actions.filename, pos.line)
+                << "in column:" << pos.column << ", "
+                << "'\\n' is deprecated, pleases use '[br]' instead" << ".\n";
+        }
+
+        if(!actions.warned_about_breaks)
+        {
+            detail::outwarn(actions.filename, pos.line)
+                << "line breaks generate invalid boostbook"
+                << "    (will only note first occurrence)."
+                << "\n";
+
+            actions.warned_about_breaks = true;
+        }
+            
         phrase << break_mark;
     }
 
@@ -501,9 +516,24 @@ namespace quickbook
         }
     }
 
-    void image_action::operator()(iterator, iterator) const
+    void image_action::operator()(iterator first, iterator) const
     {
         if(!actions.output_pre(phrase)) return;
+        
+        std::string fileref = image_fileref;
+
+        // Check for windows paths, then convert.
+        // A bit crude, but there you go.
+
+        if(fileref.find('\\') != std::string::npos)
+        {
+            detail::outwarn(actions.filename, first.get_position().line)
+                << "Image path isn't portable: "
+                << detail::utf8(fileref)
+                << std::endl;
+        }
+
+        boost::replace(fileref, '\\', '/');
 
         // Find the file basename and extension.
         //
@@ -1319,13 +1349,29 @@ namespace quickbook
         return std::accumulate(file, path.end(), result, concat);
     }
 
-    fs::path calculate_relative_path(
-        iterator first, iterator last, quickbook::actions& actions)
+    std::string check_path(iterator first, iterator last,
+        quickbook::actions& actions)
+    {
+        std::string path_text(first, last);
+
+        if(path_text.find('\\') != std::string::npos)
+        {
+            detail::outwarn(actions.filename, first.get_position().line)
+                << "Path isn't portable: "
+                << detail::utf8(path_text)
+                << std::endl;
+        }
+        
+        return path_text;
+    }
+
+    fs::path calculate_relative_path(std::string const& name, quickbook::actions& actions)
     {
         // Given a source file and the current filename, calculate the
         // path to the source file relative to the output directory.
-        fs::path path = detail::generic_to_path(std::string(first, last));
-        if (!path.is_complete())
+
+        fs::path path = detail::generic_to_path(name);
+        if (!path.has_root_directory() && !path.has_root_name())
         {
             fs::path infile = fs::absolute(actions.filename).normalize();
             path = (infile.parent_path() / path).normalize();
@@ -1339,7 +1385,7 @@ namespace quickbook
     {
         if(!actions.output_pre(out)) return;
 
-        fs::path path = calculate_relative_path(first, last, actions);
+        fs::path path = calculate_relative_path(check_path(first, last, actions), actions);
         out << "\n<xi:include href=\"";
         detail::print_string(detail::escape_uri(path.generic_string()), out.get());
         out << "\" />\n";
@@ -1352,7 +1398,7 @@ namespace quickbook
             fs::path path(name);
 
             // If the path is relative, try and resolve it.
-            if (!path.is_complete())
+            if (!path.has_root_directory() && !path.has_root_name())
             {
                 // See if it can be found locally first.
                 if (fs::exists(current / path))
@@ -1379,7 +1425,8 @@ namespace quickbook
     {
         if(!actions.output_pre(actions.out)) return;
 
-        fs::path path = include_search(actions.filename.parent_path(), std::string(first,last));
+        fs::path path = include_search(actions.filename.parent_path(),
+            check_path(first, last, actions));
         std::string ext = path.extension().generic_string();
         std::vector<template_symbol> storage;
         actions.error_count +=
@@ -1402,7 +1449,8 @@ namespace quickbook
     {
         if(!actions.output_pre(actions.out)) return;
 
-        fs::path filein = include_search(actions.filename.parent_path(), std::string(first,last));
+        fs::path filein = include_search(actions.filename.parent_path(),
+            check_path(first, last, actions));
         std::string doc_type, doc_id;
         docinfo_string doc_dirname, doc_last_revision;
 

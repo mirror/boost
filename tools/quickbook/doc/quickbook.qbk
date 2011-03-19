@@ -268,6 +268,10 @@ Boost 1.46.1:
 * Improved unicode support on windows. Unicode can now be used from the
   command line, and unicode filenames are supported. Unicode output is
   a bit weak.
+* Check for windows paths, and warn about them.
+* Fix relative path detection on windows.
+* Reverse deprecation of `[br]`, printing a single warning about
+  generating invalid boostbook.
 
 [endsect] [/Change log]
 

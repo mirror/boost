@@ -125,6 +125,7 @@ namespace quickbook
         string_list             saved_anchors;
         bool                    no_eols;
         bool                    suppress;
+        bool                    warned_about_breaks;
 
     // push/pop the states and the streams
         void copy_macros_for_write();

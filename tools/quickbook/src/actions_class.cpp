@@ -76,6 +76,7 @@ namespace quickbook
         , saved_anchors()
         , no_eols(true)
         , suppress(false)
+        , warned_about_breaks(false)
 
     // actions
         , error(*this)
