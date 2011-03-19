@@ -1362,6 +1362,8 @@ namespace quickbook
                 << std::endl;
         }
         
+        boost::replace(path_text, '\\', '/');
+        
         return path_text;
     }
 
