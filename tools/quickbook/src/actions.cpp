@@ -15,6 +15,8 @@
 #include <boost/filesystem/v3/fstream.hpp>
 #include <boost/range/algorithm/replace.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/range/distance.hpp>
+#include <boost/algorithm/string/replace.hpp>
 #include "quickbook.hpp"
 #include "actions.hpp"
 #include "utils.hpp"
@@ -22,6 +24,8 @@
 #include "actions_class.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
+#include "template_tags.hpp"
+#include "table_tags.hpp"
 
 namespace quickbook
 {
@@ -74,6 +78,21 @@ namespace quickbook
         phrase << break_mark;
     }
 
+    void error_message_action::operator()(iterator first, iterator last) const
+    {
+        file_position const pos = first.get_position();
+
+        std::string value(first, last);
+        std::string formatted_message = message;
+        boost::replace_all(formatted_message, "%s", value);
+        boost::replace_all(formatted_message, "%c",
+            boost::lexical_cast<std::string>(pos.column));
+
+        detail::outerr(actions.filename, pos.line)
+            << formatted_message << std::endl;
+        ++actions.error_count;
+    }
+
     void error_action::operator()(iterator first, iterator /*last*/) const
     {
         file_position const pos = first.get_position();
@@ -82,11 +101,12 @@ namespace quickbook
         ++actions.error_count;
     }
 
-    void tagged_action::operator()(std::string const& str) const
+    void tagged_action::operator()(iterator, iterator) const
     {
         if(!actions.output_pre(out)) return;
 
-        out << pre << str << post;
+        value_consumer values = actions.values.get();
+        out << pre << values.consume().get_boostbook() << post;
     }
 
     void phrase_action::operator()() const
@@ -145,6 +165,8 @@ namespace quickbook
 
         std::string str;
         phrase.swap(str);
+        
+        value_consumer values = actions.values.get();
 
         std::string anchor;
 
@@ -156,7 +178,7 @@ namespace quickbook
         else
         {
             std::string id =
-                !element_id.empty() ? element_id :
+                values.is(general_tags::element_id) ? values.consume().get_quickbook() :
                 qbk_version_n >= 106 ? detail::make_identifier(first, last) :
                 detail::make_identifier(str.begin(), str.end());
 
@@ -185,8 +207,10 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
+        value_consumer values = actions.values.get();
+
         std::string id =
-            !element_id.empty() ? element_id :
+            values.is(general_tags::element_id) ? values.consume().get_quickbook() :
             qbk_version_n >= 106 ? detail::make_identifier(first, last) :
             detail::make_identifier(str.begin(), str.end());
 
@@ -503,33 +527,45 @@ namespace quickbook
         }
     }
 
-    void attribute_action::operator()(iterator first, iterator last) const
-    {
-        file_position const pos = first.get_position();
-
-        if (!attributes.insert(
-                attribute_map::value_type(attribute_name, std::string(first, last))
-            ).second)
-        {
-            detail::outwarn(actions.filename, pos.line)
-                << "Repeated attribute: " << detail::utf8(attribute_name) << ".\n";
-        }
-    }
-
-    void image_action::operator()(iterator first, iterator) const
+    void image_action::operator()(iterator, iterator) const
     {
         if(!actions.output_pre(phrase)) return;
+
+        typedef std::map<std::string, value> attribute_map;
+        attribute_map attributes;
+
+        value_consumer values = actions.values.get();
+        attributes["fileref"] = values.consume();
+
+        BOOST_FOREACH(value pair_, values)
+        {
+            value_consumer pair = pair_;
+            value name = pair.consume();
+            value value = pair.consume();
+            assert(!pair.is());
+            if(!attributes.insert(std::make_pair(name.get_quickbook(), value)).second)
+            {
+                detail::outwarn(actions.filename, name.get_position().line)
+                    << "Duplicate image attribute: " << name.get_quickbook() << std::endl;
+            }
+        }
+
+        // Find the file basename and extension.
+        //
+        // Not using Boost.Filesystem because I want to stay in UTF-8.
+        // Need to think about uri encoding.
         
-        std::string fileref = image_fileref;
+        std::string fileref = attributes["fileref"].get_quickbook();
 
         // Check for windows paths, then convert.
         // A bit crude, but there you go.
 
         if(fileref.find('\\') != std::string::npos)
         {
-            detail::outwarn(actions.filename, first.get_position().line)
-                << "Image path isn't portable: "
+            detail::outwarn(actions.filename, attributes["fileref"].get_position().line)
+                << "Image path isn't portable: '"
                 << detail::utf8(fileref)
+                << "'"
                 << std::endl;
         }
 
@@ -543,10 +579,10 @@ namespace quickbook
         std::string::size_type pos;
         std::string stem,extension;
 
-        pos = image_fileref.rfind('/');
+        pos = fileref.rfind('/');
         stem = pos == std::string::npos ?
-            image_fileref :
-            image_fileref.substr(pos + 1);
+            fileref :
+            fileref.substr(pos + 1);
 
         pos = stem.rfind('.');
         if (pos != std::string::npos)
@@ -560,11 +596,10 @@ namespace quickbook
         // TODO: IMO if there isn't an alt tag, then the description should
         //       be empty or missing.
 
-        attribute_map::iterator it = attributes.find("alt");
-        std::string alt_text = it != attributes.end() ? it->second : stem;
+        attribute_map::iterator alt_pos = attributes.find("alt");
+        std::string alt_text = alt_pos != attributes.end() ?
+            alt_pos->second.get_quickbook() : stem;
         attributes.erase("alt");
-
-        attributes.insert(attribute_map::value_type("fileref", image_fileref));
 
         if(extension == ".svg")
         {
@@ -579,13 +614,15 @@ namespace quickbook
            //    a tiny box with scrollbars (Firefox), or else cropped to
            //    fit in a tiny box (IE7).
            //
-           attributes.insert(attribute_map::value_type("format", "SVG"));
+
+           attributes.insert(attribute_map::value_type("format", qbk_value("SVG")));
+
            //
            // Image paths are relative to the html subdirectory:
            //
            // TODO: This seems wrong to me.
            //
-           fs::path img = detail::generic_to_path(image_fileref);
+           fs::path img = detail::generic_to_path(fileref);
            if(img.root_path().empty())
               img = "html" / img;  // relative path
 
@@ -614,8 +651,10 @@ namespace quickbook
            b = svg_text.find('\"', a + 1);
            if(a != std::string::npos)
            {
-              attributes.insert(attribute_map::value_type("contentwidth",
-                std::string(svg_text.begin() + a + 1, svg_text.begin() + b)));
+              attributes.insert(std::make_pair(
+                "contentwidth", qbk_value(std::string(
+                    svg_text.begin() + a + 1, svg_text.begin() + b))
+                ));
            }
            a = svg_text.find("height");
            a = svg_text.find('=', a);
@@ -623,8 +662,10 @@ namespace quickbook
            b = svg_text.find('\"', a + 1);
            if(a != std::string::npos)
            {
-              attributes.insert(attribute_map::value_type("contentdepth",
-                std::string(svg_text.begin() + a + 1, svg_text.begin() + b)));
+              attributes.insert(std::make_pair(
+                "contentdepth", qbk_value(std::string(
+                    svg_text.begin() + a + 1, svg_text.begin() + b))
+                ));
            }
         }
 
@@ -632,15 +673,13 @@ namespace quickbook
 
         phrase << "<imageobject><imagedata";
         
-        for(attribute_map::const_iterator
-            attr_first = attributes.begin(), attr_last  = attributes.end();
-            attr_first != attr_last; ++attr_first)
+        BOOST_FOREACH(attribute_map::value_type const& attr, attributes)
         {
-            phrase << " " << attr_first->first << "=\"";
+            phrase << " " << attr.first << "=\"";
 
+            std::string value = attr.second.get_quickbook();
             for(std::string::const_iterator
-                first = attr_first->second.begin(),
-                last  = attr_first->second.end();
+                first = value.begin(), last  = value.end();
                 first != last; ++first)
             {
                 if (*first == '\\' && ++first == last) break;
@@ -679,27 +718,37 @@ namespace quickbook
         actions.phrase.pop(); // restore the phrase
     }
 
-    void template_body_action::operator()(iterator first, iterator last) const
+    void template_body_action::operator()(iterator, iterator) const
     {
         if(actions.suppress) return;
-        if (!actions.templates.add(
-            template_symbol(
-                actions.template_identifier,
-                actions.template_info,
-                std::string(first, last),
-                actions.filename,
-                first.get_position(),
-                actions.template_block,
-                &actions.templates.top_scope())))
-        {
-            file_position const pos = first.get_position();
-            detail::outerr(actions.filename, pos.line)
-                << "Template Redefinition: " << detail::utf8(actions.template_identifier) << std::endl;
-            ++actions.error_count;
+
+        value_consumer values = actions.values.get();
+        std::string identifier = values.consume().get_quickbook();
+
+        std::vector<std::string> template_values;
+        BOOST_FOREACH(value const& p, values.consume()) {
+            template_values.push_back(p.get_quickbook());
         }
 
-        actions.template_identifier.clear();
-        actions.template_info.clear();
+        BOOST_ASSERT(values.is(template_tags::block) || values.is(template_tags::phrase));
+        value body = values.consume();
+        BOOST_ASSERT(!values.is());
+    
+        if (!actions.templates.add(
+            template_symbol(
+                identifier,
+                template_values,
+                body.get_quickbook(),
+                actions.filename,
+                body.get_position(),
+                body.get_tag() == template_tags::block,
+                &actions.templates.top_scope())))
+        {
+            file_position const pos = body.get_position();
+            detail::outerr(actions.filename, pos.line)
+                << "Template Redefinition: " << detail::utf8(identifier) << std::endl;
+            ++actions.error_count;
+        }
     }
 
     namespace
@@ -900,29 +949,36 @@ namespace quickbook
         int callout_id = 0;
     }
 
-    void template_arg_action::operator()(iterator first, iterator last) const
-    {
-        if(actions.suppress) return;
-
-        actions.template_args.push_back(
-            template_body(
-                std::string(first, last),
-                actions.filename,
-                first.get_position(),
-                actions.template_block));
-    }
-
     void do_template_action::operator()(iterator first, iterator) const
     {
         if(actions.suppress) return;
 
-        // Get the arguments and clear values stored in action.
+        file_position const pos = first.get_position();
+        
+        // Get the arguments
+        value_consumer values = actions.values.get();
+
+        bool template_escape = values.is(template_tags::escape);
+        if(template_escape) values.consume();
+
+        std::string identifier = values.consume(template_tags::identifier).get_quickbook();
 
         std::vector<template_body> args;
-        std::string identifier;
-        std::swap(args, actions.template_args);
-        std::swap(identifier, actions.template_identifier);
-        file_position const pos = first.get_position();
+
+        BOOST_FOREACH(value arg, values)
+        {
+            BOOST_ASSERT(
+                arg.get_tag() == template_tags::block ||
+                arg.get_tag() == template_tags::phrase);
+
+            args.push_back(
+                template_body(
+                    arg.get_quickbook(),
+                    actions.filename,
+                    arg.get_position(),
+                    arg.get_tag() == template_tags::block
+                ));
+        }
 
         ++actions.template_depth;
         if (actions.template_depth > actions.max_template_depth)
@@ -1022,7 +1078,7 @@ namespace quickbook
             ///////////////////////////////////
             // parse the template body:
 
-            if (!parse_template(symbol->body, actions.template_escape, actions))
+            if (!parse_template(symbol->body, template_escape, actions))
             {
                 file_position const pos = first.get_position();
                 detail::outerr(actions.filename, pos.line)
@@ -1130,44 +1186,70 @@ namespace quickbook
     {
         if(actions.suppress) return;
 
+        value_consumer values = actions.values.get();
+        std::string title = values.consume(table_tags::title).get_quickbook();
+
         actions.out << "<variablelist>\n";
 
         actions.out << "<title>";
-        std::string::iterator first = actions.table_title.begin();
-        std::string::iterator last = actions.table_title.end();
-        while (first != last)
-            detail::print_char(*first++, actions.out.get());
+        detail::print_string(title, actions.out.get());
         actions.out << "</title>\n";
 
-        std::string str;
-        actions.phrase.swap(str);
-        actions.out << str;
+        BOOST_FOREACH(value_consumer entry, values) {
+            actions.out << start_varlistentry_;
+            
+            if(entry.is()) {
+                actions.out << start_varlistterm_;
+                actions.out << entry.consume().get_boostbook();
+                actions.out << end_varlistterm_;
+            }
+            
+            if(entry.is()) {
+                actions.out << start_varlistitem_;
+                BOOST_FOREACH(value phrase, entry) actions.out << phrase.get_boostbook();
+                actions.out << end_varlistitem_;
+            }
+
+            actions.out << end_varlistentry_;
+        }
 
         actions.out << "</variablelist>\n";
-        actions.table_span = 0;
-        actions.table_header.clear();
-        actions.table_title.clear();
     }
 
     void table_action::operator()(iterator, iterator) const
     {
         if(actions.suppress) return;
 
-        std::string::iterator first = actions.table_title.begin();
-        std::string::iterator last = actions.table_title.end();
-        bool has_title = first != last;
+        value_consumer values = actions.values.get();
+
+        std::string element_id;
+        if(values.is(general_tags::element_id))
+            element_id = values.consume().get_quickbook();
+
+        std::string title = values.consume(table_tags::title).get_quickbook();
+        bool has_title = !title.empty();
         
         std::string table_id;
         if(qbk_version_n >= 105) {
-            if(!actions.element_id.empty()) {
+            if(!element_id.empty()) {
                 table_id = fully_qualified_id(actions.doc_id,
-                    actions.qualified_section_id, actions.element_id);
+                    actions.qualified_section_id, element_id);
             }
             else if(has_title) {
                 table_id = fully_qualified_id(actions.doc_id,
                     actions.qualified_section_id,
-                    detail::make_identifier(first, last));
+                    detail::make_identifier(title.begin(), title.end()));
             }
+        }
+
+        // Emulating the old behaviour which used the width of the final
+        // row for span_count.
+        int row_count = 0;
+        int span_count = 0;
+
+        BOOST_FOREACH(value row, values) {
+            ++row_count;
+            span_count = boost::distance(row);
         }
 
         if (has_title)
@@ -1177,8 +1259,7 @@ namespace quickbook
                 actions.out << " id=\"" << table_id << "\"";
             actions.out << ">\n";
             actions.out << "<title>";
-            while (first != last)
-                detail::print_char(*first++, actions.out.get());
+            detail::print_string(title, actions.out.get());
             actions.out << "</title>";
         }
         else
@@ -1189,18 +1270,26 @@ namespace quickbook
             actions.out << ">\n";
         }
 
-        actions.out << "<tgroup cols=\"" << actions.table_span << "\">\n";
+        actions.out << "<tgroup cols=\"" << span_count << "\">\n";
 
-        if (!actions.table_header.empty())
+        if (row_count > 1)
         {
-            actions.out << "<thead>" << actions.table_header << "</thead>\n";
+            actions.out << "<thead>" << start_row_;
+            BOOST_FOREACH(value cell, values.consume()) {
+                actions.out << start_cell_ << cell.get_boostbook() << end_cell_;
+            }
+            actions.out << end_row_ << "</thead>\n";
         }
 
         actions.out << "<tbody>\n";
 
-        std::string str;
-        actions.phrase.swap(str);
-        actions.out << str;
+        BOOST_FOREACH(value row, values) {
+            actions.out << start_row_;
+            BOOST_FOREACH(value cell, row) {
+                actions.out << start_cell_ << cell.get_boostbook() << end_cell_;
+            }
+            actions.out << end_row_;
+        }
 
         actions.out << "</tbody>\n"
                      << "</tgroup>\n";
@@ -1213,45 +1302,17 @@ namespace quickbook
         {
             actions.out << "</informaltable>\n";
         }
-
-        actions.table_span = 0;
-        actions.table_header.clear();
-        actions.table_title.clear();
-    }
-
-    void start_row_action::operator()(char) const
-    {
-        if (actions.suppress) return;
-
-        // the first row is the header
-        if (header.empty() && !phrase.str().empty())
-        {
-            phrase.swap(header);
-        }
-
-        phrase << start_row_;
-        span = 0;
-    }
-
-    void start_row_action::operator()(iterator f, iterator) const
-    {
-        (*this)(*f);
-    }
-
-    void col_action::operator()(std::string const& contents) const
-    {
-        if(actions.suppress) return;
-        phrase << start_cell_ << contents << end_cell_;
-        ++span;
     }
 
     void begin_section_action::operator()(iterator first, iterator last) const
     {    
         if(actions.suppress) return;
 
-        section_id = element_id.empty() ?
-            detail::make_identifier(first, last) :
-            element_id;
+        value_consumer values = actions.values.get();
+
+        section_id = values.is(general_tags::element_id) ?
+            values.consume().get_quickbook() :
+            detail::make_identifier(first, last);
 
         if (section_level != 0)
             qualified_section_id += '.';
@@ -1454,7 +1515,6 @@ namespace quickbook
         fs::path filein = include_search(actions.filename.parent_path(),
             check_path(first, last, actions));
         std::string doc_type, doc_id;
-        docinfo_string doc_dirname, doc_last_revision;
 
         // swap the filenames
         std::swap(actions.filename, filein);
@@ -1463,14 +1523,10 @@ namespace quickbook
         if(qbk_version_n >= 106) {
             doc_type = actions.doc_type;
             doc_id = actions.doc_id;
-            doc_dirname = actions.doc_dirname;
-            doc_last_revision = actions.doc_last_revision;
         }
         else {
             actions.doc_type.swap(doc_type);
             actions.doc_id.swap(doc_id);
-            actions.doc_dirname.swap(doc_dirname);
-            actions.doc_last_revision.swap(doc_last_revision);
         }
         
         // save the source mode and version info (only restored for 1.6+)
@@ -1505,8 +1561,6 @@ namespace quickbook
 
         actions.doc_type.swap(doc_type);
         actions.doc_id.swap(doc_id);
-        actions.doc_dirname.swap(doc_dirname);
-        actions.doc_last_revision.swap(doc_last_revision);
         
         if(qbk_version_n >= 106 || qbk_version_n_store >= 106)
         {
@@ -1534,11 +1588,22 @@ namespace quickbook
 
     void phrase_to_docinfo_action::operator()(iterator first, iterator last) const
     {
-        if(!actions.output_pre(phrase)) return;
+        if(!actions.output_pre(actions.phrase)) return;
 
-        out.encoded.clear();
-        phrase.swap(out.encoded);
-        out.raw = std::string(first, last);
+        std::string encoded;
+        actions.phrase.swap(encoded);
+        actions.values.builder.insert(
+            qbk_bbk_value(first, last, encoded, actions.values.builder.release_tag()));
+    }
+    
+    void phrase_to_value_action::operator()(iterator first, iterator last) const
+    {
+        if(!actions.output_pre(actions.phrase)) return;
+
+        std::string value;
+        actions.phrase.swap(value);
+        actions.values.builder.insert(
+            bbk_value(value, actions.values.builder.release_tag()));
     }
     
     void inner_phrase_action_pre::operator()(iterator, iterator) const
@@ -1594,12 +1659,11 @@ namespace quickbook
         actions.out.pop();
     }
 
-    std::string const& scoped_block_push::success_impl()
+    void scoped_block_push::success_impl()
     {
-        // TODO: This should probably return an empty string
-        // if actions.suppress is true.
         actions.inside_paragraph();
-        return actions.out.str();
+        actions.values.builder.insert(
+            bbk_value(actions.out.str(), actions.values.builder.release_tag()));
     }
 
     set_no_eols_scoped::set_no_eols_scoped(quickbook::actions& actions)

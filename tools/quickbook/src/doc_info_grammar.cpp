@@ -10,6 +10,7 @@
 
 #include "grammar_impl.hpp"
 #include "actions_class.hpp"
+#include "doc_info_tags.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
@@ -20,15 +21,60 @@ namespace quickbook
 {
     namespace cl = boost::spirit::classic;
 
+    struct attribute_info
+    {
+        attribute_info(value::tag_type t, cl::rule<scanner>* r)
+            : tag(t), rule(r)
+        {}
+
+        value::tag_type tag;
+        cl::rule<scanner>* rule;
+    };
+
     struct doc_info_grammar_local
     {
+        struct assign_attribute_type
+        {
+            assign_attribute_type(doc_info_grammar_local& l)
+                : l(l)
+            {}
+
+            void operator()(value::tag_type& t) const {
+                l.attribute_rule = *l.attribute_rules[t];
+            }
+            
+            doc_info_grammar_local& l;
+        };
+        
+        struct fallback_attribute_type
+        {
+            fallback_attribute_type(doc_info_grammar_local& l)
+                : l(l)
+            {}
+
+            void operator()(iterator, iterator) const {
+                l.attribute_rule = l.doc_fallback;
+            }
+            
+            doc_info_grammar_local& l;
+        };
+
         cl::rule<scanner>
-                        doc_title, doc_version, doc_id, doc_dirname,
-                        doc_copyright, doc_purpose, doc_category, doc_authors,
-                        doc_author, doc_license,
-                        doc_last_revision, doc_source_mode, doc_biblioid, doc_lang,
+                        doc_title, doc_simple, doc_phrase, doc_fallback,
+                        doc_copyright, doc_authors, doc_author,
+                        doc_source_mode, doc_biblioid,
                         quickbook_version, char_;
         cl::symbols<> doc_types;
+        cl::symbols<value::tag_type> doc_attributes;
+        std::map<value::tag_type, cl::rule<scanner>* > attribute_rules;
+        cl::rule<scanner> attribute_rule;
+        assign_attribute_type assign_attribute;
+        fallback_attribute_type fallback_attribute;
+        
+        doc_info_grammar_local()
+            : assign_attribute(*this)
+            , fallback_attribute(*this)
+        {}
     };
 
     void quickbook_grammar::impl::init_doc_info()
@@ -42,40 +88,46 @@ namespace quickbook
           , "appendix", "preface", "qandadiv", "qandaset"
           , "reference", "set"
         ;
+
+        BOOST_FOREACH(value::tag_type t, doc_info_attributes::tags()) {
+            local.doc_attributes.add(doc_info_attributes::name(t), t);
+        }
         
         doc_info_details =
             space
             >> '[' >> space
             >> (local.doc_types >> cl::eps_p)
-                                            [cl::assign_a(actions.doc_type)]
+                                            [actions.values.reset]
+                                            [actions.values.entry(doc_info_tags::type)]
             >> hard_space
             >>  (  *(~cl::eps_p(cl::ch_p('[') | ']' | cl::eol_p) >> local.char_)
-                )                           [actions.extract_doc_title]
+                )                           [actions.values.tag(doc_info_tags::title)]
+                                            [actions.docinfo_value]
             >>  !(
                     space >> '[' >>
                         local.quickbook_version
                     >> space >> ']'
                 )
-            >>
-                *(
-                    space >> '[' >>
-                    (
-                      local.doc_version
-                    | local.doc_id
-                    | local.doc_dirname
-                    | local.doc_copyright   [cl::push_back_a(actions.doc_copyrights, actions.copyright)]
-                    | local.doc_purpose
-                    | local.doc_category
-                    | local.doc_authors
-                    | local.doc_license
-                    | local.doc_last_revision
-                    | local.doc_source_mode
-                    | local.doc_biblioid
-                    | local.doc_lang
+            >>  *(
+                    space
+                >>  '['
+                >>  space
+                >>  (   local.doc_attributes
+                                            [local.assign_attribute]
+                                            [actions.values.tag]
+                    |   (+(cl::alnum_p | '_' | '-'))
+                                            [local.fallback_attribute]
+                                            [actions.error("Unrecognized document attribute: '%s'.")]
                     )
-                    >> space >> ']' >> +cl::eol_p
+                >>  hard_space
+                >>  local.attribute_rule
+                >>  space
+                >>  ']'
+                >>  +cl::eol_p
                 )
-            >> space >> ']' >> +cl::eol_p
+            >>  space                       [actions.values.sort]
+            >>  ']'
+            >>  +cl::eol_p
             ;
 
         local.quickbook_version =
@@ -86,106 +138,89 @@ namespace quickbook
                 )
             ;
 
-        local.doc_version =
-                "version" >> hard_space
-            >> (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_doc_version]
-            ;
+        // TODO: Clear phrase afterwards?
 
-        // TODO: Restrictions on doc_id?
-        local.doc_id =
-                "id" >> hard_space
-            >> (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_doc_id]
-            ;
+        local.doc_fallback = (*(~cl::eps_p(']') >> local.char_));
 
-        // TODO: Restrictions on doc_dirname?
-        local.doc_dirname =
-                "dirname" >> hard_space
-            >> (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_doc_dirname]
-            ;
+        // TODO: Restrictions on doc_id and doc_dirname?
+
+        local.doc_simple = (*(~cl::eps_p(']') >> local.char_)) [actions.docinfo_value];
+        local.attribute_rules[doc_info_attributes::version] = &local.doc_simple;
+        local.attribute_rules[doc_info_attributes::id] = &local.doc_simple;
+        local.attribute_rules[doc_info_attributes::dirname] = &local.doc_simple;
+        local.attribute_rules[doc_info_attributes::category] = &local.doc_simple;
+        local.attribute_rules[doc_info_attributes::last_revision] = &local.doc_simple;
+        local.attribute_rules[doc_info_attributes::lang] = &local.doc_simple;
 
         local.doc_copyright =
-                "copyright"
-            >> hard_space                   [cl::clear_a(actions.copyright.first)]
-            >> +( cl::repeat_p(4)[cl::digit_p]
-                                            [cl::push_back_a(actions.copyright.first)]
+            actions.values.scoped(doc_info_attributes::copyright)
+            [
+               +( cl::repeat_p(4)[cl::digit_p]
+                                            [actions.values.entry(doc_info_tags::copyright_year)]
                   >> space
                 )
             >> space
             >> (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_copyright_second]
+                                            [actions.values.tag(doc_info_tags::copyright_name)]
+                                            [actions.docinfo_value]
+            ]
             ;
 
-        local.doc_purpose =
-                "purpose" >> hard_space
-            >> simple_phrase                [actions.extract_doc_purpose]
-            ;
+        local.attribute_rules[doc_info_attributes::copyright] = &local.doc_copyright;
 
-        local.doc_category =
-                "category" >> hard_space
-            >> (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_doc_category]
-                                            [cl::push_back_a(actions.doc_categories, actions.doc_category)]
-            ;
+        local.doc_phrase = simple_phrase[actions.docinfo_value];
+        local.attribute_rules[doc_info_attributes::purpose] = &local.doc_phrase;
+        local.attribute_rules[doc_info_attributes::license] = &local.doc_phrase;
 
         local.doc_author =
-                '[' >> space
+                '['
+            >>   space
             >>  (*(~cl::eps_p(',') >> local.char_))
-                                            [actions.extract_name_second]
+                                            [actions.values.tag(doc_info_tags::author_surname)]
+                                            [actions.docinfo_value]
             >>  ',' >> space
             >>  (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_name_first]
+                                            [actions.values.tag(doc_info_tags::author_first)]
+                                            [actions.docinfo_value]
             >>  ']'
             ;
 
         local.doc_authors =
-                "authors"
-            >>  hard_space
-            >>  local.doc_author            [cl::push_back_a(actions.doc_authors, actions.name)]
-            >>  space
-            >>  *(  !(cl::ch_p(',') >> space)
-                >>  local.doc_author        [cl::push_back_a(actions.doc_authors, actions.name)]
+                actions.values.scoped(doc_info_attributes::authors)
+                [
+                    local.doc_author
                 >>  space
-                )
+                >>  *(  !(cl::ch_p(',') >> space)
+                    >>  local.doc_author
+                    >>  space
+                    )
+                ]
             ;
 
-        local.doc_license =
-                "license" >> hard_space
-            >> simple_phrase                [actions.extract_doc_license]
-            ;
-
-        local.doc_last_revision =
-                "last-revision" >> hard_space
-            >> (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_doc_last_revision]
-            ;
+        local.attribute_rules[doc_info_attributes::authors] = &local.doc_authors;
 
         local.doc_source_mode =
-                "source-mode" >> hard_space
-            >>  (
+                (
                    cl::str_p("c++") 
                 |  "python"
                 |  "teletype"
                 )                           [cl::assign_a(actions.source_mode)]
             ;
 
+        local.attribute_rules[doc_info_attributes::source_mode] = &local.doc_source_mode;
+
         local.doc_biblioid =
-                "biblioid"
-            >>  hard_space
-            >>  (+cl::alnum_p)              [cl::assign_a(actions.doc_biblioid.first)]
-            >>  hard_space
-            >>  (+(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_doc_biblioid]
-                                            [cl::push_back_a(actions.doc_biblioid_items, actions.doc_biblioid)]
+                actions.values.scoped(doc_info_attributes::biblioid)
+                [
+                    (+cl::alnum_p)          [actions.values.entry(doc_info_tags::biblioid_class)]
+                >>  hard_space
+                >>  (+(~cl::eps_p(']') >> local.char_))
+                                            [actions.values.tag(doc_info_tags::biblioid_value)]
+                                            [actions.docinfo_value]
+                ]
             ;
 
-        local.doc_lang =
-                "lang" >> hard_space
-            >> (*(~cl::eps_p(']') >> local.char_))
-                                            [actions.extract_doc_lang]
-            ;
+        local.attribute_rules[doc_info_attributes::biblioid] = &local.doc_biblioid;
 
         local.char_ =
                 cl::str_p("\\n")            [actions.break_]

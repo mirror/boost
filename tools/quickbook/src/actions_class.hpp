@@ -12,6 +12,7 @@
 
 #include "actions.hpp"
 #include "scoped_parser.hpp"
+#include "values_parse.hpp"
 #include <boost/tuple/tuple.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -34,38 +35,18 @@ namespace quickbook
 
         typedef std::vector<std::string> string_list;
 
-        typedef std::vector<docinfo_string> docinfo_list;
-        typedef std::pair<docinfo_string, docinfo_string> author;
-        typedef std::vector<author> author_list;
-        typedef std::pair<string_list, docinfo_string> copyright_item;
-        typedef std::vector<copyright_item> copyright_list;
-        typedef std::pair<std::string, docinfo_string> biblioid_item;
-        typedef std::vector<biblioid_item> biblioid_list;
         typedef std::pair<char, int> mark_type;
         static int const max_template_depth = 100;
 
+        value_parser            values;
+        phrase_to_value_action  phrase_value;
+        phrase_to_docinfo_action docinfo_value;
+
     // header info
         std::string             doc_type;
-        docinfo_string          doc_title;
-        docinfo_string          doc_version;
+        std::string             doc_title_qbk;
         std::string             doc_id;
-        docinfo_string          doc_dirname;
-        copyright_list          doc_copyrights;
-        docinfo_string          doc_purpose;
-        docinfo_list            doc_categories;
-        author_list             doc_authors;
-        docinfo_string          doc_license;
-        docinfo_string          doc_last_revision;
-        biblioid_list           doc_biblioid_items;
-        docinfo_string          doc_lang;
         std::string             include_doc_id;
-        //temporary state
-        biblioid_item           doc_biblioid;
-        docinfo_string          doc_id_tmp;
-        author                  name;
-        copyright_item          copyright;
-        docinfo_string          doc_category;
-
 
     // main output stream
         collector               out;
@@ -101,26 +82,13 @@ namespace quickbook
         std::stack<string_symbols> macro_stack;
 
     // temporary or global state
-        std::string             element_id;
-        std::string             table_title;
-        unsigned                table_span;
-        std::string             table_header;
         std::string             macro_id;
         std::stack<mark_type>   list_marks;
         int                     list_indent;
         bool                    condition;
-        std::string             template_identifier;
-        string_list             template_info;
         int                     template_depth;
-        bool                    template_escape;
-        bool                    template_block;
-        std::vector<quickbook::template_body>
-                                template_args;
         template_stack          templates;
         int                     error_count;
-        std::string             image_fileref;
-        std::string             attribute_name;
-        attribute_map           attributes;
         string_list             anchors;
         string_list             saved_anchors;
         bool                    no_eols;
@@ -137,19 +105,6 @@ namespace quickbook
     // actions
     ///////////////////////////////////////////////////////////////////////////
         error_action            error;
-        phrase_to_docinfo_action extract_doc_title;
-        phrase_to_docinfo_action extract_doc_license;
-        phrase_to_docinfo_action extract_doc_purpose;
-        phrase_to_docinfo_action extract_doc_version;
-        phrase_to_docinfo_action extract_doc_id;
-        phrase_to_docinfo_action extract_doc_dirname;
-        phrase_to_docinfo_action extract_copyright_second;
-        phrase_to_docinfo_action extract_name_second;
-        phrase_to_docinfo_action extract_name_first;
-        phrase_to_docinfo_action extract_doc_last_revision;
-        phrase_to_docinfo_action extract_doc_category;
-        phrase_to_docinfo_action extract_doc_biblioid;
-        phrase_to_docinfo_action extract_doc_lang;
 
         scoped_parser<scoped_block_push>
                                 scoped_block;
@@ -170,7 +125,6 @@ namespace quickbook
         plain_char_action       plain_char;
         raw_char_action         raw_char;
         escape_unicode_action   escape_unicode;
-        attribute_action        attribute;
         image_action            image;
         cond_phrase_action_pre  cond_phrase_pre;
         scoped_parser<cond_phrase_push>
@@ -221,27 +175,18 @@ namespace quickbook
         simple_phrase_action    simple_strikethrough;
 
         variablelist_action     variablelist;
-        markup_action           start_varlistentry;
-        markup_action           end_varlistentry;
-        markup_action           start_varlistterm;
-        markup_action           end_varlistterm;
-        tagged_action           varlistitem;
 
         break_action            break_;
         macro_identifier_action macro_identifier;
         macro_definition_action macro_definition;
         do_macro_action         do_macro;
         template_body_action    template_body;
-        template_arg_action     template_arg;
         do_template_action      do_template;
         link_action             url_pre;
         markup_action           url_post;
         link_action             link_pre;
         markup_action           link_post;
         table_action            table;
-        start_row_action        start_row;
-        markup_action           end_row;
-        col_action              cell;
         anchor_action           anchor;
 
         begin_section_action    begin_section;

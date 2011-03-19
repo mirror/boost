@@ -12,6 +12,7 @@ project test
     ;
 
 build-project doc-info ;
+build-project unit ;
 
 import quickbook-testing : quickbook-test quickbook-fail-test ;
 

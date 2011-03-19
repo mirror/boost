@@ -11,6 +11,7 @@
 #include "grammar_impl.hpp"
 #include "actions_class.hpp"
 #include "utils.hpp"
+#include "template_tags.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
@@ -73,7 +74,7 @@ namespace quickbook
                         template_args,
                         template_args_1_4, template_arg_1_4,
                         template_inner_arg_1_4, brackets_1_4,
-                        template_args_1_5, template_arg_1_5,
+                        template_args_1_5, template_arg_1_5, template_arg_1_5_content,
                         template_inner_arg_1_5, brackets_1_5,
                         command_line_macro_identifier, command_line_phrase,
                         dummy_block
@@ -163,6 +164,7 @@ namespace quickbook
             >>  local.element
             >>  cl::eps_p(local.check_element(element_info::in_block))
                                                 [actions.inside_paragraph]
+                                                [actions.values.reset]
             >>  (   local.element_rule
                 >>  (   (space >> ']')
                     |   cl::eps_p               [actions.error]
@@ -225,31 +227,24 @@ namespace quickbook
             >> actions.macro                    [actions.do_macro]
             ;
 
-        static const bool true_ = true;
-        static const bool false_ = false;
-
         local.template_ =
-            (
-                cl::ch_p('`')                   [cl::assign_a(actions.template_escape,true_)]
-                |
-                cl::eps_p                       [cl::assign_a(actions.template_escape,false_)]
-            )
+                cl::eps_p                       [actions.values.reset]
+            >>  !cl::str_p("`")                 [actions.values.entry(template_tags::escape)]
             >>
             ( (
                 (cl::eps_p(cl::punct_p)
                     >> actions.templates.scope
-                )                               [cl::assign_a(actions.template_identifier)]
-                                                [cl::clear_a(actions.template_args)]
+                )                               [actions.values.entry(template_tags::identifier)]
                 >> !local.template_args
             ) | (
                 (actions.templates.scope
                     >> cl::eps_p(hard_space)
-                )                               [cl::assign_a(actions.template_identifier)]
-                                                [cl::clear_a(actions.template_args)]
+                )                               [actions.values.entry(template_tags::identifier)]
                 >> space
                 >> !local.template_args
             ) )
             >> cl::eps_p(']')
+            >> cl::eps_p                        [actions.do_template]
             ;
 
         local.template_args =
@@ -263,11 +258,10 @@ namespace quickbook
         local.template_args_1_4 = local.template_arg_1_4 >> *(".." >> local.template_arg_1_4);
 
         local.template_arg_1_4 =
-                (   cl::eps_p(*cl::blank_p >> cl::eol_p)
-                                                [cl::assign_a(actions.template_block, true_)]
-                |   cl::eps_p                   [cl::assign_a(actions.template_block, false_)]
-                )
-            >>  local.template_inner_arg_1_4    [actions.template_arg]
+            (   cl::eps_p(*cl::blank_p >> cl::eol_p)
+            >>  local.template_inner_arg_1_4    [actions.values.entry(template_tags::block)]
+            |   local.template_inner_arg_1_4    [actions.values.entry(template_tags::phrase)]
+            )                               
             ;
 
         local.template_inner_arg_1_4 =
@@ -281,12 +275,14 @@ namespace quickbook
         local.template_args_1_5 = local.template_arg_1_5 >> *(".." >> local.template_arg_1_5);
 
         local.template_arg_1_5 =
-                (   cl::eps_p(*cl::blank_p >> cl::eol_p)
-                                                [cl::assign_a(actions.template_block, true_)]
-                |   cl::eps_p                   [cl::assign_a(actions.template_block, false_)]
-                )
-            >>  (+(local.brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p("..") | '[' | ']'))))
-                                                [actions.template_arg]
+            (   cl::eps_p(*cl::blank_p >> cl::eol_p)
+            >>  local.template_arg_1_5_content  [actions.values.entry(template_tags::block)]
+            |   local.template_arg_1_5_content  [actions.values.entry(template_tags::phrase)]
+            )
+            ;
+
+        local.template_arg_1_5_content =
+            +(local.brackets_1_5 | ('\\' >> cl::anychar_p) | (cl::anychar_p - (cl::str_p("..") | '[' | ']')))
             ;
 
         local.template_inner_arg_1_5 =
@@ -361,10 +357,14 @@ namespace quickbook
             ;
 
         inside_paragraph =
+            actions.scoped_block[
+            actions.values.save[
             (*( common
             |   (cl::anychar_p - phrase_end)    [actions.plain_char]
             |   (+eol)                          [actions.inside_paragraph]
             ))                                  [actions.inside_paragraph]
+            ]
+            ]
             ;
 
         local.phrase_element
@@ -373,7 +373,7 @@ namespace quickbook
             >>  (   local.element
                 >>  cl::eps_p(local.check_element(element_info::in_phrase))
                 >>  local.element_rule
-                |   local.template_             [actions.do_template]
+                |   local.template_
                 |   cl::str_p("br")             [actions.break_]
                 )
             >>  ']'

@@ -13,6 +13,7 @@
 #define BOOST_QUICKBOOK_SCOPED_PARSER_HPP
 
 #include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_nil.hpp>
 
 namespace quickbook {
     namespace cl = boost::spirit::classic;
@@ -25,12 +26,7 @@ namespace quickbook {
         typedef cl::unary< ParserT, cl::parser< scoped_parser_impl<ScopeT, DataT, ParserT> > > base_t;
 
         template <typename ScannerT>
-        struct result :
-            ScopeT::template result<
-                typename cl::parser_result<ParserT, ScannerT>::type
-            >
-        {
-        };
+        struct result { typedef cl::match<> type; };
 
         scoped_parser_impl(DataT& actions, ParserT const &p)
             : base_t(p)
@@ -48,7 +44,8 @@ namespace quickbook {
                 = this->subject().parse(scan);
 
             if (result) {
-                return scan.create_match(result.length(), scope.success(result), save, scan.first);
+                scope.success(result);
+                return scan.create_match(result.length(), cl::nil_t(), save, scan.first);
             }
             else {
                 scope.failure();

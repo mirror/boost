@@ -55,25 +55,26 @@ namespace quickbook
             ;
 
         local.image =
-                blank                           [cl::clear_a(actions.attributes)]
+                blank                           [actions.values.reset]
             >>  cl::if_p(qbk_since(105u)) [
                         (+(
                             *cl::space_p
                         >>  +(cl::anychar_p - (cl::space_p | phrase_end | '['))
-                        ))                       [cl::assign_a(actions.image_fileref)]
+                        ))                      [actions.values.entry]
                     >>  hard_space
-                    >>  *(
+                    >>  *actions.values.scoped[
                             '['
-                        >>  (*(cl::alnum_p | '_'))  [cl::assign_a(actions.attribute_name)]
+                        >>  (*(cl::alnum_p | '_')) 
+                                                [actions.values.entry]
                         >>  space
                         >>  (*(cl::anychar_p - (phrase_end | '[')))
-                                                [actions.attribute]
+                                                [actions.values.entry]
                         >>  ']'
                         >>  space
-                        )
+                        ]
                 ].else_p [
                         (*(cl::anychar_p - phrase_end))
-                                                [cl::assign_a(actions.image_fileref)]
+                                                [actions.values.entry]
                 ]
             >>  cl::eps_p(']')                  [actions.image]
             ;

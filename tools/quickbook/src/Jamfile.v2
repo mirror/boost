@@ -26,6 +26,7 @@ exe quickbook
     actions_class.cpp
     utils.cpp
     input_path.cpp
+    values.cpp
     post_process.cpp
     collector.cpp
     template_stack.cpp

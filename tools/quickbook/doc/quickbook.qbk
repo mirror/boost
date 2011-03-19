@@ -273,6 +273,10 @@ Boost 1.46.1:
 * Reverse deprecation of `[br]`, printing a single warning about
   generating invalid boostbook.
 * Fix handling empty category attributes.
+* Store data from the parser in a dynamic data structure.
+  This simplifies the implementation and makes it easier to parse
+  more complicated data structures.
+* Improved error messages for unknown doc info attributes.
 * Quickbook 1.6:
   * Scope source mode changes to the file they're made in.
 

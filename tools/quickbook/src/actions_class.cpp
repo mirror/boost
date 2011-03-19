@@ -23,18 +23,14 @@ namespace quickbook
     actions::actions(fs::path const& filein_, fs::path const& outdir_, string_stream& out_)
         : grammar_()
 
+        , values()
+        , phrase_value(*this)
+        , docinfo_value(*this)
+
     // header info
         , doc_type()
-        , doc_title()
-        , doc_version()
+        , doc_title_qbk()
         , doc_id()
-        , doc_dirname()
-        , doc_copyrights()
-        , doc_purpose()
-        , doc_categories()
-        , doc_authors()
-        , doc_license()
-        , doc_last_revision()
         , include_doc_id()
 
     // main output stream
@@ -56,22 +52,12 @@ namespace quickbook
         , source_mode("c++")
 
     // temporary or global state
-        , element_id()
-        , table_title()
-        , table_span(0)
-        , table_header()
         , macro_id()
         , list_marks()
         , list_indent(-1)
-        , template_identifier()
-        , template_info()
         , template_depth(0)
-        , template_escape(false)
         , templates()
         , error_count(0)
-        , image_fileref()
-        , attribute_name()
-        , attributes()
         , anchors()
         , saved_anchors()
         , no_eols(true)
@@ -80,31 +66,18 @@ namespace quickbook
 
     // actions
         , error(*this)
-        , extract_doc_title(doc_title, phrase, *this)
-        , extract_doc_license(doc_license, phrase, *this)
-        , extract_doc_purpose(doc_purpose, phrase, *this)
-        , extract_doc_version(doc_version, phrase, *this)
-        , extract_doc_id(doc_id_tmp, phrase, *this)
-        , extract_doc_dirname(doc_dirname, phrase, *this)
-        , extract_copyright_second(copyright.second, phrase, *this)
-        , extract_name_second(name.second, phrase, *this)
-        , extract_name_first(name.first, phrase, *this)
-        , extract_doc_last_revision(doc_last_revision, phrase, *this)
-        , extract_doc_category(doc_category, phrase, *this)
-        , extract_doc_biblioid(doc_biblioid.second, phrase, *this)
-        , extract_doc_lang(doc_lang, phrase, *this)
         , scoped_block(*this)
         , code(out, phrase, *this)
         , code_block(phrase, phrase, *this)
         , inline_code(phrase, *this)
         , inside_paragraph(out, phrase, paragraph_pre, paragraph_post, *this)
-        , h(out, phrase, element_id, doc_id, section_id, qualified_section_id, section_level, *this)
-        , h1(out, phrase, element_id, doc_id, section_id, qualified_section_id, 1, *this)
-        , h2(out, phrase, element_id, doc_id, section_id, qualified_section_id, 2, *this)
-        , h3(out, phrase, element_id, doc_id, section_id, qualified_section_id, 3, *this)
-        , h4(out, phrase, element_id, doc_id, section_id, qualified_section_id, 4, *this)
-        , h5(out, phrase, element_id, doc_id, section_id, qualified_section_id, 5, *this)
-        , h6(out, phrase, element_id, doc_id, section_id, qualified_section_id, 6, *this)
+        , h(out, phrase, doc_id, section_id, qualified_section_id, section_level, *this)
+        , h1(out, phrase, doc_id, section_id, qualified_section_id, 1, *this)
+        , h2(out, phrase, doc_id, section_id, qualified_section_id, 2, *this)
+        , h3(out, phrase, doc_id, section_id, qualified_section_id, 3, *this)
+        , h4(out, phrase, doc_id, section_id, qualified_section_id, 4, *this)
+        , h5(out, phrase, doc_id, section_id, qualified_section_id, 5, *this)
+        , h6(out, phrase, doc_id, section_id, qualified_section_id, 6, *this)
         , hr(out, hr_, *this)
         , blurb(out, blurb_pre, blurb_post, *this)
         , blockquote(out, blockquote_pre, blockquote_post, *this)
@@ -119,8 +92,7 @@ namespace quickbook
         , plain_char(phrase, *this)
         , raw_char(phrase, *this)
         , escape_unicode(phrase, *this)
-        , attribute(attributes, attribute_name, *this)
-        , image(phrase, attributes, image_fileref, *this)
+        , image(phrase, *this)
         , cond_phrase_pre(condition, macro)
         , scoped_cond_phrase(*this)
 
@@ -169,30 +141,21 @@ namespace quickbook
         , simple_strikethrough(phrase, strikethrough_pre_, strikethrough_post_, macro, *this)
 
         , variablelist(*this)
-        , start_varlistentry(phrase, start_varlistentry_, *this)
-        , end_varlistentry(phrase, end_varlistentry_, *this)
-        , start_varlistterm(phrase, start_varlistterm_, *this)
-        , end_varlistterm(phrase, end_varlistterm_, *this)
-        , varlistitem(phrase, start_varlistitem_, end_varlistitem_, *this)
 
         , break_(phrase, *this)
         , macro_identifier(*this)
         , macro_definition(*this)
         , do_macro(phrase, *this)
         , template_body(*this)
-        , template_arg(*this)
         , do_template(*this)
         , url_pre(phrase, url_pre_, *this)
         , url_post(phrase, url_post_, *this)
         , link_pre(phrase, link_pre_, *this)
         , link_post(phrase, link_post_, *this)
         , table(*this)
-        , start_row(phrase, table_span, table_header, *this)
-        , end_row(phrase, end_row_, *this)
-        , cell(phrase, table_span, *this)
         , anchor(*this)
 
-        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, element_id, *this)
+        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, *this)
         , end_section(out, section_level, min_section_level, qualified_section_id, error_count, *this)
         , element_id_warning(*this)
         , xinclude(out, *this)
@@ -241,7 +204,8 @@ namespace quickbook
         out.push();
         phrase.push();
         list_buffer.push();
-        templates.push();        
+        templates.push();
+        values.builder.save();
     }
     
     // Pushing and popping the macro symbol table is pretty expensive, so
@@ -282,6 +246,7 @@ namespace quickbook
         phrase.pop();
         list_buffer.pop();
         templates.pop();
+        values.builder.restore();
     }
     
     quickbook_grammar& actions::grammar() const {
