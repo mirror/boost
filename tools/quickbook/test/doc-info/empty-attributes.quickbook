@@ -1,0 +1,14 @@
+[library Empty Attributes
+[version]
+[id]
+[dirname]
+[copyright 2011]
+[purpose]
+[category]
+[authors [,]]
+[license]
+[last-revision]
+[lang]
+]
+
+=biblioid= and =source-mode= can't be empty.

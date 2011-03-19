@@ -1459,7 +1459,7 @@ namespace quickbook
         // swap the filenames
         std::swap(actions.filename, filein);
 
-        // save the doc info strings
+        // save the doc info strings and source mode
         if(qbk_version_n >= 106) {
             doc_type = actions.doc_type;
             doc_id = actions.doc_id;
@@ -1473,7 +1473,8 @@ namespace quickbook
             actions.doc_last_revision.swap(doc_last_revision);
         }
         
-        // save the version info
+        // save the source mode and version info (only restored for 1.6+)
+        std::string source_mode = actions.source_mode;
         unsigned qbk_major_version_store = qbk_major_version;
         unsigned qbk_minor_version_store = qbk_minor_version;
         unsigned qbk_version_n_store = qbk_version_n;
@@ -1509,6 +1510,8 @@ namespace quickbook
         
         if(qbk_version_n >= 106 || qbk_version_n_store >= 106)
         {
+            actions.source_mode = source_mode;
+
             qbk_major_version = qbk_major_version_store;
             qbk_minor_version = qbk_minor_version_store;
             qbk_version_n = qbk_version_n_store;

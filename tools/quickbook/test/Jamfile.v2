@@ -11,6 +11,8 @@ project test
         <toolset>msvc:<debug-symbols>off
     ;
 
+build-project doc-info ;
+
 import quickbook-testing : quickbook-test quickbook-fail-test ;
 
 test-suite quickbook.test :
@@ -49,10 +51,6 @@ test-suite quickbook.test :
     [ quickbook-test list_test ]
     [ quickbook-test cond_phrase ]
     [ quickbook-test macro ]
-    [ quickbook-test doc-info-1 ]
-    [ quickbook-test doc-info-2 ]
-    [ quickbook-test doc-info-3 ]
-    [ quickbook-test doc-info-4 ]
     [ quickbook-test callouts ]
     [ quickbook-test simple_markup ]
     [ quickbook-test xml-escape_1_2 ]

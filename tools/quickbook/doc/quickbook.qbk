@@ -272,6 +272,9 @@ Boost 1.46.1:
 * Fix relative path detection on windows.
 * Reverse deprecation of `[br]`, printing a single warning about
   generating invalid boostbook.
+* Fix handling empty category attributes.
+* Quickbook 1.6:
+  * Scope source mode changes to the file they're made in.
 
 [endsect] [/Change log]
 

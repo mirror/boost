@@ -281,11 +281,14 @@ namespace quickbook
                 end = actions.doc_categories.end();
                 it != end; ++it)
             {
-                tmp << "    <" << actions.doc_type << "category name=\"category:"
-                    << it->get(106)
-                    << "\"></" << actions.doc_type << "category>\n"
-                    << "\n"
-                ;
+                if (!it->empty())
+                {
+                    tmp << "    <" << actions.doc_type << "category name=\"category:"
+                        << it->get(106)
+                        << "\"></" << actions.doc_type << "category>\n"
+                        << "\n"
+                    ;
+                }
             }
         }
 
