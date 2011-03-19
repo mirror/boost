@@ -17,7 +17,7 @@ namespace quickbook
         (type)
         (title)
         (author_surname)(author_first)
-        (copyright_year)(copyright_name)
+        (copyright_year)(copyright_year_end)(copyright_name)
         (license)
         (biblioid_class)(biblioid_value)
     )

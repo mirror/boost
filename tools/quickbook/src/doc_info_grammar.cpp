@@ -61,7 +61,8 @@ namespace quickbook
 
         cl::rule<scanner>
                         doc_title, doc_simple, doc_phrase, doc_fallback,
-                        doc_copyright, doc_authors, doc_author,
+                        doc_authors, doc_author,
+                        doc_copyright, doc_copyright_year, doc_copyright_holder,
                         doc_source_mode, doc_biblioid,
                         quickbook_version, char_;
         cl::symbols<> doc_types;
@@ -152,17 +153,34 @@ namespace quickbook
         local.attribute_rules[doc_info_attributes::last_revision] = &local.doc_simple;
         local.attribute_rules[doc_info_attributes::lang] = &local.doc_simple;
 
+        local.doc_copyright_year = cl::repeat_p(4)[cl::digit_p];
+        local.doc_copyright_holder
+            =   *(  ~cl::eps_p
+                    (   ']'
+                    |   ',' >> space >> local.doc_copyright_year
+                    )
+                >>  local.char_
+                );
+
         local.doc_copyright =
-            actions.values.scoped(doc_info_attributes::copyright)
+            *actions.values.scoped(doc_info_attributes::copyright)
             [
-               +( cl::repeat_p(4)[cl::digit_p]
+                +(  local.doc_copyright_year
                                             [actions.values.entry(doc_info_tags::copyright_year)]
-                  >> space
+                >>  space
+                >>  !(  '-'
+                    >>  space
+                    >>  local.doc_copyright_year
+                                            [actions.values.entry(doc_info_tags::copyright_year_end)]
+                    )
+                >>  !cl::ch_p(',')
                 )
-            >> space
-            >> (*(~cl::eps_p(']') >> local.char_))
+            >>  space
+            >>  local.doc_copyright_holder
                                             [actions.values.tag(doc_info_tags::copyright_name)]
                                             [actions.docinfo_value]
+            >>  !cl::ch_p(',')
+            >>  space
             ]
             ;
 

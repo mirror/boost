@@ -11,6 +11,7 @@
 #include <sstream>
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/join.hpp>
+#include <boost/lexical_cast.hpp>
 #include "quickbook.hpp"
 #include "utils.hpp"
 #include "input_path.hpp"
@@ -259,7 +260,28 @@ namespace quickbook
 
             while(copyright.is(doc_info_tags::copyright_year))
             {
-                tmp << "      <year>" << copyright.consume().get_quickbook() << "</year>\n";
+                int year_start =
+                    boost::lexical_cast<int>(copyright.consume().get_quickbook());
+                int year_end =
+                    copyright.is(doc_info_tags::copyright_year_end) ?
+                    boost::lexical_cast<int>(copyright.consume().get_quickbook()) :
+                    year_start;
+
+                if (year_end < year_start) {
+                    ++actions.error_count;
+
+                    detail::outerr(actions.filename,
+                        copyright.begin()->get_position().line)
+                        << "Invalid year range: "
+                        << year_start
+                        << "-"
+                        << year_end
+                        << "."
+                        << std::endl;
+                }
+
+                for(; year_start <= year_end; ++year_start)
+                    tmp << "      <year>" << year_start << "</year>\n";
             }
         
             tmp << "      <holder>"
