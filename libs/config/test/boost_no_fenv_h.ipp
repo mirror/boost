@@ -34,20 +34,24 @@ int test()
   #if !defined(FE_ALL_EXCEPT)
     #error platform does not define FE_ALL_EXCEPT
   #endif
-  
-   int (*has_feclearexcept)(int ) = ::feclearexcept;
-   int (*has_fegetexceptflag)(fexcept_t *, int ) = fegetexceptflag;
-   int (*has_feraiseexcept)(int ) = feraiseexcept;
-   int (*has_fesetexceptflag)(const fexcept_t *, int ) = fesetexceptflag;
-   int (*has_fetestexcept)(int ) = fetestexcept;
-   int (*has_fegetround)(void) = fegetround;
-   int (*has_fesetround)(int ) = fesetround;
-   int (*has_fegetenv)(fenv_t *) = fegetenv;
-   int (*has_feholdexcept)(fenv_t *) = feholdexcept;
-   int (*has_fesetenv)(const fenv_t *) = fesetenv;
-   int (*has_feupdateenv)(const fenv_t *) = feupdateenv;
 
-   return 0;
+   int i;
+   fexcept_t fe;
+   fenv_t env;
+  
+   i = feclearexcept(FE_ALL_EXCEPT);
+   i += fetestexcept(FE_ALL_EXCEPT); // All flags should be zero
+   i += fegetexceptflag(&fe, FE_ALL_EXCEPT);
+   i += fesetexceptflag(&fe, FE_ALL_EXCEPT);
+   i += feraiseexcept(0);
+   i += fesetround(fegetround());
+   i += fegetenv(&env);
+   i += fesetenv(&env);
+   i += feholdexcept(&env);
+   if(i)
+      i += feupdateenv(&env);
+
+   return i;
 }
 
 }
