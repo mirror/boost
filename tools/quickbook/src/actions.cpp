@@ -377,7 +377,7 @@ namespace quickbook
 
     void list_action(quickbook::actions& actions, value list)
     {
-        if(actions.suppress) return;
+        if(!actions.output_pre(actions.out)) return;
 
         typedef std::pair<char, int> mark_type;
         std::stack<mark_type> list_marks;

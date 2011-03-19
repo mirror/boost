@@ -209,7 +209,9 @@ namespace quickbook
         local.list =
                 cl::eps_p(cl::ch_p('*') | '#')
                                             [actions.values.reset()]
-            >>  actions.values.list(block_tags::list)
+            >>  actions.scoped_output()
+                [
+                actions.values.list(block_tags::list)
                 [   +actions.values.list()
                     [   (*cl::blank_p)      [actions.values.entry(ph::arg1, ph::arg2, general_tags::list_indent)]
                     >>  (cl::ch_p('*') | '#')
@@ -217,6 +219,7 @@ namespace quickbook
                     >>  *cl::blank_p
                     >>  local.list_item     [actions.phrase_value]
                     ]
+                ]
                 ]                           [actions.element]
             ;
 

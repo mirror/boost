@@ -43,4 +43,41 @@
   <section id="anchor_test.conditional_section_anchor">
     <title><anchor id="a12"/> Conditional Section Anchor</title>
   </section>
+  <section id="anchor_test.lists">
+    <title>Lists</title> <anchor id="a14"/>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+          Item 1
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          Item 2
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          Nested List <anchor id="a15"/>
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                Nested Item 1
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                Nested Item 2
+              </simpara>
+            </listitem>
+          </itemizedlist>
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          Item 3
+        </simpara>
+      </listitem>
+    </itemizedlist>
+  </section>
 </article>

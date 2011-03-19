@@ -282,6 +282,7 @@ Boost 1.46.1:
 * Fix delimeter checking for simple markup.
 * Allow more block elements to be nested.
 * Go back to using invalid markup for lists. It generates better html.
+* Better anchor placement for lists.
 * Quickbook 1.6:
   * Scope source mode changes to the file they're made in.
 
