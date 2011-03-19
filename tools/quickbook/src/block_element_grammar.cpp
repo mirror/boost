@@ -29,7 +29,7 @@ namespace quickbook
         cl::rule<scanner>
                         heading, inner_block, inner_phrase, def_macro,
                         table, table_row, variablelist,
-                        varlistentry, varlistterm, varlistitem, table_cell,
+                        varlistentry, varlistterm, cell,
                         preformatted, begin_section, end_section,
                         xinclude, include,
                         template_, template_id, template_formal_arg,
@@ -185,7 +185,7 @@ namespace quickbook
             [
                 (
                     local.varlistterm
-                    >>  (   +local.varlistitem
+                    >>  (   +local.cell
                         |   cl::eps_p           [actions.error]
                         )
                     >>  cl::ch_p(']')
@@ -200,16 +200,6 @@ namespace quickbook
             >>  cl::ch_p('[')
             >>  local.inner_phrase
             >>  (   cl::ch_p(']')
-                >>  space
-                |   cl::eps_p                   [actions.error]
-                )
-            ;
-
-        local.varlistitem =
-            space
-            >>  cl::ch_p('[')
-            >>  (   local.inner_block
-                >>  cl::ch_p(']')
                 >>  space
                 |   cl::eps_p                   [actions.error]
                 )
@@ -235,7 +225,7 @@ namespace quickbook
             (
                 (
                     actions.values.list(table_tags::row)
-                    [   *local.table_cell
+                    [   *local.cell
                     ]
                     >>  cl::ch_p(']')
                     >>  space
@@ -244,14 +234,13 @@ namespace quickbook
             )
             ;
 
-        local.table_cell =
+        local.cell =
                 space
             >>  cl::ch_p('[')
-            >>  (   cl::eps_p
-                >>  local.inner_block
+            >>  (   local.inner_block
                 >>  cl::ch_p(']')
                 >>  space
-                | cl::eps_p                     [actions.error]
+                |   cl::eps_p                   [actions.error]
                 )
             ;
 
