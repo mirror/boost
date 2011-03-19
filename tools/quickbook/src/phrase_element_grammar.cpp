@@ -32,8 +32,6 @@ namespace quickbook
 
     void quickbook_grammar::impl::init_phrase_elements()
     {
-        using detail::var;
-
         phrase_element_grammar_local& local = store_.create();
 
         elements.add

@@ -39,8 +39,6 @@ namespace quickbook
 
     void quickbook_grammar::impl::init_block_elements()
     {
-        using detail::var;
-
         block_element_grammar_local& local = store_.create();
 
         local.element_id =

@@ -37,6 +37,9 @@ namespace quickbook
             phrase = nested_block | in_phrase
         };
 
+        element_info()
+            : type(nothing), rule(), tag(0) {}
+
         element_info(
                 type_enum t,
                 cl::rule<scanner>* r,

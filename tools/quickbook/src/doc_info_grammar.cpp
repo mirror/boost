@@ -125,7 +125,7 @@ namespace quickbook
                                             [actions.error("Unrecognized document attribute: '%s'.")]
                     )
                 >>  hard_space
-                >>  actions.values.list(detail::var(local.attribute_tag))
+                >>  actions.values.list(ph::var(local.attribute_tag))
                     [local.attribute_rule]
                 >>  space
                 >>  ']'

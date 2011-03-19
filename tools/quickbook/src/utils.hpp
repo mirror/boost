@@ -12,7 +12,6 @@
 
 #include <string>
 #include <cctype>
-#include <boost/ref.hpp>
 #include <boost/assert.hpp>
 #include <boost/filesystem/v3/path.hpp>
 #include <boost/range/algorithm_ext/push_back.hpp>
@@ -40,24 +39,6 @@ namespace detail
             range | boost::adaptors::transformed(filter_identifier_char));
 
         return out_name;
-    }
-
-    template <typename T>
-    struct var_wrapper
-        : public ::boost::reference_wrapper<T>
-    {
-        typedef ::boost::reference_wrapper<T> parent;
-
-        explicit inline var_wrapper(T& t) : parent(t) {}
-
-        inline T& operator()() const { return parent::get(); }
-    };
-
-    template <typename T>
-    inline var_wrapper<T>
-    var(T& t)
-    {
-        return var_wrapper<T>(t);
     }
 
     // un-indent a code segment

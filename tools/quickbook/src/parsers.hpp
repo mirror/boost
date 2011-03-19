@@ -14,7 +14,9 @@
 
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_nil.hpp>
+#include <boost/spirit/include/phoenix1_primitives.hpp>
 #include <boost/spirit/include/phoenix1_tuples.hpp>
+#include <boost/spirit/include/phoenix1_binders.hpp>
 
 namespace quickbook {
     namespace cl = boost::spirit::classic;
@@ -53,10 +55,6 @@ namespace quickbook {
 
         struct scoped
         {
-            typedef void result_type;
-            template <typename Arg1 = void, typename Arg2 = void>
-            struct result { typedef void type; };
-        
             explicit scoped(Impl const& impl)
                 : impl_(impl)
                 , in_progress_(false)
@@ -74,14 +72,14 @@ namespace quickbook {
             template <typename Arg1>
             bool start(phoenix::tuple<Arg1> const& x)
             {
-                in_progress_ = impl_.start(x[t0()]);
+                in_progress_ = phoenix::bind(&Impl::start)(phoenix::var(impl_), x[t0()])();
                 return in_progress_;
             }
 
             template <typename Arg1, typename Arg2>
             bool start(phoenix::tuple<Arg1, Arg2> const& x)
             {
-                in_progress_ = impl_.start(x[t0()], x[t1()]);
+                in_progress_ = phoenix::bind(&Impl::start)(phoenix::var(impl_), x[t0()], x[t1()])();
                 return in_progress_;
             }
             

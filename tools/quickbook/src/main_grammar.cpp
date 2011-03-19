@@ -20,8 +20,8 @@
 #include <boost/spirit/include/classic_if.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
 #include <boost/spirit/include/classic_attribute.hpp>
+#include <boost/spirit/include/classic_lazy.hpp>
 #include <boost/spirit/include/phoenix1_primitives.hpp>
-#include <boost/spirit/include/phoenix1_casts.hpp>
 
 namespace quickbook
 {
@@ -29,35 +29,21 @@ namespace quickbook
 
     struct main_grammar_local
     {
-        struct assign_element_type {
-            assign_element_type(main_grammar_local& l) : l(l) {}
-
-            void operator()(element_info& t) const {
-                l.element_type = t.type;
-                l.element_rule = *t.rule;
-                l.element_tag = t.tag;
-            }
-            
-            main_grammar_local& l;
-        };
-
         struct process_element_impl : scoped_action_base {
             process_element_impl(main_grammar_local& l)
                 : l(l) {}
 
             bool start()
             {
-                if (!(l.element_type & l.actions_.context))
+                if (!(l.info.type & l.actions_.context))
                     return false;
 
-                // Save the element type because it might
-                // be overridden by nested markup.
-                element_type_ = l.element_type;
+                info_ = l.info;
 
-                if (!(element_type_ & element_info::in_phrase))
+                if (!(info_.type & element_info::in_phrase))
                     l.actions_.paragraph();
 
-                l.actions_.values.reset()();
+                l.actions_.values.builder.reset();
                 
                 return true;
             }
@@ -65,18 +51,18 @@ namespace quickbook
             template <typename ResultT, typename ScannerT>
             bool result(ResultT result, ScannerT const& scan)
             {
-                if (result || l.element_type & element_info::in_phrase)
+                if (result || info_.type & element_info::in_phrase)
                     return result;
 
                 l.actions_.error(scan.first, scan.first);
                 return true;
             }
 
-            void success() { l.element_type = element_type_; }
+            void success() { l.element_type = info_.type; }
             void failure() { l.element_type = element_info::nothing; }
 
             main_grammar_local& l;
-            element_info::type_enum element_type_;
+            element_info info_;
         };
         
         struct is_block_type
@@ -91,7 +77,7 @@ namespace quickbook
 
             bool operator()() const
             {
-                return !(l_.element_type & element_info::in_phrase);
+                return l_.element_type && !(l_.element_type & element_info::in_phrase);
             }
             
             main_grammar_local& l_;
@@ -100,7 +86,7 @@ namespace quickbook
         cl::rule<scanner>
                         top_level, blocks, paragraph_separator,
                         code, code_line, blank_line, hr,
-                        list, list_item, element,
+                        list, list_item,
                         nested_char, escape,
                         inline_code,
                         template_,
@@ -115,28 +101,26 @@ namespace quickbook
                         dummy_block
                         ;
 
+        cl::rule<scanner> element;
+
         struct simple_markup_closure
             : cl::closure<simple_markup_closure, char>
         {
             member1 mark;
         };
 
-        cl::rule<scanner, simple_markup_closure::context_t>
-                        simple_markup;
+        cl::rule<scanner, simple_markup_closure::context_t> simple_markup;
         cl::rule<scanner> simple_markup_end;
 
+        element_info info;
         element_info::type_enum element_type;
-        cl::rule<scanner> element_rule;
-        value::tag_type element_tag;
 
         quickbook::actions& actions_;
-        assign_element_type assign_element;
         scoped_parser<process_element_impl> process_element;
         is_block_type is_block;
 
         main_grammar_local(quickbook::actions& actions)
             : actions_(actions)
-            , assign_element(*this)
             , process_element(*this)
             , is_block(*this)
             {}
@@ -144,8 +128,6 @@ namespace quickbook
 
     void quickbook_grammar::impl::init_main()
     {
-        using detail::var;
-
         main_grammar_local& local = store_.add(new main_grammar_local(actions));
 
         block_skip_initial_spaces =
@@ -194,13 +176,14 @@ namespace quickbook
         local.element
             =   '['
             >>  (   cl::eps_p(cl::punct_p)
-                >>  elements                    [local.assign_element]
-                |   elements                    [local.assign_element]
+                >>  elements                    [ph::var(local.info) = ph::arg1]
+                |   elements                    [ph::var(local.info) = ph::arg1]
                 >>  (cl::eps_p - (cl::alnum_p | '_'))
                 )
             >>  local.process_element()
-                [   actions.values.list(detail::var(local.element_tag))
-                    [   local.element_rule
+                [   actions.values.list(ph::var(local.info.tag))
+
+                    [   cl::lazy_p(*ph::var(local.info.rule))
                     >>  space
                     >>  ']'
                     ]                           [actions.element]
@@ -563,7 +546,7 @@ namespace quickbook
 
         phrase_end =
                 ']'
-            |   cl::eps_p(var(actions.no_eols))
+            |   cl::eps_p(ph::var(actions.no_eols))
             >>  cl::eol_p >> *cl::blank_p >> cl::eol_p
             ;                                   // Make sure that we don't go
                                                 // past a single block, except
