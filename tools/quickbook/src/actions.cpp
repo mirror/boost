@@ -187,7 +187,7 @@ namespace quickbook
             boost::lexical_cast<std::string>(pos.column));
 
         detail::outerr(actions.filename, pos.line)
-            << formatted_message << std::endl;
+            << detail::utf8(formatted_message) << std::endl;
         ++actions.error_count;
     }
 
@@ -637,7 +637,9 @@ namespace quickbook
             if(!attributes.insert(std::make_pair(name.get_quickbook(), value)).second)
             {
                 detail::outwarn(actions.filename, name.get_position().line)
-                    << "Duplicate image attribute: " << name.get_quickbook() << std::endl;
+                    << "Duplicate image attribute: "
+                    << detail::utf8(name.get_quickbook())
+                    << std::endl;
             }
         }
         

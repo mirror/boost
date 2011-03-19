@@ -30,7 +30,7 @@
                 return "null"; \
             BOOST_PP_SEQ_FOR_EACH(QUICKBOOK_VALUE_CASE, _, values) \
             default: \
-                assert(false); \
+                assert(false); return ""; \
             }; \
         } \
         \
@@ -55,7 +55,7 @@
                 return "null"; \
             BOOST_PP_SEQ_FOR_EACH(QUICKBOOK_VALUE_NAMED_CASE, _, values) \
             default: \
-                assert(false); \
+                assert(false); return ""; \
             }; \
         } \
         \
