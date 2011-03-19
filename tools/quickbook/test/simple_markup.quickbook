@@ -2,6 +2,8 @@
 [quickbook 1.5]
 ]
 
+[def _macro_ replaced]
+
 [section Simple Markup]
 
 /italic/ *bold* _underline_ =teletype=
@@ -20,5 +22,15 @@ not_underlined_
 
 _Should not underline '''escaped''' markup_.
 _or this '''escaped_ markup''' form.
+
+=Matti  Meik\u00E4l\u00E4inen=
+
+=_macro_=
+
+__macro__
+
+=_mac\ ro_=
+
+/not italic\/
 
 [endsect]

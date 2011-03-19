@@ -308,11 +308,10 @@ namespace quickbook
             content.get_boostbook(), anchor + "-heading", linkend);
     }
 
-    void simple_phrase_action::operator()(iterator first, iterator last) const
+    void simple_phrase_action::operator()(char mark) const
     {
         if(!actions.output_pre(out)) return;
 
-        char mark = *first;
         int tag =
             mark == '*' ? phrase_tags::bold :
             mark == '/' ? phrase_tags::italic :
@@ -323,18 +322,18 @@ namespace quickbook
         assert(tag != 0);
         detail::markup markup = detail::markups[tag];
 
-        std::string str(
-                boost::next(first.base()),
-                boost::prior(last.base()));
+        value_consumer values = actions.values.get();
+        value content = values.consume();
+        values.finish();
 
         out << markup.pre;
-        if (std::string const* ptr = find(macro, str.c_str()))
+        if (std::string const* ptr = find(macro, content.get_quickbook().c_str()))
         {
             out << *ptr;
         }
         else
         {
-            detail::print_string(str, out.get());
+            out << content.get_boostbook();
         }
         out << markup.post;
     }

@@ -31,5 +31,20 @@
     <para>
       _Should not underline escaped markup_. _or this escaped_ markup form.
     </para>
+    <para>
+      <literal>Matti Meik&#xE4;l&#xE4;inen</literal>
+    </para>
+    <para>
+      <literal>replaced</literal>
+    </para>
+    <para>
+      <emphasis role="underline">replaced</emphasis>
+    </para>
+    <para>
+      <literal>_macro_</literal>
+    </para>
+    <para>
+      /not italic/
+    </para>
   </section>
 </article>

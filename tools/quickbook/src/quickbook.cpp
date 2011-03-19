@@ -150,7 +150,19 @@ namespace quickbook
 
             if (pretty_print)
             {
-                result = post_process(buffer.str(), fileout, indent, linewidth);
+                try
+                {
+                    fileout << post_process(buffer.str(), indent, linewidth);
+                }
+                catch (quickbook::post_process_failure&)
+                {
+                    // fallback!
+                    ::quickbook::detail::outerr()
+                        << "Post Processing Failed."
+                        << std::endl;
+                    fileout << buffer.str();
+                    return 1;
+                }
             }
             else
             {

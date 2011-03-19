@@ -142,7 +142,7 @@ namespace quickbook
         , macro(macro)
         , actions(actions) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(char) const;
 
         collector& out;
         string_symbols const& macro;
