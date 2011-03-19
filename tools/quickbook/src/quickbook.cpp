@@ -110,9 +110,10 @@ namespace quickbook
     }
 
     static int
-    parse_document(fs::path const& filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
+    parse_document(fs::path const& filein_, fs::path const& xinclude_base,
+            string_stream& out, bool ignore_docinfo = false)
     {
-        actions actor(filein_, outdir, out);
+        actions actor(filein_, xinclude_base, out);
 
         set_macros(actor);
         bool r = parse_file(filein_, actor);
@@ -134,16 +135,14 @@ namespace quickbook
     parse_document(
         fs::path const& filein_
       , fs::path const& fileout_
+      , fs::path const& xinclude_base_
       , int indent
       , int linewidth
       , bool pretty_print)
     {
         int result = 0;
-        fs::path outdir = fileout_.parent_path();
-        if (outdir.empty())
-            outdir = ".";
         string_stream buffer;
-        result = parse_document(filein_, outdir, buffer);
+        result = parse_document(filein_, xinclude_base_, buffer);
 
         if (result == 0)
         {
@@ -194,6 +193,8 @@ main(int argc, char* argv[])
         quickbook::detail::initialise_markups();
 
         options_description desc("Allowed options");
+        options_description hidden("Hidden options");
+        options_description all("All options");
 
 #if QUICKBOOK_WIDE_PATHS
 #define PO_VALUE po::wvalue
@@ -215,6 +216,17 @@ main(int argc, char* argv[])
             ("define,D", PO_VALUE< std::vector<input_string> >(), "define macro")
         ;
 
+        hidden.add_options()
+            ("expect-errors",
+                "Succeed if the input file contains a correctly handled "
+                "error, fail otherwise.")
+            ("xinclude-base", PO_VALUE<input_string>(),
+                "Generate xincludes as if generating for this target "
+                "directory.")
+        ;
+
+        all.add(desc).add(hidden);
+
         positional_options_description p;
         p.add("input-file", -1);
 
@@ -232,14 +244,23 @@ main(int argc, char* argv[])
             return 1;
         }
 
-        store(wcommand_line_parser(wide_argc, wide_argv).options(desc).positional(p).run(), vm);
+        store(
+            wcommand_line_parser(wide_argc, wide_argv)
+                .options(all)
+                .positional(p)
+                .run(), vm);
 
         LocalFree(wide_argv);
 #else
-        store(command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
+        store(command_line_parser(argc, argv)
+                .options(all)
+                .positional(p)
+                .run(), vm);
 #endif
 
         notify(vm);
+
+        bool expect_errors = vm.count("expect-errors");
 
         if (vm.count("help"))
         {
@@ -337,12 +358,35 @@ main(int argc, char* argv[])
                 fileout = filein;
                 fileout.replace_extension(".xml");
             }
+            
+            fs::path xinclude_base;
+            if (vm.count("xinclude-base"))
+            {
+                xinclude_base = quickbook::detail::input_to_path(
+                    vm["xinclude-base"].as<input_string>());
+            }
+            else
+            {
+                xinclude_base = fileout.parent_path();
+                if (xinclude_base.empty())
+                    xinclude_base = ".";
+            }
 
             quickbook::detail::out() << "Generating Output File: "
                 << quickbook::detail::path_to_stream(fileout)
                 << std::endl;
 
-            return quickbook::parse_document(filein, fileout, indent, linewidth, pretty_print);
+            int r = quickbook::parse_document(filein, fileout, xinclude_base, indent, linewidth, pretty_print);
+
+            if (expect_errors)
+            {
+                if (!r) quickbook::detail::outerr() << "No errors detected for --expect-errors." << std::endl;
+                return !r;
+            }
+            else
+            {
+                return r;
+            }
         }
         else
         {

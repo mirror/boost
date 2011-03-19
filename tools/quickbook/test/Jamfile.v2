@@ -13,8 +13,9 @@ project test
 
 build-project doc-info ;
 build-project unit ;
+build-project command-line ;
 
-import quickbook-testing : quickbook-test quickbook-fail-test ;
+import quickbook-testing : quickbook-test quickbook-error-test ;
 
 test-suite quickbook.test :
     [ quickbook-test quickbook-manual ]
@@ -33,8 +34,8 @@ test-suite quickbook.test :
     [ quickbook-test template-section ]
     [ quickbook-test mismatched-brackets-1 ]
     [ quickbook-test mismatched-brackets-2 ]
-    [ quickbook-fail-test mismatched-brackets-3 ]
-    #[ quickbook-test xinclude ]
+    [ quickbook-error-test mismatched-brackets-3 ]
+    [ quickbook-test xinclude : : : <quickbook-xinclude-base>../src ]
     [ quickbook-test import ]
     [ quickbook-test include_1_5 ]
     [ quickbook-test include_1_6 ]
@@ -60,26 +61,26 @@ test-suite quickbook.test :
     [ quickbook-test newline ]
     [ quickbook-test anchor ]
     [ quickbook-test command_line_macro : : : <quickbook-test-define>__macro__=*bold* ]
-    [ quickbook-fail-test fail-include ]
-    [ quickbook-fail-test fail-import ]
-    [ quickbook-fail-test fail-template-arguments1 ]
-    [ quickbook-fail-test fail-template-arguments2 ]
-    [ quickbook-fail-test fail-template-arguments3 ]
-    [ quickbook-fail-test fail-cpp-mismatched-escape ]
-    [ quickbook-fail-test fail-python-mismatched-escape ]
-    [ quickbook-fail-test fail-post-process ]
-    [ quickbook-fail-test fail-parse-error1 ]
-    [ quickbook-fail-test fail-parse-error2 ]
-    [ quickbook-fail-test fail-template-lookup1 ]
-    [ quickbook-fail-test fail-template-section-1 ]
-    [ quickbook-fail-test fail-template-section-2 ]
-    [ quickbook-fail-test fail-template-section-3 ]
-    [ quickbook-fail-test fail-unknown-quickbook-1 ]
-    [ quickbook-fail-test fail-unknown-quickbook-2 ]
-    [ quickbook-fail-test fail-unknown-quickbook-3 ]
+    [ quickbook-error-test fail-include ]
+    [ quickbook-error-test fail-import ]
+    [ quickbook-error-test fail-template-arguments1 ]
+    [ quickbook-error-test fail-template-arguments2 ]
+    [ quickbook-error-test fail-template-arguments3 ]
+    [ quickbook-error-test fail-cpp-mismatched-escape ]
+    [ quickbook-error-test fail-python-mismatched-escape ]
+    [ quickbook-error-test fail-post-process ]
+    [ quickbook-error-test fail-parse-error1 ]
+    [ quickbook-error-test fail-parse-error2 ]
+    [ quickbook-error-test fail-template-lookup1 ]
+    [ quickbook-error-test fail-template-section-1 ]
+    [ quickbook-error-test fail-template-section-2 ]
+    [ quickbook-error-test fail-template-section-3 ]
+    [ quickbook-error-test fail-unknown-quickbook-1 ]
+    [ quickbook-error-test fail-unknown-quickbook-2 ]
+    [ quickbook-error-test fail-unknown-quickbook-3 ]
     [ quickbook-test utf-8 ]
     [ quickbook-test utf-8-bom ]
     [ quickbook-test unicode-escape ]
-    [ quickbook-fail-test utf-16be-bom ]
-    [ quickbook-fail-test utf-16le-bom ]
+    [ quickbook-error-test utf-16be-bom ]
+    [ quickbook-error-test utf-16le-bom ]
     ;

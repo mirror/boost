@@ -23,7 +23,7 @@ namespace quickbook
 
     struct actions
     {
-        actions(fs::path const& filein_, fs::path const& outdir, string_stream& out_);
+        actions(fs::path const& filein_, fs::path const& xinclude_base, string_stream& out_);
 
     private:
         boost::scoped_ptr<quickbook_grammar> grammar_;
@@ -63,7 +63,7 @@ namespace quickbook
 
     // state
         fs::path                filename;
-        fs::path                outdir;
+        fs::path                xinclude_base;
         std::size_t             macro_change_depth;
         string_symbols          macro;
         int                     section_level;

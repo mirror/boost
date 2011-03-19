@@ -8,7 +8,7 @@
 
 project quickook/tests/doc-info ;
 
-import quickbook-testing : quickbook-test quickbook-fail-test ;
+import quickbook-testing : quickbook-test quickbook-error-test ;
 
 test-suite quickbook.test :
     [ quickbook-test escape-1.6 ]
@@ -22,6 +22,6 @@ test-suite quickbook.test :
     [ quickbook-test source-mode-1.5 ]
     [ quickbook-test source-mode-1.6 ]
     [ quickbook-test copyright1 ]
-    [ quickbook-fail-test copyright-fail1 ]
-    [ quickbook-fail-test copyright-fail2 ]
+    [ quickbook-error-test copyright-fail1 ]
+    [ quickbook-error-test copyright-fail2 ]
     ;

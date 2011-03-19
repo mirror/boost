@@ -1531,8 +1531,8 @@ namespace quickbook
         {
             fs::path infile = fs::absolute(actions.filename).normalize();
             path = (infile.parent_path() / path).normalize();
-            fs::path outdir = fs::absolute(actions.outdir).normalize();
-            path = path_difference(outdir, path);
+            fs::path xinclude_base = fs::absolute(actions.xinclude_base).normalize();
+            path = path_difference(xinclude_base, path);
         }
         return path;
     }

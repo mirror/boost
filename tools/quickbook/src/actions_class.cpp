@@ -20,7 +20,7 @@
 
 namespace quickbook
 {
-    actions::actions(fs::path const& filein_, fs::path const& outdir_, string_stream& out_)
+    actions::actions(fs::path const& filein_, fs::path const& xinclude_base_, string_stream& out_)
         : grammar_()
 
     // header info
@@ -45,7 +45,7 @@ namespace quickbook
 
     // state
         , filename(fs::absolute(filein_))
-        , outdir(outdir_)
+        , xinclude_base(xinclude_base_)
         , macro_change_depth(0)
         , macro()
         , section_level(0)
@@ -116,7 +116,7 @@ namespace quickbook
         state_stack.push(
             boost::make_tuple(
                 filename
-              , outdir
+              , xinclude_base
               , macro_change_depth
               , section_level
               , min_section_level
@@ -156,7 +156,7 @@ namespace quickbook
     
         boost::tie(
             filename
-          , outdir
+          , xinclude_base
           , macro_change_depth
           , section_level
           , min_section_level
