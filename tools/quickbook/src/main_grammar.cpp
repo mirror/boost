@@ -19,53 +19,13 @@
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_if.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
+#include <boost/spirit/include/classic_attribute.hpp>
 #include <boost/spirit/include/phoenix1_primitives.hpp>
 #include <boost/spirit/include/phoenix1_casts.hpp>
 
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
-
-    template <typename Rule, typename Action>
-    inline void
-    simple_markup(
-        Rule& simple
-      , char mark
-      , Action const& action
-      , Rule const& close
-    )
-    {
-        simple =
-                mark
-            >>  lookback
-                [   cl::anychar_p
-                >>  ~cl::eps_p(mark)            // first mark not be preceeded by
-                                                // the same character.
-                >>  (cl::space_p | cl::punct_p | cl::end_p)
-                                                // first mark must be preceeded
-                                                // by space or punctuation or the
-                                                // mark character or a the start.
-                ]
-            >>  (   cl::graph_p                 // graph_p must follow first mark
-                >>  *(  cl::anychar_p -
-                        (   lookback[cl::graph_p]
-                                                // final mark must be preceeded by
-                                                // graph_p
-                        >>  mark
-                        >>  ~cl::eps_p(mark)    // final mark not be followed by
-                                                // the same character.
-                        >>  (cl::space_p | cl::punct_p | cl::end_p)
-                                                // final mark must be followed by
-                                                // space or punctuation
-                        |   close               // Make sure that we don't go
-                                                // past a single block
-                        )
-                    )
-                >>  cl::eps_p(mark)
-                )                               [action]
-            >> mark
-            ;
-    }
 
     struct main_grammar_local
     {
@@ -141,11 +101,9 @@ namespace quickbook
                         top_level, blocks, paragraph_separator,
                         code, code_line, blank_line, hr,
                         list, list_item, element,
-                        simple_phrase_end,
                         escape,
-                        inline_code, simple_format,
-                        simple_bold, simple_italic, simple_underline,
-                        simple_teletype, template_,
+                        inline_code,
+                        template_,
                         code_block, macro,
                         template_args,
                         template_args_1_4, template_arg_1_4,
@@ -156,6 +114,15 @@ namespace quickbook
                         command_line_macro_identifier, command_line_phrase,
                         dummy_block
                         ;
+
+        struct simple_markup_closure
+            : cl::closure<simple_markup_closure, char>
+        {
+            member1 mark;
+        };
+
+        cl::rule<scanner, simple_markup_closure::context_t>
+                        simple_markup, simple_markup_end;
 
         element_info::type_enum element_type;
         cl::rule<scanner> element_rule;
@@ -293,7 +260,7 @@ namespace quickbook
             |   local.break_
             |   local.code_block
             |   local.inline_code
-            |   local.simple_format
+            |   local.simple_markup
             |   local.escape
             |   comment
             ;
@@ -413,23 +380,40 @@ namespace quickbook
                 )
             ;
 
-        local.simple_format =
-                local.simple_bold
-            |   local.simple_italic
-            |   local.simple_underline
-            |   local.simple_teletype
+        local.simple_markup =
+            (   cl::chset<>("*/_=")            [local.simple_markup.mark = ph::arg1]
+            >>  lookback
+                [   cl::anychar_p
+                >>  ~cl::eps_p(cl::f_ch_p(local.simple_markup.mark))
+                                                // first mark not be preceeded by
+                                                // the same character.
+                >>  (cl::space_p | cl::punct_p | cl::end_p)
+                                                // first mark must be preceeded
+                                                // by space or punctuation or the
+                                                // mark character or a the start.
+                ]
+            >>  cl::graph_p                     // graph_p must follow first mark
+            >>  *(cl::anychar_p - local.simple_markup_end(local.simple_markup.mark))
+            >>  cl::f_ch_p(local.simple_markup.mark)
+            )                                   [actions.simple_markup]
             ;
 
-        local.simple_phrase_end = '[' | phrase_end;
-
-        simple_markup(local.simple_bold,
-            '*', actions.simple_bold, local.simple_phrase_end);
-        simple_markup(local.simple_italic,
-            '/', actions.simple_italic, local.simple_phrase_end);
-        simple_markup(local.simple_underline,
-            '_', actions.simple_underline, local.simple_phrase_end);
-        simple_markup(local.simple_teletype,
-            '=', actions.simple_teletype, local.simple_phrase_end);
+        local.simple_markup_end
+            =   (   lookback[cl::graph_p]       // final mark must be preceeded by
+                                                // graph_p
+                >>  cl::f_ch_p(local.simple_markup_end.mark)
+                >>  ~cl::eps_p(cl::f_ch_p(local.simple_markup_end.mark))
+                                                // final mark not be followed by
+                                                // the same character.
+                >>  (cl::space_p | cl::punct_p | cl::end_p)
+                                                 // final mark must be followed by
+                                                 // space or punctuation
+                )
+            |   '['
+            |   "'''"
+            |   '`'
+            |   phrase_end
+                ;
 
         phrase =
             actions.scoped_context(element_info::in_phrase)
@@ -479,7 +463,9 @@ namespace quickbook
             |   (
                     ("'''" >> !eol)             [actions.escape_pre]
                 >>  *(cl::anychar_p - "'''")    [actions.raw_char]
-                >>  cl::str_p("'''")            [actions.escape_post]
+                >>  (   cl::str_p("'''")        [actions.escape_post]
+                    |   cl::eps_p               [actions.error("Unclosed boostbook escape.")]
+                    )
                 )
             ;
 

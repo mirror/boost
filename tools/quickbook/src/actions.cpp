@@ -17,6 +17,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/range/distance.hpp>
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/next_prior.hpp>
 #include "quickbook.hpp"
 #include "actions.hpp"
 #include "utils.hpp"
@@ -311,18 +312,31 @@ namespace quickbook
     {
         if(!actions.output_pre(out)) return;
 
-        out << pre;
-        std::string str(first, last);
+        char mark = *first;
+        int tag =
+            mark == '*' ? phrase_tags::bold :
+            mark == '/' ? phrase_tags::italic :
+            mark == '_' ? phrase_tags::underline :
+            mark == '=' ? phrase_tags::teletype :
+            0;
+        
+        assert(tag != 0);
+        detail::markup markup = detail::markups[tag];
+
+        std::string str(
+                boost::next(first.base()),
+                boost::prior(last.base()));
+
+        out << markup.pre;
         if (std::string const* ptr = find(macro, str.c_str()))
         {
             out << *ptr;
         }
         else
         {
-            while (first != last)
-                detail::print_char(*first++, out.get());
+            detail::print_string(str, out.get());
         }
-        out << post;
+        out << markup.post;
     }
 
     bool cond_phrase_push::start()

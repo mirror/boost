@@ -78,6 +78,7 @@ test-suite quickbook.test :
     [ quickbook-error-test fail-unknown-quickbook-1 ]
     [ quickbook-error-test fail-unknown-quickbook-2 ]
     [ quickbook-error-test fail-unknown-quickbook-3 ]
+    [ quickbook-error-test fail-mismatched-boostbook-escape ]
     [ quickbook-test utf-8 ]
     [ quickbook-test utf-8-bom ]
     [ quickbook-test unicode-escape ]

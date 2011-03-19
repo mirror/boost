@@ -122,11 +122,7 @@ namespace quickbook
         raw_char_action         raw_char;
         escape_unicode_action   escape_unicode;
 
-        simple_phrase_action    simple_bold;
-        simple_phrase_action    simple_italic;
-        simple_phrase_action    simple_underline;
-        simple_phrase_action    simple_teletype;
-        simple_phrase_action    simple_strikethrough;
+        simple_phrase_action    simple_markup;
 
         break_action            break_;
         do_macro_action         do_macro;

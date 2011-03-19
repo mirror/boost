@@ -136,21 +136,15 @@ namespace quickbook
 
         simple_phrase_action(
             collector& out
-          , std::string const& pre
-          , std::string const& post
           , string_symbols const& macro
           , quickbook::actions& actions)
         : out(out)
-        , pre(pre)
-        , post(post)
         , macro(macro)
         , actions(actions) {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& out;
-        std::string pre;
-        std::string post;
         string_symbols const& macro;
         quickbook::actions& actions;
     };

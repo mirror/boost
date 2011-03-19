@@ -17,7 +17,7 @@
       not__underlined__hopefully
     </para>
     <para>
-      (<emphasis role="bold">bold</emphasis>)
+      (<emphasis role="bold">bold</emphasis>) <emphasis role="underline">und/er/lined</emphasis>
     </para>
     <para>
       <emphasis>all/italic</emphasis> * not bold*
@@ -27,6 +27,9 @@
     </para>
     <para>
       not_underlined_
+    </para>
+    <para>
+      _Should not underline escaped markup_. _or this escaped_ markup form.
     </para>
   </section>
 </article>

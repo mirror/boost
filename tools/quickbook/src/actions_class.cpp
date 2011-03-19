@@ -77,11 +77,7 @@ namespace quickbook
         , raw_char(phrase, *this)
         , escape_unicode(phrase, *this)
 
-        , simple_bold(phrase, bold_pre_, bold_post_, macro, *this)
-        , simple_italic(phrase, italic_pre_, italic_post_, macro, *this)
-        , simple_underline(phrase, underline_pre_, underline_post_, macro, *this)
-        , simple_teletype(phrase, teletype_pre_, teletype_post_, macro, *this)
-        , simple_strikethrough(phrase, strikethrough_pre_, strikethrough_post_, macro, *this)
+        , simple_markup(phrase, macro, *this)
 
         , break_(phrase, *this)
         , do_macro(phrase, *this)
