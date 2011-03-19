@@ -8,9 +8,24 @@
 
 #include "values.hpp"
 #include <boost/intrusive_ptr.hpp>
+#include <boost/current_function.hpp>
+
+#define UNDEFINED_ERROR() \
+    throw value_error( \
+        std::string(BOOST_CURRENT_FUNCTION) +\
+        " not defined for " + \
+        this->type_name() + \
+        " values." \
+        );
 
 namespace quickbook
 {
+    ////////////////////////////////////////////////////////////////////////////
+    // Value Error
+    
+    value_error::value_error(std::string const& x)
+        : std::logic_error(x) {}
+    
     ////////////////////////////////////////////////////////////////////////////
     // Node
 
@@ -25,12 +40,12 @@ namespace quickbook
         
         value_node* value_node::store() { return this; }
 
-        file_position value_node::get_position() const { assert(false); }
-        std::string value_node::get_quickbook() const { assert(false); }
-        std::string value_node::get_boostbook() const { assert(false); }
-        value_node* value_node::get_list() const { assert(false); }
+        file_position value_node::get_position() const { UNDEFINED_ERROR(); }
+        std::string value_node::get_quickbook() const { UNDEFINED_ERROR(); }
+        std::string value_node::get_boostbook() const {  UNDEFINED_ERROR(); }
+        value_node* value_node::get_list() const {  UNDEFINED_ERROR(); }
 
-        bool value_node::is_empty() const { return false; }
+        bool value_node::empty() const { return false; }
         bool value_node::is_list() const { return false; }
         bool value_node::is_string() const { return false; }
     }
@@ -52,10 +67,12 @@ namespace quickbook
                 : value_node(t) {}
 
         private:
+            char const* type_name() const { return "empty"; }
+        
             virtual value_node* clone() const
                 { return new value_empty_impl(tag_); }
 
-            virtual bool is_empty() const
+            virtual bool empty() const
                 { return true; }
             
             friend value quickbook::empty_value(value::tag_type);
@@ -188,11 +205,13 @@ namespace quickbook
         public:
             explicit value_string_impl(std::string const&, value::tag_type);
         private:
+            char const* type_name() const { return "boostbook"; }
+
             virtual ~value_string_impl();
             virtual value_node* clone() const;
             virtual std::string get_boostbook() const;
             virtual bool is_string() const;
-            virtual bool is_empty() const;
+            virtual bool empty() const;
     
             std::string value_;
         };
@@ -206,12 +225,14 @@ namespace quickbook
                     quickbook::iterator begin, quickbook::iterator end,
                     value::tag_type);
         private:
+            char const* type_name() const { return "quickbook"; }
+
             virtual ~value_qbk_string_impl();
             virtual value_node* clone() const;
             virtual file_position get_position() const;
             virtual std::string get_quickbook() const;
             virtual bool is_string() const;
-            virtual bool is_empty() const;
+            virtual bool empty() const;
     
             std::string value_;
             file_position position_;
@@ -222,13 +243,15 @@ namespace quickbook
         public:
             explicit value_qbk_ref_impl(quickbook::iterator begin, quickbook::iterator end, value::tag_type);
         private:
+            char const* type_name() const { return "quickbook"; }
+
             virtual ~value_qbk_ref_impl();
             virtual value_node* clone() const;
             virtual value_node* store();
             virtual file_position get_position() const;
             virtual std::string get_quickbook() const;
             virtual bool is_string() const;
-            virtual bool is_empty() const;
+            virtual bool empty() const;
     
             quickbook::iterator begin_;
             quickbook::iterator end_;
@@ -237,6 +260,8 @@ namespace quickbook
         struct value_qbk_bbk_impl : public value_node
         {
         private:
+            char const* type_name() const { return "quickbook/boostbook"; }
+
             value_qbk_bbk_impl(
                 std::string const& qbk, std::string const& bbk,
                 file_position const&, value::tag_type);
@@ -251,7 +276,7 @@ namespace quickbook
             virtual std::string get_quickbook() const;
             virtual std::string get_boostbook() const;
             virtual bool is_string() const;
-            virtual bool is_empty() const;
+            virtual bool empty() const;
 
             std::string qbk_value_;
             std::string bbk_value_;
@@ -289,7 +314,7 @@ namespace quickbook
         bool value_string_impl::is_string() const
             { return true; }
 
-        bool value_string_impl::is_empty() const
+        bool value_string_impl::empty() const
             { return value_.empty(); }
 
         // value_qbk_string_impl
@@ -328,7 +353,7 @@ namespace quickbook
         bool value_qbk_string_impl::is_string() const
             { return true; }
 
-        bool value_qbk_string_impl::is_empty() const
+        bool value_qbk_string_impl::empty() const
             { return value_.empty(); }
     
         // value_qbk_ref_impl
@@ -363,7 +388,7 @@ namespace quickbook
         bool value_qbk_ref_impl::is_string() const
             { return true; }
 
-        bool value_qbk_ref_impl::is_empty() const
+        bool value_qbk_ref_impl::empty() const
             { return begin_ == end_; }
     
         // value_qbk_bbk_impl
@@ -427,7 +452,7 @@ namespace quickbook
             { return true; }
 
         // Should this test the quickbook, the boostbook or both?
-        bool value_qbk_bbk_impl::is_empty() const
+        bool value_qbk_bbk_impl::empty() const
             { return bbk_value_.empty(); }
     }
 
@@ -469,9 +494,8 @@ namespace quickbook
         void list_unref(value_node*);
         value_node** merge_sort(value_node**);
         value_node** merge_sort(value_node**, int);
-        value_node** merge_adjacent_ranges(
-                value_node**, value_node**, value_node**);
-        void swap_adjacent_ranges(value_node**, value_node**, value_node**);
+        value_node** merge(value_node**, value_node**, value_node**);
+        void rotate(value_node**, value_node**, value_node**);
 
         value_node** list_ref_back(value_node** back)
         {
@@ -515,12 +539,12 @@ namespace quickbook
                 count < recurse_limit && *p != &value_nil_impl::instance;
                 ++count)
             {
-                p = merge_adjacent_ranges(l, p, merge_sort(p, count));
+                p = merge(l, p, merge_sort(p, count));
             }
             return p;
         }
         
-        value_node** merge_adjacent_ranges(
+        value_node** merge(
                 value_node** first, value_node** second, value_node** third)
         {
             for(;;) {
@@ -530,7 +554,7 @@ namespace quickbook
                     first = &(*first)->next_;
                 }
     
-                swap_adjacent_ranges(first, second, third);
+                rotate(first, second, third);
                 first = &(*first)->next_;
                 
                 // Since the two ranges were just swapped, the order is now:
@@ -546,13 +570,12 @@ namespace quickbook
                     first = &(*first)->next_;
                 }
     
-                swap_adjacent_ranges(first, third, second);
+                rotate(first, third, second);
                 first = &(*first)->next_;
             }
         }
 
-        void swap_adjacent_ranges(
-                value_node** first, value_node** second, value_node** third)
+        void rotate(value_node** first, value_node** second, value_node** third)
         {
             value_node* tmp = *first;
             *first = *second;
@@ -573,10 +596,12 @@ namespace quickbook
             value_list_impl(value::tag_type);
             value_list_impl(value_node*, value::tag_type);
         private:
+            char const* type_name() const { return "list"; }
+
             virtual ~value_list_impl();
             virtual value_node* clone() const;
             virtual value_node* store();
-            virtual bool is_empty() const;
+            virtual bool empty() const;
             virtual bool is_list() const;
     
             virtual value_node* get_list() const;
@@ -634,7 +659,7 @@ namespace quickbook
         }
 
 
-        bool value_list_impl::is_empty() const
+        bool value_list_impl::empty() const
         {
             return head_ == &value_nil_impl::instance;
         }

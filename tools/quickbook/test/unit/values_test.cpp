@@ -16,7 +16,7 @@
 void empty_tests()
 {
     quickbook::value q;
-    BOOST_TEST(q.is_empty());
+    BOOST_TEST(q.empty());
     BOOST_TEST(!q.is_list());
     BOOST_TEST(!q.is_string());
 }
@@ -40,11 +40,11 @@ void sort_test()
     b.sort_list();
     
     quickbook::value_consumer c = b.get();
-    BOOST_TEST(c.is(2)); BOOST_TEST_EQ(c.consume(2).get_boostbook(), "b");
-    BOOST_TEST(c.is(5)); c.consume(5);
-    BOOST_TEST(c.is(8)); c.consume(8);
-    BOOST_TEST(c.is(10)); c.consume(10);
-    BOOST_TEST(!c.is());
+    BOOST_TEST(c.check(2)); BOOST_TEST_EQ(c.consume(2).get_boostbook(), "b");
+    BOOST_TEST(c.check(5)); c.consume(5);
+    BOOST_TEST(c.check(8)); c.consume(8);
+    BOOST_TEST(c.check(10)); c.consume(10);
+    BOOST_TEST(!c.check());
 }
 
 void multiple_list_test()
@@ -65,17 +65,17 @@ void multiple_list_test()
     quickbook::value_consumer l1 = list1.get(); list1.reset();
     quickbook::value_consumer l2 = list2.get(); list2.reset();
 
-    BOOST_TEST(l1.is(10));
+    BOOST_TEST(l1.check(10));
     BOOST_TEST_EQ(l1.consume(10).get_boostbook(), "b");
-    BOOST_TEST(l1.is(5));
+    BOOST_TEST(l1.check(5));
     BOOST_TEST_EQ(l1.consume(5).get_boostbook(), "a");
-    BOOST_TEST(!l1.is());
+    BOOST_TEST(!l1.check());
 
-    BOOST_TEST(l2.is(5));
+    BOOST_TEST(l2.check(5));
     BOOST_TEST_EQ(l2.consume(5).get_boostbook(), "a");
-    BOOST_TEST(l2.is(3));
+    BOOST_TEST(l2.check(3));
     BOOST_TEST_EQ(l2.consume(3).get_boostbook(), "c");
-    BOOST_TEST(!l2.is());
+    BOOST_TEST(!l2.check());
 }
 
 void store_test1()
@@ -100,11 +100,11 @@ void store_test1()
 void store_test2_check(quickbook::value const& q)
 {
     quickbook::value_consumer l1 = q;
-    BOOST_TEST(l1.is(5));
+    BOOST_TEST(l1.check(5));
     BOOST_TEST_EQ(l1.consume(5).get_quickbook(), "Hello");
-    BOOST_TEST(l1.is(10));
+    BOOST_TEST(l1.check(10));
     BOOST_TEST_EQ(l1.consume(10).get_boostbook(), "World");
-    BOOST_TEST(!l1.is());
+    BOOST_TEST(!l1.check());
 }
 
 void store_test2()

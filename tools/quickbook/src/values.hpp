@@ -15,12 +15,15 @@
 #include <string>
 #include <cassert>
 #include <boost/scoped_ptr.hpp>
+#include <boost/iterator/iterator_traits.hpp>
+#include <stdexcept>
 #include "fwd.hpp"
 
 namespace quickbook
 {
     class value;
     class value_builder;
+    class value_error;
 
     namespace detail
     {
@@ -41,6 +44,7 @@ namespace quickbook
             virtual ~value_node();
 
         public:
+            virtual char const* type_name() const = 0;
             virtual value_node* clone() const = 0;
             virtual value_node* store();
 
@@ -48,12 +52,12 @@ namespace quickbook
             virtual std::string get_quickbook() const;
             virtual std::string get_boostbook() const;
 
-            virtual bool is_empty() const;
+            virtual bool empty() const;
             virtual bool is_list() const;
             virtual bool is_string() const;
 
             virtual value_node* get_list() const;
-
+            
             int ref_count_;
             const tag_type tag_;
             value_node* next_;
@@ -91,7 +95,7 @@ namespace quickbook
         public:
             void swap(value_base& x) { std::swap(value_, x.value_); }
 
-            bool is_empty() const { return value_->is_empty(); }
+            bool empty() const { return value_->empty(); }
             bool is_list() const { return value_->is_list(); }
             bool is_string() const { return value_->is_string(); }
 
@@ -129,6 +133,7 @@ namespace quickbook
         public:
             explicit value_proxy(value_node* base) : value_base(base) {}
             value_proxy* operator->() { return this; }
+            value_ref operator*() const { return value_ref(value_); }
         };
     
         ////////////////////////////////////////////////////////////////////////
@@ -257,14 +262,43 @@ namespace quickbook
     };
 
     ////////////////////////////////////////////////////////////////////////////
+    // Value Error
+    //
+    
+    class value_error : std::logic_error
+    {
+    public:
+        value_error(std::string const&);
+    };
+
+    ////////////////////////////////////////////////////////////////////////////
     // Value Consumer
     //
     // Convenience class for unpacking value values.
 
     class value_consumer {
     public:
-        typedef value::iterator iterator;
-        typedef value::iterator const_iterator;
+        class iterator
+            : public boost::input_iterator_helper<iterator,
+                boost::iterator_value<value::iterator>::type,
+                boost::iterator_difference<value::iterator>::type,
+                boost::iterator_pointer<value::iterator>::type,
+                boost::iterator_reference<value::iterator>::type>
+        {
+        public:
+            iterator();
+            explicit iterator(value::iterator* p) : ptr_(p) {}
+            friend bool operator==(iterator x, iterator y)
+                { return *x.ptr_ == *y.ptr_; }
+            iterator& operator++() { ++*ptr_; return *this; }
+            reference operator*() const { return **ptr_; }
+            pointer operator->() const { return ptr_->operator->(); }
+        private:
+            value::iterator* ptr_;
+        };
+
+
+        typedef iterator const_iterator;
         typedef iterator::reference reference;
     
         value_consumer(value const& x)
@@ -281,19 +315,19 @@ namespace quickbook
 
         reference consume()
         {
-            assert(is());
+            assert(check());
             return *pos_++;
         }
 
         reference consume(value::tag_type t)
         {
-            assert(is(t));
+            assert(check(t));
             return *pos_++;
         }
 
         value optional_consume()
         {
-            if(is()) {
+            if(check()) {
                 return *pos_++;
             }
             else {
@@ -303,7 +337,7 @@ namespace quickbook
 
         value optional_consume(value::tag_type t)
         {
-            if(is(t)) {
+            if(check(t)) {
                 return *pos_++;
             }
             else {
@@ -311,21 +345,26 @@ namespace quickbook
             }
         }
 
-        bool is()
+        bool check() const
         {
             return pos_ != end_;
         }
 
-        bool is(value::tag_type t)
+        bool check(value::tag_type t) const
         {
             return pos_ != end_ && t == pos_->get_tag();
         }
+        
+        void finish() const
+        {
+            assert(pos_ == end_);
+        }
 
-        iterator begin() const { return pos_; }
-        iterator end() const { return end_; }
+        iterator begin() { return iterator(&pos_); }
+        iterator end() { return iterator(&end_); }
     private:
         value list_;
-        iterator pos_, end_;
+        value::iterator pos_, end_;
     };
 }
 

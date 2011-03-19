@@ -33,7 +33,7 @@ namespace quickbook
         value p;
 
         int count = 0;
-        while(c.is(tag)) {
+        while(c.check(tag)) {
             p = c.consume();
             ++count;
         }
@@ -47,12 +47,12 @@ namespace quickbook
             std::vector<std::string>* duplicates)
     {
         value l = consume_last(c, tag, duplicates);
-        if(l.is_empty()) return l;
+        if(l.empty()) return l;
 
         assert(l.is_list());
         value_consumer c2 = l;
         value p = c2.consume();
-        assert(!c2.is());
+        c2.finish();
 
         return p;
     }
@@ -61,7 +61,7 @@ namespace quickbook
     {
         std::vector<value> values;
         
-        while(c.is(tag)) {
+        while(c.check(tag)) {
             values.push_back(c.consume());
         }
         
@@ -77,12 +77,12 @@ namespace quickbook
 
         // Skip over invalid attributes
 
-        while (values.is(value::default_tag)) values.consume();
+        while (values.check(value::default_tag)) values.consume();
         
         std::vector<std::string> duplicates;
 
         value doc_title;
-        if (values.is())
+        if (values.check())
         {
             actions.doc_type = values.consume(doc_info_tags::type).get_quickbook();
             doc_title = values.consume(doc_info_tags::title);
@@ -103,10 +103,9 @@ namespace quickbook
         
         // Skip over source-mode tags (already dealt with)
 
-        while (values.is(doc_info_attributes::source_mode)) values.consume();
+        while (values.check(doc_info_attributes::source_mode)) values.consume();
 
-
-        BOOST_ASSERT(!values.is());
+        values.finish();
 
         if(!duplicates.empty())
         {
@@ -118,14 +117,14 @@ namespace quickbook
                 ;
         }
 
-        if (!id.is_empty())
+        if (!id.empty())
             actions.doc_id = id.get_quickbook();
 
         if (actions.doc_id.empty())
             actions.doc_id = detail::make_identifier(actions.doc_title_qbk);
         
-        if (dirname.is_empty() && actions.doc_type == "library") {
-            if (!id.is_empty()) {
+        if (dirname.empty() && actions.doc_type == "library") {
+            if (!id.empty()) {
                 dirname = id;
             }
             else {
@@ -133,7 +132,7 @@ namespace quickbook
             }
         }
 
-        if (last_revision.is_empty())
+        if (last_revision.empty())
         {
             // default value for last-revision is now
 
@@ -195,13 +194,13 @@ namespace quickbook
         {
             std::vector<std::string> invalid_attributes;
 
-            if (!purpose.is_empty())
+            if (!purpose.empty())
                 invalid_attributes.push_back("purpose");
 
             if (!categories.empty())
                 invalid_attributes.push_back("category");
 
-            if (!dirname.is_empty())
+            if (!dirname.empty())
                 invalid_attributes.push_back("dirname");
 
             if(!invalid_attributes.empty())
@@ -228,7 +227,7 @@ namespace quickbook
             << actions.doc_id
             << "\"\n";
         
-        if(!lang.is_empty())
+        if(!lang.empty())
         {
             out << "    lang=\""
                 << doc_info_output(lang, 106)
@@ -240,7 +239,7 @@ namespace quickbook
             out << "    name=\"" << doc_info_output(doc_title, 106) << "\"\n";
         }
 
-        if(!dirname.is_empty())
+        if(!dirname.empty())
         {
             out << "    dirname=\""
                 << doc_info_output(dirname, 106)
@@ -259,7 +258,7 @@ namespace quickbook
             tmp << "    <authorgroup>\n";
             BOOST_FOREACH(value_consumer author_values, authors)
             {
-                while (author_values.is()) {
+                while (author_values.check()) {
                     value surname = author_values.consume(doc_info_tags::author_surname);
                     value first = author_values.consume(doc_info_tags::author_first);
     
@@ -278,16 +277,16 @@ namespace quickbook
 
         BOOST_FOREACH(value_consumer copyright, copyrights)
         {
-            while(copyright.is())
+            while(copyright.check())
             {
                 tmp << "\n" << "    <copyright>\n";
     
-                while(copyright.is(doc_info_tags::copyright_year))
+                while(copyright.check(doc_info_tags::copyright_year))
                 {
                     int year_start =
                         boost::lexical_cast<int>(copyright.consume().get_quickbook());
                     int year_end =
-                        copyright.is(doc_info_tags::copyright_year_end) ?
+                        copyright.check(doc_info_tags::copyright_year_end) ?
                         boost::lexical_cast<int>(copyright.consume().get_quickbook()) :
                         year_start;
     
@@ -317,7 +316,7 @@ namespace quickbook
             }
         }
 
-        if (!license.is_empty())
+        if (!license.empty())
         {
             tmp << "    <legalnotice>\n"
                 << "      <para>\n"
@@ -328,7 +327,7 @@ namespace quickbook
             ;
         }
 
-        if (!purpose.is_empty())
+        if (!purpose.empty())
         {
             tmp << "    <" << actions.doc_type << "purpose>\n"
                 << "      " << doc_info_output(purpose, 103)
@@ -339,14 +338,14 @@ namespace quickbook
 
         BOOST_FOREACH(value_consumer values, categories) {
             value category = values.optional_consume();
-            if(!category.is_empty()) {
+            if(!category.empty()) {
                 tmp << "    <" << actions.doc_type << "category name=\"category:"
                     << doc_info_output(category, 106)
                     << "\"></" << actions.doc_type << "category>\n"
                     << "\n"
                 ;
             }
-            assert(!values.is());
+            values.finish();
         }
 
         BOOST_FOREACH(value_consumer biblioid, biblioids)
@@ -361,7 +360,7 @@ namespace quickbook
                 << "</biblioid>"
                 << "\n"
                 ;
-            assert(!biblioid.is());
+            biblioid.finish();
         }
 
         if(actions.doc_type != "library") {
@@ -398,11 +397,11 @@ namespace quickbook
 
     static void write_document_title(collector& out, value const& title, value const& version)
     {
-        if (!title.is_empty())
+        if (!title.empty())
         {
             out << "  <title>"
                 << doc_info_output(title, 106);
-            if (!version.is_empty()) {
+            if (!version.empty()) {
                 out << ' ' << doc_info_output(version, 106);
             }
             out<< "</title>\n\n\n";
