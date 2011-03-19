@@ -283,6 +283,7 @@ Boost 1.46.1:
 * Allow more block elements to be nested.
 * Go back to using invalid markup for lists. It generates better html.
 * Better anchor placement for lists.
+* Pass-thru comments in code snippets.
 * Quickbook 1.6:
   * Scope source mode changes to the file they're made in.
 
@@ -1936,6 +1937,18 @@ or
 
 can be used to inhibit code from passing through to quickbook. All text between
 the delimeters will simply be ignored.
+
+Comments of this form:
+
+    //=int main() {}
+
+or
+
+    /*=foo()*/
+
+will be displayed as code that isn't in comments. This allows you to
+include some code in the snippet but not actually use it when
+compiling your example.
 
 [heading Callouts]
 

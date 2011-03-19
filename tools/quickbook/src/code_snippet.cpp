@@ -99,6 +99,7 @@ namespace quickbook
                         start_snippet               [boost::bind(&actions_type::start_snippet, &actions, _1, _2)]
                     |   end_snippet                 [boost::bind(&actions_type::end_snippet, &actions, _1, _2)]
                     |   escaped_comment
+                    |   pass_thru_comment
                     |   ignore
                     |   cl::anychar_p               [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
                     ;
@@ -142,11 +143,25 @@ namespace quickbook
                             "\"\"\""
                         )
                     ;
+
+                // Note: Unlike escaped_comment and ignore, this doesn't
+                // swallow preceeding whitespace.
+                pass_thru_comment
+                    =   "#="
+                    >>  (   *(cl::anychar_p - cl::eol_p)
+                        >>  (cl::eol_p | cl::end_p)
+                        )                           [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
+                    |   cl::confix_p(
+                            "\"\"\"=",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::pass_thru, &actions, _1, _2)],
+                            "\"\"\""
+                        )
+                    ;
             }
 
             cl::rule<Scanner>
                 start_, identifier, code_elements, start_snippet, end_snippet,
-                escaped_comment, ignore;
+                escaped_comment, pass_thru_comment, ignore;
 
             cl::rule<Scanner> const&
             start() const { return start_; }
@@ -182,6 +197,7 @@ namespace quickbook
                     |   end_snippet                 [boost::bind(&actions_type::end_snippet, &actions, _1, _2)]
                     |   escaped_comment
                     |   ignore
+                    |   pass_thru_comment
                     |   line_callout
                     |   inline_callout
                     |   cl::anychar_p               [boost::bind(&actions_type::pass_thru_char, &actions, _1)]
@@ -249,11 +265,25 @@ namespace quickbook
                             "*/"
                         )
                     ;
+
+                // Note: Unlike escaped_comment and ignore, this doesn't
+                // swallow preceeding whitespace.
+                pass_thru_comment
+                    =   "//="
+                    >>  (   *(cl::anychar_p - cl::eol_p)
+                        >>  (cl::eol_p | cl::end_p)
+                        )                           [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
+                    |   cl::confix_p(
+                            "/*`",
+                            (*cl::anychar_p)        [boost::bind(&actions_type::pass_thru, &actions, _1, _2)],
+                            "*/"
+                        )
+                    ;
             }
 
             cl::rule<Scanner>
             start_, identifier, code_elements, start_snippet, end_snippet,
-                escaped_comment, inline_callout, line_callout, ignore;
+                escaped_comment, pass_thru_comment, inline_callout, line_callout, ignore;
 
             cl::rule<Scanner> const&
             start() const { return start_; }
@@ -334,7 +364,7 @@ namespace quickbook
     void code_snippet_actions::pass_thru(iterator first, iterator last)
     {
         if(snippet_stack.empty()) return;
-        code += *first;
+        code.append(first, last);
     }
 
     void code_snippet_actions::pass_thru_char(char c)
