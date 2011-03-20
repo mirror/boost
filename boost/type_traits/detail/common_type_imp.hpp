@@ -80,11 +80,11 @@ struct propagate_cv< const volatile From, To >
 
 template< class T >
 struct is_integral_or_enum
-    : mpl::or_< is_integral<T>, is_enum<T> >
+    : public mpl::or_< is_integral<T>, is_enum<T> >
 { };
 template<>
 struct is_integral_or_enum< bool >
-    : false_type
+    : public false_type
 { };
 
 /*******************************************************************************
@@ -97,7 +97,7 @@ struct is_integral_or_enum< bool >
 
 template< class T >
 struct make_unsigned_soft
-    : make_unsigned<T>
+    : public make_unsigned<T>
 { };
 template<>
 struct make_unsigned_soft< bool >
@@ -105,7 +105,7 @@ struct make_unsigned_soft< bool >
 
 template< class T >
 struct make_signed_soft
-    : make_signed<T>
+    : public make_signed<T>
 { };
 template<>
 struct make_signed_soft< bool >
@@ -151,7 +151,7 @@ yes_type rvalue_test(...);
 
 template< class First, class Last, std::size_t Index >
 struct conversion_test_overloads_iterate
-    : conversion_test_overloads_iterate<
+    : public conversion_test_overloads_iterate<
           typename mpl::next< First >::type, Last, Index + 1
       >
 {
@@ -168,7 +168,7 @@ struct conversion_test_overloads_iterate< Last, Last, Index >
 
 template< class Sequence >
 struct conversion_test_overloads
-    : conversion_test_overloads_iterate<
+    : public conversion_test_overloads_iterate<
           typename mpl::begin< Sequence >::type,
           typename mpl::end< Sequence >::type,
           0
@@ -187,7 +187,7 @@ template<
     int N = mpl::size< Sequence >::value
 >
 struct select
-    : mpl::at_c< Sequence, Index >
+    : public mpl::at_c< Sequence, Index >
 { };
 template< class Sequence, int N >
 struct select< Sequence, N, N >
@@ -293,7 +293,7 @@ struct nominal_candidates< T, U, V*, W*, false >
 
 template<class T, class U, bool b>
 struct common_type_dispatch_on_rvalueness
-    : deduce_common_type< T, U, typename nominal_candidates<T,U>::type >
+    : public deduce_common_type< T, U, typename nominal_candidates<T,U>::type >
 { };
 
 template< class T, class U >
@@ -316,7 +316,7 @@ public:
 
 template< class T, class U >
 struct common_type_impl
-    : common_type_dispatch_on_rvalueness<T,U, sizeof( ::boost::detail_type_traits_common_type::rvalue_test(
+    : public common_type_dispatch_on_rvalueness<T,U, sizeof( ::boost::detail_type_traits_common_type::rvalue_test(
         declval< bool >() ? declval<T>() : declval<U>() ) ) == sizeof( yes_type ) >
 { };
 

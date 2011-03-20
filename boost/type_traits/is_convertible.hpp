@@ -85,7 +85,7 @@ struct does_conversion_exist<void>
 
 template <typename From, typename To>
 struct is_convertible_basic_impl
-    : does_conversion_exist<From>::template result_<To>
+    : public does_conversion_exist<From>::template result_<To>
 {
 };
 

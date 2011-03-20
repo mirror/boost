@@ -141,7 +141,7 @@ namespace type_traits_detail {
     template <class T, class U>
     struct common_type<T, U, void>
 #endif
-    : type_traits_detail::common_type_2<T,U>
+    : public type_traits_detail::common_type_2<T,U>
     { };
 
 

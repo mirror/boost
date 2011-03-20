@@ -135,7 +135,7 @@ template<> struct assert_intrinsic_wchar_t<wchar_t> {};
 template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #endif
 
-#if _MSC_VER+0 >= 1000
+#if defined(_MSC_VER) && (_MSC_VER+0 >= 1000)
 #  if _MSC_VER >= 1200
 #     define BOOST_HAS_MS_INT64
 #  endif

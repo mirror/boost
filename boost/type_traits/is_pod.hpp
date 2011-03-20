@@ -49,7 +49,7 @@ template <typename T> struct is_pod_impl
 #if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 template <typename T, std::size_t sz>
 struct is_pod_impl<T[sz]>
-    : is_pod_impl<T>
+    : public is_pod_impl<T>
 {
 };
 #endif
