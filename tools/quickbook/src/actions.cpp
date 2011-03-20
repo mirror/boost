@@ -11,6 +11,7 @@
 #include <numeric>
 #include <functional>
 #include <algorithm>
+#include <vector>
 #include <boost/filesystem/v3/convenience.hpp>
 #include <boost/filesystem/v3/fstream.hpp>
 #include <boost/range/algorithm/replace.hpp>
@@ -1506,22 +1507,79 @@ namespace quickbook
         detail::outwarn(actions.filename, pos.line) << "Empty id.\n";        
     }
 
-    fs::path path_difference(fs::path const& outdir, fs::path const& path)
+    // Not a general purpose normalization function, just
+    // from paths from the root directory. It strips the excess
+    // ".." parts from a path like: "x/../../y", leaving "y".
+    std::vector<fs::path> normalize_path_from_root(fs::path const& path)
     {
-        fs::path outtmp, temp;
-        fs::path::iterator out = outdir.begin(), file = path.begin();
-        for(; out != outdir.end() && file != path.end(); ++out, ++file)
-        {
-            if(!fs::equivalent(outtmp /= *out, temp /= *file))
-                break;
-        }
-        out = (out == outdir.begin()) ? outdir.end() : out;
+        assert(!path.has_root_directory() && !path.has_root_name());
+    
+        std::vector<fs::path> parts;
 
-        fs::path result = fs::path();
-        for(; out != outdir.end(); ++out)
-            if(*out != ".") result /= "..";
-        std::divides<fs::path> concat;
-        return std::accumulate(file, path.end(), result, concat);
+        BOOST_FOREACH(fs::path const& part, path)
+        {
+            if (part.empty() || part == ".") {
+            }
+            else if (part == "..") {
+                if (!parts.empty()) parts.pop_back();
+            }
+            else {
+                parts.push_back(part);
+            }
+        }
+        
+        return parts;
+    }
+
+    // The relative path from base to path
+    fs::path path_difference(fs::path const& base, fs::path const& path)
+    {
+        fs::path
+            absolute_base = fs::absolute(base),
+            absolute_path = fs::absolute(path);
+
+        // Remove '.', '..' and empty parts from the remaining path
+        std::vector<fs::path>
+            base_parts = normalize_path_from_root(absolute_base.relative_path()),
+            path_parts = normalize_path_from_root(absolute_path.relative_path());
+
+        std::vector<fs::path>::iterator
+            base_it = base_parts.begin(),
+            base_end = base_parts.end(),
+            path_it = path_parts.begin(),
+            path_end = path_parts.end();
+
+        // Build up the two paths in these variables, checking for the first
+        // difference.
+        fs::path
+            base_tmp = absolute_base.root_path(),
+            path_tmp = absolute_path.root_path();
+
+        fs::path result;
+
+        // If they have different roots then there's no relative path so
+        // just build an absolute path.
+        if (!fs::equivalent(base_tmp, path_tmp))
+        {
+            result = path_tmp;
+        }
+        else
+        {
+            // Find the point at which the paths differ    
+            for(; base_it != base_end && path_it != path_end; ++base_it, ++path_it)
+            {
+                if(!fs::equivalent(base_tmp /= *base_it, path_tmp /= *path_it))
+                    break;
+            }
+    
+            // Build a relative path to that point
+            for(; base_it != base_end; ++base_it) result /= "..";
+        }
+
+        // Build the rest of our path
+        for(; path_it != path_end; ++path_it) result /= *path_it;
+
+        return result;
     }
 
     std::string check_path(value const& path, quickbook::actions& actions)
@@ -1547,14 +1605,17 @@ namespace quickbook
         // path to the source file relative to the output directory.
 
         fs::path path = detail::generic_to_path(name);
-        if (!path.has_root_directory() && !path.has_root_name())
+        if (path.has_root_directory())
         {
-            fs::path infile = fs::absolute(actions.filename).normalize();
-            path = (infile.parent_path() / path).normalize();
-            fs::path xinclude_base = fs::absolute(actions.xinclude_base).normalize();
-            path = path_difference(xinclude_base, path);
+            return path;
         }
-        return path;
+        else
+        {
+            return path_difference(
+                actions.xinclude_base,
+                actions.filename.parent_path() / path);
+                
+        }
     }
 
     void xinclude_action(quickbook::actions& actions, value xinclude)

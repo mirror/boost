@@ -41,8 +41,7 @@ exe quickbook
     /boost//program_options
     /boost//filesystem
     : #<define>QUICKBOOK_NO_DATES
-      # Still using 'normalize' which has been deprecated.
-      #<define>BOOST_FILESYSTEM_NO_DEPRECATED
+      <define>BOOST_FILESYSTEM_NO_DEPRECATED
       <toolset>msvc:<cxxflags>/wd4355
       <toolset>msvc:<cxxflags>/wd4511
       <toolset>msvc:<cxxflags>/wd4512

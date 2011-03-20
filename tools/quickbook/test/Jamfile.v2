@@ -15,6 +15,7 @@ build-project doc-info ;
 build-project unit ;
 build-project command-line ;
 build-project snippets ;
+build-project "include" ;
 
 import quickbook-testing : quickbook-test quickbook-error-test ;
 
