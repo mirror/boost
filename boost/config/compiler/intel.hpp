@@ -218,9 +218,16 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  undef  BOOST_NO_AUTO_MULTIDECLARATIONS
 #endif
 
+#if (BOOST_INTEL_CXX_VERSION < 1200)
+//
+// fenv.h appears not to work with Intel prior to 12.0:
+//
+#  define BOOST_NO_FENV_H
+#endif
+
 //
 // last known and checked version:
-#if (BOOST_INTEL_CXX_VERSION > 1110)
+#if (BOOST_INTEL_CXX_VERSION > 1200)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
