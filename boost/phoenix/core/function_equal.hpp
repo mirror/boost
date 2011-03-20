@@ -68,7 +68,9 @@ namespace boost { namespace phoenix
                             proto::terminal<proto::_>
                           , compare(
                                 proto::_value
-                              , proto::_value(proto::_state)
+                              , proto::call<
+                                    proto::_value(proto::_state)
+                                >
                             )
                         >
                       , proto::otherwise<test(proto::_, proto::_state)>

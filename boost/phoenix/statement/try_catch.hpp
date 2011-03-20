@@ -116,26 +116,28 @@ namespace boost { namespace phoenix
             : proto::or_<
                 proto::when<
                     rule::catch_all
-                  , evaluator(proto::_child_c<0>, proto::_data, int())
+                  , evaluator(proto::_child_c<0>, proto::_data, proto::make<int()>)
                 >
               , proto::when<
                     rule::catch_
-                  , evaluator(proto::_child_c<1>, proto::_data, int())
+                  , evaluator(proto::_child_c<1>, proto::_data, proto::make<int()>)
                 >
               , proto::when<
                     rule::try_catch
                   , mpl::and_<
-                        evaluator(proto::_child_c<0>, proto::_data, int())
+                        evaluator(proto::_child_c<0>, proto::_data, proto::make<int()>)
                       , proto::fold<
-                            proto::functional::pop_front(proto::_)
-                          , mpl::true_()
+                            proto::call<proto::functional::pop_front(proto::_)>
+                          , proto::make<mpl::true_()>
                           , mpl::and_<
                                 proto::_state
-                              , try_catch_is_nullary(
-                                    proto::_
-                                  , int()
-                                  , proto::_data
-                                )
+                              , proto::call<
+                                    try_catch_is_nullary(
+                                        proto::_
+                                      , proto::make<int()>
+                                      , proto::_data
+                                    )
+                                >
                             >()
                         >
                     >()

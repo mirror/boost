@@ -131,11 +131,19 @@ namespace boost { namespace phoenix
         : proto::call<
             evaluator(
                 proto::_child_c<2>
-              , proto::call<functional::context(
-                    mpl::true_()
-                  , detail::scope_is_nullary_actions()
-                )>
-              , proto::make<int()>
+              , proto::call<
+                    functional::context(
+                        proto::make<
+                            mpl::true_()
+                        >
+                      , proto::make<
+                            detail::scope_is_nullary_actions()
+                        >
+                    )
+                >
+              , proto::make<
+                    int()
+                >
             )
         >
     {};

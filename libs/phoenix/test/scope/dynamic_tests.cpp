@@ -49,7 +49,7 @@ main()
         {   //  Second stack frame
             dynamic_frame<my_dynamic::self_type> frame(clos);
             (clos.num = 987)();
-            (clos.message = "Abracadabra ")();
+            (clos.message = std::string("Abracadabra "))();
             (clos.real = clos.num * 1e30)();
 
             {   //  Third stack frame

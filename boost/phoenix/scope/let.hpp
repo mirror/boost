@@ -164,14 +164,29 @@ namespace boost { namespace phoenix
     struct is_nullary::when<rule::let, Dummy>
         : proto::make<
             mpl::and_<
-                detail::local_var_def_is_nullary<proto::_value(proto::_child_c<0>), _context>()
+                proto::make<
+                    detail::local_var_def_is_nullary<
+                        proto::call<
+                            proto::_value(proto::_child_c<0>)
+                        >
+                      , _context
+                    >()
+                >
               , evaluator(
                     proto::_child_c<1>
-                  , vector2<
-                        mpl::true_
-                      , detail::scope_is_nullary_actions
-                    >()
-                  , int()
+                  , proto::call<
+                        functional::context(
+                            proto::make<
+                                mpl::true_()
+                            >
+                          , proto::make<
+                                detail::scope_is_nullary_actions()
+                            >
+                        )
+                    >
+                  , proto::make<
+                        int()
+                    >
                 )
             >()
         >
