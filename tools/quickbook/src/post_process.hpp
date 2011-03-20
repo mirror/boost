@@ -19,10 +19,10 @@ namespace quickbook
       , int indent = -1
       , int linewidth = -1);
 
-    class post_process_failure : std::runtime_error
+    class post_process_failure : public std::runtime_error
     {
     public:
-        post_process_failure(std::string const& error)
+        explicit post_process_failure(std::string const& error)
             : std::runtime_error(error) {}
     };
 }

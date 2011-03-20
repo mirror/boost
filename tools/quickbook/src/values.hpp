@@ -273,10 +273,10 @@ namespace quickbook
     // Value Error
     //
     
-    class value_error : std::logic_error
+    class value_error : public std::logic_error
     {
     public:
-        value_error(std::string const&);
+        explicit value_error(std::string const&);
     };
 
     ////////////////////////////////////////////////////////////////////////////
