@@ -65,6 +65,9 @@ namespace quickbook
 
     // state
         fs::path                filename;
+        fs::path                filename_relative;  // for the __FILENAME__ macro.
+                                                    // (relative to the original file
+                                                    //  or include path).
         fs::path                xinclude_base;
         std::size_t             macro_change_depth;
         string_symbols          macro;

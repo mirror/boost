@@ -17,6 +17,7 @@ import type ;
 
 feature.feature quickbook-testing.quickbook-command : : free dependency ;
 feature.feature <quickbook-test-define> : : free ;
+feature.feature <quickbook-test-include> : : free path ;
 feature.feature <quickbook-xinclude-base> : : free ;
 
 type.register QUICKBOOK_INPUT : quickbook ;
@@ -126,6 +127,7 @@ rule quickbook-error-test ( target-name : input ? : requirements * )
 toolset.flags quickbook-testing.process-quickbook quickbook-command <quickbook-testing.quickbook-command> ;
 toolset.flags quickbook-testing.process-quickbook QB-DEFINES        <quickbook-test-define> ;
 toolset.flags quickbook-testing.process-quickbook XINCLUDE          <quickbook-xinclude-base> ;
+toolset.flags quickbook-testing.process-quickbook INCLUDES          <quickbook-test-include> ;
 
 rule process-quickbook ( target : source : properties * )
 {
@@ -134,6 +136,6 @@ rule process-quickbook ( target : source : properties * )
 
 actions process-quickbook bind quickbook-command
 {
-    $(quickbook-command) $(>) --output-file=$(<) --debug -D"$(QB-DEFINES)" --xinclude-base=$(XINCLUDE)
+    $(quickbook-command) $(>) --output-file=$(<) --debug -D"$(QB-DEFINES)" -I"$(INCLUDES)" --xinclude-base="$(XINCLUDE)"
 }
 

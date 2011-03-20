@@ -1573,8 +1573,19 @@ namespace quickbook
 
     namespace
     {
-        fs::path include_search(fs::path const & current, std::string const & name)
+        struct include_search_return
         {
+            include_search_return(fs::path const& x, fs::path const& y)
+                : filename(x), filename_relative(y) {}
+
+            fs::path filename;
+            fs::path filename_relative;
+        };
+
+        include_search_return include_search(std::string const & name,
+                quickbook::actions const& actions)
+        {
+            fs::path current = actions.filename.parent_path();
             fs::path path(name);
 
             // If the path is relative, try and resolve it.
@@ -1583,7 +1594,9 @@ namespace quickbook
                 // See if it can be found locally first.
                 if (fs::exists(current / path))
                 {
-                    return current / path;
+                    return include_search_return(
+                        current / path,
+                        actions.filename_relative.parent_path() / path);
                 }
 
                 // Search in each of the include path locations.
@@ -1592,12 +1605,13 @@ namespace quickbook
                     full /= path;
                     if (fs::exists(full))
                     {
-                        return full;
+                        return include_search_return(full, path);
                     }
                 }
             }
 
-            return path;
+            return include_search_return(path,
+                actions.filename_relative.parent_path() / path);
         }
     }
 
@@ -1606,14 +1620,14 @@ namespace quickbook
         if(!actions.output_pre(actions.out)) return;
 
         value_consumer values = import;
-        fs::path path = include_search(actions.filename.parent_path(),
-            check_path(values.consume(), actions));
+        include_search_return paths = include_search(
+            check_path(values.consume(), actions), actions);
         values.finish();
 
-        std::string ext = path.extension().generic_string();
+        std::string ext = paths.filename.extension().generic_string();
         std::vector<template_symbol> storage;
         actions.error_count +=
-            load_snippets(path.string(), storage, ext, actions.doc_id);
+            load_snippets(paths.filename.string(), storage, ext, actions.doc_id);
 
         BOOST_FOREACH(template_symbol& ts, storage)
         {
@@ -1634,14 +1648,15 @@ namespace quickbook
 
         value_consumer values = include;
         value include_doc_id = values.optional_consume(general_tags::include_id);
-        fs::path filein = include_search(actions.filename.parent_path(),
-            check_path(values.consume(), actions));
+        include_search_return filein = include_search(
+            check_path(values.consume(), actions), actions);
         values.finish();
 
         std::string doc_type, doc_id;
 
         // swap the filenames
-        std::swap(actions.filename, filein);
+        std::swap(actions.filename, filein.filename);
+        std::swap(actions.filename_relative, filein.filename_relative);
 
         // save the doc info strings and source mode
         if(qbk_version_n >= 106) {
@@ -1670,7 +1685,7 @@ namespace quickbook
 
         // update the __FILENAME__ macro
         *boost::spirit::classic::find(actions.macro, "__FILENAME__")
-            = detail::path_to_generic(actions.filename);
+            = detail::path_to_generic(actions.filename_relative);
 
         // save values
         actions.values.builder.save();
@@ -1681,7 +1696,8 @@ namespace quickbook
         // restore the values
         actions.values.builder.restore();
 
-        std::swap(actions.filename, filein);
+        std::swap(actions.filename, filein.filename);
+        std::swap(actions.filename_relative, filein.filename_relative);
 
         actions.doc_type.swap(doc_type);
         actions.doc_id.swap(doc_id);

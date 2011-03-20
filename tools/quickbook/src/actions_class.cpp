@@ -45,7 +45,8 @@ namespace quickbook
         , scoped_context(*this)
 
     // state
-        , filename(fs::absolute(filein_))
+        , filename(filein_)
+        , filename_relative(filein_.filename())
         , xinclude_base(xinclude_base_)
         , macro_change_depth(0)
         , macro()
@@ -90,16 +91,11 @@ namespace quickbook
         
         , output_pre(*this)
     {
-        // turn off __FILENAME__ macro on debug mode = true
-        std::string filename_str = debug_mode ?
-            std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") :
-            detail::path_to_generic(filename);
-
         // add the predefined macros
         macro.add
             ("__DATE__", std::string(quickbook_get_date))
             ("__TIME__", std::string(quickbook_get_time))
-            ("__FILENAME__", filename_str)
+            ("__FILENAME__", detail::path_to_generic(filename_relative))
         ;
         
         boost::scoped_ptr<quickbook_grammar> g(
