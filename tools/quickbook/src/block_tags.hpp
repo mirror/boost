@@ -23,7 +23,7 @@ namespace quickbook
         (variable_list)(table)
         (xinclude)(import)(include)
         (paragraph)
-        (list)
+        (list)(ordered_list)(itemized_list)
     )
 
     QUICKBOOK_VALUE_TAGS(table_tags, 0x250,

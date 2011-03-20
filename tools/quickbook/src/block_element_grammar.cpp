@@ -29,7 +29,7 @@ namespace quickbook
         cl::rule<scanner>
                         heading, inner_block, inner_phrase, def_macro,
                         table, table_row, variablelist,
-                        varlistentry, varlistterm, cell,
+                        varlistentry, varlistterm, list, cell,
                         preformatted, begin_section, end_section,
                         xinclude, include,
                         template_, template_id, template_formal_arg,
@@ -231,6 +231,13 @@ namespace quickbook
                 | cl::eps_p                     [actions.error]
             )
             ;
+
+        elements.add
+            ("ordered_list", element_info(element_info::nested_block, &local.list, block_tags::ordered_list, 106))
+            ("itemized_list", element_info(element_info::nested_block, &local.list, block_tags::itemized_list, 106))
+            ;
+
+        local.list = *local.cell;
 
         local.cell =
                 space

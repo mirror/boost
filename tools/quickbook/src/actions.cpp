@@ -52,6 +52,7 @@ namespace quickbook
     }
 
     void list_action(quickbook::actions&, value);
+    void explicit_list_action(quickbook::actions&, value);
     void header_action(quickbook::actions&, value);
     void begin_section_action(quickbook::actions&, value);
     void end_section_action(quickbook::actions&, value, file_position);
@@ -80,6 +81,9 @@ namespace quickbook
         {
         case block_tags::list:
             return list_action(actions, v);
+        case block_tags::ordered_list:
+        case block_tags::itemized_list:
+            return explicit_list_action(actions, v);
         case block_tags::generic_heading:
         case block_tags::heading1:
         case block_tags::heading2:
@@ -447,6 +451,23 @@ namespace quickbook
             actions.out << "</simpara></listitem>";
             actions.out << ((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
         }
+    }
+
+    void explicit_list_action(quickbook::actions& actions, value list)
+    {
+        if(!actions.output_pre(actions.out)) return;
+        detail::markup markup = detail::markups[list.get_tag()];
+
+        actions.out << markup.pre;
+
+        BOOST_FOREACH(value item, list)
+        {
+            actions.out << "<listitem>";
+            actions.out << item.get_boostbook();
+            actions.out << "</listitem>";
+        }
+
+        actions.out << markup.post;
     }
 
     // TODO: No need to check suppress since this is only used in the syntax

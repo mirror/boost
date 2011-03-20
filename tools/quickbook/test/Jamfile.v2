@@ -60,6 +60,8 @@ test-suite quickbook.test :
     [ quickbook-test xml-escape_1_2 ]
     [ quickbook-test xml-escape_1_5 ]
     [ quickbook-test blocks ]
+    [ quickbook-test elements_1_5 ]
+    [ quickbook-test elements_1_6 ]
     [ quickbook-test newline ]
     [ quickbook-test anchor ]
     [ quickbook-test command_line_macro : : : <quickbook-test-define>__macro__=*bold* ]

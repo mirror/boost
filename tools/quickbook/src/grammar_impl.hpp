@@ -43,12 +43,14 @@ namespace quickbook
         element_info(
                 type_enum t,
                 cl::rule<scanner>* r,
-                value::tag_type tag = value::default_tag)
-            : type(t), rule(r), tag(tag) {}
+                value::tag_type tag = value::default_tag,
+                unsigned int v = 0)
+            : type(t), rule(r), tag(tag), qbk_version(v) {}
 
         type_enum type;
         cl::rule<scanner>* rule;
         value::tag_type tag;
+        unsigned int qbk_version;
     };
 
     struct quickbook_grammar::impl

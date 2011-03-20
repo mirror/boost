@@ -108,6 +108,8 @@ namespace quickbook
                 { block_tags::important, important_pre, important_post },
                 { block_tags::note, note_pre, note_post },
                 { block_tags::tip, tip_pre, tip_post },
+                { block_tags::ordered_list, "<orderedlist>", "</orderedlist>" },
+                { block_tags::itemized_list, "<itemizedlist>", "</itemizedlist>" },
                 { phrase_tags::url, url_pre_, url_post_ },
                 { phrase_tags::link, link_pre_, link_post_ },
                 { phrase_tags::funcref, funcref_pre_, funcref_post_ },

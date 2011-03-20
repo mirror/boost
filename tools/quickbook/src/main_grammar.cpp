@@ -35,7 +35,8 @@ namespace quickbook
 
             bool start()
             {
-                if (!(l.info.type & l.actions_.context))
+                if (!(l.info.type & l.actions_.context) ||
+                        qbk_version_n < l.info.qbk_version)
                     return false;
 
                 info_ = l.info;
