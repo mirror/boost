@@ -106,21 +106,28 @@ extern "C" void* __cdecl _InterlockedExchangePointer( void* volatile *, void* );
 
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) || defined( __CYGWIN__ )
 
+#if defined(__MINGW64__)
+#define BOOST_INTERLOCKED_IMPORT
+#else
+#define BOOST_INTERLOCKED_IMPORT __declspec(dllimport)
+#endif
+
+
 namespace boost
 {
 
 namespace detail
 {
 
-extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement( long volatile * );
-extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement( long volatile * );
-extern "C" __declspec(dllimport) long __stdcall InterlockedCompareExchange( long volatile *, long, long );
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchange( long volatile *, long );
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchangeAdd( long volatile *, long );
+extern "C"BOOST_INTERLOCKED_IMPORT long __stdcall InterlockedIncrement( long volatile * );
+extern "C"BOOST_INTERLOCKED_IMPORT long __stdcall InterlockedDecrement( long volatile * );
+extern "C"BOOST_INTERLOCKED_IMPORT long __stdcall InterlockedCompareExchange( long volatile *, long, long );
+extern "C"BOOST_INTERLOCKED_IMPORT long __stdcall InterlockedExchange( long volatile *, long );
+extern "C"BOOST_INTERLOCKED_IMPORT long __stdcall InterlockedExchangeAdd( long volatile *, long );
 
 # if defined(_M_IA64) || defined(_M_AMD64)
-extern "C" __declspec(dllimport) void* __stdcall InterlockedCompareExchangePointer( void* volatile *, void*, void* );
-extern "C" __declspec(dllimport) void* __stdcall InterlockedExchangePointer( void* volatile *, void* );
+extern "C"BOOST_INTERLOCKED_IMPORT void* __stdcall InterlockedCompareExchangePointer( void* volatile *, void*, void* );
+extern "C"BOOST_INTERLOCKED_IMPORT void* __stdcall InterlockedExchangePointer( void* volatile *, void* );
 # endif
 
 } // namespace detail
