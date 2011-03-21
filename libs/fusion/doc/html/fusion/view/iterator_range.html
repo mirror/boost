@@ -27,7 +27,7 @@
 <a name="fusion.view.iterator_range"></a><a class="link" href="iterator_range.html" title="iterator_range">iterator_range</a>
 </h3></div></div></div>
 <a name="fusion.view.iterator_range.description"></a><h5>
-<a name="id912718"></a>
+<a name="id939635"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.description">Description</a>
       </h5>
 <p>
@@ -35,21 +35,21 @@
         sub-range of its underlying sequence delimited by a pair of iterators.
       </p>
 <a name="fusion.view.iterator_range.header"></a><h5>
-<a name="id912742"></a>
+<a name="id939659"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">iterator_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">iterator_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.iterator_range.synopsis"></a><h5>
-<a name="id912850"></a>
+<a name="id939767"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Last</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">iterator_range</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.iterator_range.template_parameters"></a><h5>
-<a name="id912915"></a>
+<a name="id939832"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -88,6 +88,8 @@
                 </p>
               </td>
 <td>
+                <p>
+                </p>
               </td>
 </tr>
 <tr>
@@ -102,30 +104,32 @@
                 </p>
               </td>
 <td>
+                <p>
+                </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.iterator_range.model_of"></a><h5>
-<a name="id913037"></a>
+<a name="id939961"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-            <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>,
-            <a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
-            Sequence</a> or <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
-            Access Sequence</a> depending on the traversal characteristics (see
-            <a class="link" href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence Traversal
-            Concept</a>) of its underlying sequence.
-          </li>
+<a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>,
+          <a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+          Sequence</a> or <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
+          Access Sequence</a> depending on the traversal characteristics (see
+          <a class="link" href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence Traversal Concept</a>)
+          of its underlying sequence.
+        </li>
 <li class="listitem">
-            <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-            Sequence</a> if <code class="computeroutput"><span class="identifier">First</span></code>
-            and <code class="computeroutput"><span class="identifier">Last</span></code> implement the
-            <a class="link" href="../iterator/concepts/associative_iterator.html" title="Associative Iterator">Associative
-            Iterator</a> model.
-          </li>
+<a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+          Sequence</a> if <code class="computeroutput"><span class="identifier">First</span></code>
+          and <code class="computeroutput"><span class="identifier">Last</span></code> implement the
+          <a class="link" href="../iterator/concepts/associative_iterator.html" title="Associative Iterator">Associative
+          Iterator</a> model.
+        </li>
 </ul></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
@@ -149,7 +153,7 @@
 </dl>
 </div>
 <a name="fusion.view.iterator_range.expression_semantics"></a><h5>
-<a name="id913233"></a>
+<a name="id944417"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.expression_semantics">Expression
         Semantics</a>
       </h5>
@@ -223,7 +227,7 @@
 </tbody>
 </table></div>
 <a name="fusion.view.iterator_range.example"></a><h5>
-<a name="id913472"></a>
+<a name="id944656"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">char</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">s</span> <span class="special">=</span> <span class="string">"Ruby"</span><span class="special">;</span>

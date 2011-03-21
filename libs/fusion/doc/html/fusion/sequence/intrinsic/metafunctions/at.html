@@ -27,14 +27,16 @@
 <a name="fusion.sequence.intrinsic.metafunctions.at"></a><a class="link" href="at.html" title="at">at</a>
 </h5></div></div></div>
 <a name="fusion.sequence.intrinsic.metafunctions.at.description"></a><h6>
-<a name="id854492"></a>
+<a name="id885196"></a>
             <a class="link" href="at.html#fusion.sequence.intrinsic.metafunctions.at.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a class="link" href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><sup>[<a name="id854513" href="#ftn.id854513" class="footnote">6</a>]</sup>.
+            Returns the result type of <a class="link" href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>
+            <sup>[<a name="id885218" href="#ftn.id885218" class="footnote">6</a>]</sup>
+            .
           </p>
 <a name="fusion.sequence.intrinsic.metafunctions.at.synopsis"></a><h6>
-<a name="id854584"></a>
+<a name="id885288"></a>
             <a class="link" href="at.html#fusion.sequence.intrinsic.metafunctions.at.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
@@ -46,7 +48,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id854668"></a><p class="title"><b>Table&#160;1.29.&#160;Parameters</b></p>
+<a name="id885372"></a><p class="title"><b>Table&#160;1.29.&#160;Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -79,8 +81,8 @@
                   </td>
 <td>
                     <p>
-                      A model of <a class="link" href="../../concepts/forward_sequence.html" title="Forward Sequence">Forward
-                      Sequence</a>
+                      A model of <a class="link" href="../../concepts/random_access_sequence.html" title="Random Access Sequence">Random
+                      Access Sequence</a>
                     </p>
                   </td>
 <td>
@@ -111,7 +113,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.sequence.intrinsic.metafunctions.at.expression_semantics"></a><h6>
-<a name="id854796"></a>
+<a name="id885500"></a>
             <a class="link" href="at.html#fusion.sequence.intrinsic.metafunctions.at.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -125,14 +127,14 @@
             using <a class="link" href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> to access the <code class="computeroutput"><span class="identifier">N</span></code>th element of <code class="computeroutput"><span class="identifier">Seq</span></code>.
           </p>
 <a name="fusion.sequence.intrinsic.metafunctions.at.header"></a><h6>
-<a name="id854891"></a>
+<a name="id885595"></a>
             <a class="link" href="at.html#fusion.sequence.intrinsic.metafunctions.at.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">at</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">at</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequence.intrinsic.metafunctions.at.example"></a><h6>
-<a name="id855006"></a>
+<a name="id885710"></a>
             <a class="link" href="at.html#fusion.sequence.intrinsic.metafunctions.at.example">Example</a>
           </h6>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">float</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
@@ -140,12 +142,12 @@
 </pre>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id854513" href="#id854513" class="para">6</a>] </sup>
-              <a class="link" href="at.html" title="at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></code></a> reflects the actual return
-              type of the function <a class="link" href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>. <a class="link" href="../../../sequence.html" title="Sequence">Sequence</a>(s)
-              typically return references to its elements via the <a class="link" href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> function. If you want to
-              get the actual element type, use <a class="link" href="value_at.html" title="value_at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></code></a>
-            </p></div>
+<div class="footnote"><p><sup>[<a name="ftn.id885218" href="#id885218" class="para">6</a>] </sup>
+                <a class="link" href="at.html" title="at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></code></a> reflects the actual return
+                type of the function <a class="link" href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>. <a class="link" href="../../../sequence.html" title="Sequence">Sequence</a>(s)
+                typically return references to its elements via the <a class="link" href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> function. If you want
+                to get the actual element type, use <a class="link" href="value_at.html" title="value_at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></code></a>
+              </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

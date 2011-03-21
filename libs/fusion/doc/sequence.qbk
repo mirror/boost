@@ -845,7 +845,7 @@ Performs an element by element swap of the elements in 2 sequences.
 
 [table
     [[Parameters]    [Requirement]                           [Description]]
-    [[`seq1`, `seq2`]        [Models of __forward_sequence__][The sequences whos elements we wish to swap.]]
+    [[`seq1`, `seq2`][Models of __forward_sequence__][The sequences whos elements we wish to swap.]]
 ]
 
 [heading Expression Semantics]
@@ -1118,7 +1118,7 @@ the actual element type, use __result_of_value_at__].
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`N`][An __mpl_integral_constant__][Index of element]]
 ]
 
@@ -1160,7 +1160,7 @@ get the actual element type, use __result_of_value_at_c__].
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`M`][Positive integer index][Index of element]]
 ]
 
@@ -1199,7 +1199,7 @@ Returns the actual type at a given index from the __sequence__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`N`][An __mpl_integral_constant__][Index of element]]
 ]
 
@@ -1238,7 +1238,7 @@ Returns the actual type at a given index from the __sequence__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`M`][Positive integer index][Index of element]]
 ]
 
@@ -1276,7 +1276,7 @@ Returns the result type of __has_key__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __associative_sequence__][Argument sequence]]
     [[`Key`][Any type][Key type]]
 ]
 
@@ -1319,7 +1319,7 @@ you want to get the actual element type, use __result_of_value_at_key__].
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __associative_sequence__][Argument sequence]]
     [[`Key`][Any type][Key type]]
 ]
 
@@ -1357,7 +1357,7 @@ Returns the actual element type associated with a Key from the __sequence__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __associative_sequence__][Argument sequence]]
     [[`Key`][Any type][Key type]]
 ]
 
@@ -1373,7 +1373,7 @@ Returns the actual element type associated with a Key from the __sequence__.
 
     #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
     #include <boost/fusion/include/value_at_key.hpp>
-    
+
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
     BOOST_MPL_ASSERT((boost::is_same<__result_of_at_key__<mymap, int>::type, char>));

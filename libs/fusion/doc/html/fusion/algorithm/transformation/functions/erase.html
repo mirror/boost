@@ -27,7 +27,7 @@
 <a name="fusion.algorithm.transformation.functions.erase"></a><a class="link" href="erase.html" title="erase">erase</a>
 </h5></div></div></div>
 <a name="fusion.algorithm.transformation.functions.erase.description"></a><h6>
-<a name="id988052"></a>
+<a name="id1021163"></a>
             <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.description">Description</a>
           </h6>
 <p>
@@ -35,7 +35,7 @@
             those at a specified iterator, or between two iterators.
           </p>
 <a name="fusion.algorithm.transformation.functions.erase.synposis"></a><h6>
-<a name="id988074"></a>
+<a name="id1021184"></a>
             <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.synposis">Synposis</a>
           </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
@@ -54,7 +54,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">First</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it1</span><span class="special">,</span> <span class="identifier">Last</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it2</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id988406"></a><p class="title"><b>Table&#160;1.73.&#160;Parameters</b></p>
+<a name="id1021517"></a><p class="title"><b>Table&#160;1.73.&#160;Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -138,7 +138,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.algorithm.transformation.functions.erase.expression_semantics"></a><h6>
-<a name="id989954"></a>
+<a name="id1021699"></a>
             <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -149,15 +149,15 @@
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-                A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a>.
-              </li>
+              A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+              Sequence</a>.
+            </li>
 <li class="listitem">
-                A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-                Sequence</a> if <code class="computeroutput"><span class="identifier">seq</span></code>
-                implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-                Sequence</a> model.
-              </li>
+              A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> if <code class="computeroutput"><span class="identifier">seq</span></code>
+              implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> model.
+            </li>
 </ul></div>
 <p>
             <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, containing
@@ -171,15 +171,15 @@
           </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-                A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a>.
-              </li>
+              A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+              Sequence</a>.
+            </li>
 <li class="listitem">
-                A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-                Sequence</a> if <code class="computeroutput"><span class="identifier">seq</span></code>
-                implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-                Sequence</a> model.
-              </li>
+              A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> if <code class="computeroutput"><span class="identifier">seq</span></code>
+              implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> model.
+            </li>
 </ul></div>
 <p>
             <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, with
@@ -187,21 +187,21 @@
             in their original order, except those in the range [<code class="computeroutput"><span class="identifier">first</span></code>,<code class="computeroutput"><span class="identifier">last</span></code>).
           </p>
 <a name="fusion.algorithm.transformation.functions.erase.complexity"></a><h6>
-<a name="id990193"></a>
+<a name="id1021924"></a>
             <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithm.transformation.functions.erase.header"></a><h6>
-<a name="id990212"></a>
+<a name="id1021943"></a>
             <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">erase</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">erase</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.transformation.functions.erase.example"></a><h6>
-<a name="id990327"></a>
+<a name="id1022058"></a>
             <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.example">Example</a>
           </h6>
 <pre class="programlisting"><span class="keyword">const</span> <a class="link" href="../../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2.0</span><span class="special">,</span> <span class="char">'c'</span><span class="special">);</span>
