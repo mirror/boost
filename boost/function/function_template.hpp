@@ -514,7 +514,7 @@ namespace boost {
           if (f) {
             // should be a reinterpret cast, but some compilers insist
             // on giving cv-qualifiers to free functions
-            functor.func_ptr = (void (*)())(f);
+            functor.func_ptr = reinterpret_cast<void (*)()>(f);
             return true;
           } else {
             return false;
@@ -536,7 +536,7 @@ namespace boost {
           // objects, so we invoke through mem_fn() but we retain the
           // right target_type() values.
           if (f) {
-            this->assign_to(mem_fn(f), functor);
+            this->assign_to(boost::mem_fn(f), functor);
             return true;
           } else {
             return false;
@@ -549,7 +549,7 @@ namespace boost {
           // objects, so we invoke through mem_fn() but we retain the
           // right target_type() values.
           if (f) {
-            this->assign_to_a(mem_fn(f), functor, a);
+            this->assign_to_a(boost::mem_fn(f), functor, a);
             return true;
           } else {
             return false;
@@ -563,7 +563,7 @@ namespace boost {
         void 
         assign_functor(FunctionObj f, function_buffer& functor, mpl::true_)
         {
-          new ((void*)&functor.data) FunctionObj(f);
+          new (reinterpret_cast<void*>(&functor.data)) FunctionObj(f);
         }
         template<typename FunctionObj,typename Allocator>
         void 
@@ -625,7 +625,7 @@ namespace boost {
         assign_to(const reference_wrapper<FunctionObj>& f, 
                   function_buffer& functor, function_obj_ref_tag)
         {
-          functor.obj_ref.obj_ptr = (void *)f.get_pointer();
+          functor.obj_ref.obj_ptr = (void *)(f.get_pointer());
           functor.obj_ref.is_const_qualified = is_const<FunctionObj>::value;
           functor.obj_ref.is_volatile_qualified = is_volatile<FunctionObj>::value;
           return true;
@@ -677,7 +677,7 @@ namespace boost {
 
     vtable_type* get_vtable() const {
       return reinterpret_cast<vtable_type*>(
-               reinterpret_cast<std::size_t>(vtable) & ~(std::size_t)0x01);
+               reinterpret_cast<std::size_t>(vtable) & ~static_cast<size_t>(0x01));
     }
 
     struct clear_type {};
@@ -751,9 +751,6 @@ namespace boost {
 
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    // MSVC 6.0 and prior require all definitions to be inline, but
-    // these definitions can become very costly.
     result_type operator()(BOOST_FUNCTION_PARMS) const
     {
       if (this->empty())
@@ -762,9 +759,6 @@ namespace boost {
       return get_vtable()->invoker
                (this->functor BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
     }
-#else
-    result_type operator()(BOOST_FUNCTION_PARMS) const;
-#endif
 
     // The distinction between when to use BOOST_FUNCTION_FUNCTION and
     // when to use self_type is obnoxious. MSVC cannot handle self_type as
@@ -917,7 +911,7 @@ namespace boost {
         if (boost::has_trivial_copy_constructor<Functor>::value &&
             boost::has_trivial_destructor<Functor>::value &&
             detail::function::function_allows_small_object_optimization<Functor>::value)
-          value |= (std::size_t)0x01;
+          value |= static_cast<size_t>(0x01);
         vtable = reinterpret_cast<detail::function::vtable_base *>(value);
       } else 
         vtable = 0;
@@ -951,7 +945,7 @@ namespace boost {
         if (boost::has_trivial_copy_constructor<Functor>::value &&
             boost::has_trivial_destructor<Functor>::value &&
             detail::function::function_allows_small_object_optimization<Functor>::value)
-          value |= (std::size_t)0x01;
+          value |= static_cast<std::size_t>(0x01);
         vtable = reinterpret_cast<detail::function::vtable_base *>(value);
       } else 
         vtable = 0;
@@ -997,22 +991,6 @@ namespace boost {
   {
     f1.swap(f2);
   }
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-  template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
-  typename BOOST_FUNCTION_FUNCTION<
-      R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS>::result_type
-  inline 
-  BOOST_FUNCTION_FUNCTION<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS>
-  ::operator()(BOOST_FUNCTION_PARMS) const
-  {
-    if (this->empty())
-      boost::throw_exception(bad_function_call());
-
-    return get_vtable()->invoker
-             (this->functor BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
-  }
-#endif
 
 // Poison comparisons between boost::function objects of the same type.
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>

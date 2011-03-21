@@ -8,6 +8,7 @@
 # For more information, see http://www.boost.org/
 
 project
+    : requirements <toolset>msvc:<asynch-exceptions>on
     : source-location $(BOOST_ROOT)
     ;
 
