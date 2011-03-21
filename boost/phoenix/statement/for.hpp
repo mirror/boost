@@ -28,18 +28,20 @@ namespace boost { namespace phoenix
         typedef void result_type;
 
         template <
-            typename Context
-          , typename Init
+            typename Init
           , typename Cond
           , typename Step
-          , typename Do>
+          , typename Do
+          , typename Context
+        >
         result_type
         operator()(
-            Context const& ctx
-          , Init const& init
+            Init const& init
           , Cond const& cond
           , Step const& step
-          , Do const& do_) const
+          , Do const& do_
+          , Context & ctx
+        ) const
         {
             for(eval(init, ctx); eval(cond, ctx); eval(step, ctx))
                 eval(do_, ctx);
@@ -67,9 +69,9 @@ namespace boost { namespace phoenix
                         make(init, cond, step, do_);
         }
 
-        Init const& init;
-        Cond const& cond;
-        Step const& step;
+        Init init;
+        Cond cond;
+        Step step;
     };
 
     template <typename Init, typename Cond, typename Step>

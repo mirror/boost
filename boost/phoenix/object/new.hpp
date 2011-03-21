@@ -25,24 +25,21 @@ BOOST_PHOENIX_DEFINE_EXPRESSION_VARARG(
 
 namespace boost { namespace phoenix
 {
-
-    //template <typename T>
     struct new_eval
     {
         template <typename Sig>
         struct result;
 
-        template <typename This, typename Context, typename A0>
-        struct result<This(Context, A0)>
+        template <typename This, typename A0, typename Context>
+        struct result<This(A0, Context)>
         {
             typedef typename detail::result_of::target<A0> target_type;
-            typedef typename target_type::type  construct_type;
             typedef typename target_type::type * type;
         };
 
-        template <typename Context, typename Target>
+        template <typename Target, typename Context>
         typename detail::result_of::target<Target>::type *
-        operator()(Context const&, Target) const
+        operator()(Target, Context &) const
         {
             return new typename detail::result_of::target<Target>::type;
         }

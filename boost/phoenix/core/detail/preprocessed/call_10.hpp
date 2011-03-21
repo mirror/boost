@@ -26,7 +26,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0)
+                    Fun(A0, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -35,8 +35,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -57,7 +60,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1)
+                    Fun(A0 , A1, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -66,8 +69,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -88,7 +94,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2)
+                    Fun(A0 , A1 , A2, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -97,8 +103,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -119,7 +128,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2; typedef typename proto::result_of::child_c<Expr, 3>::type A3;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2 , A3)
+                    Fun(A0 , A1 , A2 , A3, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -128,8 +137,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -150,7 +162,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2; typedef typename proto::result_of::child_c<Expr, 3>::type A3; typedef typename proto::result_of::child_c<Expr, 4>::type A4;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2 , A3 , A4)
+                    Fun(A0 , A1 , A2 , A3 , A4, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -159,8 +171,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -181,7 +196,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2; typedef typename proto::result_of::child_c<Expr, 3>::type A3; typedef typename proto::result_of::child_c<Expr, 4>::type A4; typedef typename proto::result_of::child_c<Expr, 5>::type A5;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2 , A3 , A4 , A5)
+                    Fun(A0 , A1 , A2 , A3 , A4 , A5, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -190,8 +205,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -212,7 +230,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2; typedef typename proto::result_of::child_c<Expr, 3>::type A3; typedef typename proto::result_of::child_c<Expr, 4>::type A4; typedef typename proto::result_of::child_c<Expr, 5>::type A5; typedef typename proto::result_of::child_c<Expr, 6>::type A6;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2 , A3 , A4 , A5 , A6)
+                    Fun(A0 , A1 , A2 , A3 , A4 , A5 , A6, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -221,8 +239,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -243,7 +264,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2; typedef typename proto::result_of::child_c<Expr, 3>::type A3; typedef typename proto::result_of::child_c<Expr, 4>::type A4; typedef typename proto::result_of::child_c<Expr, 5>::type A5; typedef typename proto::result_of::child_c<Expr, 6>::type A6; typedef typename proto::result_of::child_c<Expr, 7>::type A7;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7)
+                    Fun(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -252,8 +273,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -274,7 +298,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2; typedef typename proto::result_of::child_c<Expr, 3>::type A3; typedef typename proto::result_of::child_c<Expr, 4>::type A4; typedef typename proto::result_of::child_c<Expr, 5>::type A5; typedef typename proto::result_of::child_c<Expr, 6>::type A6; typedef typename proto::result_of::child_c<Expr, 7>::type A7; typedef typename proto::result_of::child_c<Expr, 8>::type A8;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8)
+                    Fun(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -283,8 +307,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     
@@ -305,7 +332,7 @@
             typedef typename proto::result_of::child_c<Expr, 0>::type A0; typedef typename proto::result_of::child_c<Expr, 1>::type A1; typedef typename proto::result_of::child_c<Expr, 2>::type A2; typedef typename proto::result_of::child_c<Expr, 3>::type A3; typedef typename proto::result_of::child_c<Expr, 4>::type A4; typedef typename proto::result_of::child_c<Expr, 5>::type A5; typedef typename proto::result_of::child_c<Expr, 6>::type A6; typedef typename proto::result_of::child_c<Expr, 7>::type A7; typedef typename proto::result_of::child_c<Expr, 8>::type A8; typedef typename proto::result_of::child_c<Expr, 9>::type A9;
             typedef
                 typename boost::result_of<
-                    Fun(context_type, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9)
+                    Fun(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9, context_type)
                 >::type
                 result_type;
             result_type operator()(
@@ -314,8 +341,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    , proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e));
+                return
+                    Fun()(
+                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
     }

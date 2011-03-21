@@ -28,15 +28,14 @@ namespace boost { namespace phoenix
         template <typename Sig>
         struct result;
 
-        template <typename This, typename Context, typename Target, typename Source>
-        struct result<This(Context, Target const &, Source const&)>
+        template <typename This, typename Target, typename Source, typename Context>
+        struct result<This(Target const &, Source const&, Context)>
             : detail::result_of::target<Target>
-        {
-        };
+        {};
 
-        template <typename Context, typename Target, typename Source>
+        template <typename Target, typename Source, typename Context>
         typename detail::result_of::target<Target>::type
-        operator()(Context const& ctx, Target, Source const& u) const
+        operator()(Target, Source const& u, Context const& ctx) const
         {
             return static_cast<
                     typename detail::result_of::target<Target>::type

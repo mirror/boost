@@ -118,12 +118,14 @@ namespace boost { namespace phoenix
         template <typename Sig>
         struct result;
 
-        template <typename This, typename Context, typename N, typename Scope>
-        struct result<This(Context, N, Scope)>
+        template <typename This, typename N, typename Scope, typename Context>
+        struct result<This(N, Scope, Context)>
         {
             typedef
                 typename boost::remove_pointer<
-                    typename proto::detail::uncvref<typename proto::result_of::value<Scope>::type>::type
+                    typename proto::detail::uncvref<
+                        typename proto::result_of::value<Scope>::type
+                    >::type
                 >::type
                 scope_type;
             typedef 
@@ -133,17 +135,26 @@ namespace boost { namespace phoenix
             typedef
                 typename fusion::result_of::at_c<
                     tuple_type
-                  , proto::detail::uncvref<typename proto::result_of::value<N>::type>::type::value
+                  , proto::detail::uncvref<
+                        typename proto::result_of::value<N>::type
+                    >::type::value
                 >::type
                 type;
 
         };
 
-        template <typename Context, typename N, typename Scope>
-        typename result<dynamic_member_eval(Context, N, Scope)>::type
-        operator()(Context const&, N, Scope s) const
+        template <typename N, typename Scope, typename Context>
+        typename result<dynamic_member_eval(N, Scope, Context)>::type
+        operator()(N, Scope s, Context &) const
         {
-            return fusion::at_c<proto::detail::uncvref<typename proto::result_of::value<N>::type>::type::value>(proto::value(s)->frame->data());
+            return
+                fusion::at_c<
+                    proto::detail::uncvref<
+                        typename proto::result_of::value<N>::type
+                    >::type::value
+                >(
+                    proto::value(s)->frame->data()
+                );
         }
     };
 

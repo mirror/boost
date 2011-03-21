@@ -52,7 +52,7 @@ main()
         BOOST_TEST((arg1[3])(v) == "d");
 
         map<string, int> m;
-        (arg1[std::string("Kimpo")] = arg2)(m, x);
+        (arg1["Kimpo"] = arg2)(m, x);
         BOOST_TEST(m["Kimpo"] == x);
     }
 

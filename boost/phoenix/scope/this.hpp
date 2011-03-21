@@ -64,13 +64,13 @@ namespace boost { namespace phoenix {
         template <typename Sig>
         struct result;
 
-        template <typename This, typename Context, typename T, typename T0>
-        struct result<This(Context, T, T0)>
-            : result<This(Context const &, T const &, T0 const &)>
+        template <typename This, typename T, typename T0, typename Context>
+        struct result<This(T, T0, Context)>
+            : result<This(T const &, T0 const &, Context const &)>
         {};
 
-        template <typename This, typename Context, typename T, typename T0>
-        struct result<This(Context &, T &, T0 &)>
+        template <typename This, typename T, typename T0, typename Context>
+        struct result<This(T &, T0 &, Context &)>
         {
             typedef
                 typename evaluator::impl<T &, Context &, int>::result_type
@@ -89,13 +89,13 @@ namespace boost { namespace phoenix {
                 type;
         };
 
-        template <typename This, typename Context, typename T, typename T0, typename T1>
-        struct result<This(Context, T, T0, T1)>
-            : result<This(Context const &, T const &, T0 const &, T1 const &)>
+        template <typename This, typename T, typename T0, typename T1, typename Context>
+        struct result<This(T, T0, T1, Context)>
+            : result<This(T const &, T0 const &, T1 const &, Context const &)>
         {};
 
-        template <typename This, typename Context, typename T, typename T0, typename T1>
-        struct result<This(Context &, T &, T0 &, T1 &)>
+        template <typename This, typename T, typename T0, typename T1, typename Context>
+        struct result<This(T &, T0 &, T1 &, Context &)>
         {
             typedef
                 typename evaluator::impl<T &, Context &, int>::result_type
@@ -119,9 +119,9 @@ namespace boost { namespace phoenix {
         };
 
 
-        template <typename Context, typename This, typename T0>
-        typename result<this_function_eval(Context &, This const&, T0 const&)>::type
-        operator()(Context & ctx, This const& _this, T0 const & t0) const
+        template <typename This, typename T0, typename Context>
+        typename result<this_function_eval(This const&, T0 const&, Context &)>::type
+        operator()(This const& _this, T0 const & t0, Context & ctx) const
         {
             typedef typename evaluator::impl<This const&, Context &, int>::result_type this_type;
             typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
@@ -132,9 +132,9 @@ namespace boost { namespace phoenix {
             return eval(_this, ctx)(eval(t0, ctx));
         }
 
-        template <typename Context, typename This, typename T0, typename T1>
-        typename result<this_function_eval(Context &, This const&, T0 const&, T1 const&)>::type
-        operator()(Context & ctx, This const& _this, T0 const & t0, T1 const & t1) const
+        template <typename This, typename T0, typename T1, typename Context>
+        typename result<this_function_eval(This const&, T0 const&, T1 const&, Context)>::type
+        operator()(This const& _this, T0 const & t0, T1 const & t1, Context & ctx) const
         {
             typedef typename evaluator::impl<This const&, Context &, int>::result_type this_type;
             typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
@@ -150,11 +150,11 @@ namespace boost { namespace phoenix {
         : proto::or_<
             proto::when<
                 expression::this_function<proto::_, proto::_>
-              , this_function_eval(_context, proto::_child_c<0>, proto::_child_c<1>)
+              , this_function_eval(proto::_child_c<0>, proto::_child_c<1>, _context)
             >
           , proto::when<
                 expression::this_function<proto::_, proto::_>
-              , this_function_eval(_context, proto::_child_c<0>, proto::_child_c<1>, proto::_child_c<2>)
+              , this_function_eval(proto::_child_c<0>, proto::_child_c<1>, proto::_child_c<2>, _context)
             >
         >
     {};

@@ -20,17 +20,20 @@
     boost::phoenix::expression::function<FUNC>::type const                      \
     inline NAME()                                                               \
     {                                                                           \
-        return boost::phoenix::expression::function<FUNC>::make(FUNC());                        \
+        return boost::phoenix::expression::function<FUNC>::make(FUNC());        \
     }                                                                           \
 /**/
 
 
 #define BOOST_PHOENIX_ADAPT_FUNCTION(NAME, FUNC, N)                             \
     template <BOOST_PHOENIX_typename_A(N)>                                      \
-    typename boost::phoenix::expression::function<FUNC, BOOST_PHOENIX_A(N)>::type const         \
+    typename                                                                    \
+        boost::phoenix::expression::function<                                   \
+            FUNC                                                                \
+          , BOOST_PHOENIX_A(N)>::type const                                     \
     inline NAME(BOOST_PHOENIX_A_const_ref_a(N))                                 \
     {                                                                           \
-        return boost::phoenix::expression::                                                     \
+        return boost::phoenix::expression::                                     \
             function<FUNC, BOOST_PHOENIX_A(N)>::                                \
                 make(FUNC(), BOOST_PHOENIX_a(N));                               \
     }                                                                           \

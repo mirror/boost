@@ -121,20 +121,21 @@ namespace boost { namespace phoenix
 
 #else // BOOST_PHOENIX_IS_ITERATING
 
-        template <typename This, typename Context, BOOST_PHOENIX_typename_A>
-        struct result<This(Context, BOOST_PHOENIX_A)>
-            : result<This(Context, BOOST_PHOENIX_A_const_ref)>
+        template <typename This, BOOST_PHOENIX_typename_A, typename Context>
+        struct result<This(BOOST_PHOENIX_A, Context)>
+            : result<This(BOOST_PHOENIX_A_const_ref, Context)>
         {};
 
-        template <typename This, typename Context, BOOST_PHOENIX_typename_A>
-        struct result<This(Context, BOOST_PHOENIX_A_ref)>
+        template <typename This, BOOST_PHOENIX_typename_A, typename Context>
+        struct result<This(BOOST_PHOENIX_A_ref, Context)>
             : result_of::mem_fun_ptr_eval<Context, BOOST_PHOENIX_A>
         {};
 
-        template <typename Context, BOOST_PHOENIX_typename_A>
+        template <BOOST_PHOENIX_typename_A, typename Context>
         typename result_of::mem_fun_ptr_eval<Context, BOOST_PHOENIX_A>::type
         operator()(
-            Context const & ctx, BOOST_PHOENIX_A_const_ref_a
+            BOOST_PHOENIX_A_const_ref_a
+          , Context & ctx
         ) const
         {
             return

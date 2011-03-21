@@ -12,8 +12,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1>
-        struct result<This(Context, A0 , A1)>
+        template <typename This, typename A0 , typename A1, typename Context>
+        struct result<This(A0 , A1, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -23,17 +23,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1>
-        typename result<new_eval(Context const &, A0 const& , A1 const&)>::type
+        template <typename A0 , typename A1, typename Context>
+        typename result<new_eval(A0 const& , A1 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const&)
+                    new_eval(A0 const& , A1 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx)
                 );
@@ -45,8 +45,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2>
-        struct result<This(Context, A0 , A1 , A2)>
+        template <typename This, typename A0 , typename A1 , typename A2, typename Context>
+        struct result<This(A0 , A1 , A2, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -56,17 +56,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const&)>::type
+        template <typename A0 , typename A1 , typename A2, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const&)
+                    new_eval(A0 const& , A1 const& , A2 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx)
                 );
@@ -78,8 +78,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2 , typename A3>
-        struct result<This(Context, A0 , A1 , A2 , A3)>
+        template <typename This, typename A0 , typename A1 , typename A2 , typename A3, typename Context>
+        struct result<This(A0 , A1 , A2 , A3, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -89,17 +89,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2 , typename A3>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const&)>::type
+        template <typename A0 , typename A1 , typename A2 , typename A3, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const& , A3 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2 , A3 const& a3
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const&)
+                    new_eval(A0 const& , A1 const& , A2 const& , A3 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx)
                 );
@@ -111,8 +111,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
-        struct result<This(Context, A0 , A1 , A2 , A3 , A4)>
+        template <typename This, typename A0 , typename A1 , typename A2 , typename A3 , typename A4, typename Context>
+        struct result<This(A0 , A1 , A2 , A3 , A4, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -122,17 +122,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const&)>::type
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const&)
+                    new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx)
                 );
@@ -144,8 +144,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
-        struct result<This(Context, A0 , A1 , A2 , A3 , A4 , A5)>
+        template <typename This, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5, typename Context>
+        struct result<This(A0 , A1 , A2 , A3 , A4 , A5, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -155,17 +155,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const&)>::type
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const&)
+                    new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx)
                 );
@@ -177,8 +177,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
-        struct result<This(Context, A0 , A1 , A2 , A3 , A4 , A5 , A6)>
+        template <typename This, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6, typename Context>
+        struct result<This(A0 , A1 , A2 , A3 , A4 , A5 , A6, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -188,17 +188,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const&)>::type
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const&)
+                    new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx)
                 );
@@ -210,8 +210,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
-        struct result<This(Context, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7)>
+        template <typename This, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7, typename Context>
+        struct result<This(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -221,17 +221,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const&)>::type
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const&)
+                    new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx)
                 );
@@ -243,8 +243,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
-        struct result<This(Context, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8)>
+        template <typename This, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8, typename Context>
+        struct result<This(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -254,17 +254,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const&)>::type
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const&)
+                    new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx) , eval(a8, ctx)
                 );
@@ -276,8 +276,8 @@
     
     
     
-        template <typename This, typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
-        struct result<This(Context, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9)>
+        template <typename This, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9, typename Context>
+        struct result<This(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -287,17 +287,17 @@
             typedef typename target_type::type construct_type;
             typedef typename target_type::type * type;
         };
-        template <typename Context, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
-        typename result<new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const& , A9 const&)>::type
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9, typename Context>
+        typename result<new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const& , A9 const&, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9
+          , Context & ctx
         ) const
         {
             return
                 new typename result<
-                    new_eval(Context const &, A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const& , A9 const&)
+                    new_eval(A0 const& , A1 const& , A2 const& , A3 const& , A4 const& , A5 const& , A6 const& , A7 const& , A8 const& , A9 const&, Context &)
                     >::construct_type(
                         eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx) , eval(a8, ctx) , eval(a9, ctx)
                 );

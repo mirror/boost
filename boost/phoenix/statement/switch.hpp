@@ -126,9 +126,9 @@ namespace boost { namespace phoenix {
         {
         }
 
-        template <typename Context, typename Cond, typename Cases>
+        template <typename Cond, typename Cases, typename Context>
         result_type
-        operator()(Context & ctx, Cond const & cond, Cases const & cases) const
+        operator()(Cond const & cond, Cases const & cases, Context & ctx) const
         {
             this->evaluate(
                     ctx

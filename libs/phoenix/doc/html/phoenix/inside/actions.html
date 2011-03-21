@@ -91,7 +91,7 @@
         how the Phoenix AST will be traversed.
       </p>
 <a name="phoenix.inside.actions.writing_an_action"></a><h5>
-<a name="id860319"></a>
+<a name="id706992"></a>
         <a class="link" href="actions.html#phoenix.inside.actions.writing_an_action">Writing an Action</a>
       </h5>
 <p>
@@ -117,8 +117,8 @@
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="keyword">int</span> <span class="identifier">result_type</span><span class="special">;</span>
 
-    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Context</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Lhs</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Rhs</span><span class="special">&gt;</span>
-    <span class="identifier">result_type</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Context</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">ctx</span><span class="special">,</span> <span class="identifier">Lhs</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">Rhs</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">rhs</span><span class="special">)</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Lhs</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Rhs</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Context</span><span class="special">&gt;</span>
+    <span class="identifier">result_type</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Lhs</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">Rhs</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">rhs</span><span class="special">,</span> <span class="identifier">Context</span> <span class="special">&amp;</span> <span class="identifier">ctx</span><span class="special">)</span>
     <span class="special">{</span>
         <span class="keyword">return</span> <span class="identifier">eval</span><span class="special">(</span><span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">ctx</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">eval</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">,</span> <span class="identifier">ctx</span><span class="special">);</span>
     <span class="special">}</span>

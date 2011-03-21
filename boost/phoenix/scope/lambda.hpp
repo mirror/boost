@@ -36,12 +36,12 @@ namespace boost { namespace phoenix
 
         template <
             typename This
-          , typename Context
           , typename OuterEnv
           , typename Locals
           , typename Lambda
+          , typename Context
         >
-        struct result<This(Context, OuterEnv &, Locals &, Lambda &)>
+        struct result<This(OuterEnv &, Locals &, Lambda &, Context)>
         {
             typedef
                 typename result_of::env<Context>::type
@@ -73,19 +73,19 @@ namespace boost { namespace phoenix
         };
         
         template <
-            typename Context
-          , typename OuterEnv
+            typename OuterEnv
           , typename Locals
           , typename Lambda
+          , typename Context
         >
         typename result<
-            lambda_eval(Context const&, OuterEnv const&, Locals const&, Lambda const&)
+            lambda_eval(OuterEnv const&, Locals const&, Lambda const&, Context &)
         >::type
         operator()(
-            Context const& ctx
-          , OuterEnv const & outer_env
+            OuterEnv const & outer_env
           , Locals const& locals
           , Lambda const& lambda
+          , Context & ctx
         ) const
         {
             typedef
@@ -206,13 +206,13 @@ namespace boost { namespace phoenix
         template <typename Sig>
         struct result;
 
-        template <typename This, typename Context, typename Lambda>
-        struct result<This(Context, Lambda)>
-            : result<This(Context, Lambda const &)>
+        template <typename This, typename Lambda, typename Context>
+        struct result<This(Lambda, Context)>
+            : result<This(Lambda const &, Context)>
         {};
 
-        template <typename This, typename Context, typename Lambda>
-        struct result<This(Context, Lambda &)>
+        template <typename This, typename Lambda, typename Context>
+        struct result<This(Lambda &, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -229,13 +229,13 @@ namespace boost { namespace phoenix
                 type;
         };
         
-        template <typename This, typename Context, typename Locals, typename Lambda>
-        struct result<This(Context, Locals, Lambda)>
-            : result<This(Context, Locals const &, Lambda const &)>
+        template <typename This, typename Locals, typename Lambda, typename Context>
+        struct result<This(Locals, Lambda, Context)>
+            : result<This(Locals const &, Lambda const &, Context)>
         {};
 
-        template <typename This, typename Context, typename Locals, typename Lambda>
-        struct result<This(Context, Locals&, Lambda&)>
+        template <typename This, typename Locals, typename Lambda, typename Context>
+        struct result<This(Locals&, Lambda&, Context)>
         {
             typedef
                 typename 
@@ -264,9 +264,9 @@ namespace boost { namespace phoenix
                 type;
         };
 
-        template <typename Context, typename Lambda>
-        typename result<lambda_actor_eval(Context const&, Lambda const&)>::type
-        operator()(Context const& ctx, Lambda const& lambda) const
+        template <typename Lambda, typename Context>
+        typename result<lambda_actor_eval(Lambda const&, Context &)>::type
+        operator()(Lambda const& lambda, Context & ctx) const
         {
             typedef
                 typename proto::detail::uncvref<
@@ -282,14 +282,14 @@ namespace boost { namespace phoenix
         }
 
         template <
-            typename Context
-          , typename Locals
+            typename Locals
           , typename Lambda
+          , typename Context
         >
         typename result<
-            lambda_actor_eval(Context const &, Locals const&, Lambda const&)
+            lambda_actor_eval(Locals const&, Lambda const&, Context &)
         >::type
-        operator()(Context const & ctx, Locals const& locals, Lambda const& lambda) const
+        operator()(Locals const& locals, Lambda const& lambda, Context & ctx) const
         {
             typedef
                 typename 
@@ -298,7 +298,7 @@ namespace boost { namespace phoenix
                             typename proto::result_of::value<
                                 Locals const &
                             >::type
-                          , Context const &
+                          , Context &
                         )
                     >::type
                 locals_type;

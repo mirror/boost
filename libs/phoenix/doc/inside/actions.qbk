@@ -56,8 +56,8 @@ Lets have an (simplified) example on how to write an evaluation action for
     {
         typedef int result_type;
 
-        template <typename Context, typename Lhs, typename Rhs>
-        result_type operator()(Context const & ctx, Lhs const& lhs, Rhs const &rhs)
+        template <typename Lhs, typename Rhs, typename Context>
+        result_type operator()(Lhs const& lhs, Rhs const &rhs, Context & ctx)
         {
             return eval(lhs, ctx) + eval(rhs, ctx);
         }

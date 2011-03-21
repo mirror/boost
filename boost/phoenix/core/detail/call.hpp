@@ -37,7 +37,7 @@
                 BOOST_PP_CAT(A, N); \
 /**/
 #define M1(Z, N ,D) \
-    BOOST_PP_COMMA() proto::child_c<N>(e)
+    BOOST_PP_COMMA_IF(N) proto::child_c<N>(e)
 /**/
     
 
@@ -72,7 +72,7 @@
 
             typedef
                 typename boost::result_of<
-                    Fun(context_type, BOOST_PHOENIX_A)
+                    Fun(BOOST_PHOENIX_A, context_type)
                 >::type
                 result_type;
 
@@ -82,8 +82,11 @@
               , typename call_impl::data_param d
             ) const
             {
-                return Fun()(boost::phoenix::context(s, d)
-                    BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, M1, _));
+                return
+                    Fun()(
+                        BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, M1, _)
+                      , boost::phoenix::context(s, d)
+                    );
             }
         };
 

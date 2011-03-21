@@ -44,8 +44,8 @@
 
 #else
 
-        template <typename This, typename Context, BOOST_PHOENIX_typename_A>
-        struct result<This(Context, BOOST_PHOENIX_A)>
+        template <typename This, BOOST_PHOENIX_typename_A, typename Context>
+        struct result<This(BOOST_PHOENIX_A, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -56,23 +56,23 @@
             typedef typename target_type::type * type;
         };
 
-        template <typename Context, BOOST_PHOENIX_typename_A>
-        typename result<new_eval(Context const &, BOOST_PHOENIX_A_const_ref)>::type
+        template <BOOST_PHOENIX_typename_A, typename Context>
+        typename result<new_eval(BOOST_PHOENIX_A_const_ref, Context &)>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , BOOST_PP_ENUM_SHIFTED_BINARY_PARAMS(
                 BOOST_PHOENIX_ITERATION
               , A
               , const& a
             )
+          , Context & ctx
         ) const
         {
 #define EVAL_a(_,n,__) \
             BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) eval(a ## n, ctx)
             return
                 new typename result<
-                    new_eval(Context const &, BOOST_PHOENIX_A_const_ref)
+                    new_eval(BOOST_PHOENIX_A_const_ref, Context &)
                     >::construct_type(
                         BOOST_PP_REPEAT_FROM_TO(
                             1

@@ -44,22 +44,22 @@
 
 #else
 
-        template <typename This, typename Context, BOOST_PHOENIX_typename_A>
-        struct result<This(Context, BOOST_PHOENIX_A)>
+        template <typename This, BOOST_PHOENIX_typename_A, typename Context>
+        struct result<This(BOOST_PHOENIX_A, Context)>
             : detail::result_of::target<A0>
         {
         };
         
-        template <typename Context, BOOST_PHOENIX_typename_A>
+        template <BOOST_PHOENIX_typename_A, typename Context>
         typename detail::result_of::target<A0>::type
         operator()(
-            Context const& ctx
-          , A0 const&
+            A0 const&
           , BOOST_PP_ENUM_SHIFTED_BINARY_PARAMS(
                 BOOST_PHOENIX_ITERATION
               , A
               , const& a
             )
+          , Context & ctx
         ) const
         {
 #define EVAL_a(_,n,__) \
