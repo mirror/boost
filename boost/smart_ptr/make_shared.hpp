@@ -49,7 +49,18 @@ private:
     {
         if( initialized_ )
         {
+#if defined( __GNUC__ )
+
+            // fixes incorrect aliasing warning
+            T * p = reinterpret_cast< T* >( storage_.data_ );
+            p->~T();
+
+#else
+
             reinterpret_cast< T* >( storage_.data_ )->~T();
+
+#endif
+
             initialized_ = false;
         }
     }
