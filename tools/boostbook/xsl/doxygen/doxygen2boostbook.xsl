@@ -1105,6 +1105,9 @@
   <!-- Handle constructors -->
   <xsl:template name="constructor">
     <constructor>
+      <xsl:if test="@explicit = 'yes'">
+        <xsl:attribute name="specifiers">explicit</xsl:attribute>
+      </xsl:if>
       <xsl:call-template name="function.children"/>
     </constructor>
   </xsl:template>
@@ -1241,6 +1244,9 @@
   </xsl:template>
   <xsl:template match="copydoc" mode="passthrough">
     <xsl:apply-templates mode="passthrough"/>
+  </xsl:template>
+  <xsl:template match="verbatim" mode="passthrough">
+    <xsl:copy-of select="node()"/>
   </xsl:template>
 
   <xsl:template match="para/simplesect" mode="passthrough">

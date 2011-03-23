@@ -269,7 +269,7 @@ General default options go here:
 * Body text is not indented compared to the titles.
 * Page margins are a rather small 0.5in, but we need
   all the space we can get for code blocks.
-* Paper size is A4: an ISO standard, and just slightly smaller than US Letter.
+* Paper size is A4: an ISO standard, slightly taller and narrower than US Letter.
 * Use SVG graphics for admonishments: the bitmaps look awful in PDF's.
 * Disable draft mode so we're not constantly trying to download the necessary graphic.
 * Set default image paths to pull down direct from SVN: individual Jamfiles can override this

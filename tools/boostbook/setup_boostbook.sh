@@ -11,7 +11,8 @@ DOCBOOK_XSL_VERSION=1.75.2
 DOCBOOK_DTD_VERSION=4.2
 FOP_VERSION=0.94
 FOP_JDK_VERSION=1.4
-FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries
+# FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries
+FOP_MIRROR=http://archive.apache.org/dist/xmlgraphics/fop/binaries/
 SOURCEFORGE_DOWNLOAD=http://sourceforge.net/projects/docbook/files/
 HTTP_GET_CMD="curl -O -L"
 
@@ -19,7 +20,7 @@ HTTP_GET_CMD="curl -O -L"
 
 # Get the DocBook XSLT Stylesheets
 DOCBOOK_XSL_TARBALL=docbook-xsl-$DOCBOOK_XSL_VERSION.tar.gz
-DOCBOOK_XSL_URL=$SOURCEFORGE_DOWNLOAD/docbook-xsl/$DOCBOOK_XSL_VERSION/$DOCBOOK_XSL_TARBALL/download
+DOCBOOK_XSL_URL=$SOURCEFORGE_DOWNLOAD/docbook-xsl/$DOCBOOK_XSL_VERSION/$DOCBOOK_XSL_TARBALL
 if test -f $DOCBOOK_XSL_TARBALL; then
   echo "Using existing DocBook XSLT Stylesheets (version $DOCBOOK_XSL_VERSION)."
 else
