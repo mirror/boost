@@ -372,10 +372,10 @@ void map_insert_range_test2(X*,
     std::cerr<<"map_insert_range_test2\n";
 
     typedef test::list<
-        std::pair<BOOST_DEDUCED_TYPENAME X::key_type const, int>
+        std::pair<BOOST_DEDUCED_TYPENAME X::key_type const, test::implicitly_convertible>
     > list;
     test::random_values<
-        boost::unordered_map<BOOST_DEDUCED_TYPENAME X::key_type, int>
+        boost::unordered_map<BOOST_DEDUCED_TYPENAME X::key_type, test::implicitly_convertible>
     > v(1000, generator);
     list l(v.begin(), v.end());
 

@@ -261,7 +261,7 @@ namespace unnecessary_copy_tests
         // copied.
         reset();
         x.emplace(source<std::pair<count_copies, count_copies> >());
-        COPY_COUNT(2); MOVE_COUNT(0);
+        COPY_COUNT(2); MOVE_COUNT_RANGE(0,2);
 
         // TODO: This doesn't work on older versions of gcc.
         //count_copies part;
