@@ -16,6 +16,7 @@
 #include <cassert>
 #include <boost/scoped_ptr.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <stdexcept>
 #include "fwd.hpp"
 
@@ -38,6 +39,7 @@ namespace quickbook
 
         public:
             typedef int tag_type;
+            typedef boost::iterator_range<quickbook::iterator> qbk_range;
 
         protected:
             explicit value_node(tag_type);
@@ -51,8 +53,10 @@ namespace quickbook
             virtual file_position get_position() const;
             virtual std::string get_quickbook() const;
             virtual std::string get_boostbook() const;
+            virtual qbk_range get_quickbook_range() const;
             virtual int get_int() const;
 
+            virtual bool check() const;
             virtual bool empty() const;
             virtual bool is_list() const;
             virtual bool is_string() const;
@@ -83,6 +87,7 @@ namespace quickbook
             typedef iterator const_iterator;
             typedef value_node::tag_type tag_type;
             enum { default_tag = 0 };
+            typedef boost::iterator_range<quickbook::iterator> qbk_range;
 
         protected:
             explicit value_base(value_node* base)
@@ -96,6 +101,7 @@ namespace quickbook
         public:
             void swap(value_base& x) { std::swap(value_, x.value_); }
 
+            bool check() const { return value_->check(); }
             bool empty() const { return value_->empty(); }
             bool is_list() const { return value_->is_list(); }
             bool is_string() const { return value_->is_string(); }
@@ -109,6 +115,8 @@ namespace quickbook
             { return value_->get_position(); }
             std::string get_quickbook() const
             { return value_->get_quickbook(); }
+            qbk_range get_quickbook_range() const
+            { return value_->get_quickbook_range(); }
             std::string get_boostbook() const
             { return value_->get_boostbook(); }
             int get_int() const
@@ -181,7 +189,7 @@ namespace quickbook
             value_counted& operator=(value_counted);
             ~value_counted();
 
-            void store();
+            value store() const;
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -257,6 +265,7 @@ namespace quickbook
         void reset();
         void set_tag(value::tag_type);
         void insert(value const&);
+        void extend(value const&);
 
         void start_list(value::tag_type = value::default_tag);
         void finish_list();

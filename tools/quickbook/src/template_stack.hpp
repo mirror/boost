@@ -19,6 +19,8 @@
 #include <boost/next_prior.hpp>
 #include <boost/filesystem/path.hpp>
 #include "fwd.hpp"
+#include "values.hpp"
+#include "template_tags.hpp"
 
 namespace quickbook
 {
@@ -26,23 +28,11 @@ namespace quickbook
 
     struct template_body
     {
-        template_body(
-                std::string const& content,
-                fs::path const& filename,
-                file_position const& position,
-                bool is_block
-            )
-            : content(content)
-            , filename(filename)
-            , position(position)
-            , is_block(is_block)
-        {
-        }
+        template_body(value const&, fs::path const&);
+        bool is_block() const;
 
-        std::string content;
+        value content;
         fs::path filename;        
-        file_position position;
-        bool is_block;
     };
 
     struct template_scope;
@@ -52,16 +42,13 @@ namespace quickbook
         template_symbol(
                 std::string const& identifier,
                 std::vector<std::string> const& params,
-                std::string const& body,
+                value const& content,
                 fs::path const& filename,
-                file_position const& position,
-                bool is_block,
                 template_scope const* parent = 0)
            : identifier(identifier)
            , params(params)
-           , body(body, filename, position, is_block)
+           , body(content, filename)
            , parent(parent)
-           , callout(false)
            , callouts() {}
 
         std::string identifier;
@@ -73,8 +60,7 @@ namespace quickbook
         // or static_parent for clarity.
         template_scope const* parent;
 
-        bool callout;
-        std::vector<template_body> callouts;
+        value callouts;
     };
 
     typedef boost::spirit::classic::symbols<template_symbol> template_symbols;

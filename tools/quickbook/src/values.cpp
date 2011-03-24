@@ -44,10 +44,12 @@ namespace quickbook
         file_position value_node::get_position() const { UNDEFINED_ERROR(); }
         int value_node::get_int() const { UNDEFINED_ERROR(); }
         std::string value_node::get_quickbook() const { UNDEFINED_ERROR(); }
+        value_node::qbk_range value_node::get_quickbook_range() const { UNDEFINED_ERROR(); }
         std::string value_node::get_boostbook() const {  UNDEFINED_ERROR(); }
         value_node* value_node::get_list() const {  UNDEFINED_ERROR(); }
 
         bool value_node::empty() const { return false; }
+        bool value_node::check() const { return true; }
         bool value_node::is_list() const { return false; }
         bool value_node::is_string() const { return false; }
     }
@@ -76,6 +78,9 @@ namespace quickbook
 
             virtual bool empty() const
                 { return true; }
+
+            virtual bool check() const
+                { return false; }
             
             friend value quickbook::empty_value(value::tag_type);
         };
@@ -151,12 +156,9 @@ namespace quickbook
             intrusive_ptr_release(value_);
         }
 
-        void value_counted::store()
+        value value_counted::store() const
         {
-            value_node* new_value = value_->store();
-            intrusive_ptr_add_ref(new_value);
-            intrusive_ptr_release(value_);
-            value_ = new_value;
+            return value(value_->store());
         }
     }
     
@@ -289,6 +291,7 @@ namespace quickbook
             virtual value_node* clone() const;
             virtual file_position get_position() const;
             virtual std::string get_quickbook() const;
+            qbk_range get_quickbook_range() const;
             virtual bool is_string() const;
             virtual bool empty() const;
     
@@ -308,6 +311,7 @@ namespace quickbook
             virtual value_node* store();
             virtual file_position get_position() const;
             virtual std::string get_quickbook() const;
+            qbk_range get_quickbook_range() const;
             virtual bool is_string() const;
             virtual bool empty() const;
     
@@ -332,6 +336,7 @@ namespace quickbook
             virtual value_node* clone() const;
             virtual file_position get_position() const;
             virtual std::string get_quickbook() const;
+            qbk_range get_quickbook_range() const;
             virtual std::string get_boostbook() const;
             virtual bool is_string() const;
             virtual bool empty() const;
@@ -408,6 +413,11 @@ namespace quickbook
         std::string value_qbk_string_impl::get_quickbook() const
             { return value_; }
 
+        value::qbk_range value_qbk_string_impl::get_quickbook_range() const
+            { return qbk_range(
+                iterator(value_.begin(), position_),
+                iterator(value_.end())); }
+
         bool value_qbk_string_impl::is_string() const
             { return true; }
 
@@ -442,6 +452,9 @@ namespace quickbook
 
         std::string value_qbk_ref_impl::get_quickbook() const
             { return std::string(begin_.base(), end_.base()); }
+
+        value::qbk_range value_qbk_ref_impl::get_quickbook_range() const
+            { return qbk_range(begin_, end_); }
 
         bool value_qbk_ref_impl::is_string() const
             { return true; }
@@ -502,6 +515,11 @@ namespace quickbook
 
         std::string value_qbk_bbk_impl::get_quickbook() const
             { return qbk_value_; }
+
+        value::qbk_range value_qbk_bbk_impl::get_quickbook_range() const
+            { return qbk_range(
+                iterator(qbk_value_.begin(), position_),
+                iterator(qbk_value_.end())); }
 
         std::string value_qbk_bbk_impl::get_boostbook() const
             { return bbk_value_; }
@@ -687,7 +705,6 @@ namespace quickbook
             return new value_list_impl(head_, tag_);
         }
 
-        // TODO: Could reuse nodes is any node has a reference count of 1.
         value_node* value_list_impl::store()
         {
             value_node* pos = head_;
@@ -762,7 +779,6 @@ namespace quickbook
             if(other.back_ == &head_) other.back_ = &other.head_;
         }
 
-        // TODO: Multiple list refs are incompatible with 'store'
         value_node* value_list_builder::get() const {
             return head_;
         }
@@ -823,6 +839,14 @@ namespace quickbook
 
     void value_builder::insert(value const& item) {
         current.append(item.value_);
+    }
+
+    void value_builder::extend(value const& list) {
+        for (value::iterator begin = list.begin(), end = list.end();
+            begin != end; ++begin)
+        {
+            insert(*begin);
+        }
     }
 
     void value_builder::start_list(value::tag_type tag) {

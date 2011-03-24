@@ -27,7 +27,6 @@
 #include "actions_class.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
-#include "template_tags.hpp"
 #include "block_tags.hpp"
 #include "phrase_tags.hpp"
 
@@ -883,10 +882,8 @@ namespace quickbook
             template_symbol(
                 identifier,
                 template_values,
-                body.get_quickbook(),
+                body,
                 actions.filename,
-                body.get_position(),
-                body.get_tag() == template_tags::block,
                 &actions.templates.top_scope())))
         {
             file_position const pos = body.get_position();
@@ -991,18 +988,18 @@ namespace quickbook
                     // arguments, or if there are no more spaces left.
 
                     template_body& body = args.back();
-                    iterator begin(body.content.begin(), body.position);
-                    iterator end(body.content.end());
+                    iterator begin = body.content.get_quickbook_range().begin();
+                    iterator end = body.content.get_quickbook_range().end();
                     
                     std::pair<iterator, iterator> pos =
                         find_seperator(begin, end);
                     if (pos.second == end) break;
                     template_body second(
-                        std::string(pos.second, end),
-                        body.filename,
-                        pos.second.get_position(),
-                        false);
-                    body.content = std::string(begin, pos.first);
+                        qbk_value(pos.second, end, template_tags::phrase),
+                        body.filename);
+    
+                    body.content = qbk_value(begin, pos.first,
+                        body.content.get_tag()).store();
                     args.push_back(second);
                 }
             }
@@ -1040,7 +1037,7 @@ namespace quickbook
             {
                 if (!actions.templates.add(
                         template_symbol(*tpl, empty_params, arg->content,
-                            arg->filename, arg->position, arg->is_block, &scope)))
+                            arg->filename, &scope)))
                 {
                     detail::outerr(actions.filename, pos.line)
                         << "Duplicate Symbol Found" << std::endl;
@@ -1069,17 +1066,17 @@ namespace quickbook
             {
                 //  escape the body of the template
                 //  we just copy out the literal body
-                (body.is_block ? actions.out : actions.phrase) << body.content;
+                (body.is_block() ? actions.out : actions.phrase) << body.content.get_quickbook();
                 return true;
             }
             else
             {
-                if (!body.is_block)
+                if (!body.is_block())
                 {
                     //  do a phrase level parse
                     actions.filename = body.filename;
-                    iterator first(body.content.begin(), body.position);
-                    iterator last(body.content.end());
+                    iterator first = body.content.get_quickbook_range().begin();
+                    iterator last = body.content.get_quickbook_range().end();
                     
                     return cl::parse(first, last, actions.grammar().simple_phrase).full;
                 }
@@ -1090,8 +1087,8 @@ namespace quickbook
                     //  the need to check for end of file in the grammar.
                     
                     actions.filename = body.filename;
-                    std::string content = body.content + "\n\n";
-                    iterator first(content.begin(), body.position);
+                    std::string content = body.content.get_quickbook() + "\n\n";
+                    iterator first(content.begin(), body.content.get_position());
                     iterator last(content.end());
 
                     return cl::parse(first, last, actions.grammar().block).full;
@@ -1123,17 +1120,7 @@ namespace quickbook
 
         BOOST_FOREACH(value arg, values)
         {
-            BOOST_ASSERT(
-                arg.get_tag() == template_tags::block ||
-                arg.get_tag() == template_tags::phrase);
-
-            args.push_back(
-                template_body(
-                    arg.get_quickbook(),
-                    actions.filename,
-                    arg.get_position(),
-                    arg.get_tag() == template_tags::block
-                ));
+            args.push_back(template_body(arg, actions.filename));
         }
         
         values.finish();
@@ -1177,7 +1164,7 @@ namespace quickbook
             ///////////////////////////////////
             // Initialise the arguments
             
-            if (!symbol->callout)
+            if (!symbol->callouts.check())
             {
                 // Break the arguments for a template
             
@@ -1214,7 +1201,9 @@ namespace quickbook
                     code += "linkends=\"" + callout_id + "\" />";
                     code += "'''";
 
-                    args.push_back(template_body(code, actions.filename, pos, false));
+                    args.push_back(template_body(
+                        qbk_value(code, pos, template_tags::phrase),
+                        actions.filename));
                 }
             }
 
@@ -1241,11 +1230,11 @@ namespace quickbook
                 file_position const pos = first.get_position();
                 detail::outerr(actions.filename, pos.line)
                     << "Expanding "
-                    << (symbol->body.is_block ? "block" : "phrase")
+                    << (symbol->body.is_block() ? "block" : "phrase")
                     << " template: " << detail::utf8(symbol->identifier) << std::endl
                     << std::endl
                     << "------------------begin------------------" << std::endl
-                    << detail::utf8(symbol->body.content)
+                    << detail::utf8(symbol->body.content.get_quickbook())
                     << "------------------end--------------------" << std::endl
                     << std::endl;
                 actions.pop(); // restore the actions' states
@@ -1270,27 +1259,28 @@ namespace quickbook
         actions.phrase.swap(phrase);
         actions.pop(); // restore the actions' states
 
-        if(symbol->callout && symbol->callouts.size() > 0)
+        if(!symbol->callouts.empty())
         {
             BOOST_ASSERT(phrase.empty());
             block += "<calloutlist>";
-            BOOST_FOREACH(template_body const& c, symbol->callouts)
+            BOOST_FOREACH(value c, symbol->callouts)
             {
                 std::string callout_id = actions.doc_id +
                     boost::lexical_cast<std::string>(detail::callout_id++);
 
                 std::string callout_value;
                 actions.push();
-                bool r = parse_template(c, false, actions);
+                bool r = parse_template(
+                    template_body(c, symbol->body.filename), false, actions);
                 actions.out.swap(callout_value);
                 actions.pop();
 
                 if(!r)
                 {
-                    detail::outerr(c.filename, c.position.line)
+                    detail::outerr(symbol->body.filename, c.get_position().line)
                         << "Expanding callout." << std::endl
                         << "------------------begin------------------" << std::endl
-                        << detail::utf8(c.content)
+                        << detail::utf8(c.get_quickbook())
                         << std::endl
                         << "------------------end--------------------" << std::endl
                         ;
@@ -1306,7 +1296,7 @@ namespace quickbook
             block += "</calloutlist>";
         }
 
-        if(symbol->body.is_block || !block.empty()) {
+        if(symbol->body.is_block() || !block.empty()) {
             actions.paragraph(); // For paragraphs before the template call.
             actions.out << block;
             actions.phrase << phrase;
@@ -1749,7 +1739,7 @@ namespace quickbook
             ts.parent = &actions.templates.top_scope();
             if (!actions.templates.add(ts))
             {
-                detail::outerr(ts.body.filename, ts.body.position.line)
+                detail::outerr(ts.body.filename, ts.body.content.get_position().line)
                     << "Template Redefinition: " << detail::utf8(tname) << std::endl;
                 ++actions.error_count;
             }

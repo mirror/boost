@@ -7,14 +7,15 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include <stack>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include "template_stack.hpp"
 #include "actions.hpp"
+#include "values.hpp"
 
 namespace quickbook
 {
@@ -52,17 +53,34 @@ namespace quickbook
                 , start_code(false)
                 , end_code(false)
             {}
-
+            
             std::string id;
             int callout_base_id;
             std::string content;
             bool start_code;
             bool end_code;
-            std::vector<template_body> callouts;
+            value_builder callouts;
+            boost::shared_ptr<snippet_data> next;
         };
         
+        void push_snippet_data(std::string const& id, int callout_base_id)
+        {
+            boost::shared_ptr<snippet_data> new_snippet(
+                new snippet_data(id, callout_base_id));
+            new_snippet->next = snippet_stack;
+            snippet_stack = new_snippet;
+        }
+
+        boost::shared_ptr<snippet_data> pop_snippet_data()
+        {
+            boost::shared_ptr<snippet_data> snippet(snippet_stack);
+            snippet_stack = snippet->next;
+            snippet->next.reset();
+            return snippet;
+        }
+        
         int callout_id;
-        std::stack<snippet_data> snippet_stack;
+        boost::shared_ptr<snippet_data> snippet_stack;
         std::string code;
         std::string id;
         std::vector<template_symbol>& storage;
@@ -323,8 +341,8 @@ namespace quickbook
 
     void code_snippet_actions::append_code()
     {
-        if(snippet_stack.empty()) return;
-        snippet_data& snippet = snippet_stack.top();
+        if(!snippet_stack) return;
+        snippet_data& snippet = *snippet_stack;
     
         if (!code.empty())
         {
@@ -350,8 +368,8 @@ namespace quickbook
 
     void code_snippet_actions::close_code()
     {
-        if(snippet_stack.empty()) return;
-        snippet_data& snippet = snippet_stack.top();
+        if(!snippet_stack) return;
+        snippet_data& snippet = *snippet_stack;
     
         if(snippet.end_code)
         {
@@ -362,30 +380,29 @@ namespace quickbook
 
     void code_snippet_actions::pass_thru(iterator first, iterator last)
     {
-        if(snippet_stack.empty()) return;
+        if(!snippet_stack) return;
         code.append(first, last);
     }
 
     void code_snippet_actions::pass_thru_char(char c)
     {
-        if(snippet_stack.empty()) return;
+        if(!snippet_stack) return;
         code += c;
     }
 
     void code_snippet_actions::callout(iterator first, iterator last)
     {
-        if(snippet_stack.empty()) return;
+        if(!snippet_stack) return;
         code += "``[[callout" + boost::lexical_cast<std::string>(callout_id) + "]]``";
     
-        snippet_stack.top().callouts.push_back(
-            template_body(std::string(first, last), filename, first.get_position(), true));
+        snippet_stack->callouts.insert(qbk_value(first, last, template_tags::block).store());
         ++callout_id;
     }
 
     void code_snippet_actions::escaped_comment(iterator first, iterator last)
     {
-        if(snippet_stack.empty()) return;
-        snippet_data& snippet = snippet_stack.top();
+        if(!snippet_stack) return;
+        snippet_data& snippet = *snippet_stack;
         append_code();
         close_code();
 
@@ -400,50 +417,53 @@ namespace quickbook
     void code_snippet_actions::start_snippet(iterator, iterator)
     {
         append_code();
-        snippet_stack.push(snippet_data(id, callout_id));
+        push_snippet_data(id, callout_id);
         id.clear();
     }
 
     void code_snippet_actions::end_snippet(iterator first, iterator)
     {
         // TODO: Error?
-        if(snippet_stack.empty()) return;
+        if(!snippet_stack) return;
 
         append_code();
 
-        snippet_data snippet = snippet_stack.top();
-        snippet_stack.pop();
+        boost::shared_ptr<snippet_data> snippet = pop_snippet_data();
+        value callouts = snippet->callouts.get();
 
         std::string body;
-        if(snippet.start_code) {
+        if(snippet->start_code) {
             body += "\n\n";
             body += source_type;
             body += "```\n";
         }
-        body += snippet.content;
-        if(snippet.end_code) {
+        body += snippet->content;
+        if(snippet->end_code) {
             body += "```\n\n";
         }
-        
+
         std::vector<std::string> params;
-        for (size_t i = 0; i < snippet.callouts.size(); ++i)
+        int i = 0;
+        for(value::iterator it = callouts.begin(); it != callouts.end(); ++it)
         {
-            params.push_back("[callout" + boost::lexical_cast<std::string>(snippet.callout_base_id + i) + "]");
+            params.push_back("[callout" + boost::lexical_cast<std::string>(snippet->callout_base_id + i) + "]");
+            ++i;
         }
         
         // TODO: Save position in start_snippet
-        template_symbol symbol(snippet.id, params, body, filename, first.get_position(), true);
-        symbol.callout = true;
-        symbol.callouts = snippet.callouts;
+        template_symbol symbol(snippet->id, params,
+            qbk_value(body, first.get_position(), template_tags::block),
+            filename);
+        symbol.callouts = callouts;
         storage.push_back(symbol);
 
         // Merge the snippet into its parent
 
-        if(!snippet_stack.empty())
+        if(snippet_stack)
         {
-            snippet_data& next = snippet_stack.top();
-            if(!snippet.content.empty()) {
-                if(!snippet.start_code) {
+            snippet_data& next = *snippet_stack;
+            if(!snippet->content.empty()) {
+                if(!snippet->start_code) {
                     close_code();
                 }
                 else if(!next.end_code) {
@@ -452,11 +472,11 @@ namespace quickbook
                     next.content += "```\n";
                 }
                 
-                next.content += snippet.content;
-                next.end_code = snippet.end_code;
+                next.content += snippet->content;
+                next.end_code = snippet->end_code;
             }
-            
-            next.callouts.insert(next.callouts.end(), snippet.callouts.begin(), snippet.callouts.end());
+
+            next.callouts.extend(callouts);
         }
     }
 }
