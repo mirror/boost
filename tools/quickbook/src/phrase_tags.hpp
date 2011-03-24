@@ -21,6 +21,7 @@ namespace quickbook
         (bold)(italic)(underline)(teletype)(strikethrough)(quote)(replaceable)
         (footnote)
         (escape)
+        (break_mark)
     )
     
     QUICKBOOK_VALUE_NAMED_TAGS(source_mode_tags, 0x550,

@@ -11,6 +11,7 @@
 #include <numeric>
 #include <functional>
 #include <vector>
+#include <map>
 #include <boost/filesystem/v3/convenience.hpp>
 #include <boost/filesystem/v3/fstream.hpp>
 #include <boost/range/distance.hpp>
@@ -181,7 +182,7 @@ namespace quickbook
             actions.warned_about_breaks = true;
         }
             
-        phrase << break_mark;
+        phrase << detail::get_markup(phrase_tags::break_mark).pre;
     }
 
     void error_message_action::operator()(iterator first, iterator last) const
@@ -210,7 +211,7 @@ namespace quickbook
     void block_action(quickbook::actions& actions, value block)
     {
         if(!actions.output_pre(actions.out)) return;
-        detail::markup markup = detail::markups[block.get_tag()];
+        detail::markup markup = detail::get_markup(block.get_tag());
 
         value_consumer values = block;
         actions.out << markup.pre << values.consume().get_boostbook() << markup.post;
@@ -220,14 +221,14 @@ namespace quickbook
     void block_empty_action(quickbook::actions& actions, value block)
     {
         if(!actions.output_pre(actions.out)) return;
-        detail::markup markup = detail::markups[block.get_tag()];
+        detail::markup markup = detail::get_markup(block.get_tag());
         actions.out << markup.pre;
     }
 
     void phrase_action(quickbook::actions& actions, value phrase)
     {
         if(!actions.output_pre(actions.phrase)) return;
-        detail::markup markup = detail::markups[phrase.get_tag()];
+        detail::markup markup = detail::get_markup(phrase.get_tag());
 
         value_consumer values = phrase;
         actions.phrase << markup.pre << values.consume().get_boostbook() << markup.post;
@@ -237,7 +238,7 @@ namespace quickbook
     void raw_phrase_action(quickbook::actions& actions, value phrase)
     {
         if(!actions.output_pre(actions.phrase)) return;
-        detail::markup markup = detail::markups[phrase.get_tag()];
+        detail::markup markup = detail::get_markup(phrase.get_tag());
         actions.phrase << markup.pre << phrase.get_quickbook() << markup.post;
     }
 
@@ -255,7 +256,7 @@ namespace quickbook
         while(pos != end && cl::space_p.test(*pos)) ++pos;
 
         if(pos != end) {
-            detail::markup markup = detail::markups[block_tags::paragraph];
+            detail::markup markup = detail::get_markup(block_tags::paragraph);
             actions.out << markup.pre << str;
             actions.output_pre(actions.out);
             actions.out << markup.post;
@@ -345,7 +346,7 @@ namespace quickbook
             0;
         
         assert(tag != 0);
-        detail::markup markup = detail::markups[tag];
+        detail::markup markup = detail::get_markup(tag);
 
         value_consumer values = actions.values.get();
         value content = values.consume();
@@ -476,7 +477,7 @@ namespace quickbook
     void explicit_list_action(quickbook::actions& actions, value list)
     {
         if(!actions.output_pre(actions.out)) return;
-        detail::markup markup = detail::markups[list.get_tag()];
+        detail::markup markup = detail::get_markup(list.get_tag());
 
         actions.out << markup.pre;
 
@@ -1319,7 +1320,7 @@ namespace quickbook
     void link_action(quickbook::actions& actions, value link)
     {
         if(!actions.output_pre(actions.phrase)) return;
-        detail::markup markup = detail::markups[link.get_tag()];
+        detail::markup markup = detail::get_markup(link.get_tag());
 
         value_consumer values = link;
         value dst = values.consume();
@@ -1352,21 +1353,21 @@ namespace quickbook
         actions.out << "</title>\n";
 
         BOOST_FOREACH(value_consumer entry, values) {
-            actions.out << start_varlistentry_;
+            actions.out << "<varlistentry>";
             
             if(entry.check()) {
-                actions.out << start_varlistterm_;
+                actions.out << "<term>";
                 actions.out << entry.consume().get_boostbook();
-                actions.out << end_varlistterm_;
+                actions.out << "</term>";
             }
             
             if(entry.check()) {
-                actions.out << start_varlistitem_;
+                actions.out << "<listitem>";
                 BOOST_FOREACH(value phrase, entry) actions.out << phrase.get_boostbook();
-                actions.out << end_varlistitem_;
+                actions.out << "</listitem>";
             }
 
-            actions.out << end_varlistentry_;
+            actions.out << "</varlistentry>\n";
         }
 
         actions.out << "</variablelist>\n";
@@ -1434,21 +1435,21 @@ namespace quickbook
 
         if (row_count > 1)
         {
-            actions.out << "<thead>" << start_row_;
+            actions.out << "<thead>" << "<row>";
             BOOST_FOREACH(value cell, values.consume()) {
-                actions.out << start_cell_ << cell.get_boostbook() << end_cell_;
+                actions.out << "<entry>" << cell.get_boostbook() << "</entry>";
             }
-            actions.out << end_row_ << "</thead>\n";
+            actions.out << "</row>\n" << "</thead>\n";
         }
 
         actions.out << "<tbody>\n";
 
         BOOST_FOREACH(value row, values) {
-            actions.out << start_row_;
+            actions.out << "<row>";
             BOOST_FOREACH(value cell, row) {
-                actions.out << start_cell_ << cell.get_boostbook() << end_cell_;
+                actions.out << "<entry>" << cell.get_boostbook() << "</entry>";
             }
-            actions.out << end_row_;
+            actions.out << "</row>\n";
         }
         
         values.finish();
