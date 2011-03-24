@@ -23,6 +23,7 @@
 namespace quickbook
 {
     class value;
+    class stored_value;
     class value_builder;
     class value_error;
 
@@ -98,9 +99,8 @@ namespace quickbook
 
             ~value_base() {}
 
-        public:
             void swap(value_base& x) { std::swap(value_, x.value_); }
-
+        public:
             bool check() const { return value_->check(); }
             bool empty() const { return value_->empty(); }
             bool is_list() const { return value_->is_list(); }
@@ -121,6 +121,8 @@ namespace quickbook
             { return value_->get_boostbook(); }
             int get_int() const
             { return value_->get_int(); }
+
+            value_node* store() const { return value_->store(); }
 
         protected:
             value_node* value_;
@@ -181,15 +183,13 @@ namespace quickbook
 
         class value_counted : public value_base
         {
-        public:
+            value_counted& operator=(value_counted const&);
+        protected:
             value_counted();
             value_counted(value_counted const&);
             value_counted(value_base const&);
             value_counted(value_node*);
-            value_counted& operator=(value_counted);
             ~value_counted();
-
-            value store() const;
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -226,8 +226,20 @@ namespace quickbook
     public:
         value();
         value(value const&);
-        value(detail::value_ref);
+        value(detail::value_base const&);
         explicit value(detail::value_node*);
+        value& operator=(value);
+        void swap(value& x) { detail::value_counted::swap(x); }
+    };
+    
+    class stored_value : public detail::value_counted
+    {
+    public:
+        stored_value();
+        stored_value(stored_value const&);
+        stored_value(detail::value_base const&);
+        stored_value& operator=(stored_value);
+        void swap(stored_value& x) { detail::value_counted::swap(x); }
     };
 
     // Empty

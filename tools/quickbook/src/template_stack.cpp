@@ -20,7 +20,7 @@ namespace quickbook
             value const& content,
             fs::path const& filename
         )
-        : content(content.store())
+        : content(content)
         , filename(filename)
     {
         assert(content.get_tag() == template_tags::block ||

@@ -999,7 +999,7 @@ namespace quickbook
                         body.filename);
     
                     body.content = qbk_value(begin, pos.first,
-                        body.content.get_tag()).store();
+                        body.content.get_tag());
                     args.push_back(second);
                 }
             }

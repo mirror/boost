@@ -395,7 +395,7 @@ namespace quickbook
         if(!snippet_stack) return;
         code += "``[[callout" + boost::lexical_cast<std::string>(callout_id) + "]]``";
     
-        snippet_stack->callouts.insert(qbk_value(first, last, template_tags::block).store());
+        snippet_stack->callouts.insert(qbk_value(first, last, template_tags::block));
         ++callout_id;
     }
 

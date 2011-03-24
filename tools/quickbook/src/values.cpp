@@ -145,20 +145,9 @@ namespace quickbook
             intrusive_ptr_add_ref(value_);
         }
     
-        value_counted& value_counted::operator=(value_counted x)
-        {
-            swap(x);
-            return *this;
-        }
-    
         value_counted::~value_counted()
         {
             intrusive_ptr_release(value_);
-        }
-
-        value value_counted::store() const
-        {
-            return value(value_->store());
         }
     }
     
@@ -175,7 +164,7 @@ namespace quickbook
     {
     }
 
-    value::value(detail::value_ref x)
+    value::value(detail::value_base const& x)
         : detail::value_counted(x)
     {
     }
@@ -184,7 +173,37 @@ namespace quickbook
         : detail::value_counted(x)
     {
     }
-    
+
+    value& value::operator=(value x)
+    {
+        swap(x);
+        return *this;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // stored_value
+
+    stored_value::stored_value()
+        : detail::value_counted()
+    {
+    }
+
+    stored_value::stored_value(stored_value const& x)
+        : detail::value_counted(x)
+    {
+    }
+
+    stored_value::stored_value(detail::value_base const& x)
+        : detail::value_counted(x.store())
+    {
+    }
+
+    stored_value& stored_value::operator=(stored_value x)
+    {
+        swap(x);
+        return *this;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // Iterator
 
@@ -720,15 +739,16 @@ namespace quickbook
 
             value_list_builder build;
 
-            for(value_node* pos2 = head_;
-                pos2 != &value_nil_impl::instance;
-                pos2 = pos2->next_)
-            {
-                if(pos2 == pos)
-                    build.append(new_node.get());
-                else
-                    build.append(pos2);
-            }
+            value_node* pos2 = head_;
+
+            for(;pos2 != pos; pos2 = pos2->next_)
+                build.append(pos2);
+
+            build.append(new_node.get());
+            pos2 = pos2->next_;
+
+            for(;pos2 != &value_nil_impl::instance; pos2 = pos2->next_)
+                build.append(pos2->store());
 
             return new value_list_impl(build.get(), tag_);
         }

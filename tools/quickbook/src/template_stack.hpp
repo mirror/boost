@@ -31,7 +31,7 @@ namespace quickbook
         template_body(value const&, fs::path const&);
         bool is_block() const;
 
-        value content;
+        stored_value content;
         fs::path filename;        
     };
 
@@ -60,7 +60,7 @@ namespace quickbook
         // or static_parent for clarity.
         template_scope const* parent;
 
-        value callouts;
+        stored_value callouts;
     };
 
     typedef boost::spirit::classic::symbols<template_symbol> template_symbols;
