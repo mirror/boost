@@ -9,7 +9,6 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "actions_class.hpp"
-#include "markups.hpp"
 #include "quickbook.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
@@ -72,7 +71,6 @@ namespace quickbook
         , code_block(phrase, phrase, *this)
         , inline_code(phrase, *this)
         , paragraph(*this)
-        , hr(out, hr_, *this)
         , space_char(phrase)
         , plain_char(phrase, *this)
         , raw_char(phrase, *this)
@@ -86,9 +84,6 @@ namespace quickbook
 
         , element_id_warning(*this)
 
-        , escape_pre(phrase, escape_pre_, *this)
-        , escape_post(phrase, escape_post_, *this)
-        
         , output_pre(*this)
     {
         // add the predefined macros

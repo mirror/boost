@@ -24,6 +24,7 @@ namespace quickbook
         (xinclude)(import)(include)
         (paragraph)
         (list)(ordered_list)(itemized_list)
+        (hr)
     )
 
     QUICKBOOK_VALUE_TAGS(table_tags, 0x250,

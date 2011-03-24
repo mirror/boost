@@ -11,6 +11,7 @@
 #include "grammar_impl.hpp"
 #include "actions_class.hpp"
 #include "doc_info_tags.hpp"
+#include "phrase_tags.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
@@ -243,11 +244,12 @@ namespace quickbook
             |   "\\U" >> cl::repeat_p(8)
                     [cl::chset<>("0-9a-fA-F")]
                                             [actions.escape_unicode]
-            |   (
-                    ("'''" >> !cl::eol_p)   [actions.escape_pre]
-                >>  *(cl::anychar_p - "'''")[actions.raw_char]
-                >>  cl::str_p("'''")        [actions.escape_post]
-                )
+            |   ("'''" >> !eol)
+            >>	actions.values.save()
+            	[  (*(cl::anychar_p - "'''"))
+            								[actions.values.entry(ph::arg1, ph::arg2, phrase_tags::escape)]
+            	>>  cl::str_p("'''")        [actions.element]
+            	]
             |   cl::anychar_p               [actions.plain_char]
             ;
     }

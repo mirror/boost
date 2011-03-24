@@ -289,33 +289,6 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    struct markup_action
-    {
-        // A generic markup action
-
-        markup_action(
-            collector& phrase,
-            std::string const& str,
-            quickbook::actions& actions)
-        : phrase(phrase), str(str), actions(actions) {}
-
-        template <typename T>
-        void operator()(T const&) const
-        {
-            phrase << str;
-        }
-
-        template <typename T>
-        void operator()(T const&, T const&) const
-        {
-            phrase << str;
-        }
-
-        collector& phrase;
-        std::string str;
-        quickbook::actions& actions;
-    };
-    
     struct code_action
     {
         // Does the actual syntax highlighing of code

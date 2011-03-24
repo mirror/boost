@@ -20,6 +20,7 @@ namespace quickbook
         (macroref)(headerref)(conceptref)(globalref)
         (bold)(italic)(underline)(teletype)(strikethrough)(quote)(replaceable)
         (footnote)
+        (escape)
     )
     
     QUICKBOOK_VALUE_NAMED_TAGS(source_mode_tags, 0x550,

@@ -13,6 +13,7 @@
 #include "utils.hpp"
 #include "template_tags.hpp"
 #include "block_tags.hpp"
+#include "phrase_tags.hpp"
 #include "parsers.hpp"
 #include "scoped.hpp"
 #include <boost/spirit/include/classic_core.hpp>
@@ -157,7 +158,7 @@ namespace quickbook
         local.blocks =
            *(   local.code
             |   local.list
-            |   local.hr                        [actions.hr]
+            |   local.hr
             |   +eol
             )
             ;
@@ -169,9 +170,11 @@ namespace quickbook
             ;
 
         local.hr =
-            cl::str_p("----")
-            >> *(cl::anychar_p - eol)
-            >> +eol
+                cl::str_p("----")
+            >>  actions.values.list(block_tags::hr)
+                [   *(cl::anychar_p - eol)
+                >>  +eol
+                ]                               [actions.element]
             ;
 
         local.element
@@ -469,13 +472,13 @@ namespace quickbook
                                                 [actions.escape_unicode]
             |   "\\U" >> cl::repeat_p(8) [cl::chset<>("0-9a-fA-F")]
                                                 [actions.escape_unicode]
-            |   (
-                    ("'''" >> !eol)             [actions.escape_pre]
-                >>  *(cl::anychar_p - "'''")    [actions.raw_char]
-                >>  (   cl::str_p("'''")        [actions.escape_post]
+            |   ("'''" >> !eol)
+            >>  actions.values.save()
+                [   (*(cl::anychar_p - "'''"))  [actions.values.entry(ph::arg1, ph::arg2, phrase_tags::escape)]
+                >>  (   cl::str_p("'''")
                     |   cl::eps_p               [actions.error("Unclosed boostbook escape.")]
-                    )
-                )
+                    )                           [actions.element]
+                ]
             ;
 
         //

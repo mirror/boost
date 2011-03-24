@@ -119,7 +119,6 @@ namespace quickbook
         code_action             code_block;
         inline_code_action      inline_code;
         paragraph_action        paragraph;
-        markup_action           hr;
         space                   space_char;
         plain_char_action       plain_char;
         raw_char_action         raw_char;
@@ -132,9 +131,6 @@ namespace quickbook
         do_template_action      do_template;
 
         element_id_warning_action element_id_warning;
-
-        markup_action           escape_pre;
-        markup_action           escape_post;
 
         pre_output_action       output_pre;
     };

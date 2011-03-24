@@ -57,6 +57,7 @@ namespace quickbook
     void begin_section_action(quickbook::actions&, value);
     void end_section_action(quickbook::actions&, value, file_position);
     void block_action(quickbook::actions&, value);
+    void block_empty_action(quickbook::actions&, value);
     void macro_definition_action(quickbook::actions&, value);
     void template_body_action(quickbook::actions&, value);
     void variable_list_action(quickbook::actions&, value);
@@ -67,7 +68,8 @@ namespace quickbook
     void image_action(quickbook::actions&, value);
     void anchor_action(quickbook::actions&, value);
     void link_action(quickbook::actions&, value);
-    void phrase_action_(quickbook::actions&, value);
+    void phrase_action(quickbook::actions&, value);
+    void raw_phrase_action(quickbook::actions&, value);
     void source_mode_action(quickbook::actions&, value);
 
     void element_action::operator()(iterator first, iterator) const
@@ -105,6 +107,8 @@ namespace quickbook
         case block_tags::note:
         case block_tags::tip:
             return block_action(actions,v);
+        case block_tags::hr:
+            return block_empty_action(actions,v);
         case block_tags::macro_definition:
             return macro_definition_action(actions,v);
         case block_tags::template_definition:
@@ -142,7 +146,9 @@ namespace quickbook
         case phrase_tags::quote:
         case phrase_tags::replaceable:
         case phrase_tags::footnote:
-            return phrase_action_(actions, v);
+            return phrase_action(actions, v);
+        case phrase_tags::escape:
+            return raw_phrase_action(actions, v);
         case source_mode_tags::cpp:
         case source_mode_tags::python:
         case source_mode_tags::teletype:
@@ -211,7 +217,14 @@ namespace quickbook
         values.finish();
     }
 
-    void phrase_action_(quickbook::actions& actions, value phrase)
+    void block_empty_action(quickbook::actions& actions, value block)
+    {
+        if(!actions.output_pre(actions.out)) return;
+        detail::markup markup = detail::markups[block.get_tag()];
+        actions.out << markup.pre;
+    }
+
+    void phrase_action(quickbook::actions& actions, value phrase)
     {
         if(!actions.output_pre(actions.phrase)) return;
         detail::markup markup = detail::markups[phrase.get_tag()];
@@ -219,6 +232,13 @@ namespace quickbook
         value_consumer values = phrase;
         actions.phrase << markup.pre << values.consume().get_boostbook() << markup.post;
         values.finish();
+    }
+
+    void raw_phrase_action(quickbook::actions& actions, value phrase)
+    {
+        if(!actions.output_pre(actions.phrase)) return;
+        detail::markup markup = detail::markups[phrase.get_tag()];
+        actions.phrase << markup.pre << phrase.get_quickbook() << markup.post;
     }
 
     void paragraph_action::operator()() const

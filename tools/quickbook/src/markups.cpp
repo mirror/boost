@@ -110,6 +110,7 @@ namespace quickbook
                 { block_tags::tip, tip_pre, tip_post },
                 { block_tags::ordered_list, "<orderedlist>", "</orderedlist>" },
                 { block_tags::itemized_list, "<itemizedlist>", "</itemizedlist>" },
+                { block_tags::hr, hr_, 0 },
                 { phrase_tags::url, url_pre_, url_post_ },
                 { phrase_tags::link, link_pre_, link_post_ },
                 { phrase_tags::funcref, funcref_pre_, funcref_post_ },
@@ -127,7 +128,8 @@ namespace quickbook
                 { phrase_tags::strikethrough, strikethrough_pre_, strikethrough_post_ },
                 { phrase_tags::quote, quote_pre_, quote_post_ },
                 { phrase_tags::replaceable, replaceable_pre_, replaceable_post_ },
-                { phrase_tags::footnote, footnote_pre_, footnote_post_ }
+                { phrase_tags::footnote, footnote_pre_, footnote_post_ },
+                { phrase_tags::escape, escape_pre_, escape_post_ }
             };
 
             BOOST_FOREACH(markup m, init_markups)
