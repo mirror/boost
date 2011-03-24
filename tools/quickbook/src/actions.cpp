@@ -10,15 +10,15 @@
 =============================================================================*/
 #include <numeric>
 #include <functional>
-#include <algorithm>
 #include <vector>
 #include <boost/filesystem/v3/convenience.hpp>
 #include <boost/filesystem/v3/fstream.hpp>
+#include <boost/range/distance.hpp>
 #include <boost/range/algorithm/replace.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/range/distance.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/next_prior.hpp>
+#include <boost/foreach.hpp>
 #include "quickbook.hpp"
 #include "actions.hpp"
 #include "utils.hpp"
@@ -558,12 +558,12 @@ namespace quickbook
             detail::print_space(*first++, out.get());
     }
 
-    void pre_escape_back::operator()(iterator first, iterator last) const
+    void pre_escape_back::operator()(iterator, iterator) const
     {
         escape_actions.phrase.push(); // save the stream
     }
 
-    void post_escape_back::operator()(iterator first, iterator last) const
+    void post_escape_back::operator()(iterator, iterator) const
     {
         escape_actions.output_pre(escape_actions.phrase);
         out << escape_actions.phrase.str();
@@ -897,59 +897,72 @@ namespace quickbook
 
     namespace
     {
-        iterator find_bracket_end(iterator begin, iterator const& end)
-        {
-            unsigned int depth = 1;
-
-            while(depth > 0) {
-                char const* search_chars = "[]\\";
-                begin = std::find_first_of(begin, end, search_chars, search_chars + 3);
-                if(begin == end) return begin;
-
-                if(*begin == '\\')
-                {
-                    if(++begin == end) return begin;
-                    ++begin;
-                }
-                else
-                {
-                    depth += (*begin == '[') ? 1 : -1;
-                    ++begin;
-                }
-            }
-
-            return begin;
-        }
-
-        iterator find_first_seperator(iterator const& begin, iterator const& end)
+        iterator find_first_seperator(iterator begin, iterator end)
         {
             if(qbk_version_n < 105) {
-                char const* whitespace = " \t\r\n";
-                return std::find_first_of(begin, end, whitespace, whitespace + 4);
-            }
-            else {
-                iterator pos = begin;
-
-                while(true)
+                for(;begin != end; ++begin)
                 {
-                    char const* search_chars = " \t\r\n\\[";
-                    pos = std::find_first_of(pos, end, search_chars, search_chars + 6);
-                    if(pos == end) return pos;
-
-                    switch(*pos)
+                    switch(*begin)
                     {
-                    case '[':
-                        pos = find_bracket_end(++pos, end);
-                        break;
-                    case '\\':
-                        if(++pos == end) return pos;
-                        ++pos;
-                        break;
+                    case ' ':
+                    case '\t':
+                    case '\n':
+                    case '\r':
+                        return begin;
                     default:
-                        return pos;
+                        break;
                     }
                 }
             }
+            else {
+                unsigned int depth = 0;
+
+                for(;begin != end; ++begin)
+                {
+                    switch(*begin)
+                    {
+                    case '[':
+                        ++depth;
+                        break;
+                    case '\\':
+                        if(++begin == end) return begin;
+                        break;
+                    case ']':
+                        if (depth > 0) --depth;
+                        break;
+                    case ' ':
+                    case '\t':
+                    case '\n':
+                    case '\r':
+                        if (depth == 0) return begin;
+                    default:
+                        break;
+                    }
+                }
+            }
+            
+            return begin;
+        }
+        
+        std::pair<iterator, iterator> find_seperator(iterator begin, iterator end)
+        {
+            iterator first = begin = find_first_seperator(begin, end);
+
+            for(;begin != end; ++begin)
+            {
+                switch(*begin)
+                {
+                case ' ':
+                case '\t':
+                case '\n':
+                case '\r':
+                    break;
+                default:
+                    return std::make_pair(first, begin);
+                }
+            }
+            
+            return std::make_pair(first, begin);
         }
     
         bool break_arguments(
@@ -980,17 +993,15 @@ namespace quickbook
                     iterator begin(body.content.begin(), body.position);
                     iterator end(body.content.end());
                     
-                    iterator l_pos = find_first_seperator(begin, end);
-                    if (l_pos == end)
-                        break;
-                    char const* whitespace = " \t\r\n";
-                    char const* whitespace_end = whitespace + 4;
-                    iterator r_pos = l_pos;
-                    while(r_pos != end && std::find(whitespace, whitespace_end, *r_pos) != whitespace_end) ++r_pos;
-                    if (r_pos == end)
-                        break;
-                    template_body second(std::string(r_pos, end), body.filename, r_pos.get_position(), false);
-                    body.content = std::string(begin, l_pos);
+                    std::pair<iterator, iterator> pos =
+                        find_seperator(begin, end);
+                    if (pos.second == end) break;
+                    template_body second(
+                        std::string(pos.second, end),
+                        body.filename,
+                        pos.second.get_position(),
+                        false);
+                    body.content = std::string(begin, pos.first);
                     args.push_back(second);
                 }
             }
@@ -1834,7 +1845,7 @@ namespace quickbook
         return (*this)(first, last, value::default_tag);
     }
     
-    void collector_to_value_action::operator()(iterator first, iterator last) const
+    void collector_to_value_action::operator()(iterator, iterator) const
     {
         if(!actions.output_pre(output)) return;
 

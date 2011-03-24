@@ -110,8 +110,10 @@ namespace quickbook
     }
 
     static int
-    parse_document(fs::path const& filein_, fs::path const& xinclude_base,
-            string_stream& out, bool ignore_docinfo = false)
+    parse_document(
+        fs::path const& filein_,
+        fs::path const& xinclude_base,
+            string_stream& out)
     {
         actions actor(filein_, xinclude_base, out);
 
@@ -248,6 +250,9 @@ main(int argc, char* argv[])
         bool pretty_print = true;
 
 #if QUICKBOOK_WIDE_PATHS
+        quickbook::ignore_variable(&argc);
+        quickbook::ignore_variable(&argv);
+
         int wide_argc;
         LPWSTR* wide_argv = CommandLineToArgvW(GetCommandLineW(), &wide_argc);
         if (!wide_argv)

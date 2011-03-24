@@ -11,6 +11,7 @@
 #include <sstream>
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/join.hpp>
+#include <boost/foreach.hpp>
 #include "quickbook.hpp"
 #include "utils.hpp"
 #include "input_path.hpp"

@@ -693,7 +693,7 @@ namespace quickbook
             value_node* pos = head_;
             boost::intrusive_ptr<value_node> new_node;
 
-            while(true) {
+            for(;;) {
                 if(pos == &value_nil_impl::instance)
                     return this;
                 new_node = pos->store();

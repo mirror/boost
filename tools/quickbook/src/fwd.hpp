@@ -17,8 +17,11 @@ namespace quickbook
 {
     struct actions;
     struct quickbook_grammar;
+    struct collector;
 
     typedef position_iterator<std::string::const_iterator> iterator;
+
+    inline void ignore_variable(void const*) {} 
 }
 
 #endif

@@ -7,6 +7,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+#include <stack>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
@@ -307,9 +308,7 @@ namespace quickbook
         iterator first(code.begin());
         iterator last(code.end());
 
-        size_t fname_len = file.size();
-        bool is_python = fname_len >= 3
-            && file[--fname_len]=='y' && file[--fname_len]=='p' && file[--fname_len]=='.';
+        bool is_python = extension == ".py";
         code_snippet_actions a(storage, file, doc_id, is_python ? "[python]" : "[c++]");
         // TODO: Should I check that parse succeeded?
         if(is_python) {
@@ -398,14 +397,14 @@ namespace quickbook
         }
     }
 
-    void code_snippet_actions::start_snippet(iterator first, iterator last)
+    void code_snippet_actions::start_snippet(iterator, iterator)
     {
         append_code();
         snippet_stack.push(snippet_data(id, callout_id));
         id.clear();
     }
 
-    void code_snippet_actions::end_snippet(iterator first, iterator last)
+    void code_snippet_actions::end_snippet(iterator first, iterator)
     {
         // TODO: Error?
         if(snippet_stack.empty()) return;

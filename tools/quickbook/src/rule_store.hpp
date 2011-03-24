@@ -15,7 +15,7 @@
 #define BOOST_SPIRIT_QUICKBOOK_RULE_STORE_HPP
 
 #include <deque>
-#include <boost/assert.hpp>
+#include <cassert>
 #include <utility>
 
 namespace quickbook
@@ -34,7 +34,8 @@ namespace quickbook
             
             scoped_void() : ptr_(0), del_(0) {}
             scoped_void(scoped_void const& src) : ptr_(0), del_(0) {
-                BOOST_ASSERT(!src.ptr_);
+            ignore_variable(&src);
+                assert(!src.ptr_);
             }
             ~scoped_void() {
                 if(ptr_) del_(ptr_);

@@ -10,32 +10,19 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP
 
-#include <map>
 #include <string>
 #include <vector>
-#include <stack>
-#include <algorithm>
-#include <boost/filesystem/v3/operations.hpp>
 #include <boost/spirit/include/phoenix1_functions.hpp>
-#include <boost/foreach.hpp>
-#include <boost/tuple/tuple.hpp>
+#include <boost/spirit/include/classic_symbols_fwd.hpp>
 #include "fwd.hpp"
-#include "collector.hpp"
 #include "template_stack.hpp"
 #include "utils.hpp"
 #include "values.hpp"
 #include "scoped.hpp"
 
-#ifdef BOOST_MSVC
-// disable copy/assignment could not be generated, unreferenced formal params
-#pragma warning (push)
-#pragma warning(disable : 4511 4512 4100)
-#endif
-
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
-    namespace fs = boost::filesystem;
 
     extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
 
@@ -125,7 +112,7 @@ namespace quickbook
         : actions(actions) {}
 
         void operator()() const;
-        void operator()(iterator first, iterator last) const { (*this)(); }
+        void operator()(iterator, iterator) const { (*this)(); }
 
         quickbook::actions& actions;
     };
@@ -440,9 +427,5 @@ namespace quickbook
         int saved_context_;
     };
 }
-
-#ifdef BOOST_MSVC
-#pragma warning (pop)
-#endif
 
 #endif // BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP

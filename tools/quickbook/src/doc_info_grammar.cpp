@@ -8,10 +8,8 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include "grammar_impl.hpp"
-#include "actions_class.hpp"
-#include "doc_info_tags.hpp"
-#include "phrase_tags.hpp"
+#include <map>
+#include <boost/foreach.hpp>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
@@ -19,6 +17,10 @@
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_numerics.hpp>
 #include <boost/spirit/include/phoenix1_primitives.hpp>
+#include "grammar_impl.hpp"
+#include "actions_class.hpp"
+#include "doc_info_tags.hpp"
+#include "phrase_tags.hpp"
 
 namespace quickbook
 {

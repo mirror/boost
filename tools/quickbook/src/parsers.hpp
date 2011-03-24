@@ -176,7 +176,7 @@ namespace quickbook {
         {
             typedef phoenix::tuple<> tuple;
             return scoped_parser_gen<Impl, tuple>(impl_, tuple());
-        };
+        }
 
         template <typename Arg1>
         scoped_parser_gen<Impl, phoenix::tuple<Arg1> >
@@ -184,7 +184,7 @@ namespace quickbook {
         {
             typedef phoenix::tuple<Arg1> tuple;
             return scoped_parser_gen<Impl, tuple>(impl_, tuple(x1));
-        };
+        }
     
         template <typename Arg1, typename Arg2>
         scoped_parser_gen<Impl, phoenix::tuple<Arg1, Arg2> >
@@ -192,7 +192,7 @@ namespace quickbook {
         {
             typedef phoenix::tuple<Arg1, Arg2> tuple;
             return scoped_parser_gen<Impl, tuple>(impl_, tuple(x1, x2));
-        };
+        }
         
         Impl impl_;
     };
@@ -252,4 +252,5 @@ namespace quickbook {
     
     lookback_gen const lookback = lookback_gen();
 }
+
 #endif // BOOST_QUICKBOOK_SCOPED_BLOCK_HPP

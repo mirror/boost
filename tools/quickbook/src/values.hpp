@@ -305,7 +305,6 @@ namespace quickbook
             value::iterator* ptr_;
         };
 
-
         typedef iterator const_iterator;
         typedef iterator::reference reference;
     
@@ -323,13 +322,13 @@ namespace quickbook
 
         reference consume()
         {
-            assert(check());
+            assert_check();
             return *pos_++;
         }
 
         reference consume(value::tag_type t)
         {
-            assert(check(t));
+            assert_check(t);
             return *pos_++;
         }
 
@@ -365,12 +364,27 @@ namespace quickbook
         
         void finish() const
         {
-            assert(pos_ == end_);
+            if (pos_ != end_)
+            throw value_error("Not all values handled.");
         }
 
         iterator begin() { return iterator(&pos_); }
         iterator end() { return iterator(&end_); }
     private:
+
+    void assert_check() const
+    {
+        if (pos_ == end_)
+        throw value_error("Attempt to read past end of value list.");
+    }
+
+    void assert_check(value::tag_type t) const
+    {
+        assert_check();
+        if (t != pos_->get_tag())
+        throw value_error("Incorrect value tag.");
+    }
+
         value list_;
         value::iterator pos_, end_;
     };

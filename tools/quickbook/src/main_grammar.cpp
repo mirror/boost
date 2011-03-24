@@ -186,7 +186,6 @@ namespace quickbook
                 )
             >>  local.process_element()
                 [   actions.values.list(ph::var(local.info.tag))
-
                     [   cl::lazy_p(*ph::var(local.info.rule))
                     >>  space
                     >>  ']'
