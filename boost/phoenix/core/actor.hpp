@@ -11,6 +11,7 @@
 
 #include <boost/phoenix/core/limits.hpp>
 
+#include <boost/is_placeholder.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/phoenix/core/domain.hpp>
@@ -20,6 +21,7 @@
 #include <boost/phoenix/support/iterate.hpp>
 #include <boost/phoenix/support/vector.hpp>
 #include <boost/proto/extends.hpp>
+#include <boost/proto/make_expr.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/mpl/void.hpp>
 #include <cstring>
@@ -63,7 +65,12 @@ namespace boost { namespace phoenix
 
 
     #define BOOST_PHOENIX_ACTOR_ASSIGN_CHILD(Z, N, D)                           \
-        assign(proto::_child_c<N>, proto::_child_c<N>(proto::_state))           \
+        assign(                                                                 \
+            proto::_child_c<N>                                                  \
+          , proto::call<                                                        \
+                proto::_child_c<N>(proto::_state)                               \
+            >                                                                   \
+        )                                                                       \
     /**/
     #define BOOST_PHOENIX_ACTOR_ASSIGN_CALL(Z, N, D)                            \
             proto::when<                                                        \
@@ -112,7 +119,18 @@ namespace boost { namespace phoenix
     template <typename Expr>
     struct actor
     {
-        BOOST_PROTO_BASIC_EXTENDS(Expr, actor<Expr>, phoenix_domain)
+        typedef typename
+            mpl::eval_if<
+                mpl::or_<
+                    is_custom_terminal<Expr>
+                  , mpl::bool_<is_placeholder<Expr>::value>
+                >
+              , proto::terminal<Expr>
+              , mpl::identity<Expr>
+            >::type
+            expr_type;
+        
+        BOOST_PROTO_BASIC_EXTENDS(expr_type, actor<expr_type>, phoenix_domain)
 
         // providing operator= to be assignable
         actor& operator=(actor const& other)
@@ -125,28 +143,67 @@ namespace boost { namespace phoenix
             detail::assign()(*this, other);
             return *this;
         }
-        BOOST_PROTO_EXTENDS_ASSIGN_()
+
+        template <typename A0>
+        typename proto::result_of::make_expr<
+            proto::tag::assign
+          , phoenix_domain
+          , proto_base_expr
+          , A0
+        >::type
+        operator=(A0 const & a0) const
+        {
+            return proto::make_expr<proto::tag::assign, phoenix_domain>(this->proto_expr_, a0);
+        }
+
+        template <typename A0>
+        typename proto::result_of::make_expr<
+            proto::tag::assign
+          , phoenix_domain
+          , proto_base_expr
+          , A0
+        >::type
+        operator=(A0 & a0) const
+        {
+            return proto::make_expr<proto::tag::assign, phoenix_domain>(this->proto_expr_, a0);
+        }
+
+        //BOOST_PROTO_EXTENDS_ASSIGN_()
         BOOST_PROTO_EXTENDS_SUBSCRIPT()
 
         template <typename Sig>
         struct result;
 
-        typename result_of::actor<Expr>::type
+        typename result_of::actor<proto_base_expr>::type
         operator()()
         {
             typedef vector1<const actor<Expr> *> env_type;
             env_type env = {this};
             
-            return eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, context(env, default_actions()));
         }
 
-        typename result_of::actor<Expr>::type
+        typename result_of::actor<proto_base_expr>::type
         operator()() const
         {
             typedef vector1<const actor<Expr> *> env_type;
             env_type env = {this};
             
-            return eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, context(env, default_actions()));
+        }
+
+        template <typename Env>
+        typename evaluator::impl<
+            proto_base_expr const &
+          , typename result_of::context<
+                Env const &
+              , default_actions const &
+            >::type
+          , int
+        >::result_type
+        eval(Env const & env) const
+        {
+            return phoenix::eval(*this, context(env, default_actions()));
         }
         
         // Bring in the rest
@@ -160,12 +217,12 @@ namespace boost
     // specialize boost::result_of to return the proper result type
     template <typename Expr>
     struct result_of<phoenix::actor<Expr>()>
-        : phoenix::result_of::actor<Expr>
+        : phoenix::result_of::actor<typename phoenix::actor<Expr>::proto_base_expr>
     {};
     
     template <typename Expr>
     struct result_of<phoenix::actor<Expr> const()>
-        : result_of<phoenix::actor<Expr>()>
+        : result_of<phoenix::actor<typename phoenix::actor<Expr>::proto_base_expr>()>
     {};
 }
 

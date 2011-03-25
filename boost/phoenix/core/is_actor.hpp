@@ -28,7 +28,7 @@ namespace boost { namespace phoenix
     {};
 
     template <typename T>
-    struct is_actor<T const &>
+    struct is_actor<T const>
         : is_actor<T>
     {};
 

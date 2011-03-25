@@ -15,6 +15,7 @@
 #include <boost/phoenix/core/domain.hpp>
 #include <boost/proto/make_expr.hpp>
 #include <boost/proto/tags.hpp>
+#include <boost/proto/operators.hpp>
 
 namespace boost { namespace phoenix
 {
@@ -85,6 +86,9 @@ namespace boost { namespace phoenix
         return proto::make_expr<
             proto::tag::shift_right, phoenix_domain>(a0, a1);
     }
+    
+    using proto::exprns_::operator<<;
+    using proto::exprns_::operator>>;
 }}
 
 #endif

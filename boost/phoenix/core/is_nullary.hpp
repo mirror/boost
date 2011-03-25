@@ -66,12 +66,12 @@ namespace boost { namespace phoenix
                             typename proto::result_of::value<Expr>::type
                         >::type
                     >
-            >::template impl<
-                typename proto::result_of::value<Expr>::type
-              , State
-              , Data
-            >::result_type
-        >
+                >::template impl<
+                    typename proto::result_of::value<Expr>::type
+                  , State
+                  , Data
+                >::result_type
+            >
         {};
 
         template <typename Expr, typename State, typename Data>

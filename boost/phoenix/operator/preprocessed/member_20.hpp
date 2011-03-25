@@ -19,6 +19,7 @@ namespace boost { namespace phoenix
     {
         return detail::mem_fun_ptr_gen<actor<Object>, MemPtr>(obj, ptr);
     }
+    using proto::exprns_::operator->*;
     namespace result_of
     {
         template <

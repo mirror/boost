@@ -17,6 +17,7 @@
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/support/category_of.hpp>
+#include <boost/fusion/include/pop_front.hpp>
 #include <boost/utility/result_of.hpp>
 
 namespace boost { namespace phoenix
@@ -51,6 +52,19 @@ namespace boost { namespace phoenix
         Env      env;
         OuterEnv outer_env;
         Locals   locals;
+
+        typedef typename
+            fusion::result_of::pop_front<
+                typename add_const<
+                    typename proto::detail::uncvref<Env>::type
+                >::type
+            >::type
+            args_type;
+
+        args_type args() const
+        {
+            return fusion::pop_front(env);
+        }
     
         #define BOOST_PHOENIX_ADAPT_SCOPED_ENVIRONMENT(INTRINSIC)               \
         template <typename Seq>                                                 \
@@ -58,7 +72,21 @@ namespace boost { namespace phoenix
         {                                                                       \
             typedef                                                             \
                 typename fusion::result_of::INTRINSIC<                          \
-                    typename Seq::env_type                                      \
+                    typename mpl::eval_if<                                      \
+                        is_const<                                               \
+                            typename remove_reference<                          \
+                                typename Seq::env_type                          \
+                            >::type                                             \
+                        >                                                       \
+                      , add_const<                                              \
+                            typename proto::detail::uncvref<                    \
+                                typename Seq::env_type                          \
+                            >::type                                             \
+                        >                                                       \
+                      , proto::detail::uncvref<                                 \
+                            typename Seq::env_type                              \
+                        >                                                       \
+                    >::type                                                     \
                 >::type                                                         \
                 type;                                                           \
                                                                                 \
@@ -78,7 +106,21 @@ namespace boost { namespace phoenix
         {
             typedef
                 typename fusion::result_of::value_at<
-                    typename proto::detail::uncvref<typename Seq::env_type>::type
+                    typename mpl::eval_if<
+                        is_const<
+                            typename remove_reference<
+                                typename Seq::env_type
+                            >::type
+                        >
+                      , add_const<
+                            typename proto::detail::uncvref<
+                                typename Seq::env_type
+                            >::type
+                        >
+                      , proto::detail::uncvref<
+                            typename Seq::env_type
+                        >
+                    >::type
                   , N
                 >::type
                 type;
@@ -89,7 +131,21 @@ namespace boost { namespace phoenix
         {
             typedef
                 typename fusion::result_of::at<
-                    typename proto::detail::uncvref<typename Seq::env_type>::type
+                    typename mpl::eval_if<
+                        is_const<
+                            typename remove_reference<
+                                typename Seq::env_type
+                            >::type
+                        >
+                      , add_const<
+                            typename proto::detail::uncvref<
+                                typename Seq::env_type
+                            >::type
+                        >
+                      , proto::detail::uncvref<
+                            typename Seq::env_type
+                        >
+                    >::type
                   , N
                 >::type
                 type;

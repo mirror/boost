@@ -10,6 +10,7 @@
 
 #include <boost/phoenix/operator/detail/define_operator.hpp>
 #include <boost/phoenix/core/expression.hpp>
+#include <boost/proto/operators.hpp>
 
 namespace boost { namespace phoenix
 {
@@ -21,6 +22,9 @@ namespace boost { namespace phoenix
         (assign)
         (subscript)
     )
+    
+    using proto::exprns_::operator&;
+    using proto::exprns_::operator*;
 }}
 
 #include <boost/phoenix/operator/detail/undef_operator.hpp>

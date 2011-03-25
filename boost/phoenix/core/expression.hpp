@@ -4,6 +4,7 @@
 #define BOOST_PHOENIX_CORE_EXPRESSION_HPP
 
 #include <boost/phoenix/core/limits.hpp>
+#include <boost/call_traits.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/phoenix/core/detail/expression.hpp>
 #include <boost/phoenix/support/iterate.hpp>
@@ -23,6 +24,7 @@
 #define BOOST_PHOENIX_CORE_EXPRESSION_HPP
 
 #include <boost/phoenix/core/limits.hpp>
+#include <boost/call_traits.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/phoenix/core/detail/expression.hpp>
 #include <boost/phoenix/core/domain.hpp>
@@ -71,11 +73,20 @@ namespace boost { namespace phoenix
         : proto::domain<proto::use_basic_expr<proto::default_generator> >
     {};
 
+#define M0(Z, N, D) \
+    BOOST_PP_COMMA_IF(N) typename call_traits<BOOST_PP_CAT(A, N)>::value_type
+
+#define M1(Z, N, D) \
+    BOOST_PP_COMMA_IF(N) typename call_traits<BOOST_PP_CAT(A, N)>::param_type BOOST_PP_CAT(a, N)
+
 #define BOOST_PHOENIX_ITERATION_PARAMS                                          \
     (3, (1, BOOST_PHOENIX_COMPOSITE_LIMIT,                                      \
     <boost/phoenix/core/expression.hpp>))                                       \
 /**/
     #include BOOST_PHOENIX_ITERATE()
+
+#undef M0
+#undef M1
 
 }}
 
@@ -94,7 +105,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , BOOST_PHOENIX_A
+              , BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, M0, _)
             >::type
             base_type;
 
@@ -104,7 +115,7 @@ namespace boost { namespace phoenix
             typename proto::nary_expr<Tag, BOOST_PHOENIX_A>::proto_grammar
             proto_grammar;
         
-        static type make(BOOST_PHOENIX_A_a)
+        static type make(BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, M1, _))
         {
             actor<base_type> const e =
                 {

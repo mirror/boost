@@ -9,6 +9,7 @@
 #define BOOST_PHOENIX_CORE_TERMINAL_HPP
 
 #include <boost/phoenix/core/limits.hpp>
+#include <boost/call_traits.hpp>
 #include <boost/is_placeholder.hpp>
 #include <boost/phoenix/core/actor.hpp>
 #include <boost/phoenix/core/meta_grammar.hpp>
@@ -17,6 +18,28 @@
 #include <boost/proto/transform/lazy.hpp>
 #include <boost/proto/functional/fusion/at.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
+
+#define BOOST_PHOENIX_DEFINE_CUSTOM_TERMINAL(Template, Terminal, IsNullary, EvalFun)\
+    namespace boost { namespace phoenix                                         \
+    {                                                                           \
+        namespace result_of                                                     \
+        {                                                                       \
+            Template                                                            \
+            struct is_nullary<                                                  \
+                custom_terminal<                                                \
+                    Terminal                                                    \
+                >                                                               \
+            >                                                                   \
+                : IsNullary                                                     \
+            {};                                                                 \
+        }                                                                       \
+        Template                                                                \
+        struct is_custom_terminal<Terminal >: mpl::true_ {};                    \
+                                                                                \
+        Template                                                                \
+        struct custom_terminal<Terminal > : proto::call<EvalFun > {};           \
+    }}                                                                          \
+/**/
 
 namespace boost { namespace phoenix
 {
@@ -29,28 +52,21 @@ namespace boost { namespace phoenix
  
     namespace expression
     {
-        template <typename T>
+        template <typename T, template <typename> class Actor = actor>
         struct terminal
-            : proto::terminal<T>
+            : proto::terminal<
+                typename call_traits<T>::value_type
+            >
         {
-            typedef actor<typename proto::terminal<T>::type> type;
+            typedef typename
+                proto::terminal<
+                    typename call_traits<T>::value_type
+                >::type base_type;
+            typedef Actor<base_type> type;
             
-            static const type make(T t)
+            static const type make(typename call_traits<T>::param_type t)
             {
-                typename terminal<T>::type const e = {{t}};
-                return e;
-            }
-        };
-        
-        template <typename T, int N>
-        struct terminal<T[N]>
-            : proto::terminal<T>
-        {
-            typedef actor<typename proto::terminal<T* >::type> type;
-
-            static const type make(T t[N])
-            {
-                typename terminal<T *>::type const e = {{t}};
+                actor<base_type> const e = {base_type::make(t)};
                 return e;
             }
         };

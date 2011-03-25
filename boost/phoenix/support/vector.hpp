@@ -14,6 +14,7 @@
 
 #include <boost/phoenix/core/limits.hpp>
 #include <boost/phoenix/support/iterate.hpp>
+#include <boost/preprocessor/repetition/enum_shifted_params.hpp>
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 #define M0(Z, N, D)                                                             \
@@ -26,6 +27,14 @@
 #define M2(Z, N, D)                                                             \
     (BOOST_PP_CAT(A, N), BOOST_PP_CAT(a, N))                                    \
 /**/
+
+namespace boost { namespace phoenix
+{
+    template <typename Dummy = void>
+    struct vector0
+    {};
+}}
+
 
 #define BOOST_PHOENIX_ITERATION_PARAMS                                          \
         (3, (1, BOOST_PP_INC(BOOST_PHOENIX_LIMIT),                              \
@@ -46,6 +55,16 @@ namespace boost { namespace phoenix
     struct BOOST_PP_CAT(vector, BOOST_PHOENIX_ITERATION)
     {
         BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, M0, _)
+
+        typedef
+            BOOST_PP_CAT(vector, BOOST_PP_DEC(BOOST_PHOENIX_ITERATION))<BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PHOENIX_ITERATION, A)>
+            args_type;
+
+        args_type args() const
+        {
+            args_type r = {BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PHOENIX_ITERATION, a)};
+            return r;
+        }
     };
 }}
 

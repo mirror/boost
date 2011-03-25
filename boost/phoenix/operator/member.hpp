@@ -12,6 +12,7 @@
 #include <boost/phoenix/operator/detail/mem_fun_ptr_gen.hpp>
 #include <boost/phoenix/support/iterate.hpp>
 #include <boost/type_traits/is_member_function_pointer.hpp>
+#include <boost/proto/operators.hpp>
 
 #include <boost/phoenix/operator/preprocessed/member.hpp>
 
@@ -32,6 +33,7 @@
 #include <boost/phoenix/operator/detail/mem_fun_ptr_gen.hpp>
 #include <boost/phoenix/support/iterate.hpp>
 #include <boost/type_traits/is_member_function_pointer.hpp>
+#include <boost/proto/operators.hpp>
 
 #if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/member_" BOOST_PHOENIX_LIMIT_STR ".hpp")
@@ -73,6 +75,8 @@ namespace boost { namespace phoenix
     {
         return detail::mem_fun_ptr_gen<actor<Object>, MemPtr>(obj, ptr);
     }
+
+    using proto::exprns_::operator->*;
 
     namespace result_of
     {

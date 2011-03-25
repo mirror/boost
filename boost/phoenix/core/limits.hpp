@@ -11,6 +11,7 @@
 #include <boost/preprocessor/inc.hpp>
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/stringize.hpp>
+#include <boost/phoenix/version.hpp>
 #include <boost/phoenix/support/preprocessor/round.hpp>
 
 #if !defined(BOOST_PHOENIX_LIMIT)
@@ -18,6 +19,8 @@
 #elif (BOOST_PHOENIX_LIMIT < 5)
 # error "PHOENIX_LIMIT is set too low"
 #endif
+// for backwards compat.
+#define PHOENIX_LIMIT BOOST_PHOENIX_LIMIT
 
 #define BOOST_PHOENIX_LIMIT_STR BOOST_PP_STRINGIZE(BOOST_PHOENIX_PP_ROUND_UP(BOOST_PHOENIX_LIMIT))
 
