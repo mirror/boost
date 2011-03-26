@@ -265,23 +265,19 @@ namespace quickbook
 
         local.template_ =
             (   '['
-            >>  space                           [actions.values.reset()]
-            >>  !cl::str_p("`")                 [actions.values.entry(ph::arg1, ph::arg2, template_tags::escape)]
-            >>
-            ( (
-                (cl::eps_p(cl::punct_p)
-                    >> actions.templates.scope
-                )                               [actions.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
-                >> !local.template_args
-            ) | (
-                (actions.templates.scope
-                    >> cl::eps_p(hard_space)
-                )                               [actions.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
-                >> space
-                >> !local.template_args
-            ) )
-            >> ']'
-            )                                   [actions.do_template]
+            >>  space
+            >>  actions.values.list(template_tags::template_)
+                [   !cl::str_p("`")             [actions.values.entry(ph::arg1, ph::arg2, template_tags::escape)]
+                >>  (   cl::eps_p(cl::punct_p)
+                    >>  actions.templates.scope [actions.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
+                    |   actions.templates.scope [actions.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
+                    >>  cl::eps_p(hard_space)
+                    )
+                >>  space
+                >>  !local.template_args
+                >>  ']'
+                ]
+            )                                   [actions.element]
             ;
 
         local.template_args =

@@ -14,6 +14,7 @@
 namespace quickbook
 {
     QUICKBOOK_VALUE_TAGS(template_tags, 0x100,
+        (template_)
         (escape)
         (identifier)
         (block)

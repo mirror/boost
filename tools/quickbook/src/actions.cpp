@@ -71,6 +71,7 @@ namespace quickbook
     void phrase_action(quickbook::actions&, value);
     void raw_phrase_action(quickbook::actions&, value);
     void source_mode_action(quickbook::actions&, value);
+    void do_template_action(quickbook::actions&, value, file_position);
 
     void element_action::operator()(iterator first, iterator) const
     {
@@ -153,6 +154,8 @@ namespace quickbook
         case source_mode_tags::python:
         case source_mode_tags::teletype:
             return source_mode_action(actions, v);
+        case template_tags::template_:
+            return do_template_action(actions, v, first.get_position());
         default:
             break;
         }
@@ -1102,14 +1105,13 @@ namespace quickbook
         int callout_id = 0;
     }
 
-    void do_template_action::operator()(iterator first, iterator) const
+    void do_template_action(quickbook::actions& actions, value template_list,
+            file_position pos)
     {
         if(actions.suppress) return;
 
-        file_position const pos = first.get_position();
-        
         // Get the arguments
-        value_consumer values = actions.values.release();
+        value_consumer values = template_list;
 
         bool template_escape = values.check(template_tags::escape);
         if(template_escape) values.consume();
@@ -1227,7 +1229,6 @@ namespace quickbook
 
             if (!parse_template(symbol->body, template_escape, actions))
             {
-                file_position const pos = first.get_position();
                 detail::outerr(actions.filename, pos.line)
                     << "Expanding "
                     << (symbol->body.is_block() ? "block" : "phrase")
@@ -1245,7 +1246,6 @@ namespace quickbook
 
             if (actions.section_level != actions.min_section_level)
             {
-                file_position const pos = first.get_position();
                 detail::outerr(actions.filename, pos.line)
                     << "Mismatched sections in template " << detail::utf8(identifier) << std::endl;
                 actions.pop(); // restore the actions' states

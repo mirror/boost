@@ -80,7 +80,6 @@ namespace quickbook
 
         , break_(phrase, *this)
         , do_macro(phrase, *this)
-        , do_template(*this)
 
         , element_id_warning(*this)
 

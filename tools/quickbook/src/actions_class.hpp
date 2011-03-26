@@ -129,7 +129,6 @@ namespace quickbook
 
         break_action            break_;
         do_macro_action         do_macro;
-        do_template_action      do_template;
 
         element_id_warning_action element_id_warning;
 

@@ -327,18 +327,6 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
-    struct do_template_action
-    {
-        // Handles template substitutions
-
-        do_template_action(quickbook::actions& actions)
-        : actions(actions) {}
-
-        void operator()(iterator first, iterator last) const;
-
-        quickbook::actions& actions;
-    };
-
    struct element_id_warning_action
    {
         element_id_warning_action(quickbook::actions& actions_)
