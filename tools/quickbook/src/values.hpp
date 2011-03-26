@@ -61,6 +61,7 @@ namespace quickbook
             virtual bool empty() const;
             virtual bool is_list() const;
             virtual bool is_string() const;
+            virtual bool equals(value_node*) const;
 
             virtual value_node* get_list() const;
             
@@ -121,6 +122,11 @@ namespace quickbook
             { return value_->get_boostbook(); }
             int get_int() const
             { return value_->get_int(); }
+
+            // Equality is pretty inefficient. Not really designed for anything
+            // more than testing purposes.
+            friend bool operator==(value_base const& x, value_base const& y)
+            { return x.value_->equals(y.value_); }
 
         protected:
             value_node* value_;

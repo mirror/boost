@@ -11,6 +11,7 @@
 
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/range/algorithm/equal.hpp>
+#include <vector>
 #include "values.hpp"
 
 void empty_tests()
@@ -131,6 +132,33 @@ void store_test2()
     store_test2_check(q);
 }
 
+void equality_tests()
+{
+    std::vector<quickbook::value> distinct_values;
+
+    quickbook::value_builder builder;
+    quickbook::value nil;
+    
+    // 0: nil
+    distinct_values.push_back(nil);
+
+    // 1: []
+    distinct_values.push_back(builder.release());
+
+    // 2: [nil]
+    builder.insert(nil);
+    distinct_values.push_back(builder.release());
+
+    for(int i = 0; i < distinct_values.size(); ++i)
+        for(int j = 0; j < distinct_values.size(); ++j)
+            if ((i == j) != (distinct_values[i] == distinct_values[j]))
+            {
+                BOOST_ERROR("Value mismatch.");
+                BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                    << "\tat " << i << ", " << j << std::endl;
+            }
+}
+
 int main()
 {
     empty_tests();
@@ -139,6 +167,7 @@ int main()
     multiple_list_test();
     store_test1();
     store_test2();
+    equality_tests();
 
     return boost::report_errors();
 }

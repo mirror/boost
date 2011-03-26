@@ -12,7 +12,7 @@
 #include <boost/lexical_cast.hpp>
 
 #define UNDEFINED_ERROR() \
-    throw value_error( \
+    throw value_undefined_method( \
         std::string(BOOST_CURRENT_FUNCTION) +\
         " not defined for " + \
         this->type_name() + \
@@ -24,9 +24,17 @@ namespace quickbook
     ////////////////////////////////////////////////////////////////////////////
     // Value Error
     
+    struct value_undefined_method : value_error
+    {
+        value_undefined_method(std::string const&);
+    };
+    
     value_error::value_error(std::string const& x)
         : std::logic_error(x) {}
-    
+
+    value_undefined_method::value_undefined_method(std::string const& x)
+        : value_error(x) {}
+
     ////////////////////////////////////////////////////////////////////////////
     // Node
 
@@ -45,15 +53,49 @@ namespace quickbook
         int value_node::get_int() const { UNDEFINED_ERROR(); }
         std::string value_node::get_quickbook() const { UNDEFINED_ERROR(); }
         value_node::qbk_range value_node::get_quickbook_range() const { UNDEFINED_ERROR(); }
-        std::string value_node::get_boostbook() const {  UNDEFINED_ERROR(); }
-        value_node* value_node::get_list() const {  UNDEFINED_ERROR(); }
+        std::string value_node::get_boostbook() const { UNDEFINED_ERROR(); }
+        value_node* value_node::get_list() const { UNDEFINED_ERROR(); }
 
         bool value_node::empty() const { return false; }
         bool value_node::check() const { return true; }
         bool value_node::is_list() const { return false; }
         bool value_node::is_string() const { return false; }
+        bool value_node::equals(value_node*) const { UNDEFINED_ERROR(); }
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    // List end value
+    //
+    // A special value for marking the end of lists.
+
+    namespace detail
+    {
+        struct value_list_end_impl : public value_node
+        {
+            static value_list_end_impl instance;
+        private:
+            value_list_end_impl()
+                : value_node(value::default_tag)
+            {
+                intrusive_ptr_add_ref(&instance);
+                next_ = this;
+            }
+
+            virtual char const* type_name() const { return "list end"; }
+            virtual value_node* clone() const { UNDEFINED_ERROR(); }
+
+            virtual bool equals(value_node* other) const
+            { return this == other; }
+
+            bool empty() const { UNDEFINED_ERROR(); }
+            bool check() const { UNDEFINED_ERROR(); }
+            bool is_list() const { UNDEFINED_ERROR(); }
+            bool is_string() const { UNDEFINED_ERROR(); }
+        };
+
+        value_list_end_impl value_list_end_impl::instance;
+    }
+        
     ////////////////////////////////////////////////////////////////////////////
     // Empty/nil values
     //
@@ -81,6 +123,9 @@ namespace quickbook
 
             virtual bool check() const
                 { return false; }
+
+            virtual bool equals(value_node* other) const
+                { return !other->check(); }
             
             friend value quickbook::empty_value(value::tag_type);
         };
@@ -93,9 +138,10 @@ namespace quickbook
                 : value_empty_impl(value::default_tag)
             {
                 intrusive_ptr_add_ref(&instance);
+                next_ = &value_list_end_impl::instance;
             }
         };
-        
+
         value_nil_impl value_nil_impl::instance;
 
         value_node* value_empty_impl::new_(value::tag_type t) {
@@ -110,6 +156,11 @@ namespace quickbook
             else
                 return new value_empty_impl(t);
         }
+    }
+
+    value empty_value(value::tag_type t)
+    {
+        return value(detail::value_empty_impl::new_(t));
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -205,20 +256,6 @@ namespace quickbook
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // Iterator
-
-    namespace detail
-    {
-        value::iterator::iterator()
-            : ptr_(&value_nil_impl::instance) {}
-    }
-
-    value empty_value(value::tag_type t)
-    {
-        return value(detail::value_empty_impl::new_(t));
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
     // Integers
 
     namespace detail
@@ -234,7 +271,8 @@ namespace quickbook
             virtual std::string get_quickbook() const;
             virtual std::string get_boostbook() const;
             virtual bool empty() const;
-    
+            virtual bool equals(value_node*) const;
+
             int value_;
         };
 
@@ -267,6 +305,15 @@ namespace quickbook
         {
             return false;
         }
+
+        bool value_int_impl::equals(value_node* other) const {
+            try {
+                return value_ == other->get_int();
+            }
+            catch(value_undefined_method&) {
+                return false;
+            }
+        }
     }
 
     value int_value(int v, value::tag_type t)
@@ -291,7 +338,8 @@ namespace quickbook
             virtual std::string get_boostbook() const;
             virtual bool is_string() const;
             virtual bool empty() const;
-    
+            virtual bool equals(value_node*) const;
+
             std::string value_;
         };
     
@@ -313,6 +361,7 @@ namespace quickbook
             qbk_range get_quickbook_range() const;
             virtual bool is_string() const;
             virtual bool empty() const;
+            virtual bool equals(value_node*) const;
     
             std::string value_;
             file_position position_;
@@ -333,7 +382,8 @@ namespace quickbook
             qbk_range get_quickbook_range() const;
             virtual bool is_string() const;
             virtual bool empty() const;
-    
+            virtual bool equals(value_node*) const;
+
             quickbook::iterator begin_;
             quickbook::iterator end_;
         };
@@ -359,6 +409,7 @@ namespace quickbook
             virtual std::string get_boostbook() const;
             virtual bool is_string() const;
             virtual bool empty() const;
+            virtual bool equals(value_node*) const;
 
             std::string qbk_value_;
             std::string bbk_value_;
@@ -398,6 +449,15 @@ namespace quickbook
 
         bool value_string_impl::empty() const
             { return value_.empty(); }
+
+        bool value_string_impl::equals(value_node* other) const {
+            try {
+                return value_ == other->get_boostbook();
+            }
+            catch(value_undefined_method&) {
+                return false;
+            }
+        }
 
         // value_qbk_string_impl
     
@@ -442,7 +502,16 @@ namespace quickbook
 
         bool value_qbk_string_impl::empty() const
             { return value_.empty(); }
-    
+
+        bool value_qbk_string_impl::equals(value_node* other) const {
+            try {
+                return value_ == other->get_quickbook();
+            }
+            catch(value_undefined_method&) {
+                return false;
+            }
+        }
+
         // value_qbk_ref_impl
     
         value_qbk_ref_impl::value_qbk_ref_impl(
@@ -481,6 +550,15 @@ namespace quickbook
         bool value_qbk_ref_impl::empty() const
             { return begin_ == end_; }
     
+        bool value_qbk_ref_impl::equals(value_node* other) const {
+            try {
+                return this->get_quickbook() == other->get_quickbook();
+            }
+            catch(value_undefined_method&) {
+                return false;
+            }
+        }
+
         // value_qbk_bbk_impl
     
         value_qbk_bbk_impl::value_qbk_bbk_impl(
@@ -549,6 +627,20 @@ namespace quickbook
         // Should this test the quickbook, the boostbook or both?
         bool value_qbk_bbk_impl::empty() const
             { return bbk_value_.empty(); }
+
+        bool value_qbk_bbk_impl::equals(value_node* other) const {
+            try {
+                return this->get_quickbook() == other->get_quickbook();
+            }
+            catch(value_undefined_method&) {}
+
+            try {
+                return this->get_boostbook() == other->get_boostbook();
+            }
+            catch(value_undefined_method&) {}
+
+            return false;
+        }
     }
 
     value qbk_value(iterator x, iterator y, value::tag_type t)
@@ -594,7 +686,7 @@ namespace quickbook
 
         value_node** list_ref_back(value_node** back)
         {
-            while(*back != &value_nil_impl::instance) {
+            while(*back != &value_list_end_impl::instance) {
                 intrusive_ptr_add_ref(*back);
                 back = &(*back)->next_;
             }
@@ -604,7 +696,7 @@ namespace quickbook
 
         void list_ref(value_node* ptr)
         {
-            while(ptr != &value_nil_impl::instance) {
+            while(ptr != &value_list_end_impl::instance) {
                 intrusive_ptr_add_ref(ptr);
                 ptr = ptr->next_;
             }
@@ -612,7 +704,7 @@ namespace quickbook
 
         void list_unref(value_node* ptr)
         {
-            while(ptr != &value_nil_impl::instance) {
+            while(ptr != &value_list_end_impl::instance) {
                 value_node* next = ptr->next_;
                 intrusive_ptr_release(ptr);
                 ptr = next;
@@ -621,7 +713,7 @@ namespace quickbook
 
         value_node** merge_sort(value_node** l)
         {
-            if(*l == &value_nil_impl::instance)
+            if(*l == &value_list_end_impl::instance)
                 return l;
             else
                 return merge_sort(l, 9999);
@@ -631,7 +723,7 @@ namespace quickbook
         {
             value_node** p = &(*l)->next_;
             for(int count = 0;
-                count < recurse_limit && *p != &value_nil_impl::instance;
+                count < recurse_limit && *p != &value_list_end_impl::instance;
                 ++count)
             {
                 p = merge(l, p, merge_sort(p, count));
@@ -676,7 +768,7 @@ namespace quickbook
             *first = *second;
             *second = *third;
             *third = tmp;
-            //if(*second != &value_nil_impl::instance) back = second;
+            //if(*second != &value_list_end_impl::instance) back = second;
         }
     }
     }
@@ -699,19 +791,20 @@ namespace quickbook
             virtual value_node* clone() const;
             virtual value_node* store();
             virtual bool empty() const;
+            virtual bool equals(value_node*) const;
+
             virtual bool is_list() const;
-    
             virtual value_node* get_list() const;
     
             value_node* head_;
         };
-
+        
         value_list_impl::value_list_impl(value::tag_type tag)
-            : value_node(tag), head_(&value_nil_impl::instance)
+            : value_node(tag), head_(&value_list_end_impl::instance)
         {}
     
         value_list_impl::value_list_impl(value_list_builder& builder,
-        		value::tag_type tag)
+                value::tag_type tag)
             : value_node(tag), head_(builder.release())
         {
         }
@@ -738,7 +831,7 @@ namespace quickbook
             boost::intrusive_ptr<value_node> new_node;
 
             for(;;) {
-                if(pos == &value_nil_impl::instance)
+                if(pos == &value_list_end_impl::instance)
                     return this;
                 new_node = pos->store();
                 if(new_node.get() != pos) break;
@@ -755,16 +848,15 @@ namespace quickbook
             build.append(new_node.get());
             pos2 = pos2->next_;
 
-            for(;pos2 != &value_nil_impl::instance; pos2 = pos2->next_)
+            for(;pos2 != &value_list_end_impl::instance; pos2 = pos2->next_)
                 build.append(pos2->store());
 
             return new value_list_impl(build, tag_);
         }
 
-
         bool value_list_impl::empty() const
         {
-            return head_ == &value_nil_impl::instance;
+            return head_ == &value_list_end_impl::instance;
         }
     
         bool value_list_impl::is_list() const
@@ -776,6 +868,25 @@ namespace quickbook
         {
             return head_;
         }
+
+        bool value_list_impl::equals(value_node* other) const {
+            value_node* x1;
+
+            try {
+                 x1 = other->get_list();
+            }
+            catch(value_undefined_method&) {
+                return false;
+            }
+
+            for(value_node *x2 = head_; x1 != x2; x1 = x1->next_, x2 = x2->next_)
+            {
+                if (x2 == &value_list_end_impl::instance ||
+                    !x1->equals(x2)) return false;
+            }
+            
+            return true;
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -786,7 +897,7 @@ namespace quickbook
         // value_list_builder
     
         value_list_builder::value_list_builder()
-            : head_(&value_nil_impl::instance)
+            : head_(&value_list_end_impl::instance)
             , back_(&head_)
         {}
 
@@ -808,9 +919,9 @@ namespace quickbook
         }
 
         value_node* value_list_builder::release() {
-        	value_node* r = head_;
-        	head_ = &value_nil_impl::instance;
-        	back_ = &head_;
+            value_node* r = head_;
+            head_ = &value_list_end_impl::instance;
+            back_ = &head_;
             return r;
         }
     
@@ -826,7 +937,7 @@ namespace quickbook
         void value_list_builder::sort()
         {
             back_ = merge_sort(&head_);
-            assert(*back_ == &value_nil_impl::instance);
+            assert(*back_ == &value_list_end_impl::instance);
         }
     }
 
@@ -899,5 +1010,14 @@ namespace quickbook
     void value_builder::sort_list()
     {
         current.sort();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Iterator
+
+    namespace detail
+    {
+        value::iterator::iterator()
+            : ptr_(&value_list_end_impl::instance) {}
     }
 }
