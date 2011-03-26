@@ -429,7 +429,7 @@ namespace quickbook
         append_code();
 
         boost::shared_ptr<snippet_data> snippet = pop_snippet_data();
-        value callouts = snippet->callouts.get();
+        value callouts = snippet->callouts.release();
 
         std::string body;
         if(snippet->start_code) {

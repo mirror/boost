@@ -73,7 +73,7 @@ namespace quickbook
         // The doc_info in the file has been parsed. Here's what we'll do
         // *before* anything else.
 
-        value_consumer values = actions.values.get();
+        value_consumer values = actions.values.release();
 
         // Skip over invalid attributes
 

@@ -123,7 +123,7 @@ namespace quickbook {
             , sort(builder)
             {}
     
-        value get() { return builder.get(); }
+        value release() { return builder.release(); }
 
         value_builder builder;
         scoped_parser<value_builder_save> save;

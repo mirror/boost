@@ -194,7 +194,7 @@ namespace quickbook
     }
 
     stored_value::stored_value(detail::value_base const& x)
-        : detail::value_counted(x.store())
+        : detail::value_counted(x.value_->store())
     {
     }
 
@@ -689,8 +689,10 @@ namespace quickbook
         struct value_list_impl : public value_node
         {
             value_list_impl(value::tag_type);
-            value_list_impl(value_node*, value::tag_type);
+            value_list_impl(value_list_builder&, value::tag_type);
         private:
+            value_list_impl(value_list_impl const&);
+
             char const* type_name() const { return "list"; }
 
             virtual ~value_list_impl();
@@ -708,8 +710,14 @@ namespace quickbook
             : value_node(tag), head_(&value_nil_impl::instance)
         {}
     
-        value_list_impl::value_list_impl(value_node* ptr, value::tag_type tag)
-            : value_node(tag), head_(ptr)
+        value_list_impl::value_list_impl(value_list_builder& builder,
+        		value::tag_type tag)
+            : value_node(tag), head_(builder.release())
+        {
+        }
+
+        value_list_impl::value_list_impl(value_list_impl const& x)
+            : value_node(x.tag_), head_(x.head_)
         {
             list_ref(head_);
         }
@@ -721,7 +729,7 @@ namespace quickbook
 
         value_node* value_list_impl::clone() const
         {
-            return new value_list_impl(head_, tag_);
+            return new value_list_impl(*this);
         }
 
         value_node* value_list_impl::store()
@@ -750,7 +758,7 @@ namespace quickbook
             for(;pos2 != &value_nil_impl::instance; pos2 = pos2->next_)
                 build.append(pos2->store());
 
-            return new value_list_impl(build.get(), tag_);
+            return new value_list_impl(build, tag_);
         }
 
 
@@ -799,8 +807,11 @@ namespace quickbook
             if(other.back_ == &head_) other.back_ = &other.head_;
         }
 
-        value_node* value_list_builder::get() const {
-            return head_;
+        value_node* value_list_builder::release() {
+        	value_node* r = head_;
+        	head_ = &value_nil_impl::instance;
+        	back_ = &head_;
+            return r;
         }
     
         void value_list_builder::append(value_node* item)
@@ -847,8 +858,8 @@ namespace quickbook
         swap(*store);
     }
 
-    value value_builder::get() {
-        return value(new detail::value_list_impl(current.get(), list_tag));
+    value value_builder::release() {
+        return value(new detail::value_list_impl(current, list_tag));
     }
 
     void value_builder::reset() {
@@ -876,7 +887,7 @@ namespace quickbook
     }
 
     void value_builder::finish_list() {
-        value list = get();
+        value list = release();
         restore();
         insert(list);
     }

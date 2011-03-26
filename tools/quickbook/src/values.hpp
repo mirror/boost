@@ -122,14 +122,13 @@ namespace quickbook
             int get_int() const
             { return value_->get_int(); }
 
-            value_node* store() const { return value_->store(); }
-
         protected:
             value_node* value_;
 
             // value_builder needs to access 'value_' to get the node
             // from a value.
             friend class quickbook::value_builder;
+            friend class quickbook::stored_value;
         };
         
         ////////////////////////////////////////////////////////////////////////
@@ -206,7 +205,7 @@ namespace quickbook
             value_list_builder(value_node*);
             ~value_list_builder();
             void swap(value_list_builder& b);
-            value_node* get() const;
+            value_node* release();
 
             void append(value_node*);
             void sort();
@@ -272,7 +271,7 @@ namespace quickbook
         void save();
         void restore();
 
-        value get();
+        value release();
 
         void reset();
         void set_tag(value::tag_type);

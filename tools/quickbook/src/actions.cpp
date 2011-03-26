@@ -74,7 +74,7 @@ namespace quickbook
 
     void element_action::operator()(iterator first, iterator) const
     {
-        value_consumer values = actions.values.get();
+        value_consumer values = actions.values.release();
         if(!values.check()) return;
         value v = values.consume();
         if(values.check()) return;
@@ -347,7 +347,7 @@ namespace quickbook
         assert(tag != 0);
         detail::markup markup = detail::get_markup(tag);
 
-        value_consumer values = actions.values.get();
+        value_consumer values = actions.values.release();
         value content = values.consume();
         values.finish();
 
@@ -367,7 +367,7 @@ namespace quickbook
     {
         saved_suppress = actions.suppress;
     
-        value_consumer values = actions.values.get();
+        value_consumer values = actions.values.release();
         bool condition = find(actions.macro,
             values.consume().get_quickbook().c_str());
     
@@ -1109,7 +1109,7 @@ namespace quickbook
         file_position const pos = first.get_position();
         
         // Get the arguments
-        value_consumer values = actions.values.get();
+        value_consumer values = actions.values.release();
 
         bool template_escape = values.check(template_tags::escape);
         if(template_escape) values.consume();
