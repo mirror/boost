@@ -30,7 +30,7 @@ namespace quickbook
 
     quickbook_grammar::impl::impl(quickbook::actions& a)
         : actions(a)
-        , store_()
+        , cleanup_()
     {
         init_main();
         init_block_elements();

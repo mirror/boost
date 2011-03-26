@@ -12,7 +12,7 @@
 #define BOOST_SPIRIT_QUICKBOOK_GRAMMARS_IMPL_HPP
 
 #include "grammar.hpp"
-#include "rule_store.hpp"
+#include "cleanup.hpp"
 #include "values.hpp"
 #include <boost/spirit/include/classic_symbols.hpp>
 
@@ -56,7 +56,7 @@ namespace quickbook
     struct quickbook_grammar::impl
     {
         quickbook::actions& actions;
-        rule_store store_;
+        cleanup cleanup_;
 
         // Main Grammar
         cl::rule<scanner> block_start;

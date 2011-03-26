@@ -32,7 +32,8 @@ namespace quickbook
 
     void quickbook_grammar::impl::init_phrase_elements()
     {
-        phrase_element_grammar_local& local = store_.create();
+        phrase_element_grammar_local& local = cleanup_.add(
+            new phrase_element_grammar_local);
 
         elements.add
             ("?", element_info(element_info::phrase, &local.cond_phrase))

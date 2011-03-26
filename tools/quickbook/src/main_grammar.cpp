@@ -130,7 +130,8 @@ namespace quickbook
 
     void quickbook_grammar::impl::init_main()
     {
-        main_grammar_local& local = store_.add(new main_grammar_local(actions));
+        main_grammar_local& local = cleanup_.add(
+            new main_grammar_local(actions));
 
         block_skip_initial_spaces =
             *(cl::blank_p | comment) >> block_start

@@ -6,13 +6,13 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-// This header defines a class which can will manage quickbook rules for a
-// grammar class so that it doesn't have to declare every rule it'll use.
-//
-// TODO: Noncopyable, but some sort of reference counting scheme would work.
+// This header defines a class which can will store pointers and deleters
+// to a number of objects and delete them on exit. Basically stick an
+// object in here, and you can use pointers and references to the object
+// for the cleanup object's lifespan.
 
-#if !defined(BOOST_SPIRIT_QUICKBOOK_RULE_STORE_HPP)
-#define BOOST_SPIRIT_QUICKBOOK_RULE_STORE_HPP
+#if !defined(BOOST_SPIRIT_QUICKBOOK_CLEANUP_HPP)
+#define BOOST_SPIRIT_QUICKBOOK_CLEANUP_HPP
 
 #include <deque>
 #include <cassert>
@@ -50,44 +50,24 @@ namespace quickbook
         };
     }
     
-    struct rule_store
+    struct cleanup
     {
-        struct instantiate
-        {
-            rule_store& s;
-            instantiate(rule_store& s) : s(s) {}
-            
-            template <typename T>
-            operator T&() {
-                std::auto_ptr<T> obj(new T());
-                T& ref = *obj;
-                s.store_.push_back(detail::scoped_void());
-                s.store_.back().store(obj.release(), &detail::delete_impl<T>);
-                return ref;
-            }
-        };
-
-        rule_store() {}
-
-        instantiate create() {
-            instantiate i(*this);
-            return i;
-        }
-        
+        cleanup() {}
+    
         template <typename T>
         T& add(T* new_)
         {
             std::auto_ptr<T> obj(new_);
-            store_.push_back(detail::scoped_void());
-            store_.back().store(obj.release(), &detail::delete_impl<T>);
+            cleanup_list_.push_back(detail::scoped_void());
+            cleanup_list_.back().store(obj.release(), &detail::delete_impl<T>);
 
             return *new_;
         }
 
-        std::deque<detail::scoped_void> store_;
+        std::deque<detail::scoped_void> cleanup_list_;
     private:
-        rule_store& operator=(rule_store const&);
-        rule_store(rule_store const&);
+        cleanup& operator=(cleanup const&);
+        cleanup(cleanup const&);
     };
 }
 

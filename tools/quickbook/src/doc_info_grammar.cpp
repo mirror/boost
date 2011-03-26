@@ -89,7 +89,8 @@ namespace quickbook
 
     void quickbook_grammar::impl::init_doc_info()
     {
-        doc_info_grammar_local& local = store_.create();
+        doc_info_grammar_local& local = cleanup_.add(
+            new doc_info_grammar_local);
 
         typedef cl::uint_parser<int, 10, 1, 2>  uint2_t;
 
