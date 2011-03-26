@@ -12,7 +12,7 @@
 //                 available, <boost/detail/fenv.hpp> should be included
 //                 instead of directly including <fenv.h>.
 
-#include <boost/detail/fenv.hpp>
+#include <fenv.h>
 
 namespace boost_no_fenv_h {
 
