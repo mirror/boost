@@ -131,8 +131,6 @@ namespace quickbook
         do_macro_action         do_macro;
 
         element_id_warning_action element_id_warning;
-
-        pre_output_action       output_pre;
     };
 }
 

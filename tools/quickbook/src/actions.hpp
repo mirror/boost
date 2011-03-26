@@ -367,17 +367,6 @@ namespace quickbook
         collector& output;
     };
 
-    struct pre_output_action
-    {
-        pre_output_action(quickbook::actions& actions)
-            : actions(actions) {}
-            
-        bool operator()(collector& tgt) const;
-        bool operator()(iterator, iterator) const;
-        
-        quickbook::actions& actions;
-    };
-
     struct scoped_output_push : scoped_action_base
     {
         scoped_output_push(quickbook::actions& actions)

@@ -82,8 +82,6 @@ namespace quickbook
         , do_macro(phrase, *this)
 
         , element_id_warning(*this)
-
-        , output_pre(*this)
     {
         // add the predefined macros
         macro.add

@@ -173,7 +173,7 @@ namespace quickbook
         local.variablelist =
                 (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
             >>  (*(cl::anychar_p - eol))        [actions.values.entry(ph::arg1, ph::arg2, table_tags::title)]
-            >>  (+eol)                          [actions.output_pre]
+            >>  (+eol)
             >>  *local.varlistentry
             ;
 
@@ -213,7 +213,7 @@ namespace quickbook
             >>  local.element_id_1_5
             >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
             >>  (*(cl::anychar_p - eol))        [actions.values.entry(ph::arg1, ph::arg2, table_tags::title)]
-            >>  (+eol)                          [actions.output_pre]
+            >>  (+eol)
             >>  *local.table_row
             ;
 

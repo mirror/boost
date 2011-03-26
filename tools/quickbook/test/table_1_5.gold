@@ -298,5 +298,29 @@
         </tbody>
       </tgroup>
     </table>
+    <anchor id="id1"/>
+    <table frame="all" id="table_1_5.section1.table_with_anchors">
+      <title>Table with anchors</title>
+      <tgroup cols="1">
+        <thead>
+          <row>
+            <entry>
+              <para>
+                <anchor id="id2"/> a<anchor id="id3"/>
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>
+              <para>
+                b
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </section>
 </article>
