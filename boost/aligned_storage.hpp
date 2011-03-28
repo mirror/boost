@@ -48,10 +48,10 @@ struct aligned_storage_imp
     {
         char buf[size_];
 
-        typename mpl::eval_if_c<
+        typename ::boost::mpl::eval_if_c<
               alignment_ == std::size_t(-1)
-            , mpl::identity<detail::max_align>
-            , type_with_alignment<alignment_>
+            , ::boost::mpl::identity< ::boost::detail::max_align >
+            , ::boost::type_with_alignment<alignment_>
             >::type align_;
     } data_;
     void* address() const { return const_cast<aligned_storage_imp*>(this); }
@@ -76,12 +76,12 @@ class aligned_storage :
 #else
    public
 #endif
-   detail::aligned_storage::aligned_storage_imp<size_, alignment_> 
+   ::boost::detail::aligned_storage::aligned_storage_imp<size_, alignment_> 
 {
  
 public: // constants
 
-    typedef detail::aligned_storage::aligned_storage_imp<size_, alignment_> type;
+    typedef ::boost::detail::aligned_storage::aligned_storage_imp<size_, alignment_> type;
 
     BOOST_STATIC_CONSTANT(
           std::size_t
@@ -166,7 +166,7 @@ const void* aligned_storage<S,A>::address() const
 // as a POD (Note that aligned_storage<> itself is not a POD):
 //
 template <std::size_t size_, std::size_t alignment_>
-struct is_pod<boost::detail::aligned_storage::aligned_storage_imp<size_,alignment_> >
+struct is_pod< ::boost::detail::aligned_storage::aligned_storage_imp<size_,alignment_> >
    BOOST_TT_AUX_BOOL_C_BASE(true)
 { 
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(true)
