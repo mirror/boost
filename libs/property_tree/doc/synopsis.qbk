@@ -28,7 +28,7 @@ container (the closest being std::list), plus a bunch of extra member
 functions. These functions allow easy and effective access to the data stored
 in property tree. They are various variants of __ptree_get__, __ptree_put__,
 __ptree_get_value__, __ptree_put_value__, __ptree_get_child__,
-__ptree_put_child__. Additionally, there is __ptree_data__ function to access
+__ptree_put_child__. Additionally, there is a __ptree_data__ function to access
 node data directly.
 
 See the [classref boost::property_tree::basic_ptree basic_ptree class template synopsis] for more information.
