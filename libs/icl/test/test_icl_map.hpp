@@ -32,8 +32,8 @@ void itl_map_contains_4_bicremental_types()
     MapT map_a;
     segmental::atomize(map_a, itv_map_a);
 
-    BOOST_CHECK_EQUAL( contains(map_a, MK_u(3)), true );
-    BOOST_CHECK_EQUAL( within(MK_u(3), map_a),   true );
+    BOOST_CHECK_EQUAL( contains(map_a, MK_v(3)), true );
+    BOOST_CHECK_EQUAL( within(MK_v(3), map_a),   true );
 
     map_element_type key_value_pair(MK_v(6), MK_u(3));
     BOOST_CHECK( contains(map_a, key_value_pair) );

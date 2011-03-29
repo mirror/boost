@@ -10,31 +10,31 @@ Copyright (c) 2011-2011: Joachim Faulhaber
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_fundamentals_4_ordered_types)
-{            interval_map_fundamentals_4_ordered_types<INTERVAL_MAP, ordered_type_1, int>();}
+{            interval_map_fundamentals_4_ordered_types<INTERVAL_MAP, discrete_type_1, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_ctor_4_bicremental_types)
-{            interval_map_ctor_4_bicremental_types<INTERVAL_MAP, bicremental_type_1, int>();}
+{            interval_map_ctor_4_bicremental_types<INTERVAL_MAP, discrete_type_2, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_add_sub_4_bicremental_types)
-{            interval_map_add_sub_4_bicremental_types<INTERVAL_MAP, bicremental_type_2, int>();}
+{            interval_map_add_sub_4_bicremental_types<INTERVAL_MAP, discrete_type_3, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_contains_4_bicremental_types)
-{            interval_map_contains_4_bicremental_types<INTERVAL_MAP, discrete_type_5, int>();}
+{            interval_map_contains_4_bicremental_types<INTERVAL_MAP, discrete_type_4, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_contains_key_objects_4_bicremental_types)
-{            interval_map_contains_key_objects_4_bicremental_types<INTERVAL_MAP, discrete_type_4, int>();}
+{            interval_map_contains_key_objects_4_bicremental_types<INTERVAL_MAP, discrete_type_5, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_operators_4_bicremental_types)
-{            interval_map_operators_4_bicremental_types<INTERVAL_MAP, bicremental_type_5, int>();}
+{            interval_map_operators_4_bicremental_types<INTERVAL_MAP, discrete_type_6, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_base_intersect_4_bicremental_types)
-{            interval_map_base_intersect_4_bicremental_types<INTERVAL_MAP, bicremental_type_6, int>();}
+{            interval_map_base_intersect_4_bicremental_types<INTERVAL_MAP, discrete_type_1, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_base_erase_4_bicremental_types)
@@ -42,11 +42,11 @@ BOOST_AUTO_TEST_CASE
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_base_is_disjoint_4_bicremental_types)
-{            interval_map_base_is_disjoint_4_bicremental_types<INTERVAL_MAP, bicremental_type_8, int>();}
+{            interval_map_base_is_disjoint_4_bicremental_types<INTERVAL_MAP, discrete_type_8, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_flip_4_bicremental_types)
-{            interval_map_flip_4_bicremental_types<INTERVAL_MAP, bicremental_type_1, int>();}
+{            interval_map_flip_4_bicremental_types<INTERVAL_MAP, discrete_type_1, int>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_find_4_bicremental_types)
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_std_copy_via_inserter_4_bicremental_types)
-{            interval_map_std_copy_via_inserter_4_bicremental_types<signed_bicremental_type_1, int, partial_absorber, INTERVAL_MAP>();}
+{            interval_map_std_copy_via_inserter_4_bicremental_types<signed_discrete_type_1, int, partial_absorber, INTERVAL_MAP>();}
 
 BOOST_AUTO_TEST_CASE
 (fastest_icl_interval_map_element_iter_4_discrete_types)

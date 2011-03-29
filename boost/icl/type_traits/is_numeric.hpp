@@ -10,6 +10,8 @@ Copyright (c) 2010-2010: Joachim Faulhaber
 
 #include <limits>
 #include <complex>
+#include <boost/type_traits/ice.hpp>
+#include <boost/type_traits/is_integral.hpp>
 
 namespace boost{ namespace icl
 {
@@ -20,11 +22,27 @@ template <class Type> struct is_fixed_numeric
     BOOST_STATIC_CONSTANT(bool, value = (0 < std::numeric_limits<Type>::digits));
 };
 
+template <class Type> struct is_std_numeric
+{
+    typedef is_std_numeric type;
+    BOOST_STATIC_CONSTANT(bool, 
+        value = (std::numeric_limits<Type>::is_specialized));
+};
+
+template <class Type> struct is_std_integral
+{
+    typedef is_std_integral type;
+    BOOST_STATIC_CONSTANT(bool, 
+        value = (std::numeric_limits<Type>::is_integer));
+};
+
 template <class Type> struct is_numeric
 {
     typedef is_numeric type;
     BOOST_STATIC_CONSTANT(bool, value = 
-        (mpl::or_<is_fixed_numeric<Type>, is_integral<Type> >::value) );
+        (mpl::or_< is_std_numeric<Type>
+                 , boost::is_integral<Type> 
+                 , is_std_integral<Type> >::value) );
 };
 
 template <class Type> 
@@ -52,6 +70,15 @@ struct numeric_minimum<Type, true>
 
     static bool is_less_than_or(Type value, bool cond)
     { return cond || is_less_than(value); }
+};
+
+//--------------------------------------------------------------------------
+template<class Type> 
+struct is_non_floating_point
+{
+    typedef is_non_floating_point type;
+    BOOST_STATIC_CONSTANT(bool, value = 
+        (mpl::not_< is_floating_point<Type> >::value));
 };
 
 }} // namespace boost icl
