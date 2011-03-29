@@ -91,10 +91,23 @@ test-suite "itl"
       # sets
       [ run fastest_interval_set_/fastest_interval_set.cpp 
             : : : <define>BOOST_ICL_TEST_CHRONO
-            : chrono_icl_interval_set ]
+            : chrono_interval_set ]
             
       [ run fastest_interval_set_infix_/fastest_interval_set_infix.cpp
             : : : <define>BOOST_ICL_TEST_CHRONO
-            : chrono_icl_interval_set_infix ]
+            : chrono_interval_set_infix ]
                
+      [ run fastest_interval_set_mixed_/fastest_interval_set_mixed.cpp
+            : : : <define>BOOST_ICL_TEST_CHRONO
+            : chrono_interval_set_mixed ]
+            
+      # maps
+      [ run fastest_interval_map_/fastest_interval_map.cpp 
+            : : : <define>BOOST_ICL_TEST_CHRONO
+            : chrono_interval_map ]
+
+      [ run fastest_interval_map_infix_/fastest_interval_map_infix.cpp
+            : : : <define>BOOST_ICL_TEST_CHRONO
+            : chrono_interval_map_infix ]
+      
     ;
