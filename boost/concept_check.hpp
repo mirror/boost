@@ -562,10 +562,10 @@ namespace boost
     : ForwardIterator<TT>
   {
       BOOST_CONCEPT_USAGE(Mutable_ForwardIterator) {
-        *i++ = *i;         // require postincrement and assignment
+        *i++ = *j;         // require postincrement and assignment
       }
    private:
-      TT i;
+      TT i, j;
   };
 
   BOOST_concept(BidirectionalIterator,(TT))
@@ -591,10 +591,10 @@ namespace boost
   {
       BOOST_CONCEPT_USAGE(Mutable_BidirectionalIterator)
       {
-          *i-- = *i;                  // require postdecrement and assignment
+          *i-- = *j;                  // require postdecrement and assignment
       }
    private:
-      TT i;
+      TT i, j;
   };
 
   BOOST_concept(RandomAccessIterator,(TT))
