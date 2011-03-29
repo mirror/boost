@@ -26,7 +26,7 @@ namespace detail {
 #define BOOST_RANDOM_DETAIL_CONSTEXPR constexpr
 #elif defined(BOOST_MSVC)
 #define BOOST_RANDOM_DETAIL_CONSTEXPR __forceinline
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && __GNUC__ >= 4
 #define BOOST_RANDOM_DETAIL_CONSTEXPR __attribute__((const)) __attribute__((always_inline))
 #else
 #define BOOST_RANDOM_DETAIL_CONSTEXPR inline
