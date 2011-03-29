@@ -555,10 +555,10 @@ namespace boost { namespace graph { namespace distributed {
                                adj[*liter].begin(), adj[*liter].end() );
 #ifdef PBGL_IN_PLACE_MERGE
 #ifdef PBGL_SORT_ASSERT
-                BOOST_ASSERT(__gnu_cxx::is_sorted(my_adj.begin(),
+                BOOST_ASSERT(::boost::detail::is_sorted(my_adj.begin(),
                                                   my_adj.end() - adj[*liter].size(),
                                                   std::less<vertex_descriptor>()));
-                BOOST_ASSERT(__gnu_cxx::is_sorted(my_adj.end() - adj[*liter].size(),
+                BOOST_ASSERT(::boost::detail::is_sorted(my_adj.end() - adj[*liter].size(),
                                                   my_adj.end(),
                                                   std::less<vertex_descriptor>()));
 #endif
@@ -603,10 +603,10 @@ namespace boost { namespace graph { namespace distributed {
 #ifdef PBGL_IN_PLACE_MERGE
             std::size_t num_incoming_edges = incoming_edges.size();
 #ifdef PBGL_SORT_ASSERT
-            BOOST_ASSERT(__gnu_cxx::is_sorted(my_adj.begin(),
+            BOOST_ASSERT(::boost::detail::is_sorted(my_adj.begin(),
                                               my_adj.end() - (num_incoming_edges-1),
                                               std::less<vertex_descriptor>()));
-            BOOST_ASSERT(__gnu_cxx::is_sorted(my_adj.end() - (num_incoming_edges-1),
+            BOOST_ASSERT(::boost::detail::is_sorted(my_adj.end() - (num_incoming_edges-1),
                                               my_adj.end(),
                                               std::less<vertex_descriptor>()));
 #endif
