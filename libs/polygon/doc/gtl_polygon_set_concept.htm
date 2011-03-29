@@ -350,6 +350,17 @@ together.</p>
 		runtime wrt. vertices + intersections.</td>
 	</tr>
 	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T, typename 
+		coord_type&gt;<br>
+		T&amp; <b>simplify</b>(T&amp; polygon_set, distance_type
+		threshold)</font></td>
+		<td>Simplify the polygon set by removing vertices that lie
+                  within threshold distance of the line segment that
+                  connects the two adjacent points in the polygon.&nbsp;
+                  Expected n log n runtime, worst case quadratic 
+		  runtime wrt. vertices + intersections.</td>
+	</tr>
+	<tr>
 		<td width="586"><font face="Courier New">template &lt;typename T&gt;<br>
 T&amp; <b>scale_up</b>(T&amp; polygon_set, unsigned_area_type factor)</font></td>
 		<td>Scales geometry up by unsigned factor.&nbsp; Expected n log n 
