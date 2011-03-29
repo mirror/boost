@@ -46,6 +46,7 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <string>
 #include <functional>
 #include <boost/tuple/tuple.hpp>
 #include <boost/iterator/transform_iterator.hpp>
@@ -60,6 +61,27 @@ struct pure_traversal
         typename boost::iterator_traversal<It>::type
     >
 {};
+
+
+/// Tests for https://svn.boost.org/trac/boost/ticket/1517
+int to_value(int const &v)
+{
+    return v;
+}
+
+void category_test()
+{
+    std::list<int> rng1;
+    std::string rng2;
+
+    boost::make_zip_iterator(
+        boost::make_tuple(
+            boost::make_transform_iterator(rng1.begin(), &to_value), // BidirectionalInput
+            rng2.begin() // RandomAccess
+        )
+    );
+}
+///
   
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -69,6 +91,8 @@ struct pure_traversal
   
 int main( void )
 {
+
+  category_test();
 
   std::cout << "\n"
             << "***********************************************\n"

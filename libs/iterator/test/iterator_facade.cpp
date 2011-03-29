@@ -87,6 +87,10 @@ struct input_iter
     }
 };
 
+template <class T, class U>
+void same_type(U const&)
+{ BOOST_MPL_ASSERT((boost::is_same<T,U>)); }
+
 int main()
 {
     int state = 0;
@@ -101,6 +105,8 @@ int main()
     input_iter p;
     (*p).mutator();
     p->mutator();
+
+    same_type<input_iter::pointer>(p.operator->());
     
     return boost::report_errors();
 }

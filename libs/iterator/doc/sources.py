@@ -6,6 +6,7 @@ sources = [
 'counting_iterator.rst',
 'facade-and-adaptor.rst',
 'filter_iterator.rst',
+'function_input_iterator.rst',
 'function_output_iterator.rst',
 'index.rst',
 'indirect_iterator.rst',

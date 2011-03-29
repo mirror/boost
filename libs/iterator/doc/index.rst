@@ -138,7 +138,11 @@ iterator templates based on the Boost `iterator facade and adaptor`_.
 * |filter|_ (PDF__): an iterator over the subset of elements of some
   sequence which satisfy a given predicate
 
-* |function|_ (PDF__): an output iterator wrapping a unary function
+* |function_input|_ (PDF__): an input iterator wrapping a generator (nullary
+  function object); each time the iterator is dereferenced, the function object
+  is called to get the value to return.
+
+* |function_output|_ (PDF__): an output iterator wrapping a unary function
   object; each time an element is written into the dereferenced
   iterator, it is passed as a parameter to the function object.
 
@@ -171,8 +175,12 @@ __ counting_iterator.pdf
 .. _filter: filter_iterator.html
 __ filter_iterator.pdf
 
-.. |function| replace:: ``function_output_iterator``
-.. _function: function_output_iterator.html
+.. |function_input| replace:: ``function_input_iterator``
+.. _function_input: function_input_iterator.html
+__ function_input_iterator.pdf
+
+.. |function_output| replace:: ``function_output_iterator``
+.. _function_output: function_output_iterator.html
 __ function_output_iterator.pdf
 
 .. |indirect| replace:: ``indirect_iterator``
