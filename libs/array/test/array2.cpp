@@ -15,12 +15,11 @@
 #include <boost/array.hpp>
 #include "print.hpp"
 using namespace std;
-using namespace boost;
 
 int main()
 {
     // create and initialize array
-    array<int,10> a = { { 1, 2, 3, 4, 5 } };
+    boost::array<int,10> a = { { 1, 2, 3, 4, 5 } };
 
     print_elements(a);
 
