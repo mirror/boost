@@ -139,11 +139,15 @@
 #  define BOOST_NO_0X_HDR_RANDOM
 #endif
 
+//  C++0x features in GCC 4.5.0 and later
+//
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  define BOOST_NO_0X_HDR_TYPEINDEX
+#endif
 //  C++0x headers not yet (fully!) implemented
 //
 #  define BOOST_NO_0X_HDR_THREAD
 #  define BOOST_NO_0X_HDR_TYPE_TRAITS
 #  define BOOST_NO_0X_HDR_CODECVT
-#  define BOOST_NO_0X_HDR_TYPEINDEX
 
 //  --- end ---

@@ -32,7 +32,7 @@ template<int> struct X { };
 
 constexpr A a = 42;
 
-X<a> x; // OK: unique conversion to int
+X<a> xx; // OK: unique conversion to int
 
 int test()
 {
