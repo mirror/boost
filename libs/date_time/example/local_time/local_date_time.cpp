@@ -28,10 +28,10 @@ int main() {
   std::locale loc(std::locale::classic(), timefacet);
   
   std::cout << ny_time << std::endl;
-  // 2004-Aug-30 00:00:00 EDT
+  // 2004-Aug-30 10:00:00 EDT
   std::cout.imbue(loc);
   std::cout << ny_time << std::endl;
-  // 2004-Aug-30 00:00:00 Eastern Daylight Time
+  // 2004-Aug-30 10:00:00 Eastern Daylight Time
 
   return 0;
 }

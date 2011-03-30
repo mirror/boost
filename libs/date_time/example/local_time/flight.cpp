@@ -5,7 +5,7 @@
 /* This example shows a program that calculates the arrival time of a plane
  * that flys from Phoenix to New York.  During the flight New York shifts
  * into daylight savings time (Phoenix doesn't because Arizona doesn't use
- * dst).  
+ * DST).  
  *
  * 
  */
@@ -20,24 +20,34 @@ int main()
   //setup some timezones for creating and adjusting local times
   //This user editable file can be found in libs/date_time/data.
   tz_database tz_db;
-  tz_db.load_from_file("date_time_zonespec.csv");
+  try {
+    tz_db.load_from_file("../../data/date_time_zonespec.csv");
+  }catch(data_not_accessible dna) {
+    std::cerr << "Error with time zone data file: " << dna.what() << std::endl;
+    exit(EXIT_FAILURE);
+  }catch(bad_field_count bfc) {
+    std::cerr << "Error with time zone data file: " << bfc.what() << std::endl;
+    exit(EXIT_FAILURE);
+  }
   time_zone_ptr nyc_tz = tz_db.time_zone_from_region("America/New_York");
-  //Use a 
+  //Use a newly created time zone rule
   time_zone_ptr phx_tz(new posix_time_zone("MST-07:00:00"));
 
-  //local departure time in phoenix is 11 pm on april 2 2005 
-  // (ny changes to dst on apr 3 at 2 am)
-  local_date_time phx_departure(date(2005, Apr, 2), hours(23), 
+  //local departure time in Phoenix is 11 pm on March 13 2010 
+  // (NY changes to DST on March 14 at 2 am)
+  local_date_time phx_departure(date(2010, Mar, 13), hours(23), 
                                 phx_tz, 
                                 local_date_time::NOT_DATE_TIME_ON_ERROR);
+  local_date_time nyc_departure = phx_departure.local_time_in(nyc_tz);
 
   time_duration flight_length = hours(4) + minutes(30);
   local_date_time phx_arrival = phx_departure + flight_length;
   local_date_time nyc_arrival = phx_arrival.local_time_in(nyc_tz);
 
-  std::cout << "departure phx time: " << phx_departure << std::endl;
-  std::cout << "arrival phx time:   " << phx_arrival << std::endl;
-  std::cout << "arrival nyc time:   " << nyc_arrival << std::endl;
+  std::cout << "departure PHX time: " << phx_departure << std::endl;
+  std::cout << "departure NYC time: " << nyc_departure << std::endl;
+  std::cout << "arrival PHX time:   " << phx_arrival << std::endl;
+  std::cout << "arrival NYC time:   " << nyc_arrival << std::endl;
 
 }
 

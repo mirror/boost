@@ -29,16 +29,16 @@ main()
   ptime now = second_clock::local_time();
   //Get the date part out of the time
   date today = now.date();
-  date tommorrow = today + days(1);
-  ptime tommorrow_start(tommorrow); //midnight 
+  date tomorrow = today + days(1);
+  ptime tomorrow_start(tomorrow); //midnight 
 
   //iterator adds by one hour
   time_iterator titr(now,hours(1)); 
-  for (; titr < tommorrow_start; ++titr) {
+  for (; titr < tomorrow_start; ++titr) {
     std::cout << to_simple_string(*titr) << std::endl;
   }
   
-  time_duration remaining = tommorrow_start - now;
+  time_duration remaining = tomorrow_start - now;
   std::cout << "Time left till midnight: " 
             << to_simple_string(remaining) << std::endl;
   return 0;

@@ -13,7 +13,7 @@ main()
   using namespace boost::gregorian;
 
   date d(2002,Feb,1); //an arbitrary date
-  //construct a time by adding up some durations durations
+  //construct a time by adding up some durations
   ptime t1(d, hours(5)+minutes(4)+seconds(2)+milliseconds(1));
   //construct a new time by subtracting some times
   ptime t2 = t1 - hours(5)- minutes(4)- seconds(2)- milliseconds(1);

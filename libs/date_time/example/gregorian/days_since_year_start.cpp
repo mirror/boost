@@ -1,6 +1,6 @@
 
-#include <iostream>
 #include "boost/date_time/gregorian/gregorian.hpp"
+#include <iostream>
 
 int
 main() 
@@ -14,7 +14,7 @@ main()
   std::cout << "Days since Jan 1: " << days_since_year_start.days() 
             << std::endl;
   return 0;
-};
+}
 
 /*  Copyright 2001-2004: CrystalClear Software, Inc
  *  http://www.crystalclearsoftware.com
