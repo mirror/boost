@@ -17,7 +17,7 @@
 
     <programlisting><emphasis role="keyword">using namespace</emphasis> boost::gregorian;
     date weekstart(<emphasis role="number">2002</emphasis>,Feb,<emphasis role="number">1</emphasis>);
-    date weekend  = weekstart + week(<emphasis role="number">1</emphasis>);
+    date weekend  = weekstart + weeks(<emphasis role="number">1</emphasis>);
     date d2 = d1 + days(<emphasis role="number">5</emphasis>);
     date today = day_clock::local_day();
     if (d2 &gt;= today) {} <emphasis role="comment">//date comparison operators</emphasis> 
@@ -39,7 +39,8 @@
     date d5 = next_weekday(d4, Sunday); <emphasis role="comment">//calculate Sunday following d4
 
     //US labor day is first Monday in Sept</emphasis> 
-    nth_day_of_the_week_in_month labor_day(nth_dow::first,Monday, Sep); 
+	<emphasis role="keyword">typedef</emphasis> nth_day_of_the_week_in_month nth_dow;
+    nth_dow labor_day(nth_dow::first,Monday, Sep); 
     <emphasis role="comment">//calculate a specific date for 2004 from functor</emphasis> 
     date d6 = labor_day.get_date(<emphasis role="number">2004</emphasis>); 
     </programlisting>    

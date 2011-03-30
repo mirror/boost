@@ -336,13 +336,13 @@ d3.is_special(); // --> false</screen></entry>
 	  <entry><screen></screen></entry>
 	</row>
         <row>
-	  <entry valign="top" morerows="1"><screen>date end_of_month_day() const</screen></entry>
+	  <entry valign="top" morerows="1"><screen>date end_of_month() const</screen></entry>
 	  <entry>Returns the last day of the month for the date.</entry>
 	</row>
 	<row>
 	  <entry><screen>date d(2000,Feb,1);
 //gets Feb 29 -- 2000 was leap year
-date eom = d.end_of_month_day();</screen></entry>
+date eom = d.end_of_month();</screen></entry>
 	</row>
       </tbody>
     </tgroup>
