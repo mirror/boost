@@ -11,12 +11,7 @@
 #define BOOST_FUSION_ADAPTED_STD_PAIR_HPP
 
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
-
-namespace std
-{
-    template<class T1, class T2>
-    struct pair;
-}
+#include <utility>
 
 BOOST_FUSION_ADAPT_TPL_STRUCT(
     (T1)(T2),(std::pair)(T1)(T2),(T1, first)(T2, second))
