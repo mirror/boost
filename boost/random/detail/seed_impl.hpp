@@ -85,6 +85,7 @@ inline T pow2(int n)
 template<class Engine, class Iter>
 void generate_from_real(Engine& eng, Iter begin, Iter end)
 {
+    using std::fmod;
     typedef typename Engine::result_type RealType;
     const int Bits = Engine::precision();
     int remaining_bits = 0;
@@ -106,7 +107,7 @@ void generate_from_real(Engine& eng, Iter begin, Iter end)
             if(Bits < 32 || remaining_bits != 0) {
                 boost::uint_least32_t divisor =
                     (boost::uint_least32_t(1) << (32 - remaining_bits));
-                boost::uint_least32_t extra_bits = boost::uint_least32_t(val) & (divisor - 1);
+                boost::uint_least32_t extra_bits = boost::uint_least32_t(fmod(val, mult32)) & (divisor - 1);
                 val = val / divisor;
                 *begin++ = saved_bits | (extra_bits << remaining_bits);
                 if(begin == end) return;
@@ -116,7 +117,7 @@ void generate_from_real(Engine& eng, Iter begin, Iter end)
             // If Bits < 32 we should never enter this loop
             if(Bits >= 32) {
                 for(; available_bits >= 32; available_bits -= 32) {
-                    boost::uint_least32_t word = boost::uint_least32_t(val);
+                    boost::uint_least32_t word = boost::uint_least32_t(fmod(val, mult32));
                     val /= mult32;
                     *begin++ = word;
                     if(begin == end) return;
