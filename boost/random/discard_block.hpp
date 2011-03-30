@@ -156,7 +156,7 @@ public:
     operator<<(std::basic_ostream<CharT,Traits>& os,
                const discard_block_engine& s)
     {
-        os << s._rng << " " << s._n;
+        os << s._rng << ' ' << s._n;
         return os;
     }
 

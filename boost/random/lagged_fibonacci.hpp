@@ -142,9 +142,9 @@ public:
      */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, lagged_fibonacci_engine, f)
     {
-        os << f.i << " ";
+        os << f.i;
         for(unsigned int i = 0; i < f.long_lag; ++i)
-            os << f.x[i] << " ";
+            os << ' ' << f.x[i];
         return os;
     }
     
@@ -362,10 +362,10 @@ public:
     {
         // allow for Koenig lookup
         using std::pow;
-        os << f.i << " ";
+        os << f.i;
         std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
         for(unsigned int i = 0; i < f.long_lag; ++i)
-            os << f.x[i] * f.modulus() << " ";
+            os << ' ' << f.x[i] * f.modulus();
         os.flags(oldflags);
         return os;
     }

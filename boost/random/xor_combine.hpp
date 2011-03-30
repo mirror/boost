@@ -143,7 +143,7 @@ public:
      */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, xor_combine_engine, s)
     {
-        os << s._rng1 << " " << s._rng2;
+        os << s._rng1 << ' ' << s._rng2;
         return os;
     }
     

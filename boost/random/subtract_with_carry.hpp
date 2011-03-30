@@ -225,8 +225,8 @@ public:
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, subtract_with_carry_engine, f)
     {
         for(unsigned int j = 0; j < f.long_lag; ++j)
-            os << f.compute(j) << " ";
-        os << f.carry << " ";
+            os << f.compute(j) << ' ';
+        os << f.carry;
         return os;
     }
 
@@ -467,7 +467,7 @@ public:
         std::ios_base::fmtflags oldflags =
             os.flags(os.dec | os.fixed | os.left); 
         for(unsigned int j = 0; j < f.long_lag; ++j)
-            os << (f.compute(j) * f._modulus) << " ";
+            os << (f.compute(j) * f._modulus) << ' ';
         os << (f.carry * f._modulus);
         os.flags(oldflags);
         return os;

@@ -210,7 +210,7 @@ public:
      * of the second base generator.
      */
     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, additive_combine_engine, r)
-    { os << r._mlcg1 << " " << r._mlcg2; return os; }
+    { os << r._mlcg1 << ' ' << r._mlcg2; return os; }
 
     /**
      * Reads the state of an @c additive_combine_engine from a
