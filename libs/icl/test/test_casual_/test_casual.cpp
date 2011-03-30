@@ -7,6 +7,8 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 +-----------------------------------------------------------------------------*/
 #define BOOST_TEST_MODULE icl::casual unit test
 
+#define BOOST_ICL_TEST_CHRONO
+
 #include <libs/icl/test/disable_test_warnings.hpp>
 
 #include <string>
@@ -21,7 +23,6 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include "../test_value_maker.hpp"
 
 #include <boost/rational.hpp>
-#include <boost/icl/chrono.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 
@@ -52,6 +53,8 @@ private:
 }
 */
 }} //namespace boost scalars
+
+
 
 class MyInt
 {
@@ -92,6 +95,7 @@ BOOST_AUTO_TEST_CASE(chrono_duration_ctor)
     cout << "++centi2=" << centi2 << " centi2.count() = " << centi2.count() << endl;
 */
 }
+
 
 BOOST_AUTO_TEST_CASE(test_difference_types)
 {
@@ -208,4 +212,5 @@ BOOST_AUTO_TEST_CASE(casual)
 
     BOOST_CHECK_EQUAL(true, true);
 }
+
 

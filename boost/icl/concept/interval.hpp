@@ -923,7 +923,7 @@ cardinality(const Type& object)
             && domain_equal<Type>(lower(object), upper(object)))
         return icl::unit_element<SizeT>::value();
     else 
-        return infinity<SizeT>::value();
+        return icl::infinity<SizeT>::value();
 }
 
 template<class Type>
@@ -945,7 +945,7 @@ cardinality(const Type& object)
     if(icl::is_empty(object))
         return icl::identity_element<SizeT>::value();
     else 
-        return infinity<SizeT>::value();
+        return icl::infinity<SizeT>::value();
 }
 
 template<class Type>

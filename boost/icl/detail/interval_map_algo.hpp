@@ -130,7 +130,7 @@ bool contains(const IntervalMapT& container,
               const typename IntervalMapT::element_type& key_value_pair) 
 {
     typename IntervalMapT::const_iterator it_ = container.find(key_value_pair.key);
-    return it_ != container.end() && it_->second == key_value_pair.data;
+    return it_ != container.end() && (*it_).second == key_value_pair.data;
 }
 
 template<class IntervalMapT>
