@@ -116,7 +116,7 @@ public:
      * seed the base generator.
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_SEED(independent_bits_engine,
-        result_type, seq)
+        SeedSeq, seq)
     { _base.seed(seq); }
 
     /**
