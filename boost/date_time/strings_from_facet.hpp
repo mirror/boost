@@ -50,8 +50,8 @@ gather_month_strings(const std::locale& locale, bool short_strings=true)
     //grab the needed strings by using the locale to
     //output each month
     const charT* p_outfmt = outfmt.c_str(), *p_outfmt_end = p_outfmt + outfmt.size();
+    tm tm_value = {};
     for (int m=0; m < 12; m++) {
-      tm tm_value;
       tm_value.tm_mon = m;
       stringstream_type ss;
       ostream_iter_type oitr(ss);
@@ -103,8 +103,8 @@ gather_weekday_strings(const std::locale& locale, bool short_strings=true)
     //grab the needed strings by using the locale to
     //output each month / weekday
     const charT* p_outfmt = outfmt.c_str(), *p_outfmt_end = p_outfmt + outfmt.size();
+    tm tm_value = {};
     for (int i=0; i < 7; i++) {
-      tm tm_value;
       tm_value.tm_wday = i;
       stringstream_type ss;
       ostream_iter_type oitr(ss);
