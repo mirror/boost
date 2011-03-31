@@ -8,6 +8,7 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #ifndef BOOST_ICL_TYPE_TRAITS_SIZE_TYPE_OF_HPP_JOFA_080911
 #define BOOST_ICL_TYPE_TRAITS_SIZE_TYPE_OF_HPP_JOFA_080911
 
+#include <boost/mpl/has_xxx.hpp>
 #include <boost/icl/type_traits/difference_type_of.hpp>
 
 namespace boost{ namespace icl

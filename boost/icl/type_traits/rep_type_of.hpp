@@ -9,6 +9,7 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #define BOOST_ICL_TYPE_TRAITS_REP_TYPE_OF_HPP_JOFA_110329
 
 #include <boost/config.hpp> // For macro BOOST_STATIC_CONSTANT
+#include <boost/mpl/has_xxx.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
