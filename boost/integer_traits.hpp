@@ -227,7 +227,7 @@ class integer_traits< ::boost::ulong_long_type>
 template<>
 class integer_traits< ::boost::long_long_type>
   : public std::numeric_limits< ::boost::long_long_type>,
-    public detail::integer_traits_base< ::boost::long_long_type, (1LL << (sizeof(::boost::long_long_type) - 1)), ~(1LL << (sizeof(::boost::long_long_type) - 1))>
+    public detail::integer_traits_base< ::boost::long_long_type, (1LL << (sizeof(::boost::long_long_type) * CHAR_BIT - 1)), ~(1LL << (sizeof(::boost::long_long_type) * CHAR_BIT - 1))>
 { };
 
 template<>
