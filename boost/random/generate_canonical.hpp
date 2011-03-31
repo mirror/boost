@@ -35,7 +35,9 @@ RealType generate_canonical_impl(URNG& g, boost::mpl::true_ /*is_integral*/)
     std::size_t digits = std::numeric_limits<RealType>::digits;
     RealType R = RealType((g.max)()) - RealType((g.min)()) + 1;
     RealType mult = R;
-    RealType limit = pow(RealType(2), RealType((std::min)(bits, digits)));
+    RealType limit =
+        pow(RealType(2),
+            RealType((std::min)(static_cast<std::size_t>(bits), digits)));
     RealType S = RealType(detail::subtract<base_result>()(g(), (g.min)()));
     while(mult < limit) {
         RealType inc = RealType(detail::subtract<base_result>()(g(), (g.min)()));
