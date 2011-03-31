@@ -21,7 +21,6 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 // interval instance types
 #include "../test_type_lists.hpp"
 #include "../test_value_maker.hpp"
-#include "../test_laws.hpp"
 
 #include <boost/type_traits/is_same.hpp>
 
@@ -34,6 +33,7 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 
 #include <boost/icl/detail/interval_morphism.hpp>
 #include <boost/icl/interval_map.hpp>
+#include "../test_laws.hpp"
 
 using namespace std;
 using namespace boost;

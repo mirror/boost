@@ -15,12 +15,12 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 // interval instance types
 #include "../test_type_lists.hpp"
 #include "../test_value_maker.hpp"
-#include "../test_laws.hpp"
 
 #include <boost/icl/interval_set.hpp>
 #include <boost/icl/separate_interval_set.hpp>
 #include <boost/icl/split_interval_set.hpp>
 #include <boost/icl/detail/interval_morphism.hpp>
+#include "../test_laws.hpp"
 
 using namespace std;
 using namespace boost;

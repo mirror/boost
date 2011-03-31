@@ -105,21 +105,21 @@ private:
     template<class Combiner>
     void handle_left_combined(iterator it_)
     {
-        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable(it_->second))
+        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable((*it_).second))
             this->_map.erase(it_);
     }
 
     template<class Combiner>
     void handle_combined(iterator it_)
     {
-        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable(it_->second))
+        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable((*it_).second))
             this->_map.erase(it_);
     }
 
     template<class Combiner>
     void handle_preceeded_combined(iterator prior_, iterator& it_)
     {
-        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable(it_->second))
+        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable((*it_).second))
         {
             this->_map.erase(it_);
             it_ = prior_;
@@ -129,7 +129,7 @@ private:
     template<class Combiner>
     void handle_succeeded_combined(iterator it_, iterator)
     {
-        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable(it_->second))
+        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable((*it_).second))
             this->_map.erase(it_);
     }
 
@@ -139,7 +139,7 @@ private:
     void gap_insert_at(iterator& it_, iterator prior_, 
                        const interval_type& end_gap, const codomain_type& co_val)
     {
-        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable(it_->second))
+        if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable((*it_).second))
         {
             this->_map.erase(it_);
             it_ = this->template gap_insert<Combiner>(prior_, end_gap, co_val);

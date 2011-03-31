@@ -1183,11 +1183,12 @@ template
 >
 void interval_map_find_4_numeric_continuous_types()
 {
+#ifndef BOOST_ICL_TEST_CHRONO
     typedef IntervalMap<T,U> IntervalMapT;
     typedef typename IntervalMapT::interval_type  IntervalT;
     typedef typename IntervalMapT::const_iterator c_iterator;
 
-    T q_1_2 = MK_v(1) / MK_v(2);
+    T q_1_2 = MK_v(1) / MK_v(2);//JODO Doesn't work with chrono
     T q_3_2 = MK_v(3) / MK_v(2);
     T q_1_3 = MK_v(1) / MK_v(3);
     T q_2_3 = MK_v(2) / MK_v(3);
@@ -1232,7 +1233,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK( !icl::contains(map_a, MK_v(1)) );
     BOOST_CHECK(  icl::contains(map_a, q_3_2) );
     BOOST_CHECK( !icl::contains(map_a, MK_v(2)) );
-
+#endif
 }
 
 
