@@ -299,7 +299,7 @@ namespace boost { namespace phoenix
                             typename remove_reference<Arg1>::type
                           , typename iterator_of<C>::type
                         >
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1500)
+#if defined(BOOST_MSVC)// && (BOOST_MSVC <= 1500)
                       , iterator_of<C>
 #else
                       , boost::mpl::identity<void>
