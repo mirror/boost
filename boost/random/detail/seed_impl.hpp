@@ -332,10 +332,9 @@ inline void fill_array_int(Iter& first, Iter last, IntType (&x)[n])
 template<int w, std::size_t n, class RealType>
 void seed_array_real_impl(const boost::uint_least32_t* storage, RealType (&x)[n])
 {
-    using std::pow;
     boost::uint_least32_t mask = ~((~boost::uint_least32_t(0)) << (w%32));
     RealType two32 = 4294967296.0;
-    const RealType divisor = pow(RealType(2), -w);
+    const RealType divisor = RealType(1)/detail::pow2<RealType>(w);
     unsigned int j;
     for(j = 0; j < n; ++j) {
         RealType val = RealType(0);
@@ -365,10 +364,9 @@ void seed_array_real(SeedSeq& seq, RealType (&x)[n])
 template<int w, std::size_t n, class Iter, class RealType>
 void fill_array_real(Iter& first, Iter last, RealType (&x)[n])
 {
-    using std::pow;
     boost::uint_least32_t mask = ~((~boost::uint_least32_t(0)) << (w%32));
     RealType two32 = 4294967296.0;
-    const RealType divisor = pow(RealType(2), -w);
+    const RealType divisor = RealType(1)/detail::pow2<RealType>(w);
     unsigned int j;
     for(j = 0; j < n; ++j) {
         RealType val = RealType(0);
