@@ -895,8 +895,7 @@ do_print_prefixed(
             >
         >,
         T
-    >& q,
-    mpl::true_)
+    >& q)
 {
     quantity<
         unit<
@@ -932,8 +931,7 @@ void do_print_prefixed(
             >
         >,
         T
-    >& q,
-    mpl::true_)
+    >& q)
 {
     quantity<
         unit<
@@ -952,13 +950,25 @@ void do_print_prefixed(
 }
 
 template<class Prefixes, class CharT, class Traits, class Dimension, class System, class T>
-void do_print_prefixed(std::basic_ostream<CharT, Traits>& os, const quantity<unit<Dimension, System>, T>& q, mpl::true_ norm_test)
+void do_print_prefixed(std::basic_ostream<CharT, Traits>& os, const quantity<unit<Dimension, System>, T>& q)
 {
-    detail::do_print_prefixed<Prefixes>(os, quantity<unit<Dimension, typename make_heterogeneous_system<Dimension, System>::type>, T>(q), norm_test);
+    detail::do_print_prefixed<Prefixes>(os, quantity<unit<Dimension, typename make_heterogeneous_system<Dimension, System>::type>, T>(q));
 }
 
-template<class Prefixes, class CharT, class Traits, class Unit, class T, class NormTest>
-void do_print_prefixed(std::basic_ostream<CharT, Traits>& os, const quantity<Unit, T>& q, NormTest)
+template<class Prefixes, class CharT, class Traits, class Unit, class T>
+void do_print_prefixed(std::basic_ostream<CharT, Traits>& os, const quantity<Unit, T>& q)
+{
+    detail::print_default(os, q)();
+}
+
+template<class Prefixes, class CharT, class Traits, class Unit, class T>
+void maybe_print_prefixed(std::basic_ostream<CharT, Traits>& os, const quantity<Unit, T>& q, mpl::true_)
+{
+    detail::do_print_prefixed<Prefixes>(os, q);
+}
+
+template<class Prefixes, class CharT, class Traits, class Unit, class T>
+void maybe_print_prefixed(std::basic_ostream<CharT, Traits>& os, const quantity<Unit, T>& q, mpl::false_)
 {
     detail::print_default(os, q)();
 }
@@ -1037,11 +1047,11 @@ inline std::basic_ostream<Char, Traits>& operator<<(std::basic_ostream<Char, Tra
     }
     else if (units::get_autoprefix(os) == autoprefix_engineering)
     {
-        detail::do_print_prefixed<detail::engineering_prefixes>(os, q, detail::test_norm(autoprefix_norm(q.value())));
+        detail::maybe_print_prefixed<detail::engineering_prefixes>(os, q, detail::test_norm(autoprefix_norm(q.value())));
     }
     else if (units::get_autoprefix(os) == autoprefix_binary)
     {
-        detail::do_print_prefixed<detail::binary_prefixes>(os, q, detail::test_norm(autoprefix_norm(q.value())));
+        detail::maybe_print_prefixed<detail::binary_prefixes>(os, q, detail::test_norm(autoprefix_norm(q.value())));
     }
     else
     {
