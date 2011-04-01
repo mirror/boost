@@ -92,7 +92,6 @@ main()
 {
     using namespace boost::fusion;
     using namespace boost;
-    using namespace std;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
@@ -111,8 +110,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<ns::point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<ns::point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<ns::point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<ns::point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);

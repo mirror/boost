@@ -36,7 +36,6 @@ main()
 {
     using namespace boost::fusion;
     using namespace boost;
-    using namespace std;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');

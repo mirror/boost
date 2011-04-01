@@ -28,7 +28,6 @@ main()
 {
     using namespace boost::fusion;
     using namespace boost;
-    using namespace std;
     namespace fusion = boost::fusion;
     using boost::fusion::pair;
     using boost::fusion::make_pair;

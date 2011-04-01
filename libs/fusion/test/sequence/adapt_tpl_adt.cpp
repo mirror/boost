@@ -65,7 +65,6 @@ int
 main()
 {
     using namespace boost::fusion;
-    using namespace std;
 
     typedef ns::point<int, int> point;
 
