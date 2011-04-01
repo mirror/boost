@@ -1254,7 +1254,27 @@ private:
     {
         return m_history;
     }
-    // get a state
+    // get a state (const version)
+    // as a pointer
+    template <class State>
+    typename ::boost::enable_if<typename ::boost::is_pointer<State>::type,State >::type
+    get_state(::boost::msm::back::dummy<0> = 0) const
+    {
+        return const_cast<State >
+            (&
+                (::boost::fusion::at_key<
+                    typename ::boost::remove_const<typename ::boost::remove_pointer<State>::type>::type>(m_substate_list)));
+    }
+    // as a reference
+    template <class State>
+    typename ::boost::enable_if<typename ::boost::is_reference<State>::type,State >::type
+    get_state(::boost::msm::back::dummy<1> = 0) const
+    {
+        return const_cast<State >
+            ( ::boost::fusion::at_key<
+                typename ::boost::remove_const<typename ::boost::remove_reference<State>::type>::type>(m_substate_list) );
+    }
+    // get a state (non const version)
     // as a pointer
     template <class State>
     typename ::boost::enable_if<typename ::boost::is_pointer<State>::type,State >::type
@@ -1270,7 +1290,6 @@ private:
     {
         return ::boost::fusion::at_key<typename ::boost::remove_reference<State>::type>(m_substate_list);
     }
-
     // checks if a flag is active using the BinaryOp as folding function
     template <class Flag,class BinaryOp>
     bool is_flag_active() const
@@ -1682,7 +1701,7 @@ private:
         {
             // end of processing
             template<class Event>
-            static void process(Event const& evt,library_sm*,HandledEnum&){}
+            static void process(Event const& ,library_sm*,HandledEnum&){}
         };
         public:
         region_processing_helper(library_sm* self_,HandledEnum& result_)
