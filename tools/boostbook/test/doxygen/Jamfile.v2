@@ -4,6 +4,7 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 import doxygen ;
+import os ;
 
 doxygen autodoc
     :
@@ -11,6 +12,24 @@ doxygen autodoc
     :
         <xsl:param>"boost.doxygen.reftitle=Example Reference"
     ;
+
+if [ os.name ] = NT
+{
+    actions compare
+    {
+        comp /A $(>[1]) $(>[2]) >$(<)
+    }
+
+}
+else
+{
+    actions compare
+    {
+        diff -u $(>[1]) $(>[2]) >$(<)
+    }
+}
+
+make check : autodoc.xml autodoc.gold : @compare ;
 
 boostbook standalone
     :
