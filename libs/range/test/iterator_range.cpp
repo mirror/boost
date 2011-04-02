@@ -200,6 +200,15 @@ namespace iterator_range_test_detail
             }
         }
     }
+    
+    void check_iterator_range_from_array()
+    {
+        double source[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
+        boost::iterator_range<double*> rng = boost::make_iterator_range(source);
+        BOOST_CHECK_EQUAL_COLLECTIONS( rng.begin(), rng.end(),
+                                       source, source + 6 );
+    }
+    
 } // namespace iterator_range_test_detail
 
 template<typename Pred>

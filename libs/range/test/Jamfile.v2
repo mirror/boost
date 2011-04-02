@@ -31,6 +31,7 @@ rule range-test ( name : includes * )
 }
 
 test-suite range :
+	[ compile-fail compile_fail/iterator_range1.cpp ]
 	[ range-test adaptor_test/adjacent_filtered ]
 	[ range-test adaptor_test/copied ]
 	[ range-test adaptor_test/filtered ]
