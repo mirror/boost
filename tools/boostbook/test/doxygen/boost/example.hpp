@@ -108,6 +108,8 @@ namespace example
      * \ref example::example "Link to class"
      * \ref example_template "Link to class template"
      * \note This is a note.
+     *
+     * \see example::example and example_template
      */
     int namespace_func(int i, int j);
 }

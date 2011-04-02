@@ -25,7 +25,7 @@ else
 {
     actions compare
     {
-        diff -u $(>[1]) $(>[2]) && echo "Stamped" >$(<)
+        diff -u -w $(>[1]) $(>[2]) && echo "Stamped" >$(<)
     }
 }
 
