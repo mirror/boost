@@ -89,11 +89,27 @@ namespace example
      *     void foo() {}
      * \endcode
      *
+     * \tparam TypeParameter A template parameter
+     * \tparam NonTypeParameter This is a non-type template parameter
+     * \tparam TypeParameterWithDefault This is a template parameter with a default argument
      */
 
     template <typename TypeParameter, int NonTypeParameter,
         typename TypeParameterWithDefault = int>
     struct example_template {};
+
+    /**
+     * \param i A function parameter
+     * \param j Another
+     * \return The answer
+     * \pre i > j
+     *
+     * This is a test function.
+     * \ref example::example "Link to class"
+     * \ref example_template "Link to class template"
+     * \note This is a note.
+     */
+    int namespace_func(int i, int j);
 }
 
 #define EXAMPLE(m) The macro

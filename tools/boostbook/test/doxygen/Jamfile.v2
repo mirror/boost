@@ -17,7 +17,7 @@ if [ os.name ] = NT
 {
     actions compare
     {
-        comp /A $(>[1]) $(>[2]) >$(<)
+        comp /A $(>[1]) $(>[2]) && echo "Stamped" >$(<)
     }
 
 }
@@ -25,7 +25,7 @@ else
 {
     actions compare
     {
-        diff -u $(>[1]) $(>[2]) >$(<)
+        diff -u $(>[1]) $(>[2]) && echo "Stamped" >$(<)
     }
 }
 

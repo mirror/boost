@@ -566,6 +566,7 @@
   <xsl:template match="param" mode="template">
     <xsl:choose>
       <xsl:when test="string(type)='class' or string(type)='typename'">
+        <xsl:variable name="name" select="normalize-space(string(declname))"/>
         <template-type-parameter>
           <xsl:attribute name="name">
             <xsl:value-of select="normalize-space(string(declname))"/>
@@ -576,6 +577,13 @@
                 mode="passthrough"/>
             </default>
           </xsl:if>
+          <xsl:for-each select="../../detaileddescription//parameterlist[@kind='templateparam']/parameteritem">
+            <xsl:if test="string(parameternamelist/parametername)=$name">
+              <purpose>
+                <xsl:apply-templates select="parameterdescription/para" mode="passthrough"/>
+              </purpose>
+            </xsl:if>
+          </xsl:for-each>
         </template-type-parameter>
       </xsl:when>
       <!-- Doxygen 1.5.8 generates odd xml for template type parameters.
@@ -583,8 +591,11 @@
       <xsl:when test="not(declname) and
         (starts-with(string(type), 'class ') or starts-with(string(type), 'typename '))">
         <template-type-parameter>
-          <xsl:attribute name="name">
+          <xsl:variable name="name">
             <xsl:value-of select="normalize-space(substring-after(string(type), ' '))"/>
+          </xsl:variable>
+          <xsl:attribute name="name">
+            <xsl:value-of select="$name"/>
           </xsl:attribute>
           <xsl:if test="defval">
             <default>
@@ -592,12 +603,22 @@
                 mode="passthrough"/>
             </default>
           </xsl:if>
+          <xsl:for-each select="../../detaileddescription//parameterlist[@kind='templateparam']/parameteritem">
+            <xsl:if test="string(parameternamelist/parametername)=$name">
+              <purpose>
+                <xsl:apply-templates select="parameterdescription/para" mode="passthrough"/>
+              </purpose>
+            </xsl:if>
+          </xsl:for-each>
         </template-type-parameter>
       </xsl:when>
       <xsl:otherwise>
         <template-nontype-parameter>
-          <xsl:attribute name="name">
+          <xsl:variable name="name">
             <xsl:value-of select="normalize-space(string(declname))"/>
+          </xsl:variable>
+          <xsl:attribute name="name">
+            <xsl:value-of select="$name"/>
           </xsl:attribute>
           <type>
             <xsl:apply-templates select="type"/>
@@ -608,6 +629,13 @@
                 mode="passthrough"/>
             </default>
           </xsl:if>
+          <xsl:for-each select="../../detaileddescription//parameterlist[@kind='templateparam']/parameteritem">
+            <xsl:if test="string(parameternamelist/parametername)=$name">
+              <purpose>
+                <xsl:apply-templates select="parameterdescription/para" mode="passthrough"/>
+              </purpose>
+            </xsl:if>
+          </xsl:for-each>
         </template-nontype-parameter>
       </xsl:otherwise>
     </xsl:choose>
@@ -1009,12 +1037,6 @@
           mode="function-clauses"/>
       </throws>
     </xsl:if>
-    <xsl:variable name="notes" select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='note' or @kind='attention']"/>
-    <xsl:if test="count($notes) &gt; 0"> 
-      <notes>
-        <xsl:apply-templates select="$notes" mode="function-clauses"/>
-      </notes>
-    </xsl:if>
   </xsl:template>
 
   <!-- Handle free functions -->
@@ -1259,6 +1281,12 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="para/simplesect[@kind='note' or @kind='attention']" mode="passthrough">
+    <note>
+      <xsl:apply-templates mode="passthrough"/>
+    </note>
+  </xsl:template>
+
   <xsl:template match="para/simplesect[@kind='par']" mode="passthrough">
     <formalpara>
       <xsl:apply-templates mode="passthrough"/>
@@ -1315,7 +1343,20 @@
   <!-- Ignore ref elements for now, as there is a lot of documentation which
        will have incorrect ref elements at the moment -->
   <xsl:template match="ref" mode="passthrough">
-    <xsl:apply-templates mode="passthrough"/>
+    <xsl:variable name="as-class" select="key('compounds-by-id', @refid)[@kind='class' or @kind='struct']"/>
+    <xsl:choose>
+      <xsl:when test="$as-class">
+        <classname>
+          <xsl:attribute name="alt">
+            <xsl:value-of select="$as-class/compoundname/text()"/>
+          </xsl:attribute>
+          <xsl:value-of select="text()"/>
+        </classname>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="passthrough"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Handle function clauses -->
@@ -1335,9 +1376,6 @@
         <xsl:apply-templates mode="passthrough"/>
       </postconditions>
     </xsl:if>
-    <xsl:if test="@kind='note' or @kind='attention'">
-      <xsl:apply-templates mode="passthrough"/>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template match="parameterlist" mode="function-clauses">
@@ -1353,8 +1391,8 @@
             </classname>
             <xsl:text> </xsl:text>
             <xsl:apply-templates 
-              select="parameterdescription/para/text()
-                      |parameterdescription/para/*"
+              select=".//parameterdescription/para/text()
+                      |.//parameterdescription/para/*"
               mode="passthrough"/>
           </xsl:otherwise>
         </xsl:choose>
