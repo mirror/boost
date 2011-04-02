@@ -14,6 +14,7 @@
 #include <boost/range/end.hpp>
 #include <boost/range/concepts.hpp>
 #include <boost/ref.hpp>
+#include <boost/utility.hpp>
 #include <algorithm>
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1600)
@@ -54,7 +55,7 @@ namespace boost
                             void
                           >::type* = 0)
             {
-                return std::for_each(first, last, fn);
+                return std::for_each<Iterator, UnaryFunction>(first, last, fn);
             }
         }
 #endif
