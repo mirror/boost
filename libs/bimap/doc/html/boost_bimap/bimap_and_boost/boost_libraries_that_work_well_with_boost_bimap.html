@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost Libraries that work well with Boost.Bimap</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="up" href="../bimap_and_boost.html" title="Bimap and Boost">
 <link rel="prev" href="../bimap_and_boost.html" title="Bimap and Boost">
@@ -340,25 +340,24 @@
 </pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list">
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap16"></a><a href="#boost_bimap16co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p>
-            We must do a const cast because Boost.Serialization archives only save
-          const objects. Read Boost.Serializartion docs for the rationale behind
-          this decision </p></td>
+              We must do a const cast because Boost.Serialization archives only save
+              const objects. Read Boost.Serializartion docs for the rationale behind
+              this decision
+            </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap17"></a><a href="#boost_bimap17co"><img src="../../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
-<td valign="top" align="left"><p> We can only serialize iterators if the bimap was serialized
-          first. Note that the const cast is not requiered here because we create
-          our iterators as const. </p></td>
+<td valign="top" align="left"><p>
+              We can only serialize iterators if the bimap was serialized first.
+              Note that the const cast is not requiered here because we create our
+              iterators as const.
+            </p></td>
 </tr>
 </table></div>
-<p>
-        </p>
 <p>
           Serialization capabilities are automatically provided by just linking with
           the appropriate Boost.Serialization library module: it is not necessary
@@ -461,17 +460,14 @@
  </pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap18"></a><a href="#boost_bimap18co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p>
-        Note that <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">relation</span></code> has to be used instead of <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span></code>. Contrary to <code class="computeroutput"><span class="identifier">value_type</span></code>, <code class="computeroutput"><span class="identifier">relation</span></code>
-          type stores the elements as non const, a requirement of <code class="computeroutput"><span class="identifier">assign</span><span class="special">::</span><span class="identifier">list_of</span></code>
-          </p></td>
+              Note that <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">relation</span></code> has to be used instead of
+              <code class="computeroutput"><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span></code>. Contrary to <code class="computeroutput"><span class="identifier">value_type</span></code>, <code class="computeroutput"><span class="identifier">relation</span></code>
+              type stores the elements as non const, a requirement of <code class="computeroutput"><span class="identifier">assign</span><span class="special">::</span><span class="identifier">list_of</span></code>
+            </p></td>
 </tr></table></div>
-<p>
-        </p>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
@@ -702,15 +698,13 @@
 </pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap19"></a><a href="#boost_bimap19co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> We can modify the right element because we have use a mutable collection
-          type in the right side. </p></td>
+<td valign="top" align="left"><p>
+              We can modify the right element because we have use a mutable collection
+              type in the right side.
+            </p></td>
 </tr></table></div>
-<p>
-        </p>
 <p>
           You can use it directly with ranges too:
         </p>

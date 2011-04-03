@@ -398,11 +398,11 @@ I've just done so:
     [@http://boost.org/more/lib_guide.htm#Guidelines Boost programming guidelines].
 
     *b.* User documentation. Requirements on the format are loose, though the
-    [@http://www.boost.org/tools/quickbook/doc/html/index.html QuickBook] format is
+    [@http://www.boost.org/tools/quickbook/ QuickBook] format is
     gaining acceptance within Boost.
 
     *c.* Complete set of unit tests powered by
-    [@http://boost.sourceforge.net/boost-build2/ Boost Build System V2].
+    [@http://www.boost.org/boost-build2/ Boost Build System V2].
 
     *Requirements*
 

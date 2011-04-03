@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Controlling collection types</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="up" href="../the_tutorial.html" title="The tutorial">
 <link rel="prev" href="discovering_the_bimap_framework.html" title="Discovering the bimap framework">
@@ -59,7 +59,7 @@
           The following is the list of all supported collection types.
         </p>
 <div class="table">
-<a name="id767190"></a><p class="title"><b>Table&#160;1.2.&#160;Collection of Key Types</b></p>
+<a name="id776404"></a><p class="title"><b>Table&#160;1.2.&#160;Collection of Key Types</b></p>
 <div class="table-contents"><table class="table" summary="Collection of Key Types">
 <colgroup>
 <col>
@@ -353,7 +353,7 @@
 <a name="boost_bimap.the_tutorial.controlling_collection_types.examples"></a><a class="link" href="controlling_collection_types.html#boost_bimap.the_tutorial.controlling_collection_types.examples" title="Examples">Examples</a>
 </h4></div></div></div>
 <a name="boost_bimap.the_tutorial.controlling_collection_types.examples.countries_populations"></a><h6>
-<a name="id768285"></a>
+<a name="id777500"></a>
           <a class="link" href="controlling_collection_types.html#boost_bimap.the_tutorial.controlling_collection_types.examples.countries_populations">Countries
           Populations</a>
         </h6>
@@ -429,25 +429,24 @@
 </pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list">
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap4"></a><a href="#boost_bimap4co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> The right map view works like a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">multimap</span><span class="special">&lt;</span> <span class="keyword">long</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">greater</span><span class="special">&lt;</span><span class="keyword">long</span><span class="special">&gt;</span> <span class="special">&gt;</span></code>,
-          We can iterate over it to print the results in the required order. </p></td>
+<td valign="top" align="left"><p>
+              The right map view works like a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">multimap</span><span class="special">&lt;</span> <span class="keyword">long</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">greater</span><span class="special">&lt;</span><span class="keyword">long</span><span class="special">&gt;</span> <span class="special">&gt;</span></code>,
+              We can iterate over it to print the results in the required order.
+            </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap5"></a><a href="#boost_bimap5co"><img src="../../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
-<td valign="top" align="left"><p> The
-          left map view works like a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">unordered_map</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">long</span> <span class="special">&gt;</span></code>, given the name of the country we can
-          use it to search for the population in constant time </p></td>
+<td valign="top" align="left"><p>
+              The left map view works like a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">unordered_map</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">long</span> <span class="special">&gt;</span></code>, given the name of the country
+              we can use it to search for the population in constant time
+            </p></td>
 </tr>
 </table></div>
-<p>
-        </p>
 <a name="boost_bimap.the_tutorial.controlling_collection_types.examples.repetitions_counter"></a><h6>
-<a name="id769726"></a>
+<a name="id778674"></a>
           <a class="link" href="controlling_collection_types.html#boost_bimap.the_tutorial.controlling_collection_types.examples.repetitions_counter">Repetitions
           counter</a>
         </h6>
@@ -499,29 +498,30 @@
 </pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list">
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap6"></a><a href="#boost_bimap6co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">counter</span></code> is an integer that
-          is initialized in zero in the constructor </p></td>
+<td valign="top" align="left"><p>
+              <code class="computeroutput"><span class="identifier">counter</span></code> is an integer
+              that is initialized in zero in the constructor
+            </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap7"></a><a href="#boost_bimap7co"><img src="../../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
-<td valign="top" align="left"><p> Because the right collection
-          type is <code class="computeroutput"><span class="identifier">list_of</span></code>, the right
-          data is not used a key and can be modified in the same way as with standard
-          maps. </p></td>
+<td valign="top" align="left"><p>
+              Because the right collection type is <code class="computeroutput"><span class="identifier">list_of</span></code>,
+              the right data is not used a key and can be modified in the same way
+              as with standard maps.
+            </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap8"></a><a href="#boost_bimap8co"><img src="../../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
-<td valign="top" align="left"><p> When we insert the elements using the left map view, the element
-          is inserted at the end of the list. </p></td>
+<td valign="top" align="left"><p>
+              When we insert the elements using the left map view, the element is
+              inserted at the end of the list.
+            </p></td>
 </tr>
 </table></div>
-<p>
-        </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

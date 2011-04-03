@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Useful functions</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
 <link rel="up" href="../the_tutorial.html" title="The tutorial">
 <link rel="prev" href="differences_with_standard_maps.html" title="Differences with standard maps">
@@ -128,15 +128,13 @@
 </pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap9"></a><a href="#boost_bimap9co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">it</span></code> is still valid here,
-          and the bimap was left unchanged </p></td>
+<td valign="top" align="left"><p>
+              <code class="computeroutput"><span class="identifier">it</span></code> is still valid here,
+              and the bimap was left unchanged
+            </p></td>
 </tr></table></div>
-<p>
-        </p>
 <p>
           <code class="computeroutput"><span class="identifier">replace</span></code> functions performs
           this substitution in such a manner that:
@@ -230,15 +228,13 @@
 </pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap10"></a><a href="#boost_bimap10co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">it</span></code> is not longer valid
-          and <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="string">"1"</span><span class="special">)</span></code> is removed from the bimap </p></td>
+<td valign="top" align="left"><p>
+              <code class="computeroutput"><span class="identifier">it</span></code> is not longer valid
+              and <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="string">"1"</span><span class="special">)</span></code> is removed from the bimap
+            </p></td>
 </tr></table></div>
-<p>
-        </p>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
@@ -315,25 +311,23 @@
 </span></pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list">
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap11"></a><a href="#boost_bimap11co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">range_type</span></code> is a handy typedef
-          equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span><span class="identifier">iterator</span><span class="special">&gt;</span></code>.
-          <code class="computeroutput"><span class="identifier">const_range_type</span></code> is provided
-          too, and it is equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span><span class="identifier">const_iterator</span><span class="special">&gt;</span></code> </p></td>
+<td valign="top" align="left"><p>
+              <code class="computeroutput"><span class="identifier">range_type</span></code> is a handy
+              typedef equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span><span class="identifier">iterator</span><span class="special">&gt;</span></code>. <code class="computeroutput"><span class="identifier">const_range_type</span></code>
+              is provided too, and it is equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span><span class="identifier">const_iterator</span><span class="special">&gt;</span></code>
+            </p></td>
 </tr>
 <tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap12"></a><a href="#boost_bimap12co"><img src="../../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
-<td valign="top" align="left"><p> _key is a Boost.Lambda placeholder.
-          To use it you have to include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">bimap</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-          </p></td>
+<td valign="top" align="left"><p>
+              _key is a Boost.Lambda placeholder. To use it you have to include
+              <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">bimap</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+            </p></td>
 </tr>
 </table></div>
-<p>
-        </p>
 <p>
           <code class="computeroutput"><span class="identifier">range</span></code> simply accepts predicates
           specifying the lower and upper bounds of the interval searched. Please
@@ -354,14 +348,12 @@
 </span></pre>
 <p>
         </p>
-<p>
-          </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left"><p><a name="boost_bimap13"></a><a href="#boost_bimap13co"><img src="../../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
-<td valign="top" align="left"><p> This is equivalent to std::make_pair(s.begin(),s.end()) </p></td>
+<td valign="top" align="left"><p>
+              This is equivalent to std::make_pair(s.begin(),s.end())
+            </p></td>
 </tr></table></div>
-<p>
-        </p>
 <p>
           <a href="../../../../example/tutorial_range.cpp" target="_top">Go to source code</a>
         </p>
