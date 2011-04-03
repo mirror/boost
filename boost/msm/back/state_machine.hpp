@@ -1044,10 +1044,30 @@ private:
         eventless_helper.process_completion_event();
     }
 
+    // start the state machine (calls entry of the initial state passing incomingEvent to on_entry's)
+    template <class Event>
+    void start(Event const& incomingEvent)
+    {
+        // call on_entry on this SM
+        (static_cast<Derived*>(this))->on_entry(incomingEvent,*this);
+        ::boost::mpl::for_each<initial_states, boost::msm::wrap<mpl::placeholders::_1> >
+            (call_init<Event>(incomingEvent,this));
+        // give a chance to handle an anonymous (eventless) transition
+        handle_eventless_transitions_helper<library_sm> eventless_helper(this,true);
+        eventless_helper.process_completion_event();
+    }
+
     // stop the state machine (calls exit of the current state)
     void stop()
     {
         do_exit(fsm_final_event(),*this);
+    }
+
+    // stop the state machine (calls exit of the current state passing finalEvent to on_exit's)
+    template <class Event>
+    void stop(Event const& finalEvent)
+    {
+        do_exit(finalEvent,*this);
     }
 
     // Main function used by clients of the derived FSM to make
@@ -2167,7 +2187,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      };
      // start for states machines which are themselves embedded in other state machines (composites)
      template <class Event>
-     void start(Event const& incomingEvent)
+     void internal_start(Event const& incomingEvent)
      {
          region_start_helper< ::boost::mpl::int_<0> >::do_start(this,incomingEvent);
          // give a chance to handle an anonymous (eventless) transition
@@ -2205,7 +2225,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              operator()(EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<0> = 0)
          {
              (static_cast<Derived*>(self))->on_entry(evt,fsm);
-             self->start(evt);
+             self->internal_start(evt);
          }
 
          // this variant is for the direct entry case (just one entry, not a sequence of entries)
@@ -2227,7 +2247,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index <= nr_regions::value);
              // just set the correct zone, the others will be default/history initialized
              self->m_states[find_region_id<typename EventType::active_state::wrapped_entry>::region_index] = state_id;
-             self->start(evt.m_event);
+             self->internal_start(evt.m_event);
          }
 
          // this variant is for the fork entry case (a sequence on entries)
@@ -2248,7 +2268,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
                                     ::boost::msm::wrap< ::boost::mpl::placeholders::_1> >
                                                         (fork_helper<EventType>(self,evt));
              // set the correct zones, the others (if any) will be default/history initialized
-             self->start(evt.m_event);
+             self->internal_start(evt.m_event);
          }
 
          // this variant is for the pseudo state entry case
@@ -2263,7 +2283,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              int state_id = get_state_id<stt,typename EventType::active_state::wrapped_entry>::value;
              // given region starts with the entry pseudo state as active state
              self->m_states[find_region_id<typename EventType::active_state::wrapped_entry>::region_index] = state_id;
-             self->start(evt.m_event);
+             self->internal_start(evt.m_event);
              // and we process the transition in the zone of the newly active state
              // (entry pseudo states are, according to UML, a state connecting 1 transition outside to 1 inside
              self->process_event(evt.m_event);
