@@ -208,7 +208,9 @@ struct is_base_of
 
 #if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 5)
 
+#ifndef BOOST_CLANG
 #define BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES
+#endif
 
 #else
 
