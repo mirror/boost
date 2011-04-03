@@ -3,7 +3,7 @@
 <article id="identifiers_in_quickbook_1_6" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Identifiers in quickbook 1.6</title> <anchor id="identifiers_in_quickbook_1_6.test_heading_with__code_"/>
-  <bridgehead renderas="sect2">
+  <bridgehead renderas="sect2" id="identifiers_in_quickbook_1_6.test_heading_with__code_-heading">
     <link linkend="identifiers_in_quickbook_1_6.test_heading_with__code_">Test heading
     with <code><phrase role="identifier">code</phrase></code></link>
   </bridgehead>

@@ -14,7 +14,11 @@ project quickbook
         <toolset>darwin:<c++-template-depth>300
         <toolset>gcc:<cflags>-g0
         <toolset>darwin:<cflags>-g0
+        <warnings>all
+        <toolset>msvc:<cflags>/wd4709
     ;
+
+lib shell32 ;
 
 exe quickbook
     :
@@ -24,6 +28,7 @@ exe quickbook
     actions_class.cpp
     utils.cpp
     input_path.cpp
+    values.cpp
     post_process.cpp
     collector.cpp
     template_stack.cpp
@@ -38,8 +43,7 @@ exe quickbook
     /boost//program_options
     /boost//filesystem
     : #<define>QUICKBOOK_NO_DATES
-      # Still using 'normalize' which has been deprecated.
-      #<define>BOOST_FILESYSTEM_NO_DEPRECATED
+      <define>BOOST_FILESYSTEM_NO_DEPRECATED
       <toolset>msvc:<cxxflags>/wd4355
       <toolset>msvc:<cxxflags>/wd4511
       <toolset>msvc:<cxxflags>/wd4512
@@ -50,4 +54,5 @@ exe quickbook
       <toolset>msvc:<cxxflags>/wd4800
       <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
       <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+      <target-os>windows:<library>shell32
     ;

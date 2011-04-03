@@ -12,7 +12,8 @@
 #define BOOST_SPIRIT_QUICKBOOK_GRAMMARS_IMPL_HPP
 
 #include "grammar.hpp"
-#include "rule_store.hpp"
+#include "cleanup.hpp"
+#include "values.hpp"
 #include <boost/spirit/include/classic_symbols.hpp>
 
 namespace quickbook
@@ -25,25 +26,37 @@ namespace quickbook
             in_block = 1,
             in_phrase = 2,
             in_conditional = 4,
+            in_nested_block = 8
         };
 
         enum type_enum {
-            block = 1,
-            phrase = 2,
-            conditional_or_block = 5
+            nothing = 0,
+            block = in_block,
+            conditional_or_block = block | in_conditional,
+            nested_block = conditional_or_block | in_nested_block,
+            phrase = nested_block | in_phrase
         };
 
-        element_info(type_enum t, cl::rule<scanner>* r)
-            : type(t), rule(r) {}
+        element_info()
+            : type(nothing), rule(), tag(0) {}
+
+        element_info(
+                type_enum t,
+                cl::rule<scanner>* r,
+                value::tag_type tag = value::default_tag,
+                unsigned int v = 0)
+            : type(t), rule(r), tag(tag), qbk_version(v) {}
 
         type_enum type;
         cl::rule<scanner>* rule;
+        value::tag_type tag;
+        unsigned int qbk_version;
     };
 
     struct quickbook_grammar::impl
     {
         quickbook::actions& actions;
-        rule_store store_;
+        cleanup cleanup_;
 
         // Main Grammar
         cl::rule<scanner> block_start;

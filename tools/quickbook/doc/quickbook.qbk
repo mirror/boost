@@ -239,7 +239,9 @@ Features include:
   * XML escape documentation fields, with escapes to allow encoding unicode
     in ASCII.
 
-[heading Version 1.5.4 - Boost 1.46.0]
+[heading Version 1.5.4 - Boost 1.46.1]
+
+Boost 1.46.0:
 
 * Add support for `lang` attribute in documentation info.
 * Improved anchor implementation. Especially for using an anchor
@@ -250,6 +252,46 @@ Features include:
   allow more block elements in a future version.
 * Rearrange the structure of the grammar.
 * Use filesystem 3. Remove cygwin support.
+
+Boost 1.46.1:
+
+* Work around optimization bug in g++ 4.4 on 64 bit linux.
+
+[heading Version 1.5.5 - Boost 1.47]
+
+* Tweak anchor placement for titles.
+* Hard code the quickbook path into the quickbook testing tools. This
+  means that they can be used from multiple locations.
+* Generate an id for boostbook `bridgehead` elements. This results in
+  more consistent html, since docbook generates a random id if they
+  don't have one.
+* Improved unicode support on windows. Unicode can now be used from the
+  command line, and unicode filenames are supported. Unicode output is
+  a bit weak.
+* Check for windows paths, and warn about them.
+* Fix relative path detection on windows.
+* Reverse deprecation of `[br]`, printing a single warning about
+  generating invalid boostbook.
+* Fix handling empty category attributes.
+* Store data from the parser in a dynamic data structure.
+  This simplifies the implementation and makes it easier to parse
+  more complicated data structures.
+* Improved error messages for unknown doc info attributes.
+* Richer copyright syntax. Now understands:
+  `[copyright 2001-2006, 2010 One person, 2008 Another person]`.
+* Fix delimeter checking for simple markup.
+* Allow more block elements to be nested.
+* Go back to using invalid markup for lists. It generates better html.
+* Better anchor placement for lists.
+* Pass-thru comments in code snippets.
+* Use relative paths for `__FILENAME__` macro.
+* Rewrite xinclude path generator so that it doesn't use deprecated
+  filesystem functions.
+* Quickbook 1.6:
+  * Scope source mode changes to the file they're made in.
+  * Explicit markup for lists. e.g.
+    `[ordered_list [item1][item2]]` or
+    `[itemized_list [item1][item2]]`.
 
 [endsect] [/Change log]
 
@@ -1901,6 +1943,18 @@ or
 
 can be used to inhibit code from passing through to quickbook. All text between
 the delimeters will simply be ignored.
+
+Comments of this form:
+
+    //=int main() {}
+
+or
+
+    /*=foo()*/
+
+will be displayed as code that isn't in comments. This allows you to
+include some code in the snippet but not actually use it when
+compiling your example.
 
 [heading Callouts]
 

@@ -92,4 +92,16 @@
       </listitem>
     </varlistentry>
   </variablelist>
+  <anchor id="id1"/>
+  <variablelist>
+    <title>Variable List with anchors</title>
+    <varlistentry>
+      <term><anchor id="id2"/> a<anchor id="id3"/> </term>
+      <listitem>
+        <para>
+          <anchor id="id4"/> b<anchor id="id5"/>
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
 </article>

@@ -15,17 +15,28 @@
 #include <time.h>
 #include <vector>
 #include <string>
+#include <boost/filesystem/v3/path.hpp>
 #include "fwd.hpp"
 
 namespace quickbook
 {
+    namespace fs = boost::filesystem;
+
     extern tm* current_time; // the current time
     extern tm* current_gm_time; // the current UTC time
     extern bool debug_mode;
-    extern std::vector<std::string> include_path;
+    extern std::vector<fs::path> include_path;
     extern std::vector<std::string> preset_defines;
 
-    int parse_file(char const* filein_, actions& actor, bool ignore_docinfo = false);
+    int parse_file(fs::path const& filein_, actions& actor, bool ignore_docinfo = false);
+    
+    // Some initialisation methods
+    //
+    // Declared here to avoid including other headers
+    namespace detail
+    {
+        void initialise_markups();
+    }
 }
 
 #endif

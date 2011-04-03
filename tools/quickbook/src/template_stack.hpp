@@ -14,42 +14,25 @@
 #include <vector>
 #include <boost/tuple/tuple.hpp>
 #include <boost/assert.hpp>
-#include <boost/spirit/include/classic_position_iterator.hpp>
 #include <boost/spirit/include/classic_functor_parser.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/next_prior.hpp>
+#include <boost/filesystem/path.hpp>
+#include "fwd.hpp"
+#include "values.hpp"
+#include "template_tags.hpp"
 
 namespace quickbook
 {
+    namespace fs = boost::filesystem;
+
     struct template_body
     {
-        template_body(
-                std::string const& content,
-                boost::spirit::classic::file_position const& position,
-                bool is_block
-            )
-            : content(content)
-            , position(position)
-            , is_block(is_block)
-        {
-        }
+        template_body(value const&, fs::path const&);
+        bool is_block() const;
 
-        template_body(
-                std::string const& content,
-                boost::spirit::classic::file_position_base<char const*> const& position,
-                bool is_block
-            )
-            : content(content)
-            , position(position.file, position.line, position.column)
-            , is_block(is_block)
-        {
-        }
-    
-        std::string content;
-        // Note: Using file_position to store the filename after the file
-        // has been closed.
-        boost::spirit::classic::file_position position;
-        bool is_block;
+        stored_value content;
+        fs::path filename;        
     };
 
     struct template_scope;
@@ -59,29 +42,13 @@ namespace quickbook
         template_symbol(
                 std::string const& identifier,
                 std::vector<std::string> const& params,
-                std::string const& body,
-                boost::spirit::classic::file_position const& position,
-                bool is_block,
+                value const& content,
+                fs::path const& filename,
                 template_scope const* parent = 0)
            : identifier(identifier)
            , params(params)
-           , body(body, position, is_block)
+           , body(content, filename)
            , parent(parent)
-           , callout(false)
-           , callouts() {}
-
-        template_symbol(
-                std::string const& identifier,
-                std::vector<std::string> const& params,
-                std::string const& body,
-                boost::spirit::classic::file_position_base<char const*> const& position,
-                bool is_block,
-                template_scope const* parent = 0)
-           : identifier(identifier)
-           , params(params)
-           , body(body, position, is_block)
-           , parent(parent)
-           , callout(false)
            , callouts() {}
 
         std::string identifier;
@@ -93,8 +60,7 @@ namespace quickbook
         // or static_parent for clarity.
         template_scope const* parent;
 
-        bool callout;
-        std::vector<template_body> callouts;
+        stored_value callouts;
     };
 
     typedef boost::spirit::classic::symbols<template_symbol> template_symbols;

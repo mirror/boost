@@ -8,18 +8,16 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "utils.hpp"
+#include "input_path.hpp"
 #include <boost/spirit/include/classic_core.hpp>
+#include <boost/filesystem/v3/fstream.hpp>
 
 #include <cctype>
 #include <cstring>
 #include <stdexcept>
 #include <fstream>
-#include <iostream>
+#include <ostream>
 #include <map>
-
-namespace quickbook {
-    extern bool ms_errors;
-}
 
 namespace quickbook { namespace detail
 {
@@ -118,21 +116,6 @@ namespace quickbook { namespace detail
         }
     }
 
-    // remove the extension from a filename
-    std::string
-    remove_extension(std::string const& filename)
-    {
-        std::string::size_type const n = filename.find_last_of('.');
-        if(std::string::npos == n)
-        {
-            return filename;
-        }
-        else
-        {
-            return std::string(filename.begin(), filename.begin()+n);
-        }
-    }
-
     std::string escape_uri(std::string uri)
     {
         for (std::string::size_type n = 0; n < uri.size(); ++n)
@@ -149,36 +132,6 @@ namespace quickbook { namespace detail
             }
         }
         return uri;
-    }
-
-    std::ostream& outerr(std::string const& file, int line)
-    {
-        if (line >= 0)
-        {
-            if (ms_errors)
-                return std::clog << file << "(" << line << "): error: ";
-            else
-                return std::clog << file << ":" << line << ": error: ";
-        }
-        else
-        {
-            return std::clog << file << ": error: ";
-        }
-    }
-
-    std::ostream& outwarn(std::string const& file, int line)
-    {
-        if (line >= 0)
-        {
-            if (ms_errors)
-                return std::clog << file << "(" << line << "): warning: ";
-            else
-                return std::clog << file << ":" << line << ": warning: ";
-        }
-        else
-        {
-            return std::clog << file << ": warning: ";
-        }
     }
 
     // Read the first few bytes in a file to see it starts with a byte order
@@ -238,12 +191,13 @@ namespace quickbook { namespace detail
 
     template <class InputIterator, class OutputIterator>
     bool normalize(InputIterator begin, InputIterator end,
-            OutputIterator out, std::string const& filename)
+            OutputIterator out, fs::path const& filename)
     {
         std::string encoding = read_bom(begin, end, out);
 
         if(encoding != "UTF-8" && encoding != "") {
-            outerr(filename) << encoding << " is not supported. Please use UTF-8."
+            outerr(filename) << encoding.c_str()
+                << " is not supported. Please use UTF-8."
                 << std::endl;
 
             return false;
@@ -263,15 +217,14 @@ namespace quickbook { namespace detail
         return true;
     }
 
-    int load(std::string const& filename, std::string& storage)
+    int load(fs::path const& filename, std::string& storage)
     {
-        using std::cerr;
         using std::endl;
         using std::ios;
         using std::ifstream;
         using std::istream_iterator;
 
-        ifstream in(filename.c_str(), std::ios_base::in);
+        fs::ifstream in(filename, std::ios_base::in);
 
         if (!in)
         {

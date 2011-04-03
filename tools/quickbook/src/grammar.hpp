@@ -44,7 +44,7 @@ namespace quickbook
         cl::rule<scanner> const& start_rule;
     };
 
-    class quickbook_grammar
+    struct quickbook_grammar
     {
     public:
         struct impl;

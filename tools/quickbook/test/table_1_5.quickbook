@@ -69,4 +69,33 @@
   ]
 ]
 
+[table Nested Tables
+  [
+    [
+      Header 1
+    ]
+    [
+      Header 2
+    ]
+  ]
+  [
+    [
+      [table Inner Table
+        [[1.1][1.2]]
+        [[2.1][2.2]]
+      ]
+    ]
+  ]
+  [
+    [
+      Something.
+    ]
+  ]
+]
+
+[#id1]
+[table Table with anchors
+[[[#id2]a[#id3]]][[b]]
+]
+
 [endsect]

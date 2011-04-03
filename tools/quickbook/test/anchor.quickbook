@@ -34,3 +34,17 @@ they appear in the correct place. [#a3]
 [#a12][?__not_defined__ #a13]
 [section Conditional Section Anchor]
 [endsect]
+
+[section Lists]
+
+[#a14]
+
+* Item 1
+* Item 2
+* Nested List
+  [#a15]
+  * Nested Item 1
+  * Nested Item 2
+* Item 3
+
+[endsect]

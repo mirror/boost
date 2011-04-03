@@ -11,44 +11,130 @@
 #include <sstream>
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/join.hpp>
+#include <boost/foreach.hpp>
 #include "quickbook.hpp"
 #include "utils.hpp"
+#include "input_path.hpp"
 #include "actions_class.hpp"
+#include "doc_info_tags.hpp"
 
 namespace quickbook
 {
-    std::string const& docinfo_string::get(unsigned version) const
+    static void write_document_title(collector& out, value const& title, value const& version);
+    
+    static std::string doc_info_output(value const& p, unsigned version)
     {
-        return (qbk_version_n < version) ? raw : encoded;
+        return (qbk_version_n < version) ? p.get_quickbook() : p.get_boostbook();
     }
 
-    static void write_document_title(collector& out, quickbook::actions& actions);
-    static void write_document_info(collector& out, quickbook::actions& actions);
+    value consume_last(value_consumer& c, value::tag_type tag,
+            std::vector<std::string>* duplicates)
+    {
+        value p;
+
+        int count = 0;
+        while(c.check(tag)) {
+            p = c.consume();
+            ++count;
+        }
+
+        if(count > 1) duplicates->push_back(doc_info_attributes::name(tag));
+
+        return p;
+    }
+
+    value consume_last_single(value_consumer& c, value::tag_type tag,
+            std::vector<std::string>* duplicates)
+    {
+        value l = consume_last(c, tag, duplicates);
+        if(l.empty()) return l;
+
+        assert(l.is_list());
+        value_consumer c2 = l;
+        value p = c2.consume();
+        c2.finish();
+
+        return p;
+    }
+
+    std::vector<value> consume_multiple(value_consumer& c, value::tag_type tag)
+    {
+        std::vector<value> values;
+        
+        while(c.check(tag)) {
+            values.push_back(c.consume());
+        }
+        
+        return values;
+    }
 
     void pre(collector& out, quickbook::actions& actions, bool ignore_docinfo)
     {
         // The doc_info in the file has been parsed. Here's what we'll do
         // *before* anything else.
 
-        if (!actions.doc_id_tmp.empty())
-            actions.doc_id = actions.doc_id_tmp.get(106);
+        value_consumer values = actions.values.release();
+
+        // Skip over invalid attributes
+
+        while (values.check(value::default_tag)) values.consume();
+        
+        value qbk_version = values.optional_consume(doc_info_tags::qbk_version);
+        
+        value doc_title;
+        if (values.check())
+        {
+            actions.doc_type = values.consume(doc_info_tags::type).get_quickbook();
+            doc_title = values.consume(doc_info_tags::title);
+            actions.doc_title_qbk = doc_title.get_quickbook();
+        }
+
+        std::vector<std::string> duplicates;
+
+        value id = consume_last_single(values, doc_info_attributes::id, &duplicates);
+        value dirname = consume_last_single(values, doc_info_attributes::dirname, &duplicates);
+        value last_revision = consume_last_single(values, doc_info_attributes::last_revision, &duplicates);
+        value purpose = consume_last_single(values, doc_info_attributes::purpose, &duplicates);
+        std::vector<value> categories = consume_multiple(values, doc_info_attributes::category);
+        value lang = consume_last_single(values, doc_info_attributes::lang, &duplicates);
+        value version = consume_last_single(values, doc_info_attributes::version, &duplicates);
+        std::vector<value> authors = consume_multiple(values, doc_info_attributes::authors);
+        std::vector<value> copyrights = consume_multiple(values, doc_info_attributes::copyright);
+        value license = consume_last_single(values, doc_info_attributes::license, &duplicates);
+        std::vector<value> biblioids = consume_multiple(values, doc_info_attributes::biblioid);
+        
+        // Skip over source-mode tags (already dealt with)
+
+        while (values.check(doc_info_attributes::source_mode)) values.consume();
+
+        values.finish();
+
+        if(!duplicates.empty())
+        {
+            detail::outwarn(actions.filename,1)
+                << (duplicates.size() > 1 ?
+                    "Duplicate attributes" : "Duplicate attribute")
+                << ":" << detail::utf8(boost::algorithm::join(duplicates, ", "))
+                << "\n"
+                ;
+        }
+
+        if (!id.empty())
+            actions.doc_id = id.get_quickbook();
 
         if (actions.doc_id.empty())
-            actions.doc_id = detail::make_identifier(
-                actions.doc_title.raw.begin(),actions.doc_title.raw.end());
-
-        if (actions.doc_dirname.empty() && actions.doc_type == "library") {
-            if (!actions.doc_id_tmp.empty()) {
-                actions.doc_dirname = actions.doc_id_tmp;
+            actions.doc_id = detail::make_identifier(actions.doc_title_qbk);
+        
+        if (dirname.empty() && actions.doc_type == "library") {
+            if (!id.empty()) {
+                dirname = id;
             }
             else {
-                actions.doc_dirname.raw = actions.doc_dirname.encoded = actions.doc_id;
+                dirname = qbk_bbk_value(actions.doc_id, doc_info_attributes::dirname);
             }
         }
 
-        actions.doc_id_tmp.clear();
-
-        if (actions.doc_last_revision.empty())
+        if (last_revision.empty())
         {
             // default value for last-revision is now
 
@@ -60,7 +146,7 @@ namespace quickbook
                     "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $"),
                 current_gm_time
             );
-            actions.doc_last_revision.raw = actions.doc_last_revision.encoded = strdate;
+            last_revision = qbk_bbk_value(strdate, doc_info_attributes::last_revision);
         }
 
         // if we're ignoring the document info, we're done.
@@ -71,31 +157,37 @@ namespace quickbook
 
         // Quickbook version
 
-        if (qbk_major_version == -1)
+        int qbk_major_version, qbk_minor_version;
+
+        if (qbk_version.empty())
         {
             // hard code quickbook version to v1.1
             qbk_major_version = 1;
             qbk_minor_version = 1;
-            qbk_version_n = 101;
-            detail::outwarn(actions.filename.string(),1)
+            detail::outwarn(actions.filename,1)
                 << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
         else
         {
-            qbk_version_n = ((unsigned) qbk_major_version * 100) +
-                (unsigned) qbk_minor_version;
+            value_consumer qbk_version_values(qbk_version);
+            qbk_major_version = qbk_version_values.consume().get_int();
+            qbk_minor_version = qbk_version_values.consume().get_int();
+            qbk_version_values.finish();
         }
         
+        qbk_version_n = ((unsigned) qbk_major_version * 100) +
+            (unsigned) qbk_minor_version;
+
         if (qbk_version_n == 106)
         {
-            detail::outwarn(actions.filename.string(),1)
+            detail::outwarn(actions.filename,1)
                 << "Quickbook 1.6 is still under development and is "
                 "likely to change in the future." << std::endl;
         }
         else if(qbk_version_n < 100 || qbk_version_n > 106)
         {
-            detail::outerr(actions.filename.string(),1)
+            detail::outerr(actions.filename,1)
                 << "Unknown version of quickbook: quickbook "
                 << qbk_major_version
                 << "."
@@ -110,22 +202,22 @@ namespace quickbook
         {
             std::vector<std::string> invalid_attributes;
 
-            if (!actions.doc_purpose.empty())
+            if (!purpose.empty())
                 invalid_attributes.push_back("purpose");
 
-            if (!actions.doc_categories.empty())
+            if (!categories.empty())
                 invalid_attributes.push_back("category");
 
-            if (!actions.doc_dirname.empty())
+            if (!dirname.empty())
                 invalid_attributes.push_back("dirname");
 
             if(!invalid_attributes.empty())
             {
-                detail::outwarn(actions.filename.string(),1)
+                detail::outwarn(actions.filename,1)
                     << (invalid_attributes.size() > 1 ?
                         "Invalid attributes" : "Invalid attribute")
-                    << " for '" << actions.doc_type << " document info': "
-                    << boost::algorithm::join(invalid_attributes, ", ")
+                    << " for '" << detail::utf8(actions.doc_type) << " document info': "
+                    << detail::utf8(boost::algorithm::join(invalid_attributes, ", "))
                     << "\n"
                     ;
             }
@@ -143,37 +235,157 @@ namespace quickbook
             << actions.doc_id
             << "\"\n";
         
-        if(!actions.doc_lang.empty())
+        if(!lang.empty())
         {
             out << "    lang=\""
-                << actions.doc_lang.get(106)
+                << doc_info_output(lang, 106)
                 << "\"\n";
         }
 
         if(actions.doc_type == "library")
         {
-            out << "    name=\"" << actions.doc_title.get(106) << "\"\n";
+            out << "    name=\"" << doc_info_output(doc_title, 106) << "\"\n";
         }
 
-        if(!actions.doc_dirname.empty())
+        if(!dirname.empty())
         {
             out << "    dirname=\""
-                << actions.doc_dirname.get(106)
+                << doc_info_output(dirname, 106)
                 << "\"\n";
         }
 
         out << "    last-revision=\""
-            << actions.doc_last_revision.get(106)
+            << doc_info_output(last_revision, 106)
             << "\" \n"
             << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n";
-            
-        if(actions.doc_type == "library") {
-            write_document_info(out, actions);
-            write_document_title(out, actions);
+
+        std::ostringstream tmp;
+
+        if(!authors.empty())
+        {
+            tmp << "    <authorgroup>\n";
+            BOOST_FOREACH(value_consumer author_values, authors)
+            {
+                while (author_values.check()) {
+                    value surname = author_values.consume(doc_info_tags::author_surname);
+                    value first = author_values.consume(doc_info_tags::author_first);
+    
+                    tmp << "      <author>\n"
+                        << "        <firstname>"
+                        << doc_info_output(first, 106)
+                        << "</firstname>\n"
+                        << "        <surname>"
+                        << doc_info_output(surname, 106)
+                        << "</surname>\n"
+                        << "      </author>\n";
+                }
+            }
+            tmp << "    </authorgroup>\n";
         }
-        else {
-            write_document_title(out, actions);
-            write_document_info(out, actions);
+
+        BOOST_FOREACH(value_consumer copyright, copyrights)
+        {
+            while(copyright.check())
+            {
+                tmp << "\n" << "    <copyright>\n";
+    
+                while(copyright.check(doc_info_tags::copyright_year))
+                {
+                    int year_start = copyright.consume().get_int();
+                    int year_end =
+                        copyright.check(doc_info_tags::copyright_year_end) ?
+                        copyright.consume().get_int() :
+                        year_start;
+    
+                    if (year_end < year_start) {
+                        ++actions.error_count;
+    
+                        detail::outerr(actions.filename,
+                            copyright.begin()->get_position().line)
+                            << "Invalid year range: "
+                            << year_start
+                            << "-"
+                            << year_end
+                            << "."
+                            << std::endl;
+                    }
+    
+                    for(; year_start <= year_end; ++year_start)
+                        tmp << "      <year>" << year_start << "</year>\n";
+                }
+            
+                tmp << "      <holder>"
+                    << doc_info_output(copyright.consume(doc_info_tags::copyright_name), 106)
+                    << "</holder>\n"
+                    << "    </copyright>\n"
+                    << "\n"
+                ;
+            }
+        }
+
+        if (!license.empty())
+        {
+            tmp << "    <legalnotice>\n"
+                << "      <para>\n"
+                << "        " << doc_info_output(license, 103) << "\n"
+                << "      </para>\n"
+                << "    </legalnotice>\n"
+                << "\n"
+            ;
+        }
+
+        if (!purpose.empty())
+        {
+            tmp << "    <" << actions.doc_type << "purpose>\n"
+                << "      " << doc_info_output(purpose, 103)
+                << "    </" << actions.doc_type << "purpose>\n"
+                << "\n"
+                ;
+        }
+
+        BOOST_FOREACH(value_consumer values, categories) {
+            value category = values.optional_consume();
+            if(!category.empty()) {
+                tmp << "    <" << actions.doc_type << "category name=\"category:"
+                    << doc_info_output(category, 106)
+                    << "\"></" << actions.doc_type << "category>\n"
+                    << "\n"
+                ;
+            }
+            values.finish();
+        }
+
+        BOOST_FOREACH(value_consumer biblioid, biblioids)
+        {
+            value class_ = biblioid.consume(doc_info_tags::biblioid_class);
+            value value_ = biblioid.consume(doc_info_tags::biblioid_value);
+            
+            tmp << "    <biblioid class=\""
+                << class_.get_quickbook()
+                << "\">"
+                << doc_info_output(value_, 106)
+                << "</biblioid>"
+                << "\n"
+                ;
+            biblioid.finish();
+        }
+
+        if(actions.doc_type != "library") {
+            write_document_title(out, doc_title, version);
+        }
+
+        std::string docinfo = tmp.str();
+        if(!docinfo.empty())
+        {
+            out << "  <" << actions.doc_type << "info>\n"
+                << docinfo
+                << "  </" << actions.doc_type << "info>\n"
+                << "\n"
+            ;
+        }
+
+        if(actions.doc_type == "library") {
+            write_document_title(out, doc_title, version);
         }
     }
     
@@ -183,133 +395,23 @@ namespace quickbook
         if (ignore_docinfo)
         {
             return;
-        }
+        } 
 
         // We've finished generating our output. Here's what we'll do
         // *after* everything else.
         out << "\n</" << actions.doc_type << ">\n\n";
     }
 
-    void write_document_title(collector& out, quickbook::actions& actions)
+    static void write_document_title(collector& out, value const& title, value const& version)
     {
-        if (!actions.doc_title.empty())
+        if (!title.empty())
         {
             out << "  <title>"
-                << actions.doc_title.get(106);
-            if (!actions.doc_version.empty()) {
-                out << ' ' << actions.doc_version.get(106);
+                << doc_info_output(title, 106);
+            if (!version.empty()) {
+                out << ' ' << doc_info_output(version, 106);
             }
             out<< "</title>\n\n\n";
-        }
-    }
-
-    void write_document_info(collector& out, quickbook::actions& actions)
-    {
-        std::ostringstream tmp;
-
-        if(!actions.doc_authors.empty())
-        {
-            tmp << "    <authorgroup>\n";
-            for(actions::author_list::const_iterator
-                it = actions.doc_authors.begin(),
-                end = actions.doc_authors.end();
-                it != end; ++it)
-            {
-                tmp << "      <author>\n"
-                    << "        <firstname>"
-                    << it->first.get(106)
-                    << "</firstname>\n"
-                    << "        <surname>"
-                    << it->second.get(106)
-                    << "</surname>\n"
-                    << "      </author>\n";
-            }
-            tmp << "    </authorgroup>\n";
-        }
-
-        if (!actions.doc_copyrights.empty())
-        {
-            for(actions::copyright_list::const_iterator
-                it = actions.doc_copyrights.begin(),
-                end = actions.doc_copyrights.end();
-                it != end; ++it)
-            {
-                tmp << "\n" << "    <copyright>\n";
-        
-                for(actions::string_list::const_iterator
-                    it2 = it->first.begin(),
-                    end = it->first.end();
-                    it2 != end; ++it2)
-                {
-                    tmp << "      <year>" << *it2 << "</year>\n";
-                }
-        
-                tmp << "      <holder>"
-                    << it->second.get(106)
-                    << "</holder>\n"
-                    << "    </copyright>\n"
-                    << "\n"
-                ;
-            }
-        }
-
-        if (!actions.doc_license.empty())
-        {
-            tmp << "    <legalnotice>\n"
-                << "      <para>\n"
-                << "        " << actions.doc_license.get(103) << "\n"
-                << "      </para>\n"
-                << "    </legalnotice>\n"
-                << "\n"
-            ;
-        }
-
-        if (!actions.doc_purpose.empty())
-        {
-            tmp << "    <" << actions.doc_type << "purpose>\n"
-                << "      " << actions.doc_purpose.get(103)
-                << "    </" << actions.doc_type << "purpose>\n"
-                << "\n"
-                ;
-        }
-
-        if (!actions.doc_categories.empty())
-        {
-            for(actions::docinfo_list::const_iterator
-                it = actions.doc_categories.begin(),
-                end = actions.doc_categories.end();
-                it != end; ++it)
-            {
-                tmp << "    <" << actions.doc_type << "category name=\"category:"
-                    << it->get(106)
-                    << "\"></" << actions.doc_type << "category>\n"
-                    << "\n"
-                ;
-            }
-        }
-
-        for (actions::biblioid_list::const_iterator
-            it = actions.doc_biblioid_items.begin(),
-            end = actions.doc_biblioid_items.end();
-            it != end; ++it)
-        {
-            tmp << "    <biblioid class=\""
-                << it->first
-                << "\">"
-                << it->second.get(103)
-                << "</biblioid>"
-                << "\n"
-                ;
-        }
-
-        std::string value = tmp.str();
-        if(!value.empty())
-        {
-            out << "  <" << actions.doc_type << "info>\n"
-                << value
-                << "  </" << actions.doc_type << "info>\n"
-                << "\n"
-            ;
         }
     }
 }

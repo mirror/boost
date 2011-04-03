@@ -52,6 +52,13 @@ Three level list:
 # G
 # H
 
+Markup in list:
+
+*   *Bold*
+*   [*Bold]
+*   ["Quoted]
+*   [footnote Footnote]
+
 [section List immediately following markup]
 * One
 * Two

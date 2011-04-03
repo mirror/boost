@@ -12,7 +12,7 @@
       Hello.
     </para>
     <anchor id="section_in_a_template.test.just_to_test_id_generation"/>
-    <bridgehead renderas="sect3">
+    <bridgehead renderas="sect3" id="section_in_a_template.test.just_to_test_id_generation-heading">
       <link linkend="section_in_a_template.test.just_to_test_id_generation">Just
       to test id generation</link>
     </bridgehead>

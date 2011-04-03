@@ -6,6 +6,8 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
+
+#include <cassert>
 #include "template_stack.hpp"
 
 #ifdef BOOST_MSVC
@@ -14,6 +16,23 @@
 
 namespace quickbook
 {
+    template_body::template_body(
+            value const& content,
+            fs::path const& filename
+        )
+        : content(content)
+        , filename(filename)
+    {
+        assert(content.get_tag() == template_tags::block ||
+            content.get_tag() == template_tags::phrase);
+    }
+
+    bool template_body::is_block() const
+    {
+        return content.get_tag() == template_tags::block;
+    }
+
+
     template_stack::template_stack()
         : scope(template_stack::parser(*this))
         , scopes()

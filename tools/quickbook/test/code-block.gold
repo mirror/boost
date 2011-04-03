@@ -27,7 +27,7 @@ Code block line 2.
     Paragraph.
   </para>
   <anchor id="indented_code_blocks.code_blocks_separated_by_comment"/>
-  <bridgehead renderas="sect2">
+  <bridgehead renderas="sect2" id="indented_code_blocks.code_blocks_separated_by_comment-heading">
     <link linkend="indented_code_blocks.code_blocks_separated_by_comment">Code blocks
     separated by comment</link>
   </bridgehead>

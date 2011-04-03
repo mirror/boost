@@ -11,18 +11,17 @@
 #if !defined(BOOST_SPIRIT_FWD_HPP)
 #define BOOST_SPIRIT_FWD_HPP
 
-#include <boost/spirit/include/classic_iterator.hpp>
-#include <boost/range.hpp>
-#include <boost/shared_ptr.hpp>
+#include "iterator.hpp"
 
 namespace quickbook
 {
     struct actions;
     struct quickbook_grammar;
+    struct collector;
 
-    typedef boost::spirit::classic::file_position_base<char const*> position;
-    typedef boost::spirit::classic::position_iterator<
-        std::string::const_iterator, position> iterator;
+    typedef position_iterator<std::string::const_iterator> iterator;
+
+    inline void ignore_variable(void const*) {} 
 }
 
 #endif

@@ -233,5 +233,94 @@
         </tbody>
       </tgroup>
     </table>
+    <table frame="all" id="table_1_5.section1.nested_tables">
+      <title>Nested Tables</title>
+      <tgroup cols="1">
+        <thead>
+          <row>
+            <entry>
+              <para>
+                Header 1
+              </para>
+            </entry>
+            <entry>
+              <para>
+                Header 2
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>
+              <table frame="all" id="table_1_5.section1.inner_table">
+                <title>Inner Table</title>
+                <tgroup cols="2">
+                  <thead>
+                    <row>
+                      <entry>
+                        <para>
+                          1.1
+                        </para>
+                      </entry>
+                      <entry>
+                        <para>
+                          1.2
+                        </para>
+                      </entry>
+                    </row>
+                  </thead>
+                  <tbody>
+                    <row>
+                      <entry>
+                        <para>
+                          2.1
+                        </para>
+                      </entry>
+                      <entry>
+                        <para>
+                          2.2
+                        </para>
+                      </entry>
+                    </row>
+                  </tbody>
+                </tgroup>
+              </table>
+            </entry>
+          </row>
+          <row>
+            <entry>
+              <para>
+                Something.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <anchor id="id1"/>
+    <table frame="all" id="table_1_5.section1.table_with_anchors">
+      <title>Table with anchors</title>
+      <tgroup cols="1">
+        <thead>
+          <row>
+            <entry>
+              <para>
+                <anchor id="id2"/> a<anchor id="id3"/>
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>
+              <para>
+                b
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </section>
 </article>

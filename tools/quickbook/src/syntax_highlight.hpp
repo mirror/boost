@@ -16,6 +16,7 @@
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
 #include "grammar.hpp"
+#include "grammar_impl.hpp" // Just for context stuff. Should move?
 
 namespace quickbook
 {
@@ -57,7 +58,7 @@ namespace quickbook
                     |   char_           [Process("char", self.out)]
                     |   number          [Process("number", self.out)]
                     |   cl::repeat_p(1)[cl::anychar_p]
-                                        [Unexpected(self.out)]
+                                        [Unexpected(self.out, self.escape_actions)]
                     )
                     ;
 
@@ -69,10 +70,12 @@ namespace quickbook
                     ;
 
                 qbk_phrase =
-                   *(   g.common
-                    |   (cl::anychar_p - cl::str_p("``"))
+                    self.escape_actions.scoped_context(element_info::in_phrase)
+                    [  *(   g.common
+                        |   (cl::anychar_p - cl::str_p("``"))
                                         [self.escape_actions.plain_char]
-                    )
+                        )
+                    ]
                     ;
 
                 escape =
@@ -206,7 +209,7 @@ namespace quickbook
                     |   string_         [Process("string", self.out)]
                     |   number          [Process("number", self.out)]
                     |   cl::repeat_p(1)[cl::anychar_p]
-                                        [Unexpected(self.out)]
+                                        [Unexpected(self.out, self.escape_actions)]
                     )
                     ;
 
@@ -218,10 +221,13 @@ namespace quickbook
                     ;
 
                 qbk_phrase =
-                   *(   g.common
-                    |   (cl::anychar_p - cl::str_p("``"))
+                    self.escape_actions.scoped_context(element_info::in_phrase)
+                    [
+                       *(   g.common
+                        |   (cl::anychar_p - cl::str_p("``"))
                                         [self.escape_actions.plain_char]
-                    )
+                        )
+                    ]
                     ;
 
                 escape =
@@ -362,10 +368,13 @@ namespace quickbook
                     ;
 
                 qbk_phrase =
-                   *(   g.common
-                    |   (cl::anychar_p - cl::str_p("``"))
+                    self.escape_actions.scoped_context(element_info::in_phrase)
+                    [
+                       *(   g.common
+                        |   (cl::anychar_p - cl::str_p("``"))
                                         [self.escape_actions.plain_char]
-                    )
+                        )
+                    ]
                     ;
 
                 escape =
