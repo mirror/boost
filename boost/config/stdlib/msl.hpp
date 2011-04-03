@@ -26,7 +26,9 @@
 #endif
 
 // check C lib version for <stdint.h>
+#ifdef __cplusplus
 #include <cstddef>
+#endif
 
 #if defined(__MSL__) && (__MSL__ >= 0x5000)
 #  define BOOST_HAS_STDINT_H

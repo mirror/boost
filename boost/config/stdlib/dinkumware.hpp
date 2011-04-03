@@ -86,10 +86,12 @@
 #  define BOOST_NO_STD_LOCALE
 #endif
 
+#ifdef __cplusplus
 #include <typeinfo>
 #if !_HAS_EXCEPTIONS
 #  define BOOST_NO_STD_TYPEINFO    
 #endif  
+#endif
 
 //  C++0x headers implemented in 520 (as shipped by Microsoft)
 //

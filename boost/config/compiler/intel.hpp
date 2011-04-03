@@ -121,6 +121,7 @@
 // in type_traits code among other things, getting this correct
 // for the Intel compiler is actually remarkably fragile and tricky:
 //
+#ifdef __cplusplus
 #if defined(BOOST_NO_INTRINSIC_WCHAR_T)
 #include <cwchar>
 template< typename T > struct assert_no_intrinsic_wchar_t;
@@ -133,6 +134,7 @@ template< typename T > struct assert_intrinsic_wchar_t;
 template<> struct assert_intrinsic_wchar_t<wchar_t> {};
 // if you see an error here then define BOOST_NO_INTRINSIC_WCHAR_T on the command line:
 template<> struct assert_intrinsic_wchar_t<unsigned short> {};
+#endif
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER+0 >= 1000)

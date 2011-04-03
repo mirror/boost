@@ -24,7 +24,8 @@ if $(is_unix)
 }
 
 test-suite config
-  :
+  : 
+    [ compile config_test_c.c ]
     [ run config_test.cpp 
           : #args
           : #input-files

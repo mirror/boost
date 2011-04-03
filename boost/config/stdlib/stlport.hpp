@@ -9,7 +9,7 @@
 
 //  STLPort standard library config:
 
-#if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+#if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) && defined(__cplusplus)
 #  include <cstddef>
 #  if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #      error "This is not STLPort!"
@@ -203,7 +203,7 @@ namespace std{ using _STLP_VENDOR_CSTD::strcmp; using _STLP_VENDOR_CSTD::strcpy;
 //
 // gcc-2.95.3/STLPort does not like the using declarations we use to get ADL with std::min/max
 //
-#if defined(__GNUC__) && (__GNUC__ < 3)
+#if defined(__GNUC__) && (__GNUC__ < 3) && defined(__cplusplus)
 #  include <algorithm> // for std::min and std::max
 #  define BOOST_USING_STD_MIN() ((void)0)
 #  define BOOST_USING_STD_MAX() ((void)0)

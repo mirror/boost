@@ -14,7 +14,7 @@
 #define BOOST_SYMBIAN 1
 
 
-#if defined(__S60_3X__)
+#if defined(__S60_3X__) && defined(__cplusplus)
 // Open C / C++ plugin was introdused in this SDK, earlier versions don't have CRT / STL
 #  define BOOST_S60_3rd_EDITION_FP2_OR_LATER_SDK
 // make sure we have __GLIBC_PREREQ if available at all
