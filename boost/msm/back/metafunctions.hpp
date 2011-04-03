@@ -647,6 +647,12 @@ struct get_initial_event
     typedef typename StateType::initial_event type;
 };
 
+template <class StateType>
+struct get_final_event 
+{
+    typedef typename StateType::final_event type;
+};
+
 template <class TransitionTable, class InitState>
 struct build_one_orthogonal_region 
 {

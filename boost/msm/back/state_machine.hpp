@@ -67,6 +67,7 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(no_automatic_create)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(non_forwarding_flag)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(direct_entry)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(initial_event)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(final_event)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(do_serialize)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(history_policy)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(fsm_check)
@@ -257,6 +258,7 @@ private:
     typedef HistoryPolicy               history_policy;
 
     struct InitEvent { };
+    struct ExitEvent { };
     // flag handling
     struct Flag_AND
     {
@@ -276,6 +278,12 @@ private:
         ::boost::mpl::identity<InitEvent>
     >::type fsm_initial_event;
 
+    // if the front-end fsm provides an exit_event typedef, replace ExitEvent by this one
+    typedef typename ::boost::mpl::eval_if< 
+        typename has_final_event<Derived>::type,
+        get_final_event<Derived>,
+        ::boost::mpl::identity<ExitEvent>
+    >::type fsm_final_event;
 
     template <class ExitPoint>
     struct exit_pt : public ExitPoint
@@ -1034,7 +1042,12 @@ private:
         // give a chance to handle an anonymous (eventless) transition
         handle_eventless_transitions_helper<library_sm> eventless_helper(this,true);
         eventless_helper.process_completion_event();
+    }
 
+    // stop the state machine (calls exit of the current state)
+    void stop()
+    {
+        do_exit(fsm_final_event(),*this);
     }
 
     // Main function used by clients of the derived FSM to make
