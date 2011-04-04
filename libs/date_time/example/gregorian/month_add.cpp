@@ -17,7 +17,7 @@ main()
   date d2 = d + months(1); 
   date d3 = d - months(1);
   std::cout << "Today is: " << to_simple_string(d) << ".\n"
-            << "One month from today will be: " << to_simple_string(d2) 
+            << "One month from today will be: " << to_simple_string(d2) << ".\n"
             << "One month ago was: " << to_simple_string(d3)
             << std::endl;
   std::cout << "******** Warning read this ***********************\n";
@@ -31,14 +31,20 @@ main()
             << std::endl;
 
   std::cout << "\nSo what does this mean?  It means the result of adding months is order\n"
-            << "dependent, non-communitive, and may create problems for applications.\n"
+            << "dependent, non-commutative, and may create problems for applications.\n"
             << "Consider: \n"
-            << "Jan 30, 2004 + (1 month) + (1 month) != Jan 29, 2004 + (2 months)\n"
-            << "Why not? Because Jan 30, 2004 + 1 month is Feb 29 + 1 month is Mar 29th.\n"
-            << "while Jan 30, 2004 + 2 months is Mar 29th.\n"
+            << "Jan 30, 2004 + (1 month) + (1 month) != Jan 30, 2004 + (2 months)\n"
+            << "Why not? Because Jan 30, 2004 + 1 month is Feb 29 + 1 month is Mar 31st.\n"
+            << "while Jan 30, 2004 + 2 months is Mar 30th.\n"
             << "All of this clears up as long as all the starting dates before the 28th of\n"
             << "the month -- then all the behavior follows classical mathematical rules.\n";
   
+  date d6(2004, Jan, 30);
+  date d7 = d6 + months(1) + months(1);
+  date d8 = d6 + months(2);
+  std::cout << "2004-01-30 + (1 month) + (1 month) is: " << to_simple_string(d7) << ".\n"
+            << "2004-01-30 + (2 months) is: " << to_simple_string(d8)
+			<< std::endl;
 
   return 0;
 }

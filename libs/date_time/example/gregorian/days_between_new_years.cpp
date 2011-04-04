@@ -3,10 +3,11 @@
  * New Years day of this year, and days until next New Years day.
  *
  * Expected results:
- * Adding together both durations will produce 366 (365 in a leap year).
+ * Adding together both durations will produce 365 (366 in a leap year).
  */
-#include <iostream>
+
 #include "boost/date_time/gregorian/gregorian.hpp"
+#include <iostream>
 
 int
 main() 
@@ -25,7 +26,7 @@ main()
   std::cout << "Days until next Jan 1: " << days_until_year_start.days() 
             << std::endl;
   return 0;
-};
+}
 
 
 /*  Copyright 2001-2004: CrystalClear Software, Inc

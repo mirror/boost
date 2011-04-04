@@ -141,7 +141,7 @@ int main(){
   period_formatter per_formatter(period_formatter::AS_OPEN_RANGE, 
                                  " to ", "from ", " exclusive", " inclusive" );
   period_parser per_parser(period_parser::AS_OPEN_RANGE, 
-                           " to ", "from ", " exclusive" , "inclusive" );
+                           " to ", "from ", " exclusive" , " inclusive" );
   
   // default output
   ss.str("");

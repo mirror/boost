@@ -15,7 +15,7 @@ main()
   
   std::cout << "Days till new year: " << dd.days() << std::endl;
   return 0;
-};
+}
 
 /*  Copyright 2001-2004: CrystalClear Software, Inc
  *  http://www.crystalclearsoftware.com
