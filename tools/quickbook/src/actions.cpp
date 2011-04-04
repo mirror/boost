@@ -1777,7 +1777,7 @@ namespace quickbook
         std::string ext = paths.filename.extension().generic_string();
         std::vector<template_symbol> storage;
         actions.error_count +=
-            load_snippets(paths.filename.string(), storage, ext, actions.doc_id);
+            load_snippets(paths.filename, storage, ext, actions.doc_id);
 
         BOOST_FOREACH(template_symbol& ts, storage)
         {
@@ -1842,7 +1842,7 @@ namespace quickbook
         actions.values.builder.save();
 
         // parse the file
-        quickbook::parse_file(actions.filename.string().c_str(), actions, true);
+        quickbook::parse_file(actions.filename, actions, true);
 
         // restore the values
         actions.values.builder.restore();
