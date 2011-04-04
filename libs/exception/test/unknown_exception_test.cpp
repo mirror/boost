@@ -62,6 +62,15 @@ main()
                 BOOST_TEST(false);
             }
         catch(
+        boost::exception & x )
+            {
+            //Yay! Non-intrusive cloning supported!
+            if( int const * d=boost::get_error_info<test>(x) )
+                BOOST_TEST( 42==*d );
+            else
+                BOOST_TEST(false);
+            }
+        catch(
         ... )
             {
             BOOST_TEST(false);
@@ -101,6 +110,11 @@ main()
             {
             }
         catch(
+        std::exception & )
+            {
+            //Yay! Non-intrusive cloning supported!
+            }
+        catch(
         ... )
             {
             BOOST_TEST(false);
@@ -112,6 +126,11 @@ main()
         catch(
         boost::exception & )
             {
+            }
+        catch(
+        std::exception & )
+            {
+            //Yay! Non-intrusive cloning supported!
             }
         catch(
         ... )
