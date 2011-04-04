@@ -40,7 +40,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -82,7 +82,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -124,7 +124,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -166,7 +166,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type , typename call_traits<A3>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A3>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -208,7 +208,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type , typename call_traits<A3>::value_type , typename call_traits<A4>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A3>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A4>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -250,7 +250,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type , typename call_traits<A3>::value_type , typename call_traits<A4>::value_type , typename call_traits<A5>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A3>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A4>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A5>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -292,7 +292,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type , typename call_traits<A3>::value_type , typename call_traits<A4>::value_type , typename call_traits<A5>::value_type , typename call_traits<A6>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A3>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A4>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A5>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A6>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -334,7 +334,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type , typename call_traits<A3>::value_type , typename call_traits<A4>::value_type , typename call_traits<A5>::value_type , typename call_traits<A6>::value_type , typename call_traits<A7>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A3>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A4>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A5>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A6>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A7>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -376,7 +376,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type , typename call_traits<A3>::value_type , typename call_traits<A4>::value_type , typename call_traits<A5>::value_type , typename call_traits<A6>::value_type , typename call_traits<A7>::value_type , typename call_traits<A8>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A3>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A4>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A5>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A6>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A7>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A8>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;
@@ -418,7 +418,7 @@ namespace boost { namespace phoenix
             typename proto::result_of::make_expr<
                 Tag
               , default_domain_with_basic_expr
-              , typename call_traits<A0>::value_type , typename call_traits<A1>::value_type , typename call_traits<A2>::value_type , typename call_traits<A3>::value_type , typename call_traits<A4>::value_type , typename call_traits<A5>::value_type , typename call_traits<A6>::value_type , typename call_traits<A7>::value_type , typename call_traits<A8>::value_type , typename call_traits<A9>::value_type
+              , typename proto::detail::uncvref<typename call_traits<A0>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A1>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A2>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A3>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A4>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A5>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A6>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A7>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A8>::value_type>::type , typename proto::detail::uncvref<typename call_traits<A9>::value_type>::type
             >::type
             base_type;
         typedef Actor<base_type> type;

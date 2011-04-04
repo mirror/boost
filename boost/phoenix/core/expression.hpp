@@ -74,7 +74,7 @@ namespace boost { namespace phoenix
     {};
 
 #define M0(Z, N, D) \
-    BOOST_PP_COMMA_IF(N) typename call_traits<BOOST_PP_CAT(A, N)>::value_type
+    BOOST_PP_COMMA_IF(N) typename proto::detail::uncvref<typename call_traits<BOOST_PP_CAT(A, N)>::value_type>::type
 
 #define M1(Z, N, D) \
     BOOST_PP_COMMA_IF(N) typename call_traits<BOOST_PP_CAT(A, N)>::param_type BOOST_PP_CAT(a, N)
