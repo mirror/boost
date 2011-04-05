@@ -14,7 +14,6 @@ project quickbook
         <toolset>darwin:<c++-template-depth>300
         <toolset>gcc:<cflags>-g0
         <toolset>darwin:<cflags>-g0
-        <warnings>all
         <toolset>msvc:<cflags>/wd4709
     ;
 
