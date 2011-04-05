@@ -127,18 +127,26 @@ boost
             std::ostringstream tmp;
             if( be )
                 {
-                if( char const * const * f=get_error_info<throw_file>(*be) )
-                    {
-                    tmp << *f;
-                    if( int const * l=get_error_info<throw_line>(*be) )
-                        tmp << '(' << *l << "): ";
-                    }
-                tmp << "Throw in function ";
-                if( char const * const * fn=get_error_info<throw_function>(*be) )
-                    tmp << *fn;
+                char const * const * f=get_error_info<throw_file>(*be);
+                int const * l=get_error_info<throw_line>(*be);
+                char const * const * fn=get_error_info<throw_function>(*be);
+                if( !f && !l && !fn )
+                    tmp << "Throw location unknown (consider using BOOST_THROW_EXCEPTION)\n";
                 else
-                    tmp << "(unknown)";
-                tmp << '\n';
+                    {
+                    if( f )
+                        {
+                        tmp << *f;
+                        if( int const * l=get_error_info<throw_line>(*be) )
+                            tmp << '(' << *l << "): ";
+                        }
+                    tmp << "Throw in function ";
+                    if( char const * const * fn=get_error_info<throw_function>(*be) )
+                        tmp << *fn;
+                    else
+                        tmp << "(unknown)";
+                    tmp << '\n';
+                    }
                 }
 #ifndef BOOST_NO_RTTI
             tmp << std::string("Dynamic exception type: ") <<
