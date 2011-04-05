@@ -8,19 +8,22 @@
  * $Id$
  */
 
-#include <boost/nondet_random.hpp>
+#include <boost/random/random_device.hpp>
 
 #include <boost/test/test_tools.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 
-int test_main(int argc, char** argv) {
-	boost::random_device rng;
-	double entropy = rng.entropy();
-	BOOST_CHECK_GE(entropy, 0);
-	for(int i = 0; i < 100; ++i) {
-		boost::random_device::result_type val = rng();
-		BOOST_CHECK_GE(val, (rng.min)());
-		BOOST_CHECK_LE(val, (rng.max)());
-	}
-	return 0;
+int test_main(int, char**) {
+    boost::random_device rng;
+    double entropy = rng.entropy();
+    BOOST_CHECK_GE(entropy, 0);
+    for(int i = 0; i < 100; ++i) {
+        boost::random_device::result_type val = rng();
+        BOOST_CHECK_GE(val, (rng.min)());
+        BOOST_CHECK_LE(val, (rng.max)());
+    }
+
+    boost::uint32_t a[10];
+    rng.generate(a, a + 10);
+    return 0;
 }

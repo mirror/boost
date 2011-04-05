@@ -19,3 +19,10 @@
 [weighted_die]
 
 [endsect]
+
+[section Generating a random password]
+
+[import ../example/password.cpp]
+[password]
+
+[endsect]

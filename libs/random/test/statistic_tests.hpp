@@ -19,9 +19,10 @@
 #include <algorithm>
 #include <cmath>
 
-#include <boost/random.hpp>
 #include <boost/config.hpp>
 #include <boost/bind.hpp>
+#include <boost/random/uniform_01.hpp>
+#include <boost/random/variate_generator.hpp>
 
 #include "integrate.hpp"
 
@@ -93,7 +94,7 @@ public:
     for(int i = 0; i < n; ++i)
       count(f());
   }
-  double probability(int i) const { return 1.0/classes(); }
+  double probability(int /*i*/) const { return 1.0/classes(); }
 };
 
 // two-dimensional equidistribution experiment
@@ -344,10 +345,12 @@ public:
   double probability(unsigned int r) const
   {
     if(r == classes()-1)
-      return 1-fac<double>(d)/std::pow(d, static_cast<double>(d+classes()-2))* 
+      return 1-fac<double>(d)/
+        std::pow(static_cast<double>(d), static_cast<double>(d+classes()-2)) *
         stirling2<double>(d+classes()-2, d);
     else
-      return fac<double>(d)/std::pow(d, static_cast<double>(d+r)) * 
+      return fac<double>(d)/
+        std::pow(static_cast<double>(d), static_cast<double>(d+r)) * 
         stirling2<double>(d+r-1, d-1);
   }
 private:

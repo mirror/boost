@@ -18,17 +18,7 @@
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/variate_generator.hpp>
-
-// Sun CC doesn't handle boost::iterator_adaptor yet
-#if !defined(__SUNPRO_CC) || (__SUNPRO_CC > 0x530)
 #include <boost/generator_iterator.hpp>
-#endif
-
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std {
-  using ::time;
-}
-#endif
 
 // This is a typedef for a random number generator.
 // Try boost::mt19937 or boost::ecuyer1988 instead of boost::minstd_rand
@@ -43,23 +33,18 @@ void experiment(base_generator_type & generator)
   typedef boost::variate_generator<base_generator_type&, distribution_type> gen_type;
   gen_type die_gen(generator, distribution_type(1, 6));
 
-#if !defined(__SUNPRO_CC) || (__SUNPRO_CC > 0x530)
   // If you want to use an STL iterator interface, use iterator_adaptors.hpp.
-  // Unfortunately, this doesn't work on SunCC yet.
   boost::generator_iterator<gen_type> die(&die_gen);
   for(int i = 0; i < 10; i++)
     std::cout << *die++ << " ";
   std::cout << '\n';
-#endif
 }
 
 int main()
 {
   // Define a random number generator and initialize it with a reproducible
   // seed.
-  // (The seed is unsigned, otherwise the wrong overload may be selected
-  // when using mt19937 as the base_generator_type.)
-  base_generator_type generator(42u);
+  base_generator_type generator(42);
 
   std::cout << "10 samples of a uniform distribution in [0..1):\n";
 
@@ -114,15 +99,12 @@ int main()
   boost::variate_generator<base_generator_type&, boost::uniform_int<> > deg(generator, degen_dist);
   std::cout << deg() << " " << deg() << " " << deg() << std::endl;
   
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   {
     // You can save the generator state for future use.  You can read the
     // state back in at any later time using operator>>.
     std::ofstream file("rng.saved", std::ofstream::trunc);
     file << generator;
   }
-#endif
-  // Some compilers don't pay attention to std:3.6.1/5 and issue a
-  // warning here if "return 0;" is omitted.
+
   return 0;
 }

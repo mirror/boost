@@ -43,7 +43,19 @@ typedef boost::multi_index_container<
     >
 > unique_list;
 
-int main() {
+int main(int argc, char** argv) {
+
+    std::string suffix;
+    std::string id;
+
+    if(argc >= 2 && std::strcmp(argv[1], "-linux") == 0) {
+        suffix = "linux";
+        id = "Linux";
+    } else  {
+        suffix = "windows";
+        id = "Windows";
+    }
+
     std::vector<std::pair<std::string, double> > generator_info;
     std::string line;
     while(std::getline(std::cin, line)) {
@@ -63,8 +75,8 @@ int main() {
     double min = std::min_element(generator_info.begin(), generator_info.end(), compare_second())->second;
 
     std::ofstream generator_defs("performance_data.qbk");
-    std::ofstream generator_performance("generator_performance.qbk");
-    generator_performance << "[table Basic Generators\n";
+    std::ofstream generator_performance(("generator_performance_" + suffix + ".qbk").c_str());
+    generator_performance << "[table Basic Generators (" << id << ")\n";
     generator_performance << "  [[generator] [M rn/sec] [time per random number \\[nsec\\]] "
                              "[relative speed compared to fastest \\[percent\\]]]\n";
 
@@ -96,9 +108,9 @@ int main() {
         }
     } while(std::getline(std::cin, line));
 
-    std::ofstream distribution_performance("distribution_performance.qbk");
+    std::ofstream distribution_performance(("distribution_performance_" + suffix + ".qbk").c_str());
 
-    distribution_performance << "[table Distributions\n";
+    distribution_performance << "[table Distributions (" << id << ")\n";
     distribution_performance << "  [[\\[M rn/sec\\]]";
     BOOST_FOREACH(const std::string& generator, generator_names) {
         distribution_performance << boost::format("[%s]") % generator;

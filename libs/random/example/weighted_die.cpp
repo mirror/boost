@@ -13,11 +13,7 @@
     [@boost://libs/random/example/weighted_die.cpp weighted_die.cpp].
 */
 #include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/variate_generator.hpp>
-#include <vector>
-#include <algorithm>
-#include <numeric>
+#include <boost/random/discrete_distribution.hpp>
 
 boost::mt19937 gen;
 
@@ -25,27 +21,27 @@ boost::mt19937 gen;
    This time, instead of a fair die, the probability of
    rolling a 1 is 50% (!).  The other five faces are all
    equally likely.
+
+   __discrete_distribution works nicely here by allowing
+   us to assign weights to each of the possible outcomes.
+
+   [tip If your compiler supports `std::initializer_list`,
+   you can initialize __discrete_distribution directly with
+   the weights.]
 */
-static const double probabilities[] = {
+double probabilities[] = {
     0.5, 0.1, 0.1, 0.1, 0.1, 0.1
 };
+boost::random::discrete_distribution<> dist(probabilities);
 
 /*`
   Now define a function that simulates rolling this die.
-  Note that the C++0x library contains a `discrete_distribution`
-  class which would be a better way to do this.
 */
 int roll_weighted_die() {
-    std::vector<double> cumulative;
-    std::partial_sum(&probabilities[0], &probabilities[0] + 6,
-                     std::back_inserter(cumulative));
-    boost::uniform_real<> dist(0, cumulative.back());
-    boost::variate_generator<boost::mt19937&, boost::uniform_real<> > die(gen, dist);
-    /*<< Find the position within the sequence and add 1
-         (to make sure that the result is in the range [1,6]
-         instead of [0,5])
+    /*<< Add 1 to make sure that the result is in the range [1,6]
+         instead of [0,5].
     >>*/
-    return (std::lower_bound(cumulative.begin(), cumulative.end(), die()) - cumulative.begin()) + 1;
+    return dist(gen) + 1;
 }
 
 //]

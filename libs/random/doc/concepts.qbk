@@ -31,42 +31,21 @@ random number generators are appropriate:
 * pseudo-random number generator 
 * quasi-random number generator 
 
-All variations have some properties in common, these concepts (in the STL
-sense) are called __NumberGenerator and __UniformRandomNumberGenerator. Each
-concept will be defined in a subsequent section. 
+All variations have some properties in common, the concepts (in the STL
+sense) is called __UniformRandomNumberGenerator. This
+concept will be defined in a subsequent section.
 
 The goals for this library are the following:
 
-* allow easy integration of third-party random-number generators 
-* define a validation interface for the generators 
+* allow easy integration of third-party random-number generators
 * provide easy-to-use front-end classes which model popular distributions 
 * provide maximum efficiency 
-* allow control on quantization effects in front-end processing (not yet done) 
-
-[endsect]
-
-[section Number Generator]
-
-A number generator is a /function object/ (std:20.3 [lib.function.objects]) that
-takes zero arguments. Each call to `operator()` returns a number. In the
-following table, X denotes a number generator class returning objects of type
-T, and u is a value of X.
-
-[table NumberGenerator requirements
-  [[expression] [return type] [pre/post-condition]]
-  [[`X::result_type`] [`T`] [`std::numeric_limits<T>::is_specialized` is
-                             `true`, `T` is __LessThanComparable]]
-  [[`u.operator()()`] [`T`] [-]]
-] 
-
-[note The NumberGenerator requirements do not impose any restrictions on the
-characteristics of the returned numbers.]
 
 [endsect]
 
 [section Uniform Random Number Generator]
 
-A uniform random number generator is a __NumberGenerator that provides a
+A uniform random number generator provides a
 sequence of random numbers uniformly distributed on a given range. The
 range can be compile-time fixed or available (only) after run-time construction
 of the object.
@@ -81,18 +60,9 @@ of type T, and v is a const value of X.
 
 [table UniformRandomNumberGenerator requirements
   [[expression] [return type] [pre/post-condition]]
-  [[`X::has_fixed_range`] [`bool`] [compile-time constant; if `true`, the range
-                                    on which the random numbers are uniformly
-                                    distributed is known at compile-time and
-                                    members `min_value` and `max_value` exist.
-                                    Note: This flag may also be `false` due to
-                                    compiler limitations]]
-  [[`X::min_value`] [`T`] [compile-time constant; `min_value` is only defined if
-                           `has_fixed_range` is `true`.  If it exists, it is
-                           equal to `v.min()`.]]
-  [[`X::max_value`] [`T`] [compile-time constant; `max_value` is only defined if
-                           `has_fixed_range` is `true`.  If it exists, it is
-                           equal to `v.max()`]] 
+  [[`X::result_type`] [`T`] [`std::numeric_limits<T>::is_specialized` is
+                             `true`, `T` is __LessThanComparable]]
+  [[`u.operator()()`] [`T`] [-]]
   [[`v.min()`] [`T`] [tight lower bound on the set of all values returned by
                       `operator()`. The return value of this function shall not
                       change during the lifetime of the object.]]
@@ -158,8 +128,9 @@ to explicitly clear any temporary storage as soon as it is no longer needed.]
 
 A pseudo-random number generator is a __UniformRandomNumberGenerator which
 provides a deterministic sequence of pseudo-random numbers, based on some
-algorithm and internal state. [classref boost::random::linear_congruential
-Linear congruential] and [classref boost::random::inversive_congruential
+algorithm and internal state.
+[classref boost::random::linear_congruential_engine
+Linear congruential] and [classref boost::random::inversive_congruential_engine
 inversive congruential] generators are examples of such [prng pseudo-random
 number generators]. Often, these generators are very sensitive to their
 parameters. In order to prevent wrong implementations from being used, an
@@ -186,20 +157,13 @@ a const value of `X`.
   [[`X()`] [-] [creates a generator in some implementation-defined state.
                 Note: Several generators thusly created may possibly produce
                 dependent or identical sequences of random numbers.]]
-  [[`explicit X(...)`] [-] [creates a generator with user-provided state; the
+  [[`X(...)`] [-] [creates a generator with user-provided state; the
                             implementation shall specify the constructor
                             argument(s)]]
   [[`u.seed(...)`] [`void`] [sets the current state according to the
                              argument(s); at least functions with the same
                              signature as the non-default constructor(s)
                              shall be provided.]]
-  [[`X::validation(x)`] [`bool`] [compares the pre-computed and hardcoded
-                                  10001th element in the generator's random
-                                  number sequence with x. The generator must
-                                  have been constructed by its default
-                                  constructor and seed must not have been
-                                  called for the validation to be
-                                  meaningful.]]
 ]
 
 [note The seed member function is similar to the assign member function in
@@ -219,7 +183,7 @@ assumed that the `locales` used for writing and reading be the same. The
 pseudo-random number generator with the restored state and the original at
 the just-written state shall be equivalent.
 
-Classes which model a pseudo-random number generator may also model the
+Classes which model a pseudo-random number generator should also model the
 __CopyConstructible and __Assignable concepts. However, note that the
 sequences of the original and the copy are strongly correlated (in fact,
 they are identical), which may make them unsuitable for some problem domains.
@@ -247,16 +211,16 @@ type `T`, `u` is a value of `X`, `x` is a (possibly const) value of `X`, and
 `e` is an lvalue of an arbitrary type that meets the requirements of a
 __UniformRandomNumberGenerator, returning values of type `U`.
 
-[table Random distribution requirements (in addition to NumberGenerator, CopyConstructible, and Assignable)
+[table Random distribution requirements (in addition to CopyConstructible, and Assignable)
   [[expression] [return type] [pre/post-condition] [complexity]]
-  [[`X::input_type`] [`U`] [-] [compile-time]]
+  [[`X::result_type`] [`T`] [-] [compile-time]]
   [[`u.reset()`] [`void`] [subsequent uses of `u` do not depend on values
-                           produced by `e` prior to invoking `reset`.]
+                           produced by any engine prior to invoking `reset`.]
                          [constant]]
   [[`u(e)`] [`T`] [the sequence of numbers returned by successive invocations
                    with the same object `e` is randomly distributed with some
                    probability density function `p(x)`]
-                  [amortized constant  number of invocations of `e`]]
+                  [amortized constant number of invocations of `e`]]
   [[`os << x`] [`std::ostream&`] [writes a textual representation for the
                                   parameters and additional internal data of
                                   the distribution `x` to `os`.
