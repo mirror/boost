@@ -14,6 +14,7 @@
 
 #include <boost/config.hpp>
 #include <boost/exception/get_error_info.hpp>
+#include <boost/exception/info.hpp>
 #include <boost/utility/enable_if.hpp>
 #ifndef BOOST_NO_RTTI
 #include <boost/units/detail/utility.hpp>
@@ -85,19 +86,23 @@ boost
         char const *
         get_diagnostic_information( exception const & x, char const * header )
             {
-            if( error_info_container * c=x.data_.get() )
 #ifndef BOOST_NO_EXCEPTIONS
-                try
-                    {
+            try
+                {
 #endif
-                    return c->diagnostic_information(header);
+                error_info_container * c=x.data_.get();
+                if( !c )
+                    x.data_.adopt(c=new exception_detail::error_info_container_impl);
+                char const * di=c->diagnostic_information(header);
+                BOOST_ASSERT(di!=0);
+                return di;
 #ifndef BOOST_NO_EXCEPTIONS
-                    }
-                catch(...)
-                    {
-                    }
+                }
+            catch(...)
+                {
+                return 0;
+                }
 #endif
-            return 0;
             }
 
         inline
@@ -166,7 +171,10 @@ boost
             {
 #endif
             (void) exception_detail::diagnostic_information_impl(&e,0,false);
-            return exception_detail::get_diagnostic_information(e,0);
+            if( char const * di=exception_detail::get_diagnostic_information(e,0) )
+                return di;
+            else
+                return "Failed to produce boost::diagnostic_information_what()";
 #ifndef BOOST_NO_EXCEPTIONS
             }
         catch(

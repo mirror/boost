@@ -202,6 +202,17 @@ main()
         }
     try
         {
+        throw error4();
+        }
+    catch(
+    error4 & x )
+        {
+        std::string di1=boost::diagnostic_information(x);
+        std::string wh1=x.what();
+        BOOST_TEST(wh1==di1);
+        }
+    try
+        {
         error4 x; x << tagged_int1(42) << tagged_int2(42);
         throw x;
         }
