@@ -84,7 +84,7 @@ BOOST_PP_SEQ_FOR_EACH(                                                          
     namespace tag                                                               \
     {                                                                           \
         struct BOOST_PP_SEQ_HEAD(BOOST_PP_SEQ_REVERSE(NAME_SEQ)) {};            \
-        std::ostream &operator<<(                                               \
+        inline std::ostream &operator<<(                                        \
             std::ostream & os                                                   \
           , BOOST_PP_SEQ_HEAD(BOOST_PP_SEQ_REVERSE(NAME_SEQ)))                  \
         {                                                                       \
