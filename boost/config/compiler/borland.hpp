@@ -59,6 +59,10 @@
 #ifdef __cplusplus
 #include <climits>
 #include <cwchar>
+#else
+#include <limits.h>
+#include <wchar.h>
+#endif // __cplusplus
 #ifndef WCHAR_MAX
 #  define WCHAR_MAX 0xffff
 #endif
@@ -66,12 +70,11 @@
 #  define WCHAR_MIN 0
 #endif
 #endif
-#endif // __cplusplus
 
 // Borland C++ Builder 6 and below:
-#if (__BORLANDC__ <= 0x564) && defined(__cplusplus)
+#if (__BORLANDC__ <= 0x564)
 
-#  ifdef NDEBUG
+#  if defined(NDEBUG) && defined(__cplusplus)
       // fix broken <cstring> so that Boost.test works:
 #     include <cstring>
 #     undef strcmp
