@@ -91,7 +91,7 @@
 //
 // If this is GNU libstdc++2, then no <limits> and no std::wstring:
 //
-#if (defined(__GNUC__) && (__GNUC__ < 3) && defined(__cplusplus))
+#if (defined(__GNUC__) && (__GNUC__ < 3))
 #  include <string>
 #  if defined(__BASTRING__)
 #     define BOOST_NO_LIMITS
