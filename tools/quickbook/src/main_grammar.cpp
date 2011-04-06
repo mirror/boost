@@ -384,7 +384,7 @@ namespace quickbook
                 [
                     actions.scoped_output()
                     [
-                        (*( ~cl::eps_p(local.simple_markup_end)
+                        (+( ~cl::eps_p(local.simple_markup_end)
                         >>  local.nested_char
                         ))                      [actions.docinfo_value(ph::arg1, ph::arg2)]
                     ]                           

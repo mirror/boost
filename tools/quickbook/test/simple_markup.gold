@@ -46,5 +46,8 @@
     <para>
       /not italic/
     </para>
+    <para>
+      These shouldn't be interepted as markup: == // **
+    </para>
   </section>
 </article>
