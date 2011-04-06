@@ -27,23 +27,23 @@
 <a name="fusion.extension.sequence_facade"></a><a class="link" href="sequence_facade.html" title="Sequence Facade">Sequence Facade</a>
 </h3></div></div></div>
 <a name="fusion.extension.sequence_facade.description"></a><h5>
-<a name="id1060457"></a>
+<a name="id975530"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.description">Description</a>
       </h5>
 <p>
         The <a class="link" href="sequence_facade.html" title="Sequence Facade"><code class="computeroutput"><span class="identifier">sequence_facade</span></code></a>
         template provides an intrusive mechanism for producing a conforming Fusion
-        iterator.
+        sequence.
       </p>
 <a name="fusion.extension.sequence_facade.synopsis"></a><h5>
-<a name="id1060483"></a>
+<a name="id975578"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Derived</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">TravesalTag</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">IsView</span> <span class="special">=</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">sequence_facade</span><span class="special">;</span>
 </pre>
 <a name="fusion.extension.sequence_facade.usage"></a><h5>
-<a name="id1060577"></a>
+<a name="id975710"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.usage">Usage</a>
       </h5>
 <p>
@@ -59,7 +59,7 @@
         type.
       </p>
 <div class="table">
-<a name="id1060628"></a><p class="title"><b>Table&#160;1.101.&#160;Parameters</b></p>
+<a name="id975798"></a><p class="title"><b>Table&#160;1.101.&#160;Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -107,7 +107,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id1060739"></a><p class="title"><b>Table&#160;1.102.&#160;Key Expressions</b></p>
+<a name="id975936"></a><p class="title"><b>Table&#160;1.102.&#160;Key Expressions</b></p>
 <div class="table-contents"><table class="table" summary="Key Expressions">
 <colgroup>
 <col>
@@ -204,6 +204,34 @@
 <tr>
 <td>
                 <p>
+                  <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">empty</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code> if <code class="computeroutput"><span class="identifier">Seq</span></code>
+                  has zero elements, <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></code>
+                  otherwise.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">empty</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">call</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns a type convertible to <code class="computeroutput"><span class="keyword">bool</span></code>
+                  that evaluates to true if the sequence is empty, else, evaluates
+                  to false.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
                   <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">at</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
                 </p>
               </td>
@@ -244,14 +272,14 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.extension.sequence_facade.include"></a><h5>
-<a name="id1061407"></a>
+<a name="id977032"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.include">Include</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">sequence_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">sequence_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.extension.sequence_facade.example"></a><h5>
-<a name="id1061515"></a>
+<a name="id977188"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.example">Example</a>
       </h5>
 <p>
