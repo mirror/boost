@@ -500,6 +500,23 @@ assert ( *opt1 == static_cast<U>(v) ) ;
 
 __SPACE__
 
+[#reference_optional_operator_equal_factory]
+
+[: `template<InPlaceFactory> optional<T>& optional<T` ['(not a ref)]`>::operator=( InPlaceFactory const& f );`]
+[: `template<TypedInPlaceFactory> optional<T>& optional<T` ['(not a ref)]`>::operator=( TypedInPlaceFactory const& f );`]
+
+* [*Effect:] Assigns an `optional` with a value of `T` obtained from the
+factory.
+* [*Postconditions: ] `*this` is [_initialized] and its value is ['directly given]
+from the factory `f` (i.e., the value [_is not copied]).
+* [*Throws:] Whatever the `T` constructor called by the factory throws.
+* [*Notes:] See [link boost_optional.in_place_factories In-Place Factories]
+* [*Exception Safety:] Exceptions can only be thrown during the call to
+the `T` constructor used by the factory; in that case, the `optional` object
+will be left empty.
+
+__SPACE__
+
 [#reference_optional_reset_value]
 
 [: `void optional<T` ['(not a ref)]`>::reset( T const& v ) ;`]
