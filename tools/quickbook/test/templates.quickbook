@@ -160,9 +160,12 @@ End block template.
 
 [template phrase[content] Start phrase template. [content] End phrase template.]
 
-[block [block Hello!]]
-[block [phrase Hello!]]
-[phrase [block Hello!]]
-[phrase [phrase Hello!]]
+Pre [block [block Hello!]] Post
+
+Pre [block [phrase Hello!]] Post
+
+Pre [phrase [block Hello!]] Post
+
+Pre [phrase [phrase Hello!]] Post
 
 [endsect]

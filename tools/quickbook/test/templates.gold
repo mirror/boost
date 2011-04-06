@@ -67,6 +67,9 @@
   <section id="templates.nested_templates">
     <title><link linkend="templates.nested_templates">Nested Templates</link></title>
     <para>
+      Pre
+    </para>
+    <para>
       Start block template.
     </para>
     <para>
@@ -82,6 +85,12 @@
       End block template.
     </para>
     <para>
+      Post
+    </para>
+    <para>
+      Pre
+    </para>
+    <para>
       Start block template.
     </para>
     <para>
@@ -89,6 +98,12 @@
     </para>
     <para>
       End block template.
+    </para>
+    <para>
+      Post
+    </para>
+    <para>
+      Pre
     </para>
     <para>
       Start phrase template.
@@ -103,8 +118,14 @@
       End block template.
     </para>
     <para>
-      End phrase template. Start phrase template. Start phrase template. Hello! End
-      phrase template. End phrase template.
+      End phrase template.
+    </para>
+    <para>
+      Post
+    </para>
+    <para>
+      Pre Start phrase template. Start phrase template. Hello! End phrase template.
+      End phrase template. Post
     </para>
   </section>
 </article>

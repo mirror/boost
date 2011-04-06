@@ -1341,6 +1341,7 @@ namespace quickbook
             actions.paragraph(); // For paragraphs before the template call.
             actions.out << block;
             actions.phrase << phrase;
+            actions.paragraph();
         }
         else {
             actions.phrase << phrase;
