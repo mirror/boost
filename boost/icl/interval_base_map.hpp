@@ -426,10 +426,17 @@ public:
     { return _map.upper_bound(interval); }
 
     std::pair<iterator,iterator> equal_range(const key_type& interval)
-    { return _map.equal_range(interval); }
+    { 
+        return std::pair<iterator,iterator>
+               (lower_bound(interval), upper_bound(interval)); 
+    }
 
-    std::pair<const_iterator,const_iterator> equal_range(const key_type& interval)const
-    { return _map.equal_range(interval); }
+    std::pair<const_iterator,const_iterator> 
+        equal_range(const key_type& interval)const
+    { 
+        return std::pair<const_iterator,const_iterator>
+               (lower_bound(interval), upper_bound(interval)); 
+    }
 
     iterator begin() { return _map.begin(); }
     iterator end()   { return _map.end(); }
@@ -492,8 +499,7 @@ private:
         if(icl::is_empty(inter_val)) 
             return;
 
-        std::pair<const_iterator, const_iterator> exterior 
-            = this->_map.equal_range(inter_val);
+        std::pair<const_iterator, const_iterator> exterior = equal_range(inter_val);
         if(exterior.first == exterior.second)
             return;
 
@@ -963,7 +969,7 @@ inline typename interval_base_map<SubType,DomainT,CodomainT,Traits,Compare,Combi
     else
     {
         // Detect the first and the end iterator of the collision sequence
-        std::pair<iterator,iterator> overlap = this->_map.equal_range(inter_val);
+        std::pair<iterator,iterator> overlap = equal_range(inter_val);
         iterator it_   = overlap.first,
                  last_ = prior(overlap.second);
         interval_type rest_interval = inter_val;
@@ -1045,7 +1051,7 @@ inline void interval_base_map<SubType,DomainT,CodomainT,Traits,Compare,Combine,S
     if(on_absorbtion<type,Combiner,Traits::absorbs_identities>::is_absorbable(co_val)) 
         return;
 
-    std::pair<iterator, iterator> exterior = this->_map.equal_range(inter_val);
+    std::pair<iterator, iterator> exterior = equal_range(inter_val);
     if(exterior.first == exterior.second)
         return;
 
@@ -1149,7 +1155,7 @@ inline typename interval_base_map<SubType,DomainT,CodomainT,Traits,Compare,Combi
         return that()->handle_inserted(insertion.first);
     {
         // Detect the first and the end iterator of the collision sequence
-        std::pair<iterator,iterator> overlap = this->_map.equal_range(inter_val);
+        std::pair<iterator,iterator> overlap = equal_range(inter_val);
         iterator it_    = overlap.first,
                  last_  = prior(overlap.second);
         insert_main(inter_val, co_val, it_, last_);
@@ -1194,7 +1200,7 @@ inline SubType& interval_base_map<SubType,DomainT,CodomainT,Traits,Compare,Combi
     if(on_codomain_absorbtion::is_absorbable(co_val))
         return *that();
 
-    std::pair<iterator,iterator> exterior = this->_map.equal_range(inter_val);
+    std::pair<iterator,iterator> exterior = equal_range(inter_val);
     if(exterior.first == exterior.second)
         return *that();
 
@@ -1251,7 +1257,7 @@ inline SubType& interval_base_map<SubType,DomainT,CodomainT,Traits,Compare,Combi
     if(icl::is_empty(minuend)) 
         return *that();
 
-    std::pair<iterator, iterator> exterior = this->_map.equal_range(minuend);
+    std::pair<iterator, iterator> exterior = equal_range(minuend);
     if(exterior.first == exterior.second)
         return *that();
 
