@@ -217,8 +217,7 @@
           otherwise, same as:
         </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span> <span class="special">[</span><span class="error">'</span><span class="special">(</span><span class="keyword">not</span> <span class="identifier">a</span>
-        <span class="identifier">ref</span><span class="special">)]&gt;::</span><span class="identifier">optional</span><span class="special">()</span></code>
+        <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span> </code><span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;::</span><span class="identifier">optional</span><span class="special">()</span></code>
       </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="special">::</span><span class="identifier">optional</span><span class="special">()</span></code>
@@ -712,7 +711,7 @@
           <span class="bold"><strong>Exception Safety:</strong></span> Exceptions can only
           be thrown during the call to the <code class="computeroutput"><span class="identifier">T</span></code>
           constructor used by the factory; in that case, the <code class="computeroutput"><span class="identifier">optional</span></code>
-          object will be left empty.
+          object will be reset to be <span class="emphasis"><em>uninitialized</em></span>.
         </li>
 </ul></div>
 <p>

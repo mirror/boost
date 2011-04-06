@@ -99,7 +99,7 @@ functions could have the following interface:
     std::pair<char,bool> get_async_input();
     std::pair<point,bool> polygon::get_any_point_effectively_inside();
 
-These functions use a consistent interface for dealing with possibly inexistent
+These functions use a consistent interface for dealing with possibly nonexistent
 results:
 
     std::pair<point,bool> p = poly.get_any_point_effectively_inside();

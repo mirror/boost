@@ -232,7 +232,7 @@ __SPACE__
 
 * otherwise, same as:
 
-[: `optional<T ['(not a ref)]>::optional()`]
+[: `optional<T `['(not a ref)]`>::optional()`]
 [: `optional<T&>           ::optional()`]
 
 __SPACE__
@@ -513,7 +513,7 @@ from the factory `f` (i.e., the value [_is not copied]).
 * [*Notes:] See [link boost_optional.in_place_factories In-Place Factories]
 * [*Exception Safety:] Exceptions can only be thrown during the call to
 the `T` constructor used by the factory; in that case, the `optional` object
-will be left empty.
+will be reset to be ['uninitialized].
 
 __SPACE__
 
