@@ -668,6 +668,17 @@ of `__BORLANDC__` /unless/ the macro `BOOST_DETECT_OUTDATED_WORKAROUNDS` is defi
 
 [*Note]: the ultimate source of documentation for this macro is in [@../../../../boost/detail/workaround.hpp boost/detail/workaround.hpp].
 ]]
+[[`BOOST_PREVENT_MACRO_SUBSTITUTION`][
+Sometimes you have a function name with the same name as a C macro, for example "min" and "max"
+member functions, in which case one can prevent the function being expanded as a macro using:
+``
+someclass.min BOOST_PREVENT_MACRO_SUBSTITUTION(arg1, arg2);
+``
+The following also works in most, but not all, contexts:
+``
+(someclass.max)(arg1, arg2);
+``
+]]
 [[`BOOST_DEDUCED_TYPENAME`][
 Some compilers don't support the use of typename for dependent types in deduced
 contexts. This macro expands to nothing on those compilers, and typename

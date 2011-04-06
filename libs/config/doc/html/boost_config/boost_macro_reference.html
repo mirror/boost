@@ -2896,6 +2896,30 @@
 <tr>
 <td>
                 <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_PREVENT_MACRO_SUBSTITUTION</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Sometimes you have a function name with the same name as a C macro,
+                  for example "min" and "max" member functions,
+                  in which case one can prevent the function being expanded as a
+                  macro using: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">someclass</span><span class="special">.</span><span class="identifier">min</span> <span class="identifier">BOOST_PREVENT_MACRO_SUBSTITUTION</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">,</span> <span class="identifier">arg2</span><span class="special">);</span>
+</pre>
+<p>
+                  The following also works in most, but not all, contexts: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="special">(</span><span class="identifier">someclass</span><span class="special">.</span><span class="identifier">max</span><span class="special">)(</span><span class="identifier">arg1</span><span class="special">,</span> <span class="identifier">arg2</span><span class="special">);</span>
+</pre>
+<p>
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
                   <code class="computeroutput"><span class="identifier">BOOST_DEDUCED_TYPENAME</span></code>
                 </p>
               </td>
