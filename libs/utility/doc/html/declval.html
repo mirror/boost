@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Declval</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="declval.html" title="Declval">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -17,7 +17,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav"></div>
-<div class="article" lang="en">
+<div class="article">
 <div class="titlepage">
 <div>
 <div><h2 class="title">
@@ -35,9 +35,9 @@
 </div></div>
 <div><p class="copyright">Copyright &#169; 2008 Howard Hinnant</p></div>
 <div><p class="copyright">Copyright &#169; 2008 Beman Dawes</p></div>
-<div><p class="copyright">Copyright &#169; 2009 -2010 Vicente J. Botet Escriba</p></div>
+<div><p class="copyright">Copyright &#169; 2009, 2010 Vicente J. Botet Escriba</p></div>
 <div><div class="legalnotice">
-<a name="id879409"></a><p>
+<a name="id3354293"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -49,10 +49,10 @@
 <p><b>Table of Contents</b></p>
 <dl>
 <dt><span class="section"><a href="declval.html#declval.overview">Overview</a></span></dt>
-<dt><span class="section"><a href="declval.html#declval.reference"> Reference </a></span></dt>
+<dt><span class="section"><a href="declval.html#declval.reference">Reference </a></span></dt>
 </dl>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="declval.overview"></a><a class="link" href="declval.html#declval.overview" title="Overview">Overview</a>
 </h2></div></div></div>
@@ -103,18 +103,18 @@
       which ensures that we can also use cv void as template parameter. The careful
       reader might have noticed that <code class="computeroutput"><span class="identifier">declval</span><span class="special">()</span></code> already exists under the name create() as
       part of the definition of the semantics of the type trait is_convertible in
-      the C==0x standard.
+      the C++0x standard.
     </p>
 <p>
       The provision of a new library component that allows the production of values
-      in unevaluated expressions is considered as important to realize constrained
-      templates in C++0x where concepts are not available. This extremely light-weight
-      function is expected to be part of the daily tool-box of the C++0x programmer.
+      in unevaluated expressions is considered important to realize constrained templates
+      in C++0x where concepts are not available. This extremely light-weight function
+      is expected to be part of the daily tool-box of the C++0x programmer.
     </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="declval.reference"></a><a class="link" href="declval.html#declval.reference" title="Reference"> Reference </a>
+<a name="declval.reference"></a><a class="link" href="declval.html#declval.reference" title="Reference">Reference </a>
 </h2></div></div></div>
 <p>
       <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">utility</span><span class="special">/</span><span class="identifier">declval</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
@@ -148,13 +148,13 @@
 <span class="identifier">decltype</span><span class="special">(</span><span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">To</span><span class="special">&gt;(</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">From</span><span class="special">&gt;()))</span> <span class="identifier">convert</span><span class="special">(</span><span class="identifier">From</span><span class="special">&amp;&amp;);</span>
 </pre>
 <p>
-      Declares a function template convert which only participats in overloading
+      Declares a function template convert which only participates in overloading
       if the type From can be explicitly converted to type To.
     </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: September 16, 2010 at 16:19:10 GMT</small></p></td>
+<td align="left"><p><small>Last revised: April 06, 2011 at 20:06:10 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

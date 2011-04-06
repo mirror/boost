@@ -59,9 +59,9 @@ T is an lvalue-reference, otherwise an rvalue. To extend the domain of this func
   typename std::add_rvalue_reference<T>::type declval(); // not used
   
 which ensures that we can also use cv void as template parameter. The careful reader might have noticed that `declval()` 
-already exists under the name create() as part of the definition of the semantics of the type trait is_convertible in the C==0x standard. 
+already exists under the name create() as part of the definition of the semantics of the type trait is_convertible in the C++0x standard. 
 
-The provision of a new library component that allows the production of values in unevaluated expressions is considered as 
+The provision of a new library component that allows the production of values in unevaluated expressions is considered 
 important to realize constrained templates in C++0x where concepts are not available. 
 This extremely light-weight function is expected to be part of the daily tool-box of the C++0x programmer. 
 
@@ -96,7 +96,7 @@ The library provides the function template declval to simplify the definition of
     template <class To, class From>
     decltype(static_cast<To>(declval<From>())) convert(From&&);
 
-Declares a function template convert which only participats in overloading if the type From can be explicitly converted to type To. 
+Declares a function template convert which only participates in overloading if the type From can be explicitly converted to type To. 
 
 [endsect]
 
