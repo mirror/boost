@@ -21,5 +21,5 @@ rule extract-snippets ( target : sources * : properties * )
 }
 actions extract-snippets bind EXTRACTOR-COMMAND
 {
-    $(EXTRACTOR-COMMAND) "$(<:D)" $(>)
+    $(EXTRACTOR-COMMAND[1]) "$(<:D)" $(>)
 }
