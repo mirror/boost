@@ -128,4 +128,69 @@
       End phrase template. Post
     </para>
   </section>
+  <section id="templates.block_markup">
+    <title><link linkend="templates.block_markup">Block Markup</link></title>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+          a
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          b
+        </simpara>
+      </listitem>
+    </itemizedlist>
+    <para/>
+    
+<programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase>
+</programlisting>
+    <para>
+      Paragraphs 1
+    </para>
+    <para>
+      Paragraphs 2
+    </para>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                a
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                b
+              </simpara>
+            </listitem>
+          </itemizedlist>
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          <para/>
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          
+<programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase>
+</programlisting>
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          <para>
+            Paragraphs 1
+          </para>
+          <para>
+            Paragraphs 2
+          </para>
+        </simpara>
+      </listitem>
+    </itemizedlist>
+  </section>
 </article>

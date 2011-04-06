@@ -169,3 +169,32 @@ Pre [phrase [block Hello!]] Post
 Pre [phrase [phrase Hello!]] Post
 
 [endsect]
+
+[/----------------------------------- Block Markup ]
+
+[section Block Markup]
+
+[template list
+* a
+* b]
+
+[template horizontal
+----]
+
+[template codeblock
+    int main() {}]
+
+[template paragraphs
+Paragraphs 1
+
+Paragraphs 2
+]
+
+[list][horizontal][codeblock][paragraphs]
+
+* [list]
+* [horizontal]
+* [codeblock]
+* [paragraphs]
+
+[endsect]

@@ -1885,13 +1885,24 @@ namespace quickbook
         return (*this)(first, last, value::default_tag);
     }
     
-    void collector_to_value_action::operator()(iterator, iterator) const
+    void to_value_action::operator()(iterator, iterator) const
     {
         if (actions.suppress) return;
-        write_anchors(actions, output);
 
         std::string value;
-        output.swap(value);
+
+        if (!actions.out.str().empty())
+        {
+            actions.paragraph();
+            write_anchors(actions, actions.out);
+            actions.out.swap(value);
+        }
+        else
+        {
+            write_anchors(actions, actions.phrase);
+            actions.phrase.swap(value);
+        }
+
         actions.values.builder.insert(bbk_value(value, value::default_tag));
     }
     

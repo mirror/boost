@@ -35,8 +35,7 @@ namespace quickbook
 
     // value actions
         , values()
-        , phrase_value(*this, phrase)
-        , out_value(*this, out)
+        , to_value(*this)
         , docinfo_value(*this)
         , scoped_cond_phrase(*this)
         , scoped_output(*this)

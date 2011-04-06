@@ -51,8 +51,7 @@ namespace quickbook
 
     // value actions
         value_parser            values;
-        collector_to_value_action phrase_value;
-        collector_to_value_action out_value;
+        to_value_action         to_value;
         phrase_to_docinfo_action docinfo_value;
         
         scoped_parser<cond_phrase_push>

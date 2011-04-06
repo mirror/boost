@@ -357,15 +357,14 @@ namespace quickbook
     
     typedef phoenix::function<phrase_to_docinfo_action_impl> phrase_to_docinfo_action;
 
-    struct collector_to_value_action
+    struct to_value_action
     {
-        collector_to_value_action(quickbook::actions& actions, collector& output)
-            : actions(actions), output(output) {}
+        to_value_action(quickbook::actions& actions)
+            : actions(actions) {}
 
         void operator()(iterator first, iterator last) const;
 
         quickbook::actions& actions;
-        collector& output;
     };
 
     struct scoped_output_push : scoped_action_base
