@@ -11,6 +11,8 @@
 
 [section Synopsis]
 
+    ```// In Header: <`[@boost:/boost/optional/optional.hpp boost/optional/optional.hpp]'''<phrase role="comment">&gt;</phrase>'''``
+
     namespace boost {
 
     template<class T>
@@ -45,9 +47,9 @@
 
         template<class U> optional& operator = ( optional<U> const& rhs ) ; ``[link reference_optional_operator_equal_other_optional __GO_TO__]``
 
-        template<class InPlaceFactory> optional& operator = ( InPlaceFactory const& f ) ; ``[/[link reference_optional_operator_equal_factory __GO_TO__]]``
+        template<class InPlaceFactory> optional& operator = ( InPlaceFactory const& f ) ; ``[link reference_optional_operator_equal_factory __GO_TO__]``
 
-        template<class TypedInPlaceFactory> optional& operator = ( TypedInPlaceFactory const& f ) ; ``[/[link reference_optional_operator_equal_factory __GO_TO__]]``
+        template<class TypedInPlaceFactory> optional& operator = ( TypedInPlaceFactory const& f ) ; ``[link reference_optional_operator_equal_factory __GO_TO__]``
 
         T const& get() const ; ``[link reference_optional_get __GO_TO__]``
         T&       get() ; ``[link reference_optional_get __GO_TO__]``
