@@ -59,7 +59,7 @@ namespace quickbook
             {
                 tgt << "<anchor id=\"";
                 detail::print_string(*it, tgt.get());
-                tgt << "\"/>\n";
+                tgt << "\"/>";
             }
             
             actions.anchors.clear();

@@ -7,7 +7,7 @@
     <para>
       <ulink url="http://www.boost.org/">http://www.boost.org/</ulink> <ulink url="http://www.boost.org/">Boost</ulink>
       <link linkend="link-id">link-id</link> <link linkend="link-id">Link Text</link>
-      <anchor id="link-id"/> <functionname alt="foo">foo</functionname> <functionname
+      <anchor id="link-id"/><functionname alt="foo">foo</functionname> <functionname
       alt="foo">link text</functionname> <classname alt="foo">foo</classname> <classname
       alt="foo">link text</classname> <methodname alt="foo">foo</methodname> <methodname
       alt="foo">link text</methodname> <enumname alt="foo">foo</enumname> <enumname
