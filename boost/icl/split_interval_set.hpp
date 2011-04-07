@@ -146,7 +146,7 @@ private:
 
     iterator add_over(const interval_type& addend)
     {
-        std::pair<iterator,iterator> overlap = equal_range(addend);
+        std::pair<iterator,iterator> overlap = this->equal_range(addend);
         iterator first_ = overlap.first,
                  end_   = overlap.second,
                  last_  = end_; --last_;
