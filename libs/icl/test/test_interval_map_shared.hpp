@@ -1212,7 +1212,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK_EQUAL( found1->second, found2->second );
     BOOST_CHECK_EQUAL( found1->second, MK_u(2) );
 
-	if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
     {
         found1 = map_a.find(MK_v(0));
         found2 = icl::find(map_a, MK_v(0));
@@ -1225,7 +1225,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK      ( found1 == found2 );
     BOOST_CHECK      ( found1 == map_a.end() );
 
-	if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
     {
         BOOST_CHECK( !icl::contains(map_a, MK_v(0)) );
     }
