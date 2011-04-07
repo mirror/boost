@@ -379,9 +379,9 @@ assert ( *opt == y ) ;
 
 __SPACE__
 
-[: `optional<T&>& optional<T&>::operator= ( T& const& rhs ) ;`]
+[: `optional<T&>& optional<T&>::operator= ( T& rhs ) ;`]
 
-* [*Effect:] (Re)binds thee wrapped reference.
+* [*Effect:] (Re)binds the wrapped reference.
 * [*Postconditions: ] `*this` is initialized and it references the same
 object referenced by `rhs`.
 * [*Notes:] If `*this` was initialized, is is ['rebound] to the new object.

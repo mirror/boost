@@ -42,7 +42,7 @@
 </pre>
 <p>
       If you assign to a bare C++ reference, the assignment is forwarded to the referenced
-      object; it's value changes but the reference is never rebound.
+      object; its value changes but the reference is never rebound.
     </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
@@ -117,16 +117,16 @@
       or not.
     </p>
 <p>
-      That is, you would have to discriminate in order to be consistency.
+      That is, you would have to discriminate in order to be consistent.
     </p>
 <p>
-      If in your code rebinding to another object is not an option, then is very
-      likely that binding for the fist time isn't either. In such case, assignment
+      If in your code rebinding to another object is not an option, then it is very
+      likely that binding for the first time isn't either. In such case, assignment
       to an <span class="emphasis"><em>uninitialized </em></span> <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span></code>
-      shall be prohibited. It is quite possible that in such scenario the precondition
-      that the lvalue must be already initialized exist. If it doesn't, then binding
-      for the first time is OK while rebinding is not which is IMO very unlikely.
-      In such scenario, you can assign the value itself directly, as in:
+      shall be prohibited. It is quite possible that in such a scenario it is a precondition
+      that the lvalue must be already initialized. If it isn't, then binding for
+      the first time is OK while rebinding is not which is IMO very unlikely. In
+      such a scenario, you can assign the value itself directly, as in:
     </p>
 <pre class="programlisting"><span class="identifier">assert</span><span class="special">(!!</span><span class="identifier">opt</span><span class="special">);</span>
 <span class="special">*</span><span class="identifier">opt</span><span class="special">=</span><span class="identifier">value</span><span class="special">;</span>

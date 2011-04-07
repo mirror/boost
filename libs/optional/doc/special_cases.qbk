@@ -1,4 +1,4 @@
-
+﻿
 [section Optional references]
 
 This library allows the template parameter `T` to be of reference type:
@@ -37,7 +37,7 @@ the first time) to the object. Clearly, there is no other choice.
     assert(x==2); 
 
 If you assign to a bare C++ reference, the assignment is forwarded to the
-referenced object; it's value changes but the reference is never rebound.
+referenced object; its value changes but the reference is never rebound.
 
     int a = 1 ;
     int& ra = a ;
@@ -95,15 +95,15 @@ use Optional's assignment without explicitly handling the previous
 initialization state unless your code is capable of functioning whether
 after the assignment, `a` aliases the same object as `b` or not.
 
-That is, you would have to discriminate in order to be consistency.
+That is, you would have to discriminate in order to be consistent.
 
-If in your code rebinding to another object is not an option, then is very
-likely that binding for the fist time isn't either. In such case, assignment
+If in your code rebinding to another object is not an option, then it is very
+likely that binding for the first time isn't either. In such case, assignment
 to an ['uninitialized ] `optional<T&>` shall be prohibited. It is quite possible
-that in such scenario the precondition that the lvalue must be already
-initialized exist. If it doesn't, then binding for the first time is OK
+that in such a scenario it is a precondition that the lvalue must be already
+initialized. If it isn't, then binding for the first time is OK
 while rebinding is not which is IMO very unlikely.
-In such scenario, you can assign the value itself directly, as in:
+In such a scenario, you can assign the value itself directly, as in:
 
     assert(!!opt);
     *opt=value;
