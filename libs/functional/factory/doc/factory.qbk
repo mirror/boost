@@ -107,7 +107,7 @@ interfaces.
 
         // [...]
 
-        std::auto_ptr<an_abstract_factory> x = factories[some_name]->create();
+        std::auto_ptr<an_abstract_class> x(factories.at(some_name).create());
 
         // [...]
     }
