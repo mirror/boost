@@ -26,7 +26,7 @@
 </h3></div></div>
 <div><p class="copyright">Copyright &#169; 2007, 2008 Tobias Schwinger</p></div>
 <div><div class="legalnotice">
-<a name="id2865350"></a><p>
+<a name="id3353252"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -103,7 +103,7 @@
 </span>
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-    <a href="http://www.boost.org/libs/ptr_container/doc/ptr_map.html" target="_top"><code class="computeroutput"><span class="identifier">__boost__ptr_map__</span></code></a><span class="special">&lt;</span><a href="http://www.sgi.com/tech/stl/string.html" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span></code></a><span class="special">,</span><span class="identifier">a_factory</span><span class="special">&gt;</span> <span class="identifier">factories</span><span class="special">;</span>
+    <a href="http://www.boost.org/libs/ptr_container/doc/ptr_map.html" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">ptr_map</span></code></a><span class="special">&lt;</span><a href="http://www.sgi.com/tech/stl/string.html" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span></code></a><span class="special">,</span><span class="identifier">a_factory</span><span class="special">&gt;</span> <span class="identifier">factories</span><span class="special">;</span>
 
     <span class="comment">// [...]
 </span>
@@ -125,17 +125,31 @@
       a rather simple intention. We could use templates to get rid of some of it
       but the approach remains inflexible:
     </p>
-<pre class="programlisting"><span class="identifier">o</span> <span class="identifier">We</span> <span class="identifier">may</span> <span class="identifier">want</span> <span class="identifier">a</span> <span class="identifier">factory</span> <span class="identifier">that</span> <span class="identifier">takes</span> <span class="identifier">some</span> <span class="identifier">arguments</span> <span class="identifier">that</span> <span class="identifier">are</span> <span class="identifier">forwarded</span> <span class="identifier">to</span>
-  <span class="identifier">the</span> <span class="identifier">constructor</span><span class="special">,</span>
-<span class="identifier">o</span> <span class="identifier">we</span> <span class="identifier">will</span> <span class="identifier">probably</span> <span class="identifier">want</span> <span class="identifier">to</span> <span class="identifier">use</span> <span class="identifier">smart</span> <span class="identifier">pointers</span><span class="special">,</span>
-<span class="identifier">o</span> <span class="identifier">we</span> <span class="identifier">may</span> <span class="identifier">want</span> <span class="identifier">several</span> <span class="identifier">member</span> <span class="identifier">functions</span> <span class="identifier">to</span> <span class="identifier">create</span> <span class="identifier">different</span> <span class="identifier">kinds</span> <span class="identifier">of</span>
-  <span class="identifier">objects</span><span class="special">,</span>
-<span class="identifier">o</span> <span class="identifier">we</span> <span class="identifier">might</span> <span class="keyword">not</span> <span class="identifier">necessarily</span> <span class="identifier">need</span> <span class="identifier">a</span> <span class="identifier">polymorphic</span> <span class="identifier">base</span> <span class="keyword">class</span> <span class="keyword">for</span> <span class="identifier">the</span> <span class="identifier">objects</span><span class="special">,</span>
-<span class="identifier">o</span> <span class="identifier">as</span> <span class="identifier">we</span> <span class="identifier">will</span> <span class="identifier">see</span><span class="special">,</span> <span class="identifier">we</span> <span class="keyword">do</span> <span class="keyword">not</span> <span class="identifier">need</span> <span class="identifier">a</span> <span class="identifier">factory</span> <span class="identifier">base</span> <span class="keyword">class</span> <span class="identifier">at</span> <span class="identifier">all</span><span class="special">,</span> 
-<span class="identifier">o</span> <span class="identifier">we</span> <span class="identifier">might</span> <span class="identifier">want</span> <span class="identifier">to</span> <span class="identifier">just</span> <span class="identifier">call</span> <span class="identifier">the</span> <span class="identifier">constructor</span> <span class="special">-</span> <span class="identifier">without</span> <span class="error">`</span><span class="keyword">new</span><span class="error">`</span> <span class="identifier">to</span> <span class="identifier">create</span>
-  <span class="identifier">an</span> <span class="identifier">object</span> <span class="identifier">on</span> <span class="identifier">the</span> <span class="identifier">stack</span><span class="special">,</span> <span class="keyword">and</span>
-<span class="identifier">o</span> <span class="identifier">finally</span> <span class="identifier">we</span> <span class="identifier">might</span> <span class="identifier">want</span> <span class="identifier">to</span> <span class="identifier">use</span> <span class="identifier">customized</span> <span class="identifier">memory</span> <span class="identifier">management</span><span class="special">.</span>
-</pre>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          We may want a factory that takes some arguments that are forwarded to the
+          constructor,
+        </li>
+<li class="listitem">
+          we will probably want to use smart pointers,
+        </li>
+<li class="listitem">
+          we may want several member functions to create different kinds of objects,
+        </li>
+<li class="listitem">
+          we might not necessarily need a polymorphic base class for the objects,
+        </li>
+<li class="listitem">
+          as we will see, we do not need a factory base class at all,
+        </li>
+<li class="listitem">
+          we might want to just call the constructor - without <code class="computeroutput"><span class="keyword">new</span></code>
+          to create an object on the stack, and
+        </li>
+<li class="listitem">
+          finally we might want to use customized memory management.
+        </li>
+</ul></div>
 <p>
       Experience has shown that using function objects and generic Boost components
       for their composition, Design Patterns that describe callback mechasisms (typically
@@ -401,12 +415,13 @@
         yields the pointee type.
       </p>
 <p>
-        If an <span class="underline">_allocator_</span> is given, it is used
-        for memory allocation and the placement form of the <code class="computeroutput"><span class="keyword">new</span></code>
-        operator is used to construct the object. A function object that calls the
-        destructor and deallocates the memory with a copy of the Allocator is used
-        for the second constructor argument of <code class="computeroutput"><span class="identifier">Pointer</span></code>
-        (thus it must be a <span class="underline">_smart_pointer_</span>
+        If an <a href="http://www.sgi.com/tech/stl/concepts/allocator.html" target="_top">Allocator</a>
+        is given, it is used for memory allocation and the placement form of the
+        <code class="computeroutput"><span class="keyword">new</span></code> operator is used to construct
+        the object. A function object that calls the destructor and deallocates the
+        memory with a copy of the Allocator is used for the second constructor argument
+        of <code class="computeroutput"><span class="identifier">Pointer</span></code> (thus it must
+        be a <a href="http://www.boost.org/libs/smart_ptr/index.html" target="_top">Smart Pointer</a>
         that provides a suitable constructor, such as <a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span></code></a>).
       </p>
 <p>
