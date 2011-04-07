@@ -23,9 +23,9 @@
 
 [#id1]
 [variablelist Variable List with anchors
-	[
-	[[#id2]a[#id3]]
-	[[#id4]b[#id5]]
-	]
+    [
+    [[#id2]a[#id3]]
+    [[#id4]b[#id5]]
+    ]
 ]
-	
+    
