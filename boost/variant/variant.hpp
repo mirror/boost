@@ -1169,14 +1169,14 @@ private: // helpers, for representation (below)
     which_t which_;
     storage_t storage_;
 
-    void indicate_which(int which)
+    void indicate_which(int which_arg)
     {
-        which_ = static_cast<which_t>( which );
+        which_ = static_cast<which_t>( which_arg );
     }
 
-    void indicate_backup_which(int which)
+    void indicate_backup_which(int which_arg)
     {
-        which_ = static_cast<which_t>( -(which + 1) );
+        which_ = static_cast<which_t>( -(which_arg + 1) );
     }
 
 private: // helpers, for queries (below)
