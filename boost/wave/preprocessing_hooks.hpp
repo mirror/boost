@@ -198,8 +198,7 @@ struct default_preprocessing_hooks
     //  The parameter 'native_name' on return is expected to hold the unique 
     //  full file name of the located file.
     //
-    //  The return value defines whether the found file will be included 
-    //  (return false) or will be skipped (return true).
+    //  The return value defines whether the file was located successfully.
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContextT>
