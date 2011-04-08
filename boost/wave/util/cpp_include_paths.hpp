@@ -334,7 +334,7 @@ bool include_paths::find_include_file (std::string &s, std::string &dir,
                 dirpath = create_path((*it).second);
                 dirpath /= create_path(s);
             }
-            
+
             dir = dirpath.string();
             s = normalize(currpath).string();    // found the required file
             return true;
