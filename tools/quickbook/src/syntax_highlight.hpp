@@ -50,7 +50,7 @@ namespace quickbook
                     |   macro
                     |   escape
                     |   preprocessor    [Process("preprocessor", self.out)]
-                    |   comment         [Process("comment", self.out)]
+                    |   comment
                     |   keyword         [Process("keyword", self.out)]
                     |   identifier      [Process("identifier", self.out)]
                     |   special         [Process("special", self.out)]
@@ -102,7 +102,29 @@ namespace quickbook
                     ;
 
                 comment
-                    =   cl::comment_p("//") | cl::comment_p("/*", "*/")
+                    =   (   "//"
+                        >>  *(cl::anychar_p - (cl::eol_p | "``"))
+                        )               [Process("comment", self.out)]
+                    >>  *(  escape
+                        |   (
+                                +(cl::anychar_p - (cl::eol_p | "``"))
+                            )           [Process("comment", self.out)]
+                        )
+                    |   (   "/*"
+                        >>  *(cl::anychar_p - (cl::str_p("*/") | "``"))
+                        >>  ("*/" | cl::end_p)
+                        )               [Process("comment", self.out)]
+                    |   (   "/*"
+                        >>  *(cl::anychar_p - "``")
+                        )               [Process("comment", self.out)]
+                    >>  *(  escape
+                        |   (  +(cl::anychar_p - (cl::str_p("*/") | "``"))
+                            >>  cl::eps_p("``")
+                            )           [Process("comment", self.out)]
+                        )
+                    >>  !(  +(cl::anychar_p - cl::str_p("*/"))
+                        >>  !cl::str_p("*/")
+                        )               [Process("comment", self.out)]
                     ;
 
                 keyword
@@ -202,7 +224,7 @@ namespace quickbook
                     *(  (+cl::space_p)  [Space(self.out)]
                     |   macro
                     |   escape          
-                    |   comment         [Process("comment", self.out)]
+                    |   comment
                     |   keyword         [Process("keyword", self.out)]
                     |   identifier      [Process("identifier", self.out)]
                     |   special         [Process("special", self.out)]
@@ -250,7 +272,9 @@ namespace quickbook
                     ;
 
                 comment
-                    =   cl::comment_p("#")
+                    =   (   "#"
+                        >>  *(cl::anychar_p - (cl::eol_p | "``"))
+                        )               [Process("comment", self.out)]
                     ;
 
                 keyword

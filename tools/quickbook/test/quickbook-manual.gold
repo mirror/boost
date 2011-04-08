@@ -1549,8 +1549,8 @@ escape (no processing/formatting)
 
 <phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="comment">// Sample code
-</phrase>    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World\n&quot;</phrase><phrase role="special">;</phrase>
+    <phrase role="comment">// Sample code</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World\n&quot;</phrase><phrase role="special">;</phrase>
     <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
@@ -2714,8 +2714,8 @@ for the journey to old age.]]]
           
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="comment">// return 'em, foo man!
-</phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
+    <phrase role="comment">// return 'em, foo man!</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
         </para>
@@ -2726,8 +2726,8 @@ for the journey to old age.]]]
           
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">bar</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="comment">// return 'em, bar man!
-</phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;bar&quot;</phrase><phrase role="special">;</phrase>
+    <phrase role="comment">// return 'em, bar man!</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;bar&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase></programlisting>
         </para>
         <para>
@@ -2743,10 +2743,10 @@ for the journey to old age.]]]
           get marked up. We use distinguishable comments following the form:
         </para>
         
-<programlisting><phrase role="comment">//[id
-</phrase><phrase role="identifier">some</phrase> <phrase role="identifier">code</phrase> <phrase role="identifier">here</phrase>
-<phrase role="comment">//]
-</phrase></programlisting>
+<programlisting><phrase role="comment">//[id</phrase>
+<phrase role="identifier">some</phrase> <phrase role="identifier">code</phrase> <phrase role="identifier">here</phrase>
+<phrase role="comment">//]</phrase>
+</programlisting>
         <para>
           The first comment line above initiates a named code-snippet. This prefix
           will not be visible in quickbook. The entire code-snippet in between <code><phrase
@@ -2764,8 +2764,8 @@ for the journey to old age.]]]
           Special comments of the form:
         </para>
         
-<programlisting><phrase role="comment">//` some [*quickbook] markup here
-</phrase></programlisting>
+<programlisting><phrase role="comment">//` some [*quickbook] markup here</phrase>
+</programlisting>
         <para>
           and:
         </para>
