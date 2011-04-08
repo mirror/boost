@@ -26,6 +26,8 @@ Boost V1.47.0
   concatenates all adjacent string literals into a single string literal.
 - Fixed whitespace handling, added a corresponding set of test cases 
   (t_9_020.cpp)
+- Added a new preprocessing hook: locate_include_file allowing to customize the
+  way include files are located.
 
 Boost V1.46.0
 - V2.2.0
