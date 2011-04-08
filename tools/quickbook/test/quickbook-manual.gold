@@ -3029,8 +3029,8 @@ for the journey to old age.]]]
     <phrase role="special">:</phrase> <phrase role="special">/</phrase><phrase role="identifier">usr</phrase><phrase role="special">/</phrase><phrase role="identifier">share</phrase><phrase role="special">/</phrase><phrase role="identifier">xml</phrase><phrase role="special">/</phrase><phrase role="identifier">docbook</phrase><phrase role="special">/</phrase><phrase role="identifier">schema</phrase><phrase role="special">/</phrase><phrase role="identifier">dtd</phrase><phrase role="special">/</phrase><phrase role="number">4.2</phrase>
     <phrase role="special">;</phrase>
 
-<phrase role="comment"># Remove this line if you're not using doxygen
-</phrase><phrase role="identifier">using</phrase> <phrase role="identifier">doxygen</phrase> <phrase role="special">;</phrase>
+<phrase role="comment"># Remove this line if you're not using doxygen</phrase>
+<phrase role="identifier">using</phrase> <phrase role="identifier">doxygen</phrase> <phrase role="special">;</phrase>
 </programlisting>
       <para>
         The above steps are enough to get a functional BoostBook setup. Quickbook
