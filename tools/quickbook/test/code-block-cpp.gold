@@ -8,10 +8,10 @@
 <phrase role="comment">/* No escape
  * with newlines
  */</phrase>
-<phrase role="comment">// In Header: &lt;</phrase><ulink url="boost:/boost/optional/optional.hpp">boost/optional/optional.hpp</ulink><phrase role="comment">&gt;</phrase>
-<phrase role="comment">/* In Header: &lt;</phrase><ulink url="boost:/boost/optional/optional.hpp">boost/optional/optional.hpp</ulink><phrase role="comment">&gt; */</phrase>
-<phrase role="comment">/* Multiple escapes: </phrase><emphasis>italic</emphasis><phrase role="comment">
- * </phrase><emphasis role="underline">underline</emphasis><emphasis role="bold">bold</emphasis><phrase role="comment">
+<phrase role="comment">// In Header: &lt;<ulink url="boost:/boost/optional/optional.hpp">boost/optional/optional.hpp</ulink>&gt;</phrase>
+<phrase role="comment">/* In Header: &lt;<ulink url="boost:/boost/optional/optional.hpp">boost/optional/optional.hpp</ulink>&gt; */</phrase>
+<phrase role="comment">/* Multiple escapes: <emphasis>italic</emphasis>
+ * <emphasis role="underline">underline</emphasis><emphasis role="bold">bold</emphasis>
  */</phrase>
 </programlisting>
   <para>
@@ -24,6 +24,6 @@
     A badly formed comment with an escape:
   </para>
   
-<programlisting><phrase role="comment">/* Oh dear </phrase><emphasis role="bold">bold</emphasis><phrase role="comment">
+<programlisting><phrase role="comment">/* Oh dear <emphasis role="bold">bold</emphasis>
 </phrase></programlisting>
 </article>

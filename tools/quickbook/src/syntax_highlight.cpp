@@ -91,29 +91,18 @@ namespace quickbook
                     ;
 
                 comment
-                    =   (   "//"
-                        >>  *(cl::anychar_p - (cl::eol_p | "``"))
-                        )               [span("comment", self.out)]
+                    =   cl::str_p("//")         [span_start("comment", self.out)]
                     >>  *(  escape
-                        |   (
-                                +(cl::anychar_p - (cl::eol_p | "``"))
-                            )           [span("comment", self.out)]
+                        |   (+(cl::anychar_p - (cl::eol_p | "``")))
+                                                [span(0, self.out)]
                         )
-                    |   (   "/*"
-                        >>  *(cl::anychar_p - (cl::str_p("*/") | "``"))
-                        >>  ("*/" | cl::end_p)
-                        )               [span("comment", self.out)]
-                    |   (   "/*"
-                        >>  *(cl::anychar_p - "``")
-                        )               [span("comment", self.out)]
+                    >>  cl::eps_p               [span_end(self.out)]
+                    |   cl::str_p("/*")         [span_start("comment", self.out)]
                     >>  *(  escape
-                        |   (  +(cl::anychar_p - (cl::str_p("*/") | "``"))
-                            >>  cl::eps_p("``")
-                            )           [span("comment", self.out)]
+                        |   (+(cl::anychar_p - (cl::str_p("*/") | "``")))
+                                                [span(0, self.out)]
                         )
-                    >>  !(  +(cl::anychar_p - cl::str_p("*/"))
-                        >>  !cl::str_p("*/")
-                        )               [span("comment", self.out)]
+                    >>  (!cl::str_p("*/"))      [span_end(self.out)]
                     ;
 
                 keyword
@@ -250,9 +239,12 @@ namespace quickbook
                     ;
 
                 comment
-                    =   (   "#"
-                        >>  *(cl::anychar_p - (cl::eol_p | "``"))
-                        )               [span("comment", self.out)]
+                    =   cl::str_p("#")          [span_start("comment", self.out)]
+                    >>  *(  escape
+                        |   (+(cl::anychar_p - (cl::eol_p | "``")))
+                                                [span(0, self.out)]
+                        )
+                    >>  cl::eps_p               [span_end(self.out)]
                     ;
 
                 keyword
