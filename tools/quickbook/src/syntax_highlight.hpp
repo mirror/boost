@@ -17,26 +17,18 @@
 #include <boost/spirit/include/classic_loops.hpp>
 #include "grammar.hpp"
 #include "grammar_impl.hpp" // Just for context stuff. Should move?
+#include "actions_class.hpp"
 
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
 
     // Grammar for C++ highlighting
-    template <
-        typename Process
-      , typename Space
-      , typename Macro
-      , typename DoMacro
-      , typename PreEscape
-      , typename PostEscape
-      , typename Unexpected
-      , typename Out>
     struct cpp_highlight
-    : public cl::grammar<cpp_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, Unexpected, Out> >
+    : public cl::grammar<cpp_highlight>
     {
-        cpp_highlight(Out& out, Macro const& macro, DoMacro do_macro, actions& escape_actions)
-        : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
+        cpp_highlight(collector& out, actions& escape_actions)
+        : out(out), escape_actions(escape_actions) {}
 
         template <typename Scanner>
         struct definition
@@ -46,27 +38,27 @@ namespace quickbook
             {
                 program
                     =
-                    *(  (+cl::space_p)  [Space(self.out)]
+                    *(  (+cl::space_p)  [space(self.out)]
                     |   macro
                     |   escape
-                    |   preprocessor    [Process("preprocessor", self.out)]
+                    |   preprocessor    [span("preprocessor", self.out)]
                     |   comment
-                    |   keyword         [Process("keyword", self.out)]
-                    |   identifier      [Process("identifier", self.out)]
-                    |   special         [Process("special", self.out)]
-                    |   string_         [Process("string", self.out)]
-                    |   char_           [Process("char", self.out)]
-                    |   number          [Process("number", self.out)]
+                    |   keyword         [span("keyword", self.out)]
+                    |   identifier      [span("identifier", self.out)]
+                    |   special         [span("special", self.out)]
+                    |   string_         [span("string", self.out)]
+                    |   char_           [span("char", self.out)]
+                    |   number          [span("number", self.out)]
                     |   cl::repeat_p(1)[cl::anychar_p]
-                                        [Unexpected(self.out, self.escape_actions)]
+                                        [unexpected_char(self.out, self.escape_actions)]
                     )
                     ;
 
                 macro =
                     // must not be followed by alpha or underscore
-                    cl::eps_p(self.macro                  
+                    cl::eps_p(self.escape_actions.macro
                         >> (cl::eps_p - (cl::alpha_p | '_')))
-                    >> self.macro                       [self.do_macro]
+                    >> self.escape_actions.macro        [do_macro_action(self.out, self.escape_actions)]
                     ;
 
                 qbk_phrase =
@@ -79,7 +71,7 @@ namespace quickbook
                     ;
 
                 escape =
-                    cl::str_p("``")     [PreEscape(self.escape_actions, save)]
+                    cl::str_p("``")     [pre_escape_back(self.escape_actions, save)]
                     >>
                     (
                         (
@@ -94,7 +86,7 @@ namespace quickbook
                             cl::eps_p   [self.escape_actions.error]
                             >> *cl::anychar_p
                         )
-                    )                   [PostEscape(self.out, self.escape_actions, save)]
+                    )                   [post_escape_back(self.out, self.escape_actions, save)]
                     ;
 
                 preprocessor
@@ -104,27 +96,27 @@ namespace quickbook
                 comment
                     =   (   "//"
                         >>  *(cl::anychar_p - (cl::eol_p | "``"))
-                        )               [Process("comment", self.out)]
+                        )               [span("comment", self.out)]
                     >>  *(  escape
                         |   (
                                 +(cl::anychar_p - (cl::eol_p | "``"))
-                            )           [Process("comment", self.out)]
+                            )           [span("comment", self.out)]
                         )
                     |   (   "/*"
                         >>  *(cl::anychar_p - (cl::str_p("*/") | "``"))
                         >>  ("*/" | cl::end_p)
-                        )               [Process("comment", self.out)]
+                        )               [span("comment", self.out)]
                     |   (   "/*"
                         >>  *(cl::anychar_p - "``")
-                        )               [Process("comment", self.out)]
+                        )               [span("comment", self.out)]
                     >>  *(  escape
                         |   (  +(cl::anychar_p - (cl::str_p("*/") | "``"))
                             >>  cl::eps_p("``")
-                            )           [Process("comment", self.out)]
+                            )           [span("comment", self.out)]
                         )
                     >>  !(  +(cl::anychar_p - cl::str_p("*/"))
                         >>  !cl::str_p("*/")
-                        )               [Process("comment", self.out)]
+                        )               [span("comment", self.out)]
                     ;
 
                 keyword
@@ -189,29 +181,18 @@ namespace quickbook
             start() const { return program; }
         };
 
-        Out& out;
-        Macro const& macro;
-        DoMacro do_macro;
+        collector& out;
         actions& escape_actions;
     };
 
     // Grammar for Python highlighting
     // See also: The Python Reference Manual
     // http://docs.python.org/ref/ref.html
-    template <
-        typename Process
-      , typename Space
-      , typename Macro
-      , typename DoMacro
-      , typename PreEscape
-      , typename PostEscape
-      , typename Unexpected
-      , typename Out>
     struct python_highlight
-    : public cl::grammar<python_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, Unexpected, Out> >
+    : public cl::grammar<python_highlight>
     {
-        python_highlight(Out& out, Macro const& macro, DoMacro do_macro, actions& escape_actions)
-        : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
+        python_highlight(collector& out, actions& escape_actions)
+        : out(out), escape_actions(escape_actions) {}
 
         template <typename Scanner>
         struct definition
@@ -221,25 +202,25 @@ namespace quickbook
             {
                 program
                     =
-                    *(  (+cl::space_p)  [Space(self.out)]
+                    *(  (+cl::space_p)  [space(self.out)]
                     |   macro
                     |   escape          
                     |   comment
-                    |   keyword         [Process("keyword", self.out)]
-                    |   identifier      [Process("identifier", self.out)]
-                    |   special         [Process("special", self.out)]
-                    |   string_         [Process("string", self.out)]
-                    |   number          [Process("number", self.out)]
+                    |   keyword         [span("keyword", self.out)]
+                    |   identifier      [span("identifier", self.out)]
+                    |   special         [span("special", self.out)]
+                    |   string_         [span("string", self.out)]
+                    |   number          [span("number", self.out)]
                     |   cl::repeat_p(1)[cl::anychar_p]
-                                        [Unexpected(self.out, self.escape_actions)]
+                                        [unexpected_char(self.out, self.escape_actions)]
                     )
                     ;
 
                 macro = 
                     // must not be followed by alpha or underscore
-                    cl::eps_p(self.macro
+                    cl::eps_p(self.escape_actions.macro
                         >> (cl::eps_p - (cl::alpha_p | '_')))
-                    >> self.macro                       [self.do_macro]
+                    >> self.escape_actions.macro        [do_macro_action(self.out, self.escape_actions)]
                     ;
 
                 qbk_phrase =
@@ -253,7 +234,7 @@ namespace quickbook
                     ;
 
                 escape =
-                    cl::str_p("``")     [PreEscape(self.escape_actions, save)]
+                    cl::str_p("``")     [pre_escape_back(self.escape_actions, save)]
                     >>
                     (
                         (
@@ -268,13 +249,13 @@ namespace quickbook
                             cl::eps_p   [self.escape_actions.error]
                             >> *cl::anychar_p
                         )
-                    )                   [PostEscape(self.out, self.escape_actions, save)]
+                    )                   [post_escape_back(self.out, self.escape_actions, save)]
                     ;
 
                 comment
                     =   (   "#"
                         >>  *(cl::anychar_p - (cl::eol_p | "``"))
-                        )               [Process("comment", self.out)]
+                        )               [span("comment", self.out)]
                     ;
 
                 keyword
@@ -350,25 +331,16 @@ namespace quickbook
             start() const { return program; }
         };
 
-        Out& out;
-        Macro const& macro;
-        DoMacro do_macro;
+        collector& out;
         actions& escape_actions;
     };
 
     // Grammar for plain text (no actual highlighting)
-    template <
-        typename CharProcess
-      , typename Macro
-      , typename DoMacro
-      , typename PreEscape
-      , typename PostEscape
-      , typename Out>
     struct teletype_highlight
-    : public cl::grammar<teletype_highlight<CharProcess, Macro, DoMacro, PreEscape, PostEscape, Out> >
+    : public cl::grammar<teletype_highlight>
     {
-        teletype_highlight(Out& out, Macro const& macro, DoMacro do_macro, actions& escape_actions)
-        : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
+        teletype_highlight(collector& out, actions& escape_actions)
+        : out(out), escape_actions(escape_actions) {}
 
         template <typename Scanner>
         struct definition
@@ -380,15 +352,15 @@ namespace quickbook
                     =
                     *(  macro
                     |   escape          
-                    |   cl::repeat_p(1)[cl::anychar_p]  [CharProcess(self.out, self.escape_actions)]
+                    |   cl::repeat_p(1)[cl::anychar_p]  [plain_char_action(self.out, self.escape_actions)]
                     )
                     ;
 
                 macro =
                     // must not be followed by alpha or underscore
-                    cl::eps_p(self.macro                    
+                    cl::eps_p(self.escape_actions.macro
                         >> (cl::eps_p - (cl::alpha_p | '_')))
-                    >> self.macro       [self.do_macro]
+                    >> self.escape_actions.macro        [do_macro_action(self.out, self.escape_actions)]
                     ;
 
                 qbk_phrase =
@@ -402,7 +374,7 @@ namespace quickbook
                     ;
 
                 escape =
-                    cl::str_p("``")     [PreEscape(self.escape_actions, save)]
+                    cl::str_p("``")     [pre_escape_back(self.escape_actions, save)]
                     >>
                     (
                         (
@@ -417,7 +389,7 @@ namespace quickbook
                             cl::eps_p   [self.escape_actions.error]
                             >> *cl::anychar_p
                         )
-                    )                   [PostEscape(self.out, self.escape_actions, save)]
+                    )                   [post_escape_back(self.out, self.escape_actions, save)]
                     ;
             }
 
@@ -430,9 +402,7 @@ namespace quickbook
             start() const { return program; }
         };
 
-        Out& out;
-        Macro const& macro;
-        DoMacro do_macro;
+        collector& out;
         actions& escape_actions;
     };
 
