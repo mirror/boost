@@ -404,7 +404,7 @@ namespace boost { namespace fusion
       , State const
       , F
     >::type
-    BOOST_FUSION_FOLD_NAME(Seq& seq,State const& state,F f)
+    BOOST_FUSION_FOLD_NAME(Seq& seq, State const& state, F f)
     {
         return result_of::BOOST_FUSION_FOLD_NAME<Seq,State const,F>::call(
             state,
@@ -418,9 +418,37 @@ namespace boost { namespace fusion
       , State const
       , F
     >::type
-    BOOST_FUSION_FOLD_NAME(Seq const& seq,State const& state,F f)
+    BOOST_FUSION_FOLD_NAME(Seq const& seq, State const& state, F f)
     {
         return result_of::BOOST_FUSION_FOLD_NAME<Seq const,State const,F>::call(
+            state,
+            fusion::BOOST_FUSION_FOLD_IMPL_FIRST_IT_FUNCTION(seq),
+            f);
+    }
+
+    template<typename Seq, typename State, typename F>
+    inline typename result_of::BOOST_FUSION_FOLD_NAME<
+        Seq
+      , State const
+      , F
+    >::type
+    BOOST_FUSION_FOLD_NAME(Seq& seq, State& state, F f)
+    {
+        return result_of::BOOST_FUSION_FOLD_NAME<Seq,State,F>::call(
+            state,
+            fusion::BOOST_FUSION_FOLD_IMPL_FIRST_IT_FUNCTION(seq),
+            f);
+    }
+
+    template<typename Seq, typename State, typename F>
+    inline typename result_of::BOOST_FUSION_FOLD_NAME<
+        Seq const
+      , State const
+      , F
+    >::type
+    BOOST_FUSION_FOLD_NAME(Seq const& seq, State& state, F f)
+    {
+        return result_of::BOOST_FUSION_FOLD_NAME<Seq const,State,F>::call(
             state,
             fusion::BOOST_FUSION_FOLD_IMPL_FIRST_IT_FUNCTION(seq),
             f);
