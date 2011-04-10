@@ -143,7 +143,7 @@ test_main(int /* argc */, char * /* argv */[]) {
         ifs.imbue(*utf8_locale);
         ifs.open("test.dat");
 
-        wchar_t item = 0;
+        std::wint_t item = 0;
         // note can't use normal vector from iterator constructor because
         // dinkumware doesn't have it.
         for(;;){
