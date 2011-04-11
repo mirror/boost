@@ -153,9 +153,10 @@ namespace date_time {
         std::string& first,
         std::string& second)
   {
-    int sep_pos = static_cast<int>(s.find(sep));
+    std::string::size_type sep_pos = s.find(sep);
     first = s.substr(0,sep_pos);
-    second = s.substr(sep_pos+1);
+    if (sep_pos!=std::string::npos)
+        second = s.substr(sep_pos+1);
     return true;
   }
 
