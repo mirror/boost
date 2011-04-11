@@ -117,7 +117,7 @@ do_all_tests()
 
   time_input_facet* facet = new time_input_facet();
   std::locale loc(std::locale::classic(), facet);
-  facet->time_duration_format("%H:%M:%S%f");
+  facet->time_duration_format("%H:%M:%S""%f");
   iss.imbue(loc);
 
   iss.str("14:13:12.0 extra stuff");
@@ -180,7 +180,7 @@ do_all_tests()
   { /****** iso format tests (and custom 'scrunched-together formats) ******/
     time_input_facet *facet = new time_input_facet();
     facet->set_iso_format();
-    facet->time_duration_format("%H%M%S%F"); // iso format
+    facet->time_duration_format("%H""%M""%S""%F"); // iso format
     std::stringstream ss;
     ss.imbue(std::locale(std::locale::classic(), facet));
     ptime pt(not_a_date_time);
@@ -217,19 +217,19 @@ do_all_tests()
     ss.exceptions(std::ios_base::failbit); // we need exceptions turned on here
     int count = 0;
     try {
-      facet->time_duration_format("%H%M%S%F");
+      facet->time_duration_format("%H""%M""%S""%F");
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
       check_equal("special value w/ hours flag", td, nadt);
       ss.str("");
-      facet->time_duration_format("%M%S%F");
+      facet->time_duration_format("%M""%S""%F");
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
       check_equal("special value w/ minutes flag", td, nadt);
       ss.str("");
-      facet->time_duration_format("%S%F");
+      facet->time_duration_format("%S""%F");
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
@@ -257,17 +257,17 @@ do_all_tests()
     // exception tests
     std::ios_base::failure exc("failure");
     check("failure test w/ hours flag",
-        failure_test(td, "bad_input", exc, new time_input_facet("%H%M%S%F")));
+        failure_test(td, "bad_input", exc, new time_input_facet("%H""%M""%S""%F")));
     check("silent failure test w/ hours flag",
-        failure_test(td, "bad_input", new time_input_facet("%H%M%S%F")));
+        failure_test(td, "bad_input", new time_input_facet("%H""%M""%S""%F")));
     check("failure test w/ minute flag",
-        failure_test(td, "bad_input", exc, new time_input_facet("%M%S%F")));
+        failure_test(td, "bad_input", exc, new time_input_facet("%M""%S""%F")));
     check("silent failure test w/ minute flag",
-        failure_test(td, "bad_input", new time_input_facet("%M%S%F")));
+        failure_test(td, "bad_input", new time_input_facet("%M""%S""%F")));
     check("failure test w/ second flag",
-        failure_test(td, "bad_input", exc, new time_input_facet("%S%F")));
+        failure_test(td, "bad_input", exc, new time_input_facet("%S""%F")));
     check("silent failure test w/ second flag",
-        failure_test(td, "bad_input", new time_input_facet("%S%F")));
+        failure_test(td, "bad_input", new time_input_facet("%S""%F")));
     check("failure test w/ sec w/frac (always) flag",
         failure_test(td, "bad_input", exc, new time_input_facet("%s")));
     check("silent failure test w/ sec w/frac (always) flag",
@@ -350,11 +350,11 @@ do_all_tests()
   // Failure tests
   // faliure tests for date elements tested in gregorian tests
   time_input_facet* facet2 = new time_input_facet();
-  facet2->time_duration_format("%H:%M:%S%f");
+  facet2->time_duration_format("%H:%M:%S""%f");
   check("Failure test: Missing frac_sec with %f flag (w/exceptions)",
         failure_test(td, "14:13:12 extra stuff", e_failure, facet2));
   time_input_facet* facet3 = new time_input_facet();
-  facet3->time_duration_format("%H:%M:%S%f");
+  facet3->time_duration_format("%H:%M:%S""%f");
   check("Failure test: Missing frac_sec with %f flag (no exceptions)",
         failure_test(td, "14:13:12 extra stuff", facet3));
 
