@@ -45,6 +45,7 @@ time2_demo contained this comment:
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_unsigned.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
 
 #include <boost/cstdint.hpp>
 #if (defined(BOOST_MSVC) && (BOOST_MSVC == 1500)) || defined(__IBMCPP__)
