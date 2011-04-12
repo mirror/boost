@@ -53,14 +53,14 @@ namespace
   int gettimeofday(struct timeval * tp, void *)
   {
     FILETIME ft;
-	#if defined(UNDER_CE)
-		// Windows CE does not define GetSystemTimeAsFileTime so we do it in two steps.
-		SYSTEMTIME st;
-		::GetSystemTime( &st );
-		::SystemTimeToFileTime( &st, &ft );
-	#else
-		::GetSystemTimeAsFileTime( &ft );  // never fails
-	#endif
+  #if defined(UNDER_CE)
+    // Windows CE does not define GetSystemTimeAsFileTime so we do it in two steps.
+    SYSTEMTIME st;
+    ::GetSystemTime( &st );
+    ::SystemTimeToFileTime( &st, &ft );
+  #else
+    ::GetSystemTimeAsFileTime( &ft );  // never fails
+  #endif
     long long t = (static_cast<long long>(ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
   # if !defined( BOOST_MSVC ) || BOOST_MSVC > 1300 // > VC++ 7.0
     t -= 116444736000000000LL;
