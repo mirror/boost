@@ -18,7 +18,7 @@ namespace win32 {
 // Windows CE define GetCurrentThread as an inline function in kfuncs.h
 inline HANDLE_ GetCurrentThread() 
 {
-	return ::GetCurrentThread();
+  return ::GetCurrentThread();
 }
 #else
 #if defined( BOOST_USE_WINDOWS_H )

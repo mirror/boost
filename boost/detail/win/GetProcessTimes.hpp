@@ -14,7 +14,7 @@
 namespace boost {
 namespace detail {
 namespace win32 {
-#if !defined(UNDER_CE)	// Windows CE does not define GetProcessTimes
+#if !defined(UNDER_CE)  // Windows CE does not define GetProcessTimes
 #if defined( BOOST_USE_WINDOWS_H )
     using ::GetProcessTimes;
 #else
