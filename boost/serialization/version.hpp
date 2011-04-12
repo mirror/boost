@@ -54,7 +54,7 @@ struct version
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 template<class T>
-int version<T>::value;
+const int version<T>::value;
 #endif
 
 } // namespace serialization
