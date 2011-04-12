@@ -223,6 +223,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-compile2 time_point/default_duration_pass.cpp : time_point_default_duration_pass ]
         [ compile-fail time_point/not_duration_fail.cpp : : time_point_not_duration_fail   ]
         [ chrono-run2 time_point/arithmetic_pass.cpp  : time_point_arithmetic_pass ]
+        [ chrono-run2 time_point/arithmetic_ext_pass.cpp  : time_point_arithmetic_ext_pass ]
         [ chrono-run2 time_point/time_point_cast_pass.cpp  : time_point_time_point_cast_pass ]
         [ compile-fail time_point/time_point_cast_int_fail.cpp : : time_point_time_point_cast_int_fail   ]
         [ chrono-run2 time_point/comparisons_pass.cpp  : time_point_comparisons_pass ]
