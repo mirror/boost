@@ -150,7 +150,7 @@ namespace boost { namespace phoenix
           , phoenix_domain
           , proto_base_expr
           , A0
-        >::type
+        >::type const
         operator=(A0 const & a0) const
         {
             return proto::make_expr<proto::tag::assign, phoenix_domain>(this->proto_expr_, a0);
@@ -162,14 +162,38 @@ namespace boost { namespace phoenix
           , phoenix_domain
           , proto_base_expr
           , A0
-        >::type
+        >::type const
         operator=(A0 & a0) const
         {
             return proto::make_expr<proto::tag::assign, phoenix_domain>(this->proto_expr_, a0);
         }
+        
+        template <typename A0>
+        typename proto::result_of::make_expr<
+            proto::tag::subscript
+          , phoenix_domain
+          , proto_base_expr
+          , A0
+        >::type const
+        operator[](A0 const & a0) const
+        {
+            return proto::make_expr<proto::tag::subscript, phoenix_domain>(this->proto_expr_, a0);
+        }
+
+        template <typename A0>
+        typename proto::result_of::make_expr<
+            proto::tag::subscript
+          , phoenix_domain
+          , proto_base_expr
+          , A0
+        >::type const
+        operator[](A0 & a0) const
+        {
+            return proto::make_expr<proto::tag::subscript, phoenix_domain>(this->proto_expr_, a0);
+        }
 
         //BOOST_PROTO_EXTENDS_ASSIGN_()
-        BOOST_PROTO_EXTENDS_SUBSCRIPT()
+        //BOOST_PROTO_EXTENDS_SUBSCRIPT()
 
         template <typename Sig>
         struct result;
@@ -222,7 +246,7 @@ namespace boost
     
     template <typename Expr>
     struct result_of<phoenix::actor<Expr> const()>
-        : result_of<phoenix::actor<typename phoenix::actor<Expr>::proto_base_expr>()>
+        : phoenix::result_of::actor<typename phoenix::actor<Expr>::proto_base_expr>
     {};
 }
 
