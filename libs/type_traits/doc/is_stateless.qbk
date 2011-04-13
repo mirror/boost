@@ -9,7 +9,7 @@
    template <class T>
    struct is_stateless : public __tof {};
   
-__inherit Ff T is a stateless type then inherits from __true_type, otherwise
+__inherit If T is a stateless type then inherits from __true_type, otherwise
 from __false_type.
 
 Type T must be a complete type.
