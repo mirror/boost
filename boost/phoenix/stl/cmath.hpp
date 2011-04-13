@@ -10,7 +10,7 @@
 
 #include <boost/phoenix/core/limits.hpp>
 #include <cmath>
-#include <boost/phoenix/function/adapt_function.hpp>
+#include <boost/phoenix/function/adapt_callable.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 
@@ -36,7 +36,7 @@ namespace boost {
     };                                                                  \
     }                                                                   \
     namespace phoenix {                                                 \
-    BOOST_PHOENIX_ADAPT_FUNCTION(name, phoenix_impl::name ## _impl, 1)  \
+    BOOST_PHOENIX_ADAPT_CALLABLE(name, phoenix_impl::name ## _impl, 1)  \
     }
 
 BOOST_PHOENIX_MATH_FUNCTION(acos, 1)

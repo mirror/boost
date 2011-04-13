@@ -131,7 +131,7 @@ See [@../../example/define_expression.cpp define_expression.cpp] for the full ex
     [link phoenix.inside.actions here].
 ]
 
-[/section Boilerplate Macros]
+[section Boilerplate Macros]
 
 When having more and more expressions, you start to realize that this is a very
 repetetive task. Phoenix provides boilerplate macros that make defining Phoenix
@@ -454,6 +454,8 @@ of namespaces under which the following symbols will be defined:
 [heading Example]
 
 TBD
+
+[endsect]
 
 [endsect]
 

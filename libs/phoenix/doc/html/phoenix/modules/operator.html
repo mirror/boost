@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Phoenix 3.0">
 <link rel="up" href="../modules.html" title="Modules">
-<link rel="prev" href="function.html" title="Function">
+<link rel="prev" href="function/adapting_functions.html" title="Adapting Functions">
 <link rel="next" href="statement.html" title="Statement">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="function.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../modules.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="statement.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="function/adapting_functions.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../modules.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="statement.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -141,18 +141,18 @@
 </span><span class="identifier">val</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="number">3</span><span class="special">;</span> <span class="comment">// Lazily evaluated
 </span></pre>
 <a name="phoenix.modules.operator.supported_operators"></a><h5>
-<a name="id675204"></a>
+<a name="id797479"></a>
         <a class="link" href="operator.html#phoenix.modules.operator.supported_operators">Supported operators</a>
       </h5>
 <a name="phoenix.modules.operator.unary_operators"></a><h5>
-<a name="id675223"></a>
+<a name="id797499"></a>
         <a class="link" href="operator.html#phoenix.modules.operator.unary_operators">Unary operators</a>
       </h5>
 <pre class="programlisting"><span class="identifier">prefix</span><span class="special">:</span>   <span class="special">~,</span> <span class="special">!,</span> <span class="special">-,</span> <span class="special">+,</span> <span class="special">++,</span> <span class="special">--,</span> <span class="special">&amp;</span> <span class="special">(</span><span class="identifier">reference</span><span class="special">),</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">dereference</span><span class="special">)</span>
 <span class="identifier">postfix</span><span class="special">:</span>  <span class="special">++,</span> <span class="special">--</span>
 </pre>
 <a name="phoenix.modules.operator.binary_operators"></a><h5>
-<a name="id675354"></a>
+<a name="id797630"></a>
         <a class="link" href="operator.html#phoenix.modules.operator.binary_operators">Binary operators</a>
       </h5>
 <pre class="programlisting"><span class="special">=,</span> <span class="special">[],</span> <span class="special">+=,</span> <span class="special">-=,</span> <span class="special">*=,</span> <span class="special">/=,</span> <span class="special">%=,</span> <span class="special">&amp;=,</span> <span class="special">|=,</span> <span class="special">^=,</span> <span class="special">&lt;&lt;=,</span> <span class="special">&gt;&gt;=</span>
@@ -161,7 +161,7 @@
 <span class="special">&amp;&amp;,</span> <span class="special">||,</span> <span class="special">-&gt;*</span>
 </pre>
 <a name="phoenix.modules.operator.ternary_operator"></a><h5>
-<a name="id675555"></a>
+<a name="id797830"></a>
         <a class="link" href="operator.html#phoenix.modules.operator.ternary_operator">Ternary operator</a>
       </h5>
 <pre class="programlisting"><span class="identifier">if_else</span><span class="special">(</span><span class="identifier">c</span><span class="special">,</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">)</span>
@@ -174,7 +174,7 @@
         albeit in a lazy manner.
       </p>
 <a name="phoenix.modules.operator.member_pointer_operator"></a><h5>
-<a name="id675656"></a>
+<a name="id797932"></a>
         <a class="link" href="operator.html#phoenix.modules.operator.member_pointer_operator">Member pointer
         operator</a>
       </h5>
@@ -215,7 +215,7 @@
 <span class="special">(</span><span class="identifier">arg1</span><span class="special">-&gt;*&amp;</span><span class="identifier">A</span><span class="special">::</span><span class="identifier">func</span><span class="special">)(</span><span class="identifier">arg2</span><span class="special">)(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">i</span><span class="special">);</span> <span class="comment">// returns a-&gt;func(i)
 </span></pre>
 <a name="phoenix.modules.operator.include_files"></a><h5>
-<a name="id676037"></a>
+<a name="id798312"></a>
         <a class="link" href="operator.html#phoenix.modules.operator.include_files">Include Files</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -357,7 +357,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="function.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../modules.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="statement.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="function/adapting_functions.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../modules.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="statement.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

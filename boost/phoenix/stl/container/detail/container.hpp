@@ -74,8 +74,8 @@ namespace boost { namespace phoenix { namespace stl
     struct const_qualified_reference_of
     {
         typedef typename
-            boost::mpl::eval_if<
-                boost::is_const<C>
+            boost::mpl::eval_if_c<
+                boost::is_const<C>::value
               , const_reference_of<C>
               , reference_of<C>
             >::type
@@ -86,8 +86,8 @@ namespace boost { namespace phoenix { namespace stl
     struct const_qualified_iterator_of
     {
         typedef typename
-            boost::mpl::eval_if<
-                boost::is_const<C>
+            boost::mpl::eval_if_c<
+                boost::is_const<C>::value
               , const_iterator_of<C>
               , iterator_of<C>
             >::type
@@ -98,8 +98,8 @@ namespace boost { namespace phoenix { namespace stl
     struct const_qualified_reverse_iterator_of
     {
         typedef typename
-            boost::mpl::eval_if<
-                boost::is_const<C>
+            boost::mpl::eval_if_c<
+                boost::is_const<C>::value
               , const_reverse_iterator_of<C>
               , reverse_iterator_of<C>
             >::type

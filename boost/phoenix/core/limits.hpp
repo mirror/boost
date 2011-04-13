@@ -112,6 +112,12 @@
 #   error "BOOST_PROTO_MAX_LOGICAL_ARITY < BOOST_PHOENIX_COMPOSITE_LIMIT"
 #endif
 
+#if !defined(BOOST_RESULT_OF_NUM_ARGS)
+#   define BOOST_RESULT_OF_NUM_ARGS BOOST_PP_INC(BOOST_PHOENIX_COMPOSITE_LIMIT)
+#elif BOOST_RESULT_OF_NUM_ARGS < BOOST_PP_INC(BOOST_PHOENIX_COMPOSITE_LIMIT)
+#   error "BOOST_RESULT_OF_NUM_ARGS < BOOST_PHOENIX_COMPOSITE_LIMIT + 1"
+#endif
+
 // this include will set the limit for the proto expression arity
 #include <boost/proto/proto_fwd.hpp>
 

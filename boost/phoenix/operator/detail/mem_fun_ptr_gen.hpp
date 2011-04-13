@@ -51,7 +51,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr>
             struct mem_fun_ptr_gen<Object, MemPtr>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      boost::phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr>
@@ -79,7 +79,7 @@ namespace boost { namespace phoenix
             operator()() const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr);
             }
 
 #define BOOST_PHOENIX_ITERATE_OPERATOR 2
@@ -111,7 +111,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, BOOST_PHOENIX_typename_A>
             struct mem_fun_ptr_gen<Object, MemPtr, BOOST_PHOENIX_A>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -129,7 +129,7 @@ namespace boost { namespace phoenix
             operator()(BOOST_PHOENIX_A_const_ref_a) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, BOOST_PHOENIX_a);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, BOOST_PHOENIX_a);
             }
 
             template <BOOST_PHOENIX_typename_A>
@@ -141,7 +141,7 @@ namespace boost { namespace phoenix
             operator()(BOOST_PHOENIX_A_ref_a) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, BOOST_PHOENIX_a);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, BOOST_PHOENIX_a);
             }
 
 #endif

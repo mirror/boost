@@ -51,7 +51,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 &>::type
@@ -114,7 +114,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2 , a3};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2 , typename A3>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 & , A3 &>::type
@@ -177,7 +177,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2 , a3 , a4};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 & , A3 & , A4 &>::type
@@ -240,7 +240,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2 , a3 , a4 , a5};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 & , A3 & , A4 & , A5 &>::type
@@ -303,7 +303,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2 , a3 , a4 , a5 , a6};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 & , A3 & , A4 & , A5 & , A6 &>::type
@@ -366,7 +366,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 & , A3 & , A4 & , A5 & , A6 & , A7 &>::type
@@ -429,7 +429,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 & , A3 & , A4 & , A5 & , A6 & , A7 & , A8 &>::type
@@ -492,7 +492,7 @@
                 env_type;
             env_type env = {this, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
         typename result_of::actor<proto_base_expr, A0 & , A1 & , A2 & , A3 & , A4 & , A5 & , A6 & , A7 & , A8 & , A9 &>::type

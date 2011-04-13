@@ -8,10 +8,6 @@
 
 #ifndef BOOST_PHOENIX_HPP
 
-#ifdef BOOST_PHOENIX_USE_V2_OVER_V3
-#include <boost/spirit/home/phoenix.hpp>
-#else
 #include <boost/phoenix/phoenix.hpp>
-#endif
 
 #endif

@@ -14,11 +14,7 @@ using boost::phoenix::function;
 
 struct is_odd_ 
 {
-    template <typename Arg>
-    struct result 
-    { 
-        typedef bool type; 
-    };
+    typedef bool result_type;
 
     template <typename Arg>
     bool operator()(Arg arg1) const

@@ -17,7 +17,7 @@
 #include <boost/phoenix/stl/algorithm/detail/begin.hpp>
 #include <boost/phoenix/stl/algorithm/detail/end.hpp>
 
-#include <boost/phoenix/function/adapt_function.hpp>
+#include <boost/phoenix/function/adapt_callable.hpp>
 
 namespace boost { namespace phoenix {
     namespace impl
@@ -39,7 +39,7 @@ namespace boost { namespace phoenix {
             };
 
             template<class R, class F>
-            F operator()(R& r, F fn) const
+            F const & operator()(R& r, F const& fn) const
             {        
                 return std::for_each(detail::begin_(r), detail::end_(r), fn);
             }
@@ -88,9 +88,9 @@ namespace boost { namespace phoenix {
         };
     }
 
-    BOOST_PHOENIX_ADAPT_FUNCTION(for_each, impl::for_each, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(accumulate, impl::accumulate, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(accumulate, impl::accumulate, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(for_each, impl::for_each, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(accumulate, impl::accumulate, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(accumulate, impl::accumulate, 3)
 
 }}
 

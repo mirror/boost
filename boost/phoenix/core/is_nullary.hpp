@@ -89,8 +89,8 @@ namespace boost { namespace phoenix
                 is_nullary_trait;
 
             typedef
-                typename mpl::eval_if<
-                    proto::is_transform<is_nullary_trait>
+                typename mpl::eval_if_c<
+                    proto::is_transform<is_nullary_trait>::value
                   , defer_result<Expr, State, Data>
                   , is_nullary_trait
                 >::type
@@ -147,6 +147,28 @@ namespace boost { namespace phoenix
         struct is_nullary<custom_terminal<actor<T> > >
             : evaluator
         {};
+        
+        template <typename T>
+        struct is_nullary<custom_terminal<boost::reference_wrapper<actor<T> > > >
+        {
+            BOOST_PROTO_TRANSFORM(is_nullary<custom_terminal<boost::reference_wrapper<actor<T> > > >)
+            template <typename Expr, typename State, typename Data>
+            struct impl
+            {
+                typedef typename evaluator::template impl<actor<T>, State, Data>::result_type result_type;
+            };
+        };
+        
+        template <typename T>
+        struct is_nullary<custom_terminal<boost::reference_wrapper<actor<T> const> > >
+        {
+            BOOST_PROTO_TRANSFORM(is_nullary<custom_terminal<boost::reference_wrapper<actor<T> const> > >)
+            template <typename Expr, typename State, typename Data>
+            struct impl
+            {
+                typedef typename evaluator::template impl<actor<T>, State, Data>::result_type result_type;
+            };
+        };
     }
 
 }}

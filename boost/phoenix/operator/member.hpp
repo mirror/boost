@@ -61,16 +61,14 @@ BOOST_PHOENIX_DEFINE_EXPRESSION_VARARG(
 
 namespace boost { namespace phoenix
 {
-    BOOST_PHOENIX_BINARY_OPERATORS(
-        (mem_ptr)
-    )
+    BOOST_PHOENIX_BINARY_OPERATORS((mem_ptr))
 
     template <typename Object, typename MemPtr>
     inline
     typename enable_if<
         is_member_function_pointer<MemPtr>
       , detail::mem_fun_ptr_gen<actor<Object>, MemPtr> const
-      >::type
+    >::type
     operator->*(actor<Object> const& obj, MemPtr ptr)
     {
         return detail::mem_fun_ptr_gen<actor<Object>, MemPtr>(obj, ptr);

@@ -63,7 +63,7 @@
                 env_type;
             env_type env = {this, BOOST_PHOENIX_a};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
 
         template <BOOST_PHOENIX_typename_A>

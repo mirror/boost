@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="Chapter&#160;1.&#160;Phoenix 3.0">
-<link rel="next" href="phoenix/introduction.html" title="Introduction">
+<link rel="next" href="phoenix/what_s_new.html" title="What's New">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -17,7 +17,7 @@
 <td align="center"><a href="../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
-<div class="spirit-nav"><a accesskey="n" href="phoenix/introduction.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a></div>
+<div class="spirit-nav"><a accesskey="n" href="phoenix/what_s_new.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a></div>
 <div class="chapter">
 <div class="titlepage"><div>
 <div><h2 class="title">
@@ -33,7 +33,7 @@
 </h3></div></div>
 <div><p class="copyright">Copyright &#169; 2002-2005, 2010 Joel de Guzman, Dan Marsden, Thomas Heller</p></div>
 <div><div class="legalnotice">
-<a name="id624774"></a><p>
+<a name="id743217"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -42,6 +42,8 @@
 <div class="toc">
 <p><b>Table of Contents</b></p>
 <dl>
+<dt><span class="section"><a href="phoenix/what_s_new.html">What's New</a></span></dt>
+<dd><dl><dt><span class="section"><a href="phoenix/what_s_new/phoenix_3_0.html">Phoenix 3.0</a></span></dt></dl></dd>
 <dt><span class="section"><a href="phoenix/introduction.html">Introduction</a></span></dt>
 <dt><span class="section"><a href="phoenix/starter_kit.html">Starter Kit</a></span></dt>
 <dd><dl>
@@ -68,6 +70,8 @@
 <dt><span class="section"><a href="phoenix/modules/core/nothing.html">Nothing</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="phoenix/modules/function.html">Function</a></span></dt>
+<dd><dl><dt><span class="section"><a href="phoenix/modules/function/adapting_functions.html">Adapting
+        Functions</a></span></dt></dl></dd>
 <dt><span class="section"><a href="phoenix/modules/operator.html">Operator</a></span></dt>
 <dt><span class="section"><a href="phoenix/modules/statement.html">Statement</a></span></dt>
 <dd><dl>
@@ -99,6 +103,8 @@
 </dl></dd>
 <dt><span class="section"><a href="phoenix/modules/bind.html">Bind</a></span></dt>
 <dd><dl>
+<dt><span class="section"><a href="phoenix/modules/bind/binding_function_objects.html">Binding
+        Function Objects</a></span></dt>
 <dt><span class="section"><a href="phoenix/modules/bind/binding_functions.html">Binding Functions</a></span></dt>
 <dt><span class="section"><a href="phoenix/modules/bind/binding_member_functions.html">Binding
         Member Functions</a></span></dt>
@@ -117,12 +123,8 @@
 <dd><dl>
 <dt><span class="section"><a href="phoenix/inside/actor.html">Actors in Detail</a></span></dt>
 <dt><span class="section"><a href="phoenix/inside/expression.html">Phoenix Expressions</a></span></dt>
-<dd><dl>
-<dt><span class="section"><a href="phoenix/inside/expression/boost_phoenix_define_expression.html">BOOST_PHOENIX_DEFINE_EXPRESSION</a></span></dt>
-<dt><span class="section"><a href="phoenix/inside/expression/boost_phoenix_define_expression_vararg.html">BOOST_PHOENIX_DEFINE_EXPRESSION_VARARG</a></span></dt>
-<dt><span class="section"><a href="phoenix/inside/expression/boost_phoenix_define_expression_ext.html">BOOST_PHOENIX_DEFINE_EXPRESSION_EXT</a></span></dt>
-<dt><span class="section"><a href="phoenix/inside/expression/boost_phoenix_define_expression_ext_vararg.html">BOOST_PHOENIX_DEFINE_EXPRESSION_EXT_VARARG</a></span></dt>
-</dl></dd>
+<dd><dl><dt><span class="section"><a href="phoenix/inside/expression/boilerplate_macros.html">Boilerplate
+        Macros</a></span></dt></dl></dd>
 <dt><span class="section"><a href="phoenix/inside/actions.html">More on Actions</a></span></dt>
 <dt><span class="section"><a href="phoenix/inside/rules.html">Predefined Expressions and Rules</a></span></dt>
 <dt><span class="section"><a href="phoenix/inside/custom_terminals.html">Custom Terminals</a></span></dt>
@@ -141,7 +143,7 @@
 </dl>
 </div>
 <a name="phoenix.preface"></a><h2>
-<a name="id655465"></a>
+<a name="id773908"></a>
     <a class="link" href="index.html#phoenix.preface">Preface</a>
   </h2>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -160,7 +162,7 @@
     <span class="inlinemediaobject"><img src="images/lambda_cpp.png" alt="lambda_cpp"></span>
   </p>
 <a name="phoenix.description"></a><h3>
-<a name="id623578"></a>
+<a name="id742020"></a>
     <a class="link" href="index.html#phoenix.description">Description</a>
   </h3>
 <p>
@@ -178,7 +180,7 @@
     library is organized in highly independent modules and layers.
   </p>
 <a name="phoenix.how_to_use_this_manual"></a><h3>
-<a name="id623625"></a>
+<a name="id742068"></a>
     <a class="link" href="index.html#phoenix.how_to_use_this_manual">How to use this manual</a>
   </h3>
 <p>
@@ -200,7 +202,7 @@
     icons precede some text to indicate:
   </p>
 <div class="table">
-<a name="id623656"></a><p class="title"><b>Table&#160;1.1.&#160;Icons</b></p>
+<a name="id742099"></a><p class="title"><b>Table&#160;1.1.&#160;Icons</b></p>
 <div class="table-contents"><table class="table" summary="Icons">
 <colgroup>
 <col>
@@ -289,15 +291,15 @@
   </p>
 </div>
 <a name="phoenix._emphasis_role__bold___emphasis____to_joel_s_dear_daughter__phoenix__emphasis___emphasis_"></a><h3>
-<a name="id664422"></a>
+<a name="id782864"></a>
     <a class="link" href="index.html#phoenix._emphasis_role__bold___emphasis____to_joel_s_dear_daughter__phoenix__emphasis___emphasis_"><span class="bold"><strong><span class="emphasis"><em>...To Joel's dear daughter, Phoenix</em></span></strong></span></a>
   </h3>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: March 21, 2011 at 10:12:42 GMT</small></p></td>
+<td align="left"><p><small>Last revised: April 13, 2011 at 19:05:27 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
-<div class="spirit-nav"><a accesskey="n" href="phoenix/introduction.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a></div>
+<div class="spirit-nav"><a accesskey="n" href="phoenix/what_s_new.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a></div>
 </body>
 </html>

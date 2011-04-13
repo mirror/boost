@@ -23,7 +23,7 @@
 #include <boost/phoenix/stl/algorithm/detail/end.hpp>
 #include <boost/phoenix/stl/algorithm/detail/decay_array.hpp>
 
-#include <boost/phoenix/function/adapt_function.hpp>
+#include <boost/phoenix/function/adapt_callable.hpp>
 
 #include <boost/range/result_iterator.hpp>
 #include <boost/range/difference_type.hpp>
@@ -618,39 +618,39 @@ namespace boost { namespace phoenix {
 
     }
 
-    BOOST_PHOENIX_ADAPT_FUNCTION(find, impl::find, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(find_if, impl::find_if, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(find_end, impl::find_end, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(find_end, impl::find_end, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(find_first_of, impl::find_first_of, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(find_first_of, impl::find_first_of, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(adjacent_find, impl::adjacent_find, 1)
-    BOOST_PHOENIX_ADAPT_FUNCTION(adjacent_find, impl::adjacent_find, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(count, impl::count, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(count_if, impl::count_if, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(distance, impl::distance, 1)
-    BOOST_PHOENIX_ADAPT_FUNCTION(equal, impl::equal, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(equal, impl::equal, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(search, impl::search, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(search, impl::search, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(lower_bound, impl::lower_bound, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(lower_bound, impl::lower_bound, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(upper_bound, impl::upper_bound, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(upper_bound, impl::upper_bound, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(equal_range, impl::equal_range, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(equal_range, impl::equal_range, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(mismatch, impl::mismatch, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(mismatch, impl::mismatch, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(binary_search, impl::binary_search, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(binary_search, impl::binary_search, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(includes, impl::includes, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(includes, impl::includes, 3)
-    BOOST_PHOENIX_ADAPT_FUNCTION(min_element, impl::min_element, 1)
-    BOOST_PHOENIX_ADAPT_FUNCTION(min_element, impl::min_element, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(max_element, impl::max_element, 1)
-    BOOST_PHOENIX_ADAPT_FUNCTION(max_element, impl::max_element, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(lexicographical_compare, impl::lexicographical_compare, 2)
-    BOOST_PHOENIX_ADAPT_FUNCTION(lexicographical_compare, impl::lexicographical_compare, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(find, impl::find, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(find_if, impl::find_if, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(find_end, impl::find_end, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(find_end, impl::find_end, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(find_first_of, impl::find_first_of, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(find_first_of, impl::find_first_of, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(adjacent_find, impl::adjacent_find, 1)
+    BOOST_PHOENIX_ADAPT_CALLABLE(adjacent_find, impl::adjacent_find, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(count, impl::count, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(count_if, impl::count_if, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(distance, impl::distance, 1)
+    BOOST_PHOENIX_ADAPT_CALLABLE(equal, impl::equal, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(equal, impl::equal, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(search, impl::search, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(search, impl::search, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(lower_bound, impl::lower_bound, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(lower_bound, impl::lower_bound, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(upper_bound, impl::upper_bound, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(upper_bound, impl::upper_bound, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(equal_range, impl::equal_range, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(equal_range, impl::equal_range, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(mismatch, impl::mismatch, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(mismatch, impl::mismatch, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(binary_search, impl::binary_search, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(binary_search, impl::binary_search, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(includes, impl::includes, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(includes, impl::includes, 3)
+    BOOST_PHOENIX_ADAPT_CALLABLE(min_element, impl::min_element, 1)
+    BOOST_PHOENIX_ADAPT_CALLABLE(min_element, impl::min_element, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(max_element, impl::max_element, 1)
+    BOOST_PHOENIX_ADAPT_CALLABLE(max_element, impl::max_element, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(lexicographical_compare, impl::lexicographical_compare, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(lexicographical_compare, impl::lexicographical_compare, 3)
 
 }}
 

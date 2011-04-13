@@ -10,6 +10,8 @@
 #include <boost/phoenix/operator.hpp>
 #include <boost/phoenix/scope.hpp>
 
+#include <iostream>
+
 template <typename T0>
 void f(T0 t)
 {

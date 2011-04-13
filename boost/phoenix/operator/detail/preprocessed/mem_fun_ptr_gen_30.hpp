@@ -21,7 +21,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr>
             struct mem_fun_ptr_gen<Object, MemPtr>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      boost::phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr>
@@ -36,7 +36,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0>
             struct mem_fun_ptr_gen<Object, MemPtr, A0>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -52,7 +52,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -68,7 +68,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -84,7 +84,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -100,7 +100,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -116,7 +116,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -132,7 +132,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -148,7 +148,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -164,7 +164,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -180,7 +180,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -196,7 +196,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -212,7 +212,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -228,7 +228,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -244,7 +244,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -260,7 +260,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -276,7 +276,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -292,7 +292,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -308,7 +308,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -324,7 +324,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -340,7 +340,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -356,7 +356,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -372,7 +372,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -388,7 +388,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -404,7 +404,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -420,7 +420,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -436,7 +436,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -452,7 +452,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25 , typename A26>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -468,7 +468,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25 , typename A26 , typename A27>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -484,7 +484,7 @@ namespace boost { namespace phoenix
             template <typename Object, typename MemPtr, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25 , typename A26 , typename A27 , typename A28>
             struct mem_fun_ptr_gen<Object, MemPtr, A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28>
                 : proto::result_of::make_expr<
-                      tag::mem_fun_ptr
+                      phoenix::tag::mem_fun_ptr
                     , phoenix_domain
                     , Object
                     , MemPtr
@@ -502,7 +502,7 @@ namespace boost { namespace phoenix
             operator()() const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr);
             }
     
     
@@ -520,7 +520,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0);
             }
             template <typename A0>
             typename result_of::mem_fun_ptr_gen<
@@ -531,7 +531,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0);
             }
     
     
@@ -549,7 +549,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1);
             }
             template <typename A0 , typename A1>
             typename result_of::mem_fun_ptr_gen<
@@ -560,7 +560,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1);
             }
     
     
@@ -578,7 +578,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2);
             }
             template <typename A0 , typename A1 , typename A2>
             typename result_of::mem_fun_ptr_gen<
@@ -589,7 +589,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2);
             }
     
     
@@ -607,7 +607,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3>
             typename result_of::mem_fun_ptr_gen<
@@ -618,7 +618,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3);
             }
     
     
@@ -636,7 +636,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
             typename result_of::mem_fun_ptr_gen<
@@ -647,7 +647,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4);
             }
     
     
@@ -665,7 +665,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
             typename result_of::mem_fun_ptr_gen<
@@ -676,7 +676,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5);
             }
     
     
@@ -694,7 +694,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
             typename result_of::mem_fun_ptr_gen<
@@ -705,7 +705,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6);
             }
     
     
@@ -723,7 +723,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
             typename result_of::mem_fun_ptr_gen<
@@ -734,7 +734,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
             }
     
     
@@ -752,7 +752,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
             typename result_of::mem_fun_ptr_gen<
@@ -763,7 +763,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
             }
     
     
@@ -781,7 +781,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
             typename result_of::mem_fun_ptr_gen<
@@ -792,7 +792,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
             }
     
     
@@ -810,7 +810,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10>
             typename result_of::mem_fun_ptr_gen<
@@ -821,7 +821,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10);
             }
     
     
@@ -839,7 +839,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11>
             typename result_of::mem_fun_ptr_gen<
@@ -850,7 +850,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11);
             }
     
     
@@ -868,7 +868,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12>
             typename result_of::mem_fun_ptr_gen<
@@ -879,7 +879,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12);
             }
     
     
@@ -897,7 +897,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13>
             typename result_of::mem_fun_ptr_gen<
@@ -908,7 +908,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13);
             }
     
     
@@ -926,7 +926,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14>
             typename result_of::mem_fun_ptr_gen<
@@ -937,7 +937,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14);
             }
     
     
@@ -955,7 +955,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15>
             typename result_of::mem_fun_ptr_gen<
@@ -966,7 +966,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15);
             }
     
     
@@ -984,7 +984,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16>
             typename result_of::mem_fun_ptr_gen<
@@ -995,7 +995,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16);
             }
     
     
@@ -1013,7 +1013,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17>
             typename result_of::mem_fun_ptr_gen<
@@ -1024,7 +1024,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17);
             }
     
     
@@ -1042,7 +1042,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18>
             typename result_of::mem_fun_ptr_gen<
@@ -1053,7 +1053,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18);
             }
     
     
@@ -1071,7 +1071,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19>
             typename result_of::mem_fun_ptr_gen<
@@ -1082,7 +1082,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19);
             }
     
     
@@ -1100,7 +1100,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20>
             typename result_of::mem_fun_ptr_gen<
@@ -1111,7 +1111,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20);
             }
     
     
@@ -1129,7 +1129,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21>
             typename result_of::mem_fun_ptr_gen<
@@ -1140,7 +1140,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21);
             }
     
     
@@ -1158,7 +1158,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21 , A22 const& a22) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22>
             typename result_of::mem_fun_ptr_gen<
@@ -1169,7 +1169,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21 , A22 & a22) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22);
             }
     
     
@@ -1187,7 +1187,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21 , A22 const& a22 , A23 const& a23) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23>
             typename result_of::mem_fun_ptr_gen<
@@ -1198,7 +1198,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21 , A22 & a22 , A23 & a23) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23);
             }
     
     
@@ -1216,7 +1216,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21 , A22 const& a22 , A23 const& a23 , A24 const& a24) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24>
             typename result_of::mem_fun_ptr_gen<
@@ -1227,7 +1227,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21 , A22 & a22 , A23 & a23 , A24 & a24) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24);
             }
     
     
@@ -1245,7 +1245,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21 , A22 const& a22 , A23 const& a23 , A24 const& a24 , A25 const& a25) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25>
             typename result_of::mem_fun_ptr_gen<
@@ -1256,7 +1256,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21 , A22 & a22 , A23 & a23 , A24 & a24 , A25 & a25) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25);
             }
     
     
@@ -1274,7 +1274,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21 , A22 const& a22 , A23 const& a23 , A24 const& a24 , A25 const& a25 , A26 const& a26) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25 , typename A26>
             typename result_of::mem_fun_ptr_gen<
@@ -1285,7 +1285,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21 , A22 & a22 , A23 & a23 , A24 & a24 , A25 & a25 , A26 & a26) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26);
             }
     
     
@@ -1303,7 +1303,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21 , A22 const& a22 , A23 const& a23 , A24 const& a24 , A25 const& a25 , A26 const& a26 , A27 const& a27) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25 , typename A26 , typename A27>
             typename result_of::mem_fun_ptr_gen<
@@ -1314,7 +1314,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21 , A22 & a22 , A23 & a23 , A24 & a24 , A25 & a25 , A26 & a26 , A27 & a27) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27);
             }
     
     
@@ -1332,7 +1332,7 @@ namespace boost { namespace phoenix
             operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9 , A10 const& a10 , A11 const& a11 , A12 const& a12 , A13 const& a13 , A14 const& a14 , A15 const& a15 , A16 const& a16 , A17 const& a17 , A18 const& a18 , A19 const& a19 , A20 const& a20 , A21 const& a21 , A22 const& a22 , A23 const& a23 , A24 const& a24 , A25 const& a25 , A26 const& a26 , A27 const& a27 , A28 const& a28) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27 , a28);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27 , a28);
             }
             template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9 , typename A10 , typename A11 , typename A12 , typename A13 , typename A14 , typename A15 , typename A16 , typename A17 , typename A18 , typename A19 , typename A20 , typename A21 , typename A22 , typename A23 , typename A24 , typename A25 , typename A26 , typename A27 , typename A28>
             typename result_of::mem_fun_ptr_gen<
@@ -1343,7 +1343,7 @@ namespace boost { namespace phoenix
             operator()(A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9 , A10 & a10 , A11 & a11 , A12 & a12 , A13 & a13 , A14 & a14 , A15 & a15 , A16 & a16 , A17 & a17 , A18 & a18 , A19 & a19 , A20 & a20 , A21 & a21 , A22 & a22 , A23 & a23 , A24 & a24 , A25 & a25 , A26 & a26 , A27 & a27 , A28 & a28) const
             {
                 return proto::make_expr<
-                    tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27 , a28);
+                    phoenix::tag::mem_fun_ptr, phoenix_domain>(obj, ptr, a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9 , a10 , a11 , a12 , a13 , a14 , a15 , a16 , a17 , a18 , a19 , a20 , a21 , a22 , a23 , a24 , a25 , a26 , a27 , a28);
             }
             Object const& obj;
             MemPtr ptr;
