@@ -78,7 +78,6 @@ void member_function_test()
     
     std::cout << typeid(typename boost::result_of<X::f0()>::type).name() << "\n";
 
-    /*
     bind(&X::f0, &x)();
     bind(&X::f0, ref(x))();
 
@@ -159,7 +158,6 @@ void member_function_test()
     bind(&X::g8, ref(x), 1, 2, 3, 4, 5, 6, 7, 8)();
 
     BOOST_TEST( x.hash == 23558 );
-    */
 }
 
 int main()

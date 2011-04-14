@@ -16,17 +16,30 @@ functor somewhere offline, detached from the call site. If you wish to transform
 plain function, member function or member variable to a lambda expression, `bind`
 is your friend.
 
-[note Take note that binders are monomorphic. Rather than binding
-functions, the preferred way is to write true generic and polymorphic [link
-phoenix.modules.function lazy functions]. However, since most of the time we
-are dealing with adaptation of existing code, binders get the job done faster.]
+[note Take note that binding functions, member functions or member variables is
+monomorphic. Rather than binding functions, the preferred way is to write true
+generic and polymorphic [link phoenix.modules.function lazy functions].]
 
 There is a set of overloaded `bind` template functions. Each `bind(x)`
 function generates a suitable binder object.
 
+[section Binding Function Objects]
+
+    #include <boost/phoenix/bind/bind_function_object.hpp>
+
+Binding function objects serves two purposes:
+* Partial function application
+* Quick adaption of already existing function objects
+
+In order to deduce the return type of the function object, it has to implement
+the __boost_result_of__ protocol. If the bound function object is polymorphic,
+the resulting binding object is polymorphic.
+
+[endsect]
+
 [section Binding Functions]
 
-    #include <boost/phoenix/bind/bind.hpp>
+    #include <boost/phoenix/bind/bind_function.hpp>
 
 Example, given a function `foo`:
 
@@ -50,7 +63,7 @@ will print out "4".
 [endsect]
 [section Binding Member Functions]
 
-    #include <boost/phoenix/bind/bind.hpp>
+    #include <boost/phoenix/bind/bind_member_function.hpp>
 
 Binding member functions can be done similarly. A bound member function takes in
 a pointer or reference to an object as the first argument. For instance, given:
@@ -76,7 +89,7 @@ the arguments can be lazily bound. Examples:
 [endsect]
 [section Binding Member Variables]
 
-    #include <boost/phoenix/bind/bind.hpp>
+    #include <boost/phoenix/bind/bind_member_variable.hpp>
 
 Member variables can also be bound much like member functions. Member variables
 are not functions. Yet, like the [link phoenix.modules.core.references `ref(x)`] that

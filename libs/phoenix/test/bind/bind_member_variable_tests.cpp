@@ -95,9 +95,7 @@ struct add_const_pointer
 int
 main()
 {
-    //write_test<test::x>(identity());
     write_test<test::x>(add_pointer());
-    //write_test<test::xx>(identity());
     write_test<test::xx>(add_pointer());
 
     read_test<test::x>(identity());

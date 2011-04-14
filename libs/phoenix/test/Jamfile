@@ -35,12 +35,15 @@ test-suite phoenix_object :
     ;
 
 test-suite phoenix_function :
+    [ run function/adapt_function.cpp ] 
     [ run function/function_tests.cpp ] 
+#    [ run function/function_tests_phx2.cpp ] 
     ;
 
 test-suite phoenix_bind :
     [ run bind/bind_function_tests.cpp ] 
     [ run bind/bind_function_object_tests.cpp ]
+#    [ run bind/bind_function_object_tests_phx2.cpp ]
     [ run bind/bind_member_function_tests.cpp ]
     [ run bind/bind_member_variable_tests.cpp ]
     ;
@@ -69,6 +72,7 @@ test-suite phoenix_container :
 
 test-suite phoenix_scope :
     [ run scope/lambda_tests.cpp ] 
+#    [ run scope/lambda_tests_phx2.cpp ] 
     [ run scope/let_tests.cpp ] 
     [ run scope/dynamic_tests.cpp ] 
     [ run scope/bug3289.cpp ]
@@ -122,7 +126,7 @@ test-suite phoenix_include :
     [ run include/scope.cpp ]
     [ run include/statement.cpp ]
     [ run include/stl.cpp ]
-    [ run include/bind/bind.cpp : : : : bind_bind ]
+#    [ run include/bind/bind.cpp : : : : bind_bind ]
     [ run include/version.cpp ]
     [ run include/core/actor.cpp ]
     [ run include/core/argument.cpp ]

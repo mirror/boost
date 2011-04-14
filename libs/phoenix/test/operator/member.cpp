@@ -43,11 +43,15 @@ int main()
     Test* ptr = &test;
 
     BOOST_TEST((val(ptr)->*&Test::value)() == 1);
-    //BOOST_TEST((val(cptr)->*&Test::value)() == 1);
-    //BOOST_TEST((arg1->*&Test::value)(cptr) == 1);
+    /*
+    BOOST_TEST((val(cptr)->*&Test::value)() == 1);
+    BOOST_TEST((arg1->*&Test::value)(cptr) == 1);
+    */
 
-    //((val(ptr)->*&Test::value) = 2)();
-    //BOOST_TEST(test.value == 2);
+    /*
+    ((val(ptr)->*&Test::value) = 2)();
+    BOOST_TEST(test.value == 2);
+    */
 
 
     BOOST_TEST((val(ptr)->*&Test::func)(3)() == 3);
@@ -89,5 +93,5 @@ int main()
     //BOOST_TEST((arg1->*&Test::value)(captr) == 2);
     BOOST_TEST((arg1->*&Test::func)(11)(captr) == 11);
 
-    return 0;
+    return boost::report_errors();
 }
