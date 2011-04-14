@@ -24,7 +24,7 @@ int main() {
   local_date_time ny_time(date(2004, Aug, 30), hours(10), nyc, true);
   
   typedef boost::date_time::time_facet<local_date_time, char> ldt_facet;
-  ldt_facet* timefacet = new ldt_facet("%Y-%b-%d %H:%M:%S%F %Z");
+  ldt_facet* timefacet = new ldt_facet("%Y-%b-%d %H:%M:%S""%F %Z");
   std::locale loc(std::locale::classic(), timefacet);
   
   std::cout << ny_time << std::endl;

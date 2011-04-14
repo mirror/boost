@@ -165,7 +165,7 @@ int main() {
       //reset the sign to always print
       time_facet* f = new time_facet();
       ss.imbue(std::locale(ss.getloc(), f));
-      f->time_duration_format("%+%H:%M:%S%F");
+      f->time_duration_format("%+%H:%M:%S""%F");
 
       ss.str("");
       ss << td4 - td3;
@@ -348,20 +348,20 @@ int main() {
     }
 
     {
-      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S%F");
-      teststreaming("widestream custom time no frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", t, 
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S" L"%F");
+      teststreaming("widestream custom time no frac seconds %F operator: %Y-%b-%d %H:%M:%S""%F", t, 
                     std::wstring(L"2004-Oct-13 18:01:56"), 
                     std::locale(std::locale::classic(), wtimefacet));
     }
 
     {
-      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S%F");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S" L"%F");
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
-      teststreaming("widestream custom time with frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tf, 
+      teststreaming("widestream custom time with frac seconds %F operator: %Y-%b-%d %H:%M:%S""%F", tf, 
                     std::wstring(L"2004-Oct-13 18:01:56.000003000"), 
                     std::locale(std::locale::classic(), wtimefacet));
 #else
-      teststreaming("widestream custom time with frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tf, 
+      teststreaming("widestream custom time with frac seconds %F operator: %Y-%b-%d %H:%M:%S""%F", tf, 
                     std::wstring(L"2004-Oct-13 18:01:56.000003"), 
                     std::locale(std::locale::classic(), wtimefacet));
 #endif // BOOST_DATE_TIME_HAS_NANOSECONDS
@@ -395,13 +395,13 @@ int main() {
 
 
     {
-      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S%F");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S" L"%F");
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
-      teststreaming("widestream time period frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tp, 
+      teststreaming("widestream time period frac seconds %F operator: %Y-%b-%d %H:%M:%S""%F", tp, 
                     std::wstring(L"[2004-Oct-13 18:01:56/2004-Oct-20 19:02:57.000002999]"), 
                     std::locale(std::locale::classic(), wtimefacet));
 #else
-      teststreaming("widestream time period frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tp, 
+      teststreaming("widestream time period frac seconds %F operator: %Y-%b-%d %H:%M:%S""%F", tp, 
                     std::wstring(L"[2004-Oct-13 18:01:56/2004-Oct-20 19:02:57.000002]"), 
                     std::locale(std::locale::classic(), wtimefacet));
 #endif // BOOST_DATE_TIME_HAS_NANOSECONDS
