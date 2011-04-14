@@ -208,4 +208,16 @@ void test(const wchar_t& c, const test_invalid_regex_tag& tag)
 }
 #endif
 
+#ifdef BOOST_NO_EXCETIONS
+namespace boost{
+
+void throw_exception( std::exception const & e )
+{
+   std::cerr << e.what() << std::endl;
+   std::exit(1);
+}
+
+}
+#endif
+
 #include <boost/test/included/prg_exec_monitor.hpp>
