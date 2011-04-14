@@ -43,7 +43,7 @@
                 >::type::type &                                                 \
             )                                                                   \
             {                                                                   \
-                eval(proto::child_c<1>(BOOST_PP_CAT(a, N)), ctx);               \
+                boost::phoenix::eval(proto::child_c<1>(BOOST_PP_CAT(a, N)), ctx);               \
             }                                                                   \
     /**/
 
@@ -75,7 +75,7 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
             BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, BOOST_PHOENIX_TRY_CATCH_EVAL_R, _)
         }
@@ -92,7 +92,7 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
             BOOST_PP_REPEAT(
                 BOOST_PP_DEC(BOOST_PHOENIX_ITERATION)
@@ -100,7 +100,7 @@
             )
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         BOOST_PP_CAT(a, BOOST_PP_DEC(BOOST_PHOENIX_ITERATION))
                     )

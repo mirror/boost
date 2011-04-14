@@ -159,10 +159,10 @@ namespace boost { namespace phoenix {
                     >::type
                     case_label;
 
-                switch(eval(cond, ctx))
+                switch(boost::phoenix::eval(cond, ctx))
                 {
                     case case_label::value:
-                        eval(proto::child_c<1>(cases), ctx);
+                        boost::phoenix::eval(proto::child_c<1>(cases), ctx);
                 }
             }
             
@@ -176,10 +176,10 @@ namespace boost { namespace phoenix {
               , mpl::true_
             ) const
             {
-                switch(eval(cond, ctx))
+                switch(boost::phoenix::eval(cond, ctx))
                 {
                     default:
-                        eval(proto::child_c<0>(cases), ctx);
+                        boost::phoenix::eval(proto::child_c<0>(cases), ctx);
                 }
             }
 

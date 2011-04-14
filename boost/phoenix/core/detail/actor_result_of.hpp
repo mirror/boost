@@ -44,7 +44,7 @@
         struct nullary_actor_result
         {
             typedef
-                typename evaluator::impl<
+                typename boost::phoenix::evaluator::impl<
                     Expr const&
                   , vector2<
                         vector1<const ::boost::phoenix::actor<Expr> *> &

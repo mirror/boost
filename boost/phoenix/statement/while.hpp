@@ -29,9 +29,9 @@ namespace boost { namespace phoenix
         result_type
         operator()(Cond const& cond, Do const& do_, Context & ctx) const
         {
-            while(eval(cond, ctx))
+            while(boost::phoenix::eval(cond, ctx))
             {
-                eval(do_, ctx);
+                boost::phoenix::eval(do_, ctx);
             }
         }
     };

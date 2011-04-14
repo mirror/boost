@@ -58,8 +58,8 @@ namespace boost { namespace phoenix
         result_type
         operator()(Cond const & cond, Then const & then, Context & ctx) const
         {
-            if(eval(cond, ctx))
-                eval(then, ctx);
+            if(boost::phoenix::eval(cond, ctx))
+                boost::phoenix::eval(then, ctx);
         }
         
         template<typename Cond, typename Then, typename Else, typename Context>
@@ -71,10 +71,10 @@ namespace boost { namespace phoenix
             , Context const & ctx
         ) const
         {
-            if(eval(cond, ctx))
-                eval(then, ctx);
+            if(boost::phoenix::eval(cond, ctx))
+                boost::phoenix::eval(then, ctx);
             else
-                eval(else_, ctx);
+                boost::phoenix::eval(else_, ctx);
         }
     };
     

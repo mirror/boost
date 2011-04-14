@@ -63,7 +63,7 @@ namespace boost { namespace phoenix
         typename result<custom_terminal(actor<Expr> const &, Context &)>::type
         operator()(actor<Expr> const & expr, Context & ctx) const
         {
-            return eval(expr, ctx);
+            return boost::phoenix::eval(expr, ctx);
         }
     };
 

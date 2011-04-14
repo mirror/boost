@@ -30,8 +30,8 @@ namespace boost { namespace phoenix
         operator()(Cond const& cond, Do const& do_, Context & ctx) const
         {
             do
-                eval(do_, ctx);
-            while (eval(cond, ctx));
+                boost::phoenix::eval(do_, ctx);
+            while (boost::phoenix::eval(cond, ctx));
         }
     };
     
