@@ -75,7 +75,7 @@ namespace boost { namespace phoenix
                         >
                       , proto::otherwise<test(proto::_, proto::_state)>
                     >
-                  , test()
+                  , proto::call<phoenix::detail::test()>
                 >
             >
         {};
