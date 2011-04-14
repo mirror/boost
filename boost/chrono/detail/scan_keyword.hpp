@@ -30,7 +30,7 @@ namespace boost {
 namespace chrono {
 namespace chrono_detail {
 
-void free_aux(void* ptr) { free(ptr); }    
+inline void free_aux(void* ptr) { free(ptr); }
 
 // scan_keyword
 // Scans [b, e) until a match is found in the basic_strings range
