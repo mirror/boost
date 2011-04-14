@@ -120,11 +120,11 @@ namespace boost { namespace phoenix
     struct actor
     {
         typedef typename
-            mpl::eval_if<
+            mpl::eval_if_c<
                 mpl::or_<
                     is_custom_terminal<Expr>
                   , mpl::bool_<is_placeholder<Expr>::value>
-                >
+                >::value
               , proto::terminal<Expr>
               , mpl::identity<Expr>
             >::type

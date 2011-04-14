@@ -54,7 +54,7 @@ namespace boost { namespace phoenix
                 proto::when<
                     proto::comma<
                         switch_case_is_nullary
-                      , proto::or_<rule::switch_default_case, rule::switch_case>
+                      , proto::or_<phoenix::rule::switch_default_case, phoenix::rule::switch_case>
                     >
                   , mpl::and_<
                         switch_case_is_nullary(
@@ -68,7 +68,7 @@ namespace boost { namespace phoenix
                     >()
                 >
               , proto::when<
-                    proto::or_<rule::switch_default_case, rule::switch_case>
+                    proto::or_<phoenix::rule::switch_default_case, phoenix::rule::switch_case>
                   , evaluator(proto::_child_c<0>, proto::_state)
                 >
             >
@@ -76,15 +76,15 @@ namespace boost { namespace phoenix
 
         struct switch_case_grammar
             : proto::or_<
-                proto::comma<switch_case_grammar, rule::switch_case>
-              , proto::when<rule::switch_case, proto::_>
+                proto::comma<switch_case_grammar, phoenix::rule::switch_case>
+              , proto::when<phoenix::rule::switch_case, proto::_>
             >
         {};
 
         struct switch_case_with_default_grammar
             : proto::or_<
-                proto::comma<switch_case_grammar, rule::switch_default_case>
-              , proto::when<rule::switch_default_case, proto::_>
+                proto::comma<switch_case_grammar, phoenix::rule::switch_default_case>
+              , proto::when<phoenix::rule::switch_default_case, proto::_>
             >
         {};
 

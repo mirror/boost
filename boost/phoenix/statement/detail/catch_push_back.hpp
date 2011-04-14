@@ -62,14 +62,14 @@
         {
             typedef
                 typename proto::result_of::make_expr<
-                    tag::catch_
+                    phoenix::tag::catch_
                   , default_domain_with_basic_expr
                   , catch_exception<Exception>
                   , Expr
                 >::type
                 catch_expr;
 
-            typedef expression::try_catch<
+            typedef phoenix::expression::try_catch<
                 BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, BOOST_PHOENIX_CATCH_PUSH_BACK_R0, _)
               , catch_expr> gen_type;
             typedef typename gen_type::type type;
@@ -88,7 +88,7 @@
                           , _
                         )
                       , proto::make_expr<
-                            tag::catch_
+                            phoenix::tag::catch_
                           , default_domain_with_basic_expr
                         >(catch_exception<Exception>(), catch_)
                     );
@@ -100,13 +100,13 @@
         {
             typedef
                 typename proto::result_of::make_expr<
-                    tag::catch_all
+                    phoenix::tag::catch_all
                   , default_domain_with_basic_expr
                   , Expr
                 >::type
                 catch_expr;
 
-            typedef expression::try_catch<
+            typedef phoenix::expression::try_catch<
                 BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, BOOST_PHOENIX_CATCH_PUSH_BACK_R0, _)
               , catch_expr> gen_type;
             typedef typename gen_type::type type;
@@ -125,7 +125,7 @@
                           , _
                         )
                       , proto::make_expr<
-                            tag::catch_all
+                            phoenix::tag::catch_all
                           , default_domain_with_basic_expr
                         >(catch_)
                     );

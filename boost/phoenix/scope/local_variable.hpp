@@ -20,7 +20,6 @@
 
 namespace boost { namespace phoenix
 {
-
     namespace detail
     {
         template <typename Key>
@@ -70,7 +69,6 @@ namespace boost { namespace phoenix
         template <typename Map, typename Context>
         struct local_var_def_is_nullary;
 
-
         struct local_var_def_eval;
             
         #include <boost/phoenix/scope/detail/local_var_def.hpp>
@@ -84,12 +82,12 @@ namespace boost { namespace phoenix
         };
 
         template <typename Dummy>
-        struct scope_is_nullary_actions::when<rule::custom_terminal, Dummy>
+        struct scope_is_nullary_actions::when<boost::phoenix::rule::custom_terminal, Dummy>
             : proto::or_<
-                proto::when<rule::local_variable, mpl::true_()>
+                proto::when<boost::phoenix::rule::local_variable, mpl::true_()>
               , proto::otherwise<
                     boost::phoenix::result_of::is_nullary<
-                        custom_terminal<proto::_value>
+                        boost::phoenix::custom_terminal<proto::_value>
                     >()
                 >
             >

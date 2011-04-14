@@ -72,12 +72,12 @@ namespace boost { namespace phoenix
         {                                                                       \
             typedef                                                             \
                 typename fusion::result_of::INTRINSIC<                          \
-                    typename mpl::eval_if<                                      \
+                    typename mpl::eval_if_c<                                    \
                         is_const<                                               \
                             typename remove_reference<                          \
                                 typename Seq::env_type                          \
                             >::type                                             \
-                        >                                                       \
+                        >::value                                                \
                       , add_const<                                              \
                             typename proto::detail::uncvref<                    \
                                 typename Seq::env_type                          \
@@ -106,12 +106,12 @@ namespace boost { namespace phoenix
         {
             typedef
                 typename fusion::result_of::value_at<
-                    typename mpl::eval_if<
+                    typename mpl::eval_if_c<
                         is_const<
                             typename remove_reference<
                                 typename Seq::env_type
                             >::type
-                        >
+                        >::value
                       , add_const<
                             typename proto::detail::uncvref<
                                 typename Seq::env_type
@@ -131,12 +131,12 @@ namespace boost { namespace phoenix
         {
             typedef
                 typename fusion::result_of::at<
-                    typename mpl::eval_if<
+                    typename mpl::eval_if_c<
                         is_const<
                             typename remove_reference<
                                 typename Seq::env_type
                             >::type
-                        >
+                        >::value
                       , add_const<
                             typename proto::detail::uncvref<
                                 typename Seq::env_type

@@ -21,7 +21,6 @@
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/enum_params.hpp>
 #include <boost/preprocessor/repeat_from_to.hpp>
-#include <iostream>
 
 #define BOOST_PHOENIX_DEFINE_EXPRESSION(NAME_SEQ, SEQ)                          \
     BOOST_PHOENIX_DEFINE_EXPRESSION_BASE(                                       \
@@ -84,8 +83,9 @@ BOOST_PP_SEQ_FOR_EACH(                                                          
     namespace tag                                                               \
     {                                                                           \
         struct BOOST_PP_SEQ_HEAD(BOOST_PP_SEQ_REVERSE(NAME_SEQ)) {};            \
-        inline std::ostream &operator<<(                                        \
-            std::ostream & os                                                   \
+        template <typename Ostream>                                             \
+        inline Ostream &operator<<(                                             \
+            Ostream & os                                                        \
           , BOOST_PP_SEQ_HEAD(BOOST_PP_SEQ_REVERSE(NAME_SEQ)))                  \
         {                                                                       \
             os << BOOST_PP_STRINGIZE(                                           \

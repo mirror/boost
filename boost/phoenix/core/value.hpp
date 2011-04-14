@@ -76,10 +76,11 @@ namespace boost { namespace phoenix
 
         template<typename T>
         struct argument_type
-            : mpl::eval_if<
-            is_function<typename remove_pointer<T>::type>,
-            mpl::identity<T>,
-            const_ref<T> >
+            : mpl::eval_if_c<
+                is_function<typename remove_pointer<T>::type>::value
+              , mpl::identity<T>
+              , const_ref<T>
+            >
         {
             typedef T type;
         };

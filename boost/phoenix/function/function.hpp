@@ -8,8 +8,8 @@
 #ifndef BOOST_PHOENIX_FUNCTION_FUNCTION_HPP
 #define BOOST_PHOENIX_FUNCTION_FUNCTION_HPP
 
-#include <boost/phoenix/function/function_handling.hpp>
-#include <boost/phoenix/function/adapt_function.hpp>
+//#include <boost/phoenix/function/function_handling.hpp>
+#include <boost/phoenix/core/detail/function_eval.hpp>
 #include <boost/preprocessor/facilities/expand.hpp>
 #include <boost/preprocessor/logical/or.hpp>
 #include <boost/utility/result_of.hpp>
@@ -33,10 +33,10 @@ namespace boost { namespace phoenix
         template <typename Sig>
         struct result;
 
-        typename expression::function<F>::type const
+        typename detail::expression::function_eval<F>::type const
         operator()() const
         {
-            return expression::function<F>::make(f);
+            return detail::expression::function_eval<F>::make(f);
         }
 
         // Bring in the rest
@@ -44,12 +44,11 @@ namespace boost { namespace phoenix
 
         F f;
     };
-
 }
 
     template<typename F>
     struct result_of<phoenix::function<F>()>
-      : phoenix::expression::function<F>
+      : phoenix::detail::expression::function_eval<F>
     {};
 
 }

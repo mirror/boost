@@ -6,6 +6,7 @@
 #include <boost/phoenix/core/limits.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
+#include <boost/phoenix/core/as_actor.hpp>
 #include <boost/phoenix/core/detail/expression.hpp>
 #include <boost/phoenix/support/iterate.hpp>
 #include <boost/preprocessor/comparison/equal.hpp>
@@ -26,6 +27,7 @@
 #include <boost/phoenix/core/limits.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
+#include <boost/phoenix/core/as_actor.hpp>
 #include <boost/phoenix/core/detail/expression.hpp>
 #include <boost/phoenix/core/domain.hpp>
 #include <boost/phoenix/support/iterate.hpp>
@@ -73,10 +75,11 @@ namespace boost { namespace phoenix
         : proto::domain<proto::use_basic_expr<proto::default_generator> >
     {};
 
-#define M0(Z, N, D) \
-    BOOST_PP_COMMA_IF(N) typename proto::detail::uncvref<typename call_traits<BOOST_PP_CAT(A, N)>::value_type>::type
+#define M0(Z, N, D)                                                             \
+    BOOST_PP_COMMA_IF(N)                                                        \
+    typename proto::detail::uncvref<typename call_traits<BOOST_PP_CAT(A, N)>::value_type>::type
 
-#define M1(Z, N, D) \
+#define M1(Z, N, D)                                                             \
     BOOST_PP_COMMA_IF(N) typename call_traits<BOOST_PP_CAT(A, N)>::param_type BOOST_PP_CAT(a, N)
 
 #define BOOST_PHOENIX_ITERATION_PARAMS                                          \

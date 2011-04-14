@@ -95,6 +95,54 @@ namespace boost { namespace phoenix
             return r;
         }
     };
+    
+    template<typename Expr>
+    struct custom_terminal<boost::reference_wrapper<actor<Expr> > >
+    {
+        template <typename Sig>
+        struct result;
+
+        template <typename This, typename Context>
+        struct result<This(boost::reference_wrapper<actor<Expr> > const &, Context)>
+            : boost::result_of<evaluator(actor<Expr> &, Context)>
+        {};
+
+        template <typename This, typename Context>
+        struct result<This(boost::reference_wrapper<actor<Expr> > &, Context)>
+            : boost::result_of<evaluator(actor<Expr> &, Context)>
+        {};
+
+        template <typename Context>
+        typename boost::result_of<evaluator(actor<Expr> &, Context const &)>::type
+        operator()(boost::reference_wrapper<actor<Expr> > & r, Context const & ctx) const
+        {
+            return eval(r, ctx);
+        }
+    };
+    
+    template<typename Expr>
+    struct custom_terminal<boost::reference_wrapper<actor<Expr> const> >
+    {
+        template <typename Sig>
+        struct result;
+
+        template <typename This, typename Context>
+        struct result<This(boost::reference_wrapper<actor<Expr> const> const &, Context)>
+            : boost::result_of<evaluator(actor<Expr> const&, Context)>
+        {};
+
+        template <typename This, typename Context>
+        struct result<This(boost::reference_wrapper<actor<Expr> const> &, Context)>
+            : boost::result_of<evaluator(actor<Expr> const&, Context)>
+        {};
+
+        template <typename Context>
+        typename boost::result_of<evaluator(actor<Expr> const&, Context const &)>::type
+        operator()(boost::reference_wrapper<actor<Expr> const> const & r, Context & ctx) const
+        {
+            return eval(unwrap_ref(r), ctx);
+        }
+    };
 }}
 
 #endif

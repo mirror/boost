@@ -8,9 +8,6 @@
 #ifndef BOOST_PHOENIX_PHOENIX_HPP
 #define BOOST_PHOENIX_PHOENIX_HPP
 
-#ifdef BOOST_PHOENIX_USE_V2_OVER_V3
-#include <boost/spirit/home/phoenix.hpp>
-#else
 #include <boost/phoenix/core.hpp>
 #include <boost/phoenix/function.hpp>
 #include <boost/phoenix/operator.hpp>
@@ -19,6 +16,5 @@
 #include <boost/phoenix/scope.hpp>
 #include <boost/phoenix/bind.hpp>
 #include <boost/phoenix/stl.hpp>
-#endif
 
 #endif

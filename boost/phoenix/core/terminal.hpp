@@ -55,12 +55,12 @@ namespace boost { namespace phoenix
         template <typename T, template <typename> class Actor = actor>
         struct terminal
             : proto::terminal<
-                typename call_traits<T>::value_type
+                T//typename call_traits<T>::value_type
             >
         {
             typedef typename
                 proto::terminal<
-                    typename call_traits<T>::value_type
+                    T//typename call_traits<T>::value_type
                 >::type base_type;
             typedef Actor<base_type> type;
             

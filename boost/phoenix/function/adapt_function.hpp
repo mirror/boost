@@ -9,51 +9,89 @@
 #define BOOST_PHOENIX_FUNCTION_ADAPT_FUNCTION_HPP
 
 #include <boost/phoenix/core/limits.hpp>
-#include <boost/phoenix/function/function_handling.hpp>
-#include <boost/preprocessor/control/if.hpp>
-#include <boost/preprocessor/facilities/empty.hpp>
-#include <boost/preprocessor/facilities/identity.hpp>
-#include <boost/preprocessor/punctuation/comma_if.hpp>
+#include <boost/phoenix/core/detail/function_eval.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
 
-#define BOOST_PHOENIX_ADAPT_FUNCTION_NULLARY(NAME, FUNC)                        \
-    boost::phoenix::expression::function<FUNC>::type const                      \
+#define BOOST_PHOENIX_ADAPT_FUNCTION_NULLARY(RESULT, NAME, FUNC)                \
+    namespace detail                                                            \
+    {                                                                           \
+        struct BOOST_PP_CAT(NAME, _impl_nullary)                                \
+        {                                                                       \
+            typedef RESULT result_type;                                         \
+                                                                                \
+            result_type                                                         \
+            operator()() const                                                  \
+            {                                                                   \
+                return FUNC();                                                  \
+            }                                                                   \
+        };                                                                      \
+    }                                                                           \
+                                                                                \
+    boost::phoenix::detail::expression::function_eval<                          \
+        detail:: BOOST_PP_CAT(NAME, _impl_nullary)                              \
+    >::type const                                                               \
     inline NAME()                                                               \
     {                                                                           \
-        return boost::phoenix::expression::function<FUNC>::make(FUNC());        \
+        return boost::phoenix::detail::expression::                             \
+                function_eval<detail:: BOOST_PP_CAT(NAME, _impl_nullary)>       \
+                    ::make(detail:: BOOST_PP_CAT(NAME, _impl_nullary)());       \
     }                                                                           \
 /**/
 
-
-#define BOOST_PHOENIX_ADAPT_FUNCTION(NAME, FUNC, N)                             \
+#define BOOST_PHOENIX_ADAPT_FUNCTION(RESULT, NAME, FUNC, N)                     \
+    namespace detail                                                            \
+    {                                                                           \
+        struct BOOST_PP_CAT(BOOST_PP_CAT(NAME, _impl_), N)                      \
+        {                                                                       \
+            template <typename Sig>                                             \
+            struct result;                                                      \
+                                                                                \
+            template <typename This, BOOST_PHOENIX_typename_A(N)>               \
+            struct result<This(BOOST_PHOENIX_A(N))>                             \
+            {typedef RESULT type;};                                            \
+                                                                                \
+            template <BOOST_PHOENIX_typename_A(N)>                              \
+            RESULT                                                              \
+            operator()(BOOST_PHOENIX_A_ref_a(N)) const                          \
+            {                                                                   \
+                return FUNC(BOOST_PHOENIX_a(N));                                \
+            }                                                                   \
+        };                                                                      \
+    }                                                                           \
+                                                                                \
     template <BOOST_PHOENIX_typename_A(N)>                                      \
     typename                                                                    \
-        boost::phoenix::expression::function<                                   \
-            FUNC                                                                \
+        boost::phoenix::detail::expression::function_eval<                      \
+        detail:: BOOST_PP_CAT(BOOST_PP_CAT(NAME, _impl_), N)                    \
           , BOOST_PHOENIX_A(N)>::type const                                     \
     inline NAME(BOOST_PHOENIX_A_const_ref_a(N))                                 \
     {                                                                           \
-        return boost::phoenix::expression::                                     \
-            function<FUNC, BOOST_PHOENIX_A(N)>::                                \
-                make(FUNC(), BOOST_PHOENIX_a(N));                               \
+        return boost::phoenix::detail::expression::                             \
+            function_eval<                                                      \
+                detail:: BOOST_PP_CAT(BOOST_PP_CAT(NAME, _impl_), N)            \
+              , BOOST_PHOENIX_A(N)                                              \
+            >::make(                                                            \
+                detail:: BOOST_PP_CAT(BOOST_PP_CAT(NAME, _impl_), N)()          \
+              , BOOST_PHOENIX_a(N)                                              \
+            );                                                                  \
     }                                                                           \
 /**/
 
-
-#define BOOST_PHOENIX_ADAPT_FUNCTION_VARARG(NAME, FUNC)                         \
+#define BOOST_PHOENIX_ADAPT_FUNCTION_VARARG(RESULT, NAME, FUNC)                 \
     BOOST_PHOENIX_ADAPT_FUNCTION_NULLARY(NAME, FUNC)                            \
     BOOST_PP_REPEAT_FROM_TO(                                                    \
         1                                                                       \
       , BOOST_PHOENIX_LIMIT                                                     \
       , BOOST_PHOENIX_ADAPT_FUNCTION_VARARG_R                                   \
-      , (NAME, FUNC)                                                            \
+      , (RESULT, NAME, FUNC)                                                    \
     )                                                                           \
 /**/
 
 #define BOOST_PHOENIX_ADAPT_FUNCTION_VARARG_R(Z, N, D)                          \
     BOOST_PHOENIX_ADAPT_FUNCTION(                                               \
-        BOOST_PP_TUPLE_ELEM(2, 0, D)                                            \
-      , BOOST_PP_TUPLE_ELEM(2, 1, D)                                            \
+        BOOST_PP_TUPLE_ELEM(3, 0, D)                                            \
+      , BOOST_PP_TUPLE_ELEM(3, 1, D)                                            \
+      , BOOST_PP_TUPLE_ELEM(3, 2, D)                                            \
       , N                                                                       \
     )                                                                           \
 /**/

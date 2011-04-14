@@ -115,15 +115,15 @@ namespace boost { namespace phoenix
         struct try_catch_is_nullary
             : proto::or_<
                 proto::when<
-                    rule::catch_all
+                    phoenix::rule::catch_all
                   , evaluator(proto::_child_c<0>, proto::_data, proto::make<int()>)
                 >
               , proto::when<
-                    rule::catch_
+                    phoenix::rule::catch_
                   , evaluator(proto::_child_c<1>, proto::_data, proto::make<int()>)
                 >
               , proto::when<
-                    rule::try_catch
+                    phoenix::rule::try_catch
                   , mpl::and_<
                         evaluator(proto::_child_c<0>, proto::_data, proto::make<int()>)
                       , proto::fold<
@@ -158,7 +158,7 @@ namespace boost { namespace phoenix
         {
             typedef
                 typename proto::result_of::make_expr<
-                    tag::catch_
+                    phoenix::tag::catch_
                   , default_domain_with_basic_expr
                   , catch_exception<Exception>
                   , Expr
@@ -166,7 +166,7 @@ namespace boost { namespace phoenix
                 catch_expr;
             
             typedef
-                expression::try_catch<
+                phoenix::expression::try_catch<
                     TryCatch
                   , catch_expr
                 >
@@ -179,7 +179,7 @@ namespace boost { namespace phoenix
                     gen_type::make(
                         try_catch
                       , proto::make_expr<
-                            tag::catch_
+                            phoenix::tag::catch_
                           , default_domain_with_basic_expr
                         >(catch_exception<Exception>(), catch_)
                     );
@@ -198,14 +198,14 @@ namespace boost { namespace phoenix
         {
             typedef
                 typename proto::result_of::make_expr<
-                    tag::catch_all
+                    phoenix::tag::catch_all
                   , default_domain_with_basic_expr
                   , Expr
                 >::type
                 catch_expr;
             
             typedef
-                expression::try_catch<
+                phoenix::expression::try_catch<
                     TryCatch
                   , catch_expr
                 >
@@ -218,7 +218,7 @@ namespace boost { namespace phoenix
                     gen_type::make(
                         try_catch
                       , proto::make_expr<
-                            tag::catch_all
+                            phoenix::tag::catch_all
                           , default_domain_with_basic_expr
                         >(catch_)
                     );
