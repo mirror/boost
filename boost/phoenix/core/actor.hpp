@@ -204,7 +204,7 @@ namespace boost { namespace phoenix
             typedef vector1<const actor<Expr> *> env_type;
             env_type env = {this};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
 
         typename result_of::actor<proto_base_expr>::type
@@ -213,7 +213,7 @@ namespace boost { namespace phoenix
             typedef vector1<const actor<Expr> *> env_type;
             env_type env = {this};
             
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
 
         template <typename Env>
@@ -227,7 +227,7 @@ namespace boost { namespace phoenix
         >::result_type
         eval(Env const & env) const
         {
-            return phoenix::eval(*this, context(env, default_actions()));
+            return phoenix::eval(*this, phoenix::context(env, default_actions()));
         }
         
         // Bring in the rest
