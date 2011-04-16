@@ -116,7 +116,7 @@ namespace boost { namespace phoenix
         typename boost::result_of<evaluator(actor<Expr> &, Context const &)>::type
         operator()(boost::reference_wrapper<actor<Expr> > & r, Context const & ctx) const
         {
-            return eval(r, ctx);
+            return boost::phoenix::eval(r, ctx);
         }
     };
     
@@ -140,7 +140,7 @@ namespace boost { namespace phoenix
         typename boost::result_of<evaluator(actor<Expr> const&, Context const &)>::type
         operator()(boost::reference_wrapper<actor<Expr> const> const & r, Context & ctx) const
         {
-            return eval(unwrap_ref(r), ctx);
+            return boost::phoenix::eval(unwrap_ref(r), ctx);
         }
     };
 }}

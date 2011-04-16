@@ -129,7 +129,7 @@ namespace boost { namespace phoenix {
             //std::cout << typeid(checker).name() << "\n";
             //std::cout << typeid(checker).name() << "\n";
 
-            return eval(_this, ctx)(eval(t0, ctx));
+            return boost::phoenix::eval(_this, ctx)(boost::phoenix::eval(t0, ctx));
         }
 
         template <typename This, typename T0, typename T1, typename Context>
@@ -141,7 +141,7 @@ namespace boost { namespace phoenix {
 
             //std::cout << typeid(checker).name() << "\n";
 
-            return eval(_this, ctx)(eval(t0, ctx), eval(t1, ctx));
+            return boost::phoenix::eval(_this, ctx)(boost::phoenix::eval(t0, ctx), boost::phoenix::eval(t1, ctx));
         }
     };
 

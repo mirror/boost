@@ -28,7 +28,7 @@ namespace boost { namespace phoenix
         result_type
         operator()(P const& p, Context &ctx) const
         {
-            delete eval(p, ctx);
+            delete boost::phoenix::eval(p, ctx);
         }
     };
 

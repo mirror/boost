@@ -41,9 +41,9 @@ namespace boost { namespace phoenix
 
         template <typename Eval, typename Env>
         typename result<v2_eval(Eval const&, Env)>::type
-        operator()(Eval const & eval, Env const & env) const
+        operator()(Eval const & e, Env const & env) const
         {
-            return eval.eval(env);
+            return e.eval(env);
         }
     };
 }}

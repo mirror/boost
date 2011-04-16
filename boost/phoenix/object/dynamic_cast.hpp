@@ -40,7 +40,7 @@ namespace boost { namespace phoenix
             return
                 dynamic_cast<
                     typename detail::result_of::target<Target>::type
-                >(eval(u, ctx));
+                >(boost::phoenix::eval(u, ctx));
         }
     };
 

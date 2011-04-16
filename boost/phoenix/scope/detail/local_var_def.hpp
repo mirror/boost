@@ -43,7 +43,7 @@
 
 #define M3(Z, N, D)                                                             \
     BOOST_PP_CAT(pair, N)(                                                      \
-        eval(fusion::at_key<BOOST_PP_CAT(Tag, N)>(locals), ctx)                 \
+        boost::phoenix::eval(fusion::at_key<BOOST_PP_CAT(Tag, N)>(locals), ctx)                 \
     )                                                                           \
 /**/
 

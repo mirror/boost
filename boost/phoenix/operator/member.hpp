@@ -95,7 +95,7 @@ namespace boost { namespace phoenix
 
     #define BOOST_PHOENIX_MEMBER_EVAL(Z, N, D)                                  \
         BOOST_PP_COMMA_IF(BOOST_PP_NOT(BOOST_PP_EQUAL(N, 2)))                   \
-        eval(BOOST_PP_CAT(a, N), ctx)                                           \
+        boost::phoenix::eval(BOOST_PP_CAT(a, N), ctx)                                           \
     /**/
 
     #define BOOST_PHOENIX_ITERATION_PARAMS                                      \
@@ -142,8 +142,8 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
                     BOOST_PP_REPEAT_FROM_TO(
                         2

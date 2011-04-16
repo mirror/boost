@@ -52,7 +52,7 @@ namespace boost { namespace phoenix
         result_type
         operator()(ThrowExpr const& throw_expr, Context & ctx) const
         {
-            throw eval(throw_expr, ctx);
+            throw boost::phoenix::eval(throw_expr, ctx);
         }
     };
     

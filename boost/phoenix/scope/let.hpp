@@ -103,7 +103,7 @@ namespace boost { namespace phoenix
                   , l
                 );
 
-            return eval(let, context(scoped_env, actions(ctx)));
+            return boost::phoenix::eval(let, context(scoped_env, actions(ctx)));
         }
     };
 

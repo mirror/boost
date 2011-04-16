@@ -43,8 +43,8 @@ namespace boost { namespace phoenix
           , Context & ctx
         ) const
         {
-            for(eval(init, ctx); eval(cond, ctx); eval(step, ctx))
-                eval(do_, ctx);
+            for(boost::phoenix::eval(init, ctx); boost::phoenix::eval(cond, ctx); boost::phoenix::eval(step, ctx))
+                boost::phoenix::eval(do_, ctx);
         }
     };
     

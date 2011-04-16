@@ -59,20 +59,20 @@ namespace boost { namespace phoenix {
             typename result<function_eval(F const&, Context const&)>::type
             operator()(F const & f, Context const & ctx) const
             {
-                return eval(f, ctx)();
+                return boost::phoenix::eval(f, ctx)();
             }
 
             template <typename F, typename Context>
             typename result<function_eval(F &, Context const&)>::type
             operator()(F & f, Context const & ctx) const
             {
-                return eval(f, ctx)();
+                return boost::phoenix::eval(f, ctx)();
             }
 
         #define PHOENIX_GET_ARG(z, n, data)                                     \
             typedef                                                             \
                 typename boost::result_of<                                      \
-                    evaluator(                                                  \
+                    boost::phoenix::evaluator(                                                  \
                         BOOST_PP_CAT(A, n)                                      \
                       , Context                                                 \
                     )                                                           \
@@ -80,7 +80,7 @@ namespace boost { namespace phoenix {
                 BOOST_PP_CAT(a, n);
 
         #define PHOENIX_EVAL_ARG(z, n, data)                                    \
-            help_rvalue_deduction(eval(BOOST_PP_CAT(a, n), ctx))
+            help_rvalue_deduction(boost::phoenix::eval(BOOST_PP_CAT(a, n), ctx))
         
         #define M0(z, n, data)                                     \
             typename proto::detail::uncvref<BOOST_PP_CAT(a, n)>::type
@@ -157,7 +157,7 @@ namespace boost { namespace phoenix {
             >::type
             operator()(F const & f, BOOST_PHOENIX_A_ref_a, Context const & ctx) const
             {
-                return eval(f, ctx)(BOOST_PP_ENUM(BOOST_PHOENIX_ITERATION, PHOENIX_EVAL_ARG, _));
+                return boost::phoenix::eval(f, ctx)(BOOST_PP_ENUM(BOOST_PHOENIX_ITERATION, PHOENIX_EVAL_ARG, _));
             }
 
             template <typename F, BOOST_PHOENIX_typename_A, typename Context>
@@ -170,7 +170,7 @@ namespace boost { namespace phoenix {
             >::type
             operator()(F & f, BOOST_PHOENIX_A_ref_a, Context const & ctx) const
             {
-                return eval(f, ctx)(BOOST_PP_ENUM(BOOST_PHOENIX_ITERATION, PHOENIX_EVAL_ARG, _));
+                return boost::phoenix::eval(f, ctx)(BOOST_PP_ENUM(BOOST_PHOENIX_ITERATION, PHOENIX_EVAL_ARG, _));
             }
 #endif
 

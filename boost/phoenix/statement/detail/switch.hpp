@@ -56,7 +56,7 @@
 
     #define BOOST_PHOENIX_SWITCH_EVAL_R(Z, N, DATA)                             \
         case BOOST_PP_CAT(case_label, N)::value :                               \
-            eval(                                                               \
+            boost::phoenix::eval(                                                               \
                 proto::child_c<1>(                                              \
                     fusion::deref(                                              \
                         fusion::advance_c<N>(fusion::begin(flat_view))          \
@@ -108,7 +108,7 @@
                   , BOOST_PHOENIX_ITERATION
                 )
 
-                switch(eval(cond, ctx))
+                switch(boost::phoenix::eval(cond, ctx))
                 {
                     BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, BOOST_PHOENIX_SWITCH_EVAL_R, _)
                 }
@@ -140,14 +140,14 @@
                   , BOOST_PHOENIX_ITERATION
                 )
 
-                switch(eval(cond, ctx))
+                switch(boost::phoenix::eval(cond, ctx))
                 {
                     BOOST_PP_REPEAT(
                         BOOST_PP_DEC(BOOST_PHOENIX_ITERATION)
                       , BOOST_PHOENIX_SWITCH_EVAL_R, _
                     )
                     default:
-                        eval(
+                        boost::phoenix::eval(
                             proto::child_c<0>(
                                 fusion::deref(
                                     fusion::advance_c<
