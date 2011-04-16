@@ -7,16 +7,93 @@
 #ifndef BOOST_UNORDERED_DETAIL_UTIL_HPP_INCLUDED
 #define BOOST_UNORDERED_DETAIL_UTIL_HPP_INCLUDED
 
-#include <cstddef>
-#include <utility>
 #include <algorithm>
+#include <cstddef>
+#include <stdexcept>
+#include <utility>
 #include <boost/limits.hpp>
+#include <boost/config.hpp>
+#include <boost/config/no_tr1/cmath.hpp>
+#include <boost/detail/workaround.hpp>
+#include <boost/detail/select_type.hpp>
+#include <boost/assert.hpp>
+#include <boost/iterator.hpp>
 #include <boost/iterator/iterator_categories.hpp>
+#include <boost/compressed_pair.hpp>
+#include <boost/type_traits/aligned_storage.hpp>
+#include <boost/type_traits/alignment_of.hpp>
+#include <boost/type_traits/remove_const.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/preprocessor/seq/size.hpp>
 #include <boost/preprocessor/seq/enum.hpp>
-#include <boost/unordered/detail/fwd.hpp>
 
-namespace boost { namespace unordered_detail {
+// Template parameters:
+//
+// H = Hash Function
+// P = Predicate
+// A = Value Allocator
+// G = Bucket group policy, 'grouped' or 'ungrouped'
+// E = Key Extractor
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && \
+        !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#   if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+        // STLport doesn't have std::forward.
+#   else
+#       define BOOST_UNORDERED_STD_FORWARD
+#   endif
+#endif
+
+#if !defined(BOOST_UNORDERED_EMPLACE_LIMIT)
+#define BOOST_UNORDERED_EMPLACE_LIMIT 10
+#endif
+
+#if !defined(BOOST_UNORDERED_STD_FORWARD)
+
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/enum_binary_params.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
+
+#define BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params) \
+    BOOST_PP_ENUM_PARAMS_Z(z, num_params, class Arg)
+#define BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params) \
+    BOOST_PP_ENUM_BINARY_PARAMS_Z(z, num_params, Arg, const& arg)
+#define BOOST_UNORDERED_CALL_PARAMS(z, num_params) \
+    BOOST_PP_ENUM_PARAMS_Z(z, num_params, arg)
+
+#endif
+
+namespace boost { namespace unordered { namespace detail {
+
+    static const float minimum_max_load_factor = 1e-3f;
+    static const std::size_t default_bucket_count = 11;
+    struct move_tag {};
+
+    template <class T> class unique_table;
+    template <class T> class equivalent_table;
+    template <class Alloc, bool Unique> class node_constructor;
+    template <class ValueType>
+    struct set_extractor;
+    template <class Key, class ValueType>
+    struct map_extractor;
+    struct no_key;
+
+    // Explicitly call a destructor
+
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4100) // unreferenced formal parameter
+#endif
+
+    template <class T>
+    inline void destroy(T* x) {
+        x->~T();
+    }
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
     ////////////////////////////////////////////////////////////////////////////
     // convert double to std::size_t
@@ -95,12 +172,19 @@ namespace boost { namespace unordered_detail {
     ////////////////////////////////////////////////////////////////////////////
     // pair_cast - because some libraries don't have the full pair constructors.
 
+#if 0
     template <class Dst1, class Dst2, class Src1, class Src2>
     inline std::pair<Dst1, Dst2> pair_cast(std::pair<Src1, Src2> const& x)
     {
         return std::pair<Dst1, Dst2>(Dst1(x.first), Dst2(x.second));
     }
 
+#define BOOST_UNORDERED_PAIR_CAST(First, Last, Argument) \
+    ::boost::unordered::detail::pair_cast<First, Last>(Argument)
+#else
+#define BOOST_UNORDERED_PAIR_CAST(First, Last, Argument) \
+    Argument
+#endif
     ////////////////////////////////////////////////////////////////////////////
     // insert_size/initial_size
 
@@ -116,13 +200,13 @@ namespace boost { namespace unordered_detail {
 #endif
 
     template <class I>
-    inline std::size_t insert_size(I i, I j, boost::forward_traversal_tag)
+    inline std::size_t insert_size(I i, I j, ::boost::forward_traversal_tag)
     {
         return std::distance(i, j);
     }
 
     template <class I>
-    inline std::size_t insert_size(I, I, boost::incrementable_traversal_tag)
+    inline std::size_t insert_size(I, I, ::boost::incrementable_traversal_tag)
     {
         return 1;
     }
@@ -130,202 +214,18 @@ namespace boost { namespace unordered_detail {
     template <class I>
     inline std::size_t insert_size(I i, I j)
     {
-        BOOST_DEDUCED_TYPENAME boost::iterator_traversal<I>::type
+        BOOST_DEDUCED_TYPENAME ::boost::iterator_traversal<I>::type
             iterator_traversal_tag;
         return insert_size(i, j, iterator_traversal_tag);
     }
     
     template <class I>
     inline std::size_t initial_size(I i, I j,
-        std::size_t num_buckets = boost::unordered_detail::default_bucket_count)
+        std::size_t num_buckets = ::boost::unordered::detail::default_bucket_count)
     {
         return (std::max)(static_cast<std::size_t>(insert_size(i, j)) + 1,
             num_buckets);
     }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Node Constructors
-
-#if defined(BOOST_UNORDERED_STD_FORWARD)
-
-    template <class T, class... Args>
-    inline void construct_impl(T*, void* address, Args&&... args)
-    {
-        new(address) T(std::forward<Args>(args)...);
-    }
-
-#if defined(BOOST_UNORDERED_CPP0X_PAIR)
-    template <class First, class Second, class Key, class Arg0, class... Args>
-    inline void construct_impl(std::pair<First, Second>*, void* address,
-        Key&& k, Arg0&& arg0, Args&&... args)
-    )
-    {
-        new(address) std::pair<First, Second>(k,
-            Second(arg0, std::forward<Args>(args)...);
-    }
-#endif
-
-#else
-
-#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                       \
-    template <                                                                 \
-        class T,                                                               \
-        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                           \
-    >                                                                          \
-    inline void construct_impl(                                                \
-        T*, void* address,                                                     \
-        BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                         \
-    )                                                                          \
-    {                                                                          \
-        new(address) T(                                                        \
-            BOOST_UNORDERED_CALL_PARAMS(z, num_params));                       \
-    }                                                                          \
-                                                                               \
-    template <class First, class Second, class Key,                            \
-        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                           \
-    >                                                                          \
-    inline void construct_impl(                                                \
-        std::pair<First, Second>*, void* address,                              \
-        Key const& k, BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))          \
-    {                                                                          \
-        new(address) std::pair<First, Second>(k,                               \
-            Second(BOOST_UNORDERED_CALL_PARAMS(z, num_params)));               \
-    }
-
-    BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
-        BOOST_UNORDERED_CONSTRUCT_IMPL, _)
-
-#undef BOOST_UNORDERED_CONSTRUCT_IMPL
-#endif
-
-    // hash_node_constructor
-    //
-    // Used to construct nodes in an exception safe manner.
-
-    template <class Alloc, class Grouped>
-    class hash_node_constructor
-    {
-        typedef hash_buckets<Alloc, Grouped> buckets;
-        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
-        typedef BOOST_DEDUCED_TYPENAME buckets::real_node_ptr real_node_ptr;
-        typedef BOOST_DEDUCED_TYPENAME buckets::value_type value_type;
-
-        buckets& buckets_;
-        real_node_ptr node_;
-        bool node_constructed_;
-        bool value_constructed_;
-
-    public:
-
-        hash_node_constructor(buckets& m) :
-            buckets_(m),
-            node_(),
-            node_constructed_(false),
-            value_constructed_(false)
-        {
-        }
-
-        ~hash_node_constructor();
-        void construct_preamble();
-
-#if defined(BOOST_UNORDERED_STD_FORWARD)
-        template <class... Args>
-        void construct(Args&&... args)
-        {
-            construct_preamble();
-            construct_impl((value_type*) 0, node_->address(),
-                std::forward<Args>(args)...);
-            value_constructed_ = true;
-        }
-#else
-
-#define BOOST_UNORDERED_CONSTRUCT(z, num_params, _)                            \
-        template <                                                             \
-            BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                       \
-        >                                                                      \
-        void construct(                                                        \
-            BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                     \
-        )                                                                      \
-        {                                                                      \
-            construct_preamble();                                              \
-            construct_impl(                                                    \
-                (value_type*) 0, node_->address(),                             \
-                BOOST_UNORDERED_CALL_PARAMS(z, num_params)                     \
-            );                                                                 \
-            value_constructed_ = true;                                         \
-        }
-
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
-            BOOST_UNORDERED_CONSTRUCT, _)
-
-#undef BOOST_UNORDERED_CONSTRUCT
-
-#endif
-        template <class K, class M>
-        void construct_pair(K const& k, M*)
-        {
-            construct_preamble();
-            new(node_->address()) value_type(k, M());                    
-            value_constructed_ = true;
-        }
-
-        value_type& value() const
-        {
-            BOOST_ASSERT(node_);
-            return node_->value();
-        }
-
-        // no throw
-        BOOST_DEDUCED_TYPENAME buckets::node_ptr release()
-        {
-            real_node_ptr p = node_;
-            node_ = real_node_ptr();
-            // node_ptr cast
-            return buckets_.bucket_alloc().address(*p);
-        }
-
-    private:
-        hash_node_constructor(hash_node_constructor const&);
-        hash_node_constructor& operator=(hash_node_constructor const&);
-    };
-    
-    // hash_node_constructor
-
-    template <class Alloc, class Grouped>
-    inline hash_node_constructor<Alloc, Grouped>::~hash_node_constructor()
-    {
-        if (node_) {
-            if (value_constructed_) {
-#if BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x0613))
-                struct dummy { hash_node<Alloc, Grouped> x; };
-#endif
-                boost::unordered_detail::destroy(node_->value_ptr());
-            }
-
-            if (node_constructed_)
-                buckets_.node_alloc().destroy(node_);
-
-            buckets_.node_alloc().deallocate(node_, 1);
-        }
-    }
-
-    template <class Alloc, class Grouped>
-    inline void hash_node_constructor<Alloc, Grouped>::construct_preamble()
-    {
-        if(!node_) {
-            node_constructed_ = false;
-            value_constructed_ = false;
-
-            node_ = buckets_.node_alloc().allocate(1);
-            buckets_.node_alloc().construct(node_, node());
-            node_constructed_ = true;
-        }
-        else {
-            BOOST_ASSERT(node_constructed_ && value_constructed_);
-            boost::unordered_detail::destroy(node_->value_ptr());
-            value_constructed_ = false;
-        }
-    }
-}}
+}}}
 
 #endif

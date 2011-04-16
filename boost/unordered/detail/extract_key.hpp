@@ -6,12 +6,11 @@
 #ifndef BOOST_UNORDERED_DETAIL_EXTRACT_KEY_HPP_INCLUDED
 #define BOOST_UNORDERED_DETAIL_EXTRACT_KEY_HPP_INCLUDED
 
-#include <boost/config.hpp>
-#include <boost/type_traits/remove_const.hpp>
-#include <boost/unordered/detail/fwd.hpp>
+#include <boost/unordered/detail/table.hpp>
 
 namespace boost {
-namespace unordered_detail {
+namespace unordered {
+namespace detail {
 
     // key extractors
     //
@@ -75,7 +74,7 @@ namespace unordered_detail {
     struct map_extractor
     {
         typedef ValueType value_type;
-        typedef BOOST_DEDUCED_TYPENAME boost::remove_const<Key>::type key_type;
+        typedef BOOST_DEDUCED_TYPENAME ::boost::remove_const<Key>::type key_type;
 
         static key_type const& extract(value_type const& v)
         {
@@ -143,6 +142,6 @@ namespace unordered_detail {
             return x.second == y.second;
         }
     };
-}}
+}}}
 
 #endif

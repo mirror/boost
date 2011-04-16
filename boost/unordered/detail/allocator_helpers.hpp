@@ -23,7 +23,7 @@
 #  include <boost/detail/allocator_utilities.hpp>
 #endif
 
-namespace boost { namespace unordered_detail {
+namespace boost { namespace unordered { namespace detail {
 
     // rebind_wrap
     //
@@ -102,7 +102,7 @@ namespace boost { namespace unordered_detail {
         allocator_array_constructor& operator=(
             allocator_array_constructor const&);
     };
-}}
+}}}
 
 #if defined(BOOST_UNORDERED_USE_ALLOCATOR_UTILITIES)
 #  undef BOOST_UNORDERED_USE_ALLOCATOR_UTILITIES

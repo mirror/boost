@@ -38,7 +38,8 @@
 /*************************************************************************************************/
 
 namespace boost {
-namespace unordered_detail {
+namespace unordered {
+namespace detail {
 
 /*************************************************************************************************/
 
@@ -69,7 +70,7 @@ struct class_has_move_assign {
 /*************************************************************************************************/
 
 template<typename T>
-struct has_move_assign : boost::mpl::and_<boost::is_class<T>, class_has_move_assign<T> > {};
+struct has_move_assign : ::boost::mpl::and_<boost::is_class<T>, class_has_move_assign<T> > {};
 
 /*************************************************************************************************/
 
@@ -83,13 +84,13 @@ class test_can_convert_anything { };
 
 /*
     REVISIT (sparent@adobe.com): This is a work around for Boost 1.34.1 and VC++ 2008 where
-    boost::is_convertible<T, T> fails to compile.
+    ::boost::is_convertible<T, T> fails to compile.
 */
 
 template <typename T, typename U>
-struct is_convertible : boost::mpl::or_<
-    boost::is_same<T, U>,
-    boost::is_convertible<T, U>
+struct is_convertible : ::boost::mpl::or_<
+    ::boost::is_same<T, U>,
+    ::boost::is_convertible<T, U>
 > { };
 
 /*************************************************************************************************/
@@ -124,10 +125,10 @@ private:
 \brief The is_movable trait can be used to identify movable types.
 */
 template <typename T>
-struct is_movable : boost::mpl::and_<
-                        boost::is_convertible<move_from<T>, T>,
+struct is_movable : ::boost::mpl::and_<
+                        ::boost::is_convertible<move_from<T>, T>,
                         move_detail::has_move_assign<T>,
-                        boost::mpl::not_<boost::is_convertible<move_detail::test_can_convert_anything, T> >
+                        ::boost::mpl::not_<boost::is_convertible<move_detail::test_can_convert_anything, T> >
                     > { };
 
 /*************************************************************************************************/
@@ -138,7 +139,7 @@ struct is_movable : boost::mpl::and_<
 // unless the trait is specialized.
 
 template <typename T>
-struct is_movable : boost::mpl::false_ { };
+struct is_movable : ::boost::mpl::false_ { };
 
 #endif
 
@@ -158,10 +159,10 @@ struct is_movable : boost::mpl::false_ { };
 template <typename T,
           typename U = T,
           typename R = void*>
-struct copy_sink : boost::enable_if<
-                        boost::mpl::and_<
-                            boost::unordered_detail::move_detail::is_convertible<T, U>,                           
-                            boost::mpl::not_<is_movable<T> >
+struct copy_sink : ::boost::enable_if<
+                        ::boost::mpl::and_<
+                            ::boost::unordered::detail::move_detail::is_convertible<T, U>,                           
+                            ::boost::mpl::not_<is_movable<T> >
                         >,
                         R
                     >
@@ -179,9 +180,9 @@ struct copy_sink : boost::enable_if<
 template <typename T,
           typename U = T,
           typename R = void*>
-struct move_sink : boost::enable_if<
-                        boost::mpl::and_<
-                            boost::unordered_detail::move_detail::is_convertible<T, U>,                            
+struct move_sink : ::boost::enable_if<
+                        ::boost::mpl::and_<
+                            ::boost::unordered::detail::move_detail::is_convertible<T, U>,                            
                             is_movable<T>
                         >,
                         R
@@ -233,7 +234,8 @@ T& move(T& x) {
 
 #endif // BOOST_NO_SFINAE
 
-} // namespace unordered_detail
+} // namespace detail
+} // namespace unordered
 } // namespace boost
 
 /*************************************************************************************************/

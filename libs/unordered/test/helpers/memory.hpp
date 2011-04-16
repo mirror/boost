@@ -70,7 +70,7 @@ namespace test
         template <class Alloc = std::allocator<int> >
         struct memory_tracker {
             typedef BOOST_DEDUCED_TYPENAME
-                boost::unordered_detail::rebind_wrap<Alloc,
+                ::boost::unordered::detail::rebind_wrap<Alloc,
                     std::pair<memory_area const, memory_track> >::type
                 allocator_type;
 
