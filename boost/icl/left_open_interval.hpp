@@ -24,6 +24,7 @@ class left_open_interval
 public:
     typedef left_open_interval<DomainT,Compare> type;
     typedef DomainT domain_type;
+    typedef ICL_COMPARE_DOMAIN(Compare,DomainT) domain_compare;
 
 public:
     //==========================================================================
@@ -41,7 +42,7 @@ public:
 
     /** Constructor for a left-open singleton interval <tt>(val-1,val]</tt> */
     explicit left_open_interval(const DomainT& val)
-        : _lwb(icl::pred(val)), _upb(val)
+        : _lwb(predecessor<DomainT,domain_compare>::apply(val)), _upb(val)
     {
         BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
