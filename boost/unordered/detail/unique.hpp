@@ -12,7 +12,7 @@
 namespace boost { namespace unordered { namespace detail {
 
     template <class T>
-    class unique_table : public T::table
+    class unique_table : public T::table_base
     {
     public:
         typedef BOOST_DEDUCED_TYPENAME T::hasher hasher;
@@ -20,7 +20,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_DEDUCED_TYPENAME T::value_allocator value_allocator;
         typedef BOOST_DEDUCED_TYPENAME T::key_type key_type;
         typedef BOOST_DEDUCED_TYPENAME T::value_type value_type;
-        typedef BOOST_DEDUCED_TYPENAME T::table table;
+        typedef BOOST_DEDUCED_TYPENAME T::table_base table_base;
         typedef BOOST_DEDUCED_TYPENAME T::node_constructor node_constructor;
 
         typedef BOOST_DEDUCED_TYPENAME T::node node;
@@ -34,16 +34,16 @@ namespace boost { namespace unordered { namespace detail {
 
         unique_table(std::size_t n, hasher const& hf, key_equal const& eq,
             value_allocator const& a)
-          : table(n, hf, eq, a) {}
+          : table_base(n, hf, eq, a) {}
         unique_table(unique_table const& x)
-          : table(x, x.node_alloc()) {}
+          : table_base(x, x.node_alloc()) {}
         unique_table(unique_table const& x, value_allocator const& a)
-          : table(x, a) {}
+          : table_base(x, a) {}
         unique_table(unique_table& x, move_tag m)
-          : table(x, m) {}
+          : table_base(x, m) {}
         unique_table(unique_table& x, value_allocator const& a,
             move_tag m)
-          : table(x, a, m) {}
+          : table_base(x, a, m) {}
         ~unique_table() {}
 
         // equals
@@ -379,7 +379,7 @@ namespace boost { namespace unordered { namespace detail {
         true>
     {        
         typedef ::boost::unordered::detail::unique_table<set<H, P, A> > impl;
-        typedef ::boost::unordered::detail::table<set<H, P, A> > table;
+        typedef ::boost::unordered::detail::table<set<H, P, A> > table_base;
     };
 
     template <class K, class H, class P, class A>
@@ -390,7 +390,7 @@ namespace boost { namespace unordered { namespace detail {
         true>
     {
         typedef ::boost::unordered::detail::unique_table<map<K, H, P, A> > impl;
-        typedef ::boost::unordered::detail::table<map<K, H, P, A> > table;
+        typedef ::boost::unordered::detail::table<map<K, H, P, A> > table_base;
     };
 }}}
 

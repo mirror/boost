@@ -12,7 +12,7 @@
 namespace boost { namespace unordered { namespace detail {
 
     template <class T>
-    class equivalent_table : public T::table
+    class equivalent_table : public T::table_base
     {
     public:
         typedef BOOST_DEDUCED_TYPENAME T::hasher hasher;
@@ -20,7 +20,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_DEDUCED_TYPENAME T::value_allocator value_allocator;
         typedef BOOST_DEDUCED_TYPENAME T::key_type key_type;
         typedef BOOST_DEDUCED_TYPENAME T::value_type value_type;
-        typedef BOOST_DEDUCED_TYPENAME T::table table;
+        typedef BOOST_DEDUCED_TYPENAME T::table_base table_base;
         typedef BOOST_DEDUCED_TYPENAME T::node_constructor node_constructor;
 
         typedef BOOST_DEDUCED_TYPENAME T::node node;
@@ -32,17 +32,17 @@ namespace boost { namespace unordered { namespace detail {
 
         equivalent_table(std::size_t n,
             hasher const& hf, key_equal const& eq, value_allocator const& a)
-          : table(n, hf, eq, a) {}
+          : table_base(n, hf, eq, a) {}
         equivalent_table(equivalent_table const& x)
-          : table(x, x.node_alloc()) {}
+          : table_base(x, x.node_alloc()) {}
         equivalent_table(equivalent_table const& x,
             value_allocator const& a)
-          : table(x, a) {}
+          : table_base(x, a) {}
         equivalent_table(equivalent_table& x, move_tag m)
-          : table(x, m) {}
+          : table_base(x, m) {}
         equivalent_table(equivalent_table& x,
             value_allocator const& a, move_tag m)
-          : table(x, a, m) {}
+          : table_base(x, a, m) {}
         ~equivalent_table() {}
 
         // Equality
@@ -237,7 +237,7 @@ namespace boost { namespace unordered { namespace detail {
         false>
     {
         typedef equivalent_table<multiset<H, P, A> > impl;
-        typedef table<multiset<H, P, A> > table;
+        typedef table<multiset<H, P, A> > table_base;
     };
 
     template <class K, class H, class P, class A>
@@ -248,7 +248,7 @@ namespace boost { namespace unordered { namespace detail {
         false>
     {
         typedef equivalent_table<multimap<K, H, P, A> > impl;
-        typedef table<multimap<K, H, P, A> > table;
+        typedef table<multimap<K, H, P, A> > table_base;
     };
 }}}
 

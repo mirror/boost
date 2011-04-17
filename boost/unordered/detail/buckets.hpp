@@ -15,7 +15,7 @@ namespace boost { namespace unordered { namespace detail {
     //
     // Now the main data structure:
     //
-    // buckets<A, Unique>           buffered_functions<H, P>
+    // buckets<A, Unique>           functions<H, P>
     //       |                              |
     //       +---------------+--------------+
     //                       |
@@ -323,10 +323,10 @@ namespace boost { namespace unordered { namespace detail {
     template <class H, class P> class set_hash_functions;
 
     template <class H, class P>
-    class buffered_functions
+    class functions
     {
         friend class set_hash_functions<H, P>;
-        buffered_functions& operator=(buffered_functions const&);
+        functions& operator=(functions const&);
 
         typedef ::boost::compressed_pair<H, P> function_pair;
         typedef BOOST_DEDUCED_TYPENAME ::boost::aligned_storage<
@@ -358,19 +358,19 @@ namespace boost { namespace unordered { namespace detail {
         
     public:
 
-        buffered_functions(H const& hf, P const& eq)
+        functions(H const& hf, P const& eq)
             : current_(false)
         {
             construct(current_, hf, eq);
         }
 
-        buffered_functions(buffered_functions const& bf)
+        functions(functions const& bf)
             : current_(false)
         {
             construct(current_, bf.current());
         }
 
-        ~buffered_functions() {
+        ~functions() {
             destroy(current_);
         }
 
@@ -389,22 +389,20 @@ namespace boost { namespace unordered { namespace detail {
         set_hash_functions(set_hash_functions const&);
         set_hash_functions& operator=(set_hash_functions const&);
     
-        typedef buffered_functions<H, P> buffered_functions;
-        buffered_functions& buffered_functions_;
+        functions<H,P>& functions_;
         bool tmp_functions_;
 
     public:
 
-        set_hash_functions(buffered_functions& f, H const& h, P const& p)
-          : buffered_functions_(f),
+        set_hash_functions(functions<H,P>& f, H const& h, P const& p)
+          : functions_(f),
             tmp_functions_(!f.current_)
         {
             f.construct(tmp_functions_, h, p);
         }
 
-        set_hash_functions(buffered_functions& f,
-            buffered_functions const& other)
-          : buffered_functions_(f),
+        set_hash_functions(functions<H,P>& f, functions<H,P> const& other)
+          : functions_(f),
             tmp_functions_(!f.current_)
         {
             f.construct(tmp_functions_, other.current());
@@ -412,12 +410,12 @@ namespace boost { namespace unordered { namespace detail {
 
         ~set_hash_functions()
         {
-            buffered_functions_.destroy(tmp_functions_);
+            functions_.destroy(tmp_functions_);
         }
 
         void commit()
         {
-            buffered_functions_.current_ = tmp_functions_;
+            functions_.current_ = tmp_functions_;
             tmp_functions_ = !tmp_functions_;
         }
     };

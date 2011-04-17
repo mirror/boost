@@ -18,7 +18,7 @@ namespace boost { namespace unordered { namespace detail {
     // their declaration and implementation.
 
     template <class T>
-    class table : public T::buckets, public T::buffered_functions
+    class table : public T::buckets, public T::functions
     {
         table(table const&);
     public:
@@ -27,7 +27,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_DEDUCED_TYPENAME T::value_allocator value_allocator;
         typedef BOOST_DEDUCED_TYPENAME T::key_type key_type;
         typedef BOOST_DEDUCED_TYPENAME T::value_type value_type;
-        typedef BOOST_DEDUCED_TYPENAME T::buffered_functions base;
+        typedef BOOST_DEDUCED_TYPENAME T::functions functions;
         typedef BOOST_DEDUCED_TYPENAME T::buckets buckets;
         typedef BOOST_DEDUCED_TYPENAME T::extractor extractor;
         typedef BOOST_DEDUCED_TYPENAME T::node_constructor node_constructor;
@@ -182,7 +182,7 @@ namespace boost { namespace unordered { namespace detail {
                 key_equal const& eq,
                 node_allocator const& a)
           : buckets(a, next_prime(num_buckets)),
-            base(hf, eq),
+            functions(hf, eq),
             size_(),
             mlf_(1.0f),
             max_load_(0)
@@ -191,7 +191,7 @@ namespace boost { namespace unordered { namespace detail {
 
         table(table const& x, node_allocator const& a)
           : buckets(a, x.min_buckets_for_size(x.size_)),
-            base(x),
+            functions(x),
             size_(x.size_),
             mlf_(x.mlf_),
             max_load_(0)
@@ -204,7 +204,7 @@ namespace boost { namespace unordered { namespace detail {
 
         table(table& x, move_tag)
           : buckets(x.node_alloc(), x.bucket_count_),
-            base(x),
+            functions(x),
             size_(0),
             mlf_(1.0f),
             max_load_(0)
@@ -214,7 +214,7 @@ namespace boost { namespace unordered { namespace detail {
 
         table(table& x, node_allocator const& a, move_tag)
           : buckets(a, x.bucket_count_),
-            base(x),
+            functions(x),
             size_(0),
             mlf_(x.mlf_),
             max_load_(0)
@@ -579,7 +579,7 @@ namespace boost { namespace unordered { namespace detail {
         
         typedef ::boost::unordered::detail::node_constructor<value_allocator, Unique> node_constructor;
         typedef ::boost::unordered::detail::buckets<value_allocator, Unique> buckets;
-        typedef ::boost::unordered::detail::buffered_functions<hasher, key_equal> buffered_functions;
+        typedef ::boost::unordered::detail::functions<hasher, key_equal> functions;
 
         typedef BOOST_DEDUCED_TYPENAME buckets::node node;
         typedef BOOST_DEDUCED_TYPENAME buckets::bucket bucket;
