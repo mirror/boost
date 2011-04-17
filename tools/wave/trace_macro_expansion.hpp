@@ -1144,10 +1144,71 @@ protected:
     }
 
     ///////////////////////////////////////////////////////////////////////////
+    // join all adjacent string tokens into the first one
+    template <typename StringT>
+    StringT unlit(StringT const& str)
+    {
+        return str.substr(1, str.size()-2);
+    }
+
+    template <typename StringT>
+    StringT merge_string_lits(StringT const& lhs, StringT const& rhs)
+    {
+        StringT result ("\"");
+
+        result += unlit(lhs);
+        result += unlit(rhs);
+        result += "\"";
+        return result;
+    }
+
+    template <typename ContextT, typename ContainerT>
+    void join_adjacent_string_tokens(ContextT &ctx, ContainerT const& values,
+        ContainerT& joined_values)
+    {
+        using namespace boost::wave;
+
+        typedef typename ContextT::token_type token_type;
+        typedef typename token_type::string_type string_type;
+        typedef typename ContainerT::const_iterator const_iterator;
+        typedef typename ContainerT::iterator iterator;
+
+        token_type* current = 0;
+
+        const_iterator end = values.end();
+        for (const_iterator it = values.begin(); it != end; ++it) {
+            token_id id(*it);
+
+            if (id == T_STRINGLIT) {
+                if (!current) {
+                    joined_values.push_back(*it);
+                    current = &joined_values.back();
+                }
+                else {
+                    current->set_value(merge_string_lits(
+                        current->get_value(), (*it).get_value()));
+                }
+            }
+            else if (current) {
+                typedef util::impl::next_token<const_iterator> next_token_type;
+                token_id next_id (next_token_type::peek(it, end, true));
+
+                if (next_id != T_STRINGLIT) {
+                    current = 0;
+                    joined_values.push_back(*it);
+                }
+            }
+            else {
+                joined_values.push_back(*it);
+            }
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     //  interpret the pragma wave option() directives
     template <typename ContextT, typename ContainerT>
     bool 
-    interpret_pragma_option(ContextT &ctx, ContainerT const &values, 
+    interpret_pragma_option(ContextT &ctx, ContainerT const &cvalues, 
         typename ContextT::token_type const &act_token)
     {
         using namespace boost::wave;
@@ -1155,6 +1216,9 @@ protected:
         typedef typename ContextT::token_type token_type;
         typedef typename token_type::string_type string_type;
         typedef typename ContainerT::const_iterator const_iterator;
+
+        ContainerT values;
+        join_adjacent_string_tokens(ctx, cvalues, values);
 
         const_iterator end = values.end();
         for (const_iterator it = values.begin(); it != end; /**/) {
