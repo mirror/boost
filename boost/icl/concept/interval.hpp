@@ -897,6 +897,13 @@ operator < (const Type& left, const Type& right)
             || (lower_equal(left,right) && upper_less(left,right)); 
 }
 
+template<class Type>
+inline typename boost::enable_if<is_interval<Type>, bool>::type
+operator > (const Type& left, const Type& right)
+{
+    return right < left;
+}
+
 
 
 //------------------------------------------------------------------------------

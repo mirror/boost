@@ -19,7 +19,7 @@ namespace boost{namespace icl
 {
 
 template <class DomainT, 
-          ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, DomainT)>
+          ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(ICL_COMPARE_DEFAULT, DomainT)>
 class right_open_interval
 {
 public:
