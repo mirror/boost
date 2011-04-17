@@ -625,6 +625,7 @@ namespace boost { namespace unordered { namespace iterator_detail {
         typedef cl_iterator<A, Unique> const_local_iterator;
 
         friend class cl_iterator<A, Unique>;
+        
         node_ptr ptr_;
         std::size_t bucket_;
         std::size_t bucket_count_;
@@ -683,6 +684,7 @@ namespace boost { namespace unordered { namespace iterator_detail {
         typedef BOOST_DEDUCED_TYPENAME buckets::node_ptr node_ptr;
         typedef BOOST_DEDUCED_TYPENAME buckets::node node;
         typedef l_iterator<A, Unique> local_iterator;
+
         friend class l_iterator<A, Unique>;
 
         node_ptr ptr_;

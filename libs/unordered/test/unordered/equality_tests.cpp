@@ -136,15 +136,17 @@ namespace equality_tests
         UNORDERED_EQUALITY_MULTIMAP_TEST(
             ((1)(1))((1)(1)), !=, ((1)(1))((1)(2)))
         UNORDERED_EQUALITY_MULTIMAP_TEST(
-            ((1)(2))((1)(1)), !=, ((1)(1))((1)(2)))
+            ((1)(2))((1)(1)), ==, ((1)(1))((1)(2)))
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((1)(2))((1)(1)), !=, ((1)(1))((1)(3)))
     }
 
     UNORDERED_AUTO_TEST(equality_predicate_test)
     {
         UNORDERED_EQUALITY_SET_TEST(
-            (1), ==, (1001))
+            (1), !=, (1001))
         UNORDERED_EQUALITY_MAP_TEST(
-            ((1)(2))((1001)(1)), ==, ((1001)(2))((1)(1)))
+            ((1)(2))((1001)(1)), !=, ((1001)(2))((1)(1)))
     }
 
     // Test that equality still works when the two containers have

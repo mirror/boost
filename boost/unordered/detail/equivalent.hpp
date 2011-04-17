@@ -55,22 +55,71 @@ namespace boost { namespace unordered { namespace detail {
             for(node_ptr n1 = this->buckets_[this->bucket_count_].next_; n1;)
             {
                 node_ptr n2 = other.find_matching_node(n1);
-                if(!n2) return false;
-    
+                if (!n2) return false;
                 node_ptr end1 = node::next_group(n1);
                 node_ptr end2 = node::next_group(n2);
-    
-                do {
-                    if(!extractor::compare_mapped(
-                        node::get_value(n1), node::get_value(n2)))
-                        return false;
-                    n1 = n1->next_;
-                    n2 = n2->next_;
-                } while(n1 != end1 && n2 != end2);
-                if(n1 != end1 || n2 != end2) return false;
+                if (!group_equals(n1, end1, n2, end2)) return false;
+                n1 = end1;    
             }
     
             return true;
+        }
+        
+        static bool group_equals(node_ptr n1, node_ptr end1,
+                node_ptr n2, node_ptr end2)
+        {
+            for(;;)
+            {
+                if (node::get_value(n1) != node::get_value(n2))
+                    break;
+
+                n1 = n1->next_;
+                n2 = n2->next_;
+            
+                if (n1 == end1) return n2 == end2;
+                if (n2 == end2) return false;
+            }
+            
+            for(node_ptr n1a = n1, n2a = n2;;)
+            {
+                n1a = n1a->next_;
+                n2a = n2a->next_;
+
+                if (n1a == end1)
+                {
+                    if (n2a == end2) break;
+                    else return false;
+                }
+                if (n2a == end2) return false;
+            }
+
+            node_ptr start = n1;
+            for(;n1 != end2; n1 = n1->next_)
+            {
+                value_type const& v = node::get_value(n1);
+                if (find(start, n1, v)) continue;
+                std::size_t matches = count(n2, end2, v);
+                if (!matches or matches != 1 + count(n1->next_, end1, v))
+                    return false;
+            }
+            
+            return true;
+        }
+        
+        static bool find(node_ptr n, node_ptr end, value_type const& v)
+        {
+            for(;n != end; n = n->next_)
+                if (node::get_value(n) == v)
+                    return true;
+            return false;
+        }
+        
+        static std::size_t count(node_ptr n, node_ptr end, value_type const& v)
+        {
+            std::size_t count = 0;
+            for(;n != end; n = n->next_)
+                if (node::get_value(n) == v) ++count;
+            return count;
         }
 
         ////////////////////////////////////////////////////////////////////////
