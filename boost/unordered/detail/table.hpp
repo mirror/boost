@@ -396,7 +396,7 @@ namespace boost { namespace unordered { namespace detail {
             {
                 node_ptr node_to_delete = n;
                 n = n->next_;
-                delete_node(node_to_delete);
+                this->delete_node(node_to_delete);
             }
     
             ++end;
