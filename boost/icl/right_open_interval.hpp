@@ -19,12 +19,13 @@ namespace boost{namespace icl
 {
 
 template <class DomainT, 
-          ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(std::less, DomainT)>
+          ICL_COMPARE Compare = ICL_COMPARE_INSTANCE(ICL_COMPARE_DEFAULT, DomainT)>
 class right_open_interval
 {
 public:
     typedef right_open_interval<DomainT,Compare> type;
     typedef DomainT domain_type;
+    typedef ICL_COMPARE_DOMAIN(Compare,DomainT) domain_compare;
 
 public:
     //==========================================================================
@@ -42,7 +43,7 @@ public:
 
     /** Constructor for a singleton interval <tt>[val,val+1)</tt> */
     explicit right_open_interval(const DomainT& val)
-        : _lwb(val), _upb(icl::succ(val))
+        : _lwb(val), _upb(icl::successor<DomainT,domain_compare>::apply(val))
     {
         BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));

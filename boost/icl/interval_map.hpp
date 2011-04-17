@@ -28,7 +28,7 @@ template
     typename DomainT,
     typename CodomainT,
     class Traits = icl::partial_absorber,
-    ICL_COMPARE Compare  = ICL_COMPARE_INSTANCE(std::less, DomainT),
+    ICL_COMPARE Compare  = ICL_COMPARE_INSTANCE(ICL_COMPARE_DEFAULT, DomainT),
     ICL_COMBINE Combine  = ICL_COMBINE_INSTANCE(icl::inplace_plus, CodomainT),
     ICL_SECTION Section  = ICL_SECTION_INSTANCE(icl::inter_section, CodomainT), 
     ICL_INTERVAL(ICL_COMPARE) Interval = ICL_INTERVAL_INSTANCE(ICL_INTERVAL_DEFAULT, DomainT, Compare),
