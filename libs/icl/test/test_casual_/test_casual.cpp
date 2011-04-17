@@ -183,32 +183,69 @@ BOOST_AUTO_TEST_CASE(test_infinities)
 
 }
 
+BOOST_AUTO_TEST_CASE(invariance_wrt_compare_ordering_ticket_5482)
+{
+    typedef int T;
+    typedef int U;
+    typedef interval_map<T,U, partial_absorber> IntervalMapT;
+    typedef interval_map<T,U, partial_absorber,std::less> IntervalLtMapT;
+    typedef interval_map<T,U, partial_absorber,std::greater> IntervalGtMapT;
+    typedef interval_set<T>                     IntervalSetT;
+    typedef IntervalMapT::interval_type         IntervalT;
+    typedef IntervalLtMapT::interval_type       IntervalLtT;
+    typedef IntervalGtMapT::interval_type       IntervalGtT;
+
+    IntervalLtMapT lt_map;
+    IntervalGtMapT gt_map;
+
+    BOOST_CHECK( IntervalLtMapT::domain_compare()(0,1));
+    BOOST_CHECK(!IntervalLtMapT::domain_compare()(1,0));
+    BOOST_CHECK( IntervalGtMapT::domain_compare()(1,0));
+    BOOST_CHECK(!IntervalGtMapT::domain_compare()(0,1));
+
+    IntervalGtT(5);
+
+    lt_map.insert(make_pair(IntervalLtT(1),1));
+    lt_map.insert(make_pair(IntervalLtT(2),1));
+
+    gt_map.insert(make_pair(IntervalGtT(2,1),1));
+    gt_map.insert(make_pair(IntervalGtT(3,2),1));
+    gt_map.insert(make_pair(IntervalGtT(5,4),1));
+    gt_map.add(make_pair(IntervalGtT(8,2),1));
+
+    cout << "-----------------------------\n";
+    cout << "lt_map.iterative_size() = " << lt_map.iterative_size() << endl;
+    cout << "gt_map.iterative_size() = " << gt_map.iterative_size() << endl;
+    cout << "gt_map : " << gt_map << endl;
+    
+
+    BOOST_CHECK_EQUAL(true, true);
+}
+
+
+BOOST_AUTO_TEST_CASE(ticket_5482)
+{
+    typedef interval_map<int,int,partial_absorber,std::less>    m1_t;
+    typedef interval_map<int,int,partial_absorber,std::greater> m2_t;
+    m1_t m1;
+    m2_t m2;
+    m1.insert(make_pair(m1_t::interval_type(1), 20));
+    m1.insert(make_pair(m1_t::interval_type(2), 20));
+    m1.insert(make_pair(m1_t::interval_type(3), 20));
+
+    m2.insert(make_pair(m2_t::interval_type(1), 20));
+    m2.insert(make_pair(m2_t::interval_type(2), 20));
+    m2.insert(make_pair(m2_t::interval_type(3), 20));
+    BOOST_CHECK_EQUAL(m1.iterative_size(), m2.iterative_size());
+}
+
 BOOST_AUTO_TEST_CASE(casual)
 {
-    //typedef int T;
-    //typedef int U;
-    //typedef interval_map<T,U, total_absorber> IntervalMapT;
-    //typedef interval_set<T>                   IntervalSetT;
-    //typedef IntervalMapT::interval_type       IntervalT;
-
-    BOOST_CHECK((has_std_infinity<double>::value));
-
-    BOOST_CHECK((boost::detail::is_incrementable<chrono::duration<int> >::value));
-
-    BOOST_CHECK((has_rep_type<chrono::duration<int> >::value));
-    BOOST_CHECK((represents<int, chrono::duration<int> >::value));
-
-    BOOST_CHECK((!is_discrete<chrono::duration<double> >::value));
-
-    //BOOST_CHECK((!is_discrete<Now_time_rational>::value));
-    BOOST_CHECK(( is_continuous<boost::rational<int> >::value));
-    BOOST_CHECK(( !is_discrete<boost::rational<int> >::value));
-
-    BOOST_CHECK(( has_rep_type<Now_time_rational>::value));
-    BOOST_CHECK(( is_continuous<Now_time_rational>::value));
-    BOOST_CHECK(( !is_discrete<Now_time_rational>::value));
-    BOOST_CHECK(( is_continuous<typename rep_type_of<Now_time_rational>::type>::value));
-
+    typedef int T;
+    typedef int U;
+    typedef interval_map<T,U, partial_absorber> IntervalMapT;
+    typedef interval_set<T>                     IntervalSetT;
+    typedef IntervalMapT::interval_type         IntervalT;
 
     BOOST_CHECK_EQUAL(true, true);
 }

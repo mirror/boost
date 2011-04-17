@@ -70,6 +70,7 @@ test-suite "itl"
       
       # Bug fixes --------------------------------------------------------------
       [ run fix_icl_after_thread_/fix_icl_after_thread.cpp ] 
+      [ run fix_tickets_/fix_tickets.cpp ] 
       
       # Check for compiler bugs ------------------------------------------------
       # compile-fail-tests  
