@@ -22,6 +22,7 @@ Output:
 
 #include <cmath>
 #include <boost/units/cmath.hpp>
+#include <boost/units/io.hpp>
 #include <boost/units/systems/si/plane_angle.hpp>
 #include <boost/units/systems/si/length.hpp>
 #include <boost/units/systems/si/dimensionless.hpp>
