@@ -7,6 +7,12 @@
 #ifndef TT_TEST_HPP
 #define TT_TEST_HPP
 
+#include <boost/config.hpp>
+
+#if defined(_WIN32_WCE) && defined(BOOST_MSVC)
+#pragma warning(disable:4201)
+#endif
+
 #ifdef USE_UNIT_TEST
 #  include <boost/test/unit_test.hpp>
 #endif
