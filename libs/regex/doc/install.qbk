@@ -93,6 +93,12 @@ that you are using to build Boost.  Boost.Regex will not work correctly unless
 you ensure that this is the case: it is up to you to ensure that the version 
 of ICU you are using is binary compatible with the toolset you use to build Boost.]
 
+And finally, if you want to build/test with multiple compiler versions, all with different ICU
+builds, then the only way to achieve that currently is to modify your user-config.jam so that
+each toolset has the necessary compiler/linker options set so that ICU is found automatically
+by the configuration step (providing the ICU binaries use the standard names, all you have to
+add is the appropriate header-include and linker-search paths).
+
 [h4 Building via makefiles]
 
 [h5 Borland C++ Builder:]
