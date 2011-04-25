@@ -12,6 +12,7 @@
 
 #include <initializer_list>
 #include <vector>
+#include <string>
 
 namespace boost_no_initializer_lists {
 

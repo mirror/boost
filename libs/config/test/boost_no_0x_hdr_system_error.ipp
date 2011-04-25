@@ -16,6 +16,10 @@ namespace boost_no_0x_hdr_system_error {
 
 int test()
 {
+  using std::error_category;
+  using std::error_code;
+  using std::error_condition;
+  using std::system_error;
   return 0;
 }
 

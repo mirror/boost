@@ -42,14 +42,12 @@
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code">Macros
       for libraries with separate source code</a></span></dt>
 </dl></div>
-<a name="config_defects"></a><p>
-    </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects" title="Macros that describe defects">Macros
       that describe defects</a>
 </h3></div></div></div>
-<p>
+<a name="config_defects"></a><p>
         The following macros all describe features that are required by the C++ standard,
         if one of the following macros is defined, then it represents a defect in
         the compiler's conformance with the standard.
@@ -278,6 +276,26 @@
                 <p>
                   The Platform does not provide <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">wctype</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>
                   and <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cwctype</span><span class="special">&gt;</span></code>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_FENV_H</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Platform, Standard library
+                </p>
+              </td>
+<td>
+                <p>
+                  The C standard library doesn't provide <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">fenv</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>.
+                  <a href="../../../../../boost/detail/fenv.hpp" target="_top"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">fenv</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a>
+                  should be included instead of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">fenv</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>
+                  for maximum portability on platforms which do provide <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">fenv</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>.
                 </p>
               </td>
 </tr>
@@ -1306,14 +1324,12 @@
 </tbody>
 </table></div>
 </div>
-<a name="config_features"></a><p>
-    </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_optional_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features" title="Macros that describe optional features">Macros
       that describe optional features</a>
 </h3></div></div></div>
-<p>
+<a name="config_features"></a><p>
         The following macros describe features that are not required by the C++ standard.
         The macro is only defined if the feature is present.
       </p>
@@ -1691,26 +1707,6 @@
 <td>
                 <p>
                   The compiler has native support for SGI style type traits.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_HAS_FENV_H</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  Platform, Standard library
-                </p>
-              </td>
-<td>
-                <p>
-                  The platform has a <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">fenv</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>.
-                  <a href="../../../../../boost/detail/fenv.hpp" target="_top"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">fenv</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a>
-                  should be included instead of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">fenv</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>
-                  for maximum portability.
                 </p>
               </td>
 </tr>
@@ -2327,36 +2323,12 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CONCEPTS</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  The standard library does not provide header &lt;concepts&gt;.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
                   <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CONDITION_VARIABLE</span></code>
                 </p>
               </td>
 <td>
                 <p>
                   The standard library does not provide header &lt;condition_variable&gt;.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CONTAINER_CONCEPTS</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  The standard library does not provide header &lt;container_concepts&gt;.
                 </p>
               </td>
 </tr>
@@ -2393,30 +2365,6 @@
 <td>
                 <p>
                   The standard library does not provide header &lt;initializer_list&gt;.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_ITERATOR_CONCEPTS</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  The standard library does not provide header &lt;iterator_concepts&gt;.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_MEMORY_CONCEPTS</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  The standard library does not provide header &lt;memory_concepts&gt;.
                 </p>
               </td>
 </tr>
@@ -2605,18 +2553,6 @@
 <td>
                 <p>
                   The compiler does not support type <code class="computeroutput"><span class="identifier">char32_t</span></code>.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_CONCEPTS</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  The compiler does not support Concepts.
                 </p>
               </td>
 </tr>
@@ -2883,14 +2819,12 @@
 </tbody>
 </table></div>
 </div>
-<a name="config_helpers"></a><p>
-    </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
       Helper Macros</a>
 </h3></div></div></div>
-<p>
+<a name="config_helpers"></a><p>
         The following macros are either simple helpers, or macros that provide workarounds
         for compiler/standard library defects.
       </p>
@@ -2956,6 +2890,30 @@
                 <p>
                   <span class="bold"><strong>Note</strong></span>: the ultimate source of documentation
                   for this macro is in <a href="../../../../../boost/detail/workaround.hpp" target="_top">boost/detail/workaround.hpp</a>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_PREVENT_MACRO_SUBSTITUTION</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Sometimes you have a function name with the same name as a C macro,
+                  for example "min" and "max" member functions,
+                  in which case one can prevent the function being expanded as a
+                  macro using: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">someclass</span><span class="special">.</span><span class="identifier">min</span> <span class="identifier">BOOST_PREVENT_MACRO_SUBSTITUTION</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">,</span> <span class="identifier">arg2</span><span class="special">);</span>
+</pre>
+<p>
+                  The following also works in most, but not all, contexts: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="special">(</span><span class="identifier">someclass</span><span class="special">.</span><span class="identifier">max</span><span class="special">)(</span><span class="identifier">arg1</span><span class="special">,</span> <span class="identifier">arg2</span><span class="special">);</span>
+</pre>
+<p>
                 </p>
               </td>
 </tr>
@@ -3294,14 +3252,12 @@
 </tbody>
 </table></div>
 </div>
-<a name="config_info_macros"></a><p>
-    </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_informational_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros" title="Boost Informational Macros">Boost
       Informational Macros</a>
 </h3></div></div></div>
-<p>
+<a name="config_info_macros"></a><p>
         The following macros describe boost features; these are, generally speaking
         the only boost macros that should be tested in user code.
       </p>

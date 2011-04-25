@@ -539,14 +539,10 @@ that are not yet supported by a particular compiler or library.
 [[`BOOST_NO_0X_HDR_ARRAY`][The standard library does not provide header <array>.]]
 [[`BOOST_NO_0X_HDR_CHRONO`][The standard library does not provide header <chrono>.]]
 [[`BOOST_NO_0X_HDR_CODECVT`][The standard library does not provide header <codecvt>.]]
-[[`BOOST_NO_0X_HDR_CONCEPTS`][The standard library does not provide header <concepts>.]]
 [[`BOOST_NO_0X_HDR_CONDITION_VARIABLE`][The standard library does not provide header <condition_variable>.]]
-[[`BOOST_NO_0X_HDR_CONTAINER_CONCEPTS`][The standard library does not provide header <container_concepts>.]]
 [[`BOOST_NO_0X_HDR_FORWARD_LIST`][The standard library does not provide header <forward_list>.]]
 [[`BOOST_NO_0X_HDR_FUTURE`][The standard library does not provide header <future>.]]
 [[`BOOST_NO_0X_HDR_INITIALIZER_LIST`][The standard library does not provide header <initializer_list>.]]
-[[`BOOST_NO_0X_HDR_ITERATOR_CONCEPTS`][The standard library does not provide header <iterator_concepts>.]]
-[[`BOOST_NO_0X_HDR_MEMORY_CONCEPTS`][The standard library does not provide header <memory_concepts>.]]
 [[`BOOST_NO_0X_HDR_MUTEX`][The standard library does not provide header <mutex>.]]
 [[`BOOST_NO_0X_HDR_RANDOM`][The standard library does not provide header <random>.]]
 [[`BOOST_NO_0X_HDR_RATIO`][The standard library does not provide header <ratio>.]]
@@ -571,8 +567,6 @@ type `char16_t`.
 [[`BOOST_NO_CHAR32_T`][The compiler does not support 
 type `char32_t`. 
 ]]                       
-[[`BOOST_NO_CONCEPTS`][The compiler does not support Concepts. 
-]]                      
 [[`BOOST_NO_TEMPLATE_ALIASES`][The compiler does not support template aliases. 
 ]]                      
 [[`BOOST_NO_CONSTEXPR`][The compiler does not support 
@@ -673,6 +667,17 @@ of `__BORLANDC__` /unless/ the macro `BOOST_DETECT_OUTDATED_WORKAROUNDS` is defi
 `(__BORLANDC__ <= 0x590)`.
 
 [*Note]: the ultimate source of documentation for this macro is in [@../../../../boost/detail/workaround.hpp boost/detail/workaround.hpp].
+]]
+[[`BOOST_PREVENT_MACRO_SUBSTITUTION`][
+Sometimes you have a function name with the same name as a C macro, for example "min" and "max"
+member functions, in which case one can prevent the function being expanded as a macro using:
+``
+someclass.min BOOST_PREVENT_MACRO_SUBSTITUTION(arg1, arg2);
+``
+The following also works in most, but not all, contexts:
+``
+(someclass.max)(arg1, arg2);
+``
 ]]
 [[`BOOST_DEDUCED_TYPENAME`][
 Some compilers don't support the use of typename for dependent types in deduced

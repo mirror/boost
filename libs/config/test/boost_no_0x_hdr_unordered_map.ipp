@@ -16,7 +16,9 @@ namespace boost_no_0x_hdr_unordered_map {
 
 int test()
 {
-  return 0;
+  std::unordered_map<int, long> s1;
+  std::unordered_multimap<int, long> s2;
+  return s1.empty() && s2.empty() ? 0 : 1;
 }
 
 }

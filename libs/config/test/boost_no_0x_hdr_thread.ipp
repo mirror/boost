@@ -16,6 +16,11 @@ namespace boost_no_0x_hdr_thread {
 
 int test()
 {
+  using std::thread;
+  using std::this_thread::get_id;
+  using std::this_thread::yield;
+  using std::this_thread::sleep_until;
+  using std::this_thread::sleep_for;
   return 0;
 }
 

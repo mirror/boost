@@ -44,7 +44,9 @@
 //
 // Is this really the best way to detect whether the std lib is in namespace std?
 //
+#ifdef __cplusplus
 #include <cstddef>
+#endif
 #if !defined(__STL_IMPORT_VENDOR_CSTD) && !defined(_STLP_IMPORT_VENDOR_CSTD)
 #  define BOOST_NO_STDC_NAMESPACE
 #endif
@@ -62,7 +64,6 @@
 #define BOOST_NO_AUTO_MULTIDECLARATIONS
 #define BOOST_NO_CHAR16_T
 #define BOOST_NO_CHAR32_T
-#define BOOST_NO_CONCEPTS
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_DECLTYPE
 #define BOOST_NO_DEFAULTED_FUNCTIONS

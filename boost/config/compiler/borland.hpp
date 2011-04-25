@@ -56,8 +56,13 @@
 #  define BOOST_NO_CV_VOID_SPECIALIZATIONS
 #  define BOOST_NO_DEDUCED_TYPENAME
 // workaround for missing WCHAR_MAX/WCHAR_MIN:
+#ifdef __cplusplus
 #include <climits>
 #include <cwchar>
+#else
+#include <limits.h>
+#include <wchar.h>
+#endif // __cplusplus
 #ifndef WCHAR_MAX
 #  define WCHAR_MAX 0xffff
 #endif
@@ -69,7 +74,7 @@
 // Borland C++ Builder 6 and below:
 #if (__BORLANDC__ <= 0x564)
 
-#  ifdef NDEBUG
+#  if defined(NDEBUG) && defined(__cplusplus)
       // fix broken <cstring> so that Boost.test works:
 #     include <cstring>
 #     undef strcmp
@@ -166,7 +171,6 @@
 
 #define BOOST_NO_AUTO_DECLARATIONS
 #define BOOST_NO_AUTO_MULTIDECLARATIONS
-#define BOOST_NO_CONCEPTS
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_DEFAULTED_FUNCTIONS
 #define BOOST_NO_DELETED_FUNCTIONS

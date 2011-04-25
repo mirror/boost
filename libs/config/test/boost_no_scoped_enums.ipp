@@ -15,7 +15,14 @@ namespace boost_no_scoped_enums {
 int test()
 {
   enum class scoped_enum { yes, no, maybe };
-  return 0;
+  // This tests bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38064
+  bool b = (scoped_enum::yes == scoped_enum::yes) 
+   && (scoped_enum::yes != scoped_enum::no) 
+   && (scoped_enum::yes < scoped_enum::no) 
+   && (scoped_enum::yes <= scoped_enum::no) 
+   && (scoped_enum::no > scoped_enum::yes) 
+   && (scoped_enum::no >= scoped_enum::yes);
+  return b ? 0 : 1;
 }
 
 }

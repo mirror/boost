@@ -60,7 +60,7 @@
 // (Niels Dekker, LKEB, April 2010)
 #  define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
 
-#  ifdef NDEBUG
+#  if defined(NDEBUG) && defined(__cplusplus)
       // fix broken <cstring> so that Boost.test works:
 #     include <cstring>
 #     undef strcmp
@@ -93,7 +93,6 @@
 
 #define BOOST_NO_AUTO_DECLARATIONS
 #define BOOST_NO_AUTO_MULTIDECLARATIONS
-#define BOOST_NO_CONCEPTS
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_DEFAULTED_FUNCTIONS
 #define BOOST_NO_DELETED_FUNCTIONS

@@ -16,6 +16,9 @@ namespace boost_no_0x_hdr_codecvt {
 
 int test()
 {
+  using std::codecvt_utf8;
+  using std::codecvt_utf16;
+  using std::codecvt_utf8_utf16;
   return 0;
 }
 

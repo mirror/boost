@@ -16,6 +16,19 @@ namespace boost_no_0x_hdr_future {
 
 int test()
 {
+  using std::is_error_code_enum;
+  using std::make_error_code;
+  using std::make_error_condition;
+  using std::future_category;
+  using std::future_error;
+  using std::promise;
+  using std::promise;
+  using std::promise;
+  using std::future;
+  using std::shared_future;
+  using std::atomic_future;
+  using std::packaged_task; // undefined
+  using std::async;
   return 0;
 }
 
