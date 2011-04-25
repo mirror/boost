@@ -21,15 +21,28 @@ printer friendly PDF format].
 
 [section:intro Overview and Tutorial]
 
-The header `<boost/static_assert.hpp>` supplies a single macro `BOOST_STATIC_ASSERT(x)`, 
-which generates a compile time error message if the integral-constant-expression `x`
-is not true. In other words it is the compile time equivalent of the assert macro; 
+The header `<boost/static_assert.hpp>` supplies two macros:
+
+   BOOST_STATIC_ASSERT(x)
+   BOOST_STATIC_ASSERT_MSG(x, msg)
+   
+Both generate a compile time error message if the integral-constant-expression `x`
+is not true. In other words, they are the compile time equivalent of the assert macro; 
 this is sometimes known as a "compile-time-assertion", but will be called a 
 "static assertion" throughout these docs. Note that if the condition is `true`, 
-then the macro will generate neither code nor data - and the macro can also 
+then the macros will generate neither code nor data - and the macros can also 
 be used at either namespace, class or function scope. When used in a template, 
 the static assertion will be evaluated at the time the template is instantiated; 
-this is particularly useful for validating template parameters. 
+this is particularly useful for validating template parameters.
+
+If the C++0x `static_assert` feature is available, both macros will use it.
+For `BOOST_STATIC_ASSERT(x)`, the error message with be a stringized version of `x`.
+For `BOOST_STATIC_ASSERT_MSG(x, msg)`, the error message will be the `msg` string.
+
+If the C++0x `static_assert` feature is not available, `BOOST_STATIC_ASSERT_MSG(x, msg)`
+will be treated as `BOOST_STATIC_ASSERT(x)`.
+
+The material that follows assumes the C++0x `static_assert` feature is not available.
 
 One of the aims of `BOOST_STATIC_ASSERT` is to generate readable error messages. 
 These immediately tell the user that a library is being used in a manner that 

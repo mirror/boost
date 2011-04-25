@@ -16,12 +16,16 @@
 // Namespace scope
 BOOST_STATIC_ASSERT(sizeof(int) >= sizeof(short));
 BOOST_STATIC_ASSERT(sizeof(char) == 1);
+BOOST_STATIC_ASSERT_MSG(sizeof(int) >= sizeof(short), "msg1");
+BOOST_STATIC_ASSERT_MSG(sizeof(char) == 1, "msg2");
 
 // Function (block) scope
 void f()
 {
   BOOST_STATIC_ASSERT(sizeof(int) >= sizeof(short));
   BOOST_STATIC_ASSERT(sizeof(char) == 1);
+  BOOST_STATIC_ASSERT_MSG(sizeof(int) >= sizeof(short), "msg3");
+  BOOST_STATIC_ASSERT_MSG(sizeof(char) == 1, "msg4");
 }
 
 struct Bob
@@ -29,6 +33,8 @@ struct Bob
   private:  // can be in private, to avoid namespace pollution
     BOOST_STATIC_ASSERT(sizeof(int) >= sizeof(short));
     BOOST_STATIC_ASSERT(sizeof(char) == 1);
+    BOOST_STATIC_ASSERT_MSG(sizeof(int) >= sizeof(short), "msg5");
+    BOOST_STATIC_ASSERT_MSG(sizeof(char) == 1, "msg6");
   public:
 
   // Member function scope: provides access to member variables
@@ -36,9 +42,11 @@ struct Bob
   char c;
   int f()
   {
-#ifndef _MSC_VER // broken sizeof in VC6
+#if defined(_MSC_VER) && _MSC_VER < 1300 // broken sizeof in VC6
     BOOST_STATIC_ASSERT(sizeof(x) >= sizeof(short));
     BOOST_STATIC_ASSERT(sizeof(c) == 1);
+    BOOST_STATIC_ASSERT_MSG(sizeof(x) >= sizeof(short), "msg7");
+    BOOST_STATIC_ASSERT_MSG(sizeof(c) == 1, "msg8");
 #endif
     return x;
   }
@@ -52,6 +60,7 @@ struct Bill
 {
   private:  // can be in private, to avoid namespace pollution
     BOOST_STATIC_ASSERT(sizeof(Int) > sizeof(char));
+    BOOST_STATIC_ASSERT_MSG(sizeof(Int) > sizeof(char), "msg9");
   public:
 
   // Template member function scope: provides access to member variables
@@ -62,10 +71,12 @@ struct Bill
   {
     BOOST_STATIC_ASSERT(sizeof(Int) == sizeof(Int2));
     BOOST_STATIC_ASSERT(sizeof(Char) == sizeof(Char2));
+    BOOST_STATIC_ASSERT_MSG(sizeof(Int) == sizeof(Int2), "msg10");
+    BOOST_STATIC_ASSERT_MSG(sizeof(Char) == sizeof(Char2), "msg11");
   }
 };
 
-void test_Bill() // BOOST_CT_ASSERTs are not triggerred until instantiated
+void test_Bill() // BOOST_STATIC_ASSERTs are not triggerred until instantiated
 {
   Bill<int, char> z;
   //Bill<int, int> bad; // will not compile
