@@ -38,8 +38,11 @@ __examples
 [:`is_virtual_base_of<Base, Derived>::value` is an integral constant 
 expression that evaluates to /true/.]
 
-[:`is_virtual_base_of<Base, Derived>::value` is an integral constant 
+[:`is_virtual_base_of<SomeClassType, SomeClassType>::value` is an integral constant 
 expression that evaluates to /true/.]
+
+[:`is_virtual_base_of<NotAClassType, NotAClassType>::value` is an integral constant 
+expression that evaluates to /false/.]
 
 [:`is_virtual_base_of<T, U>::value_type` is the type `bool`.]
 

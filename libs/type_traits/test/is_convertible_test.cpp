@@ -11,6 +11,8 @@
 #else
 #  include <boost/type_traits/is_convertible.hpp>
 #endif
+#include <boost/utility/enable_if.hpp>
+
 
 template <class T>
 struct convertible_from
@@ -22,6 +24,37 @@ struct base2 { };
 struct middle2 : public virtual base2 { };
 struct derived2 : public middle2 { };
 
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+
+template<typename T>
+struct test_bug_4530
+{
+	template<typename A>
+	test_bug_4530(A&&, typename boost::enable_if<boost::is_convertible<A&&, T> >::type* =0);
+};
+
+struct A4530
+{
+   template <class T>
+   A4530(T);
+};
+
+#endif
+
+#ifdef BOOST_MSVC
+
+struct bug_5271a
+{
+    __declspec(align(16)) int value;
+};
+
+struct bug_5271b
+{
+    __declspec(align(16)) int value;
+    bug_5271b(int v) : value(v) {}
+};
+
+#endif
 
 TT_TEST_BEGIN(is_convertible)
 
@@ -49,7 +82,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int,test_abc1>::value), fals
 #endif
 
 // The following four do not compile without member template support:
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,void>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,void>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<void,void>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<void,float>::value), false);
 
@@ -102,7 +135,12 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_abc1&, test_abc2>::valu
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int, int_constructible>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float> >::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float const&> >::value), true);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float&> >::value), true);
+//
+// These two tests give different results with different compilers, we used to require *true* results
+// from these, but C++0x behaviour requires *false*:
+//
+//BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float&> >::value), false);
+//BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<char,convertible_from<char&> >::value), false);
 
 #if !(defined(__GNUC__) && (__GNUC__ < 4))
 // GCC 3.x emits warnings here, which causes the tests to fail when we compile with warnings-as-errors:
@@ -113,7 +151,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<char&
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<char,convertible_from<char> >::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<char,convertible_from<char const&> >::value), true);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<char,convertible_from<char&> >::value), true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float&,convertible_from<float> >::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float const&,convertible_from<float> >::value), true);
@@ -140,13 +177,15 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,char>::value), true)
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,float>::value), true);
 #endif
 
+#ifndef BOOST_NO_RVALUE_REFERENCES
+// Test bug case 4530:
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_bug_4530<A4530>,A4530>::value), true);
+#endif
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC > 1310)
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int, bug_5271a>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int, bug_5271b>::value), true);
+#endif
 
 TT_TEST_END
-
-
-
-
-
-
-
 

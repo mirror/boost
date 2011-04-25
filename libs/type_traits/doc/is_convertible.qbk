@@ -9,7 +9,7 @@
    template <class From, class To>
    struct is_convertible : public __tof {};
   
-__inherit If an imaginary lvalue of type `From` is convertible to type `To` then 
+__inherit If an imaginary rvalue of type `From` is convertible to type `To` then 
 inherits from __true_type, otherwise inherits from __false_type.
 
 Type From must not be an incomplete type.
@@ -58,7 +58,7 @@ expression that evaluates to /false/: the conversion would require a `const_cast
 expression that evaluates to /true/.]
 
 [:`is_convertible<int, int>::value` is an integral constant 
-expression that evaluates to /false/.]
+expression that evaluates to /true/.]
 
 [:`is_convertible<T, T>::value_type` is the type `bool`.]
 

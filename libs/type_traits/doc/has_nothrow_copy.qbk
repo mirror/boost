@@ -25,8 +25,10 @@ templates, then this template can not be used with function types.
 Without some (as yet unspecified) help from the compiler, 
 `has_nothrow_copy` will never report that a class or struct has a 
 non-throwing copy-constructor; this is always safe, if possibly sub-optimal.
-Currently (May 2005) only Visual C++ 8 has the necessary compiler __intrinsics to ensure that this
-trait "just works".
+Currently (May 2011) compilers more recent than Visual C++ 8, GCC-4.3, Greenhills 6.0, 
+Intel-11.0, and Codegear have the necessary compiler __intrinsics to ensure that this 
+trait "just works".  You may also test to see if the necessary __intrinsics are available 
+by checking to see if the macro `BOOST_HAS_NOTHROW_COPY` is defined.
 
 __header ` #include <boost/type_traits/has_nothrow_copy.hpp>` or ` #include <boost/type_traits.hpp>`
 

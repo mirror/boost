@@ -154,7 +154,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<int[3][2]>::value, tr
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<int[2][4][5][6][3]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<empty_UDT>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<void>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<void>::value, false);
 // cases we would like to succeed but can't implement in the language:
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<empty_POD_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<POD_UDT>::value, true, false);

@@ -19,9 +19,12 @@ __compat Without (some as yet unspecified) help from the
 compiler, we cannot distinguish between union and class types using only standard C++, 
 as a result this type will never inherit from __true_type, unless the user explicitly
 specializes the template for their user-defined union types, or unless the compiler
-supplies some unspecified intrinsic that implements this functionality.  Currently
-(May 2005) only Visual C++ 8 has the necessary compiler __intrinsics to make this 
-trait "just work" without user intervention.
+supplies some unspecified intrinsic that implements this functionality.  
+Currently (May 2011) compilers more recent than Visual C++ 8, GCC-4.3, Greenhills 6.0, 
+Intel-11.0, and Codegear have the necessary compiler __intrinsics to ensure that this 
+trait "just works".  You may also test to see if the necessary __intrinsics are available 
+by checking to see if the macro `BOOST_IS_UNION` is defined.
+
 
 __header ` #include <boost/type_traits/is_union.hpp>` or ` #include <boost/type_traits.hpp>`
 

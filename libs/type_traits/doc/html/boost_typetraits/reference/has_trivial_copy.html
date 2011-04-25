@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
@@ -54,9 +53,13 @@
 <p>
         Without some (as yet unspecified) help from the compiler, has_trivial_copy
         will never report that a user-defined class or struct has a trivial constructor;
-        this is always safe, if possibly sub-optimal. Currently (May 2005) only MWCW
-        9 and Visual C++ 8 have the necessary compiler <a class="link" href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
-        to detect user-defined classes with trivial constructors.
+        this is always safe, if possibly sub-optimal. Currently (May 2011) compilers
+        more recent than Visual C++ 8, GCC-4.3, Greenhills 6.0, Intel-11.0, and Codegear
+        have the necessary compiler <a class="link" href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
+        to ensure that this trait "just works". You may also test to see
+        if the necessary <a class="link" href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
+        are available by checking to see if the macro <code class="computeroutput"><span class="identifier">BOOST_HAS_TRIVIAL_COPY</span></code>
+        is defined.
       </p>
 <p>
         <span class="bold"><strong>C++ Standard Reference:</strong></span> 12.8p6.

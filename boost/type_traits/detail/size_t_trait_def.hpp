@@ -19,10 +19,10 @@
 #include <cstddef>
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC >= 1300
-#   define BOOST_TT_AUX_SIZE_T_BASE(C) ::boost::integral_constant<std::size_t,C>
+#   define BOOST_TT_AUX_SIZE_T_BASE(C) public ::boost::integral_constant<std::size_t,C>
 #   define BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) /**/
 #else
-#   define BOOST_TT_AUX_SIZE_T_BASE(C) ::boost::mpl::size_t<C>
+#   define BOOST_TT_AUX_SIZE_T_BASE(C) public ::boost::mpl::size_t<C>
 #   define BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) \
     typedef ::boost::mpl::size_t<C> base_; \
     using base_::value; \
@@ -34,6 +34,7 @@
 template< typename T > struct trait \
     : BOOST_TT_AUX_SIZE_T_BASE(C) \
 { \
+public:\
     BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) \
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,trait,(T)) \
 }; \
@@ -45,6 +46,7 @@ BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,trait) \
 template<> struct trait<spec> \
     : BOOST_TT_AUX_SIZE_T_BASE(C) \
 { \
+public:\
     BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) \
     BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,trait,(spec)) \
 }; \
