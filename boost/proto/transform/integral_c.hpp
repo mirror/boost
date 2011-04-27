@@ -26,9 +26,7 @@ namespace boost { namespace proto
         {
             typedef T result_type;
 
-            /// Returns I.
-            /// \param e The current expression.
-            /// \return \c e
+            /// \return \c I
             /// \throw nothrow
             T operator()(
                 typename impl::expr_param
