@@ -1,13 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// \file arg.hpp
-/// Contains definition of the argN transforms.
+/// \file integral_c.hpp
+/// Contains definition of the integral_c transform and friends.
 //
-//  Copyright 2008 Eric Niebler. Distributed under the Boost
+//  Copyright 2011 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_PROTO_TRANSFORM_ARG_HPP_EAN_11_01_2007
-#define BOOST_PROTO_TRANSFORM_ARG_HPP_EAN_11_01_2007
+#ifndef BOOST_PROTO_TRANSFORM_INTEGRAL_C_HPP_EAN_04_28_2011
+#define BOOST_PROTO_TRANSFORM_INTEGRAL_C_HPP_EAN_04_28_2011
 
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/transform/impl.hpp>
