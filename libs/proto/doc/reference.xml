@@ -75,11 +75,6 @@
           <classname alt="boost::proto::assign">proto::assign</classname>
         </computeroutput>
       </listitem>
-      <!--<listitem>
-        <computeroutput>
-          <classname alt="boost::proto::base_expr">proto::base_expr</classname>
-        </computeroutput>
-      </listitem>-->
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::basic_expr">proto::basic_expr</classname>
@@ -133,6 +128,11 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::callable">proto::callable</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::char_">proto::char_</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -417,6 +417,16 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::int_">proto::int_</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::integral_c">proto::integral_c</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::is_aggregate">proto::is_aggregate</classname>
         </computeroutput>
       </listitem>
@@ -488,6 +498,11 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::logical_or">proto::logical_or</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::long_">proto::long_</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -708,6 +723,11 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::shift_right_assign">proto::shift_right_assign</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::size_t">proto::size_t</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -1136,6 +1156,7 @@
   <xi:include href="reference/transform/fold.xml"/>
   <xi:include href="reference/transform/fold_tree.xml"/>
   <xi:include href="reference/transform/impl.xml"/>
+  <xi:include href="reference/transform/integral_c.xml"/>
   <xi:include href="reference/transform/lazy.xml"/>
   <xi:include href="reference/transform/make.xml"/>
   <xi:include href="reference/transform/pass_through.xml"/>
