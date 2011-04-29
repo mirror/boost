@@ -287,6 +287,7 @@ Boost 1.46.1:
 * Use relative paths for `__FILENAME__` macro.
 * Rewrite xinclude path generator so that it doesn't use deprecated
   filesystem functions.
+* Allow quickbook escapes inside comments in syntax highlighted code.
 * Quickbook 1.6:
   * Scope source mode changes to the file they're made in.
   * Explicit markup for lists. e.g.
