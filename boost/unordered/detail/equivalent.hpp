@@ -99,7 +99,7 @@ namespace boost { namespace unordered { namespace detail {
                 value_type const& v = node::get_value(n1);
                 if (find(start, n1, v)) continue;
                 std::size_t matches = count_equal(n2, end2, v);
-                if (!matches or matches != 1 + count_equal(n1->next_, end1, v))
+                if (!matches || matches != 1 + count_equal(n1->next_, end1, v))
                     return false;
             }
             
