@@ -246,6 +246,26 @@ void test6()
     BOOST_CHECK_EQUAL(build1.get(), 500);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// test7
+//  Test regex_replace with an xpressive lambda
+void test7()
+{
+    namespace xp = boost::xpressive;
+    using namespace xp;
+
+    std::map<std::string, std::string> env;
+    env["XXX"] = "!!!";
+    env["YYY"] = "???";
+
+    std::string text("This is a %XXX% string %YYY% and stuff.");
+    sregex var = '%' >> (s1 = +_w) >> '%';
+
+    text = regex_replace(text, var, xp::ref(env)[s1]);
+
+    BOOST_CHECK_EQUAL(text, "This is a !!! string ??? and stuff.");
+}
+
 using namespace boost::unit_test;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -261,6 +281,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test->add(BOOST_TEST_CASE(&test4_aux));
     test->add(BOOST_TEST_CASE(&test5));
     test->add(BOOST_TEST_CASE(&test6));
+    test->add(BOOST_TEST_CASE(&test7));
     return test;
 }
 
