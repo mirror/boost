@@ -724,6 +724,21 @@ namespace boost { namespace proto
 
     struct _void;
 
+    template<typename T, T I>
+    struct integral_c;
+
+    template<char I>
+    struct char_;
+
+    template<int I>
+    struct int_;
+
+    template<long I>
+    struct long_;
+
+    template<std::size_t I>
+    struct size_t;
+
     template<int I>
     struct _child_c;
 
