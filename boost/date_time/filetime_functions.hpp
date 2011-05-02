@@ -73,12 +73,12 @@ namespace winapi {
         file_time ft_utc;
         GetSystemTimeAsFileTime(&ft_utc);
         FileTimeToLocalFileTime(&ft_utc, &ft);
-#elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
+#elif defined(BOOST_HAS_GETSYSTEMTIMEASFILETIME)
+        GetSystemTimeAsFileTime(&ft);
+#else
         system_time st;
         GetSystemTime(&st);
         SystemTimeToFileTime(&st, &ft);
-#else
-        GetSystemTimeAsFileTime(&ft);
 #endif
     }
 
