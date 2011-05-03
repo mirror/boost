@@ -1,8 +1,6 @@
 
 #include <boost/phoenix.hpp>
 
-#include <iostream>
-
 struct omp_for_eval
 {
     typedef void result_type;
@@ -33,7 +31,7 @@ struct omp_for_eval
 ////////////////////////////////////////////////////////////////////////////////
 // Define new custom expression
 BOOST_PHOENIX_DEFINE_EXPRESSION(
-    (client)(omp_for)
+    (omp_for)
   , (boost::phoenix::meta_grammar) // Cond
     (boost::phoenix::meta_grammar) // Init
     (boost::phoenix::meta_grammar) // Step
@@ -43,7 +41,7 @@ BOOST_PHOENIX_DEFINE_EXPRESSION(
 namespace boost { namespace phoenix
 {
     template <>
-    struct default_actions::when<client::rule::omp_for>
+    struct default_actions::when< ::rule::omp_for>
         : boost::phoenix::call< ::omp_for_eval>
     {};
 }}
@@ -55,11 +53,11 @@ struct omp_for_gen
         : init(init), cond(cond), step(step) {}
     
     template <typename Do>
-    typename client::expression::omp_for<Init, Cond, Step, Do>::type const
+    typename expression::omp_for<Init, Cond, Step, Do>::type const
     operator[](Do const& do_) const
     {
         return
-            client::expression::
+            expression::
                 omp_for<Init, Cond, Step, Do>::
                     make(init, cond, step, do_);
     }
@@ -115,14 +113,14 @@ parallel_eval(Expr const & expr, A0 & a0, A1 & a1, A2 & a2)
 
 // changing evaluation mechanism on the fly
 BOOST_PHOENIX_DEFINE_EXPRESSION(
-    (detail)(parallel)
+    (parallel)
   , (boost::phoenix::meta_grammar)
 )
 
 namespace boost { namespace phoenix
 {
     template <>
-    struct default_actions::when< ::detail::rule::parallel>
+    struct default_actions::when< ::rule::parallel>
         : proto::call<
             evaluator(
                 proto::_child0
@@ -137,12 +135,11 @@ namespace boost { namespace phoenix
 }}
 
 template <typename Expr>
-typename detail::expression::parallel<Expr>::type const
+typename expression::parallel<Expr>::type const
 parallel(Expr const & expr)
 {
-    return detail::expression::parallel<Expr>::make(expr);
+    return expression::parallel<Expr>::make(expr);
 }
-
 ////////////////////////////////////////////////////////////////////////////////
 
 
