@@ -60,6 +60,8 @@
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/preprocessor/cat.hpp> 
+
+#include <boost/msm/msm_grammar.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
 namespace proto = boost::proto;
@@ -179,7 +181,7 @@ template<typename Expr>
 struct euml_terminal;
 
 struct sm_domain
-    : proto::domain< proto::generator<euml_terminal>, terminal_grammar >
+    : proto::domain< proto::generator<euml_terminal>, terminal_grammar, boost::msm::msm_domain >
 {};
 
 struct state_grammar : 

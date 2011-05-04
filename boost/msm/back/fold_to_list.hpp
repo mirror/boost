@@ -13,6 +13,7 @@
 #include <boost/msm/proto_config.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/proto/transform.hpp>
+#include <boost/msm/msm_grammar.hpp>
 #include <boost/fusion/container/list/cons.hpp>
 
 namespace boost { namespace msm { namespace back
@@ -20,7 +21,19 @@ namespace boost { namespace msm { namespace back
  struct state_copy_tag
  {
  };
- ::boost::proto::terminal<state_copy_tag>::type const states_={{}};
+
+template<class X = proto::is_proto_expr>
+struct define_states_creation
+{
+   BOOST_PROTO_BASIC_EXTENDS(
+       proto::terminal<state_copy_tag>::type
+     , define_states_creation
+     , boost::msm::msm_domain
+   )
+};
+
+define_states_creation<> const states_ = {{}};
+
  struct FoldToList
   : ::boost::proto::or_<
         // Don't add the states_ terminal to the list
