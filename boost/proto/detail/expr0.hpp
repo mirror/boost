@@ -432,6 +432,45 @@
             typedef typename result_of::funop<Sig, expr, default_domain>::type const type;
         };
 
+#ifndef BOOST_NO_VARIADIC_TEMPLATES
+        /// \overload
+        ///
+        template<typename ...A>
+        typename result_of::funop<
+            expr const(A const &...)
+          , expr
+          , default_domain
+        >::type const
+        operator ()(A const &... a) const
+        {
+            return result_of::funop<
+                expr const(A const &...)
+              , expr
+              , default_domain
+            >::call(*this, a...);
+        }
+
+    #ifdef BOOST_PROTO_DEFINE_TERMINAL
+        /// \overload
+        ///
+        template<typename ...A>
+        typename result_of::funop<
+            expr(A const &...)
+          , expr
+          , default_domain
+        >::type const
+        operator ()(A const &... a)
+        {
+            return result_of::funop<
+                expr(A const &...)
+              , expr
+              , default_domain
+            >::call(*this, a...);
+        }
+    #endif
+
+#else // BOOST_NO_VARIADIC_TEMPLATES
+
         /// Function call
         ///
         /// \return A new \c expr\<\> node representing the function invocation of \c (*this)().
@@ -453,8 +492,10 @@
         }
     #endif
 
-#define BOOST_PP_ITERATION_PARAMS_2 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY), <boost/proto/detail/expr1.hpp>))
-#include BOOST_PP_ITERATE()
+    #define BOOST_PP_ITERATION_PARAMS_2 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY), <boost/proto/detail/expr1.hpp>))
+    #include BOOST_PP_ITERATE()
+
+#endif
     };
 
 #undef ARG_COUNT

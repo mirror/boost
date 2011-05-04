@@ -23,14 +23,14 @@
     template<typename Expr, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A)>
     struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     {
-        typedef proto::expr<
-            tag::function
+        typedef typename proto::base_expr<
+            Domain
+          , tag::function
           , BOOST_PP_CAT(list, BOOST_PP_INC(BOOST_PP_ITERATION()))<
                 Expr &
                 BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), M0, ~)
             >
-          , BOOST_PP_INC(BOOST_PP_ITERATION())
-        > type;
+        >::type type;
 
         static type const call(
             Expr &e
