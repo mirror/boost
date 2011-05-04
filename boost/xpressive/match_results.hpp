@@ -938,7 +938,10 @@ private:
       , mpl::size_t<4>
     ) const
     {
-        return this->format2_(out, detail::ReplaceAlgo()(format, 0, *this));
+        // detail::ReplaceAlgo may be an incomplete type at this point, so
+        // we can't construct it directly.
+        typedef typename mpl::if_c<true, detail::ReplaceAlgo, OutputIterator>::type ReplaceAlgo;
+        return this->format2_(out, ReplaceAlgo()(format, 0, *this));
     }
 
     /// INTERNAL ONLY
