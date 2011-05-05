@@ -14,24 +14,28 @@
 #include <boost/phoenix/core/expression.hpp>
 #include <boost/phoenix/core/meta_grammar.hpp>
 #include <boost/phoenix/core/terminal.hpp>
+#include <boost/phoenix/scope/lambda.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 
+/*
 BOOST_PHOENIX_DEFINE_EXPRESSION_VARARG(
     (boost)(phoenix)(this_function)
   , (meta_grammar)(meta_grammar)
   , BOOST_PHOENIX_LIMIT
 )
+*/
 
 namespace boost { namespace phoenix {
-
+    /*
     template <typename Expr>
     struct this_actor;
+    */
 
     namespace detail
     {
         template <typename Dummy>
         struct this_placeholder {};
-        
+      /*  
         struct infinite_recursion_detected {};
 
         struct last_non_this_actor
@@ -55,8 +59,9 @@ namespace boost { namespace phoenix {
                 >
             >
         {};
+        */
     }
-    
+#if 0
     struct this_function_eval
     {
         BOOST_PROTO_CALLABLE()
@@ -72,6 +77,8 @@ namespace boost { namespace phoenix {
         template <typename This, typename T, typename T0, typename Context>
         struct result<This(T &, T0 &, Context &)>
         {
+            typedef void type;
+            /*
             typedef
                 typename evaluator::impl<T &, Context &, int>::result_type
                 this_type;
@@ -87,6 +94,7 @@ namespace boost { namespace phoenix {
                     typename boost::result_of<typename proto::detail::uncvref<checker>::type(arg0_type)>::type
                 >::type
                 type;
+                */
         };
 
         template <typename This, typename T, typename T0, typename T1, typename Context>
@@ -97,6 +105,8 @@ namespace boost { namespace phoenix {
         template <typename This, typename T, typename T0, typename T1, typename Context>
         struct result<This(T &, T0 &, T1 &, Context &)>
         {
+            typedef void type;
+            /*
             typedef
                 typename evaluator::impl<T &, Context &, int>::result_type
                 this_type;
@@ -116,15 +126,16 @@ namespace boost { namespace phoenix {
                     typename boost::result_of<typename proto::detail::uncvref<checker>::type(arg0_type, arg1_type)>::type
                 >::type
                 type;
+            */
         };
 
 
         template <typename This, typename T0, typename Context>
         typename result<this_function_eval(This const&, T0 const&, Context &)>::type
-        operator()(This const& _this, T0 const & t0, Context & ctx) const
+        operator()(This const& _this, T0 const & t0, Context const & ctx) const
         {
-            typedef typename evaluator::impl<This const&, Context &, int>::result_type this_type;
-            typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
+            //typedef typename evaluator::impl<This const&, Context &, int>::result_type this_type;
+            //typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
 
             //std::cout << typeid(checker).name() << "\n";
             //std::cout << typeid(checker).name() << "\n";
@@ -134,14 +145,9 @@ namespace boost { namespace phoenix {
 
         template <typename This, typename T0, typename T1, typename Context>
         typename result<this_function_eval(This const&, T0 const&, T1 const&, Context)>::type
-        operator()(This const& _this, T0 const & t0, T1 const & t1, Context & ctx) const
+        operator()(This const& this_, T0 const & t0, T1 const & t1, Context const & ctx) const
         {
-            typedef typename evaluator::impl<This const&, Context &, int>::result_type this_type;
-            typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
-
-            //std::cout << typeid(checker).name() << "\n";
-
-            return boost::phoenix::eval(_this, ctx)(boost::phoenix::eval(t0, ctx), boost::phoenix::eval(t1, ctx));
+            return boost::phoenix::eval(this_, ctx)(boost::phoenix::eval(t0, ctx), boost::phoenix::eval(t1, ctx));
         }
     };
 
@@ -183,7 +189,7 @@ namespace boost { namespace phoenix {
             return expression::this_function<this_actor, T0, T1>::make(*this, t0, t1);
         }
     };
-    
+#endif
     
     template <typename D>
     struct is_custom_terminal<detail::this_placeholder<D> >
@@ -230,7 +236,7 @@ namespace boost { namespace phoenix {
             : proto::terminal<detail::this_placeholder<void> >
         {
             typedef proto::terminal<detail::this_placeholder<void> >::type base_type;
-            typedef this_actor<base_type> type;
+            typedef actor<base_type> type;
             
             static const type make()
             {
