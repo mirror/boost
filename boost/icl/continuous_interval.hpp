@@ -161,7 +161,7 @@ struct type_to_string<icl::continuous_interval<DomainT,Compare> >
 template<class DomainT> 
 struct value_size<icl::continuous_interval<DomainT> >
 {
-    static std::size_t apply(const icl::continuous_interval<DomainT>& value) 
+    static std::size_t apply(const icl::continuous_interval<DomainT>&) 
     { return 2; }
 };
 

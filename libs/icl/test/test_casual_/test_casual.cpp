@@ -239,6 +239,7 @@ BOOST_AUTO_TEST_CASE(ticket_5482)
     BOOST_CHECK_EQUAL(m1.iterative_size(), m2.iterative_size());
 }
 
+
 BOOST_AUTO_TEST_CASE(casual)
 {
     typedef int T;

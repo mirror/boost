@@ -106,7 +106,7 @@ struct type_to_string<icl::closed_interval<DomainT,Compare> >
 template<class DomainT> 
 struct value_size<icl::closed_interval<DomainT> >
 {
-    static std::size_t apply(const icl::closed_interval<DomainT>& value) 
+    static std::size_t apply(const icl::closed_interval<DomainT>&) 
     { return 2; }
 };
 

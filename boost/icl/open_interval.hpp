@@ -107,7 +107,7 @@ struct type_to_string<icl::open_interval<DomainT,Compare> >
 template<class DomainT, ICL_COMPARE Compare> 
 struct value_size<icl::open_interval<DomainT,Compare> >
 {
-    static std::size_t apply(const icl::open_interval<DomainT>& value) 
+    static std::size_t apply(const icl::open_interval<DomainT>&) 
     { return 2; }
 };
 
