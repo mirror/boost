@@ -40,7 +40,7 @@ struct iterator_wrapper
       : it(iter)
     {}
 
-    Iter it;
+    mutable Iter it;
 };
 
 struct begin : proto::callable
