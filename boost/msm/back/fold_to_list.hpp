@@ -43,11 +43,19 @@ define_states_creation<> const states_ = {{}};
         >
         // Put all other terminals at the head of the
         // list that we're building in the "state" parameter
+        // first states for the eUML states
       , ::boost::proto::when<
-            ::boost::proto::terminal< ::boost::proto::_>
+            ::boost::proto::terminal< state_tag >
+            , boost::fusion::cons< ::boost::proto::_, ::boost::proto::_state>(
+                ::boost::proto::_, ::boost::proto::_state
+            )
+        >
+        // then states from other front-ends
+      , ::boost::proto::when<
+      ::boost::proto::terminal< proto::_ >
             , boost::fusion::cons< ::boost::proto::_value, ::boost::proto::_state>(
                 ::boost::proto::_value, ::boost::proto::_state
-            )
+    )
         >
         // For left-shift operations, first fold the right
         // child to a list using the current state. Use

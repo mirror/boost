@@ -228,7 +228,7 @@ struct euml_event: proto::extends<typename proto::terminal<event_tag>::type, EVT
     };
 };
 template <class STATE>
-struct euml_state: proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>
+struct euml_state: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, state_domain>
 {
     typedef state_tag euml_tag_type;
     using proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>::operator=;

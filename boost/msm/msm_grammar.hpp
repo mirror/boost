@@ -11,6 +11,7 @@
 #ifndef BOOST_MSM_GRAMMAR_H
 #define BOOST_MSM_GRAMMAR_H
 
+#include <boost/msm/common.hpp>
 
 
 namespace boost { namespace msm
