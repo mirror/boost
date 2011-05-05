@@ -611,6 +611,7 @@ namespace boost { namespace proto
 
             proto_child0 child0() const
             {
+                using std::size_t;
                 return *(This *)((char *)this - BOOST_PROTO_OFFSETOF(This, proto_member_union_start_));
             }
 
