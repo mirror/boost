@@ -1,22 +1,45 @@
-///////////////////////////////////////////////////////////////////////////////
-// funop.hpp
-// Contains definition of funop[n]\<\> class template.
-//
-//  Copyright 2008 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+#if !defined(BOOST_PROTO_DONT_USE_PREPROCESSED_FILES)
 
-#ifndef BOOST_PP_IS_ITERATING
-#error Do not include this file directly
-#endif
+    #include <boost/proto/detail/preprocessed/funop.hpp>
 
-#define M0(Z, N, DATA)                                                                          \
-    typename proto::result_of::as_child<BOOST_PP_CAT(A, N), Domain>::type                       \
-    /**/
+#elif !defined(BOOST_PP_IS_ITERATING)
 
-#define M1(Z, N, DATA)                                                                          \
-    proto::as_child<Domain>(BOOST_PP_CAT(a, N))                                                 \
-    /**/
+    #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
+        #pragma wave option(preserve: 2, line: 0, output: "preprocessed/funop.hpp")
+    #endif
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // funop.hpp
+    // Contains definition of funop[n]\<\> class template.
+    //
+    //  Copyright 2008 Eric Niebler. Distributed under the Boost
+    //  Software License, Version 1.0. (See accompanying file
+    //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+    #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
+        #pragma wave option(preserve: 1)
+    #endif
+
+    #define M0(Z, N, DATA)                                                                          \
+        typename proto::result_of::as_child<BOOST_PP_CAT(A, N), Domain>::type                       \
+        /**/
+
+    #define M1(Z, N, DATA)                                                                          \
+        proto::as_child<Domain>(BOOST_PP_CAT(a, N))                                                 \
+        /**/
+
+    #define BOOST_PP_ITERATION_PARAMS_1                                                             \
+        (3, (0, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY), <boost/proto/detail/funop.hpp>))
+    #include BOOST_PP_ITERATE()
+
+    #undef M1
+    #undef M0
+
+    #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
+        #pragma wave option(output: null)
+    #endif
+
+#else
 
     /// \brief A helper metafunction for computing the
     /// return type of \c proto::expr\<\>::operator().
@@ -60,5 +83,4 @@
         >
     {};
 
-#undef M0
-#undef M1
+#endif // BOOST_PROTO_DONT_USE_PREPROCESSED_FILES

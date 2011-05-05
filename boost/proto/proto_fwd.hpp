@@ -45,6 +45,14 @@
 # error BOOST_PROTO_MAX_FUNCTION_CALL_ARITY cannot be larger than BOOST_PROTO_MAX_ARITY
 #endif
 
+#ifndef BOOST_PROTO_DONT_USE_PREPROCESSED_FILES
+  #if 5 != BOOST_PROTO_MAX_ARITY ||                                                                 \
+      8 != BOOST_PROTO_MAX_LOGICAL_ARITY ||                                                         \
+      5 != BOOST_PROTO_MAX_FUNCTION_CALL_ARITY
+    #define BOOST_PROTO_DONT_USE_PREPROCESSED_FILES
+  #endif
+#endif
+
 #ifndef BOOST_PROTO_BROKEN_CONST_OVERLOADS
 # if BOOST_WORKAROUND(__GNUC__, == 3) \
   || BOOST_WORKAROUND(__EDG_VERSION__, BOOST_TESTED_AT(310))
