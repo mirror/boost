@@ -33,10 +33,6 @@
     
     
     
-    
-    
-    
-    
     template<typename Tag, typename Arg0>
     struct basic_expr<Tag, term<Arg0>, 0>
     {

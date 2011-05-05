@@ -9,4 +9,7 @@
 //#include <boost/proto/transform.hpp>
 //#include <boost/proto/functional.hpp>
 
+#include <boost/proto/args.hpp>
 #include <boost/proto/expr.hpp>
+#include <boost/proto/extends.hpp>
+#include <boost/proto/deep_copy.hpp>

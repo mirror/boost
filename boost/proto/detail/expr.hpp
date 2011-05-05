@@ -8,6 +8,19 @@
 
 #elif !defined(BOOST_PP_IS_ITERATING)
 
+    /// INTERNAL ONLY
+    ///
+    #define BOOST_PROTO_CHILD(Z, N, DATA)                                                       \
+        typedef BOOST_PP_CAT(Arg, N) BOOST_PP_CAT(proto_child, N);                              \
+        BOOST_PP_CAT(proto_child, N) BOOST_PP_CAT(child, N);                                    \
+        /**< INTERNAL ONLY */
+
+    /// INTERNAL ONLY
+    ///
+    #define BOOST_PROTO_VOID(Z, N, DATA)                                                        \
+        typedef void BOOST_PP_CAT(proto_child, N);                                              \
+        /**< INTERNAL ONLY */
+
     // Generate variadic versions of expr
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(preserve: 2, line: 0, output: "preprocessed/expr_variadic.hpp")
@@ -24,19 +37,6 @@
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(preserve: 1)
     #endif
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_CHILD(Z, N, DATA)                                                       \
-        typedef BOOST_PP_CAT(Arg, N) BOOST_PP_CAT(proto_child, N);                              \
-        BOOST_PP_CAT(proto_child, N) BOOST_PP_CAT(child, N);                                    \
-        /**< INTERNAL ONLY */
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_VOID(Z, N, DATA)                                                        \
-        typedef void BOOST_PP_CAT(proto_child, N);                                              \
-        /**< INTERNAL ONLY */
 
     // The expr<> specializations are actually defined here.
     #define BOOST_PROTO_DEFINE_TERMINAL

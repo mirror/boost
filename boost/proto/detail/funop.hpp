@@ -4,6 +4,15 @@
 
 #elif !defined(BOOST_PP_IS_ITERATING)
 
+    #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/arithmetic/dec.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
+
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(preserve: 2, line: 0, output: "preprocessed/funop.hpp")
     #endif
