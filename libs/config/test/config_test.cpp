@@ -1,4 +1,4 @@
-//  This file was automatically generated on Tue Mar 15 12:25:21 2011
+//  This file was automatically generated on Thu May  5 04:40:08 2011
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -366,6 +366,11 @@ namespace boost_no_pointer_to_member_template_parameters = empty_boost;
 #include "boost_no_nested_friendship.ipp"
 #else
 namespace boost_no_nested_friendship = empty_boost;
+#endif
+#ifndef BOOST_NO_NOEXCEPT
+#include "boost_no_noexcept.ipp"
+#else
+namespace boost_no_noexcept = empty_boost;
 #endif
 #ifndef BOOST_NO_NULLPTR
 #include "boost_no_nullptr.ipp"
@@ -1434,6 +1439,11 @@ int main( int, char *[] )
    if(0 != boost_no_nested_friendship::test())
    {
       std::cerr << "Failed test for BOOST_NO_NESTED_FRIENDSHIP at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_noexcept::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_NOEXCEPT at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_nullptr::test())

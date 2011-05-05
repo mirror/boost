@@ -597,6 +597,8 @@ The C++ compiler does not support C++0x initializer lists.
 ]]                      
 [[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
 ]]                
+[[`BOOST_NO_NOEXCEPT`][The compiler does not support `noexcept`. 
+]]                      
 [[`BOOST_NO_NULLPTR`][The compiler does not support 'nullptr'. 
 ]]                      
 [[`BOOST_NO_RAW_LITERALS`][The compiler does not support
