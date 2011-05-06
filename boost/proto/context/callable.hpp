@@ -62,14 +62,13 @@
                 static Expr &sexpr_;
                 static typename Expr::proto_tag &stag_;
 
-                BOOST_STATIC_CONSTANT(bool, value =
-                (
+                static const bool value =
                     sizeof(yes_type) ==
                     sizeof(
                         detail::check_is_expr_handled(
                             (sctx_(stag_, proto::value(sexpr_)), 0)
                         )
-                )));
+                    );
 
                 typedef mpl::bool_<value> type;
             };
@@ -258,8 +257,7 @@
                 static Expr &sexpr_;
                 static typename Expr::proto_tag &stag_;
 
-                BOOST_STATIC_CONSTANT(bool, value =
-                (
+                static const bool value =
                     sizeof(yes_type) ==
                     sizeof(
                         detail::check_is_expr_handled(
@@ -268,7 +266,7 @@
                                 BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_CHILD_N, sexpr_)
                             ), 0)
                         )
-                )));
+                    );
 
                 typedef mpl::bool_<value> type;
             };

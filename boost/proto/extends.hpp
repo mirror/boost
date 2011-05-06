@@ -168,7 +168,7 @@ namespace boost { namespace proto
         typedef typename proto_base_expr::proto_grammar proto_grammar;                              \
         typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;        \
         typedef void proto_is_expr_; /**< INTERNAL ONLY */                                          \
-        BOOST_STATIC_CONSTANT(long, proto_arity_c = proto_base_expr::proto_arity_c);                \
+        static const long proto_arity_c = proto_base_expr::proto_arity_c;                \
         typedef boost::proto::tag::proto_expr fusion_tag;                                           \
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)                        \
                                                                                                     \
@@ -557,7 +557,7 @@ namespace boost { namespace proto
             typedef mpl::long_<2> proto_arity;
             typedef detail::not_a_valid_type proto_address_of_hack_type_;
             typedef void proto_is_expr_; /**< INTERNAL ONLY */
-            BOOST_STATIC_CONSTANT(long, proto_arity_c = 2);
+            static const long proto_arity_c = 2;
             typedef boost::proto::tag::proto_expr fusion_tag;
             typedef This &proto_child0;
             typedef expr<tag::terminal, term<Fun> > const &proto_child1;

@@ -89,7 +89,7 @@
     #endif
     {
         typedef Tag proto_tag;
-        BOOST_STATIC_CONSTANT(long, proto_arity_c = BOOST_PP_ITERATION());
+        static const long proto_arity_c = BOOST_PP_ITERATION();
         typedef mpl::long_<BOOST_PP_ITERATION() > proto_arity;
         typedef basic_expr proto_base_expr;
         #ifdef BOOST_PROTO_DEFINE_TERMINAL

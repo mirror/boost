@@ -15,3 +15,4 @@
 #include <boost/proto/deep_copy.hpp>
 #include <boost/proto/generate.hpp>
 #include <boost/proto/make_expr.hpp>
+#include <boost/proto/matches.hpp>

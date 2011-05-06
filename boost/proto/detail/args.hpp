@@ -40,7 +40,7 @@
     template< typename Arg0 >
     struct term
     {
-        BOOST_STATIC_CONSTANT(long, arity = 0);
+        static const long arity = 0;
         typedef Arg0 child0;
         BOOST_PP_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
 
@@ -71,7 +71,7 @@
     template< BOOST_PP_ENUM_PARAMS(N, typename Arg) >
     struct BOOST_PP_CAT(list, N)
     {
-        BOOST_STATIC_CONSTANT(long, arity = N);
+        static const long arity = N;
         BOOST_PP_REPEAT(N, BOOST_PROTO_DEFINE_CHILD_N, ~)
         BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
 

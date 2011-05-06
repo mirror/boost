@@ -228,7 +228,7 @@ namespace boost { namespace proto
             template<typename T>
             struct has_get_pointer
             {
-                BOOST_STATIC_CONSTANT(bool, value = sizeof(void *) == sizeof(get_pointer(make<T &>())));
+                static const bool value = sizeof(void *) == sizeof(get_pointer(make<T &>()));
                 typedef mpl::bool_<value> type;
             };
         }
@@ -342,8 +342,8 @@ namespace boost { namespace proto
             template<typename T, typename U, typename V>
             struct result_of_<T U::*(V), typename enable_if_c<is_member_object_pointer<T U::*>::value>::type>
             {
-                BOOST_STATIC_CONSTANT(bool, is_V_a_smart_ptr = 2 == sizeof(test_V_is_a_U<U>(&lvalue(make<V>()))));
-                BOOST_STATIC_CONSTANT(bool, is_ptr_to_const = 2 == sizeof(test_ptr_to_const(BOOST_PROTO_GET_POINTER(U, make<V>()))));
+                static const bool is_V_a_smart_ptr = 2 == sizeof(test_V_is_a_U<U>(&lvalue(make<V>())));
+                static const bool is_ptr_to_const = 2 == sizeof(test_ptr_to_const(BOOST_PROTO_GET_POINTER(U, make<V>())));
 
                 // If V is not a U, then it is a (smart) pointer and we can always return an lvalue.
                 // Otherwise, we can only return an lvalue if we are given one.
