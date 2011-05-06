@@ -1055,7 +1055,7 @@ length(const Type& object)
 template<class Type>
 inline typename enable_if<is_interval<Type>, 
     typename size_type_of<interval_traits<Type> >::type>::type
-iterative_size(const Type& object)
+iterative_size(const Type&)
 {
     return 2;
 }

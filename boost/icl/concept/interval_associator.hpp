@@ -670,7 +670,7 @@ template<class LeftT, class RightT>
 typename enable_if< mpl::and_< is_intra_combinable<LeftT, RightT> 
                              , mpl::or_<is_total<LeftT>, is_total<RightT> > >
                   , bool>::type
-intersects(const LeftT& left, const RightT& right)
+intersects(const LeftT&, const RightT&)
 {
     return true;
 }

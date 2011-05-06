@@ -88,7 +88,7 @@ typename enable_if< mpl::and_< is_interval_map<Type>
                              , is_total<Type> 
                              , is_cross_derivative<Type, CoType> >
             , bool>::type
-contains(const Type& super, const CoType& sub)
+contains(const Type&, const CoType&)
 {
     return true;
 }

@@ -68,8 +68,8 @@ contains(const IntervalMapT& container,
 
 template<class IntervalMapT>
 typename enable_if<is_total<IntervalMapT>, bool>::type
-contains(const IntervalMapT& container, 
-         const typename IntervalMapT::domain_type& key) 
+contains(const IntervalMapT&, 
+         const typename IntervalMapT::domain_type&) 
 {
     return true;
 }
@@ -97,8 +97,8 @@ contains(const IntervalMapT& container,
 
 template<class IntervalMapT>
 typename enable_if<is_total<IntervalMapT>, bool>::type
-contains(const IntervalMapT& container, 
-         const typename IntervalMapT::interval_type& sub_interval) 
+contains(const IntervalMapT&, 
+         const typename IntervalMapT::interval_type&) 
 {
     return true;
 }
@@ -115,7 +115,7 @@ contains(const IntervalMapT& super_map, const IntervalSetT& sub_set)
 template<class IntervalMapT, class IntervalSetT>
 typename enable_if<mpl::and_<is_total<IntervalMapT>
                             ,is_interval_set<IntervalSetT> >, bool>::type
-contains(const IntervalMapT& super_map, const IntervalSetT& sub_set) 
+contains(const IntervalMapT&, const IntervalSetT&) 
 {
     return true;
 }

@@ -158,7 +158,7 @@ struct type_to_string<icl::discrete_interval<DomainT,Compare> >
 template<class DomainT> 
 struct value_size<icl::discrete_interval<DomainT> >
 {
-    static std::size_t apply(const icl::discrete_interval<DomainT>& value) 
+    static std::size_t apply(const icl::discrete_interval<DomainT>&) 
     { return 2; }
 };
 

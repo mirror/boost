@@ -12,6 +12,8 @@ Copyright (c) 2010-2011: Joachim Faulhaber
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/ice.hpp>
 #include <boost/icl/type_traits/is_numeric.hpp>
+#include <boost/icl/type_traits/rep_type_of.hpp>
+#include <boost/icl/type_traits/size_type_of.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/if.hpp>
 
