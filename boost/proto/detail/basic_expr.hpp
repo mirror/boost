@@ -42,7 +42,6 @@
     #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/proto/detail/basic_expr.hpp>))
     #include BOOST_PP_ITERATE()
 
-    // Generate non-variadic versions of expr and basic_expr
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(output: null)
     #endif

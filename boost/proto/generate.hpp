@@ -69,12 +69,8 @@
                 }
             };
 
-        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/proto/generate.hpp>))
-        #include BOOST_PP_ITERATE()
-
-        #undef BOOST_PROTO_DEFINE_BY_VALUE
-        #undef BOOST_PROTO_DEFINE_BY_VALUE_TYPE
-
+            // Include the other specializations of by_value_generator_
+            #include <boost/proto/detail/generate_by_value.hpp>
         }
 
         /// \brief A simple generator that passes an expression

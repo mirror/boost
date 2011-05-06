@@ -432,4 +432,3 @@
         
         typedef detail::not_a_valid_type address_of_hack_type_;
     };
-    
