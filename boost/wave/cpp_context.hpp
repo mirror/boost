@@ -100,7 +100,7 @@ public:
 // concept checks
 // the given iterator should be at least a forward iterator type
     BOOST_CLASS_REQUIRE(IteratorT, boost, ForwardIteratorConcept);
-    
+
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
     typedef typename token_type::string_type        string_type;
