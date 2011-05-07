@@ -13,6 +13,12 @@
     #ifndef BOOST_PROTO_DETAIL_TEMPLATE_ARITY_HPP_EAN_2011_05_07
     #define BOOST_PROTO_DETAIL_TEMPLATE_ARITY_HPP_EAN_2011_05_07
 
+    // Somewhat indirect definition of BOOST_PROTO_TEMPLATE_ARITY_PARAM is
+    // to overcome a shortcoming of the Wave tool used to generate the
+    // pre-preprocessed headers.
+    #define BOOST_PROTO_TEMPLATE_ARITY_PARAM BOOST_PROTO_TEMPLATE_ARITY_PARAM2
+    #define BOOST_PROTO_TEMPLATE_ARITY_PARAM2(param)
+
     #ifdef BOOST_PROTO_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
 
         #include <boost/preprocessor/cat.hpp>
@@ -22,11 +28,8 @@
         #include <boost/mpl/int.hpp>
         #include <boost/proto/proto_fwd.hpp>
 
-        // When generating the preprocessed headers, leave this workaround in by
-        // simply not defining it.
-        #if !defined(__WAVE__) || !defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
-            #define BOOST_PROTO_TEMPLATE_ARITY_PARAM(param) , param
-        #endif
+        #undef BOOST_PROTO_TEMPLATE_ARITY_PARAM2
+        #define BOOST_PROTO_TEMPLATE_ARITY_PARAM2(param) , param
 
         namespace boost { namespace proto { namespace detail
         {
@@ -61,14 +64,6 @@
             {};
 
         }}}
-
-    #else
-
-        // When generating the preprocessed headers, leave this workaround in by
-        // simply not defining it.
-        #if !defined(__WAVE__) || !defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
-            #define BOOST_PROTO_TEMPLATE_ARITY_PARAM(param)
-        #endif
 
     #endif // BOOST_PROTO_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
     #endif // BOOST_PROTO_DETAIL_TEMPLATE_ARITY_HPP_EAN_2011_05_07

@@ -17,7 +17,7 @@
             struct child_c<Expr, 0>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child0 value_type;
@@ -32,7 +32,7 @@
             struct child_c<Expr &, 0>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child0 value_type;
@@ -53,7 +53,7 @@
             struct child_c<Expr const &, 0>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child0 value_type;
@@ -157,7 +157,7 @@
             struct child_c<Expr, 1>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child1 value_type;
@@ -172,7 +172,7 @@
             struct child_c<Expr &, 1>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child1 value_type;
@@ -193,7 +193,7 @@
             struct child_c<Expr const &, 1>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child1 value_type;
@@ -297,7 +297,7 @@
             struct child_c<Expr, 2>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child2 value_type;
@@ -312,7 +312,7 @@
             struct child_c<Expr &, 2>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child2 value_type;
@@ -333,7 +333,7 @@
             struct child_c<Expr const &, 2>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child2 value_type;
@@ -437,7 +437,7 @@
             struct child_c<Expr, 3>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child3 value_type;
@@ -452,7 +452,7 @@
             struct child_c<Expr &, 3>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child3 value_type;
@@ -473,7 +473,7 @@
             struct child_c<Expr const &, 3>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child3 value_type;
@@ -577,7 +577,7 @@
             struct child_c<Expr, 4>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child4 value_type;
@@ -592,7 +592,7 @@
             struct child_c<Expr &, 4>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child4 value_type;
@@ -613,7 +613,7 @@
             struct child_c<Expr const &, 4>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child4 value_type;
@@ -708,7 +708,7 @@
             struct child_c<Expr, 5>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child5 value_type;
@@ -723,7 +723,7 @@
             struct child_c<Expr &, 5>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child5 value_type;
@@ -744,7 +744,7 @@
             struct child_c<Expr const &, 5>
             {
                 
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
                 
                 
                 typedef typename Expr::proto_child5 value_type;

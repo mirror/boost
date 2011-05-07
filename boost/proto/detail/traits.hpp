@@ -1,8 +1,6 @@
 #if !defined(BOOST_PROTO_DONT_USE_PREPROCESSED_FILES)
 
-    #define BOOST_PROTO_STATIC_ASSERT BOOST_STATIC_ASSERT
     #include <boost/proto/detail/preprocessed/traits.hpp>
-    #undef BOOST_PROTO_STATIC_ASSERT
 
 #elif !defined(BOOST_PP_IS_ITERATING)
 
@@ -13,8 +11,6 @@
 
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(preserve: 2, line: 0, output: "preprocessed/traits.hpp")
-    #else
-        #define BOOST_PROTO_STATIC_ASSERT BOOST_STATIC_ASSERT
     #endif
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -35,8 +31,6 @@
 
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(output: null)
-    #else
-        #undef BOOST_PROTO_STATIC_ASSERT
     #endif
 
     #undef BOOST_PROTO_CHILD
@@ -155,7 +149,7 @@
             struct child_c<Expr, N>
             {
                 /// Verify that we are not operating on a terminal
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
 
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
@@ -173,7 +167,7 @@
             struct child_c<Expr &, N>
             {
                 /// Verify that we are not operating on a terminal
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
 
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
@@ -198,7 +192,7 @@
             struct child_c<Expr const &, N>
             {
                 /// Verify that we are not operating on a terminal
-                BOOST_PROTO_STATIC_ASSERT(0 != Expr::proto_arity_c);
+                BOOST_STATIC_ASSERT(0 != Expr::proto_arity_c);
 
                 /// The raw type of the Nth child as it is stored within
                 /// \c Expr. This may be a value or a reference
