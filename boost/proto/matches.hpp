@@ -29,8 +29,7 @@
 #include <boost/config.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/aux_/template_arity.hpp>
-#include <boost/mpl/aux_/lambda_arity_param.hpp>
+#include <boost/proto/detail/template_arity.hpp>
 #include <boost/utility/enable_if.hpp>
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
 #include <boost/type_traits/is_array.hpp>
@@ -43,18 +42,6 @@
 #include <boost/proto/traits.hpp>
 #include <boost/proto/transform/when.hpp>
 #include <boost/proto/transform/impl.hpp>
-
-// Some compilers (like GCC) need extra help figuring out a template's arity.
-// I use MPL's BOOST_MPL_AUX_LAMBDA_ARITY_PARAM() macro to disambiguate, which
-// which is controlled by the BOOST_MPL_LIMIT_METAFUNCTION_ARITY macro. If
-// You define BOOST_PROTO_MAX_ARITY to be greater than
-// BOOST_MPL_LIMIT_METAFUNCTION_ARITY on these compilers, things don't work.
-// You must define BOOST_MPL_LIMIT_METAFUNCTION_ARITY to be greater.
-#ifdef BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
-# if BOOST_PROTO_MAX_ARITY > BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-#  error BOOST_MPL_LIMIT_METAFUNCTION_ARITY must be at least as large as BOOST_PROTO_MAX_ARITY
-# endif
-#endif
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma warning(push)
@@ -99,39 +86,39 @@ namespace boost { namespace proto
         {};
 
         template<typename T, typename U
-            BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<U>::value)
+            BOOST_PROTO_TEMPLATE_ARITY_PARAM(long Arity = detail::template_arity<U>::value)
         >
         struct lambda_matches
           : mpl::false_
         {};
 
         template<typename T>
-        struct lambda_matches<T, proto::_ BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+        struct lambda_matches<T, proto::_ BOOST_PROTO_TEMPLATE_ARITY_PARAM(-1)>
           : mpl::true_
         {};
 
         template<typename T>
-        struct lambda_matches<T, T BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+        struct lambda_matches<T, T BOOST_PROTO_TEMPLATE_ARITY_PARAM(-1)>
           : mpl::true_
         {};
 
         template<typename T, std::size_t M, typename U>
-        struct lambda_matches<T[M], U BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+        struct lambda_matches<T[M], U BOOST_PROTO_TEMPLATE_ARITY_PARAM(-1)>
           : array_matches<T[M], U>
         {};
 
         template<typename T, std::size_t M>
-        struct lambda_matches<T[M], _ BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+        struct lambda_matches<T[M], _ BOOST_PROTO_TEMPLATE_ARITY_PARAM(-1)>
           : mpl::true_
         {};
 
         template<typename T, std::size_t M>
-        struct lambda_matches<T[M], T[M] BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+        struct lambda_matches<T[M], T[M] BOOST_PROTO_TEMPLATE_ARITY_PARAM(-1)>
           : mpl::true_
         {};
 
         template<template<typename> class T, typename Expr0, typename Grammar0>
-        struct lambda_matches<T<Expr0>, T<Grammar0> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
+        struct lambda_matches<T<Expr0>, T<Grammar0> BOOST_PROTO_TEMPLATE_ARITY_PARAM(1) >
           : lambda_matches<Expr0, Grammar0>
         {};
 

@@ -13,7 +13,7 @@
     struct lambda_matches<
         T<Expr0 , Expr1>
       , T<Grammar0 , Grammar1>
-        BOOST_PROTO_LAMBDA_ARITY_PARAM(2)
+        BOOST_PROTO_TEMPLATE_ARITY_PARAM(2)
     >
       : and_2<
             lambda_matches< Expr0 , Grammar0 >::value,
@@ -28,7 +28,7 @@
     struct lambda_matches<
         T<Expr0 , Expr1 , Expr2>
       , T<Grammar0 , Grammar1 , Grammar2>
-        BOOST_PROTO_LAMBDA_ARITY_PARAM(3)
+        BOOST_PROTO_TEMPLATE_ARITY_PARAM(3)
     >
       : and_3<
             lambda_matches< Expr0 , Grammar0 >::value,
@@ -43,7 +43,7 @@
     struct lambda_matches<
         T<Expr0 , Expr1 , Expr2 , Expr3>
       , T<Grammar0 , Grammar1 , Grammar2 , Grammar3>
-        BOOST_PROTO_LAMBDA_ARITY_PARAM(4)
+        BOOST_PROTO_TEMPLATE_ARITY_PARAM(4)
     >
       : and_4<
             lambda_matches< Expr0 , Grammar0 >::value,
@@ -58,7 +58,7 @@
     struct lambda_matches<
         T<Expr0 , Expr1 , Expr2 , Expr3 , Expr4>
       , T<Grammar0 , Grammar1 , Grammar2 , Grammar3 , Grammar4>
-        BOOST_PROTO_LAMBDA_ARITY_PARAM(5)
+        BOOST_PROTO_TEMPLATE_ARITY_PARAM(5)
     >
       : and_5<
             lambda_matches< Expr0 , Grammar0 >::value,

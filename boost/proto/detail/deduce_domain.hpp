@@ -37,12 +37,6 @@ namespace boost
     {
         namespace detail
         {
-            template<int N>
-            struct sized_type
-            {
-                typedef char (&type)[N];
-            };
-
             template<typename Domain>
             struct domain_
               : domain_<typename Domain::proto_super_domain>

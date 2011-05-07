@@ -23,8 +23,7 @@
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/mpl/bool.hpp>
-#include <boost/mpl/aux_/template_arity.hpp>
-#include <boost/mpl/aux_/lambda_arity_param.hpp>
+#include <boost/proto/detail/template_arity.hpp>
 #include <boost/type_traits/is_pod.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/add_const.hpp>
@@ -61,7 +60,7 @@ namespace boost { namespace proto
           : mpl::true_
         {};
 
-        template<typename T BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<T>::value)>
+        template<typename T BOOST_PROTO_TEMPLATE_ARITY_PARAM(long Arity = boost::proto::detail::template_arity<T>::value)>
         struct is_callable_
           : is_callable2_<T>
         {};

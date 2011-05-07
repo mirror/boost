@@ -24,8 +24,7 @@
     #include <boost/preprocessor/arithmetic/inc.hpp>
     #include <boost/mpl/and.hpp>
     #include <boost/mpl/aux_/has_type.hpp>
-    #include <boost/mpl/aux_/template_arity.hpp>
-    #include <boost/mpl/aux_/lambda_arity_param.hpp>
+    #include <boost/proto/detail/template_arity.hpp>
     #include <boost/utility/result_of.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/traits.hpp>
@@ -72,7 +71,7 @@
             template<
                 typename R
               , typename Expr, typename State, typename Data
-                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<R>::value)
+                BOOST_PROTO_TEMPLATE_ARITY_PARAM(long Arity = detail::template_arity<R>::value)
             >
             struct make_
             {
@@ -305,7 +304,7 @@
             struct make_<
                 R<BOOST_PP_ENUM_PARAMS(N, A)>
               , Expr, State, Data
-                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N)
+                BOOST_PROTO_TEMPLATE_ARITY_PARAM(N)
             >
               : nested_type_if<R<BOOST_PP_ENUM(N, TMP1, ~)>, (BOOST_PP_REPEAT(N, TMP2, ~) false)>
             {};
@@ -318,7 +317,7 @@
             struct make_<
                 noinvoke<R<BOOST_PP_ENUM_PARAMS(N, A)> >
               , Expr, State, Data
-                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1)
+                BOOST_PROTO_TEMPLATE_ARITY_PARAM(1)
             >
             {
                 typedef R<BOOST_PP_ENUM(N, TMP1, ~)> type;

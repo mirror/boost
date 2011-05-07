@@ -1,8 +1,6 @@
 #if !defined(BOOST_PROTO_DONT_USE_PREPROCESSED_FILES)
 
-    #define BOOST_PROTO_LAMBDA_ARITY_PARAM BOOST_MPL_AUX_LAMBDA_ARITY_PARAM
     #include <boost/proto/detail/preprocessed/lambda_matches.hpp>
-    #undef BOOST_PROTO_LAMBDA_ARITY_PARAM
 
 #elif !defined(BOOST_PP_IS_ITERATING)
 
@@ -14,8 +12,6 @@
 
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(preserve: 2, line: 0, output: "preprocessed/lambda_matches.hpp")
-    #else
-        #define BOOST_PROTO_LAMBDA_ARITY_PARAM BOOST_MPL_AUX_LAMBDA_ARITY_PARAM
     #endif
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -36,8 +32,6 @@
 
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(output: null)
-    #else
-        #undef BOOST_PROTO_LAMBDA_ARITY_PARAM
     #endif
 
     #undef BOOST_PROTO_DEFINE_LAMBDA_MATCHES
@@ -54,7 +48,7 @@
     struct lambda_matches<
         T<BOOST_PP_ENUM_PARAMS(N, Expr)>
       , T<BOOST_PP_ENUM_PARAMS(N, Grammar)>
-        BOOST_PROTO_LAMBDA_ARITY_PARAM(N)
+        BOOST_PROTO_TEMPLATE_ARITY_PARAM(N)
     >
       : BOOST_PP_CAT(and_, N)<
             BOOST_PROTO_DEFINE_LAMBDA_MATCHES(~, 0, ~)::value,

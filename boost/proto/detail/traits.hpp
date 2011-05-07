@@ -1,10 +1,8 @@
 #if !defined(BOOST_PROTO_DONT_USE_PREPROCESSED_FILES)
 
-    #define BOOST_PROTO_LAMBDA_ARITY_PARAM BOOST_MPL_AUX_LAMBDA_ARITY_PARAM
     #define BOOST_PROTO_STATIC_ASSERT BOOST_STATIC_ASSERT
     #include <boost/proto/detail/preprocessed/traits.hpp>
     #undef BOOST_PROTO_STATIC_ASSERT
-    #undef BOOST_PROTO_LAMBDA_ARITY_PARAM
 
 #elif !defined(BOOST_PP_IS_ITERATING)
 
@@ -16,7 +14,6 @@
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(preserve: 2, line: 0, output: "preprocessed/traits.hpp")
     #else
-        #define BOOST_PROTO_LAMBDA_ARITY_PARAM BOOST_MPL_AUX_LAMBDA_ARITY_PARAM
         #define BOOST_PROTO_STATIC_ASSERT BOOST_STATIC_ASSERT
     #endif
 
@@ -40,7 +37,6 @@
         #pragma wave option(output: null)
     #else
         #undef BOOST_PROTO_STATIC_ASSERT
-        #undef BOOST_PROTO_LAMBDA_ARITY_PARAM
     #endif
 
     #undef BOOST_PROTO_CHILD
@@ -140,7 +136,7 @@
                 template<BOOST_PP_ENUM_PARAMS(N, typename BOOST_PP_INTERCEPT)> class T
               , BOOST_PP_ENUM_PARAMS(N, typename A)
             >
-            struct is_callable_<T<BOOST_PP_ENUM_PARAMS(N, A)> BOOST_PROTO_LAMBDA_ARITY_PARAM(N)>
+            struct is_callable_<T<BOOST_PP_ENUM_PARAMS(N, A)> BOOST_PROTO_TEMPLATE_ARITY_PARAM(N)>
               : is_same<BOOST_PP_CAT(A, BOOST_PP_DEC(N)), callable>
             {};
         }

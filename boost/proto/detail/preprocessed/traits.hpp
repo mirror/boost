@@ -141,7 +141,7 @@
                 template<typename> class T
               , typename A0
             >
-            struct is_callable_<T<A0> BOOST_PROTO_LAMBDA_ARITY_PARAM(1)>
+            struct is_callable_<T<A0> BOOST_PROTO_TEMPLATE_ARITY_PARAM(1)>
               : is_same<A0, callable>
             {};
         }
@@ -281,7 +281,7 @@
                 template<typename , typename> class T
               , typename A0 , typename A1
             >
-            struct is_callable_<T<A0 , A1> BOOST_PROTO_LAMBDA_ARITY_PARAM(2)>
+            struct is_callable_<T<A0 , A1> BOOST_PROTO_TEMPLATE_ARITY_PARAM(2)>
               : is_same<A1, callable>
             {};
         }
@@ -421,7 +421,7 @@
                 template<typename , typename , typename> class T
               , typename A0 , typename A1 , typename A2
             >
-            struct is_callable_<T<A0 , A1 , A2> BOOST_PROTO_LAMBDA_ARITY_PARAM(3)>
+            struct is_callable_<T<A0 , A1 , A2> BOOST_PROTO_TEMPLATE_ARITY_PARAM(3)>
               : is_same<A2, callable>
             {};
         }
@@ -561,7 +561,7 @@
                 template<typename , typename , typename , typename> class T
               , typename A0 , typename A1 , typename A2 , typename A3
             >
-            struct is_callable_<T<A0 , A1 , A2 , A3> BOOST_PROTO_LAMBDA_ARITY_PARAM(4)>
+            struct is_callable_<T<A0 , A1 , A2 , A3> BOOST_PROTO_TEMPLATE_ARITY_PARAM(4)>
               : is_same<A3, callable>
             {};
         }
@@ -692,7 +692,7 @@
                 template<typename , typename , typename , typename , typename> class T
               , typename A0 , typename A1 , typename A2 , typename A3 , typename A4
             >
-            struct is_callable_<T<A0 , A1 , A2 , A3 , A4> BOOST_PROTO_LAMBDA_ARITY_PARAM(5)>
+            struct is_callable_<T<A0 , A1 , A2 , A3 , A4> BOOST_PROTO_TEMPLATE_ARITY_PARAM(5)>
               : is_same<A4, callable>
             {};
         }
