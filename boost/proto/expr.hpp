@@ -13,6 +13,7 @@
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/selection/max.hpp>
 #include <boost/preprocessor/iteration/iterate.hpp>
+#include <boost/preprocessor/facilities/intercept.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/preprocessor/repetition/enum_trailing.hpp>

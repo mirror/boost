@@ -4,14 +4,13 @@
 
 #elif !defined(BOOST_PP_IS_ITERATING)
 
-    #include <boost/preprocessor/cat.hpp>
-    #include <boost/preprocessor/arithmetic/dec.hpp>
-    #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/preprocessor/facilities/intercept.hpp>
-    #include <boost/preprocessor/repetition/enum_trailing.hpp>
-    #include <boost/preprocessor/repetition/enum_params.hpp>
-    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
-    #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
+    #define BOOST_PROTO_AS_CHILD_TYPE(Z, N, DATA)                                                   \
+        typename proto::result_of::as_child<BOOST_PP_CAT(A, N), Domain>::type                       \
+        /**/
+
+    #define BOOST_PROTO_AS_CHILD(Z, N, DATA)                                                        \
+        proto::as_child<Domain>(BOOST_PP_CAT(a, N))                                                 \
+        /**/
 
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(preserve: 2, line: 0, output: "preprocessed/funop.hpp")
@@ -29,20 +28,12 @@
         #pragma wave option(preserve: 1)
     #endif
 
-    #define M0(Z, N, DATA)                                                                          \
-        typename proto::result_of::as_child<BOOST_PP_CAT(A, N), Domain>::type                       \
-        /**/
-
-    #define M1(Z, N, DATA)                                                                          \
-        proto::as_child<Domain>(BOOST_PP_CAT(a, N))                                                 \
-        /**/
-
     #define BOOST_PP_ITERATION_PARAMS_1                                                             \
         (3, (0, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY), <boost/proto/detail/funop.hpp>))
     #include BOOST_PP_ITERATE()
 
-    #undef M1
-    #undef M0
+    #undef BOOST_PROTO_AS_CHILD
+    #undef BOOST_PROTO_AS_CHILD_TYPE
 
     #if defined(__WAVE__) && defined(BOOST_PROTO_CREATE_PREPROCESSED_FILES)
         #pragma wave option(output: null)
@@ -60,7 +51,7 @@
           , tag::function
           , BOOST_PP_CAT(list, BOOST_PP_INC(BOOST_PP_ITERATION()))<
                 Expr &
-                BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), M0, ~)
+                BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_AS_CHILD_TYPE, ~)
             >
         >::type type;
 
@@ -71,7 +62,7 @@
         {
             type that = {
                 e
-                BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), M1, ~)
+                BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_AS_CHILD, ~)
             };
             return that;
         }

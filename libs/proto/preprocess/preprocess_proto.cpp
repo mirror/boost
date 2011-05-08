@@ -13,6 +13,7 @@
 #include <boost/proto/expr.hpp>
 #include <boost/proto/extends.hpp>
 #include <boost/proto/deep_copy.hpp>
+#include <boost/proto/domain.hpp>
 #include <boost/proto/generate.hpp>
 #include <boost/proto/make_expr.hpp>
 #include <boost/proto/matches.hpp>
@@ -21,3 +22,5 @@
 #include <boost/proto/transform/fold.hpp>
 #include <boost/proto/transform/lazy.hpp>
 #include <boost/proto/transform/make.hpp>
+#include <boost/proto/transform/pass_through.hpp>
+#include <boost/proto/transform/when.hpp>

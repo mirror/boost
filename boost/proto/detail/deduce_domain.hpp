@@ -151,37 +151,7 @@ namespace boost
                 >
             {};
 
-            #define M0(Z, N, DATA)                                                                  \
-                typedef                                                                             \
-                    typename common_domain2<common ## N, A ## N>::type                              \
-                BOOST_PP_CAT(common, BOOST_PP_INC(N));                                              \
-                /**/
-
-            #define BOOST_PP_LOCAL_MACRO(N)                                                         \
-                template<BOOST_PP_ENUM_PARAMS(N, typename A)>                                       \
-                struct BOOST_PP_CAT(common_domain, N)                                               \
-                {                                                                                   \
-                    typedef A0 common1;                                                             \
-                    BOOST_PP_REPEAT_FROM_TO(1, N, M0, ~)                                            \
-                    typedef common ## N type;                                                       \
-                    BOOST_PROTO_ASSERT_VALID_DOMAIN(type);                                          \
-                };                                                                                  \
-                                                                                                    \
-                template<BOOST_PP_ENUM_PARAMS(N, typename E)>                                       \
-                struct BOOST_PP_CAT(deduce_domain, N)                                               \
-                  : BOOST_PP_CAT(common_domain, N)<                                                 \
-                        BOOST_PP_ENUM_BINARY_PARAMS(                                                \
-                            N                                                                       \
-                          , typename domain_of<E, >::type BOOST_PP_INTERCEPT                        \
-                        )                                                                           \
-                    >                                                                               \
-                {};                                                                                 \
-                /**/
-
-            #define BOOST_PP_LOCAL_LIMITS (3, BOOST_PROTO_MAX_ARITY)
-            #include BOOST_PP_LOCAL_ITERATE()
-
-            #undef M0
+            #include <boost/proto/detail/deduce_domain_n.hpp>
         }
     }
 }
