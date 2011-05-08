@@ -186,6 +186,12 @@ public:
         return emit_relative_filenames;
     }
 
+    // add a macro name, which should not be expanded at all (left untouched)
+    void add_noexpandmacro(std::string const& name)
+    {
+        noexpandmacros.insert(name);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'expanding_function_like_macro' is called whenever a 
@@ -213,6 +219,11 @@ public:
     //  invocation (starting with the opening parenthesis and ending after the
     //  closing one).
     //
+    //  The return value defines whether the corresponding macro will be 
+    //  expanded (return false) or will be copied to the output (return true).
+    //  Note: the whole argument list is copied unchanged to the output as well
+    //        without any further processing.
+    //
     ///////////////////////////////////////////////////////////////////////////
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
@@ -237,8 +248,15 @@ public:
         TokenT const &macrocall, std::vector<ContainerT> const &arguments,
         IteratorT const& seqstart, IteratorT const& seqend) 
     {
-        if (enabled_macro_counting())
-            count_invocation(macrodef.get_value().c_str());
+        if (enabled_macro_counting() || !noexpandmacros.empty()) {
+            std::string name (macrodef.get_value().c_str());
+
+            if (noexpandmacros.find(name.c_str()) != noexpandmacros.end())
+                return true;    // do not expand this macro
+
+            if (enabled_macro_counting())
+                count_invocation(name.c_str());
+        }
 
         if (!enabled_macro_tracing()) 
             return false;
@@ -356,8 +374,15 @@ public:
         TokenT const &macrodef, ContainerT const &definition, 
         TokenT const &macrocall)
     {
-        if (enabled_macro_counting())
-            count_invocation(macrodef.get_value().c_str());
+        if (enabled_macro_counting() || !noexpandmacros.empty()) {
+            std::string name (macrodef.get_value().c_str());
+
+            if (noexpandmacros.find(name.c_str()) != noexpandmacros.end())
+                return true;    // do not expand this macro
+
+            if (enabled_macro_counting())
+                count_invocation(name.c_str());
+        }
 
         if (!enabled_macro_tracing()) 
             return false;
@@ -1444,6 +1469,8 @@ private:
 
     std::map<std::string, std::size_t> counts;    // macro invocation counts
     bool emit_relative_filenames;   // emit relative names in #line directives
+
+    std::set<std::string> noexpandmacros;   // list of macros not to expand
 };
 
 #undef BOOST_WAVE_GETSTRING

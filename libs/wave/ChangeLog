@@ -28,6 +28,13 @@ Boost V1.47.0
   (t_9_020.cpp)
 - Added a new preprocessing hook: locate_include_file allowing to customize the
   way include files are located.
+- Added new command line option --noexpand/-N to the Wave driver allowing to 
+  suppress macro expansion for a given macro name (works for both, object like 
+  and function like macros). This option has to be used very carefully as it 
+  not only leaves the whole macro invocation untouched in the generated output
+  but also removes this macro from consideration for Wave itself. This can 
+  cause unexpected results if the suppressed macro would influence #ifdef's 
+  later on.
 
 Boost V1.46.0
 - V2.2.0
