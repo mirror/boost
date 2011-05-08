@@ -95,3 +95,29 @@
     {
         typedef G0 which;
     };
+    template<bool B, typename Expr, typename BasicExpr, typename G0 , typename G1 , typename G2 , typename G3 , typename G4 , typename G5 , typename G6 , typename G7 , typename G8>
+    struct or_9
+      : or_8<
+            matches_<Expr, BasicExpr, typename G1::proto_grammar>::value
+          , Expr, BasicExpr, G1 , G2 , G3 , G4 , G5 , G6 , G7 , G8
+        >
+    {};
+    template<typename Expr, typename BasicExpr , typename G0 , typename G1 , typename G2 , typename G3 , typename G4 , typename G5 , typename G6 , typename G7 , typename G8>
+    struct or_9<true, Expr, BasicExpr, G0 , G1 , G2 , G3 , G4 , G5 , G6 , G7 , G8>
+      : mpl::true_
+    {
+        typedef G0 which;
+    };
+    template<bool B, typename Expr, typename BasicExpr, typename G0 , typename G1 , typename G2 , typename G3 , typename G4 , typename G5 , typename G6 , typename G7 , typename G8 , typename G9>
+    struct or_10
+      : or_9<
+            matches_<Expr, BasicExpr, typename G1::proto_grammar>::value
+          , Expr, BasicExpr, G1 , G2 , G3 , G4 , G5 , G6 , G7 , G8 , G9
+        >
+    {};
+    template<typename Expr, typename BasicExpr , typename G0 , typename G1 , typename G2 , typename G3 , typename G4 , typename G5 , typename G6 , typename G7 , typename G8 , typename G9>
+    struct or_10<true, Expr, BasicExpr, G0 , G1 , G2 , G3 , G4 , G5 , G6 , G7 , G8 , G9>
+      : mpl::true_
+    {
+        typedef G0 which;
+    };

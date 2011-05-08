@@ -235,3 +235,233 @@
             return that;
         }
     };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 >
+    struct by_value_generator_<
+        proto::expr<Tag, list6<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5>, 6>
+    >
+    {
+        typedef
+            list6<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5>
+        src_args;
+        typedef
+            list6<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type
+            >
+        dst_args;
+        typedef proto::expr<Tag, src_args, 6> src_type;
+        typedef proto::expr<Tag, dst_args, 6> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 >
+    struct by_value_generator_<
+        proto::basic_expr<Tag, list6<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5>, 6>
+    >
+    {
+        typedef
+            list6<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5>
+        src_args;
+        typedef
+            list6<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type
+            >
+        dst_args;
+        typedef proto::basic_expr<Tag, src_args, 6> src_type;
+        typedef proto::basic_expr<Tag, dst_args, 6> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 >
+    struct by_value_generator_<
+        proto::expr<Tag, list7<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6>, 7>
+    >
+    {
+        typedef
+            list7<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6>
+        src_args;
+        typedef
+            list7<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type
+            >
+        dst_args;
+        typedef proto::expr<Tag, src_args, 7> src_type;
+        typedef proto::expr<Tag, dst_args, 7> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 >
+    struct by_value_generator_<
+        proto::basic_expr<Tag, list7<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6>, 7>
+    >
+    {
+        typedef
+            list7<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6>
+        src_args;
+        typedef
+            list7<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type
+            >
+        dst_args;
+        typedef proto::basic_expr<Tag, src_args, 7> src_type;
+        typedef proto::basic_expr<Tag, dst_args, 7> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 , typename Arg7 >
+    struct by_value_generator_<
+        proto::expr<Tag, list8<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7>, 8>
+    >
+    {
+        typedef
+            list8<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7>
+        src_args;
+        typedef
+            list8<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type , typename uncvref<Arg7 >::type
+            >
+        dst_args;
+        typedef proto::expr<Tag, src_args, 8> src_type;
+        typedef proto::expr<Tag, dst_args, 8> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6 , e.child7
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 , typename Arg7 >
+    struct by_value_generator_<
+        proto::basic_expr<Tag, list8<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7>, 8>
+    >
+    {
+        typedef
+            list8<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7>
+        src_args;
+        typedef
+            list8<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type , typename uncvref<Arg7 >::type
+            >
+        dst_args;
+        typedef proto::basic_expr<Tag, src_args, 8> src_type;
+        typedef proto::basic_expr<Tag, dst_args, 8> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6 , e.child7
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 , typename Arg7 , typename Arg8 >
+    struct by_value_generator_<
+        proto::expr<Tag, list9<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8>, 9>
+    >
+    {
+        typedef
+            list9<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8>
+        src_args;
+        typedef
+            list9<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type , typename uncvref<Arg7 >::type , typename uncvref<Arg8 >::type
+            >
+        dst_args;
+        typedef proto::expr<Tag, src_args, 9> src_type;
+        typedef proto::expr<Tag, dst_args, 9> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6 , e.child7 , e.child8
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 , typename Arg7 , typename Arg8 >
+    struct by_value_generator_<
+        proto::basic_expr<Tag, list9<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8>, 9>
+    >
+    {
+        typedef
+            list9<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8>
+        src_args;
+        typedef
+            list9<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type , typename uncvref<Arg7 >::type , typename uncvref<Arg8 >::type
+            >
+        dst_args;
+        typedef proto::basic_expr<Tag, src_args, 9> src_type;
+        typedef proto::basic_expr<Tag, dst_args, 9> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6 , e.child7 , e.child8
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 , typename Arg7 , typename Arg8 , typename Arg9 >
+    struct by_value_generator_<
+        proto::expr<Tag, list10<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8 , Arg9>, 10>
+    >
+    {
+        typedef
+            list10<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8 , Arg9>
+        src_args;
+        typedef
+            list10<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type , typename uncvref<Arg7 >::type , typename uncvref<Arg8 >::type , typename uncvref<Arg9 >::type
+            >
+        dst_args;
+        typedef proto::expr<Tag, src_args, 10> src_type;
+        typedef proto::expr<Tag, dst_args, 10> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6 , e.child7 , e.child8 , e.child9
+            };
+            return that;
+        }
+    };
+    template<typename Tag , typename Arg0 , typename Arg1 , typename Arg2 , typename Arg3 , typename Arg4 , typename Arg5 , typename Arg6 , typename Arg7 , typename Arg8 , typename Arg9 >
+    struct by_value_generator_<
+        proto::basic_expr<Tag, list10<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8 , Arg9>, 10>
+    >
+    {
+        typedef
+            list10<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8 , Arg9>
+        src_args;
+        typedef
+            list10<
+                typename uncvref<Arg0 >::type , typename uncvref<Arg1 >::type , typename uncvref<Arg2 >::type , typename uncvref<Arg3 >::type , typename uncvref<Arg4 >::type , typename uncvref<Arg5 >::type , typename uncvref<Arg6 >::type , typename uncvref<Arg7 >::type , typename uncvref<Arg8 >::type , typename uncvref<Arg9 >::type
+            >
+        dst_args;
+        typedef proto::basic_expr<Tag, src_args, 10> src_type;
+        typedef proto::basic_expr<Tag, dst_args, 10> type;
+        static type const call(src_type const &e)
+        {
+            type that = {
+                e.child0 , e.child1 , e.child2 , e.child3 , e.child4 , e.child5 , e.child6 , e.child7 , e.child8 , e.child9
+            };
+            return that;
+        }
+    };

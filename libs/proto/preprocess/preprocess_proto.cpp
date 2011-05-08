@@ -17,3 +17,7 @@
 #include <boost/proto/make_expr.hpp>
 #include <boost/proto/matches.hpp>
 #include <boost/proto/transform/call.hpp>
+#include <boost/proto/transform/default.hpp>
+#include <boost/proto/transform/fold.hpp>
+#include <boost/proto/transform/lazy.hpp>
+#include <boost/proto/transform/make.hpp>

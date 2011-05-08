@@ -238,3 +238,208 @@
             return other::call(sequence);
         }
     };
+    template<typename Tag, typename Domain, typename Sequence>
+    struct unpack_expr_<Tag, Domain, Sequence, 6>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5;
+        typedef
+            list6<
+                typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >::result_type
+            >
+        proto_args;
+        typedef typename base_expr<Domain, Tag, proto_args>::type expr_type;
+        typedef typename Domain::proto_generator proto_generator;
+        typedef typename proto_generator::template result<proto_generator(expr_type)>::type type;
+        static type const call(Sequence const &sequence)
+        {
+            fusion_iterator0 it0 = fusion::begin(sequence); fusion_iterator1 it1 = fusion::next(it0); fusion_iterator2 it2 = fusion::next(it1); fusion_iterator3 it3 = fusion::next(it2); fusion_iterator4 it4 = fusion::next(it3); fusion_iterator5 it5 = fusion::next(it4);
+            expr_type const that = {
+                detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >()(*it0) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >()(*it1) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >()(*it2) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >()(*it3) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >()(*it4) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >()(*it5)
+            };
+            return proto_generator()(that);
+        }
+    };
+    template<typename Tag, typename Sequence>
+    struct unpack_expr_<Tag, deduce_domain, Sequence, 6>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5;
+        typedef
+            unpack_expr_<
+                Tag
+              , typename deduce_domain6<
+                    typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type
+                >::type
+              , Sequence
+              , 6
+            >
+        other;
+        typedef typename other::type type;
+        static type const call(Sequence const &sequence)
+        {
+            return other::call(sequence);
+        }
+    };
+    template<typename Tag, typename Domain, typename Sequence>
+    struct unpack_expr_<Tag, Domain, Sequence, 7>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6;
+        typedef
+            list7<
+                typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >::result_type
+            >
+        proto_args;
+        typedef typename base_expr<Domain, Tag, proto_args>::type expr_type;
+        typedef typename Domain::proto_generator proto_generator;
+        typedef typename proto_generator::template result<proto_generator(expr_type)>::type type;
+        static type const call(Sequence const &sequence)
+        {
+            fusion_iterator0 it0 = fusion::begin(sequence); fusion_iterator1 it1 = fusion::next(it0); fusion_iterator2 it2 = fusion::next(it1); fusion_iterator3 it3 = fusion::next(it2); fusion_iterator4 it4 = fusion::next(it3); fusion_iterator5 it5 = fusion::next(it4); fusion_iterator6 it6 = fusion::next(it5);
+            expr_type const that = {
+                detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >()(*it0) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >()(*it1) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >()(*it2) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >()(*it3) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >()(*it4) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >()(*it5) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >()(*it6)
+            };
+            return proto_generator()(that);
+        }
+    };
+    template<typename Tag, typename Sequence>
+    struct unpack_expr_<Tag, deduce_domain, Sequence, 7>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6;
+        typedef
+            unpack_expr_<
+                Tag
+              , typename deduce_domain7<
+                    typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type
+                >::type
+              , Sequence
+              , 7
+            >
+        other;
+        typedef typename other::type type;
+        static type const call(Sequence const &sequence)
+        {
+            return other::call(sequence);
+        }
+    };
+    template<typename Tag, typename Domain, typename Sequence>
+    struct unpack_expr_<Tag, Domain, Sequence, 8>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6; typedef typename fusion::result_of::next< fusion_iterator6>::type fusion_iterator7;
+        typedef
+            list8<
+                typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , Domain >::result_type
+            >
+        proto_args;
+        typedef typename base_expr<Domain, Tag, proto_args>::type expr_type;
+        typedef typename Domain::proto_generator proto_generator;
+        typedef typename proto_generator::template result<proto_generator(expr_type)>::type type;
+        static type const call(Sequence const &sequence)
+        {
+            fusion_iterator0 it0 = fusion::begin(sequence); fusion_iterator1 it1 = fusion::next(it0); fusion_iterator2 it2 = fusion::next(it1); fusion_iterator3 it3 = fusion::next(it2); fusion_iterator4 it4 = fusion::next(it3); fusion_iterator5 it5 = fusion::next(it4); fusion_iterator6 it6 = fusion::next(it5); fusion_iterator7 it7 = fusion::next(it6);
+            expr_type const that = {
+                detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >()(*it0) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >()(*it1) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >()(*it2) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >()(*it3) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >()(*it4) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >()(*it5) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >()(*it6) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , Domain >()(*it7)
+            };
+            return proto_generator()(that);
+        }
+    };
+    template<typename Tag, typename Sequence>
+    struct unpack_expr_<Tag, deduce_domain, Sequence, 8>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6; typedef typename fusion::result_of::next< fusion_iterator6>::type fusion_iterator7;
+        typedef
+            unpack_expr_<
+                Tag
+              , typename deduce_domain8<
+                    typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type
+                >::type
+              , Sequence
+              , 8
+            >
+        other;
+        typedef typename other::type type;
+        static type const call(Sequence const &sequence)
+        {
+            return other::call(sequence);
+        }
+    };
+    template<typename Tag, typename Domain, typename Sequence>
+    struct unpack_expr_<Tag, Domain, Sequence, 9>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6; typedef typename fusion::result_of::next< fusion_iterator6>::type fusion_iterator7; typedef typename fusion::result_of::next< fusion_iterator7>::type fusion_iterator8;
+        typedef
+            list9<
+                typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator8 >::type >::type , Domain >::result_type
+            >
+        proto_args;
+        typedef typename base_expr<Domain, Tag, proto_args>::type expr_type;
+        typedef typename Domain::proto_generator proto_generator;
+        typedef typename proto_generator::template result<proto_generator(expr_type)>::type type;
+        static type const call(Sequence const &sequence)
+        {
+            fusion_iterator0 it0 = fusion::begin(sequence); fusion_iterator1 it1 = fusion::next(it0); fusion_iterator2 it2 = fusion::next(it1); fusion_iterator3 it3 = fusion::next(it2); fusion_iterator4 it4 = fusion::next(it3); fusion_iterator5 it5 = fusion::next(it4); fusion_iterator6 it6 = fusion::next(it5); fusion_iterator7 it7 = fusion::next(it6); fusion_iterator8 it8 = fusion::next(it7);
+            expr_type const that = {
+                detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >()(*it0) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >()(*it1) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >()(*it2) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >()(*it3) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >()(*it4) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >()(*it5) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >()(*it6) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , Domain >()(*it7) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator8 >::type >::type , Domain >()(*it8)
+            };
+            return proto_generator()(that);
+        }
+    };
+    template<typename Tag, typename Sequence>
+    struct unpack_expr_<Tag, deduce_domain, Sequence, 9>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6; typedef typename fusion::result_of::next< fusion_iterator6>::type fusion_iterator7; typedef typename fusion::result_of::next< fusion_iterator7>::type fusion_iterator8;
+        typedef
+            unpack_expr_<
+                Tag
+              , typename deduce_domain9<
+                    typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator8 >::type >::type
+                >::type
+              , Sequence
+              , 9
+            >
+        other;
+        typedef typename other::type type;
+        static type const call(Sequence const &sequence)
+        {
+            return other::call(sequence);
+        }
+    };
+    template<typename Tag, typename Domain, typename Sequence>
+    struct unpack_expr_<Tag, Domain, Sequence, 10>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6; typedef typename fusion::result_of::next< fusion_iterator6>::type fusion_iterator7; typedef typename fusion::result_of::next< fusion_iterator7>::type fusion_iterator8; typedef typename fusion::result_of::next< fusion_iterator8>::type fusion_iterator9;
+        typedef
+            list10<
+                typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator8 >::type >::type , Domain >::result_type , typename detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator9 >::type >::type , Domain >::result_type
+            >
+        proto_args;
+        typedef typename base_expr<Domain, Tag, proto_args>::type expr_type;
+        typedef typename Domain::proto_generator proto_generator;
+        typedef typename proto_generator::template result<proto_generator(expr_type)>::type type;
+        static type const call(Sequence const &sequence)
+        {
+            fusion_iterator0 it0 = fusion::begin(sequence); fusion_iterator1 it1 = fusion::next(it0); fusion_iterator2 it2 = fusion::next(it1); fusion_iterator3 it3 = fusion::next(it2); fusion_iterator4 it4 = fusion::next(it3); fusion_iterator5 it5 = fusion::next(it4); fusion_iterator6 it6 = fusion::next(it5); fusion_iterator7 it7 = fusion::next(it6); fusion_iterator8 it8 = fusion::next(it7); fusion_iterator9 it9 = fusion::next(it8);
+            expr_type const that = {
+                detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , Domain >()(*it0) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , Domain >()(*it1) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , Domain >()(*it2) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , Domain >()(*it3) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , Domain >()(*it4) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , Domain >()(*it5) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , Domain >()(*it6) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , Domain >()(*it7) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator8 >::type >::type , Domain >()(*it8) , detail::protoify< typename add_const< typename fusion::result_of::value_of< fusion_iterator9 >::type >::type , Domain >()(*it9)
+            };
+            return proto_generator()(that);
+        }
+    };
+    template<typename Tag, typename Sequence>
+    struct unpack_expr_<Tag, deduce_domain, Sequence, 10>
+    {
+        typedef typename fusion::result_of::begin<Sequence const>::type fusion_iterator0; typedef typename fusion::result_of::next< fusion_iterator0>::type fusion_iterator1; typedef typename fusion::result_of::next< fusion_iterator1>::type fusion_iterator2; typedef typename fusion::result_of::next< fusion_iterator2>::type fusion_iterator3; typedef typename fusion::result_of::next< fusion_iterator3>::type fusion_iterator4; typedef typename fusion::result_of::next< fusion_iterator4>::type fusion_iterator5; typedef typename fusion::result_of::next< fusion_iterator5>::type fusion_iterator6; typedef typename fusion::result_of::next< fusion_iterator6>::type fusion_iterator7; typedef typename fusion::result_of::next< fusion_iterator7>::type fusion_iterator8; typedef typename fusion::result_of::next< fusion_iterator8>::type fusion_iterator9;
+        typedef
+            unpack_expr_<
+                Tag
+              , typename deduce_domain10<
+                    typename add_const< typename fusion::result_of::value_of< fusion_iterator0 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator1 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator2 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator3 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator4 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator5 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator6 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator7 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator8 >::type >::type , typename add_const< typename fusion::result_of::value_of< fusion_iterator9 >::type >::type
+                >::type
+              , Sequence
+              , 10
+            >
+        other;
+        typedef typename other::type type;
+        static type const call(Sequence const &sequence)
+        {
+            return other::call(sequence);
+        }
+    };
