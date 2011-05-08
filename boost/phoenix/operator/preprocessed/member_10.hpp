@@ -5,10 +5,10 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-namespace boost { namespace phoenix { namespace tag { struct mem_fun_ptr {}; template <typename Ostream> inline Ostream &operator<<( Ostream & os , mem_fun_ptr) { os << "mem_fun_ptr"; return os; } } namespace expression { template < typename A0 = void , typename A1 = void , typename A2 = void , typename A3 = void , typename A4 = void , typename A5 = void , typename A6 = void , typename A7 = void , typename A8 = void , typename A9 = void , typename Dummy = void > struct mem_fun_ptr; template < typename A0 > struct mem_fun_ptr< A0 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 > {}; template < typename A0 , typename A1 > struct mem_fun_ptr< A0 , A1 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 > {}; template < typename A0 , typename A1 , typename A2 > struct mem_fun_ptr< A0 , A1 , A2 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 > struct mem_fun_ptr< A0 , A1 , A2 , A3 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 , A6 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 , A6 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 > {}; } namespace rule { struct mem_fun_ptr : expression:: mem_fun_ptr < proto::vararg< meta_grammar > > {}; } } } namespace boost { namespace phoenix { template <typename Dummy> struct meta_grammar::case_< boost :: phoenix :: tag:: mem_fun_ptr , Dummy > : enable_rule< boost :: phoenix :: rule:: mem_fun_ptr , Dummy > {}; } }
+namespace boost { namespace phoenix { namespace tag { struct mem_fun_ptr {}; template <typename Ostream> inline Ostream &operator<<( Ostream & os , mem_fun_ptr) { os << "mem_fun_ptr"; return os; } } namespace expression { template < typename A0 = void , typename A1 = void , typename A2 = void , typename A3 = void , typename A4 = void , typename A5 = void , typename A6 = void , typename A7 = void , typename A8 = void , typename A9 = void , typename Dummy = void > struct mem_fun_ptr; template < typename A0 > struct mem_fun_ptr< A0 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 > {}; template < typename A0 , typename A1 > struct mem_fun_ptr< A0 , A1 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 > {}; template < typename A0 , typename A1 , typename A2 > struct mem_fun_ptr< A0 , A1 , A2 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 > struct mem_fun_ptr< A0 , A1 , A2 , A3 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 , A6 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 , A6 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 > {}; template < typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 > struct mem_fun_ptr< A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 > : boost::phoenix::expr< tag:: mem_fun_ptr , A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 > {}; } namespace rule { struct mem_fun_ptr : expression:: mem_fun_ptr < proto::vararg< meta_grammar > > {}; } } } namespace boost { namespace phoenix { template <typename Dummy> struct meta_grammar::case_< :: boost :: phoenix :: tag:: mem_fun_ptr , Dummy > : enable_rule< :: boost :: phoenix :: rule:: mem_fun_ptr , Dummy > {}; } }
 namespace boost { namespace phoenix
 {
-    namespace expression { template <typename Lhs, typename Rhs> struct mem_ptr : expr<proto::tag::mem_ptr, Lhs, Rhs> {}; } namespace rule { struct mem_ptr : expression::mem_ptr<meta_grammar, meta_grammar> {}; } template <typename Dummy> struct meta_grammar::case_<proto::tag::mem_ptr, Dummy> : enable_rule<rule::mem_ptr, Dummy> {};
+    namespace expression { template <typename Lhs, typename Rhs> struct mem_ptr : expr<proto::tag:: mem_ptr, Lhs, Rhs> {}; } namespace rule { struct mem_ptr : expression:: mem_ptr<meta_grammar, meta_grammar> {}; } template <typename Dummy> struct meta_grammar::case_<proto::tag:: mem_ptr, Dummy> : enable_rule<rule:: mem_ptr, Dummy> {};
     template <typename Object, typename MemPtr>
     inline
     typename enable_if<
@@ -228,8 +228,8 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
                     
                 );
@@ -259,10 +259,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx)
+                    boost::phoenix::eval(a2, ctx)
                 );
         }
         
@@ -290,10 +290,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx) , eval(a3, ctx)
+                    boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx)
                 );
         }
         
@@ -321,10 +321,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx)
+                    boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx)
                 );
         }
         
@@ -352,10 +352,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx)
+                    boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx)
                 );
         }
         
@@ -383,10 +383,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx)
+                    boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx)
                 );
         }
         
@@ -414,10 +414,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx)
+                    boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx) , boost::phoenix::eval(a7, ctx)
                 );
         }
         
@@ -445,10 +445,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx) , eval(a8, ctx)
+                    boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx) , boost::phoenix::eval(a7, ctx) , boost::phoenix::eval(a8, ctx)
                 );
         }
         
@@ -476,10 +476,10 @@ namespace boost { namespace phoenix
         {
             return
                 (
-                    get_pointer(eval(a0, ctx))
-                    ->*eval(a1, ctx)
+                    get_pointer(boost::phoenix::eval(a0, ctx))
+                    ->*boost::phoenix::eval(a1, ctx)
                 )(
-                    eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx) , eval(a8, ctx) , eval(a9, ctx)
+                    boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx) , boost::phoenix::eval(a7, ctx) , boost::phoenix::eval(a8, ctx) , boost::phoenix::eval(a9, ctx)
                 );
         }
         

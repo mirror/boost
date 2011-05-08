@@ -11,6 +11,8 @@
 #include <boost/phoenix/core/limits.hpp>
 #include <boost/fusion/container/map.hpp>
 #include <boost/fusion/container/generation/make_map.hpp>
+#include <boost/fusion/sequence/intrinsic/at_key.hpp>
+#include <boost/fusion/sequence/intrinsic/has_key.hpp>
 #include <boost/phoenix/core/call.hpp>
 #include <boost/phoenix/core/expression.hpp>
 #include <boost/phoenix/core/reference.hpp>

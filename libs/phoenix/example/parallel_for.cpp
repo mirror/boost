@@ -110,7 +110,6 @@ parallel_eval(Expr const & expr, A0 & a0, A1 & a1, A2 & a2)
     return boost::phoenix::eval(expr, boost::phoenix::context(env, parallel_actions()));
 }
 
-
 // changing evaluation mechanism on the fly
 BOOST_PHOENIX_DEFINE_EXPRESSION(
     (parallel)

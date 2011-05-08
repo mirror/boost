@@ -24,9 +24,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); }
         }
         template <typename Try, typename A0, typename Context>
         typename boost::disable_if<
@@ -40,12 +40,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
             
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a0
                     )
@@ -71,9 +71,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); }
         }
         template <typename Try, typename A0 , typename A1, typename Context>
         typename boost::disable_if<
@@ -87,12 +87,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a1
                     )
@@ -118,9 +118,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2, typename Context>
         typename boost::disable_if<
@@ -134,12 +134,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a2
                     )
@@ -165,9 +165,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2 , typename A3, typename Context>
         typename boost::disable_if<
@@ -181,12 +181,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a3
                     )
@@ -212,9 +212,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2 , typename A3 , typename A4, typename Context>
         typename boost::disable_if<
@@ -228,12 +228,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a4
                     )
@@ -259,9 +259,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5, typename Context>
         typename boost::disable_if<
@@ -275,12 +275,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a5
                     )
@@ -306,9 +306,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a6), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a6), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6, typename Context>
         typename boost::disable_if<
@@ -322,12 +322,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a6
                     )
@@ -353,9 +353,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a7), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a7), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7, typename Context>
         typename boost::disable_if<
@@ -369,12 +369,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a6), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a6), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a7
                     )
@@ -400,9 +400,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a7), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a8), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a7), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a8), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8, typename Context>
         typename boost::disable_if<
@@ -416,12 +416,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a7), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a7), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a8
                     )
@@ -447,9 +447,9 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a7), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a8), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A9 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a9), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a7), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a8), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A9 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a9), ctx); }
         }
         template <typename Try, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9, typename Context>
         typename boost::disable_if<
@@ -463,12 +463,12 @@
         {
             try
             {
-                eval(proto::child_c<0>(try_), ctx);
+                boost::phoenix::eval(proto::child_c<0>(try_), ctx);
             }
-            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a7), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type::type & ) { eval(proto::child_c<1>(a8), ctx); }
+            catch( typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a0), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a1), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a2), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a3), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a4), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a5), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a6), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a7), ctx); } catch( typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type::type & ) { boost::phoenix::eval(proto::child_c<1>(a8), ctx); }
             catch(...)
             {
-                eval(
+                boost::phoenix::eval(
                     proto::child_c<0>(
                         a9
                     )

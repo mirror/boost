@@ -8,6 +8,7 @@
 #define BOOST_PHOENIX_CORE_AS_ACTOR_HPP
 
 #include <boost/phoenix/core/actor.hpp>
+#include <boost/fusion/support/void.hpp>
 
 namespace boost { namespace phoenix
 {

@@ -8,6 +8,7 @@
 #ifndef BOOST_PHOENIX_CORE_FUNCTION_EQUAL_HPP
 #define BOOST_PHOENIX_CORE_FUNCTION_EQUAL_HPP
 
+#include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/phoenix/core/limits.hpp>
 #include <boost/is_placeholder.hpp>
 #include <boost/mpl/bool.hpp>
@@ -134,7 +135,7 @@ namespace boost { namespace phoenix
 
                 BOOST_PP_REPEAT_FROM_TO(
                     1
-                  , BOOST_PROTO_MAX_ARITY
+                  , BOOST_PP_INC(BOOST_PROTO_MAX_ARITY)
                   , BOOST_PHOENIX_FUNCTION_EQUAL
                   , _
                 )

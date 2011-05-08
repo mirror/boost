@@ -28,7 +28,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx)
+                    boost::phoenix::eval(a1, ctx)
                 );
         }
     
@@ -54,7 +54,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx)
                 );
         }
     
@@ -80,7 +80,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx)
                 );
         }
     
@@ -106,7 +106,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx)
                 );
         }
     
@@ -132,7 +132,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx)
                 );
         }
     
@@ -158,7 +158,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx)
                 );
         }
     
@@ -184,7 +184,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx) , boost::phoenix::eval(a7, ctx)
                 );
         }
     
@@ -210,7 +210,7 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx) , eval(a8, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx) , boost::phoenix::eval(a7, ctx) , boost::phoenix::eval(a8, ctx)
                 );
         }
     
@@ -236,6 +236,6 @@
         {
             return
                 typename detail::result_of::target<A0>::type(
-                    eval(a1, ctx) , eval(a2, ctx) , eval(a3, ctx) , eval(a4, ctx) , eval(a5, ctx) , eval(a6, ctx) , eval(a7, ctx) , eval(a8, ctx) , eval(a9, ctx)
+                    boost::phoenix::eval(a1, ctx) , boost::phoenix::eval(a2, ctx) , boost::phoenix::eval(a3, ctx) , boost::phoenix::eval(a4, ctx) , boost::phoenix::eval(a5, ctx) , boost::phoenix::eval(a6, ctx) , boost::phoenix::eval(a7, ctx) , boost::phoenix::eval(a8, ctx) , boost::phoenix::eval(a9, ctx)
                 );
         }
