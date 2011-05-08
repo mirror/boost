@@ -1,6 +1,25 @@
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+#ifndef BOOST_PHOENIX_SCOPE_LOCAL_VAR_DEF_HPP
+#define BOOST_PHOENIX_SCOPE_LOCAL_VAR_DEF_HPP
+
+#include <boost/phoenix/support/iterate.hpp>
+
+#include <boost/phoenix/scope/detail/preprocessed/local_var_def.hpp>
+
+#endif
+
+#else
 
 #if !BOOST_PHOENIX_IS_ITERATING
 
+#ifndef BOOST_PHOENIX_SCOPE_LOCAL_VAR_DEF_HPP
+#define BOOST_PHOENIX_SCOPE_LOCAL_VAR_DEF_HPP
+
+#include <boost/phoenix/support/iterate.hpp>
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/local_var_def_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
 /*==============================================================================
     Copyright (c) 2005-2010 Joel de Guzman
     Copyright (c) 2010 Thomas Heller
@@ -8,10 +27,9 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#ifndef BOOST_PHOENIX_SCOPE_LOCAL_VAR_DEF_HPP
-#define BOOST_PHOENIX_SCOPE_LOCAL_VAR_DEF_HPP
-
-#include <boost/phoenix/support/iterate.hpp>
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 1)
+#endif
 
 #define M0(Z, N, D)                                                             \
     fusion::pair<BOOST_PP_CAT(Tag, N), BOOST_PP_CAT(A, N)>                      \
@@ -78,6 +96,10 @@
 #undef M1
 #undef M2
 #undef M3
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
 
 #endif
 
@@ -197,6 +219,8 @@
                         BOOST_PP_ENUM(BOOST_PHOENIX_ITERATION, M3, _)
                     );
             }
+#endif
+
 #endif
 
 #endif

@@ -1,7 +1,7 @@
 /*==============================================================================
     Copyright (c) 2001-2010 Joel de Guzman
     Copyright (c) 2010 Eric Niebler
-    Copyright (c) 2010 Thomas Heller
+    Copyright (c) 2010-2011 Thomas Heller
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -69,38 +69,82 @@ namespace boost { namespace phoenix
         };
     }
 
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+
+#include <boost/phoenix/core/preprocessed/argument.hpp>
+
+#else
+
+#if !defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#include <boost/phoenix/core/detail/argument.hpp>
+#else
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/argument_predefined_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+/*==============================================================================
+    Copyright (c) 2001-2010 Joel de Guzman
+    Copyright (c) 2010-2011 Thomas Heller
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 1)
+#endif
+
+#ifdef BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#undef BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#define BOOST_PHOENIX_NO_PREDEFINED_TERMINALS_RESTORE
+#endif
+
+#include <boost/phoenix/core/detail/argument.hpp>
+
+#ifndef BOOST_PHOENIX_NO_PREDEFINED_TERMINALS_RESTORE
+#define BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#undef BOOST_PHOENIX_NO_PREDEFINED_TERIMINALS_RESTORE
+#endif
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/argument_no_predefined_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+/*==============================================================================
+    Copyright (c) 2001-2010 Joel de Guzman
+    Copyright (c) 2010-2011 Thomas Heller
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 1)
+#endif
+
 #ifndef BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#define BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#define BOOST_PHOENIX_NO_PREDEFINED_TERMINALS_RESTORE
+#endif
 
-    #define BOOST_PHOENIX_ARGUMENT_N(_, N, name)                                \
-    typedef                                                                     \
-        expression::argument<BOOST_PP_INC(N)>::type                             \
-        BOOST_PP_CAT(BOOST_PP_CAT(name, BOOST_PP_INC(N)), _type);               \
-    expression::argument<BOOST_PP_INC(N)>::type const                           \
-        BOOST_PP_CAT(name, BOOST_PP_INC(N)) = {{{}}};                           \
-    /**/
+#include <boost/phoenix/core/detail/argument.hpp>
 
-#else // BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#ifndef BOOST_PHOENIX_NO_PREDEFINED_TERMINALS_RESTORE
+#undef BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#undef BOOST_PHOENIX_NO_PREDEFINED_TERIMINALS_RESTORE
+#endif
 
-    #define BOOST_PHOENIX_ARGUMENT_N(_, N, name)                                \
-    typedef                                                                     \
-        expression::argument<BOOST_PP_INC(N)>::type                             \
-        BOOST_PP_CAT(BOOST_PP_CAT(name, BOOST_PP_INC(N)), _type);               \
-    /**/
-#endif // BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
 
-    namespace placeholders
-    {
-        BOOST_PP_REPEAT(BOOST_PHOENIX_ARG_LIMIT, BOOST_PHOENIX_ARGUMENT_N, arg)
-        BOOST_PP_REPEAT(BOOST_PHOENIX_ARG_LIMIT, BOOST_PHOENIX_ARGUMENT_N, _)
-    }
+#endif
 
-    namespace arg_names
-    {
-        BOOST_PP_REPEAT(BOOST_PHOENIX_ARG_LIMIT, BOOST_PHOENIX_ARGUMENT_N, arg)
-        BOOST_PP_REPEAT(BOOST_PHOENIX_ARG_LIMIT, BOOST_PHOENIX_ARGUMENT_N, _)
-    }
+#endif
 
-    #undef BOOST_PHOENIX_ARGUMENT_N
 }}
 
 #endif

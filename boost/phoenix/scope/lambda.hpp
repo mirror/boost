@@ -1,11 +1,5 @@
-/*==============================================================================
-    Copyright (c) 2001-2010 Joel de Guzman
-    Copyright (c) 2004 Daniel Wallin
-    Copyright (c) 2010 Thomas Heller
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying
-    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-==============================================================================*/
 #ifndef BOOST_PHOENIX_SCOPE_LAMBDA_HPP
 #define BOOST_PHOENIX_SCOPE_LAMBDA_HPP
 
@@ -16,6 +10,38 @@
 #include <boost/phoenix/core/meta_grammar.hpp>
 #include <boost/phoenix/scope/local_variable.hpp>
 #include <boost/phoenix/scope/scoped_environment.hpp>
+
+#include <boost/phoenix/scope/preprocessed/lambda.hpp>
+
+#endif
+#else
+
+#ifndef BOOST_PHOENIX_SCOPE_LAMBDA_HPP
+#define BOOST_PHOENIX_SCOPE_LAMBDA_HPP
+
+#include <boost/phoenix/core/limits.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/phoenix/core/call.hpp>
+#include <boost/phoenix/core/expression.hpp>
+#include <boost/phoenix/core/meta_grammar.hpp>
+#include <boost/phoenix/scope/local_variable.hpp>
+#include <boost/phoenix/scope/scoped_environment.hpp>
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/lambda_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+/*==============================================================================
+    Copyright (c) 2001-2010 Joel de Guzman
+    Copyright (c) 2004 Daniel Wallin
+    Copyright (c) 2010 Thomas Heller
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 1)
+#endif
+
     
 BOOST_PHOENIX_DEFINE_EXPRESSION(
     (boost)(phoenix)(lambda)
@@ -392,5 +418,11 @@ namespace boost { namespace phoenix
     lambda_local_gen const lambda = lambda_local_gen();
 
 }}
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
+
+#endif
 
 #endif

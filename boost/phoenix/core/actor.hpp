@@ -87,6 +87,24 @@ namespace boost { namespace phoenix
             >                                                                   \
       /**/
 
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+#include <boost/phoenix/core/preprocessed/actor.hpp>
+#else
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/actor_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+/*==============================================================================
+    Copyright (c) 2005-2010 Joel de Guzman
+    Copyright (c) 2010-2011 Thomas Heller
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 1)
+#endif
+
         struct assign
             : proto::or_<
                 BOOST_PP_ENUM_SHIFTED(
@@ -100,6 +118,12 @@ namespace boost { namespace phoenix
                 >
             >
         {};
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
+
+#endif
     #undef BOOST_PHOENIX_ACTOR_ASSIGN_CALL
     #undef BOOST_PHOENIX_ACTOR_ASSIGN_CHILD
     }

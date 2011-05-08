@@ -37,7 +37,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e)
+                        proto::child_c< 0>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -71,7 +71,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -105,7 +105,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -139,7 +139,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -173,7 +173,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -207,7 +207,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -241,7 +241,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -275,7 +275,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -309,7 +309,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -343,7 +343,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -377,7 +377,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -411,7 +411,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -445,7 +445,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -479,7 +479,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e) , proto::child_c<13>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e) , proto::child_c< 13>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -513,7 +513,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e) , proto::child_c<13>(e) , proto::child_c<14>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e) , proto::child_c< 13>(e) , proto::child_c< 14>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -547,7 +547,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e) , proto::child_c<13>(e) , proto::child_c<14>(e) , proto::child_c<15>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e) , proto::child_c< 13>(e) , proto::child_c< 14>(e) , proto::child_c< 15>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -581,7 +581,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e) , proto::child_c<13>(e) , proto::child_c<14>(e) , proto::child_c<15>(e) , proto::child_c<16>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e) , proto::child_c< 13>(e) , proto::child_c< 14>(e) , proto::child_c< 15>(e) , proto::child_c< 16>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -615,7 +615,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e) , proto::child_c<13>(e) , proto::child_c<14>(e) , proto::child_c<15>(e) , proto::child_c<16>(e) , proto::child_c<17>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e) , proto::child_c< 13>(e) , proto::child_c< 14>(e) , proto::child_c< 15>(e) , proto::child_c< 16>(e) , proto::child_c< 17>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -649,7 +649,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e) , proto::child_c<13>(e) , proto::child_c<14>(e) , proto::child_c<15>(e) , proto::child_c<16>(e) , proto::child_c<17>(e) , proto::child_c<18>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e) , proto::child_c< 13>(e) , proto::child_c< 14>(e) , proto::child_c< 15>(e) , proto::child_c< 16>(e) , proto::child_c< 17>(e) , proto::child_c< 18>(e)
                       , boost::phoenix::context(s, d)
                     );
             }
@@ -683,7 +683,7 @@
             {
                 return
                     Fun()(
-                        proto::child_c<0>(e) , proto::child_c<1>(e) , proto::child_c<2>(e) , proto::child_c<3>(e) , proto::child_c<4>(e) , proto::child_c<5>(e) , proto::child_c<6>(e) , proto::child_c<7>(e) , proto::child_c<8>(e) , proto::child_c<9>(e) , proto::child_c<10>(e) , proto::child_c<11>(e) , proto::child_c<12>(e) , proto::child_c<13>(e) , proto::child_c<14>(e) , proto::child_c<15>(e) , proto::child_c<16>(e) , proto::child_c<17>(e) , proto::child_c<18>(e) , proto::child_c<19>(e)
+                        proto::child_c< 0>(e) , proto::child_c< 1>(e) , proto::child_c< 2>(e) , proto::child_c< 3>(e) , proto::child_c< 4>(e) , proto::child_c< 5>(e) , proto::child_c< 6>(e) , proto::child_c< 7>(e) , proto::child_c< 8>(e) , proto::child_c< 9>(e) , proto::child_c< 10>(e) , proto::child_c< 11>(e) , proto::child_c< 12>(e) , proto::child_c< 13>(e) , proto::child_c< 14>(e) , proto::child_c< 15>(e) , proto::child_c< 16>(e) , proto::child_c< 17>(e) , proto::child_c< 18>(e) , proto::child_c< 19>(e)
                       , boost::phoenix::context(s, d)
                     );
             }

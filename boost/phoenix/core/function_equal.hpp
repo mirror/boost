@@ -103,6 +103,13 @@ namespace boost { namespace phoenix
             }
 
             private:
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+#include <boost/phoenix/core/preprocessed/function_equal.hpp>
+#else
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/function_equal_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+
                 #define BOOST_PHOENIX_FUNCTION_EQUAL_R(Z, N, DATA)              \
                     && function_equal_()(                                       \
                             proto::child_c< N >(e1)                             \
@@ -141,6 +148,11 @@ namespace boost { namespace phoenix
                 )
                 #undef BOOST_PHOENIX_FUNCTION_EQUAL_R
                 #undef BOOST_PHOENIX_FUNCTION_EQUAL
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
+#endif
         };
     }
 

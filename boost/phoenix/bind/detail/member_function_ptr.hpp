@@ -45,8 +45,6 @@ namespace boost { namespace phoenix { namespace detail
         }
     };
 
-    BOOST_PROTO_USE_GET_POINTER();
-
     template <>
     struct member_function_ptr_impl<0>
     {
@@ -61,6 +59,8 @@ namespace boost { namespace phoenix { namespace detail
             template <typename Class>
             RT operator()(Class& obj) const
             {
+                BOOST_PROTO_USE_GET_POINTER();
+
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj) ->*fp)();
             }
@@ -75,10 +75,35 @@ namespace boost { namespace phoenix { namespace detail
         };
     };
 
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+    #include <boost/phoenix/bind/detail/preprocessed/member_function_ptr.hpp>
+#else
+
+#if defined(__WAVE__) && defined (BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(preserve: 2, line: 0, output: "preprocessed/member_function_ptr_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+
+/*=============================================================================
+    Copyright (c) 2001-2007 Joel de Guzman
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(preserve: 1)
+#endif
+
 #define BOOST_PHOENIX_ITERATION_PARAMS                                          \
     (3, (1, BOOST_PHOENIX_COMPOSITE_LIMIT,                                      \
     <boost/phoenix/bind/detail/member_function_ptr.hpp>))
 #include BOOST_PHOENIX_ITERATE()
+
+#if defined(__WAVE__) && defined (BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(output: null)
+#endif
+
+#endif
 
 }}} // namespace boost::phoenix::detail
 
@@ -105,6 +130,8 @@ namespace boost { namespace phoenix { namespace detail
             template <typename Class, BOOST_PHOENIX_typename_A>
             RT operator()(Class& obj, BOOST_PHOENIX_A_const_ref_a) const
             {
+                BOOST_PROTO_USE_GET_POINTER();
+
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(BOOST_PHOENIX_a);
             }
