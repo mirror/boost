@@ -2282,7 +2282,7 @@ Exit_Pt_Helper const exit_pt_;
 #define MSM_EUML_EVENT_INSTANCE_HELPER_ATTRIBUTE_MAP(z, n, unused)                              \
     template <BOOST_PP_ENUM_PARAMS(n, class ARG),class T>                                       \
     void init(BOOST_PP_ENUM(n, MSM_EUML_EVENT_INSTANCE_HELPER_EXECUTE1, ~ ), \
-    T,typename ::boost::enable_if< typename boost::mpl::eval_if< typename ::boost::fusion::traits::is_sequence<T>::type,size_helper<T,n>,::boost::mpl::false_>::type,void >::type* dummyval=0)      \
+    T,typename ::boost::enable_if< typename boost::mpl::eval_if< typename ::boost::fusion::traits::is_sequence<T>::type,size_helper<T,n>,::boost::mpl::false_>::type,void >::type* =0)      \
     {                                                                                           \
         BOOST_PP_REPEAT_FROM_TO(0,n ,                                                           \
         MSM_EUML_EVENT_HELPER_GET_ATTRIBUTE, ~)                                                 \
