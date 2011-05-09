@@ -1,4 +1,4 @@
-//  This file was automatically generated on Thu May  5 04:40:08 2011
+//  This file was automatically generated on Mon May 09 12:11:18 2011
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -556,6 +556,11 @@ namespace boost_no_typename_with_ctor = empty_boost;
 #include "boost_no_unicode_literals.ipp"
 #else
 namespace boost_no_unicode_literals = empty_boost;
+#endif
+#ifndef BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX
+#include "boost_no_unified_init.ipp"
+#else
+namespace boost_no_unified_initialization_syntax = empty_boost;
 #endif
 #ifndef BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #include "boost_no_using_breaks_adl.ipp"
@@ -1629,6 +1634,11 @@ int main( int, char *[] )
    if(0 != boost_no_unicode_literals::test())
    {
       std::cerr << "Failed test for BOOST_NO_UNICODE_LITERALS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_unified_initialization_syntax::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_function_scope_using_declaration_breaks_adl::test())

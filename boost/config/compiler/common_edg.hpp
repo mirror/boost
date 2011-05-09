@@ -91,6 +91,7 @@
 #define BOOST_NO_TEMPLATE_ALIASES
 #define BOOST_NO_UNICODE_LITERALS
 #define BOOST_NO_VARIADIC_TEMPLATES
+#define BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX
 
 #ifdef c_plusplus
 // EDG has "long long" in non-strict mode
