@@ -24,13 +24,14 @@
 #include <boost/mpl/long.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/mpl/aux_/config/ttp.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
-# define BOOST_PROTO_MAX_ARITY 5
+# define BOOST_PROTO_MAX_ARITY 10
 #endif
 
 #ifndef BOOST_PROTO_MAX_LOGICAL_ARITY
-# define BOOST_PROTO_MAX_LOGICAL_ARITY 8
+# define BOOST_PROTO_MAX_LOGICAL_ARITY 10
 #endif
 
 #ifndef BOOST_PROTO_MAX_FUNCTION_CALL_ARITY
@@ -43,6 +44,14 @@
 
 #if BOOST_PROTO_MAX_FUNCTION_CALL_ARITY > BOOST_PROTO_MAX_ARITY
 # error BOOST_PROTO_MAX_FUNCTION_CALL_ARITY cannot be larger than BOOST_PROTO_MAX_ARITY
+#endif
+
+#ifndef BOOST_PROTO_DONT_USE_PREPROCESSED_FILES
+  #if 10 < BOOST_PROTO_MAX_ARITY ||                                                                 \
+      10 < BOOST_PROTO_MAX_LOGICAL_ARITY ||                                                         \
+      10 < BOOST_PROTO_MAX_FUNCTION_CALL_ARITY
+    #define BOOST_PROTO_DONT_USE_PREPROCESSED_FILES
+  #endif
 #endif
 
 #ifndef BOOST_PROTO_BROKEN_CONST_OVERLOADS
@@ -89,12 +98,22 @@
 # define BOOST_PROTO_RESULT_OF boost::tr1_result_of
 #endif
 
+#ifdef BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
+# define BOOST_PROTO_EXTENDED_TEMPLATE_PARAMETERS_MATCHING 
+#endif
+
 namespace boost { namespace proto
 {
     namespace detail
     {
         typedef char yes_type;
         typedef char (&no_type)[2];
+
+        template<int N>
+        struct sized_type
+        {
+            typedef char (&type)[N];
+        };
 
         struct dont_care;
         struct undefined; // leave this undefined
