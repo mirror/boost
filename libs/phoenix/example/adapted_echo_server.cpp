@@ -7,14 +7,19 @@
 
 #include <cstdlib>
 #include <iostream>
+
+#define BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
+
 #include <boost/phoenix.hpp>
 #include <boost/asio.hpp>
 
 namespace phx = boost::phoenix;
 
 using boost::phoenix::ref;
+/*
 using boost::phoenix::lambda;
 using boost::phoenix::arg_names::_1;
+*/
 
 BOOST_PHOENIX_ADAPT_FUNCTION(void, read, boost::asio::async_read, 4)
 BOOST_PHOENIX_ADAPT_FUNCTION(void, write, boost::asio::async_write, 3)
@@ -40,6 +45,9 @@ int main(int argc, char* argv[])
       std::cerr << "Usage: async_tcp_echo_server <port>\n";
       return 1;
     }
+
+    phx::lambda_type lambda;
+    phx::arg_names::_1_type _1;
 
     boost::asio::io_service io_service;
     boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::atoi(argv[1])));
