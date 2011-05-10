@@ -55,7 +55,7 @@
 
 BOOST_PHOENIX_DEFINE_EXPRESSION_VARARG(
     (boost)(phoenix)(mem_fun_ptr)
-  , (meta_grammar)
+  , (meta_grammar)(meta_grammar)
   , BOOST_PHOENIX_LIMIT
 )
 

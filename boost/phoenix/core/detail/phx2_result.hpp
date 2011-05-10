@@ -40,11 +40,33 @@ namespace boost { namespace phoenix {
 
         template <typename F, BOOST_PHOENIX_typename_A_void(BOOST_PP_DEC(BOOST_PHOENIX_COMPOSITE_LIMIT)), typename Dummy = void>
         struct phx2_result;
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+#include <boost/phoenix/core/detail/preprocessed/phx2_result.hpp>
+#else
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/phx2_result_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+/*=============================================================================
+    Copyright (c) 2011 Thomas Heller
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 1)
+#endif
+
 
         #define BOOST_PHOENIX_ITERATION_PARAMS                                  \
             (3, (1, BOOST_PP_DEC(BOOST_PHOENIX_COMPOSITE_LIMIT),                \
             <boost/phoenix/core/detail/phx2_result.hpp>))
 #include BOOST_PHOENIX_ITERATE()
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
+
+#endif
     }
 }}
 

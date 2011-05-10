@@ -86,10 +86,35 @@ namespace boost { namespace phoenix { namespace detail
         };
     };
 
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+    #include <boost/phoenix/bind/detail/preprocessed/function_ptr.hpp>
+#else
+
+#if defined(__WAVE__) && defined (BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(preserve: 2, line: 0, output: "preprocessed/function_ptr_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+
+/*=============================================================================
+    Copyright (c) 2001-2007 Joel de Guzman
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(preserve: 1)
+#endif
+
 #define BOOST_PHOENIX_ITERATION_PARAMS                                          \
     (3, (2, BOOST_PHOENIX_COMPOSITE_LIMIT,                                      \
     <boost/phoenix/bind/detail/function_ptr.hpp>))
 #include BOOST_PHOENIX_ITERATE()
+
+#if defined(__WAVE__) && defined (BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(output: null)
+#endif
+
+#endif
 
 }}} // namespace boost::phoenix::detail
 

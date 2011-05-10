@@ -14,6 +14,7 @@
 
 #include <algorithm>
 
+#include <boost/phoenix/core/limits.hpp>
 #include <boost/phoenix/stl/algorithm/detail/has_find.hpp>
 #include <boost/phoenix/stl/algorithm/detail/has_lower_bound.hpp>
 #include <boost/phoenix/stl/algorithm/detail/has_upper_bound.hpp>

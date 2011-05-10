@@ -33,7 +33,12 @@ namespace boost { namespace phoenix
         struct result;
 
         template <typename This, typename Locals, typename Let, typename Context>
-        struct result<This(Locals const &, Let const &, Context)>
+        struct result<This(Locals, Let, Context)>
+            : result<This(Locals const &, Let const &, Context)>
+        {};
+
+        template <typename This, typename Locals, typename Let, typename Context>
+        struct result<This(Locals &, Let &, Context)>
         {
             typedef
                 typename result_of::actions<Context>::type

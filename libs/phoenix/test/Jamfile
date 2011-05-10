@@ -126,7 +126,6 @@ test-suite phoenix_include :
     [ run include/scope.cpp ]
     [ run include/statement.cpp ]
     [ run include/stl.cpp ]
-#    [ run include/bind/bind.cpp : : : : bind_bind ]
     [ run include/version.cpp ]
     [ run include/core/actor.cpp ]
     [ run include/core/argument.cpp ]

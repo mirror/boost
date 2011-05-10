@@ -56,7 +56,7 @@
 
     #define BOOST_PHOENIX_SWITCH_EVAL_R(Z, N, DATA)                             \
         case BOOST_PP_CAT(case_label, N)::value :                               \
-            boost::phoenix::eval(                                                               \
+            boost::phoenix::eval(                                               \
                 proto::child_c<1>(                                              \
                     fusion::deref(                                              \
                         fusion::advance_c<N>(fusion::begin(flat_view))          \

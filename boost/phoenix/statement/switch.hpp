@@ -9,12 +9,14 @@
 #define BOOST_PHOENIX_STATEMENT_SWITCH_HPP
 
 #include <boost/phoenix/core/limits.hpp>
+#include <boost/fusion/iterator/advance.hpp>
 #include <boost/phoenix/core/call.hpp>
 #include <boost/phoenix/core/expression.hpp>
 #include <boost/phoenix/core/meta_grammar.hpp>
 #include <boost/phoenix/core/is_nullary.hpp>
 #include <boost/phoenix/support/iterate.hpp>
 #include <boost/proto/make_expr.hpp>
+#include <boost/proto/fusion.hpp>
 
 BOOST_PHOENIX_DEFINE_EXPRESSION(
     (boost)(phoenix)(switch_case)

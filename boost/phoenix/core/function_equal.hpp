@@ -8,6 +8,7 @@
 #ifndef BOOST_PHOENIX_CORE_FUNCTION_EQUAL_HPP
 #define BOOST_PHOENIX_CORE_FUNCTION_EQUAL_HPP
 
+#include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/phoenix/core/limits.hpp>
 #include <boost/is_placeholder.hpp>
 #include <boost/mpl/bool.hpp>
@@ -102,6 +103,13 @@ namespace boost { namespace phoenix
             }
 
             private:
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+#include <boost/phoenix/core/preprocessed/function_equal.hpp>
+#else
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/function_equal_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+
                 #define BOOST_PHOENIX_FUNCTION_EQUAL_R(Z, N, DATA)              \
                     && function_equal_()(                                       \
                             proto::child_c< N >(e1)                             \
@@ -134,12 +142,17 @@ namespace boost { namespace phoenix
 
                 BOOST_PP_REPEAT_FROM_TO(
                     1
-                  , BOOST_PROTO_MAX_ARITY
+                  , BOOST_PP_INC(BOOST_PROTO_MAX_ARITY)
                   , BOOST_PHOENIX_FUNCTION_EQUAL
                   , _
                 )
                 #undef BOOST_PHOENIX_FUNCTION_EQUAL_R
                 #undef BOOST_PHOENIX_FUNCTION_EQUAL
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
+#endif
         };
     }
 

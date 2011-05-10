@@ -130,9 +130,9 @@ Here are some sample preset definitions of `arg1`..`argN`
 
     namespace placeholders
     {
-        expression::argument<0>::type const arg1 = {};
-        expression::argument<1>::type const arg2 = {};
-        expression::argument<2>::type const arg3 = {};
+        expression::argument<1>::type const arg1 = {};
+        expression::argument<2>::type const arg2 = {};
+        expression::argument<3>::type const arg3 = {};
     }
 
 and its __bll__ `_1`..`_N` style counterparts:
@@ -140,9 +140,9 @@ and its __bll__ `_1`..`_N` style counterparts:
 
     namespace placeholders
     {
-        expression::argument<0>::type const _1 = {};
-        expression::argument<1>::type const _2 = {};
-        expression::argument<2>::type const _3 = {};
+        expression::argument<1>::type const _1 = {};
+        expression::argument<2>::type const _2 = {};
+        expression::argument<3>::type const _3 = {};
     }
 
 [note You can set `BOOST_PHOENIX_ARG_LIMIT`, the predefined maximum
@@ -153,7 +153,7 @@ placeholder index. By default, `BOOST_PHOENIX_ARG_LIMIT` is set to `BOOST_PHOENI
 
 When appropriate, you can define your own `argument` names. For example:
 
-    expression::argument<0>::type x; // note zero based index
+    expression::argument<1>::type x; // note one based index
 
 `x` may now be used as a parameter to a lazy function:
 

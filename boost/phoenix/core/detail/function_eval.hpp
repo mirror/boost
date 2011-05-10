@@ -1,10 +1,5 @@
-/*=============================================================================
-    Copyright (c) 2001-2007 Joel de Guzman
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying
-    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-==============================================================================*/
-#if !BOOST_PHOENIX_IS_ITERATING
 #ifndef BOOST_PHOENIX_CORE_DETAIL_FUNCTION_EVAL_HPP
 #define BOOST_PHOENIX_CORE_DETAIL_FUNCTION_EVAL_HPP
 
@@ -15,6 +10,39 @@
 #include <boost/phoenix/core/meta_grammar.hpp>
 #include <boost/phoenix/core/detail/phx2_result.hpp>
 #include <boost/utility/result_of.hpp>
+
+#include <boost/phoenix/core/detail/preprocessed/function_eval.hpp>
+
+#endif
+#else
+
+#if !BOOST_PHOENIX_IS_ITERATING
+
+#ifndef BOOST_PHOENIX_CORE_DETAIL_FUNCTION_EVAL_HPP
+#define BOOST_PHOENIX_CORE_DETAIL_FUNCTION_EVAL_HPP
+
+#include <boost/phoenix/core/limits.hpp>
+#include <boost/phoenix/support/iterate.hpp>
+#include <boost/phoenix/core/call.hpp>
+#include <boost/phoenix/core/expression.hpp>
+#include <boost/phoenix/core/meta_grammar.hpp>
+#include <boost/phoenix/core/detail/phx2_result.hpp>
+#include <boost/utility/result_of.hpp>
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/function_eval_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+/*=============================================================================
+    Copyright (c) 2001-2007 Joel de Guzman
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(preserve: 1)
+#endif
 
 BOOST_PHOENIX_DEFINE_EXPRESSION_VARARG(
     (boost)(phoenix)(detail)(function_eval)
@@ -104,6 +132,11 @@ namespace boost { namespace phoenix {
     {};
 }}
 
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+#pragma wave option(output: null)
+#endif
+
+
 #endif
 
 #else
@@ -174,3 +207,4 @@ namespace boost { namespace phoenix {
             }
 #endif
 
+#endif

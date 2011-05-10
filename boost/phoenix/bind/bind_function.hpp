@@ -44,11 +44,36 @@ namespace boost { namespace phoenix {
         typedef detail::function_ptr<1, RT, RT(*)(T0 &)> fp_type;
         return detail::expression::function_eval<fp_type, A0>::make(fp_type(f), a0);
     }
-        
+
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+    #include <boost/phoenix/bind/preprocessed/bind_function.hpp>
+#else
+
+#if defined(__WAVE__) && defined (BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(preserve: 2, line: 0, output: "preprocessed/bind_function_" BOOST_PHOENIX_LIMIT_STR ".hpp")
+#endif
+
+/*=============================================================================
+    Copyright (c) 2001-2007 Joel de Guzman
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+==============================================================================*/
+
+#if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(preserve: 1)
+#endif
+
 #define BOOST_PHOENIX_ITERATION_PARAMS                                          \
     (3, (2, BOOST_PP_DEC(BOOST_PHOENIX_ACTOR_LIMIT),                            \
             <boost/phoenix/bind/bind_function.hpp>))
 #include BOOST_PHOENIX_ITERATE()
+
+#if defined(__WAVE__) && defined (BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
+    #pragma wave option(output: null)
+#endif
+
+#endif
 
 }}
 
