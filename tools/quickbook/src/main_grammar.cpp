@@ -221,7 +221,7 @@ namespace quickbook
                     >>  (cl::ch_p('*') | '#')
                                             [actions.values.entry(ph::arg1, ph::arg2, general_tags::list_mark)]
                     >>  *cl::blank_p
-                    >>  local.list_item     [actions.phrase_value]
+                    >>  local.list_item     [actions.to_value]
                     ]
                 ]
                 ]                           [actions.element]
@@ -384,7 +384,7 @@ namespace quickbook
                 [
                     actions.scoped_output()
                     [
-                        (*( ~cl::eps_p(local.simple_markup_end)
+                        (+( ~cl::eps_p(local.simple_markup_end)
                         >>  local.nested_char
                         ))                      [actions.docinfo_value(ph::arg1, ph::arg2)]
                     ]                           
@@ -508,7 +508,7 @@ namespace quickbook
                 >>  local.command_line_phrase
                 >>  *cl::space_p
                 |   cl::eps_p
-                )                               [actions.phrase_value]
+                )                               [actions.to_value]
             ]                                   [actions.element]
             ;
 

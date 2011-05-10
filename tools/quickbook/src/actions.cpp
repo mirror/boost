@@ -59,7 +59,7 @@ namespace quickbook
             {
                 tgt << "<anchor id=\"";
                 detail::print_string(*it, tgt.get());
-                tgt << "\"/>\n";
+                tgt << "\"/>";
             }
             
             actions.anchors.clear();
@@ -522,10 +522,24 @@ namespace quickbook
     }
 
     // TODO: No need to check suppress since this is only used in the syntax
-    //       highlighter. I should moved this or something.
+    //       highlighter. I should move this or something.
     void span::operator()(iterator first, iterator last) const
     {
+        if (name) out << "<phrase role=\"" << name << "\">";
+        while (first != last)
+            detail::print_char(*first++, out.get());
+        if (name) out << "</phrase>";
+    }
+
+    void span_start::operator()(iterator first, iterator last) const
+    {
         out << "<phrase role=\"" << name << "\">";
+        while (first != last)
+            detail::print_char(*first++, out.get());
+    }
+
+    void span_end::operator()(iterator first, iterator last) const
+    {
         while (first != last)
             detail::print_char(*first++, out.get());
         out << "</phrase>";
@@ -1341,6 +1355,7 @@ namespace quickbook
             actions.paragraph(); // For paragraphs before the template call.
             actions.out << block;
             actions.phrase << phrase;
+            actions.paragraph();
         }
         else {
             actions.phrase << phrase;
@@ -1777,7 +1792,7 @@ namespace quickbook
         std::string ext = paths.filename.extension().generic_string();
         std::vector<template_symbol> storage;
         actions.error_count +=
-            load_snippets(paths.filename.string(), storage, ext, actions.doc_id);
+            load_snippets(paths.filename, storage, ext, actions.doc_id);
 
         BOOST_FOREACH(template_symbol& ts, storage)
         {
@@ -1842,7 +1857,7 @@ namespace quickbook
         actions.values.builder.save();
 
         // parse the file
-        quickbook::parse_file(actions.filename.string().c_str(), actions, true);
+        quickbook::parse_file(actions.filename, actions, true);
 
         // restore the values
         actions.values.builder.restore();
@@ -1884,13 +1899,24 @@ namespace quickbook
         return (*this)(first, last, value::default_tag);
     }
     
-    void collector_to_value_action::operator()(iterator, iterator) const
+    void to_value_action::operator()(iterator, iterator) const
     {
         if (actions.suppress) return;
-        write_anchors(actions, output);
 
         std::string value;
-        output.swap(value);
+
+        if (!actions.out.str().empty())
+        {
+            actions.paragraph();
+            write_anchors(actions, actions.out);
+            actions.out.swap(value);
+        }
+        else
+        {
+            write_anchors(actions, actions.phrase);
+            actions.phrase.swap(value);
+        }
+
         actions.values.builder.insert(bbk_value(value, value::default_tag));
     }
     

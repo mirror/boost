@@ -281,7 +281,7 @@ namespace quickbook
         local.inner_block =
             actions.scoped_output()
             [
-                inside_paragraph                [actions.out_value]
+                inside_paragraph                [actions.to_value]
             ]
             ;
 

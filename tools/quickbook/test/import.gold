@@ -27,8 +27,8 @@
     
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="comment">// return 'em, foo man!
-</phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
+    <phrase role="comment">// return 'em, foo man!</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
   </para>
@@ -57,8 +57,8 @@
   <para>
     
 <programlisting><phrase role="keyword">def</phrase> <phrase role="identifier">foo</phrase><phrase role="special">():</phrase>
-    <phrase role="comment"># return 'em, foo man!
-</phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase>
+    <phrase role="comment"># return 'em, foo man!</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase>
 
 </programlisting>
   </para>
@@ -87,8 +87,8 @@
     
 <programlisting><phrase role="keyword">char</phrase><phrase role="special">*</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="comment">// return 'em, foo man!
-</phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
+    <phrase role="comment">// return 'em, foo man!</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
   </para>

@@ -127,7 +127,7 @@ namespace quickbook
         local.inner_phrase =
                 blank
             >>  actions.scoped_output()
-                [   phrase                          [actions.phrase_value]
+                [   phrase                          [actions.to_value]
                 ]
             ;
     }

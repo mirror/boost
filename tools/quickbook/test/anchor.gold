@@ -6,42 +6,42 @@
   <section id="anchor_test.anchors">
     <title>Anchors</title>
     <para>
-      <anchor id="a1"/> A paragraph containing several anchors. <anchor id="a2"/>
-      We want to make sure they appear in the correct place. <anchor id="a3"/>
+      <anchor id="a1"/>A paragraph containing several anchors. <anchor id="a2"/>We
+      want to make sure they appear in the correct place. <anchor id="a3"/>
     </para>
     <anchor id="anchor_test.anchors.this_heading_shouldn_t_pick_up_the_previous_anchor"/>
     <bridgehead renderas="sect3" id="anchor_test.anchors.this_heading_shouldn_t_pick_up_the_previous_anchor-heading">
       <link linkend="anchor_test.anchors.this_heading_shouldn_t_pick_up_the_previous_anchor">This
       heading shouldn't pick up the previous anchor</link>
     </bridgehead>
-    <anchor id="a4"/> <anchor id="anchor_test.anchors.this_heading_should_pick_up_the_previous_anchor"/>
+    <anchor id="a4"/><anchor id="anchor_test.anchors.this_heading_should_pick_up_the_previous_anchor"/>
     <bridgehead renderas="sect3" id="anchor_test.anchors.this_heading_should_pick_up_the_previous_anchor-heading">
       <link linkend="anchor_test.anchors.this_heading_should_pick_up_the_previous_anchor">This
       heading should pick up the previous anchor</link>
     </bridgehead>
-    <anchor id="a5"/> <anchor id="anchor_test.anchors.and_this_one"/>
+    <anchor id="a5"/><anchor id="anchor_test.anchors.and_this_one"/>
     <bridgehead renderas="sect3" id="anchor_test.anchors.and_this_one-heading">
       <link linkend="anchor_test.anchors.and_this_one">And this one</link>
     </bridgehead>
-    <anchor id="a6"/> <anchor id="anchor_test.anchors.also_this_one"/>
+    <anchor id="a6"/><anchor id="anchor_test.anchors.also_this_one"/>
     <bridgehead renderas="sect3" id="anchor_test.anchors.also_this_one-heading">
       <link linkend="anchor_test.anchors.also_this_one">Also this one</link>
     </bridgehead>
-    <anchor id="a7"/> <anchor id="anchors.finally_this"/>
+    <anchor id="a7"/><anchor id="anchors.finally_this"/>
     <bridgehead renderas="sect3" id="anchors.finally_this-heading">
       Finally this
     </bridgehead>
     <anchor id="a8"/>
   </section>
   <section id="anchor_test.section_anchor">
-    <title><anchor id="a9"/> Section Anchor</title>
+    <title><anchor id="a9"/>Section Anchor</title>
     <section id="anchor_test.nested_section">
-      <title><anchor id="a10"/> Nested Section</title>
+      <title><anchor id="a10"/>Nested Section</title>
     </section>
     <anchor id="a11"/>
   </section>
   <section id="anchor_test.conditional_section_anchor">
-    <title><anchor id="a12"/> Conditional Section Anchor</title>
+    <title><anchor id="a12"/>Conditional Section Anchor</title>
   </section>
   <section id="anchor_test.lists">
     <title>Lists</title> <anchor id="a14"/>

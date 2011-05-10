@@ -24,7 +24,7 @@ namespace quickbook
     struct code_snippet_actions
     {
         code_snippet_actions(std::vector<template_symbol>& storage,
-                                 std::string const& filename,
+                                 fs::path const& filename,
                                  std::string const& doc_id,
                                  char const* source_type)
             : callout_id(0)
@@ -312,7 +312,7 @@ namespace quickbook
     };
 
     int load_snippets(
-        std::string const& file
+        fs::path const& file
       , std::vector<template_symbol>& storage   // snippets are stored in a
                                                 // vector of template_symbols
       , std::string const& extension

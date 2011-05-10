@@ -33,4 +33,6 @@ __macro__
 
 /not italic\/
 
+These shouldn't be interepted as markup: == // **
+
 [endsect]
