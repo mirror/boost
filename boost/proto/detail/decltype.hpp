@@ -63,7 +63,7 @@ namespace boost { namespace proto
                 any(...);
                 any operator=(any);
                 any operator[](any);
-                #define M0(Z, N, DATA) any operator()(BOOST_PP_ENUM_PARAMS_Z(Z, N, any BOOST_PP_INTERCEPT));
+                #define M0(Z, N, DATA) any operator()(BOOST_PP_ENUM_PARAMS(N, any BOOST_PP_INTERCEPT));
                 BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, M0, ~)
                 #undef M0
 
