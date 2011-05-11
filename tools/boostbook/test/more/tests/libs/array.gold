@@ -149,7 +149,9 @@
   <phrase role="comment">// <link linkend="id35-bb">modifiers</link></phrase>
   <phrase role="keyword">void</phrase> <link linkend="id36-bb"><phrase role="identifier">swap</phrase></link><phrase role="special">(</phrase><link linkend="boost.array">array</link><phrase role="special">&lt;</phrase><phrase role="identifier">T</phrase><phrase role="special">,</phrase> <phrase role="identifier">N</phrase><phrase role="special">&gt;</phrase><phrase role="special">&amp;</phrase><phrase role="special">)</phrase><phrase role="special">;</phrase>
   <phrase role="keyword">void</phrase> <link linkend="id37-bb"><phrase role="identifier">assign</phrase></link><phrase role="special">(</phrase><phrase role="keyword">const</phrase> <phrase role="identifier">T</phrase><phrase role="special">&amp;</phrase><phrase role="special">)</phrase><phrase role="special">;</phrase>
-  <phrase role="identifier">T</phrase> elems[N]<phrase role="special">;</phrase>
+
+  <phrase role="comment">// public data members</phrase>
+  <phrase role="identifier">T</phrase> <phrase role="identifier">elems[N]</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase><phrase role="special">;</phrase>
 
 <phrase role="comment">// <link linkend="id38-bb">specialized algorithms</link></phrase>

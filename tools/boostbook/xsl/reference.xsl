@@ -160,13 +160,19 @@
     <xsl:param name="prefix"/>
     <xsl:apply-templates mode="comment">
       <xsl:with-param name="wrap"
-                      select="$wrap and count(*) = 0 and count(text()) = 1"/>
+                      select="$wrap and count(text()|*) = 1"/>
       <xsl:with-param name="prefix" select="$prefix"/>
     </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="simpara|para" mode="comment">
-    <xsl:apply-templates select="text()|*" mode="comment"/>
+    <xsl:param name="wrap" select="false()"/>
+    <xsl:param name="prefix"/>
+    <xsl:apply-templates select="text()|*" mode="comment">
+      <xsl:with-param name="wrap"
+                      select="$wrap and count(text()|*) = 1"/>
+      <xsl:with-param name="prefix" select="$prefix"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="text()" mode="comment">
