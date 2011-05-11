@@ -305,9 +305,9 @@ struct Deferred_Events : euml_config<Deferred_Events>
     typedef int activate_deferred_events;
     Deferred_Events(){}
 };
-No_Exception const no_exception;
-No_Msg_Queue const no_msg_queue;
-Deferred_Events const deferred_events;
+No_Exception const no_exception=No_Exception();
+No_Msg_Queue const no_msg_queue=No_Msg_Queue();
+Deferred_Events const deferred_events=Deferred_Events();
 
 struct invalid_type{};
 struct make_invalid_type
@@ -359,7 +359,7 @@ struct NoAction : euml_action<NoAction>
         return true;
     }
 };
-NoAction const no_action;
+NoAction const no_action = NoAction();
 
 struct fsm_artefact_tag {};
 template <class Index=void>
@@ -410,7 +410,7 @@ struct GetSource_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::type
         typedef GetSource_<Arg1> type;
     };
 };
-GetSource_Helper const source_;
+GetSource_Helper const source_ = GetSource_Helper();
 
 template <class Index=void>
 struct GetTarget_ : euml_action<GetTarget_<Index> >
@@ -460,7 +460,7 @@ struct GetTarget_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::type
         typedef GetTarget_<Arg1> type;
     };
 };
-GetTarget_Helper const target_;
+GetTarget_Helper const target_ = GetTarget_Helper();
 
 template <class Index=void>
 struct GetState_ : euml_action<GetState_<Index> >
@@ -512,7 +512,7 @@ struct GetState_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::type,
         typedef GetState_<Arg1> type;
     };
 };
-GetState_Helper const state_;
+GetState_Helper const state_ = GetState_Helper();
 
 template <class Index=void>
 struct GetEvent_ : euml_action<GetEvent_<Index> >
@@ -587,7 +587,7 @@ struct GetEvent_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::type,
         typedef GetEvent_<Arg1> type;
     };
 };
-GetEvent_Helper const event_;
+GetEvent_Helper const event_ = GetEvent_Helper();
 
 template <class Index=void>
 struct GetFsm_ : euml_action<GetFsm_<Index> >
@@ -662,7 +662,7 @@ struct GetFsm_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::type, G
         typedef GetFsm_<Arg1> type;
     };
 };
-GetFsm_Helper const fsm_;
+GetFsm_Helper const fsm_ = GetFsm_Helper();
 
 template <class StateName,class Param1>
 struct SubState_ : euml_action<SubState_<StateName, Param1> >
@@ -734,7 +734,7 @@ struct SubState_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::type,
         typedef SubState_<Arg1,Arg2> type;
     };
 };
-SubState_Helper const substate_;
+SubState_Helper const substate_ = SubState_Helper();
 
 template <class Target,class Index>
 struct GetAttribute_  : euml_action<GetAttribute_<Target, Index> >
@@ -796,7 +796,7 @@ struct GetAttribute_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::t
         typedef GetAttribute_<Arg1,Arg2> type;
     };
 };
-GetAttribute_Helper const attribute_;
+GetAttribute_Helper const attribute_ = GetAttribute_Helper();
 
 template <class Index>
 struct Source_ : euml_action<Source_<Index> >
@@ -978,7 +978,7 @@ struct True_ : euml::euml_action<True_>
         return true;
     }
 };
-True_ const true_;
+True_ const true_ = True_();
 
 struct False_ : euml::euml_action<False_>
 {
@@ -1008,7 +1008,7 @@ struct False_ : euml::euml_action<False_>
         return false;
     }
 };
-False_ const false_;
+False_ const false_ = False_();
 
 template <int Val>
 struct Int_ : euml_action<Int_<Val> >
@@ -1330,7 +1330,7 @@ struct Process_Helper: proto::extends< proto::terminal<process_tag>::type, Proce
         typedef Process_<Arg1,Arg2,Arg3,Arg4,Arg5> type;
     };
 };
-Process_Helper const process_;
+Process_Helper const process_ = Process_Helper();
 
 template <class ToProcessEvt,class Value,class Param1, class Param2, class Param3>
 struct Process2_ : euml_action<Process2_<ToProcessEvt,Value, Param1, Param2, Param3> >
@@ -1468,7 +1468,7 @@ struct Process2_Helper : proto::extends< proto::terminal<process2_tag>::type, Pr
         typedef Process2_<Arg1,Arg2,Arg3,Arg4,Arg5> type;
     };
 };
-Process2_Helper const process2_;
+Process2_Helper const process2_ = Process2_Helper();
 
 template <class Flag,class Param1=void, class Enable=void >                                             
 struct Get_Flag_ : euml_action<Get_Flag_<Flag,Param1,Enable> > {};        
@@ -1548,7 +1548,7 @@ struct Get_Flag_Helper: proto::extends< proto::terminal<fsm_artefact_tag>::type,
         typedef Get_Flag_<Arg1,Arg2> type;
     };
 };
-Get_Flag_Helper const is_flag_;
+Get_Flag_Helper const is_flag_ = Get_Flag_Helper();
 
 // deferring an event
 struct DeferEvent_ : euml_action< DeferEvent_ >
@@ -1574,7 +1574,7 @@ struct Defer_Helper : proto::extends< proto::terminal<fsm_artefact_tag>::type, D
         typedef DeferEvent_ type;
     };
 };
-Defer_Helper const defer_;
+Defer_Helper const defer_ = Defer_Helper();
 
 struct explicit_tag {};
 struct Explicit_Helper : proto::extends< proto::terminal<explicit_tag>::type, Explicit_Helper, sm_domain>
@@ -1591,7 +1591,7 @@ struct Explicit_Helper : proto::extends< proto::terminal<explicit_tag>::type, Ex
         typedef typename Arg1::template direct<Arg2> type;
     };
 };
-Explicit_Helper const explicit_;
+Explicit_Helper const explicit_ = Explicit_Helper();
 
 struct entry_pt_tag {};
 struct Entry_Pt_Helper : proto::extends< proto::terminal<entry_pt_tag>::type, Entry_Pt_Helper, sm_domain>
@@ -1608,7 +1608,7 @@ struct Entry_Pt_Helper : proto::extends< proto::terminal<entry_pt_tag>::type, En
         typedef typename Arg1::template entry_pt<Arg2> type;
     };
 };
-Entry_Pt_Helper const entry_pt_;
+Entry_Pt_Helper const entry_pt_ = Entry_Pt_Helper();
 
 struct exit_pt_tag {};
 struct Exit_Pt_Helper : proto::extends< proto::terminal<exit_pt_tag>::type, Exit_Pt_Helper, sm_domain>
@@ -1625,7 +1625,7 @@ struct Exit_Pt_Helper : proto::extends< proto::terminal<exit_pt_tag>::type, Exit
         typedef typename Arg1::template exit_pt<Arg2> type;
     };
 };
-Exit_Pt_Helper const exit_pt_;
+Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
 
 #ifdef BOOST_MSVC
 #define BOOST_MSM_EUML_FUNCTION(functor,function,function_name,result_trans,result_state)               \
@@ -1796,7 +1796,7 @@ Exit_Pt_Helper const exit_pt_;
         functor ## Helper , sm_domain> { functor ## Helper(){}                                          \
         template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5,class Arg6>                    \
         struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5,Arg6> type;}; };                           \
-        functor ## Helper const function_name ;
+        functor ## Helper const function_name = functor ## Helper ();
 
 #define BOOST_MSM_EUML_METHOD(functor,function,function_name,result_trans,result_state)                 \
     template <class Param1=void , class Param2=void , class Param3=void , class Param4=void,            \
@@ -1947,7 +1947,7 @@ Exit_Pt_Helper const exit_pt_;
         functor ## Helper , sm_domain> { functor ## Helper(){}                                          \
         template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5,class Arg6>                    \
         struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5,Arg6> type;}; };                           \
-        functor ## Helper const function_name ;
+        functor ## Helper const function_name = functor ## Helper ();
 
 #else
 
@@ -2077,7 +2077,7 @@ Exit_Pt_Helper const exit_pt_;
         functor ## Helper , sm_domain> { functor ## Helper(){}                                          \
         template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5>                               \
         struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5> type;}; };                                \
-        functor ## Helper const function_name ;
+        functor ## Helper const function_name = functor ## Helper ();
 
 #define BOOST_MSM_EUML_METHOD(functor,function,function_name,result_trans,result_state)                 \
     template <class Param1=void , class Param2=void , class Param3=void , class Param4=void,            \
@@ -2203,7 +2203,7 @@ Exit_Pt_Helper const exit_pt_;
         functor ## Helper , sm_domain> { functor ## Helper(){}                                          \
         template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5>                               \
         struct In {typedef functor <Arg1,Arg2,Arg3,Arg4,Arg5> type;}; };                                \
-        functor ## Helper const function_name ;
+        functor ## Helper const function_name = functor ## Helper ();
 
 #endif
 

@@ -520,7 +520,7 @@ struct attr_name ## _                                                           
         typedef ::boost::fusion::pair<attr_name ## _,attr_type> attribute_type;                         \
         attr_name ## _ (){}                                                                             \
     };                                                                                                  \
-attr_name ## _ const attr_name;
+attr_name ## _ const attr_name = attr_name ## _();
 
 struct make_attributes_tag
 {
