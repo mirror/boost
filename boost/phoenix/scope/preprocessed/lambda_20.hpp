@@ -7,7 +7,7 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
     
-namespace boost { namespace phoenix { namespace tag { struct lambda {}; template <typename Ostream> inline Ostream &operator<<( Ostream & os , lambda) { os << "lambda"; return os; } } namespace expression { template <typename A0 , typename A1 , typename A2> struct lambda : boost::phoenix::expr< :: boost :: phoenix :: tag:: lambda , A0 , A1 , A2> {}; } namespace rule { struct lambda : expression:: lambda <proto::terminal<proto::_>, proto::terminal<proto::_>, meta_grammar> {}; } } } namespace boost { namespace phoenix { template <typename Dummy> struct meta_grammar::case_< :: boost :: phoenix :: tag:: lambda , Dummy > : enable_rule< :: boost :: phoenix :: rule:: lambda , Dummy > {}; } }
+namespace boost { namespace phoenix { namespace tag { struct lambda {}; template <typename Ostream> inline Ostream &operator<<( Ostream & os , lambda) { os << "lambda"; return os; } } namespace expression { template <typename A0 , typename A1 , typename A2> struct lambda : boost::phoenix::expr< :: boost :: phoenix :: tag:: lambda , A0 , A1 , A2> {}; typedef proto::functional::make_expr< tag:: lambda > make_lambda; } namespace rule { struct lambda : expression:: lambda <proto::terminal<proto::_>, proto::terminal<proto::_>, meta_grammar> {}; } } } namespace boost { namespace phoenix { template <typename Dummy> struct meta_grammar::case_< :: boost :: phoenix :: tag:: lambda , Dummy > : enable_rule< :: boost :: phoenix :: rule:: lambda , Dummy > {}; } }
 namespace boost { namespace phoenix
 {
     struct lambda_eval

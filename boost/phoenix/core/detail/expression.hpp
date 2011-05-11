@@ -97,6 +97,14 @@ BOOST_PP_SEQ_FOR_EACH(                                                          
     namespace expression                                                        \
     {                                                                           \
         EXPRESSION(NAME_SEQ, GRAMMAR_SEQ, DATA)                                 \
+        typedef                                                                 \
+            proto::functional::make_expr<                                       \
+                    tag:: BOOST_PP_SEQ_HEAD(BOOST_PP_SEQ_REVERSE(NAME_SEQ))     \
+            >                                                                   \
+            BOOST_PP_CAT(                                                       \
+                make_                                                           \
+              , BOOST_PP_SEQ_HEAD(BOOST_PP_SEQ_REVERSE(NAME_SEQ))               \
+            );                                                                  \
     }                                                                           \
     namespace rule                                                              \
     {                                                                           \

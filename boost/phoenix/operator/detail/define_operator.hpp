@@ -30,6 +30,7 @@
     struct name                                                                 \
         : expr<proto::tag::name, Lhs, Rhs>                                      \
     {};                                                                         \
+    typedef proto::functional::make_expr<proto::tag::name> BOOST_PP_CAT(make_, name); \
 /**/
 
 #define BOOST_PHOENIX_BINARY_RULE(__, ___, name)                                \

@@ -55,7 +55,7 @@ namespace boost { namespace phoenix
         static type
         convert(T const& x)
         {
-            type e = {as_actor_base<T>::convert(x)};
+            type e = {{as_actor_base<T>::convert(x)}};
             return e;
         }
     };

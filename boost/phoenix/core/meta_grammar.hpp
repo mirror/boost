@@ -92,6 +92,14 @@ namespace boost { namespace phoenix
         : proto::when<Rule, proto::external_transform>
     {};
 
+    namespace result_of
+    {
+        template <typename Expr, typename Context>
+        struct eval
+            : boost::result_of< ::boost::phoenix::evaluator(Expr, Context)>
+        {};
+    }
+
     /////////////////////////////////////////////////////////////////////////////
     // A function we can call to evaluate our expression
     template <typename Expr, typename Context>
