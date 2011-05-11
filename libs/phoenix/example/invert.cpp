@@ -83,7 +83,7 @@ void print_expr(Expr const & expr)
         phoenix::eval(
             expr
           , phoenix::context(
-                int()
+                phoenix::nothing
               , invert_actions()
             )
         )
@@ -95,7 +95,7 @@ template <typename Expr>
 typename
     boost::phoenix::result_of::eval<
         Expr const&
-      , phoenix::result_of::context<boost::mpl::void_, invert_actions>::type
+      , phoenix::result_of::context<phoenix::nothing_type, invert_actions>::type
     >::type
 invert(Expr const & expr)
 {
@@ -103,7 +103,7 @@ invert(Expr const & expr)
         phoenix::eval(
             expr
           , phoenix::context(
-                boost::mpl::void_()
+                phoenix::nothing
               , invert_actions()
             )
         );
