@@ -86,6 +86,7 @@ struct direct_entry_event
 {
     typedef int direct_entry;
     typedef StateType active_state;
+    typedef Event contained_event;
 
     direct_entry_event(Event const& evt):m_event(evt){}
     Event const& m_event;
@@ -2416,6 +2417,22 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     {
         // nothing to process
     }
+    // helper function. In cases where the event is wrapped (target is a direct entry states)
+    // we want to send only the real event to on_entry, not the wrapper.
+    template <class EventType>
+    static 
+    typename boost::enable_if<typename has_direct_entry<EventType>::type,typename EventType::contained_event const& >::type
+    remove_direct_entry_event_wrapper(EventType const& evt)
+    {
+        return evt.m_event;
+    }
+    template <class EventType>
+    static typename boost::disable_if<typename has_direct_entry<EventType>::type,EventType const& >::type
+    remove_direct_entry_event_wrapper(EventType const& evt)
+    {
+        // identity. No wrapper
+        return evt;
+    }
     // calls the entry/exit or on_entry/on_exit depending on the state type
     // (avoids calling virtually)
     // variant for FSMs
@@ -2436,7 +2453,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     execute_entry(StateType& astate,EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<1> = 0)
     {
         // simple call to on_entry
-        astate.on_entry(evt,fsm);
+        astate.on_entry(remove_direct_entry_event_wrapper(evt),fsm);
     }
     // variant for exit pseudo states
     template <class StateType,class EventType,class FsmType>
