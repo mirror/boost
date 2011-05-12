@@ -2249,15 +2249,29 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
         instance_name ## _helper(){}                                                            \
         typedef instance_name ## _impl action_name;                                             \
     };                                                                                          \
-    instance_name ## _helper const instance_name = instance_name ## _helper();                  \
+    static instance_name ## _helper instance_name;                                              \
     struct instance_name ## _impl : instance_name ## _helper
+
+#define BOOST_MSM_EUML_DECLARE_ACTION(instance_name)                                                        \
+    struct instance_name ;                                                                      \
+    struct instance_name ## _helper :  msm::front::euml::euml_action<instance_name >            \
+    {                                                                                           \
+        instance_name ## _helper(){}                                                            \
+        typedef instance_name action_name;                                                      \
+    };                                                                                          \
+    struct instance_name : instance_name ## _helper
 
 
 #define BOOST_MSM_EUML_EVENT(instance_name)                                                     \
     struct instance_name ## _helper : msm::front::euml::euml_event<instance_name ## _helper>{   \
     instance_name ## _helper(){}                                                                \
-    instance_name ## _helper const& operator()(){return *this;} };                              \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    instance_name ## _helper const& operator()() const {return *this;} };                       \
+    static instance_name ## _helper instance_name;
+
+#define BOOST_MSM_EUML_DECLARE_EVENT(instance_name)                                             \
+    struct instance_name : msm::front::euml::euml_event<instance_name >{                        \
+    instance_name(){}                                                                           \
+    instance_name const& operator()() const {return *this;} };
 
 #define MSM_EUML_CONCAT(param1,param2) param1
 #define MSM_EUML_EVENT_INSTANCE_HELPER_EXECUTE1(z, n, unused) ARG ## n arg ## n
@@ -2316,7 +2330,7 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
         BOOST_PP_REPEAT_FROM_TO(1,BOOST_PP_ADD(FUSION_MAX_MAP_SIZE ,1),                         \
         MSM_EUML_EVENT_INSTANCE_HELPER_OPERATOR_IMPL, instance_name)                            \
     };                                                                                          \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
 
 #define BOOST_MSM_EUML_EVENT_NAME(instance_name) instance_name ## _helper
 
@@ -2324,7 +2338,10 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
 
 #define BOOST_MSM_EUML_FLAG(instance_name)                                                      \
     struct instance_name ## _helper : msm::front::euml::euml_flag<instance_name ## _helper>{};  \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
+
+#define BOOST_MSM_EUML_DECLARE_FLAG(instance_name)                                                      \
+    struct instance_name : msm::front::euml::euml_flag<instance_name >{};
 
 #define BOOST_MSM_EUML_STATE_NAME(instance_name) instance_name ## _helper
 
@@ -2376,33 +2393,33 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
 // following macros declare a state type and create an instance
 #define BOOST_MSM_EUML_STATE(expr,instance_name)                                                        \
     struct instance_name ## tag{};                                                                      \
-    typedef BOOST_TYPEOF(build_state<instance_name ## tag> expr) instance_name ## _helper;  \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    typedef BOOST_TYPEOF(build_state<instance_name ## tag> expr) instance_name ## _helper;              \
+    static instance_name ## _helper instance_name;
 
-#define BOOST_MSM_EUML_INTERRUPT_STATE(expr,instance_name)                                                        \
+#define BOOST_MSM_EUML_INTERRUPT_STATE(expr,instance_name)                                              \
     struct instance_name ## tag{};                                                                      \
-    typedef BOOST_TYPEOF(build_interrupt_state<instance_name ## tag> expr) instance_name ## _helper;  \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    typedef BOOST_TYPEOF(build_interrupt_state<instance_name ## tag> expr) instance_name ## _helper;    \
+    static instance_name ## _helper instance_name;
 
-#define BOOST_MSM_EUML_TERMINATE_STATE(expr,instance_name)                                                        \
+#define BOOST_MSM_EUML_TERMINATE_STATE(expr,instance_name)                                              \
     struct instance_name ## tag{};                                                                      \
-    typedef BOOST_TYPEOF(build_terminate_state<instance_name ## tag> expr) instance_name ## _helper;  \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    typedef BOOST_TYPEOF(build_terminate_state<instance_name ## tag> expr) instance_name ## _helper;    \
+    static instance_name ## _helper instance_name;
 
-#define BOOST_MSM_EUML_EXPLICIT_ENTRY_STATE(region,expr,instance_name)                          \
-    struct instance_name ## tag{};                                                                  \
+#define BOOST_MSM_EUML_EXPLICIT_ENTRY_STATE(region,expr,instance_name)                                  \
+    struct instance_name ## tag{};                                                                      \
     typedef BOOST_TYPEOF(build_explicit_entry_state<instance_name ## tag BOOST_MSM_EUML_ENTRY_STATE_HELPER(region) > expr) instance_name ## _helper;  \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
 
 #define BOOST_MSM_EUML_ENTRY_STATE(region,expr,instance_name)                                       \
     struct instance_name ## tag{};                                                                  \
     typedef BOOST_TYPEOF(build_entry_state<instance_name ## tag BOOST_MSM_EUML_ENTRY_STATE_HELPER(region) > expr) instance_name ## _helper;  \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
 
 #define BOOST_MSM_EUML_EXIT_STATE(expr,instance_name)                                                       \
     struct instance_name ## tag{};                                                                          \
-    typedef BOOST_TYPEOF(build_exit_state<instance_name ## tag> expr) instance_name ## _helper; \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    typedef BOOST_TYPEOF(build_exit_state<instance_name ## tag> expr) instance_name ## _helper;             \
+    static instance_name ## _helper instance_name;
 
 
 #ifndef BOOST_MSVC
@@ -2410,12 +2427,12 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
 #define BOOST_MSM_EUML_TRANSITION_TABLE(expr,instance_name)                                     \
     typedef BOOST_TYPEOF(BOOST_MSM_EUML_BUILD_STT_HELPER BOOST_MSM_EUML_BUILD_STT_HELPER2(expr)) instance_name ## _def;                  \
     struct instance_name ## _helper :  public instance_name ## _def{instance_name ## _helper(){}};                          \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
 
 #define BOOST_MSM_EUML_INTERNAL_TRANSITION_TABLE(expr,instance_name)                            \
     typedef BOOST_TYPEOF(BOOST_MSM_EUML_BUILD_INTERNAL_STT_HELPER BOOST_MSM_EUML_BUILD_STT_HELPER2(expr)) instance_name ## _def;         \
     struct instance_name ## _helper :  public instance_name ## _def{instance_name ## _helper(){}};   \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
 
 #else
 
@@ -2423,13 +2440,13 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
     struct instance_name ## _helper :                                                           \
     public BOOST_TYPEOF(BOOST_MSM_EUML_BUILD_STT_HELPER BOOST_MSM_EUML_BUILD_STT_HELPER2(expr)) \
     {instance_name ## _helper(){}} ;                                                            \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
 
 #define BOOST_MSM_EUML_INTERNAL_TRANSITION_TABLE(expr,instance_name)                                        \
     struct instance_name ## _helper :                                                                       \
     public BOOST_TYPEOF(BOOST_MSM_EUML_BUILD_INTERNAL_STT_HELPER BOOST_MSM_EUML_BUILD_STT_HELPER2(expr))    \
     {instance_name ## _helper(){}} ;                                                                        \
-    instance_name ## _helper const instance_name = instance_name ## _helper();
+    static instance_name ## _helper instance_name;
 
 #endif
 
