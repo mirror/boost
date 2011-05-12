@@ -53,13 +53,13 @@ struct omp_for_gen
         : init(init), cond(cond), step(step) {}
     
     template <typename Do>
-    typename expression::omp_for<Init, Cond, Step, Do>::type const
+    typename
+        boost::result_of<
+            expression::make_omp_for(Init, Cond, Step, Do)
+        >::type const
     operator[](Do const& do_) const
     {
-        return
-            expression::
-                omp_for<Init, Cond, Step, Do>::
-                    make(init, cond, step, do_);
+        return expression::make_omp_for()(init, cond, step, do_);
     }
     
     Init init;
@@ -158,7 +158,7 @@ int main()
     using boost::phoenix::lambda;
     using boost::phoenix::nothing;
 
-    const int NUM = 67108864;
+    const int NUM = 1;
 
     {
         std::vector<int> a(NUM, 1);

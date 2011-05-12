@@ -148,7 +148,7 @@ namespace boost { namespace phoenix
             }
         };
 
-        struct at
+        struct at_impl
         {
             template <typename Sig>
             struct result;
@@ -161,7 +161,7 @@ namespace boost { namespace phoenix
             };
 
             template <typename C, typename Index>
-            typename result<at(C&, Index const&)>::type
+            typename result<at_impl(C&, Index const&)>::type
             operator()(C& c, Index const &i) const
             {
                 return c.at(i);
@@ -174,7 +174,7 @@ namespace boost { namespace phoenix
             };
 
             template <typename C, typename Index>
-            typename result<at(C const&, Index const&)>::type
+            typename result<at_impl(C const&, Index const&)>::type
             operator()(C const& c, Index const &i) const
             {
                 return c.at(i);
@@ -789,7 +789,7 @@ namespace boost { namespace phoenix
     BOOST_PHOENIX_ADAPT_CALLABLE(assign, boost::phoenix::stl::assign, 2)
     BOOST_PHOENIX_ADAPT_CALLABLE(assign, boost::phoenix::stl::assign, 3)
     BOOST_PHOENIX_ADAPT_CALLABLE(assign, boost::phoenix::stl::assign, 4)
-    BOOST_PHOENIX_ADAPT_CALLABLE(at, stl::at, 2)
+    BOOST_PHOENIX_ADAPT_CALLABLE(at, ::boost::phoenix::stl::at_impl, 2)
     BOOST_PHOENIX_ADAPT_CALLABLE(back, stl::back, 1)
     BOOST_PHOENIX_ADAPT_CALLABLE(begin, stl::begin, 1)
     BOOST_PHOENIX_ADAPT_CALLABLE(capacity, stl::capacity, 1)
