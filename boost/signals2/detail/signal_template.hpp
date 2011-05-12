@@ -345,6 +345,9 @@ namespace boost
               resolver);
           }
         private:
+          // declare assignment operator private since this class might have reference or const members
+         slot_invoker & operator=(const slot_invoker &);
+
 #define BOOST_SIGNALS2_ADD_REF_M_ARG_STATEMENT(z, n, data) \
   BOOST_SIGNALS2_ADD_REF_TYPE(~, n, ~) BOOST_SIGNALS2_M_ARG_NAME(~, n, ~) ;
           BOOST_PP_REPEAT(BOOST_SIGNALS2_NUM_ARGS, BOOST_SIGNALS2_ADD_REF_M_ARG_STATEMENT, ~)
