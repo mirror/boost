@@ -39,7 +39,7 @@ namespace boost { namespace phoenix {
             };
 
             template<class R, class F>
-            F const & operator()(R& r, F const& fn) const
+            F const operator()(R& r, F const& fn) const
             {        
                 return std::for_each(detail::begin_(r), detail::end_(r), fn);
             }

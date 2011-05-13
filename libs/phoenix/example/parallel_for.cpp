@@ -53,13 +53,10 @@ struct omp_for_gen
         : init(init), cond(cond), step(step) {}
     
     template <typename Do>
-    typename
-        boost::result_of<
-            expression::make_omp_for(Init, Cond, Step, Do)
-        >::type const
+    typename result_of::make_omp_for<Init, Cond, Step, Do>::type const
     operator[](Do const& do_) const
     {
-        return expression::make_omp_for()(init, cond, step, do_);
+        return make_omp_for(init, cond, step, do_);
     }
     
     Init init;
@@ -95,19 +92,29 @@ struct parallel_actions::when<boost::phoenix::rule::for_>
 
 // Doing the same as actor<Expr>::operator
 template <typename Expr, typename A0, typename A1, typename A2>
-typename boost::result_of<
-    boost::phoenix::evaluator(
-        Expr const &
-      , typename boost::phoenix::result_of::context<
-            boost::phoenix::vector4<Expr const *, A0 &, A1 &, A2 &>
-          , parallel_actions
+typename boost::phoenix::result_of::eval<
+    Expr const &
+  , typename boost::phoenix::result_of::make_context<
+        typename boost::phoenix::result_of::make_env<
+            Expr const *
+          , A0 &
+          , A1 &
+          , A2 &
         >::type
-    )
+      , parallel_actions
+    >::type
 >::type
-parallel_eval(Expr const & expr, A0 & a0, A1 & a1, A2 & a2)
+parallel_eval(Expr & expr, A0 & a0, A1 & a1, A2 & a2)
 {
-    boost::phoenix::vector4<Expr const *, A0 &, A1 &, A2 &> env = {boost::addressof(expr), a0, a1, a2};
-    return boost::phoenix::eval(expr, boost::phoenix::context(env, parallel_actions()));
+    Expr const * this_ = boost::addressof(expr);
+    return
+        boost::phoenix::eval(
+            expr
+          , boost::phoenix::make_context(
+                boost::phoenix::make_env(this_, a0, a1, a2)
+              , parallel_actions()
+            )
+        );
 }
 
 // changing evaluation mechanism on the fly
@@ -123,21 +130,21 @@ namespace boost { namespace phoenix
         : proto::call<
             evaluator(
                 proto::_child0
-              , functional::context(
+              , functional::make_context(
                     _env
                   , parallel_actions()
                 )
-              , int()
+              , unused()//mpl::void_()
             )
         >
     {};
 }}
 
 template <typename Expr>
-typename expression::parallel<Expr>::type const
+typename result_of::make_parallel<Expr>::type
 parallel(Expr const & expr)
 {
-    return expression::parallel<Expr>::make(expr);
+    return make_parallel(expr);
 }
 ////////////////////////////////////////////////////////////////////////////////
 

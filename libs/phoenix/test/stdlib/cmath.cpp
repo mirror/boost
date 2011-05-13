@@ -2,7 +2,7 @@
 #include <boost/function.hpp>
 #include <boost/phoenix/core.hpp>
 #include <boost/phoenix/operator.hpp>
-#include <boost/phoenix/stdlib/cmath.hpp>
+#include <boost/phoenix/stl/cmath.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 int main()

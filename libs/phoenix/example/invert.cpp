@@ -32,7 +32,7 @@ using phoenix::evaluator;
 template <>
 struct invert_actions::when<phoenix::rule::plus>
     : proto::call<
-        phoenix::expression::make_minus(
+        phoenix::functional::make_minus(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -42,7 +42,7 @@ struct invert_actions::when<phoenix::rule::plus>
 template <>
 struct invert_actions::when<phoenix::rule::minus>
     : proto::call<
-        phoenix::expression::make_plus(
+        phoenix::functional::make_plus(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -52,7 +52,7 @@ struct invert_actions::when<phoenix::rule::minus>
 template <>
 struct invert_actions::when<phoenix::rule::multiplies>
     : proto::call<
-        phoenix::expression::make_divides(
+        phoenix::functional::make_divides(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -62,7 +62,7 @@ struct invert_actions::when<phoenix::rule::multiplies>
 template <>
 struct invert_actions::when<phoenix::rule::divides>
     : proto::call<
-        phoenix::expression::make_multiplies(
+        phoenix::functional::make_multiplies(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -95,15 +95,18 @@ template <typename Expr>
 typename
     boost::phoenix::result_of::eval<
         Expr const&
-      , phoenix::result_of::context<phoenix::nothing_type, invert_actions>::type
+      , phoenix::result_of::make_context<
+            phoenix::result_of::make_env<>::type
+          , invert_actions
+        >::type
     >::type
 invert(Expr const & expr)
 {
     return 
         phoenix::eval(
             expr
-          , phoenix::context(
-                phoenix::nothing
+          , phoenix::make_context(
+                phoenix::make_env()
               , invert_actions()
             )
         );
@@ -127,5 +130,4 @@ int main()
 
     print_expr(_1 * invert(_2 - _3));
 }
-
 

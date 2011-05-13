@@ -6,7 +6,9 @@
 ==============================================================================*/
 
 #undef BOOST_PHOENIX_UNARY_RULE
+#undef BOOST_PHOENIX_UNARY_FUNCTIONAL
 #undef BOOST_PHOENIX_BINARY_RULE
+#undef BOOST_PHOENIX_BINARY_FUNCTIONAL
 #undef BOOST_PHOENIX_UNARY_EXPRESSION
 #undef BOOST_PHOENIX_BINARY_EXPRESSION
 #undef BOOST_PHOENIX_GRAMMAR
