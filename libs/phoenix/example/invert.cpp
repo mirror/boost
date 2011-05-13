@@ -24,13 +24,15 @@ struct invert_actions
 using phoenix::evaluator;
 
 #ifdef _MSC_VER
+// redifining evaluator, this is because MSVC chokes on function types like:
+// F(G(...))
 #define evaluator(A0, A1) proto::call<phoenix::evaluator(A0, A1)>
 #endif
 
 template <>
 struct invert_actions::when<phoenix::rule::plus>
     : proto::call<
-        proto::functional::make_expr<proto::tag::minus>(
+        phoenix::functional::make_minus(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -40,7 +42,7 @@ struct invert_actions::when<phoenix::rule::plus>
 template <>
 struct invert_actions::when<phoenix::rule::minus>
     : proto::call<
-        proto::functional::make_expr<proto::tag::plus>(
+        phoenix::functional::make_plus(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -50,7 +52,7 @@ struct invert_actions::when<phoenix::rule::minus>
 template <>
 struct invert_actions::when<phoenix::rule::multiplies>
     : proto::call<
-        proto::functional::make_expr<proto::tag::divides>(
+        phoenix::functional::make_divides(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -60,7 +62,7 @@ struct invert_actions::when<phoenix::rule::multiplies>
 template <>
 struct invert_actions::when<phoenix::rule::divides>
     : proto::call<
-        proto::functional::make_expr<proto::tag::multiplies>(
+        phoenix::functional::make_multiplies(
             evaluator(proto::_left, phoenix::_context)
           , evaluator(proto::_right, phoenix::_context)
         )
@@ -81,7 +83,7 @@ void print_expr(Expr const & expr)
         phoenix::eval(
             expr
           , phoenix::context(
-                int()
+                phoenix::nothing
               , invert_actions()
             )
         )
@@ -90,19 +92,21 @@ void print_expr(Expr const & expr)
 }
 
 template <typename Expr>
-typename boost::result_of<
-    phoenix::evaluator(
+typename
+    boost::phoenix::result_of::eval<
         Expr const&
-      , phoenix::result_of::context<int, invert_actions>::type
-    )
->::type
+      , phoenix::result_of::make_context<
+            phoenix::result_of::make_env<>::type
+          , invert_actions
+        >::type
+    >::type
 invert(Expr const & expr)
 {
     return 
         phoenix::eval(
             expr
-          , phoenix::context(
-                int()
+          , phoenix::make_context(
+                phoenix::make_env()
               , invert_actions()
             )
         );
@@ -122,9 +126,8 @@ int main()
     print_expr(_1 * _2 / _3);
     print_expr(_1 * _2 + _3);
     print_expr(_1 * _2 - _3);
-    print_expr(phoenix::if_(_1 * _4)[_2 - _3]);
+    print_expr(if_(_1 * _4)[_2 - _3]);
 
     print_expr(_1 * invert(_2 - _3));
 }
-
 

@@ -15,12 +15,12 @@ struct factorial_impl
     template <typename Sig>
     struct result;
     
-    template <typename Arg>
+    template <typename This, typename Arg>
     struct result<This(Arg)>
         : result<This(Arg const &)>
     {};
 
-    template <typename Arg>
+    template <typename This, typename Arg>
     struct result<This(Arg &)>
     {
         typedef Arg type;
@@ -37,9 +37,10 @@ struct factorial_impl
 int
 main()
 {
+    using boost::phoenix::arg_names::arg1;
     boost::phoenix::function<factorial_impl> factorial;
-    using namespace boost::phoenix::arg_names::arg1;
     int i = 4;
+    std::cout << factorial(i)() << std::endl;
     std::cout << factorial(arg1)(i) << std::endl;
     return 0;
 }

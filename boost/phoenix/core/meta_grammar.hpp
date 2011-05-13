@@ -74,8 +74,32 @@ namespace boost { namespace phoenix
                 return what()(e, env(s), actions(s));
             }
         };
+        
+        template <typename Expr, typename State>
+        struct impl<Expr, State, unused>
+            : proto::transform_impl<Expr, State, unused>
+        {
+            typedef
+                meta_grammar::impl<
+                    Expr
+                  , typename result_of::env<State>::type
+                  , typename result_of::actions<State>::type
+                >
+                what;
+
+            typedef typename what::result_type result_type;
+
+            result_type operator()(
+                typename impl::expr_param e
+              , typename impl::state_param s
+              , typename impl::data_param
+            ) const
+            {
+                return what()(e, env(s), actions(s));
+            }
+        };
     };
-    
+
     /////////////////////////////////////////////////////////////////////////////
     // Set of default actions. Extend this whenever you add a new phoenix
     // construct
@@ -91,6 +115,14 @@ namespace boost { namespace phoenix
     struct enable_rule
         : proto::when<Rule, proto::external_transform>
     {};
+
+    namespace result_of
+    {
+        template <typename Expr, typename Context>
+        struct eval
+            : boost::result_of< ::boost::phoenix::evaluator(Expr, Context)>
+        {};
+    }
 
     /////////////////////////////////////////////////////////////////////////////
     // A function we can call to evaluate our expression

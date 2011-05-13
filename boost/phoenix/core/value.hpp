@@ -84,44 +84,25 @@ namespace boost { namespace phoenix
         {
             typedef T type;
         };
+
+        template <typename T>
+        struct decay
+        {
+            typedef T type;
+        };
+        template <typename T, int N>
+        struct decay<T[N]> : decay<T const *> {};
     }
     
     template <typename T>
-    struct as_actor_base
+    struct as_actor<T, mpl::false_>
     {
-        typedef typename expression::value<T>::type type;
+        typedef typename expression::value<typename meta::decay<T>::type >::type type;
 
-        static typename expression::value<T>::type
-        convert(typename meta::argument_type<T>::type x)
+        static type
+        convert(typename meta::argument_type<typename meta::decay<T>::type>::type t)
         {
-            return expression::value<T>::make(x);
-        }
-    };
-
-    // Sometimes it is necessary to auto-convert references to
-    // a value<T>. This happens when we are re-currying. This
-    // cannot happen through the standard public actor interfaces.
-    template <typename T>
-    struct as_actor_base<T&>
-    {
-        typedef typename expression::value<T>::type type;
-
-        static typename expression::value<T>::type
-        convert(T& x)
-        {
-            return expression::value<T>::make(x);
-        }
-    };
-
-    template <typename T, int N>
-    struct as_actor_base<T[N]>
-    {
-        typedef typename expression::value<T const *>::type type;
-
-        static typename expression::value<T const *>::type
-        convert(T const x[N])
-        {
-            return expression::value<T const*>::make(x);
+            return expression::value<typename meta::decay<T>::type >::make(t);
         }
     };
 }}

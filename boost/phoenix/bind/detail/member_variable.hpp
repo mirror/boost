@@ -8,6 +8,7 @@
 #define BOOST_PHOENIX_CORE_DETAIL_MEMBER_VARIABLE_HPP
 
 #include <boost/proto/detail/decltype.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
 
 namespace boost { namespace phoenix { namespace detail {
 
