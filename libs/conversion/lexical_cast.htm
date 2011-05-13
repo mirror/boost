@@ -245,6 +245,15 @@ Eliminate an overhead of <code>std::locale</code> if your program runs in the "C
     <td>May be in a future version. There is no requirement in <a href="#n1973">[N1973]</a> to reset the flag but remember that <a href="#n1973">[N1973]</a> is not yet accepted by the committee. By the way, it's a great opportunity to make your <code>operator&gt;&gt;</code> conform to the standard. Read a good C++ book, study <code>std::sentry</code> and <a href="../../libs/io/doc/ios_state.html">ios_state_saver</a>.
     </td>
   </tr>
+  <tr>
+  <td valign="top"><b>Question:</b></td>
+    <td>Why <code>std::cout << boost::lexical_cast&lt;unsigned int&gt;("-1");</code> does not throw, but outputs 4294967295?</td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Answer:</b></td>
+    <td><code>boost::lexical_cast</code> has the behavior of <code>stringstream</code>, which uses <code>num_get</code> functions of <code>std::locale</code> to convert numbers. If we look at the [22.2.2.1.2] of Programming languages &mdash; C++, we'll see, that <code>num_get</code> uses the rules of <code>scanf</code> for conversions. And in the C99 standard for unsigned input value minus sign is optional, so if a negative number is read, no errors will arise and the result will be the two's complement.
+    </td>
+  </tr>
 </table>
 
 <h2><a name="references">References</a></h2>
