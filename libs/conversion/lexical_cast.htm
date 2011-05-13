@@ -194,32 +194,74 @@ public:
 </pre>
 			</blockquote>Exception used to indicate runtime <a href="#lexical_cast"><code>lexical_cast</code></a>
 		failure.
-			<hr>
 		
-<h2><a name="faq">Frequently Asked Questions</h2>
-    <p> Q: Why does <code>lexical_cast&lt;int8_t&gt;("127")</code> throw <code>bad_lexical_cast</code>?
-    <br> A: The type <code>int8_t</code> is a typedef to <code>char</code> or <code>signed char</code>.
+<hr>
+<!-- 
+The original design of lexical_cast library does not supports throwing/nonthrowing behaviour, default values,
+locales... BOOST_LEXICAL_CAST_ASSUME_C_LOCALE is a good optimization, but it breaks down the original design.
+-->
+<!--
+  <h2><a name="BOOST_LEXICAL_CAST_ASSUME_C_LOCALE"><code>BOOST_LEXICAL_CAST_ASSUME_C_LOCALE</code></a></h2>
+  <blockquote><pre>#define BOOST_LEXICAL_CAST_ASSUME_C_LOCALE</blockquote></pre>
+or,
+  <blockquote><pre>g++ -DBOOST_LEXICAL_CAST_ASSUME_C_LOCALE ...  (gcc on Linux/Unix)</blockquote></pre>
+  <blockquote><pre>cl.exe /DBOOST_LEXICAL_CAST_ASSUME_C_LOCALE ... (Visual C++ on Windows)</blockquote></pre>
+</pre>
+Eliminate an overhead of <code>std::locale</code> if your program runs in the "C" locale. If the option is set but a program runs in other locale, <code>lexical_cast</code> result is unspecified.
+<hr>
+-->
+		
+<h2><a name="faq">Frequently Asked Questions</a></h2>
+
+<table>
+  <tr>
+    <td valign="top"><b>Question:</b></td>
+    <td>Why does <code>lexical_cast&lt;int8_t&gt;("127")</code> throw <code>bad_lexical_cast</code>?</td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Answer:</b></td>
+    <td>The type <code>int8_t</code> is a typedef to <code>char</code> or <code>signed char</code>.
     Lexical conversion to these types is simply reading a byte from source but since the source has
     more than one byte, the exception is thrown.
-    <p>Please use other integer types such as <code>int</code> or <code>short int</code>. If bounds checking
+    Please use other integer types such as <code>int</code> or <code>short int</code>. If bounds checking
     is important, you can also call <a href="../../libs/numeric/conversion/doc/html/boost_numericconversion/improved_numeric_cast__.html">numeric_cast</a>:
-
 <pre><a href="../../libs/numeric/conversion/doc/html/boost_numericconversion/improved_numeric_cast__.html">numeric_cast</a>&lt;int8_t&gt;(lexical_cast&lt;int&gt;("127"));</pre>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Question:</b></td><td>What does <code>lexical_cast&lt;std::string&gt;</code> of an <code>int8_t</code> or <code>uint8_t</code> not do what I expect?</td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Answer:</b></td><td>As above, note that <code>int8_t</code> and <code>uint8_t</code> are actually chars and are formatted as such.  To avoid this, cast to an integer type first:
+      <pre>lexical_cast&lt;std::string&gt;(static_cast&lt;int&gt;(n));</pre>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Question:</b></td>
+    <td>The implementation always resets the <code>ios_base::skipws</code> flag of an underlying stream object. It breaks my <code>operator&gt;&gt;</code> that works only in presence of this flag. Can you remove code that resets the flag?</td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Answer:</b></td>
+    <td>May be in a future version. There is no requirement in <a href="#n1973">[N1973]</a> to reset the flag but remember that <a href="#n1973">[N1973]</a> is not yet accepted by the committee. By the way, it's a great opportunity to make your <code>operator&gt;&gt;</code> conform to the standard. Read a good C++ book, study <code>std::sentry</code> and <a href="../../libs/io/doc/ios_state.html">ios_state_saver</a>.
+    </td>
+  </tr>
+  <tr>
+  <td valign="top"><b>Question:</b></td>
+    <td>Why <code>std::cout << boost::lexical_cast&lt;unsigned int&gt;("-1");</code> does not throw, but outputs 4294967295?</td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Answer:</b></td>
+    <td><code>boost::lexical_cast</code> has the behavior of <code>stringstream</code>, which uses <code>num_get</code> functions of <code>std::locale</code> to convert numbers. If we look at the [22.2.2.1.2] of Programming languages &mdash; C++, we'll see, that <code>num_get</code> uses the rules of <code>scanf</code> for conversions. And in the C99 standard for unsigned input value minus sign is optional, so if a negative number is read, no errors will arise and the result will be the two's complement.
+    </td>
+  </tr>
+</table>
 
-    <p> Q: What does <code>lexical_cast&lt;std::string&gt;</code> of an <code>int8_t</code> or <code>uint8_t</code> not do what I expect?
-    <br> A: As above, note that <code>int8_t</code> and <code>uint8_t</code> are actually chars and are formatted as such.  To avoid this, cast to an integer type first:
-
-<pre>lexical_cast&lt;std::string&gt;(static_cast&lt;int&gt;(n));</pre>
-
-    <p> Q: The implementation always resets the <code>ios_base::skipws</code> flag of an underlying stream object. It breaks my <code>operator&gt;&gt;</code> that works only in presence of this flag. Can you remove code that resets the flag?
-    <br> A: May be in a future version. There is no requirement in <a href="#n1973">[N1973]</a> to reset the flag but remember that <a href="#n1973">[N1973]</a> is not yet accepted by the committee. By the way, it's a great opportunity to make your <code>operator&gt;&gt;</code> conform to the standard. Read a good C++ book, study <code>std::sentry</code> and <a href="../../libs/io/doc/ios_state.html">ios_state_saver</a>.
-</ul>
-<h2><a name="references">References</h2>
+<h2><a name="references">References</a></h2>
 <ul type="square">
-    <a name="n1973"></a><li> [N1973] Kevlin Henney, Beman Dawes, Lexical Conversion Library Proposal for TR2,
+    <li><a name="n1973"></a>[N1973] Kevlin Henney, Beman Dawes, Lexical Conversion Library Proposal for TR2,
       <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1973.html">N1973</a>.
       <a name="tuning"></a><li> [Tuning] Alexander Nasonov, Fine Tuning for lexical_cast,
-      <a href="http://www.accu.org/var/uploads/journals/overload74.pdf">Overload #74</a>,
+      <a href="http://accu.org/index.php/journals/1375">Overload #74</a> (<a href="http://www.accu.org/var/uploads/journals/overload74.pdf">PDF</a>),
       August 2006.</li>
 </ul>
 <h2><a name="changes">Changes</a></h2>
@@ -265,6 +307,12 @@ public:
 	<p>
 			<hr>
 			
-<div align="right"><small><i>&copy; Copyright Kevlin Henney, 2000&#150;2005</i></small></div>
+<div align="right"><small><i>Copyright &copy; Kevlin Henney, 2000-2005</i></small></div>
+<div align="right"><small><i>Copyright &copy; Alexander Nasonov, 2006-2010</i></small></div>
+<div align="right"><small><i>Copyright &copy; Antony Polukhin, 2011</i></small></div>
+<div align="right"><small><i>
+  Distributed under the Boost Software License, Version 1.0. (See accompanying
+  file LICENSE_1_0.txt or copy at <a href="/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)</i></small>
+</div>
 	</body>
 </html>

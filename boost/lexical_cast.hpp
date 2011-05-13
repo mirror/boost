@@ -55,7 +55,13 @@
 namespace boost
 {
     // exception used to indicate runtime lexical_cast failure
-    class bad_lexical_cast : public std::bad_cast
+    class bad_lexical_cast :
+    // workaround MSVC bug with std::bad_cast when _HAS_EXCEPTIONS == 0 
+#if defined(BOOST_MSVC) && defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS 
+        public std::exception 
+#else 
+        public std::bad_cast 
+#endif 
 
 #if defined(__BORLANDC__) && BOOST_WORKAROUND( __BORLANDC__, < 0x560 )
         // under bcc32 5.5.1 bad_cast doesn't derive from exception
@@ -521,11 +527,10 @@ namespace boost
             std::string::size_type const grouping_size = grouping.size();
             CharT thousands_sep = grouping_size ? np.thousands_sep() : 0;
             std::string::size_type group = 0; // current group number
-            char last_grp_size = grouping[0] <= 0 ? CHAR_MAX : grouping[0];
-            // a) Since grouping is const, grouping[grouping.size()] returns 0.
-            // b) It's safe to assume here and below that CHAR_MAX
-            //    is equivalent to unlimited grouping:
+            char last_grp_size =
+                grouping_size == 0 || grouping[0] <= 0 ? CHAR_MAX : grouping[0];
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+            // Check that ulimited group is unreachable:
             BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
 #endif
 
@@ -1120,6 +1125,7 @@ namespace boost
 # pragma warning( push )
 # pragma warning( disable : 4701 ) // possible use of ... before initialization
 # pragma warning( disable : 4702 ) // unreachable code
+# pragma warning( disable : 4267 ) // conversion from 'size_t' to 'unsigned int'
 #endif
 
         template< typename Target
@@ -1149,7 +1155,7 @@ namespace boost
 
             Target result;
             if(!(interpreter << arg && interpreter >> result))
-                BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+              BOOST_LCAST_THROW_BAD_CAST(Source, Target);
             return result;
         }
 #if (defined _MSC_VER)
@@ -1191,11 +1197,7 @@ namespace boost
         Target result;
 
         if(!(interpreter << arg && interpreter >> result))
-#ifndef BOOST_NO_TYPEID
-            throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
-#else
-            throw_exception(bad_lexical_cast());
-#endif
+          BOOST_LCAST_THROW_BAD_CAST(Source, Target);
         return result;
     }
 
