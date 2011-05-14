@@ -430,7 +430,7 @@ namespace boost { namespace phoenix
                 BOOST_PHOENIX_a(N)                                              \
             };                                                                  \
         return env;                                                             \
-    };                                                                          \
+    }                                                                           \
     template <BOOST_PHOENIX_typename_A(N)>                                      \
     typename result_of::make_env<BOOST_PHOENIX_A_const_ref(N)>::type            \
     inline make_env(BOOST_PHOENIX_A_const_ref_a(N))                             \
@@ -441,7 +441,7 @@ namespace boost { namespace phoenix
                 BOOST_PHOENIX_a(N)                                              \
             };                                                                  \
         return env;                                                             \
-    };                                                                          \
+    }                                                                           \
     /**/
         BOOST_PP_REPEAT_FROM_TO(1, BOOST_PHOENIX_LIMIT, BOOST_PHOENIX_M0, _)
     #undef BOOST_PHOENIX_M0
