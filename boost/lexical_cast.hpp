@@ -11,8 +11,8 @@
 //        enhanced with contributions from Terje Slettebo,
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
-//        Alexander Nasonov and other Boosters
-// when:  November 2000, March 2003, June 2005, June 2006
+//        Alexander Nasonov, Antony Polukhin and other Boosters
+// when:  November 2000, March 2003, June 2005, June 2006, March 2011
 
 #include <climits>
 #include <cstddef>
@@ -20,12 +20,18 @@
 #include <string>
 #include <typeinfo>
 #include <exception>
+#include <cmath>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/numeric/conversion/cast.hpp>
+#include <boost/type_traits/ice.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
+#include <boost/type_traits/is_signed.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
@@ -1161,23 +1167,272 @@ namespace boost
 #if (defined _MSC_VER)
 # pragma warning( pop )
 #endif
+
+        template<typename T>
+        struct is_stdstring
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false );
+        };
+
+        template<typename CharT, typename Traits, typename Alloc>
+        struct is_stdstring< std::basic_string<CharT, Traits, Alloc> >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true );
+        };
+
+        template<typename T>
+        struct is_char_or_wchar
+        {
+#ifndef BOOST_LCAST_NO_WCHAR_T
+            BOOST_STATIC_CONSTANT(bool, value =
+                    (
+                    ::boost::type_traits::ice_or<
+                         is_same< T, char >::value,
+                         is_same< T, wchar_t >::value,
+                         is_same< T, unsigned char >::value,
+                         is_same< T, signed char >::value
+                    >::value
+                    )
+            );
+#else
+            BOOST_STATIC_CONSTANT(bool, value =
+                    (
+                    ::boost::type_traits::ice_or<
+                         is_same< T, char >::value,
+                         is_same< T, unsigned char >::value,
+                         is_same< T, signed char >::value
+                    >::value
+                    )
+            );
+#endif
+        };
+
+        template<typename Target, typename Source>
+        struct is_arithmetic_and_not_xchars
+        {
+            BOOST_STATIC_CONSTANT(bool, value =
+               (
+                   ::boost::type_traits::ice_and<
+                           is_arithmetic<Source>::value,
+                           is_arithmetic<Target>::value,
+                           ::boost::type_traits::ice_not<
+                                detail::is_char_or_wchar<Target>::value
+                           >::value,
+                           ::boost::type_traits::ice_not<
+                                detail::is_char_or_wchar<Source>::value
+                           >::value
+                   >::value
+               )
+            );
+        };
+
+        template<typename Target, typename Source>
+        struct is_xchar_to_xchar
+        {
+            BOOST_STATIC_CONSTANT(bool, value =
+                    (
+                    ::boost::type_traits::ice_and<
+                         is_same<Source,Target>::value,
+                         is_char_or_wchar<Target>::value
+                    >::value
+                    )
+            );
+        };
+
+        template<typename Target, typename Source>
+        struct is_char_array_to_stdstring
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false );
+        };
+
+        template<typename CharT, typename Traits, typename Alloc>
+        struct is_char_array_to_stdstring< std::basic_string<CharT, Traits, Alloc>, CharT* >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true );
+        };
+
+        template<typename CharT, typename Traits, typename Alloc>
+        struct is_char_array_to_stdstring< std::basic_string<CharT, Traits, Alloc>, const CharT* >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true );
+        };
+
+        template<typename Target, typename Source>
+        struct lexical_cast_do_cast
+        {
+            static inline Target lexical_cast_impl(const Source &arg)
+            {
+                typedef typename detail::array_to_pointer_decay<Source>::type src;
+
+                typedef typename detail::widest_char<
+                typename detail::stream_char<Target>::type
+                , typename detail::stream_char<src>::type
+                >::type char_type;
+
+                typedef detail::lcast_src_length<char_type, src> lcast_src_length;
+                std::size_t const src_len = lcast_src_length::value;
+                char_type buf[src_len + 1];
+                lcast_src_length::check_coverage();
+                return detail::lexical_cast<Target, src, !src_len>(arg, buf, src_len);
+            }
+        };
+
+        template<typename Source>
+        struct lexical_cast_copy
+        {
+            static inline Source lexical_cast_impl(const Source &arg)
+            {
+                return arg;
+            }
+        };
+
+        class precision_loss_error : public boost::numeric::bad_numeric_cast
+        {
+         public:
+            virtual const char * what() const throw()
+             {  return "bad numeric conversion: precision loss error"; }
+        };
+
+        template<class S >
+        struct throw_on_precision_loss
+        {
+         typedef boost::numeric::Trunc<S> Rounder;
+         typedef S source_type ;
+
+         typedef typename mpl::if_< is_arithmetic<S>,S,S const&>::type argument_type ;
+
+         static source_type nearbyint ( argument_type s )
+         {
+            source_type orig_div_round = s / Rounder::nearbyint(s);
+
+            if ( (orig_div_round > 1 ? orig_div_round - 1 : 1 - orig_div_round) > std::numeric_limits<source_type>::epsilon() )
+               BOOST_THROW_EXCEPTION( precision_loss_error() );
+            return s ;
+         }
+
+         typedef typename Rounder::round_style round_style;
+        } ;
+
+        template<typename Target, typename Source>
+        struct lexical_cast_dynamic_num_not_ignoring_minus
+        {
+            static inline Target lexical_cast_impl(const Source &arg)
+            {
+                try{
+                    typedef boost::numeric::converter<
+                            Target,
+                            Source,
+                            boost::numeric::conversion_traits<Target,Source>,
+                            boost::numeric::def_overflow_handler,
+                            throw_on_precision_loss<Source>
+                    > Converter ;
+
+                    return Converter::convert(arg);
+                } catch(...) {
+                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+                }
+            }
+        };
+
+        template<typename Target, typename Source>
+        struct lexical_cast_dynamic_num_ignoring_minus
+        {
+            static inline Target lexical_cast_impl(const Source &arg)
+            {
+                try{
+                    typedef boost::numeric::converter<
+                            Target,
+                            Source,
+                            boost::numeric::conversion_traits<Target,Source>,
+                            boost::numeric::def_overflow_handler,
+                            throw_on_precision_loss<Source>
+                    > Converter ;
+
+                    bool has_minus = ( arg < 0);
+                    if ( has_minus ) {
+                        return static_cast<Target>(-Converter::convert(-arg));
+                    } else {
+                        return Converter::convert(arg);
+                    }
+                } catch(...) {
+                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+                }
+            }
+        };
+
+        /*
+         * lexical_cast_dynamic_num follows the rules:
+         * 1) If Source can be converted to Target without precision loss and
+         * without overflows, then assign Source to Target and return
+         *
+         * 2) If Source is less than 0 and Target is an unsigned integer,
+         * then negate Source, check the requirements of rule 1) and if
+         * successful, assign static_casted Source to Target and return
+         *
+         * 3) Otherwise throw a bad_lexical_cast exception
+         *
+         *
+         * Rule 2) required because boost::lexical_cast has the behavior of
+         * stringstream, which uses the rules of scanf for conversions. And
+         * in the C99 standard for unsigned input value minus sign is
+         * optional, so if a negative number is read, no errors will arise
+         * and the result will be the two's complement.
+         */
+        template<typename Target, typename Source>
+        struct lexical_cast_dynamic_num
+        {
+            static inline Target lexical_cast_impl(const Source &arg)
+            {
+                typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
+                    ::boost::type_traits::ice_and<
+                        ::boost::type_traits::ice_or<
+                            ::boost::is_signed<Source>::value,
+                            ::boost::is_float<Source>::value
+                        >::value,
+                        ::boost::type_traits::ice_not<
+                            is_same<Source, bool>::value
+                        >::value,
+                        ::boost::type_traits::ice_not<
+                            is_same<Target, bool>::value
+                        >::value,
+                        ::boost::is_unsigned<Target>::value
+                    >::value,
+                    lexical_cast_dynamic_num_ignoring_minus<Target, Source>,
+                    lexical_cast_dynamic_num_not_ignoring_minus<Target, Source>
+                >::type caster_type;
+
+                return caster_type::lexical_cast_impl(arg);
+            }
+        };
     }
 
     template<typename Target, typename Source>
     inline Target lexical_cast(const Source &arg)
     {
-        typedef typename detail::array_to_pointer_decay<Source>::type src;
+        typedef BOOST_DEDUCED_TYPENAME detail::array_to_pointer_decay<Source>::type src;
 
-        typedef typename detail::widest_char<
-            typename detail::stream_char<Target>::type
-          , typename detail::stream_char<src>::type
-          >::type char_type;
+        typedef BOOST_DEDUCED_TYPENAME ::boost::type_traits::ice_or<
+                detail::is_xchar_to_xchar<Target, src>::value,
+                detail::is_char_array_to_stdstring<Target,src>::value,
+                ::boost::type_traits::ice_and<
+                     is_same<Target, src>::value,
+                     detail::is_stdstring<Target>::value
+                >::value
+        > do_copy_type;
 
-        typedef detail::lcast_src_length<char_type, src> lcast_src_length;
-        std::size_t const src_len = lcast_src_length::value;
-        char_type buf[src_len + 1];
-        lcast_src_length::check_coverage();
-        return detail::lexical_cast<Target, src, !src_len>(arg, buf, src_len);
+        typedef BOOST_DEDUCED_TYPENAME detail::is_arithmetic_and_not_xchars<Target, src> do_copy_with_dynamic_check_type;
+
+        typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
+            do_copy_type::value,
+            detail::lexical_cast_copy<src>,
+            BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
+                 do_copy_with_dynamic_check_type::value,
+                 detail::lexical_cast_dynamic_num<Target, src>,
+                 detail::lexical_cast_do_cast<Target, src>
+            >::type
+        >::type caster_type;
+
+        return caster_type::lexical_cast_impl(arg);
     }
 
     #else
@@ -1205,7 +1460,8 @@ namespace boost
 }
 
 // Copyright Kevlin Henney, 2000-2005.
-// Copyright Alexander Nasonov, 2006-2007.
+// Copyright Alexander Nasonov, 2006-2010.
+// Copyright Antony Polukhin, 2011.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at

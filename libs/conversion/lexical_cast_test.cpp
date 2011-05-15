@@ -2,7 +2,7 @@
 //
 //  See http://www.boost.org for most recent version, including documentation.
 //
-//  Copyright Terje Slettebø and Kevlin Henney, 2005.
+//  Copyright Terje Sletteb and Kevlin Henney, 2005.
 //  Copyright Alexander Nasonov, 2006.
 //
 //  Distributed under the Boost
@@ -84,6 +84,9 @@ void test_conversion_from_to_uintmax_t();
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
 #endif
+void test_conversion_from_to_float();
+void test_conversion_from_to_double();
+void test_conversion_from_to_long_double();
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 void test_traits();
 void test_wtraits();
@@ -122,6 +125,9 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
 #endif
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_float));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_double));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_long_double));
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     suite->add(BOOST_TEST_CASE(&test_traits));
     suite->add(BOOST_TEST_CASE(&test_wtraits));
@@ -447,6 +453,24 @@ void test_conversion_from_integral_to_char(CharT zero)
     BOOST_CHECK_THROW(lexical_cast<CharT>(t), bad_lexical_cast);
 }
 
+template<class T, class CharT>
+void test_conversion_from_char_to_integral(CharT zero)
+{
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 0)) == static_cast<T>(0) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 1)) == static_cast<T>(1) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 2)) == static_cast<T>(2) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 3)) == static_cast<T>(3) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 4)) == static_cast<T>(4) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 5)) == static_cast<T>(5) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 6)) == static_cast<T>(6) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 7)) == static_cast<T>(7) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 8)) == static_cast<T>(8) );
+    BOOST_CHECK(lexical_cast<T>( static_cast<CharT>(zero + 9)) == static_cast<T>(9) );
+
+    BOOST_CHECK_THROW(lexical_cast<T>( static_cast<CharT>(zero + 10)), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>( static_cast<CharT>(zero - 1)), bad_lexical_cast);
+}
+
 template<class T>
 void test_conversion_from_integral_to_integral()
 {
@@ -625,12 +649,35 @@ void test_conversion_from_to_integral()
     signed char const szero = '0';
     unsigned char const uzero = '0';
     test_conversion_from_integral_to_char<T>(zero);
+    test_conversion_from_char_to_integral<T>(zero);
     test_conversion_from_integral_to_char<T>(szero);
+    test_conversion_from_char_to_integral<T>(szero);
     test_conversion_from_integral_to_char<T>(uzero);
+    test_conversion_from_char_to_integral<T>(uzero);
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     wchar_t const wzero = L'0';
     test_conversion_from_integral_to_char<T>(wzero);
+    test_conversion_from_char_to_integral<T>(wzero);
 #endif
+
+    BOOST_CHECK(lexical_cast<T>("-1") == static_cast<T>(-1));
+    BOOST_CHECK(lexical_cast<T>("-9") == static_cast<T>(-9));
+    BOOST_CHECK(lexical_cast<T>(-1) == static_cast<T>(-1));
+    BOOST_CHECK(lexical_cast<T>(-9) == static_cast<T>(-9));
+
+    BOOST_CHECK_THROW(lexical_cast<T>("-1.0"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>("-9.0"), bad_lexical_cast);
+    BOOST_CHECK(lexical_cast<T>(-1.0) == static_cast<T>(-1));
+    BOOST_CHECK(lexical_cast<T>(-9.0) == static_cast<T>(-9));
+
+    BOOST_CHECK(lexical_cast<T>(static_cast<T>(1)) == static_cast<T>(1));
+    BOOST_CHECK(lexical_cast<T>(static_cast<T>(9)) == static_cast<T>(9));
+    BOOST_CHECK_THROW(lexical_cast<T>(1.1f), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>(1.1), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>(1.1L), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>(1.0001f), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>(1.0001), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>(1.0001L), bad_lexical_cast);
 
     // test_conversion_from_to_integral_for_locale
 
@@ -663,6 +710,27 @@ void test_conversion_from_to_integral()
 
     if(grouping1.empty() && grouping2.empty())
         BOOST_TEST_MESSAGE("Formatting with thousands_sep has not been tested");
+}
+
+template<class T>
+void test_conversion_from_to_float()
+{
+    char const zero = '0';
+    signed char const szero = '0';
+    unsigned char const uzero = '0';
+    test_conversion_from_integral_to_char<T>(zero);
+    test_conversion_from_char_to_integral<T>(zero);
+    test_conversion_from_integral_to_char<T>(szero);
+    test_conversion_from_char_to_integral<T>(szero);
+    test_conversion_from_integral_to_char<T>(uzero);
+    test_conversion_from_char_to_integral<T>(uzero);
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+    wchar_t const wzero = L'0';
+    test_conversion_from_integral_to_char<T>(wzero);
+    test_conversion_from_char_to_integral<T>(wzero);
+#endif
+
+    test_conversion_from_integral_to_integral<T>();
 }
 
 void test_conversion_from_to_short()
@@ -715,6 +783,19 @@ void test_conversion_from_to_longlong()
 void test_conversion_from_to_ulonglong()
 {
     test_conversion_from_to_integral<boost::ulong_long_type>();
+}
+
+void test_conversion_from_to_float()
+{
+    test_conversion_from_to_float<float>();
+}
+void test_conversion_from_to_double()
+{
+    test_conversion_from_to_float<double>();
+}
+void test_conversion_from_to_long_double()
+{
+    test_conversion_from_to_float<long double>();
 }
 
 #elif defined(LCAST_TEST_LONGLONG)

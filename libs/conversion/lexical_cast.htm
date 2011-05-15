@@ -265,6 +265,11 @@ Eliminate an overhead of <code>std::locale</code> if your program runs in the "C
       August 2006.</li>
 </ul>
 <h2><a name="changes">Changes</a></h2>
+<h3>May 2011:</h3>
+<ul type="square">
+    <li>Better performance for conversions from arithmetic type to arithmetic type.</li>
+    <li>Directly construct <code>Target</code> from <code>Source</code> on some conversions (like conversions from string to string, from char array to string, from char to char and others).</li>
+</ul>
 <h3>August, October 2006:</h3>
 <ul type="square">
     <li>Better performance for many combinations of <code>Source</code> and <code>Target</code>
