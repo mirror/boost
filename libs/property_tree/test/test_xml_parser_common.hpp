@@ -63,6 +63,7 @@ void test_xml_parser()
 {
 
     using namespace boost::property_tree;
+    typedef typename Ptree::data_type::value_type char_type;
 
     generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
     (
@@ -104,7 +105,7 @@ void test_xml_parser()
     (
         ReadFuncWS(), WriteFuncWS(), ok_data_5, NULL, 
         "testok5.xml", NULL, "testok5out.xml",
-        3, umlautsize<typename Ptree::data_type::value_type>(), 12
+        3, umlautsize<char_type>(), 12
     );
 
     generic_parser_test_error<Ptree, ReadFuncWS, WriteFuncWS, xml_parser_error>
@@ -129,6 +130,13 @@ void test_xml_parser()
     (
         ReadFuncWS(), WriteFuncWS(), bug_data_pr1678, NULL,
         "testpr1678.xml", NULL, "testpr1678out.xml", 2, 0, 4
+    );
+
+    generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
+    (
+        ReadFuncWS(), WriteFuncWS(), bug_data_pr5203, NULL,
+        "testpr5203.xml", NULL, "testpr5203out.xml",
+        3, 4 * umlautsize<char_type>(), 13
     );
 
 }

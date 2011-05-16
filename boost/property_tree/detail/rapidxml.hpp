@@ -313,8 +313,10 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         template<class Ch>
         inline size_t get_index(const Ch c)
         {
-            // If not ASCII char, its sematic is same as plain 'z'
-            if (c > 255)
+            // If not ASCII char, its semantic is same as plain 'z'.
+            // char could be signed, so first stretch and make unsigned.
+            unsigned n = c;
+            if (n > 127)
             {
                 return 'z';
             }
