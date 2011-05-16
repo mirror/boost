@@ -21,7 +21,7 @@
           </para>
         </description>
         <inherit>
-          <type>proto::callable</type>
+          <type><classname>proto::callable</classname></type>
         </inherit>
         <struct-specialization name="result">
           <template>
@@ -52,6 +52,17 @@
             </returns>
           </method>
         </method-group>
+      </struct>
+
+      <!-- proto::basic_default_generator -->
+      <struct name="basic_default_generator">
+        <purpose>
+          A simple generator that passes an expression through unchanged while stating
+          a preference for <classname>proto::basic_expr</classname>&lt;&gt; over
+          <classname>proto::expr</classname>&lt;&gt;.</purpose>
+        <inherit>
+          <type><classname>proto::use_basic_expr</classname>&lt; <classname>proto::default_generator</classname> &gt;</type>
+        </inherit>
       </struct>
 
       <!-- proto::generator -->

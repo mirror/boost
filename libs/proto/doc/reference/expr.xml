@@ -68,7 +68,7 @@
         </typedef>
 
         <typedef name="proto_domain">
-          <type><classname>proto::default_domain</classname></type>
+          <type><classname>proto::basic_default_domain</classname></type>
         </typedef>
 
         <typedef name="proto_grammar">

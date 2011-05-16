@@ -42,7 +42,7 @@
         typedef basic_expr proto_base_expr;
         typedef term<Arg0> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -116,7 +116,7 @@
         typedef basic_expr proto_base_expr;
         typedef list1<Arg0> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -196,7 +196,7 @@
         typedef basic_expr proto_base_expr;
         typedef list2<Arg0 , Arg1> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -264,7 +264,7 @@
         typedef basic_expr proto_base_expr;
         typedef list3<Arg0 , Arg1 , Arg2> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -332,7 +332,7 @@
         typedef basic_expr proto_base_expr;
         typedef list4<Arg0 , Arg1 , Arg2 , Arg3> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -400,7 +400,7 @@
         typedef basic_expr proto_base_expr;
         typedef list5<Arg0 , Arg1 , Arg2 , Arg3 , Arg4> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -468,7 +468,7 @@
         typedef basic_expr proto_base_expr;
         typedef list6<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -536,7 +536,7 @@
         typedef basic_expr proto_base_expr;
         typedef list7<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -604,7 +604,7 @@
         typedef basic_expr proto_base_expr;
         typedef list8<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -672,7 +672,7 @@
         typedef basic_expr proto_base_expr;
         typedef list9<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;
@@ -740,7 +740,7 @@
         typedef basic_expr proto_base_expr;
         typedef list10<Arg0 , Arg1 , Arg2 , Arg3 , Arg4 , Arg5 , Arg6 , Arg7 , Arg8 , Arg9> proto_args;
         typedef basic_expr proto_grammar;
-        typedef default_domain proto_domain;
+        typedef basic_default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
         typedef basic_expr proto_derived_expr;

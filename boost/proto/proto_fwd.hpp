@@ -270,6 +270,8 @@ namespace boost { namespace proto
     ////////////////////////////////////////////////////////////////////////////////////////////////
     struct default_generator;
 
+    struct basic_default_generator;
+
     template<template<typename> class Extends>
     struct generator;
 
@@ -300,6 +302,8 @@ namespace boost { namespace proto
         struct domain;
 
         struct default_domain;
+
+        struct basic_default_domain;
 
         struct deduce_domain;
 
