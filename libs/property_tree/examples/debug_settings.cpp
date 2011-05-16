@@ -59,8 +59,8 @@ void debug_settings::load(const std::string &filename)
     // child, it throws. Property tree iterator can be used in 
     // the same way as standard container iterator. Category 
     // is bidirectional_iterator.
-    //BOOST_FOREACH(ptree::value_type &v, pt.get_child("debug.modules"))
-    //    m_modules.insert(v.second.data());
+    BOOST_FOREACH(ptree::value_type &v, pt.get_child("debug.modules"))
+        m_modules.insert(v.second.data());
 
 }
 

@@ -14,11 +14,11 @@
 
 [include info_parser.qbk]
 
-# These parsers will be dropped for now.
-#[include cmd_line_parser.qbk]
+[/ These parsers will be dropped for now.]
+[/ include cmd_line_parser.qbk]
 
-#[include windows_registry_parser.qbk]
+[/ include windows_registry_parser.qbk]
 
-#[include system_environment_parser.qbk]
+[/ include system_environment_parser.qbk]
 
 [endsect] [/parsers]

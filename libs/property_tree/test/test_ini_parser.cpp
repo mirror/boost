@@ -47,6 +47,12 @@ const char *ok_data_5 =
     "Key1=Data1\n"             // No section
     "Key2=Data2\n";
 
+// Treat # as comment.
+const char *ok_data_6 =
+    "# Comment\n"
+    "[Section1]\n"
+    "Key1=Data1\n";
+
 // Erroneous data
 const char *error_data_1 = 
     "[Section1]\n"
@@ -130,6 +136,12 @@ void test_ini_parser()
     (
         ReadFunc(), WriteFunc(), ok_data_5, NULL, 
         "testok5.ini", NULL, "testok5out.ini", 3, 10, 8
+    );
+
+    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    (
+        ReadFunc(), WriteFunc(), ok_data_6, NULL, 
+        "testok6.ini", NULL, "testok6out.ini", 3, 5, 12
     );
 
     generic_parser_test_error<Ptree, ReadFunc, WriteFunc, ini_parser_error>

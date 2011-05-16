@@ -29,7 +29,7 @@
 [def __ptree_data_type__ [classref boost::property_tree::basic_ptree::data_type data_type]]
 [def __ptree_iterator__ [classref boost::property_tree::basic_ptree::iterator iterator]]
 [def __ptree_const_iterator__ [classref boost::property_tree::basic_ptree::const_iterator const_iterator]]
-[def __path__ [classref boost::property_tree::path path]]
+[def __path__ [classref boost::property_tree::string_path path]]
 [def __ptree_error__ [classref boost::property_tree::ptree_error ptree_error]]
 [def __ptree_bad_data__ [classref boost::property_tree::ptree_bad_data ptree_bad_data]]
 [def __ptree_bad_path__ [classref boost::property_tree::ptree_bad_path ptree_bad_path]]
@@ -53,7 +53,7 @@
 [def __ptree_get_value_optional__ [memberref boost::property_tree::basic_ptree::get_value_optional get_value_optional]]
 [def __ptree_get_child__ [memberref boost::property_tree::basic_ptree::get_child get_child]]
 [def __ptree_put__ [memberref boost::property_tree::basic_ptree::put put]]
-[def __ptree_put__ [memberref boost::property_tree::basic_ptree::add add]]
+[def __ptree_add__ [memberref boost::property_tree::basic_ptree::add add]]
 [def __ptree_put_value__ [memberref boost::property_tree::basic_ptree::put_value put_value]]
 
 [/ free-functions]

@@ -41,8 +41,8 @@ XML / property tree conversion schema (__read_xml__ and __write_xml__):
 * XML comments are stored in nodes named [^<xmlcomment>], unless comment
   ignoring is enabled via the flags.
 * Text content is stored in one of two ways, depending on the flags. The default
-  way concatenates all text nodes and stores them in a single node called
-  [^<xmltext>]. This way, the entire content can be conveniently read, but the
+  way concatenates all text nodes and stores them as the data of the element
+  node. This way, the entire content can be conveniently read, but the
   relative ordering of text and child elements is lost. The other way stores
   each text content as a separate node, all called [^<xmltext>].
 

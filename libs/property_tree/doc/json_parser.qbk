@@ -10,8 +10,8 @@
 The __json__ is a data interchange format derived from the object literal
 notation of JavaScript. (JSON stands for JavaScript Object Notation.)
 JSON is a simple, compact format for loosely structured node trees of any depth,
-very similar to the property tree dataset. It is less stuctured than XML and has
-no schema support, but has the advantage of being simpler, smaller and typed
+very similar to the property tree dataset. It is less structured than XML and
+has no schema support, but has the advantage of being simpler, smaller and typed
 without the need for a complex schema.
 
 The property tree dataset is not typed, and does not support arrays as such.
