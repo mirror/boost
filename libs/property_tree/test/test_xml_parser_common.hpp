@@ -124,6 +124,12 @@ void test_xml_parser()
         ReadFuncWS(), WriteFuncWS(), bug_data_pr2855, NULL,
         "testpr2855.xml", NULL, "testpr2855out.xml", 3, 7, 14
     );
+    
+    generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
+    (
+        ReadFuncWS(), WriteFuncWS(), bug_data_pr1678, NULL,
+        "testpr1678.xml", NULL, "testpr1678out.xml", 2, 0, 4
+    );
 
 }
 

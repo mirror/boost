@@ -761,7 +761,11 @@ const char *error_data_2 =
     "<start>";      // XML tag not closed
 
 const char *bug_data_pr2855 =
-    "<?xml version=\"1.0\" encoding\"utf-8\"?>\n"
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
     "<start> notrim</start>";
+
+// byte order mark
+const char *bug_data_pr1678 =
+    "\xEF\xBB\xBF<?xml version=\"1.0\" encoding=\"utf-8\"?><root/>";
 
 #endif

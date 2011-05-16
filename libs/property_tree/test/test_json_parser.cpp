@@ -249,6 +249,9 @@ const char *error_data_3 =
 const char *error_data_4 = 
     "{\n\"a\"\n}";      // No object
 
+const char *bug_data_pr4387 =
+    "[1, 2, 3]"; // Root array
+
 struct ReadFunc
 {
     template<class Ptree>
@@ -367,6 +370,12 @@ void test_json_parser()
     (
         ReadFunc(), WriteFunc(), error_data_4, NULL,
         "testerr4.json", NULL, "testerr4out.json", 3
+    );
+
+    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    (
+        ReadFunc(), WriteFunc(), bug_data_pr4387, NULL, 
+        "testpr4387.json", NULL, "testpr4387out.json", 4, 3, 0
     );
 
 }
