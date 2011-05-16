@@ -514,7 +514,7 @@ whole to match then no match is found at all.
 
 [h5 Recursive Expressions]
 
-[^(?['N]) (?-['N]) (?+['N]) (?R) (?0)]
+[^(?['N]) (?-['N]) (?+['N]) (?R) (?0) (?&NAME)]
 
 =(?R)= and =(?0)= recurse to the start of the entire pattern.
 
@@ -522,6 +522,8 @@ whole to match then no match is found at all.
 
 [^(?-['N])] and [^(?+['N])] are relative recursions, so for example =(?-1)= recurses to the last sub-expression to be declared,
 and =(?+1)= recurses to the next sub-expression to be declared.
+
+[^(?&NAME)] recurses to named sub-expression ['NAME].
 
 [h5 Conditional Expressions]
 
