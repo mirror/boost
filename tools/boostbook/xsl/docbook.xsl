@@ -382,6 +382,10 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="processing-instruction()">
+    <xsl:copy/>
+  </xsl:template>
+
   <xsl:template match="code">
     <computeroutput>
       <xsl:apply-templates mode="annotation"/>
