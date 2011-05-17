@@ -19,12 +19,14 @@ namespace boost { namespace msm { namespace back
 class placeholder
 {
 public:
+    virtual ~placeholder(){}
     virtual ::boost::msm::back::HandledEnum process_event() const =0;
 };
 template<class EventType,class FsmType>
 class holder : public placeholder
 {
 public:
+    virtual ~holder(){}
     holder(EventType const& evt, FsmType& fsm){}
     virtual ::boost::msm::back::HandledEnum process_event() const
     {

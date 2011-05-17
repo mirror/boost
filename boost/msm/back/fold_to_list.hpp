@@ -32,7 +32,7 @@ struct define_states_creation
    )
 };
 
-define_states_creation<> const states_ = {{}};
+define_states_creation<> const states_ = {{{}}};
 
  struct FoldToList
   : ::boost::proto::or_<
