@@ -290,18 +290,24 @@ struct trait \
 #   if !defined(BOOST_MPL_HAS_XXX_NO_WRAPPED_TYPES)
 #     if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 #       define BOOST_MPL_HAS_XXX_NO_WRAPPED_TYPES 1
+#     else
+#       define BOOST_MPL_HAS_XXX_NO_WRAPPED_TYPES 0
 #     endif
 #   endif
 
 #   if !defined(BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION)
 #     if (defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS))
 #       define BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION 1
+#     else
+#       define BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION 0
 #     endif
 #   endif
 
 #   if !defined(BOOST_MPL_HAS_XXX_NEEDS_TEMPLATE_SFINAE)
 #     if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 #       define BOOST_MPL_HAS_XXX_NEEDS_TEMPLATE_SFINAE 1
+#     else
+#       define BOOST_MPL_HAS_XXX_NEEDS_TEMPLATE_SFINAE 0
 #     endif
 #   endif
 
