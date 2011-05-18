@@ -2,7 +2,7 @@
 <?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0/rng/docbook.rng" type="xml"?>
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
     <info>
-        <title>Meta State Machine (MSM) V2.20</title>
+        <title>Meta State Machine (MSM)</title>
         <author>
             <personname>Christophe Henry</personname>
             <email>christophe.j.henry@googlemail.com</email>
@@ -660,7 +660,7 @@ template &lt;class Fire> void send_rocket(Fire const&amp; evt)
   fire_rocket(evt.direction, current_calculation);
 }
 ...
-};</programlisting>
+};</programlisting>                    
                     <para>Entry and exit actions represent a behavior common to a state, no matter
                         through which transition it is entered or left. States being reusable, it
                         might make sense to locate your data there instead of in the state machine,
@@ -699,6 +699,23 @@ void on_entry(Event const&amp; evt, Fsm&amp; fsm)
                             g_row2, a_irow2, irow2, g_irow2</command> let you call an action located
                         in any state of the current fsm or in the front-end itself, thus letting you
                         place useful data anywhere you see fit.</para>
+                    <para>It is sometimes desirable to generate new events for the state machine
+                        inside actions. Since the process_event method belongs to the back end, you
+                        first need to gain a reference to it. The back end derives from the front
+                        end, so one way of doing this is to use a cast:</para>
+                    <programlisting>struct launcher_ : public msm::front::state_machine_def&lt;launcher_>{
+template &lt;class Fire> void send_rocket(Fire const&amp; evt)
+{
+  fire_rocket();
+  msm::back::state_machine&lt;launcher_> &amp;fsm = static_cast&lt;msm::back::state_machine&lt;launcher_> &amp;>(*this);
+  fsm.process_event(rocket_launched());
+}
+...
+};</programlisting>
+                    <para>The same can be implemented inside entry/exit actions. Admittedly, this is
+                        a bit awkward. A more natural mechanism is available using the <command
+                            xlink:href="#functor-front-end-actions">functor</command>
+                        front-end.</para>
                 </sect2>
                 <sect2>
                     <title>Defining a simple state machine</title>
@@ -750,7 +767,8 @@ void no_transition(Event const&amp; e, Fsm&amp; ,int state){...}</programlisting
                         activate the initial state, which means in turn that the initial state's
                         entry behavior will be called. The reason why we need this will be explained
                         in the <link xlink:href="#backend-start">back-end part</link>. After a call
-                        to start, the state machine is ready to process events.</para>
+                        to start, the state machine is ready to process events. The same way,
+                        calling <code>stop()</code> will cause the last exit actions to be called.</para>
                 </sect2>
                 <sect2>
                     <title>Defining a submachine</title>
@@ -1694,6 +1712,17 @@ struct Empty : public msm::front::euml::func_state&lt;Empty_Entry,Empty_Exit>{};
         fire_rocket(evt.direction, src.current_calculation);
     } 
 }; </programlisting>
+                <para>It was a little awkward to generate new events inside actions with the basic
+                front-end. With the functor front-end it is much cleaner:</para>
+                    <programlisting>struct send_rocket 
+{ 
+    template &lt;class Fsm,class Evt,class SourceState,class TargetState> 
+    void operator()(Evt const&amp; evt, Fsm&amp; fsm, SourceState&amp; src,TargetState&amp;) 
+    {
+        fire_rocket(evt.direction, src.current_calculation);
+        fsm.process_event(rocket_launched());
+    } 
+}; </programlisting>                    
                 </sect2>
                 <sect2>
                     <title>Defining a simple state machine</title>
@@ -2014,6 +2043,47 @@ Empty_impl const Empty;</programlisting>
                             return value when used inside a transition or a state behavior. You can
                             now use this inside a transition:</para>
                         <programlisting>Empty == Open + open_close / (close_drawer,activate_empty_(target_))</programlisting>
+                    </sect3>
+                    <sect3>
+                        <title><command xml:id="eUML-phoenix"/>Writing actions with Boost.Phoenix (in development)</title>
+                        <para> It is also possible to write actions, guards, state entry and exit
+                            actions using a reduced set of Boost.Phoenix capabilities. This feature
+                            is still in development stage, so you might get here and there some
+                            surprise. Simple cases, however, should work well. What will not work
+                            will be mixing of eUML and Phoenix functors. Writing guards in one
+                            language and actions in another is ok though.</para>
+                        <para>Phoenix also supports a larger syntax than what will ever be possible
+                            with eUML, so you can only use a reduced set of phoenix's grammar. This
+                            is due to the nature of eUML. The run-time transition table definition
+                            is translated to a type using Boost.Typeof. The result is a "normal" MSM
+                            transition table made of functor types. As C++ does not allow mixing
+                            run-time and compile-time constructs, there will be some limit (trying
+                            to instantiate a template class MyTemplateClass&lt;i> where i is an int
+                            will give you an idea). This means following valid Phoenix constructs
+                            will not work:</para>
+                        <para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para>literals</para>
+                                </listitem>
+                                <listitem>
+                                    <para>function pointers</para>
+                                </listitem>
+                                <listitem>
+                                    <para>bind</para>
+                                </listitem>
+                                <listitem>
+                                    <para>->*</para>
+                                </listitem>
+                            </itemizedlist>
+                        </para>
+                        <para>Future versions of MSM will support Phoenix better. You can contribute
+                            by finding out cases which do not work but should, so that they can be
+                            added.</para>
+                        <para>Phoenix support is not activated by default. To activate it, add
+                            before any MSM header: #define BOOST_MSM_EUML_PHOENIX_SUPPORT.</para>
+                        <para>A <link
+                            xlink:href="examples/SimplePhoenix.cpp">simple example</link> shows some basic capabilities.</para>
                     </sect3>
                 </sect2>
                 <sect2>
@@ -2651,8 +2721,9 @@ struct Open_impl : public Open_def
                         describe what can be done with it.</para>
                 </sect2>
                 <sect2>
-                    <title><command xml:id="backend-start"/>Starting a state machine</title>
-                    <para>The <code>start</code> method starts the state machine, meaning it will
+                    <title><command xml:id="backend-start"/>Starting and stopping a state
+                        machine</title>
+                    <para>The <code>start()</code> method starts the state machine, meaning it will
                         activate the initial state, which means in turn that the initial state's
                         entry behavior will be called. We need the start method because you do not
                         always want the entry behavior of the initial state to be called immediately
@@ -2661,6 +2732,11 @@ struct Open_impl : public Open_def
                         back to the initial state is an algorithm call. Each call to start will make
                         the algorithm run once. The <link xlink:href="examples/iPodSearch.cpp"
                             >iPodSearch</link> example uses this possibility.</para>
+                    <para>The <code>stop()</code> method works the same way. It will cause the exit
+                        actions of the currently active states(s) to be called.</para>
+                    <para>Both methods are actually not an absolute need. Not calling them will
+                        simply cause your first entry or your last exit action not to be
+                        called.</para>
                 </sect2>
                 <sect2>
                     <title>Event dispatching</title>
@@ -3685,6 +3761,10 @@ typename ::boost::enable_if&lt;
                             <para>Thanks to Matt Calabrese, Juraj Ivancic, Adam Merz and Joseph Wu
                                 for reporting bugs.</para>
                         </listitem>
+                        <listitem>
+                            <para>Thanks to Thomas Mistretta for providing an addition to the
+                                section "What do you actually do inside actions / guards".</para>
+                        </listitem>
                     </itemizedlist>
                 </para>
             </sect1>
@@ -3716,7 +3796,44 @@ typename ::boost::enable_if&lt;
         <chapter>
             <title>Version history</title>
             <sect1>
-                <title>From V2.12 to V2.20</title>
+                <title>From V2.20 to V2.21 (Boost 1.47)</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>added a <command xlink:href="#backend-start">stop()</command> method in the back-end.</para>
+                        </listitem>
+                        <listitem>
+                            <para><command xlink:href="#eUML-phoenix">Added partial support for Boost.Phoenix functors in eUML</command></para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfixes<itemizedlist>
+                                    <listitem>
+                                        <para>Trac 5117, 5253, 5533</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>gcc warnings about unused variables</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>better implemenation of favor_compile_time back-end
+                                            policy</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>bug with eUML and state construction</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>incorrect eUML event and state macros</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>incorrect event type passed to a direct entry state's
+                                            on_entry action</para>
+                                    </listitem>
+                                </itemizedlist></para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+            </sect1>
+            <sect1>
+                <title>From V2.12 to V2.20 (Boost 1.46)</title>
                 <para>
                     <itemizedlist>
                         <listitem>
@@ -3740,7 +3857,7 @@ typename ::boost::enable_if&lt;
                         </listitem>
                         <listitem>
                             <para><command xlink:href="#backend-queues">Possibility to provide a
-                                    container</command> for the event and deferred event queues. A
+                                container</command> for the event and deferred event queues. A
                                 policy implementation based on a more efficient Boost.CircularBuffer
                                 is provided.</para>
                         </listitem>
@@ -3750,27 +3867,27 @@ typename ::boost::enable_if&lt;
                         </listitem>
                         <listitem>
                             <para>added possibility to <command xlink:href="#backend-enqueueing"
-                                    >enqueue events</command> for delayed processing.</para>
+                                >enqueue events</command> for delayed processing.</para>
                         </listitem>
                         <listitem>
                             <para>Bugfixes<itemizedlist>
-                                    <listitem>
-                                        <para>Trac 4926</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>stack overflow using the Defer functor</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>anonymous transition of a submachine not called for
-                                            the initial state</para>
-                                    </listitem>
-                                </itemizedlist></para>
+                                <listitem>
+                                    <para>Trac 4926</para>
+                                </listitem>
+                                <listitem>
+                                    <para>stack overflow using the Defer functor</para>
+                                </listitem>
+                                <listitem>
+                                    <para>anonymous transition of a submachine not called for
+                                        the initial state</para>
+                                </listitem>
+                            </itemizedlist></para>
                         </listitem>
                     </itemizedlist>
                 </para>
             </sect1>
             <sect1>
-                <title>From V2.10 to V2.12</title>
+                <title>From V2.10 to V2.12  (Boost 1.45)</title>
                 <para>
                     <itemizedlist>
                         <listitem>
@@ -3793,7 +3910,7 @@ typename ::boost::enable_if&lt;
                 </para>
             </sect1>
             <sect1>
-                <title>From V2.0 to V2.12</title>
+                <title>From V2.0 to V2.12  (Boost 1.44)</title>
                 <para>
                     <itemizedlist>
                         <listitem>
