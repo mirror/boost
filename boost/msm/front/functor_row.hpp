@@ -256,7 +256,6 @@ namespace boost { namespace msm { namespace front
         // no action, no guard
         typedef sm__i_row_tag row_type_tag;
     };
-    struct state_tag{};
     struct event_tag{};
     struct action_tag{};
     struct state_action_tag{};
