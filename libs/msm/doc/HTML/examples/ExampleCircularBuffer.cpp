@@ -1,17 +1,9 @@
-// Copyright 2010 Christophe Henry
-// henry UNDERSCORE christophe AT hotmail DOT com
-// This is an extended version of the state machine available in the boost::mpl library
-// Distributed under the same license as the original.
-// Copyright for the original version:
-// Copyright 2005 David Abrahams and Aleksey Gurtovoy. Distributed
-// under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
-
 #include <vector>
 #include <iostream>
 // back-end
 #include <boost/msm/back/state_machine.hpp>
+// header for support of circular_buffer
+#include <boost/msm/back/queue_container_circular.hpp>
 //front-end
 #include <boost/msm/front/state_machine_def.hpp>
 // functors
@@ -37,7 +29,7 @@ namespace  // Concrete FSM implementation
     struct open_close {};
 
     // A "complicated" event type that carries some data.
-    enum DiskTypeEnum
+	enum DiskTypeEnum
     {
         DISK_CD=0,
         DISK_DVD=1
@@ -56,17 +48,6 @@ namespace  // Concrete FSM implementation
     // front-end: define the FSM structure 
     struct player_ : public msm::front::state_machine_def<player_>
     {
-        template <class Event,class FSM>
-        void on_entry(Event const& ,FSM&) 
-        {
-            std::cout << "entering: Player" << std::endl;
-        }
-        template <class Event,class FSM>
-        void on_exit(Event const&,FSM& ) 
-        {
-            std::cout << "leaving: Player" << std::endl;
-        }
-
         // The list of FSM states
         struct Empty : public msm::front::state<> 
         {
@@ -77,7 +58,7 @@ namespace  // Concrete FSM implementation
             void on_exit(Event const&,FSM& ) {std::cout << "leaving: Empty" << std::endl;}
         };
         struct Open : public msm::front::state<> 
-        { 
+        {	 
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Open" << std::endl;}
             template <class Event,class FSM>
@@ -85,7 +66,7 @@ namespace  // Concrete FSM implementation
         };
 
         struct Stopped : public msm::front::state<> 
-        { 
+        {	 
             // when stopped, the CD is loaded
             template <class Event,class FSM>
             void on_entry(Event const& ,FSM&) {std::cout << "entering: Stopped" << std::endl;}
@@ -234,7 +215,7 @@ namespace  // Concrete FSM implementation
 
         // Transition table for player
         struct transition_table : mpl::vector<
-            //    Start     Event         Next      Action                     Guard
+            //    Start     Event         Next      Action				       Guard
             //  +---------+-------------+---------+---------------------------+----------------------+
             Row < Stopped , play        , Playing , ActionSequence_
                                                      <mpl::vector<
@@ -269,7 +250,7 @@ namespace  // Concrete FSM implementation
         }
     };
     // Pick a back-end
-    typedef msm::back::state_machine<player_> player;
+    typedef msm::back::state_machine<player_, msm::back::queue_container_circular> player;
 
     //
     // Testing utilities.
@@ -282,7 +263,10 @@ namespace  // Concrete FSM implementation
 
     void test()
     {        
-        player p;
+		player p;
+        // we get the message queue and limit it to capacity 1
+        // get_message_queue returns the queue container (in this case circular_buffer)
+        p.get_message_queue().set_capacity(1);
         // needed to start the highest-level SM. This will call on_entry and mark the start of the SM
         p.start(); 
         // go to Open, call on_exit on Empty, then action, then on_entry on Open
@@ -294,7 +278,7 @@ namespace  // Concrete FSM implementation
         p.process_event(
             cd_detected("louie, louie",DISK_CD)); pstate(p);
         // no need to call play() as the previous event does it in its action method
-        //p.process_event(play());
+		//p.process_event(play());
 
         // at this point, Play is active      
         p.process_event(pause()); pstate(p);
@@ -305,9 +289,6 @@ namespace  // Concrete FSM implementation
         // event leading to the same state
         // no action method called as it is not present in the transition table
         p.process_event(stop());  pstate(p);
-        std::cout << "stop fsm" << std::endl;
-        p.stop();
-
     }
 }
 

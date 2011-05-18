@@ -88,9 +88,18 @@ namespace  // Concrete FSM implementation
             return true;
         }
     };
+    // it is also possible to use a plain functor, with default-constructor in the transition table
+    struct start_play 
+    {
+        template <class FSM,class EVT,class SourceState,class TargetState>
+        void operator()(EVT const& ,FSM&,SourceState& ,TargetState& )
+        {
+            cout << "player::start_play" << endl;
+        }
+    };
     // replaces the old transition table
     BOOST_MSM_EUML_TRANSITION_TABLE((
-          Playing   == Stopped  + play        / start_playback ,
+          Playing   == Stopped  + play        / start_play() ,
           Playing   == Paused   + end_pause   / resume_playback,
           //  +------------------------------------------------------------------------------+
           Empty     == Open     + open_close  / (close_drawer,activate_empty_(target_)),

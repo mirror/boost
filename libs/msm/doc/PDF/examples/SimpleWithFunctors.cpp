@@ -56,6 +56,17 @@ namespace  // Concrete FSM implementation
     // front-end: define the FSM structure 
     struct player_ : public msm::front::state_machine_def<player_>
     {
+        template <class Event,class FSM>
+        void on_entry(Event const& ,FSM&) 
+        {
+            std::cout << "entering: Player" << std::endl;
+        }
+        template <class Event,class FSM>
+        void on_exit(Event const&,FSM& ) 
+        {
+            std::cout << "leaving: Player" << std::endl;
+        }
+
         // The list of FSM states
         struct Empty : public msm::front::state<> 
         {
@@ -294,6 +305,9 @@ namespace  // Concrete FSM implementation
         // event leading to the same state
         // no action method called as it is not present in the transition table
         p.process_event(stop());  pstate(p);
+        std::cout << "stop fsm" << std::endl;
+        p.stop();
+
     }
 }
 
