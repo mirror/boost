@@ -17,8 +17,6 @@
 #include <numeric>
 #include <utility>
 
-#define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/assert.hpp>
