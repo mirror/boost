@@ -72,6 +72,18 @@ namespace boost { namespace proto
         #include <boost/proto/detail/generate_by_value.hpp>
     }
 
+    /// \brief Annotate a generator to indicate that it would
+    /// prefer to be passed instances of \c proto::basic_expr\<\> rather
+    /// than \c proto::expr\<\>. <tt>use_basic_expr\<Generator\></tt> is
+    /// itself a generator.
+    ///
+    template<typename Generator>
+    struct use_basic_expr
+      : Generator
+    {
+        BOOST_PROTO_USE_BASIC_EXPR()
+    };
+
     /// \brief A simple generator that passes an expression
     /// through unchanged.
     ///
@@ -107,6 +119,19 @@ namespace boost { namespace proto
         }
     };
 
+    /// \brief A simple generator that passes an expression
+    /// through unchanged and specifies a preference for
+    /// \c proto::basic_expr\<\> over \c proto::expr\<\>.
+    ///
+    /// Generators are intended for use as the first template parameter
+    /// to the \c domain\<\> class template and control if and how
+    /// expressions within that domain are to be customized.
+    /// The \c default_generator makes no modifications to the expressions
+    /// passed to it.
+    struct basic_default_generator
+      : proto::use_basic_expr<default_generator>
+    {};
+    
     /// \brief A generator that wraps expressions passed
     /// to it in the specified extension wrapper.
     ///
@@ -307,18 +332,6 @@ namespace boost { namespace proto
         }
     };
 
-    /// \brief Annotate a generator to indicate that it would
-    /// prefer to be passed instances of \c proto::basic_expr\<\> rather
-    /// than \c proto::expr\<\>. <tt>use_basic_expr\<Generator\></tt> is
-    /// itself a generator.
-    ///
-    template<typename Generator>
-    struct use_basic_expr
-      : Generator
-    {
-        BOOST_PROTO_USE_BASIC_EXPR()
-    };
-
     /// \brief Tests a generator to see whether it would prefer
     /// to be passed instances of \c proto::basic_expr\<\> rather than
     /// \c proto::expr\<\>.
@@ -376,7 +389,19 @@ namespace boost
     };
 
     template<typename Expr>
+    struct result_of<proto::basic_default_domain(Expr)>
+    {
+        typedef Expr type;
+    };
+
+    template<typename Expr>
     struct result_of<proto::default_generator(Expr)>
+    {
+        typedef Expr type;
+    };
+
+    template<typename Expr>
+    struct result_of<proto::basic_default_generator(Expr)>
     {
         typedef Expr type;
     };
@@ -389,7 +414,19 @@ namespace boost
     };
 
     template<typename Expr>
+    struct tr1_result_of<proto::basic_default_domain(Expr)>
+    {
+        typedef Expr type;
+    };
+
+    template<typename Expr>
     struct tr1_result_of<proto::default_generator(Expr)>
+    {
+        typedef Expr type;
+    };
+
+    template<typename Expr>
+    struct tr1_result_of<proto::basic_default_generator(Expr)>
     {
         typedef Expr type;
     };

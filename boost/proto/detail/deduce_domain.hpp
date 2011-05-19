@@ -70,10 +70,20 @@ namespace boost
               : domain_<not_a_domain>
             {};
 
+            template<>
+            struct domain_<basic_default_domain>
+              : domain_<not_a_domain>
+            {};
+
             sized_type<1>::type default_test(void*, void*);
             sized_type<2>::type default_test(domain_<default_domain>*, void*);
+            sized_type<2>::type default_test(domain_<basic_default_domain>*, void*);
             sized_type<3>::type default_test(void*, domain_<default_domain>*);
+            sized_type<3>::type default_test(void*, domain_<basic_default_domain>*);
             sized_type<4>::type default_test(domain_<default_domain>*, domain_<default_domain>*);
+            sized_type<4>::type default_test(domain_<basic_default_domain>*, domain_<default_domain>*);
+            sized_type<4>::type default_test(domain_<default_domain>*, domain_<basic_default_domain>*);
+            sized_type<4>::type default_test(domain_<basic_default_domain>*, domain_<basic_default_domain>*);
 
         #ifdef BOOST_NO_DECLTYPE
             template<int N, typename Domain>
@@ -131,8 +141,20 @@ namespace boost
                 typedef D0 type;
             };
 
+            template<typename D0>
+            struct common_domain2<D0, basic_default_domain, 4>
+            {
+                typedef D0 type;
+            };
+
             template<typename D1>
             struct common_domain2<default_domain, D1, 4>
+            {
+                typedef D1 type;
+            };
+
+            template<typename D1>
+            struct common_domain2<basic_default_domain, D1, 4>
             {
                 typedef D1 type;
             };
@@ -141,6 +163,24 @@ namespace boost
             struct common_domain2<default_domain, default_domain, 4>
             {
                 typedef default_domain type;
+            };
+
+            template<>
+            struct common_domain2<basic_default_domain, default_domain, 4>
+            {
+                typedef default_domain type;
+            };
+
+            template<>
+            struct common_domain2<default_domain, basic_default_domain, 4>
+            {
+                typedef default_domain type;
+            };
+
+            template<>
+            struct common_domain2<basic_default_domain, basic_default_domain, 4>
+            {
+                typedef basic_default_domain type;
             };
 
             template<typename E0, typename E1>
