@@ -577,6 +577,84 @@ namespace boost
         }
     }
 
+    namespace detail // lcast_ret_unsigned
+    {
+        template<class Traits, class T, class CharT>
+        inline bool lcast_ret_unsigned(T& value, const CharT* const begin, const CharT* end)
+        {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+            BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+#endif
+            typedef typename Traits::int_type int_type;
+            CharT const czero = lcast_char_constants<CharT>::zero;
+            --end;
+            value = 0;
+
+            if ( *end < czero || *end >= czero + 10 || begin > end)
+                return false;
+            value = *end - czero;
+            --end;
+            T multiplier = 1;
+
+#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+            // TODO: use BOOST_NO_STD_LOCALE
+            std::locale loc;
+            typedef std::numpunct<CharT> numpunct;
+            numpunct const& np = BOOST_USE_FACET(numpunct, loc);
+            std::string const& grouping = np.grouping();
+            std::string::size_type const grouping_size = grouping.size();
+
+            /* According to [22.2.2.1.2] of Programming languages — C++ we MUST check for correct grouping */
+            if (grouping_size)
+            {
+                unsigned char current_grouping = 0;
+                CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
+                char remained = grouping[current_grouping] - 1;
+
+                for(;end>=begin; --end)
+                {
+                    if (remained) {
+                        T const new_sub_value = multiplier * 10 * (*end - czero);
+
+                        if (*end < czero || *end >= czero + 10
+                                /* detecting overflow */
+                                || new_sub_value/10 != multiplier * (*end - czero)
+                                || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
+                                )
+                            return false;
+
+                        value += new_sub_value;
+                        multiplier *= 10;
+                        --remained;
+                    } else {
+                        if ( !Traits::eq(*end, thousands_sep) || begin == end ) return false;
+                        if (current_grouping < grouping_size-1 ) ++current_grouping;
+                        remained = grouping[current_grouping];
+                    }
+                }
+            } else
+#endif
+            {
+                while ( begin <= end )
+                {
+                    T const new_sub_value = multiplier * 10 * (*end - czero);
+
+                    if (*end < czero || *end >= czero + 10
+                            /* detecting overflow */
+                            || new_sub_value/10 != multiplier * (*end - czero)
+                            || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
+                            )
+                        return false;
+
+                    value += new_sub_value;
+                    multiplier *= 10;
+                    --end;
+                }
+            }
+            return true;
+        }
+    }
+
     namespace detail // stream wrapper for handling lexical conversions
     {
         template<typename Target, typename Source, typename Traits>
@@ -762,7 +840,129 @@ namespace boost
             bool operator<<(double);
             bool operator<<(long double);
 
+        private:
+
+            template <typename Type>
+            bool input_operator_helper_unsigned(Type& output)
+            {
+                CharT const minus = lcast_char_constants<CharT>::minus;
+                bool const has_minus = Traits::eq(minus,*start);
+                bool const succeed = lcast_ret_unsigned<Traits>(output, has_minus ? start+1 : start, finish);
+#if (defined _MSC_VER)
+# pragma warning( push )
+// C4146: unary minus operator applied to unsigned type, result still unsigned
+# pragma warning( disable : 4146 )
+#elif defined( __BORLANDC__ )
+# pragma option push -w-8041
+#endif
+                if (has_minus) output = static_cast<Type>(-output);
+#if (defined _MSC_VER)
+# pragma warning( pop )
+#elif defined( __BORLANDC__ )
+# pragma option pop
+#endif
+                return succeed;
+            }
+
+            template <typename Type>
+            bool input_operator_helper_signed(Type& output)
+            {
+                CharT const minus = lcast_char_constants<CharT>::minus;
+                typedef BOOST_DEDUCED_TYPENAME make_unsigned<Type>::type utype;
+                utype out_tmp =0;
+                bool const has_minus = Traits::eq(minus,*start);
+                bool succeed = lcast_ret_unsigned<Traits>(out_tmp, has_minus ? start+1 : start, finish);
+                if (has_minus) {
+#if (defined _MSC_VER)
+# pragma warning( push )
+// C4146: unary minus operator applied to unsigned type, result still unsigned
+# pragma warning( disable : 4146 )
+#elif defined( __BORLANDC__ )
+# pragma option push -w-8041
+#endif
+                    utype const comp_val = static_cast<utype>(-(std::numeric_limits<Type>::min)());
+                    succeed = succeed && out_tmp<=comp_val;
+                    output = -out_tmp;
+#if (defined _MSC_VER)
+# pragma warning( pop )
+#elif defined( __BORLANDC__ )
+# pragma option pop
+#endif
+                } else {
+                    utype const comp_val = static_cast<utype>((std::numeric_limits<Type>::max)());
+                    succeed = succeed && out_tmp<=comp_val;
+                    output = out_tmp;
+                }
+                return succeed;
+            }
+
         public: // input
+
+            bool operator>>(unsigned short& output)
+            {
+                return input_operator_helper_unsigned(output);
+            }
+
+            bool operator>>(unsigned int& output)
+            {
+                return input_operator_helper_unsigned(output);
+            }
+
+            bool operator>>(unsigned long int& output)
+            {
+                return input_operator_helper_unsigned(output);
+            }
+
+            bool operator>>(short& output)
+            {
+                return input_operator_helper_signed(output);
+            }
+
+            bool operator>>(int& output)
+            {
+                return input_operator_helper_signed(output);
+            }
+
+            bool operator>>(long int& output)
+            {
+                return input_operator_helper_signed(output);
+            }
+
+
+#if defined(BOOST_HAS_LONG_LONG)
+            bool operator>>( boost::ulong_long_type& output)
+            {
+                return input_operator_helper_unsigned(output);
+            }
+
+            bool operator>>(boost::long_long_type& output)
+            {
+                return input_operator_helper_signed(output);
+            }
+
+#elif defined(BOOST_HAS_MS_INT64)
+            bool operator>>(unsigned __int64& output)
+            {
+                return input_operator_helper_unsigned(output);
+            }
+
+            bool operator>>(__int64& output)
+            {
+                return input_operator_helper_signed(output);
+            }
+
+#endif
+
+            bool operator>>(bool& output)
+            {
+                output = (start[0] == lcast_char_constants<CharT>::zero + 1);
+                return finish-start==1
+                        && (
+                            start[0] == lcast_char_constants<CharT>::zero
+                            || start[0] == lcast_char_constants<CharT>::zero + 1
+                           );
+            }
+
 
             // Generic istream-based algorithm.
             // lcast_streambuf_for_target<InputStreamable>::value is true.
@@ -1059,22 +1259,16 @@ namespace boost
         template<class Target>
         struct lcast_streambuf_for_target
         {
-            BOOST_STATIC_CONSTANT(bool, value = true);
+            BOOST_STATIC_CONSTANT(bool, value =
+                    (
+                    ::boost::type_traits::ice_or<
+                         ::boost::type_traits::ice_not< is_integral<Target>::value >::value,
+                         is_same<Target, signed char>::value,
+                         is_same<Target, unsigned char>::value
+                    >::value
+                    )
+            );
         };
-
-        template<>
-        struct lcast_streambuf_for_target<char>
-        {
-            BOOST_STATIC_CONSTANT(bool, value = false);
-        };
-
-#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-        template<>
-        struct lcast_streambuf_for_target<wchar_t>
-        {
-            BOOST_STATIC_CONSTANT(bool, value = false);
-        };
-#endif
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class Traits, class Alloc>
@@ -1328,7 +1522,7 @@ namespace boost
                     > Converter ;
 
                     return Converter::convert(arg);
-                } catch(...) {
+                } catch( ::boost::numeric::bad_numeric_cast const& ) {
                     BOOST_LCAST_THROW_BAD_CAST(Source, Target);
                 }
             }
@@ -1354,7 +1548,7 @@ namespace boost
                     } else {
                         return Converter::convert(arg);
                     }
-                } catch(...) {
+                } catch( ::boost::numeric::bad_numeric_cast const& ) {
                     BOOST_LCAST_THROW_BAD_CAST(Source, Target);
                 }
             }

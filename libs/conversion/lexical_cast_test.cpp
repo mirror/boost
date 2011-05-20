@@ -4,6 +4,7 @@
 //
 //  Copyright Terje Sletteb and Kevlin Henney, 2005.
 //  Copyright Alexander Nasonov, 2006.
+//  Copyright Antony Polukhin, 2011.
 //
 //  Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -32,6 +33,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
+#include <boost/type_traits/integral_promotion.hpp>
 #include <string>
 #include <memory>
 
@@ -235,6 +237,14 @@ void test_conversion_to_bool()
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>("0"));
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>(std::string("1")));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(std::string("0")));
+
+    BOOST_CHECK_THROW(lexical_cast<bool>(1.0001L), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<bool>(2), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<bool>(2u), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<bool>(-1), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<bool>(-2), bad_lexical_cast);
+
+
     BOOST_CHECK_THROW(
         lexical_cast<bool>(std::string("")), bad_lexical_cast);
     BOOST_CHECK_THROW(
@@ -564,25 +574,46 @@ void test_conversion_from_string_to_integral(CharT)
     BOOST_CHECK_EQUAL(lexical_cast<T>(s), min_val);
     if(limits::is_signed)
     {
-#if defined(BOOST_MSVC) && BOOST_MSVC == 1400
-        // VC++ 8.0 bug, see libs/conversion/test/lexical_cast_vc8_bug_test.cpp
-        if(sizeof(T) < sizeof(boost::intmax_t))
-#endif
-        {
-            BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
-            BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
-        }
+        BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
+        BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
     }
 
     s = to_str<CharT>(max_val);
     BOOST_CHECK_EQUAL(lexical_cast<T>(s), max_val);
-#if defined(BOOST_MSVC) && BOOST_MSVC == 1400
-    // VC++ 8.0 bug, see libs/conversion/test/lexical_cast_vc8_bug_test.cpp
-    if(sizeof(T) != sizeof(boost::intmax_t))
-#endif
     {
         BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
         BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
+
+        s = to_str<CharT>(max_val);
+        for (int i =1; i <=10; ++i) {
+            s[s.size()-1] += 1;
+            BOOST_CHECK_THROW(lexical_cast<T>( s ), bad_lexical_cast);
+        }
+
+        s = to_str<CharT>(max_val);
+        std::locale loc;
+        typedef std::numpunct<char> numpunct;
+        if ( BOOST_USE_FACET(numpunct, loc).grouping().empty() ) {
+            // Following tests work well for locale C
+            BOOST_CHECK_EQUAL(lexical_cast<T>(to_str<CharT>(0)+s), max_val);
+            BOOST_CHECK_EQUAL(lexical_cast<T>(to_str<CharT>(0)+to_str<CharT>(0)+s), max_val);
+            BOOST_CHECK_EQUAL(lexical_cast<T>(to_str<CharT>(0)+to_str<CharT>(0)+to_str<CharT>(0)+s), max_val);
+        }
+
+        for (int i =1; i <=256; ++i) {
+            BOOST_CHECK_THROW(lexical_cast<T>( to_str<CharT>(i)+s ), bad_lexical_cast);
+        }
+
+        typedef BOOST_DEDUCED_TYPENAME boost::integral_promotion<T>::type promoted;
+        if ( !(boost::is_same<T, promoted>::value) )
+        {
+            promoted prom = max_val;
+            s = to_str<CharT>(max_val);
+            for (int i =1; i <=256; ++i) {
+                BOOST_CHECK_THROW(lexical_cast<T>( to_str<CharT>(prom+i) ), bad_lexical_cast);
+                BOOST_CHECK_THROW(lexical_cast<T>( to_str<CharT>(i)+s ), bad_lexical_cast);
+            }
+        }
     }
 
     if(limits::digits <= 16 && lcast_test_small_integral_types_completely)
@@ -627,6 +658,18 @@ void test_conversion_from_string_to_integral(CharT)
 template<class T>
 void test_conversion_from_to_integral_for_locale()
 {
+    std::locale current_locale;
+    typedef std::numpunct<char> numpunct;
+    numpunct const& np = BOOST_USE_FACET(numpunct, current_locale);
+    if ( !np.grouping().empty() )
+    {
+        BOOST_CHECK_THROW(
+                lexical_cast<T>( std::string("100") + np.thousands_sep() + np.thousands_sep() + "0" )
+                , bad_lexical_cast);
+        BOOST_CHECK_THROW(lexical_cast<T>( std::string("100") + np.thousands_sep() ), bad_lexical_cast);
+        BOOST_CHECK_THROW(lexical_cast<T>( np.thousands_sep() + std::string("100") ), bad_lexical_cast);
+    }
+
     test_conversion_from_integral_to_integral<T>();
     test_conversion_from_integral_to_string<T>('0');
     test_conversion_from_string_to_integral<T>('0');
@@ -773,18 +816,6 @@ void test_conversion_from_to_uintmax_t()
     test_conversion_from_to_integral<boost::uintmax_t>();
 }
 
-#if defined(BOOST_HAS_LONG_LONG)
-
-void test_conversion_from_to_longlong()
-{
-    test_conversion_from_to_integral<boost::long_long_type>();
-}
-
-void test_conversion_from_to_ulonglong()
-{
-    test_conversion_from_to_integral<boost::ulong_long_type>();
-}
-
 void test_conversion_from_to_float()
 {
     test_conversion_from_to_float<float>();
@@ -798,7 +829,19 @@ void test_conversion_from_to_long_double()
     test_conversion_from_to_float<long double>();
 }
 
-#elif defined(LCAST_TEST_LONGLONG)
+#if defined(BOOST_HAS_LONG_LONG)
+
+void test_conversion_from_to_longlong()
+{
+    test_conversion_from_to_integral<boost::long_long_type>();
+}
+
+void test_conversion_from_to_ulonglong()
+{
+    test_conversion_from_to_integral<boost::ulong_long_type>();
+}
+
+#elif defined(BOOST_HAS_MS_INT64)
 
 void test_conversion_from_to_longlong()
 {
