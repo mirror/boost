@@ -52,16 +52,20 @@ main(int argc, char *argv[])
         return 1;
     }
 
-// read the file to analyse into a std::string     
+// read the file to analyse into a std::string
     ifstream infile(argv[1]);
     string teststr;
     if (infile.is_open()) {
         infile.unsetf(std::ios::skipws);
-        string line;
-        for (getline(infile, line); infile.good(); getline(infile, line)) {
-            teststr += line;
-            teststr += '\n';
-        }
+#if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+        // this is known to be very slow for large files on some systems
+        copy (std::istream_iterator<char>(infile),
+              std::istream_iterator<char>(), 
+              std::inserter(teststr, teststr.end()));
+#else
+        teststr = std::string(std::istreambuf_iterator<char>(infile.rdbuf()),
+                              std::istreambuf_iterator<char>());
+#endif 
     }
     else {
         teststr = argv[1];
