@@ -62,6 +62,7 @@
 #include <boost/preprocessor/cat.hpp> 
 
 #include <boost/msm/msm_grammar.hpp>
+#include <boost/msm/active_state_switching_policies.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
 namespace proto = boost::proto;
@@ -308,6 +309,28 @@ struct Deferred_Events : euml_config<Deferred_Events>
 No_Exception const no_exception=No_Exception();
 No_Msg_Queue const no_msg_queue=No_Msg_Queue();
 Deferred_Events const deferred_events=Deferred_Events();
+
+struct ActiveStateSwitchBeforeTransition : euml_config<ActiveStateSwitchBeforeTransition>
+{
+    typedef boost::msm::active_state_switch_before_transition active_state_switch_policy;
+    ActiveStateSwitchBeforeTransition(){}
+};
+ActiveStateSwitchBeforeTransition const switch_active_before_transition = ActiveStateSwitchBeforeTransition();
+
+struct ActiveStateSwitchAfterExit : euml_config<ActiveStateSwitchAfterExit>
+{
+    typedef boost::msm::active_state_switch_after_exit active_state_switch_policy;
+    ActiveStateSwitchAfterExit(){}
+};
+ActiveStateSwitchAfterExit const switch_active_after_exit = ActiveStateSwitchAfterExit();
+
+struct ActiveStateSwitchAfterAction : euml_config<ActiveStateSwitchAfterAction>
+{
+    typedef boost::msm::active_state_switch_after_transition_action active_state_switch_policy;
+    ActiveStateSwitchAfterAction(){}
+};
+ActiveStateSwitchAfterAction const switch_active_after_action = ActiveStateSwitchAfterAction();
+
 
 struct invalid_type{};
 struct make_invalid_type

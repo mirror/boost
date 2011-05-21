@@ -47,6 +47,7 @@
 
 #include <boost/parameter.hpp>
 
+#include <boost/msm/active_state_switching_policies.hpp>
 #include <boost/msm/row_tags.hpp>
 #include <boost/msm/back/fold_to_list.hpp>
 #include <boost/msm/back/metafunctions.hpp>
@@ -171,6 +172,13 @@ private:
         template In<deferred_fct>::type             deferred_events_queue_t;
     typedef typename QueueContainerPolicy::
         template In<transition_fct>::type           events_queue_t;
+
+    typedef typename boost::mpl::eval_if<
+        typename is_active_state_switch_policy<Derived>::type,
+        get_active_state_switch_policy<Derived>,
+        // default
+        ::boost::mpl::identity<active_state_switch_after_entry>
+    >::type active_state_switching;
 
     typedef bool (*flag_handler)(library_sm const&);
 
@@ -419,21 +427,24 @@ private:
                 // guard rejected the event, we stay in the current one
                 return HANDLED_GUARD_REJECT;
             }
+            fsm.m_states[region_index] = active_state_switching::after_guard(current_state,next_state);
 
             // the guard condition has already been checked
             execute_exit<current_state_type>
                 (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),evt,fsm);
+            fsm.m_states[region_index] = active_state_switching::after_exit(current_state,next_state);
 
             // then call the action method
             HandledEnum res = ROW::action_call(fsm,evt,
                              ::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),
                              ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
                              fsm.m_substate_list);
+            fsm.m_states[region_index] = active_state_switching::after_action(current_state,next_state);
 
             // and finally the entry method of the new current state
             convert_event_and_execute_entry<next_state_type,T2>
                 (::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),evt,fsm);
-            fsm.m_states[region_index]=next_state;
+            fsm.m_states[region_index] = active_state_switching::after_entry(current_state,next_state);
             return res;
         }
     };
@@ -495,15 +506,18 @@ private:
                 // guard rejected the event, we stay in the current one
                 return HANDLED_GUARD_REJECT;
             }
+            fsm.m_states[region_index] = active_state_switching::after_guard(current_state,next_state);
+
             // the guard condition has already been checked
             execute_exit<current_state_type>
                 (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),evt,fsm);
+            fsm.m_states[region_index] = active_state_switching::after_exit(current_state,next_state);
+            fsm.m_states[region_index] = active_state_switching::after_action(current_state,next_state);
 
             // and finally the entry method of the new current state
             convert_event_and_execute_entry<next_state_type,T2>
                 (::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),evt,fsm);
-
-            fsm.m_states[region_index]=next_state;
+            fsm.m_states[region_index] = active_state_switching::after_entry(current_state,next_state);
             return HANDLED_TRUE;
         }
     };
@@ -551,22 +565,25 @@ private:
             {
                 return HANDLED_FALSE;
             }
+            fsm.m_states[region_index] = active_state_switching::after_guard(current_state,next_state);
+
             // no need to check the guard condition
             // first call the exit method of the current state
             execute_exit<current_state_type>
                 (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),evt,fsm);
+            fsm.m_states[region_index] = active_state_switching::after_exit(current_state,next_state);
 
             // then call the action method
             HandledEnum res = ROW::action_call(fsm,evt,
                             ::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),
                             ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
                             fsm.m_substate_list);
+            fsm.m_states[region_index] = active_state_switching::after_action(current_state,next_state);
 
             // and finally the entry method of the new current state
             convert_event_and_execute_entry<next_state_type,T2>
                 (::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),evt,fsm);
-
-            fsm.m_states[region_index]=next_state;
+            fsm.m_states[region_index] = active_state_switching::after_entry(current_state,next_state);
             return res;
         }
     };
@@ -614,15 +631,19 @@ private:
             {
                 return HANDLED_FALSE;
             }
+            fsm.m_states[region_index] = active_state_switching::after_guard(current_state,next_state);
+
             // first call the exit method of the current state
             execute_exit<current_state_type>
                 (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),evt,fsm);
+            fsm.m_states[region_index] = active_state_switching::after_exit(current_state,next_state);
+            fsm.m_states[region_index] = active_state_switching::after_action(current_state,next_state);
+
 
             // and finally the entry method of the new current state
             convert_event_and_execute_entry<next_state_type,T2>
                 (::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),evt,fsm);
-
-            fsm.m_states[region_index]=next_state;
+            fsm.m_states[region_index] = active_state_switching::after_entry(current_state,next_state);
             return HANDLED_TRUE;
         }
     };
