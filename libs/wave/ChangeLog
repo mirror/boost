@@ -35,6 +35,7 @@ Boost V1.47.0
   but also removes this macro from consideration for Wave itself. This can 
   cause unexpected results if the suppressed macro would influence #ifdef's 
   later on.
+- Fixed problem #5554: wave slex parser eof without eol skips the last line.
 
 Boost V1.46.0
 - V2.2.0
