@@ -463,7 +463,7 @@ namespace boost
 #endif // #ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
     }
 
-    namespace detail // '0' and '-' constants
+    namespace detail // '0', '+' and '-' constants
     {
         template<typename CharT> struct lcast_char_constants;
 
@@ -472,6 +472,7 @@ namespace boost
         {
             BOOST_STATIC_CONSTANT(char, zero  = '0');
             BOOST_STATIC_CONSTANT(char, minus = '-');
+            BOOST_STATIC_CONSTANT(char, plus = '+');
         };
 
 #ifndef BOOST_LCAST_NO_WCHAR_T
@@ -480,6 +481,7 @@ namespace boost
         {
             BOOST_STATIC_CONSTANT(wchar_t, zero  = L'0');
             BOOST_STATIC_CONSTANT(wchar_t, minus = L'-');
+            BOOST_STATIC_CONSTANT(wchar_t, plus = L'+');
         };
 #endif
     }
@@ -604,7 +606,9 @@ namespace boost
             std::string const& grouping = np.grouping();
             std::string::size_type const grouping_size = grouping.size();
 
-            /* According to [22.2.2.1.2] of Programming languages — C++ we MUST check for correct grouping */
+            /* According to [22.2.2.1.2] of Programming languages - C++
+             * we MUST check for correct grouping
+             */
             if (grouping_size)
             {
                 unsigned char current_grouping = 0;
@@ -846,8 +850,20 @@ namespace boost
             bool input_operator_helper_unsigned(Type& output)
             {
                 CharT const minus = lcast_char_constants<CharT>::minus;
-                bool const has_minus = Traits::eq(minus,*start);
-                bool const succeed = lcast_ret_unsigned<Traits>(output, has_minus ? start+1 : start, finish);
+                CharT const plus = lcast_char_constants<CharT>::plus;
+                bool has_minus = false;
+
+                /* We won`t use `start' any more, so no need in decrementing it after */
+                if ( Traits::eq(minus,*start) )
+                {
+                    ++start;
+                    has_minus = true;
+                } else if ( Traits::eq( plus, *start ) )
+                {
+                    ++start;
+                }
+
+                bool const succeed = lcast_ret_unsigned<Traits>(output, start, finish);
 #if (defined _MSC_VER)
 # pragma warning( push )
 // C4146: unary minus operator applied to unsigned type, result still unsigned
@@ -868,10 +884,22 @@ namespace boost
             bool input_operator_helper_signed(Type& output)
             {
                 CharT const minus = lcast_char_constants<CharT>::minus;
+                CharT const plus = lcast_char_constants<CharT>::plus;
                 typedef BOOST_DEDUCED_TYPENAME make_unsigned<Type>::type utype;
                 utype out_tmp =0;
-                bool const has_minus = Traits::eq(minus,*start);
-                bool succeed = lcast_ret_unsigned<Traits>(out_tmp, has_minus ? start+1 : start, finish);
+                bool has_minus = false;
+
+                /* We won`t use `start' any more, so no need in decrementing it after */
+                if ( Traits::eq(minus,*start) )
+                {
+                    ++start;
+                    has_minus = true;
+                } else if ( Traits::eq(plus, *start) )
+                {
+                    ++start;
+                }
+
+                bool succeed = lcast_ret_unsigned<Traits>(out_tmp, start, finish);
                 if (has_minus) {
 #if (defined _MSC_VER)
 # pragma warning( push )
@@ -953,14 +981,38 @@ namespace boost
 
 #endif
 
+            /*
+             * case "-0" || "0" || "+0" :   output = false; return true;
+             * case "1" || "+1":            output = true;  return true;
+             * default:                     return false;
+             */
             bool operator>>(bool& output)
             {
-                output = (start[0] == lcast_char_constants<CharT>::zero + 1);
-                return finish-start==1
-                        && (
-                            start[0] == lcast_char_constants<CharT>::zero
-                            || start[0] == lcast_char_constants<CharT>::zero + 1
-                           );
+                CharT const zero = lcast_char_constants<CharT>::zero;
+                CharT const plus = lcast_char_constants<CharT>::plus;
+                CharT const minus = lcast_char_constants<CharT>::minus;
+
+                switch(finish-start)
+                {
+                    case 1:
+                        output = Traits::eq(start[0],  zero+1);
+                        return output || Traits::eq(start[0], zero );
+                    case 2:
+                        if ( Traits::eq( plus, *start) )
+                        {
+                            ++start;
+                            output = Traits::eq(start[0], zero +1);
+                            return output || Traits::eq(start[0], zero );
+                        } else
+                        {
+                            output = false;
+                            return Traits::eq( minus, *start)
+                                && Traits::eq( zero, start[1]);
+                        }
+                    default:
+                        output = false; // Suppress warning about uninitalized variable
+                        return false;
+                }
             }
 
 
@@ -1614,7 +1666,8 @@ namespace boost
                 >::value
         > do_copy_type;
 
-        typedef BOOST_DEDUCED_TYPENAME detail::is_arithmetic_and_not_xchars<Target, src> do_copy_with_dynamic_check_type;
+        typedef BOOST_DEDUCED_TYPENAME
+                detail::is_arithmetic_and_not_xchars<Target, src> do_copy_with_dynamic_check_type;
 
         typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
             do_copy_type::value,

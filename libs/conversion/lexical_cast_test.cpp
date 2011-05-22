@@ -249,6 +249,12 @@ void test_conversion_to_bool()
         lexical_cast<bool>(std::string("")), bad_lexical_cast);
     BOOST_CHECK_THROW(
         lexical_cast<bool>(std::string("Test")), bad_lexical_cast);
+
+    BOOST_CHECK(lexical_cast<bool>("+1") == true );
+    BOOST_CHECK(lexical_cast<bool>("+0") == false );
+    BOOST_CHECK(lexical_cast<bool>("-0") == false );
+    BOOST_CHECK_THROW(lexical_cast<bool>("--0"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<bool>("-+-0"), bad_lexical_cast);
 }
 
 void test_conversion_to_string()
@@ -722,6 +728,8 @@ void test_conversion_from_to_integral()
     BOOST_CHECK_THROW(lexical_cast<T>(1.0001), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<T>(1.0001L), bad_lexical_cast);
 
+    BOOST_CHECK(lexical_cast<T>("+1") == static_cast<T>(1) );
+    BOOST_CHECK(lexical_cast<T>("+9") == static_cast<T>(9) );
     // test_conversion_from_to_integral_for_locale
 
     typedef std::numpunct<char> numpunct;
@@ -774,6 +782,9 @@ void test_conversion_from_to_float()
 #endif
 
     test_conversion_from_integral_to_integral<T>();
+
+    BOOST_CHECK_CLOSE(lexical_cast<T>("+1"), 1, std::numeric_limits<T>::epsilon()  );
+    BOOST_CHECK_CLOSE(lexical_cast<T>("+9"), 9, std::numeric_limits<T>::epsilon()*9 );
 }
 
 void test_conversion_from_to_short()
