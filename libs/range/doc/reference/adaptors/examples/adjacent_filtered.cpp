@@ -11,7 +11,7 @@
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/assign.hpp>
 #include <algorithm>
-#include <functinoal>
+#include <functional>
 #include <iostream>
 #include <vector>
 

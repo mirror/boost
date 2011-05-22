@@ -41,5 +41,5 @@ int main(int argc, const char* argv[])
     display_element_and_index( input | indexed(0) );
     
     return 0;
-]
+}
 
