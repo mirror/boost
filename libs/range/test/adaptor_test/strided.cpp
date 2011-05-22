@@ -252,14 +252,19 @@ namespace boost
         }
 
         template<typename Range>
-        void strided_test_ticket_5236_check(const Range& rng)
+        void strided_test_ticket_5236_check_bidirectional(const Range& rng)
         {
             BOOST_CHECK_EQUAL( boost::distance(rng), 1 );
             BOOST_CHECK_EQUAL( std::distance(boost::begin(rng), boost::prior(boost::end(rng))), 0 );
-            
+        }
+        
+        template<typename Range>
+        void strided_test_ticket_5236_check(const Range& rng)
+        {
+            strided_test_ticket_5236_check_bidirectional(rng);
+                        
             typename boost::range_iterator<const Range>::type it = boost::end(rng);
             it = it - 1;
-            
             BOOST_CHECK_EQUAL( std::distance(boost::begin(rng), it), 0 );
         }
         
@@ -268,7 +273,15 @@ namespace boost
             std::vector<int> v;
             v.push_back(1);
             strided_test_ticket_5236_check( v | boost::adaptors::strided(2) );                
+            
+            // Ensure that there is consistency between the random-access implementation
+            // and the bidirectional.
+            
+            std::list<int> l;
+            l.push_back(1);
+            strided_test_ticket_5236_check_bidirectional( l | boost::adaptors::strided(2) );
         }
+        
     }
 }
 
