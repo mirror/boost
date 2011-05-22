@@ -11,8 +11,6 @@
 #ifndef BOOST_MSM_PROTO_CONFIG_H
 #define BOOST_MSM_PROTO_CONFIG_H
 
-#define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-
 #include <boost/proto/proto_fwd.hpp>
 
 #endif //BOOST_MSM_PROTO_CONFIG_H

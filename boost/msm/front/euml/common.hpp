@@ -14,10 +14,6 @@
 #include <boost/config.hpp>
 #include <boost/msm/proto_config.hpp>
 
-#ifndef BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-#define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-#endif
-
 #include <iterator>
 #include <utility>
 

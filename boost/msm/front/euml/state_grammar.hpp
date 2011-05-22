@@ -602,8 +602,8 @@ struct attribute
    typedef ::boost::fusion::pair<int,int> attribute_type;
 };
 
- attribute<> const attributes_ = {{}};
- attribute<> const no_attributes_ = {{}};
+attribute<> const attributes_ = {{{}}};
+ attribute<> const no_attributes_ = {{{}}};
 
  struct BuildAttributesHelper
    : proto::make<
@@ -672,8 +672,8 @@ struct configure
    )
 };
 
- configure<> const configure_ = {{}};
- configure<> const no_configure_ = {{}};
+ configure<> const configure_ = {{{}}};
+ configure<> const no_configure_ = {{{}}};
 
 struct BuildConfigure 
  : proto::make<
@@ -704,7 +704,7 @@ struct define_init
    )
 };
 
-define_init<> const init_ = {{}};
+define_init<> const init_ = {{{}}};
 struct BuildInit
    : proto::make<
        ::boost::mpl::pop_front<
