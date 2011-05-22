@@ -81,7 +81,6 @@ namespace boost
     void test_irange(int first, int last, int step_size)
     {
         BOOST_ASSERT( step_size != 0 );
-        BOOST_ASSERT( (last - first) % step_size == 0 );
         test_irange_impl<signed char>(first, last, step_size);
         test_irange_impl<unsigned char>(first, last, step_size);
         test_irange_impl<signed short>(first, last, step_size);
@@ -114,8 +113,16 @@ namespace boost
         test_irange(10, 0, -1);
         test_irange(0, 2, 2);
         test_irange(2, 0, -2);
+        test_irange(0, 9, 2);
         test_irange(10, 20, 5);
         test_irange(20, 10, -5);
+        
+        test_irange(0, 0, 3);
+        test_irange(0, 1, 3);
+        test_irange(0, 2, 3);
+        test_irange(0, 3, 3);
+        test_irange(0, 4, 3);
+        test_irange(0, 10, 3);
     }
 } // namespace boost
 

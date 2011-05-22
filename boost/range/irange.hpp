@@ -216,9 +216,10 @@ namespace boost
 
         typedef typename range_detail::integer_iterator_with_step<Integer> iterator_t;
 
-        const std::ptrdiff_t last_step
-            = (static_cast<std::ptrdiff_t>(last) - static_cast<std::ptrdiff_t>(first))
-            / (static_cast<std::ptrdiff_t>(step_size));
+        const std::ptrdiff_t l = static_cast<std::ptrdiff_t>(last);
+        const std::ptrdiff_t f = static_cast<std::ptrdiff_t>(first);
+        const std::ptrdiff_t sz = static_cast<std::ptrdiff_t>(step_size);
+        const std::ptrdiff_t last_step = (l + ((l-f) % sz) - f) / sz;
 
         return strided_integer_range<Integer>(
             iterator_t(first, 0, step_size),
