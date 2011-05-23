@@ -455,6 +455,8 @@ boost
         {
         BOOST_ASSERT(p);
         p.ptr_->rethrow();
+        BOOST_ASSERT(0);
+        abort();
         }
 
     inline
