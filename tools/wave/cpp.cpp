@@ -934,7 +934,7 @@ int error_count = 0;
         // if -I- was given on the command line, this has to be propagated
             if (ip.seen_separator) 
                 ctx.set_sysinclude_delimiter();
-                 
+
         // add system include directories to the include path
             vector<std::string>::const_iterator sysend = ip.syspaths.end();
             for (vector<std::string>::const_iterator syscit = ip.syspaths.begin(); 
@@ -980,7 +980,7 @@ int error_count = 0;
         }
 
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
-    // suppress expansion of, specified macros
+    // suppress expansion of specified macros
         if (vm.count("noexpand")) {
             vector<std::string> const &noexpandmacros = 
                 vm["noexpand"].as<vector<std::string> >();
