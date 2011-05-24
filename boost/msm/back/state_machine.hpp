@@ -1118,7 +1118,7 @@ private:
                 (evt,::boost::mpl::bool_<is_no_exception_thrown<library_sm>::type::value>());
             if (handled)
             {
-                ret_handled = HANDLED_TRUE;
+                ret_handled = handled;
             }
 
             // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 §15.3.14)
