@@ -17,6 +17,7 @@
 #include <ostream>
 #include <string>
 #include <stack>
+#include <set>
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
@@ -161,8 +162,6 @@ public:
         default_outfile(default_outfile_),
         emit_relative_filenames(false)
     {
-        using namespace std;    // some systems have time in namespace std
-        time(&started_at);
     }
     ~trace_macro_expansion()
     {
@@ -1046,10 +1045,13 @@ protected:
         // ensure all directories for this file do exist
         fs::create_directories(boost::wave::util::branch_path(fpath));
 
-        // figure out, whether the file to open was last accessed by us
+        // figure out, whether the file has been written to by us, if yes, we
+        // append any output to this file, otherwise we overwrite it
         std::ios::openmode mode = std::ios::out;
-        if (fs::exists(fpath) && fs::last_write_time(fpath) >= started_at)
+        if (fs::exists(fpath) && written_by_us.find(fpath) != written_by_us.end())
             mode = (std::ios::openmode)(std::ios::out | std::ios::app);
+
+        written_by_us.insert(fpath);
 
         // close the current file
         if (outputstrm.is_open())
@@ -1460,7 +1462,7 @@ private:
     boost::filesystem::path current_outfile;    // name of the current output file 
 
     stop_watch elapsed_time;        // trace timings
-    std::time_t started_at;         // time, this process was started at
+    std::set<boost::filesystem::path> written_by_us;    // all files we have written to
 
     typedef std::pair<bool, boost::filesystem::path> output_option_type;
     std::stack<output_option_type> output_options;  // output option stack

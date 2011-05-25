@@ -37,7 +37,11 @@
 typedef boost::wave::cpplexer::lex_token<> token_type;
 
 template struct boost::wave::grammars::intlit_grammar_gen<token_type>;
-template struct boost::wave::grammars::chlit_grammar_gen<token_type>;
+#if BOOST_WAVE_WCHAR_T_SIGNEDNESS == BOOST_WAVE_WCHAR_T_AUTOSELECT || \
+    BOOST_WAVE_WCHAR_T_SIGNEDNESS == BOOST_WAVE_WCHAR_T_FORCE_SIGNED
+template struct boost::wave::grammars::chlit_grammar_gen<int, token_type>;
+#endif
+template struct boost::wave::grammars::chlit_grammar_gen<unsigned int, token_type>;
 
 #endif // #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION != 0
 
