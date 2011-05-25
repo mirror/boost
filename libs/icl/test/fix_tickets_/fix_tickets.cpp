@@ -40,3 +40,17 @@ BOOST_AUTO_TEST_CASE(ticket_5482)
     BOOST_CHECK_EQUAL(m2.iterative_size(), 1);
 }
 
+
+#include <boost/cstdint.hpp>
+BOOST_AUTO_TEST_CASE(ticket_5559_Denis)
+{
+    //Submitted by Denis
+    typedef boost::icl::interval_set<boost::uint32_t, std::greater> Set;
+    const uint32_t ui32_max = (std::numeric_limits<uint32_t>::max)();
+
+    Set q1( Set::interval_type::closed(ui32_max, 0) );
+    Set q5( Set::interval_type::closed(0, 0) );
+
+    BOOST_CHECK_EQUAL(q1, q1+q5);
+}
+
