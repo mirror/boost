@@ -2441,13 +2441,13 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     template <class EventType>
     static 
     typename boost::enable_if<typename has_direct_entry<EventType>::type,typename EventType::contained_event const& >::type
-    remove_direct_entry_event_wrapper(EventType const& evt)
+    remove_direct_entry_event_wrapper(EventType const& evt,boost::msm::back::dummy<0> = 0)
     {
         return evt.m_event;
     }
     template <class EventType>
     static typename boost::disable_if<typename has_direct_entry<EventType>::type,EventType const& >::type
-    remove_direct_entry_event_wrapper(EventType const& evt)
+    remove_direct_entry_event_wrapper(EventType const& evt,boost::msm::back::dummy<1> = 0)
     {
         // identity. No wrapper
         return evt;
