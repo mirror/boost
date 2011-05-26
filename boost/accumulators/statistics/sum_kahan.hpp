@@ -59,7 +59,7 @@ struct sum_kahan_impl
         const Sample myTmp2 = this->sum + myTmp1;
         this->compensation = (myTmp2 - this->sum) - myTmp1;
         this->sum = myTmp2;
-    };
+    }
 
     result_type result(dont_care) const
     {
