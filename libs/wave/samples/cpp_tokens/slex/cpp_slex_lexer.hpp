@@ -382,7 +382,7 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
 #endif
     TOKEN_DATA(SPACE, "[ \t\v\f]+"),
 //    TOKEN_DATA(SPACE2, "[\\v\\f]+"),
-    TOKEN_DATA(CONTLINE, "\\" "\\n"), 
+    TOKEN_DATA(CONTLINE, Q("\\") "\n"), 
     TOKEN_DATA(NEWLINE, NEWLINEDEF),
     TOKEN_DATA(POUND_POUND, "##"),
     TOKEN_DATA(POUND_POUND_ALT, Q("%:") Q("%:")),
