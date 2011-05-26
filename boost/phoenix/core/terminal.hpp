@@ -58,10 +58,13 @@ namespace boost { namespace phoenix
                 T//typename call_traits<T>::value_type
             >
         {
-            typedef typename
-                proto::terminal<
-                    T//typename call_traits<T>::value_type
-                >::type base_type;
+            typedef
+                proto::basic_expr<
+                    proto::tag::terminal
+                  , proto::term<T>
+                  , 0
+                >
+                base_type;
             typedef Actor<base_type> type;
             
             static const type make(typename call_traits<T>::param_type t)

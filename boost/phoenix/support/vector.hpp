@@ -60,7 +60,10 @@ namespace boost { namespace phoenix
 {
     template <typename Dummy = void>
     struct vector0
-    {};
+    {
+        typedef mpl::int_<0> size_type;
+        static const int size_value = 0;
+    };
 }}
 
 
@@ -88,6 +91,9 @@ namespace boost { namespace phoenix
     struct BOOST_PP_CAT(vector, BOOST_PHOENIX_ITERATION)
     {
         BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, M0, _)
+        
+        typedef mpl::int_<BOOST_PHOENIX_ITERATION> size_type;
+        static const int size_value = BOOST_PHOENIX_ITERATION;
 
         typedef
             BOOST_PP_CAT(vector, BOOST_PP_DEC(BOOST_PHOENIX_ITERATION))<BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PHOENIX_ITERATION, A)>

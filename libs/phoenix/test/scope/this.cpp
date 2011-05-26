@@ -5,12 +5,12 @@
 ==============================================================================*/
 
 #include <boost/phoenix/core.hpp>
-#include <boost/phoenix/scope/this.hpp>
 #include <boost/phoenix/statement.hpp>
 #include <boost/phoenix/operator.hpp>
 #include <boost/phoenix/scope.hpp>
-
 #include <iostream>
+#include <boost/phoenix/scope/this.hpp>
+
 
 template <typename T0>
 void f(T0 t)
@@ -39,7 +39,7 @@ void f_2(T0 t)
 
 int main()
 {
-    using boost::phoenix::_this;
+    //using boost::phoenix::_this;
     using boost::phoenix::if_;
     using boost::phoenix::if_else;
     using boost::phoenix::val;
@@ -57,18 +57,29 @@ int main()
         .else_
         [
             std::cout << _1 << " "
-          , _this(_1 - 1)
+          , this_(_1 - 1)
         ]
-        , val("")
+		 , val(0)
     ));
- 
-    f((
+
+	 /*
+	 f((
         if_else(
             _1 == 0
           , _1
-          ,_this(_1 - 1)
+          ,this_(_1 - 1)
         )
     ));
+	 */
+	 
+	 f((
+        if_else(
+            _1 != 0
+          ,this_(_1 - 1)
+          , _1
+        )
+    ));
+/* 
 
     f(( // fac(n) = n * fac(n-1); fac(1) = 1
         if_else(
@@ -78,7 +89,6 @@ int main()
         )
     ));
     
-    /*
     f(( // fac(n) = n * fac(n-1); fac(1) = 1
         if_else(
             _1 > 1
@@ -86,7 +96,6 @@ int main()
           , 1
         )
     ));
-    */
     
     f(( // fib(n) = fib(n-1) + fib(n-2); fib(0) = 0; fib(1) = 1
         if_else(
@@ -111,4 +120,5 @@ int main()
             )
         )
     ));
+	 */
 }

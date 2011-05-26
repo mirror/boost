@@ -198,14 +198,17 @@ namespace boost { namespace phoenix {
     inline
     typename proto::result_of::make_expr<
         tag::switch_case
-      , default_domain_with_basic_expr
+      , proto::basic_default_domain
       , mpl::int_<N>
       , A
     >::type const
     case_(A const & a)
     {
         return
-            proto::make_expr<tag::switch_case, default_domain_with_basic_expr>(
+            proto::make_expr<
+                tag::switch_case
+              , proto::basic_default_domain
+            >(
                 mpl::int_<N>()
               , a
             );
@@ -215,14 +218,15 @@ namespace boost { namespace phoenix {
     inline
     typename proto::result_of::make_expr<
         tag::switch_default_case
-      , default_domain_with_basic_expr
+      , proto::basic_default_domain
       , A
     >::type const
     default_(A const& a)
     {
         return
             proto::make_expr<
-                tag::switch_default_case, default_domain_with_basic_expr
+                tag::switch_default_case
+              , proto::basic_default_domain
             >(a);
     }
 

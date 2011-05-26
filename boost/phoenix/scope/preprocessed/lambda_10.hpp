@@ -6,8 +6,8 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-    
-namespace boost { namespace phoenix { namespace tag { struct lambda {}; template <typename Ostream> inline Ostream &operator<<( Ostream & os , lambda) { os << "lambda"; return os; } } namespace expression { template <typename A0 , typename A1 , typename A2> struct lambda : boost::phoenix::expr< :: boost :: phoenix :: tag:: lambda , A0 , A1 , A2> {}; } namespace rule { struct lambda : expression:: lambda <proto::terminal<proto::_>, proto::terminal<proto::_>, meta_grammar> {}; } namespace functional { typedef boost::proto::functional::make_expr< tag:: lambda > make_lambda; } namespace result_of { template <typename A0 , typename A1 , typename A2> struct make_lambda : boost::result_of< functional:: make_lambda(A0 , A1 , A2) > {}; } template <typename A0 , typename A1 , typename A2> inline typename result_of::make_lambda< A0 , A1 , A2 >::type const make_lambda( A0 const& a0 , A1 const& a1 , A2 const& a2 ) { return functional::make_lambda()( a0 , a1 , a2 ); } } } namespace boost { namespace phoenix { template <typename Dummy> struct meta_grammar::case_< :: boost :: phoenix :: tag:: lambda , Dummy > : enable_rule< :: boost :: phoenix :: rule:: lambda , Dummy > {}; } }
+namespace boost { namespace phoenix { namespace tag { struct lambda_actor {}; template <typename Ostream> inline Ostream &operator<<( Ostream & os , lambda_actor) { os << "lambda_actor"; return os; } } namespace expression { template <typename A0 , typename A1 , typename A2> struct lambda_actor : boost::phoenix::expr< :: boost :: phoenix :: tag:: lambda_actor , A0 , A1 , A2> {}; } namespace rule { struct lambda_actor : expression:: lambda_actor <proto::terminal<proto::_>, proto::terminal<proto::_>, meta_grammar> {}; } namespace functional { typedef boost::proto::functional::make_expr< tag:: lambda_actor > make_lambda_actor; } namespace result_of { template <typename A0 , typename A1 , typename A2> struct make_lambda_actor : boost::result_of< functional:: make_lambda_actor(A0 , A1 , A2) > {}; } template <typename A0 , typename A1 , typename A2> inline typename result_of::make_lambda_actor< A0 , A1 , A2 >::type const make_lambda_actor( A0 const& a0 , A1 const& a1 , A2 const& a2 ) { return functional::make_lambda_actor()( a0 , a1 , a2 ); } } } namespace boost { namespace phoenix { template <typename Dummy> struct meta_grammar::case_< :: boost :: phoenix :: tag:: lambda_actor , Dummy > : enable_rule< :: boost :: phoenix :: rule:: lambda_actor , Dummy > {}; } }
+namespace boost { namespace phoenix { namespace tag { struct lambda {}; template <typename Ostream> inline Ostream &operator<<( Ostream & os , lambda) { os << "lambda"; return os; } } namespace expression { template <typename A0 , typename A1 , typename A2 , typename A3> struct lambda : boost::phoenix::expr< :: boost :: phoenix :: tag:: lambda , A0 , A1 , A2 , A3> {}; } namespace rule { struct lambda : expression:: lambda <proto::terminal<proto::_>, proto::terminal<proto::_>, proto::terminal<proto::_>, meta_grammar> {}; } namespace functional { typedef boost::proto::functional::make_expr< tag:: lambda > make_lambda; } namespace result_of { template <typename A0 , typename A1 , typename A2 , typename A3> struct make_lambda : boost::result_of< functional:: make_lambda(A0 , A1 , A2 , A3) > {}; } template <typename A0 , typename A1 , typename A2 , typename A3> inline typename result_of::make_lambda< A0 , A1 , A2 , A3 >::type const make_lambda( A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 ) { return functional::make_lambda()( a0 , a1 , a2 , a3 ); } } } namespace boost { namespace phoenix { template <typename Dummy> struct meta_grammar::case_< :: boost :: phoenix :: tag:: lambda , Dummy > : enable_rule< :: boost :: phoenix :: rule:: lambda , Dummy > {}; } }
 namespace boost { namespace phoenix
 {
     struct lambda_eval
@@ -19,73 +19,96 @@ namespace boost { namespace phoenix
             typename This
           , typename OuterEnv
           , typename Locals
+          , typename Map
           , typename Lambda
           , typename Context
         >
-        struct result<This(OuterEnv &, Locals &, Lambda &, Context)>
+        struct result<This(OuterEnv, Locals, Map, Lambda, Context)>
         {
             typedef
-                typename result_of::env<Context>::type
-                env_type;
-            typedef
-                typename result_of::actions<Context>::type
-                actions_type;
-            typedef
-                typename proto::result_of::value<Locals>::type
-                locals_type;
-            typedef
-                typename proto::result_of::value<OuterEnv>::type
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<
+                        OuterEnv
+                    >::type
+                >::type
                 outer_env_type;
             typedef
-                scoped_environment<env_type, outer_env_type, locals_type>
-                scoped_env;
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<
+                        Locals
+                    >::type
+                >::type
+                locals_type;
             typedef
-                typename result_of::context<scoped_env, actions_type>::type
-                ctx_type;
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<
+                        Map
+                    >::type
+                >::type
+                map_type;
+            
             typedef
-                typename evaluator::impl<Lambda const &, ctx_type const&, int>::result_type
-                type;
+                typename proto::detail::uncvref<
+                    typename result_of::env<Context>::type
+                >::type
+                env_type;
+				typedef 
+				    typename result_of::eval<
+				        Lambda
+					   , typename result_of::context<
+						      scoped_environment<
+						          env_type
+					           , outer_env_type
+					           , locals_type
+					           , map_type
+					         >
+							 , typename result_of::actions<
+							 	    Context
+								>::type
+					     >::type
+					 >::type
+				    type;
         };
-        
-        template <
-            typename OuterEnv
-          , typename Locals
-          , typename Lambda
-          , typename Context
-        >
-        typename result<
-            lambda_eval(OuterEnv const&, Locals const&, Lambda const&, Context &)
-        >::type
-        operator()(
-            OuterEnv const & outer_env
-          , Locals const& locals
-          , Lambda const& lambda
-          , Context & ctx
-        ) const
+        template <typename OuterEnv, typename Locals, typename Map, typename Lambda, typename Context>
+        typename result<lambda_eval(OuterEnv const &, Locals const &, Map const &, Lambda const &, Context const &)>::type
+        operator()(OuterEnv const & outer_env, Locals const & locals, Map const &, Lambda const & lambda, Context const & ctx) const
         {
             typedef
-                typename result_of::env<Context>::type
-                env_type;
-            typedef
-                typename result_of::actions<Context>::type
-                actions_type;
-            typedef
-                typename proto::result_of::value<Locals>::type
-                locals_type;
-            typedef
-                typename proto::result_of::value<OuterEnv>::type
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<
+                        OuterEnv
+                    >::type
+                >::type
                 outer_env_type;
             typedef
-                scoped_environment<env_type, outer_env_type, locals_type>
-                scoped_env_type;
-            env_type e(env(ctx));
-            scoped_env_type
-                scoped_env(
-                    e
-                  , proto::value(outer_env)
-                  , proto::value(locals)
-                );
-            return boost::phoenix::eval(lambda, context(scoped_env, actions(ctx)));
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<
+                        Locals
+                    >::type
+                >::type
+                locals_type;
+            typedef
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<
+                        Map
+                    >::type
+                >::type
+                map_type;
+            
+            typedef
+                typename proto::detail::uncvref<
+                    typename result_of::env<Context>::type
+                >::type
+                env_type;
+            
+				scoped_environment<
+                env_type
+              , outer_env_type
+              , locals_type
+              , map_type
+            >
+            env(phoenix::env(ctx), proto::value(outer_env), proto::value(locals));
+            return eval(lambda, phoenix::context(env, phoenix::actions(ctx)));
         }
     };
     template <typename Dummy>
@@ -96,7 +119,7 @@ namespace boost { namespace phoenix
     struct is_nullary::when<rule::lambda, Dummy>
         : proto::call<
             evaluator(
-                proto::_child_c<2>
+                proto::_child_c<3>
               , proto::call<
                     functional::context(
                         proto::make<
@@ -113,62 +136,37 @@ namespace boost { namespace phoenix
             )
         >
     {};
-    namespace tag
-    {
-        struct lambda_actor {};
-    }
-    namespace expression
-    {
-        template <typename A0 = void, typename A1 = void, typename Dummy = void>
-        struct lambda_actor;
-        template <typename A0>
-        struct lambda_actor<A0>
-            : expr<tag::lambda_actor, A0>
-        {};
-        template <typename A0, typename A1>
-        struct lambda_actor<A0, A1>
-            : expr< tag::lambda_actor, A0, A1>
-        {};
-    }
-    namespace rule
-    {
-        struct lambda_actor
-            : proto::or_<
-                expression::lambda_actor<meta_grammar>
-              , expression::lambda_actor<proto::terminal<proto::_>, meta_grammar>
-            >
-        {};
-    }
     template <typename Dummy>
     struct is_nullary::when<rule::lambda_actor, Dummy>
         : proto::or_<
             proto::when<
-                expression::lambda_actor<meta_grammar>
+                expression::lambda_actor<
+                    proto::terminal<vector0<> >
+                  , proto::terminal<proto::_>
+                  , meta_grammar
+                >
               , mpl::true_()
             >
           , proto::when<
                 expression::lambda_actor<
                     proto::terminal<proto::_>
+                  , proto::terminal<proto::_>
                   , meta_grammar
                 >
-              , detail::local_var_def_is_nullary<proto::_value(proto::_child_c<0>), _context>()
+              , proto::fold<
+                    proto::_value(proto::_child_c<0>)
+                  , mpl::true_()
+                  , mpl::and_<proto::_state, evaluator(proto::_, _context, int())>()
+                >
             >
         >
-    {};
-    template <typename Dummy>
-    struct meta_grammar::case_<tag::lambda_actor, Dummy>
-        : enable_rule<rule::lambda_actor, Dummy>
     {};
     struct lambda_actor_eval
     {
         template <typename Sig>
         struct result;
-        template <typename This, typename Lambda, typename Context>
-        struct result<This(Lambda, Context)>
-            : result<This(Lambda const &, Context)>
-        {};
-        template <typename This, typename Lambda, typename Context>
-        struct result<This(Lambda &, Context)>
+        template <typename This, typename Vars, typename Map, typename Lambda, typename Context>
+        struct result<This(Vars, Map, Lambda, Context)>
         {
             typedef
                 typename proto::detail::uncvref<
@@ -176,92 +174,74 @@ namespace boost { namespace phoenix
                 >::type
                 env_type;
             typedef
-                typename expression::lambda<
-                    env_type
-                  , mpl::void_
-                  , Lambda
+                typename proto::detail::uncvref<
+                    typename result_of::actions<Context>::type
                 >::type
-                type;
-        };
-        
-        template <typename This, typename Locals, typename Lambda, typename Context>
-        struct result<This(Locals, Lambda, Context)>
-            : result<This(Locals const &, Lambda const &, Context)>
-        {};
-        template <typename This, typename Locals, typename Lambda, typename Context>
-        struct result<This(Locals&, Lambda&, Context)>
-        {
-            typedef
-                typename 
-                    boost::result_of<
-                        detail::local_var_def_eval(
-                            typename proto::result_of::value<
-                                Locals&
-                            >::type
-                          , Context
-                        )
-                    >::type
-                locals_type;
+                actions_type;
             typedef
                 typename proto::detail::uncvref<
-                    typename result_of::env<Context>::type
+                    typename proto::result_of::value<Vars>::type
+                     >::type
+                     vars_type;
+            
+            typedef typename 
+                detail::result_of::initialize_locals<
+                    vars_type
+                  , Context
                 >::type
-                env_type;
+            locals_type;
             typedef
                 typename expression::lambda<
                     env_type
                   , locals_type
+                  , Map
                   , Lambda
                 >::type const
                 type;
         };
-        template <typename Lambda, typename Context>
-        typename result<lambda_actor_eval(Lambda const&, Context &)>::type
-        operator()(Lambda const& lambda, Context & ctx) const
-        {
-            typedef
-                typename proto::detail::uncvref<
-                    typename result_of::env<Context>::type
-                >::type
-                env_type;
-            mpl::void_ t;
-            return
-                expression::
-                    lambda<env_type, mpl::void_, Lambda>::
-                        make(env(ctx), t, lambda);
-        }
         template <
-            typename Locals
+            typename Vars
+          , typename Map
           , typename Lambda
           , typename Context
         >
         typename result<
-            lambda_actor_eval(Locals const&, Lambda const&, Context &)
-        >::type
-        operator()(Locals const& locals, Lambda const& lambda, Context & ctx) const
+            lambda_actor_eval(Vars const&, Map const &, Lambda const&, Context &)
+        >::type const
+        operator()(Vars const& vars, Map const& map, Lambda const& lambda, Context & ctx) const
         {
-            typedef
-                typename 
-                    boost::result_of<
-                        detail::local_var_def_eval(
-                            typename proto::result_of::value<
-                                Locals const &
-                            >::type
-                          , Context &
-                        )
-                    >::type
-                locals_type;
-            locals_type l
-                = detail::local_var_def_eval()(proto::value(locals), ctx);
             typedef
                 typename proto::detail::uncvref<
                     typename result_of::env<Context>::type
                 >::type
                 env_type;
+            typedef
+                typename proto::detail::uncvref<
+                    typename result_of::actions<Context>::type
+                >::type
+                actions_type;
+            typedef
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<Vars>::type
+                     >::type
+                     vars_type;
+            typedef
+                typename proto::detail::uncvref<
+                    typename proto::result_of::value<Map>::type
+                     >::type
+                     map_type;
+            
+            typedef typename 
+                detail::result_of::initialize_locals<
+                    vars_type
+                  , Context
+                >::type
+            locals_type;
+            locals_type locals = initialize_locals(proto::value(vars), ctx);
             return
                 expression::
-                    lambda<env_type, locals_type, Lambda>::
-                        make(env(ctx), l, lambda);
+                    lambda<env_type, locals_type, Map, Lambda>::
+                        make(env(ctx), locals, map, lambda);
         }
     };
     template <typename Dummy>
@@ -269,32 +249,38 @@ namespace boost { namespace phoenix
         : call<lambda_actor_eval, Dummy>
     {};
     
-    template <typename Locals = void, typename Dummy = void>
+    template <typename Locals = void, typename Map = void, typename Dummy = void>
     struct lambda_actor_gen;
     template <>
-    struct lambda_actor_gen<void, void>
+    struct lambda_actor_gen<void, void, void>
     {
         template <typename Expr>
-        typename expression::lambda_actor<Expr>::type const
+        typename expression::lambda_actor<vector0<>, detail::map_local_index_to_tuple<>, Expr>::type const
         operator[](Expr const & expr) const
         {
-            return expression::lambda_actor<Expr>::make(expr);
+            typedef vector0<> locals_type;
+            typedef detail::map_local_index_to_tuple<> map_type;
+            return expression::lambda_actor<locals_type, map_type, Expr>::make(locals_type(), map_type(), expr);
         }
     };
-    template <typename Locals>
-    struct lambda_actor_gen<Locals>
+    template <typename Locals, typename Map>
+    struct lambda_actor_gen<Locals, Map>
     {
         lambda_actor_gen(Locals const & locals)
             : locals(locals)
         {}
+        lambda_actor_gen(lambda_actor_gen const & o)
+            : locals(o.locals)
+        {};
         template <typename Expr>
         typename expression::lambda_actor<
             Locals
+          , Map
           , Expr
         >::type const
         operator[](Expr const & expr) const
         {
-            return expression::lambda_actor<Locals, Expr>::make(locals, expr);
+            return expression::lambda_actor<Locals, Map, Expr>::make(locals, Map(), expr);
         }
         Locals locals;
     };
@@ -306,7 +292,266 @@ namespace boost { namespace phoenix
         {
             return lambda_actor_gen<>();
         }
-        template <typename A0> lambda_actor_gen< typename detail::make_locals<A0>::type > const operator()(A0 const& a0) const { return detail::make_locals<A0> ::make(a0); } template <typename A0 , typename A1> lambda_actor_gen< typename detail::make_locals<A0 , A1>::type > const operator()(A0 const& a0 , A1 const& a1) const { return detail::make_locals<A0 , A1> ::make(a0 , a1); } template <typename A0 , typename A1 , typename A2> lambda_actor_gen< typename detail::make_locals<A0 , A1 , A2>::type > const operator()(A0 const& a0 , A1 const& a1 , A2 const& a2) const { return detail::make_locals<A0 , A1 , A2> ::make(a0 , a1 , a2); } template <typename A0 , typename A1 , typename A2 , typename A3> lambda_actor_gen< typename detail::make_locals<A0 , A1 , A2 , A3>::type > const operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3) const { return detail::make_locals<A0 , A1 , A2 , A3> ::make(a0 , a1 , a2 , a3); } template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4> lambda_actor_gen< typename detail::make_locals<A0 , A1 , A2 , A3 , A4>::type > const operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4) const { return detail::make_locals<A0 , A1 , A2 , A3 , A4> ::make(a0 , a1 , a2 , a3 , a4); } template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5> lambda_actor_gen< typename detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5>::type > const operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5) const { return detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5> ::make(a0 , a1 , a2 , a3 , a4 , a5); } template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6> lambda_actor_gen< typename detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5 , A6>::type > const operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6) const { return detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5 , A6> ::make(a0 , a1 , a2 , a3 , a4 , a5 , a6); } template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7> lambda_actor_gen< typename detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7>::type > const operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7) const { return detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7> ::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7); } template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8> lambda_actor_gen< typename detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8>::type > const operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8) const { return detail::make_locals<A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8> ::make(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8); }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0>
+        lambda_actor_gen<
+            vector1<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0) const
+        {
+            typedef
+                vector1<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1>
+        lambda_actor_gen<
+            vector2<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1) const
+        {
+            typedef
+                vector2<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2>
+        lambda_actor_gen<
+            vector3<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2) const
+        {
+            typedef
+                vector3<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2 , typename A3>
+        lambda_actor_gen<
+            vector4<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3) const
+        {
+            typedef
+                vector4<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2) , proto::child_c<1>(a3)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
+        lambda_actor_gen<
+            vector5<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4) const
+        {
+            typedef
+                vector5<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2) , proto::child_c<1>(a3) , proto::child_c<1>(a4)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
+        lambda_actor_gen<
+            vector6<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5) const
+        {
+            typedef
+                vector6<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2) , proto::child_c<1>(a3) , proto::child_c<1>(a4) , proto::child_c<1>(a5)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
+        lambda_actor_gen<
+            vector7<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6) const
+        {
+            typedef
+                vector7<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2) , proto::child_c<1>(a3) , proto::child_c<1>(a4) , proto::child_c<1>(a5) , proto::child_c<1>(a6)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
+        lambda_actor_gen<
+            vector8<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A7 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7) const
+        {
+            typedef
+                vector8<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A7 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2) , proto::child_c<1>(a3) , proto::child_c<1>(a4) , proto::child_c<1>(a5) , proto::child_c<1>(a6) , proto::child_c<1>(a7)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
+        lambda_actor_gen<
+            vector9<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A7 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A8 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8) const
+        {
+            typedef
+                vector9<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A7 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A8 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2) , proto::child_c<1>(a3) , proto::child_c<1>(a4) , proto::child_c<1>(a5) , proto::child_c<1>(a6) , proto::child_c<1>(a7) , proto::child_c<1>(a8)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
+    
+    
+    
+    
+    
+    
+    
+        template <typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
+        lambda_actor_gen<
+            vector10<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A7 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A8 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A9 , 1 >::type >::type>
+          , detail::map_local_index_to_tuple<typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A9 , 0 >::type >::type >::type>
+        >
+        operator()(A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9) const
+        {
+            typedef
+                vector10<typename proto::detail::uncvref< typename proto::result_of::child_c< A0 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A1 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A2 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A3 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A4 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A5 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A6 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A7 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A8 , 1 >::type >::type , typename proto::detail::uncvref< typename proto::result_of::child_c< A9 , 1 >::type >::type>
+                locals_type;
+            locals_type locals = {proto::child_c<1>(a0) , proto::child_c<1>(a1) , proto::child_c<1>(a2) , proto::child_c<1>(a3) , proto::child_c<1>(a4) , proto::child_c<1>(a5) , proto::child_c<1>(a6) , proto::child_c<1>(a7) , proto::child_c<1>(a8) , proto::child_c<1>(a9)};
+            return
+                lambda_actor_gen<
+                    locals_type
+                  , detail::map_local_index_to_tuple<
+                        typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A0 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A1 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A2 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A3 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A4 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A5 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A6 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A7 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A8 , 0 >::type >::type >::type , typename proto::detail::uncvref< typename proto::result_of::value< typename proto::result_of::child_c< A9 , 0 >::type >::type >::type
+                    >
+                >(locals);
+        }
     };
     typedef lambda_local_gen lambda_type;
     lambda_local_gen const lambda = lambda_local_gen();

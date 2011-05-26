@@ -9,7 +9,10 @@ namespace boost { namespace phoenix
 {
     template <typename Dummy = void>
     struct vector0
-    {};
+    {
+        typedef mpl::int_<0> size_type;
+        static const int size_value = 0;
+    };
 }}
     
     
@@ -24,6 +27,9 @@ namespace boost { namespace phoenix
     struct vector1
     {
         typedef A0 member_type0; A0 a0;
+        
+        typedef mpl::int_<1> size_type;
+        static const int size_value = 1;
         typedef
             vector0<>
             args_type;
@@ -52,6 +58,9 @@ namespace boost { namespace phoenix
     struct vector2
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1;
+        
+        typedef mpl::int_<2> size_type;
+        static const int size_value = 2;
         typedef
             vector1<A1>
             args_type;
@@ -80,6 +89,9 @@ namespace boost { namespace phoenix
     struct vector3
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2;
+        
+        typedef mpl::int_<3> size_type;
+        static const int size_value = 3;
         typedef
             vector2<A1 , A2>
             args_type;
@@ -108,6 +120,9 @@ namespace boost { namespace phoenix
     struct vector4
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3;
+        
+        typedef mpl::int_<4> size_type;
+        static const int size_value = 4;
         typedef
             vector3<A1 , A2 , A3>
             args_type;
@@ -136,6 +151,9 @@ namespace boost { namespace phoenix
     struct vector5
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4;
+        
+        typedef mpl::int_<5> size_type;
+        static const int size_value = 5;
         typedef
             vector4<A1 , A2 , A3 , A4>
             args_type;
@@ -164,6 +182,9 @@ namespace boost { namespace phoenix
     struct vector6
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5;
+        
+        typedef mpl::int_<6> size_type;
+        static const int size_value = 6;
         typedef
             vector5<A1 , A2 , A3 , A4 , A5>
             args_type;
@@ -192,6 +213,9 @@ namespace boost { namespace phoenix
     struct vector7
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6;
+        
+        typedef mpl::int_<7> size_type;
+        static const int size_value = 7;
         typedef
             vector6<A1 , A2 , A3 , A4 , A5 , A6>
             args_type;
@@ -220,6 +244,9 @@ namespace boost { namespace phoenix
     struct vector8
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7;
+        
+        typedef mpl::int_<8> size_type;
+        static const int size_value = 8;
         typedef
             vector7<A1 , A2 , A3 , A4 , A5 , A6 , A7>
             args_type;
@@ -248,6 +275,9 @@ namespace boost { namespace phoenix
     struct vector9
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8;
+        
+        typedef mpl::int_<9> size_type;
+        static const int size_value = 9;
         typedef
             vector8<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8>
             args_type;
@@ -276,6 +306,9 @@ namespace boost { namespace phoenix
     struct vector10
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9;
+        
+        typedef mpl::int_<10> size_type;
+        static const int size_value = 10;
         typedef
             vector9<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9>
             args_type;
@@ -304,6 +337,9 @@ namespace boost { namespace phoenix
     struct vector11
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10;
+        
+        typedef mpl::int_<11> size_type;
+        static const int size_value = 11;
         typedef
             vector10<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10>
             args_type;
@@ -332,6 +368,9 @@ namespace boost { namespace phoenix
     struct vector12
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11;
+        
+        typedef mpl::int_<12> size_type;
+        static const int size_value = 12;
         typedef
             vector11<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11>
             args_type;
@@ -360,6 +399,9 @@ namespace boost { namespace phoenix
     struct vector13
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12;
+        
+        typedef mpl::int_<13> size_type;
+        static const int size_value = 13;
         typedef
             vector12<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12>
             args_type;
@@ -388,6 +430,9 @@ namespace boost { namespace phoenix
     struct vector14
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13;
+        
+        typedef mpl::int_<14> size_type;
+        static const int size_value = 14;
         typedef
             vector13<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13>
             args_type;
@@ -416,6 +461,9 @@ namespace boost { namespace phoenix
     struct vector15
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14;
+        
+        typedef mpl::int_<15> size_type;
+        static const int size_value = 15;
         typedef
             vector14<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14>
             args_type;
@@ -444,6 +492,9 @@ namespace boost { namespace phoenix
     struct vector16
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15;
+        
+        typedef mpl::int_<16> size_type;
+        static const int size_value = 16;
         typedef
             vector15<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15>
             args_type;
@@ -472,6 +523,9 @@ namespace boost { namespace phoenix
     struct vector17
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16;
+        
+        typedef mpl::int_<17> size_type;
+        static const int size_value = 17;
         typedef
             vector16<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16>
             args_type;
@@ -500,6 +554,9 @@ namespace boost { namespace phoenix
     struct vector18
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17;
+        
+        typedef mpl::int_<18> size_type;
+        static const int size_value = 18;
         typedef
             vector17<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17>
             args_type;
@@ -528,6 +585,9 @@ namespace boost { namespace phoenix
     struct vector19
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18;
+        
+        typedef mpl::int_<19> size_type;
+        static const int size_value = 19;
         typedef
             vector18<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18>
             args_type;
@@ -556,6 +616,9 @@ namespace boost { namespace phoenix
     struct vector20
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19;
+        
+        typedef mpl::int_<20> size_type;
+        static const int size_value = 20;
         typedef
             vector19<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19>
             args_type;
@@ -584,6 +647,9 @@ namespace boost { namespace phoenix
     struct vector21
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20;
+        
+        typedef mpl::int_<21> size_type;
+        static const int size_value = 21;
         typedef
             vector20<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20>
             args_type;
@@ -612,6 +678,9 @@ namespace boost { namespace phoenix
     struct vector22
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21;
+        
+        typedef mpl::int_<22> size_type;
+        static const int size_value = 22;
         typedef
             vector21<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21>
             args_type;
@@ -640,6 +709,9 @@ namespace boost { namespace phoenix
     struct vector23
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22;
+        
+        typedef mpl::int_<23> size_type;
+        static const int size_value = 23;
         typedef
             vector22<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22>
             args_type;
@@ -668,6 +740,9 @@ namespace boost { namespace phoenix
     struct vector24
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23;
+        
+        typedef mpl::int_<24> size_type;
+        static const int size_value = 24;
         typedef
             vector23<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23>
             args_type;
@@ -696,6 +771,9 @@ namespace boost { namespace phoenix
     struct vector25
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24;
+        
+        typedef mpl::int_<25> size_type;
+        static const int size_value = 25;
         typedef
             vector24<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24>
             args_type;
@@ -724,6 +802,9 @@ namespace boost { namespace phoenix
     struct vector26
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25;
+        
+        typedef mpl::int_<26> size_type;
+        static const int size_value = 26;
         typedef
             vector25<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25>
             args_type;
@@ -752,6 +833,9 @@ namespace boost { namespace phoenix
     struct vector27
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26;
+        
+        typedef mpl::int_<27> size_type;
+        static const int size_value = 27;
         typedef
             vector26<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26>
             args_type;
@@ -780,6 +864,9 @@ namespace boost { namespace phoenix
     struct vector28
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27;
+        
+        typedef mpl::int_<28> size_type;
+        static const int size_value = 28;
         typedef
             vector27<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27>
             args_type;
@@ -808,6 +895,9 @@ namespace boost { namespace phoenix
     struct vector29
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28;
+        
+        typedef mpl::int_<29> size_type;
+        static const int size_value = 29;
         typedef
             vector28<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28>
             args_type;
@@ -836,6 +926,9 @@ namespace boost { namespace phoenix
     struct vector30
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29;
+        
+        typedef mpl::int_<30> size_type;
+        static const int size_value = 30;
         typedef
             vector29<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29>
             args_type;
@@ -864,6 +957,9 @@ namespace boost { namespace phoenix
     struct vector31
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30;
+        
+        typedef mpl::int_<31> size_type;
+        static const int size_value = 31;
         typedef
             vector30<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30>
             args_type;
@@ -892,6 +988,9 @@ namespace boost { namespace phoenix
     struct vector32
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31;
+        
+        typedef mpl::int_<32> size_type;
+        static const int size_value = 32;
         typedef
             vector31<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31>
             args_type;
@@ -920,6 +1019,9 @@ namespace boost { namespace phoenix
     struct vector33
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32;
+        
+        typedef mpl::int_<33> size_type;
+        static const int size_value = 33;
         typedef
             vector32<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32>
             args_type;
@@ -948,6 +1050,9 @@ namespace boost { namespace phoenix
     struct vector34
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33;
+        
+        typedef mpl::int_<34> size_type;
+        static const int size_value = 34;
         typedef
             vector33<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33>
             args_type;
@@ -976,6 +1081,9 @@ namespace boost { namespace phoenix
     struct vector35
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34;
+        
+        typedef mpl::int_<35> size_type;
+        static const int size_value = 35;
         typedef
             vector34<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34>
             args_type;
@@ -1004,6 +1112,9 @@ namespace boost { namespace phoenix
     struct vector36
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35;
+        
+        typedef mpl::int_<36> size_type;
+        static const int size_value = 36;
         typedef
             vector35<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35>
             args_type;
@@ -1032,6 +1143,9 @@ namespace boost { namespace phoenix
     struct vector37
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36;
+        
+        typedef mpl::int_<37> size_type;
+        static const int size_value = 37;
         typedef
             vector36<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36>
             args_type;
@@ -1060,6 +1174,9 @@ namespace boost { namespace phoenix
     struct vector38
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37;
+        
+        typedef mpl::int_<38> size_type;
+        static const int size_value = 38;
         typedef
             vector37<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37>
             args_type;
@@ -1088,6 +1205,9 @@ namespace boost { namespace phoenix
     struct vector39
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38;
+        
+        typedef mpl::int_<39> size_type;
+        static const int size_value = 39;
         typedef
             vector38<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38>
             args_type;
@@ -1116,6 +1236,9 @@ namespace boost { namespace phoenix
     struct vector40
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39;
+        
+        typedef mpl::int_<40> size_type;
+        static const int size_value = 40;
         typedef
             vector39<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39>
             args_type;
@@ -1144,6 +1267,9 @@ namespace boost { namespace phoenix
     struct vector41
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40;
+        
+        typedef mpl::int_<41> size_type;
+        static const int size_value = 41;
         typedef
             vector40<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40>
             args_type;
@@ -1172,6 +1298,9 @@ namespace boost { namespace phoenix
     struct vector42
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41;
+        
+        typedef mpl::int_<42> size_type;
+        static const int size_value = 42;
         typedef
             vector41<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41>
             args_type;
@@ -1200,6 +1329,9 @@ namespace boost { namespace phoenix
     struct vector43
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42;
+        
+        typedef mpl::int_<43> size_type;
+        static const int size_value = 43;
         typedef
             vector42<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42>
             args_type;
@@ -1228,6 +1360,9 @@ namespace boost { namespace phoenix
     struct vector44
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43;
+        
+        typedef mpl::int_<44> size_type;
+        static const int size_value = 44;
         typedef
             vector43<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43>
             args_type;
@@ -1256,6 +1391,9 @@ namespace boost { namespace phoenix
     struct vector45
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43; typedef A44 member_type44; A44 a44;
+        
+        typedef mpl::int_<45> size_type;
+        static const int size_value = 45;
         typedef
             vector44<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43 , A44>
             args_type;
@@ -1284,6 +1422,9 @@ namespace boost { namespace phoenix
     struct vector46
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43; typedef A44 member_type44; A44 a44; typedef A45 member_type45; A45 a45;
+        
+        typedef mpl::int_<46> size_type;
+        static const int size_value = 46;
         typedef
             vector45<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43 , A44 , A45>
             args_type;
@@ -1312,6 +1453,9 @@ namespace boost { namespace phoenix
     struct vector47
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43; typedef A44 member_type44; A44 a44; typedef A45 member_type45; A45 a45; typedef A46 member_type46; A46 a46;
+        
+        typedef mpl::int_<47> size_type;
+        static const int size_value = 47;
         typedef
             vector46<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43 , A44 , A45 , A46>
             args_type;
@@ -1340,6 +1484,9 @@ namespace boost { namespace phoenix
     struct vector48
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43; typedef A44 member_type44; A44 a44; typedef A45 member_type45; A45 a45; typedef A46 member_type46; A46 a46; typedef A47 member_type47; A47 a47;
+        
+        typedef mpl::int_<48> size_type;
+        static const int size_value = 48;
         typedef
             vector47<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43 , A44 , A45 , A46 , A47>
             args_type;
@@ -1368,6 +1515,9 @@ namespace boost { namespace phoenix
     struct vector49
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43; typedef A44 member_type44; A44 a44; typedef A45 member_type45; A45 a45; typedef A46 member_type46; A46 a46; typedef A47 member_type47; A47 a47; typedef A48 member_type48; A48 a48;
+        
+        typedef mpl::int_<49> size_type;
+        static const int size_value = 49;
         typedef
             vector48<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43 , A44 , A45 , A46 , A47 , A48>
             args_type;
@@ -1396,6 +1546,9 @@ namespace boost { namespace phoenix
     struct vector50
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43; typedef A44 member_type44; A44 a44; typedef A45 member_type45; A45 a45; typedef A46 member_type46; A46 a46; typedef A47 member_type47; A47 a47; typedef A48 member_type48; A48 a48; typedef A49 member_type49; A49 a49;
+        
+        typedef mpl::int_<50> size_type;
+        static const int size_value = 50;
         typedef
             vector49<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43 , A44 , A45 , A46 , A47 , A48 , A49>
             args_type;
@@ -1424,6 +1577,9 @@ namespace boost { namespace phoenix
     struct vector51
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10; typedef A11 member_type11; A11 a11; typedef A12 member_type12; A12 a12; typedef A13 member_type13; A13 a13; typedef A14 member_type14; A14 a14; typedef A15 member_type15; A15 a15; typedef A16 member_type16; A16 a16; typedef A17 member_type17; A17 a17; typedef A18 member_type18; A18 a18; typedef A19 member_type19; A19 a19; typedef A20 member_type20; A20 a20; typedef A21 member_type21; A21 a21; typedef A22 member_type22; A22 a22; typedef A23 member_type23; A23 a23; typedef A24 member_type24; A24 a24; typedef A25 member_type25; A25 a25; typedef A26 member_type26; A26 a26; typedef A27 member_type27; A27 a27; typedef A28 member_type28; A28 a28; typedef A29 member_type29; A29 a29; typedef A30 member_type30; A30 a30; typedef A31 member_type31; A31 a31; typedef A32 member_type32; A32 a32; typedef A33 member_type33; A33 a33; typedef A34 member_type34; A34 a34; typedef A35 member_type35; A35 a35; typedef A36 member_type36; A36 a36; typedef A37 member_type37; A37 a37; typedef A38 member_type38; A38 a38; typedef A39 member_type39; A39 a39; typedef A40 member_type40; A40 a40; typedef A41 member_type41; A41 a41; typedef A42 member_type42; A42 a42; typedef A43 member_type43; A43 a43; typedef A44 member_type44; A44 a44; typedef A45 member_type45; A45 a45; typedef A46 member_type46; A46 a46; typedef A47 member_type47; A47 a47; typedef A48 member_type48; A48 a48; typedef A49 member_type49; A49 a49; typedef A50 member_type50; A50 a50;
+        
+        typedef mpl::int_<51> size_type;
+        static const int size_value = 51;
         typedef
             vector50<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10 , A11 , A12 , A13 , A14 , A15 , A16 , A17 , A18 , A19 , A20 , A21 , A22 , A23 , A24 , A25 , A26 , A27 , A28 , A29 , A30 , A31 , A32 , A33 , A34 , A35 , A36 , A37 , A38 , A39 , A40 , A41 , A42 , A43 , A44 , A45 , A46 , A47 , A48 , A49 , A50>
             args_type;

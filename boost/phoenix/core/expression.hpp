@@ -1,24 +1,4 @@
 
-#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
-#ifndef BOOST_PHOENIX_CORE_EXPRESSION_HPP
-#define BOOST_PHOENIX_CORE_EXPRESSION_HPP
-
-#include <boost/phoenix/core/limits.hpp>
-#include <boost/call_traits.hpp>
-#include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/phoenix/core/as_actor.hpp>
-#include <boost/phoenix/core/detail/expression.hpp>
-#include <boost/phoenix/support/iterate.hpp>
-#include <boost/preprocessor/comparison/equal.hpp>
-#include <boost/proto/domain.hpp>
-#include <boost/proto/make_expr.hpp>
-#include <boost/proto/transform/pass_through.hpp>
-
-#include <boost/phoenix/core/preprocessed/expression.hpp>
-
-#endif
-#else
-
 #if !BOOST_PHOENIX_IS_ITERATING
 
 #ifndef BOOST_PHOENIX_CORE_EXPRESSION_HPP
@@ -35,6 +15,12 @@
 #include <boost/proto/domain.hpp>
 #include <boost/proto/make_expr.hpp>
 #include <boost/proto/transform/pass_through.hpp>
+
+#if !defined(BOOST_PHOENIX_DONT_USE_PREPROCESSED_FILES)
+
+#include <boost/phoenix/core/preprocessed/expression.hpp>
+
+#else
 
 #if defined(__WAVE__) && defined(BOOST_PHOENIX_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/expression_" BOOST_PHOENIX_LIMIT_STR ".hpp")
@@ -71,10 +57,6 @@ namespace boost { namespace phoenix
     >
     struct expr : expr_ext<actor, Tag, BOOST_PHOENIX_A(BOOST_PHOENIX_COMPOSITE_LIMIT)> {};
 
-    struct default_domain_with_basic_expr
-        : proto::domain<proto::use_basic_expr<proto::default_generator> >
-    {};
-
 #define M0(Z, N, D)                                                             \
     BOOST_PP_COMMA_IF(N)                                                        \
     typename proto::detail::uncvref<typename call_traits<BOOST_PP_CAT(A, N)>::value_type>::type
@@ -97,6 +79,8 @@ namespace boost { namespace phoenix
 #pragma wave option(output: null)
 #endif
 
+#endif // PHOENIX_DONT_USE_PREPROCESSED_FILES
+
 #endif
 
 #else
@@ -107,7 +91,7 @@ namespace boost { namespace phoenix
         typedef
             typename proto::result_of::make_expr<
                 Tag
-              , default_domain_with_basic_expr
+              , proto::basic_default_domain
               , BOOST_PP_REPEAT(BOOST_PHOENIX_ITERATION, M0, _)
             >::type
             base_type;
@@ -124,7 +108,7 @@ namespace boost { namespace phoenix
                 {
                     proto::make_expr<
                         Tag
-                      , default_domain_with_basic_expr
+                      , proto::basic_default_domain
                     >(BOOST_PHOENIX_a)
                 };
             return e;
@@ -144,5 +128,3 @@ namespace boost { namespace phoenix
     };
 
 #endif
-
-#endif // PHOENIX_DONT_USE_PREPROCESSED_FILES

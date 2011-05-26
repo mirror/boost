@@ -1,6 +1,6 @@
 /*==============================================================================
     Copyright (c) 2005-2010 Joel de Guzman
-    Copyright (c) 2010 Thomas Heller
+    Copyright (c) 2010-2011 Thomas Heller
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,26 +9,18 @@
 #define BOOST_PHOENIX_SCOPE_LOCAL_VARIABLE_HPP
 
 #include <boost/phoenix/core/limits.hpp>
-#include <boost/fusion/container/map.hpp>
-#include <boost/fusion/container/generation/make_map.hpp>
-#include <boost/fusion/sequence/intrinsic/at_key.hpp>
-#include <boost/fusion/sequence/intrinsic/has_key.hpp>
 #include <boost/phoenix/core/call.hpp>
 #include <boost/phoenix/core/expression.hpp>
 #include <boost/phoenix/core/reference.hpp>
 #include <boost/phoenix/core/value.hpp>
 #include <boost/phoenix/scope/scoped_environment.hpp>
+#include <boost/phoenix/scope/detail/local_variable.hpp>
 #include <boost/phoenix/statement/sequence.hpp>
 
 namespace boost { namespace phoenix
 {
     namespace detail
     {
-        template <typename Key>
-        struct local
-        {
-            typedef Key type;
-        };
     }
     
     namespace expression
@@ -68,13 +60,6 @@ namespace boost { namespace phoenix
 
     namespace detail
     {
-        template <typename Map, typename Context>
-        struct local_var_def_is_nullary;
-
-        struct local_var_def_eval;
-            
-        #include <boost/phoenix/scope/detail/local_var_def.hpp>
-        
         struct scope_is_nullary_actions
         {
             template <typename Rule, typename Dummy = void>
@@ -99,99 +84,6 @@ namespace boost { namespace phoenix
         {
         };
     }
-
-    struct get_local
-    {
-        template <typename Sig>
-        struct result;
-        
-        template <typename This, typename Env, typename OuterEnv, typename Locals, typename Key>
-        struct result<This(scoped_environment<Env, OuterEnv, Locals> const&, Key)>
-            : mpl::eval_if_c<
-                fusion::result_of::has_key<Locals, Key>::type::value
-              , fusion::result_of::at_key<Locals, Key>
-              , result<This(OuterEnv&, Key)>
-            >
-        {};
-
-        template <typename This, typename Env, typename OuterEnv, typename Locals, typename Key>
-        struct result<This(scoped_environment<Env, OuterEnv, Locals>&, Key)>
-            : mpl::eval_if_c<
-                fusion::result_of::has_key<Locals, Key>::type::value
-              , fusion::result_of::at_key<Locals, Key>
-              , result<This(typename proto::detail::uncvref<OuterEnv>::type&, Key)>
-            >
-        {};
-
-        template <typename This, typename Env, typename OuterEnv, typename Key>
-        struct result<This(scoped_environment<Env, OuterEnv, mpl::void_> const&, Key)>
-            : result<This(OuterEnv&, Key)>
-        {};
-
-        template <typename This, typename Env, typename OuterEnv, typename Key>
-        struct result<This(scoped_environment<Env, OuterEnv, mpl::void_>&, Key)>
-            : result<This(OuterEnv&, Key)>
-        {};
-        
-        template <typename This, typename Env, typename Key>
-        struct result<This(Env &, Key)>
-        {
-            typedef detail::local_var_not_found type;
-        };
-
-        template <typename Env, typename OuterEnv, typename Locals, typename Key>
-        typename result<get_local(scoped_environment<Env, OuterEnv, Locals>&, Key)>::type
-        operator()(scoped_environment<Env, OuterEnv, Locals>& env, Key k) const
-        {
-            return this->evaluate(env, k, typename fusion::result_of::has_key<Locals, Key>::type());
-        }
-
-        template <typename Env, typename OuterEnv, typename Locals, typename Key>
-        typename result<get_local(scoped_environment<Env, OuterEnv, Locals>&, Key)>::type
-        operator()(scoped_environment<Env, OuterEnv, Locals> const& env, Key k) const
-        {
-            return this->evaluate(env, k, typename fusion::result_of::has_key<Locals, Key>::type());
-        }
-        
-        template <typename Env, typename OuterEnv, typename Key>
-        typename result<get_local(scoped_environment<Env, OuterEnv, mpl::void_>&, Key)>::type
-        operator()(scoped_environment<Env, OuterEnv, mpl::void_>& env, Key k) const
-        {
-            return (*this)(env.outer_env, k);
-        }
-        
-        template <typename Env, typename OuterEnv, typename Key>
-        typename result<get_local(scoped_environment<Env, OuterEnv, mpl::void_>&, Key)>::type
-        operator()(scoped_environment<Env, OuterEnv, mpl::void_> const& env, Key k) const
-        {
-            return (*this)(env.outer_env, k);
-        }
-
-        template <typename Env, typename Key>
-        typename result<get_local(Env&, Key)>::type
-        operator()(Env &, Key) const
-        {
-            return detail::local_var_not_found();
-        }
-
-        private:
-            // is a scoped environment
-            template <typename Env, typename Key>
-            typename result<get_local(Env&, Key)>::type
-            evaluate(Env & env, Key, mpl::true_) const
-            {
-                return fusion::at_key<Key>(env.locals);
-            }
-            
-            // --> we need to look in the outer environment
-            template <typename Env, typename Key>
-            typename result<get_local(Env&, Key)>::type
-            evaluate(Env & env, Key k, mpl::false_) const
-            {
-                return (*this)(env.outer_env, k);
-            }
-
-    };
     
     template<typename Key>
     struct is_custom_terminal<detail::local<Key> >
@@ -213,21 +105,32 @@ namespace boost { namespace phoenix
         struct result<This(Local &, Context)>
         {
             typedef
-                typename get_local::
-                    template result<
-                        get_local(
-                            typename result_of::env<Context>::type
-                          , Local
-                        )
-                    >::type
-                type;
+                typename remove_reference<
+                    typename result_of::env<Context>::type
+                >::type
+                env_type;
+                
+                typedef typename detail::apply_local<detail::local<Key>, env_type>::type type;
         };
 
         template <typename Local, typename Context>
-        typename result<custom_terminal<detail::local<Key> >(Local const &, Context const&)>::type
-        operator()(Local const& local, Context const & ctx)
+        typename result<custom_terminal(Local const &, Context const&)>::type
+        operator()(Local, Context const & ctx)
         {
-            return get_local()(env(ctx), local);
+            typedef
+                typename remove_reference<
+                    typename result_of::env<Context>::type
+                >::type
+                env_type;
+                
+                typedef typename detail::apply_local<detail::local<Key>, env_type>::type return_type;
+            
+            static const int index_value = detail::get_index<typename env_type::map_type, detail::local<Key> >::value;
+
+            typedef detail::eval_local<Key> eval_local;
+
+            return eval_local::template get<return_type, index_value>(
+                phoenix::env(ctx));
         }
     };
 
@@ -288,17 +191,6 @@ namespace boost { namespace phoenix
         _y_type const _y = {{{}}};
         _z_type const _z = {{{}}};
 #endif
-    }
-    
-    namespace detail
-    {
-        template <
-            BOOST_PHOENIX_typename_A_void(BOOST_PHOENIX_LOCAL_LIMIT)
-          , typename Dummy = void
-        >
-        struct make_locals;
-        
-        #include <boost/phoenix/scope/detail/make_locals.hpp>
     }
 }}
 

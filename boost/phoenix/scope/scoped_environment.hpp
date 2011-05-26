@@ -22,36 +22,37 @@
 
 namespace boost { namespace phoenix
 {
-    template<typename Env, typename OuterEnv, typename Locals>
+    template<typename Env, typename OuterEnv, typename Locals, typename Map>
     struct scoped_environment
         : fusion::sequence_facade<
-            scoped_environment<Env, OuterEnv, Locals>
+            scoped_environment<Env, OuterEnv, Locals, Map>
           , fusion::random_access_traversal_tag
         >
     {
         typedef Env env_type;
         typedef OuterEnv outer_env_type;
         typedef Locals locals_type;
+        typedef Map map_type;
 
         scoped_environment(
-            Env env
-          , OuterEnv outer_env
-          , Locals locals
+            Env const & env
+          , OuterEnv const &outer_env
+          , Locals const &locals
         )
             : env(env)
             , outer_env(outer_env)
             , locals(locals)
         {}
 
-        scoped_environment(scoped_environment const& o)
-            : env(o.env)
+		  scoped_environment(scoped_environment const & o)
+		      : env(o.env)
             , outer_env(o.outer_env)
-            , locals(o.locals)
-        {}
+			   , locals(o.locals)
+		 {};
 
-        Env      env;
-        OuterEnv outer_env;
-        Locals   locals;
+        Env      const & env;
+        OuterEnv const & outer_env;
+        Locals   const & locals;
 
         typedef typename
             fusion::result_of::pop_front<
@@ -163,13 +164,13 @@ namespace boost { namespace phoenix
     template <typename Env>
     struct is_scoped_environment<Env&> : is_scoped_environment<Env> {};
     
-    template <typename Env, typename OuterEnv, typename Locals>
-    struct is_scoped_environment<scoped_environment<Env, OuterEnv, Locals> >
+    template <typename Env, typename OuterEnv, typename Locals, typename Map>
+    struct is_scoped_environment<scoped_environment<Env, OuterEnv, Locals, Map> >
         : mpl::true_
     {};
 
-    template <typename Env, typename OuterEnv, typename Locals>
-    struct is_scoped_environment<scoped_environment<Env, OuterEnv, Locals> const>
+    template <typename Env, typename OuterEnv, typename Locals, typename Map>
+    struct is_scoped_environment<scoped_environment<Env, OuterEnv, Locals, Map> const>
         : mpl::true_
     {};
 }}
