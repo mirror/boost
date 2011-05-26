@@ -51,7 +51,7 @@ struct sum_kahan_impl
     template<typename Args>
     void 
 #if BOOST_ACCUMULATORS_GCC_VERSION > 40305
-    __attribute__((optimize("-fno-associative-math")))
+    __attribute__((optimize("no-associative-math")))
 #endif
     operator ()(Args const & args)
     {
