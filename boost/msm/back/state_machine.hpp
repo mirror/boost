@@ -796,7 +796,7 @@ private:
             return false;
         }
         // Take the transition action and return the next state.
-        static HandledEnum execute(library_sm& fsm, int , int state, transition_event const& evt)
+        static HandledEnum execute(library_sm& fsm, int , int , transition_event const& evt)
         {
             if (!check_guard(fsm,evt))
             {
