@@ -49,7 +49,8 @@ public:
         // Only for discrete types this ctor creates an interval containing 
         // a single element only.
         BOOST_STATIC_ASSERT((icl::is_discrete<DomainT>::value));
-        BOOST_ASSERT((numeric_minimum<DomainT, is_numeric<DomainT>::value >::is_less_than(val) )); 
+        BOOST_ASSERT((numeric_minimum<DomainT, domain_compare, is_numeric<DomainT>::value >
+                                     ::is_less_than(val) )); 
     }
 
     /** Interval from <tt>low</tt> to <tt>up</tt> with bounds <tt>bounds</tt> */

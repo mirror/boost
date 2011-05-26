@@ -54,8 +54,6 @@ struct is_numeric<std::complex<Type> >
 };
 
 //--------------------------------------------------------------------------
-//CL template<class Type, class Compare, bool Enable = false> struct numeric_minimum;
-
 template<class Type, class Compare, bool Enable = false>
 struct numeric_minimum
 {
