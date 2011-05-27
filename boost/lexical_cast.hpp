@@ -555,6 +555,10 @@ namespace boost
             BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
 #endif
 
+            typedef typename Traits::int_type int_type;
+            CharT const czero = lcast_char_constants<CharT>::zero;
+            int_type const zero = Traits::to_int_type(czero);
+
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
             // TODO: use BOOST_NO_STD_LOCALE
             std::locale loc;
@@ -562,47 +566,54 @@ namespace boost
             numpunct const& np = BOOST_USE_FACET(numpunct, loc);
             std::string const& grouping = np.grouping();
             std::string::size_type const grouping_size = grouping.size();
-            CharT thousands_sep = grouping_size ? np.thousands_sep() : 0;
-            std::string::size_type group = 0; // current group number
-            char last_grp_size =
-                grouping_size == 0 || grouping[0] <= 0 ? CHAR_MAX : grouping[0];
+
+            if ( grouping_size && grouping[0] > 0 )
+            {
+
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
             // Check that ulimited group is unreachable:
             BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
 #endif
+                CharT thousands_sep = np.thousands_sep();
+                std::string::size_type group = 0; // current group number
+                char last_grp_size = grouping[0];
+                char left = last_grp_size;
 
-            char left = last_grp_size;
-#endif
-
-            typedef typename Traits::int_type int_type;
-            CharT const czero = lcast_char_constants<CharT>::zero;
-            int_type const zero = Traits::to_int_type(czero);
-
-            do
-            {
-#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
-                if(left == 0)
+                do
                 {
-                    ++group;
-                    if(group < grouping_size)
+                    if(left == 0)
                     {
-                        char const grp_size = grouping[group];
-                        last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                        ++group;
+                        if(group < grouping_size)
+                        {
+                            char const grp_size = grouping[group];
+                            last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                        }
+
+                        left = last_grp_size;
+                        --finish;
+                        Traits::assign(*finish, thousands_sep);
                     }
 
-                    left = last_grp_size;
+                    --left;
+
                     --finish;
-                    Traits::assign(*finish, thousands_sep);
-                }
+                    int_type const digit = static_cast<int_type>(n % 10U);
+                    Traits::assign(*finish, Traits::to_char_type(zero + digit));
+                    n /= 10;
+                } while(n);
 
-                --left;
+            } else
 #endif
-
-                --finish;
-                int_type const digit = static_cast<int_type>(n % 10U);
-                Traits::assign(*finish, Traits::to_char_type(zero + digit));
-                n /= 10;
-            } while(n);
+            {
+                do
+                {
+                    --finish;
+                    int_type const digit = static_cast<int_type>(n % 10U);
+                    Traits::assign(*finish, Traits::to_char_type(zero + digit));
+                    n /= 10;
+                } while(n);
+            }
 
             return finish;
         }
@@ -638,10 +649,10 @@ namespace boost
             /* According to [22.2.2.1.2] of Programming languages - C++
              * we MUST check for correct grouping
              */
-            if (grouping_size)
+            if (grouping_size && grouping[0] > 0)
             {
                 unsigned char current_grouping = 0;
-                CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
+                CharT const thousands_sep = np.thousands_sep();
                 char remained = grouping[current_grouping] - 1;
 
                 for(;end>=begin; --end)

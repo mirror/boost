@@ -937,7 +937,6 @@ void test_wallocator()
 
 #endif
 
-#include <iostream>
 void test_char_types_conversions()
 {
     const char c_arr[]            = "Test array of chars";
