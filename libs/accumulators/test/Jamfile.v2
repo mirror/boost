@@ -50,6 +50,7 @@ test-suite "accumulators"
       [ run rolling_mean.cpp ]
       [ run skewness.cpp ]
       [ run sum.cpp ]
+      [ run sum_kahan.cpp ]
       [ run tail.cpp ]
       [ run tail_mean.cpp ]
       [ run tail_quantile.cpp ]
@@ -67,8 +68,8 @@ test-suite "accumulators"
       [ run weighted_p_square_quantile.cpp ]
       [ run weighted_skewness.cpp ]
       [ run weighted_sum.cpp ]
+      [ run weighted_sum_kahan.cpp ]
       [ run weighted_variance.cpp ]
-
       [ run weighted_pot_quantile.cpp ]
       [ run weighted_tail_mean.cpp ]
       [ run weighted_tail_quantile.cpp ]

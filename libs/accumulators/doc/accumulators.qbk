@@ -500,7 +500,7 @@ the values of all samples passed into it.
     
     }}}
 
-Much of the above should be pretty self-explanitory, except for the use of argument packs
+Much of the above should be pretty self-explanatory, except for the use of argument packs
 which may be confusing if you have never used the _parameter_ library before. An argument
 pack is a cluster of values, each of which can be accessed with a key. So `args[sample]`
 extracts from the pack the value associated with the `sample` key. And the cryptic
@@ -853,7 +853,7 @@ is an acceptable substitute.
 
 [*Registering feature variants with [^as_feature<>]]
 
-You may hve noticed that some feature variants in the Accumulators Framework can be
+You may have noticed that some feature variants in the Accumulators Framework can be
 specified with a nicer syntax. For instance, instead of `tag::mean` and `tag::immediate_mean`
 you can specify them with `tag::mean(lazy)` and `tag::mean(immediate)` respectively.
 These are merely aliases, but the syntax makes the relationship between the two clearer.
@@ -2219,7 +2219,8 @@ of the 2nd central moment (the variance) of the sampless 3. For implementation d
 
 [section:sum sum ['and variants]]
 
-For summing the samples, weights or variates. 
+For summing the samples, weights or variates. The default implementation uses the standard sum operation, 
+but variants using the Kahan summation algorithm are also provided.
 
 [variablelist
     [[Result Type] [`_sample_type_` for summing samples \n
@@ -2228,19 +2229,26 @@ For summing the samples, weights or variates.
     [[Depends On] [['none]]]
     [[Variants] [`tag::sum` \n
                  `tag::sum_of_weights` \n
-                 `tag::sum_of_variates<_variate_type_, _variate_tag_>`]]
+                 `tag::sum_of_variates<_variate_type_, _variate_tag_>` \n
+		 `tag::sum_kahan` (a.k.a. `tag::sum(kahan)`) \n
+		 `tag::sum_of_weights_kahan` (a.k.a. `tag::sum_of_weights(kahan)`) \n
+		 `tag::sum_of_variates_kahan<_variate_type_, _variate_tag_>` \n]]
     [[Initialization Parameters] [['none]]]
     [[Accumulator Parameters] [`weight` for summing weights \n
                                `_variate_tag_` for summing variates]]
     [[Extractor Parameters] [['none]]]
-    [[Accumulator Complexity] [O(1)]] 
+    [[Accumulator Complexity] [O(1). Note that the Kahan sum performs four floating-point sum 
+    		  	       operations per accumulated value, whereas the naive sum 
+			       performs only one.]] 
     [[Extractor Complexity] [O(1)]] 
 ]
 
 [*Header]
 [def _SUM_HPP_ [headerref boost/accumulators/statistics/sum.hpp]]
+[def _SUM_KAHAN_HPP_ [headerref boost/accumulators/statistics/sum_kahan.hpp]]
 
     #include <_SUM_HPP_>
+    #include <_SUM_KAHAN_HPP_>
 
 [*Example]
 
@@ -2269,9 +2277,18 @@ For summing the samples, weights or variates.
     BOOST_CHECK_EQUAL(12, sum_of_weights(acc));
     BOOST_CHECK_EQUAL(18, sum_of_variates(acc));
 
+    // demonstrate Kahan summation
+    accumulator_set<float, stats<tag::sum_kahan> > acc;
+    BOOST_CHECK_EQUAL(0.0f, sum_kahan(acc));
+    for (size_t i = 0; i < 1e6; ++i) {
+      acc(1e-6f);
+    }
+    BOOST_CHECK_EQUAL(1.0f, sum_kahan(acc));
+
 [*See also]
 
 * [classref boost::accumulators::impl::sum_impl [^sum_impl]]
+* [classref boost::accumulators::impl::sum_kahan_impl [^sum_kahan_impl]]
 
 [endsect]
 
@@ -3573,26 +3590,34 @@ For implementation details, see
 [section:weighted_sum weighted_sum ['and variants]]
 
 For summing the weighted samples or variates. All of the `tag::weighted_sum_of_variates<>` features 
-can be extracted with the `weighted_sum_of_variates()` extractor.
+can be extracted with the `weighted_sum_of_variates()` extractor. Variants that implement the Kahan 
+summation algorithm are also provided.
 
 [variablelist
     [[Result Type] [`numeric::functional::multiplies<_sample_type_, _weight_type_>::result_type` for summing weighted samples \n
                     `numeric::functional::multiplies<_variate_type_, _weight_type_>::result_type` for summing weighted variates]]
     [[Depends On] [['none]]]
     [[Variants] [`tag::weighted_sum` \n
-                 `tag::weighted_sum_of_variates<_variate_type_, _variate_tag_>`]]
+                 `tag::weighted_sum_of_variates<_variate_type_, _variate_tag_>` \n
+		 `tag::weighted_sum_kahan` (a.k.a. tag::weighted_sum(kahan)) \n
+		 `tag::weighted_sum_of_variates_kahan<_variate_type_, _variate_tag_>` \n]]
     [[Initialization Parameters] [['none]]]
     [[Accumulator Parameters] [`weight` \n
                                `_variate_tag_` for summing variates]]
     [[Extractor Parameters] [['none]]]
-    [[Accumulator Complexity] [O(1)]] 
+    [[Accumulator Complexity] [O(1). Note that the Kahan sum performs four floating-point sum 
+    		  	       operations per accumulated value, whereas the naive sum 
+			       performs only one.]] 
     [[Extractor Complexity] [O(1)]] 
 ]
 
 [*Header]
 [def _WEIGHTED_SUM_HPP_ [headerref boost/accumulators/statistics/weighted_sum.hpp]]
+[def _WEIGHTED_SUM_KAHAN_HPP_ [headerref boost/accumulators/statistics/weighted_sum_kahan.hpp]]
 
     #include <_WEIGHTED_SUM_HPP_>
+    #include <_WEIGHTED_SUM_KAHAN_HPP_>
+
 
 [*Example]
 
@@ -3610,9 +3635,18 @@ can be extracted with the `weighted_sum_of_variates()` extractor.
     BOOST_CHECK_EQUAL(32, weighted_sum(acc));
     BOOST_CHECK_EQUAL(78, weighted_sum_of_variates(acc));
 
+    // demonstrate weighted Kahan summation
+    accumulator_set<float, stats<tag::weighted_sum_kahan>, float > acc;
+    BOOST_CHECK_EQUAL(0.0f, weighted_sum_kahan(acc));
+    for (size_t i = 0; i < 1e6; ++i) {
+      acc(1.0f, weight = 1e-6f);
+    }
+    BOOST_CHECK_EQUAL(1.0f, weighted_sum_kahan(acc));
+
 [*See also]
 
 * [classref boost::accumulators::impl::weighted_sum_impl [^weighted_sum_impl]]
+* [classref boost::accumulators::impl::weighted_sum_impl [^weighted_sum_kahan_impl]]
 
 [endsect]
 
@@ -4013,6 +4047,9 @@ implementation. I would also like to thank David Abrahams and Matthias Troyer fo
 their key contributions to the design of the library. Many thanks are due to Michael 
 Gauckler and Olivier Gygi, who, along with Daniel Egloff, implemented many of the 
 statistical accumulators.
+
+I would also like to thank Simon West for all his assistance maintaining
+Boost.Accumulators.
 
 Finally, I would like to thank _ZKB_ for sponsoring the work on Boost.Accumulators 
 and graciously donating it to the community. 
