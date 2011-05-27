@@ -30,6 +30,7 @@ class discrete_interval
 public:
     typedef discrete_interval<DomainT,Compare> type;
     typedef DomainT domain_type;
+    typedef ICL_COMPARE_DOMAIN(Compare,DomainT) domain_compare;
     typedef typename bounded_value<DomainT>::type bounded_domain_type;
 
 public:
