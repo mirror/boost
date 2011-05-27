@@ -597,6 +597,8 @@ The C++ compiler does not support C++0x initializer lists.
 ]]                      
 [[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
 ]]                
+[[`BOOST_NO_NOEXCEPT`][The compiler does not support `noexcept`. 
+]]                      
 [[`BOOST_NO_NULLPTR`][The compiler does not support 'nullptr'. 
 ]]                      
 [[`BOOST_NO_RAW_LITERALS`][The compiler does not support
@@ -618,7 +620,10 @@ scoped enumerations (`enum class`).
 ]]                      
 [[`BOOST_NO_UNICODE_LITERALS`][The compiler does not support
 Unicode (`u8`, `u`, `U`) literals. 
-]]               
+]] 
+[[`BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX`][The compiler does not support
+the [@http://en.wikipedia.org/wiki/C%2B%2B0x#Uniform_initialization C++11 Unified Initialization Syntax].
+]]
 [[`BOOST_NO_VARIADIC_TEMPLATES`][The compiler does not support
 variadic templates. 
 ]]

@@ -212,7 +212,9 @@
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #define BOOST_NO_CONSTEXPR
+#define BOOST_NO_NOEXCEPT
 #define BOOST_NO_NULLPTR
+#define BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX
 #endif
 
 #ifndef BOOST_COMPILER
