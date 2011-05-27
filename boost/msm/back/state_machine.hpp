@@ -1474,8 +1474,8 @@ private:
                         (init_states(m_states));
          m_history.set_initial_states(m_states);
          // create states
-         fill_states(this);
          set_states(expr);
+         fill_states(this);
      }
      // Construct with the default initial states and some default argument(s)
 #define MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB(z, n, unused) ARG ## n t ## n
@@ -1518,8 +1518,8 @@ private:
          ::boost::mpl::for_each< seq_initial_states, ::boost::msm::wrap<mpl::placeholders::_1> > \
                         (init_states(m_states));                                    \
          m_history.set_initial_states(m_states);                                    \
-         fill_states(this);                                                         \
          set_states(expr);                                                          \
+         fill_states(this);                                                         \
      }
 
      BOOST_PP_REPEAT_FROM_TO(1,BOOST_PP_ADD(BOOST_MSM_CONSTRUCTOR_ARG_SIZE,1), MSM_CONSTRUCTOR_HELPER_EXECUTE, ~)
