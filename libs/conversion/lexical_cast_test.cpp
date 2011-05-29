@@ -95,6 +95,7 @@ void test_wtraits();
 void test_allocator();
 void test_wallocator();
 #endif
+void test_char_types_conversions();
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
@@ -136,6 +137,8 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_allocator));
     suite->add(BOOST_TEST_CASE(&test_wallocator));
 #endif
+
+    suite->add(BOOST_TEST_CASE(&test_char_types_conversions));
 
     return suite;
 }
@@ -730,6 +733,12 @@ void test_conversion_from_to_integral()
 
     BOOST_CHECK(lexical_cast<T>("+1") == static_cast<T>(1) );
     BOOST_CHECK(lexical_cast<T>("+9") == static_cast<T>(9) );
+    BOOST_CHECK(lexical_cast<T>("+10") == static_cast<T>(10) );
+    BOOST_CHECK(lexical_cast<T>("+90") == static_cast<T>(90) );
+    BOOST_CHECK_THROW(lexical_cast<T>("++1"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>("-+9"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>("--1"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>("+-9"), bad_lexical_cast);
     // test_conversion_from_to_integral_for_locale
 
     typedef std::numpunct<char> numpunct;
@@ -785,6 +794,11 @@ void test_conversion_from_to_float()
 
     BOOST_CHECK_CLOSE(lexical_cast<T>("+1"), 1, std::numeric_limits<T>::epsilon()  );
     BOOST_CHECK_CLOSE(lexical_cast<T>("+9"), 9, std::numeric_limits<T>::epsilon()*9 );
+
+    BOOST_CHECK_THROW(lexical_cast<T>("++1"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>("-+9"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>("--1"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>("+-9"), bad_lexical_cast);
 }
 
 void test_conversion_from_to_short()
@@ -923,3 +937,42 @@ void test_wallocator()
 
 #endif
 
+void test_char_types_conversions()
+{
+    const char c_arr[]            = "Test array of chars";
+    const unsigned char uc_arr[]  = "Test array of chars";
+    const signed char sc_arr[]    = "Test array of chars";
+
+    BOOST_CHECK(boost::lexical_cast<std::string>(c_arr) == std::string(c_arr));
+    BOOST_CHECK(boost::lexical_cast<std::string>(uc_arr) == std::string(c_arr));
+    BOOST_CHECK(boost::lexical_cast<std::string>(sc_arr) == std::string(c_arr));
+
+    BOOST_CHECK(boost::lexical_cast<char>(c_arr[0]) == c_arr[0]);
+    BOOST_CHECK(boost::lexical_cast<char>(uc_arr[0]) == c_arr[0]);
+    BOOST_CHECK(boost::lexical_cast<char>(sc_arr[0]) == c_arr[0]);
+
+    BOOST_CHECK(boost::lexical_cast<unsigned char>(c_arr[0]) == uc_arr[0]);
+    BOOST_CHECK(boost::lexical_cast<unsigned char>(uc_arr[0]) == uc_arr[0]);
+    BOOST_CHECK(boost::lexical_cast<unsigned char>(sc_arr[0]) == uc_arr[0]);
+
+    BOOST_CHECK(boost::lexical_cast<signed char>(c_arr[0]) == sc_arr[0]);
+    BOOST_CHECK(boost::lexical_cast<signed char>(uc_arr[0]) == sc_arr[0]);
+    BOOST_CHECK(boost::lexical_cast<signed char>(sc_arr[0]) == sc_arr[0]);
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+    const wchar_t wc_arr[]=L"Test array of chars";
+
+    BOOST_CHECK(boost::lexical_cast<std::wstring>(wc_arr) == std::wstring(wc_arr));
+    BOOST_CHECK(boost::lexical_cast<std::wstring>(c_arr) == std::wstring(wc_arr));
+
+    BOOST_CHECK(boost::lexical_cast<std::wstring>(sc_arr) != std::wstring(wc_arr) );
+    BOOST_CHECK(boost::lexical_cast<std::wstring>(uc_arr) != std::wstring(wc_arr) );
+
+    BOOST_CHECK(boost::lexical_cast<wchar_t>(c_arr[0]) == wc_arr[0]);
+    BOOST_CHECK(boost::lexical_cast<wchar_t>(wc_arr[0]) == wc_arr[0]);
+
+    BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(uc_arr[0]), bad_lexical_cast);
+    BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(sc_arr[0]), bad_lexical_cast);
+
+#endif
+}

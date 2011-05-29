@@ -247,13 +247,42 @@ namespace boost
             static void check_coverage() {}
         };
 
-        // No specializations for:
-        // lcast_src_length<char, signed char>
-        // lcast_src_length<char, unsigned char>
-        // lcast_src_length<char, signed char*>
-        // lcast_src_length<char, unsigned char*>
-        // lcast_src_length<char, signed char const*>
-        // lcast_src_length<char, unsigned char const*>
+        template<>
+        struct lcast_src_length<char, signed char>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+        template<>
+        struct lcast_src_length<char, unsigned char>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+        template<>
+        struct lcast_src_length<char, signed char*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+        template<>
+        struct lcast_src_length<char, unsigned char*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+        template<>
+        struct lcast_src_length<char, signed char const*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+        template<>
+        struct lcast_src_length<char, unsigned char const*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
 
 #ifndef BOOST_LCAST_NO_WCHAR_T
         template<>
@@ -526,6 +555,10 @@ namespace boost
             BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
 #endif
 
+            typedef typename Traits::int_type int_type;
+            CharT const czero = lcast_char_constants<CharT>::zero;
+            int_type const zero = Traits::to_int_type(czero);
+
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
             // TODO: use BOOST_NO_STD_LOCALE
             std::locale loc;
@@ -533,47 +566,54 @@ namespace boost
             numpunct const& np = BOOST_USE_FACET(numpunct, loc);
             std::string const& grouping = np.grouping();
             std::string::size_type const grouping_size = grouping.size();
-            CharT thousands_sep = grouping_size ? np.thousands_sep() : 0;
-            std::string::size_type group = 0; // current group number
-            char last_grp_size =
-                grouping_size == 0 || grouping[0] <= 0 ? CHAR_MAX : grouping[0];
+
+            if ( grouping_size && grouping[0] > 0 )
+            {
+
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
             // Check that ulimited group is unreachable:
             BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
 #endif
+                CharT thousands_sep = np.thousands_sep();
+                std::string::size_type group = 0; // current group number
+                char last_grp_size = grouping[0];
+                char left = last_grp_size;
 
-            char left = last_grp_size;
-#endif
-
-            typedef typename Traits::int_type int_type;
-            CharT const czero = lcast_char_constants<CharT>::zero;
-            int_type const zero = Traits::to_int_type(czero);
-
-            do
-            {
-#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
-                if(left == 0)
+                do
                 {
-                    ++group;
-                    if(group < grouping_size)
+                    if(left == 0)
                     {
-                        char const grp_size = grouping[group];
-                        last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                        ++group;
+                        if(group < grouping_size)
+                        {
+                            char const grp_size = grouping[group];
+                            last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                        }
+
+                        left = last_grp_size;
+                        --finish;
+                        Traits::assign(*finish, thousands_sep);
                     }
 
-                    left = last_grp_size;
+                    --left;
+
                     --finish;
-                    Traits::assign(*finish, thousands_sep);
-                }
+                    int_type const digit = static_cast<int_type>(n % 10U);
+                    Traits::assign(*finish, Traits::to_char_type(zero + digit));
+                    n /= 10;
+                } while(n);
 
-                --left;
+            } else
 #endif
-
-                --finish;
-                int_type const digit = static_cast<int_type>(n % 10U);
-                Traits::assign(*finish, Traits::to_char_type(zero + digit));
-                n /= 10;
-            } while(n);
+            {
+                do
+                {
+                    --finish;
+                    int_type const digit = static_cast<int_type>(n % 10U);
+                    Traits::assign(*finish, Traits::to_char_type(zero + digit));
+                    n /= 10;
+                } while(n);
+            }
 
             return finish;
         }
@@ -609,10 +649,10 @@ namespace boost
             /* According to [22.2.2.1.2] of Programming languages - C++
              * we MUST check for correct grouping
              */
-            if (grouping_size)
+            if (grouping_size && grouping[0] > 0)
             {
                 unsigned char current_grouping = 0;
-                CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
+                CharT const thousands_sep = np.thousands_sep();
                 char remained = grouping[current_grouping] - 1;
 
                 for(;end>=begin; --end)
@@ -821,9 +861,13 @@ namespace boost
 
             bool operator<<(bool);
             bool operator<<(char);
+            bool operator<<(unsigned char);
+            bool operator<<(signed char);
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
             bool operator<<(wchar_t);
 #endif
+            bool operator<<(unsigned char const*);
+            bool operator<<(signed char const*);
             bool operator<<(CharT const*);
             bool operator<<(short);
             bool operator<<(int);
@@ -1050,6 +1094,8 @@ namespace boost
             }
 
             bool operator>>(CharT&);
+            bool operator>>(unsigned char&);
+            bool operator>>(signed char&);
 
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 // This #if is in sync with lcast_streambuf_for_target
@@ -1089,6 +1135,34 @@ namespace boost
             widen_and_assign(start, ch);
             finish = start + 1;
             return true;
+        }
+
+        template<typename CharT, class Base, class Traits>
+        inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator<<(
+               unsigned char ch)
+        {
+            return ((*this) << static_cast<char>(ch));
+        }
+
+        template<typename CharT, class Base, class Traits>
+        inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator<<(
+               signed char ch)
+        {
+            return ((*this) << static_cast<char>(ch));
+        }
+
+        template<typename CharT, class Base, class Traits>
+        inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator<<(
+               unsigned char const* ch)
+        {
+            return ((*this) << reinterpret_cast<char const*>(ch));
+        }
+
+        template<typename CharT, class Base, class Traits>
+        inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator<<(
+               signed char const* ch)
+        {
+            return ((*this) << reinterpret_cast<char const*>(ch));
         }
 
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
@@ -1256,6 +1330,34 @@ namespace boost
             return ok;
         }
 
+        template<typename CharT, class Base, class Traits>
+        inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator>>(
+                unsigned char& output)
+        {
+            BOOST_STATIC_ASSERT( sizeof(CharT) == sizeof(unsigned char) );
+            bool const ok = (finish - start == 1);
+            if(ok) {
+                CharT out;
+                Traits::assign(out, *start);
+                output = static_cast<signed char>(out);
+            }
+            return ok;
+        }
+
+        template<typename CharT, class Base, class Traits>
+        inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator>>(
+                signed char& output)
+        {
+            BOOST_STATIC_ASSERT( sizeof(CharT) == sizeof(signed char) );
+            bool const ok = (finish - start == 1);
+            if(ok) {
+                CharT out;
+                Traits::assign(out, *start);
+                output = static_cast<signed char>(out);
+            }
+            return ok;
+        }
+
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<typename CharT, class Base, class Traits>
         inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator>>(
@@ -1312,13 +1414,9 @@ namespace boost
         struct lcast_streambuf_for_target
         {
             BOOST_STATIC_CONSTANT(bool, value =
-                    (
-                    ::boost::type_traits::ice_or<
-                         ::boost::type_traits::ice_not< is_integral<Target>::value >::value,
-                         is_same<Target, signed char>::value,
-                         is_same<Target, unsigned char>::value
-                    >::value
-                    )
+                (
+                 ::boost::type_traits::ice_not< is_integral<Target>::value >::value
+                )
             );
         };
 
@@ -1472,16 +1570,29 @@ namespace boost
             );
         };
 
+        /*
+         * is_xchar_to_xchar<Target, Source>::value is true, when
+         * Target and Souce are the same char types, or when
+         * Target and Souce are char types of the same size.
+         */
         template<typename Target, typename Source>
         struct is_xchar_to_xchar
         {
             BOOST_STATIC_CONSTANT(bool, value =
-                    (
-                    ::boost::type_traits::ice_and<
-                         is_same<Source,Target>::value,
-                         is_char_or_wchar<Target>::value
+                (
+                    ::boost::type_traits::ice_or<
+                        ::boost::type_traits::ice_and<
+                             is_same<Source,Target>::value,
+                             is_char_or_wchar<Target>::value
+                        >::value,
+                        ::boost::type_traits::ice_and<
+                             ::boost::type_traits::ice_eq< sizeof(char),sizeof(Target)>::value,
+                             ::boost::type_traits::ice_eq< sizeof(char),sizeof(Source)>::value,
+                             is_char_or_wchar<Target>::value,
+                             is_char_or_wchar<Source>::value
+                        >::value
                     >::value
-                    )
+                )
             );
         };
 
