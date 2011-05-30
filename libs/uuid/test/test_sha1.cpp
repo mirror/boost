@@ -11,7 +11,6 @@
 
 #include <boost/uuid/sha1.hpp>
 #include <boost/detail/lightweight_test.hpp>
-#include "lightweight_test_ex.hpp"
 #include <algorithm>
 #include <cstring>
 #include <cstddef>
