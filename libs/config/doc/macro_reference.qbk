@@ -890,7 +890,7 @@ compiler version macro.
 Defined to 1 if the compiler is the Clang compiler.
 ]]
 [[`BOOST_WINDOWS`][`<boost/config.hpp>`][
-Defined if the Windows platfrom API is available.
+Defined if the Windows platform API is available.
 ]]
 [[`BOOST_DINKUMWARE_STDLIB`][`<boost/config.hpp>`][
 Defined if the dinkumware standard library is in use, takes the same value
