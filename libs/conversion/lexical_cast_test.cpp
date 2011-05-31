@@ -677,6 +677,9 @@ void test_conversion_from_to_integral_for_locale()
                 , bad_lexical_cast);
         BOOST_CHECK_THROW(lexical_cast<T>( std::string("100") + np.thousands_sep() ), bad_lexical_cast);
         BOOST_CHECK_THROW(lexical_cast<T>( np.thousands_sep() + std::string("100") ), bad_lexical_cast);
+
+        // Exception must not be thrown, when we are using no separators at all
+        BOOST_CHECK( lexical_cast<T>("10000") == static_cast<T>(10000) );
     }
 
     test_conversion_from_integral_to_integral<T>();

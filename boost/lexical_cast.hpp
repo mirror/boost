@@ -654,6 +654,7 @@ namespace boost
                 unsigned char current_grouping = 0;
                 CharT const thousands_sep = np.thousands_sep();
                 char remained = grouping[current_grouping] - 1;
+                bool shall_we_return = true;
 
                 for(;end>=begin; --end)
                 {
@@ -671,12 +672,31 @@ namespace boost
                         multiplier *= 10;
                         --remained;
                     } else {
-                        if ( !Traits::eq(*end, thousands_sep) || begin == end ) return false;
-                        if (current_grouping < grouping_size-1 ) ++current_grouping;
-                        remained = grouping[current_grouping];
+                        if ( !Traits::eq(*end, thousands_sep) ) //|| begin == end ) return false;
+                        {
+                            /*
+                             * According to Programming languages - C++
+                             * Digit grouping is checked. That is, the positions of discarded
+                             * separators is examined for consistency with
+                             * use_facet<numpunct<charT> >(loc ).grouping()
+                             *
+                             * BUT what if there is no separators at all and grouping()
+                             * is not empty? Well, we have no extraced separators, so we
+                             * won`t check them for consistency. This will allow us to
+                             * work with "C" locale from other locales
+                             */
+                            shall_we_return = false;
+                            break;
+                        } else {
+                            if ( begin == end ) return false;
+                            if (current_grouping < grouping_size-1 ) ++current_grouping;
+                            remained = grouping[current_grouping];
+                        }
                     }
                 }
-            } else
+
+                if (shall_we_return) return true;
+            }
 #endif
             {
                 while ( begin <= end )
