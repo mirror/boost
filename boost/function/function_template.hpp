@@ -486,19 +486,19 @@ namespace boost {
                                             BOOST_FUNCTION_TEMPLATE_ARGS);
 
         template<typename F>
-        bool assign_to(F f, function_buffer& functor)
+        bool assign_to(F f, function_buffer& functor) const
         {
           typedef typename get_function_tag<F>::type tag;
           return assign_to(f, functor, tag());
         }
         template<typename F,typename Allocator>
-        bool assign_to_a(F f, function_buffer& functor, Allocator a)
+        bool assign_to_a(F f, function_buffer& functor, Allocator a) const
         {
           typedef typename get_function_tag<F>::type tag;
           return assign_to_a(f, functor, a, tag());
         }
 
-        void clear(function_buffer& functor)
+        void clear(function_buffer& functor) const
         {
           if (base.manager)
             base.manager(functor, functor, destroy_functor_tag);
@@ -508,7 +508,7 @@ namespace boost {
         // Function pointers
         template<typename FunctionPtr>
         bool 
-        assign_to(FunctionPtr f, function_buffer& functor, function_ptr_tag)
+        assign_to(FunctionPtr f, function_buffer& functor, function_ptr_tag) const
         {
           this->clear(functor);
           if (f) {
@@ -522,7 +522,7 @@ namespace boost {
         }
         template<typename FunctionPtr,typename Allocator>
         bool 
-        assign_to_a(FunctionPtr f, function_buffer& functor, Allocator, function_ptr_tag)
+        assign_to_a(FunctionPtr f, function_buffer& functor, Allocator, function_ptr_tag) const
         {
           return assign_to(f,functor,function_ptr_tag());
         }
@@ -530,7 +530,7 @@ namespace boost {
         // Member pointers
 #if BOOST_FUNCTION_NUM_ARGS > 0
         template<typename MemberPtr>
-        bool assign_to(MemberPtr f, function_buffer& functor, member_ptr_tag)
+        bool assign_to(MemberPtr f, function_buffer& functor, member_ptr_tag) const
         {
           // DPG TBD: Add explicit support for member function
           // objects, so we invoke through mem_fn() but we retain the
@@ -543,7 +543,7 @@ namespace boost {
           }
         }
         template<typename MemberPtr,typename Allocator>
-        bool assign_to_a(MemberPtr f, function_buffer& functor, Allocator a, member_ptr_tag)
+        bool assign_to_a(MemberPtr f, function_buffer& functor, Allocator a, member_ptr_tag) const
         {
           // DPG TBD: Add explicit support for member function
           // objects, so we invoke through mem_fn() but we retain the
@@ -561,13 +561,13 @@ namespace boost {
         // Assign to a function object using the small object optimization
         template<typename FunctionObj>
         void 
-        assign_functor(FunctionObj f, function_buffer& functor, mpl::true_)
+        assign_functor(FunctionObj f, function_buffer& functor, mpl::true_) const
         {
           new (reinterpret_cast<void*>(&functor.data)) FunctionObj(f);
         }
         template<typename FunctionObj,typename Allocator>
         void 
-        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator, mpl::true_)
+        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator, mpl::true_) const
         {
           assign_functor(f,functor,mpl::true_());
         }
@@ -575,13 +575,13 @@ namespace boost {
         // Assign to a function object allocated on the heap.
         template<typename FunctionObj>
         void 
-        assign_functor(FunctionObj f, function_buffer& functor, mpl::false_)
+        assign_functor(FunctionObj f, function_buffer& functor, mpl::false_) const
         {
           functor.obj_ptr = new FunctionObj(f);
         }
         template<typename FunctionObj,typename Allocator>
         void 
-        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator a, mpl::false_)
+        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator a, mpl::false_) const
         {
           typedef functor_wrapper<FunctionObj,Allocator> functor_wrapper_type;
           typedef typename Allocator::template rebind<functor_wrapper_type>::other
@@ -596,7 +596,7 @@ namespace boost {
 
         template<typename FunctionObj>
         bool 
-        assign_to(FunctionObj f, function_buffer& functor, function_obj_tag)
+        assign_to(FunctionObj f, function_buffer& functor, function_obj_tag) const
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
             assign_functor(f, functor, 
@@ -608,7 +608,7 @@ namespace boost {
         }
         template<typename FunctionObj,typename Allocator>
         bool 
-        assign_to_a(FunctionObj f, function_buffer& functor, Allocator a, function_obj_tag)
+        assign_to_a(FunctionObj f, function_buffer& functor, Allocator a, function_obj_tag) const
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
             assign_functor_a(f, functor, a,
@@ -623,7 +623,7 @@ namespace boost {
         template<typename FunctionObj>
         bool 
         assign_to(const reference_wrapper<FunctionObj>& f, 
-                  function_buffer& functor, function_obj_ref_tag)
+                  function_buffer& functor, function_obj_ref_tag) const
         {
           functor.obj_ref.obj_ptr = (void *)(f.get_pointer());
           functor.obj_ref.is_const_qualified = is_const<FunctionObj>::value;
@@ -633,7 +633,7 @@ namespace boost {
         template<typename FunctionObj,typename Allocator>
         bool 
         assign_to_a(const reference_wrapper<FunctionObj>& f, 
-                  function_buffer& functor, Allocator, function_obj_ref_tag)
+                  function_buffer& functor, Allocator, function_obj_ref_tag) const
         {
           return assign_to(f,functor,function_obj_ref_tag());
         }
@@ -903,7 +903,7 @@ namespace boost {
       // static initialization. Otherwise, we will have a race
       // condition here in multi-threaded code. See
       // http://thread.gmane.org/gmane.comp.lib.boost.devel/164902/.
-      static vtable_type stored_vtable = 
+      static const vtable_type stored_vtable = 
         { { &manager_type::manage }, &invoker_type::invoke };
 
       if (stored_vtable.assign_to(f, functor)) {
@@ -937,7 +937,7 @@ namespace boost {
       // static initialization. Otherwise, we will have a race
       // condition here in multi-threaded code. See
       // http://thread.gmane.org/gmane.comp.lib.boost.devel/164902/.
-      static vtable_type stored_vtable =
+      static const vtable_type stored_vtable =
         { { &manager_type::manage }, &invoker_type::invoke };
 
       if (stored_vtable.assign_to_a(f, functor, a)) { 
