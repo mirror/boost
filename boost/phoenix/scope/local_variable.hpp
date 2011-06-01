@@ -73,9 +73,7 @@ namespace boost { namespace phoenix
             : proto::or_<
                 proto::when<boost::phoenix::rule::local_variable, mpl::true_()>
               , proto::otherwise<
-                    boost::phoenix::result_of::is_nullary<
-                        boost::phoenix::custom_terminal<proto::_value>
-                    >()
+                    is_nullary::when<boost::phoenix::rule::custom_terminal, Dummy>
                 >
             >
         {};
