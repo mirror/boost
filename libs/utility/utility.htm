@@ -224,6 +224,15 @@ typedef boost::result_of&lt;
 &gt;::type type;</pre>
                 </blockquote>
 
+                <p>In a future
+                release, <code>BOOST_RESULT_OF_USE_DECLTYPE</code>
+                may be enabled by default on compilers that
+                support <code>decltype</code>, so if you use the above
+                protocol please take care to ensure that
+                the <code>result_type</code>
+                and <code>result&lt;&gt;</code> members are
+                accurate.</p>
+
                 <a name="BOOST_NO_RESULT_OF"></a>
                 <p>This implementation of <code>result_of</code>
                 requires class template partial specialization, the
