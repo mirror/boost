@@ -175,7 +175,7 @@ private:
     }
     
     void throw_invalid() const {
-        throw_exception(std::runtime_error("invalid uuid string"));
+        BOOST_THROW_EXCEPTION(std::runtime_error("invalid uuid string"));
     }
 };
 
