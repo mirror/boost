@@ -575,6 +575,10 @@ type `char32_t`.
 [[`BOOST_NO_DECLTYPE`][The compiler does not support 
 `decltype`. 
 ]]                       
+[[`BOOST_NO_DECLTYPE_N3276`][The compiler does not support the extension to
+`decltype` described in [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3276.pdf N3276],
+accepted in Madrid, March 2011.
+]]                       
 [[`BOOST_NO_DEFAULTED_FUNCTIONS`][The compiler does not support 
 defaulted (`= default`) functions.  
 ]]            
@@ -599,7 +603,7 @@ The C++ compiler does not support C++0x initializer lists.
 ]]                
 [[`BOOST_NO_NOEXCEPT`][The compiler does not support `noexcept`. 
 ]]                      
-[[`BOOST_NO_NULLPTR`][The compiler does not support 'nullptr'. 
+[[`BOOST_NO_NULLPTR`][The compiler does not support `nullptr`. 
 ]]                      
 [[`BOOST_NO_RAW_LITERALS`][The compiler does not support
 raw string literals. 

@@ -1,4 +1,4 @@
-//  This file was automatically generated on Mon May 09 12:11:18 2011
+//  This file was automatically generated on Wed Jun  1 21:44:56 2011
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -196,6 +196,11 @@ namespace boost_no_cwctype = empty_boost;
 #include "boost_no_decltype.ipp"
 #else
 namespace boost_no_decltype = empty_boost;
+#endif
+#ifndef BOOST_NO_DECLTYPE_N3276
+#include "boost_no_decltype_n3276.ipp"
+#else
+namespace boost_no_decltype_n3276 = empty_boost;
 #endif
 #ifndef BOOST_DEDUCED_TYPENAME
 #include "boost_no_ded_typename.ipp"
@@ -1274,6 +1279,11 @@ int main( int, char *[] )
    if(0 != boost_no_decltype::test())
    {
       std::cerr << "Failed test for BOOST_NO_DECLTYPE at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_decltype_n3276::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_DECLTYPE_N3276 at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_deduced_typename::test())

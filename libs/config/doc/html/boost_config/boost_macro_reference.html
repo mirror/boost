@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_config.boost_macro_reference"></a><a class="link" href="boost_macro_reference.html" title="Boost Macro Reference">Boost Macro Reference</a>
 </h2></div></div></div>
@@ -42,12 +42,12 @@
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code">Macros
       for libraries with separate source code</a></span></dt>
 </dl></div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects" title="Macros that describe defects">Macros
+<a name="boost_config.boost_macro_reference.macros_that_describe_defects"></a><a name="config_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects" title="Macros that describe defects">Macros
       that describe defects</a>
 </h3></div></div></div>
-<a name="config_defects"></a><p>
+<p>
         The following macros all describe features that are required by the C++ standard,
         if one of the following macros is defined, then it represents a defect in
         the compiler's conformance with the standard.
@@ -422,16 +422,16 @@
                   The compiler does not perform function template ordering or its
                   function template ordering is incorrect. 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="comment">// #1
-</span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="comment">// #1</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
 
-<span class="comment">// #2
-</span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">(*)(</span><span class="identifier">U</span><span class="special">));</span>
+<span class="comment">// #2</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">(*)(</span><span class="identifier">U</span><span class="special">));</span>
 
 <span class="keyword">void</span> <span class="identifier">bar</span><span class="special">(</span><span class="keyword">int</span><span class="special">);</span>
 
-<span class="identifier">f</span><span class="special">(&amp;</span><span class="identifier">bar</span><span class="special">);</span> <span class="comment">// should choose #2.
-</span></pre>
+<span class="identifier">f</span><span class="special">(&amp;</span><span class="identifier">bar</span><span class="special">);</span> <span class="comment">// should choose #2.</span>
+</pre>
 <p>
                 </p>
               </td>
@@ -1324,12 +1324,12 @@
 </tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_optional_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features" title="Macros that describe optional features">Macros
+<a name="boost_config.boost_macro_reference.macros_that_describe_optional_features"></a><a name="config_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features" title="Macros that describe optional features">Macros
       that describe optional features</a>
 </h3></div></div></div>
-<a name="config_features"></a><p>
+<p>
         The following macros describe features that are not required by the C++ standard.
         The macro is only defined if the feature is present.
       </p>
@@ -2216,7 +2216,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features" title="Macros that describe possible C++0x features">Macros
       that describe possible C++0x features</a>
@@ -2257,7 +2257,7 @@
 </tr></tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported" title="Macros that describe C++0x features not supported">Macros
       that describe C++0x features not supported</a>
@@ -2595,6 +2595,20 @@
 <tr>
 <td>
                 <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_DECLTYPE_N3276</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  The compiler does not support the extension to <code class="computeroutput"><span class="identifier">decltype</span></code>
+                  described in <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3276.pdf" target="_top">N3276</a>,
+                  accepted in Madrid, March 2011.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
                   <code class="computeroutput"><span class="identifier">BOOST_NO_DEFAULTED_FUNCTIONS</span></code>
                 </p>
               </td>
@@ -2714,7 +2728,7 @@
               </td>
 <td>
                 <p>
-                  The compiler does not support 'nullptr'.
+                  The compiler does not support <code class="computeroutput"><span class="identifier">nullptr</span></code>.
                 </p>
               </td>
 </tr>
@@ -2844,12 +2858,12 @@
 </tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
+<a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a name="config_helpers"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
       Helper Macros</a>
 </h3></div></div></div>
-<a name="config_helpers"></a><p>
+<p>
         The following macros are either simple helpers, or macros that provide workarounds
         for compiler/standard library defects.
       </p>
@@ -2889,10 +2903,10 @@
                   usage is then: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#if</span> <span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">MACRONAME</span><span class="special">,</span> <span class="identifier">CONDITION</span><span class="special">)</span>
-   <span class="comment">// workaround code goes here...
-</span><span class="preprocessor">#else</span>
-   <span class="comment">// Standard conforming code goes here...
-</span><span class="preprocessor">#endif</span>
+   <span class="comment">// workaround code goes here...</span>
+<span class="preprocessor">#else</span>
+   <span class="comment">// Standard conforming code goes here...</span>
+<span class="preprocessor">#endif</span>
 </pre>
 <p>
                   where <code class="computeroutput"><span class="identifier">MACRONAME</span></code>
@@ -3277,12 +3291,12 @@
 </tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.boost_informational_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros" title="Boost Informational Macros">Boost
+<a name="boost_config.boost_macro_reference.boost_informational_macros"></a><a name="config_info_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros" title="Boost Informational Macros">Boost
       Informational Macros</a>
 </h3></div></div></div>
-<a name="config_info_macros"></a><p>
+<p>
         The following macros describe boost features; these are, generally speaking
         the only boost macros that should be tested in user code.
       </p>
@@ -3555,7 +3569,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code" title="Macros for libraries with separate source code">Macros
       for libraries with separate source code</a>
@@ -3572,14 +3586,14 @@
         The following macros and helper headers are of use to authors whose libraries
         include separate source code, and are intended to address several issues:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             Controlling shared library symbol visibility
           </li>
-<li>
+<li class="listitem">
             Fixing the ABI of the compiled library
           </li>
-<li>
+<li class="listitem">
             Selecting which compiled library to link against based upon the compilers
             settings
           </li>
@@ -3588,7 +3602,7 @@
         See <a href="http://svn.boost.org/trac/boost/wiki/Guidelines/Separate" target="_top">Guidelines
         for Authors of Boost Libraries Containing Separate Source</a>
       </p>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.macros_controlling_shared_library_symbol_visibility"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.macros_controlling_shared_library_symbol_visibility" title="Macros controlling shared library symbol visibility">Macros
         controlling shared library symbol visibility</a>
@@ -3743,7 +3757,7 @@
 <span class="special">...</span>
 </pre>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing" title="ABI Fixing">ABI
         Fixing</a>
@@ -3771,28 +3785,28 @@
 <pre class="programlisting"><span class="preprocessor">#ifndef</span> <span class="identifier">MY_INCLUDE_GUARD</span>
 <span class="preprocessor">#define</span> <span class="identifier">MY_INCLUDE_GUARD</span>
 
-<span class="comment">// all includes go here:
-</span><code class="literal"><span class="bold"><strong>#include &lt;boost/config.hpp&gt;</strong></span></code>
+<span class="comment">// all includes go here:</span>
+<code class="literal"><span class="bold"><strong>#include &lt;boost/config.hpp&gt;</strong></span></code>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">whatever</span><span class="special">&gt;</span>
 
-<code class="literal"><span class="bold"><strong>#include &lt;boost/config/abi_prefix.hpp&gt;</strong></span></code> <span class="comment">// must be the last #include
-</span>
+<code class="literal"><span class="bold"><strong>#include &lt;boost/config/abi_prefix.hpp&gt;</strong></span></code> <span class="comment">// must be the last #include</span>
+
 <span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
 
-<span class="comment">// your code goes here
-</span>
+<span class="comment">// your code goes here</span>
+
 <span class="special">}</span>
 
-<code class="literal"><span class="bold"><strong>#include &lt;boost/config/abi_suffix.hpp&gt;</strong></span></code> <span class="comment">// pops abi_prefix.hpp pragmas
-</span>
-<span class="preprocessor">#endif</span> <span class="comment">// include guard
-</span></pre>
+<code class="literal"><span class="bold"><strong>#include &lt;boost/config/abi_suffix.hpp&gt;</strong></span></code> <span class="comment">// pops abi_prefix.hpp pragmas</span>
+
+<span class="preprocessor">#endif</span> <span class="comment">// include guard</span>
+</pre>
 <p>
           <span class="bold"><strong>my_library.cpp</strong></span>
         </p>
 <pre class="programlisting"><span class="special">...</span>
-<span class="comment">// nothing special need be done in the implementation file
-</span><span class="special">...</span>
+<span class="comment">// nothing special need be done in the implementation file</span>
+<span class="special">...</span>
 </pre>
 <p>
           The user can disable this mechanism by defining <code class="computeroutput"><span class="identifier">BOOST_DISABLE_ABI_HEADERS</span></code>,
@@ -3801,7 +3815,7 @@
           to point to their own prefix/suffix headers if they so wish.
         </p>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection" title="Automatic library selection">Automatic
         library selection</a>
@@ -3856,12 +3870,12 @@
           <span class="bold"><strong>my_library.hpp</strong></span>
         </p>
 <pre class="programlisting"><span class="special">...</span>
-<span class="comment">//
-</span><span class="comment">// Don't include auto-linking code if the user has disabled it by
-</span><span class="comment">// defining BOOST_ALL_NO_LIB, or BOOST_MY_LIBRARY_NO_LIB, or if this 
-</span><span class="comment">// is one of our own source files (signified by BOOST_MY_LIBRARY_SOURCE):
-</span><span class="comment">//
-</span><span class="preprocessor">#if</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_ALL_NO_LIB</span><span class="special">)</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_MY_LIBRARY_NO_LIB</span><span class="special">)</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_MY_LIBRARY_SOURCE</span><span class="special">)</span>
+<span class="comment">//</span>
+<span class="comment">// Don't include auto-linking code if the user has disabled it by</span>
+<span class="comment">// defining BOOST_ALL_NO_LIB, or BOOST_MY_LIBRARY_NO_LIB, or if this </span>
+<span class="comment">// is one of our own source files (signified by BOOST_MY_LIBRARY_SOURCE):</span>
+<span class="comment">//</span>
+<span class="preprocessor">#if</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_ALL_NO_LIB</span><span class="special">)</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_MY_LIBRARY_NO_LIB</span><span class="special">)</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_MY_LIBRARY_SOURCE</span><span class="special">)</span>
 <span class="preprocessor">#  define</span> <span class="identifier">BOOST_LIB_NAME</span> <span class="identifier">boost_my_library</span>
 <span class="preprocessor">#  ifdef</span> <span class="identifier">BOOST_MY_LIBRARY_DYN_LINK</span>
 <span class="preprocessor">#     define</span> <span class="identifier">BOOST_DYN_LINK</span>
@@ -3873,10 +3887,10 @@
 <p>
           <span class="bold"><strong>my_library.cpp</strong></span>
         </p>
-<pre class="programlisting"><span class="comment">// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
-</span><span class="comment">// library is being built (possibly exporting rather than importing code)
-</span><span class="comment">//
-</span><span class="preprocessor">#define</span> <span class="identifier">BOOST_MY_LIBRARY_SOURCE</span>
+<pre class="programlisting"><span class="comment">// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the</span>
+<span class="comment">// library is being built (possibly exporting rather than importing code)</span>
+<span class="comment">//</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_MY_LIBRARY_SOURCE</span>
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">my_library</span><span class="special">/</span><span class="identifier">my_library</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="special">...</span>
@@ -3886,7 +3900,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2007 Beman Dawes, Vesa Karvonen, John
+      Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
