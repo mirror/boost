@@ -151,11 +151,54 @@ void trim_all_test()
     BOOST_CHECK( trim_all_copy_if( string("<>abc<>def<>"), is_any_of( "<<>>" ) )=="abc<def" );
 }
 
+void trim_fill_test()
+{
+    string str1("     1x   x   x   x1     ");
+    string str2("+---...2x+--x--+x-+-x2...---+");
+    string str3("    ");
+
+    // *** value passing tests *** //
+
+    // general string test
+    BOOST_CHECK( trim_fill_copy( str1, "-" )=="1x-x-x-x1" ) ;
+    BOOST_CHECK( trim_fill_copy_if( str2, " ", is_punct() )=="2x x x x2" ) ;
+
+    // spaces-only string test
+    BOOST_CHECK( trim_fill_copy( str3, " " )=="" );
+
+    // empty string check 
+    BOOST_CHECK( trim_fill_copy( string(""), " " )=="" );
+
+    // general string test
+    trim_fill( str1, "-" );
+    BOOST_CHECK( str1=="1x-x-x-x1" ) ;
+    trim_fill_if( str2, "", is_punct() );
+    BOOST_CHECK( str2=="2xxxx2" ) ;
+
+    // spaces-only string test
+    str3 = "    "; trim_fill( str3, "" );
+    BOOST_CHECK( str3=="" );
+
+    // empty string check 
+    str3 = ""; trim_fill( str3, "" );
+    BOOST_CHECK( str3=="" );
+    BOOST_CHECK( str3=="" );
+
+    // *** non-standard predicate tests *** //
+    BOOST_CHECK( 
+        trim_fill_copy_if( 
+        string("123abc127deb456"), 
+        "+",
+        is_classified(std::ctype_base::digit) )=="abc+deb" );
+    BOOST_CHECK( trim_fill_copy_if( string("<>abc<>def<>"), "-", is_any_of( "<<>>" ) )=="abc-def" );
+}
+
 // test main 
 int test_main( int, char*[] )
 {
     trim_test();
     trim_all_test();
-    
+    trim_fill_test();
+
     return 0;
 }
