@@ -27,6 +27,9 @@
 // Graphviz Output
 #include <boost/graph/distributed/graphviz.hpp>
 
+// For choose_min_reducer
+#include <boost/graph/distributed/distributed_graph_utility.hpp>
+
 // Standard Library includes
 #include <fstream>
 #include <string>
@@ -70,6 +73,12 @@ int main(int argc, char* argv[])
   // Compute BFS levels from vertex 0
   property_map<Graph, vertex_distance_t>::type distance =
     get(vertex_distance, g);
+
+  // Initialize distances to infinity and set reduction operation to 'min'
+  BGL_FORALL_VERTICES(v, g, Graph) {
+    put(distance, v, std::numeric_limits<std::size_t>::max());
+  }
+  distance.set_reduce(boost::graph::distributed::choose_min_reducer<std::size_t>());
 
   put(distance, start, 0);
   breadth_first_search
