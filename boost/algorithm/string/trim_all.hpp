@@ -27,8 +27,8 @@
     sequence (string). In addition, spaces in the middle of the sequence are truncated
     to just one character. Space is recognized using given locales.
 
-	\c trim_fill acts as trim_all, but the spaces in the middle are replaces with 
-	a user-define sequence of character.
+    \c trim_fill acts as trim_all, but the spaces in the middle are replaces with 
+    a user-define sequence of character.
 
     Parametric (\c _if) variants use a predicate (functor) to select which characters
     are to be trimmed.. 
@@ -45,7 +45,7 @@ namespace boost {
         //! Trim All - parametric
         /*!
             Remove all leading and trailing spaces from the input and
-            compress all other spaces to a single space.
+            compress all other spaces to a single character.
             The result is a trimmed copy of the input
 
             \param Input An input sequence
@@ -66,7 +66,7 @@ namespace boost {
         //! Trim All
         /*!
             Remove all leading and trailing spaces from the input and
-            compress all other spaces to a single space.
+            compress all other spaces to a single character.
             The input sequence is modified in-place.
 
             \param Input An input sequence
@@ -86,7 +86,7 @@ namespace boost {
         //! Trim All
         /*!
             Remove all leading and trailing spaces from the input and
-            compress all other spaces to a single space.
+            compress all other spaces to a single character.
             The result is a trimmed copy of the input
 
             \param Input An input sequence
@@ -103,7 +103,7 @@ namespace boost {
         //! Trim All
         /*!
             Remove all leading and trailing spaces from the input and
-            compress all other spaces to a single space.
+            compress all other spaces to a single character.
             The input sequence is modified in-place.
 
             \param Input An input sequence
@@ -121,11 +121,11 @@ namespace boost {
         /*!
             Remove all leading and trailing spaces from the input and
             replace all every block of consecutive spaces with a fill string
-			defined by user.
+            defined by user.
             The result is a trimmed copy of the input
 
             \param Input An input sequence
-			\param Fill A string used to fill the inner spaces
+            \param Fill A string used to fill the inner spaces
             \param IsSpace An unary predicate identifying spaces
             \return A trimmed copy of the input
         */
@@ -142,13 +142,13 @@ namespace boost {
 
         //! Trim Fill
         /*!
-			Remove all leading and trailing spaces from the input and
-			replace all every block of consecutive spaces with a fill string
-			defined by user.
+            Remove all leading and trailing spaces from the input and
+            replace all every block of consecutive spaces with a fill string
+            defined by user.
             The input sequence is modified in-place.
 
             \param Input An input sequence
-			\param Fill A string used to fill the inner spaces
+            \param Fill A string used to fill the inner spaces
             \param IsSpace An unary predicate identifying spaces
         */
         template<typename SequenceT, typename RangeT, typename PredicateT>
@@ -164,9 +164,9 @@ namespace boost {
 
         //! Trim Fill
         /*!
-			Remove all leading and trailing spaces from the input and
-			replace all every block of consecutive spaces with a fill string
-			defined by user.
+            Remove all leading and trailing spaces from the input and
+            replace all every block of consecutive spaces with a fill string
+            defined by user.
             The result is a trimmed copy of the input
 
             \param Input An input sequence
@@ -183,13 +183,13 @@ namespace boost {
 
         //! Trim Fill
         /*!
-			Remove all leading and trailing spaces from the input and
-			replace all every block of consecutive spaces with a fill string
-			defined by user.
+            Remove all leading and trailing spaces from the input and
+            replace all every block of consecutive spaces with a fill string
+            defined by user.
             The input sequence is modified in-place.
 
             \param Input An input sequence
-			\param Fill A string used to fill the inner spaces
+            \param Fill A string used to fill the inner spaces
             \param Loc A locale used for 'space' classification
             \return A trimmed copy of the input
         */
@@ -207,10 +207,10 @@ namespace boost {
     using algorithm::trim_all_if;
     using algorithm::trim_all_copy;
     using algorithm::trim_all_copy_if;
-	using algorithm::trim_fill;
-	using algorithm::trim_fill_if;
-	using algorithm::trim_fill_copy;
-	using algorithm::trim_fill_copy_if;
+    using algorithm::trim_fill;
+    using algorithm::trim_fill_if;
+    using algorithm::trim_fill_copy;
+    using algorithm::trim_fill_copy_if;
 
 } // namespace boost
 
