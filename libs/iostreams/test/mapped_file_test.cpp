@@ -21,6 +21,7 @@
 
 #include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
+#include <boost/filesystem/path.hpp>
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
@@ -292,6 +293,20 @@ void mapped_file_test()
         std::strcpy(name, orig.name().c_str());
         
         mapped_file mf((char*) name);
+
+        BOOST_CHECK_MESSAGE(
+            boost::iostreams::test::test_writeable(mf),
+            "failed seeking within private mapped_file"
+        );
+
+        mf.close();
+    }
+
+    //---------Check creating opening mapped_file with filesystem3 path------//
+    {
+        boost::iostreams::test::test_file orig;
+        
+        mapped_file mf(boost::filesystem::path(orig.name()));
 
         BOOST_CHECK_MESSAGE(
             boost::iostreams::test::test_writeable(mf),

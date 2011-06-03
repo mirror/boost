@@ -15,7 +15,7 @@ local NO_ZLIB = [ modules.peek : NO_ZLIB ] ;
 local LARGE_FILE_TEMP = [ modules.peek : LARGE_FILE_TEMP ] ;
 local LARGE_FILE_KEEP = [ modules.peek : LARGE_FILE_KEEP ] ;
 
-rule test-iostreams ( sources * : requirements * ) {
+rule test-iostreams ( sources * : requirements * : target-name ? ) {
     return [
             run
                 $(sources)
@@ -30,6 +30,7 @@ rule test-iostreams ( sources * : requirements * ) {
                 <define>BOOST_IOSTREAMS_NO_LIB
                 <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
                 $(requirements)
+            : $(target-name)
         ] ;
 }
 
@@ -86,6 +87,12 @@ rule compile-fail-iostreams ( sources * : requirements * : target-name ? ) {
           [ test-iostreams line_filter_test.cpp ]
           [ test-iostreams mapped_file_test.cpp 
                 ../build//boost_iostreams ]
+          [ test-iostreams path_test.cpp
+                : <define>BOOST_FILESYSTEM_VERSION=2
+                : path_test_filesystem2 ]
+          [ test-iostreams path_test.cpp
+                : <define>BOOST_FILESYSTEM_VERSION=3
+                : path_test_filesystem3 ]
           [ test-iostreams newline_test.cpp ]
           [ test-iostreams null_test.cpp ]
           [ test-iostreams operation_sequence_test.cpp ]
