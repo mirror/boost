@@ -19,6 +19,9 @@
               <computeroutput>a | b | c</computeroutput> has a flattened view with elements [a, b, c], even
               though the tree is grouped as <computeroutput>((a | b) | c)</computeroutput>.
             </para>
+            <para>
+              The resulting view is a Fusion Forward Sequence.
+            </para>
           </description>
           <inherit>
             <type><classname>proto::callable</classname></type>
@@ -56,6 +59,11 @@
               <parameter name="expr">
                 <paramtype>Expr &amp;</paramtype>
               </parameter>
+              <description>
+                <para>
+                  Returns a Fusion Forward Sequence representing a flattened view of <computeroutput>expr</computeroutput>.
+                </para>
+              </description>
             </method>
             <method name="operator()" cv="const">
               <type>typename <classname>proto::result_of::flatten</classname>&lt; Expr const &gt;::type const</type>
@@ -65,6 +73,11 @@
               <parameter name="expr">
                 <paramtype>Expr const &amp;</paramtype>
               </parameter>
+              <description>
+                <para>
+                  Returns a Fusion Forward Sequence representing a flattened view of <computeroutput>expr</computeroutput>.
+                </para>
+              </description>
             </method>
           </method-group>
         </struct>
@@ -81,6 +94,7 @@
             <functionname alt="proto::flatten">proto::flatten()</functionname></computeroutput></purpose>
           <typedef name="type">
             <type><emphasis>unspecified</emphasis></type>
+            <purpose>A Fusion Forward Sequence</purpose>
           </typedef>
         </struct>
       </namespace>
@@ -114,6 +128,9 @@
             corresponding to the expression <computeroutput>a | b | c</computeroutput> has a flattened
             view with elements [a, b, c], even though the tree is grouped as
             <computeroutput>((a | b) | c)</computeroutput>.
+          </para>
+          <para>
+            The returned view is a Fusion Forward Sequence.
           </para>
         </description>
       </overloaded-function>
