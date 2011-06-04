@@ -393,7 +393,7 @@ namespace quickbook
                                 )
                             >>  local.nested_char
                             )
-                        )                       [actions.docinfo_value(ph::arg1, ph::arg2)]
+                        )                       [actions.to_value]
                     ]
                 >>  cl::f_ch_p(local.simple_markup.mark)
                                                 [actions.simple_markup]
