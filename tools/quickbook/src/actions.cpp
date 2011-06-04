@@ -380,14 +380,7 @@ namespace quickbook
         values.finish();
 
         out << markup.pre;
-        if (std::string const* ptr = find(macro, content.get_quickbook().c_str()))
-        {
-            out << *ptr;
-        }
-        else
-        {
-            out << content.get_boostbook();
-        }
+        out << content.get_boostbook();
         out << markup.post;
     }
 
