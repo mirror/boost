@@ -386,7 +386,13 @@ namespace quickbook
                     [
                         (   cl::eps_p(actions.macro >> local.simple_markup_end)
                         >>  actions.macro       [actions.do_macro]
-                        |   +(~cl::eps_p(local.simple_markup_end) >> local.nested_char)
+                        |   ~cl::eps_p(cl::f_ch_p(local.simple_markup.mark))
+                        >>  +(  ~cl::eps_p
+                                (   lookback [~cl::f_ch_p(local.simple_markup.mark)]
+                                >>  local.simple_markup_end
+                                )
+                            >>  local.nested_char
+                            )
                         )                       [actions.docinfo_value(ph::arg1, ph::arg2)]
                     ]
                 >>  cl::f_ch_p(local.simple_markup.mark)
