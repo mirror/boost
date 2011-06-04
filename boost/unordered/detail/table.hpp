@@ -1,6 +1,6 @@
 
 // Copyright (C) 2003-2004 Jeremy B. Maitin-Shepard.
-// Copyright (C) 2005-2009 Daniel James
+// Copyright (C) 2005-2011 Daniel James
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -801,7 +801,16 @@ namespace boost { namespace unordered { namespace iterator_detail {
         typedef ::boost::unordered::iterator_detail::iterator<A, Unique>
             iterator;
         friend class ::boost::unordered::iterator_detail::iterator<A, Unique>;
-        friend class ::boost::unordered::detail::iterator_access;
+
+        template <class K, class T, class H, class P, class A2>
+        friend class ::boost::unordered::unordered_map;
+        template <class K, class T, class H, class P, class A2>
+        friend class ::boost::unordered::unordered_multimap;
+        template <class T, class H, class P, class A2>
+        friend class ::boost::unordered::unordered_set;
+        template <class T, class H, class P, class A2>
+        friend class ::boost::unordered::unordered_multiset;
+
         node_ptr node_;
 
     public:

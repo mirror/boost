@@ -1,6 +1,6 @@
 
 // Copyright (C) 2003-2004 Jeremy B. Maitin-Shepard.
-// Copyright (C) 2005-2009 Daniel James
+// Copyright (C) 2005-2011 Daniel James
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -635,24 +635,6 @@ namespace boost { namespace unordered { namespace detail {
             }
         }
     }
-
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Iterators
-
-    // iterator_access is used to access the internal iterator without
-    // making it publicly available.
-
-    class iterator_access
-    {
-    public:
-        template <class Iterator>
-        static BOOST_DEDUCED_TYPENAME Iterator::node_ptr const&
-            get(Iterator const& it)
-        {
-            return it.node_;
-        }
-    };
 }}}
 
 #endif

@@ -1,6 +1,6 @@
 
 // Copyright (C) 2003-2004 Jeremy B. Maitin-Shepard.
-// Copyright (C) 2005-2009 Daniel James.
+// Copyright (C) 2005-2011 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -37,6 +37,8 @@
 #endif
 
 namespace boost
+{
+namespace unordered
 {
     template <class K, class T, class H, class P, class A>
     class unordered_map
@@ -93,12 +95,6 @@ namespace boost
 
         table table_;
         
-        BOOST_DEDUCED_TYPENAME types::node_ptr const&
-            get(const_iterator const& it)
-        {
-            return ::boost::unordered::detail::iterator_access::get(it);
-        }
-
     public:
 
         // construct/destroy/copy
@@ -425,12 +421,6 @@ namespace boost
 
         table table_;
         
-        BOOST_DEDUCED_TYPENAME types::node_ptr const&
-            get(const_iterator const& it)
-        {
-            return ::boost::unordered::detail::iterator_access::get(it);
-        }
-
     public:
 
         // construct/destroy/copy
@@ -957,7 +947,7 @@ namespace boost
     BOOST_DEDUCED_TYPENAME unordered_map<K,T,H,P,A>::iterator
         unordered_map<K,T,H,P,A>::erase(const_iterator position)
     {
-        return iterator(table_.erase(get(position)));
+        return iterator(table_.erase(position.node_));
     }
 
     template <class K, class T, class H, class P, class A>
@@ -972,7 +962,7 @@ namespace boost
         unordered_map<K,T,H,P,A>::erase(
             const_iterator first, const_iterator last)
     {
-        return iterator(table_.erase_range(get(first), get(last)));
+        return iterator(table_.erase_range(first.node_, last.node_));
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1411,7 +1401,7 @@ namespace boost
     BOOST_DEDUCED_TYPENAME unordered_multimap<K,T,H,P,A>::iterator
         unordered_multimap<K,T,H,P,A>::erase(const_iterator position)
     {
-        return iterator(table_.erase(get(position)));
+        return iterator(table_.erase(position.node_));
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1426,7 +1416,7 @@ namespace boost
         unordered_multimap<K,T,H,P,A>::erase(
             const_iterator first, const_iterator last)
     {
-        return iterator(table_.erase_range(get(first), get(last)));
+        return iterator(table_.erase_range(first.node_, last.node_));
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1584,7 +1574,7 @@ namespace boost
         m1.swap(m2);
     }
 
-
+} // namespace unordered
 } // namespace boost
 
 #if defined(BOOST_MSVC)
