@@ -431,17 +431,6 @@ namespace boost { namespace unordered { namespace detail {
         new(address) T(std::forward<Args>(args)...);
     }
 
-#if defined(BOOST_UNORDERED_CPP0X_PAIR)
-    template <class First, class Second, class Key, class Arg0, class... Args>
-    inline void construct_impl(std::pair<First, Second>*, void* address,
-        Key&& k, Arg0&& arg0, Args&&... args)
-    )
-    {
-        new(address) std::pair<First, Second>(k,
-            Second(arg0, std::forward<Args>(args)...);
-    }
-#endif
-
 #else
 
 #define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                       \
