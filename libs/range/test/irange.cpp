@@ -14,7 +14,6 @@
 #include <boost/range/end.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-#include <iostream>
 #include <vector>
 
 namespace boost
@@ -35,27 +34,38 @@ namespace boost
         BOOST_CHECK_EQUAL_COLLECTIONS( test.begin(), test.end(),
                                        reference.begin(), reference.end() );
     }
+    
+    template<typename Integer>
+    std::ptrdiff_t test_irange_calculate_num_steps(Integer first, Integer last, int step)
+    {
+        const std::ptrdiff_t sz = static_cast<std::ptrdiff_t>(step >= 0 ? step : -step);
+        const std::ptrdiff_t l = static_cast<std::ptrdiff_t>(step >= 0 ? last : first);
+        const std::ptrdiff_t f = static_cast<std::ptrdiff_t>(step >= 0 ? first : last);
+        return (l + ((l-f) % sz) - f) / sz;
+    }
 
     // Test an integer range with a runtime specified step size.
-    template<typename Integer>
-    void test_irange_impl(Integer first, Integer last, int step)
+    template<typename Integer, typename IntegerInput>
+    void test_irange_impl(IntegerInput first, IntegerInput last, int step)
     {
         BOOST_ASSERT( step != 0 );
+        
+        // Skip tests that have negative values if the type is
+        // unsigned
+        if ((static_cast<IntegerInput>(static_cast<Integer>(first)) != first)
+        ||  (static_cast<IntegerInput>(static_cast<Integer>(last)) != last))
+            return;
+        
         std::vector<Integer> reference;
-        if (step > 0)
-        {
-            for (Integer i = first; i < last; i += step)
-                reference.push_back(i);
-        }
-        else
-        {
-            for (Integer i = first; i > last; i += step)
-                reference.push_back(i);
-        }
+
+        const std::ptrdiff_t num_steps = test_irange_calculate_num_steps(first, last, step);        
+        Integer current_value = first;
+        for (std::ptrdiff_t i = 0; i < num_steps; ++i, current_value += step)
+            reference.push_back(current_value);
 
         std::vector<Integer> test;
         boost::push_back(test, boost::irange(first, last, step));
-
+        
         BOOST_CHECK_EQUAL_COLLECTIONS( test.begin(), test.end(),
                                        reference.begin(), reference.end() );
     }
@@ -81,7 +91,6 @@ namespace boost
     void test_irange(int first, int last, int step_size)
     {
         BOOST_ASSERT( step_size != 0 );
-        BOOST_ASSERT( (last - first) % step_size == 0 );
         test_irange_impl<signed char>(first, last, step_size);
         test_irange_impl<unsigned char>(first, last, step_size);
         test_irange_impl<signed short>(first, last, step_size);
@@ -114,8 +123,27 @@ namespace boost
         test_irange(10, 0, -1);
         test_irange(0, 2, 2);
         test_irange(2, 0, -2);
+        test_irange(0, 9, 2);
+        test_irange(9, 0, -2);
+        test_irange(-9, 0, 2);
+        test_irange(-9, 9, 2);
+        test_irange(9, -9, -2);
         test_irange(10, 20, 5);
         test_irange(20, 10, -5);
+        
+        test_irange(0, 0, 3);
+        test_irange(0, 1, 3);
+        test_irange(0, 2, 3);
+        test_irange(0, 3, 3);
+        test_irange(0, 4, 3);
+        test_irange(0, 10, 3);
+        
+        test_irange(0, 0, -3);
+        test_irange(0, -1, -3);
+        test_irange(0, -2, -3);
+        test_irange(0, -3, -3);
+        test_irange(0, -4, -3);
+        test_irange(0, -10, -3);
     }
 } // namespace boost
 

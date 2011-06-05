@@ -9,7 +9,7 @@
 //
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/algorithm/copy.hpp>
-#include <boost/range/assign.hpp>
+#include <boost/assign.hpp>
 #include <algorithm>
 #include <iostream>
 #include <vector>
