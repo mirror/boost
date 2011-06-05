@@ -107,8 +107,10 @@ typename enable_if
 singleton(const typename interval_traits<Type>::domain_type& value)
 {
     //ASSERT: This always creates an interval with exactly one element
-    typedef typename interval_traits<Type>::domain_type domain_type;
-    BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(value) )); 
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
+    BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                 ::is_less_than(value) )); 
 
     return interval_traits<Type>::construct(domain_prior<Type>(value), value);
 }
@@ -118,8 +120,10 @@ typename enable_if<is_discrete_static_open<Type>, Type>::type
 singleton(const typename interval_traits<Type>::domain_type& value)
 {
     //ASSERT: This always creates an interval with exactly one element
-    typedef typename interval_traits<Type>::domain_type domain_type;
-    BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(value))); 
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
+    BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                 ::is_less_than(value))); 
 
     return interval_traits<Type>::construct( domain_prior<Type>(value)
                                            , domain_next<Type>(value));
@@ -172,8 +176,10 @@ typename enable_if
 >::type
 unit_trail(const typename interval_traits<Type>::domain_type& value)
 {
-    typedef typename interval_traits<Type>::domain_type domain_type;
-    BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(value) )); 
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
+    BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                 ::is_less_than(value) )); 
 
     return interval_traits<Type>::construct(domain_prior<Type>(value), value);
 }
@@ -187,8 +193,10 @@ typename enable_if
 >::type
 unit_trail(const typename interval_traits<Type>::domain_type& value)
 {
-    typedef typename interval_traits<Type>::domain_type domain_type;
-    BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(value))); 
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
+    BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                 ::is_less_than(value))); 
 
     return interval_traits<Type>::construct( domain_prior<Type>(value)
                                            ,  domain_next<Type>(value));
@@ -279,15 +287,18 @@ typename enable_if<is_static_left_open<Type>, Type>::type
 hull(const typename interval_traits<Type>::domain_type& left,
      const typename interval_traits<Type>::domain_type& right)
 {
-    typedef typename interval_traits<Type>::domain_type domain_type;
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
     if(interval_traits<Type>::domain_compare()(left,right))
     {
-        BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(left) )); 
+        BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                     ::is_less_than(left) )); 
         return construct<Type>(domain_prior<Type>(left), right);
     }
     else
     {
-        BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(right) )); 
+        BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                     ::is_less_than(right) )); 
         return construct<Type>(domain_prior<Type>(right), left);
     }
 }
@@ -308,16 +319,19 @@ typename enable_if<is_static_open<Type>, Type>::type
 hull(const typename interval_traits<Type>::domain_type& left,
      const typename interval_traits<Type>::domain_type& right)
 {
-    typedef typename interval_traits<Type>::domain_type domain_type;
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
     if(interval_traits<Type>::domain_compare()(left,right))
     {
-        BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(left) )); 
+        BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                     ::is_less_than(left) )); 
         return construct<Type>( domain_prior<Type>(left)
                               ,  domain_next<Type>(right));
     }
     else
     {
-        BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value >::is_less_than(right) )); 
+        BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
+                                     ::is_less_than(right) )); 
         return construct<Type>( domain_prior<Type>(right)
                               ,  domain_next<Type>(left));
     }
@@ -402,8 +416,9 @@ enable_if< mpl::and_< mpl::or_<is_static_right_open<Type>, is_static_open<Type> 
          , typename interval_traits<Type>::domain_type>::type
 last(const Type& object)
 { 
-    typedef typename interval_traits<Type>::domain_type domain_type;
-    BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value>
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
+    BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
                                  ::is_less_than(upper(object)) )); 
     return domain_prior<Type>(upper(object));
 }
@@ -413,8 +428,9 @@ inline typename enable_if<is_discrete_interval<Type>,
                           typename interval_traits<Type>::domain_type>::type
 last(const Type& object)
 { 
-    typedef typename interval_traits<Type>::domain_type domain_type;
-    BOOST_ASSERT((numeric_minimum<domain_type, is_numeric<domain_type>::value>
+    typedef typename interval_traits<Type>::domain_type    domain_type;
+    typedef typename interval_traits<Type>::domain_compare domain_compare;
+    BOOST_ASSERT((numeric_minimum<domain_type, domain_compare, is_numeric<domain_type>::value>
                                  ::is_less_than_or(upper(object), is_right_closed(object.bounds())) )); 
     return is_right_closed(object.bounds()) ? 
                                   upper(object) : 
