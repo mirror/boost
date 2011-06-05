@@ -1896,6 +1896,22 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         BOOST_MSM_EUML_TRANSITION_TABLE. The <link
                             xlink:href="examples/SimpleTutorialWithEumlTable.cpp">implementation</link> is pretty
                         straightforward.</para>
+                    <para>The <link
+                        xlink:href="examples/CompositeTutorialWithEumlTable.cpp">composite</link> implementation is slightly trickier because the submachine
+                        has to be a msm::back::state_machine and a msm::front::euml::state. For
+                        example:</para>
+                    <programlisting>struct front_end : public msm::front::state_machine_def&lt;front_end>
+{
+...
+};
+struct submachine : public boost::msm::back::state_machine&lt;front_end>,
+                    public msm::front::euml::euml_state&lt;submachine>
+{
+};</programlisting>
+                    <para>Unfortunately, there is a bug with VC, which appears from time to time and
+                        causes in a stack overflow. If you get a warning that the program is
+                        recursive on all paths, revert to either standard eUML or another front-end
+                        as Microsoft doesn't seem to intend to fix it.</para>
                     <para>We now have a new, more readable transition table with few changes to our
                         example. eUML can do much more so please follow the guide.</para>
                 </sect2>
@@ -2043,51 +2059,10 @@ Empty_impl const Empty;</programlisting>
                             return value when used inside a transition or a state behavior. You can
                             now use this inside a transition:</para>
                         <programlisting>Empty == Open + open_close / (close_drawer,activate_empty_(target_))</programlisting>
-                    </sect3>
-                    <sect3>
-                        <title><command xml:id="eUML-phoenix"/>Writing actions with Boost.Phoenix (in development)</title>
-                        <para> It is also possible to write actions, guards, state entry and exit
-                            actions using a reduced set of Boost.Phoenix capabilities. This feature
-                            is still in development stage, so you might get here and there some
-                            surprise. Simple cases, however, should work well. What will not work
-                            will be mixing of eUML and Phoenix functors. Writing guards in one
-                            language and actions in another is ok though.</para>
-                        <para>Phoenix also supports a larger syntax than what will ever be possible
-                            with eUML, so you can only use a reduced set of phoenix's grammar. This
-                            is due to the nature of eUML. The run-time transition table definition
-                            is translated to a type using Boost.Typeof. The result is a "normal" MSM
-                            transition table made of functor types. As C++ does not allow mixing
-                            run-time and compile-time constructs, there will be some limit (trying
-                            to instantiate a template class MyTemplateClass&lt;i> where i is an int
-                            will give you an idea). This means following valid Phoenix constructs
-                            will not work:</para>
-                        <para>
-                            <itemizedlist>
-                                <listitem>
-                                    <para>literals</para>
-                                </listitem>
-                                <listitem>
-                                    <para>function pointers</para>
-                                </listitem>
-                                <listitem>
-                                    <para>bind</para>
-                                </listitem>
-                                <listitem>
-                                    <para>->*</para>
-                                </listitem>
-                            </itemizedlist>
-                        </para>
-                        <para>Future versions of MSM will support Phoenix better. You can contribute
-                            by finding out cases which do not work but should, so that they can be
-                            added.</para>
-                        <para>Phoenix support is not activated by default. To activate it, add
-                            before any MSM header: #define BOOST_MSM_EUML_PHOENIX_SUPPORT.</para>
-                        <para>A <link
-                            xlink:href="examples/SimplePhoenix.cpp">simple example</link> shows some basic capabilities.</para>
-                    </sect3>
+                    </sect3>              
                 </sect2>
                 <sect2>
-                    <title>Defining a simple state machine</title>
+                    <title>Wrapping up a simple state machine and first complete examples</title>
                     <para>You can reuse the state machine definition method from the standard
                         front-end and simply replace the transition table by this new one. You can
                         also use eUML to define a state machine "on the fly" (if, for example, you
@@ -2140,11 +2115,11 @@ Empty_impl const Empty;</programlisting>
                     <programlisting>BOOST_MSM_EUML_DECLARE_STATE_MACHINE((transition_table,init_ &lt;&lt; Empty ),
                                      player_)</programlisting>
                     <para>Please have a look at the player tutorial written using eUML's <link
-                            xlink:href="examples/SimpleTutorialEuml2.cpp">first</link> and <link
-                            xlink:href="examples/SimpleTutorialEuml.cpp">second</link> syntax. The
-                        BOOST_MSM_EUML_DECLARE_ATTRIBUTE macro, to which we will get back shortly,
-                        declares attributes given to an eUML type (state or event) using the
-                            <command xlink:href="#eUML-attributes">attribute
+                            xlink:href="examples/SimpleTutorialEuml2.cpp">first syntax</link> and
+                            <link xlink:href="examples/SimpleTutorialEuml.cpp">second syntax</link>.
+                        The BOOST_MSM_EUML_DECLARE_ATTRIBUTE macro, to which we will get back
+                        shortly, declares attributes given to an eUML type (state or event) using
+                        the <command xlink:href="#eUML-attributes">attribute
                         syntax</command>.</para>
                 </sect2>
                 <sect2>
@@ -2699,6 +2674,69 @@ struct Open_impl : public Open_def
                             </listitem>
                         </itemizedlist></para>
                 </sect2>
+                <sect2>
+                    <title><command xml:id="eUML-phoenix"/>Writing actions with Boost.Phoenix (in development)</title>
+                    <para> It is also possible to write actions, guards, state entry and exit
+                        actions using a reduced set of Boost.Phoenix capabilities. This feature
+                        is still in development stage, so you might get here and there some
+                        surprise. Simple cases, however, should work well. What will not work
+                        will be mixing of eUML and Phoenix functors. Writing guards in one
+                        language and actions in another is ok though.</para>
+                    <para>Phoenix also supports a larger syntax than what will ever be possible
+                        with eUML, so you can only use a reduced set of phoenix's grammar. This
+                        is due to the nature of eUML. The run-time transition table definition
+                        is translated to a type using Boost.Typeof. The result is a "normal" MSM
+                        transition table made of functor types. As C++ does not allow mixing
+                        run-time and compile-time constructs, there will be some limit (trying
+                        to instantiate a template class MyTemplateClass&lt;i> where i is an int
+                        will give you an idea). This means following valid Phoenix constructs
+                        will not work:</para>
+                    <para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>literals</para>
+                            </listitem>
+                            <listitem>
+                                <para>function pointers</para>
+                            </listitem>
+                            <listitem>
+                                <para>bind</para>
+                            </listitem>
+                            <listitem>
+                                <para>->*</para>
+                            </listitem>
+                        </itemizedlist>
+                    </para>
+                    <para>MSM also provides placeholders which make more sense in its context
+                        than arg1.. argn:</para>
+                    <para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>_event: the event triggering the transition</para>
+                            </listitem>
+                            <listitem>
+                                <para>_fsm: the state machine processing the event</para>
+                            </listitem>
+                            <listitem>
+                                <para>_source: the source state of the transition</para>
+                            </listitem>
+                            <listitem>
+                                <para>_target: the target state of the transition</para>
+                            </listitem>
+                            <listitem>
+                                <para>_state: for state entry/exit actions, the entry/exit
+                                    state</para>
+                            </listitem>
+                        </itemizedlist>
+                    </para>
+                    <para>Future versions of MSM will support Phoenix better. You can contribute
+                        by finding out cases which do not work but should, so that they can be
+                        added.</para>
+                    <para>Phoenix support is not activated by default. To activate it, add
+                        before any MSM header: #define BOOST_MSM_EUML_PHOENIX_SUPPORT.</para>
+                    <para>A <link
+                        xlink:href="examples/SimplePhoenix.cpp">simple example</link> shows some basic capabilities.</para>
+                </sect2>
             </sect1>
             <sect1>
                 <title>Back-end</title>
@@ -3165,7 +3203,51 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</programlisting>
  typedef msm::back::state_machine&lt; player_,msm::back::AlwaysHistory> player;  
  typedef msm::back::state_machine&lt; player_,msm::back::mpl_graph_fsm_check,msm::back::AlwaysHistory> player; 
  typedef msm::back::state_machine&lt; player_,msm::back::AlwaysHistory,msm::back::mpl_graph_fsm_check> player;      </programlisting>                    
-                </sect2>                    
+                </sect2>   
+                <sect2>
+                    <title><command xml:id="backend-state-switch"/>Choosing when to switch active
+                        states </title>
+                    <para>The UML Standard is silent about a very important question: when a
+                        transition fires, at which exact point is the target state the new active
+                        state of a state machine? At the end of the transition? After the source
+                        state has been left? What if an exception is thrown? The Standard considers
+                        that run-to-completion means a transition completes in almost no time. But
+                        even this can be in some conditions a very very long time. Consider the
+                        following example. We have a state machine representing a network
+                        connection. We can be <code>Connected</code> and <code>Disconnected</code>. When we move from one
+                        state to another, we send a (Boost) Signal to another entity. By default,
+                        MSM makes the target state as the new state after the transition is
+                        completed. We want to send a signal based on a flag is_connected which is
+                        true when in state Connected.</para>
+                    <para>We are in state <code>Disconnected</code> and receive an event <code>connect</code>. The transition
+                        action will ask the state machine <code>is_flag_active&lt;is_connected></code> and will
+                        get... false because we are still in <code>Disconnected</code>. Hmm, what to do? We could
+                        queue the action and execute it later, but it means an extra queue, more
+                        work and higher run-time.</para>
+                    <para>MSM provides the possibility (in form of a policy) for a front-end to
+                        decide when the target state becomes active. It can be:<itemizedlist>
+                            <listitem>
+                                <para>before the transition fires, if the guard will allow the
+                                    transition to fire:
+                                        <code>active_state_switch_before_transition</code></para>
+                            </listitem>
+                            <listitem>
+                                <para>after calling the exit action of the source state:
+                                        <code>active_state_switch_after_exit</code></para>
+                            </listitem>
+                            <listitem>
+                                <para>after the transition action is executed:
+                                        <code>active_state_switch_after_transition_action</code></para>
+                            </listitem>
+                            <listitem>
+                                <para>after the entry action of the target state is executed
+                                    (default): <code>active_state_switch_after_entry</code></para>
+                            </listitem>
+                        </itemizedlist>The problem and the solution is shown for the
+                        <link xlink:href="examples/ActiveStateSetBeforeTransition.cpp">functor-front-end</link> 
+                        and <link xlink:href="examples/ActivateStateBeforeTransitionEuml.cpp">eUML</link>. Removing <code>active_state_switch_before_transition</code>
+                        will show the default state.   </para>                    
+                </sect2>                   
             </sect1>
         </chapter>
         <chapter>
@@ -3343,7 +3425,30 @@ typename ::boost::enable_if&lt;
             </sect1>
         </chapter>
         <chapter>
-            <title>Questions &amp; Answers</title>
+            <title>Questions &amp; Answers, tips</title>
+            <para><emphasis role="underline">Where should I define a state machine?</emphasis>: The
+                tutorials are implemented in a simple cpp source file for simplicity. I want to
+                model dynamic behavior of a class as a state machine, how should I define the state
+                machine?</para>
+            <para><emphasis role="underline">Answer</emphasis>: Usually you'll want to implement the
+                state machine as an attribute of the class. Unfortunately, a concrete state machine
+                is a typedef, which cannot be forward-declared. This leaves you with two
+                possibilities: <itemizedlist>
+                    <listitem>
+                        <para>Provide the state machine definition inside the header class and
+                            contain an instance as attribute. Simple, but with several drawbacks:
+                            using namespace directives are not advised, and compile-time cost for
+                            all modules including the header.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Keep the state machine as (shared) pointer to void inside the <link
+                                xlink:href="examples/FsmAsPtr.hpp">class definition</link>, and
+                            implement the state machine in the <link
+                                xlink:href="examples/FsmAsPtr.cpp">cpp file</link>. Minimum
+                            compile-time, using directives are okay, but the state machine is now
+                            located inside the heap.</para>
+                    </listitem>
+                </itemizedlist></para>
             <para><emphasis role="underline">Question</emphasis>: on_entry gets as argument, the
                 sent event. What event do I get when the state becomes default-activated (because it
                 is an initial state)?</para>
@@ -3800,15 +3905,21 @@ typename ::boost::enable_if&lt;
                 <para>
                     <itemizedlist>
                         <listitem>
-                            <para>added a <command xlink:href="#backend-start">stop()</command> method in the back-end.</para>
+                            <para>Added a <command xlink:href="#backend-start">stop()</command>
+                                method in the back-end.</para>
                         </listitem>
                         <listitem>
-                            <para><command xlink:href="#eUML-phoenix">Added partial support for Boost.Phoenix functors in eUML</command></para>
+                            <para><command xlink:href="#eUML-phoenix">Added partial support for
+                                    Boost.Phoenix functors in eUML</command></para>
+                        </listitem>
+                        <listitem>
+                            <para>Added the possibility to choose when <command xlink:href="#backend-state-switch">state switching</command>
+                                occurs.</para>
                         </listitem>
                         <listitem>
                             <para>Bugfixes<itemizedlist>
                                     <listitem>
-                                        <para>Trac 5117, 5253, 5533</para>
+                                        <para>Trac 5117, 5253, 5533, 5573</para>
                                     </listitem>
                                     <listitem>
                                         <para>gcc warnings about unused variables</para>
@@ -3826,6 +3937,9 @@ typename ::boost::enable_if&lt;
                                     <listitem>
                                         <para>incorrect event type passed to a direct entry state's
                                             on_entry action</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>more examples</para>
                                     </listitem>
                                 </itemizedlist></para>
                         </listitem>
