@@ -98,8 +98,12 @@ public:
         return *this;
     }
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1400)
     // Assignment operator taking a boost::filesystem2::path or
     // boost::filesystem2::wpath
+    // (not on Visual C++ 7.1, as it seems to have problems with
+    // SFINAE functions with the same parameters, doesn't seem
+    // worth working around).
     template<typename Path>
     typename sfinae<typename Path::external_string_type, path&>::type
     	operator=(const Path& p)
@@ -107,6 +111,7 @@ public:
         init(p.external_file_string());
         return *this;
     }
+#endif
 
     // Assignment operator taking a boost::filesystem3::path
     template<typename Path>
