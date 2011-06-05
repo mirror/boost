@@ -17,24 +17,15 @@
 #include <boost/phoenix/scope/lambda.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 
-/*
 BOOST_PHOENIX_DEFINE_EXPRESSION_VARARG(
-    (boost)(phoenix)(this_function)
+    (boost)(phoenix)(this_)
   , (meta_grammar)(meta_grammar)
   , BOOST_PHOENIX_LIMIT
 )
-*/
 
 namespace boost { namespace phoenix {
-    /*
-    template <typename Expr>
-    struct this_actor;
-    */
-
     namespace detail
     {
-        template <typename Dummy>
-        struct this_placeholder {};
       /*  
         struct infinite_recursion_detected {};
 
@@ -61,194 +52,139 @@ namespace boost { namespace phoenix {
         {};
         */
     }
-#if 0
-    struct this_function_eval
+    struct this_eval
     {
         BOOST_PROTO_CALLABLE()
 
         template <typename Sig>
         struct result;
 
-        template <typename This, typename T, typename T0, typename Context>
-        struct result<This(T, T0, Context)>
-            : result<This(T const &, T0 const &, Context const &)>
-        {};
-
-        template <typename This, typename T, typename T0, typename Context>
-        struct result<This(T &, T0 &, Context &)>
+        template <typename This, typename A0, typename Context>
+        struct result<This(A0, Context)>
         {
-            typedef void type;
-            /*
-            typedef
-                typename evaluator::impl<T &, Context &, int>::result_type
-                this_type;
+				typedef
+					typename proto::detail::uncvref<
+						typename result_of::env<
+							Context
+						>::type
+					>::type
+					outer_env_type;
+				
+				typedef
+					typename remove_pointer<
+						typename remove_reference<
+							typename fusion::result_of::at_c<
+							   outer_env_type
+							 , 0
+							>::type
+						>::type
+					>::type
+					actor_type;
+				
+				typedef
+					typename result_of::eval<
+						A0 const &
+					 , Context const &
+					>::type
+					a0_type;
 
-            typedef
-                typename evaluator::impl<T0 &, Context &, int>::result_type
-                arg0_type;
+				typedef
+					vector2<actor_type const *, a0_type>
+					inner_env_type;
 
-            typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
-
-            typedef
-                typename proto::detail::uncvref<
-                    typename boost::result_of<typename proto::detail::uncvref<checker>::type(arg0_type)>::type
-                >::type
-                type;
-                */
+				typedef 
+					scoped_environment<
+						inner_env_type
+					 , outer_env_type
+					 , vector0<>
+					 , detail::map_local_index_to_tuple<>
+					>
+					env_type;
+				
+				typedef
+					typename result_of::eval<
+						actor_type const &
+					 , typename result_of::context<
+					 		inner_env_type
+						 , typename result_of::actions<
+						 		Context
+							>::type
+						>::type
+					>::type
+					type;
         };
 
-        template <typename This, typename T, typename T0, typename T1, typename Context>
-        struct result<This(T, T0, T1, Context)>
-            : result<This(T const &, T0 const &, T1 const &, Context const &)>
-        {};
-
-        template <typename This, typename T, typename T0, typename T1, typename Context>
-        struct result<This(T &, T0 &, T1 &, Context &)>
+        template <typename A0, typename Context>
+        typename result<this_eval(A0 const&, Context const &)>::type
+        operator()(A0 const & a0, Context const & ctx) const
         {
-            typedef void type;
-            /*
-            typedef
-                typename evaluator::impl<T &, Context &, int>::result_type
-                this_type;
-
-            typedef
-                typename evaluator::impl<T0 &, Context &, int>::result_type
-                arg0_type;
-
-            typedef
-                typename evaluator::impl<T0 &, Context &, int>::result_type
-                arg1_type;
-
-            typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
-
-            typedef
-                typename proto::detail::uncvref<
-                    typename boost::result_of<typename proto::detail::uncvref<checker>::type(arg0_type, arg1_type)>::type
-                >::type
-                type;
-            */
-        };
-
-
-        template <typename This, typename T0, typename Context>
-        typename result<this_function_eval(This const&, T0 const&, Context &)>::type
-        operator()(This const& _this, T0 const & t0, Context const & ctx) const
-        {
-            //typedef typename evaluator::impl<This const&, Context &, int>::result_type this_type;
-            //typedef typename detail::last_non_this_actor::impl<this_type, int, int>::result_type checker;
 
             //std::cout << typeid(checker).name() << "\n";
             //std::cout << typeid(checker).name() << "\n";
+				typedef
+					typename proto::detail::uncvref<
+						typename result_of::env<
+							Context
+						>::type
+					>::type
+					outer_env_type;
+				
+				typedef
+					typename remove_pointer<
+						typename remove_reference<
+							typename fusion::result_of::at_c<
+							   outer_env_type
+							 , 0
+							>::type
+						>::type
+					>::type
+					actor_type;
+				
+				typedef
+					typename result_of::eval<
+						A0 const &
+					 , Context const &
+					>::type
+					a0_type;
 
-            return boost::phoenix::eval(_this, ctx)(boost::phoenix::eval(t0, ctx));
-        }
+				typedef
+					vector2<actor_type const *, a0_type>
+					inner_env_type;
 
-        template <typename This, typename T0, typename T1, typename Context>
-        typename result<this_function_eval(This const&, T0 const&, T1 const&, Context)>::type
-        operator()(This const& this_, T0 const & t0, T1 const & t1, Context const & ctx) const
-        {
-            return boost::phoenix::eval(this_, ctx)(boost::phoenix::eval(t0, ctx), boost::phoenix::eval(t1, ctx));
+				typedef 
+					scoped_environment<
+						inner_env_type
+					 , outer_env_type
+					 , vector0<>
+					 , detail::map_local_index_to_tuple<>
+					>
+					env_type;
+
+				inner_env_type inner_env = {fusion::at_c<0>(phoenix::env(ctx)), phoenix::eval(a0, ctx)};
+				vector0<> locals;
+				env_type env(inner_env, phoenix::env(ctx), locals);
+
+				return phoenix::eval(*fusion::at_c<0>(phoenix::env(ctx)), phoenix::context(inner_env, phoenix::actions(ctx)));
+            //return (*fusion::at_c<0>(phoenix::env(ctx)))(eval(a0, ctx));
         }
     };
 
     template <typename Dummy>
-    struct default_actions::when<rule::this_function, Dummy>
-        : proto::or_<
-            proto::when<
-                expression::this_function<proto::_, proto::_>
-              , this_function_eval(proto::_child_c<0>, proto::_child_c<1>, _context)
-            >
-          , proto::when<
-                expression::this_function<proto::_, proto::_>
-              , this_function_eval(proto::_child_c<0>, proto::_child_c<1>, proto::_child_c<2>, _context)
-            >
-        >
-    {};
-
-    template <typename Expr>
-    struct this_actor
-        : actor<Expr>
-    {
-        typedef actor< Expr > base_type;
-        
-        this_actor(base_type const & base = base_type())
-            : base_type( base )
-        {}
-        
-        template <typename T>
-        typename expression::this_function<this_actor, T>::type const
-        operator()(T const & t) const
-        {
-            return expression::this_function<this_actor, T>::make(*this, t);
-        }
-        
-        template <typename T0, typename T1>
-        typename expression::this_function<this_actor, T0, T1>::type const
-        operator()(T0 const & t0, T1 const & t1) const
-        {
-            return expression::this_function<this_actor, T0, T1>::make(*this, t0, t1);
-        }
-    };
-#endif
-    
-    template <typename D>
-    struct is_custom_terminal<detail::this_placeholder<D> >
-        : mpl::true_
+    struct default_actions::when<rule::this_, Dummy>
+        : call<this_eval>
     {};
     
-    // Special handling for this_placeholder
-    template<typename D>
-    struct custom_terminal<detail::this_placeholder<D> >
-    {
-        template <typename Sig>
-        struct result;
-        
-        template <typename This, typename P, typename Context>
-        struct result<This(P, Context)>
-        {
-            typedef
-                typename add_reference<
-                    typename remove_pointer<
-                        typename remove_reference<
-                            typename fusion::result_of::at_c<
-                                typename boost::remove_reference<
-                                    typename result_of::env<Context>::type
-                                >::type
-                              , 0
-                            >::type
-                        >::type
-                    >::type
-                >::type
-            type;
-        };
-       
-        template <typename Context>
-        typename result<custom_terminal(detail::this_placeholder<D>, Context)>::type const
-        operator()(detail::this_placeholder<D>, Context &ctx) const
-        {
-            return *fusion::at_c<0>(env(ctx));
-        }
-    };
+	 template <typename Dummy>
+    struct is_nullary::when<rule::this_, Dummy>
+        : proto::make<mpl::false_()>
+    {};
     
-    namespace expression
-    {
-        struct _this
-            : proto::terminal<detail::this_placeholder<void> >
-        {
-            typedef proto::terminal<detail::this_placeholder<void> >::type base_type;
-            typedef actor<base_type> type;
-            
-            static const type make()
-            {
-                actor<base_type> const e = {{{}}};
-                return e;
-            }
-        };
-    }
-
-#ifndef BOOST_PHOENIX_NO_PREDEFINED_TERMINALS
-    expression::_this::type const _this = expression::_this::make();
-#endif
+	 template <typename A0>
+	 typename expression::this_<A0>::type const
+	 this_(A0 const & a0)
+	 {
+		 return expression::this_<A0>::make(a0);
+	 }
     
 }}
 

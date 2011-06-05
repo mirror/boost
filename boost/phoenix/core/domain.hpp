@@ -22,7 +22,7 @@ namespace boost { namespace phoenix
         : proto::domain<
             proto::pod_generator<actor>
           , meta_grammar
-          , proto::default_domain
+          , proto::basic_default_domain
         >
     {
         template <typename T>

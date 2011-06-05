@@ -9,7 +9,10 @@ namespace boost { namespace phoenix
 {
     template <typename Dummy = void>
     struct vector0
-    {};
+    {
+        typedef mpl::int_<0> size_type;
+        static const int size_value = 0;
+    };
 }}
     
     
@@ -24,6 +27,9 @@ namespace boost { namespace phoenix
     struct vector1
     {
         typedef A0 member_type0; A0 a0;
+        
+        typedef mpl::int_<1> size_type;
+        static const int size_value = 1;
         typedef
             vector0<>
             args_type;
@@ -52,6 +58,9 @@ namespace boost { namespace phoenix
     struct vector2
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1;
+        
+        typedef mpl::int_<2> size_type;
+        static const int size_value = 2;
         typedef
             vector1<A1>
             args_type;
@@ -80,6 +89,9 @@ namespace boost { namespace phoenix
     struct vector3
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2;
+        
+        typedef mpl::int_<3> size_type;
+        static const int size_value = 3;
         typedef
             vector2<A1 , A2>
             args_type;
@@ -108,6 +120,9 @@ namespace boost { namespace phoenix
     struct vector4
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3;
+        
+        typedef mpl::int_<4> size_type;
+        static const int size_value = 4;
         typedef
             vector3<A1 , A2 , A3>
             args_type;
@@ -136,6 +151,9 @@ namespace boost { namespace phoenix
     struct vector5
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4;
+        
+        typedef mpl::int_<5> size_type;
+        static const int size_value = 5;
         typedef
             vector4<A1 , A2 , A3 , A4>
             args_type;
@@ -164,6 +182,9 @@ namespace boost { namespace phoenix
     struct vector6
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5;
+        
+        typedef mpl::int_<6> size_type;
+        static const int size_value = 6;
         typedef
             vector5<A1 , A2 , A3 , A4 , A5>
             args_type;
@@ -192,6 +213,9 @@ namespace boost { namespace phoenix
     struct vector7
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6;
+        
+        typedef mpl::int_<7> size_type;
+        static const int size_value = 7;
         typedef
             vector6<A1 , A2 , A3 , A4 , A5 , A6>
             args_type;
@@ -220,6 +244,9 @@ namespace boost { namespace phoenix
     struct vector8
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7;
+        
+        typedef mpl::int_<8> size_type;
+        static const int size_value = 8;
         typedef
             vector7<A1 , A2 , A3 , A4 , A5 , A6 , A7>
             args_type;
@@ -248,6 +275,9 @@ namespace boost { namespace phoenix
     struct vector9
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8;
+        
+        typedef mpl::int_<9> size_type;
+        static const int size_value = 9;
         typedef
             vector8<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8>
             args_type;
@@ -276,6 +306,9 @@ namespace boost { namespace phoenix
     struct vector10
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9;
+        
+        typedef mpl::int_<10> size_type;
+        static const int size_value = 10;
         typedef
             vector9<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9>
             args_type;
@@ -304,6 +337,9 @@ namespace boost { namespace phoenix
     struct vector11
     {
         typedef A0 member_type0; A0 a0; typedef A1 member_type1; A1 a1; typedef A2 member_type2; A2 a2; typedef A3 member_type3; A3 a3; typedef A4 member_type4; A4 a4; typedef A5 member_type5; A5 a5; typedef A6 member_type6; A6 a6; typedef A7 member_type7; A7 a7; typedef A8 member_type8; A8 a8; typedef A9 member_type9; A9 a9; typedef A10 member_type10; A10 a10;
+        
+        typedef mpl::int_<11> size_type;
+        static const int size_value = 11;
         typedef
             vector10<A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , A9 , A10>
             args_type;

@@ -159,7 +159,7 @@ namespace boost { namespace phoenix
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -180,7 +180,7 @@ namespace boost { namespace phoenix
                         try_catch
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -199,7 +199,7 @@ namespace boost { namespace phoenix
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -219,7 +219,7 @@ namespace boost { namespace phoenix
                         try_catch
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }

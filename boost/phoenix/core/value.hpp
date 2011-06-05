@@ -54,9 +54,11 @@ namespace boost { namespace phoenix
 
         template <typename This, typename Actor, typename Context>
         struct result<This(Actor, Context)>
-            : boost::remove_reference<
-                typename evaluator::impl<Actor, Context, int>::result_type
-            >
+            : boost::remove_const<
+				    typename boost::remove_reference<
+                    typename evaluator::impl<Actor, Context, int>::result_type
+                >::type
+				>
         {};     
 
         template <typename Context>

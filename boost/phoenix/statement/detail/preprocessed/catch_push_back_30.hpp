@@ -18,7 +18,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -38,7 +38,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -50,7 +50,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -69,7 +69,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -87,7 +87,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -107,7 +107,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -119,7 +119,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -138,7 +138,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -156,7 +156,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -176,7 +176,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -188,7 +188,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -207,7 +207,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -225,7 +225,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -245,7 +245,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -257,7 +257,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -276,7 +276,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -294,7 +294,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -314,7 +314,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -326,7 +326,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -345,7 +345,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -363,7 +363,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -383,7 +383,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -395,7 +395,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -414,7 +414,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -432,7 +432,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -452,7 +452,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -464,7 +464,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -483,7 +483,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -501,7 +501,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -521,7 +521,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -533,7 +533,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -552,7 +552,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -570,7 +570,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -590,7 +590,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -602,7 +602,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -621,7 +621,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -639,7 +639,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -659,7 +659,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -671,7 +671,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -690,7 +690,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -708,7 +708,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -728,7 +728,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -740,7 +740,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -759,7 +759,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -777,7 +777,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -797,7 +797,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -809,7 +809,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -828,7 +828,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -846,7 +846,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -866,7 +866,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -878,7 +878,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -897,7 +897,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -915,7 +915,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -935,7 +935,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -947,7 +947,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -966,7 +966,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -984,7 +984,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1004,7 +1004,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1016,7 +1016,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1035,7 +1035,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1053,7 +1053,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1073,7 +1073,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1085,7 +1085,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1104,7 +1104,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1122,7 +1122,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1142,7 +1142,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1154,7 +1154,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1173,7 +1173,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1191,7 +1191,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1211,7 +1211,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1223,7 +1223,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1242,7 +1242,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1260,7 +1260,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1280,7 +1280,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1292,7 +1292,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1311,7 +1311,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1329,7 +1329,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1349,7 +1349,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1361,7 +1361,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1380,7 +1380,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1398,7 +1398,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1418,7 +1418,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1430,7 +1430,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1449,7 +1449,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1467,7 +1467,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1487,7 +1487,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1499,7 +1499,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1518,7 +1518,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1536,7 +1536,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1556,7 +1556,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1568,7 +1568,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1587,7 +1587,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1605,7 +1605,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1625,7 +1625,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1637,7 +1637,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1656,7 +1656,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1674,7 +1674,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1694,7 +1694,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1706,7 +1706,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1725,7 +1725,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1743,7 +1743,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1763,7 +1763,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1775,7 +1775,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1794,7 +1794,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1812,7 +1812,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1832,7 +1832,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch) , proto::child_c< 27>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1844,7 +1844,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1863,7 +1863,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch) , proto::child_c< 27>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1881,7 +1881,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1901,7 +1901,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch) , proto::child_c< 27>(try_catch) , proto::child_c< 28>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1913,7 +1913,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -1932,7 +1932,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch) , proto::child_c< 27>(try_catch) , proto::child_c< 28>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }
@@ -1950,7 +1950,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , catch_exception<Exception>
                   , Expr
                 >::type
@@ -1970,7 +1970,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch) , proto::child_c< 27>(try_catch) , proto::child_c< 28>(try_catch) , proto::child_c< 29>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_exception<Exception>(), catch_)
                     );
             }
@@ -1982,7 +1982,7 @@
             typedef
                 typename proto::result_of::make_expr<
                     phoenix::tag::catch_all
-                  , default_domain_with_basic_expr
+                  , proto::basic_default_domain
                   , Expr
                 >::type
                 catch_expr;
@@ -2001,7 +2001,7 @@
                         proto::child_c< 0>(try_catch) , proto::child_c< 1>(try_catch) , proto::child_c< 2>(try_catch) , proto::child_c< 3>(try_catch) , proto::child_c< 4>(try_catch) , proto::child_c< 5>(try_catch) , proto::child_c< 6>(try_catch) , proto::child_c< 7>(try_catch) , proto::child_c< 8>(try_catch) , proto::child_c< 9>(try_catch) , proto::child_c< 10>(try_catch) , proto::child_c< 11>(try_catch) , proto::child_c< 12>(try_catch) , proto::child_c< 13>(try_catch) , proto::child_c< 14>(try_catch) , proto::child_c< 15>(try_catch) , proto::child_c< 16>(try_catch) , proto::child_c< 17>(try_catch) , proto::child_c< 18>(try_catch) , proto::child_c< 19>(try_catch) , proto::child_c< 20>(try_catch) , proto::child_c< 21>(try_catch) , proto::child_c< 22>(try_catch) , proto::child_c< 23>(try_catch) , proto::child_c< 24>(try_catch) , proto::child_c< 25>(try_catch) , proto::child_c< 26>(try_catch) , proto::child_c< 27>(try_catch) , proto::child_c< 28>(try_catch) , proto::child_c< 29>(try_catch)
                       , proto::make_expr<
                             phoenix::tag::catch_all
-                          , default_domain_with_basic_expr
+                          , proto::basic_default_domain
                         >(catch_)
                     );
             }

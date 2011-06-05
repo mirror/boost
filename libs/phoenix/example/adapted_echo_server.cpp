@@ -16,10 +16,6 @@
 namespace phx = boost::phoenix;
 
 using boost::phoenix::ref;
-/*
-using boost::phoenix::lambda;
-using boost::phoenix::arg_names::_1;
-*/
 
 BOOST_PHOENIX_ADAPT_FUNCTION(void, read, boost::asio::async_read, 4)
 BOOST_PHOENIX_ADAPT_FUNCTION(void, write, boost::asio::async_write, 3)
@@ -63,7 +59,7 @@ int main(int argc, char* argv[])
     action _action;
     BOOST_AUTO(
         create_handler
-      , (lambda(_action = bind(_1))
+      , (lambda(_action = lambda[_1])
         [
             if_(!_error)
             [
@@ -91,17 +87,11 @@ int main(int argc, char* argv[])
         phx::expression::argument<3>::type _error;
         phx::expression::argument<4>::type _length;
         read_handler = create_handler(
-            lambda
-            [
-                write(_socket, buffer(_buf, _length), phx::ref(write_handler))
-            ]
+            write(_socket, buffer(_buf, _length), phx::ref(write_handler))
         );
 
         write_handler = create_handler(
-            lambda
-            [
-                read(_socket, buffer(_buf, max_length), boost::asio::transfer_at_least(1), phx::ref(read_handler))
-            ]
+            read(_socket, buffer(_buf, max_length), boost::asio::transfer_at_least(1), phx::ref(read_handler))
         );
     }
 

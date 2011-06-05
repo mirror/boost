@@ -201,7 +201,24 @@ of namespaces under which the following symbols will be defined:
         {};
     }
 
-This macros also adds a specialization for `meta_grammar::case_<tag::name>`.
+    namespace functional
+    {
+        struct make_name; // A polymorphic function object that can be called to create the expression node
+    }
+
+    namespace result_of
+    {
+        template <typename A0, typename A1 ... typename AN>
+        struct make_name; // The result type of the expression node
+    }
+
+    // convenience polymorphic function to create an expression node
+    template <typename A0, typename A1 ... typename AN>
+    result_of::make_name<A0, A1 ... AN>
+    make_name(A0 const & a0, A1 const & a1 ... AN const & an);
+
+This macros also adds a specialization for `meta_grammar::case_<tag::name>` to
+enable the rule for further use in actions.
 
 [heading Header]
 
@@ -287,6 +304,25 @@ of namespaces under which the following symbols will be defined:
         {};
     }
 
+    namespace functional
+    {
+        struct make_name; // A polymorphic function object that can be called to create the expression node
+    }
+
+    namespace result_of
+    {
+        template <typename A0, typename A1 ... typename AN>
+        struct make_name; // The result type of the expression node
+    }
+
+    // convenience polymorphic function to create an expression node
+    template <typename A0, typename A1 ... typename AN>
+    result_of::make_name<A0, A1 ... AN>
+    make_name(A0 const & a0, A1 const & a1 ... AN const & an);
+
+This macros also adds a specialization for `meta_grammar::case_<tag::name>` to
+enable the rule for further use in actions.
+
 [heading Header]
 
     #include <boost/phoenix/core/expression.hpp>
@@ -365,7 +401,24 @@ of namespaces under which the following symbols will be defined:
         {};
     }
 
-This macros also adds a specialization for `meta_grammar::case_<tag::name>`.
+    namespace functional
+    {
+        struct make_name; // A polymorphic function object that can be called to create the expression node
+    }
+
+    namespace result_of
+    {
+        template <typename A0, typename A1 ... typename AN>
+        struct make_name; // The result type of the expression node
+    }
+
+    // convenience polymorphic function to create an expression node
+    template <typename A0, typename A1 ... typename AN>
+    result_of::make_name<A0, A1 ... AN>
+    make_name(A0 const & a0, A1 const & a1 ... AN const & an);
+
+This macros also adds a specialization for `meta_grammar::case_<tag::name>` to
+enable the rule for further use in actions.
 
 [heading Header]
 
@@ -380,7 +433,7 @@ This macros also adds a specialization for `meta_grammar::case_<tag::name>`.
         (meta_grammar) // Then
     )
 
-This defines the if_ expression. The custom actor defines the `else_`.
+This defines the if_ expression. The custom actor defines `else_` as a member.
 
 [endsect]
 
@@ -446,6 +499,25 @@ of namespaces under which the following symbols will be defined:
             >
         {};
     }
+
+    namespace functional
+    {
+        struct make_name; // A polymorphic function object that can be called to create the expression node
+    }
+
+    namespace result_of
+    {
+        template <typename A0, typename A1 ... typename AN>
+        struct make_name; // The result type of the expression node
+    }
+
+    // convenience polymorphic function to create an expression node
+    template <typename A0, typename A1 ... typename AN>
+    result_of::make_name<A0, A1 ... AN>
+    make_name(A0 const & a0, A1 const & a1 ... AN const & an);
+
+This macros also adds a specialization for `meta_grammar::case_<tag::name>` to
+enable the rule for further use in actions.
 
 [heading Header]
 
