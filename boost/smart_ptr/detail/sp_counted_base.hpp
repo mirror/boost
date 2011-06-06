@@ -32,6 +32,9 @@
 #elif defined( BOOST_DISABLE_THREADS ) && !defined( BOOST_SP_ENABLE_THREADS ) && !defined( BOOST_DISABLE_WIN32 )
 # include <boost/smart_ptr/detail/sp_counted_base_nt.hpp>
 
+#elif defined( __SNC__ )
+# include <boost/smart_ptr/detail/sp_counted_base_snc_ps3.hpp>
+
 #elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp>
 
