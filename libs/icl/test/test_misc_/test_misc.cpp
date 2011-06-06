@@ -6,6 +6,9 @@ Copyright (c) 2008-2009: Joachim Faulhaber
            http://www.boost.org/LICENSE_1_0.txt)
 +-----------------------------------------------------------------------------*/
 #define BOOST_TEST_MODULE icl::misc unit test
+
+#define BOOST_ICL_TEST_CHRONO
+
 #include <libs/icl/test/disable_test_warnings.hpp>
 #include <string>
 #include <vector>
@@ -178,4 +181,90 @@ BOOST_AUTO_TEST_CASE(test_interval_bounds_1)
 
     BOOST_CHECK_EQUAL(icl::right_bounds(L0_1D, L0_1T), interval_bounds::left_open());
 }
+
+
+BOOST_AUTO_TEST_CASE(test_infinities)
+{
+    BOOST_CHECK(( has_std_infinity<double>::value));
+    BOOST_CHECK((!has_std_infinity<int>::value));
+
+    BOOST_CHECK(( has_max_infinity<int>::value ));
+    BOOST_CHECK((!has_max_infinity<double>::value ));
+
+    //--------------------------------------------------------------------------
+    BOOST_CHECK_EQUAL( numeric_infinity<double>::value(),  (std::numeric_limits<double>::infinity)() );
+    BOOST_CHECK_EQUAL( numeric_infinity<int>::value(),     (std::numeric_limits<int>::max)() );
+    BOOST_CHECK_EQUAL( numeric_infinity<std::string>::value(), std::string() );
+
+    //--------------------------------------------------------------------------
+    BOOST_CHECK_EQUAL( infinity<double>::value(),  (std::numeric_limits<double>::infinity)() );
+    BOOST_CHECK_EQUAL( infinity<int>::value(),     (std::numeric_limits<int>::max)() );
+    BOOST_CHECK_EQUAL( infinity<std::string>::value(), identity_element<std::string>::value() );
+
+    //--------------------------------------------------------------------------
+    BOOST_CHECK_EQUAL( infinity<chrono::duration<double> >::value()
+                     , chrono::duration<double>((std::numeric_limits<double>::infinity)()) );
+    BOOST_CHECK_EQUAL( infinity<chrono::duration<int> >::value()
+                     , chrono::duration<int>((std::numeric_limits<int>::max)()) );
+}
+
+
+BOOST_AUTO_TEST_CASE(test_difference_types)
+{
+    BOOST_CHECK(( boost::is_same< int,            difference_type_of<int>::type >::value ));
+    BOOST_CHECK(( boost::is_same< double,         difference_type_of<double>::type >::value ));
+    BOOST_CHECK(( boost::is_same< std::ptrdiff_t, difference_type_of<int*>::type >::value ));
+
+    BOOST_CHECK(( has_difference_type<std::string>::value ));
+    BOOST_CHECK(( boost::is_same< std::string::difference_type, difference_type_of<std::string>::type >::value ));
+    BOOST_CHECK(( boost::is_same< std::ptrdiff_t, difference_type_of<std::string>::type >::value ));
+
+    BOOST_CHECK((  boost::is_same<                    chrono::duration<int>
+                                 , difference_type_of<chrono::duration<int> >::type >::value ));
+    BOOST_CHECK((  boost::is_same<                    chrono::duration<double>
+                                 , difference_type_of<chrono::duration<double> >::type >::value ));
+
+    BOOST_CHECK((  boost::is_same<                    Now::time_point::duration
+                                 , difference_type_of<Now::time_point>::type >::value ));
+
+    typedef boost::chrono::time_point<Now, boost::chrono::duration<double> > contin_timeT;
+    BOOST_CHECK((  boost::is_same<                    contin_timeT::duration
+                                 , difference_type_of<contin_timeT>::type >::value ));
+
+    typedef boost::chrono::time_point<Now, boost::chrono::duration<int> > discr_timeT;
+    BOOST_CHECK((  boost::is_same<                    chrono::duration<int>
+                                 , difference_type_of<discr_timeT>::type >::value ));
+}
+
+BOOST_AUTO_TEST_CASE(test_size_types)
+{
+    BOOST_CHECK(( boost::is_same< std::size_t,    size_type_of<int>::type >::value ));
+    BOOST_CHECK(( boost::is_same< std::size_t,    size_type_of<double>::type >::value ));
+    BOOST_CHECK(( boost::is_same< std::size_t,    size_type_of<int*>::type >::value ));
+    BOOST_CHECK(( boost::is_same< std::size_t,    size_type_of<std::string>::type >::value ));
+    BOOST_CHECK(( boost::is_same<              chrono::duration<int>
+                                , size_type_of<chrono::duration<int> >::type >::value ));
+    BOOST_CHECK(( boost::is_same<              chrono::duration<double>
+                                , size_type_of<chrono::duration<double> >::type >::value ));
+
+    typedef boost::chrono::time_point<Now, boost::chrono::duration<int> > discr_timeT;
+    BOOST_CHECK((  boost::is_same< chrono::duration<int>
+                                 , size_type_of<discr_timeT>::type >::value ));
+
+    typedef boost::chrono::time_point<Now, boost::chrono::duration<double> > contin_timeT;
+    BOOST_CHECK((  boost::is_same< contin_timeT::duration
+                                 , size_type_of<contin_timeT>::type >::value ));
+}
+
+BOOST_AUTO_TEST_CASE(test_chrono_identity_elements)
+{
+    chrono::duration<int> idel_i = icl::identity_element<chrono::duration<int> >::value();
+    //cout << "dur<int>0 = " << idel_i << endl;
+    chrono::duration<double> idel_d = icl::identity_element<chrono::duration<int> >::value();
+    //cout << "dur<dbl>0 = " << idel_d << endl;
+
+    BOOST_CHECK(( boost::is_same<              chrono::duration<int>
+                                , size_type_of<chrono::duration<int> >::type >::value ));
+}
+
 
