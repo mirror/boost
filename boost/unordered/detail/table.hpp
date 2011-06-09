@@ -802,6 +802,7 @@ namespace boost { namespace unordered { namespace iterator_detail {
             iterator;
         friend class ::boost::unordered::iterator_detail::iterator<A, Unique>;
 
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
         template <class K, class T, class H, class P, class A2>
         friend class ::boost::unordered::unordered_map;
         template <class K, class T, class H, class P, class A2>
@@ -810,6 +811,9 @@ namespace boost { namespace unordered { namespace iterator_detail {
         friend class ::boost::unordered::unordered_set;
         template <class T, class H, class P, class A2>
         friend class ::boost::unordered::unordered_multiset;
+#else
+    public:
+#endif
 
         node_ptr node_;
 
