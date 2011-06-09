@@ -193,9 +193,8 @@ namespace quickbook
         if(!actions.warned_about_breaks)
         {
             detail::outwarn(actions.filename, pos.line)
-                << "line breaks generate invalid boostbook"
-                << "    (will only note first occurrence)."
-                << "\n";
+                << "line breaks generate invalid boostbook "
+                   "(will only note first occurrence).\n";
 
             actions.warned_about_breaks = true;
         }
