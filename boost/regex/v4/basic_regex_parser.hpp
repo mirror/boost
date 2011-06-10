@@ -941,7 +941,8 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
          ++m_position;
       }
       // for perl regexes only check for pocessive ++ repeats.
-      if((0 == (this->flags() & regbase::main_option_type)) 
+      if((m_position != m_end)
+         && (0 == (this->flags() & regbase::main_option_type)) 
          && (this->m_traits.syntax_type(*m_position) == regex_constants::syntax_plus))
       {
          pocessive = true;
