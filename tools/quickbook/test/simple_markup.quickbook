@@ -8,7 +8,9 @@
 
 /italic/ *bold* _underline_ =teletype=
 
-//italic// **bold** __underline__ ==teletype==
+//not italic// **not bold** __not underline__ ==not teletype==
+
+_odd__ edge case_
 
 not__underlined__hopefully
 

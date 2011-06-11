@@ -75,7 +75,7 @@ namespace quickbook
         , raw_char(phrase, *this)
         , escape_unicode(phrase, *this)
 
-        , simple_markup(phrase, macro, *this)
+        , simple_markup(phrase, *this)
 
         , break_(phrase, *this)
         , do_macro(phrase, *this)

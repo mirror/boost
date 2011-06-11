@@ -193,9 +193,8 @@ namespace quickbook
         if(!actions.warned_about_breaks)
         {
             detail::outwarn(actions.filename, pos.line)
-                << "line breaks generate invalid boostbook"
-                << "    (will only note first occurrence)."
-                << "\n";
+                << "line breaks generate invalid boostbook "
+                   "(will only note first occurrence).\n";
 
             actions.warned_about_breaks = true;
         }
@@ -380,14 +379,7 @@ namespace quickbook
         values.finish();
 
         out << markup.pre;
-        if (std::string const* ptr = find(macro, content.get_quickbook().c_str()))
-        {
-            out << *ptr;
-        }
-        else
-        {
-            out << content.get_boostbook();
-        }
+        out << content.get_boostbook();
         out << markup.post;
     }
 

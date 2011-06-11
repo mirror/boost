@@ -124,16 +124,13 @@ namespace quickbook
 
         simple_phrase_action(
             collector& out
-          , string_symbols const& macro
           , quickbook::actions& actions)
         : out(out)
-        , macro(macro)
         , actions(actions) {}
 
         void operator()(char) const;
 
         collector& out;
-        string_symbols const& macro;
         quickbook::actions& actions;
     };
 

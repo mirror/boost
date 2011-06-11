@@ -10,8 +10,10 @@
       role="underline">underline</emphasis> <literal>teletype</literal>
     </para>
     <para>
-      <emphasis>/italic/</emphasis> <emphasis role="bold">*bold*</emphasis> <emphasis
-      role="underline">_underline_</emphasis> <literal>=teletype=</literal>
+      //not italic// **not bold** __not underline__ ==not teletype==
+    </para>
+    <para>
+      <emphasis role="underline">odd__ edge case</emphasis>
     </para>
     <para>
       not__underlined__hopefully
