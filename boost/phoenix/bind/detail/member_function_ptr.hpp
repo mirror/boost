@@ -128,7 +128,7 @@ namespace boost { namespace phoenix { namespace detail
                 : fp(fp) {}
 
             template <typename Class, BOOST_PHOENIX_typename_A>
-            RT operator()(Class& obj, BOOST_PHOENIX_A_const_ref_a) const
+            RT operator()(Class& obj, BOOST_PHOENIX_A_ref_a) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
 
@@ -137,7 +137,7 @@ namespace boost { namespace phoenix { namespace detail
             }
 
             template <typename Class, BOOST_PHOENIX_typename_A>
-            RT operator()(Class* obj, BOOST_PHOENIX_A_const_ref_a) const
+            RT operator()(Class* obj, BOOST_PHOENIX_A_ref_a) const
             {
                 return (obj->*fp)(BOOST_PHOENIX_a);
             }
