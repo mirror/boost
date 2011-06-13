@@ -21,14 +21,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0>
-            RT operator()(Class& obj, A0 const& a0) const
+            RT operator()(Class& obj, A0 & a0) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0);
             }
             template <typename Class, typename A0>
-            RT operator()(Class* obj, A0 const& a0) const
+            RT operator()(Class* obj, A0 & a0) const
             {
                 return (obj->*fp)(a0);
             }
@@ -52,14 +52,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1);
             }
             template <typename Class, typename A0 , typename A1>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1) const
             {
                 return (obj->*fp)(a0 , a1);
             }
@@ -83,14 +83,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2);
             }
             template <typename Class, typename A0 , typename A1 , typename A2>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2) const
             {
                 return (obj->*fp)(a0 , a1 , a2);
             }
@@ -114,14 +114,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2 , a3);
             }
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3) const
             {
                 return (obj->*fp)(a0 , a1 , a2 , a3);
             }
@@ -145,14 +145,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2 , a3 , a4);
             }
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4) const
             {
                 return (obj->*fp)(a0 , a1 , a2 , a3 , a4);
             }
@@ -176,14 +176,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2 , a3 , a4 , a5);
             }
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5) const
             {
                 return (obj->*fp)(a0 , a1 , a2 , a3 , a4 , a5);
             }
@@ -207,14 +207,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6);
             }
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6) const
             {
                 return (obj->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6);
             }
@@ -238,14 +238,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
             }
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7) const
             {
                 return (obj->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7);
             }
@@ -269,14 +269,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
             }
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8) const
             {
                 return (obj->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8);
             }
@@ -300,14 +300,14 @@
             impl(FP fp)
                 : fp(fp) {}
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
-            RT operator()(Class& obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9) const
+            RT operator()(Class& obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9) const
             {
                 BOOST_PROTO_USE_GET_POINTER();
                 typedef typename proto::detail::classtypeof<FP>::type class_type;
                 return (BOOST_PROTO_GET_POINTER(class_type, obj)->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
             }
             template <typename Class, typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8 , typename A9>
-            RT operator()(Class* obj, A0 const& a0 , A1 const& a1 , A2 const& a2 , A3 const& a3 , A4 const& a4 , A5 const& a5 , A6 const& a6 , A7 const& a7 , A8 const& a8 , A9 const& a9) const
+            RT operator()(Class* obj, A0 & a0 , A1 & a1 , A2 & a2 , A3 & a3 , A4 & a4 , A5 & a5 , A6 & a6 , A7 & a7 , A8 & a8 , A9 & a9) const
             {
                 return (obj->*fp)(a0 , a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , a9);
             }

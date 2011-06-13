@@ -205,9 +205,20 @@ namespace boost { namespace phoenix
                   , meta_grammar
                 >
               , proto::fold<
-                    proto::_value(proto::_child_c<0>)
-                  , mpl::true_()
-                  , mpl::and_<proto::_state, evaluator(proto::_, _context, int())>()
+                    proto::call<proto::_value(proto::_child_c<0>)>
+                  , proto::make<mpl::true_()>
+                  , proto::make<
+                        mpl::and_<
+                            proto::_state
+                          , proto::call<
+                                evaluator(
+                                    proto::_
+                                  , _context
+                                  , proto::make<int()>
+                                )
+                            >
+                        >()
+                    >
                 >
             >
         >
