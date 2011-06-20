@@ -89,7 +89,7 @@ namespace quickbook
                         top_level, blocks, paragraph_separator,
                         code, code_line, blank_line, hr,
                         list, list_item,
-                        nested_char, escape,
+                        escape,
                         inline_code,
                         template_,
                         code_block, macro,
@@ -391,7 +391,7 @@ namespace quickbook
                                 (   lookback [~cl::f_ch_p(local.simple_markup.mark)]
                                 >>  local.simple_markup_end
                                 )
-                            >>  local.nested_char
+                            >>  cl::anychar_p   [actions.plain_char]
                             )
                         )                       [actions.to_value]
                     ]
@@ -452,19 +452,6 @@ namespace quickbook
                 )
             ]                                   [actions.paragraph]
             ]
-            ;
-
-        local.nested_char =
-                cl::str_p("\\n")                [actions.break_]
-            |   "\\ "                           // ignore an escaped space
-            |   '\\' >> cl::punct_p             [actions.raw_char]
-            |   "\\u" >> cl::repeat_p(4)
-                    [cl::chset<>("0-9a-fA-F")]
-                                                [actions.escape_unicode]
-            |   "\\U" >> cl::repeat_p(8)
-                    [cl::chset<>("0-9a-fA-F")]
-                                                [actions.escape_unicode]
-            |   cl::anychar_p                   [actions.plain_char]
             ;
 
         local.escape =
