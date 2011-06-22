@@ -2264,7 +2264,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              (static_cast<Derived*>(self))->on_entry(evt,fsm);
              int state_id = get_state_id<stt,typename EventType::active_state::wrapped_entry>::value;
              BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index >= 0);
-             BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index <= nr_regions::value);
+             BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index < nr_regions::value);
              // just set the correct zone, the others will be default/history initialized
              self->m_states[find_region_id<typename EventType::active_state::wrapped_entry>::region_index] = state_id;
              self->internal_start(evt.m_event);
@@ -2321,7 +2321,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              {
                  int state_id = get_state_id<stt,typename StateType::wrapped_entry>::value;
                  BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index >= 0);
-                 BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index <= nr_regions::value);
+                 BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index < nr_regions::value);
                  helper_self->m_states[find_region_id<typename StateType::wrapped_entry>::region_index] = state_id;
              }
          private:
