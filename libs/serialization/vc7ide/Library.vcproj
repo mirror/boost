@@ -483,6 +483,9 @@
 				RelativePath="..\..\..\boost\archive\detail\common_oarchive.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\detail\export_archive_serializer_map.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\detail\interface_iarchive.hpp">
 			</File>
 			<File
