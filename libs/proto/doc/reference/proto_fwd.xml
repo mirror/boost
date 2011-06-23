@@ -347,7 +347,7 @@
     <purpose>Controls the maximum number of child nodes an expression may have.</purpose>
     <description>
       <para>
-        <computeroutput>BOOST_PROTO_MAX_ARITY</computeroutput> defaults to 5. It may be set higher or lower, but not
+        <computeroutput>BOOST_PROTO_MAX_ARITY</computeroutput> defaults to 10. It may be set higher or lower, but not
         lower than 3. Setting it higher will have a negative effect on compile times. 
       </para>
       <para>
@@ -365,7 +365,7 @@
       </computeroutput> accept.</purpose>
     <description>
       <para>
-        <computeroutput>BOOST_PROTO_MAX_LOGICAL_ARITY</computeroutput> defaults to 8. It may be set higher or lower. Setting
+        <computeroutput>BOOST_PROTO_MAX_LOGICAL_ARITY</computeroutput> defaults to 10. It may be set higher or lower. Setting
         it higher will have a negative effect on compile times.
       </para>
     </description>
