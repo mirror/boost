@@ -29,7 +29,6 @@
 # include BOOST_PP_ITERATE()
 #
 # else
-#
 # if defined NO_FLAGS
 
 struct BOOST_PP_CAT(X, BOOST_PP_ITERATION()) {
