@@ -10,5 +10,8 @@
     <para>
       This letter &#x3B1; should have a space either side of it.
     </para>
+    <para>
+      These should be properly encoded: &gt; &lt; &quot;
+    </para>
   </section>
 </article>

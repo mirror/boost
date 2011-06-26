@@ -294,6 +294,10 @@ Boost 1.46.1:
     `[ordered_list [item1][item2]]` or
     `[itemized_list [item1][item2]]`.
 
+[heading Version 1.5.6 - Boost 1.48]
+
+* Xml encode escaped punctuation (eg. `\<` is correctly encodes to \<).
+
 [endsect] [/Change log]
 
 [section:syntax Syntax Summary]

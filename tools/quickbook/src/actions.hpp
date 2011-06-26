@@ -252,22 +252,6 @@ namespace quickbook
         std::string& save;
     };
 
-    struct raw_char_action
-    {
-        // Prints a single raw (unprocessed) char.
-        // Allows '<', '>'... etc.
-
-        raw_char_action(collector& phrase, quickbook::actions& actions)
-        : phrase(phrase)
-        , actions(actions) {}
-
-        void operator()(char ch) const;
-        void operator()(iterator first, iterator /*last*/) const;
-
-        collector& phrase;
-        quickbook::actions& actions;
-    };
-
     struct plain_char_action
     {
         // Prints a single plain char.

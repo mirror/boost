@@ -664,22 +664,6 @@ namespace quickbook
         out << "</code>";
     }
 
-    void raw_char_action::operator()(char ch) const
-    {
-        if (actions.suppress) return;
-        write_anchors(actions, phrase);
-
-        phrase << ch;
-    }
-
-    void raw_char_action::operator()(iterator first, iterator /*last*/) const
-    {
-        if (actions.suppress) return;
-        write_anchors(actions, phrase);
-
-        phrase << *first;
-    }
-
     void plain_char_action::operator()(char ch) const
     {
         if (actions.suppress) return;
