@@ -98,10 +98,10 @@ public:
         return *this;
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1400)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
     // Assignment operator taking a boost::filesystem2::path or
     // boost::filesystem2::wpath
-    // (not on Visual C++ 7.1, as it seems to have problems with
+    // (not on Visual C++ 7.1/8.0, as it seems to have problems with
     // SFINAE functions with the same parameters, doesn't seem
     // worth working around).
     template<typename Path>
