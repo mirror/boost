@@ -75,8 +75,8 @@ void test_unicode()
    TEST_REGEX_CLASS_U(Non-Spacing Mark, 20EA);
    TEST_REGEX_CLASS_U(Mc, 1938);
    TEST_REGEX_CLASS_U(Spacing Combining Mark, 1938);
-   TEST_REGEX_CLASS_U(Me, 06DE);
-   TEST_REGEX_CLASS_U(Enclosing Mark, 06DE);
+   TEST_REGEX_CLASS_U(Me, 0488);
+   TEST_REGEX_CLASS_U(Enclosing Mark, 0488);
    TEST_REGEX_CLASS_U(N*, 0669);
    TEST_REGEX_CLASS_U(Number, 0669);
    TEST_REGEX_CLASS_U(Nd, 0669);
