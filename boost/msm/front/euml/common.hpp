@@ -65,6 +65,7 @@ namespace proto = boost::proto;
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(tag_type)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(action_name)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(not_intern_euml_state)
 
 namespace boost { namespace msm { namespace front { namespace euml
 {
@@ -158,6 +159,19 @@ struct get_fct
 >::type type;
 };
 
+// used to differentiate between different types of euml_state's
+template <class T,class Enable=void>
+struct get_state_name 
+{
+    typedef T type;
+};
+
+template <class T>
+struct get_state_name<T,typename ::boost::enable_if<has_not_intern_euml_state<T> >::type>
+{
+    typedef typename T::In::type type;
+};
+
 template <class T>
 struct get_action_name 
 {
@@ -225,15 +239,26 @@ struct euml_event: proto::extends<typename proto::terminal<event_tag>::type, EVT
     };
 };
 template <class STATE>
-struct euml_state: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, state_domain>
+struct euml_state_intern: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, state_domain>
 {
     typedef state_tag euml_tag_type;
     using proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>::operator=;
     template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5 
 #ifdef BOOST_MSVC 
- ,class Arg6 
+        ,class Arg6 
 #endif
->
+    >
+    struct In
+    {
+        typedef STATE type;
+    };
+};
+template <class STATE>
+struct euml_state: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, state_domain>
+{
+    typedef state_tag euml_tag_type;
+    typedef int not_intern_euml_state;
+    using proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>::operator=;
     struct In
     {
         typedef STATE type;

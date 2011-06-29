@@ -49,7 +49,7 @@ template<class StateNameTag,
          class Defer = ::boost::mpl::vector0<>,
          class BASE = ::boost::msm::front::default_base_state>
 struct func_state :  public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
-                     euml_state<func_state<StateNameTag,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
+                     euml_state_intern<func_state<StateNameTag,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
     func_state(){}
     // grammar testing
@@ -84,7 +84,7 @@ template<class StateNameTag,
          class Defer = ::boost::mpl::vector0<>,
          class BASE = default_base_state>
 struct entry_func_state :  public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
-                           euml_state<entry_func_state<StateNameTag,ZoneIndex,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
+                           euml_state_intern<entry_func_state<StateNameTag,ZoneIndex,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
     entry_func_state(){}
     // grammar testing
@@ -124,7 +124,7 @@ template<class StateNameTag,
          class BASE = default_base_state>
 struct explicit_entry_func_state :  public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
                                     public ::boost::msm::front::explicit_entry<ZoneIndex>,
-                                    euml_state<explicit_entry_func_state<StateNameTag,
+                                    euml_state_intern<explicit_entry_func_state<StateNameTag,
                                         ZoneIndex,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
     explicit_entry_func_state(){}
@@ -160,7 +160,7 @@ template<class StateNameTag,
          class Defer = ::boost::mpl::vector0<>,
          class BASE = default_base_state>
 struct exit_func_state :   public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
-                           euml_state<exit_func_state<StateNameTag,Event,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
+                           euml_state_intern<exit_func_state<StateNameTag,Event,EntryFunctor,ExitFunctor,Attributes,Flags,Defer,BASE> >
 {
     exit_func_state(){}
     // grammar testing
@@ -537,7 +537,7 @@ struct BuildActionsCases::case_<proto::tag::terminal>
             >,
         proto::when<
             proto::terminal<state_tag>,
-            proto::_
+            get_state_name<proto::_>()
             >,
         proto::when<
             proto::terminal<flag_tag>,
@@ -853,7 +853,7 @@ template<class StateNameTag,
          class OnExceptionFunctor = NoAction,
          class BASE = ::boost::msm::front::default_base_state>
 struct func_state_machine :  public ::boost::msm::front::detail::state_base<BASE,Attributes>, 
-                             euml_state<func_state_machine<StateNameTag,STT,Init,EntryFunctor,ExitFunctor,Attributes,Flags,
+                             euml_state_intern<func_state_machine<StateNameTag,STT,Init,EntryFunctor,ExitFunctor,Attributes,Flags,
                                                         Defer,NoTransitionFunctor,OnExceptionFunctor,BASE> >
 {
     func_state_machine(){}
