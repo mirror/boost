@@ -64,12 +64,16 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         BOOST_MSM_EUML_TRANSITION_TABLE. The <a class="link" href="examples/SimpleTutorialWithEumlTable.cpp" target="_top">implementation</a> is pretty
                         straightforward.</p><p>The <a class="link" href="examples/CompositeTutorialWithEumlTable.cpp" target="_top">composite</a> implementation is slightly trickier because the submachine
                         has to be a msm::back::state_machine and a msm::front::euml::state. For
-                        example:</p><pre class="programlisting">struct front_end : public msm::front::state_machine_def&lt;front_end&gt;
+                        example:</p><pre class="programlisting">// front-end like always
+struct front_end : public boost::msm::front::state_machine_def&lt;front_end&gt;
 {
 ...
 };
-struct submachine : public boost::msm::back::state_machine&lt;front_end&gt;,
-                    public msm::front::euml::euml_state&lt;submachine&gt;
+// back-end like always
+typedef boost::msm::back::state_machine&lt;front_end&gt; back_end;
+// this is new: make the submachine a eUML type
+struct submachine : public back_end,
+                    public boost::msm::front::euml::euml_state&lt;back_end&gt;
 {
 };</pre><p>Unfortunately, there is a bug with VC, which appears from time to time and
                         causes in a stack overflow. If you get a warning that the program is

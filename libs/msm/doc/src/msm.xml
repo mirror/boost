@@ -1900,12 +1900,16 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         xlink:href="examples/CompositeTutorialWithEumlTable.cpp">composite</link> implementation is slightly trickier because the submachine
                         has to be a msm::back::state_machine and a msm::front::euml::state. For
                         example:</para>
-                    <programlisting>struct front_end : public msm::front::state_machine_def&lt;front_end>
+                    <programlisting>// front-end like always
+struct front_end : public boost::msm::front::state_machine_def&lt;front_end>
 {
 ...
 };
-struct submachine : public boost::msm::back::state_machine&lt;front_end>,
-                    public msm::front::euml::euml_state&lt;submachine>
+// back-end like always
+typedef boost::msm::back::state_machine&lt;front_end> back_end;
+// this is new: make the submachine a eUML type
+struct submachine : public back_end,
+                    public boost::msm::front::euml::euml_state&lt;back_end>
 {
 };</programlisting>
                     <para>Unfortunately, there is a bug with VC, which appears from time to time and
