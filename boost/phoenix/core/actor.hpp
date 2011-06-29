@@ -50,6 +50,24 @@ namespace boost { namespace phoenix
             error_invalid_lambda_expr(T const&) {}
         };
 
+        template <typename T>
+        struct result_type_deduction_helper
+        {
+            typedef T const & type;
+        };
+
+        template <typename T>
+        struct result_type_deduction_helper<T &>
+        {
+            typedef T & type;
+        };
+
+        template <typename T>
+        struct result_type_deduction_helper<T const &>
+        {
+            typedef T const & type;
+        };
+
         struct do_assign
         {
             BOOST_PROTO_CALLABLE()
@@ -62,7 +80,6 @@ namespace boost { namespace phoenix
                 proto::value(t1) = proto::value(t2);
             }
         };
-
 
     #define BOOST_PHOENIX_ACTOR_ASSIGN_CHILD(Z, N, D)                           \
         assign(                                                                 \
@@ -215,9 +232,6 @@ namespace boost { namespace phoenix
         {
             return proto::make_expr<proto::tag::subscript, phoenix_domain>(this->proto_expr_, a0);
         }
-
-        //BOOST_PROTO_EXTENDS_ASSIGN_()
-        //BOOST_PROTO_EXTENDS_SUBSCRIPT()
 
         template <typename Sig>
         struct result;
