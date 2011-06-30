@@ -108,7 +108,12 @@ public:
     {
         if(_n >= returned_block) {
             // discard values of random number generator
-            _rng.discard(total_block - _n);
+            // Don't use discard, since we still need to
+            // be somewhat compatible with TR1.
+            // _rng.discard(total_block - _n);
+            for(std::size_t i = 0; i < total_block - _n; ++i) {
+                _rng();
+            }
             _n = 0;
         }
         ++_n;
