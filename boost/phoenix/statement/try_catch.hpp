@@ -253,7 +253,13 @@ namespace boost { namespace phoenix
 
     template <typename Dummy>
     struct is_nullary::when<rule::try_catch, Dummy>
-        : proto::call<detail::try_catch_is_nullary(proto::_, int(), _context)>
+        : proto::call<
+            detail::try_catch_is_nullary(
+                proto::_
+              , proto::make<int()>
+              , _context
+            )
+        >
     {};
 
     template <typename TryCatch, typename Exception>
