@@ -20,6 +20,10 @@
 #include "test_locale.hpp"
 #include <stdarg.h>
 
+#ifdef BOOST_HAS_ICU
+#include <unicode/uloc.h>
+#endif
+
 #ifdef TEST_THREADS
 #include <list>
 #include <boost/thread.hpp>
@@ -82,6 +86,19 @@ void run_tests()
 
 int cpp_main(int /*argc*/, char * /*argv*/[])
 {
+#ifdef BOOST_HAS_ICU
+   //
+   // We need to set the default locale used by ICU, 
+   // otherwise some of our tests using equivalence classes fail.
+   //
+   UErrorCode err = U_ZERO_ERROR;
+   uloc_setDefault("en", &err);
+   if(err != U_ZERO_ERROR)
+   {
+      std::cerr << "Unable to set the default ICU locale to \"en\"." << std::endl;
+      return -1;
+   }
+#endif
 #ifdef TEST_THREADS
    try{
       get_array_data();  // initialises data.
