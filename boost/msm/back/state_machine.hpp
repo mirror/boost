@@ -334,7 +334,8 @@ private:
             template <class ForwardEvent>
             static void helper(ForwardEvent const& ,forwarding_function& )
             {
-                // Not our event, ignore
+                // Not our event, assert
+                BOOST_ASSERT(false);
             }
         };
         template <int Dummy>
