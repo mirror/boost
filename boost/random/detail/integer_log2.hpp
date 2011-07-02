@@ -22,7 +22,9 @@ namespace boost {
 namespace random {
 namespace detail {
 
-#if !defined(BOOST_NO_CONSTEXPR)
+// Daniel James: Disabled use of constexpr because integer_log2_impl is not a
+// valid constexpr.
+#if 0 && !defined(BOOST_NO_CONSTEXPR)
 #define BOOST_RANDOM_DETAIL_CONSTEXPR constexpr
 #elif defined(BOOST_MSVC)
 #define BOOST_RANDOM_DETAIL_CONSTEXPR __forceinline
