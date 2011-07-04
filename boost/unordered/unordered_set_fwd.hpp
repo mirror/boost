@@ -14,8 +14,34 @@
 
 namespace boost
 {
+    namespace unordered
+    {
+        template <class T, class H, class P, class A>
+        inline bool operator==(unordered_set<T, H, P, A> const&,
+            unordered_set<T, H, P, A> const&);
+        template <class T, class H, class P, class A>
+        inline bool operator!=(unordered_set<T, H, P, A> const&,
+            unordered_set<T, H, P, A> const&);
+        template <class T, class H, class P, class A>
+        inline void swap(unordered_set<T, H, P, A> &m1,
+                unordered_set<T, H, P, A> &m2);
+
+        template <class T, class H, class P, class A>
+        inline bool operator==(unordered_multiset<T, H, P, A> const&,
+            unordered_multiset<T, H, P, A> const&);
+        template <class T, class H, class P, class A>
+        inline bool operator!=(unordered_multiset<T, H, P, A> const&,
+            unordered_multiset<T, H, P, A> const&);
+        template <class T, class H, class P, class A>
+        inline void swap(unordered_multiset<T, H, P, A> &m1,
+                unordered_multiset<T, H, P, A> &m2);
+    }
+
     using ::boost::unordered::unordered_set;
     using ::boost::unordered::unordered_multiset;
+    using ::boost::unordered::swap;
+    using ::boost::unordered::operator==;
+    using ::boost::unordered::operator!=;
 }
 
 #endif

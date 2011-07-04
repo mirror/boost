@@ -25,15 +25,6 @@ namespace unordered
         class P = std::equal_to<K>,
         class A = std::allocator<std::pair<const K, T> > >
     class unordered_map;
-    template <class K, class T, class H, class P, class A>
-    inline bool operator==(unordered_map<K, T, H, P, A> const&,
-        unordered_map<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    inline bool operator!=(unordered_map<K, T, H, P, A> const&,
-        unordered_map<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    inline void swap(unordered_map<K, T, H, P, A>&,
-            unordered_map<K, T, H, P, A>&);
 
     template <class K,
         class T,
@@ -41,46 +32,18 @@ namespace unordered
         class P = std::equal_to<K>,
         class A = std::allocator<std::pair<const K, T> > >
     class unordered_multimap;
-    template <class K, class T, class H, class P, class A>
-    inline bool operator==(unordered_multimap<K, T, H, P, A> const&,
-        unordered_multimap<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    inline bool operator!=(unordered_multimap<K, T, H, P, A> const&,
-        unordered_multimap<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    inline void swap(unordered_multimap<K, T, H, P, A>&,
-            unordered_multimap<K, T, H, P, A>&);
 
     template <class T,
         class H = hash<T>,
         class P = std::equal_to<T>,
         class A = std::allocator<T> >
     class unordered_set;
-    template <class T, class H, class P, class A>
-    inline bool operator==(unordered_set<T, H, P, A> const&,
-        unordered_set<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    inline bool operator!=(unordered_set<T, H, P, A> const&,
-        unordered_set<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    inline void swap(unordered_set<T, H, P, A> &m1,
-            unordered_set<T, H, P, A> &m2);
 
     template <class T,
         class H = hash<T>,
         class P = std::equal_to<T>,
         class A = std::allocator<T> >
     class unordered_multiset;
-    template <class T, class H, class P, class A>
-    inline bool operator==(unordered_multiset<T, H, P, A> const&,
-        unordered_multiset<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    inline bool operator!=(unordered_multiset<T, H, P, A> const&,
-        unordered_multiset<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    inline void swap(unordered_multiset<T, H, P, A> &m1,
-            unordered_multiset<T, H, P, A> &m2);
-
 }
 }
 

@@ -129,6 +129,7 @@ void container_test(X& r, T const&)
     test::check_return_type<const_iterator>::equals(a_const.cend());
 
     a.swap(b);
+    boost::swap(a, b);
     test::check_return_type<X>::equals_ref(r = a);
     test::check_return_type<size_type>::equals(a.size());
     test::check_return_type<size_type>::equals(a.max_size());
@@ -180,6 +181,8 @@ void equality_test(X& r)
 
     test::check_return_type<bool>::equals(a == b);
     test::check_return_type<bool>::equals(a != b);
+    test::check_return_type<bool>::equals(boost::operator==(a, b));
+    test::check_return_type<bool>::equals(boost::operator!=(a, b));
 }
 
 template <class X, class T>
