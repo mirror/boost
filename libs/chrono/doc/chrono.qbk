@@ -1129,7 +1129,7 @@ Usage
     milliseconds ms;
     std::cout << ms.count() << '\n';
 
-['See the source file [@../../example/i_dont_like_the_default_duration_behavior.cpp example/i_dont_like_the_default_duration_behavior.cpp]]
+['See the source file [@boost:libs/chrono/example/i_dont_like_the_default_duration_behavior.cpp example/i_dont_like_the_default_duration_behavior.cpp]]
 
 [endsect]
 [/
@@ -1192,7 +1192,7 @@ This example shows how to handle duration with resolution not known until run-ti
         friend bool operator>=(duration x, duration y) {return !(x < y);}
     };
 
-['See the source file [@../../example/runtime_resolution.cpp here]]
+['See the source file [@boost:libs/chrono/example/runtime_resolution.cpp here]]
 
 [endsect]
 ]
@@ -1201,7 +1201,7 @@ This example shows how to handle duration with resolution not known until run-ti
 
 A "saturating" signed integral type is developed.  This type has +/- infinity and a NaN (like IEEE floating-point) but otherwise obeys signed integral arithmetic. This class is subsequently used as the template parameter Rep in boost::chrono::__duration to demonstrate a duration class that does not silently ignore overflow.
 
-['See the source file [@../../example/saturating.cpp example/saturating.cpp]]
+['See the source file [@boost:libs/chrono/example/saturating.cpp example/saturating.cpp]]
 
 [endsect]
 
@@ -1282,7 +1282,7 @@ Usage
         print(xt);
 
 
-['See the source file [@../../example/xtime.cpp xtime.cpp]]
+['See the source file [@boost:libs/chrono/example/xtime.cpp xtime.cpp]]
 
 [endsect]
 
@@ -1337,7 +1337,7 @@ Users can easily create their own clocks, with both points in time and time dura
         }
     };
 
-['See the source file [@../../example/cycle_count.cpp cycle_count.cpp]]
+['See the source file [@boost:libs/chrono/example/cycle_count.cpp cycle_count.cpp]]
 
 [endsect]
 
@@ -1476,7 +1476,7 @@ Usage of xtime_clock
         std::cout << "paused " << boost::chrono::::nanoseconds(elapsed).count() << " nanoseconds\n";
 
 
-['See the source file [@../../example/timeval_demo.cpp example/timeval_demo.cpp]]
+['See the source file [@boost:libs/chrono/example/timeval_demo.cpp example/timeval_demo.cpp]]
 
 [endsect]
 [endsect]
@@ -1487,7 +1487,7 @@ Usage of xtime_clock
 [/======================================================]
 [section Howard Hinnant's original demonstration program]
 
-['See the source file [@../../example/time2_demo.cpp example/time2_demo.cpp]]
+['See the source file [@boost:libs/chrono/example/time2_demo.cpp example/time2_demo.cpp]]
 
 [endsect]
 ]
@@ -1512,7 +1512,7 @@ Being able to *easily* write this function is a major feature!
     BOOST_AUTO(t2, system_clock::now() + nanoseconds(3));
     BOOST_AUTO(t3, min(t1, t2));
 
-['See the source file [@../../example/min_time_point.cpp example/min_time_point.cpp]]
+['See the source file [@boost:libs/chrono/example/min_time_point.cpp example/min_time_point.cpp]]
 
 [endsect]
 
@@ -1587,7 +1587,7 @@ The output of this program run looks like this:
 
 
 
-['See the source file [@../../example/await_keystroke.cpp example/await_keystroke.cpp]]
+['See the source file [@boost:libs/chrono/example/await_keystroke.cpp example/await_keystroke.cpp]]
 
 [endsect]
 
@@ -1634,7 +1634,7 @@ The output of this program run looks like this:
       return std::system( s.c_str() );
     }
 
-['See the source file [@../../example/timex.cpp example/timex.cpp]]
+['See the source file [@boost:libs/chrono/example/timex.cpp example/timex.cpp]]
 
 [endsect]
 ]
@@ -1870,7 +1870,7 @@ Next follows how simple is the usage of this functions:
     this_thread::sleep_until(chrono::__system_clock::now() + chrono::__duration<double>(1.5));
 
 
-['See the source file [@../../example/simulated_thread_interface_demo.cpp example/simulated_thread_interface_demo.cpp]]
+['See the source file [@boost:libs/chrono/example/simulated_thread_interface_demo.cpp example/simulated_thread_interface_demo.cpp]]
 
 [endsect]
 
@@ -1908,7 +1908,7 @@ Output is:
 
     5 heures, 45 minutes, 15 secondes et 763 millisecondes
 
-['See the source file [@../../example/french.cpp example/french.cpp]]
+['See the source file [@boost:libs/chrono/example/french.cpp example/french.cpp]]
 
 [endsect] [/section:french French Output]
 [endsect] [/section IO]
