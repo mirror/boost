@@ -10,23 +10,23 @@
 
 [heading Lazy Evaluation]
 
-Unlike __mpl__, Fusion algorithms are lazy[except for some special cases
-such as __for_each__ and __copy__] and non sequence-type preserving.
-What does that mean? It means that when you operate on a sequence
-through a Fusion algorithm that returns a sequence, the sequence
-returned may not be of the same class as the original. This is by
-design. Runtime efficiency is given a high priority. Like __mpl__, and
-unlike __stl__, fusion algorithms are functional in nature such that
-algorithms are non mutating (no side effects). However, due to the high
-cost of returning full sequences such as vectors and lists, /Views/ are
-returned from Fusion algorithms instead. For example, the __transform__
-algorithm does not actually return a transformed version of the original
-sequence. __transform__ returns a __transform_view__. This view holds a
-reference to the original sequence plus the transform function.
-Iteration over the __transform_view__ will apply the transform function
-over the sequence elements on demand. This /lazy/ evaluation scheme
-allows us to chain as many algorithms as we want without incurring a
-high runtime penalty.
+Unlike __mpl__, Fusion algorithms are lazy[footnote Except for some
+special cases such as __for_each__ and __copy__ which are inherently
+imperative algorithms.] and non sequence-type preserving [footnote What
+does that mean? It means that when you operate on a sequence through a
+Fusion algorithm that returns a sequence, the sequence returned may not
+be of the same class as the original]. This is by design. Runtime
+efficiency is given a high priority. Like __mpl__, and unlike __stl__,
+fusion algorithms are mostly functional in nature such that algorithms
+are non mutating (no side effects). However, due to the high cost of
+returning full sequences such as vectors and lists, /Views/ are returned
+from Fusion algorithms instead. For example, the __transform__ algorithm
+does not actually return a transformed version of the original sequence.
+__transform__ returns a __transform_view__. This view holds a reference
+to the original sequence plus the transform function. Iteration over the
+__transform_view__ will apply the transform function over the sequence
+elements on demand. This /lazy/ evaluation scheme allows us to chain as
+many algorithms as we want without incurring a high runtime penalty.
 
 [heading Sequence Extension]
 
@@ -39,6 +39,7 @@ the original sequence `s` and the value `x`. Functions that were once
 sequence specific and need to be implemented N times over N different
 sequences are now implemented only once. That is to say that Fusion
 sequences are cheaply extensible.
+
 To regain the original sequence, __conversion__ functions are provided. You
 may use one of the __conversion__ functions to convert back to the original
 sequence type.
