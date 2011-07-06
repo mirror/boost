@@ -10,21 +10,23 @@
 
 [heading Lazy Evaluation]
 
-Unlike __mpl__, Fusion algorithms are lazy and non sequence-type
-preserving. What does that mean? It means that when you operate on a
-sequence through a Fusion algorithm that returns a sequence, the sequence
-returned may not be of the same class as the original. This is by design.
-Runtime efficiency is given a high priority. Like __mpl__, and unlike
-__stl__, fusion algorithms are functional in nature such that algorithms
-are non mutating (no side effects). However, due to the high cost of
-returning full sequences such as vectors and lists, /Views/ are returned
-from Fusion algorithms instead. For example, the __transform__ algorithm
-does not actually return a transformed version of the original sequence.
-__transform__ returns a __transform_view__. This view holds a reference to
-the original sequence plus the transform function. Iteration over the
-__transform_view__ will apply the transform function over the sequence
-elements on demand. This /lazy/ evaluation scheme allows us to chain as
-many algorithms as we want without incurring a high runtime penalty.
+Unlike __mpl__, Fusion algorithms are lazy[except for some special cases
+such as __for_each__ and __copy__] and non sequence-type preserving.
+What does that mean? It means that when you operate on a sequence
+through a Fusion algorithm that returns a sequence, the sequence
+returned may not be of the same class as the original. This is by
+design. Runtime efficiency is given a high priority. Like __mpl__, and
+unlike __stl__, fusion algorithms are functional in nature such that
+algorithms are non mutating (no side effects). However, due to the high
+cost of returning full sequences such as vectors and lists, /Views/ are
+returned from Fusion algorithms instead. For example, the __transform__
+algorithm does not actually return a transformed version of the original
+sequence. __transform__ returns a __transform_view__. This view holds a
+reference to the original sequence plus the transform function.
+Iteration over the __transform_view__ will apply the transform function
+over the sequence elements on demand. This /lazy/ evaluation scheme
+allows us to chain as many algorithms as we want without incurring a
+high runtime penalty.
 
 [heading Sequence Extension]
 
@@ -45,6 +47,61 @@ sequence type.
 
     #include <boost/fusion/algorithm.hpp>
     #include <boost/fusion/include/algorithm.hpp>
+
+[section Auxiliary]
+
+The auxiliary algorithms provide the utility algorithms for sequences.
+
+[heading Header]
+
+    #include <boost/fusion/algorithm/auxiliary.hpp>
+    #include <boost/fusion/include/auxiliary.hpp>
+
+[section Functions]
+
+[section copy]
+
+[heading Description]
+Copy a sequence `src` to a sequence `dest`.
+It is also used to convert sequence into other.
+
+[heading Synopsis]
+    template <typename Seq1, typename Seq2>
+    void copy(Seq1 const& src, Seq2& dest);
+
+[table Parameters
+    [[Parameter][Requirement][Description]]
+    [[`src`][A model of __forward_sequence__, all elements contained in the `src` sequence should be convertible into the element contained in the `dest` sequence.][Operation's argument]]
+    [[`dest`][A model of __forward_sequence__, `e2 = e1` is valid expression for each pair of elements `e1` of `src` and `e2` of `dest`.][Operation's argument]]
+]
+
+[heading Expression Semantics]
+    __copy__(src, dest);
+
+[*Return type]: `void`
+
+[*Semantics]: `e2 = e1` for each element `e1` in `src` and `e2` in `dest`.
+
+[heading Complexity]
+Linear, exactly `__result_of_size__<Sequence>::value`.
+
+[heading Header]
+
+    #include <boost/fusion/algorithm/auxiliary/copy.hpp>
+    #include <boost/fusion/include/copy.hpp>
+
+[heading Example]
+    __vector__<int,int> vec(1,2);
+    __list__<int,int> ls;
+    __copy__(vec, ls);
+    assert(ls == __make_list__(1,2));
+
+[endsect]
+
+[endsect]
+
+[endsect]
+
 
 [section Iteration]
 
@@ -75,7 +132,7 @@ the first call) and [arg_desc] of `seq`.
         >
     typename result_of_name_macro<Sequence, State const, F>::type name_macro(
         Sequence& seq, State const& initial_state, F f);
-        
+
     template<
         typename Sequence,
         typename State,

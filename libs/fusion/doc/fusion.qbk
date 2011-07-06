@@ -215,6 +215,7 @@
 
 [def __algorithm__              [link fusion.algorithm Algorithm]]
 [def __algorithms__             [link fusion.algorithm Algorithms]]
+[def __copy__                   [link fusion.algorithm.auxiliary.functions.copy `copy`]]
 [def __fold__                   [link fusion.algorithm.iteration.functions.fold `fold`]]
 [def __result_of_fold__         [link fusion.algorithm.iteration.metafunctions.fold `result_of::fold`]]
 [def __reverse_fold__           [link fusion.algorithm.iteration.functions.reverse_fold `reverse_fold`]]
