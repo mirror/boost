@@ -1,6 +1,12 @@
 #ifndef BOOST_LEXICAL_CAST_INCLUDED
 #define BOOST_LEXICAL_CAST_INCLUDED
 
+// MS compatible compilers support #pragma once
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+#endif
+
 // Boost lexical_cast.hpp header  -------------------------------------------//
 //
 // See http://www.boost.org/libs/conversion for documentation.
@@ -502,6 +508,9 @@ namespace boost
             BOOST_STATIC_CONSTANT(char, zero  = '0');
             BOOST_STATIC_CONSTANT(char, minus = '-');
             BOOST_STATIC_CONSTANT(char, plus = '+');
+            BOOST_STATIC_CONSTANT(char, lowercase_e = 'e');
+            BOOST_STATIC_CONSTANT(char, capital_e = 'E');
+            BOOST_STATIC_CONSTANT(char, c_decimal_separator = '.');
         };
 
 #ifndef BOOST_LCAST_NO_WCHAR_T
@@ -511,6 +520,9 @@ namespace boost
             BOOST_STATIC_CONSTANT(wchar_t, zero  = L'0');
             BOOST_STATIC_CONSTANT(wchar_t, minus = L'-');
             BOOST_STATIC_CONSTANT(wchar_t, plus = L'+');
+            BOOST_STATIC_CONSTANT(wchar_t, lowercase_e = L'e');
+            BOOST_STATIC_CONSTANT(wchar_t, capital_e = L'E');
+            BOOST_STATIC_CONSTANT(wchar_t, c_decimal_separator = L'.');
         };
 #endif
     }
@@ -646,7 +658,7 @@ namespace boost
             std::string const& grouping = np.grouping();
             std::string::size_type const grouping_size = grouping.size();
 
-            /* According to [22.2.2.1.2] of Programming languages - C++
+            /* According to Programming languages - C++
              * we MUST check for correct grouping
              */
             if (grouping_size && grouping[0] > 0)
@@ -715,6 +727,246 @@ namespace boost
                     --end;
                 }
             }
+            return true;
+        }
+    }
+
+    namespace detail // lcast_ret_float
+    {
+        template <class T>
+        struct mantissa_holder_type
+        {
+            /* Can not be used with this type */
+        };
+
+        template <>
+        struct mantissa_holder_type<float>
+        {
+            typedef unsigned int type;
+        };
+
+        template <>
+        struct mantissa_holder_type<double>
+        {
+#if defined(BOOST_HAS_LONG_LONG)
+            typedef boost::ulong_long_type type;
+#elif defined(BOOST_HAS_MS_INT64)
+            typedef unsigned __int64 type;
+#endif
+        };
+
+        template<class Traits, class T, class CharT>
+        inline bool lcast_ret_float(T& value, const CharT* begin, const CharT* end)
+        {
+
+#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+            // TODO: use BOOST_NO_STD_LOCALE
+            std::locale loc;
+            typedef std::numpunct<CharT> numpunct;
+            numpunct const& np = BOOST_USE_FACET(numpunct, loc);
+            std::string const& grouping = np.grouping();
+            std::string::size_type const grouping_size = grouping.size();
+            CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
+            CharT const decimal_point = np.decimal_point();
+            bool found_grouping = false;
+            unsigned int last_grouping_pos = grouping_size - 1;
+#else
+            CharT const decimal_point = lcast_char_constants<CharT>::c_decimal_separator;
+#endif
+
+            CharT const czero = lcast_char_constants<CharT>::zero;
+            CharT const minus = lcast_char_constants<CharT>::minus;
+            CharT const plus = lcast_char_constants<CharT>::plus;
+            CharT const capital_e = lcast_char_constants<CharT>::capital_e;
+            CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
+
+            value = 0.0;
+
+            typedef typename Traits::int_type int_type;
+            typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::type mantissa_type;
+            int_type const zero = Traits::to_int_type(czero);
+            if (begin == end) return false;
+
+            /* Getting the plus/minus sign */
+            bool has_minus = false;
+            if ( *begin == minus ) {
+                ++ begin;
+                has_minus = true;
+                if (begin == end) return false;
+            } else if ( *begin == plus ) {
+                ++begin;
+                if (begin == end) return false;
+            }
+
+            if ( *begin < czero || *begin >= czero + 10 ) {
+                return false;
+            }
+
+
+            bool found_decimal = false;
+            int pow_of_10 = 0;
+            mantissa_type mantissa=0;
+            bool is_mantissa_full = false;
+
+            char length_since_last_delim = 0;
+
+            while ( begin != end )
+            {
+                if (found_decimal) {
+                    /* We allow no thousand_separators after decimal point */
+
+                    mantissa_type tmp_mantissa = mantissa * 10u;
+                    if ( *begin == lowercase_e || *begin == capital_e ) break;
+                    if ( *begin < czero || *begin >= czero + 10 ) return false;
+                    if (    is_mantissa_full
+                            || tmp_mantissa / 10u != mantissa
+                            || (std::numeric_limits<mantissa_type>::max)()-(*begin - zero) < tmp_mantissa
+                            ) {
+                        is_mantissa_full = true;
+                        ++ begin;
+                        continue;
+                    }
+
+                    -- pow_of_10;
+                    mantissa = tmp_mantissa;
+                    mantissa += *begin - zero;
+                } else {
+
+                    if (*begin >= czero && *begin < czero + 10) {
+
+                        /* Checking for mantissa overflow. If overflow will
+                         * occur, them we only increase multiplyer
+                         */
+                        mantissa_type tmp_mantissa = mantissa * 10u;
+                        if(     !is_mantissa_full
+                                && tmp_mantissa / 10u == mantissa
+                                && (std::numeric_limits<mantissa_type>::max)()-(*begin - zero) >= tmp_mantissa
+                            )
+                        {
+                            mantissa = tmp_mantissa;
+                            mantissa += *begin - zero;
+                        } else
+                        {
+                            is_mantissa_full = true;
+                            ++ pow_of_10;
+                        }
+
+                        ++ length_since_last_delim;
+                    } else if ( *begin == decimal_point || *begin == lowercase_e || *begin == capital_e) {
+#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+                        /* If ( we need to check grouping
+                         *      and (   grouping missmatches
+                         *              or grouping position is incorrect
+                         *              or we are using the grouping position 0 twice
+                         *           )
+                         *    ) then return error
+                         */
+                        if( grouping_size && found_grouping
+                            && (
+                                   length_since_last_delim != grouping[0]
+                                   || last_grouping_pos>1
+                                   || (last_grouping_pos==0 && grouping_size>1)
+                                )
+                           ) return false;
+#endif
+
+                        if(*begin == decimal_point){
+                            ++ begin;
+                            found_decimal = true;
+                            continue;
+                        }else break;
+                    }
+#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+                    else if (grouping_size && *begin == thousands_sep){
+                        if(found_grouping)
+                        {
+                            /* It is not he first time, when we find thousands separator,
+                             * so we need to chek, is the distance between two groupings
+                             * equal to grouping[last_grouping_pos] */
+
+                            if (length_since_last_delim != grouping[last_grouping_pos] )
+                            {
+                                if (!last_grouping_pos) return false;
+                                else
+                                {
+                                    -- last_grouping_pos;
+                                    if (length_since_last_delim != grouping[last_grouping_pos]) return false;
+                                }
+                            } else
+                                /* We are calling the grouping[0] twice, when grouping size is more than 1 */
+                                if (grouping_size>1u && last_grouping_pos+1<grouping_size) return false;
+
+                        } else {
+                            /* Delimiter at the begining ',000' */
+                            if (!length_since_last_delim) return false;
+
+                            found_grouping = true;
+                            if (length_since_last_delim > grouping[last_grouping_pos] ) return false;
+                        }
+
+                        length_since_last_delim = 0;
+                        ++ begin;
+
+                        /* Delimiter at the end '100,' */
+                        if (begin == end) return false;
+                        continue;
+                    }
+#endif
+                    else return false;
+                }
+
+                ++begin;
+            }
+
+            // Exponent found
+            if ( begin != end && ( *begin == lowercase_e || *begin == capital_e ) ) {
+                ++ begin;
+                if ( begin == end ) return false;
+
+                bool exp_has_minus = false;
+                if( *begin == minus ) {
+                    exp_has_minus = true;
+                    ++ begin;
+                    if ( begin == end ) return false;
+                } else if (*begin == plus ) {
+                    ++ begin;
+                    if ( begin == end ) return false;
+                }
+
+                int exp_pow_of_10 = 0;
+                while ( begin != end )
+                {
+                    if ( *begin < czero
+                            || *begin >= czero + 10
+                            || exp_pow_of_10 * 10 < exp_pow_of_10) /* Overflows are checked lower more precisely*/
+                        return false;
+
+                    exp_pow_of_10 *= 10;
+                    exp_pow_of_10 += *begin - zero;
+                    ++ begin;
+                };
+
+                if ( exp_pow_of_10 ) {
+                    /* Overflows are checked lower */
+                    if ( exp_has_minus ) {
+                        pow_of_10 -= exp_pow_of_10;
+                    } else {
+                        pow_of_10 += exp_pow_of_10;
+                    }
+                }
+            }
+
+            /* We need a more accurate algorithm... We can not use current algorithm
+             * with long doubles (and with doubles if sizeof(double)==sizeof(long double)).
+             */
+            long double result = std::pow(10.0L, pow_of_10) * mantissa;
+            value = ( has_minus ? -1 * result : result);
+
+            if ( value > (std::numeric_limits<T>::max)()        // is it +inf
+                    || value < -(std::numeric_limits<T>::max)() // is it -inf
+                    || value != value)                          // is it NaN
+                return false;
+
             return true;
         }
     }
@@ -1079,11 +1331,53 @@ namespace boost
                 }
             }
 
+            bool operator>>(float& output)
+            {
+                return lcast_ret_float<Traits>(output,start,finish);
+            }
+
+#if defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)
+        private:
+            // we need workaround
+            bool no_long_double_80bit_realization_workaround(double& output, int) {
+                return convert_using_base_class(output);
+            }
+
+            // we do not need a workaround
+            bool no_long_double_80bit_realization_workaround(double& output,char) {
+                return lcast_ret_float<Traits>(output,start,finish);
+            }
+        public:
+
+            bool operator>>(double& output)
+            {
+                /*
+                 * Some compilers implement long double as double. In that case these types have
+                 * same size, same precision, same max and min values... And it means,
+                 * that current implementation of lcast_ret_float cannot be used for type
+                 * double, because it will give a big precision loss.
+                 * */
+                boost::mpl::if_c<
+                    ::boost::type_traits::ice_eq< sizeof(double), sizeof(long double) >::value,
+                    int,
+                    char
+                >::type dummy = 0;
+
+                return no_long_double_80bit_realization_workaround(output, dummy);
+            }
+#endif
 
             // Generic istream-based algorithm.
             // lcast_streambuf_for_target<InputStreamable>::value is true.
             template<typename InputStreamable>
             bool operator>>(InputStreamable& output)
+            {
+                return convert_using_base_class(output);
+            }
+
+        private:
+            template<typename InputStreamable>
+            bool convert_using_base_class(InputStreamable& output)
             {
 #if (defined _MSC_VER)
 # pragma warning( push )
@@ -1112,6 +1406,7 @@ namespace boost
                 Traits::eof();
 #endif
             }
+        public:
 
             bool operator>>(CharT&);
             bool operator>>(unsigned char&);
@@ -1433,11 +1728,30 @@ namespace boost
         template<class Target>
         struct lcast_streambuf_for_target
         {
+#if defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)
             BOOST_STATIC_CONSTANT(bool, value =
                 (
-                 ::boost::type_traits::ice_not< is_integral<Target>::value >::value
+                 ::boost::type_traits::ice_or<
+                      ::boost::type_traits::ice_not< is_arithmetic<Target>::value >::value,
+                      is_same<Target, long double>::value,
+                      ::boost::type_traits::ice_and<
+                           is_same<Target, double>::value,
+                           ::boost::type_traits::ice_eq<sizeof(double), sizeof(long double)>::value
+                      >::value
+                 >::value
                 )
             );
+#else
+            BOOST_STATIC_CONSTANT(bool, value =
+                (
+                 ::boost::type_traits::ice_or<
+                      ::boost::type_traits::ice_not< is_arithmetic<Target>::value >::value,
+                      is_same<Target, long double>::value,
+                      is_same<Target, double>::value
+                  >::value
+                )
+            );
+#endif
         };
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

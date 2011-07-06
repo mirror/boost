@@ -86,9 +86,6 @@ void test_conversion_from_to_uintmax_t();
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
 #endif
-void test_conversion_from_to_float();
-void test_conversion_from_to_double();
-void test_conversion_from_to_long_double();
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 void test_traits();
 void test_wtraits();
@@ -128,9 +125,6 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
 #endif
-    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_float));
-    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_double));
-    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_long_double));
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     suite->add(BOOST_TEST_CASE(&test_traits));
     suite->add(BOOST_TEST_CASE(&test_wtraits));
@@ -679,7 +673,7 @@ void test_conversion_from_to_integral_for_locale()
         BOOST_CHECK_THROW(lexical_cast<T>( np.thousands_sep() + std::string("100") ), bad_lexical_cast);
 
         // Exception must not be thrown, when we are using no separators at all
-        BOOST_CHECK( lexical_cast<T>("10000") == static_cast<T>(10000) );
+        BOOST_CHECK( lexical_cast<T>("30000") == static_cast<T>(30000) );
     }
 
     test_conversion_from_integral_to_integral<T>();
@@ -775,35 +769,6 @@ void test_conversion_from_to_integral()
         BOOST_TEST_MESSAGE("Formatting with thousands_sep has not been tested");
 }
 
-template<class T>
-void test_conversion_from_to_float()
-{
-    char const zero = '0';
-    signed char const szero = '0';
-    unsigned char const uzero = '0';
-    test_conversion_from_integral_to_char<T>(zero);
-    test_conversion_from_char_to_integral<T>(zero);
-    test_conversion_from_integral_to_char<T>(szero);
-    test_conversion_from_char_to_integral<T>(szero);
-    test_conversion_from_integral_to_char<T>(uzero);
-    test_conversion_from_char_to_integral<T>(uzero);
-#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-    wchar_t const wzero = L'0';
-    test_conversion_from_integral_to_char<T>(wzero);
-    test_conversion_from_char_to_integral<T>(wzero);
-#endif
-
-    test_conversion_from_integral_to_integral<T>();
-
-    BOOST_CHECK_CLOSE(lexical_cast<T>("+1"), 1, std::numeric_limits<T>::epsilon()  );
-    BOOST_CHECK_CLOSE(lexical_cast<T>("+9"), 9, std::numeric_limits<T>::epsilon()*9 );
-
-    BOOST_CHECK_THROW(lexical_cast<T>("++1"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<T>("-+9"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<T>("--1"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<T>("+-9"), bad_lexical_cast);
-}
-
 void test_conversion_from_to_short()
 {
     test_conversion_from_to_integral<short>();
@@ -842,19 +807,6 @@ void test_conversion_from_to_intmax_t()
 void test_conversion_from_to_uintmax_t()
 {
     test_conversion_from_to_integral<boost::uintmax_t>();
-}
-
-void test_conversion_from_to_float()
-{
-    test_conversion_from_to_float<float>();
-}
-void test_conversion_from_to_double()
-{
-    test_conversion_from_to_float<double>();
-}
-void test_conversion_from_to_long_double()
-{
-    test_conversion_from_to_float<long double>();
 }
 
 #if defined(BOOST_HAS_LONG_LONG)
@@ -966,16 +918,25 @@ void test_char_types_conversions()
     const wchar_t wc_arr[]=L"Test array of chars";
 
     BOOST_CHECK(boost::lexical_cast<std::wstring>(wc_arr) == std::wstring(wc_arr));
+    BOOST_CHECK(boost::lexical_cast<wchar_t>(wc_arr[0]) == wc_arr[0]);
+
+    // Following tests depend on realization of std::locale.
+    // All we need to know, is that this functions must compile
+    BOOST_CHECK(boost::lexical_cast<wchar_t>(c_arr[0]) == wc_arr[0]);
     BOOST_CHECK(boost::lexical_cast<std::wstring>(c_arr) == std::wstring(wc_arr));
 
     BOOST_CHECK(boost::lexical_cast<std::wstring>(sc_arr) != std::wstring(wc_arr) );
     BOOST_CHECK(boost::lexical_cast<std::wstring>(uc_arr) != std::wstring(wc_arr) );
-
-    BOOST_CHECK(boost::lexical_cast<wchar_t>(c_arr[0]) == wc_arr[0]);
-    BOOST_CHECK(boost::lexical_cast<wchar_t>(wc_arr[0]) == wc_arr[0]);
 
     BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(uc_arr[0]), bad_lexical_cast);
     BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(sc_arr[0]), bad_lexical_cast);
 
 #endif
 }
+
+
+
+
+
+
+

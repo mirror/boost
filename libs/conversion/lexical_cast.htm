@@ -267,6 +267,10 @@ Eliminate an overhead of <code>std::locale</code> if your program runs in the "C
       August 2006.</li>
 </ul>
 <h2><a name="changes">Changes</a></h2>
+<h3>July 2011:</h3>
+<ul type="square">
+    <li>Better performance and less memory usage for conversions to float type (and to double type, if sizeof(double)&lt;sizeof(long double)).</li>
+</ul>
 <h3>May 2011:</h3>
 <ul type="square">
     <li>Optimizations for "C" and other locales without number grouping.</li>

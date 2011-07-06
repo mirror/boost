@@ -64,7 +64,6 @@ void test_round_conversion()
 
 }
 
-#if defined(BOOST_MSVC)
 // See bug http://tinyurl.com/vhpvo
 template<class T>
 void test_msvc_magic_values()
@@ -73,7 +72,6 @@ void test_msvc_magic_values()
     std::string magic_msvc_s = boost::lexical_cast<std::string>(magic_msvc);
     BOOST_CHECK(magic_msvc == lexical_cast<T>(magic_msvc_s));
 }
-#endif
 
 void test_round_conversion_float()
 {
@@ -83,16 +81,12 @@ void test_round_conversion_float()
 void test_round_conversion_double()
 {
     test_round_conversion<double>();
-#if defined(BOOST_MSVC)
     test_msvc_magic_values<double>();
-#endif
 }
 
 void test_round_conversion_long_double()
 {
     test_round_conversion<long double>();
-#if defined(BOOST_MSVC)
     test_msvc_magic_values<long double>();
-#endif
 }
 
