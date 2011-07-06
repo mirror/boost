@@ -126,51 +126,44 @@
             <title>Founding idea</title>
             <para>Let's start with an example taken from the C++ Template Metaprogramming
                 book:</para>
-            <para>
-                <code>class player : public state_machine&lt;player></code></para>
-            <para><code>{ </code></para>
-            <para><code>// The list of FSM states enum states { Empty, Open, Stopped, Playing,
-                    Paused , initial_state = Empty }; </code></para>
-            <para><code>// transition actions void start_playback(play const&amp;) { std::cout
-                    &lt;&lt; "player::start_playback\n"; } </code></para>
-            <para><code>void open_drawer(open_close const&amp;) { std::cout &lt;&lt;
-                    "player::open_drawer\n"; } </code></para>
-            <para><code>void close_drawer(open_close const&amp;) { std::cout &lt;&lt;
-                    "player::close_drawer\n"; } </code></para>
-            <para><code>void store_cd_info(cd_detected const&amp;) { std::cout &lt;&lt;
-                    "player::store_cd_info\n"; } </code></para>
-            <para><code>void stop_playback(stop const&amp;) { std::cout &lt;&lt;
-                    "player::stop_playback\n"; } </code></para>
-            <para><code>void pause_playback(pause const&amp;) { std::cout &lt;&lt;
-                    "player::pause_playback\n"; } </code></para>
-            <para><code>void resume_playback(play const&amp;) { std::cout &lt;&lt;
-                    "player::resume_playback\n"; } </code></para>
-            <para><code>void stop_and_open(open_close const&amp;) { std::cout &lt;&lt;
-                    "player::stop_and_open\n"; } </code></para>
-            <para><code>friend class state_machine&lt;player>; </code></para>
-            <para><code>typedef player p; // makes transition table cleaner </code></para>
-            <para><code>// Transition table </code></para>
-            <para><code>struct transition_table : mpl::vector11&lt; </code></para>
-            <para><code>row &lt; Stopped , play , Playing , &amp;p::start_playback >, </code></para>
-            <para><code>row &lt; Stopped , open_close , Open , &amp;p::open_drawer >, </code></para>
-            <para><code>row &lt; Open , open_close , Empty , &amp;p::close_drawer >, </code></para>
-            <para><code>row &lt; Empty , open_close , Open , &amp;p::open_drawer >, </code></para>
-            <para><code>row &lt; Empty , cd_detected , Stopped , &amp;p::store_cd_info >,
-                </code></para>
-            <para><code>row &lt; Playing , stop , Stopped , &amp;p::stop_playback >, </code></para>
-            <para><code>row &lt; Playing , pause , Paused , &amp;p::pause_playback >, </code></para>
-            <para><code>row &lt; Playing , open_close , Open , &amp;p::stop_and_open >,
-                </code></para>
-            <para><code>row &lt; Paused , play , Playing , &amp;p::resume_playback >, </code></para>
-            <para><code>row &lt; Paused , stop , Stopped , &amp;p::stop_playback >, </code></para>
-            <para><code>row &lt; Paused , open_close , Open , &amp;p::stop_and_open > </code></para>
-            <para><code>> {}; </code></para>
-            <para><code>// Replaces the default no-transition response. </code></para>
-            <para><code>template &lt;class Event> int no_transition(int state, Event const&amp; e) {
-                    std::cout &lt;&lt; "no transition from state " &lt;&lt; state &lt;&lt; " on
-                    event " &lt;&lt; typeid(e).name() &lt;&lt; std::endl; return state; } };</code>
-            </para>
-            <para><code>void test() { player p; p.process_event(open_close());...}</code></para>
+            <programlisting>class player : public state_machine&lt;player>
+{ 
+  // The list of FSM states enum states { Empty, Open, Stopped, Playing, Paused , initial_state = Empty }; 
+
+  // transition actions 
+  void start_playback(play const&amp;) { std::cout &lt;&lt; "player::start_playback\n"; } 
+  void open_drawer(open_close const&amp;) { std::cout &lt;&lt; "player::open_drawer\n"; } 
+  // more transition actions
+  ...
+  typedef player p; // makes transition table cleaner 
+  struct transition_table : mpl::vector11&lt; 
+  //    Start     Event        Target      Action                       
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Stopped , play       ,  Playing  , &amp;p::start_playback        >,
+    row&lt; Stopped , open_close ,  Open     , &amp;::open_drawer            >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Open    , open_close ,  Empty    , &amp;p::close_drawer          >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Empty   , open_close ,  Open     , &amp;p::open_drawer           >,
+    row&lt; Empty   , cd_detected,  Stopped  , &amp;p::store_cd_info         >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Playing , stop       ,  Stopped  , &amp;p::stop_playback         >,
+    row&lt; Playing , pause      ,  Paused   , &amp;p::pause_playback        >,
+    row&lt; Playing , open_close ,  Open     , &amp;p::stop_and_open         >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Paused  , play       ,  Playing  , &amp;p::resume_playback       >,
+    row&lt; Paused  , stop       ,  Stopped  , &amp;p::stop_playback         >,
+    row&lt; Paused  , open_close ,  Open     , &amp;p::stop_and_open         >
+  //   +---------+------------+-----------+---------------------------+ 
+  > {};
+  // Replaces the default no-transition response. 
+  template &lt;class Event> 
+  int no_transition(int state, Event const&amp; e)
+  { 
+    std::cout &lt;&lt; "no transition from state " &lt;&lt; state &lt;&lt; " on event " &lt;&lt; typeid(e).name() &lt;&lt; std::endl; 
+    return state; 
+  }
+};                        </programlisting>
             <para>This example is the foundation for the idea driving MSM: a descriptive and
                 expressive language based on a transition table with as little syntactic noise as
                 possible, all this while offering as many features from the UML 2.0 standard as
