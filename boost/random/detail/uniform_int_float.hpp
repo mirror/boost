@@ -19,6 +19,7 @@
 #include <boost/config.hpp>
 #include <boost/integer.hpp>
 #include <boost/random/detail/config.hpp>
+#include <boost/random/detail/generator_bits.hpp>
 
 #include <boost/random/detail/disable_warnings.hpp>
 
@@ -48,7 +49,9 @@ public:
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     {
         std::size_t digits = std::numeric_limits<result_type>::digits;
-        if(URNG::precision() < digits) digits = URNG::precision();
+        if(detail::generator_bits<URNG>::value() < digits) {
+            digits = detail::generator_bits<URNG>::value();
+        }
         return (result_type(2) << (digits - 1)) - 1;
     }
     base_type& base() { return _rng; }

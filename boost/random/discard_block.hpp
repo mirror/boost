@@ -108,7 +108,12 @@ public:
     {
         if(_n >= returned_block) {
             // discard values of random number generator
-            _rng.discard(total_block - _n);
+            // Don't use discard, since we still need to
+            // be somewhat compatible with TR1.
+            // _rng.discard(total_block - _n);
+            for(std::size_t i = 0; i < total_block - _n; ++i) {
+                _rng();
+            }
             _n = 0;
         }
         ++_n;
@@ -138,16 +143,6 @@ public:
      */
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     { return (base_type::max)(); }
-
-    /**
-     * INTERNAL ONLY
-     * Returns the number of random bits.
-     * This is not part of the standard, and I'm not sure that
-     * it's the best solution, but something like this is needed
-     * to implement generate_canonical.  For now, mark it as
-     * an implementation detail.
-     */
-    static std::size_t precision() { return base_type::precision(); }
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
     /** Writes a \discard_block_engine to a @c std::ostream. */
@@ -220,6 +215,23 @@ public:
 };
 
 /// \endcond
+
+namespace detail {
+
+    template<class Engine>
+    struct generator_bits;
+    
+    template<class URNG, std::size_t p, std::size_t r>
+    struct generator_bits<discard_block_engine<URNG, p, r> > {
+        static std::size_t value() { return generator_bits<URNG>::value(); }
+    };
+
+    template<class URNG, int p, int r>
+    struct generator_bits<discard_block<URNG, p, r> > {
+        static std::size_t value() { return generator_bits<URNG>::value(); }
+    };
+
+}
 
 } // namespace random
 

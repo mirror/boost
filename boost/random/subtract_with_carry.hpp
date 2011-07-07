@@ -427,16 +427,6 @@ public:
     static result_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     { return result_type(1); }
 
-    /**
-     * INTERNAL ONLY
-     * Returns the number of random bits.
-     * This is not part of the standard, and I'm not sure that
-     * it's the best solution, but something like this is needed
-     * to implement generate_canonical.  For now, mark it as
-     * an implementation detail.
-     */
-    static std::size_t precision() { return w; }
-
     /** Returns the next value of the generator. */
     result_type operator()()
     {
@@ -599,6 +589,23 @@ public:
 };
 
 /// \endcond
+
+namespace detail {
+
+template<class Engine>
+struct generator_bits;
+
+template<class RealType, std::size_t w, std::size_t s, std::size_t r>
+struct generator_bits<subtract_with_carry_01_engine<RealType, w, s, r> > {
+    static std::size_t value() { return w; }
+};
+
+template<class RealType, int w, unsigned s, unsigned r, int v>
+struct generator_bits<subtract_with_carry_01<RealType, w, s, r, v> > {
+    static std::size_t value() { return w; }
+};
+
+}
 
 } // namespace random
 } // namespace boost
