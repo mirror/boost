@@ -798,12 +798,8 @@ namespace boost
                 if (begin == end) return false;
             }
 
-            if ( *begin < czero || *begin >= czero + 10 ) {
-                return false;
-            }
-
-
             bool found_decimal = false;
+            bool found_number_before_exp = false;
             int pow_of_10 = 0;
             mantissa_type mantissa=0;
             bool is_mantissa_full = false;
@@ -830,6 +826,8 @@ namespace boost
                     -- pow_of_10;
                     mantissa = tmp_mantissa;
                     mantissa += *begin - zero;
+
+                    found_number_before_exp = true;
                 } else {
 
                     if (*begin >= czero && *begin < czero + 10) {
@@ -851,6 +849,7 @@ namespace boost
                             ++ pow_of_10;
                         }
 
+                        found_number_before_exp = true;
                         ++ length_since_last_delim;
                     } else if ( *begin == decimal_point || *begin == lowercase_e || *begin == capital_e) {
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
@@ -874,7 +873,10 @@ namespace boost
                             ++ begin;
                             found_decimal = true;
                             continue;
-                        }else break;
+                        }else {
+                            if (!found_number_before_exp) return false;
+                            break;
+                        }
                     }
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
                     else if (grouping_size && *begin == thousands_sep){
