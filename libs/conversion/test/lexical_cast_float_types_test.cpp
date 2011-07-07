@@ -88,16 +88,16 @@ void test_conversion_from_to_float_for_locale()
         BOOST_CHECK_THROW(lexical_cast<T>( std::string("1e10") + np.thousands_sep() ), bad_lexical_cast);
         BOOST_CHECK_THROW(lexical_cast<T>( std::string("1") + np.thousands_sep() + "e10" ), bad_lexical_cast);
 
-        BOOST_CHECK_CLOSE(lexical_cast<T>( to_str< char >(100000) ), 100000, (std::numeric_limits<T>::epsilon()*100) );
-        BOOST_CHECK_CLOSE(lexical_cast<T>( to_str< char >(10000000u) ), 10000000u, (std::numeric_limits<T>::epsilon()*100) );
-        BOOST_CHECK_CLOSE(lexical_cast<T>( to_str< char >(100) ), 100, (std::numeric_limits<T>::epsilon()*100) );
+        BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( to_str< char >(100000) ), 100000, (std::numeric_limits<T>::epsilon()) );
+        BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( to_str< char >(10000000u) ), 10000000u, (std::numeric_limits<T>::epsilon()) );
+        BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( to_str< char >(100) ), 100, (std::numeric_limits<T>::epsilon()) );
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-        BOOST_CHECK_CLOSE(lexical_cast<T>( to_str< wchar_t >(100000) ), 100000, (std::numeric_limits<T>::epsilon()*100) );
-        BOOST_CHECK_CLOSE(lexical_cast<T>( to_str< wchar_t >(10000000u) ), 10000000u, (std::numeric_limits<T>::epsilon()*100) );
-        BOOST_CHECK_CLOSE(lexical_cast<T>( to_str< wchar_t >(100) ), 100, (std::numeric_limits<T>::epsilon()*100) );
+        BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( to_str< wchar_t >(100000) ), 100000, (std::numeric_limits<T>::epsilon()) );
+        BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( to_str< wchar_t >(10000000u) ), 10000000u, (std::numeric_limits<T>::epsilon()) );
+        BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( to_str< wchar_t >(100) ), 100, (std::numeric_limits<T>::epsilon()) );
 #endif
         // Exception must not be thrown, when we are using no separators at all
-        BOOST_CHECK_CLOSE( lexical_cast<T>("30000"), static_cast<T>(30000), (std::numeric_limits<T>::epsilon()*100) );
+        BOOST_CHECK_CLOSE_FRACTION( lexical_cast<T>("30000"), static_cast<T>(30000), (std::numeric_limits<T>::epsilon()) );
     }
 }
 
@@ -111,18 +111,18 @@ void test_conversion_from_to_float_for_locale()
 #ifndef BOOST_LCAST_NO_WCHAR_T
 #define CHECK_CLOSE_ABS_DIFF(VAL,PREFIX)                                                          \
     converted_val = lexical_cast<test_t>(#VAL);                                                   \
-    BOOST_CHECK_CLOSE( (VAL ## L? VAL ## L : std::numeric_limits<test_t>::epsilon()),             \
+    BOOST_CHECK_CLOSE_FRACTION( (VAL ## L? VAL ## L : std::numeric_limits<test_t>::epsilon()),             \
                        (converted_val ? converted_val : std::numeric_limits<test_t>::epsilon()),  \
-                       std::numeric_limits<test_t>::epsilon() * 100                               \
+                       std::numeric_limits<test_t>::epsilon()                                     \
                      );                                                                           \
     BOOST_CHECK_EQUAL(converted_val, lexical_cast<test_t>(L## #VAL) );
 
 #else
 #define CHECK_CLOSE_ABS_DIFF(VAL,TYPE)                                                            \
     converted_val = lexical_cast<test_t>(#VAL);                                                   \
-    BOOST_CHECK_CLOSE( (VAL ## L? VAL ## L : std::numeric_limits<test_t>::epsilon()),             \
+    BOOST_CHECK_CLOSE_FRACTION( (VAL ## L? VAL ## L : std::numeric_limits<test_t>::epsilon()),             \
                        (converted_val ? converted_val : std::numeric_limits<test_t>::epsilon()),  \
-                       std::numeric_limits<test_t>::epsilon() * 100                               \
+                       std::numeric_limits<test_t>::epsilon()                                     \
                      );
 #endif
 
@@ -132,27 +132,27 @@ void test_converion_to_float_types()
     typedef TestType test_t;
     test_t converted_val;
 
-    BOOST_CHECK_CLOSE(1.0, lexical_cast<test_t>('1'), (std::numeric_limits<test_t>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.0, lexical_cast<test_t>('1'), (std::numeric_limits<test_t>::epsilon()));
     BOOST_CHECK_EQUAL(0.0, lexical_cast<test_t>('0'));
 
     unsigned char const uc_one = '1';
     unsigned char const uc_zero ='0';
-    BOOST_CHECK_CLOSE(1.0, lexical_cast<test_t>(uc_one), (std::numeric_limits<test_t>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.0, lexical_cast<test_t>(uc_one), (std::numeric_limits<test_t>::epsilon()));
     BOOST_CHECK_EQUAL(0.0, lexical_cast<test_t>(uc_zero));
 
     signed char const sc_one = '1';
     signed char const sc_zero ='0';
-    BOOST_CHECK_CLOSE(1.0, lexical_cast<test_t>(sc_one), (std::numeric_limits<test_t>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.0, lexical_cast<test_t>(sc_one), (std::numeric_limits<test_t>::epsilon()));
     BOOST_CHECK_EQUAL(0.0, lexical_cast<test_t>(sc_zero));
 
-    BOOST_CHECK_CLOSE(1e34L, lexical_cast<test_t>( "10000000000000000000000000000000000"), (std::numeric_limits<test_t>::epsilon()*100) );
+    BOOST_CHECK_CLOSE_FRACTION(1e34L, lexical_cast<test_t>( "10000000000000000000000000000000000"), (std::numeric_limits<test_t>::epsilon()) );
 
 //    VC failes the next test
-//    BOOST_CHECK_CLOSE(1e-35L, lexical_cast<test_t>("0.00000000000000000000000000000000001"), (std::numeric_limits<test_t>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(
+//    BOOST_CHECK_CLOSE_FRACTION(1e-35L, lexical_cast<test_t>("0.00000000000000000000000000000000001"), (std::numeric_limits<test_t>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(
                                     0.1111111111111111111111111111111111111111111111111111111111111111111111111L
             , lexical_cast<test_t>("0.1111111111111111111111111111111111111111111111111111111111111111111111111")
-            , (std::numeric_limits<test_t>::epsilon()*100) );
+            , (std::numeric_limits<test_t>::epsilon()) );
 
     CHECK_CLOSE_ABS_DIFF(1,test_t);
     BOOST_CHECK_EQUAL(0,lexical_cast<test_t>("0"));
@@ -300,13 +300,13 @@ void test_float_typess_for_overflows()
     typedef T test_t;
     test_t minvalue = (std::numeric_limits<test_t>::min)();
     std::string s_min_value = lexical_cast<std::string>(minvalue);
-    BOOST_CHECK_CLOSE(minvalue, lexical_cast<test_t>(minvalue), (std::numeric_limits<test_t>::epsilon()*100));
-    BOOST_CHECK_CLOSE(minvalue, lexical_cast<test_t>(s_min_value), (std::numeric_limits<test_t>::epsilon()*100));
+    BOOST_CHECK_CLOSE_FRACTION(minvalue, lexical_cast<test_t>(minvalue), (std::numeric_limits<test_t>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(minvalue, lexical_cast<test_t>(s_min_value), (std::numeric_limits<test_t>::epsilon()));
 
     test_t maxvalue = (std::numeric_limits<test_t>::max)();
     std::string s_max_value = lexical_cast<std::string>(maxvalue);
-    BOOST_CHECK_CLOSE(maxvalue, lexical_cast<test_t>(maxvalue), (std::numeric_limits<test_t>::epsilon()*100));
-    BOOST_CHECK_CLOSE(maxvalue, lexical_cast<test_t>(s_max_value), (std::numeric_limits<test_t>::epsilon()*100));
+    BOOST_CHECK_CLOSE_FRACTION(maxvalue, lexical_cast<test_t>(maxvalue), (std::numeric_limits<test_t>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(maxvalue, lexical_cast<test_t>(s_max_value), (std::numeric_limits<test_t>::epsilon()));
 
     BOOST_CHECK_THROW(lexical_cast<test_t>(s_max_value+"1"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>(s_max_value+"9"), bad_lexical_cast);
@@ -343,10 +343,10 @@ void test_float_typess_for_overflows()
 #define TEST_TO_FROM_CAST_AROUND_TYPED(VAL,STRING_TYPE)                             \
     test_value = VAL + std::numeric_limits<test_t>::epsilon() * i ;                 \
     converted_val = lexical_cast<test_t>( lexical_cast<STRING_TYPE>(test_value) );  \
-    BOOST_CHECK_CLOSE(                                                              \
+    BOOST_CHECK_CLOSE_FRACTION(                                                              \
             test_value,                                                             \
             converted_val,                                                          \
-            std::numeric_limits<test_t>::epsilon()*100                              \
+            std::numeric_limits<test_t>::epsilon()                                  \
         );
 
 /*
@@ -429,16 +429,16 @@ void test_conversion_from_float_to_char(CharT zero)
 template<class T, class CharT>
 void test_conversion_from_char_to_float(CharT zero)
 {
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 0)), static_cast<T>(0), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 1)), static_cast<T>(1), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 2)), static_cast<T>(2), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 3)), static_cast<T>(3), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 4)), static_cast<T>(4), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 5)), static_cast<T>(5), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 6)), static_cast<T>(6), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 7)), static_cast<T>(7), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 8)), static_cast<T>(8), (std::numeric_limits<T>::epsilon()*100) );
-    BOOST_CHECK_CLOSE(lexical_cast<T>( static_cast<CharT>(zero + 9)), static_cast<T>(9), (std::numeric_limits<T>::epsilon()*100) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 0)), static_cast<T>(0), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 1)), static_cast<T>(1), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 2)), static_cast<T>(2), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 3)), static_cast<T>(3), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 4)), static_cast<T>(4), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 5)), static_cast<T>(5), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 6)), static_cast<T>(6), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 7)), static_cast<T>(7), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 8)), static_cast<T>(8), (std::numeric_limits<T>::epsilon()) );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>( static_cast<CharT>(zero + 9)), static_cast<T>(9), (std::numeric_limits<T>::epsilon()) );
 
     BOOST_CHECK_THROW(lexical_cast<T>( static_cast<CharT>(zero + 10)), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<T>( static_cast<CharT>(zero - 1)), bad_lexical_cast);
@@ -467,8 +467,8 @@ void test_conversion_from_to_float()
     test_conversion_from_char_to_float<T>(wzero);
     #endif
 
-    BOOST_CHECK_CLOSE(lexical_cast<T>("+1"), 1, std::numeric_limits<T>::epsilon()  );
-    BOOST_CHECK_CLOSE(lexical_cast<T>("+9"), 9, std::numeric_limits<T>::epsilon()*9 );
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>("+1"), 1, std::numeric_limits<T>::epsilon());
+    BOOST_CHECK_CLOSE_FRACTION(lexical_cast<T>("+9"), 9, std::numeric_limits<T>::epsilon());
 
     BOOST_CHECK_THROW(lexical_cast<T>("++1"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<T>("-+9"), bad_lexical_cast);
