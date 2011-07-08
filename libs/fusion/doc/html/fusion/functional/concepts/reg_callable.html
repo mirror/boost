@@ -24,11 +24,11 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.functional.concepts.reg_callable"></a><a class="link" href="reg_callable.html" title="Regular Callable Object"> Regular Callable
+<a name="fusion.functional.concepts.reg_callable"></a><a class="link" href="reg_callable.html" title="Regular Callable Object">Regular Callable
         Object</a>
 </h4></div></div></div>
 <a name="fusion.functional.concepts.reg_callable.description"></a><h6>
-<a name="id1103254"></a>
+<a name="fusion.functional.concepts.reg_callable.description-heading"></a>
           <a class="link" href="reg_callable.html#fusion.functional.concepts.reg_callable.description">Description</a>
         </h6>
 <p>
@@ -37,11 +37,13 @@
           can appear immediately to the left of a function call operator.
         </p>
 <a name="fusion.functional.concepts.reg_callable.refinement_of"></a><h6>
-<a name="id1103276"></a>
+<a name="fusion.functional.concepts.reg_callable.refinement_of-heading"></a>
           <a class="link" href="reg_callable.html#fusion.functional.concepts.reg_callable.refinement_of">Refinement
           of</a>
         </h6>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><a class="link" href="callable.html" title="Callable Object">Callable Object</a></li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+              <a class="link" href="callable.html" title="Callable Object">Callable Object</a>
+            </li></ul></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
@@ -65,7 +67,7 @@
 </dl>
 </div>
 <a name="fusion.functional.concepts.reg_callable.expression_requirements"></a><h6>
-<a name="id1104529"></a>
+<a name="fusion.functional.concepts.reg_callable.expression_requirements-heading"></a>
           <a class="link" href="reg_callable.html#fusion.functional.concepts.reg_callable.expression_requirements">Expression
           requirements</a>
         </h6>
@@ -112,26 +114,26 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.reg_callable.models"></a><h6>
-<a name="id1104643"></a>
+<a name="fusion.functional.concepts.reg_callable.models-heading"></a>
           <a class="link" href="reg_callable.html#fusion.functional.concepts.reg_callable.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-            function pointer types
-          </li>
+              function pointer types
+            </li>
 <li class="listitem">
-            all kinds of function objects
-          </li>
+              all kinds of function objects
+            </li>
 </ul></div>
 <a name="fusion.functional.concepts.reg_callable.examples"></a><h6>
-<a name="id1104667"></a>
+<a name="fusion.functional.concepts.reg_callable.examples-heading"></a>
           <a class="link" href="reg_callable.html#fusion.functional.concepts.reg_callable.examples">Examples</a>
         </h6>
 <pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_static_member_function</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;()</span>
-<span class="comment">// using namespace boost;
-</span><span class="identifier">bind</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span>
+<span class="comment">// using namespace boost;</span>
+<span class="identifier">bind</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span>
 <span class="identifier">lambda</span><span class="special">::</span><span class="identifier">_1</span> <span class="special">+=</span> <span class="identifier">lambda</span><span class="special">::</span><span class="identifier">_2</span><span class="special">;</span>
 <span class="identifier">fusion</span><span class="special">::</span><a class="link" href="../generation/functions/mk_fused_fobj.html" title="make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
 </pre>

@@ -24,11 +24,11 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.functional.concepts.poly"></a><a class="link" href="poly.html" title="Polymorphic Function Object"> Polymorphic Function
+<a name="fusion.functional.concepts.poly"></a><a class="link" href="poly.html" title="Polymorphic Function Object">Polymorphic Function
         Object</a>
 </h4></div></div></div>
 <a name="fusion.functional.concepts.poly.description"></a><h6>
-<a name="id1105491"></a>
+<a name="fusion.functional.concepts.poly.description-heading"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.description">Description</a>
         </h6>
 <p>
@@ -36,15 +36,19 @@
           Callable Object</a> type.
         </p>
 <a name="fusion.functional.concepts.poly.refinement_of"></a><h6>
-<a name="id1105512"></a>
+<a name="fusion.functional.concepts.poly.refinement_of-heading"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.refinement_of">Refinement
           of</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><a class="link" href="reg_callable.html" title="Regular Callable Object">Regular Callable
-            Object</a></li>
-<li class="listitem"><a class="link" href="def_callable.html" title="Deferred Callable Object">Deferred Callable
-            Object</a></li>
+<li class="listitem">
+              <a class="link" href="reg_callable.html" title="Regular Callable Object">Regular Callable
+              Object</a>
+            </li>
+<li class="listitem">
+              <a class="link" href="def_callable.html" title="Deferred Callable Object">Deferred Callable
+              Object</a>
+            </li>
 </ul></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
@@ -75,7 +79,7 @@
 </dl>
 </div>
 <a name="fusion.functional.concepts.poly.expression_requirements"></a><h6>
-<a name="id1105727"></a>
+<a name="fusion.functional.concepts.poly.expression_requirements-heading"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.expression_requirements">Expression
           requirements</a>
         </h6>
@@ -124,31 +128,31 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.poly.models"></a><h6>
-<a name="id1105885"></a>
+<a name="fusion.functional.concepts.poly.models-heading"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-            function pointers
-          </li>
+              function pointers
+            </li>
 <li class="listitem">
-            function objects of the Standard Library
-          </li>
+              function objects of the Standard Library
+            </li>
 <li class="listitem">
-            all Fusion <a class="link" href="../adapters.html" title="Adapters">functional adapters</a>
-</li>
+              all Fusion <a class="link" href="../adapters.html" title="Adapters">functional adapters</a>
+            </li>
 </ul></div>
 <a name="fusion.functional.concepts.poly.examples"></a><h6>
-<a name="id1105918"></a>
+<a name="fusion.functional.concepts.poly.examples-heading"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.examples">Examples</a>
         </h6>
 <pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_static_member_function</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;()</span>
-<span class="comment">// using namespace boost;
-</span><span class="identifier">bind</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span>
-<span class="comment">// Note: Boost.Lambda expressions don't work with __boost_result_of__
-</span><span class="identifier">fusion</span><span class="special">::</span><a class="link" href="../generation/functions/mk_fused_fobj.html" title="make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
+<span class="comment">// using namespace boost;</span>
+<span class="identifier">bind</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span>
+<span class="comment">// Note: Boost.Lambda expressions don't work with __boost_result_of__</span>
+<span class="identifier">fusion</span><span class="special">::</span><a class="link" href="../generation/functions/mk_fused_fobj.html" title="make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

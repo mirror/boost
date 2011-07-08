@@ -27,7 +27,7 @@
 <a name="fusion.view.nview"></a><a class="link" href="nview.html" title="nview">nview</a>
 </h3></div></div></div>
 <a name="fusion.view.nview.description"></a><h5>
-<a name="id988015"></a>
+<a name="fusion.view.nview.description-heading"></a>
         <a class="link" href="nview.html#fusion.view.nview.description">Description</a>
       </h5>
 <p>
@@ -38,14 +38,14 @@
         and a list of indicies specifying the elements to iterate over.
       </p>
 <a name="fusion.view.nview.header"></a><h5>
-<a name="id988056"></a>
+<a name="fusion.view.nview.header-heading"></a>
         <a class="link" href="nview.html#fusion.view.nview.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">nview</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">nview</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.nview.synopsis"></a><h5>
-<a name="id988164"></a>
+<a name="fusion.view.nview.synopsis-heading"></a>
         <a class="link" href="nview.html#fusion.view.nview.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Indicies</span><span class="special">&gt;</span>
@@ -56,7 +56,7 @@
 <span class="identifier">as_nview</span><span class="special">(</span><span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 </pre>
 <a name="fusion.view.nview.template_parameters"></a><h5>
-<a name="id988372"></a>
+<a name="fusion.view.nview.template_parameters-heading"></a>
         <a class="link" href="nview.html#fusion.view.nview.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -96,8 +96,6 @@
                 </p>
               </td>
 <td>
-                <p>
-                </p>
               </td>
 </tr>
 <tr>
@@ -113,8 +111,6 @@
                 </p>
               </td>
 <td>
-                <p>
-                </p>
               </td>
 </tr>
 <tr>
@@ -137,14 +133,14 @@
 </tbody>
 </table></div>
 <a name="fusion.view.nview.model_of"></a><h5>
-<a name="id988595"></a>
+<a name="fusion.view.nview.model_of-heading"></a>
         <a class="link" href="nview.html#fusion.view.nview.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
-<a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
-          Access Sequence</a> (see <a class="link" href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence
-          Traversal Concept</a>)
-        </li></ul></div>
+            <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
+            Access Sequence</a> (see <a class="link" href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence
+            Traversal Concept</a>)
+          </li></ul></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
@@ -163,7 +159,7 @@
 </dl>
 </div>
 <a name="fusion.view.nview.expression_semantics"></a><h5>
-<a name="id988718"></a>
+<a name="fusion.view.nview.expression_semantics-heading"></a>
         <a class="link" href="nview.html#fusion.view.nview.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
@@ -239,7 +235,7 @@
         of references to the elements of the original Fusion <a class="link" href="../sequence.html" title="Sequence">Sequence</a>
       </p>
 <a name="fusion.view.nview.example"></a><h5>
-<a name="id988966"></a>
+<a name="fusion.view.nview.example-heading"></a>
         <a class="link" href="nview.html#fusion.view.nview.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
@@ -247,9 +243,9 @@
 
 <span class="identifier">vec</span> <span class="identifier">v1</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'c'</span><span class="special">,</span> <span class="number">2.0</span><span class="special">);</span>
 
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">nview</span><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">,</span> <span class="identifier">indicies</span><span class="special">&gt;(</span><span class="identifier">v1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// (2.0 c 1 2.0 1)
-</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">as_nview</span><span class="special">&lt;</span><span class="number">2</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// (2.0 c c 1)
-</span></pre>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">nview</span><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">,</span> <span class="identifier">indicies</span><span class="special">&gt;(</span><span class="identifier">v1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// (2.0 c 1 2.0 1)</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">as_nview</span><span class="special">&lt;</span><span class="number">2</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// (2.0 c c 1)</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

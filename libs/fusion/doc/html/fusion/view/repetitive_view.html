@@ -27,7 +27,7 @@
 <a name="fusion.view.repetitive_view"></a><a class="link" href="repetitive_view.html" title="repetitive_view">repetitive_view</a>
 </h3></div></div></div>
 <a name="fusion.view.repetitive_view.description"></a><h5>
-<a name="id989320"></a>
+<a name="fusion.view.repetitive_view.description-heading"></a>
         <a class="link" href="repetitive_view.html#fusion.view.repetitive_view.description">Description</a>
       </h5>
 <p>
@@ -40,21 +40,21 @@
         is not.
       </p>
 <a name="fusion.view.repetitive_view.header"></a><h5>
-<a name="id989385"></a>
+<a name="fusion.view.repetitive_view.header-heading"></a>
         <a class="link" href="repetitive_view.html#fusion.view.repetitive_view.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">repetitive_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">repetitive_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.repetitive_view.synopsis"></a><h5>
-<a name="id989493"></a>
+<a name="fusion.view.repetitive_view.synopsis-heading"></a>
         <a class="link" href="repetitive_view.html#fusion.view.repetitive_view.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">repetitive_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.repetitive_view.template_parameters"></a><h5>
-<a name="id989544"></a>
+<a name="fusion.view.repetitive_view.template_parameters-heading"></a>
         <a class="link" href="repetitive_view.html#fusion.view.repetitive_view.template_parameters">Template
         parameters</a>
       </h5>
@@ -94,8 +94,6 @@
                 </p>
               </td>
 <td>
-                <p>
-                </p>
               </td>
 </tr></tbody>
 </table></div>
@@ -117,7 +115,7 @@
 </dl>
 </div>
 <a name="fusion.view.repetitive_view.expression_semantics"></a><h5>
-<a name="id989738"></a>
+<a name="fusion.view.repetitive_view.expression_semantics-heading"></a>
         <a class="link" href="repetitive_view.html#fusion.view.repetitive_view.expression_semantics">Expression
         Semantics</a>
       </h5>
@@ -152,8 +150,6 @@
                 </p>
               </td>
 <td>
-                <p>
-                </p>
               </td>
 <td>
                 <p>
@@ -169,8 +165,6 @@
                 </p>
               </td>
 <td>
-                <p>
-                </p>
               </td>
 <td>
                 <p>
@@ -188,8 +182,6 @@
                 </p>
               </td>
 <td>
-                <p>
-                </p>
               </td>
 <td>
                 <p>
@@ -213,8 +205,6 @@
                 </p>
               </td>
 <td>
-                <p>
-                </p>
               </td>
 </tr>
 <tr>
@@ -238,7 +228,7 @@
 </tbody>
 </table></div>
 <a name="fusion.view.repetitive_view.result_type_expressions"></a><h5>
-<a name="id990084"></a>
+<a name="fusion.view.repetitive_view.result_type_expressions-heading"></a>
         <a class="link" href="repetitive_view.html#fusion.view.repetitive_view.result_type_expressions">Result
         Type Expressions</a>
       </h5>
@@ -263,7 +253,7 @@
 </tbody>
 </table></div>
 <a name="fusion.view.repetitive_view.example"></a><h5>
-<a name="id990214"></a>
+<a name="fusion.view.repetitive_view.example-heading"></a>
         <a class="link" href="repetitive_view.html#fusion.view.repetitive_view.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vec1</span><span class="special">;</span>
@@ -272,8 +262,8 @@
 <span class="identifier">vec1</span> <span class="identifier">v1</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'c'</span><span class="special">,</span> <span class="number">2.0</span><span class="special">);</span>
 <span class="identifier">vec2</span> <span class="identifier">v2</span><span class="special">(</span><span class="identifier">repetitive_view</span><span class="special">&lt;</span><span class="identifier">vec1</span><span class="special">&gt;(</span><span class="identifier">v1</span><span class="special">));</span>
 
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">v2</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 1, 'c', 2.0, 1, 'c'
-</span></pre>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">v2</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 1, 'c', 2.0, 1, 'c'</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

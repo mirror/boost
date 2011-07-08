@@ -24,10 +24,10 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.adapted.adapt_assoc"></a><a class="link" href="adapt_assoc.html" title="BOOST_FUSION_ADAPT_ASSOC_STRUCT"> BOOST_FUSION_ADAPT_ASSOC_STRUCT</a>
+<a name="fusion.adapted.adapt_assoc"></a><a class="link" href="adapt_assoc.html" title="BOOST_FUSION_ADAPT_ASSOC_STRUCT">BOOST_FUSION_ADAPT_ASSOC_STRUCT</a>
 </h3></div></div></div>
 <a name="fusion.adapted.adapt_assoc.description"></a><h5>
-<a name="id997476"></a>
+<a name="fusion.adapted.adapt_assoc.description-heading"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.description">Description</a>
       </h5>
 <p>
@@ -37,7 +37,7 @@
         Sequence</a>.
       </p>
 <a name="fusion.adapted.adapt_assoc.synopsis"></a><h5>
-<a name="id997502"></a>
+<a name="fusion.adapted.adapt_assoc.synopsis-heading"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="identifier">BOOST_FUSION_ADAPT_ASSOC_STRUCT</span><span class="special">(</span>
@@ -48,7 +48,7 @@
     <span class="special">)</span>
 </pre>
 <a name="fusion.adapted.adapt_assoc.semantics"></a><h5>
-<a name="id997603"></a>
+<a name="fusion.adapted.adapt_assoc.semantics-heading"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.semantics">Semantics</a>
       </h5>
 <p>
@@ -66,14 +66,14 @@
         should be the fully namespace qualified name of the struct to be adapted.
       </p>
 <a name="fusion.adapted.adapt_assoc.header"></a><h5>
-<a name="id997680"></a>
+<a name="fusion.adapted.adapt_assoc.header-heading"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="keyword">struct</span><span class="special">/</span><span class="identifier">adapt_assoc_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">adapt_assoc_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.adapted.adapt_assoc.example"></a><h5>
-<a name="id997795"></a>
+<a name="fusion.adapted.adapt_assoc.example-heading"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">demo</span>
@@ -91,10 +91,10 @@
     <span class="keyword">struct</span> <span class="identifier">age</span><span class="special">;</span>
 <span class="special">}</span>
 
-<span class="comment">// demo::employee is now a Fusion sequence.
-</span><span class="comment">// It is also an associative sequence with
-</span><span class="comment">// keys keys::name and keys::age present.
-</span><span class="identifier">BOOST_FUSION_ADAPT_ASSOC_STRUCT</span><span class="special">(</span>
+<span class="comment">// demo::employee is now a Fusion sequence.</span>
+<span class="comment">// It is also an associative sequence with</span>
+<span class="comment">// keys keys::name and keys::age present.</span>
+<span class="identifier">BOOST_FUSION_ADAPT_ASSOC_STRUCT</span><span class="special">(</span>
     <span class="identifier">demo</span><span class="special">::</span><span class="identifier">employee</span><span class="special">,</span>
     <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">keys</span><span class="special">::</span><span class="identifier">name</span><span class="special">)</span>
     <span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">age</span><span class="special">,</span> <span class="identifier">keys</span><span class="special">::</span><span class="identifier">age</span><span class="special">))</span>
