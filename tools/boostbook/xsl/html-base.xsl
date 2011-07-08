@@ -317,4 +317,8 @@ set       toc,title
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="itemizedlist[@role = 'index']" mode="class.value">
+   <xsl:value-of select="'index'"/>
+</xsl:template>
+
 </xsl:stylesheet>
