@@ -23,6 +23,7 @@
     [last-revision $Date$]
 ]
 
+[include ../../../tools/auto_index/include/auto_index_helpers.qbk]
 
 [def __boost_root ../../../../]
 [def __tof '''<replaceable><link linkend="boost_typetraits.reference.integral_constant">true_type</link>-or-<link linkend="boost_typetraits.reference.integral_constant">false_type</link></replaceable>''']
@@ -260,19 +261,10 @@ See __has_trivial_constructor.
 [include history.qbk]
 [include credits.qbk]
 
-[? enable_index
-'''
-  <index type="class_name">
-  <title>Class Index</title>
-  </index>
-  <index type="typedef_name">
-  <title>Typedef Index</title>
-  </index>
-  <index type="macro_name">
-  <title>Macro Index</title>
-  </index>
-  <index/>
-'''
-]
+[named_index class_name Class Index]
+[named_index typedef_name Typedef Index]
+[named_index macro_name Macro Index]
+[index]
+
 
 

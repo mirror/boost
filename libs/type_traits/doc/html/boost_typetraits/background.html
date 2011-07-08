@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Background and Tutorial</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.TypeTraits">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.TypeTraits">
 <link rel="prev" href="intro.html" title="Introduction">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="intro.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="category.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_typetraits.background"></a><a class="link" href="background.html" title="Background and Tutorial">Background and Tutorial</a>
 </h2></div></div></div>
@@ -56,7 +56,7 @@
       method available to them.
     </p>
 <a name="boost_typetraits.background.type_traits"></a><h5>
-<a name="id1007922"></a>
+<a name="boost_typetraits.background.type_traits-heading"></a>
       <a class="link" href="background.html#boost_typetraits.background.type_traits">Type Traits</a>
     </h5>
 <p>
@@ -84,7 +84,7 @@
       given.
     </p>
 <a name="boost_typetraits.background.implementation"></a><h5>
-<a name="id1007985"></a>
+<a name="boost_typetraits.background.implementation-heading"></a>
       <a class="link" href="background.html#boost_typetraits.background.implementation">Implementation</a>
     </h5>
 <p>
@@ -174,7 +174,7 @@
       in the default template.
     </p>
 <a name="boost_typetraits.background.optimized_copy"></a><h5>
-<a name="id1015349"></a>
+<a name="boost_typetraits.background.optimized_copy-heading"></a>
       <a class="link" href="background.html#boost_typetraits.background.optimized_copy">Optimized copy</a>
     </h5>
 <p>
@@ -193,16 +193,16 @@
       copy in terms of <code class="computeroutput"><span class="identifier">memcpy</span></code> all
       of the following conditions need to be met:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           Both of the iterator types <code class="computeroutput"><span class="identifier">Iter1</span></code>
           and <code class="computeroutput"><span class="identifier">Iter2</span></code> must be pointers.
         </li>
-<li>
+<li class="listitem">
           Both <code class="computeroutput"><span class="identifier">Iter1</span></code> and <code class="computeroutput"><span class="identifier">Iter2</span></code> must point to the same type - excluding
           const and volatile-qualifiers.
         </li>
-<li>
+<li class="listitem">
           The type pointed to by <code class="computeroutput"><span class="identifier">Iter1</span></code>
           must have a trivial assignment operator.
         </li>
@@ -210,14 +210,14 @@
 <p>
       By trivial assignment operator we mean that the type is either a scalar type<a class="link" href="background.html#background.references">[3]</a> or:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           The type has no user defined assignment operator.
         </li>
-<li>
+<li class="listitem">
           The type does not have any data members that are references.
         </li>
-<li>
+<li class="listitem">
           All base classes, and all data member objects must have trivial assignment
           operators.
         </li>
@@ -238,16 +238,16 @@
       examples</a>. The code begins by defining a template function <code class="computeroutput"><span class="identifier">do_copy</span></code> that performs a "slow but safe"
       copy. The last parameter passed to this function may be either a <code class="computeroutput"><a class="link" href="reference/integral_constant.html" title="integral_constant">true_type</a></code>
       or a <code class="computeroutput"><a class="link" href="reference/integral_constant.html" title="integral_constant">false_type</a></code>.
-      Following that there is an overload of do<span class="underline">copy that
-      uses `memcpy`: this time the iterators are required to actually be pointers
-      to the same type, and the final parameter must be a `</span>_true_type<code class="computeroutput"><span class="special">.</span> <span class="identifier">Finally</span><span class="special">,</span> <span class="identifier">the</span> <span class="identifier">version</span>
-      <span class="identifier">of</span> </code>copy<code class="computeroutput"> <span class="identifier">calls</span>
-      </code>do<span class="underline">copy`, passing `</span>_has_trivial_assign&lt;value_type&gt;()`
-      as the final parameter: this will dispatch to the optimized version where appropriate,
-      otherwise it will call the "slow but safe version".
+      Following that there is an overload of do_copy that uses <code class="computeroutput"><span class="identifier">memcpy</span></code>:
+      this time the iterators are required to actually be pointers to the same type,
+      and the final parameter must be a <code class="computeroutput"><a class="link" href="reference/integral_constant.html" title="integral_constant">true_type</a></code>.
+      Finally, the version of <code class="computeroutput"><span class="identifier">copy</span></code>
+      calls <code class="computeroutput"><span class="identifier">do_copy</span></code>, passing <code class="computeroutput"><a class="link" href="reference/has_trivial_assign.html" title="has_trivial_assign">has_trivial_assign</a><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;()</span></code> as the final parameter: this will dispatch
+      to the optimized version where appropriate, otherwise it will call the "slow
+      but safe version".
     </p>
 <a name="boost_typetraits.background.was_it_worth_it_"></a><h5>
-<a name="id1015715"></a>
+<a name="boost_typetraits.background.was_it_worth_it_-heading"></a>
       <a class="link" href="background.html#boost_typetraits.background.was_it_worth_it_">Was it worth it?</a>
     </h5>
 <p>
@@ -264,12 +264,12 @@
       comparison between algorithms becomes difficult. However, perhaps we can add
       a couple of caveats to the premature optimization rule:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           If you use the right algorithm for the job in the first place then optimization
           will not be required; in some cases, memcpy is the right algorithm.
         </li>
-<li>
+<li class="listitem">
           If a component is going to be reused in many places by many people then
           optimizations may well be worthwhile where they would not be so for a single
           case - in other words, the likelihood that the optimization will be absolutely
@@ -379,7 +379,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="boost_typetraits.background.pair_of_references"></a><h5>
-<a name="id1015912"></a>
+<a name="boost_typetraits.background.pair_of_references-heading"></a>
       <a class="link" href="background.html#boost_typetraits.background.pair_of_references">Pair of References</a>
     </h5>
 <p>
@@ -597,7 +597,7 @@
       easier to maintain and easier to understand.
     </p>
 <a name="boost_typetraits.background.conclusion"></a><h5>
-<a name="id1016755"></a>
+<a name="boost_typetraits.background.conclusion-heading"></a>
       <a class="link" href="background.html#boost_typetraits.background.conclusion">Conclusion</a>
     </h5>
 <p>
@@ -610,55 +610,55 @@
       can be optimal as well as generic.
     </p>
 <a name="boost_typetraits.background.acknowledgements"></a><h5>
-<a name="id1016772"></a>
+<a name="boost_typetraits.background.acknowledgements-heading"></a>
       <a class="link" href="background.html#boost_typetraits.background.acknowledgements">Acknowledgements</a>
     </h5>
 <p>
       The authors would like to thank Beman Dawes and Howard Hinnant for their helpful
       comments when preparing this article.
     </p>
-<a name="boost_typetraits.background._anchor_id__background_references____references"></a><h5>
-<a name="id1016789"></a>
-      <a class="link" href="background.html#boost_typetraits.background._anchor_id__background_references____references"><a name="background.references"></a> References</a>
+<a name="boost_typetraits.background._anchor_id__background_references___references"></a><h5>
+<a name="boost_typetraits.background._anchor_id__background_references___references-heading"></a>
+      <a class="link" href="background.html#boost_typetraits.background._anchor_id__background_references___references"><a name="background.references"></a>References</a>
     </h5>
-<div class="orderedlist"><ol type="1">
-<li>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
           Nathan C. Myers, C++ Report, June 1995.
         </li>
-<li>
+<li class="listitem">
           The type traits library is based upon contributions by Steve Cleary, Beman
           Dawes, Howard Hinnant and John Maddock: it can be found at www.boost.org.
         </li>
-<li>
+<li class="listitem">
           A scalar type is an arithmetic type (i.e. a built-in integer or floating
           point type), an enumeration type, a pointer, a pointer to member, or a
           const- or volatile-qualified version of one of these types.
         </li>
-<li>
+<li class="listitem">
           This quote is from Donald Knuth, ACM Computing Surveys, December 1974,
           pg 268.
         </li>
-<li>
+<li class="listitem">
           The test code is available as part of the boost utility library (see algo_opt_examples.cpp),
           the code was compiled with gcc 2.95 with all optimisations turned on, tests
           were conducted on a 400MHz Pentium II machine running Microsoft Windows
           98.
         </li>
-<li>
+<li class="listitem">
           John Maddock and Howard Hinnant have submitted a "compressed_pair"
           library to Boost, which uses a technique similar to the one described here
           to hold references. Their pair also uses type traits to determine if any
           of the types are empty, and will derive instead of contain to conserve
           space -- hence the name "compressed".
         </li>
-<li>
+<li class="listitem">
           This is actually an issue with the C++ Core Language Working Group (issue
           #106), submitted by Bjarne Stroustrup. The tentative resolution is to allow
           a "reference to a reference to T" to mean the same thing as a
           "reference to T", but only in template instantiation, in a method
           similar to multiple cv-qualifiers.
         </li>
-<li>
+<li class="listitem">
           For those of you who are wondering why this shouldn't be const-qualified,
           remember that references are always implicitly constant (for example, you
           can't re-assign a reference). Remember also that "const T &amp;"
