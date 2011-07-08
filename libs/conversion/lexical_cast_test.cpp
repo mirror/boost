@@ -921,17 +921,6 @@ void test_char_types_conversions()
     BOOST_CHECK(boost::lexical_cast<std::wstring>(wc_arr) == std::wstring(wc_arr));
     BOOST_CHECK(boost::lexical_cast<wchar_t>(wc_arr[0]) == wc_arr[0]);
 
-    // Following tests depend on realization of std::locale.
-    // All we need to know, is that this functions must compile
-    BOOST_CHECK(boost::lexical_cast<wchar_t>(c_arr[0]) == wc_arr[0]);
-    BOOST_CHECK(boost::lexical_cast<std::wstring>(c_arr) == std::wstring(wc_arr));
-
-    BOOST_CHECK(boost::lexical_cast<std::wstring>(sc_arr) != std::wstring(wc_arr) );
-    BOOST_CHECK(boost::lexical_cast<std::wstring>(uc_arr) != std::wstring(wc_arr) );
-
-    BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(uc_arr[0]), bad_lexical_cast);
-    BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(sc_arr[0]), bad_lexical_cast);
-
 #endif
 }
 

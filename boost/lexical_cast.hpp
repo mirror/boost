@@ -1338,15 +1338,39 @@ namespace boost
                 return lcast_ret_float<Traits>(output,start,finish);
             }
 
-#if defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)
         private:
-            // we need workaround
-            bool no_long_double_80bit_realization_workaround(double& output, int) {
-                return convert_using_base_class(output);
+            // Not optimised converter
+            template <class T>
+            bool float_types_converter_internal(T& output, int /*tag*/) {
+                bool return_value = convert_using_base_class(output);
+
+                /* Some compilers and libraries successfully
+                 * parse 'inf', 'INFINITY', '1.0E', '1.0E-'...
+                 * We are trying to provide a unified behaviour,
+                 * so we just forbid such conversions (as some
+                 * of the most popular compilers/libraries do)
+                 * */
+                CharT const minus = lcast_char_constants<CharT>::minus;
+                CharT const plus = lcast_char_constants<CharT>::plus;
+                CharT const capital_e = lcast_char_constants<CharT>::capital_e;
+                CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
+                if ( return_value &&
+                     (
+                        output > (std::numeric_limits<T>::max)()     // +inf
+                        || output < -(std::numeric_limits<T>::max)() // -inf
+                        || output != output                          // NaN
+                        || *(finish-1) == lowercase_e                // 1.0e
+                        || *(finish-1) == capital_e                  // 1.0E
+                        || *(finish-1) == minus                      // 1.0e- or 1.0E-
+                        || *(finish-1) == plus                       // 1.0e+ or 1.0E+
+                     )
+                ) return false;
+
+                return return_value;
             }
 
-            // we do not need a workaround
-            bool no_long_double_80bit_realization_workaround(double& output,char) {
+            // Optimised converter
+            bool float_types_converter_internal(double& output,char /*tag*/) {
                 return lcast_ret_float<Traits>(output,start,finish);
             }
         public:
@@ -1360,14 +1384,23 @@ namespace boost
                  * double, because it will give a big precision loss.
                  * */
                 boost::mpl::if_c<
+#if defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)
                     ::boost::type_traits::ice_eq< sizeof(double), sizeof(long double) >::value,
+#else
+                     0
+#endif
                     int,
                     char
-                >::type dummy = 0;
+                >::type tag = 0;
 
-                return no_long_double_80bit_realization_workaround(output, dummy);
+                return float_types_converter_internal(output, tag);
             }
-#endif
+
+            bool operator>>(long double& output)
+            {
+                int tag = 0;
+                return float_types_converter_internal(output, tag);
+            }
 
             // Generic istream-based algorithm.
             // lcast_streambuf_for_target<InputStreamable>::value is true.
