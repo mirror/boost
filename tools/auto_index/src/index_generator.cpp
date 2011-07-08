@@ -150,7 +150,7 @@ boost::tiny_xml::element_ptr add_attribute(boost::tiny_xml::element_ptr ptr, con
 boost::regex make_primary_key_matcher(const std::string& s)
 {
    static const boost::regex e("[-_[:space:]]+|([.\\[{}()\\*+?|^$])");
-   static const char* format = "(1?\\\\$1:[-_[:space:]]+)";
+   static const char* format = "(?1\\\\$1:[-_[:space:]]+)";
    return boost::regex(regex_replace(s, e, format, boost::regex_constants::format_all), boost::regex::icase|boost::regex::perl);
 }
 
