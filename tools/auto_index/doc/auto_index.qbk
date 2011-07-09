@@ -965,7 +965,7 @@ If, when the first file is scanned, there are no scanners whose ['type] is "clas
    !define-scanner class_name "^[[:space:]]*(template[[:space:]]*<[^;:{]+>[[:space:]]*)?(class|struct)[[:space:]]*(\<\w+\>([[:blank:]]*\([^)]*\))?[[:space:]]*)*(\<\w*\>)[[:space:]]*(<[^;:{]+>)?[[:space:]]*(\{|:[^;\{()]*\{)" "(?:class|struct)[^;{]+\\<\5\\>[^;{]+\\{" \5
    !define-scanner typedef_name "typedef[^;{}#]+?(\w+)\s*;"  "typedef[^;]+\\<\1\\>\\s*;" "\1"
    !define-scanner "macro_name" "^\s*#\s*define\s+(\w+)" "\\<\1\\>" "\1"
-   !define-scanner "function_name" "\w+(?:\s*<[^>]>)?[\s&*]+?(\w+)\s*(?:BOOST_[[:upper:]_]+\s*)\([^\)]*\)\s*[;{]" "\\<\\w+\\>(?:\\s+<[^>]*>)?[\\s&*]+\\<\1\\>\\s*\\([^;{]*\\)" "\1"
+   !define-scanner "function_name" "\w+(?:\s*<[^>]>)?[\s&*]+?(\w+)\s*(?:BOOST_[[:upper:]_]+\s*)?\([^\)]*\)\s*[;{]" "\\<\\w+\\>(?:\\s+<[^>]*>)?[\\s&*]+\\<\1\\>\\s*\\([^;{]*\\)" "\1"
 
 Note that these defaults are not installed if you have provided your own versions with these ['type] names. In this case if
 you want the default scanners to be in effect as well as your own, you should include the above in your script file.  
