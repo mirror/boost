@@ -89,10 +89,10 @@ namespace chrono {
 
     template <class Duration, class Rep2,
         bool = (
-                    (boost::is_convertible<typename Duration::rep,
-                        typename common_type<typename Duration::rep, Rep2>::type>::value)
-                &&  (boost::is_convertible<Rep2,
-                        typename common_type<typename Duration::rep, Rep2>::type>::value)
+                    ((boost::is_convertible<typename Duration::rep,
+                        typename common_type<typename Duration::rep, Rep2>::type>::value))
+                &&  ((boost::is_convertible<Rep2,
+                        typename common_type<typename Duration::rep, Rep2>::type>::value))
                 )
         >
     struct duration_divide_imp
@@ -119,10 +119,10 @@ namespace chrono {
 
     template <class Rep, class Duration,
         bool = (
-                    (boost::is_convertible<typename Duration::rep,
-                        typename common_type<typename Duration::rep, Rep>::type>::value)
-                &&  (boost::is_convertible<Rep,
-                        typename common_type<typename Duration::rep, Rep>::type>::value)
+                    ((boost::is_convertible<typename Duration::rep,
+                        typename common_type<typename Duration::rep, Rep>::type>::value))
+                &&  ((boost::is_convertible<Rep,
+                        typename common_type<typename Duration::rep, Rep>::type>::value))
                 )
         >
     struct duration_divide_imp2
