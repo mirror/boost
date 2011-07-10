@@ -14,9 +14,13 @@ project detail/test/container_fwd
         <warnings-as-errors>on
   ;
 
-run container_fwd_test.cpp : : : release : container_fwd_release ;
-run container_fwd_test.cpp : : : debug : container_fwd_debug ;
 run container_no_fwd_test.cpp ;
+run container_fwd_test.cpp : : : : container_fwd ;
+run container_fwd_test.cpp : :
+    : <define>_STLP_DEBUG <define>_GLIBCXX_DEBUG
+    : container_fwd_debug ;
 
-compile-fail correctly_disable_fail.cpp : release : correctly_disable_release ;
-compile-fail correctly_disable_fail.cpp : debug : correctly_disable_debug ;
+compile-fail correctly_disable_fail.cpp : : correctly_disable ;
+compile-fail correctly_disable_fail.cpp
+    : <define>_STLP_DEBUG <define>_GLIBCXX_DEBUG
+    : correctly_disable_debug ;
