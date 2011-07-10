@@ -10,9 +10,13 @@
 #error This file requires exception handling to be enabled.
 #endif
 
-#if defined(_MSC_VER) && defined(_M_IX86) && !defined(_M_X64)
-
 #include <boost/exception/detail/clone_current_exception.hpp>
+
+#if defined(BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR) && defined(_MSC_VER) && defined(_M_IX86) && !defined(_M_X64)
+
+//Non-intrusive cloning support implemented below, only for MSVC versions mentioned above.
+//Thanks Anthony Williams!
+
 #include <boost/exception/exception.hpp>
 #include <boost/shared_ptr.hpp>
 #ifndef BOOST_NO_RTTI
@@ -269,7 +273,7 @@ boost
     exception_detail
         {
         int
-        clone_current_exception_msvc_x86( clone_base const * & cloned )
+        clone_current_exception_non_intrusive( clone_base const * & cloned )
             {
             BOOST_ASSERT(!cloned);
             int result = clone_current_exception_result::not_supported;
@@ -288,6 +292,27 @@ boost
                 }
             BOOST_ASSERT(result!=clone_current_exception_result::success || cloned);
             return result;
+            }
+        }
+    }
+
+#else
+
+//On all other compilers, return clone_current_exception_result::not_supported.
+//On such platforms, only the intrusive enable_current_exception() cloning will work.
+
+#include <boost/config.hpp>
+
+namespace
+boost
+    {
+    namespace
+    exception_detail
+        {
+        int
+        clone_current_exception_non_intrusive( clone_base const * & )
+            {
+            return clone_current_exception_result::not_supported;
             }
         }
     }

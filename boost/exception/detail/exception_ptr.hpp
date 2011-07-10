@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include <new>
 #include <ios>
+#include <cstdlib>
 
 namespace
 boost
@@ -455,6 +456,8 @@ boost
         {
         BOOST_ASSERT(p);
         p.ptr_->rethrow();
+        BOOST_ASSERT(0);
+        std::abort();
         }
 
     inline
