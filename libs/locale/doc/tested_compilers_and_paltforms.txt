@@ -1,0 +1,77 @@
+// vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 filetype=cpp.doxygen
+/*!
+\page tested_compilers_and_paltforms Tested Compilers and Platforms
+
+<table border="1" cellpadding="5" cellspacing="3">
+<tr>
+  <th>Platform</th><th>Compiler</th><th>Backends</th><th>ICU version</th><th>Notes</th>
+</tr>
+<tr>
+  <td>Linux 2.6 x86_64</td><td>GCC-4.3</td><td>icu/posix/std</td><td>3.8, 4.4, 4.6</td><td>-</td>
+</tr>
+<tr>
+  <td>Linux 2.6 x86</td><td>GCC-4.1</td><td>icu/posix/std</td><td>3.6</td><td>(not tested recently)</td>
+</tr>
+<tr>
+  <td>Linux 2.6 x86_64</td><td>GCC-4.4</td><td>icu/posix/std</td><td>4.2</td><td>-</td>
+</tr>
+<tr>
+  <td>Linux 2.6 x86_64</td><td>GCC-4.5/C++0x</td><td>icu/posix/std</td><td>3.8</td><td>-</td>
+</tr>
+<tr>
+  <td>Linux 2.6 x86_64</td><td>GCC-4.6</td><td>icu/posix/std</td><td>4.2, 4.6</td><td>-</td>
+</tr>
+<tr>
+  <td>Linux 2.6 x86_64</td><td>GCC-4.6/C++0x</td><td>icu/posix/std</td><td>4.2, 4.6</td><td>-</td>
+</tr>
+<tr>
+  <td>Linux 2.6 x86_64</td><td>GCC-4.5/C++0x with char16_t/char32_t</td><td>icu</td><td>3.8</td>
+  <td>
+	Some charXX_t faults in formatting<br>
+	std backend can't be build<br>
+	Standard library issues
+  </td>
+</tr>
+<tr>
+  <td>Linux 2.6 x86_64</td><td>Intel 11.0</td><td>icu/posix/std</td><td>3.8</td><td>-</td>
+</tr>
+<tr>
+  <td>Windows 7 32bit</td><td>MSVC 2010</td><td>icu/winapi/std</td><td>4.6</td><td>-</td>
+</tr>
+<tr>
+  <td>Windows 7 32bit</td><td>MSVC 2010/C++0x with char16_t/char32_t</td><td>icu/winapi/std</td><td>4.6</td>
+  <td>
+  Multiple test faults, because char16_t/char32_t are not
+  defined as distinct types as required by C++ standard.
+  </td>
+</tr>
+<tr>
+  <td>Windows XP 32bit</td><td>MSVC 2008</td><td>icu/winapi/std</td><td>4.2</td><td>-</td>
+</tr>
+<tr>
+  <td>Windows XP 32bit</td><td>MinGW/GCC 4.5</td><td>icu/winapi/std</td><td>4.2</td><td>-</td>
+</tr>
+<tr>
+  <td>Cygwin 1.7</td><td>GCC 4.3</td><td>icu/winapi/std</td><td>3.8</td><td>-</td>
+</tr>
+<tr>
+  <td>Mac OS X 10.6.4</td><td>GCC-4.2</td><td>icu/posix/std</td><td>4.4</td><td>-</td>
+</tr>
+<tr>
+  <td>FreeBSD 8.0</td><td>GCC-4.2.1</td><td>icu/std</td><td>3.8</td><td>-</td>
+</tr>
+<tr>
+  <td>OpenSolaris/SunOS 5.11</td><td>GCC-3.4</td><td>icu/std</td><td>4.2</td><td>iconv is disabled</td>
+</tr>
+<tr>
+  <td>OpenSolaris/SunOS 5.11</td><td>SunCC 5.10/STLport4</td><td>icu</td><td>4.2</td>
+  <td>
+    Some faults in collation, STLport issue<br>
+    iconv is disabled<br>
+    Boost-1.46.x requires patch for Boost.Thread, can be found in <tt>libs/locale/build</tt>
+  </td>
+</tr>
+</table>
+
+*/
+

@@ -1,0 +1,209 @@
+// vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 filetype=cpp.doxygen
+/*!
+\page building_boost_locale Building The library
+
+Boost.Locale presently supports  CMake build system and Boost Build.
+
+\note You need Boost 1.46 and above to use Boost.Build
+
+- \ref building_boost_locale_bb
+- \ref building_boost_locale_cmake
+- \ref binary_compatibility
+
+
+\section building_boost_locale_bb Building With Boost.Build
+
+You need Boost 1.46 and above to use Boost.Build, it includes important
+patches that allow you to build the library correctly.
+
+\subsection bb_building_deps Dependencies
+
+- Boost 1.46 and above.
+- ICU library 3.6 or above is strongly recommended
+- If no ICU library is given, iconv support is required under POSIX platforms.
+
+\subsection bb_building_proc Building Process
+
+First of all we need to prepare our sources of Boost with Boost.Locale
+
+- Download latest version of Boost and extract its sources
+- Download the latest version of Boost.Locale and extract its sources
+- Copy boost and libs subdirectory of Boost.Locale sources into the location
+  of boost sources.
+- Bootstrap latest bjam version running bootstrap.sh or bootstrap.bat.
+
+Now all you need to do is invoke bjam command:
+
+\verbatim
+./bjam --with-locale stage
+\endverbatim
+
+Or on Windows
+\verbatim
+.\bjam --with-locale stage
+\endverbatim
+
+If you are using custom ICU build or you are using Microsoft Windows
+you need to provide a path to location of ICU library using \c -sICU_PATH option
+
+For example:
+
+-   If your icu build is placed at \c /opt/icu46 such that the files are placed like\n
+    \c /opt/icu46/include/unicode/uversion.h\n
+    \c /opt/icu46/include/unicode/calendar.h\n
+    \c ... \n
+    \c /opt/icu46/lib/libicudata.so \n
+    \c /opt/icu46/lib/libicui18n.so \n
+    \c ... \n
+    then you need to provide an option \c -sICU_PATH=/opt/icu46
+    \verbatim
+    ./bjam --with-locale -sICU_PATH=/opt/icu46  stage
+    \endverbatim
+-   If your icu build is placed at <tt>c:\\icu46</tt> such that the files are placed like \n
+    <tt>c:\\icu46\\include\\unicode\\uversion.h</tt>  \n
+    <tt>c:\\icu46\\include\\unicode\\calendar.h</tt> \n
+    <tt>...</tt> \n
+    <tt>c:\\icu46\\bin\\icudt.dll</tt> \n
+    <tt>c:\\icu46\\bin\\icuin.dll</tt> \n
+    <tt>...</tt> \n
+    <tt>c:\\icu46\\lib\\icudt.lib</tt> \n
+    <tt>c:\\icu46\\lib\\icuin.lib</tt> \n
+    <tt>...</tt> \n
+    then you need to provide an option \c -sICU_PATH=c:\\icu46
+    \verbatim
+    .\bjam --with-locale -sICU_PATH=c:\icu46  stage
+    \endverbatim
+
+\note Don't forget to put both debug and release versions of ICU libraries in this path
+when using Microsoft Visual Studio  so Boost.Build will link correctly debug and release
+versions of boost_locale library.
+
+\section bb_build_opts Build Options
+
+Boost.Locale supports following options with values \c off or \c on
+
+- \c boost.locale.icu=off disable build of ICU backend even if ICU library exists
+- \c boost.locale.iconv=off or \c boost.locale.iconv=on enable or disable use of iconv
+     library. It is off by default on Windows and Solaris
+- \c boost.locale.winapi=off - disable winapi backend, it is on by default on Windows and Cygwin
+- \c boost.locale.std=off or \c boost.locale.winapi=on Disable or enable std backends. \c std backend
+     is disabled by default when using Sun Studio.
+- \c boost.locale.posix=on or \c boost.locale.posix=off Enable or disable support of POSIX backend,
+     it is on by default on Linux and Mac OS X
+
+Also Boost.Locale supports following options
+
+- \c -sICU_PATH=/path/to/location/of/icu - the location of custom ICU library
+- \c -sICONV_PATH=/path/to/location/of/iconv - the location of custom iconv library
+
+
+For example:
+
+-   Build the library on Windows with ICU backend only:
+    \verbatim
+    .\bjam boost.locale.winapi=off boost.locale.std=off -sICU_PATH=c:\icu46 --with-locale stage
+    \endverbatim
+-   Build the library on Linux with std backend only
+    \verbatim
+    .\bjam boost.locale.posix=off boost.locale.icu=off --with-locale stage
+    \endverbatim
+
+\section bb_build_test Running Unit Tests
+
+You can run unit tests by invoking \c bjam with \c libs/locale/test project parameter
+\verbatim
+./bjam libs/locale/test
+\endverbatim
+
+\section building_boost_locale_cmake Building With CMake
+
+\note CMake build does not provide mangled library names like boost_locale-mt-gd.lib, so if you
+rely on auto-linking use Boost.Build.
+
+\subsection cmake_building_deps Dependencies
+
+- CMake 2.6 and above.
+- Boost 1.35 and above.
+- Boost.Thread (when using ICU or when using Boost < 1.43)
+- ICU library 3.6 or above is strongly recommended
+- If no ICU library is given, iconv support is required under POSIX platforms.
+
+\subsection cmake_building_proc Building Process
+
+The library build should be fairly simple for users familiar with CMake.
+
+\note
+
+- MSVC Users: use \c nmake for building the library, MSVC projects are not supported!
+- Windows users: don't forget to set the PATH environment variable to point to ICU's dlls.
+
+The simplest way to build the library is:
+
+-   Extract its sources
+-   Go to the sources directory
+-   Create a subdirectory named "build"
+-   Go into this directory and run:
+    \code
+        cmake ..
+        make
+        make test
+    \endcode
+    For windows you may need to specify:
+    \code
+        cmake -DCMAKE_INCLUDE_PATH=/path/to/icu/include:/path/to/boost/include -DCMAKE_LIBRARY_PATH=/path/to/icu/lib ..
+    \endcode
+    And then:
+    \code
+        nmake
+        nmake test
+    \endcode
+    Or
+    \code
+        make && make test
+    \endcode
+    Depending on your compiler.
+
+
+\section cmake_build_opts Build Options
+
+This options can be passed to CMake to configure the library to your needs.
+
+- \c DISABLE_SHARED  - build only the static library
+- \c DISABLE_STATIC  - build only the shared library
+- \c DISABLE_ICU  - Disable the ICU backend (strongly discouraged)
+- \c DISABLE_STD_BACKED  - Disable the "std" backend
+- \c DISABLE_POSIX_BACKEND  - Disable the "posix" backend (ON by default on all but Linux and Mac OS X)
+- \c DISABLE_WINAPI_BACKEND  - Disable the "winapi" backend (ON by default on POSIX platforms).
+- \c DISABLE_ICONV  - Disable iconv-based conversion (ON by default on Windows)
+
+Useful CMake options:
+
+- \c CMAKE_INCLUDE_PATH  - path to the boost library (if not system-wide)
+- \c CMAKE_INSTALL_PREFIX  - installation path
+- \c CMAKE_BUILD_TYPE  - default is Debug on Windows/MSVC and RelWithDebInfo on all other platforms.
+
+Examples:
+
+- Build Boost.Locale with only the "icu" backend on Linux
+    \code
+        cmake -DDISABLE_POSIX_BACKEND=ON -DDISABLE_STD_BACKEND=ON -DDISABLE_ICONV=ON ..
+    \endcode
+- Build Boost.Locale with the "winapi" and "std" backends on Windows
+    \code
+        cmake -G "NMake Makefiles" -DDISABLE_ICU_BACKEND=ON -DCMAKE_INCLUDE_PATH=c:/boost_1_43_0 ..
+    \endcode
+
+\section binary_compatibility Binary Compatibility
+
+Boost.Locale is built with binary compatibility in mind. Switching localization back ends on or off,
+or using iconv or not, does not affect binary compatibility. So if a dynamic library was built
+with all possible backends, other dynamic libraries compiled with, for example, only the \c std, \c posix 
+or \c winapi backends would still be binary-compatible with it.
+
+However this definitely has an effect on some features. For example, if you
+try to use boundary analysis or a calendar facet when the library does not support the icu backend
+you would get an exception.
+
+*/
+
+
