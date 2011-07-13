@@ -19,7 +19,7 @@
 #endif
 #include <windows.h>
 
-#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
 
 namespace boost {
 namespace locale {

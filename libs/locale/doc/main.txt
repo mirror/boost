@@ -1,3 +1,11 @@
+//
+//  Copyright (c) 2009-2011 Artyom Beilis (Tonkikh)
+//
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+//
+
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 filetype=cpp.doxygen
 
 /*!
@@ -7,9 +15,11 @@
 \section main_intro What is Boost.Locale?
 
 Boost.Locale is a library that provides high quality
-localization facilities in a C++ way.
+localization facilities in a C++ way. It was originally designed
+a part of <a href="http://cppcms.sourceforge.net/">CppCMS</a> - C++ Web Framework
+project and then contributed to Boost.
 
-It gives powerful tools for development of cross platform
+Boost.Locale gives powerful tools for development of cross platform
 localized software - the software that talks to user
 in its language.
 

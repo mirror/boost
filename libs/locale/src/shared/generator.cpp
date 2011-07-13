@@ -13,7 +13,7 @@
 #include <vector>
 #include <algorithm>
 #include <boost/shared_ptr.hpp>
-#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
 
 namespace boost {
     namespace locale {
