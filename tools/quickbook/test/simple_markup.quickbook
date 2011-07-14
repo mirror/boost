@@ -33,7 +33,7 @@ __macro__
 
 =_mac\ ro_=
 
-/not italic\/
+/italic\/
 
 These shouldn't be interepted as markup: == // **
 

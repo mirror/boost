@@ -121,7 +121,6 @@ namespace quickbook
         paragraph_action        paragraph;
         space                   space_char;
         plain_char_action       plain_char;
-        raw_char_action         raw_char;
         escape_unicode_action   escape_unicode;
 
         simple_phrase_action    simple_markup;

@@ -240,7 +240,7 @@ namespace quickbook
         local.char_ =
                 cl::str_p("\\n")            [actions.break_]
             |   "\\ "                       // ignore an escaped space
-            |   '\\' >> cl::punct_p         [actions.raw_char]
+            |   '\\' >> cl::punct_p         [actions.plain_char]
             |   "\\u" >> cl::repeat_p(4)
                     [cl::chset<>("0-9a-fA-F")]
                                             [actions.escape_unicode]

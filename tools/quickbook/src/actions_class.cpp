@@ -72,7 +72,6 @@ namespace quickbook
         , paragraph(*this)
         , space_char(phrase)
         , plain_char(phrase, *this)
-        , raw_char(phrase, *this)
         , escape_unicode(phrase, *this)
 
         , simple_markup(phrase, *this)

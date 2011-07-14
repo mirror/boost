@@ -46,7 +46,7 @@
       <literal>_mac\ ro_</literal>
     </para>
     <para>
-      <emphasis>not italic\</emphasis>
+      <emphasis>italic\</emphasis>
     </para>
     <para>
       These shouldn't be interepted as markup: == // **
