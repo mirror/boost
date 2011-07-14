@@ -15,11 +15,9 @@ boostbook standalone
         auto_index
     :
         # Path for links to Boost:
-        #<xsl:param>boost.root=../../../../../../../trunk
+        <xsl:param>boost.root=../../../..
         # Path for libraries index:
         <xsl:param>boost.libraries=$(boost-root)/libs/libraries.htm
-        # Use the main Boost stylesheet:
-        <xsl:param>html.stylesheet=boostbook.css
         
         # Some general style settings:
         <xsl:param>table.footnote.number.format=1
@@ -40,10 +38,6 @@ boostbook standalone
         <xsl:param>generate.section.toc.level=10
         # Index on type:
         <xsl:param>index.on.type=1
-        
-        #<xsl:param>root.filename="sf_dist_and_tools"
-        #<xsl:param>graphicsize.extension=1
-        #<xsl:param>use.extensions=1
         
         # PDF Options:
         # TOC Generation: this is needed for FOP-0.9 and later:
@@ -84,8 +78,6 @@ boostbook standalone
         # PDF native index support is probably better for PDFs as then you actually get page numbers.
 
         <auto-index-script>autoindex.idx # Specifies the name of the script to load for mylibrary. 
-        
-        <quickbook-define>enable_index
     ;
 
 install pdf-install : standalone : <install-type>PDF <location>. <name>auto_index.pdf ;

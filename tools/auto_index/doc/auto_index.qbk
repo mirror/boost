@@ -132,7 +132,7 @@ build requirements in the Jamfile:
 
 [section:build Step 1: Build the AutoIndex tool]
 
-[/ [note This step is strictly optional, but very desirable to speed up build times.]]
+[note This step is strictly optional, but very desirable to speed up build times.]
 
 cd into `tools/auto_index/build` and invoke bjam as:
 
@@ -141,11 +141,13 @@ cd into `tools/auto_index/build` and invoke bjam as:
 Optionally pass the name of the compiler toolset you want to use to bjam as well:
 
    bjam release gcc
+
+This will build the tool and place a copy in the current directory (which is to say `tools/auto_index/build`)
    
 Now open up your `user-config.jam` file and at the end of the file add the line:
 
 [pre 
-using auto-index : ['full-path-of-executable-auto-index.exe] ; 
+using auto-index : ['full-path-to-boost-tree]/tools/auto_index/build/auto-index.exe ; 
 ]
 
 [note 
@@ -1142,9 +1144,6 @@ to the XSL stylesheets.]]
 
 [endsect]  [/section:comm_ref Command Line Reference]
 
-[? enable_index
-'''
-  <index/>
-'''
-]
+[include ../include/auto_index_helpers.qbk]
 
+[index]

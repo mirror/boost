@@ -10,9 +10,10 @@ exe auto_index :
    /boost//filesystem 
    /boost//system 
    /boost//program_options
-: <define>BOOST_ALL_NO_LIB=1 <link>static ;
+: <define>BOOST_ALL_NO_LIB=1 <link>static release ;
 
 install aii : auto_index : <location>. ;
+
 
 
 
