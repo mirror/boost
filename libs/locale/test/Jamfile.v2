@@ -21,6 +21,8 @@ project
 
 test-suite "boost_locale_test" 
     : 
+        # Configuration Information 
+        [ run test_config.cpp : : : <test-info>always_show_run_output ]
         # Shared
         [ run test_date_time.cpp ]
         [ run test_ios_prop.cpp ]
