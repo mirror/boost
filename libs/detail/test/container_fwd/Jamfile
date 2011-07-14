@@ -20,7 +20,9 @@ run container_fwd_test.cpp : :
     : <define>_STLP_DEBUG <define>_GLIBCXX_DEBUG
     : container_fwd_debug ;
 
-compile-fail correctly_disable_fail.cpp : : correctly_disable ;
 compile-fail correctly_disable_fail.cpp
-    : <define>_STLP_DEBUG <define>_GLIBCXX_DEBUG
+    : <warnings-as-errors>off
+    : correctly_disable ;
+compile-fail correctly_disable_fail.cpp
+    : <warnings-as-errors>off <define>_STLP_DEBUG <define>_GLIBCXX_DEBUG
     : correctly_disable_debug ;
