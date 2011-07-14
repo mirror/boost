@@ -29,12 +29,12 @@ test-suite "boost_locale_test"
         [ run test_codepage_converter.cpp ]
         [ run test_codepage.cpp ]
         [ run test_message.cpp : $(BOOST_ROOT)/libs/locale/test ]
+        [ run test_generator.cpp ]
         # icu
         [ run test_collate.cpp ]
         [ run test_convert.cpp ]
         [ run test_boundary.cpp ]
         [ run test_formatting.cpp : : : <optimization>off ]
-        [ run test_generator.cpp ]
         [ run test_icu_vs_os_timezone.cpp ]
         # winapi
         [ run test_winapi_collate.cpp ]
