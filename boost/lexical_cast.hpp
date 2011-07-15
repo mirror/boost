@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <istream>
 #include <string>
+#include <cstring>
 #include <typeinfo>
 #include <exception>
 #include <cmath>
@@ -731,6 +732,136 @@ namespace boost
         }
     }
 
+    namespace detail
+    {
+        /* Returns true and sets the correct value if found NaN or Inf. */
+        template <class CharT, class T>
+        inline bool parse_inf_nan_impl(const CharT* begin, const CharT* end, T& value
+            , const CharT* lc_NAN, const CharT* lc_nan
+            , const CharT* lc_INFINITY, const CharT* lc_infinity
+            , const CharT opening_brace, const CharT closing_brace)
+        {
+            using namespace std;
+            const wchar_t minus = lcast_char_constants<wchar_t>::minus;
+            const wchar_t plus = lcast_char_constants<wchar_t>::plus;
+            const int inifinity_size = 8;
+
+            bool has_minus = false;
+            /* Parsing +/- */
+            if( *begin == minus)
+            {
+                ++ begin;
+                has_minus = true;
+            }
+            else if( *begin == plus ) ++begin;
+
+            if( end-begin < 3 ) return false;
+            if( !memcmp(begin, lc_nan, 3*sizeof(CharT)) || !memcmp(begin, lc_NAN, 3*sizeof(CharT)) )
+            {
+                begin += 3;
+                if (end != begin) /* It is 'nan(...)' or some bad input*/
+                {
+                    if(end-begin<2) return false; // bad input
+                    -- end;
+                    if( *begin != opening_brace || *end != closing_brace) return false; // bad input
+                }
+
+                if( !has_minus ) value = std::numeric_limits<T>::quiet_NaN();
+                else value = -std::numeric_limits<T>::quiet_NaN();
+                return true;
+            } else
+            if (( /* 'INF' or 'inf' */
+                  end-begin==3
+                  &&
+                  (!memcmp(begin, lc_infinity, 3*sizeof(CharT)) || !memcmp(begin, lc_INFINITY, 3*sizeof(CharT)))
+                )
+                ||
+                ( /* 'INFINITY' or 'infinity' */
+                  end-begin==inifinity_size
+                  &&
+                  (!memcmp(begin, lc_infinity, inifinity_size)|| !memcmp(begin, lc_INFINITY, inifinity_size))
+                )
+             )
+            {
+                if( !has_minus ) value = std::numeric_limits<T>::infinity();
+                else value = -std::numeric_limits<T>::infinity();
+                return true;
+            }
+
+            return false;
+        }
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+        template <class T>
+        bool parse_inf_nan(const wchar_t* begin, const wchar_t* end, T& value)
+        {
+            return parse_inf_nan_impl(begin, end, value
+                               , L"NAN", L"nan"
+                               , L"INFINITY", L"infinity"
+                               , L'(', L')');
+        }
+#endif
+
+        template <class CharT, class T>
+        bool parse_inf_nan(const CharT* begin, const CharT* end, T& value)
+        {
+            return parse_inf_nan_impl(begin, end, value
+                               , "NAN", "nan"
+                               , "INFINITY", "infinity"
+                               , '(', ')');
+        }
+
+        template <class T>
+        bool put_inf_nan(wchar_t* begin, wchar_t*& end, const T& value)
+        {
+            using namespace std;
+            if (value != value)
+            {
+                memcpy(begin,L"nan", sizeof(L"nan"));
+                end = begin + 3;
+                return true;
+            } else if ( value > numeric_limits<T>::max() )
+            {
+                memcpy(begin,L"inf", sizeof(L"inf"));
+                end = begin + 3;
+                return true;
+            } else if ( value < -numeric_limits<T>::max() )
+            {
+                memcpy(begin,L"-inf", sizeof(L"-inf"));
+                end = begin + 4;
+                return true;
+            }
+
+            return false;
+        }
+
+        template <class CharT, class T>
+        bool put_inf_nan(CharT* begin, CharT*& end, const T& value)
+        {
+            using namespace std;
+            if (value != value)
+            {
+                memcpy(begin,"nan", sizeof("nan"));
+                end = begin + 3;
+                return true;
+            } else if ( value > numeric_limits<T>::max() )
+            {
+                memcpy(begin,"inf", sizeof("inf"));
+                end = begin + 3;
+                return true;
+            } else if ( value < -numeric_limits<T>::max() )
+            {
+                memcpy(begin,"-inf", sizeof("-inf"));
+                end = begin + 4;
+                return true;
+            }
+
+            return false;
+        }
+
+    }
+
+
     namespace detail // lcast_ret_float
     {
         template <class T>
@@ -781,6 +912,8 @@ namespace boost
             CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
 
             value = 0.0;
+
+            if (parse_inf_nan(begin, end, value)) return true;
 
             typedef typename Traits::int_type int_type;
             typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::type mantissa_type;
@@ -1104,6 +1237,7 @@ namespace boost
             template<class OutputStreamable>
             bool lcast_put(const OutputStreamable& input)
             {
+                if(put_inf_nan(start, finish, input)) return true;
                 this->setp(start, finish);
                 std::basic_ostream<CharT> stream(static_cast<Base*>(this));
                 lcast_set_precision(stream, static_cast<OutputStreamable*>(0));
@@ -1342,10 +1476,13 @@ namespace boost
             // Not optimised converter
             template <class T>
             bool float_types_converter_internal(T& output, int /*tag*/) {
+
+                if (parse_inf_nan(start, finish, output)) return true;
+
                 bool return_value = convert_using_base_class(output);
 
                 /* Some compilers and libraries successfully
-                 * parse 'inf', 'INFINITY', '1.0E', '1.0E-'...
+                 * parse '1.0E', '1.0E-'...
                  * We are trying to provide a unified behaviour,
                  * so we just forbid such conversions (as some
                  * of the most popular compilers/libraries do)
@@ -1356,10 +1493,7 @@ namespace boost
                 CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
                 if ( return_value &&
                      (
-                        output > (std::numeric_limits<T>::max)()     // +inf
-                        || output < -(std::numeric_limits<T>::max)() // -inf
-                        || output != output                          // NaN
-                        || *(finish-1) == lowercase_e                // 1.0e
+                        *(finish-1) == lowercase_e                   // 1.0e
                         || *(finish-1) == capital_e                  // 1.0E
                         || *(finish-1) == minus                      // 1.0e- or 1.0E-
                         || *(finish-1) == plus                       // 1.0e+ or 1.0E+

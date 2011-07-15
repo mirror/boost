@@ -42,6 +42,10 @@
 #define LCAST_TEST_LONGLONG
 #endif
 
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_WSTRING)
+#define BOOST_LCAST_NO_WCHAR_T
+#endif
+
 template<class CharT>
 struct my_traits : std::char_traits<CharT>
 {

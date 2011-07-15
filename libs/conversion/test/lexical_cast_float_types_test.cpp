@@ -242,22 +242,6 @@ void test_converion_to_float_types()
     CHECK_CLOSE_ABS_DIFF(.34, test_t);
     CHECK_CLOSE_ABS_DIFF(.34e10, test_t);
 
-//    BOOST_CHECK(lexical_cast<test_t>("-inf") == -std::numeric_limits<test_t>::infinity() );
-//    BOOST_CHECK(lexical_cast<test_t>("-INF") == -std::numeric_limits<test_t>::infinity() );
-//    BOOST_CHECK(lexical_cast<test_t>("+inf") == std::numeric_limits<test_t>::infinity() );
-//    BOOST_CHECK(lexical_cast<test_t>("infinity") == std::numeric_limits<test_t>::infinity() );
-//
-//    BOOST_CHECK(lexical_cast<test_t>("nan") == std::numeric_limits<test_t>::quiet_NaN() );
-//    BOOST_CHECK(lexical_cast<test_t>("NaN") == std::numeric_limits<test_t>::quiet_NaN() );
-
-    BOOST_CHECK_THROW(lexical_cast<test_t>("-inf"), bad_lexical_cast );
-    BOOST_CHECK_THROW(lexical_cast<test_t>("-INF"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<test_t>("+inf"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<test_t>("infinity"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<test_t>("nan"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<test_t>("NaN"), bad_lexical_cast);
-
-
     BOOST_CHECK_THROW(lexical_cast<test_t>("-1.e"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>("-1.E"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>("1.e"), bad_lexical_cast);
@@ -380,10 +364,6 @@ void test_converion_from_to_float_types()
     int to_mult = 50;
 
     TEST_TO_FROM_CAST_AROUND( 0.0 );
-
-//    TEST_TO_FROM_CAST_AROUND( std::numeric_limits<test_t>::infinity() );
-//    TEST_TO_FROM_CAST_AROUND( -std::numeric_limits<test_t>::infinity() );
-//    TEST_TO_FROM_CAST_AROUND( std::numeric_limits<test_t>::quiet_NaN() );
 
     long double val1;
     for(val1 = 1.0e-10L; val1 < 1e11; val1*=10 )
