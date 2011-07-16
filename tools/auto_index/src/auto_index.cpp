@@ -157,7 +157,7 @@ struct string_cmp
 //
 bool can_contain_title(const char* name)
 {
-   static const boost::array<const char*, 102> names = 
+   static const boost::array<const char*, 103> names = 
    { {
       "abstract", "appendix", "appendixinfo", "article", "articleinfo", "authorblurb", "bibliodiv", "biblioentry", "bibliography", 
        "bibliographyinfo", "bibliolist", "bibliomixed", "bibliomset", "biblioset", "blockinfo", "blockquote", "book", "bookinfo", 
@@ -169,7 +169,7 @@ bool can_contain_title(const char* name)
        "refsection", "refsectioninfo", "refsynopsisdiv", "refsynopsisdivinfo", "sect1", "sect1info", "sect2", "sect2info", "sect3", 
        "sect3info", "sect4", "sect4info", "sect5", "sect5info", "section", "sectioninfo", "segmentedlist", "set", "setindex", 
        "setindexinfo", "setinfo", "sidebar", "sidebarinfo", "simplesect", "step", "table", "task", "taskprerequisites", 
-       "taskrelated", "tasksummary", "tip", "toc", "variablelist", "warning"
+       "taskrelated", "tasksummary", "tip", "toc", "variablelist", "warning", "refentry"
    } };
    static std::set<const char*, string_cmp> permitted;
 
@@ -379,6 +379,16 @@ void process_node(boost::tiny_xml::element_ptr node, node_id* prev, title_info* 
       title.prev->title = get_consolidated_content(node);
       if(verbose)
          std::cout << "Indexing section: " << title.prev->title << std::endl;
+   }
+   else if((node->name == "refentrytitle") && (id.prev->prev->id))
+   {
+      //
+      // This actually sets the title of the enclosing refentry scope, 
+      // not this tag itself:
+      //
+      title.prev->prev->title = get_consolidated_content(node);
+      if(verbose)
+         std::cout << "Indexing refentry: " << title.prev->prev->title << std::endl;
    }
    if(node->name == "anchor")
    {
@@ -675,8 +685,8 @@ int main(int argc, char* argv[])
    }
    else
    {
-      //std::cerr << "No input XML file specified" << std::endl;
-      //return 1;
+      std::cerr << "No input XML file specified" << std::endl;
+      return 1;
    }
    if(vm.count("out"))
    {
@@ -684,8 +694,8 @@ int main(int argc, char* argv[])
    }
    else
    {
-      //std::cerr << "No output XML file specified" << std::endl;
-      //return 1;
+      std::cerr << "No output XML file specified" << std::endl;
+      return 1;
    }
    if(vm.count("verbose"))
    {

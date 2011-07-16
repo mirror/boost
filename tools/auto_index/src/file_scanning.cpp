@@ -144,7 +144,7 @@ void scan_file(const std::string& file)
    if(verbose)
       std::cout << "Scanning file... " << file << std::endl;
    std::string text;
-   std::ifstream is(file);
+   std::ifstream is(file.c_str());
    if(!is.peek() || !is.good())
       throw std::runtime_error(std::string("Unable to read from file: ") + file);
    load_file(text, is);
@@ -331,7 +331,7 @@ void process_script(const std::string& script)
       std::cout << "Processing script " << script << std::endl;
    boost::smatch what;
    std::string line;
-   std::ifstream is(script);
+   std::ifstream is(script.c_str());
    if(is.bad() || !exists(boost::filesystem::path(script)))
    {
       throw std::runtime_error(std::string("Could not open script file: ") + script);

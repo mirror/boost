@@ -231,7 +231,7 @@ boost::tiny_xml::element_ptr generate_entry(const Range& range, const std::strin
          list->elements.push_back(item);
          if(preferred)
          {
-            para->elements.push_back(make_element("emphasis"));
+            para->elements.push_back(add_attribute(make_element("emphasis"), "role", "bold"));
             para = para->elements.back();
          }
          if(id.size())
