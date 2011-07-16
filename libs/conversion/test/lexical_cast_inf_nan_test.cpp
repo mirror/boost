@@ -18,7 +18,9 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <boost/cstdint.hpp>
+
+#include <boost/math/special_functions/sign.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
@@ -29,56 +31,112 @@
 using namespace boost;
 
 template <class T>
+bool is_pos_inf(T value)
+{
+    return (boost::math::isinf)(value) && !(boost::math::signbit)(value);
+}
+
+template <class T>
+bool is_neg_inf(T value)
+{
+    return (boost::math::isinf)(value) && (boost::math::signbit)(value);
+}
+
+template <class T>
+bool is_pos_nan(T value)
+{
+    return (boost::math::isnan)(value) && !(boost::math::signbit)(value);
+}
+
+template <class T>
+bool is_neg_nan(T value)
+{
+    return (boost::math::isnan)(value) && (boost::math::signbit)(value);
+}
+
+template <class T>
 void test_inf_nan_templated()
 {
     typedef T test_t;
 
-    BOOST_CHECK(lexical_cast<test_t>("inf") > (std::numeric_limits<test_t >::max)() );
-    BOOST_CHECK(lexical_cast<test_t>("INF") > (std::numeric_limits<test_t >::max)() );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("inf") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("INF") ) );
 
-    BOOST_CHECK(lexical_cast<test_t>("-inf") < -(std::numeric_limits<test_t >::max)() );
-    BOOST_CHECK(lexical_cast<test_t>("-INF") < -(std::numeric_limits<test_t >::max)() );
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>("-inf") ) );
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>("-INF") ) );
 
-    BOOST_CHECK(lexical_cast<test_t>("+inf") > (std::numeric_limits<test_t >::max)() );
-    BOOST_CHECK(lexical_cast<test_t>("+INF") > (std::numeric_limits<test_t >::max)() );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("+inf") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("+INF") ) );
 
-    BOOST_CHECK(lexical_cast<test_t>("infinity") > (std::numeric_limits<test_t >::max)() );
-    BOOST_CHECK(lexical_cast<test_t>("INFINITY") > (std::numeric_limits<test_t >::max)() );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("infinity") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("INFINITY") ) );
 
-    BOOST_CHECK(lexical_cast<test_t>("-infinity") < -(std::numeric_limits<test_t >::max)() );
-    BOOST_CHECK(lexical_cast<test_t>("-INFINITY") < -(std::numeric_limits<test_t >::max)() );
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>("-infinity") ) );
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>("-INFINITY") ) );
 
-    BOOST_CHECK(lexical_cast<test_t>("+infinity") > (std::numeric_limits<test_t >::max)() );
-    BOOST_CHECK(lexical_cast<test_t>("+INFINITY") > (std::numeric_limits<test_t >::max)() );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("+infinity") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>("+INFINITY") ) );
 
-    BOOST_CHECK( lexical_cast<test_t>("nan") != lexical_cast<test_t>("nan") );
-    BOOST_CHECK( lexical_cast<test_t>("NAN") != lexical_cast<test_t>("NAN") );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>("nan") ) );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>("NAN") ) );
 
-    BOOST_CHECK( lexical_cast<test_t>("-nan") != lexical_cast<test_t>("-nan") );
-    BOOST_CHECK( lexical_cast<test_t>("-NAN") != lexical_cast<test_t>("-NAN") );
+    BOOST_CHECK( is_neg_nan( lexical_cast<test_t>("-nan") ) );
+    BOOST_CHECK( is_neg_nan( lexical_cast<test_t>("-NAN") ) );
 
-    BOOST_CHECK( lexical_cast<test_t>("+nan") != lexical_cast<test_t>("+nan") );
-    BOOST_CHECK( lexical_cast<test_t>("+NAN") != lexical_cast<test_t>("+NAN") );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>("+nan") ) );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>("+NAN") ) );
 
-    BOOST_CHECK( lexical_cast<test_t>("nan()") != lexical_cast<test_t>("nan()") );
-    BOOST_CHECK( lexical_cast<test_t>("NAN(some string)") != lexical_cast<test_t>("NAN(some string)") );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>("nan()") ) );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>("NAN(some string)") ) );
     BOOST_CHECK_THROW( lexical_cast<test_t>("NAN(some string"), bad_lexical_cast );
 
-    BOOST_CHECK(lexical_cast<std::string>( -std::numeric_limits<test_t >::infinity()) == "-inf" );
+    BOOST_CHECK(lexical_cast<std::string>( (boost::math::changesign)(std::numeric_limits<test_t >::infinity()))
+                == "-inf" );
     BOOST_CHECK(lexical_cast<std::string>( std::numeric_limits<test_t >::infinity()) == "inf" );
     BOOST_CHECK(lexical_cast<std::string>( std::numeric_limits<test_t >::quiet_NaN()) == "nan" );
+    BOOST_CHECK(lexical_cast<std::string>(
+                (boost::math::changesign)(std::numeric_limits<test_t >::quiet_NaN()))
+                == "-nan" );
 
 #ifndef  BOOST_LCAST_NO_WCHAR_T
-    BOOST_CHECK(lexical_cast<test_t>(L"inf") > (std::numeric_limits<test_t >::max)() );
-    BOOST_CHECK(lexical_cast<test_t>(L"INF") > (std::numeric_limits<test_t >::max)() );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"inf") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"INF") ) );
 
-    BOOST_CHECK( lexical_cast<test_t>(L"nan") != lexical_cast<test_t>(L"nan") );
-    BOOST_CHECK( lexical_cast<test_t>(L"NAN") != lexical_cast<test_t>(L"NAN") );
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>(L"-inf") ) );
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>(L"-INF") ) );
 
-    BOOST_CHECK(lexical_cast<std::wstring>( -std::numeric_limits<test_t >::infinity()) == L"-inf" );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"+inf") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"+INF") ) );
+
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"infinity") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"INFINITY") ) );
+
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>(L"-infinity") ) );
+    BOOST_CHECK( is_neg_inf( lexical_cast<test_t>(L"-INFINITY") ) );
+
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"+infinity") ) );
+    BOOST_CHECK( is_pos_inf( lexical_cast<test_t>(L"+INFINITY") ) );
+
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>(L"nan") ) );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>(L"NAN") ) );
+
+    BOOST_CHECK( is_neg_nan( lexical_cast<test_t>(L"-nan") ) );
+    BOOST_CHECK( is_neg_nan( lexical_cast<test_t>(L"-NAN") ) );
+
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>(L"+nan") ) );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>(L"+NAN") ) );
+
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>(L"nan()") ) );
+    BOOST_CHECK( is_pos_nan( lexical_cast<test_t>(L"NAN(some string)") ) );
+    BOOST_CHECK_THROW( lexical_cast<test_t>(L"NAN(some string"), bad_lexical_cast );
+
+    BOOST_CHECK(lexical_cast<std::wstring>( (boost::math::changesign)(std::numeric_limits<test_t >::infinity()))
+                == L"-inf" );
     BOOST_CHECK(lexical_cast<std::wstring>( std::numeric_limits<test_t >::infinity()) == L"inf" );
     BOOST_CHECK(lexical_cast<std::wstring>( std::numeric_limits<test_t >::quiet_NaN()) == L"nan" );
-
+    BOOST_CHECK(lexical_cast<std::wstring>(
+                (boost::math::changesign)(std::numeric_limits<test_t >::quiet_NaN()))
+                == L"-nan" );
 #endif
 }
 

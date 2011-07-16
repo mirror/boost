@@ -40,6 +40,8 @@
 #include <boost/type_traits/make_unsigned.hpp>
 #include <boost/type_traits/is_signed.hpp>
 #include <boost/call_traits.hpp>
+#include <boost/math/special_functions/sign.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
 #include <boost/detail/workaround.hpp>
@@ -767,7 +769,7 @@ namespace boost
                 }
 
                 if( !has_minus ) value = std::numeric_limits<T>::quiet_NaN();
-                else value = -std::numeric_limits<T>::quiet_NaN();
+                else value = (boost::math::changesign) (std::numeric_limits<T>::quiet_NaN());
                 return true;
             } else
             if (( /* 'INF' or 'inf' */
@@ -784,7 +786,7 @@ namespace boost
              )
             {
                 if( !has_minus ) value = std::numeric_limits<T>::infinity();
-                else value = -std::numeric_limits<T>::infinity();
+                else value = (boost::math::changesign) (std::numeric_limits<T>::infinity());
                 return true;
             }
 
@@ -810,49 +812,67 @@ namespace boost
                                , "INFINITY", "infinity"
                                , '(', ')');
         }
-
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template <class T>
         bool put_inf_nan(wchar_t* begin, wchar_t*& end, const T& value)
         {
             using namespace std;
-            if (value != value)
+            if ( (boost::math::isnan)(value) )
             {
-                memcpy(begin,L"nan", sizeof(L"nan"));
-                end = begin + 3;
+                if ( (boost::math::signbit)(value) )
+                {
+                    memcpy(begin,L"-nan", sizeof(L"-nan"));
+                    end = begin + 4;
+                } else
+                {
+                    memcpy(begin,L"nan", sizeof(L"nan"));
+                    end = begin + 3;
+                }
                 return true;
-            } else if ( value > numeric_limits<T>::max() )
+            } else if ( (boost::math::isinf)(value) )
             {
-                memcpy(begin,L"inf", sizeof(L"inf"));
-                end = begin + 3;
-                return true;
-            } else if ( value < -numeric_limits<T>::max() )
-            {
-                memcpy(begin,L"-inf", sizeof(L"-inf"));
-                end = begin + 4;
+                if ( (boost::math::signbit)(value) )
+                {
+                    memcpy(begin,L"-inf", sizeof(L"-inf"));
+                    end = begin + 4;
+                } else
+                {
+                    memcpy(begin,L"inf", sizeof(L"inf"));
+                    end = begin + 3;
+                }
                 return true;
             }
 
             return false;
         }
-
+#endif
         template <class CharT, class T>
         bool put_inf_nan(CharT* begin, CharT*& end, const T& value)
         {
             using namespace std;
-            if (value != value)
+            if ( (boost::math::isnan)(value) )
             {
-                memcpy(begin,"nan", sizeof("nan"));
-                end = begin + 3;
+                if ( (boost::math::signbit)(value) )
+                {
+                    memcpy(begin,"-nan", sizeof("-nan"));
+                    end = begin + 4;
+                } else
+                {
+                    memcpy(begin,"nan", sizeof("nan"));
+                    end = begin + 3;
+                }
                 return true;
-            } else if ( value > numeric_limits<T>::max() )
+            } else if ( (boost::math::isinf)(value) )
             {
-                memcpy(begin,"inf", sizeof("inf"));
-                end = begin + 3;
-                return true;
-            } else if ( value < -numeric_limits<T>::max() )
-            {
-                memcpy(begin,"-inf", sizeof("-inf"));
-                end = begin + 4;
+                if ( (boost::math::signbit)(value) )
+                {
+                    memcpy(begin,"-inf", sizeof("-inf"));
+                    end = begin + 4;
+                } else
+                {
+                    memcpy(begin,"inf", sizeof("inf"));
+                    end = begin + 3;
+                }
                 return true;
             }
 
@@ -1095,12 +1115,9 @@ namespace boost
              * with long doubles (and with doubles if sizeof(double)==sizeof(long double)).
              */
             long double result = std::pow(10.0L, pow_of_10) * mantissa;
-            value = ( has_minus ? -1 * result : result);
+            value = static_cast<T>( has_minus ? -1 * result : result);
 
-            if ( value > (std::numeric_limits<T>::max)()        // is it +inf
-                    || value < -(std::numeric_limits<T>::max)() // is it -inf
-                    || value != value)                          // is it NaN
-                return false;
+            if ( (boost::math::isinf)(value) || (boost::math::isnan)(value) ) return false;
 
             return true;
         }
