@@ -14,7 +14,6 @@ import os ;
 import toolset ;
 import project ;
 import feature ;
-
 # Features
 
 feature.feature boost.locale.iconv : on off : optional propagated ;
@@ -129,8 +128,8 @@ rule configure-full ( properties * : flags-only )
         
     if ! $(found-iconv) && ! $(found-icu) && ! <target-os>windows in $(properties) && ! <target-os>cygwin in $(properties) 
     {
-        ECHO "error: Boost.Locale needs either iconv or ICU library to be built." ;
-        EXIT ;
+        ECHO "- Boost.Locale needs either iconv or ICU library to be built." ;
+        result += <build>no ;
     }
     
     if ! <boost.locale.std> in $(properties:G)
