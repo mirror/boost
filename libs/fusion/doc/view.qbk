@@ -43,7 +43,7 @@ lazy nature make them very cheap to copy and be passed around by value.
 
 [heading Model of]
 
-* __forward_sequence__
+* __random_access_sequence__
 
 [variablelist Notation
     [[`S`]              [A `single_view` type]]
@@ -54,7 +54,7 @@ lazy nature make them very cheap to copy and be passed around by value.
 [heading Expression Semantics]
 
 Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
+defined in __random_access_sequence__.
 
 [table
     [[Expression]           [Semantics]]

@@ -27,7 +27,7 @@
 <a name="fusion.view.zip_view"></a><a class="link" href="zip_view.html" title="zip_view">zip_view</a>
 </h3></div></div></div>
 <a name="fusion.view.zip_view.description"></a><h5>
-<a name="id914976"></a>
+<a name="fusion.view.zip_view.description-heading"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.description">Description</a>
       </h5>
 <p>
@@ -35,24 +35,24 @@
         which iterates over a collection of <a class="link" href="../sequence.html" title="Sequence">Sequence</a>(s)
         in parallel. A <code class="computeroutput"><span class="identifier">zip_view</span></code> is
         constructed from a <a class="link" href="../sequence.html" title="Sequence">Sequence</a> of references
-        to the component <span class="underline">_sequence</span>_s.
+        to the component __sequence__s.
       </p>
 <a name="fusion.view.zip_view.header"></a><h5>
-<a name="id915023"></a>
+<a name="fusion.view.zip_view.header-heading"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.zip_view.synopsis"></a><h5>
-<a name="id915131"></a>
+<a name="fusion.view.zip_view.synopsis-heading"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequences</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">zip_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.zip_view.template_parameters"></a><h5>
-<a name="id915182"></a>
+<a name="fusion.view.zip_view.template_parameters-heading"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -87,7 +87,7 @@
 <td>
                 <p>
                   A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                  Sequence</a> of references to other Fusion <span class="underline">_sequence</span>_s
+                  Sequence</a> of references to other Fusion __sequence__s
                 </p>
               </td>
 <td>
@@ -95,7 +95,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.view.zip_view.model_of"></a><h5>
-<a name="id915276"></a>
+<a name="fusion.view.zip_view.model_of-heading"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
@@ -124,7 +124,7 @@
 </dl>
 </div>
 <a name="fusion.view.zip_view.expression_semantics"></a><h5>
-<a name="id915414"></a>
+<a name="fusion.view.zip_view.expression_semantics-heading"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
@@ -159,7 +159,7 @@
 <td>
                 <p>
                   Creates a <code class="computeroutput"><span class="identifier">zip_view</span></code>
-                  given a sequence of references to the component <span class="underline">_sequence</span>_s.
+                  given a sequence of references to the component __sequence__s.
                 </p>
               </td>
 </tr>
@@ -195,7 +195,7 @@
 </tbody>
 </table></div>
 <a name="fusion.view.zip_view.example"></a><h5>
-<a name="id915640"></a>
+<a name="fusion.view.zip_view.example-heading"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec1</span><span class="special">;</span>
@@ -203,8 +203,8 @@
 <span class="identifier">vec1</span> <span class="identifier">v1</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">vec2</span> <span class="identifier">v2</span><span class="special">(</span><span class="char">'a'</span><span class="special">,</span><span class="char">'b'</span><span class="special">);</span>
 <span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="identifier">vec1</span><span class="special">&amp;,</span> <span class="identifier">vec2</span><span class="special">&amp;&gt;</span> <span class="identifier">sequences</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">zip_view</span><span class="special">&lt;</span><span class="identifier">sequences</span><span class="special">&gt;(</span><span class="identifier">sequences</span><span class="special">(</span><span class="identifier">v1</span><span class="special">,</span> <span class="identifier">v2</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// ((1 a) (2 b))
-</span></pre>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">zip_view</span><span class="special">&lt;</span><span class="identifier">sequences</span><span class="special">&gt;(</span><span class="identifier">sequences</span><span class="special">(</span><span class="identifier">v1</span><span class="special">,</span> <span class="identifier">v2</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// ((1 a) (2 b))</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
