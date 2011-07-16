@@ -259,13 +259,13 @@ int cpp_main(int argc, char* argv[])
    //
    if(argc > 1)
    {
-      fs::path p(argv[1], fs::native);
+      fs::path p(argv[1]);
       config_path = p / "libs" / "config" / "test" ;
    }
    else
    {
       // try __FILE__:
-      fs::path p(__FILE__, fs::native);
+      fs::path p(__FILE__);
       config_path = p.branch_path().branch_path() / "test";
    }
    std::cout << "Info: Boost.Config test path set as: " << config_path.string() << std::endl;
