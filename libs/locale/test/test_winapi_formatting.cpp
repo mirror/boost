@@ -22,6 +22,7 @@ int main()
 #include <iomanip>
 #include "test_locale.hpp"
 #include "test_locale_tools.hpp"
+#include "../src/win32/lcid.hpp"
 #include <iostream>
 
 #include <time.h>
@@ -238,6 +239,10 @@ int main()
         for(unsigned i=0;i<sizeof(names)/sizeof(names[9]);i++) {
             name = names[i];
             std::cout << "- " << name << " locale" << std::endl;
+            if(boost::locale::impl_win::locale_to_lcid(name) == 0) {
+                std::cout << "-- not supported, skipping" << std::endl;
+                continue;
+            }
             std::locale l1=gen(name);
             std::cout << "-- UTF-8" << std::endl;
             test_by_char<char>(l1,name,lcids[i]);
