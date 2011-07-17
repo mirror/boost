@@ -306,6 +306,7 @@ void test_translate(std::string original,std::string expected,std::locale const 
     #endif
 }
 
+bool iso_8859_8_not_supported = false;
 
 
 int main(int argc,char **argv)
@@ -348,7 +349,21 @@ int main(int argc,char **argv)
             std::string locales[] = { "he_IL.UTF-8", "he_IL.ISO8859-8" };
 
             for(unsigned i=0;i<sizeof(locales)/sizeof(locales[0]);i++){
-                std::locale l=g(locales[i]);
+                std::locale l;
+                
+                if(i==1) {
+                    try {
+                        l = g(locales[i]);
+                    }
+                    catch(boost::locale::conv::invalid_charset_error const &e) {
+                        std::cout << "Looks like ISO-8859-8 is not supported! skipping" << std::endl;
+                        iso_8859_8_not_supported = true;
+                        continue;
+                    }
+                }
+                else {
+                        l = g(locales[i]);
+                }
                 
                 std::cout << "  Testing "<<locales[i]<<std::endl;
                 std::cout << "    single forms" << std::endl;
@@ -435,8 +450,13 @@ int main(int argc,char **argv)
             TEST(file_loader_is_actually_called);
             TEST(bl::translate("hello").str(l)=="שלום");
         }
-        std::cout << "Testing non-US-ASCII keys" << std::endl; 
+        if(iso_8859_8_not_supported)
         {
+            std::cout << "ISO 8859-8 not supported so skipping non-US-ASCII keys" << std::endl; 
+        }
+        else 
+        {
+            std::cout << "Testing non-US-ASCII keys" << std::endl; 
             std::cout << "  UTF-8 keys" << std::endl; 
             {
                 boost::locale::generator g;
