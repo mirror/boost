@@ -15,7 +15,7 @@
       <year>2002</year> <year>2004</year> <year>2006</year> <holder>Joel de Guzman,
       Eric Niebler</holder>
     </copyright>
-    <legalnotice>
+    <legalnotice id="legal.quickbook">
       <para>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <ulink url="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</ulink>)

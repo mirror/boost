@@ -17,7 +17,7 @@
     <copyright>
       <year>1963</year> <holder>Jane Doe</holder>
     </copyright>
-    <legalnotice>
+    <legalnotice id="legal.thing2">
       <para>
         Public Domain
       </para>

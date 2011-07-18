@@ -325,7 +325,7 @@ namespace quickbook
 
         if (!license.empty())
         {
-            tmp << "    <legalnotice>\n"
+            tmp << "    <legalnotice id=\"legal." << actions.doc_id << "\">\n"
                 << "      <para>\n"
                 << "        " << doc_info_output(license, 103) << "\n"
                 << "      </para>\n"
