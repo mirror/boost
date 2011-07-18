@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<header name="boost/proto/functional/utility.hpp">
+<header name="boost/proto/functional/std/utility.hpp">
   <para>Defines Proto callables <computeroutput><classname>boost::proto::functional::make_pair</classname></computeroutput>,
   <computeroutput><classname>boost::proto::functional::first</classname></computeroutput> and
   <computeroutput><classname>boost::proto::functional::second</classname></computeroutput>.</para>
