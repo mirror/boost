@@ -31,12 +31,14 @@ exe has_iconv : has_iconv_libc_obj ;
 explicit has_iconv ;
 
 ICONV_PATH = [ modules.peek : ICONV_PATH ] ;
+
 lib iconv 
   : 
   : <search>$(ICONV_PATH)/lib <link>shared <runtime-link>shared
   :
   : <include>$(ICONV_PATH)/include 
   ;
+
 explicit iconv ;
 
 obj has_iconv_libc_ext : ../build/has_iconv.cpp iconv ;
@@ -173,8 +175,8 @@ else
     
 }
 
-obj has_icu_obj     : ../build/has_icu_test.cpp ;
-obj has_icu64_obj   : ../build/has_icu_test.cpp ;
+obj has_icu_obj     : ../build/has_icu_test.cpp : $(ICU_OPTS)   ;
+obj has_icu64_obj   : ../build/has_icu_test.cpp : $(ICU64_OPTS) ;
 
 exe has_icu   : has_icu_obj   : $(ICU_OPTS)   ;
 exe has_icu64 : has_icu64_obj : $(ICU64_OPTS) ;
