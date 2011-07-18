@@ -231,7 +231,7 @@
     </listitem>
     <listitem>
       <simpara>
-        <footnote>
+        <footnote id="list_test.f0">
         <para>
           Footnote
         </para>

@@ -76,7 +76,7 @@
   </bridgehead>
   <blockquote>
     <para>
-      Blockquote containing a footnote<footnote>
+      Blockquote containing a footnote<footnote id="various_blocks.f0">
       <para>
         Here it is!
       </para>

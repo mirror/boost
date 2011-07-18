@@ -56,6 +56,7 @@ namespace quickbook
 
     // temporary or global state
         , callout_id_count(0)
+        , footnote_id_count(0)
         , template_depth(0)
         , templates()
         , error_count(0)

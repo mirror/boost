@@ -404,7 +404,7 @@ the true business precept.]
         </para>
         <para>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
-          are much stricter<footnote>
+          are much stricter<footnote id="quickbook.f0">
           <para>
             Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
             for sharing these samples and teaching me these obscure formatting rules.
@@ -1030,7 +1030,7 @@ escape (no processing/formatting)
 <programlisting><!--quickbook-escape-prefix-->[footnote A sample footnote]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
-          will generate this<footnote>
+          will generate this<footnote id="quickbook.f1">
           <para>
             A sample footnote
           </para>

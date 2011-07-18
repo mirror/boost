@@ -94,6 +94,7 @@ namespace quickbook
 
     // temporary or global state
         int                     callout_id_count;
+        int                     footnote_id_count;
         int                     template_depth;
         template_stack          templates;
         int                     error_count;

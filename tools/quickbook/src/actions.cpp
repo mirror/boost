@@ -84,6 +84,7 @@ namespace quickbook
     void anchor_action(quickbook::actions&, value);
     void link_action(quickbook::actions&, value);
     void phrase_action(quickbook::actions&, value);
+    void footnote_action(quickbook::actions&, value);
     void raw_phrase_action(quickbook::actions&, value);
     void source_mode_action(quickbook::actions&, value);
     void do_template_action(quickbook::actions&, value, file_position);
@@ -161,8 +162,9 @@ namespace quickbook
         case phrase_tags::strikethrough:
         case phrase_tags::quote:
         case phrase_tags::replaceable:
-        case phrase_tags::footnote:
             return phrase_action(actions, v);
+        case phrase_tags::footnote:
+            return footnote_action(actions, v);
         case phrase_tags::escape:
             return raw_phrase_action(actions, v);
         case source_mode_tags::cpp:
@@ -255,6 +257,22 @@ namespace quickbook
 
         value_consumer values = phrase;
         actions.phrase << markup.pre << values.consume().get_boostbook() << markup.post;
+        values.finish();
+    }
+
+    void footnote_action(quickbook::actions& actions, value phrase)
+    {
+        if (actions.suppress) return;
+        write_anchors(actions, actions.phrase);
+
+        value_consumer values = phrase;
+        actions.phrase
+            << "<footnote id=\""
+            << actions.doc_id << ".f"
+            << boost::lexical_cast<std::string>(actions.footnote_id_count++)
+            << "\"><para>"
+            << values.consume().get_boostbook()
+            << "</para></footnote>";
         values.finish();
     }
 
