@@ -1131,11 +1131,6 @@ namespace quickbook
         }
     }
 
-    namespace detail
-    {
-        int callout_id = 0;
-    }
-
     void do_template_action(quickbook::actions& actions, value template_list,
             file_position pos)
     {
@@ -1226,7 +1221,7 @@ namespace quickbook
                 for(unsigned int i = 0; i < size; ++i)
                 {
                     std::string callout_id = actions.doc_id +
-                        boost::lexical_cast<std::string>(detail::callout_id + i);
+                        boost::lexical_cast<std::string>(actions.callout_id_count + i);
 
                     std::string code;
                     code += "'''";
@@ -1297,7 +1292,7 @@ namespace quickbook
             BOOST_FOREACH(value c, symbol->callouts)
             {
                 std::string callout_id = actions.doc_id +
-                    boost::lexical_cast<std::string>(detail::callout_id++);
+                    boost::lexical_cast<std::string>(actions.callout_id_count++);
 
                 std::string callout_value;
                 actions.push();

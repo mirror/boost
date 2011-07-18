@@ -93,6 +93,7 @@ namespace quickbook
         std::stack<string_symbols> macro_stack;
 
     // temporary or global state
+        int                     callout_id_count;
         int                     template_depth;
         template_stack          templates;
         int                     error_count;

@@ -55,6 +55,7 @@ namespace quickbook
         , source_mode("c++")
 
     // temporary or global state
+        , callout_id_count(0)
         , template_depth(0)
         , templates()
         , error_count(0)
