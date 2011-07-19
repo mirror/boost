@@ -99,7 +99,7 @@ public:
     {
         set_partition_size(npartition_sz);
         allocated_blocks.push_back(
-            std::make_pair<void*, std::size_t>(block, nsz) );
+            std::pair<void*, std::size_t>(block, nsz) );
         boost::simple_segregated_storage<std::size_t>::add_block(
             block, nsz, npartition_sz );
         // Post: !empty()
@@ -113,7 +113,7 @@ public:
     {
         set_partition_size(npartition_sz);
         allocated_blocks.push_back(
-            std::make_pair<void*, std::size_t>(block, nsz) );
+            std::pair<void*, std::size_t>(block, nsz) );
         boost::simple_segregated_storage<std::size_t>::add_ordered_block(
             block, nsz, npartition_sz );
         // Post: !empty()
