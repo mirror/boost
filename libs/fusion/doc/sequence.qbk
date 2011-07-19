@@ -1425,12 +1425,19 @@ operators for free.
 
 [section I/O]
 
-The I/O operators: `<<` and `>>` work generically on all Fusion sequences.
-The global `operator<<` has been overloaded for generic output streams such
-that __sequence__(s) are output by recursively calling `operator<<` for each
-element. Analogously, the global `operator>>` has been overloaded to
-extract __sequence__(s) from generic input streams by recursively calling
-`operator>>` for each element.
+The I/O operators: `<<` and `>>` work generically on all Fusion
+sequences. The I/O operators are overloaded in namespace `boost::fusion`
+[footnote __sequences__ and __views__ residing in different namespaces
+will have to either provide their own I/O operators (possibly forwarding
+to fusion's I/O operators) or hoist fusion's I/O operators (using
+declaration), in their own namespaces for proper argument dependent
+lookup.]
+
+The `operator<<` has been overloaded for generic output streams such
+that __sequence__(s) are output by recursively calling `operator<<` for
+each element. Analogously, the global `operator>>` has been overloaded
+to extract __sequence__(s) from generic input streams by recursively
+calling `operator>>` for each element.
 
 The default delimiter between the elements is space, and the __sequence__
 is enclosed in parenthesis. For Example:
