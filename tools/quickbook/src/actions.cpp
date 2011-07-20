@@ -1439,6 +1439,11 @@ namespace quickbook
                     detail::make_identifier(title));
             }
         }
+        else if (has_title)
+        {
+            table_id = actions.doc_id + ".t" +
+                boost::lexical_cast<std::string>(actions.table_id_count++);
+        }
 
         // Emulating the old behaviour which used the width of the final
         // row for span_count.

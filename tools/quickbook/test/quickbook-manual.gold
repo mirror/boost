@@ -459,7 +459,7 @@ the true business precept.]
             </simpara>
           </listitem>
         </itemizedlist>
-        <table frame="all">
+        <table frame="all" id="quickbook.t0">
           <title>More Formatting Samples</title>
           <tgroup cols="2">
             <thead>
@@ -779,7 +779,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
           A C++ comment <code><phrase role="comment">// looks like this</phrase></code>
           whereas a Python comment <code><phrase role="comment">#looks like this</phrase></code>.
         </para>
-        <table frame="all">
+        <table frame="all" id="quickbook.t1">
           <title>Supported Source Modes</title>
           <tgroup cols="2">
             <thead>
@@ -1873,7 +1873,7 @@ sf_logo
         <para>
           Quickbook has some predefined macros that you can already use.
         </para>
-        <table frame="all">
+        <table frame="all" id="quickbook.t2">
           <title>Predefined Macros</title>
           <tgroup cols="3">
             <thead>
@@ -2330,7 +2330,7 @@ for the journey to old age.]]]
         <para>
           will generate:
         </para>
-        <table frame="all">
+        <table frame="all" id="quickbook.t3">
           <title>A Simple Table</title>
           <tgroup cols="3">
             <thead>
@@ -2439,7 +2439,7 @@ for the journey to old age.]]]
         <para>
           and thus:
         </para>
-        <table frame="all">
+        <table frame="all" id="quickbook.t4">
           <title>Table with fat cells</title>
           <tgroup cols="2">
             <thead>
@@ -2513,7 +2513,7 @@ for the journey to old age.]]]
     ]
 ]
 <!--quickbook-escape-postfix--></programlisting>
-        <table frame="all">
+        <table frame="all" id="quickbook.t5">
           <title>Table with code</title>
           <tgroup cols="2">
             <thead>
@@ -3191,7 +3191,7 @@ boostbook standalone
     <para>
       [cpp]
     </para>
-    <table frame="all">
+    <table frame="all" id="quickbook.t6">
       <title>Syntax Compendium</title>
       <tgroup cols="3">
         <thead>
