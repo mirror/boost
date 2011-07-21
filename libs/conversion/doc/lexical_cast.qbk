@@ -73,7 +73,7 @@ The following example uses numeric data in a string expression:
 [endsect]
 
 [section Synopsis]
-Library features defined in [@../../boost/lexical_cast.hpp boost/lexical_cast.hpp]:
+Library features defined in [@http://www.boost.org/boost/lexical_cast.hpp boost/lexical_cast.hpp]:
 ``
     namespace boost
     {
