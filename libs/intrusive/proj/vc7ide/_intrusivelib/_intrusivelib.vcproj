@@ -291,17 +291,17 @@
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\workaround.hpp">
 				</File>
+				<Filter
+					Name="doc"
+					Filter="">
+					<File
+						RelativePath="..\..\..\doc\intrusive.qbk">
+					</File>
+					<File
+						RelativePath="..\..\..\doc\Jamfile.v2">
+					</File>
+				</Filter>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="doc"
-			Filter="">
-			<File
-				RelativePath="..\..\..\doc\intrusive.qbk">
-			</File>
-			<File
-				RelativePath="..\..\..\doc\Jamfile.v2">
-			</File>
 		</Filter>
 		<Filter
 			Name="Test headers"

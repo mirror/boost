@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2006-2009
+// (C) Copyright Ion Gaztanaga  2006-2011
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -51,7 +51,7 @@ class shared_memory_data
 #include <boost/interprocess/allocators/allocator.hpp>
 
 //Definition of the shared memory friendly intrusive list
-typedef ip::list<shared_memory_data> shm_list_t;
+typedef list<shared_memory_data> intrusive_list_t;
 
 int main()
 {
@@ -80,12 +80,14 @@ int main()
       for(int i = 0; i < MaxElem; ++i)    (*pshm_vect)[i].set(i);
 
       //Now create the shared memory intrusive list
-      shm_list_t *plist = shm.construct<shm_list_t>(ip::anonymous_instance)();
+      intrusive_list_t *plist = shm.construct<intrusive_list_t>(ip::anonymous_instance)();
+
+      //Insert objects stored in shared memory vector in the intrusive list
       plist->insert(plist->end(), pshm_vect->begin(), pshm_vect->end());
 
       //Check all the inserted nodes
       int checker = 0;
-      for( shm_list_t::const_iterator it = plist->begin(), itend(plist->end())
+      for( intrusive_list_t::const_iterator it = plist->begin(), itend(plist->end())
          ; it != itend; ++it, ++checker){
          if(it->get() != checker)   return false;
       }

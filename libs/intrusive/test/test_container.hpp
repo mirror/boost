@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2007-2009
+// (C) Copyright Ion Gaztanaga  2007-2011
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -15,6 +15,7 @@
 
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/intrusive/detail/mpl.hpp>
+#include <boost/move/move.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -78,55 +79,67 @@ template< class Container, class Data >
 void test_sequence_container(Container & c, Data & d)
 {
    assert( d.size() > 2 );
-
-   c.clear();
-
-   BOOST_TEST( c.size() == 0 );
-   BOOST_TEST( c.empty() );
-
-
    {
-   typename Data::iterator i = d.begin();
-   c.insert( c.begin(), *i );
-   c.insert( c.end(), *(++i) );
+      c.clear();
+
+      BOOST_TEST( c.size() == 0 );
+      BOOST_TEST( c.empty() );
+
+
+      {
+      typename Data::iterator i = d.begin();
+      c.insert( c.begin(), *i );
+      c.insert( c.end(), *(++i) );
+      }
+
+      BOOST_TEST( c.size() == 2 );
+      BOOST_TEST( !c.empty() );
+
+      typename Container::iterator i;
+      i = c.erase( c.begin() );
+
+      BOOST_TEST( c.size() == 1 );
+
+      {
+      typename Data::iterator i = d.begin();
+      ++++i;
+      c.insert( c.begin(), *(i) );
+      }
+
+      i = c.erase( c.begin(), c.end() );
+      BOOST_TEST( i == c.end() );
+
+      BOOST_TEST( c.empty() );
+
+      c.insert( c.begin(), *d.begin() );
+
+      BOOST_TEST( c.size() == 1 );
+
+      BOOST_TEST( c.begin() != c.end() );
+
+      i = c.erase_and_dispose( c.begin(), detail::null_disposer() );
+      BOOST_TEST( i == c.begin() );
+
+      c.assign(d.begin(), d.end());
+
+      BOOST_TEST( c.size() == d.size() );
+
+      c.clear();
+
+      BOOST_TEST( c.size() == 0 );
+      BOOST_TEST( c.empty() );
    }
-
-   BOOST_TEST( c.size() == 2 );
-   BOOST_TEST( !c.empty() );
-
-   typename Container::iterator i;
-   i = c.erase( c.begin() );
-
-   BOOST_TEST( c.size() == 1 );
-
    {
-   typename Data::iterator i = d.begin();
-   ++++i;
-   c.insert( c.begin(), *(i) );
+      c.clear();
+      c.insert( c.begin(), d.begin(), d.end() );
+      Container move_c(::boost::move(c));
+      BOOST_TEST( move_c.size() == d.size() );
+      BOOST_TEST( c.empty());
+
+      c = ::boost::move(move_c);
+      BOOST_TEST( c.size() == d.size() );
+      BOOST_TEST( move_c.empty());
    }
-
-   i = c.erase( c.begin(), c.end() );
-   BOOST_TEST( i == c.end() );
-
-   BOOST_TEST( c.empty() );
-
-   c.insert( c.begin(), *d.begin() );
-
-   BOOST_TEST( c.size() == 1 );
-
-   BOOST_TEST( c.begin() != c.end() );
-
-   i = c.erase_and_dispose( c.begin(), detail::null_disposer() );
-   BOOST_TEST( i == c.begin() );
-
-   c.assign(d.begin(), d.end());
-
-   BOOST_TEST( c.size() == d.size() );
-
-   c.clear();
-
-   BOOST_TEST( c.size() == 0 );
-   BOOST_TEST( c.empty() );
 }
 
 template< class Container, class Data >
@@ -212,42 +225,55 @@ void test_common_unordered_and_associative_container(Container & c, Data & d, bo
 template< class Container, class Data >
 void test_common_unordered_and_associative_container(Container & c, Data & d)
 {
-   {
    typedef typename Container::size_type  size_type;
-
-   assert( d.size() > 2 );
-
-   c.clear();
-   c.insert(d.begin(), d.end());
-
-   for( typename Data::const_iterator di = d.begin(), de = d.end();
-      di != de; ++di )
    {
-      BOOST_TEST( c.find(*di) != c.end() );
+      assert( d.size() > 2 );
+
+      c.clear();
+      c.insert(d.begin(), d.end());
+
+      for( typename Data::const_iterator di = d.begin(), de = d.end();
+         di != de; ++di )
+      {
+         BOOST_TEST( c.find(*di) != c.end() );
+      }
+   
+      typename Data::const_iterator db = d.begin();
+      typename Data::const_iterator da = db++;
+
+      size_type old_size = c.size();
+
+      c.erase(*da);
+      BOOST_TEST( c.size() == old_size-1 );
+      //This should erase nothing
+      size_type second_erase = c.erase_and_dispose( *da, detail::null_disposer() );
+      BOOST_TEST( second_erase == 0 );
+
+      BOOST_TEST( c.count(*da) == 0 );
+      BOOST_TEST( c.count(*db) != 0 );
+
+      BOOST_TEST( c.find(*da) == c.end() );
+      BOOST_TEST( c.find(*db) != c.end() );
+
+      BOOST_TEST( c.equal_range(*db).first != c.end() );
+      BOOST_TEST( c.equal_range(*da).first == c.equal_range(*da).second );
    }
+   {
+      c.clear();
+      c.insert( d.begin(), d.end() );
+      size_type orig_size = c.size();
+      Container move_c(::boost::move(c));
+      BOOST_TEST(orig_size == move_c.size());
+      BOOST_TEST( c.empty());
+      for( typename Data::const_iterator di = d.begin(), de = d.end();
+         di != de; ++di )
+      {  BOOST_TEST( move_c.find(*di) != move_c.end() );   }
 
-   typename Data::const_iterator db = d.begin();
-   typename Data::const_iterator da = db++;
-
-   size_type old_size = c.size();
-
-   c.erase(*da);
-   BOOST_TEST( c.size() == old_size-1 );
-   //This should not eras anyone
-   size_type second_erase = c.erase_and_dispose( *da, detail::null_disposer() );
-   BOOST_TEST( second_erase == 0 );
-
-   BOOST_TEST( c.count(*da) == 0 );
-   BOOST_TEST( c.count(*db) != 0 );
-
-   BOOST_TEST( c.find(*da) == c.end() );
-   BOOST_TEST( c.find(*db) != c.end() );
-
-   BOOST_TEST( c.equal_range(*db).first != c.end() );
-
-   c.clear();
-
-   BOOST_TEST( c.equal_range(*da).first == c.end() );
+      c = ::boost::move(move_c);
+      for( typename Data::const_iterator di = d.begin(), de = d.end();
+         di != de; ++di )
+      {  BOOST_TEST( c.find(*di) != c.end() );   }
+      BOOST_TEST( move_c.empty());
    }
    typedef detail::bool_<is_unordered<Container>::value> enabler;
    test_common_unordered_and_associative_container(c, d, enabler());
