@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>regex_grep (Deprecated)</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../deprecated_interfaces.html" title="Deprecated Interfaces">
 <link rel="prev" href="regex_format.html" title="regex_format (Deprecated)">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="regex_format.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../deprecated_interfaces.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="regex_split.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_regex.ref.deprecated_interfaces.regex_grep"></a><a class="link" href="regex_grep.html" title="regex_grep (Deprecated)">regex_grep
         (Deprecated)</a>
@@ -135,33 +135,33 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">map</span><span class="special">&gt;</span> 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 
-<span class="comment">// IndexClasses: 
-</span><span class="comment">// takes the contents of a file in the form of a string 
-</span><span class="comment">// and searches for all the C++ class definitions, storing 
-</span><span class="comment">// their locations in a map of strings/int's 
-</span><span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">map_type</span><span class="special">;</span> 
+<span class="comment">// IndexClasses: </span>
+<span class="comment">// takes the contents of a file in the form of a string </span>
+<span class="comment">// and searches for all the C++ class definitions, storing </span>
+<span class="comment">// their locations in a map of strings/int's </span>
+<span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">map_type</span><span class="special">;</span> 
 
 <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">re</span> <span class="special">=</span> 
-   <span class="comment">// possibly leading whitespace:   
-</span>   <span class="string">"^[[:space:]]*"</span> 
-   <span class="comment">// possible template declaration:
-</span>   <span class="string">"(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?"</span>
-   <span class="comment">// class or struct:
-</span>   <span class="string">"(class|struct)[[:space:]]*"</span> 
-   <span class="comment">// leading declspec macros etc:
-</span>   <span class="string">"("</span>
+   <span class="comment">// possibly leading whitespace:   </span>
+   <span class="string">"^[[:space:]]*"</span> 
+   <span class="comment">// possible template declaration:</span>
+   <span class="string">"(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?"</span>
+   <span class="comment">// class or struct:</span>
+   <span class="string">"(class|struct)[[:space:]]*"</span> 
+   <span class="comment">// leading declspec macros etc:</span>
+   <span class="string">"("</span>
       <span class="string">"\\&lt;\\w+\\&gt;"</span>
       <span class="string">"("</span>
          <span class="string">"[[:blank:]]*\\([^)]*\\)"</span>
       <span class="string">")?"</span>
       <span class="string">"[[:space:]]*"</span>
    <span class="string">")*"</span> 
-   <span class="comment">// the class name
-</span>   <span class="string">"(\\&lt;\\w*\\&gt;)[[:space:]]*"</span> 
-   <span class="comment">// template specialisation parameters
-</span>   <span class="string">"(&lt;[^;:{]+&gt;)?[[:space:]]*"</span>
-   <span class="comment">// terminate in { or :
-</span>   <span class="string">"(\\{|:[^;\\{()]*\\{)"</span><span class="special">;</span>
+   <span class="comment">// the class name</span>
+   <span class="string">"(\\&lt;\\w*\\&gt;)[[:space:]]*"</span> 
+   <span class="comment">// template specialisation parameters</span>
+   <span class="string">"(&lt;[^;:{]+&gt;)?[[:space:]]*"</span>
+   <span class="comment">// terminate in { or :</span>
+   <span class="string">"(\\{|:[^;\\{()]*\\{)"</span><span class="special">;</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">expression</span><span class="special">(</span><span class="identifier">re</span><span class="special">);</span> 
 <span class="keyword">class</span> <span class="identifier">IndexClassesPred</span> 
@@ -172,11 +172,11 @@
    <span class="identifier">IndexClassesPred</span><span class="special">(</span><span class="identifier">map_type</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">::</span><span class="identifier">const_iterator</span> <span class="identifier">b</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">m</span><span class="special">(</span><span class="identifier">a</span><span class="special">),</span> <span class="identifier">base</span><span class="special">(</span><span class="identifier">b</span><span class="special">)</span> <span class="special">{}</span> 
    <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span>  <span class="identifier">smatch</span><span class="special">&amp;</span> <span class="identifier">what</span><span class="special">)</span> 
    <span class="special">{</span> 
-      <span class="comment">// what[0] contains the whole string 
-</span>      <span class="comment">// what[5] contains the class name. 
-</span>      <span class="comment">// what[6] contains the template specialisation if any. 
-</span>      <span class="comment">// add class name and position to map: 
-</span>      <span class="identifier">m</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
+      <span class="comment">// what[0] contains the whole string </span>
+      <span class="comment">// what[5] contains the class name. </span>
+      <span class="comment">// what[6] contains the template specialisation if any. </span>
+      <span class="comment">// add class name and position to map: </span>
+      <span class="identifier">m</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
                <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span> <span class="special">-</span> <span class="identifier">base</span><span class="special">;</span> 
       <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span> 
    <span class="special">}</span> 
@@ -197,33 +197,33 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">map</span><span class="special">&gt;</span> 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 
-<span class="comment">// purpose: 
-</span><span class="comment">// takes the contents of a file in the form of a string 
-</span><span class="comment">// and searches for all the C++ class definitions, storing 
-</span><span class="comment">// their locations in a map of strings/int's 
-</span><span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">map_type</span><span class="special">;</span> 
+<span class="comment">// purpose: </span>
+<span class="comment">// takes the contents of a file in the form of a string </span>
+<span class="comment">// and searches for all the C++ class definitions, storing </span>
+<span class="comment">// their locations in a map of strings/int's </span>
+<span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">map_type</span><span class="special">;</span> 
 
 <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">re</span> <span class="special">=</span> 
-   <span class="comment">// possibly leading whitespace:   
-</span>   <span class="string">"^[[:space:]]*"</span> 
-   <span class="comment">// possible template declaration:
-</span>   <span class="string">"(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?"</span>
-   <span class="comment">// class or struct:
-</span>   <span class="string">"(class|struct)[[:space:]]*"</span> 
-   <span class="comment">// leading declspec macros etc:
-</span>   <span class="string">"("</span>
+   <span class="comment">// possibly leading whitespace:   </span>
+   <span class="string">"^[[:space:]]*"</span> 
+   <span class="comment">// possible template declaration:</span>
+   <span class="string">"(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?"</span>
+   <span class="comment">// class or struct:</span>
+   <span class="string">"(class|struct)[[:space:]]*"</span> 
+   <span class="comment">// leading declspec macros etc:</span>
+   <span class="string">"("</span>
       <span class="string">"\\&lt;\\w+\\&gt;"</span>
       <span class="string">"("</span>
          <span class="string">"[[:blank:]]*\\([^)]*\\)"</span>
       <span class="string">")?"</span>
       <span class="string">"[[:space:]]*"</span>
    <span class="string">")*"</span> 
-   <span class="comment">// the class name
-</span>   <span class="string">"(\\&lt;\\w*\\&gt;)[[:space:]]*"</span> 
-   <span class="comment">// template specialisation parameters
-</span>   <span class="string">"(&lt;[^;:{]+&gt;)?[[:space:]]*"</span>
-   <span class="comment">// terminate in { or :
-</span>   <span class="string">"(\\{|:[^;\\{()]*\\{)"</span><span class="special">;</span>
+   <span class="comment">// the class name</span>
+   <span class="string">"(\\&lt;\\w*\\&gt;)[[:space:]]*"</span> 
+   <span class="comment">// template specialisation parameters</span>
+   <span class="string">"(&lt;[^;:{]+&gt;)?[[:space:]]*"</span>
+   <span class="comment">// terminate in { or :</span>
+   <span class="string">"(\\{|:[^;\\{()]*\\{)"</span><span class="special">;</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">expression</span><span class="special">(</span><span class="identifier">re</span><span class="special">);</span>
 <span class="identifier">map_type</span> <span class="identifier">class_index</span><span class="special">;</span> 
@@ -231,11 +231,11 @@
 
 <span class="keyword">bool</span> <span class="identifier">grep_callback</span><span class="special">(</span><span class="keyword">const</span>  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">smatch</span><span class="special">&amp;</span> <span class="identifier">what</span><span class="special">)</span> 
 <span class="special">{</span> 
-   <span class="comment">// what[0] contains the whole string 
-</span>   <span class="comment">// what[5] contains the class name. 
-</span>   <span class="comment">// what[6] contains the template specialisation if any. 
-</span>   <span class="comment">// add class name and position to map: 
-</span>   <span class="identifier">class_index</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
+   <span class="comment">// what[0] contains the whole string </span>
+   <span class="comment">// what[5] contains the class name. </span>
+   <span class="comment">// what[6] contains the template specialisation if any. </span>
+   <span class="comment">// add class name and position to map: </span>
+   <span class="identifier">class_index</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
                <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span> <span class="special">-</span> <span class="identifier">base</span><span class="special">;</span> 
    <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span> 
 <span class="special">}</span> 
@@ -257,11 +257,11 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">map</span><span class="special">&gt;</span> 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span> 
-<span class="comment">// purpose: 
-</span><span class="comment">// takes the contents of a file in the form of a string 
-</span><span class="comment">// and searches for all the C++ class definitions, storing 
-</span><span class="comment">// their locations in a map of strings/int's 
-</span>
+<span class="comment">// purpose: </span>
+<span class="comment">// takes the contents of a file in the form of a string </span>
+<span class="comment">// and searches for all the C++ class definitions, storing </span>
+<span class="comment">// their locations in a map of strings/int's </span>
+
 <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">map_type</span><span class="special">;</span> 
 <span class="keyword">class</span> <span class="identifier">class_index</span> 
 <span class="special">{</span> 
@@ -281,11 +281,11 @@
 <span class="special">};</span> 
 <span class="keyword">bool</span>  <span class="identifier">class_index</span><span class="special">::</span><span class="identifier">grep_callback</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">smatch</span> <span class="identifier">what</span><span class="special">)</span> 
 <span class="special">{</span> 
-   <span class="comment">// what[0] contains the whole string 
-</span>   <span class="comment">// what[5] contains the class name. 
-</span>   <span class="comment">// what[6] contains the template specialisation if any. 
-</span>   <span class="comment">// add class name and position to map: 
-</span>   <span class="identifier">index</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
+   <span class="comment">// what[0] contains the whole string </span>
+   <span class="comment">// what[5] contains the class name. </span>
+   <span class="comment">// what[6] contains the template specialisation if any. </span>
+   <span class="comment">// add class name and position to map: </span>
+   <span class="identifier">index</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
                <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span> <span class="special">-</span> <span class="identifier">base</span><span class="special">;</span> 
    <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span> 
 <span class="special">}</span> 
@@ -310,11 +310,11 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">map</span><span class="special">&gt;</span> 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span> 
-<span class="comment">// purpose: 
-</span><span class="comment">// takes the contents of a file in the form of a string 
-</span><span class="comment">// and searches for all the C++ class definitions, storing 
-</span><span class="comment">// their locations in a map of strings/int's 
-</span>
+<span class="comment">// purpose: </span>
+<span class="comment">// takes the contents of a file in the form of a string </span>
+<span class="comment">// and searches for all the C++ class definitions, storing </span>
+<span class="comment">// their locations in a map of strings/int's </span>
+
 <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">map_type</span><span class="special">;</span> 
 <span class="keyword">class</span> <span class="identifier">class_index</span> 
 <span class="special">{</span> 
@@ -337,11 +337,11 @@
 
 <span class="keyword">bool</span> <span class="identifier">class_index</span><span class="special">::</span><span class="identifier">grep_callback</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">arg_type</span><span class="special">&amp;</span> <span class="identifier">what</span><span class="special">)</span> 
 <span class="special">{</span> 
-   <span class="comment">// what[0] contains the whole string    
-</span><span class="comment">// what[5] contains the class name.    
-</span><span class="comment">// what[6] contains the template specialisation if any.    
-</span><span class="comment">// add class name and position to map:    
-</span><span class="identifier">index</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
+   <span class="comment">// what[0] contains the whole string    </span>
+<span class="comment">// what[5] contains the class name.    </span>
+<span class="comment">// what[6] contains the template specialisation if any.    </span>
+<span class="comment">// add class name and position to map:    </span>
+<span class="identifier">index</span><span class="special">[</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">second</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">[</span><span class="number">6</span><span class="special">].</span><span class="identifier">second</span><span class="special">)]</span> <span class="special">=</span> 
                <span class="identifier">what</span><span class="special">[</span><span class="number">5</span><span class="special">].</span><span class="identifier">first</span> <span class="special">-</span> <span class="identifier">base</span><span class="special">;</span> 
    <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span> 
 <span class="special">}</span> 
@@ -362,7 +362,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2010 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 1998-2010 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

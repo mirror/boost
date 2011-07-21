@@ -22,6 +22,24 @@
 #include <iterator>
 #include <algorithm>
 
+#if !defined(TEST_UTF8) && !defined(TEST_UTF16)
+#  define TEST_UTF8
+#  define TEST_UTF16
+#endif
+
+template <class I>
+typename I::value_type iterate_over(I a, I b)
+{
+   typedef I::value_type value_type;
+   value_type v = 0;
+   while(a != b)
+   {
+      v ^= *a;
+      ++a;
+   }
+   return v;
+}
+
 void spot_checks()
 {
    // test specific values ripped straight out of the Unicode standard
@@ -61,6 +79,30 @@ void spot_checks()
    BOOST_CHECK_EQUAL(*--it8, 0xB0u);
    BOOST_CHECK_EQUAL(*--it8, 0xD0u);
    BOOST_CHECK_EQUAL(*--it8, 0x4Du);
+   //
+   // Test some bad sequences and verify that our iterators will catch them:
+   //
+   boost::uint8_t bad_seq[10] = { 0x4Du, 0xD0u, 0xB0u, 0xE4u, 0xBAu, 0x8Cu, 0xF0u, 0x90u, 0x8Cu, 0x82u };
+   BOOST_CHECK_EQUAL(
+      iterate_over(
+         boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq, bad_seq, bad_seq + 10),
+         boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq+10, bad_seq, bad_seq + 10)),
+      0x000149f3u);
+   BOOST_CHECK_THROW(boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq, bad_seq, bad_seq + 9), std::out_of_range);
+   BOOST_CHECK_THROW(boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq, bad_seq, bad_seq + 8), std::out_of_range);
+   BOOST_CHECK_THROW(boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq, bad_seq, bad_seq + 7), std::out_of_range);
+   BOOST_CHECK_THROW(boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq + 2, bad_seq, bad_seq + 10), std::out_of_range);
+   BOOST_CHECK_THROW(boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq + 2, bad_seq + 2, bad_seq + 10), std::out_of_range);
+
+   boost::uint16_t bad_seq2[6] =  { 0xD800, 0xDF02, 0xD800, 0xDF02, 0xD800, 0xDF02 };
+   BOOST_CHECK_EQUAL(
+      iterate_over(
+         boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2, bad_seq2, bad_seq2 + 6),
+         boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2+6, bad_seq2, bad_seq2 + 6)),
+      66306u);
+   BOOST_CHECK_THROW(boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2, bad_seq2, bad_seq2 + 5), std::out_of_range);
+   BOOST_CHECK_THROW(boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2 + 1, bad_seq2 + 1, bad_seq2 + 6), std::out_of_range);
+   BOOST_CHECK_THROW(boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2 + 1, bad_seq2, bad_seq2 + 6), std::out_of_range);
 }
 
 void test(const std::vector< ::boost::uint32_t>& v)
@@ -84,6 +126,8 @@ void test(const std::vector< ::boost::uint32_t>& v)
    vector16_type v16;
    vector32_type v32;
    vector32_type::const_iterator i, j, k;
+
+#ifdef TEST_UTF16
    //
    // begin by testing forward iteration, of 32-16 bit interconversions:
    //
@@ -97,13 +141,13 @@ void test(const std::vector< ::boost::uint32_t>& v)
    BOOST_CHECK_EQUAL((std::size_t)std::distance(u32to16type(v.begin()), u32to16type(v.end())), v16.size());
 #endif
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-   v32.assign(u16to32type(v16.begin()), u16to32type(v16.end()));
+   v32.assign(u16to32type(v16.begin(), v16.begin(), v16.end()), u16to32type(v16.end(), v16.begin(), v16.end()));
 #else
    v32.clear();
-   std::copy(u16to32type(v16.begin()), u16to32type(v16.end()), std::back_inserter(v32));
+   std::copy(u16to32type(v16.begin(), v16.begin(), v16.end()), u16to32type(v16.end(), v16.begin(), v16.end()), std::back_inserter(v32));
 #endif
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL((std::size_t)std::distance(u16to32type(v16.begin()), u16to32type(v16.end())), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(u16to32type(v16.begin(), v16.begin(), v16.end()), u16to32type(v16.end(), v16.begin(), v16.end())), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    i = v.begin();
@@ -120,9 +164,9 @@ void test(const std::vector< ::boost::uint32_t>& v)
    BOOST_CHECK_EQUAL((std::size_t)std::distance(ru32to16type(u32to16type(v.end())), ru32to16type(u32to16type(v.begin()))), v16.size());
 #endif
    std::reverse(v16.begin(), v16.end());
-   v32.assign(ru16to32type(u16to32type(v16.end())), ru16to32type(u16to32type(v16.begin())));
+   v32.assign(ru16to32type(u16to32type(v16.end(), v16.begin(), v16.end())), ru16to32type(u16to32type(v16.begin(), v16.begin(), v16.end())));
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru16to32type(u16to32type(v16.end())), ru16to32type(u16to32type(v16.begin()))), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru16to32type(u16to32type(v16.end(), v16.begin(), v16.end())), ru16to32type(u16to32type(v16.begin(), v16.begin(), v16.end()))), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    std::reverse(v32.begin(), v32.end());
@@ -132,6 +176,9 @@ void test(const std::vector< ::boost::uint32_t>& v)
    k = v32.begin();
    BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(), v.end(), v32.begin(), v32.end());
 #endif
+#endif // TEST_UTF16
+
+#ifdef TEST_UTF8
    //
    // Test forward iteration, of 32-8 bit interconversions:
    //
@@ -145,13 +192,13 @@ void test(const std::vector< ::boost::uint32_t>& v)
    BOOST_CHECK_EQUAL((std::size_t)std::distance(u32to8type(v.begin()), u32to8type(v.end())), v8.size());
 #endif
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-   v32.assign(u8to32type(v8.begin()), u8to32type(v8.end()));
+   v32.assign(u8to32type(v8.begin(), v8.begin(), v8.end()), u8to32type(v8.end(), v8.begin(), v8.end()));
 #else
    v32.clear();
-   std::copy(u8to32type(v8.begin()), u8to32type(v8.end()), std::back_inserter(v32));
+   std::copy(u8to32type(v8.begin(), v8.begin(), v8.end()), u8to32type(v8.end(), v8.begin(), v8.end()), std::back_inserter(v32));
 #endif
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL((std::size_t)std::distance(u8to32type(v8.begin()), u8to32type(v8.end())), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(u8to32type(v8.begin(), v8.begin(), v8.end()), u8to32type(v8.end(), v8.begin(), v8.end())), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    i = v.begin();
@@ -168,9 +215,9 @@ void test(const std::vector< ::boost::uint32_t>& v)
    BOOST_CHECK_EQUAL((std::size_t)std::distance(ru32to8type(u32to8type(v.end())), ru32to8type(u32to8type(v.begin()))), v8.size());
 #endif
    std::reverse(v8.begin(), v8.end());
-   v32.assign(ru8to32type(u8to32type(v8.end())), ru8to32type(u8to32type(v8.begin())));
+   v32.assign(ru8to32type(u8to32type(v8.end(), v8.begin(), v8.end())), ru8to32type(u8to32type(v8.begin(), v8.begin(), v8.end())));
 #ifndef BOOST_NO_STD_DISTANCE
-   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru8to32type(u8to32type(v8.end())), ru8to32type(u8to32type(v8.begin()))), v32.size());
+   BOOST_CHECK_EQUAL((std::size_t)std::distance(ru8to32type(u8to32type(v8.end(), v8.begin(), v8.end())), ru8to32type(u8to32type(v8.begin(), v8.begin(), v8.end()))), v32.size());
 #endif
    BOOST_CHECK_EQUAL(v.size(), v32.size());
    std::reverse(v32.begin(), v32.end());
@@ -179,6 +226,26 @@ void test(const std::vector< ::boost::uint32_t>& v)
    std::advance(j, (std::min)(v.size(), v32.size()));
    k = v32.begin();
    BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(), v.end(), v32.begin(), v32.end());
+#endif
+#endif // TEST_UTF8
+   //
+   // Test checked construction of UTF-8/16 iterators at each location in the sequences:
+   //
+#ifdef TEST_UTF8
+   for(u8to32type v8p(v8.begin(), v8.begin(), v8.end()), v8e(v8.end(), v8.begin(), v8.end()); v8p != v8e; ++v8p)
+   {
+      u8to32type pos(v8p.base(), v8p.base(), v8.end());
+      BOOST_CHECK(pos == v8p);
+      BOOST_CHECK(*pos == *v8p);
+   }
+#endif
+#ifdef TEST_UTF16
+   for(u16to32type v16p(v16.begin(), v16.begin(), v16.end()), v16e(v16.end(), v16.begin(), v16.end()); v16p != v16e; ++v16p)
+   {
+      u16to32type pos(v16p.base(), v16p.base(), v16.end());
+      BOOST_CHECK(pos == v16p);
+      BOOST_CHECK(*pos == *v16p);
+   }
 #endif
 }
 
@@ -189,6 +256,7 @@ int test_main( int, char* [] )
    // now test a bunch of values for self-consistency and round-tripping:
    std::vector< ::boost::uint32_t> v;
    // start with boundary conditions:
+   /*
    v.push_back(0);
    v.push_back(0xD7FF);
    v.push_back(0xE000);
@@ -201,6 +269,11 @@ int test_main( int, char* [] )
    v.push_back(0x800u - 1);
    v.push_back(0x10000u);
    v.push_back(0x10000u - 1);
+   */
+   for(unsigned i = 0; i < 0xD800; ++i)
+      v.push_back(i);
+   for(unsigned i = 0xDFFF + 1; i < 0x10FFFF; ++i)
+      v.push_back(i);
    test(v);
    return 0;
 }

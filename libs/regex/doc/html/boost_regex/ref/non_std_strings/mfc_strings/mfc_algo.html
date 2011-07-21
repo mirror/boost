@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Overloaded Algorithms For MFC String Types</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../../../index.html" title="Boost.Regex">
 <link rel="up" href="../mfc_strings.html" title="Using Boost Regex With MFC Strings">
 <link rel="prev" href="mfc_regex_create.html" title="Regular Expression Creation From an MFC String">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="mfc_regex_create.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../mfc_strings.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="mfc_iter.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo"></a><a class="link" href="mfc_algo.html" title="Overloaded Algorithms For MFC String Types">Overloaded
           Algorithms For MFC String Types</a>
@@ -34,7 +34,7 @@
             here they are anyway:
           </p>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match"></a><h5>
-<a name="id1115216"></a>
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match-heading"></a>
             <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match">regex_match</a>
           </h5>
 <p>
@@ -62,18 +62,18 @@
 <p>
             <span class="bold"><strong>Example:</strong></span>
           </p>
-<pre class="programlisting"><span class="comment">//
-</span><span class="comment">// Extract filename part of a path from a CString and return the result
-</span><span class="comment">// as another CString:
-</span><span class="comment">//
-</span><span class="identifier">CString</span> <span class="identifier">get_filename</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">path</span><span class="special">)</span>
+<pre class="programlisting"><span class="comment">//</span>
+<span class="comment">// Extract filename part of a path from a CString and return the result</span>
+<span class="comment">// as another CString:</span>
+<span class="comment">//</span>
+<span class="identifier">CString</span> <span class="identifier">get_filename</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">path</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tregex</span> <span class="identifier">r</span><span class="special">(</span><span class="identifier">__T</span><span class="special">(</span><span class="string">"(?:\\A|.*\\\\)([^\\\\]+)"</span><span class="special">));</span>
    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tmatch</span> <span class="identifier">what</span><span class="special">;</span>
    <span class="keyword">if</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">path</span><span class="special">,</span> <span class="identifier">what</span><span class="special">,</span> <span class="identifier">r</span><span class="special">))</span>
    <span class="special">{</span>
-      <span class="comment">// extract $1 as a CString:
-</span>      <span class="keyword">return</span> <span class="identifier">CString</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">1</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">.</span><span class="identifier">length</span><span class="special">(</span><span class="number">1</span><span class="special">));</span>
+      <span class="comment">// extract $1 as a CString:</span>
+      <span class="keyword">return</span> <span class="identifier">CString</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">1</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">.</span><span class="identifier">length</span><span class="special">(</span><span class="number">1</span><span class="special">));</span>
    <span class="special">}</span>
    <span class="keyword">else</span>
    <span class="special">{</span>
@@ -82,7 +82,7 @@
 <span class="special">}</span>
 </pre>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match__second_overload_"></a><h5>
-<a name="id1116089"></a>
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match__second_overload_-heading"></a>
             <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match__second_overload_">regex_match
             (second overload)</a>
           </h5>
@@ -100,17 +100,17 @@
 <p>
             <span class="bold"><strong>Example:</strong></span>
           </p>
-<pre class="programlisting"><span class="comment">//
-</span><span class="comment">// Find out if *password* meets our password requirements,
-</span><span class="comment">// as defined by the regular expression *requirements*.
-</span><span class="comment">//
-</span><span class="keyword">bool</span> <span class="identifier">is_valid_password</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">password</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">requirements</span><span class="special">)</span>
+<pre class="programlisting"><span class="comment">//</span>
+<span class="comment">// Find out if *password* meets our password requirements,</span>
+<span class="comment">// as defined by the regular expression *requirements*.</span>
+<span class="comment">//</span>
+<span class="keyword">bool</span> <span class="identifier">is_valid_password</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">password</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">requirements</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">password</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_regex</span><span class="special">(</span><span class="identifier">requirements</span><span class="special">));</span>
 <span class="special">}</span>      
 </pre>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search"></a><h5>
-<a name="id1116520"></a>
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search-heading"></a>
             <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search">regex_search</a>
           </h5>
 <p>
@@ -133,14 +133,14 @@
           </p>
 <pre class="programlisting"><span class="identifier">CString</span> <span class="identifier">extract_postcode</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">address</span><span class="special">)</span>
 <span class="special">{</span>
-   <span class="comment">// searches throw address for a UK postcode and returns the result,
-</span>   <span class="comment">// the expression used is by Phil A. on www.regxlib.com:
-</span>   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tregex</span> <span class="identifier">r</span><span class="special">(</span><span class="identifier">__T</span><span class="special">(</span><span class="string">"^(([A-Z]{1,2}[0-9]{1,2})|([A-Z]{1,2}[0-9][A-Z]))\\s?([0-9][A-Z]{2})$"</span><span class="special">));</span>
+   <span class="comment">// searches throw address for a UK postcode and returns the result,</span>
+   <span class="comment">// the expression used is by Phil A. on www.regxlib.com:</span>
+   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tregex</span> <span class="identifier">r</span><span class="special">(</span><span class="identifier">__T</span><span class="special">(</span><span class="string">"^(([A-Z]{1,2}[0-9]{1,2})|([A-Z]{1,2}[0-9][A-Z]))\\s?([0-9][A-Z]{2})$"</span><span class="special">));</span>
    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tmatch</span> <span class="identifier">what</span><span class="special">;</span>
    <span class="keyword">if</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_search</span><span class="special">(</span><span class="identifier">address</span><span class="special">,</span> <span class="identifier">what</span><span class="special">,</span> <span class="identifier">r</span><span class="special">))</span>
    <span class="special">{</span>
-      <span class="comment">// extract $0 as a CString:
-</span>      <span class="keyword">return</span> <span class="identifier">CString</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">.</span><span class="identifier">length</span><span class="special">());</span>
+      <span class="comment">// extract $0 as a CString:</span>
+      <span class="keyword">return</span> <span class="identifier">CString</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">.</span><span class="identifier">length</span><span class="special">());</span>
    <span class="special">}</span>
    <span class="keyword">else</span>
    <span class="special">{</span>
@@ -149,7 +149,7 @@
 <span class="special">}</span>      
 </pre>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search__second_overload_"></a><h5>
-<a name="id1117055"></a>
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search__second_overload_-heading"></a>
             <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search__second_overload_">regex_search
             (second overload)</a>
           </h5>
@@ -164,7 +164,7 @@
             <span class="special">+</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">GetLength</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span></code>
           </p>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_replace"></a><h5>
-<a name="id1117345"></a>
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_replace-heading"></a>
             <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_replace">regex_replace</a>
           </h5>
 <p>
@@ -198,12 +198,12 @@
 <p>
             <span class="bold"><strong>Example</strong></span>:
           </p>
-<pre class="programlisting"><span class="comment">//
-</span><span class="comment">// Take a credit card number as a string of digits, 
-</span><span class="comment">// and reformat it as a human readable string with "-"
-</span><span class="comment">// separating each group of four digits:
-</span><span class="comment">//
-</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tregex</span> <span class="identifier">e</span><span class="special">(</span><span class="identifier">__T</span><span class="special">(</span><span class="string">"\\A(\\d{3,4})[- ]?(\\d{4})[- ]?(\\d{4})[- ]?(\\d{4})\\z"</span><span class="special">));</span>
+<pre class="programlisting"><span class="comment">//</span>
+<span class="comment">// Take a credit card number as a string of digits, </span>
+<span class="comment">// and reformat it as a human readable string with "-"</span>
+<span class="comment">// separating each group of four digits:</span>
+<span class="comment">//</span>
+<span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tregex</span> <span class="identifier">e</span><span class="special">(</span><span class="identifier">__T</span><span class="special">(</span><span class="string">"\\A(\\d{3,4})[- ]?(\\d{4})[- ]?(\\d{4})[- ]?(\\d{4})\\z"</span><span class="special">));</span>
 <span class="keyword">const</span> <span class="identifier">CString</span> <span class="identifier">human_format</span> <span class="special">=</span> <span class="identifier">__T</span><span class="special">(</span><span class="string">"$1-$2-$3-$4"</span><span class="special">);</span>
 
 <span class="identifier">CString</span> <span class="identifier">human_readable_card_number</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span>
@@ -214,7 +214,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2010 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 1998-2010 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

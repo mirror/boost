@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>basic_regex</title>
 <link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="../ref.html" title="Reference">
@@ -22,12 +22,12 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../ref.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="match_results.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.ref.basic_regex"></a><a class="link" href="basic_regex.html" title="basic_regex">basic_regex</a>
 </h3></div></div></div>
 <a name="boost_regex.ref.basic_regex.synopsis"></a><h5>
-<a name="id1012603"></a>
+<a name="boost_regex.ref.basic_regex.synopsis-heading"></a>
         <a class="link" href="basic_regex.html#boost_regex.ref.basic_regex.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -37,14 +37,14 @@
         encapsulates regular expression parsing and compilation. The class takes
         two template parameters:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             <code class="computeroutput"><span class="identifier">charT</span></code>: determines the
             character type, i.e. either <code class="computeroutput"><span class="keyword">char</span></code>
             or <code class="computeroutput"><span class="keyword">wchar_t</span></code>; see <a class="link" href="concepts/charT_concept.html" title="charT Requirements">charT
             concept</a>.
           </li>
-<li>
+<li class="listitem">
             <code class="computeroutput"><span class="identifier">traits</span></code>: determines the
             behavior of the character type, for example which character class names
             are recognized. A default traits class is provided: <code class="computeroutput"><span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span></code>. See also <a class="link" href="concepts/traits_concept.html" title="Traits Class Requirements">traits
@@ -77,8 +77,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span>  <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span> <span class="special">=</span> <span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">basic_regex</span> <span class="special">{</span>
    <span class="keyword">public</span><span class="special">:</span>          
-   <span class="comment">// types:
-</span>   <span class="keyword">typedef</span>          <span class="identifier">charT</span>                                <span class="identifier">value_type</span><span class="special">;</span>
+   <span class="comment">// types:</span>
+   <span class="keyword">typedef</span>          <span class="identifier">charT</span>                                <span class="identifier">value_type</span><span class="special">;</span>
    <span class="keyword">typedef</span>          <span class="identifier">implementation</span><span class="special">-</span><span class="identifier">specific</span>              <span class="identifier">const_iterator</span><span class="special">;</span>
    <span class="keyword">typedef</span>          <span class="identifier">const_iterator</span>                       <span class="identifier">iterator</span><span class="special">;</span>                 
    <span class="keyword">typedef</span>          <span class="identifier">charT</span><span class="special">&amp;</span>                               <span class="identifier">reference</span><span class="special">;</span>           
@@ -88,9 +88,9 @@
    <span class="keyword">typedef</span>          <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a>  <span class="identifier">flag_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">locale_type</span>                  <span class="identifier">locale_type</span><span class="special">;</span>
 
-   <span class="comment">// constants:
-</span>   <span class="comment">// main option selection:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">normal</span>          
+   <span class="comment">// constants:</span>
+   <span class="comment">// main option selection:</span>
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">normal</span>          
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">ECMAScript</span>      
                                                 <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
@@ -115,8 +115,8 @@
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">literal</span>         
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">literal</span><span class="special">;</span>
 
-   <span class="comment">// modifiers specific to perl expressions:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_m</span>        
+   <span class="comment">// modifiers specific to perl expressions:</span>
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_m</span>        
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_m</span><span class="special">;</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_s</span>        
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_s</span><span class="special">;</span>
@@ -125,8 +125,8 @@
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">mod_x</span>           
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">mod_x</span><span class="special">;</span>
 
-   <span class="comment">// modifiers specific to POSIX basic expressions:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_plus_qm</span>      
+   <span class="comment">// modifiers specific to POSIX basic expressions:</span>
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_plus_qm</span>      
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_plus_qm</span><span class="special">;</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_vbar</span>         
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_vbar</span>
@@ -135,8 +135,8 @@
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_intervals</span>    
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_intervals</span>
 
-   <span class="comment">// common modifiers:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">nosubs</span>          
+   <span class="comment">// common modifiers:</span>
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">nosubs</span>          
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">nosubs</span><span class="special">;</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">optimize</span>        
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">optimize</span><span class="special">;</span>
@@ -147,8 +147,8 @@
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_except</span>       
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">newline_alt</span><span class="special">;</span>
 
-   <span class="comment">// construct/copy/destroy:
-</span>   <span class="keyword">explicit</span> <a class="link" href="basic_regex.html#boost_regex.basic_regex.construct1">basic_regex</a> <span class="special">();</span>
+   <span class="comment">// construct/copy/destroy:</span>
+   <span class="keyword">explicit</span> <a class="link" href="basic_regex.html#boost_regex.basic_regex.construct1">basic_regex</a> <span class="special">();</span>
    <span class="keyword">explicit</span> <a class="link" href="basic_regex.html#boost_regex.basic_regex.construct2">basic_regex</a><span class="special">(</span><span class="keyword">const</span>  <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.construct3">basic_regex</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p1</span><span class="special">,</span> <span class="keyword">const</span>  <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p2</span><span class="special">,</span> 
                <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
@@ -169,18 +169,18 @@
 
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ST</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">SA</span><span class="special">&gt;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.opeq3">basic_regex&amp; operator=</a> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">ST</span><span class="special">,</span> <span class="identifier">SA</span><span class="special">&gt;&amp;</span> <span class="identifier">p</span><span class="special">);</span>
-   <span class="comment">// iterators: 
-</span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.subexpression">std::pair&lt;const_iterator, const_iterator&gt; subexpression</a><span class="special">(</span><span class="identifier">size_type</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span> 
+   <span class="comment">// iterators: </span>
+   <a class="link" href="basic_regex.html#boost_regex.basic_regex.subexpression">std::pair&lt;const_iterator, const_iterator&gt; subexpression</a><span class="special">(</span><span class="identifier">size_type</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.begin">const_iterator begin</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.end">const_iterator end</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="comment">// capacity: 
-</span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.size">size_type size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
+   <span class="comment">// capacity: </span>
+   <a class="link" href="basic_regex.html#boost_regex.basic_regex.size">size_type size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.max_size">size_type max_size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.empty">bool empty</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.mark_count">size_type mark_count</a><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> 
-   <span class="comment">//
-</span>   <span class="comment">// modifiers: 
-</span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign1">basic_regex&amp; assign</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span> 
+   <span class="comment">//</span>
+   <span class="comment">// modifiers: </span>
+   <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign1">basic_regex&amp; assign</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span> 
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign2">basic_regex&amp; assign</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> 
                        <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign3">basic_regex&amp; assign</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">len</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span><span class="special">);</span>
@@ -193,16 +193,16 @@
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.assign5">basic_regex&amp; assign</a><span class="special">(</span><span class="identifier">InputIterator</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">InputIterator</span> <span class="identifier">last</span><span class="special">,</span>
                        <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 
-   <span class="comment">// const operations:
-</span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.flags">flag_type flags</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="comment">// const operations:</span>
+   <a class="link" href="basic_regex.html#boost_regex.basic_regex.flags">flag_type flags</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.status">int status</a><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.str">basic_string&lt;charT&gt; str</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.compare">int compare</a><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;)</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="comment">// locale:
-</span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.imbue">locale_type imbue</a><span class="special">(</span><span class="identifier">locale_type</span> <span class="identifier">loc</span><span class="special">);</span>
+   <span class="comment">// locale:</span>
+   <a class="link" href="basic_regex.html#boost_regex.basic_regex.imbue">locale_type imbue</a><span class="special">(</span><span class="identifier">locale_type</span> <span class="identifier">loc</span><span class="special">);</span>
    <a class="link" href="basic_regex.html#boost_regex.basic_regex.getloc">locale_type getloc</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="comment">// swap
-</span>   <a class="link" href="basic_regex.html#boost_regex.basic_regex.swap">void swap</a><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;)</span> <span class="keyword">throw</span><span class="special">();</span>
+   <span class="comment">// swap</span>
+   <a class="link" href="basic_regex.html#boost_regex.basic_regex.swap">void swap</a><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;)</span> <span class="keyword">throw</span><span class="special">();</span>
 <span class="special">};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
@@ -241,18 +241,18 @@
 <span class="keyword">typedef</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">regex</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="keyword">wchar_t</span><span class="special">&gt;</span> <span class="identifier">wregex</span><span class="special">;</span>
 
-<span class="special">}</span> <span class="comment">// namespace boost
-</span></pre>
+<span class="special">}</span> <span class="comment">// namespace boost</span>
+</pre>
 <a name="boost_regex.ref.basic_regex.description"></a><h5>
-<a name="id1017421"></a>
+<a name="boost_regex.ref.basic_regex.description-heading"></a>
         <a class="link" href="basic_regex.html#boost_regex.ref.basic_regex.description">Description</a>
       </h5>
 <p>
         Class <code class="computeroutput"><span class="identifier">basic_regex</span></code> has the
         following public members:
       </p>
-<pre class="programlisting"><span class="comment">// main option selection:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">normal</span>           
+<pre class="programlisting"><span class="comment">// main option selection:</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">normal</span>           
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">ECMAScript</span>       
                                           <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
@@ -277,8 +277,8 @@
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">literal</span>          
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">literal</span><span class="special">;</span>
 
-<span class="comment">// modifiers specific to perl expressions:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_m</span>         
+<span class="comment">// modifiers specific to perl expressions:</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_m</span>         
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_m</span><span class="special">;</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_s</span>         
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_s</span><span class="special">;</span>
@@ -287,8 +287,8 @@
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">mod_x</span>            
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">mod_x</span><span class="special">;</span>
 
-<span class="comment">// modifiers specific to POSIX basic expressions:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_plus_qm</span>       
+<span class="comment">// modifiers specific to POSIX basic expressions:</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_plus_qm</span>       
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_plus_qm</span><span class="special">;</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_vbar</span>          
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_vbar</span>
@@ -297,8 +297,8 @@
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_intervals</span>     
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_intervals</span>
 
-<span class="comment">// common modifiers:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">nosubs</span>           
+<span class="comment">// common modifiers:</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">nosubs</span>           
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">nosubs</span><span class="special">;</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a class="link" href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">optimize</span>         
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">optimize</span><span class="special">;</span>
@@ -325,7 +325,7 @@
         <code class="computeroutput"><span class="identifier">basic_regex</span></code>.
       </p>
 <div class="table">
-<a name="id1020421"></a><p class="title"><b>Table&#160;1.&#160;basic_regex default construction postconditions</b></p>
+<a name="id1071160"></a><p class="title"><b>Table&#160;1.&#160;basic_regex default construction postconditions</b></p>
 <div class="table-contents"><table class="table" summary="basic_regex default construction postconditions">
 <colgroup>
 <col>
@@ -403,7 +403,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1020720"></a><p class="title"><b>Table&#160;2.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id1071458"></a><p class="title"><b>Table&#160;2.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -506,7 +506,7 @@
         specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1021136"></a><p class="title"><b>Table&#160;3.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id1071875"></a><p class="title"><b>Table&#160;3.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -608,7 +608,7 @@
         according the option flags specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1021544"></a><p class="title"><b>Table&#160;4.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id1072283"></a><p class="title"><b>Table&#160;4.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -716,7 +716,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1022021"></a><p class="title"><b>Table&#160;5.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id1072760"></a><p class="title"><b>Table&#160;5.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -816,7 +816,7 @@
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1022384"></a><p class="title"><b>Table&#160;6.&#160;Postconditions for basic_regex construction</b></p>
+<a name="id1073122"></a><p class="title"><b>Table&#160;6.&#160;Postconditions for basic_regex construction</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
@@ -1002,7 +1002,7 @@
         in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id1023856"></a><p class="title"><b>Table&#160;7.&#160;Postconditions for basic_regex::assign</b></p>
+<a name="id1075141"></a><p class="title"><b>Table&#160;7.&#160;Postconditions for basic_regex::assign</b></p>
 <div class="table-contents"><table class="table" summary="Postconditions for basic_regex::assign">
 <colgroup>
 <col>
@@ -1246,7 +1246,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2010 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 1998-2010 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

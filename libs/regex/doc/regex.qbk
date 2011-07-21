@@ -85,6 +85,10 @@ PDF version of this manual is also available].
 [include old_regex.qbk]
 [endsect]
 
+[section Internal Details]
+[include unicode_iterators.qbk]
+[endsect]
+
 [endsect]
 
 [section Background Information]
