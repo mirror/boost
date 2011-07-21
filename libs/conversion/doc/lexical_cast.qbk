@@ -13,7 +13,7 @@
     ]
 ]
 
-[def __numericcast__  [@http://www.boost.org/libs/numeric/conversion/doc/html/boost_numericconversion/improved_numeric_cast__.html `boost::numeric_cast`]]
+[def __numericcast__  [@boost:libs/numeric/conversion/doc/html/boost_numericconversion/improved_numeric_cast__.html `boost::numeric_cast`]]
 [def __proposallong__ [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1973.html Lexical Conversion Library Proposal for TR2, N1973 by Kevlin Henney and Beman Dawes]]
 [def __proposalshort__ [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1973.html Lexical Conversion Library Proposal for TR2, N1973]]
 
@@ -73,7 +73,7 @@ The following example uses numeric data in a string expression:
 [endsect]
 
 [section Synopsis]
-Library features defined in [@http://www.boost.org/boost/lexical_cast.hpp boost/lexical_cast.hpp]:
+Library features defined in [@boost:boost/lexical_cast.hpp boost/lexical_cast.hpp]:
 ``
     namespace boost
     {
@@ -136,7 +136,7 @@ It breaks my `operator>>` that works only in presence of this flag. Can you remo
 __proposallong__ to reset the flag but 
 remember that __proposalshort__ is not yet accepted by the committee. By the way, it's a great opportunity to 
 make your `operator>>` conform to the standard.
-Read a good C++ book, study `std::sentry` and [@../../libs/io/doc/ios_state.html `ios_state_saver`].
+Read a good C++ book, study `std::sentry` and [@boost:libs/io/doc/ios_state.html `ios_state_saver`].
 
 
 * [*Question:]    Why `std::cout << boost::lexical_cast<unsigned int>("-1");` does not throw, but outputs 4294967295?
