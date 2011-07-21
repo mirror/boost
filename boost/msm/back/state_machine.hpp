@@ -1002,7 +1002,8 @@ private:
         // add the internal events defined in the internal_transition_table
         // Note: these are added first because they must have a lesser prio
         // than the deeper transitions in the sub regions
-        typedef typename StateType::internal_transition_table istt_simulated;
+        // we go recursively because our states can also have internal tables or substates etc.
+        typedef typename recursive_get_internal_transition_table<StateType, ::boost::mpl::true_>::type istt_simulated;
         typedef typename ::boost::mpl::fold<
             istt_simulated,::boost::mpl::vector0<>,
             ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
@@ -1196,12 +1197,12 @@ private:
 
     deferred_events_queue_t& get_deferred_queue()
     {
-        return m_deferred_events_queue;
+        return m_deferred_events_queue.m_deferred_events_queue;
     }
 
     const deferred_events_queue_t& get_deferred_queue() const
     {
-        return m_deferred_events_queue;
+        return m_deferred_events_queue.m_deferred_events_queue;
     }
 
     // Getter that returns the current state of the FSM
