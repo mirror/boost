@@ -39,7 +39,7 @@ struct malloc_allocator
 
   static pointer address(reference r) { return &r; }
   static const_pointer address(const_reference r) { return &r; }
-  static pointer allocate(const size_type n, const pointer = 0)
+  static pointer allocate(const size_type n, const void* = 0)
   {
     const pointer ret = (pointer) std::malloc(n * sizeof(T));
     if (ret == 0)
@@ -83,7 +83,7 @@ struct new_delete_allocator
 
   static pointer address(reference r) { return &r; }
   static const_pointer address(const_reference r) { return &r; }
-  static pointer allocate(const size_type n, const pointer = 0)
+  static pointer allocate(const size_type n, const void* = 0)
   { return (pointer) new char[n * sizeof(T)]; }
   static void deallocate(const pointer p, const size_type)
   { delete [] p; }

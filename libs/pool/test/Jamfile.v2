@@ -15,7 +15,6 @@ project
         <toolset>gcc:<cxxflags>-Wno-long-long
         <toolset>pathscale:<cxxflags>-Wno-long-long
         <toolset>gcc:<cxxflags>-Wcast-align
-        <toolset>intel:<warnings-as-errors>on
         <toolset>msvc:<warnings-as-errors>on
     ;
 
@@ -34,7 +33,7 @@ test-suite pool :
     [ run test_bug_1252.cpp ]
     [ run test_bug_2696.cpp ]
     [ run test_bug_5526.cpp ]
-    [ run test_threading.cpp : : : <library>/boost/thread//boost_thread <toolset>gcc:<cxxflags>-Wno-attributes <toolset>gcc:<cxxflags>-Wno-missing-field-initializers ]
+    [ run test_threading.cpp : : : <threading>multi <library>/boost/thread//boost_thread <toolset>gcc:<cxxflags>-Wno-attributes <toolset>gcc:<cxxflags>-Wno-missing-field-initializers ]
     [ run  ../example/time_pool_alloc.cpp ]
     [ compile test_poisoned_macros.cpp ]
 
@@ -50,7 +49,7 @@ test-suite pool :
     [ run test_bug_1252.cpp  : : : [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1" : <build>no  ] : test_bug_1252_valgrind ]
     [ run test_bug_2696.cpp  : : : [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1" : <build>no  ] : test_bug_2696_valgrind ]
     [ run test_bug_5526.cpp  : : : [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1" : <build>no  ] : test_bug_5526_valgrind ]
-    [ run test_threading.cpp  : : : <library>/boost/thread//boost_thread <toolset>gcc:<cxxflags>-Wno-attributes <toolset>gcc:<cxxflags>-Wno-missing-field-initializers [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1" : <build>no  ] : test_threading_valgrind ]
+    [ run test_threading.cpp  : : : <threading>multi <library>/boost/thread//boost_thread <toolset>gcc:<cxxflags>-Wno-attributes <toolset>gcc:<cxxflags>-Wno-missing-field-initializers [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1" : <build>no  ] : test_threading_valgrind ]
 
 #
 # The following tests test Boost.Pool's code with valgrind if it's available, and in any case with BOOST_POOL_VALGRIND defined
@@ -65,7 +64,7 @@ test-suite pool :
     [ run test_bug_1252.cpp  : : : <define>BOOST_POOL_VALGRIND=1 [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1"  : <build>no ] : test_bug_1252_valgrind_2 ]
     [ run test_bug_2696.cpp  : : : <define>BOOST_POOL_VALGRIND=1 [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1"  : <build>no ] : test_bug_2696_valgrind_2 ]
     [ run test_bug_5526.cpp  : : : <define>BOOST_POOL_VALGRIND=1 [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1"  : <build>no ] : test_bug_5526_valgrind_2 ]
-    [ run test_threading.cpp  : : : <library>/boost/thread//boost_thread <define>BOOST_POOL_VALGRIND=1 <toolset>gcc:<cxxflags>-Wno-attributes <toolset>gcc:<cxxflags>-Wno-missing-field-initializers [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1"  : <build>no ] : test_threading_valgrind_2 ]
+    [ run test_threading.cpp  : : : <threading>multi <library>/boost/thread//boost_thread <define>BOOST_POOL_VALGRIND=1 <toolset>gcc:<cxxflags>-Wno-attributes <toolset>gcc:<cxxflags>-Wno-missing-field-initializers [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1"  : <build>no ] : test_threading_valgrind_2 ]
     [ run-fail test_valgrind_fail_1.cpp  : : : <define>BOOST_POOL_VALGRIND=1 [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1"  : <build>no ] ]
     [ run-fail test_valgrind_fail_2.cpp  : : : <define>BOOST_POOL_VALGRIND=1 [ check-target-builds valgrind_config_check : <testing.launcher>"valgrind --error-exitcode=1"  : <build>no ] ]
     ;
