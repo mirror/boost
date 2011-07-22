@@ -34,7 +34,8 @@ namespace quickbook
                         xinclude, include,
                         template_, template_id, template_formal_arg,
                         template_body, identifier, import,
-                        element_id, element_id_1_5, element_id_1_6;
+                        element_id, element_id_1_5, element_id_1_6,
+                        same_line;
     };
 
     void quickbook_grammar::impl::init_block_elements()
@@ -208,10 +209,12 @@ namespace quickbook
             ("table", element_info(element_info::nested_block, &local.table, block_tags::table))
             ;
 
+        local.same_line = (cl::eps_p(*cl::blank_p >> cl::eol_p) | space);
+
         local.table =
-                (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
+                local.same_line
             >>  local.element_id_1_5
-            >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
+            >>  local.same_line
             >>  (*(cl::anychar_p - eol))        [actions.values.entry(ph::arg1, ph::arg2, table_tags::title)]
             >>  (+eol)
             >>  *local.table_row
