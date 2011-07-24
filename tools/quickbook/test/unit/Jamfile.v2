@@ -13,5 +13,5 @@ project quickbook-unit-tests
     ;
 
 run values_test.cpp ../../src/values.cpp ;
-run post_process_test.cpp ../../src/post_process.cpp ;
+run post_process_test.cpp ../../src/post_process.cpp ../../src/id_generator.cpp ;
 run iterator_tests.cpp ../../src/values.cpp ;

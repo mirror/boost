@@ -28,11 +28,18 @@ namespace quickbook
 
     struct template_body
     {
-        template_body(value const&, fs::path const&);
+        enum content_type
+        {
+            quickbook,
+            raw_output
+        };
+    
+        template_body(value const&, fs::path const&, content_type = quickbook);
         bool is_block() const;
 
         stored_value content;
         fs::path filename;        
+        content_type type;
     };
 
     struct template_scope;
@@ -40,6 +47,17 @@ namespace quickbook
     struct template_symbol
     {
         template_symbol(
+                std::string const& identifier,
+                std::vector<std::string> const& params,
+                template_body const& body,
+                template_scope const* parent = 0)
+           : identifier(identifier)
+           , params(params)
+           , body(body)
+           , parent(parent)
+           , callouts() {}
+
+           template_symbol(
                 std::string const& identifier,
                 std::vector<std::string> const& params,
                 value const& content,

@@ -18,6 +18,7 @@ namespace quickbook
     struct actions;
     struct quickbook_grammar;
     struct collector;
+    struct id_generator;
 
     typedef position_iterator<std::string::const_iterator> iterator;
 

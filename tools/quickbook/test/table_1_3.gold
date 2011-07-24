@@ -49,7 +49,7 @@
   </informaltable>
   <section id="table_1_3.section1">
     <title><link linkend="table_1_3.section1">Section 1</link></title>
-    <table frame="all" id="table_1_3.t1">
+    <table frame="all" id="table_1_3.section1.t0">
       <title>A &amp; B</title>
       <tgroup cols="2">
         <thead>
@@ -82,14 +82,14 @@
         </tbody>
       </tgroup>
     </table>
-    <table frame="all" id="table_1_3.t2">
+    <table frame="all" id="table_1_3.section1.t1">
       <title>Empty Table</title>
       <tgroup cols="0">
         <tbody>
         </tbody>
       </tgroup>
     </table>
-    <table frame="all" id="table_1_3.t3">
+    <table frame="all" id="table_1_3.section1.t2">
       <title>Table with an empty cell</title>
       <tgroup cols="1">
         <tbody>
@@ -103,7 +103,7 @@
         </tbody>
       </tgroup>
     </table>
-    <table frame="all" id="table_1_3.t4">
+    <table frame="all" id="table_1_3.section1.t3">
       <title>Indentation</title>
       <tgroup cols="2">
         <thead>
@@ -142,7 +142,7 @@
         </tbody>
       </tgroup>
     </table>
-    <table frame="all" id="table_1_3.t6">
+    <table frame="all" id="table_1_3.section1.t4">
       <title>Nested Tables</title>
       <tgroup cols="1">
         <thead>
@@ -162,7 +162,7 @@
         <tbody>
           <row>
             <entry>
-              <table frame="all" id="table_1_3.t5">
+              <table frame="all" id="table_1_3.section1.t5">
                 <title>Inner Table</title>
                 <tgroup cols="2">
                   <thead>
@@ -208,7 +208,7 @@
       </tgroup>
     </table>
     <anchor id="id1"/>
-    <table frame="all" id="table_1_3.t7">
+    <table frame="all" id="table_1_3.section1.t6">
       <title>Table with anchors</title>
       <tgroup cols="1">
         <thead>
