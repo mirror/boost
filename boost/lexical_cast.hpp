@@ -25,6 +25,7 @@
 #include <istream>
 #include <string>
 #include <cstring>
+#include <cstdio>
 #include <typeinfo>
 #include <exception>
 #include <cmath>
@@ -35,6 +36,7 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/type_traits/ice.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
@@ -1003,6 +1005,7 @@ namespace boost
         // String representation of Source has an upper limit.
         template< class CharT // a result of widest_char transformation
                 , class Traits // usually char_traits<CharT>
+                , bool RequiresStringbuffer
                 >
         class lexical_stream_limited_src
         {
@@ -1015,24 +1018,22 @@ namespace boost
 #else
             typedef stl_buf_unlocker<std::basic_stringbuf<CharT, Traits>, CharT > local_stringbuffer_t;
 #endif
+            typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
+                RequiresStringbuffer,
+                local_stringbuffer_t,
+                char
+            >::type deduced_stringbuffer_t;
+
             // A string representation of Source is written to [start, finish).
-            // Currently, it is assumed that [start, finish) is big enough
-            // to hold a string representation of any Source value.
             CharT* start;
             CharT* finish;
-            local_stringbuffer_t *stringbuf;
+            deduced_stringbuffer_t stringbuffer;
 
         public:
             lexical_stream_limited_src(CharT* sta, CharT* fin)
               : start(sta)
               , finish(fin)
-              , stringbuf(NULL)
             {}
-
-            ~lexical_stream_limited_src()
-            {
-                if (stringbuf) delete stringbuf;
-            }
 
         private:
             // Undefined:
@@ -1078,7 +1079,7 @@ namespace boost
             bool shl_char_array(T const* str)
             {
                 BOOST_STATIC_ASSERT_MSG(( sizeof(T) <= sizeof(CharT)),
-                    "boost::lexical_cast does not support conversions from whar_t to char types."
+                    "boost::lexical_cast does not support conversions from wchar_t to char types."
                     "Use boost::locale instead" );
                 return shl_input_streamable(str);
             }
@@ -1087,15 +1088,10 @@ namespace boost
             template<typename InputStreamable>
             bool shl_input_streamable(InputStreamable& input)
             {
-                /* No one will call this function twice,
-                 * so we do not need `if (!stringbuf)' */
-                stringbuf = new local_stringbuffer_t();
-
-                std::basic_ostream<CharT> stream(stringbuf);
-                lcast_set_precision(stream, static_cast<InputStreamable*>(0));
+                std::basic_ostream<CharT> stream(&stringbuffer);
                 bool const result = !(stream << input).fail();
-                start = stringbuf->pbase();
-                finish = stringbuf->pptr();
+                start = stringbuffer.pbase();
+                finish = stringbuffer.pptr();
                 return result;
             }
 
@@ -1112,18 +1108,44 @@ namespace boost
                 return true;
             }
 
-#ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
             template <class T>
-            bool shl_float_types(T val)
-            {
-                if (put_inf_nan(start, finish, val)) return true;
-                local_streambuffer_t bb;
-                bb.setp(start, finish);
-                std::basic_ostream<CharT> stream(&bb);
-                lcast_set_precision(stream, &val);
-                bool const result = !(stream << val).fail();
-                finish = bb.pptr();
-                return result;
+            bool shl_float(float val,T* out)
+            {   using namespace std;
+                finish = start + sprintf(out,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
+                return finish > start;
+            }
+
+            template <class T>
+            bool shl_double(double val,T* out)
+            {   using namespace std;
+                finish = start + sprintf(out,"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
+                return finish > start;
+            }
+
+            template <class T>
+            bool shl_long_double(long double val,T* out)
+            {   using namespace std;
+                finish = start + sprintf(out,"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
+                return finish > start;
+            }
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+            bool shl_float(float val,wchar_t* out)
+            {   using namespace std;
+                finish = start + swprintf(out,finish-start,L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
+                return finish > start;
+            }
+
+            bool shl_double(double val,wchar_t* out)
+            {   using namespace std;
+                finish = start + swprintf(out,finish-start,L"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
+                return finish > start;
+            }
+
+            bool shl_long_double(long double val,wchar_t* out)
+            {   using namespace std;
+                finish = start + swprintf(out,finish-start,L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
+                return finish > start;
             }
 #endif
 
@@ -1171,11 +1193,9 @@ namespace boost
             bool operator<<(unsigned __int64 n)         { start = lcast_put_unsigned<Traits>(n, finish); return true; }
             bool operator<<(         __int64 n)         { return shl_signed(n); }
 #endif
-#ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
-            bool operator<<(float val)                  { return shl_float_types(val); }
-            bool operator<<(double val)                 { return shl_float_types(val); }
-            bool operator<<(long double val)            { return shl_float_types(val); }
-#endif // BOOST_LCAST_NO_COMPILE_TIME_PRECISION
+            bool operator<<(float val)                  { return shl_float(val,start); }
+            bool operator<<(double val)                 { return shl_double(val,start); }
+            bool operator<<(long double val)            { return shl_long_double(val,start); }
 
             template<class InStreamable>
             bool operator<<(const InStreamable& input)  { return shl_input_streamable(input); }
@@ -1586,7 +1606,25 @@ namespace boost
                 typedef BOOST_DEDUCED_TYPENAME
                     deduce_char_traits<char_type,Target,Source>::type traits;
 
-                detail::lexical_stream_limited_src<char_type,traits> interpreter(buf, buf + src_len);
+                typedef BOOST_DEDUCED_TYPENAME remove_pointer<src >::type removed_ptr_t;
+                const bool requires_stringbuf =
+                        !(
+                             ::boost::type_traits::ice_or<
+                                 is_stdstring<src >::value,
+                                 is_arithmetic<src >::value,
+                                 ::boost::type_traits::ice_and<
+                                     is_pointer<src >::value,
+                                     is_char_or_wchar<removed_ptr_t >::value,
+                                     ::boost::type_traits::ice_eq<
+                                        sizeof(char_type),
+                                        sizeof(removed_ptr_t)
+                                     >::value
+                                 >::value
+                             >::value
+                        );
+
+                detail::lexical_stream_limited_src<char_type,traits, requires_stringbuf >
+                        interpreter(buf, buf + src_len);
 
                 Target result;
                 if(!(interpreter << arg && interpreter >> result))
