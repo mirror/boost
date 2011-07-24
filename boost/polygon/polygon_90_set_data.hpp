@@ -296,7 +296,7 @@ namespace boost { namespace polygon{
 
     void sort() const{
       if(unsorted_) {
-        gtlsort(data_.begin(), data_.end());
+        polygon_sort(data_.begin(), data_.end());
         unsorted_ = false;
       }
     }
@@ -304,6 +304,7 @@ namespace boost { namespace polygon{
     template <typename input_iterator_type>
     void set(input_iterator_type input_begin, input_iterator_type input_end, orientation_2d orient) {
       data_.clear();
+      reserve(std::distance(input_begin, input_end));
       data_.insert(data_.end(), input_begin, input_end);
       orient_ = orient;
       dirty_ = true;
@@ -427,7 +428,7 @@ namespace boost { namespace polygon{
       point_data<coordinate_type> prev_pt = poly[0];
       point_data<coordinate_type> current_pt = poly[1];
       encompass(extents_rectangle, current_pt);
-      for(int i = 2; i < poly.size(); ++i) {
+      for(std::size_t i = 2; i < poly.size(); ++i) {
         point_data<coordinate_type> next_pt = poly[i];
         encompass(extents_rectangle, next_pt);
         modify_pt(poly[i-1], prev_pt, current_pt, next_pt, west_shrinking, east_shrinking, south_shrinking, north_shrinking);

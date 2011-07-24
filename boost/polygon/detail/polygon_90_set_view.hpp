@@ -164,7 +164,7 @@ namespace boost { namespace polygon{
 //       orient_ = orient;
 //       output_.clear();
 //       output_.insert(output_.end(), input_begin, input_end);
-//       gtlsort(output_.begin(), output_.end());
+//       polygon_sort(output_.begin(), output_.end());
 //     }
     void sort() const {} //is always sorted
   };

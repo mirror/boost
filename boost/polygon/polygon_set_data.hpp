@@ -11,7 +11,6 @@
 #include "polygon_45_set_concept.hpp"
 #include "polygon_traits.hpp"
 #include "detail/polygon_arbitrary_formation.hpp"
-#include <iostream>
 
 namespace boost { namespace polygon {
 
@@ -248,7 +247,7 @@ namespace boost { namespace polygon {
         data.push_back(vertex_half_edge((*itr).first.first, (*itr).first.second, (*itr).second));
         data.push_back(vertex_half_edge((*itr).first.second, (*itr).first.first, -1 * (*itr).second));
       }
-      gtlsort(data.begin(), data.end());
+      polygon_sort(data.begin(), data.end());
       pf.scan(container, data.begin(), data.end());
       //std::cout << "DONE FORMING POLYGONS\n";
     }
@@ -321,7 +320,7 @@ namespace boost { namespace polygon {
 
     void sort() const{
       if(unsorted_) {
-        gtlsort(data_.begin(), data_.end());
+        polygon_sort(data_.begin(), data_.end());
         unsorted_ = false;
       }
     }
@@ -329,6 +328,7 @@ namespace boost { namespace polygon {
     template <typename input_iterator_type>
     void set(input_iterator_type input_begin, input_iterator_type input_end) {
       clear();
+      reserve(std::distance(input_begin,input_end));
       insert(input_begin, input_end);
       dirty_ = true;
       unsorted_ = true;
@@ -388,8 +388,13 @@ namespace boost { namespace polygon {
     inline polygon_set_data& 
     scale_down(typename coordinate_traits<coordinate_type>::unsigned_area_type factor) {
       for(typename value_type::iterator itr = data_.begin(); itr != data_.end(); ++itr) {
+        bool vb = (*itr).first.first.x() == (*itr).first.second.x();
         ::boost::polygon::scale_down((*itr).first.first, factor);
         ::boost::polygon::scale_down((*itr).first.second, factor);
+        bool va = (*itr).first.first.x() == (*itr).first.second.x();
+        if(!vb && va) {
+          (*itr).second *= -1;
+        }
       }
       unsorted_ = true;
       dirty_ = true;
@@ -400,8 +405,13 @@ namespace boost { namespace polygon {
     inline polygon_set_data& scale(polygon_set_data& polygon_set, 
                                    const scaling_type& scaling) {
       for(typename value_type::iterator itr = begin(); itr != end(); ++itr) {
+        bool vb = (*itr).first.first.x() == (*itr).first.second.x();
         ::boost::polygon::scale((*itr).first.first, scaling);
         ::boost::polygon::scale((*itr).first.second, scaling);
+        bool va = (*itr).first.first.x() == (*itr).first.second.x();
+        if(!vb && va) {
+          (*itr).second *= -1;
+        }
       }
       unsorted_ = true;
       dirty_ = true;
@@ -790,7 +800,7 @@ namespace boost { namespace polygon {
         data.push_back(vertex_half_edge((*itr).first.first, (*itr).first.second, (*itr).second));
         data.push_back(vertex_half_edge((*itr).first.second, (*itr).first.first, -1 * (*itr).second));
       }
-      gtlsort(data.begin(), data.end());
+      polygon_sort(data.begin(), data.end());
       pf.scan(container, data.begin(), data.end());
     }
   };

@@ -445,7 +445,7 @@ namespace boost { namespace polygon{
     };
     template <typename S45V>
     static inline void sortScan45Vector(S45V& vec) {
-      gtlsort(vec.begin(), vec.end(), lessScan45Vertex());
+      polygon_sort(vec.begin(), vec.end(), lessScan45Vertex());
     }
 
     template <typename CountType, typename output_functor>

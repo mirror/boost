@@ -111,7 +111,7 @@ namespace boost { namespace polygon{
     template <typename output_type>
     static void performMerge(output_type& result, MergeSetData& tsd) {
       
-      gtlsort(tsd.begin(), tsd.end(), lessVertex45Compact());
+      polygon_sort(tsd.begin(), tsd.end(), lessVertex45Compact());
       typedef std::vector<std::pair<Point, typename boolean_op_45<Unit>::template Scan45CountT<CountMerge> > > TSD;
       TSD tsd_;
       tsd_.reserve(tsd.size());

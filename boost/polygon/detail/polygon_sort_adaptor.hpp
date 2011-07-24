@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-//! @brief gtlsort_adaptor default implementation that calls std::sort
+//! @brief polygon_sort_adaptor default implementation that calls std::sort
 namespace boost {
   namespace polygon {
 
@@ -23,9 +23,9 @@ namespace boost {
       typedef int unit_type; // default GTL unit 
     };
 
-    //! @brief gtlsort_adaptor default implementation that calls std::sort
+    //! @brief polygon_sort_adaptor default implementation that calls std::sort
     template<typename T>
-    struct gtlsort_adaptor {
+    struct polygon_sort_adaptor {
       //! @brief wrapper that mimics std::sort() function and takes
       // the same arguments
       template<typename RandomAccessIterator_Type>
@@ -47,17 +47,17 @@ namespace boost {
 
     //! @brief user level wrapper for sorting quantities 
     template <typename iter_type>
-    void gtlsort(iter_type _b_, iter_type _e_) 
+    void polygon_sort(iter_type _b_, iter_type _e_) 
     {
-      gtlsort_adaptor<typename dummy_to_delay_instantiation<iter_type>::unit_type>::sort(_b_, _e_);
+      polygon_sort_adaptor<typename dummy_to_delay_instantiation<iter_type>::unit_type>::sort(_b_, _e_);
     }
 
     //! @brief user level wrapper for sorting quantities that takes predicate
     // as additional argument
     template <typename iter_type, typename pred_type>
-    void gtlsort(iter_type _b_, iter_type _e_, const pred_type& _pred_) 
+    void polygon_sort(iter_type _b_, iter_type _e_, const pred_type& _pred_) 
     {
-      gtlsort_adaptor<typename dummy_to_delay_instantiation<iter_type>::unit_type>::sort(_b_, _e_, _pred_);
+      polygon_sort_adaptor<typename dummy_to_delay_instantiation<iter_type>::unit_type>::sort(_b_, _e_, _pred_);
     }
 
 

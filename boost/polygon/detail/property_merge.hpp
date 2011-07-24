@@ -112,7 +112,7 @@ public:
   inline void perform_merge(result_type& result, property_merge_data& data) {
     if(data.empty()) return;
     //sort
-    gtlsort(data.begin(), data.end(), less_vertex_data<vertex_property>());
+    polygon_sort(data.begin(), data.end(), less_vertex_data<vertex_property>());
     //scanline
     bool firstIteration = true;
     scanlinePosition = scanline.end();
@@ -442,7 +442,7 @@ private:
   inline void performExtract(T& result, property_merge_data& data) {
     if(data.empty()) return;
     //sort
-    gtlsort(data.begin(), data.end(), less_vertex_data<vertex_property>());
+    polygon_sort(data.begin(), data.end(), less_vertex_data<vertex_property>());
     
     //scanline
     bool firstIteration = true;

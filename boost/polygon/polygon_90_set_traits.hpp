@@ -278,6 +278,7 @@ namespace boost { namespace polygon{
     static inline void set(std::list<T>& polygon_set, input_iterator_type input_begin, input_iterator_type input_end, orientation_2d orient) {
       polygon_set.clear();
       polygon_90_set_data<typename polygon_90_set_traits<std::list<T> >::coordinate_type> ps(orient);
+      ps.reserve(std::distance(input_begin, input_end));
       ps.insert(input_begin, input_end, orient);
       ps.clean();
       get_90_dispatch(polygon_set, ps, orient, concept_type());
@@ -289,7 +290,10 @@ namespace boost { namespace polygon{
     template <typename input_iterator_type>
     static inline void set(std::vector<T>& polygon_set, input_iterator_type input_begin, input_iterator_type input_end, orientation_2d orient) {
       polygon_set.clear();
+      size_t num_ele = std::distance(input_begin, input_end);
+      polygon_set.reserve(num_ele);
       polygon_90_set_data<typename polygon_90_set_traits<std::list<T> >::coordinate_type> ps(orient);
+      ps.reserve(num_ele);
       ps.insert(input_begin, input_end, orient);
       ps.clean();
       get_90_dispatch(polygon_set, ps, orient, concept_type());
@@ -304,6 +308,7 @@ namespace boost { namespace polygon{
                            input_iterator_type input_begin, input_iterator_type input_end, 
                            orientation_2d orient) {
       polygon_set.clear();
+      polygon_set.reserve(std::distance(input_begin, input_end));
       polygon_set.insert(input_begin, input_end, orient);
     }
 

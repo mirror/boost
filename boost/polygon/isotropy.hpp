@@ -140,6 +140,7 @@ namespace boost { namespace polygon{
   template <typename T>
   struct coordinate_traits {};
 
+  //used to override long double with an infinite precision datatype
   template <typename T>
   struct high_precision_type {
     typedef long double type;
@@ -149,6 +150,14 @@ namespace boost { namespace polygon{
   T convert_high_precision_type(const typename high_precision_type<T>::type& v) {
     return T(v);
   }
+
+  //used to override std::sort with an alternative (parallel) algorithm
+  template <typename iter_type>
+  void polygon_sort(iter_type _b_, iter_type _e_);
+
+  template <typename iter_type, typename pred_type>
+  void polygon_sort(iter_type _b_, iter_type _e_, const pred_type& _pred_);
+
 
   template <>
   struct coordinate_traits<int> {

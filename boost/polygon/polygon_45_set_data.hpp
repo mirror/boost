@@ -212,7 +212,7 @@ namespace boost { namespace polygon{
 
     void sort() const{
       if(unsorted_) {
-        gtlsort(data_.begin(), data_.end());
+        polygon_sort(data_.begin(), data_.end());
         unsorted_ = false;
       }
     }
@@ -220,6 +220,7 @@ namespace boost { namespace polygon{
     template <typename input_iterator_type>
     void set(input_iterator_type input_begin, input_iterator_type input_end) {
       data_.clear();
+      reserve(std::distance(input_begin, input_end));
       insert(input_begin, input_end);
       dirty_ = true;
       unsorted_ = true;
@@ -1262,7 +1263,7 @@ namespace boost { namespace polygon{
         //std::cout << "SCAN " << currentX << "\n";
         //scan event
         scan45.scan(eventOut, eventIn.begin(), eventIn.end());
-        gtlsort(eventOut.begin(), eventOut.end());
+        polygon_sort(eventOut.begin(), eventOut.end());
         std::size_t ptCount = 0;
         for(std::size_t i = 0; i < eventOut.size(); ++i) {
           if(!result_data.empty() &&
@@ -1333,7 +1334,7 @@ namespace boost { namespace polygon{
       }
     }
     scan45.scan(eventOut, eventIn.begin(), eventIn.end());
-    gtlsort(eventOut.begin(), eventOut.end());
+    polygon_sort(eventOut.begin(), eventOut.end());
 
     std::size_t ptCount = 0;
     for(std::size_t i = 0; i < eventOut.size(); ++i) {
@@ -1385,7 +1386,7 @@ namespace boost { namespace polygon{
         //std::cout << "SCAN " << currentX << "\n";
         //scan event
         scan45.scan(eventOut, eventIn.begin(), eventIn.end());
-        gtlsort(eventOut.begin(), eventOut.end());
+        polygon_sort(eventOut.begin(), eventOut.end());
         std::size_t ptCount = 0;
         for(std::size_t i = 0; i < eventOut.size(); ++i) {
           if(!result_data.empty() &&
@@ -1422,7 +1423,7 @@ namespace boost { namespace polygon{
       ++iter1;
     }
     scan45.scan(eventOut, eventIn.begin(), eventIn.end());
-    gtlsort(eventOut.begin(), eventOut.end());
+    polygon_sort(eventOut.begin(), eventOut.end());
 
     std::size_t ptCount = 0;
     for(std::size_t i = 0; i < eventOut.size(); ++i) {
@@ -1639,7 +1640,7 @@ namespace boost { namespace polygon{
               result.error_data_.push_back(ci);
             }
             Data2 new_result_data;
-            gtlsort(result_data.begin(), result_data.end());
+            polygon_sort(result_data.begin(), result_data.end());
             applyUnary45OpOnVectors<Unit2, 0>(new_result_data, result_data); //OR operation
             result_data.swap(new_result_data);
           }
@@ -1749,7 +1750,7 @@ namespace boost { namespace polygon{
               result.error_data_.push_back(ci);
             }
             Data2 new_result_data;
-            gtlsort(result_data.begin(), result_data.end());
+            polygon_sort(result_data.begin(), result_data.end());
             applyUnary45OpOnVectors<Unit2, 0>(new_result_data, result_data); //OR operation
             result_data.swap(new_result_data);
           }
