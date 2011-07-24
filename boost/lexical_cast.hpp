@@ -1108,9 +1108,16 @@ namespace boost
                 return true;
             }
 
+#if (defined _MSC_VER)
+# pragma warning( push )
+// C4996: This function or variable may be unsafe. Consider using sprintf_s instead
+# pragma warning( disable : 4996 )
+#endif
+
             template <class T>
             bool shl_float(float val,T* out)
             {   using namespace std;
+                if (put_inf_nan(start,finish,val)) return true;
                 finish = start + sprintf(out,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
                 return finish > start;
             }
@@ -1118,6 +1125,7 @@ namespace boost
             template <class T>
             bool shl_double(double val,T* out)
             {   using namespace std;
+                if (put_inf_nan(start,finish,val)) return true;
                 finish = start + sprintf(out,"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
                 return finish > start;
             }
@@ -1125,25 +1133,34 @@ namespace boost
             template <class T>
             bool shl_long_double(long double val,T* out)
             {   using namespace std;
+                if (put_inf_nan(start,finish,val)) return true;
                 finish = start + sprintf(out,"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
                 return finish > start;
             }
 
+#if (defined _MSC_VER)
+# pragma warning( pop )
+#endif
+
+
 #ifndef BOOST_LCAST_NO_WCHAR_T
             bool shl_float(float val,wchar_t* out)
             {   using namespace std;
+                if (put_inf_nan(start,finish,val)) return true;
                 finish = start + swprintf(out,finish-start,L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
                 return finish > start;
             }
 
             bool shl_double(double val,wchar_t* out)
             {   using namespace std;
+                if (put_inf_nan(start,finish,val)) return true;
                 finish = start + swprintf(out,finish-start,L"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
                 return finish > start;
             }
 
             bool shl_long_double(long double val,wchar_t* out)
             {   using namespace std;
+                if (put_inf_nan(start,finish,val)) return true;
                 finish = start + swprintf(out,finish-start,L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
                 return finish > start;
             }
