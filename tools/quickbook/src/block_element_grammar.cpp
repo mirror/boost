@@ -45,7 +45,7 @@ namespace quickbook
 
         local.element_id =
             !(  ':'
-            >>  (   cl::if_p(qbk_since(105u)) [space]
+            >>  (   !(cl::eps_p(qbk_since(105u)) >> space)
                 >>  (+(cl::alnum_p | '_'))      [actions.values.entry(ph::arg1, ph::arg2, general_tags::element_id)]
                 |   cl::eps_p                   [actions.element_id_warning]
                 )
@@ -53,16 +53,10 @@ namespace quickbook
             ;
         
         local.element_id_1_5 =
-                cl::if_p(qbk_since(105u)) [
-                    local.element_id
-                ]
-                ;
+                !(cl::eps_p(qbk_since(105u)) >> local.element_id);
 
         local.element_id_1_6 =
-                cl::if_p(qbk_since(106u)) [
-                    local.element_id
-                ]
-                ;
+                !(cl::eps_p(qbk_since(106u)) >> local.element_id);
 
         elements.add
             ("section", element_info(element_info::block, &local.begin_section, block_tags::begin_section))
