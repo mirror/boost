@@ -300,6 +300,16 @@ rule configure-full ( properties * : flags-only )
             properties += <boost.locale.winapi>off ;
         }                
     }
+    if  <target-os>windows in $(properties) 
+        && <toolset>gcc in $(properties) 
+        && <link>shared in $(properties)
+    {
+        flags-result += <cxxflags>-shared-libstdc++ 
+                        <cxxflags>-shared-libgcc
+                        <linkflags>-shared-libstdc++
+                        <linkflags>-shared-libgcc
+                        ;
+    }
     
     if <boost.locale.winapi>off in $(properties)
     {
