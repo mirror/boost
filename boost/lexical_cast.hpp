@@ -1147,21 +1147,42 @@ namespace boost
             bool shl_float(float val,wchar_t* out)
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out,finish-start,L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
+                finish = start + swprintf(out,
+#ifndef __MINGW32__
+                                          finish-start,
+#endif
+                                          L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
+
                 return finish > start;
             }
+
 
             bool shl_double(double val,wchar_t* out)
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out,finish-start,L"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
+                /* __MINGW32__ is defined for both mingw.org and for mingw-w64.
+                 * For mingw-w64, __MINGW64__ is defined, too, when targetting
+                 * 64 bits.
+                 *
+                 * swprintf realization in MinGW does not conform to the ISO C
+                 * Standard.
+                 */
+                finish = start + swprintf(out,
+#ifndef __MINGW32__
+                                          finish-start,
+#endif
+                                          L"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
                 return finish > start;
             }
 
             bool shl_long_double(long double val,wchar_t* out)
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out,finish-start,L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
+                finish = start + swprintf(out,
+#ifndef __MINGW32__
+                                          finish-start,
+#endif
+                                          L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
                 return finish > start;
             }
 #endif
