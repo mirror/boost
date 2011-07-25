@@ -39,7 +39,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     the interface to support thread-safety, mostly with respect to
     automatic connection management.  This implementation was written by
     Frank Mori Hess.  Acknowledgements are also due to Timmo Stange, Peter
-    Dimov, and Gottlob Frege for ideas and feedback, and to Douglas Gregor
+    Dimov, and Tony Van Eerd for ideas and feedback, and to Douglas Gregor
     for the original version of Boost.Signals this effort was based on.
     </para>
   </section>
