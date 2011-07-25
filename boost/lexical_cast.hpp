@@ -1000,6 +1000,11 @@ namespace boost
         };
     }
 
+    namespace detail
+    {
+        struct do_not_construct_stringbuffer_t{};
+    }
+
     namespace detail // optimized stream wrapper
     {
         // String representation of Source has an upper limit.
@@ -1021,7 +1026,7 @@ namespace boost
             typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
                 RequiresStringbuffer,
                 local_stringbuffer_t,
-                char
+                do_not_construct_stringbuffer_t
             >::type deduced_stringbuffer_t;
 
             // A string representation of Source is written to [start, finish).
@@ -1210,13 +1215,17 @@ namespace boost
             bool operator<<(signed char ch)             { return ((*this) << static_cast<char>(ch)); }
 #if !defined(BOOST_LCAST_NO_WCHAR_T)
             bool operator<<(wchar_t const* str)         { return shl_char_array(str); }
+            bool operator<<(wchar_t * str)              { return shl_char_array(str); }
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
             bool operator<<(wchar_t ch)                 { return shl_char(ch); }
 #endif
 #endif
             bool operator<<(unsigned char const* ch)    { return ((*this) << reinterpret_cast<char const*>(ch)); }
+            bool operator<<(unsigned char * ch)         { return ((*this) << reinterpret_cast<char *>(ch)); }
             bool operator<<(signed char const* ch)      { return ((*this) << reinterpret_cast<char const*>(ch)); }
+            bool operator<<(signed char * ch)           { return ((*this) << reinterpret_cast<char *>(ch)); }
             bool operator<<(char const* str)            { return shl_char_array(str); }
+            bool operator<<(char* str)                  { return shl_char_array(str); }
             bool operator<<(short n)                    { return shl_signed(n); }
             bool operator<<(int n)                      { return shl_signed(n); }
             bool operator<<(long n)                     { return shl_signed(n); }
