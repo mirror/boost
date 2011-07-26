@@ -303,19 +303,6 @@ namespace boost { namespace polygon{
   euclidean_distance(const segment_type& segment,
                      typename directed_line_segment_traits<segment_type>::point_type position) {
     typedef typename directed_line_segment_distance_type<segment_type>::type Unit;
-    Unit result1 = euclidean_distance(low(segment), high(segment));
-    Unit result2 = euclidean_distance(low(segment), position);
-    Unit result3 = euclidean_distance(high(segment), position);
-    if(result2 > result1) {
-      if(result3*result3 < result2*result2 - result1*result1)
-        return result3;
-    }
-    else if(result3 > result1) {
-      if(result2*result2 < result3*result3 - result1*result1)
-        return result2;
-    }
-    if(on_above_or_below(segment, position) == 0)
-      return 0.0; //I don't want to return non-zero distance if the predicate returns on the line
     Unit x1 = x(low(segment));
     Unit y1 = y(low(segment));
     Unit x2 = x(high(segment));
@@ -326,7 +313,14 @@ namespace boost { namespace polygon{
     Unit B = Y - y1;
     Unit C = x2 - x1;
     Unit D = y2 - y1;
-    Unit denom = sqrt(C * C + D * D);
+    Unit length_sq = C * C + D * D;
+    Unit param = (A * C + B * D)/length_sq;
+    if(param > 1.0) {
+      return euclidean_distance(high(segment), position);
+    } else if(param < 0.0) {
+      return euclidean_distance(low(segment), position);
+    } 
+    Unit denom = sqrt(length_sq);
     if(denom == 0.0)
       return 0.0;
     Unit result = (A * D - C * B) / denom;
