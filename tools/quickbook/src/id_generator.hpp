@@ -47,6 +47,10 @@ namespace quickbook
 
         std::string replace_placeholders(std::string const&);
         string_ref get(string_ref placeholder);
+
+    private:
+        id_generator(id_generator const&);
+        id_generator& operator=(id_generator const&);
     };
 }
 
