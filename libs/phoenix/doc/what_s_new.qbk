@@ -19,12 +19,12 @@ Therefore the internal extension mechanism is different.
   For an in depth discussion see the section [link phoenix.inside Inside Phoenix]
 * [link phoenix.modules.function] phoenix::function now supports function objects
   that implement the __boost_result_of__ protocol. *This is a breaking change*
-  
+
   [/as well as the old return type
   deduction protocol. The same is true for [link phoenix.modules.bind Bind].]
 * Boilerplate macros to easily adapt already existing functions and function
   objects
-* [link phoenix.modules.bind Bind] is no completely compatible with Boost.Bind
+* [link phoenix.modules.bind Bind] is now completely compatible with Boost.Bind
 
 [endsect]
 
