@@ -47,6 +47,10 @@
 #include <boost/detail/lcast_precision.hpp>
 #include <boost/detail/workaround.hpp>
 
+#ifdef __PGI
+#include <cwchar>
+#endif
+
 #ifndef BOOST_NO_STD_LOCALE
 #   include <locale>
 #else
@@ -1134,7 +1138,7 @@ namespace boost
                 finish = start + sprintf(out,"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
                 return finish > start;
             }
-
+#ifndef __MINGW32__
             template <class T>
             bool shl_long_double(long double val,T* out)
             {   using namespace std;
@@ -1142,6 +1146,7 @@ namespace boost
                 finish = start + sprintf(out,"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
                 return finish > start;
             }
+#endif
 
 #if (defined _MSC_VER)
 # pragma warning( pop )
@@ -1180,16 +1185,16 @@ namespace boost
                 return finish > start;
             }
 
+#ifndef __MINGW32__
             bool shl_long_double(long double val,wchar_t* out)
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out,
-#ifndef __MINGW32__
-                                          finish-start,
-#endif
-                                          L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
+                finish = start + swprintf(out,finish-start,
+                    L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
                 return finish > start;
             }
+    #endif
+
 #endif
 
 /************************************ OPERATORS << ( ... ) ********************************/
@@ -1242,7 +1247,13 @@ namespace boost
 #endif
             bool operator<<(float val)                  { return shl_float(val,start); }
             bool operator<<(double val)                 { return shl_double(val,start); }
-            bool operator<<(long double val)            { return shl_long_double(val,start); }
+            bool operator<<(long double val)            {
+#ifndef __MINGW32__
+                return shl_long_double(val,start);
+#else
+                return shl_double(val,start);
+#endif
+            }
 
             template<class InStreamable>
             bool operator<<(const InStreamable& input)  { return shl_input_streamable(input); }
