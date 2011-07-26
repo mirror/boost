@@ -143,6 +143,11 @@ namespace boost { namespace polygon{
     if(on_above_or_below(segment, value) == 0) {
       rectangle_data<typename directed_line_segment_traits<segment_type>::coordinate_type> rect;
       set_points(rect, low(segment), high(segment));
+      if(area(rect) == 0.0) {
+        if(!consider_touch) {
+          return !equivalence(value, low(segment)) && !equivalence(value, high(segment));
+        }
+      }
       return contains(rect, value, consider_touch);
     }
     return false;
