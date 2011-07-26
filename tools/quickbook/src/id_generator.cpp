@@ -94,20 +94,6 @@ namespace quickbook
         int count;
     };
 
-    struct id_generator::placeholder
-    {
-        typedef std::pair<std::string const, id_generator::id> id_pair;
-
-        placeholder(id_generator::categories category, id_pair& id)
-          : category(category),
-            id(id),
-            final_id() {}
-    
-        id_generator::categories category;
-        id_pair& id;
-        std::string final_id; // Set in the second pass.
-    };
-    
     id_generator::id_generator()
     {
     }

@@ -33,8 +33,21 @@ namespace quickbook
     private:
 
         struct id;
-        struct placeholder;
         typedef boost::unordered_map<std::string, id> placeholder_map;
+
+        struct placeholder
+        {
+            typedef std::pair<std::string const, id_generator::id> id_pair;
+    
+            placeholder(id_generator::categories category, id_pair& id)
+              : category(category),
+                id(id),
+                final_id() {}
+        
+            id_generator::categories category;
+            id_pair& id;
+            std::string final_id; // Set in the second pass.
+        };
         
         placeholder_map ids_;
         std::deque<placeholder> placeholders_;
