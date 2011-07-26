@@ -22,17 +22,17 @@
 
 namespace quickbook
 {
-    class value;
-    class stored_value;
-    class value_builder;
-    class value_error;
+    struct value;
+    struct stored_value;
+    struct value_builder;
+    struct value_error;
 
     namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
         // Node
     
-        class value_node
+        struct value_node
         {
         private:
             value_node(value_node const&);
@@ -81,10 +81,10 @@ namespace quickbook
         // This defines most of the public methods for value.
         // 'begin' and 'end' are defined with the iterators later.
     
-        class value_base
+        struct value_base
         {
         public:
-            class iterator;
+            struct iterator;
 
             typedef iterator const_iterator;
             typedef value_node::tag_type tag_type;
@@ -133,20 +133,20 @@ namespace quickbook
 
             // value_builder needs to access 'value_' to get the node
             // from a value.
-            friend class quickbook::value_builder;
-            friend class quickbook::stored_value;
+            friend struct quickbook::value_builder;
+            friend struct quickbook::stored_value;
         };
         
         ////////////////////////////////////////////////////////////////////////
         // Reference and proxy values for use in iterators
 
-        class value_ref : public value_base
+        struct value_ref : public value_base
         {
         public:
             explicit value_ref(value_node* base) : value_base(base) {}
         };
         
-        class value_proxy : public value_base
+        struct value_proxy : public value_base
         {
         public:
             explicit value_proxy(value_node* base) : value_base(base) {}
@@ -157,7 +157,7 @@ namespace quickbook
         ////////////////////////////////////////////////////////////////////////
         // Iterators
 
-        class value_base::iterator
+        struct value_base::iterator
             : public boost::forward_iterator_helper<
                 iterator, value, int, value_proxy, value_ref>
         {
@@ -186,7 +186,7 @@ namespace quickbook
         ////////////////////////////////////////////////////////////////////////
         // Reference counting for values
 
-        class value_counted : public value_base
+        struct value_counted : public value_base
         {
             value_counted& operator=(value_counted const&);
         protected:
@@ -203,7 +203,7 @@ namespace quickbook
         // Values are immutable, so this class is used to build a list of
         // value nodes before constructing the value.
 
-        class value_list_builder {
+        struct value_list_builder {
             value_list_builder(value_list_builder const&);
             value_list_builder& operator=(value_list_builder const&);
         public:
@@ -226,7 +226,7 @@ namespace quickbook
     //
     // Most of the methods are in value_base.
 
-    class value : public detail::value_counted
+    struct value : public detail::value_counted
     {
     public:
         value();
@@ -237,7 +237,7 @@ namespace quickbook
         void swap(value& x) { detail::value_counted::swap(x); }
     };
     
-    class stored_value : public detail::value_counted
+    struct stored_value : public detail::value_counted
     {
     public:
         stored_value();
@@ -269,7 +269,7 @@ namespace quickbook
     //
     // Used to incrementally build a valueeter tree.
 
-    class value_builder {
+    struct value_builder {
     public:
         value_builder();
         void swap(value_builder& b);
@@ -299,7 +299,7 @@ namespace quickbook
     // Value Error
     //
     
-    class value_error : public std::logic_error
+    struct value_error : public std::logic_error
     {
     public:
         explicit value_error(std::string const&);
@@ -310,9 +310,9 @@ namespace quickbook
     //
     // Convenience class for unpacking value values.
 
-    class value_consumer {
+    struct value_consumer {
     public:
-        class iterator
+        struct iterator
             : public boost::input_iterator_helper<iterator,
                 boost::iterator_value<value::iterator>::type,
                 boost::iterator_difference<value::iterator>::type,

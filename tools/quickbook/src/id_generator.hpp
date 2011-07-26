@@ -16,9 +16,9 @@
 
 namespace quickbook
 {
-    class string_ref;
+    struct string_ref;
 
-    class id_generator
+    struct id_generator
     {
     public:
 

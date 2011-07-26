@@ -17,7 +17,7 @@ namespace quickbook
 {
     // string_ref
 
-    class string_ref
+    struct string_ref
     {
     public:
         typedef std::string::const_iterator iterator;
