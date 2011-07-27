@@ -180,8 +180,10 @@ namespace quickbook
         std::string escape_postfix;
         std::string processing_instruction_postfix;
         std::string comment_postfix;
+        std::string whitespace;
         std::string tag_end;
         std::string name_end;
+        std::string attribute_assign;
         std::vector<std::string> id_attributes;
         
         std::string replace(std::string const&, id_generator&);
@@ -205,12 +207,14 @@ namespace quickbook
     }
 
     xml_processor::xml_processor()
-        : escape_prefix("!--quickbook-escape-prefix-->")
-        , escape_postfix("!--quickbook-escape-postfix-->")
+        : escape_prefix("<!--quickbook-escape-prefix-->")
+        , escape_postfix("<!--quickbook-escape-postfix-->")
         , processing_instruction_postfix("?>")
         , comment_postfix("-->")
+        , whitespace(" \t\n\r")
         , tag_end(" \t\n\r>")
         , name_end("= \t\n\r>")
+        , attribute_assign("= \t\n\r")
     {
         static int const n_id_attributes = sizeof(id_attributes_)/sizeof(char const*);
         for (int i = 0; i != n_id_attributes; ++i)
@@ -226,110 +230,115 @@ namespace quickbook
         std::string result;
 
         typedef std::string::const_iterator iterator;
-        iterator pos = source.begin(), end = source.end();
-        iterator next = pos;
 
-        while (true) {
-            next = std::find(next, end, '<');
-            if (next == end) break;
+        // copied is the point up to which the source has been copied, or
+        // replaced, to result.
+        iterator copied = source.begin();
 
-            if (end - pos > escape_prefix.size() && std::equal(
-                    escape_prefix.begin(), escape_prefix.end(), pos))
+        iterator end = source.end();
+
+        for(iterator it = copied; it != end; it = std::find(it, end, '<'))
+        {
+            assert(copied <= it && it <= end);        
+
+            if (static_cast<std::size_t>(end - it) > escape_prefix.size() &&
+                    std::equal(escape_prefix.begin(), escape_prefix.end(), it))
             {
-                next = std::search(next + escape_prefix.size(), end,
+                it = std::search(it + escape_prefix.size(), end,
                     escape_postfix.begin(), escape_postfix.end());
 
-                if (next == end) break;
+                if (it == end) break;
 
-                next += escape_postfix.size();
+                it += escape_postfix.size();
                 continue;
             }
 
-            ++next;
-            if (next == end) break;
+            ++it;
+            if (it == end) break;
 
-            switch(*next)
+            switch(*it)
             {
             case '?':
-                next = std::search(next, end,
+                it = std::search(it, end,
                     processing_instruction_postfix.begin(),
                     processing_instruction_postfix.end());
-
-                if (next != end) next += processing_instruction_postfix.size();
                 break;
-            case '!':
-                if (end - next > 3 && next[1] == '-' && next[2] == '-')
-                {
-                    next = std::search(next + 3, end,
-                        comment_postfix.begin(), comment_postfix.end());
 
-                    if (next != end) next += comment_postfix.size();
+            case '!':
+                if (end - it > 3 && it[1] == '-' && it[2] == '-')
+                {
+                    it = std::search(it + 3, end,
+                        comment_postfix. begin(), comment_postfix.end());
+                    if (it != end) it += comment_postfix.size();
                 }
                 else
                 {
-                    next = std::find(next + 1, end, '>');
-                    if (next != end) ++next;
+                    it = std::find(it, end, '>');
                 }
                 break;
+
             default:
-                if (*next >= 'a' || *next <= 'z' ||
-                        *next >= 'A' || *next <= 'Z' ||
-                        *next == '_' || *next == ':')
+                if ((*it >= 'a' && *it <= 'z') ||
+                        (*it >= 'A' && *it <= 'Z') ||
+                        *it == '_' || *it == ':')
                 {
-                    next = std::find_first_of(
-                        next + 1, end, tag_end.begin(), tag_end.end());
+                    it = std::find_first_of(
+                        it + 1, end, tag_end.begin(), tag_end.end());
 
                     while (true) {
-                        while(next != end && (*next == ' ' || *next == '\t'))
-                            ++next;
+                        while(it != end &&
+                                std::find(whitespace.begin(),
+                                    whitespace.end(), *it)
+                                != whitespace.end())
+                            ++it;
                             
-                        iterator name_start = next;
+                        iterator name_start = it;
 
-                        next = std::find_first_of(
-                            next, end, name_end.begin(), name_end.end());
+                        it = std::find_first_of(
+                            it, end, name_end.begin(), name_end.end());
                         
-                        if (next == end || *next == '>') break;
+                        if (it == end || *it == '>') break;
 
-                        string_ref name(name_start, next);
-                        ++next;
+                        string_ref name(name_start, it);
+                        ++it;
 
-                        while (next != end &&
-                                std::find(name_end.begin(), name_end.end(), *next)
-                                != name_end.end())
-                            ++next;
+                        while (it != end &&
+                                std::find(attribute_assign.begin(),
+                                    attribute_assign.end(), *it)
+                                != attribute_assign.end())
+                            ++it;
 
-                        if (next == end || (*next != '"' && *next != '\'')) break;
+                        if (it == end || (*it != '"' && *it != '\'')) break;
 
-                        char delim = *next;
-                        ++next;
+                        char delim = *it;
+                        ++it;
 
-                        iterator value_start = next;
+                        iterator value_start = it;
 
-                        next = std::find(next, end, delim);
-                        string_ref value(value_start, next);
-                        if (next == end) break;
-                        ++next;
+                        it = std::find(it, end, delim);
+                        string_ref value(value_start, it);
+                        if (it == end) break;
+                        ++it;
 
-                        if (std::find(id_attributes.begin(),
-                                    id_attributes.end(), name)
+                        if (std::find(id_attributes.begin(), id_attributes.end(),
+                                    name)
                                 != id_attributes.end())
                         {
-                            result.append(pos, value.begin());
+                            result.append(copied, value.begin());
                             string_ref x = ids.get(value);
                             result.append(x.begin(), x.end());
-                            pos = value.end();
+                            copied = value.end();
                         }
                     }
                 }
                 else
                 {
-                    next = std::find(next + 1, end, '>');
-                    if (next != end) ++next;
+                    it = std::find(it, end, '>');
                 }
             }
         }
         
-        result.append(pos, source.end());
+        result.append(copied, source.end());
         return result;
     }
 }

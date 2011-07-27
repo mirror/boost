@@ -13,5 +13,14 @@
     <para>
       These should be properly encoded: &gt; &lt; &quot;
     </para>
+    <para>
+      This <link linkend="$0">link</link> shouldn't be changed.
+    </para>
+    <para>
+      Some other problematic links:
+<link linkend="$157">one</link>,
+<link linkend="$-256">two</link>,
+<link linkend="$text">three</link>.
+    </para>
   </section>
 </article>
