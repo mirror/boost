@@ -46,10 +46,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
 #include <boost/detail/workaround.hpp>
-
-#ifdef __PGI
 #include <cwchar>
-#endif
+
 
 #ifndef BOOST_NO_STD_LOCALE
 #   include <locale>
