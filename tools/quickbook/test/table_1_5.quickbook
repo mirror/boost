@@ -28,6 +28,38 @@
     [[cell]]
 ]
 
+[table [/ Comment?] Title
+    [[Heading]]
+    [[cell]]
+]
+
+[table [/ Multi line
+comment] Title
+    [[Heading]]
+    [[cell]]
+]
+
+[table Title [/  ] containing a comment
+    [[Heading]]
+    [[cell]]
+]
+
+[/ These two might be considered to be a bug. ]
+
+[table [/ Multi line
+comment]
+    Title
+    [[Heading]]
+    [[cell]]
+]
+
+[table [/ Multi line
+comment]
+    [[Title]]
+    [[Heading]]
+    [[cell]]
+]
+
 [section:section1 Section 1]
 
 [table:table1 Table 1

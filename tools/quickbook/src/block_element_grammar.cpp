@@ -203,7 +203,7 @@ namespace quickbook
             ("table", element_info(element_info::nested_block, &local.table, block_tags::table))
             ;
 
-        local.same_line = (cl::eps_p(*cl::blank_p >> cl::eol_p) | space);
+        local.same_line = *cl::blank_p >> !(comment >> space);
 
         local.table =
                 local.same_line

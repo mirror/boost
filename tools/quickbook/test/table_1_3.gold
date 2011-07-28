@@ -47,6 +47,121 @@
       </tbody>
     </tgroup>
   </informaltable>
+  <table frame="all" id="table_1_3.t1">
+    <title>Title</title>
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+            <para>
+              Heading
+            </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+            <para>
+              cell
+            </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+  <table frame="all" id="table_1_3.t2">
+    <title>Title</title>
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+            <para>
+              Heading
+            </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+            <para>
+              cell
+            </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+  <table frame="all" id="table_1_3.t3">
+    <title>Title [/ ] containing a comment</title>
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+            <para>
+              Heading
+            </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+            <para>
+              cell
+            </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+  <table frame="all" id="table_1_3.t4">
+    <title>Title</title>
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+            <para>
+              Heading
+            </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+            <para>
+              cell
+            </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+  <table frame="all" id="table_1_3.t5">
+    <title>[[Title]]</title>
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+            <para>
+              Heading
+            </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+            <para>
+              cell
+            </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
   <section id="table_1_3.section1">
     <title><link linkend="table_1_3.section1">Section 1</link></title>
     <table frame="all" id="table_1_3.section1.t0">
