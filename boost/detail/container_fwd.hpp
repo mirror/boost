@@ -47,8 +47,7 @@
      // MSL standard lib:
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(__IBMCPP__)
-     // take the default VACPP std lib
-#    define BOOST_DETAIL_NO_CONTAINER_FWD
+     // The default VACPP std lib, forward declaration seems to be fine.
 #  elif defined(MSIPL_COMPILE_H)
      // Modena C++ standard library
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
