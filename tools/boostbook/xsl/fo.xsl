@@ -18,7 +18,109 @@
   <xsl:param name="make.year.ranges" select="1"/>
   <xsl:param name="ulink.show" select="0"/>
 
-  <!-- The question and answer templates are copied here from the
+   
+  <!--
+  The following code sets which sections start new pages in the PDF document flow.
+  
+  The parameter "boost.section.newpage.depth" set how far down the hierarchy the
+  page breaks go.  Defaults to 1 (the same as html chunking), in which case only 
+  top level sections start a new page, set to a higher value to force nested sections
+  onto new pages as well.
+  
+  For top level sections (level 1), we use "break-before" which forces the very first
+  section onto a separate page from the TOC.
+  
+  For nested sections (level 2 and greater) we use "break-after" which keeps nested
+  sections together with their enclosing section (rationale: the enclosing section
+  often has nothing but a title, and no content except the nested sections, and we 
+  don't want a page break right after a section title!).
+  
+  For reference sections, we turn page breaks *off* by setting "refentry.pagebreak" to 0.
+  This is for the same reason we use "break-after" for nested sections - we want reference 
+  entries to be on the same page as the title and synopsis which encloses them.  Ideally
+  we'd use "break-after" here too, but I can't find an easy to to fix that.
+  
+  Finally note that TOC's and Indexes don't get page breaks forced after them.
+  Again there's no easy fix here, *except* for the top level TOC which gets a page break
+  after it thanks to the "break-before" on level 1 sections.  Unfortunately this means
+  there's no break after the last section and before the first Index, *unless* the
+  final section has nested sections which may then trigger one!
+  
+  We could fix all this by cut-and-pasting the relevant XSL from the stylesheets to here
+  and making sure everything uses "break-after", but whether it's worth it is questionable...?
+  
+  -->
+   
+  <xsl:param name="boost.section.newpage.depth" select="1"/>
+  <xsl:param name="refentry.pagebreak" select="0"/>
+
+   <xsl:attribute-set name="section.level1.properties" use-attribute-sets="section.properties">
+      <xsl:attribute name="break-before">
+         <xsl:if test="($boost.section.newpage.depth &gt; 0)">
+            page
+         </xsl:if>
+         <xsl:if test="not($boost.section.newpage.depth &gt; 0)">
+            auto
+         </xsl:if>
+      </xsl:attribute>
+   </xsl:attribute-set>
+
+   <xsl:attribute-set name="section.level2.properties" use-attribute-sets="section.properties">
+      <xsl:attribute name="break-after">
+         <xsl:if test="($boost.section.newpage.depth &gt; 1)">
+            page
+         </xsl:if>
+         <xsl:if test="not($boost.section.newpage.depth &gt; 1)">
+            auto
+         </xsl:if>
+      </xsl:attribute>
+   </xsl:attribute-set>
+
+   <xsl:attribute-set name="section.level3.properties" use-attribute-sets="section.properties">
+      <xsl:attribute name="break-after">
+         <xsl:if test="($boost.section.newpage.depth &gt; 2)">
+            page
+         </xsl:if>
+         <xsl:if test="not($boost.section.newpage.depth &gt; 2)">
+            auto
+         </xsl:if>
+      </xsl:attribute>
+   </xsl:attribute-set>
+
+   <xsl:attribute-set name="section.level4.properties" use-attribute-sets="section.properties">
+      <xsl:attribute name="break-after">
+         <xsl:if test="($boost.section.newpage.depth &gt; 3)">
+            page
+         </xsl:if>
+         <xsl:if test="not($boost.section.newpage.depth &gt; 3)">
+            auto
+         </xsl:if>
+      </xsl:attribute>
+   </xsl:attribute-set>
+
+   <xsl:attribute-set name="section.level5.properties" use-attribute-sets="section.properties">
+      <xsl:attribute name="break-after">
+         <xsl:if test="($boost.section.newpage.depth &gt; 4)">
+            page
+         </xsl:if>
+         <xsl:if test="not($boost.section.newpage.depth &gt; 4)">
+            auto
+         </xsl:if>
+      </xsl:attribute>
+   </xsl:attribute-set>
+
+   <xsl:attribute-set name="section.level6.properties" use-attribute-sets="section.properties">
+      <xsl:attribute name="break-after">
+         <xsl:if test="($boost.section.newpage.depth &gt; 5)">
+            page
+         </xsl:if>
+         <xsl:if test="not($boost.section.newpage.depth &gt; 5)">
+            auto
+         </xsl:if>
+      </xsl:attribute>
+   </xsl:attribute-set>
+
+   <!-- The question and answer templates are copied here from the
        1.61.3 DocBook XSL stylesheets so that we can eliminate the emission
        of id attributes in the emitted fo:list-item-label elements. FOP
        0.20.5 has problems with these id attributes, and they are otherwise
@@ -289,17 +391,5 @@ General default options go here:
 <xsl:param name="callout.graphics.path">http://svn.boost.org/svn/boost/trunk/doc/src/images/callouts/</xsl:param>
 <xsl:param name="img.src.path">http://svn.boost.org/svn/boost/trunk/doc/html/</xsl:param>
 
-<!-- Ideally we would use this to force top level sections
-     to start on a new page, unfortunately this causes rather
-     unfortunate page breaks in some Doxygen-generated
-     documentation which uses <refentry> and <synopsis>
-     sections :-(
-
-<xsl:attribute-set name="section.level1.properties">
-  <xsl:attribute name="break-before">page</xsl:attribute>
-</xsl:attribute-set>
-
--->
-  
 </xsl:stylesheet>
 

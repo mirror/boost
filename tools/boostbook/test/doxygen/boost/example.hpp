@@ -68,6 +68,8 @@ namespace example
     /**
      * Test some doxygen markup
      *
+     * \warning This is just an example.
+     *
      * Embedded docbook list:
      *
      * \xmlonly

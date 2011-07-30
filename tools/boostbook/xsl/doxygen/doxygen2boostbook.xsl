@@ -1276,7 +1276,9 @@
                   not (@kind='return') and 
                   not (@kind='post') and
                   not (@kind='attention') and
-                  not (@kind='see')">
+                  not (@kind='see') and
+                  not (@kind='warning') 
+                  ">
       <xsl:apply-templates mode="passthrough"/>
     </xsl:if>
   </xsl:template>
@@ -1285,6 +1287,12 @@
     <note>
       <xsl:apply-templates mode="passthrough"/>
     </note>
+  </xsl:template>
+
+  <xsl:template match="para/simplesect[@kind='warning']" mode="passthrough">
+    <warning>
+      <xsl:apply-templates mode="passthrough"/>
+    </warning>
   </xsl:template>
 
   <xsl:template match="para/simplesect[@kind='par']" mode="passthrough">
