@@ -28,6 +28,7 @@ exe quickbook
     utils.cpp
     input_path.cpp
     values.cpp
+    id_generator.cpp
     post_process.cpp
     collector.cpp
     template_stack.cpp

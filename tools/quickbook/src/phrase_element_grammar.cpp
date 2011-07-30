@@ -51,27 +51,27 @@ namespace quickbook
             ;
 
         local.image =
-                blank
-            >>  cl::if_p(qbk_since(105u)) [
-                        (+(
-                            *cl::space_p
-                        >>  +(cl::anychar_p - (cl::space_p | phrase_end | '['))
-                        ))                      [actions.values.entry(ph::arg1, ph::arg2)]
-                    >>  hard_space
-                    >>  *actions.values.list()
-                        [   '['
-                        >>  (*(cl::alnum_p | '_')) 
-                                                [actions.values.entry(ph::arg1, ph::arg2)]
-                        >>  space
-                        >>  (*(cl::anychar_p - (phrase_end | '[')))
-                                                [actions.values.entry(ph::arg1, ph::arg2)]
-                        >>  ']'
-                        >>  space
-                        ]
-                ].else_p [
-                        (*(cl::anychar_p - phrase_end))
-                                                [actions.values.entry(ph::arg1, ph::arg2)]
+                cl::eps_p(qbk_since(105u))
+            >>  blank
+            >>  (+(
+                    *cl::space_p
+                >>  +(cl::anychar_p - (cl::space_p | phrase_end | '['))
+                ))                      [actions.values.entry(ph::arg1, ph::arg2)]
+            >>  hard_space
+            >>  *actions.values.list()
+                [   '['
+                >>  (*(cl::alnum_p | '_')) 
+                                        [actions.values.entry(ph::arg1, ph::arg2)]
+                >>  space
+                >>  (*(cl::anychar_p - (phrase_end | '[')))
+                                        [actions.values.entry(ph::arg1, ph::arg2)]
+                >>  ']'
+                >>  space
                 ]
+            >>  cl::eps_p(']')
+            |   cl::eps_p(qbk_before(105u))
+            >>  blank
+            >>  (*(cl::anychar_p - phrase_end)) [actions.values.entry(ph::arg1, ph::arg2)]
             >>  cl::eps_p(']')
             ;
             

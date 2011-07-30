@@ -4,7 +4,7 @@
 dirname="test_that__amp____lt__are_being_escaped_" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <libraryinfo>
-    <legalnotice>
+    <legalnotice id="test_that__amp____lt__are_being_escaped_.legal">
       <para>
         &amp; should be &amp;amp;, &lt; should &amp;lt;
       </para>

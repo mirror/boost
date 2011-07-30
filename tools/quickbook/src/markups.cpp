@@ -54,7 +54,6 @@ namespace quickbook
                 { phrase_tags::strikethrough, "<emphasis role=\"strikethrough\">", "</emphasis>" },
                 { phrase_tags::quote, "<quote>", "</quote>" },
                 { phrase_tags::replaceable, "<replaceable>", "</replaceable>" },
-                { phrase_tags::footnote, "<footnote><para>", "</para></footnote>" },
                 { phrase_tags::escape, "<!--quickbook-escape-prefix-->", "<!--quickbook-escape-postfix-->" },
                 { phrase_tags::break_mark, "<sbr/>\n", 0 }
             };

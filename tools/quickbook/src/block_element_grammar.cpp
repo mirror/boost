@@ -34,7 +34,8 @@ namespace quickbook
                         xinclude, include,
                         template_, template_id, template_formal_arg,
                         template_body, identifier, import,
-                        element_id, element_id_1_5, element_id_1_6;
+                        element_id, element_id_1_5, element_id_1_6,
+                        same_line;
     };
 
     void quickbook_grammar::impl::init_block_elements()
@@ -44,7 +45,7 @@ namespace quickbook
 
         local.element_id =
             !(  ':'
-            >>  (   cl::if_p(qbk_since(105u)) [space]
+            >>  (   !(cl::eps_p(qbk_since(105u)) >> space)
                 >>  (+(cl::alnum_p | '_'))      [actions.values.entry(ph::arg1, ph::arg2, general_tags::element_id)]
                 |   cl::eps_p                   [actions.element_id_warning]
                 )
@@ -52,16 +53,10 @@ namespace quickbook
             ;
         
         local.element_id_1_5 =
-                cl::if_p(qbk_since(105u)) [
-                    local.element_id
-                ]
-                ;
+                !(cl::eps_p(qbk_since(105u)) >> local.element_id);
 
         local.element_id_1_6 =
-                cl::if_p(qbk_since(106u)) [
-                    local.element_id
-                ]
-                ;
+                !(cl::eps_p(qbk_since(106u)) >> local.element_id);
 
         elements.add
             ("section", element_info(element_info::block, &local.begin_section, block_tags::begin_section))
@@ -208,10 +203,12 @@ namespace quickbook
             ("table", element_info(element_info::nested_block, &local.table, block_tags::table))
             ;
 
+        local.same_line = *cl::blank_p >> !(comment >> space);
+
         local.table =
-                (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
+                local.same_line
             >>  local.element_id_1_5
-            >>  (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
+            >>  local.same_line
             >>  (*(cl::anychar_p - eol))        [actions.values.entry(ph::arg1, ph::arg2, table_tags::title)]
             >>  (+eol)
             >>  *local.table_row

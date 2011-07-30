@@ -33,3 +33,13 @@ install dist-lib
     :
     release
     ;
+
+# Target for quickbook toolset's auto build.
+
+alias quickbook-auto
+    : quickbook
+    : release
+    ;
+
+explicit quickbook-auto
+    ;

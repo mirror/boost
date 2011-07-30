@@ -3,7 +3,7 @@
 <article id="c___test" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>C++ test</title>
   <articleinfo>
-    <legalnotice>
+    <legalnotice id="c___test.legal">
       <para>
         <code><phrase role="keyword">def</phrase> <phrase role="identifier">foo</phrase><phrase
         role="special">(</phrase><phrase role="identifier">x</phrase><phrase role="special">):</phrase>
