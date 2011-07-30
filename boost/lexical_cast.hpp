@@ -1156,7 +1156,7 @@ namespace boost
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
                 finish = start + swprintf(out,
-#if !defined(__MINGW32__) && !defined(__PGIC__)
+#if !defined(__MINGW32__)
                                           finish-start,
 #endif
                                           L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
@@ -1176,7 +1176,7 @@ namespace boost
                  * Standard.
                  */
                 finish = start + swprintf(out,
-#if !defined(__MINGW32__) && !defined(__PGIC__)
+#if !defined(__MINGW32__)
                                           finish-start,
 #endif
                                           L"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
@@ -1187,11 +1187,7 @@ namespace boost
             bool shl_long_double(long double val,wchar_t* out)
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out,
-#if !defined(__PGIC__)
-                    finish-start,
-#endif
-                    L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
+                finish = start + swprintf(out, finish-start, L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
                 return finish > start;
             }
     #endif
