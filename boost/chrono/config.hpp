@@ -107,7 +107,6 @@
 
 //  enable dynamic linking on Windows  ---------------------------------------//
 
-#ifdef BOOST_HAS_DECLSPEC // defined by boost.config
 // we need to import/export our code only if the user has specifically
 // asked for it by defining either BOOST_ALL_DYN_LINK if they want all boost
 // libraries to be dynamically linked, or BOOST_CHRONO_DYN_LINK
@@ -115,12 +114,11 @@
 #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_CHRONO_DYN_LINK)
 // export if this is our own source, otherwise import:
 #ifdef BOOST_CHRONO_SOURCE
-# define BOOST_CHRONO_DECL __declspec(dllexport)
+# define BOOST_CHRONO_DECL BOOST_SYMBOL_EXPORT
 #else
-# define BOOST_CHRONO_DECL __declspec(dllimport)
+# define BOOST_CHRONO_DECL BOOST_SYMBOL_IMPORT
 #endif  // BOOST_CHRONO_SOURCE
 #endif  // DYN_LINK
-#endif  // BOOST_HAS_DECLSPEC
 //
 // if BOOST_CHRONO_DECL isn't defined yet define it now:
 #ifndef BOOST_CHRONO_DECL
