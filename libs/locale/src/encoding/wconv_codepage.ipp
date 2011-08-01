@@ -202,19 +202,11 @@ namespace impl {
     template<typename CharType>
     bool validate_utf16(CharType const *str,unsigned len)
     {
-        for(unsigned i=0;i<len;i++) {
-            uint16_t c = static_cast<uint16_t>(str[i]);
-
-            if(0xD800 <= c && c<= 0xDBFF) {
-                i++;
-                if(i>=len)
-                    return false;
-                c=static_cast<uint16_t>(str[i]);
-                if(0xDC00 <= c && c <= 0xDFFF)
-                    continue;
-                return false;
-            }
-            else if(0xDC00 <= c && c <=0xDFFF)
+        CharType const *begin = str;
+        CharType const *end = str+len;
+        while(begin!=end) {
+            utf::code_point c = utf::utf_traits<CharType,2>::template decode(begin,end);
+            if(c==utf::illegal || c==utf::incomplete)
                 return false;
         }
         return true;
@@ -436,30 +428,10 @@ namespace impl {
             multibyte_to_wide(code_page_,begin,end,how_ == skip,buf);
             remove_substitutions(buf);
 
-            size_t n=buf.size();
-            string_type res;
-            res.reserve(n);
-            for(unsigned i=0;i<n;i++) {
-                wchar_t cur = buf[i];
-                if(0xD800 <= cur && cur<= 0xDBFF) {
-                    i++;
-                    if(i>=n)
-                        throw conversion_error();
-                    if(0xDC00 <= buf[i] && buf[i]<=0xDFFF) {
-                        uint32_t w1 = cur;
-                        uint32_t w2 = buf[i];
-                        uint32_t norm = ((uint32_t(w1 & 0x3FF) << 10) | (w2 & 0x3FF)) + 0x10000;
-                        res+=char_type(norm);
-                    }
-                    else 
-                        throw conversion_error();
-                }
-                else if(0xDC00 <= cur && cur<=0xDFFF)
-                    throw conversion_error();
-                else
-                    res+=char_type(cur);
-            }
-            return res;
+            if(buf.empty())
+                return string_type();
+
+            return utf_to_utf<CharType>(&buf[0],&buf[0]+buf.size(),how_);
         }
     private:
         method_type how_;
@@ -488,27 +460,7 @@ namespace impl {
 
         virtual std::string convert(CharType const *begin,CharType const *end) 
         {
-            std::wstring tmp;
-            tmp.reserve(end-begin);
-            while(begin!=end) {
-                uint32_t cur = *begin++;
-                if(cur > 0x10FFFF  || (0xD800 <=cur && cur <=0xDFFF)) {
-                    if(how_ == skip)
-                        continue;
-                    else
-                        throw conversion_error();
-                }
-                if(cur > 0xFFFF) {
-                    uint32_t u = cur - 0x10000;
-                    wchar_t first  = 0xD800 | (u>>10);
-                    wchar_t second = 0xDC00 | (u & 0x3FF);
-                    tmp+=first;
-                    tmp+=second;
-                }
-                else {
-                    tmp+=wchar_t(cur);
-                }
-            }
+            std::wstring tmp = utf_to_utf<wchar_t>(begin,end,how_);
 
             std::vector<char> ctmp;
             wide_to_multibyte(code_page_,tmp.c_str(),tmp.c_str()+tmp.size(),how_ == skip,ctmp);
