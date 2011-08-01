@@ -78,7 +78,7 @@ void test_to(CharType const *s,unsigned codepoint)
     
     TEST(tr::max_width == 4 / sizeof(CharType));
 
-    TEST(tr::template decode(begin,end) == codepoint);
+    TEST(tr::template decode<CharType const *>(begin,end) == codepoint);
 
     if(codepoint == incomplete || codepoint != illegal)
         TEST(end == begin);
@@ -111,7 +111,7 @@ void test_from(CharType const *str,unsigned codepoint)
 {
     CharType buf[5] = {1,1,1,1,1};
     CharType *p=buf;
-    p = utf_traits<CharType>::template encode(codepoint,p);
+    p = utf_traits<CharType>::template encode<CharType *>(codepoint,p);
     CharType const *end = str;
     while(*end)
         end++;

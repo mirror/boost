@@ -205,7 +205,7 @@ namespace impl {
         CharType const *begin = str;
         CharType const *end = str+len;
         while(begin!=end) {
-            utf::code_point c = utf::utf_traits<CharType,2>::template decode(begin,end);
+            utf::code_point c = utf::utf_traits<CharType,2>::template decode<CharType const *>(begin,end);
             if(c==utf::illegal || c==utf::incomplete)
                 return false;
         }

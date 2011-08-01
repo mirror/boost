@@ -35,16 +35,17 @@ namespace boost {
             {
                 std::basic_string<CharOut> result;
                 result.reserve(end-begin);
-                std::back_insert_iterator<std::basic_string<CharOut> > inserter(result);
+                typedef std::back_insert_iterator<std::basic_string<CharOut> > inserter_type;
+                inserter_type inserter(result);
                 utf::code_point c;
                 while(begin!=end) {
-                    c=utf::utf_traits<CharIn>::template decode(begin,end);
+                    c=utf::utf_traits<CharIn>::template decode<CharIn const *>(begin,end);
                     if(c==utf::illegal || c==utf::incomplete) {
                         if(how==stop)
                             throw conversion_error();
                     }
                     else {
-                        utf::utf_traits<CharOut>::template encode(c,inserter);
+                        utf::utf_traits<CharOut>::template encode<inserter_type>(c,inserter);
                     }
                 }
                 return result;
