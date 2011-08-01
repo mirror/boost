@@ -5,6 +5,8 @@
 #   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ################################################################################
 
+build-project container_fwd ;
+
 project detail/test 
   : requirements
     <toolset>clang:<cxxflags>-Wno-unused
