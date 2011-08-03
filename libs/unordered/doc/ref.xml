@@ -40,8 +40,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Value</code>.
-                        A binary function object that induces an equivalence relation on values of type Key.
-                        It takes two arguments of type Key and returns a value of type bool.</entry></row>
+                        A binary function object that induces an equivalence relation on values of type <code>Value</code>.
+                        It takes two arguments of type <code>Value</code> and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
                       <entry>An allocator whose value type is the same as the container's value type.</entry></row></tbody></tgroup></informaltable></para>
@@ -360,7 +360,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <type>iterator</type>
               <description>
                 <para>Inserts an object, constructed with the arguments <code>args</code>, in the container if and only if there is no element in the container with an equivalent value.</para>
-                <para>hint is a suggestion to where the element should be inserted.</para>
+                <para><code>hint</code> is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
                 <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent value.</para>
@@ -383,7 +383,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>std::pair&lt;iterator, bool&gt;</type>
               <description>
-                <para>Inserts obj in the container if and only if there is no element in the container with an equivalent value.</para>
+                <para>Inserts <code>obj</code> in the container if and only if there is no element in the container with an equivalent value.</para>
               </description>
               <returns>
                 <para>The bool component of the return type is true if an insert took place.</para>
@@ -406,7 +406,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>iterator</type>
               <description>
-                <para>Inserts obj in the container if and only if there is no element in the container with an equivalent value.</para>
+                <para>Inserts <code>obj</code> in the container if and only if there is no element in the container with an equivalent value.</para>
                 <para>hint is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
@@ -815,8 +815,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="Equality Comparisons">
             <function name="operator==">
               <template>
-                <template-type-parameter name="Value">
-                </template-type-parameter>
+            <template-type-parameter name="Value">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -839,8 +839,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </function>
             <function name="operator!=">
               <template>
-                <template-type-parameter name="Value">
-                </template-type-parameter>
+            <template-type-parameter name="Value">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -865,8 +865,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="swap">
             <function name="swap">
               <template>
-                <template-type-parameter name="Value">
-                </template-type-parameter>
+            <template-type-parameter name="Value">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -909,7 +909,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </template-type-parameter>
           </template>
           <purpose><simpara>
-            An unordered associative container that stores  values. The same key can be stored multiple times.
+            An unordered associative container that stores values. The same key can be stored multiple times.
           </simpara></purpose>
           <description>
             <para>Based on chapter 23 of
@@ -929,8 +929,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Value</code>.
-                        A binary function object that induces an equivalence relation on values of type Key.
-                        It takes two arguments of type Key and returns a value of type bool.</entry></row>
+                        A binary function object that induces an equivalence relation on values of type <code>Value</code>.
+                        It takes two arguments of type <code>Value</code> and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
                       <entry>An allocator whose value type is the same as the container's value type.</entry></row></tbody></tgroup></informaltable></para>
@@ -1248,7 +1248,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <type>iterator</type>
               <description>
                 <para>Inserts an object, constructed with the arguments <code>args</code>, in the container.</para>
-                <para>hint is a suggestion to where the element should be inserted.</para>
+                <para><code>hint</code> is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
                 <para>An iterator pointing to the inserted element.</para>
@@ -1271,7 +1271,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>iterator</type>
               <description>
-                <para>Inserts obj in the container.</para>
+                <para>Inserts <code>obj</code> in the container.</para>
               </description>
               <returns>
                 <para>An iterator pointing to the inserted element.</para>
@@ -1293,7 +1293,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>iterator</type>
               <description>
-                <para>Inserts obj in the container.</para>
+                <para>Inserts <code>obj</code> in the container.</para>
                 <para>hint is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
@@ -1321,7 +1321,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>void</type>
               <description>
-                <para>Inserts a range of elements into the container.</para>
+                <para>Inserts a range of elements into the container. Elements are inserted if and only if there is no element in the container with an equivalent value.</para>
               </description>
               <throws>
                 <para>When inserting a single element, if an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
@@ -1702,8 +1702,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="Equality Comparisons">
             <function name="operator==">
               <template>
-                <template-type-parameter name="Value">
-                </template-type-parameter>
+            <template-type-parameter name="Value">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -1726,8 +1726,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </function>
             <function name="operator!=">
               <template>
-                <template-type-parameter name="Value">
-                </template-type-parameter>
+            <template-type-parameter name="Value">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -1752,8 +1752,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="swap">
             <function name="swap">
               <template>
-                <template-type-parameter name="Value">
-                </template-type-parameter>
+            <template-type-parameter name="Value">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -1798,7 +1798,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::equal_to&lt;Key&gt;</type></default>
             </template-type-parameter>
             <template-type-parameter name="Alloc">
-              <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt; &gt;</type></default>
+              <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt;&gt;</type></default>
             </template-type-parameter>
           </template>
           <purpose><simpara>
@@ -1825,8 +1825,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Key</code>.
-                        A binary function object that induces an equivalence relation on values of type Key.
-                        It takes two arguments of type Key and returns a value of type bool.</entry></row>
+                        A binary function object that induces an equivalence relation on values of type <code>Key</code>.
+                        It takes two arguments of type <code>Key</code> and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
                       <entry>An allocator whose value type is the same as the container's value type.</entry></row></tbody></tgroup></informaltable></para>
@@ -1882,7 +1882,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <typedef name="iterator">
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
-              <para>A iterator whose value type is <type>value_type</type>. </para>
+              <para>An iterator whose value type is <type>value_type</type>. </para>
               <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
@@ -2148,7 +2148,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <type>iterator</type>
               <description>
                 <para>Inserts an object, constructed with the arguments <code>args</code>, in the container if and only if there is no element in the container with an equivalent key.</para>
-                <para>hint is a suggestion to where the element should be inserted.</para>
+                <para><code>hint</code> is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
                 <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent key.</para>
@@ -2171,7 +2171,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>std::pair&lt;iterator, bool&gt;</type>
               <description>
-                <para>Inserts obj in the container if and only if there is no element in the container with an equivalent key.</para>
+                <para>Inserts <code>obj</code> in the container if and only if there is no element in the container with an equivalent key.</para>
               </description>
               <returns>
                 <para>The bool component of the return type is true if an insert took place.</para>
@@ -2194,7 +2194,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>iterator</type>
               <description>
-                <para>Inserts obj in the container if and only if there is no element in the container with an equivalent key.</para>
+                <para>Inserts <code>obj</code> in the container if and only if there is no element in the container with an equivalent key.</para>
                 <para>hint is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
@@ -2495,7 +2495,6 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>This is not specified in the draft standard, but that is probably an oversight. The issue has been raised in
                   <ulink url="http://groups.google.com/group/comp.std.c++/browse_thread/thread/ab7c22a868fd370b">comp.std.c++</ulink>.</para>
               </notes>
-            </overloaded-method>
           </method-group>
           <method-group name="bucket interface">
             <method name="bucket_count" cv="const">
@@ -2638,10 +2637,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="Equality Comparisons">
             <function name="operator==">
               <template>
-                <template-type-parameter name="Key">
-                </template-type-parameter>
-                <template-type-parameter name="Mapped">
-                </template-type-parameter>
+            <template-type-parameter name="Key">
+            </template-type-parameter>
+            <template-type-parameter name="Mapped">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -2664,10 +2663,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </function>
             <function name="operator!=">
               <template>
-                <template-type-parameter name="Key">
-                </template-type-parameter>
-                <template-type-parameter name="Mapped">
-                </template-type-parameter>
+            <template-type-parameter name="Key">
+            </template-type-parameter>
+            <template-type-parameter name="Mapped">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -2692,10 +2691,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="swap">
             <function name="swap">
               <template>
-                <template-type-parameter name="Key">
-                </template-type-parameter>
-                <template-type-parameter name="Mapped">
-                </template-type-parameter>
+            <template-type-parameter name="Key">
+            </template-type-parameter>
+            <template-type-parameter name="Mapped">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -2736,11 +2735,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::equal_to&lt;Key&gt;</type></default>
             </template-type-parameter>
             <template-type-parameter name="Alloc">
-              <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt; &gt;</type></default>
+              <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt;&gt;</type></default>
             </template-type-parameter>
           </template>
           <purpose><simpara>
-            An unordered associative container that associates  keys with another value. The same key can be stored multiple times.
+            An unordered associative container that associates keys with another value. The same key can be stored multiple times.
           </simpara></purpose>
           <description>
             <para>Based on chapter 23 of
@@ -2763,8 +2762,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Key</code>.
-                        A binary function object that induces an equivalence relation on values of type Key.
-                        It takes two arguments of type Key and returns a value of type bool.</entry></row>
+                        A binary function object that induces an equivalence relation on values of type <code>Key</code>.
+                        It takes two arguments of type <code>Key</code> and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
                       <entry>An allocator whose value type is the same as the container's value type.</entry></row></tbody></tgroup></informaltable></para>
@@ -2820,7 +2819,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <typedef name="iterator">
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
-              <para>A iterator whose value type is <type>value_type</type>. </para>
+              <para>An iterator whose value type is <type>value_type</type>. </para>
               <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
@@ -3085,7 +3084,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <type>iterator</type>
               <description>
                 <para>Inserts an object, constructed with the arguments <code>args</code>, in the container.</para>
-                <para>hint is a suggestion to where the element should be inserted.</para>
+                <para><code>hint</code> is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
                 <para>An iterator pointing to the inserted element.</para>
@@ -3108,7 +3107,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>iterator</type>
               <description>
-                <para>Inserts obj in the container.</para>
+                <para>Inserts <code>obj</code> in the container.</para>
               </description>
               <returns>
                 <para>An iterator pointing to the inserted element.</para>
@@ -3130,7 +3129,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>iterator</type>
               <description>
-                <para>Inserts obj in the container.</para>
+                <para>Inserts <code>obj</code> in the container.</para>
                 <para>hint is a suggestion to where the element should be inserted.</para>
               </description>
               <returns>
@@ -3158,7 +3157,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>void</type>
               <description>
-                <para>Inserts a range of elements into the container.</para>
+                <para>Inserts a range of elements into the container. Elements are inserted if and only if there is no element in the container with an equivalent key.</para>
               </description>
               <throws>
                 <para>When inserting a single element, if an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
@@ -3539,10 +3538,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="Equality Comparisons">
             <function name="operator==">
               <template>
-                <template-type-parameter name="Key">
-                </template-type-parameter>
-                <template-type-parameter name="Mapped">
-                </template-type-parameter>
+            <template-type-parameter name="Key">
+            </template-type-parameter>
+            <template-type-parameter name="Mapped">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -3565,10 +3564,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </function>
             <function name="operator!=">
               <template>
-                <template-type-parameter name="Key">
-                </template-type-parameter>
-                <template-type-parameter name="Mapped">
-                </template-type-parameter>
+            <template-type-parameter name="Key">
+            </template-type-parameter>
+            <template-type-parameter name="Mapped">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
@@ -3593,10 +3592,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <free-function-group name="swap">
             <function name="swap">
               <template>
-                <template-type-parameter name="Key">
-                </template-type-parameter>
-                <template-type-parameter name="Mapped">
-                </template-type-parameter>
+            <template-type-parameter name="Key">
+            </template-type-parameter>
+            <template-type-parameter name="Mapped">
+            </template-type-parameter>
                 <template-type-parameter name="Hash">
                 </template-type-parameter>
                 <template-type-parameter name="Pred">
