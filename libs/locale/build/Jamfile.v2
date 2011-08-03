@@ -45,6 +45,13 @@ obj has_iconv_libc_ext : ../build/has_iconv.cpp iconv ;
 exe has_external_iconv : has_iconv_libc_ext iconv ;
 explicit has_external_iconv ;
 
+exe accepts_shared_option   : ../build/option.cpp 
+                            :   <cxxflags>-shared-libstdc++ 
+                                <cxxflags>-shared-libgcc
+                                <linkflags>-shared-libstdc++
+                                <linkflags>-shared-libgcc
+                            ;
+
 
 ICU_PATH =  [ modules.peek : ICU_PATH ] ;
 ICU_LINK =  [ modules.peek : ICU_LINK ] ;
@@ -303,6 +310,7 @@ rule configure-full ( properties * : flags-only )
     if  <target-os>windows in $(properties) 
         && <toolset>gcc in $(properties) 
         && <link>shared in $(properties)
+        && [ configure.builds accepts_shared_option : $(properties) : "g++ -shared-* supported" ]
     {
         flags-result += <cxxflags>-shared-libstdc++ 
                         <cxxflags>-shared-libgcc
