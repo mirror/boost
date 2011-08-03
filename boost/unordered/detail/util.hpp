@@ -27,6 +27,7 @@
 #include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/preprocessor/seq/size.hpp>
 #include <boost/preprocessor/seq/enum.hpp>
+#include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/move/move.hpp>
 
 // Template parameters:
@@ -58,10 +59,16 @@
 
 #define BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params) \
     BOOST_PP_ENUM_PARAMS_Z(z, num_params, class Arg)
+
 #define BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params) \
-    BOOST_PP_ENUM_BINARY_PARAMS_Z(z, num_params, Arg, const& arg)
+    BOOST_PP_ENUM_##z(num_params, BOOST_UNORDERED_FUNCTION_PARAMS2, _)
+#define BOOST_UNORDERED_FUNCTION_PARAMS2(z, i, _) \
+    BOOST_FWD_REF(Arg##i) arg##i
+
 #define BOOST_UNORDERED_CALL_PARAMS(z, num_params) \
-    BOOST_PP_ENUM_PARAMS_Z(z, num_params, arg)
+    BOOST_PP_ENUM_##z(num_params, BOOST_UNORDERED_CALL_PARAMS2, _)
+#define BOOST_UNORDERED_CALL_PARAMS2(z, i, _) \
+    boost::forward<Arg##i>(arg##i)
 
 #endif
 
@@ -70,6 +77,8 @@ namespace boost { namespace unordered { namespace detail {
     static const float minimum_max_load_factor = 1e-3f;
     static const std::size_t default_bucket_count = 11;
     struct move_tag {};
+
+    struct empty_emplace {};
 
     template <class T> class unique_table;
     template <class T> class equivalent_table;
