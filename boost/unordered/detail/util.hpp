@@ -27,6 +27,7 @@
 #include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/preprocessor/seq/size.hpp>
 #include <boost/preprocessor/seq/enum.hpp>
+#include <boost/move/move.hpp>
 
 // Template parameters:
 //

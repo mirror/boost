@@ -19,10 +19,6 @@
 #include <boost/unordered/detail/equivalent.hpp>
 #include <boost/unordered/detail/unique.hpp>
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
-#include <boost/unordered/detail/move.hpp>
-#endif
-
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 #include <initializer_list>
 #endif
@@ -43,6 +39,7 @@ namespace unordered
     template <class T, class H, class P, class A>
     class unordered_set
     {
+        BOOST_COPYABLE_AND_MOVABLE(unordered_set)
     public:
 
         typedef T key_type;
@@ -127,19 +124,29 @@ namespace unordered
         
         ~unordered_set();
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        unordered_set& operator=(
+                BOOST_COPY_ASSIGN_REF(unordered_set) x)
+        {
+            table_ = x.table_;
+            return *this;
+        }
+
+        unordered_set& operator=(
+                BOOST_RV_REF(unordered_set) x)
+        {
+            table_.move(x.table_);
+            return *this;
+        }
+
         unordered_set(unordered_set const&);
-        unordered_set(unordered_set&&);
+
+        unordered_set(BOOST_RV_REF(unordered_set) other)
+            : table_(other.table_, ::boost::unordered::detail::move_tag())
+        {
+        }
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_set(unordered_set&&, allocator_type const&);
-        unordered_set& operator=(unordered_set const&);
-        unordered_set& operator=(unordered_set&&);
-#else
-        unordered_set(::boost::unordered::detail::move_from<
-                unordered_set<T,H,P,A>
-            >);
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-        unordered_set& operator=(unordered_set);
-#endif
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -349,6 +356,7 @@ namespace unordered
     template <class T, class H, class P, class A>
     class unordered_multiset
     {
+        BOOST_COPYABLE_AND_MOVABLE(unordered_multiset)
     public:
 
         typedef T key_type;
@@ -433,20 +441,29 @@ namespace unordered
 
         ~unordered_multiset();
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
-        unordered_multiset(unordered_multiset const&);
-        unordered_multiset(unordered_multiset&&);
-        unordered_multiset(unordered_multiset&&, allocator_type const&);
-        unordered_multiset& operator=(unordered_multiset const&);
-        unordered_multiset& operator=(unordered_multiset&&);
-#else
-        unordered_multiset(::boost::unordered::detail::move_from<
-                unordered_multiset<T,H,P,A>
-            >);
+        unordered_multiset& operator=(
+                BOOST_COPY_ASSIGN_REF(unordered_multiset) x)
+        {
+            table_ = x.table_;
+            return *this;
+        }
 
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-        unordered_multiset& operator=(unordered_multiset);
-#endif
+        unordered_multiset& operator=(
+                BOOST_RV_REF(unordered_multiset) x)
+        {
+            table_.move(x.table_);
+            return *this;
+        }
+
+        unordered_multiset(unordered_multiset const&);
+
+        unordered_multiset(BOOST_RV_REF(unordered_multiset) other)
+            : table_(other.table_, ::boost::unordered::detail::move_tag())
+        {
+        }
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        unordered_multiset(unordered_multiset&&, allocator_type const&);
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -716,18 +733,13 @@ namespace unordered
     template <class T, class H, class P, class A>
     unordered_set<T,H,P,A>::~unordered_set() {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
     template <class T, class H, class P, class A>
     unordered_set<T,H,P,A>::unordered_set(unordered_set const& other)
       : table_(other.table_)
     {
     }
 
-    template <class T, class H, class P, class A>
-    unordered_set<T,H,P,A>::unordered_set(unordered_set&& other)
-      : table_(other.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
 
     template <class T, class H, class P, class A>
     unordered_set<T,H,P,A>::unordered_set(
@@ -736,42 +748,10 @@ namespace unordered
     {
     }
 
-    template <class T, class H, class P, class A>
-    unordered_set<T,H,P,A>& unordered_set<T,H,P,A>::
-        operator=(unordered_set const& x)
-    {
-        table_ = x.table_;
-        return *this;
-    }
-
-    template <class T, class H, class P, class A>
-    unordered_set<T,H,P,A>& unordered_set<T,H,P,A>::
-        operator=(unordered_set&& x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-#else
-    template <class T, class H, class P, class A>
-    unordered_set<T,H,P,A>::unordered_set(
-            ::boost::unordered::detail::move_from<unordered_set<T,H,P,A> >
-                other)
-      : table_(other.source.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
-
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-    template <class T, class H, class P, class A>
-    unordered_set<T,H,P,A>& unordered_set<T,H,P,A>::
-        operator=(unordered_set x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-#endif
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+
     template <class T, class H, class P, class A>
     unordered_set<T,H,P,A>::unordered_set(
             std::initializer_list<value_type> list, size_type n,
@@ -792,6 +772,7 @@ namespace unordered
         table_.insert_range(list.begin(), list.end());
         return *this;
     }
+
 #endif
 
     // size and capacity
@@ -1114,7 +1095,6 @@ namespace unordered
     template <class T, class H, class P, class A>
     unordered_multiset<T,H,P,A>::~unordered_multiset() {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
     template <class T, class H, class P, class A>
     unordered_multiset<T,H,P,A>::unordered_multiset(
             unordered_multiset const& other)
@@ -1122,12 +1102,7 @@ namespace unordered
     {
     }
 
-    template <class T, class H, class P, class A>
-    unordered_multiset<T,H,P,A>::unordered_multiset(
-            unordered_multiset&& other)
-      : table_(other.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
 
     template <class T, class H, class P, class A>
     unordered_multiset<T,H,P,A>::unordered_multiset(
@@ -1136,41 +1111,6 @@ namespace unordered
     {
     }
 
-    template <class T, class H, class P, class A>
-    unordered_multiset<T,H,P,A>& unordered_multiset<T,H,P,A>::
-        operator=(unordered_multiset const& x)
-    {
-        table_ = x.table_;
-        return *this;
-    }
-
-    template <class T, class H, class P, class A>
-    unordered_multiset<T,H,P,A>& unordered_multiset<T,H,P,A>::
-        operator=(unordered_multiset&& x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-
-#else
-
-    template <class T, class H, class P, class A>
-    unordered_multiset<T,H,P,A>::unordered_multiset(
-            ::boost::unordered::detail::move_from<unordered_multiset<T,H,P,A> >
-                other)
-      : table_(other.source.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
-
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-    template <class T, class H, class P, class A>
-    unordered_multiset<T,H,P,A>& unordered_multiset<T,H,P,A>::
-        operator=(unordered_multiset x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-#endif
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)

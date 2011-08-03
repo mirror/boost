@@ -134,4 +134,8 @@ First official release.
 * Fix a bug when inserting into an `unordered_map` or `unordered_set` using
   iterators which returns `value_type` by copy.
 
+[h2 Boost 1.48.0]
+
+* Use Boost.Move
+
 [endsect]

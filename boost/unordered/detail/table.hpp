@@ -212,7 +212,7 @@ namespace boost { namespace unordered { namespace detail {
             this->partial_swap(x);
         }
 
-        table(table& x, node_allocator const& a, move_tag)
+        table(table& x, node_allocator const& a, move_tag m)
           : buckets(a, x.bucket_count_),
             functions(x),
             size_(0),
@@ -223,8 +223,11 @@ namespace boost { namespace unordered { namespace detail {
                 this->partial_swap(x);
             }
             else if(x.size_) {
-                x.copy_buckets_to(*this);
-                this->size_ = x.size_;
+                // Use a temporary table because move_buckets_to leaves the
+                // source container in a complete mess.
+                table tmp(x, m);
+                tmp.move_buckets_to(*this);
+                this->size_ = tmp.size_;
                 this->max_load_ = calculate_max_load();
             }
         }
@@ -335,10 +338,14 @@ namespace boost { namespace unordered { namespace detail {
             else {
                 // Create new buckets in separate buckets
                 // which will clean up if anything throws an exception.
-                // (all can throw, but with no effect as these are new objects).
                 
                 buckets b(this->node_alloc(), x.min_buckets_for_size(x.size_));
-                if (x.size_) x.copy_buckets_to(b);
+                if (x.size_) {
+                    // Use a temporary table because move_buckets_to leaves the
+                    // source container in a complete mess.
+                    table tmp(x, move_tag());
+                    tmp.move_buckets_to(b);
+                }
     
                 // Start updating the data here, no throw from now on.
                 this->size_ = x.size_;

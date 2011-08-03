@@ -307,6 +307,7 @@ namespace boost { namespace unordered { namespace detail {
         }
         
         void copy_buckets_to(buckets&) const;
+        void move_buckets_to(buckets&) const;
     };
 
     // Assigning and swapping the equality and hash function objects
@@ -598,7 +599,7 @@ namespace boost { namespace unordered { namespace detail {
     ////////////////////////////////////////////////////////////////////////////
     // copy_buckets_to
     //
-    // basic excpetion safety. If an exception is thrown this will
+    // basic exception safety. If an exception is thrown this will
     // leave dst partially filled and the buckets unset.
 
     template <class A, bool Unique>
@@ -626,6 +627,47 @@ namespace boost { namespace unordered { namespace detail {
     
                 for(n = n->next_; n != group_end; n = n->next_) {
                     a.construct(node::get_value(n));
+                    end = a.release();
+                    node::set_hash(end, hash);
+                    node::add_after_node(end, first_node);
+                }
+                
+                prev = dst.place_in_bucket(prev, end);
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // move_buckets_to
+    //
+    // Basic exception safety. The source nodes are left in an unusable state
+    // if an exception throws.
+
+    template <class A, bool Unique>
+    void buckets<A, Unique>::move_buckets_to(buckets& dst) const
+    {
+        BOOST_ASSERT(!dst.buckets_);
+
+        dst.create_buckets();
+        bucket_ptr dst_start = dst.get_bucket(dst.bucket_count_);
+
+        {        
+            node_constructor<A, Unique> a(dst);
+    
+            node_ptr n = this->buckets_[this->bucket_count_].next_;
+            node_ptr prev = dst_start;
+            
+            while(n) {
+                std::size_t hash = node::get_hash(n);
+                node_ptr group_end = node::next_group(n);
+    
+                a.construct(boost::move(node::get_value(n)));
+                node_ptr first_node = a.release();
+                node::set_hash(first_node, hash);
+                node_ptr end = prev->next_ = first_node;
+    
+                for(n = n->next_; n != group_end; n = n->next_) {
+                    a.construct(boost::move(node::get_value(n)));
                     end = a.release();
                     node::set_hash(end, hash);
                     node::add_after_node(end, first_node);

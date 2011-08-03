@@ -19,10 +19,6 @@
 #include <boost/unordered/detail/equivalent.hpp>
 #include <boost/unordered/detail/unique.hpp>
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
-#include <boost/unordered/detail/move.hpp>
-#endif
-
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 #include <initializer_list>
 #endif
@@ -43,6 +39,7 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     class unordered_map
     {
+        BOOST_COPYABLE_AND_MOVABLE(unordered_map)
     public:
         typedef K key_type;
         typedef std::pair<const K, T> value_type;
@@ -129,19 +126,30 @@ namespace unordered
         
         ~unordered_map();
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        unordered_map& operator=(
+                BOOST_COPY_ASSIGN_REF(unordered_map) x)
+        {
+            table_ = x.table_;
+            return *this;
+        }
+
+        unordered_map& operator=(
+                BOOST_RV_REF(unordered_map) x)
+        {
+            table_.move(x.table_);
+            return *this;
+        }
+
+
         unordered_map(unordered_map const&);
-        unordered_map(unordered_map&&);
+
+        unordered_map(BOOST_RV_REF(unordered_map) other)
+            : table_(other.table_, ::boost::unordered::detail::move_tag())
+        {
+        }
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_map(unordered_map&&, allocator_type const&);
-        unordered_map& operator=(unordered_map const&);
-        unordered_map& operator=(unordered_map&&);
-#else
-        unordered_map(::boost::unordered::detail::move_from<
-                unordered_map<K,T,H,P,A>
-            >);
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-        unordered_map& operator=(unordered_map);
-#endif
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -368,6 +376,7 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     class unordered_multimap
     {
+        BOOST_COPYABLE_AND_MOVABLE(unordered_multimap)
     public:
 
         typedef K key_type;
@@ -455,20 +464,29 @@ namespace unordered
 
         ~unordered_multimap();
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
-        unordered_multimap(unordered_multimap const&);
-        unordered_multimap(unordered_multimap&&);
-        unordered_multimap(unordered_multimap&&, allocator_type const&);
-        unordered_multimap& operator=(unordered_multimap const&);
-        unordered_multimap& operator=(unordered_multimap&&);
-#else
-        unordered_multimap(::boost::unordered::detail::move_from<
-                unordered_multimap<K,T,H,P,A>
-            >);
+        unordered_multimap& operator=(
+                BOOST_COPY_ASSIGN_REF(unordered_multimap) x)
+        {
+            table_ = x.table_;
+            return *this;
+        }
 
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-        unordered_multimap& operator=(unordered_multimap);
-#endif
+        unordered_multimap& operator=(
+                BOOST_RV_REF(unordered_multimap) x)
+        {
+            table_.move(x.table_);
+            return *this;
+        }
+
+        unordered_multimap(unordered_multimap const&);
+
+        unordered_multimap(BOOST_RV_REF(unordered_multimap) other)
+            : table_(other.table_, ::boost::unordered::detail::move_tag())
+        {
+        }
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        unordered_multimap(unordered_multimap&&, allocator_type const&);
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -751,18 +769,13 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     unordered_map<K,T,H,P,A>::~unordered_map() {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
     template <class K, class T, class H, class P, class A>
     unordered_map<K,T,H,P,A>::unordered_map(unordered_map const& other)
       : table_(other.table_)
     {
     }
 
-    template <class K, class T, class H, class P, class A>
-    unordered_map<K,T,H,P,A>::unordered_map(unordered_map&& other)
-      : table_(other.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
 
     template <class K, class T, class H, class P, class A>
     unordered_map<K,T,H,P,A>::unordered_map(
@@ -771,42 +784,10 @@ namespace unordered
     {
     }
 
-    template <class K, class T, class H, class P, class A>
-    unordered_map<K,T,H,P,A>& unordered_map<K,T,H,P,A>::
-        operator=(unordered_map const& x)
-    {
-        table_ = x.table_;
-        return *this;
-    }
-
-    template <class K, class T, class H, class P, class A>
-    unordered_map<K,T,H,P,A>& unordered_map<K,T,H,P,A>::
-        operator=(unordered_map&& x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-#else
-    template <class K, class T, class H, class P, class A>
-    unordered_map<K,T,H,P,A>::unordered_map(
-            ::boost::unordered::detail::move_from<unordered_map<K,T,H,P,A> >
-                other)
-      : table_(other.source.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
-
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-    template <class K, class T, class H, class P, class A>
-    unordered_map<K,T,H,P,A>& unordered_map<K,T,H,P,A>::
-        operator=(unordered_map x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-#endif
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+
     template <class K, class T, class H, class P, class A>
     unordered_map<K,T,H,P,A>::unordered_map(
             std::initializer_list<value_type> list, size_type n,
@@ -827,6 +808,7 @@ namespace unordered
         table_.insert_range(list.begin(), list.end());
         return *this;
     }
+
 #endif
 
     // size and capacity
@@ -1203,7 +1185,6 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     unordered_multimap<K,T,H,P,A>::~unordered_multimap() {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
     template <class K, class T, class H, class P, class A>
     unordered_multimap<K,T,H,P,A>::unordered_multimap(
             unordered_multimap const& other)
@@ -1211,12 +1192,7 @@ namespace unordered
     {
     }
 
-    template <class K, class T, class H, class P, class A>
-    unordered_multimap<K,T,H,P,A>::unordered_multimap(
-            unordered_multimap&& other)
-      : table_(other.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
 
     template <class K, class T, class H, class P, class A>
     unordered_multimap<K,T,H,P,A>::unordered_multimap(
@@ -1225,41 +1201,6 @@ namespace unordered
     {
     }
 
-    template <class K, class T, class H, class P, class A>
-    unordered_multimap<K,T,H,P,A>& unordered_multimap<K,T,H,P,A>::
-        operator=(unordered_multimap const& x)
-    {
-        table_ = x.table_;
-        return *this;
-    }
-
-    template <class K, class T, class H, class P, class A>
-    unordered_multimap<K,T,H,P,A>& unordered_multimap<K,T,H,P,A>::
-        operator=(unordered_multimap&& x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-
-#else
-
-    template <class K, class T, class H, class P, class A>
-    unordered_multimap<K,T,H,P,A>::unordered_multimap(
-            ::boost::unordered::detail::move_from<
-                unordered_multimap<K,T,H,P,A> > other)
-      : table_(other.source.table_, ::boost::unordered::detail::move_tag())
-    {
-    }
-
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
-    template <class K, class T, class H, class P, class A>
-    unordered_multimap<K,T,H,P,A>& unordered_multimap<K,T,H,P,A>::
-        operator=(unordered_multimap x)
-    {
-        table_.move(x.table_);
-        return *this;
-    }
-#endif
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
