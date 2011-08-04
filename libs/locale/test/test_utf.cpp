@@ -42,7 +42,7 @@ char *make4(unsigned v)
 
 boost::uint32_t const *u32_seq(boost::uint32_t a)
 {
-    static uint32_t buf[2];
+    static boost::uint32_t buf[2];
     buf[0]=a;
     buf[1]=0;
     return buf;
@@ -50,7 +50,7 @@ boost::uint32_t const *u32_seq(boost::uint32_t a)
 
 boost::uint16_t const *u16_seq(boost::uint16_t a)
 {
-    static uint16_t buf[2];
+    static boost::uint16_t buf[2];
     buf[0]=a;
     buf[1]=0;
     return buf;
@@ -58,7 +58,7 @@ boost::uint16_t const *u16_seq(boost::uint16_t a)
 
 boost::uint16_t const *u16_seq(boost::uint16_t a,boost::uint16_t b)
 {
-    static uint16_t buf[3];
+    static boost::uint16_t buf[3];
     buf[0]=a;
     buf[1]=b;
     buf[2]=0;
