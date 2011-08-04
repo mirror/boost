@@ -13,6 +13,9 @@ namespace unnecessary_copy_tests
 {
     struct count_copies
     {
+    private:
+        BOOST_COPYABLE_AND_MOVABLE(count_copies)
+    public:
         static int copies;
         static int moves;
         count_copies() : tag_(0) { ++copies; }
@@ -31,13 +34,17 @@ namespace unnecessary_copy_tests
             : tag_(x.tag_) { ++copies; }
 
         count_copies(count_copies const& x) : tag_(x.tag_) { ++copies; }
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
-        count_copies(count_copies&& x) : tag_(x.tag_) {
+        count_copies(BOOST_RV_REF(count_copies) x) : tag_(x.tag_) {
             x.tag_ = -1; ++moves;
         }
-#endif
+
        int tag_;
     private:
+        // I think the standard might require assignment (or move
+        // assignment) for some operations. That Boost.Unordered doesn't
+        // is an implementation detail. But these tests are very specific
+        // to the implementation, so it's probably okay that this doesn't
+        // meet the standard requirements.
        count_copies& operator=(count_copies const&);
     };
 
@@ -136,7 +143,7 @@ namespace unnecessary_copy_tests
         reset();
         T x;
         x.emplace(source<BOOST_DEDUCED_TYPENAME T::value_type>());
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         COPY_COUNT(1);
 #else
         COPY_COUNT(2);
@@ -148,7 +155,7 @@ namespace unnecessary_copy_tests
     UNORDERED_TEST(unnecessary_copy_emplace_rvalue_test,
             ((set)(multiset)(map)(multimap)))
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
     template <class T>
     void unnecessary_copy_emplace_move_test(T*)
     {
@@ -162,8 +169,39 @@ namespace unnecessary_copy_tests
 
     UNORDERED_TEST(unnecessary_copy_emplace_move_test,
             ((set)(multiset)(map)(multimap)))
-
 #endif
+
+    template <class T>
+    void unnecessary_copy_emplace_boost_move_set_test(T*)
+    {
+        reset();
+        T x;
+        BOOST_DEDUCED_TYPENAME T::value_type a;
+        COPY_COUNT(1); MOVE_COUNT(0);
+        x.emplace(boost::move(a));
+        COPY_COUNT(1); MOVE_COUNT(1);
+    }
+
+    UNORDERED_TEST(unnecessary_copy_emplace_boost_move_set_test,
+            ((set)(multiset)))
+
+    template <class T>
+    void unnecessary_copy_emplace_boost_move_map_test(T*)
+    {
+        reset();
+        T x;
+        BOOST_DEDUCED_TYPENAME T::value_type a;
+        COPY_COUNT(1); MOVE_COUNT(0);
+        x.emplace(boost::move(a));
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        COPY_COUNT(1); MOVE_COUNT(1);
+#else
+        COPY_COUNT(2); MOVE_COUNT(0);
+#endif
+    }
+
+    UNORDERED_TEST(unnecessary_copy_emplace_boost_move_map_test,
+            ((map)(multimap)))
 
     UNORDERED_AUTO_TEST(unnecessary_copy_emplace_set_test)
     {
@@ -181,7 +219,13 @@ namespace unnecessary_copy_tests
         // the existing element.
         reset();
         x.emplace();
+#if !defined(BOOST_UNORDERED_STD_FORWARD)
+        // TODO: I think that in this case the move could be delayed until
+        // after checking for a collision, giving MOVE_COUNT(0).
+        COPY_COUNT(1); MOVE_COUNT(1);
+#else
         COPY_COUNT(1); MOVE_COUNT(0);
+#endif
 
         //
         // 1 argument
