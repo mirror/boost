@@ -19,4 +19,11 @@ struct Foo{
   int x;
 //->
 };
+
+/*=
+int main()
+{
+    Foo x;
+}
+*/
 //]

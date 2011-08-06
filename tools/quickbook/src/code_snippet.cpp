@@ -293,7 +293,7 @@ namespace quickbook
                         >>  (cl::eol_p | cl::end_p)
                         )                           [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
                     |   cl::confix_p(
-                            "/*`",
+                            "/*=",
                             (*cl::anychar_p)        [boost::bind(&actions_type::pass_thru, &actions, _1, _2)],
                             "*/"
                         )
