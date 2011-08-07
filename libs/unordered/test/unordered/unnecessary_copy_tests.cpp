@@ -143,7 +143,7 @@ namespace unnecessary_copy_tests
         reset();
         T x;
         x.emplace(source<BOOST_DEDUCED_TYPENAME T::value_type>());
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         COPY_COUNT(1);
 #else
         COPY_COUNT(2);
@@ -155,7 +155,7 @@ namespace unnecessary_copy_tests
     UNORDERED_TEST(unnecessary_copy_emplace_rvalue_test,
             ((set)(multiset)(map)(multimap)))
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
     template <class T>
     void unnecessary_copy_emplace_move_test(T*)
     {
@@ -193,7 +193,7 @@ namespace unnecessary_copy_tests
         BOOST_DEDUCED_TYPENAME T::value_type a;
         COPY_COUNT(1); MOVE_COUNT(0);
         x.emplace(boost::move(a));
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_NO_RVALUE_REFERENCES)
         COPY_COUNT(1); MOVE_COUNT(1);
 #else
         COPY_COUNT(2); MOVE_COUNT(0);
@@ -219,7 +219,7 @@ namespace unnecessary_copy_tests
         // the existing element.
         reset();
         x.emplace();
-#if !defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         // TODO: I think that in this case the move could be delayed until
         // after checking for a collision, giving MOVE_COUNT(0).
         COPY_COUNT(1); MOVE_COUNT(1);
@@ -243,7 +243,7 @@ namespace unnecessary_copy_tests
         x.emplace(source<count_copies>());
         COPY_COUNT(1); MOVE_COUNT(0);
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         // No move should take place.
         reset();
         x.emplace(std::move(a));
@@ -315,7 +315,7 @@ namespace unnecessary_copy_tests
         //x.emplace(a_ref);
         //COPY_COUNT(0); MOVE_COUNT(0);
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         // No move should take place.
         // (since a is already in the container)
         reset();

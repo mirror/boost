@@ -424,7 +424,7 @@ namespace boost { namespace unordered { namespace detail {
     ////////////////////////////////////////////////////////////////////////////
     // Node Constructors
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
     template <class T, class... Args>
     inline void construct_impl(T*, void* address, Args&&... args)
@@ -495,7 +495,7 @@ namespace boost { namespace unordered { namespace detail {
         ~node_constructor();
         void construct_preamble();
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         template <class... Args>
         void construct(Args&&... args)
         {

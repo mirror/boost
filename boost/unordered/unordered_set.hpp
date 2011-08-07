@@ -213,7 +213,7 @@ namespace unordered
 
         // modifiers
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         template <class... Args>
         std::pair<iterator, bool> emplace(Args&&...);
         template <class... Args>
@@ -540,7 +540,7 @@ namespace unordered
 
         // modifiers
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         template <class... Args>
         iterator emplace(Args&&...);
         template <class... Args>
@@ -805,7 +805,7 @@ namespace unordered
 
     // modifiers
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
     template <class T, class H, class P, class A>
     template <class... Args>
     std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
@@ -1190,7 +1190,7 @@ namespace unordered
 
     // modifiers
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
     template <class T, class H, class P, class A>
     template <class... Args>

@@ -200,7 +200,7 @@ namespace boost { namespace unordered { namespace detail {
                 this->find_node(bucket_index, hash, k));
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
         template <class... Args>
         node_ptr emplace(Args&&... args)

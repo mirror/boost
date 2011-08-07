@@ -186,7 +186,7 @@ namespace boost { namespace unordered { namespace detail {
         }
 
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
         template<class... Args>
         emplace_return emplace(Args&&... args)

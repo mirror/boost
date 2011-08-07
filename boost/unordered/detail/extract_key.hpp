@@ -43,7 +43,7 @@ namespace detail {
             return no_key();
         }
         
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         template <class... Args>
         static no_key extract(Args const&...)
         {
@@ -99,7 +99,7 @@ namespace detail {
             return v.first;
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         template <class Arg1, class... Args>
         static key_type const& extract(key_type const& k,
             Arg1 const&, Args const&...)
