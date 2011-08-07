@@ -133,6 +133,9 @@ namespace unordered
             return *this;
         }
 
+        unordered_map(unordered_map const&);
+
+#if BOOST_UNORDERED_USE_RV_REF
         unordered_map& operator=(
                 BOOST_RV_REF(unordered_map) x)
         {
@@ -140,13 +143,11 @@ namespace unordered
             return *this;
         }
 
-
-        unordered_map(unordered_map const&);
-
         unordered_map(BOOST_RV_REF(unordered_map) other)
             : table_(other.table_, ::boost::unordered::detail::move_tag())
         {
         }
+#endif
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_map(unordered_map&&, allocator_type const&);
@@ -259,9 +260,11 @@ namespace unordered
 #endif
 
         std::pair<iterator, bool> insert(value_type const&);
-        std::pair<iterator, bool> insert(BOOST_RV_REF(value_type));
         iterator insert(const_iterator, value_type const&);
+#if BOOST_UNORDERED_USE_RV_REF
+        std::pair<iterator, bool> insert(BOOST_RV_REF(value_type));
         iterator insert(const_iterator, BOOST_RV_REF(value_type));
+#endif
         template <class InputIt> void insert(InputIt, InputIt);
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -481,6 +484,9 @@ namespace unordered
             return *this;
         }
 
+        unordered_multimap(unordered_multimap const&);
+
+#if BOOST_UNORDERED_USE_RV_REF
         unordered_multimap& operator=(
                 BOOST_RV_REF(unordered_multimap) x)
         {
@@ -488,12 +494,11 @@ namespace unordered
             return *this;
         }
 
-        unordered_multimap(unordered_multimap const&);
-
         unordered_multimap(BOOST_RV_REF(unordered_multimap) other)
             : table_(other.table_, ::boost::unordered::detail::move_tag())
         {
         }
+#endif
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_multimap(unordered_multimap&&, allocator_type const&);
@@ -606,9 +611,11 @@ namespace unordered
 #endif
 
         iterator insert(value_type const&);
-        iterator insert(BOOST_RV_REF(value_type));
         iterator insert(const_iterator, value_type const&);
+#if BOOST_UNORDERED_USE_RV_REF
+        iterator insert(BOOST_RV_REF(value_type));
         iterator insert(const_iterator, BOOST_RV_REF(value_type));
+#endif
         template <class InputIt> void insert(InputIt, InputIt);
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -929,6 +936,15 @@ namespace unordered
     }
 
     template <class K, class T, class H, class P, class A>
+    BOOST_DEDUCED_TYPENAME unordered_map<K,T,H,P,A>::iterator
+        unordered_map<K,T,H,P,A>::insert(const_iterator,
+                value_type const& obj)
+    {
+        return iterator(table_.emplace(obj).first);
+    }
+
+#if BOOST_UNORDERED_USE_RV_REF
+    template <class K, class T, class H, class P, class A>
     std::pair<BOOST_DEDUCED_TYPENAME unordered_map<K,T,H,P,A>::iterator, bool>
         unordered_map<K,T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
     {
@@ -939,18 +955,11 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     BOOST_DEDUCED_TYPENAME unordered_map<K,T,H,P,A>::iterator
         unordered_map<K,T,H,P,A>::insert(const_iterator,
-                value_type const& obj)
-    {
-        return iterator(table_.emplace(obj).first);
-    }
-
-    template <class K, class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_map<K,T,H,P,A>::iterator
-        unordered_map<K,T,H,P,A>::insert(const_iterator,
                 BOOST_RV_REF(value_type) obj)
     {
         return iterator(table_.emplace(boost::move(obj)).first);
     }
+#endif
 
     template <class K, class T, class H, class P, class A>
     template <class InputIt>
@@ -1364,17 +1373,18 @@ namespace unordered
 
     template <class K, class T, class H, class P, class A>
     BOOST_DEDUCED_TYPENAME unordered_multimap<K,T,H,P,A>::iterator
-        unordered_multimap<K,T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
-    {
-        return iterator(table_.emplace(boost::move(obj)));
-    }
-
-    template <class K, class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multimap<K,T,H,P,A>::iterator
         unordered_multimap<K,T,H,P,A>::insert(
             const_iterator, value_type const& obj)
     {
         return iterator(table_.emplace(obj));
+    }
+
+#if BOOST_UNORDERED_USE_RV_REF
+    template <class K, class T, class H, class P, class A>
+    BOOST_DEDUCED_TYPENAME unordered_multimap<K,T,H,P,A>::iterator
+        unordered_multimap<K,T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
+    {
+        return iterator(table_.emplace(boost::move(obj)));
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1384,6 +1394,7 @@ namespace unordered
     {
         return iterator(table_.emplace(boost::move(obj)));
     }
+#endif
 
     template <class K, class T, class H, class P, class A>
     template <class InputIt>

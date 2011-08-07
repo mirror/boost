@@ -62,6 +62,12 @@
 #define BOOST_UNORDERED_EMPLACE_LIMIT 10
 #endif
 
+#if defined(__SUNPRO_CC)
+#define BOOST_UNORDERED_USE_RV_REF 0
+#else
+#define BOOST_UNORDERED_USE_RV_REF 1
+#endif
+
 #if !defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
 #include <boost/preprocessor/repetition/enum_params.hpp>
