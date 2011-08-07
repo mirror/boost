@@ -34,10 +34,7 @@ namespace boost { namespace fusion
             // default implementation
             template <typename First, typename Last>
             struct apply : distance_detail::linear_distance<First, Last> 
-            {
-                BOOST_MPL_ASSERT_NOT((traits::is_random_access<First>));
-                BOOST_MPL_ASSERT_NOT((traits::is_random_access<Last>));
-            };
+            {};
         };
 
         template <>
