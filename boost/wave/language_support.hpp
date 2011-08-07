@@ -26,7 +26,7 @@ enum language_support {
 //  support flags for C++98
     support_normal = 0x01,
     support_cpp = support_normal,
-    
+
     support_option_long_long = 0x02,
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -38,7 +38,8 @@ enum language_support {
     support_cpp0x = support_option_variadics | support_option_long_long | 0x10,
 #endif
 
-    support_option_mask = 0xFF80,
+    support_option_mask = 0xFFB0,
+    support_option_emit_contnewlines = 0x0040,
     support_option_insert_whitespace = 0x0080,
     support_option_preserve_comments = 0x0100,
     support_option_no_character_validation = 0x0200,
@@ -196,6 +197,7 @@ BOOST_WAVE_OPTION(variadics)                // support_option_variadics
 BOOST_WAVE_OPTION(emit_pragma_directives)   // support_option_emit_pragma_directives
 #endif
 BOOST_WAVE_OPTION(insert_whitespace)        // support_option_insert_whitespace
+BOOST_WAVE_OPTION(emit_contnewlines)        // support_option_emit_contnewlines
 
 #undef BOOST_WAVE_NEED_OPTION
 #undef BOOST_WAVE_ENABLE_OPTION

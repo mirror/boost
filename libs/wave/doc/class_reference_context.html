@@ -381,7 +381,8 @@
   <p>This functions allows to specify the language mode, in which
     the <tt>Wave</tt> library should work. The possible
     language modes are defined by the enumerated type <tt>language_support</tt>:</p>
-  <pre>    <span class="keyword">enum</span> language_support {<br>    <span class="comment">// support flags for C++98</span><br>        support_normal = 0x01,<br>        support_cpp = support_normal,<br><span class="comment"><br>    // support flags for C99</span><br>        support_option_long_long = 0x02,<br>        support_option_variadics = 0x04,<br>        support_c99 = support_option_variadics | support_option_long_long | 0x08,<br><span class="comment"><br>    // the mask for the main language settings</span><br>        support_option_mask = 0xFF80,<br><br><span class="comment">    // additional fine tuning of the general behavior</span><br>        support_option_insert_whitespace = 0x0080,<br>        support_option_preserve_comments = 0x0100,<br>        support_option_no_character_validation = 0x0200,<br>        support_option_convert_trigraphs = 0x0400,<br>        support_option_single_line = 0x0800,<br>        support_option_prefer_pp_numbers = 0x1000,<br>        support_option_emit_line_directives = 0x2000,<br>        support_option_include_guard_detection = 0x4000,<br>        support_option_emit_pragma_directives = 0x8000<br>    };</pre>
+  <pre>    <span class="keyword">enum</span> language_support {<br>    <span class="comment">// support flags for C++98</span><br>        support_normal = 0x01,<br>        support_cpp = support_normal,<br><span class="comment"><br>    // support flags for C99</span><br>        support_option_long_long = 0x02,<br>        support_option_variadics = 0x04,<br>        support_c99 = support_option_variadics | support_option_long_long | 0x08,<br><span class="comment"><br>    // the mask for the main language settings</span><br>        support_option_mask = 0xFFB0,<br><br><span class="comment">    // additional fine tuning of the general behavior</span>
+        support_option_emit_contline = 0x0040,<br>        support_option_insert_whitespace = 0x0080,<br>        support_option_preserve_comments = 0x0100,<br>        support_option_no_character_validation = 0x0200,<br>        support_option_convert_trigraphs = 0x0400,<br>        support_option_single_line = 0x0800,<br>        support_option_prefer_pp_numbers = 0x1000,<br>        support_option_emit_line_directives = 0x2000,<br>        support_option_include_guard_detection = 0x4000,<br>        support_option_emit_pragma_directives = 0x8000<br>    };</pre>
   <p>When used with <tt>support_option_variadics</tt> the support for variadics, placemarkers and the <tt>operator&nbsp;_Pragma()</tt> is enabled in normal C++ mode. When used with the <tt>support_option_long_long</tt> the support for long long suffixes is enabled in C++ mode. </p>
   <p>The <tt>support_c99</tt> switches on the C99
     language support, which enables variadics, placemarkers, the <tt>operator&nbsp;_Pragma</tt> and long long suffixes by default. Additionally it disables the C++
@@ -444,6 +445,7 @@
       the <tt>BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES</tt> is defined
       during compilation to a value not equal to zero (see <a href="compiletime_config.html">here</a> for more
       information). </li>
+    <li>If the <tt>support_option_emit_contlines</tt> flag is set, the <tt>Wave</tt> library will emit all backslash newline sequences encountered in the input. It will generate a <tt>T_CONTLINE</tt> token for each of those character sequences. Please note that this option is supported by the custom SLex lexer module only. See the cpp_tokens example for a working example.</li>
   </ul>
   <p><strong> </strong>If the parameter <tt>reset_macros</tt> is true the <tt>set_language</tt> function internally
     resets the list of defined macros, so please be careful not to call it
@@ -476,7 +478,7 @@
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last
   updated:
-  <!-- #BeginDate format:fcAm1m -->Sunday, October 12, 2008  20:14<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, August 6, 2011  20:22<!-- #EndDate -->
   </span> </p>
 <p>&nbsp;</p>
 </body>

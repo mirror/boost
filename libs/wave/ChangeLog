@@ -20,6 +20,14 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.48.0
+ - V2.3.1
+ - Added the flag support_option_emit_contnewlines allowing to control whether
+   backslash newline sequences are emitted by the Wave library. The default is
+   as before: these tokens will be silently ignored (after the token positions 
+   have been properly updated). Note: this option is supported by the SLex lexer
+   module only.
+
 Boost V1.47.0
 - V2.3.0
 - After preprocessing the body of any #pragma wave option() the wave tool now 
