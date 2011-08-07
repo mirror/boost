@@ -1156,7 +1156,7 @@ namespace boost
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
                 finish = start + swprintf(out,
-#if !defined(__MINGW32__)
+#if !defined(__MINGW32__) && !defined(UNDER_CE)
                                           finish-start,
 #endif
                                           L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
@@ -1172,11 +1172,12 @@ namespace boost
                  * For mingw-w64, __MINGW64__ is defined, too, when targetting
                  * 64 bits.
                  *
-                 * swprintf realization in MinGW does not conform to the ISO C
+                 * swprintf realization in MinGW and under WinCE does not conform
+                 * to the ISO C
                  * Standard.
                  */
                 finish = start + swprintf(out,
-#if !defined(__MINGW32__)
+#if !defined(__MINGW32__) && !defined(UNDER_CE)
                                           finish-start,
 #endif
                                           L"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
@@ -1187,10 +1188,14 @@ namespace boost
             bool shl_long_double(long double val,wchar_t* out)
             {   using namespace std;
                 if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out, finish-start, L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
+                finish = start + swprintf(out,
+#if !defined(UNDER_CE)
+                                          finish-start,
+#endif
+                                          L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
                 return finish > start;
             }
-    #endif
+#endif
 
 #endif
 
