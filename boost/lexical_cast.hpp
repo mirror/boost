@@ -1750,6 +1750,7 @@ namespace boost
                 } catch( ::boost::numeric::bad_numeric_cast const& ) {
                     BOOST_LCAST_THROW_BAD_CAST(Source, Target);
                 }
+                BOOST_UNREACHABLE_RETURN(static_cast<Target>(0));
             }
         };
 
@@ -1776,6 +1777,7 @@ namespace boost
                 } catch( ::boost::numeric::bad_numeric_cast const& ) {
                     BOOST_LCAST_THROW_BAD_CAST(Source, Target);
                 }
+                BOOST_UNREACHABLE_RETURN(static_cast<Target>(0));
             }
         };
 
