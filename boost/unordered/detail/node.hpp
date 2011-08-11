@@ -28,7 +28,7 @@ namespace boost { namespace unordered { namespace detail {
     //
     // For unordered_set/unordered_map:
     //
-    //  bucket<A>              value_base<A::value_type>
+    //  bucket<A>              value_base<allocator_traits<A>::value_type>
     //     |                            |
     //     +--------------+-------------+
     //                    |
@@ -36,7 +36,7 @@ namespace boost { namespace unordered { namespace detail {
     //
     // For unordered_multiset/unordered_multimap:
     //
-    //  bucket<A>              value_base<A::value_type>
+    //  bucket<A>              value_base<allocator_traits<A>::value_type>
     //     |                            |
     //     +--------------+-------------+
     //                    |
@@ -57,7 +57,8 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_DEDUCED_TYPENAME
             ::boost::unordered::detail::rebind_wrap<A, bucket>::type
             bucket_allocator;
-        typedef BOOST_DEDUCED_TYPENAME bucket_allocator::pointer bucket_ptr;
+        typedef BOOST_DEDUCED_TYPENAME
+            allocator_traits<bucket_allocator>::pointer bucket_ptr;
         typedef bucket_ptr node_ptr;
     
         node_ptr next_;
@@ -101,12 +102,12 @@ namespace boost { namespace unordered { namespace detail {
     template <class A>
     struct ungrouped_node
       : ::boost::unordered::detail::bucket<A>,
-        value_base<BOOST_DEDUCED_TYPENAME A::value_type>
+        value_base<BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>
     {
         typedef ::boost::unordered::detail::bucket<A> bucket;
         typedef BOOST_DEDUCED_TYPENAME bucket::bucket_ptr bucket_ptr;
         typedef BOOST_DEDUCED_TYPENAME bucket::node_ptr node_ptr;
-        typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type value_type;
 
         std::size_t hash_;
 
@@ -176,12 +177,12 @@ namespace boost { namespace unordered { namespace detail {
     template <class A>
     struct grouped_node
       : ::boost::unordered::detail::bucket<A>,
-        value_base<BOOST_DEDUCED_TYPENAME A::value_type>
+        value_base<BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>
     {
         typedef ::boost::unordered::detail::bucket<A> bucket;
         typedef BOOST_DEDUCED_TYPENAME bucket::bucket_ptr bucket_ptr;
         typedef BOOST_DEDUCED_TYPENAME bucket::node_ptr node_ptr;
-        typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type value_type;
 
         std::size_t hash_;
         node_ptr group_prev_;

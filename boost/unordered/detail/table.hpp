@@ -617,13 +617,13 @@ namespace boost { namespace unordered { namespace iterator_detail {
     class l_iterator
         : public ::boost::iterator <
             std::forward_iterator_tag,
-            BOOST_DEDUCED_TYPENAME A::value_type,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type,
             std::ptrdiff_t,
-            BOOST_DEDUCED_TYPENAME A::pointer,
-            BOOST_DEDUCED_TYPENAME A::reference>
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::pointer,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type&>
     {
     public:
-        typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type value_type;
 
     private:
         typedef ::boost::unordered::detail::buckets<A, Unique> buckets;
@@ -641,7 +641,7 @@ namespace boost { namespace unordered { namespace iterator_detail {
         l_iterator() : ptr_() {}
         l_iterator(node_ptr x, std::size_t b, std::size_t c)
             : ptr_(x), bucket_(b), bucket_count_(c) {}
-        BOOST_DEDUCED_TYPENAME A::reference operator*() const {
+        BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type& operator*() const {
             return node::get_value(ptr_);
         }
         value_type* operator->() const {
@@ -678,13 +678,13 @@ namespace boost { namespace unordered { namespace iterator_detail {
     class cl_iterator
         : public ::boost::iterator <
             std::forward_iterator_tag,
-            BOOST_DEDUCED_TYPENAME A::value_type,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type,
             std::ptrdiff_t,
-            BOOST_DEDUCED_TYPENAME A::const_pointer,
-            BOOST_DEDUCED_TYPENAME A::const_reference >
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::const_pointer,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type const& >
     {
     public:
-        typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type value_type;
 
     private:
         typedef ::boost::unordered::detail::buckets<A, Unique> buckets;
@@ -705,7 +705,7 @@ namespace boost { namespace unordered { namespace iterator_detail {
         cl_iterator(local_iterator x)
             : ptr_(x.ptr_), bucket_(x.bucket_), bucket_count_(x.bucket_count_)
         {}
-        BOOST_DEDUCED_TYPENAME A::const_reference
+        BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type const&
             operator*() const {
             return node::get_value(ptr_);
         }
@@ -743,13 +743,13 @@ namespace boost { namespace unordered { namespace iterator_detail {
     class iterator
         : public ::boost::iterator <
             std::forward_iterator_tag,
-            BOOST_DEDUCED_TYPENAME A::value_type,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type,
             std::ptrdiff_t,
-            BOOST_DEDUCED_TYPENAME A::pointer,
-            BOOST_DEDUCED_TYPENAME A::reference >
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::pointer,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type& >
     {
     public:
-        typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type value_type;
 
     private:
         typedef ::boost::unordered::detail::buckets<A, Unique> buckets;
@@ -763,7 +763,7 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
         iterator() : node_() {}
         explicit iterator(node_ptr const& x) : node_(x) {}
-        BOOST_DEDUCED_TYPENAME A::reference operator*() const {
+        BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type& operator*() const {
             return node::get_value(node_);
         }
         value_type* operator->() const {
@@ -793,13 +793,13 @@ namespace boost { namespace unordered { namespace iterator_detail {
     class c_iterator
         : public ::boost::iterator <
             std::forward_iterator_tag,
-            BOOST_DEDUCED_TYPENAME A::value_type,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type,
             std::ptrdiff_t,
-            BOOST_DEDUCED_TYPENAME A::const_pointer,
-            BOOST_DEDUCED_TYPENAME A::const_reference >
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::const_pointer,
+            BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type const& >
     {
     public:
-        typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type value_type;
 
     private:
         typedef ::boost::unordered::detail::buckets<A, Unique> buckets;
@@ -829,7 +829,7 @@ namespace boost { namespace unordered { namespace iterator_detail {
         c_iterator() : node_() {}
         explicit c_iterator(node_ptr const& x) : node_(x) {}
         c_iterator(iterator const& x) : node_(x.node_) {}
-        BOOST_DEDUCED_TYPENAME A::const_reference operator*() const {
+        BOOST_DEDUCED_TYPENAME boost::unordered::detail::allocator_traits<A>::value_type const& operator*() const {
             return node::get_value(node_);
         }
         value_type const* operator->() const {

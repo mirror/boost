@@ -370,10 +370,10 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class H, class P, class A>
     struct set : public types<
-        BOOST_DEDUCED_TYPENAME A::value_type,
-        BOOST_DEDUCED_TYPENAME A::value_type,
+        BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
+        BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
         H, P, A,
-        set_extractor<BOOST_DEDUCED_TYPENAME A::value_type>,
+        set_extractor<BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>,
         true>
     {        
         typedef ::boost::unordered::detail::unique_table<set<H, P, A> > impl;
@@ -382,9 +382,9 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class K, class H, class P, class A>
     struct map : public types<
-        K, BOOST_DEDUCED_TYPENAME A::value_type,
+        K, BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
         H, P, A,
-        map_extractor<K, BOOST_DEDUCED_TYPENAME A::value_type>,
+        map_extractor<K, BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>,
         true>
     {
         typedef ::boost::unordered::detail::unique_table<map<K, H, P, A> > impl;

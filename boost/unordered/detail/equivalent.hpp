@@ -279,10 +279,10 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class H, class P, class A>
     struct multiset : public types<
-        BOOST_DEDUCED_TYPENAME A::value_type,
-        BOOST_DEDUCED_TYPENAME A::value_type,
+        BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
+        BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
         H, P, A,
-        set_extractor<BOOST_DEDUCED_TYPENAME A::value_type>,
+        set_extractor<BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>,
         false>
     {
         typedef equivalent_table<multiset<H, P, A> > impl;
@@ -291,9 +291,9 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class K, class H, class P, class A>
     struct multimap : public types<
-        K, BOOST_DEDUCED_TYPENAME A::value_type,
+        K, BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
         H, P, A,
-        map_extractor<K, BOOST_DEDUCED_TYPENAME A::value_type>,
+        map_extractor<K, BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>,
         false>
     {
         typedef equivalent_table<multimap<K, H, P, A> > impl;

@@ -49,16 +49,16 @@ namespace boost { namespace unordered { namespace detail {
 
         typedef A value_allocator;
         typedef ::boost::unordered::detail::bucket<A> bucket;
-        typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type value_type;
 
         typedef BOOST_DEDUCED_TYPENAME bucket::bucket_allocator
             bucket_allocator;
-        typedef BOOST_DEDUCED_TYPENAME bucket::bucket_ptr bucket_ptr;
+        typedef BOOST_DEDUCED_TYPENAME allocator_traits<bucket_allocator>::pointer bucket_ptr;
         typedef BOOST_DEDUCED_TYPENAME bucket::node_ptr node_ptr;
 
         typedef BOOST_DEDUCED_TYPENAME rebind_wrap<value_allocator, node>::type
             node_allocator;
-        typedef BOOST_DEDUCED_TYPENAME node_allocator::pointer real_node_ptr;
+        typedef BOOST_DEDUCED_TYPENAME allocator_traits<node_allocator>::pointer real_node_ptr;
 
         // Members
 
@@ -91,7 +91,7 @@ namespace boost { namespace unordered { namespace detail {
         std::size_t max_bucket_count() const
         {
             // -1 to account for the start bucket.
-            return prev_prime(this->bucket_alloc().max_size() - 1);
+            return prev_prime(allocator_traits<bucket_allocator>::max_size(bucket_alloc()) - 1);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -184,8 +184,8 @@ namespace boost { namespace unordered { namespace detail {
             real_node_ptr real_ptr(node_alloc().address(*raw_ptr));
 
             ::boost::unordered::detail::destroy(raw_ptr->value_ptr());
-            node_alloc().destroy(real_ptr);
-            node_alloc().deallocate(real_ptr, 1);
+            allocator_traits<node_allocator>::destroy(node_alloc(), real_ptr);
+            allocator_traits<node_allocator>::deallocate(node_alloc(), real_ptr, 1);
         }
 
         void delete_buckets()
@@ -202,10 +202,10 @@ namespace boost { namespace unordered { namespace detail {
     
             ++end;
             for(bucket_ptr begin = this->buckets_; begin != end; ++begin) {
-                bucket_alloc().destroy(begin);
+                allocator_traits<bucket_allocator>::destroy(bucket_alloc(), begin);
             }
     
-            bucket_alloc().deallocate(this->buckets_, this->bucket_count_ + 1);
+            allocator_traits<bucket_allocator>::deallocate(bucket_alloc(), this->buckets_, this->bucket_count_ + 1);
     
             this->buckets_ = bucket_ptr();
         }
@@ -476,6 +476,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_DEDUCED_TYPENAME buckets::node node;
         typedef BOOST_DEDUCED_TYPENAME buckets::real_node_ptr real_node_ptr;
         typedef BOOST_DEDUCED_TYPENAME buckets::value_type value_type;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node_allocator node_allocator;
 
         buckets& buckets_;
         real_node_ptr node_;
@@ -570,9 +571,9 @@ namespace boost { namespace unordered { namespace detail {
             }
 
             if (node_constructed_)
-                buckets_.node_alloc().destroy(node_);
+                allocator_traits<node_allocator>::destroy(buckets_.node_alloc(), node_);
 
-            buckets_.node_alloc().deallocate(node_, 1);
+            allocator_traits<node_allocator>::deallocate(buckets_.node_alloc(), node_, 1);
         }
     }
 
@@ -583,8 +584,8 @@ namespace boost { namespace unordered { namespace detail {
             node_constructed_ = false;
             value_constructed_ = false;
 
-            node_ = buckets_.node_alloc().allocate(1);
-            buckets_.node_alloc().construct(node_, node());
+            node_ = allocator_traits<node_allocator>::allocate(buckets_.node_alloc(), 1);
+            allocator_traits<node_allocator>::construct(buckets_.node_alloc(), node_, node());
             node_->init(buckets_.bucket_alloc().address(*node_));
 
             node_constructed_ = true;

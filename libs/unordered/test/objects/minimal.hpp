@@ -33,6 +33,7 @@ namespace minimal
     template <class T> class ptr;
     template <class T> class const_ptr;
     template <class T> class allocator;
+    template <class T> class cxx11_allocator;
 
     class copy_constructible
     {
@@ -314,6 +315,69 @@ namespace minimal
 
     template <class T>
     void swap(allocator<T>&, allocator<T>&)
+    {
+    }
+
+    // C++11 allocator
+    //
+    // Not a fully minimal C++11 allocator, just what I support. Hopefully will
+    // cut down further in the future.
+
+    template <class T>
+    class cxx11_allocator
+    {
+    public:
+        typedef T value_type;
+        template <class U> struct rebind { typedef cxx11_allocator<U> other; };
+
+        cxx11_allocator() {}
+        template <class Y> cxx11_allocator(cxx11_allocator<Y> const&) {}
+        cxx11_allocator(cxx11_allocator const&) {}
+        ~cxx11_allocator() {}
+
+        T* address(T& r) { return &r; }
+        T const* address(T const& r) { return &r; }
+
+        T* allocate(std::size_t n) {
+            return static_cast<T*>(::operator new(n * sizeof(T)));
+        }
+
+        template <class Y>
+        T* allocate(std::size_t n, const_ptr<Y> u) {
+            return static_cast<T*>(::operator new(n * sizeof(T)));
+        }
+
+        void deallocate(T* p, std::size_t) {
+            ::operator delete((void*) p);
+        }
+
+        void construct(T* p, T const& t) { new((void*)p) T(t); }
+
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+        template<class... Args> void construct(T* p, Args&&... args) {
+            new((void*)p) T(std::forward<Args>(args)...);
+        }
+#endif
+
+        void destroy(T* p) { p->~T(); }
+
+        std::size_t max_size() const { return 1000u; }
+    };
+
+    template <class T>
+    inline bool operator==(cxx11_allocator<T> const&, cxx11_allocator<T> const&)
+    {
+        return true;
+    }
+
+    template <class T>
+    inline bool operator!=(cxx11_allocator<T> const&, cxx11_allocator<T> const&)
+    {
+        return false;
+    }
+
+    template <class T>
+    void swap(cxx11_allocator<T>&, cxx11_allocator<T>&)
     {
     }
 }

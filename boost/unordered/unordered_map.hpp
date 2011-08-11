@@ -56,6 +56,7 @@ namespace unordered
             ::boost::unordered::detail::rebind_wrap<
                 allocator_type, value_type>::type
             value_allocator;
+        typedef ::boost::unordered::detail::allocator_traits<value_allocator> allocator_traits;
 
         typedef ::boost::unordered::detail::map<K, H, P,
             value_allocator> types;
@@ -66,13 +67,12 @@ namespace unordered
     public:
 
         typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::pointer pointer;
+            allocator_traits::pointer pointer;
         typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::const_pointer const_pointer;
-        typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::reference reference;
-        typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::const_reference const_reference;
+            allocator_traits::const_pointer const_pointer;
+
+        typedef value_type& reference;
+        typedef value_type const& const_reference;
 
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -407,6 +407,8 @@ namespace unordered
             ::boost::unordered::detail::rebind_wrap<
                 allocator_type, value_type>::type
             value_allocator;
+        typedef ::boost::unordered::detail::allocator_traits<value_allocator>
+            allocator_traits;
 
         typedef ::boost::unordered::detail::multimap<K, H, P,
             value_allocator> types;
@@ -417,13 +419,12 @@ namespace unordered
     public:
 
         typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::pointer pointer;
+            allocator_traits::pointer pointer;
         typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::const_pointer const_pointer;
-        typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::reference reference;
-        typedef BOOST_DEDUCED_TYPENAME
-            value_allocator::const_reference const_reference;
+            allocator_traits::const_pointer const_pointer;
+
+        typedef value_type& reference;
+        typedef value_type const& const_reference;
 
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
