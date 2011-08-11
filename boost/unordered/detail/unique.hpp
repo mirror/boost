@@ -36,7 +36,9 @@ namespace boost { namespace unordered { namespace detail {
             value_allocator const& a)
           : table_base(n, hf, eq, a) {}
         unique_table(unique_table const& x)
-          : table_base(x, x.node_alloc()) {}
+          : table_base(x,
+                allocator_traits<node_allocator>::
+                select_on_container_copy_construction(x.node_alloc())) {}
         unique_table(unique_table const& x, value_allocator const& a)
           : table_base(x, a) {}
         unique_table(unique_table& x, move_tag m)

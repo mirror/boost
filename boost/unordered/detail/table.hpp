@@ -203,7 +203,7 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         table(table& x, move_tag)
-          : buckets(x.node_alloc(), x.bucket_count_),
+          : buckets(boost::move(x.node_alloc()), x.bucket_count_),
             functions(x),
             size_(0),
             mlf_(1.0f),

@@ -103,7 +103,16 @@ namespace boost { namespace unordered { namespace detail {
             allocators_(a,a)
         {
         }
-    
+
+        // TODO: Need to move allocators_, not copy. But compressed_pair
+        // doesn't support move parameters.
+        buckets(buckets& b, move_tag m)
+          : buckets_(),
+            bucket_count_(b.bucket_count),
+            allocators_(b.allocators_)
+        {
+        }
+        
         inline ~buckets()
         {
             if(this->buckets_) { this->delete_buckets(); }

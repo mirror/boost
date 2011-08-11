@@ -34,7 +34,9 @@ namespace boost { namespace unordered { namespace detail {
             hasher const& hf, key_equal const& eq, value_allocator const& a)
           : table_base(n, hf, eq, a) {}
         equivalent_table(equivalent_table const& x)
-          : table_base(x, x.node_alloc()) {}
+          : table_base(x,
+                allocator_traits<node_allocator>::
+                select_on_container_copy_construction(x.node_alloc())) {}
         equivalent_table(equivalent_table const& x,
             value_allocator const& a)
           : table_base(x, a) {}
