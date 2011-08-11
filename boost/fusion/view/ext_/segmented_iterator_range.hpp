@@ -539,7 +539,6 @@ namespace boost { namespace fusion { namespace extension
         };
     };
 
-    // TODO: remove invocation of distance in iterator_range.
     // TODO: default implementation of begin, end, and size
     //       should check if the sequence is segmented and to
     //       the right thing.

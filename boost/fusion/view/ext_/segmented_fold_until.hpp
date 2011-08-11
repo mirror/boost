@@ -216,12 +216,16 @@ namespace boost { namespace fusion
         struct segmented_fold_until_impl<Range, State, Context, Fun, false>
         {
             typedef
-                typename boost::result_of<Fun(Range&, State const&, Context const&)>::type
+                typename boost::result_of<Fun(
+                    Range&,
+                    typename add_reference<typename add_const<typename State::value_type>::type>::type,
+                    Context const&
+                )>::type
             type;
             
             static type call(Range& rng, State const& state, Context const& context, Fun const& fun)
             {
-                return fun(rng, state, context);
+                return fun(rng, state.value, context);
             }
         };
 

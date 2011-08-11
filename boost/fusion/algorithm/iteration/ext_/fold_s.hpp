@@ -23,7 +23,7 @@ namespace boost { namespace fusion { namespace detail
         {
             typedef
                 fusion::result<
-                    typename result_of::fold<Range, typename State::value_type, Fun>::type,
+                    typename result_of::fold<Range, State, Fun>::type,
                     continue_
                 >
             type;
@@ -37,7 +37,7 @@ namespace boost { namespace fusion { namespace detail
         typename result<segmented_fold_fun(Range&, State const&, Context const&)>::type
         operator()(Range& rng, State const& state, Context const&) const
         {
-            return fusion::fold(rng, state.value, fun);
+            return fusion::fold(rng, state, fun);
         }
 
         Fun const& fun;
