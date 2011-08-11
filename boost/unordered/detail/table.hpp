@@ -21,6 +21,7 @@ namespace boost { namespace unordered { namespace detail {
     class table : public T::buckets, public T::functions
     {
         table(table const&);
+        table& operator=(table const&);
     public:
         typedef BOOST_DEDUCED_TYPENAME T::hasher hasher;
         typedef BOOST_DEDUCED_TYPENAME T::key_equal key_equal;
@@ -234,18 +235,53 @@ namespace boost { namespace unordered { namespace detail {
         ~table()
         {}
 
-        table& operator=(table const& x)
-        {
-            table tmp(x, this->node_alloc());
-            this->fast_swap(tmp);
-            return *this;
-        }
-
         // Iterators
 
         node_ptr begin() const {
             return !this->buckets_ ?
                 node_ptr() : this->buckets_[this->bucket_count_].next_;
+        }
+
+        void assign(table const& x)
+        {
+            table tmp(x, this->node_alloc());
+            this->fast_swap(tmp);
+        }
+
+        void move_assign(table& x)
+        {
+            // This can throw, but it only affects the function objects
+            // that aren't in use so it is strongly exception safe, via.
+            // double buffering.
+            set_hash_functions<hasher, key_equal> new_func_this(*this, x);
+    
+            if(this->node_alloc() == x.node_alloc()) {
+                this->buckets::move(x); // no throw
+                this->size_ = x.size_;
+                this->max_load_ = x.max_load_;
+                x.size_ = 0;
+            }
+            else {
+                // Create new buckets in separate buckets
+                // which will clean up if anything throws an exception.
+                
+                buckets b(this->node_alloc(), x.min_buckets_for_size(x.size_));
+                if (x.size_) {
+                    // Use a temporary table because move_buckets_to leaves the
+                    // source container in a complete mess.
+                    table tmp(x, move_tag());
+                    tmp.move_buckets_to(b);
+                }
+    
+                // Start updating the data here, no throw from now on.
+                this->size_ = x.size_;
+                b.swap(*this);
+                this->max_load_ = x.size_ ? calculate_max_load() : 0;
+            }
+    
+            // We've made it, the rest is no throw.
+            this->mlf_ = x.mlf_;
+            new_func_this.commit();
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -293,42 +329,6 @@ namespace boost { namespace unordered { namespace detail {
             std::swap(this->size_, x.size_);
             std::swap(this->mlf_, x.mlf_);
             std::swap(this->max_load_, x.max_load_);
-        }
-
-        void move(table& x)
-        {
-            // This can throw, but it only affects the function objects
-            // that aren't in use so it is strongly exception safe, via.
-            // double buffering.
-            set_hash_functions<hasher, key_equal> new_func_this(*this, x);
-    
-            if(this->node_alloc() == x.node_alloc()) {
-                this->buckets::move(x); // no throw
-                this->size_ = x.size_;
-                this->max_load_ = x.max_load_;
-                x.size_ = 0;
-            }
-            else {
-                // Create new buckets in separate buckets
-                // which will clean up if anything throws an exception.
-                
-                buckets b(this->node_alloc(), x.min_buckets_for_size(x.size_));
-                if (x.size_) {
-                    // Use a temporary table because move_buckets_to leaves the
-                    // source container in a complete mess.
-                    table tmp(x, move_tag());
-                    tmp.move_buckets_to(b);
-                }
-    
-                // Start updating the data here, no throw from now on.
-                this->size_ = x.size_;
-                b.swap(*this);
-                this->max_load_ = x.size_ ? calculate_max_load() : 0;
-            }
-    
-            // We've made it, the rest is no throw.
-            this->mlf_ = x.mlf_;
-            new_func_this.commit();
         }
 
         ////////////////////////////////////////////////////////////////////////

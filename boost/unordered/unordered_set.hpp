@@ -128,7 +128,7 @@ namespace unordered
         unordered_set& operator=(
                 BOOST_COPY_ASSIGN_REF(unordered_set) x)
         {
-            table_ = x.table_;
+            table_.assign(x.table_);
             return *this;
         }
 
@@ -138,7 +138,7 @@ namespace unordered
         unordered_set& operator=(
                 BOOST_RV_REF(unordered_set) x)
         {
-            table_.move(x.table_);
+            table_.move_assign(x.table_);
             return *this;
         }
 
@@ -460,7 +460,7 @@ namespace unordered
         unordered_multiset& operator=(
                 BOOST_COPY_ASSIGN_REF(unordered_multiset) x)
         {
-            table_ = x.table_;
+            table_.assign(x.table_);
             return *this;
         }
 
@@ -470,7 +470,7 @@ namespace unordered
         unordered_multiset& operator=(
                 BOOST_RV_REF(unordered_multiset) x)
         {
-            table_.move(x.table_);
+            table_.move_assign(x.table_);
             return *this;
         }
 

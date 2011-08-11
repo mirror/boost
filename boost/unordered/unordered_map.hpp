@@ -129,7 +129,7 @@ namespace unordered
         unordered_map& operator=(
                 BOOST_COPY_ASSIGN_REF(unordered_map) x)
         {
-            table_ = x.table_;
+            table_.assign(x.table_);
             return *this;
         }
 
@@ -139,7 +139,7 @@ namespace unordered
         unordered_map& operator=(
                 BOOST_RV_REF(unordered_map) x)
         {
-            table_.move(x.table_);
+            table_.move_assign(x.table_);
             return *this;
         }
 
@@ -481,7 +481,7 @@ namespace unordered
         unordered_multimap& operator=(
                 BOOST_COPY_ASSIGN_REF(unordered_multimap) x)
         {
-            table_ = x.table_;
+            table_.assign(x.table_);
             return *this;
         }
 
@@ -491,7 +491,7 @@ namespace unordered
         unordered_multimap& operator=(
                 BOOST_RV_REF(unordered_multimap) x)
         {
-            table_.move(x.table_);
+            table_.move_assign(x.table_);
             return *this;
         }
 
