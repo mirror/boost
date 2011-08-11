@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2001-2011 Joel de Guzman
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -48,6 +48,18 @@ main()
         std::cout << pop_back(l) << std::endl;
         BOOST_TEST((pop_back(l) == make_list(1)));
     }
+
+    { // make sure empty sequences are OK
+        list<int> l(1);
+        std::cout << pop_back(l) << std::endl;
+        BOOST_TEST((pop_back(l) == make_list()));
+    }
+
+    // $$$ JDG: TODO add compile fail facility $$$
+    //~ { // compile fail check (Disabled for now)
+        //~ list<> l;
+        //~ std::cout << pop_back(l) << std::endl;
+    //~ }
 
     return boost::report_errors();
 }
