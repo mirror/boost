@@ -1775,7 +1775,7 @@ namespace quickbook
                 quickbook::actions const& actions)
         {
             fs::path current = actions.filename.parent_path();
-            fs::path path(name);
+            fs::path path = detail::generic_to_path(name);
 
             // If the path is relative, try and resolve it.
             if (!path.has_root_directory() && !path.has_root_name())
