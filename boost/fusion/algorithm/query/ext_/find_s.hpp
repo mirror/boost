@@ -9,6 +9,7 @@
 
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/fusion/algorithm/query/find.hpp>
+#include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/view/ext_/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
@@ -39,7 +40,7 @@ namespace boost { namespace fusion { namespace detail
                         iterator_type,
                         typename result_of::end<Range>::type
                     >,
-                    fusion::result<segmented_iterator_type, continue_>, // NOT FOUND
+                    fusion::result<typename remove_const<State>::type, continue_>, // NOT FOUND
                     fusion::result<segmented_iterator_type, break_>     // FOUND
                 >::type
             type;
@@ -47,7 +48,29 @@ namespace boost { namespace fusion { namespace detail
 
         template<typename Range, typename State, typename Context>
         typename result<segmented_find_fun(Range&, State const&, Context const&)>::type
-        operator()(Range& rng, State const&, Context const& context) const
+        operator()(Range& rng, State const&state, Context const& context) const
+        {
+            typedef
+                typename result_of::equal_to<
+                    typename result_of::find<Range, T>::type,
+                    typename result_of::end<Range>::type
+                >::type
+            not_found;
+
+            return call(rng, state, context, not_found());
+        }
+
+    private:
+        template<typename Range, typename State, typename Context>
+        typename result<segmented_find_fun(Range&, State const&, Context const&)>::type
+        call(Range&, State const&state, Context const&, mpl::true_) const
+        {
+            return state;
+        }
+
+        template<typename Range, typename State, typename Context>
+        typename result<segmented_find_fun(Range&, State const&, Context const&)>::type
+        call(Range& rng, State const&, Context const& context, mpl::false_) const
         {
             return fusion::make_segmented_iterator(fusion::find<T>(rng), context);
         }
@@ -61,7 +84,10 @@ namespace boost { namespace fusion
     {
         template <typename Sequence, typename T>
         struct find_s
-          : result_of::segmented_fold_until<Sequence, void_, detail::segmented_find_fun<T> >
+          : result_of::segmented_fold_until<
+                Sequence,
+                typename result_of::end<Sequence>::type,
+                detail::segmented_find_fun<T> >
         {};
     }
 
@@ -69,14 +95,20 @@ namespace boost { namespace fusion
     typename result_of::find_s<Sequence, T>::type
     find_s(Sequence& seq)
     {
-        return fusion::segmented_fold_until(seq, void_(), detail::segmented_find_fun<T>());
+        return fusion::segmented_fold_until(
+            seq,
+            fusion::end(seq),
+            detail::segmented_find_fun<T>());
     }
 
     template <typename T, typename Sequence>
     typename result_of::find_s<Sequence const, T>::type
     find_s(Sequence const& seq)
     {
-        return fusion::segmented_fold_until(seq, void_(), detail::segmented_find_fun<T>());
+        return fusion::segmented_fold_until(
+            seq,
+            fusion::end(seq),
+            detail::segmented_find_fun<T>());
     }
 }}
 

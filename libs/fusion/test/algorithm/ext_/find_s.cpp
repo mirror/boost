@@ -11,6 +11,8 @@
 #include <boost/fusion/container/ext_/tree.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 
+struct not_there {};
+
 template<typename Tree>
 void 
 process_tree(Tree const &tree)
@@ -19,6 +21,7 @@ process_tree(Tree const &tree)
 
     typedef typename fusion::result_of::find_s<Tree const, short>::type short_iter;
     typedef typename fusion::result_of::find_s<Tree const, float>::type float_iter;
+    typedef typename fusion::result_of::find_s<Tree const, not_there>::type not_there_iter;
 
     // find_if_s of a segmented data structure returns generic
     // segmented iterators
@@ -28,6 +31,10 @@ process_tree(Tree const &tree)
     // they behave like ordinary Fusion iterators ...
     BOOST_TEST((*si == short('d')));
     BOOST_TEST((*fi == float(1)));
+
+    // Searching for something that's not there should return the end iterator.
+    not_there_iter nti = fusion::find_s<not_there>(tree);
+    BOOST_TEST((nti == fusion::end(tree)));
 }
 
 int
