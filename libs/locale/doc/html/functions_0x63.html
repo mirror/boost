@@ -129,6 +129,7 @@ Here is a list of all documented class members with links to the class documenta
 <li>char_type
 : <a class="el" href="classboost_1_1locale_1_1message__format.html#a83f473295edf14b9e1ae1476b81231bc">boost::locale::message_format&lt; CharType &gt;</a>
 , <a class="el" href="classboost_1_1locale_1_1basic__message.html#aa5d8dcf9d7aa01abbe73c841299345db">boost::locale::basic_message&lt; CharType &gt;</a>
+, <a class="el" href="structboost_1_1locale_1_1utf_1_1utf__traits.html#accca9dc2d8fe018b9b5640c48e3470e4">boost::locale::utf::utf_traits&lt; CharType, size &gt;</a>
 , <a class="el" href="classboost_1_1locale_1_1boundary_1_1segment.html#ad3785355ea817c087bf428315a332169">boost::locale::boundary::segment&lt; IteratorType &gt;</a>
 , <a class="el" href="classboost_1_1locale_1_1collator.html#a2b74a0b9a613a4a4337632bf34644c6f">boost::locale::collator&lt; CharType &gt;</a>
 , <a class="el" href="classboost_1_1locale_1_1basic__format.html#a45c16f2e69842b8d223d240bbd6e210a">boost::locale::basic_format&lt; CharType &gt;</a>
@@ -150,8 +151,8 @@ Here is a list of all documented class members with links to the class documenta
 : <a class="el" href="classboost_1_1locale_1_1generator.html#ae6ef1ec096f219f4e6c092507e41fa35">boost::locale::generator</a>
 </li>
 <li>clone()
-: <a class="el" href="classboost_1_1locale_1_1localization__backend.html#ab89828234ca84d4b43f3692bfbb08b25">boost::locale::localization_backend</a>
-, <a class="el" href="classboost_1_1locale_1_1abstract__calendar.html#a73bc2d023be4c6ac6a6f441f74ded2f9">boost::locale::abstract_calendar</a>
+: <a class="el" href="classboost_1_1locale_1_1abstract__calendar.html#a73bc2d023be4c6ac6a6f441f74ded2f9">boost::locale::abstract_calendar</a>
+, <a class="el" href="classboost_1_1locale_1_1localization__backend.html#ab89828234ca84d4b43f3692bfbb08b25">boost::locale::localization_backend</a>
 , <a class="el" href="classboost_1_1locale_1_1util_1_1base__converter.html#a702b31840be6f5c540cd22ac75cb2349">boost::locale::util::base_converter</a>
 </li>
 <li>collator()
@@ -161,26 +162,26 @@ Here is a list of all documented class members with links to the class documenta
 : <a class="el" href="structboost_1_1locale_1_1comparator.html#af40ee48c6c93b6e5d91492a3e0cb96a8">boost::locale::comparator&lt; CharType, default_level &gt;</a>
 </li>
 <li>compare()
-: <a class="el" href="classboost_1_1locale_1_1collator.html#a9ccdfec693cdc5a71b5adc1f083881bf">boost::locale::collator&lt; CharType &gt;</a>
+: <a class="el" href="classboost_1_1locale_1_1collator.html#ab90dc7bb909a71d3cd9a5e8d7b2eb80e">boost::locale::collator&lt; CharType &gt;</a>
 </li>
 <li>const_iterator
 : <a class="el" href="group__boundary.html#ga5f8e61b5babc3f0fa95f5fb8acae3724">boost::locale::boundary::segment_index&lt; BaseIterator &gt;</a>
-, <a class="el" href="group__boundary.html#gac9ce9158eb2fb030c1baf93376203d16">boost::locale::boundary::boundary_point_index&lt; BaseIterator &gt;</a>
 , <a class="el" href="classboost_1_1locale_1_1boundary_1_1segment.html#aa24dcd83aefe4925bfc11b0285e2517a">boost::locale::boundary::segment&lt; IteratorType &gt;</a>
+, <a class="el" href="group__boundary.html#gac9ce9158eb2fb030c1baf93376203d16">boost::locale::boundary::boundary_point_index&lt; BaseIterator &gt;</a>
 </li>
 <li>conversion_type
 : <a class="el" href="classboost_1_1locale_1_1converter__base.html#a726bc2bbcbb6f1e550cca14163fb669b">boost::locale::converter_base</a>
 </li>
 <li>convert()
-: <a class="el" href="group__message.html#ga3f2c9d7f9a363efa607738083a986251">boost::locale::message_format&lt; CharType &gt;</a>
-, <a class="el" href="classboost_1_1locale_1_1converter.html#a38dcc87504308ad5a51f3190e3c0da4b">boost::locale::converter&lt; Char &gt;</a>
+: <a class="el" href="classboost_1_1locale_1_1converter.html#a38dcc87504308ad5a51f3190e3c0da4b">boost::locale::converter&lt; Char &gt;</a>
+, <a class="el" href="group__message.html#ga3f2c9d7f9a363efa607738083a986251">boost::locale::message_format&lt; CharType &gt;</a>
 </li>
 <li>converter()
 : <a class="el" href="classboost_1_1locale_1_1converter.html#aba25fd4a18937543823cd61bef72c628">boost::locale::converter&lt; Char &gt;</a>
 </li>
-<li>country()
-: <a class="el" href="classboost_1_1locale_1_1info.html#a249c20e36da6827a8dc8b12a8342a7dc">boost::locale::info</a>
-, <a class="el" href="structboost_1_1locale_1_1gnu__gettext_1_1messages__info.html#ae939e0c5dbabba7fb4cc2872f4e7dac2">boost::locale::gnu_gettext::messages_info</a>
+<li>country
+: <a class="el" href="structboost_1_1locale_1_1gnu__gettext_1_1messages__info.html#ae939e0c5dbabba7fb4cc2872f4e7dac2">boost::locale::gnu_gettext::messages_info</a>
+, <a class="el" href="classboost_1_1locale_1_1info.html#a249c20e36da6827a8dc8b12a8342a7dc">boost::locale::info</a>
 </li>
 <li>country_property
 : <a class="el" href="classboost_1_1locale_1_1info.html#ac79e3924b5473862ab15a3290b1c8d15ab59b95580bc749f21c832a70d4b73c61">boost::locale::info</a>
@@ -189,7 +190,7 @@ Here is a list of all documented class members with links to the class documenta
 : <a class="el" href="classboost_1_1locale_1_1calendar__facet.html#a6db1915db3ad99ea65334dddaa7dcc28">boost::locale::calendar_facet</a>
 </li>
 <li>currency_flags()
-: <a class="el" href="classboost_1_1locale_1_1ios__info.html#ad31ea1190ae882f20eea582312c6c573">boost::locale::ios_info</a>
+: <a class="el" href="classboost_1_1locale_1_1ios__info.html#ac98b6625dcd7e552e144510192daebb7">boost::locale::ios_info</a>
 </li>
 <li>current
 : <a class="el" href="classboost_1_1locale_1_1abstract__calendar.html#af786b3e65294d70769f2826ef95c7bd5a83d87ff10ff6107dfd0405f1e8757ef8">boost::locale::abstract_calendar</a>
