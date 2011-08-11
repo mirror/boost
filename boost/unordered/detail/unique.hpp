@@ -22,6 +22,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_DEDUCED_TYPENAME T::value_type value_type;
         typedef BOOST_DEDUCED_TYPENAME T::table_base table_base;
         typedef BOOST_DEDUCED_TYPENAME T::node_constructor node_constructor;
+        typedef BOOST_DEDUCED_TYPENAME T::node_allocator node_allocator;
 
         typedef BOOST_DEDUCED_TYPENAME T::node node;
         typedef BOOST_DEDUCED_TYPENAME T::node_ptr node_ptr;

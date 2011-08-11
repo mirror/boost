@@ -279,15 +279,15 @@ namespace minimal
             ::operator delete((void*) p.ptr_);
         }
 
-        void construct(pointer p, T const& t) { new((void*)p.ptr_) T(t); }
+        void construct(T* p, T const& t) { new((void*)p) T(t); }
 
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
-        template<class... Args> void construct(pointer p, Args&&... args) {
-            new((void*)p.ptr_) T(std::forward<Args>(args)...);
+        template<class... Args> void construct(T* p, Args&&... args) {
+            new((void*)p) T(std::forward<Args>(args)...);
         }
 #endif
 
-        void destroy(pointer p) { ((T*)p.ptr_)->~T(); }
+        void destroy(T* p) { p->~T(); }
 
         size_type max_size() const { return 1000; }
 

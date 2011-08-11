@@ -92,18 +92,6 @@ void swap_tests2(X* ptr = 0,
         swap_test_impl(x, y);
     }
 
-#if BOOST_UNORDERED_SWAP_METHOD == 1
-    {
-        test::random_values<X> vx(100, generator), vy(50, generator);
-        X x(vx.begin(), vx.end(), 0, hasher(), key_equal(), allocator_type(1));
-        X y(vy.begin(), vy.end(), 0, hasher(), key_equal(), allocator_type(2));
-        try {
-            swap_test_impl(x, y);
-            BOOST_ERROR("Using swap method 1, "
-                "swapping with unequal allocators didn't throw.");
-        } catch (std::runtime_error) {}
-    }
-#else
     {
         test::random_values<X> vx(50, generator), vy(100, generator);
         X x(vx.begin(), vx.end(), 0, hasher(), key_equal(), allocator_type(1));
@@ -120,7 +108,6 @@ void swap_tests2(X* ptr = 0,
         swap_test_impl(x, y);
         swap_test_impl(x, y);
     }
-#endif
 }
 
 boost::unordered_set<test::object,

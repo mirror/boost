@@ -176,8 +176,7 @@ namespace boost { namespace unordered { namespace detail {
         ////////////////////////////////////////////////////////////////////////
         // Constructors
 
-        table(
-                std::size_t num_buckets,
+        table(std::size_t num_buckets,
                 hasher const& hf,
                 key_equal const& eq,
                 node_allocator const& a)
@@ -202,8 +201,8 @@ namespace boost { namespace unordered { namespace detail {
             }
         }
 
-        table(table& x, move_tag)
-          : buckets(boost::move(x.node_alloc()), x.bucket_count_),
+        table(table& x, move_tag m)
+          : buckets(x, m),
             functions(x),
             size_(0),
             mlf_(1.0f),
@@ -254,69 +253,43 @@ namespace boost { namespace unordered { namespace detail {
 
         void swap(table& x)
         {
-            if(this->node_alloc() == x.node_alloc()) {
-                if(this != &x) this->fast_swap(x);
-            }
-            else {
-                this->slow_swap(x);
+            // TODO: Should I actually swap the buckets even if this
+            // is with self?
+            if(this != &x) {
+                {
+                    set_hash_functions<hasher, key_equal> op1(*this, x);
+                    set_hash_functions<hasher, key_equal> op2(x, *this);
+    
+                    this->buckets::swap(x, integral_constant<bool,
+                            allocator_traits<node_allocator>::
+                            propagate_on_container_swap::value>());
+    
+                    op1.commit();
+                    op2.commit();
+                }
+
+                std::swap(this->size_, x.size_);
+                std::swap(this->mlf_, x.mlf_);
+                std::swap(this->max_load_, x.max_load_);
             }
         }
 
+        // Swap everything but the allocators
         void fast_swap(table& x)
         {
-            // These can throw, but they only affect the function objects
-            // that aren't in use so it is strongly exception safe, via.
-            // double buffering.
             {
                 set_hash_functions<hasher, key_equal> op1(*this, x);
                 set_hash_functions<hasher, key_equal> op2(x, *this);
                 op1.commit();
                 op2.commit();
             }
-            this->buckets::swap(x); // No throw
-            std::swap(this->size_, x.size_);
-            std::swap(this->mlf_, x.mlf_);
-            std::swap(this->max_load_, x.max_load_);
+            partial_swap(x);
         }
 
-        void slow_swap(table& x)
-        {
-            if(this == &x) return;
-    
-            {
-                // These can throw, but they only affect the function objects
-                // that aren't in use so it is strongly exception safe, via.
-                // double buffering.
-                set_hash_functions<hasher, key_equal> op1(*this, x);
-                set_hash_functions<hasher, key_equal> op2(x, *this);
-            
-                // Create new buckets in separate buckets objects
-                // which will clean up if anything throws an exception.
-                // (all can throw, but with no effect as these are new objects).
-            
-                buckets b1(this->node_alloc(), x.min_buckets_for_size(x.size_));
-                if (x.size_) x.copy_buckets_to(b1);
-            
-                buckets b2(x.node_alloc(), this->min_buckets_for_size(this->size_));
-                if (this->size_) this->copy_buckets_to(b2);
-            
-                // Modifying the data, so no throw from now on.
-            
-                b1.swap(*this);
-                b2.swap(x);
-                op1.commit();
-                op2.commit();
-            }
-            
-            std::swap(this->size_, x.size_);
-    
-            this->max_load_ = !this->buckets_ ? 0 : this->calculate_max_load();
-            x.max_load_ = !x.buckets_ ? 0 : x.calculate_max_load();
-        }
-
+        // Swap everything but the allocators, and the functions objects.
         void partial_swap(table& x)
         {
-            this->buckets::swap(x); // No throw
+            this->buckets::swap(x, false_type());
             std::swap(this->size_, x.size_);
             std::swap(this->mlf_, x.mlf_);
             std::swap(this->max_load_, x.max_load_);

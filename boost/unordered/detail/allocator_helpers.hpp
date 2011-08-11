@@ -47,6 +47,12 @@ namespace boost { namespace unordered { namespace detail {
 }}}
 #endif
 
+// TODO: Use std::addressof if available?
+#include <boost/utility/addressof.hpp>
+namespace boost { namespace unordered { namespace detail {
+    using boost::addressof;
+}}}
+
 namespace boost { namespace unordered { namespace detail {
 
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
@@ -235,7 +241,7 @@ namespace boost { namespace unordered { namespace detail {
         ~allocator_array_constructor() {
             if (ptr_) {
                 for(pointer p = ptr_; p != constructed_; ++p)
-                    allocator_traits<Allocator>::destroy(alloc_, p);
+                    allocator_traits<Allocator>::destroy(alloc_, addressof(*p));
 
                 allocator_traits<Allocator>::deallocate(alloc_, ptr_, length_);
             }
@@ -249,7 +255,7 @@ namespace boost { namespace unordered { namespace detail {
             ptr_ = allocator_traits<Allocator>::allocate(alloc_, length_);
             pointer end = ptr_ + static_cast<std::ptrdiff_t>(length_);
             for(constructed_ = ptr_; constructed_ != end; ++constructed_)
-                allocator_traits<Allocator>::construct(alloc_, constructed_, v);
+                allocator_traits<Allocator>::construct(alloc_, addressof(*constructed_), v);
         }
 
         pointer get() const

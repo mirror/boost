@@ -106,9 +106,9 @@ namespace boost { namespace unordered { namespace detail {
 
         // TODO: Need to move allocators_, not copy. But compressed_pair
         // doesn't support move parameters.
-        buckets(buckets& b, move_tag m)
+        buckets(buckets& b, move_tag)
           : buckets_(),
-            bucket_count_(b.bucket_count),
+            bucket_count_(b.bucket_count_),
             allocators_(b.allocators_)
         {
         }
@@ -133,10 +133,16 @@ namespace boost { namespace unordered { namespace detail {
             this->buckets_ = constructor.release();
         }
         
-        // no throw
-        void swap(buckets& other)
+        void swap(buckets& other, false_type = false_type())
         {
             BOOST_ASSERT(node_alloc() == other.node_alloc());
+            std::swap(buckets_, other.buckets_);
+            std::swap(bucket_count_, other.bucket_count_);
+        }
+
+        void swap(buckets& other, true_type)
+        {
+            allocators_.swap(other.allocators_);
             std::swap(buckets_, other.buckets_);
             std::swap(bucket_count_, other.bucket_count_);
         }
@@ -189,11 +195,11 @@ namespace boost { namespace unordered { namespace detail {
         
         void delete_node(node_ptr n)
         {
-            node* raw_ptr = static_cast<node*>(&*n);
+            node* raw_ptr = static_cast<node*>(addressof(*n));
             real_node_ptr real_ptr(node_alloc().address(*raw_ptr));
 
             ::boost::unordered::detail::destroy(raw_ptr->value_ptr());
-            allocator_traits<node_allocator>::destroy(node_alloc(), real_ptr);
+            allocator_traits<node_allocator>::destroy(node_alloc(), raw_ptr);
             allocator_traits<node_allocator>::deallocate(node_alloc(), real_ptr, 1);
         }
 
@@ -211,7 +217,7 @@ namespace boost { namespace unordered { namespace detail {
     
             ++end;
             for(bucket_ptr begin = this->buckets_; begin != end; ++begin) {
-                allocator_traits<bucket_allocator>::destroy(bucket_alloc(), begin);
+                allocator_traits<bucket_allocator>::destroy(bucket_alloc(), addressof(*begin));
             }
     
             allocator_traits<bucket_allocator>::deallocate(bucket_alloc(), this->buckets_, this->bucket_count_ + 1);
@@ -580,7 +586,7 @@ namespace boost { namespace unordered { namespace detail {
             }
 
             if (node_constructed_)
-                allocator_traits<node_allocator>::destroy(buckets_.node_alloc(), node_);
+                allocator_traits<node_allocator>::destroy(buckets_.node_alloc(), addressof(*node_));
 
             allocator_traits<node_allocator>::deallocate(buckets_.node_alloc(), node_, 1);
         }
@@ -594,7 +600,7 @@ namespace boost { namespace unordered { namespace detail {
             value_constructed_ = false;
 
             node_ = allocator_traits<node_allocator>::allocate(buckets_.node_alloc(), 1);
-            allocator_traits<node_allocator>::construct(buckets_.node_alloc(), node_, node());
+            allocator_traits<node_allocator>::construct(buckets_.node_alloc(), addressof(*node_), node());
             node_->init(buckets_.bucket_alloc().address(*node_));
 
             node_constructed_ = true;

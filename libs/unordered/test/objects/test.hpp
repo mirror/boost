@@ -27,6 +27,16 @@ namespace test
     template <class T> class allocator;
     object generate(object const*);
     implicitly_convertible generate(implicitly_convertible const*);
+    
+    struct true_type
+    {
+        enum { value = true };
+    };
+
+    struct false_type
+    {
+        enum { value = false };
+    };
 
     class object : globally_counted_object
     {
@@ -268,19 +278,19 @@ namespace test
             ::operator delete((void*) p);
         }
 
-        void construct(pointer p, T const& t) {
+        void construct(T* p, T const& t) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
             new(p) T(t);
         }
 
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
-        template<class... Args> void construct(pointer p, Args&&... args) {
+        template<class... Args> void construct(T* p, Args&&... args) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
             new(p) T(std::forward<Args>(args)...);
         }
 #endif
 
-        void destroy(pointer p) {
+        void destroy(T* p) {
             detail::tracker.track_destroy((void*) p, sizeof(T), tag_);
             p->~T();
         }
@@ -298,6 +308,10 @@ namespace test
         {
             return tag_ != x.tag_;
         }
+        
+        typedef true_type propagate_on_container_copy_assignment;
+        typedef true_type propagate_on_container_move_assignment;
+        typedef true_type propagate_on_container_swap;
     };
 
     template <class T>
