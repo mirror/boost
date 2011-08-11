@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2001-2011 Joel de Guzman
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -31,7 +31,7 @@ namespace boost { namespace fusion
 
         template <typename I1, typename I2>
         struct equal_to
-            : is_same<
+            : result_of::equal_to<
                 typename result_of::next<
                     typename I1::base_type>::type
               , typename I2::base_type
