@@ -124,14 +124,14 @@ namespace utf {
         /// Returns the iterator past the last written code unit.
         ///
         template<typename Iterator>
-        static Iterator encode(code_point value,Iterator out)
+        static Iterator encode(code_point value,Iterator out);
         ///
         /// Decodes valid UTF sequence that is pointed by p into code point.
         ///
         /// If the sequence is invalid or points to end the behavior is undefined
         ///
         template<typename Iterator>
-        static code_point decode_valid(Iterator &p)
+        static code_point decode_valid(Iterator &p);
     };
     
     #else
