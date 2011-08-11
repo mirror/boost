@@ -10,7 +10,7 @@
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/iterator/iterator_facade.hpp>
+#include <boost/fusion/iterator/iterator_adapter.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/mpl/minus.hpp>
 #include <boost/mpl/int.hpp>
@@ -19,94 +19,49 @@ namespace boost { namespace fusion
 {
     template <typename Iterator_>
     struct pop_back_iterator
-        : iterator_facade<
+        : iterator_adapter<
             pop_back_iterator<Iterator_>
-          , typename Iterator_::category>
+          , Iterator_>
     {
-        typedef Iterator_ base_type;
-        base_type base;
+        typedef iterator_adapter<
+            pop_back_iterator<Iterator_>
+          , Iterator_>
+        base_type;
 
-        pop_back_iterator(base_type const& base)
-            : base(base) {}
+        pop_back_iterator(Iterator_ const& iterator_base)
+            : base_type(iterator_base) {}
+
+        template <typename BaseIterator>
+        struct make
+        {
+            typedef pop_back_iterator<BaseIterator> type;
+
+            static type
+            call(BaseIterator const& i)
+            {
+                return type(i);
+            }
+        };
 
         template <typename I1, typename I2>
         struct equal_to
             : result_of::equal_to<
                 typename result_of::next<
-                    typename I1::base_type>::type
-              , typename I2::base_type
+                    typename I1::iterator_base_type>::type
+              , typename I2::iterator_base_type
             >
         {};
-
-        template <typename Iterator, typename N>
-        struct advance
-            : pop_back_iterator<
-                typename result_of::advance<
-                    typename Iterator::base_type, N>::type
-            >
-        {
-        };
 
         template <typename First, typename Last>
         struct distance
             : mpl::minus<
                 typename result_of::distance<
-                    typename First::base_type
-                  , typename Last::base_type
+                    typename First::iterator_base_type
+                  , typename Last::iterator_base_type
                 >::type
               , mpl::int_<1>
             >::type
         {};
-
-        template <typename Iterator>
-        struct value_of
-            : result_of::value_of<typename Iterator::base_type> {};
-
-        template <typename Iterator>
-        struct deref
-        {
-            typedef typename
-                result_of::deref<typename Iterator::base_type>::type
-            type;
-
-            static type
-            call(Iterator const& it)
-            {
-                return fusion::deref(it.base);
-            }
-        };
-
-        template <typename Iterator>
-        struct next
-        {
-            typedef pop_back_iterator<
-                typename result_of::next<
-                    typename Iterator::base_type
-                >::type>
-            type;
-
-            static type
-            call(Iterator const& i)
-            {
-                return fusion::next(i.base);
-            }
-        };
-
-        template <typename Iterator>
-        struct prior
-        {
-            typedef pop_back_iterator<
-                typename result_of::prior<
-                    typename Iterator::base_type
-                >::type>
-            type;
-
-            static type
-            call(Iterator const& i)
-            {
-                return fusion::prior(i.base);
-            }
-        };
     };
 
     namespace result_of
