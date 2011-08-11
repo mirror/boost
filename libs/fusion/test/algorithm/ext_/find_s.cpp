@@ -7,26 +7,23 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
+#include <boost/fusion/algorithm/query/ext_/find_s.hpp>
 #include <boost/fusion/container/ext_/tree.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
-#include <boost/mpl/placeholders.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 template<typename Tree>
 void 
 process_tree(Tree const &tree)
 {
     using namespace boost;
-    using mpl::_;
 
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
+    typedef typename fusion::result_of::find_s<Tree const, short>::type short_iter;
+    typedef typename fusion::result_of::find_s<Tree const, float>::type float_iter;
 
     // find_if_s of a segmented data structure returns generic
     // segmented iterators
-    short_iter si = fusion::find_if_s<is_same<_,short> >(tree);
-    float_iter fi = fusion::find_if_s<is_same<_,float> >(tree);
+    short_iter si = fusion::find_s<short>(tree);
+    float_iter fi = fusion::find_s<float>(tree);
 
     // they behave like ordinary Fusion iterators ...
     BOOST_TEST((*si == short('d')));

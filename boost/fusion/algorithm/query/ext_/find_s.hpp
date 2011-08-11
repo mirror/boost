@@ -4,17 +4,17 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_FUSION_FIND_IF_S_HPP_INCLUDED)
-#define BOOST_FUSION_FIND_IF_S_HPP_INCLUDED
+#if !defined(BOOST_FUSION_FIND_S_HPP_INCLUDED)
+#define BOOST_FUSION_FIND_S_HPP_INCLUDED
 
 #include <boost/type_traits/remove_const.hpp>
-#include <boost/fusion/algorithm/query/find_if.hpp>
+#include <boost/fusion/algorithm/query/find.hpp>
 #include <boost/fusion/view/ext_/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {
-    template<typename Pred>
-    struct segmented_find_if_fun
+    template<typename T>
+    struct segmented_find_fun
     {
         template<typename Sig>
         struct result;
@@ -23,7 +23,7 @@ namespace boost { namespace fusion { namespace detail
         struct result<This(Range&, State&, Context&)>
         {
             typedef
-                typename result_of::find_if<Range, Pred>::type
+                typename result_of::find<Range, T>::type
             iterator_type;
 
             typedef
@@ -46,10 +46,10 @@ namespace boost { namespace fusion { namespace detail
         };
 
         template<typename Range, typename State, typename Context>
-        typename result<segmented_find_if_fun(Range&, State const&, Context const&)>::type
+        typename result<segmented_find_fun(Range&, State const&, Context const&)>::type
         operator()(Range& rng, State const&, Context const& context) const
         {
-            return fusion::make_segmented_iterator(fusion::find_if<Pred>(rng), context);
+            return fusion::make_segmented_iterator(fusion::find<T>(rng), context);
         }
     };
 
@@ -59,24 +59,24 @@ namespace boost { namespace fusion
 {
     namespace result_of
     {
-        template <typename Sequence, typename Pred>
-        struct find_if_s
-          : result_of::segmented_fold_until<Sequence, void_, detail::segmented_find_if_fun<Pred> >
+        template <typename Sequence, typename T>
+        struct find_s
+          : result_of::segmented_fold_until<Sequence, void_, detail::segmented_find_fun<T> >
         {};
     }
 
-    template <typename Pred, typename Sequence>
-    typename result_of::find_if_s<Sequence, Pred>::type
-    find_if_s(Sequence& seq)
+    template <typename T, typename Sequence>
+    typename result_of::find_s<Sequence, T>::type
+    find_s(Sequence& seq)
     {
-        return fusion::segmented_fold_until(seq, void_(), detail::segmented_find_if_fun<Pred>());
+        return fusion::segmented_fold_until(seq, void_(), detail::segmented_find_fun<T>());
     }
 
-    template <typename Pred, typename Sequence>
-    typename result_of::find_if_s<Sequence const, Pred>::type
-    find_if_s(Sequence const& seq)
+    template <typename T, typename Sequence>
+    typename result_of::find_s<Sequence const, T>::type
+    find_s(Sequence const& seq)
     {
-        return fusion::segmented_fold_until(seq, void_(), detail::segmented_find_if_fun<Pred>());
+        return fusion::segmented_fold_until(seq, void_(), detail::segmented_find_fun<T>());
     }
 }}
 

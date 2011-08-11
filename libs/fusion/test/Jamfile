@@ -157,8 +157,14 @@ import testing ;
     run algorithm/ext_/for_each_s.cpp ;
     explicit for_each_s ;
 
+    run algorithm/ext_/find_s.cpp ;
+    explicit find_s ;
+
     run algorithm/ext_/find_if_s.cpp ;
     explicit find_if_s ;
+
+    run algorithm/ext_/fold_s.cpp ;
+    explicit fold_s ;
 
     run sequence/ext_/iterator_range_s.cpp ;
     explicit iterator_range_s ;

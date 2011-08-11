@@ -1,15 +1,13 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman, Eric Niebler
+    Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2011 Eric Niebler
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/adapted/mpl.hpp>
-#include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/algorithm/iteration/ext_/for_each_s.hpp>
-#include <boost/mpl/vector_c.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/container/ext_/tree.hpp>
 
@@ -22,44 +20,13 @@ struct print
     }
 };
 
-struct increment
-{
-    template <typename T>
-    void operator()(T& v) const
-    {
-        ++v;
-    }
-};
-
 int
 main()
 {
     using namespace boost::fusion;
-    using boost::mpl::vector_c;
-    namespace fusion = boost::fusion;
 
     {
-        typedef vector<int, char, double, char const*> vector_type;
-        vector_type v(1, 'x', 3.3, "Ruby");
-        for_each_s(v, print());
-        std::cout << std::endl;
-    }
-
-    {
-        typedef vector<int, char, double, char const*> vector_type;
-        vector_type v(1, 'x', 3.3, "Ruby");
-        for_each_s(v, increment());
-        std::cout << v << std::endl;
-    }
-
-    {
-        typedef vector_c<int, 2, 3, 4, 5, 6> mpl_vec;
-        fusion::for_each_s(mpl_vec(), print());
-        std::cout << std::endl;
-    }
-
-    {
-        fusion::for_each_s(
+        for_each_s(
             make_tree(
                 make_vector(double(0),'B')
               , make_tree(

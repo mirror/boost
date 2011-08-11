@@ -1,537 +1,549 @@
 /*=============================================================================
- Copyright (c) 2006 Eric Niebler
+    Copyright (c) 2011 Eric Niebler
 
- Use, modification and distribution is subject to the Boost Software
- License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
- http://www.boost.org/LICENSE_1_0.txt)
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#ifndef FUSION_SEGMENTED_ITERATOR_RANGE_EAN_05032006_1027
-#define FUSION_SEGMENTED_ITERATOR_RANGE_EAN_05032006_1027
+#if !defined(BOOST_FUSION_SEGMENTED_ITERATOR_RANGE_HPP_INCLUDED)
+#define BOOST_FUSION_SEGMENTED_ITERATOR_RANGE_HPP_INCLUDED
 
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/minus.hpp>
-#include <boost/mpl/next_prior.hpp>
 #include <boost/mpl/and.hpp>
-#include <boost/type_traits/remove_cv.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/fusion/iterator/mpl/convert_iterator.hpp>
-#include <boost/fusion/container/list/cons.hpp>
-#include <boost/fusion/view/joint_view.hpp>
-#include <boost/fusion/view/single_view.hpp>
-#include <boost/fusion/view/transform_view.hpp>
-#include <boost/fusion/view/iterator_range.hpp>
-#include <boost/fusion/view/ext_/multiple_view.hpp>
+#include <boost/fusion/support/tag_of.hpp>
+#include <boost/fusion/include/begin.hpp>
+#include <boost/fusion/include/end.hpp>
+#include <boost/fusion/include/next.hpp>
+#include <boost/fusion/include/deref.hpp>
+#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
+#include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
+#include <boost/fusion/include/push_back.hpp>
+#include <boost/fusion/include/push_front.hpp>
+#include <boost/fusion/include/iterator_range.hpp>
+#include <boost/fusion/include/equal_to.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
-#include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
+#include <boost/fusion/view/ext_/detail/reverse_cons.hpp>
+#include <boost/fusion/view/ext_/detail/segment_sequence.hpp>
 
-namespace boost { namespace fusion
+//  Invariants:
+//  - Each segmented iterator has a stack
+//  - Each value in the stack is an iterator range
+//  - The range at the top of the stack points to values
+//  - All other ranges point to ranges
+//  - The front of each range in the stack (besides the
+//    topmost) is the range above it
+  
+namespace boost { namespace fusion { namespace detail
 {
-    namespace detail
+    //auto make_segment_sequence_front(stack_begin)
+    //{
+    //  switch (size(stack_begin))
+    //  {
+    //  case 1:
+    //    return nil;
+    //  case 2:
+    //    // car(cdr(stack_begin)) is a range over values.
+    //    assert(end(front(car(stack_begin))) == end(car(cdr(stack_begin))));
+    //    return iterator_range(begin(car(cdr(stack_begin))), end(front(car(stack_begin))));
+    //  default:
+    //    // car(cdr(stack_begin)) is a range over segments. We replace the
+    //    // front with a view that is restricted.
+    //    assert(end(segments(front(car(stack_begin)))) == end(car(cdr(stack_begin))));
+    //    return segment_sequence(
+    //      push_front(
+    //        // The following could be a segment_sequence. It then gets wrapped
+    //        // in a single_view, and push_front puts it in a join_view with the
+    //        // following iterator_range.
+    //        iterator_range(next(begin(car(cdr(stack_begin)))), end(segments(front(car(stack_begin))))),
+    //        make_segment_sequence_front(cdr(stack_begin))));
+    //  }
+    //}
+
+    template<typename Stack, std::size_t Size = Stack::size::value>
+    struct make_segment_sequence_front
     {
-        ////////////////////////////////////////////////////////////////////////////
-        template<typename Cons, typename State = nil>
-        struct reverse_cons;
+        // assert(end(segments(front(car(stack_begin)))) == end(car(cdr(stack_begin))));
+        BOOST_MPL_ASSERT((
+            result_of::equal_to<
+                typename result_of::end<
+                    typename remove_reference<
+                        typename add_const<
+                            typename result_of::segments<
+                                typename remove_reference<
+                                    typename result_of::deref<
+                                        typename Stack::car_type::begin_type
+                                    >::type
+                                >::type
+                            >::type
+                        >::type
+                    >::type
+                >::type,
+                typename Stack::cdr_type::car_type::end_type
+            >));
 
-        template<typename Car, typename Cdr, typename State>
-        struct reverse_cons<cons<Car, Cdr>, State>
-        {
-            typedef reverse_cons<Cdr, cons<Car, State> > reverse;
-            typedef typename reverse::type type;
-
-            static type call(cons<Car, Cdr> const &cons, State const &state = State())
-            {
-                return reverse::call(cons.cdr, fusion::make_cons(cons.car, state));
-            }
-        };
-
-        template<typename State>
-        struct reverse_cons<nil, State>
-        {
-            typedef State type;
-
-            static State const &call(nil const &, State const &state = State())
-            {
-                return state;
-            }
-        };
-
-        ////////////////////////////////////////////////////////////////////////////
-        // tags
-        struct full_view {};
-        struct left_view {};
-        struct right_view {};
-        struct center_view {};
-
-        template<typename Tag>
-        struct segmented_view_tag;
-
-        ////////////////////////////////////////////////////////////////////////////
-        // a segmented view of that includes all elements either to the
-        // right or the left of a segmented iterator.
-        template<typename Tag, typename Cons1, typename Cons2 = void_>
-        struct segmented_view
-          : sequence_base<segmented_view<Tag, Cons1, Cons2> >
-        {
-            typedef segmented_view_tag<Tag> fusion_tag;
-            typedef fusion_sequence_tag tag; // this gets picked up by MPL
-            typedef mpl::true_ is_view;
-            typedef forward_traversal_tag category;
-
-            explicit segmented_view(Cons1 const &cons)
-              : cons(cons)
-            {}
-
-            typedef Cons1 cons_type;
-            cons_type const &cons;
-        };
-
-        // a segmented view that contains all the elements in between
-        // two segmented iterators
-        template<typename Cons1, typename Cons2>
-        struct segmented_view<center_view, Cons1, Cons2>
-          : sequence_base<segmented_view<center_view, Cons1, Cons2> >
-        {
-            typedef segmented_view_tag<center_view> fusion_tag;
-            typedef fusion_sequence_tag tag; // this gets picked up by MPL
-            typedef mpl::true_ is_view;
-            typedef forward_traversal_tag category;
-
-            segmented_view(Cons1 const &lcons, Cons2 const &rcons)
-              : left_cons(lcons)
-              , right_cons(rcons)
-            {}
-
-            typedef Cons1 left_cons_type;
-            typedef Cons2 right_cons_type;
-
-            left_cons_type const &left_cons;
-            right_cons_type const &right_cons;
-        };
-
-        ////////////////////////////////////////////////////////////////////////////
-        // Used to transform a sequence of segments. The first segment is
-        // bounded by RightCons, and the last segment is bounded by LeftCons
-        // and all the others are passed through unchanged.
-        template<typename RightCons, typename LeftCons = RightCons>
-        struct segments_transform
-        {
-            explicit segments_transform(RightCons const &cons_)
-              : right_cons(cons_)
-              , left_cons(cons_)
-            {}
-
-            segments_transform(RightCons const &right_cons_, LeftCons const &left_cons_)
-              : right_cons(right_cons_)
-              , left_cons(left_cons_)
-            {}
-
-            template<typename First, typename Second>
-            struct result_;
-
-            template<typename Second>
-            struct result_<right_view, Second>
-            {
-                typedef segmented_view<right_view, RightCons> type;
-            };
-
-            template<typename Second>
-            struct result_<left_view, Second>
-            {
-                typedef segmented_view<left_view, LeftCons> type;
-            };
-
-            template<typename Second>
-            struct result_<full_view, Second>
-            {
-                typedef Second type;
-            };
-
-            template<typename Sig>
-            struct result;
-
-            template<typename This, typename First, typename Second>
-            struct result<This(First, Second)>
-              : result_<
-                    typename remove_cv<typename remove_reference<First>::type>::type
-                  , typename remove_cv<typename remove_reference<Second>::type>::type
-                >
-            {};
-
-            template<typename Second>
-            segmented_view<right_view, RightCons> operator ()(right_view, Second &second) const
-            {
-                return segmented_view<right_view, RightCons>(this->right_cons);
-            }
-
-            template<typename Second>
-            segmented_view<left_view, LeftCons> operator ()(left_view, Second &second) const
-            {
-                return segmented_view<left_view, LeftCons>(this->left_cons);
-            }
-
-            template<typename Second>
-            Second &operator ()(full_view, Second &second) const
-            {
-                return second;
-            }
-
-        private:
-            RightCons const &right_cons;
-            LeftCons const &left_cons;
-        };
-
-    } // namespace detail
-
-    namespace extension
-    {
-        ////////////////////////////////////////////////////////////////////////////
-        template<typename Tag>
-        struct is_segmented_impl<detail::segmented_view_tag<Tag> >
-        {
-            template<typename Sequence>
-            struct apply
-              : mpl::true_
-            {};
-        };
-
-        ////////////////////////////////////////////////////////////////////////////
-        template<>
-        struct segments_impl<detail::segmented_view_tag<detail::right_view> >
-        {
-            template<
-                typename Sequence
-              , typename Cdr = typename Sequence::cons_type::cdr_type
+        typedef
+            iterator_range<
+                typename result_of::next<
+                    typename Stack::cdr_type::car_type::begin_type
+                >::type,
+                typename result_of::end<
+                    typename remove_reference<
+                        typename add_const<
+                            typename result_of::segments<
+                                typename remove_reference<
+                                    typename result_of::deref<
+                                        typename Stack::car_type::begin_type
+                                    >::type
+                                >::type
+                            >::type
+                        >::type
+                    >::type
+                >::type
             >
-            struct apply
-            {
-                typedef typename Sequence::cons_type::car_type segmented_range;
-                typedef typename result_of::size<segmented_range>::type size;
-                typedef typename mpl::prior<size>::type size_minus_1;
-                typedef detail::segments_transform<Cdr> tfx;
-                typedef joint_view<
-                    single_view<detail::right_view> const
-                  , multiple_view<size_minus_1, detail::full_view> const
-                > mask;
-                typedef transform_view<mask const, segmented_range const, tfx> type;
+        rest_type;
 
-                static type call(Sequence &seq)
-                {
-                    return type(
-                        mask(
-                            make_single_view(detail::right_view())
-                          , make_multiple_view<size_minus_1>(detail::full_view())
-                        )
-                      , seq.cons.car
-                      , tfx(seq.cons.cdr)
-                    );
-                }
-            };
+        typedef
+            make_segment_sequence_front<typename Stack::cdr_type>
+        recurse;
 
-            template<typename Sequence>
-            struct apply<Sequence, nil>
-            {
-                typedef typename Sequence::cons_type::car_type segmented_range;
-                typedef typename segmented_range::iterator_type begin;
-                typedef typename segmented_range::sequence_non_ref_type sequence_type;
-                typedef typename result_of::end<sequence_type>::type end;
-                typedef iterator_range<begin, end> range;
-                typedef single_view<range> type;
-
-                static type call(Sequence &seq)
-                {
-                    return type(range(seq.cons.car.where_, fusion::end(seq.cons.car.sequence)));
-                }
-            };
-        };
-
-        ////////////////////////////////////////////////////////////////////////////
-        template<>
-        struct segments_impl<detail::segmented_view_tag<detail::left_view> >
-        {
-            template<
-                typename Sequence
-              , typename Cdr = typename Sequence::cons_type::cdr_type
+        typedef
+            segment_sequence<
+                typename result_of::push_front<
+                    rest_type const,
+                    typename recurse::type 
+                >::type
             >
-            struct apply
-            {
-                typedef typename Sequence::cons_type::car_type right_segmented_range;
-                typedef typename right_segmented_range::sequence_type sequence_type;
-                typedef typename right_segmented_range::iterator_type iterator_type;
+        type;
 
-                typedef iterator_range<
-                    typename result_of::begin<sequence_type>::type
-                  , typename result_of::next<iterator_type>::type
-                > segmented_range;
-
-                typedef detail::segments_transform<Cdr> tfx;
-                typedef typename result_of::size<segmented_range>::type size;
-                typedef typename mpl::prior<size>::type size_minus_1;
-                typedef joint_view<
-                    multiple_view<size_minus_1, detail::full_view> const
-                  , single_view<detail::left_view> const
-                > mask;
-                typedef transform_view<mask const, segmented_range const, tfx> type;
-
-                static type call(Sequence &seq)
-                {
-                    return type(
-                        mask(
-                            make_multiple_view<size_minus_1>(detail::full_view())
-                          , make_single_view(detail::left_view())
-                        )
-                      , segmented_range(fusion::begin(seq.cons.car.sequence), fusion::next(seq.cons.car.where_))
-                      , tfx(seq.cons.cdr)
-                    );
-                }
-            };
-
-            template<typename Sequence>
-            struct apply<Sequence, nil>
-            {
-                typedef typename Sequence::cons_type::car_type segmented_range;
-                typedef typename segmented_range::sequence_non_ref_type sequence_type;
-                typedef typename result_of::begin<sequence_type>::type begin;
-                typedef typename segmented_range::iterator_type end;
-                typedef iterator_range<begin, end> range;
-                typedef single_view<range> type;
-
-                static type call(Sequence &seq)
-                {
-                    return type(range(fusion::begin(seq.cons.car.sequence), seq.cons.car.where_));
-                }
-            };
-        };
-
-        ////////////////////////////////////////////////////////////////////////////
-        template<>
-        struct segments_impl<detail::segmented_view_tag<detail::center_view> >
+        static type call(Stack stack)
         {
-            template<typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::right_cons_type right_cons_type;
-                typedef typename Sequence::left_cons_type left_cons_type;
-                typedef typename right_cons_type::car_type right_segmented_range;
-                typedef typename left_cons_type::car_type left_segmented_range;
-
-                typedef iterator_range<
-                    typename result_of::begin<left_segmented_range>::type
-                  , typename result_of::next<typename result_of::begin<right_segmented_range>::type>::type
-                > segmented_range;
-
-                typedef typename mpl::minus<
-                    typename result_of::size<segmented_range>::type
-                  , mpl::int_<2>
-                >::type size_minus_2;
-
-                BOOST_MPL_ASSERT_RELATION(0, <=, size_minus_2::value);
-
-                typedef detail::segments_transform<
-                    typename left_cons_type::cdr_type
-                  , typename right_cons_type::cdr_type
-                > tfx;
-
-                typedef joint_view<
-                    multiple_view<size_minus_2, detail::full_view> const
-                  , single_view<detail::left_view> const
-                > left_mask;
-
-                typedef joint_view<
-                    single_view<detail::right_view> const
-                  , left_mask const
-                > mask;
-
-                typedef transform_view<mask const, segmented_range const, tfx> type;
-
-                static type call(Sequence &seq)
-                {
-                    left_mask lmask(
-                        make_multiple_view<size_minus_2>(detail::full_view())
-                      , make_single_view(detail::left_view())
-                    );
-                    return type(
-                        mask(make_single_view(detail::right_view()), lmask)
-                      , segmented_range(fusion::begin(seq.left_cons.car), fusion::next(fusion::begin(seq.right_cons.car)))
-                      , tfx(seq.left_cons.cdr, seq.right_cons.cdr)
-                    );
-                }
-            };
-        };
-    }
-
-    // specialize iterator_range for use with segmented iterators, so that
-    // it presents a segmented view of the range.
-    template<typename First, typename Last>
-    struct iterator_range;
-
-    template<typename First, typename Last>
-    struct iterator_range<segmented_iterator<First>, segmented_iterator<Last> >
-      : sequence_base<iterator_range<segmented_iterator<First>, segmented_iterator<Last> > >
-    {
-        typedef typename convert_iterator<segmented_iterator<First> >::type begin_type;
-        typedef typename convert_iterator<segmented_iterator<Last> >::type end_type;
-        typedef typename detail::reverse_cons<First>::type begin_cons_type;
-        typedef typename detail::reverse_cons<Last>::type end_cons_type;
-        typedef iterator_range_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef typename traits::category_of<begin_type>::type category;
-        typedef typename result_of::distance<begin_type, end_type>::type size;
-        typedef mpl::true_ is_view;
-
-        iterator_range(segmented_iterator<First> const& first_, segmented_iterator<Last> const& last_)
-          : first(convert_iterator<segmented_iterator<First> >::call(first_))
-          , last(convert_iterator<segmented_iterator<Last> >::call(last_))
-          , first_cons(detail::reverse_cons<First>::call(first_.cons()))
-          , last_cons(detail::reverse_cons<Last>::call(last_.cons()))
-        {}
-
-        begin_type first;
-        end_type last;
-
-        begin_cons_type first_cons;
-        end_cons_type last_cons;
+            //return segment_sequence(
+            //  push_front(
+            //    iterator_range(next(begin(car(cdr(stack_begin)))), end(segments(front(car(stack_begin))))),
+            //    make_segment_sequence_front(cdr(stack_begin))));
+            return type(
+                fusion::push_front(
+                    rest_type(fusion::next(stack.cdr.car.first), fusion::end(fusion::segments(*stack.car.first))),
+                    recurse::call(stack.cdr)));
+        }
     };
 
-    namespace detail
+    template<typename Stack>
+    struct make_segment_sequence_front<Stack, 2>
     {
+        // assert(end(front(car(stack_begin))) == end(car(cdr(stack_begin))));
+        BOOST_MPL_ASSERT((
+            result_of::equal_to<
+                typename result_of::end<
+                    typename remove_reference<
+                        typename result_of::deref<
+                            typename Stack::car_type::begin_type
+                        >::type
+                    >::type
+                >::type,
+                typename Stack::cdr_type::car_type::end_type
+            >));
 
-        template<typename Cons1, typename Cons2>
-        struct same_segment
-          : mpl::false_
-        {};
-
-        template<typename Car1, typename Cdr1, typename Car2, typename Cdr2>
-        struct same_segment<cons<Car1, Cdr1>, cons<Car2, Cdr2> >
-          : mpl::and_<
-                traits::is_segmented<Car1>
-              , is_same<Car1, Car2>
+        typedef
+            iterator_range<
+                typename Stack::cdr_type::car_type::begin_type,
+                typename result_of::end<
+                    typename remove_reference<
+                        typename result_of::deref<
+                            typename Stack::car_type::begin_type
+                        >::type
+                    >::type
+                >::type
             >
-        {};
+        type;
 
-        ////////////////////////////////////////////////////////////////////////////
-        template<typename Cons1, typename Cons2>
-        struct segments_gen;
-
-        ////////////////////////////////////////////////////////////////////////////
-        template<typename Cons1, typename Cons2, bool SameSegment>
-        struct segments_gen2
+        static type call(Stack stack)
         {
-            typedef segments_gen<typename Cons1::cdr_type, typename Cons2::cdr_type> gen;
-            typedef typename gen::type type;
+            // return iterator_range(begin(car(cdr(stack_begin))), end(front(car(stack_begin))));
+            return type(stack.cdr.car.first, fusion::end(*stack.car.first));
+        }
+    };
 
-            static type call(Cons1 const &cons1, Cons2 const &cons2)
-            {
-                return gen::call(cons1.cdr, cons2.cdr);
-            }
-        };
-
-        template<typename Cons1, typename Cons2>
-        struct segments_gen2<Cons1, Cons2, false>
-        {
-            typedef segmented_view<center_view, Cons1, Cons2> view;
-            typedef typename result_of::segments<view>::type type;
-
-            static type call(Cons1 const &cons1, Cons2 const &cons2)
-            {
-                view v(cons1, cons2);
-                return fusion::segments(v);
-            }
-        };
-
-        template<typename Car1, typename Car2>
-        struct segments_gen2<cons<Car1>, cons<Car2>, false>
-        {
-            typedef iterator_range<
-                typename Car1::iterator_type
-              , typename Car2::iterator_type
-            > range;
-
-            typedef single_view<range> type;
-
-            static type call(cons<Car1> const &cons1, cons<Car2> const &cons2)
-            {
-                return type(range(cons1.car.where_, cons2.car.where_));
-            }
-        };
-
-        ////////////////////////////////////////////////////////////////////////////
-        template<typename Cons1, typename Cons2>
-        struct segments_gen
-          : segments_gen2<Cons1, Cons2, same_segment<Cons1, Cons2>::value>
-        {};
-
-        template<typename Car, typename Cdr>
-        struct segments_gen<cons<Car, Cdr>, nil>
-        {
-            typedef segmented_view<right_view, cons<Car, Cdr> > view;
-            typedef typename result_of::segments<view>::type type;
-
-            static type call(cons<Car, Cdr> const &cons, nil const &)
-            {
-                view v(cons);
-                return fusion::segments(v);
-            }
-        };
-
-        template<>
-        struct segments_gen<nil, nil>
-        {
-            typedef nil type;
-
-            static type call(nil const &, nil const &)
-            {
-                return nil();
-            }
-        };
-    } // namespace detail
-
-    namespace extension
+    template<typename Stack>
+    struct make_segment_sequence_front<Stack, 1>
     {
-        template<typename Tag>
-        struct is_segmented_impl;
-
-        // An iterator_range of segmented_iterators is segmented
-        template<>
-        struct is_segmented_impl<iterator_range_tag>
+        typedef nil type;
+        static type call(Stack const &)
         {
-            template<typename Iterator>
-            struct is_segmented_iterator : mpl::false_ {};
+            return nil();
+        }
+    };    
 
-            template<typename Cons>
-            struct is_segmented_iterator<segmented_iterator<Cons> > : mpl::true_ {};
+    //auto make_segment_sequence_back(stack_end)
+    //{
+    //  switch (size(stack_end))
+    //  {
+    //  case 1:
+    //    return nil;
+    //  case 2:
+    //    // car(cdr(stack_back)) is a range over values.
+    //    assert(end(front(car(stack_end))) == end(car(cdr(stack_end))));
+    //    return iterator_range(begin(front(car(stack_end))), begin(car(cdr(stack_end))));
+    //  default:
+    //    // car(cdr(stack_begin)) is a range over segments. We replace the
+    //    // back with a view that is restricted.
+    //    assert(end(segments(front(car(stack_end)))) == end(car(cdr(stack_end))));
+    //    return segment_sequence(
+    //      push_back(
+    //        iterator_range(begin(segments(front(car(stack_end)))), begin(car(cdr(stack_end)))),
+    //        make_segment_sequence_back(cdr(stack_end))));
+    //  }
+    //}
 
-            template<typename Sequence>
-            struct apply
-              : mpl::and_<
-                    is_segmented_iterator<typename Sequence::begin_type>
-                  , is_segmented_iterator<typename Sequence::end_type>
-                >
-            {};
-        };
+    template<typename Stack, std::size_t Size = Stack::size::value>
+    struct make_segment_sequence_back
+    {
+        // assert(end(segments(front(car(stack_begin)))) == end(car(cdr(stack_begin))));
+        BOOST_MPL_ASSERT((
+            result_of::equal_to<
+                typename result_of::end<
+                    typename remove_reference<
+                        typename add_const<
+                            typename result_of::segments<
+                                typename remove_reference<
+                                    typename result_of::deref<
+                                        typename Stack::car_type::begin_type
+                                    >::type
+                                >::type
+                            >::type
+                        >::type
+                    >::type
+                >::type,
+                typename Stack::cdr_type::car_type::end_type
+            >));
+
+        typedef
+            iterator_range<
+                typename result_of::begin<
+                    typename remove_reference<
+                        typename add_const<
+                            typename result_of::segments<
+                                typename remove_reference<
+                                    typename result_of::deref<
+                                        typename Stack::car_type::begin_type
+                                    >::type
+                                >::type
+                            >::type
+                        >::type
+                    >::type
+                >::type,
+                typename Stack::cdr_type::car_type::begin_type
+            >
+        rest_type;
+
+        typedef
+            make_segment_sequence_back<typename Stack::cdr_type>
+        recurse;
+
+        typedef
+            segment_sequence<
+                typename result_of::push_back<
+                    rest_type const,
+                    typename recurse::type 
+                >::type
+            >
+        type;
+
+        static type call(Stack stack)
+        {
+            //  return segment_sequence(
+            //    push_back(
+            //      iterator_range(begin(segments(front(car(stack_end)))), begin(car(cdr(stack_end)))),
+            //      make_segment_sequence_back(cdr(stack_end))));
+            return type(
+                fusion::push_back(
+                    rest_type(fusion::begin(fusion::segments(*stack.car.first)), stack.cdr.car.first),
+                    recurse::call(stack.cdr)));
+        }
+    };
+
+    template<typename Stack>
+    struct make_segment_sequence_back<Stack, 2>
+    {
+        // assert(end(front(car(stack_end))) == end(car(cdr(stack_end))));
+        BOOST_MPL_ASSERT((
+            result_of::equal_to<
+                typename result_of::end<
+                    typename remove_reference<
+                        typename result_of::deref<
+                            typename Stack::car_type::begin_type
+                        >::type
+                    >::type
+                >::type,
+                typename Stack::cdr_type::car_type::end_type
+            >));
+
+        typedef
+            iterator_range<
+                typename result_of::begin<
+                    typename remove_reference<
+                        typename result_of::deref<
+                            typename Stack::car_type::begin_type
+                        >::type
+                    >::type
+                >::type,
+                typename Stack::cdr_type::car_type::begin_type
+            >
+        type;
+
+        static type call(Stack stack)
+        {
+            // return iterator_range(begin(front(car(stack_end))), begin(car(cdr(stack_end))));
+            return type(fusion::begin(*stack.car.first), stack.cdr.car.first);
+        }
+    };
+
+    template<typename Stack>
+    struct make_segment_sequence_back<Stack, 1>
+    {
+        typedef nil type;
+        static type call(Stack const &)
+        {
+            return nil();
+        }
+    };
+    
+    //auto make_segmented_range_reduce(stack_begin, stack_end)
+    //{
+    //  if (size(stack_begin) == 1 && size(stack_end) == 1)
+    //  {
+    //    return segment_sequence(
+    //      single_view(
+    //        iterator_range(begin(car(stack_begin)), begin(car(stack_end)))));
+    //  }
+    //  else
+    //  {
+    //    // We are in the case where both begin_stack and/or end_stack have
+    //    // more than one element. Throw away any part of the tree where
+    //    // begin and end refer to the same segment.
+    //    if (begin(car(stack_begin)) == begin(car(stack_end)))
+    //    {
+    //      return make_segmented_range_reduce(cdr(stack_begin), cdr(stack_end));
+    //    }
+    //    else
+    //    {
+    //      // We are in the case where begin_stack and end_stack (a) have
+    //      // more than one element each, and (b) they point to different
+    //      // segments. We must construct a segmented sequence.
+    //      return segment_sequence(
+    //          push_back(
+    //            push_front(
+    //                iterator_range(
+    //                    fusion::next(begin(car(stack_begin))),
+    //                    begin(car(stack_end))),                 // a range of (possibly segmented) ranges.
+    //              make_segment_sequence_front(stack_begin)),    // should be a (possibly segmented) range.
+    //            make_segment_sequence_back(stack_end)));        // should be a (possibly segmented) range.
+    //    }
+    //  }
+    //}
+
+    template<
+        typename StackBegin,
+        typename StackEnd,
+        int StackBeginSize = StackBegin::size::value,
+        int StackEndSize   = StackEnd::size::value>
+    struct make_segmented_range_reduce;
+
+    template<
+        typename StackBegin,
+        typename StackEnd,
+        bool SameSegment = 
+            result_of::equal_to<
+                typename StackBegin::car_type::begin_type,
+                typename StackEnd::car_type::begin_type
+            >::type::value>
+    struct make_segmented_range_reduce2
+    {
+        typedef
+            iterator_range<
+                typename result_of::next<
+                    typename StackBegin::car_type::begin_type
+                >::type,
+                typename StackEnd::car_type::begin_type
+            >
+        rest_type;
+
+        typedef
+            segment_sequence<
+                typename result_of::push_back<
+                    typename result_of::push_front<
+                        rest_type const,
+                        typename make_segment_sequence_front<StackBegin>::type
+                    >::type const,
+                    typename make_segment_sequence_back<StackEnd>::type
+                >::type
+            >
+        type;
+
+        static type call(StackBegin stack_begin, StackEnd stack_end)
+        {
+            //return segment_sequence(
+            //    push_back(
+            //      push_front(
+            //        iterator_range(
+            //            fusion::next(begin(car(stack_begin))),
+            //            begin(car(stack_end))),                 // a range of (possibly segmented) ranges.
+            //        make_segment_sequence_front(stack_begin)),  // should be a (possibly segmented) range.
+            //      make_segment_sequence_back(stack_end)));      // should be a (possibly segmented) range.
+            return type(
+                fusion::push_back(
+                    fusion::push_front(
+                        rest_type(fusion::next(stack_begin.car.first), stack_end.car.first),
+                        make_segment_sequence_front<StackBegin>::call(stack_begin)),
+                    make_segment_sequence_back<StackEnd>::call(stack_end)));
+        }
+    };
+
+    template<typename StackBegin, typename StackEnd>
+    struct make_segmented_range_reduce2<StackBegin, StackEnd, true>
+    {
+        typedef
+            make_segmented_range_reduce<
+                typename StackBegin::cdr_type,
+                typename StackEnd::cdr_type
+            >
+        impl;
+
+        typedef
+            typename impl::type
+        type;
+
+        static type call(StackBegin stack_begin, StackEnd stack_end)
+        {
+            return impl::call(stack_begin.cdr, stack_end.cdr);
+        }
+    };
+
+    template<typename StackBegin, typename StackEnd, int StackBeginSize, int StackEndSize>
+    struct make_segmented_range_reduce
+      : make_segmented_range_reduce2<StackBegin, StackEnd>
+    {};
+
+    template<typename StackBegin, typename StackEnd>
+    struct make_segmented_range_reduce<StackBegin, StackEnd, 1, 1>
+    {
+        typedef
+            iterator_range<
+                typename StackBegin::car_type::begin_type,
+                typename StackEnd::car_type::begin_type
+            >
+        range_type;
+
+        typedef
+            single_view<range_type>
+        segment_type;
+
+        typedef
+            segment_sequence<segment_type>
+        type;
+
+        static type call(StackBegin stack_begin, StackEnd stack_end)
+        {
+            //return segment_sequence(
+            //  single_view(
+            //    iterator_range(begin(car(stack_begin)), begin(car(stack_end)))));
+            return type(segment_type(range_type(stack_begin.car.first, stack_end.car.first)));
+        }
+    };
+
+    //auto make_segmented_range(begin, end)
+    //{
+    //  return make_segmented_range_reduce(reverse(begin.nodes), reverse(end.nodes));
+    //}
+
+    template<typename Begin, typename End>
+    struct make_segmented_range
+    {
+        typedef reverse_cons<typename Begin::nodes_type>   reverse_begin_cons;
+        typedef reverse_cons<typename End::nodes_type>     reverse_end_cons;
+
+        typedef
+            make_segmented_range_reduce<
+                typename reverse_begin_cons::type,
+                typename reverse_end_cons::type
+            >
+        impl;
+
+        typedef typename impl::type type;
+
+        static type call(Begin const & begin, End const & end)
+        {
+            return impl::call(
+                reverse_begin_cons::call(begin.nodes),
+                reverse_end_cons::call(end.nodes));
+        }
+    };
+
+}}}
+
+namespace boost { namespace fusion { namespace extension
+{
+    template<typename Tag>
+    struct is_segmented_impl;
+
+    // An iterator_range of segmented_iterators is segmented
+    template<>
+    struct is_segmented_impl<iterator_range_tag>
+    {
+        template<typename Iterator>
+        struct is_segmented_iterator
+          : is_same<
+                segmented_iterator_tag,
+                typename traits::tag_of<Iterator>::type>
+        {};
 
         template<typename Sequence>
-        struct segments_impl;
-
-        template<>
-        struct segments_impl<iterator_range_tag>
+        struct apply
+          : is_segmented_iterator<typename Sequence::begin_type>
         {
-            template<typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::begin_cons_type begin_cons;
-                typedef typename Sequence::end_cons_type end_cons;
-
-                typedef detail::segments_gen<begin_cons, end_cons> gen;
-                typedef typename gen::type type;
-
-                static type call(Sequence &sequence)
-                {
-                    return gen::call(sequence.first_cons, sequence.last_cons);
-                }
-            };
+            BOOST_MPL_ASSERT_RELATION(
+                is_segmented_iterator<typename Sequence::begin_type>::value,
+                ==,
+                is_segmented_iterator<typename Sequence::end_type>::value);
         };
-    }
+    };
 
-}}
+    template<typename Tag>
+    struct segments_impl;
+
+    template<>
+    struct segments_impl<iterator_range_tag>
+    {
+        template<typename Sequence>
+        struct apply
+        {
+            typedef
+                detail::make_segmented_range<
+                    typename Sequence::begin_type,
+                    typename Sequence::end_type
+                >
+            impl;
+
+            BOOST_MPL_ASSERT((traits::is_segmented<typename impl::type>));
+
+            typedef
+                typename result_of::segments<typename impl::type>::type
+            type;
+
+            static type call(Sequence & seq)
+            {
+                return fusion::segments(impl::call(seq.first, seq.last));
+            }
+        };
+    };
+
+    // TODO: remove invocation of distance in iterator_range.
+    // TODO: default implementation of begin, end, and size
+    //       should check if the sequence is segmented and to
+    //       the right thing.
+
+}}}
 
 #endif

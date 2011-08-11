@@ -5,32 +5,36 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
+#include <sstream>
+#include <iostream>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
+#include <boost/fusion/algorithm/iteration/ext_/fold_s.hpp>
 #include <boost/fusion/container/ext_/tree.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
-#include <boost/mpl/placeholders.hpp>
-#include <boost/type_traits/is_same.hpp>
+
+struct write_string
+{
+    typedef std::ostream* result_type;
+
+    template<typename T>
+    std::ostream* operator()(std::ostream* sout, T const& t) const
+    {
+        return &(*sout << t << " ");
+    }
+};
 
 template<typename Tree>
 void 
 process_tree(Tree const &tree)
 {
     using namespace boost;
-    using mpl::_;
 
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
+    std::stringstream str;
+    fusion::fold_s(tree, &str, write_string());
+    std::string res = str.str();
 
-    // find_if_s of a segmented data structure returns generic
-    // segmented iterators
-    short_iter si = fusion::find_if_s<is_same<_,short> >(tree);
-    float_iter fi = fusion::find_if_s<is_same<_,float> >(tree);
-
-    // they behave like ordinary Fusion iterators ...
-    BOOST_TEST((*si == short('d')));
-    BOOST_TEST((*fi == float(1)));
+    BOOST_TEST_EQ(res, "a b c 1 2 3 100 e f 0 B 1 h i 4 5 6 j k l ");
 }
 
 int
@@ -40,15 +44,15 @@ main()
     process_tree(
         make_tree(
             make_vector(double(0),'B')
-          , make_tree(
+            , make_tree(
                 make_vector(1,2,long(3))
-              , make_tree(make_vector('a','b','c'))
-              , make_tree(make_vector(short('d'),'e','f'))
+                , make_tree(make_vector('a','b','c'))
+                , make_tree(make_vector(short('d'),'e','f'))
             )
-          , make_tree(
+            , make_tree(
                 make_vector(4,5,6)
-              , make_tree(make_vector(float(1),'h','i'))
-              , make_tree(make_vector('j','k','l'))
+                , make_tree(make_vector(float(1),'h','i'))
+                , make_tree(make_vector('j','k','l'))
             )
         )
     );

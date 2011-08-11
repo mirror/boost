@@ -4,8 +4,8 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_SEGMENTS_04052005_1141)
-#define FUSION_SEGMENTS_04052005_1141
+#if !defined(BOOST_FUSION_SEGMENTS_04052005_1141)
+#define BOOST_FUSION_SEGMENTS_04052005_1141
 
 #include <boost/fusion/support/tag_of.hpp>
 
@@ -27,9 +27,10 @@ namespace boost { namespace fusion
         template <typename Sequence>
         struct segments
         {
+            typedef typename traits::tag_of<Sequence>::type tag_type;
+
             typedef typename
-                extension::segments_impl<typename traits::tag_of<Sequence>::type>::
-                    template apply<Sequence>::type
+                extension::segments_impl<tag_type>::template apply<Sequence>::type
             type;
         };
     }
@@ -38,18 +39,16 @@ namespace boost { namespace fusion
     typename result_of::segments<Sequence>::type
     segments(Sequence & seq)
     {
-        return
-            extension::segments_impl<typename traits::tag_of<Sequence>::type>::
-                template apply<Sequence>::call(seq);
+        typedef typename traits::tag_of<Sequence>::type tag_type;
+        return extension::segments_impl<tag_type>::template apply<Sequence>::call(seq);
     }
 
     template <typename Sequence>
     typename result_of::segments<Sequence const>::type
     segments(Sequence const& seq)
     {
-        return
-            extension::segments_impl<typename traits::tag_of<Sequence>::type>::
-                template apply<Sequence const>::call(seq);
+        typedef typename traits::tag_of<Sequence const>::type tag_type;
+        return extension::segments_impl<tag_type>::template apply<Sequence const>::call(seq);
     }
 }}
 

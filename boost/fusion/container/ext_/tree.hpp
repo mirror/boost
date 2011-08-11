@@ -18,25 +18,17 @@
 #include <boost/fusion/container/list/cons.hpp> // for nil
 #include <boost/fusion/container/vector/vector10.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
+#include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
 #include <boost/fusion/support/ext_/is_segmented.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
+#include <boost/fusion/view/ext_/segmented_begin.hpp>
+#include <boost/fusion/view/ext_/segmented_end.hpp>
 
 namespace boost { namespace fusion
 {
    struct tree_tag;
-
-   namespace detail
-   {
-       template<typename T, bool IsConst>
-       struct reference : add_reference<T> {};
-
-       template<typename T>
-       struct reference<T, true> : reference<typename add_const<T>::type, false> {};
-
-       template<typename T>
-       struct reference<T &, true> : reference<T, false> {};
-   }
 
    template<typename Data, typename Left = nil, typename Right = nil>
    struct tree
@@ -46,7 +38,7 @@ namespace boost { namespace fusion
        typedef Left left_type;
        typedef Right right_type;
        typedef tree_tag fusion_tag;
-       typedef forward_traversal_tag category;
+       typedef bidirectional_traversal_tag category;
        typedef mpl::false_ is_view;
 
        typedef typename mpl::if_<
@@ -122,6 +114,15 @@ namespace boost { namespace fusion
            template<typename Sequence>
            struct apply
              : segmented_end<Sequence>
+           {};
+       };
+
+       template<>
+       struct size_impl<tree_tag>
+       {
+           template<typename Sequence>
+           struct apply
+             : segmented_size<Sequence>::type
            {};
        };
    }

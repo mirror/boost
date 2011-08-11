@@ -1,65 +1,37 @@
 /*=============================================================================
-    Copyright (c) 2006 Eric Niebler
+    Copyright (c) 2011 Eric Niebler
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_FOR_EACH_S_05022006_1027)
-#define FUSION_FOR_EACH_S_05022006_1027
+#if !defined(BOOST_FUSION_FOR_EACH_S_HPP_INCLUDED)
+#define BOOST_FUSION_FOR_EACH_S_HPP_INCLUDED
 
-#include <boost/mpl/assert.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <boost/fusion/support/void.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/support/ext_/is_segmented.hpp>
-
-// fwd declarations
-namespace boost { namespace fusion
-{
-    template <typename Sequence, typename F>
-    void
-    for_each_s(Sequence& seq, F const& f);
-
-    template <typename Sequence, typename F>
-    void
-    for_each_s(Sequence const& seq, F const& f);
-}}
+#include <boost/fusion/view/ext_/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {
-    template<typename F>
-    struct for_each_s_bind
+    template<typename Fun>
+    struct segmented_for_each_fun
     {
-        explicit for_each_s_bind(F const &f)
-          : f_(f)
+        typedef result<void, continue_> result_type;
+
+        explicit segmented_for_each_fun(Fun const& f)
+          : fun(f)
         {}
 
-        template<typename Sequence>
-        void operator ()(Sequence &seq) const
+        template<typename Range, typename State, typename Context>
+        result_type operator()(Range& rng, State const&, Context const&) const
         {
-            fusion::for_each_s(seq, this->f_);
+            fusion::for_each(rng, fun);
+            return void_();
         }
 
-        template<typename Sequence>
-        void operator ()(Sequence const &seq) const
-        {
-            fusion::for_each_s(seq, this->f_);
-        }
-    private:
-        F const &f_;
+        Fun const& fun;
     };
 
-    template<typename Sequence, typename F>
-    void for_each_s(Sequence &seq, F const &f, mpl::true_)
-    {
-        fusion::for_each_s(fusion::segments(seq), for_each_s_bind<F>(f));
-    }
-
-    template<typename Sequence, typename F>
-    void for_each_s(Sequence &seq, F const &f, mpl::false_)
-    {
-        fusion::for_each(seq, f);
-    }
 }}}
 
 namespace boost { namespace fusion
@@ -77,14 +49,14 @@ namespace boost { namespace fusion
     inline void
     for_each_s(Sequence& seq, F const& f)
     {
-        detail::for_each_s(seq, f, traits::is_segmented<Sequence>());
+        fusion::segmented_fold_until(seq, void_(), detail::segmented_for_each_fun<F>(f));
     }
 
     template <typename Sequence, typename F>
     inline void
     for_each_s(Sequence const& seq, F const& f)
     {
-        detail::for_each_s(seq, f, traits::is_segmented<Sequence>());
+        fusion::segmented_fold_until(seq, void_(), detail::segmented_for_each_fun<F>(f));
     }
 }}
 
