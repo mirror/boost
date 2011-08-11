@@ -10,6 +10,7 @@
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
+#include <boost/fusion/sequence/intrinsic/empty.hpp>
 #include <boost/fusion/iterator/iterator_adapter.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/mpl/minus.hpp>
@@ -69,6 +70,8 @@ namespace boost { namespace fusion
         template <typename Sequence>
         struct pop_back
         {
+            BOOST_MPL_ASSERT_NOT((result_of::empty<Sequence>));
+
             typedef pop_back_iterator<
                 typename begin<Sequence>::type>
             begin_type;

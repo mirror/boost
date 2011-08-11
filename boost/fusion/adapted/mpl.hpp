@@ -17,5 +17,6 @@
 #include <boost/fusion/adapted/mpl/detail/has_key_impl.hpp>
 #include <boost/fusion/adapted/mpl/detail/category_of_impl.hpp>
 #include <boost/fusion/adapted/mpl/detail/is_view_impl.hpp>
+#include <boost/fusion/adapted/mpl/detail/empty_impl.hpp>
 
 #endif
