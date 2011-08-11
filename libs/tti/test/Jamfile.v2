@@ -1,0 +1,135 @@
+#  (C) Copyright Edward Diener 2011
+#  Use, modification and distribution are subject to the Boost Software License,
+#  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+#  http://www.boost.org/LICENSE_1_0.txt).
+#
+# Tti testing Jamfile
+#
+
+import testing ;
+
+project tti_tests : requirements <warnings>on
+                                 <toolset>gcc:<warnings>all
+                                 <toolset>msvc:<warnings>all
+                                 <toolset>gcc-4.3.0:<cxxflags>-Wno-variadic-macros
+                                 <toolset>gcc-4.4.0:<cxxflags>-Wno-variadic-macros
+                                 <toolset>gcc-4.5.0:<cxxflags>-Wno-variadic-macros
+                                 <toolset>gcc-4.5.0:<linkflags>"-Wl,--enable-auto-import"
+                                 <toolset>gcc-4.5.2:<cxxflags>-Wno-variadic-macros
+                                 <toolset>gcc-4.6.0:<cxxflags>-Wno-variadic-macros
+                                 ;
+
+alias tti
+    : 
+        [ run test_has_member_const.cpp ]
+        [ run test_has_member.cpp ]
+        [ compile test_has_member_compile.cpp ]
+        [ compile-fail test_has_member_fail.cpp ]
+        [ compile-fail test_has_member_fail2.cpp ]
+        [ run test_has_mem_data.cpp ]
+        [ compile test_has_mem_data_compile.cpp ]
+        [ compile-fail test_has_mem_data_fail.cpp ]
+        [ compile-fail test_has_mem_data_fail2.cpp ]
+        [ compile-fail test_has_mem_data_fail3.cpp ]
+        [ run test_has_mem_fun.cpp ]
+        [ run test_has_mem_fun_const.cpp ]
+        [ compile test_has_mem_fun_compile.cpp ]
+        [ compile-fail test_has_mem_fun_fail.cpp ]
+        [ compile-fail test_has_mem_fun_fail2.cpp ]
+        [ run test_has_static_member.cpp ]
+        [ compile test_has_static_member_compile.cpp ]
+        [ compile-fail test_has_static_member_fail.cpp ]
+        [ compile-fail test_has_static_member_fail2.cpp ]
+        [ run test_has_static_mem_data.cpp ]
+        [ compile test_has_static_mem_data_compile.cpp ]
+        [ compile-fail test_has_static_mem_data_fail.cpp ]
+        [ compile-fail test_has_static_mem_data_fail2.cpp ]
+        [ compile-fail test_has_static_mem_data_fail3.cpp ]
+        [ run test_has_static_mem_fun.cpp ]
+        [ compile test_has_static_mem_fun_compile.cpp ]
+        [ compile-fail test_has_static_mem_fun_fail.cpp ]
+        [ compile-fail test_has_static_mem_fun_fail2.cpp ]
+        [ run test_has_template.cpp ]
+        [ compile test_has_template_compile.cpp ]
+        [ compile-fail test_has_template_fail.cpp ]
+        [ compile-fail test_has_template_fail2.cpp ]
+        [ compile-fail test_has_template_fail3.cpp ]
+        [ compile-fail test_has_template_fail4.cpp ]
+        [ run test_has_template_cp.cpp ]
+        [ compile test_has_template_cp_compile.cpp ]
+        [ compile-fail test_has_template_cp_fail.cpp ]
+        [ compile-fail test_has_template_cp_fail2.cpp ]
+        [ compile-fail test_has_template_cp_fail3.cpp ]
+        [ compile-fail test_has_template_cp_fail4.cpp ]
+        [ run test_has_type.cpp ]
+        [ compile test_has_type_compile.cpp ]
+        [ compile-fail test_has_type_fail.cpp ]
+        [ compile-fail test_has_type_fail2.cpp ]
+        [ compile-fail test_has_type_fail3.cpp ]
+        [ run test_has_type_ct.cpp ]
+        [ compile test_has_type_ct_compile.cpp ]
+        [ compile-fail test_has_type_ct_fail.cpp ]
+        [ compile-fail test_has_type_ct_fail2.cpp ]
+        [ compile-fail test_has_type_ct_fail3.cpp ]
+        [ compile-fail test_has_type_ct_fail4.cpp ]
+        [ compile-fail test_has_type_ct_fail5.cpp ]
+        [ run test_mem_type.cpp ]
+        [ compile test_mem_type_compile.cpp ]
+        [ run test_mf_has_mem_data.cpp ]
+        [ compile test_mf_has_mem_data_compile.cpp ]
+        [ compile-fail test_mf_has_mem_data_fail.cpp ]
+        [ compile-fail test_mf_has_mem_data_fail2.cpp ]
+        [ compile-fail test_mf_has_mem_data_fail3.cpp ]
+        [ run test_mf_has_mem_fun.cpp ]
+        [ compile test_mf_has_mem_fun_compile.cpp ]
+        [ compile-fail test_mf_has_mem_fun_fail.cpp ]
+        [ compile-fail test_mf_has_mem_fun_fail2.cpp ]
+        [ compile-fail test_mf_has_mem_fun_fail3.cpp ]
+        [ run test_mf_has_static_data.cpp ]
+        [ compile test_mf_has_static_data_compile.cpp ]
+        [ compile-fail test_mf_has_static_data_fail.cpp ]
+        [ compile-fail test_mf_has_static_data_fail2.cpp ]
+        [ compile-fail test_mf_has_static_data_fail3.cpp ]
+        [ run test_mf_has_static_fun.cpp ]
+        [ compile test_mf_has_static_fun_compile.cpp ]
+        [ compile-fail test_mf_has_static_fun_fail.cpp ]
+        [ compile-fail test_mf_has_static_fun_fail2.cpp ]
+        [ compile-fail test_mf_has_static_fun_fail3.cpp ]
+        [ run test_mf_has_type.cpp ]
+        [ compile test_mf_has_type_compile.cpp ]
+        [ compile-fail test_mf_has_type_fail.cpp ]
+        [ compile-fail test_mf_has_type_fail2.cpp ]
+        [ run test_mf_has_type_ct.cpp ]
+        [ compile test_mf_has_type_ct_compile.cpp ]
+        [ compile-fail test_mf_has_type_ct_fail.cpp ]
+        [ compile-fail test_mf_has_type_ct_fail2.cpp ]
+        [ compile-fail test_mf_has_type_ct_fail3.cpp ]
+        [ run test_mf_has_template.cpp ]
+        [ compile test_mf_has_template_compile.cpp ]
+        [ compile-fail test_mf_has_template_fail.cpp ]
+        [ compile-fail test_mf_has_template_fail2.cpp ]
+        [ compile-fail test_mf_has_template_fail3.cpp ]
+        [ compile-fail test_mf_has_template_fail4.cpp ]
+        [ run test_mf_has_template_cp.cpp ]
+        [ compile test_mf_has_template_cp_compile.cpp ]
+        [ compile-fail test_mf_has_template_cp_fail.cpp ]
+        [ compile-fail test_mf_has_template_cp_fail2.cpp ]
+        [ compile-fail test_mf_has_template_cp_fail3.cpp ]
+        [ run test_mf_mem_type.cpp ]
+        [ compile test_mf_mem_type_compile.cpp ]
+    ;
+
+alias ttivm
+    : 
+        [ run test_vm_has_template_cp.cpp : : : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile test_vm_has_template_cp_compile.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail2.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail3.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail4.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ run test_vm_mf_has_template_cp.cpp : : : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile test_vm_mf_has_template_cp_compile.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_mf_has_template_cp_fail.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_mf_has_template_cp_fail2.cpp : <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_mf_has_template_cp_fail3.cpp : <define>BOOST_PP_VARIADICS=1 ]
+    ;

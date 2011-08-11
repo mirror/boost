@@ -1,0 +1,507 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Macro Metafunctions as Metadata</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.0">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;The Type Traits Introspection Library 1.4">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;The Type Traits Introspection Library 1.4">
+<link rel="prev" href="tti_usingMM.html" title="Using the Macro Metafunctions">
+<link rel="next" href="tti_metafunctions.html" title="Nullary Type Metafunctions">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="tti_usingMM.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="tti_metafunctions.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="the_type_traits_introspection_library.tti_metaclasses"></a><a class="link" href="tti_metaclasses.html" title="Macro Metafunctions as Metadata">Macro
+    Metafunctions as Metadata</a>
+</h2></div></div></div>
+<p>
+      As specified in the Boost MPL library, there are two ways to pass metafunctions
+      as metadata, and both ways fall under the Boost MPL terminology of 'lambda
+      expressions':
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          As a metafunction class
+        </li>
+<li class="listitem">
+          As a placeholder expression
+        </li>
+</ul></div>
+<p>
+      Using a placeholder expression is the easiest way and does not require the
+      programmer to create a metafunction class for passing the metadata. The syntax
+      for this is fairly simple. The syntax for passing a macro metafunction becomes
+      <code class="computeroutput"><span class="identifier">macrometafunction</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;</span></code> etc.
+      depending on how many parameters are bring passed. Thus for two parameters
+      we would have <code class="computeroutput"><span class="identifier">macrometafunction</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">&gt;</span></code> etc.,
+      with another placeholder (<code class="computeroutput"><span class="identifier">_</span></code>)
+      added for each subsequent parameter.
+    </p>
+<p>
+      However using a placeholder expression may not be the fastest way when considering
+      compile-time speed. Because of this the TTI library provides a set of macros
+      for each of the macro metafunctions which generate a corresponding metafunction
+      class. We will call this set of macros the 'metafunction class macros'.
+    </p>
+<p>
+      These macros take exactly the same macro parameters as their corresponding
+      macro metafunctions. They generate a corresponding metafunction class rather
+      than a metafunction itself, which allows us to pass our macro metafunctions
+      as metadata, just as using placeholder expressions allows us to do.
+    </p>
+<p>
+      For these metafunction class macros there is a simple form and a complex form
+      name just as there is for the macro metafunctions. For each macro metafunction,
+      the name for the corresponding metafunction class macro is the macro metafunction
+      name with the sequence <code class="computeroutput"><span class="identifier">MTFC_</span></code>
+      ( for "MeTaFunction Class" ) following the <code class="computeroutput"><span class="identifier">BOOST_TTI_</span></code>
+      ( or <code class="computeroutput"><span class="identifier">BOOST_TTI_VM_</span></code> ) portion
+      of the macro metafunction name. The subsequent metafunction class name, using
+      the simple form, is the same name as the corresponding macro metafunction name
+      but with <code class="computeroutput"><span class="identifier">mtfc_</span></code> prepended to
+      the name.
+    </p>
+<p>
+      As with the complex form name of the macro metafunctions, the complex form
+      name of the corresponding metafunction class macros is completely determined
+      by the first 'trait' parameter.
+    </p>
+<p>
+      In the following table I do not specify the macro parameters as they are exactly
+      the same as those for their corresponding macro metafunction.
+    </p>
+<div class="table">
+<a name="the_type_traits_introspection_library.tti_metaclasses.tbmetaclasses"></a><p class="title"><b>Table&#160;1.5.&#160;TTI Metafunction Classes</b></p>
+<div class="table-contents"><table class="table" summary="TTI Metafunction Classes">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Macro Metafunction
+              </p>
+            </th>
+<th>
+              <p>
+                Metafunction Class Macro
+              </p>
+            </th>
+<th>
+              <p>
+                Metafunction Class Name
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_TYPE.html" title="Macro BOOST_TTI_HAS_TYPE">BOOST_TTI_HAS_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_TYPE.html" title="Macro BOOST_TTI_MTFC_HAS_TYPE">BOOST_TTI_MTFC_HAS_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_type_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_TYPE.html" title="Macro BOOST_TTI_TRAIT_HAS_TYPE">BOOST_TTI_TRAIT_HAS_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_TYPE.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_TYPE">BOOST_TTI_MTFC_TRAIT_HAS_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_TEMPLATE.html" title="Macro BOOST_TTI_HAS_TEMPLATE">BOOST_TTI_HAS_TEMPLATE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_TEMPLATE.html" title="Macro BOOST_TTI_MTFC_HAS_TEMPLATE">BOOST_TTI_MTFC_HAS_TEMPLATE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_template_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_TEMPLATE.html" title="Macro BOOST_TTI_TRAIT_HAS_TEMPLATE">BOOST_TTI_TRAIT_HAS_TEMPLATE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE">BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_MTFC_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_MTFC_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_template_check_params_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_template_check_params_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_VM_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS.html" title="Macro BOOST_TTI_VM_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS">BOOST_TTI_VM_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_MEMBER_DATA.html" title="Macro BOOST_TTI_HAS_MEMBER_DATA">BOOST_TTI_HAS_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_MEMBER_DATA.html" title="Macro BOOST_TTI_MTFC_HAS_MEMBER_DATA">BOOST_TTI_MTFC_HAS_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_member_data_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_MEMBER_DATA.html" title="Macro BOOST_TTI_TRAIT_HAS_MEMBER_DATA">BOOST_TTI_TRAIT_HAS_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_DATA.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_DATA">BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_HAS_MEMBER_FUNCTION">BOOST_TTI_HAS_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_HAS_MEMBER_FUNCTION">BOOST_TTI_MTFC_HAS_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_member_function_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION">BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_FUNCTION">BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_COMP_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_HAS_COMP_MEMBER_FUNCTION">BOOST_TTI_HAS_COMP_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_COMP_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_HAS_COMP_MEMBER_FUNCTION">BOOST_TTI_MTFC_HAS_COMP_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_comp_member_function_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_COMP_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_TRAIT_HAS_COMP_MEMBER_FUNCTION">BOOST_TTI_TRAIT_HAS_COMP_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_COMP_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_COMP_MEMBER_FUNCTION">BOOST_TTI_MTFC_TRAIT_HAS_COMP_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_STATIC_MEMBER_DATA.html" title="Macro BOOST_TTI_HAS_STATIC_MEMBER_DATA">BOOST_TTI_HAS_STATIC_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA.html" title="Macro BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA">BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_static_member_data_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_DATA.html" title="Macro BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_DATA">BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_DATA.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_DATA">BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_DATA</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION">BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_HAS_STATIC_MEMBER_FUNCTION">BOOST_TTI_MTFC_HAS_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_static_member_function_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION">BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_FUNCTION">BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_HAS_COMP_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_HAS_COMP_STATIC_MEMBER_FUNCTION">BOOST_TTI_HAS_COMP_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_HAS_COMP_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_HAS_COMP_STATIC_MEMBER_FUNCTION">BOOST_TTI_MTFC_HAS_COMP_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_comp_static_member_function_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION">BOOST_TTI_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION.html" title="Macro BOOST_TTI_MTFC_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION">BOOST_TTI_MTFC_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MEMBER_TYPE.html" title="Macro BOOST_TTI_MEMBER_TYPE">BOOST_TTI_MEMBER_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_MEMBER_TYPE.html" title="Macro BOOST_TTI_MTFC_MEMBER_TYPE">BOOST_TTI_MTFC_MEMBER_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_member_type_</span><span class="char">'name'</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_TRAIT_MEMBER_TYPE.html" title="Macro BOOST_TTI_TRAIT_MEMBER_TYPE">BOOST_TTI_TRAIT_MEMBER_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><a class="link" href="../BOOST_TTI_MTFC_TRAIT_MEMBER_TYPE.html" title="Macro BOOST_TTI_MTFC_TRAIT_MEMBER_TYPE">BOOST_TTI_MTFC_TRAIT_MEMBER_TYPE</a></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="char">'trait'</span></code>
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><p>
+      Each of the metafunction classes have exactly the same functionality as their
+      corresponding macro metafunction. The metafunction class generated can be passed
+      as metadata in the same way that their correspending macro metafunctions with
+      placeholder expressions can be passed as metadata.
+    </p>
+<p>
+      As will be seen when we discuss the nullary type metafunctions, each nullary
+      type metafunction takes as its first parameter a macro metafunction as metadata
+      in the form of a lambda expression. Therefore we can use either a metafunction
+      class generated by one of the macros above, or a placeholder expression, to
+      pass a macro metafunction as metadata to our nullary type metafunctions. Other
+      uses for our macro metafunctions as metadata may be found by the template metaprogrammer
+      using the TTI library.
+    </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2010 Tropic Software East Inc</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="tti_usingMM.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="tti_metafunctions.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

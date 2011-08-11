@@ -1,0 +1,36 @@
+[/ 
+  (C) Copyright Edward Diener 2011
+  Use, modification and distribution are subject to the Boost Software License,
+  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[library The Type Traits Introspection Library
+    [quickbook 1.5]
+    [version 1.4]
+    [id tti]
+    [dirname tti]
+    [copyright 2010 Tropic Software East Inc]
+    [purpose Compile time introspection of a type]
+    [category generic]
+    [authors [Diener, Edward]]
+    [source-mode c++]
+]
+ 
+[include tti_introduction.qbk]
+[include tti_why.qbk]
+[include tti_terminology.qbk]
+[include tti_functionality.qbk]
+[include tti_detail.qbk]
+[include tti_nested_type.qbk]
+[include tti_using_mm.qbk]
+[include tti_meta_classes.qbk]
+[include tti_metafunctions.qbk]
+[include tti_using_ntm.qbk]
+[include tti_func_templates.qbk]
+[include tti_tests.qbk]
+[include tti_history.qbk]
+[include tti_to_do.qbk]
+[include tti_acknowledgements.qbk]
+[include tti_index.qbk]
+[include tti_reference.qbk]

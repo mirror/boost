@@ -1,0 +1,95 @@
+[/ 
+  (C) Copyright Edward Diener 2011
+  Use, modification and distribution are subject to the Boost Software License,
+  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:tti_functionality General Functionality]
+
+The elements about which a template metaprogrammer might be interested in finding 
+out at compile time about a type are:
+
+* Does it have a nested type with a particular name ?
+* Does it have a nested type with a particular name which is a typedef for a particular type ?
+* Does it have a nested class template with a particular name ?
+* Does it have a nested class template with a particular name and a particular signature ?
+* Does it have a member function with a particular name and a particular signature ?
+* Does it have a member data with a particular name and of a particular type ?
+* Does it have a static member function with a particular name and a particular signature ?
+* Does it have a static member data with a particular name and of a particular type ?
+
+These are the compile-time questions which the TTI library answers.
+
+All of the questions above attempt to find an answer about an inner element with 
+a particular name. In order to do this using template metaprogramming, macros are used 
+so that the name of the inner element can be passed to the macro. The macro will then 
+generate an appropriate metafunction, which the template metaprogrammer can then use to 
+introspect the information that is needed. The name itself of the inner element is always passed 
+to the macro as a macro parameter, but other macro parameters may also be needed in some cases.
+
+All of the macros start with the prefix `BOOST_TTI_`, create their metafunctions in a
+namespace called 'boost::tti', and come in two forms: 
+
+# In the simplest macro form the 'name' of the inner element is used directly to generate the name 
+  of the metafunction as well as serving as the 'name' to introspect. To generate the name of 
+  the metafunction the 'name' is appended to the name of the macro, with the `BOOST_TTI_` prefix removed, 
+  a final underscore added, and the macro parameter 'name' in lower case. As an example, for the 
+  macro `BOOST_TTI_HAS_TYPE(MyType)` the name of the metafunction is `boost::tti::has_type_MyType` and it will 
+  look for an inner type called 'MyType'.
+# In the more complicated macro form, which I call the complex form, the macro starts with 
+  `BOOST_TTI_TRAIT_` and a 'trait' name is passed as the first parameter, with the 'name' of the inner 
+  element as the second parameter. The 'trait' name serves solely to completely name the metafunction in 
+  the `boost::tti` namespace. As an example, for the macro `BOOST_TTI_TRAIT_HAS_TYPE(MyTrait,MyType)` the name of 
+  the metafunction is `boost::tti::MyTrait` and it will look for an inner type called `MyType`. Every
+  macro has a corresponding complex form.
+  
+Once either of these two macro forms are used for a particular type of inner element, the 
+corresponding macro metafunction has the exact same functionality. 
+
+[important When introspecting a particular inner element any given macro metafunction generated 
+can be reused with any combination of template parameters which involve the same type of inner element. 
+Furthermore once a macro metafunction is generated, attempting to generate another macro metafunction of the 
+same name will create ODR violations since two C++ constructs with the same name/type in the same namespace 
+will have been created. This latter possibility has much less chance of occurence if you use the simple form 
+of each macro and just reuse the macro metafunction. You can even do this if you are introspecting for two 
+entities of the same name in different enclosing types, or in the same enclosing type but with different 
+signatures, as with overloaded member functions.]
+  
+In the succeeding documentation all macro metafunctions will be referred by their simple form 
+name, but remember that the complex form name can always alternatively be used.
+
+[heading Macro Metafunction Name Generation]
+
+The library also provides a set of macros which can be used to automatically generate the 
+names of the macro metafunctions so that the end-user does not have to remember the naming 
+scheme given above.
+
+For each of the macros using the simple form there are two corresponding macros based on  
+the simple form macro name, each of which takes the name of the inner element as the single
+macro parameter.
+
+# The first has the macro metafunction name with `_GEN_BASE` appended to it, and outputs the 
+  name of the metafunction without a namespace.
+# The second has the macro metafunction name with `_GEN` appended to it, and outputs the full
+  name of the macro metafunction within the Boost TTI namespace.
+  
+These simple form name generation macros are automatically included when the appropriate macro metafunction 
+header file is included.
+  
+For the macros using the complicated form, there are two fixed name macros, each of which takes
+the 'trait' name as the single macro parameter.
+
+# `BOOST_TTI_TRAIT_GEN_BASE(trait)` simply outputs 'trait' without a namespace.
+# `BOOST_TTI_TRAIT_GEN(trait)` outputs 'trait' within the BOOST TTI namespace.
+
+Both of these last macros are trivial, but are provided nonetheless to parallel the way
+that the simple form generation macros output their macro metafunction names.
+  
+Finally there is a convenience macro which simply outputs the name of the full TTI namespace.
+
+# `BOOST_TTI_NAMESPACE` simply outputs the full TTI namespace.
+
+These complicated form macros are included by all TTI header files.
+
+[endsect]

@@ -1,0 +1,275 @@
+[/ 
+  (C) Copyright Edward Diener 2011
+  Use, modification and distribution are subject to the Boost Software License,
+  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:tti_usingNTM Using the Nullary Type Metafunctions]
+[#sectti_usingNTM]
+
+Using the nullary type metafunctions can be illustrated by first creating some hypothetical
+user-defined type with corresponding nested types and other inner elements.
+This user-defined type will be weighted toward showing deeply nested types and elements within 
+those nested types. With this type we can illustrate the use of the nullary type metafunctions. This is 
+just meant to serve as a model for what a type T might entail from within 
+a class or function template.
+
+ // An enclosing type
+
+ struct T
+   {
+       
+   // Type
+    
+   struct BType // as a nested type
+     {
+       
+     // Template
+   
+     template <class,class,int,class,template <class> class InnerTemplate,class,long> struct ManyParameters { };
+       
+     // Type
+    
+     struct CType // as a further nested type
+       {
+       
+       // Template
+   
+       template <class> struct AMemberTemplate { };
+       
+       // Type
+    
+       struct DType // as a futher nested type
+         {
+       
+         // Type
+    
+         typedef double ADoubleType;
+   
+         // Template
+   
+         template <class,class,int,short,class,template <class,int> class InnerTemplate,class> struct MoreParameters { };
+   
+         // Function
+    
+         int IntFunction(short) const { return 0; }
+    
+         // Static Data
+    
+         static short DSMember;
+    
+         // Static Function
+    
+         static int SIntFunction(long,double) { return 2; }
+   
+         };
+       };
+     };
+       
+   // Data
+    
+   BType IntBT;
+       
+   };
+  
+I will be using the type above just to illustrate the sort of 
+metaprogramming questions we can ask of some type T which is passed 
+to the template programmer in a class template. Here is what the 
+class template might look like:
+
+ #include <boost/tti/tti.hpp>
+
+ template<class T>
+ struct OurTemplateClass
+   {
+   
+   // compile-time template code regarding T
+   
+   };
+
+Now let us create and invoke the nested metafunctions for each of our inner element types, 
+to see if type T above corresponds to our hypothetical type above. Imagine this being 
+within 'OurTemplateClass' above. In the examples below the same macro is invoked just once 
+to avoid ODR violations.
+
+I will also be mixing the way the macro metafunction metadata is passed to our  
+nullary type metafunctions, whether as a metafunction class or as a placeholder 
+expression. Both will work just fine since our nullary type metafunctions work 
+with any lambda expression as the first template parameter.
+ 
+[heading Member type]
+
+We start off by creating typedef's, as nullary metafunctions, for our 
+theoretical inner types in relation to T . None of these typedefs 
+will produce a compiler error even if our structure does not correspond 
+to T's reality. This also illustrates using 'boost::tti::mf_member_type'.
+
+ BOOST_TTI_MEMBER_TYPE(BType)
+ BOOST_TTI_MTFC_MEMBER_TYPE(CType)
+ BOOST_TTI_MEMBER_TYPE(DType)
+ 
+ typedef
+ boost::tti::mf_member_type
+   <
+   boost::tti::member_type_BType<_>,
+   boost::mpl::identity<T>
+   >
+ BTypeNM;
+
+ typedef
+ boost::tti::mf_member_type
+   <
+   boost::tti::mtfc_member_type_CType,
+   BTypeNM
+   >
+ CTypeNM;
+
+ typedef
+ boost::tti::mf_member_type
+   <
+   boost::tti::member_type_DType<_>,
+   CTypeNM
+   >
+ DTypeNM;
+ 
+We will use these typedefs in the ensuing examples.
+
+[heading Type]
+
+Does T have a nested type called 'DType' within 'BType::CType' ?
+
+ BOOST_TTI_HAS_TYPE(DType)
+  
+ boost::tti::mf_has_type
+   <
+   boost::tti::has_type_DType<_>,
+   CTypeNM
+   >
+   
+We could just have easily used the `boost::tti::mf_valid_member_type`
+metafunction to the same effect:
+
+  boost::tti::mf_valid_member_type
+    <
+    DTypeNM
+    >
+   
+[heading Type checking the typedef]
+
+Does T have a nested typedef called 'ADoubleType' 
+within 'BType::CType::DType' whose type is a 'double' ?
+
+ BOOST_TTI_MTFC_HAS_TYPE(ADoubleType)
+ 
+ boost::tti::mf_has_type
+   <
+   boost::tti::mtfc_has_type_ADoubleType,
+   DTypeNM,
+   boost::mpl::identity<double>
+   >
+
+[heading Template]
+
+Does T have a nested class template called 'AMemberTemplate' 
+within 'BType::CType' whose template parameters are all types ('class' or 'typename') ?
+
+ BOOST_TTI_MTFC_HAS_TEMPLATE(AMemberTemplate)
+ 
+ boost::tti::mf_has_template
+   <
+   boost::tti::mtfc_has_template_AMemberTemplate,
+   CTypeNM
+   >
+
+[heading Template with params]
+
+Does T have a nested class template called 'ManyParameters' 
+within 'BType' whose template parameters are specified exactly ?
+
+ BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(ManyParameters,(class)(class)(int)(class)(template <class> class InnerTemplate)(class)(long))
+ 
+ boost::tti::mf_has_template_check_params
+   <
+   boost::tti::has_template_check_params_ManyParameters<_>,
+   BTypeNM
+   >
+
+[heading Template with params using variadic macros]
+
+Does T have a nested class template called 'MoreParameters' 
+within 'BType::CType' whose template parameters are specified exactly ?
+
+[
+note Include the `tti_vm.hpp` general header file, or the 
+`vm_template_params.hpp` specific header file,
+when using this macro.
+]
+
+ BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS(MoreParameters,class,class,int,short,class,template <class,int> class InnerTemplate,class)
+ 
+ boost::tti::mf_has_template_check_params
+   <
+   boost::tti::mtfc_has_template_check_params_MoreParameters,
+   CTypeNM
+   >
+
+[heading Member data]
+
+Does T have a member data called 'IntBT' whose type is 'BType' ?
+
+ BOOST_TTI_MTFC_HAS_MEMBER_DATA(IntBT)
+ 
+ boost::tti::mf_has_member_data
+   <
+   boost::tti::mtfc_has_member_data_IntBT,
+   boost::mpl::identity<T>,
+   BTypeNM
+   >
+
+[heading Member function]
+
+Does T have a member function called 'IntFunction' 
+within 'BType::CType::DType' whose type is 'int (short) const' ?
+
+ BOOST_TTI_HAS_MEMBER_FUNCTION(IntFunction)
+ 
+ boost::tti::mf_has_member_function
+   <
+   boost::tti::has_member_function_IntFunction<_,_,_,_>,
+   DTypeNM,
+   boost::mpl::identity<int>,
+   boost::mpl::vector<boost::mpl::identity<short> >,
+   boost::function_types::const_qualified
+   >
+
+[heading Static member data]
+
+Does T have a static member data called 'DSMember' 
+within 'BType::CType::DType' whose type is 'short' ?
+
+ BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA(DSMember)
+ 
+ boost::tti::mf_has_static_member_data
+   <
+   boost::tti::mtfc_has_static_member_data_DSMember,
+   DTypeNM,
+   boost::mpl::identity<short>
+   >
+
+[heading Static member function]
+
+Does T have a static member function called 'SIntFunction' 
+within 'BType::CType::DType' whose type is 'int (long,double)' ?
+
+ BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION(SIntFunction)
+ 
+ boost::tti::mf_has_static_member_function
+   <
+   boost::tti::has_static_member_function_SIntFunction<_,_,_>,
+   DTypeNM,
+   boost::mpl::identity<int>,
+   boost::mpl::vector<boost::mpl::identity<long>,boost::mpl::identity<double> >
+   >
+
+[endsect]
