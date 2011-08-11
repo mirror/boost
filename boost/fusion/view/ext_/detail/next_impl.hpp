@@ -7,6 +7,7 @@
 #if !defined(BOOST_FUSION_SEGMENTED_ITERATOR_NEXT_IMPL_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_ITERATOR_NEXT_IMPL_HPP_INCLUDED
 
+#include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
 #include <boost/fusion/container/list/cons.hpp>
@@ -111,7 +112,9 @@ namespace boost { namespace fusion
             typename Range  =
                 typename remove_reference<
                     typename add_const<
-                        typename result_of::deref<typename Stack::car_type::begin_type>::type
+                        typename result_of::deref<
+                            typename Stack::car_type::begin_type
+                        >::type
                     >::type
                 >::type,
             typename Result =

@@ -72,8 +72,10 @@ namespace boost { namespace fusion { namespace detail
                         typename add_const<
                             typename result_of::segments<
                                 typename remove_reference<
-                                    typename result_of::deref<
-                                        typename Stack::car_type::begin_type
+                                    typename add_const<
+                                        typename result_of::deref<
+                                            typename Stack::car_type::begin_type
+                                        >::type
                                     >::type
                                 >::type
                             >::type
@@ -93,8 +95,10 @@ namespace boost { namespace fusion { namespace detail
                         typename add_const<
                             typename result_of::segments<
                                 typename remove_reference<
-                                    typename result_of::deref<
-                                        typename Stack::car_type::begin_type
+                                    typename add_const<
+                                        typename result_of::deref<
+                                            typename Stack::car_type::begin_type
+                                        >::type
                                     >::type
                                 >::type
                             >::type
@@ -138,8 +142,10 @@ namespace boost { namespace fusion { namespace detail
             result_of::equal_to<
                 typename result_of::end<
                     typename remove_reference<
-                        typename result_of::deref<
-                            typename Stack::car_type::begin_type
+                        typename add_const<
+                            typename result_of::deref<
+                                typename Stack::car_type::begin_type
+                            >::type
                         >::type
                     >::type
                 >::type,
@@ -151,8 +157,10 @@ namespace boost { namespace fusion { namespace detail
                 typename Stack::cdr_type::car_type::begin_type,
                 typename result_of::end<
                     typename remove_reference<
-                        typename result_of::deref<
-                            typename Stack::car_type::begin_type
+                        typename add_const<
+                            typename result_of::deref<
+                                typename Stack::car_type::begin_type
+                            >::type
                         >::type
                     >::type
                 >::type
@@ -208,8 +216,10 @@ namespace boost { namespace fusion { namespace detail
                         typename add_const<
                             typename result_of::segments<
                                 typename remove_reference<
-                                    typename result_of::deref<
-                                        typename Stack::car_type::begin_type
+                                    typename add_const<
+                                        typename result_of::deref<
+                                            typename Stack::car_type::begin_type
+                                        >::type
                                     >::type
                                 >::type
                             >::type
@@ -226,8 +236,10 @@ namespace boost { namespace fusion { namespace detail
                         typename add_const<
                             typename result_of::segments<
                                 typename remove_reference<
-                                    typename result_of::deref<
-                                        typename Stack::car_type::begin_type
+                                    typename add_const<
+                                        typename result_of::deref<
+                                            typename Stack::car_type::begin_type
+                                        >::type
                                     >::type
                                 >::type
                             >::type
@@ -272,8 +284,10 @@ namespace boost { namespace fusion { namespace detail
             result_of::equal_to<
                 typename result_of::end<
                     typename remove_reference<
-                        typename result_of::deref<
-                            typename Stack::car_type::begin_type
+                        typename add_const<
+                            typename result_of::deref<
+                                typename Stack::car_type::begin_type
+                            >::type
                         >::type
                     >::type
                 >::type,
@@ -284,8 +298,10 @@ namespace boost { namespace fusion { namespace detail
             iterator_range<
                 typename result_of::begin<
                     typename remove_reference<
-                        typename result_of::deref<
-                            typename Stack::car_type::begin_type
+                        typename add_const<
+                            typename result_of::deref<
+                                typename Stack::car_type::begin_type
+                            >::type
                         >::type
                     >::type
                 >::type,

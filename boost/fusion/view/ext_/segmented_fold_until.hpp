@@ -11,6 +11,7 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/utility/result_of.hpp>
+#include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
 #include <boost/fusion/support/void.hpp>
@@ -48,8 +49,10 @@ namespace boost { namespace fusion
                     Cur,
                     typename result_of::end<
                         typename remove_reference<
-                            typename result_of::deref<
-                                typename Context::car_type::begin_type
+                            typename add_const<
+                                typename result_of::deref<
+                                    typename Context::car_type::begin_type
+                                >::type
                             >::type
                         >::type
                     >::type
