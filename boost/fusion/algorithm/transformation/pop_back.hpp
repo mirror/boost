@@ -61,8 +61,10 @@ namespace boost { namespace fusion
         template <typename I1, typename I2>
         struct equal_to
             : result_of::equal_to<
-                typename equal_to_helper<I1, I2::is_last>::type
-              , typename equal_to_helper<I2, I1::is_last>::type
+                typename equal_to_helper<I1,
+                    (I2::is_last && !I1::is_last)>::type
+              , typename equal_to_helper<I2,
+                    (I1::is_last && !I2::is_last)>::type
             >
         {};
 
