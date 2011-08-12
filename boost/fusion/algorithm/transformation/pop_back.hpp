@@ -47,14 +47,22 @@ namespace boost { namespace fusion
             }
         };
 
+        template <typename I, bool IsLast_>
+        struct equal_to_helper
+            : mpl::identity<typename I::iterator_base_type>
+        {};
+
+        template <typename I>
+        struct equal_to_helper<I, true>
+            : result_of::next<
+                typename I::iterator_base_type>
+        {};
+
         template <typename I1, typename I2>
         struct equal_to
             : result_of::equal_to<
-                typename mpl::if_c<(I1::is_last|I2::is_last)
-                  , typename result_of::next<
-                        typename I1::iterator_base_type>::type
-                  , typename I1::iterator_base_type>::type
-              , typename I2::iterator_base_type
+                typename equal_to_helper<I1, I2::is_last>::type
+              , typename equal_to_helper<I2, I1::is_last>::type
             >
         {};
 
