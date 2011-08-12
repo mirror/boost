@@ -8,7 +8,8 @@
 //
 #if !defined(BOOST_NUMERIC_CONVERSION_DONT_USE_PREPROCESSED_FILES)
     #include <boost/numeric/conversion/detail/preprocessed/numeric_cast_traits.hpp>
-#elif !BOOST_PP_IS_ITERATING
+#else
+#if !BOOST_PP_IS_ITERATING
 
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/seq/elem.hpp>
@@ -101,3 +102,4 @@ namespace boost { namespace numeric {
     #undef BOOST_NUMERIC_CONVERSION_B
 
 #endif//! Depth 2.
+#endif// BOOST_NUMERIC_CONVERSION_DONT_USE_PREPROCESSED_FILES
