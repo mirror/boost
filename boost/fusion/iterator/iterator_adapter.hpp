@@ -9,6 +9,7 @@
 
 #include <boost/fusion/iterator/detail/advance.hpp>
 #include <boost/fusion/iterator/iterator_facade.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
 namespace boost { namespace fusion
 {
@@ -18,7 +19,9 @@ namespace boost { namespace fusion
             Derived_
           , typename Iterator_::category>
     {
-        typedef Iterator_ iterator_base_type;
+        typedef typename
+            remove_const<Iterator_>::type
+        iterator_base_type;
         iterator_base_type iterator_base;
 
         iterator_adapter(iterator_base_type const& iterator_base)
@@ -36,12 +39,18 @@ namespace boost { namespace fusion
         // default implementation
         template <typename Iterator, typename N>
         struct advance
-            : Derived_::template make<
+        {
+            typedef typename Derived_::template make<
                 typename result_of::advance<
                     typename Iterator::iterator_base_type, N
-                >::type
-            >
-        {
+                >::type>::type
+            type;
+
+            static type
+            call(Iterator const& it)
+            {
+                return type(fusion::advance<N>(it.iterator_base));
+            }
         };
 
         // default implementation
