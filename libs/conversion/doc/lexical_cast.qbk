@@ -118,17 +118,29 @@ Exception used to indicate runtime lexical_cast failure.
 [section Frequently Asked Questions]
 
 * [*Question:]    Why does `lexical_cast<int8_t>("127")` throw `bad_lexical_cast`?
-  * [*Answer:]      The type `int8_t` is a `typedef` to `char` or `signed char`. Lexical conversion to these types 
-is simply reading a byte from source but since the source has more than one byte, the exception is thrown. 
+  * [*Answer:]      The type `int8_t` is a `typedef` to `char` or `signed char`. Lexical conversion to these types is simply reading a byte from source but since the source has more than one byte, the exception is thrown. 
 Please use other integer types such as `int` or `short int`. If bounds checking is important, you can also 
 call __numericcast__: 
 `numeric_cast<int8_t>(lexical_cast<int>("127"));`
 
+[pre
+]
+
+* [*Question:]    Why does `lexical_cast<unsigned char>("127")` throw `bad_lexical_cast`?
+  * [*Answer:]      Lexical conversion to any char type is simply reading a byte from source. But since the source has more than one byte, the exception is thrown. 
+Please use other integer types such as `int` or `short int`. If bounds checking is important, you can also 
+call __numericcast__: 
+`numeric_cast<int8_t>(lexical_cast<int>("127"));`
+
+[pre
+]
 
 * [*Question:]    What does `lexical_cast<std::string>` of an `int8_t` or `uint8_t` not do what I expect?
   * [*Answer:]      As above, note that int8_t and uint8_t are actually chars and are formatted as such. To avoid 
 this, cast to an integer type first: `lexical_cast<std::string>(static_cast<int>(n));`
 
+[pre
+]
 
 * [*Question:]    The implementation always resets the `ios_base::skipws` flag of an underlying stream object. 
 It breaks my `operator>>` that works only in presence of this flag. Can you remove code that resets the flag?
@@ -138,6 +150,8 @@ remember that __proposalshort__ is not yet accepted by the committee. By the way
 make your `operator>>` conform to the standard.
 Read a good C++ book, study `std::sentry` and [@boost:libs/io/doc/ios_state.html `ios_state_saver`].
 
+[pre
+]
 
 * [*Question:]    Why `std::cout << boost::lexical_cast<unsigned int>("-1");` does not throw, but outputs 4294967295?
   * [*Answer:]      `boost::lexical_cast` has the behavior of `std::stringstream`, which uses `num_get` functions of 
