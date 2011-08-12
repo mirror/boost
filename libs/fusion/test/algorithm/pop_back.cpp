@@ -13,6 +13,8 @@
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/container/generation/make_list.hpp>
 #include <boost/fusion/algorithm/transformation/pop_back.hpp>
+#include <boost/fusion/algorithm/transformation/push_back.hpp>
+#include <boost/fusion/algorithm/query/find.hpp>
 #include <boost/mpl/vector_c.hpp>
 
 int
@@ -55,11 +57,39 @@ main()
         BOOST_TEST((pop_back(l) == make_list()));
     }
 
+    {
+        single_view<int> sv(1);
+        std::cout << pop_back(sv) << std::endl;
+
+        // Compile check only
+        begin(pop_back(sv)) == end(sv);
+        end(pop_back(sv)) == begin(sv);
+    }
+
     // $$$ JDG: TODO add compile fail facility $$$
     //~ { // compile fail check (Disabled for now)
         //~ list<> l;
         //~ std::cout << pop_back(l) << std::endl;
     //~ }
+
+#ifndef BOOST_NO_DECLTYPE
+    {
+        auto vec = make_vector(1, 3.14, "hello");
+
+        // Compile check only
+        auto popv = pop_back(vec);
+        std::cout << popv << std::endl;
+
+        auto push = push_back(vec, 42);
+        auto pop = pop_back(vec);
+        auto i1 = find<int>(popv);
+        auto i2 = find<double>(pop);
+
+        assert(i1 != end(pop));
+        assert(i2 != end(pop));
+        assert(i1 != i2);
+    }
+#endif
 
     return boost::report_errors();
 }
