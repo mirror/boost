@@ -16,26 +16,6 @@
 
 //! Define a simple custom number
 struct Double
-    :   boost::ordered_field_operators
-        <
-            Double
-          , boost::ordered_field_operators2< Double, long double
-          , boost::ordered_field_operators2< Double, double
-          , boost::ordered_field_operators2< Double, float
-          , boost::ordered_field_operators2< Double, boost::int8_t
-          , boost::ordered_field_operators2< Double, boost::uint8_t
-          , boost::ordered_field_operators2< Double, boost::int16_t
-          , boost::ordered_field_operators2< Double, boost::uint16_t
-          , boost::ordered_field_operators2< Double, boost::int32_t
-          , boost::ordered_field_operators2< Double, boost::uint32_t
-#if !defined( BOOST_NO_INT64_T )
-          , boost::ordered_field_operators2< Double, boost::int64_t
-          , boost::ordered_field_operators2< Double, boost::uint64_t
-#endif
-        > > > > > > > > > > 
-#if !defined( BOOST_NO_INT64_T )
-        > >
-#endif
 {
     Double()
         : v(0)
@@ -64,9 +44,21 @@ struct Double
         return v < static_cast<double>(rhs);
     }
 
+    template <typename LHS>
+    friend bool operator < ( const LHS& lhs, const Double& rhs )
+    {
+        return lhs < rhs.v;
+    }
+
     bool operator > ( const Double& rhs ) const
     {
         return v > rhs.v;
+    }
+
+    template <typename LHS>
+    friend bool operator > ( const LHS& lhs, const Double& rhs )
+    {
+        return lhs > rhs.v;
     }
     
     template <typename T>
@@ -75,7 +67,7 @@ struct Double
         return v > static_cast<double>(rhs);
     }
     
-    bool operator ==( const Double& rhs ) const
+    bool operator == ( const Double& rhs ) const
     {
         return v == rhs.v;
     }
@@ -84,6 +76,12 @@ struct Double
     bool operator == ( T rhs ) const
     {
         return v == static_cast<double>(rhs);
+    }
+
+    template <typename LHS>
+    friend bool operator == ( const LHS& lhs, const Double& rhs )
+    {
+        return lhs == rhs.v;
     }
     
     bool operator !() const
