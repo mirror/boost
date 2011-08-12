@@ -130,7 +130,7 @@ call __numericcast__:
   * [*Answer:]      Lexical conversion to any char type is simply reading a byte from source. But since the source has more than one byte, the exception is thrown. 
 Please use other integer types such as `int` or `short int`. If bounds checking is important, you can also 
 call __numericcast__: 
-`numeric_cast<int8_t>(lexical_cast<int>("127"));`
+`numeric_cast<unsigned char>(lexical_cast<int>("127"));`
 
 [pre
 ]
