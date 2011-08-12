@@ -35,10 +35,6 @@ namespace boost { namespace fusion
         pop_back_iterator(Iterator_ const& iterator_base)
             : base_type(iterator_base) {}
 
-        template <bool P>
-        pop_back_iterator(pop_back_iterator<Iterator_, P> const& rhs)
-            : base_type(rhs.iterator_base) {}
-
         template <typename BaseIterator>
         struct make
         {
