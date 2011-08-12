@@ -341,31 +341,29 @@ struct test_cast_traits
 
 void test_numeric_cast_traits()
 {
-    using namespace boost;
-    using namespace boost::numeric;
-    typedef mpl::vector
+    typedef boost::mpl::vector
         <
-            int8_t
-          , uint8_t
-          , int16_t
-          , uint16_t
-          , int32_t
-          , uint32_t
+            boost::int8_t
+          , boost::uint8_t
+          , boost::int16_t
+          , boost::uint16_t
+          , boost::int32_t
+          , boost::uint32_t
 #if !defined( BOOST_NO_INT64_T )
-          , int64_t
-          , uint64_t
+          , boost::int64_t
+          , boost::uint64_t
 #endif
           , float
           , double
           , long double 
         > types;
-    mpl::for_each<types>( test_cast_traits() );
+    boost::mpl::for_each<types>( test_cast_traits() );
         
     //! Check overflow handler.
     Double d( 56.0 );
-    BOOST_TEST_CATCH_CUSTOM_POSITIVE_OVERFLOW( d = numeric_cast<Double>( 101 ) );
+    BOOST_TEST_CATCH_CUSTOM_POSITIVE_OVERFLOW( d = boost::numeric_cast<Double>( 101 ) );
     BOOST_CHECK( d.v == 56. );
-    BOOST_TEST_CATCH_CUSTOM_NEGATIVE_OVERFLOW( d = numeric_cast<Double>( -101 ) );
+    BOOST_TEST_CATCH_CUSTOM_NEGATIVE_OVERFLOW( d = boost::numeric_cast<Double>( -101 ) );
     BOOST_CHECK( d.v == 56.);
 
     //! Check custom round policy.
