@@ -10,75 +10,22 @@
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
+#include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
-#include <boost/fusion/iterator/iterator_adapter.hpp>
-#include <boost/fusion/iterator/next.hpp>
-#include <boost/mpl/minus.hpp>
-#include <boost/mpl/int.hpp>
+#include <boost/fusion/iterator/advance.hpp>
 
 namespace boost { namespace fusion
 {
-    template <typename Iterator_>
-    struct pop_back_iterator
-        : iterator_adapter<
-            pop_back_iterator<Iterator_>
-          , Iterator_>
-    {
-        typedef iterator_adapter<
-            pop_back_iterator<Iterator_>
-          , Iterator_>
-        base_type;
-
-        pop_back_iterator(Iterator_ const& iterator_base)
-            : base_type(iterator_base) {}
-
-        template <typename BaseIterator>
-        struct make
-        {
-            typedef pop_back_iterator<BaseIterator> type;
-
-            static type
-            call(BaseIterator const& i)
-            {
-                return type(i);
-            }
-        };
-
-        template <typename I1, typename I2>
-        struct equal_to
-            : result_of::equal_to<
-                typename result_of::next<
-                    typename I1::iterator_base_type>::type
-              , typename I2::iterator_base_type
-            >
-        {};
-
-        template <typename First, typename Last>
-        struct distance
-            : mpl::minus<
-                typename result_of::distance<
-                    typename First::iterator_base_type
-                  , typename Last::iterator_base_type
-                >::type
-              , mpl::int_<1>
-            >::type
-        {};
-    };
-
     namespace result_of
     {
         template <typename Sequence>
         struct pop_back
         {
-            BOOST_MPL_ASSERT_NOT((result_of::empty<Sequence>));
-
-            typedef pop_back_iterator<
-                typename begin<Sequence>::type>
-            begin_type;
-
-            typedef pop_back_iterator<
-                typename end<Sequence>::type>
-            end_type;
+            static int const size = size<Sequence>::value;
+            BOOST_STATIC_ASSERT(size > 0);
+            typedef typename begin<Sequence>::type begin_type;
+            typedef mpl::int_<size-1> end_index;
+            typedef typename advance<begin_type, end_index>::type end_type;
 
             typedef
                 iterator_range<begin_type, end_type>
@@ -90,15 +37,12 @@ namespace boost { namespace fusion
     inline typename result_of::pop_back<Sequence const>::type
     pop_back(Sequence const& seq)
     {
-        typedef result_of::pop_back<Sequence const> comp;
-        typedef typename comp::begin_type begin_type;
-        typedef typename comp::end_type end_type;
-        typedef typename comp::type result;
+        typedef typename
+            result_of::pop_back<Sequence const>::end_index
+        end_index;
 
-        return result(
-            begin_type(fusion::begin(seq))
-          , end_type(fusion::end(seq))
-        );
+        typedef typename result_of::pop_back<Sequence const>::type result;
+        return result(fusion::begin(seq), fusion::advance<end_index>(fusion::begin(seq)));
     }
 }}
 
