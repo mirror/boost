@@ -42,7 +42,6 @@ namespace boost { namespace unordered { namespace detail {
 
         // Members
         
-        std::size_t size_;
         float mlf_;
         std::size_t max_load_;
 
@@ -92,7 +91,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             if (!this->size_) return node_ptr();
             std::size_t hash = hash_function(k);
-            return find_node_impl(hash % this->bucket_count_, hash, k, eq);
+            return this->find_node_impl(hash % this->bucket_count_, hash, k, eq);
         }
         
         node_ptr find_node(
@@ -101,14 +100,14 @@ namespace boost { namespace unordered { namespace detail {
                 key_type const& k) const
         {
             if (!this->size_) return node_ptr();
-            return find_node_impl(bucket_index, hash, k, this->key_eq());
+            return this->find_node_impl(bucket_index, hash, k, this->key_eq());
         }
 
         node_ptr find_node(key_type const& k) const
         {
             if (!this->size_) return node_ptr();
             std::size_t hash = this->hash_function()(k);
-            return find_node_impl(hash % this->bucket_count_, hash, k,
+            return this->find_node_impl(hash % this->bucket_count_, hash, k,
                 this->key_eq());
         }
 
@@ -167,13 +166,6 @@ namespace boost { namespace unordered { namespace detail {
             return next_prime(double_to_size_t(floor(size / (double) mlf_)) + 1);
         }
 
-        float load_factor() const
-        {
-            BOOST_ASSERT(this->bucket_count_ != 0);
-            return static_cast<float>(this->size_)
-                / static_cast<float>(this->bucket_count_);
-        }
-
         ////////////////////////////////////////////////////////////////////////
         // Constructors
 
@@ -183,7 +175,6 @@ namespace boost { namespace unordered { namespace detail {
                 node_allocator const& a)
           : buckets(a, next_prime(num_buckets)),
             functions(hf, eq),
-            size_(),
             mlf_(1.0f),
             max_load_(0)
         {
@@ -192,7 +183,6 @@ namespace boost { namespace unordered { namespace detail {
         table(table const& x, node_allocator const& a)
           : buckets(a, x.min_buckets_for_size(x.size_)),
             functions(x),
-            size_(x.size_),
             mlf_(x.mlf_),
             max_load_(0)
         {
@@ -205,7 +195,6 @@ namespace boost { namespace unordered { namespace detail {
         table(table& x, move_tag m)
           : buckets(x, m),
             functions(x),
-            size_(0),
             mlf_(1.0f),
             max_load_(0)
         {
@@ -215,7 +204,6 @@ namespace boost { namespace unordered { namespace detail {
         table(table& x, node_allocator const& a, move_tag m)
           : buckets(a, x.bucket_count_),
             functions(x),
-            size_(0),
             mlf_(x.mlf_),
             max_load_(0)
         {
@@ -225,9 +213,8 @@ namespace boost { namespace unordered { namespace detail {
             else if(x.size_) {
                 // Use a temporary table because move_buckets_to leaves the
                 // source container in a complete mess.
-                table tmp(x, m);
+                buckets tmp(x, m);
                 tmp.move_buckets_to(*this);
-                this->size_ = tmp.size_;
                 this->max_load_ = calculate_max_load();
             }
         }
@@ -257,30 +244,30 @@ namespace boost { namespace unordered { namespace detail {
     
             if(this->node_alloc() == x.node_alloc()) {
                 this->buckets::move(x); // no throw
-                this->size_ = x.size_;
+                this->mlf_ = x.mlf_;
                 this->max_load_ = x.max_load_;
-                x.size_ = 0;
             }
             else {
                 // Create new buckets in separate buckets
                 // which will clean up if anything throws an exception.
                 
                 buckets b(this->node_alloc(), x.min_buckets_for_size(x.size_));
+
                 if (x.size_) {
                     // Use a temporary table because move_buckets_to leaves the
                     // source container in a complete mess.
-                    table tmp(x, move_tag());
+                    buckets tmp(x, move_tag());
                     tmp.move_buckets_to(b);
+                    b.swap(*this);
+                    this->mlf_ = x.mlf_;
+                    this->max_load_ = calculate_max_load();
                 }
-    
-                // Start updating the data here, no throw from now on.
-                this->size_ = x.size_;
-                b.swap(*this);
-                this->max_load_ = x.size_ ? calculate_max_load() : 0;
+                else {
+                    b.swap(*this);
+                    this->mlf_ = x.mlf_;
+                }
             }
     
-            // We've made it, the rest is no throw.
-            this->mlf_ = x.mlf_;
             new_func_this.commit();
         }
 
@@ -304,7 +291,6 @@ namespace boost { namespace unordered { namespace detail {
                     op2.commit();
                 }
 
-                std::swap(this->size_, x.size_);
                 std::swap(this->mlf_, x.mlf_);
                 std::swap(this->max_load_, x.max_load_);
             }
@@ -326,7 +312,6 @@ namespace boost { namespace unordered { namespace detail {
         void partial_swap(table& x)
         {
             this->buckets::swap(x, false_type());
-            std::swap(this->size_, x.size_);
             std::swap(this->mlf_, x.mlf_);
             std::swap(this->max_load_, x.max_load_);
         }
@@ -365,28 +350,6 @@ namespace boost { namespace unordered { namespace detail {
         //
         // no throw
 
-        void clear()
-        {
-            if(!this->size_) return;
-    
-            bucket_ptr end = this->get_bucket(this->bucket_count_);
-    
-            node_ptr n = (end)->next_;
-            while(BOOST_UNORDERED_BORLAND_BOOL(n))
-            {
-                node_ptr node_to_delete = n;
-                n = n->next_;
-                this->delete_node(node_to_delete);
-            }
-    
-            ++end;
-            for(bucket_ptr begin = this->buckets_; begin != end; ++begin) {
-                begin->next_ = bucket_ptr();
-            }
-    
-            this->size_ = 0;
-        }
-
         std::size_t erase_key(key_type const& k)
         {
             if(!this->size_) return 0;
@@ -413,50 +376,14 @@ namespace boost { namespace unordered { namespace detail {
             node_ptr pos = prev->next_;
             node_ptr end = node::next_group(pos);
             prev->next_ = end;
-    
             this->fix_buckets(bucket, prev, end);
-    
-            std::size_t count = this->delete_nodes(pos, end);
-            this->size_ -= count;
-    
-            return count;
-        }
-
-        node_ptr erase(node_ptr r)
-        {
-            BOOST_ASSERT(r);
-            node_ptr next = r->next_;
-    
-            bucket_ptr bucket = this->get_bucket(
-                node::get_hash(r) % this->bucket_count_);
-            node_ptr prev = node::unlink_node(*bucket, r);
-    
-            this->fix_buckets(bucket, prev, next);
-    
-            this->delete_node(r);
-            --this->size_;
-    
-            return next;
-        }
-
-        node_ptr erase_range(node_ptr r1, node_ptr r2)
-        {
-            if (r1 == r2) return r2;
-    
-            std::size_t bucket_index = node::get_hash(r1) % this->bucket_count_;
-            node_ptr prev = node::unlink_nodes(
-                this->buckets_[bucket_index], r1, r2);
-            this->fix_buckets_range(bucket_index, prev, r1, r2);
-            this->size_ -= this->delete_nodes(r1, r2);
-    
-            return r2;
+            return this->delete_nodes(pos, end);
         }
 
         // Reserve and rehash
 
         bool reserve_for_insert(std::size_t);
         void rehash(std::size_t);
-        void rehash_impl(std::size_t);
     };
     
     ////////////////////////////////////////////////////////////////////////////
@@ -480,7 +407,8 @@ namespace boost { namespace unordered { namespace detail {
                     = this->min_buckets_for_size((std::max)(size,
                         this->size_ + (this->size_ >> 1)));
                 if (num_buckets != this->bucket_count_) {
-                    rehash_impl(num_buckets);
+                    this->rehash_impl(num_buckets);
+                    this->max_load_ = calculate_max_load();
                     return true;
                 }
             }
@@ -506,37 +434,11 @@ namespace boost { namespace unordered { namespace detail {
             // no throw:
             min_buckets = next_prime((std::max)(min_buckets,
                     double_to_size_t(floor(this->size_ / (double) mlf_)) + 1));
-            if(min_buckets != this->bucket_count_) rehash_impl(min_buckets);
+            if(min_buckets != this->bucket_count_) {
+                this->rehash_impl(min_buckets);
+                this->max_load_ = calculate_max_load();
+            }
         }
-    }
-
-    // strong otherwise exception safety
-    template <class T>
-    void table<T>::rehash_impl(std::size_t num_buckets)
-    {
-        std::size_t size = this->size_;
-        BOOST_ASSERT(size);
-
-        buckets dst(this->node_alloc(), num_buckets);
-        dst.create_buckets();
-        
-        bucket_ptr src_start = this->get_bucket(this->bucket_count_);
-        bucket_ptr dst_start = dst.get_bucket(dst.bucket_count_);
-
-        dst_start->next_ = src_start->next_;
-        src_start->next_ = bucket_ptr();
-        // No need to do this, since the following is 'no throw'.
-        //this->size_ = 0;
-
-        node_ptr prev = dst_start;
-        while (BOOST_UNORDERED_BORLAND_BOOL(prev->next_))
-            prev = dst.place_in_bucket(prev, node::next_group2(prev));
-
-        // Swap the new nodes back into the container and setup the
-        // variables.
-        dst.swap(*this); // no throw
-        this->size_ = size;
-        this->max_load_ = calculate_max_load();
     }
 
     ////////////////////////////////////////////////////////////////////////////

@@ -64,6 +64,7 @@ namespace boost { namespace unordered { namespace detail {
 
         bucket_ptr buckets_;
         std::size_t bucket_count_;
+        std::size_t size_;
         ::boost::compressed_pair<bucket_allocator, node_allocator> allocators_;
         
         // Data access
@@ -100,6 +101,7 @@ namespace boost { namespace unordered { namespace detail {
         buckets(node_allocator const& a, std::size_t bucket_count)
           : buckets_(),
             bucket_count_(bucket_count),
+            size_(),
             allocators_(a,a)
         {
         }
@@ -109,6 +111,7 @@ namespace boost { namespace unordered { namespace detail {
         buckets(buckets& b, move_tag)
           : buckets_(),
             bucket_count_(b.bucket_count_),
+            size_(),
             allocators_(b.allocators_)
         {
         }
@@ -138,6 +141,7 @@ namespace boost { namespace unordered { namespace detail {
             BOOST_ASSERT(node_alloc() == other.node_alloc());
             std::swap(buckets_, other.buckets_);
             std::swap(bucket_count_, other.bucket_count_);
+            std::swap(size_, other.size_);
         }
 
         void swap(buckets& other, true_type)
@@ -145,6 +149,7 @@ namespace boost { namespace unordered { namespace detail {
             allocators_.swap(other.allocators_);
             std::swap(buckets_, other.buckets_);
             std::swap(bucket_count_, other.bucket_count_);
+            std::swap(size_, other.size_);
         }
 
         void move(buckets& other)
@@ -153,13 +158,15 @@ namespace boost { namespace unordered { namespace detail {
             if(this->buckets_) { this->delete_buckets(); }
             this->buckets_ = other.buckets_;
             this->bucket_count_ = other.bucket_count_;
+            this->size_ = other.size_;
             other.buckets_ = bucket_ptr();
             other.bucket_count_ = 0;
+            other.size_ = 0;
         }
 
         std::size_t bucket_size(std::size_t index) const
         {
-            if (!this->buckets_) return 0;
+            if (!this->size_) return 0;
             node_ptr ptr = this->buckets_[index].next_;
             if (!ptr) return 0;
             ptr = ptr->next_;
@@ -177,7 +184,7 @@ namespace boost { namespace unordered { namespace detail {
 
         node_ptr bucket_begin(std::size_t bucket_index) const
         {
-            if (!this->buckets_) return node_ptr();
+            if (!this->size_) return node_ptr();
             bucket& b = this->buckets_[bucket_index];
             if (!b.next_) return node_ptr();
             return b.next_->next_;
@@ -188,6 +195,13 @@ namespace boost { namespace unordered { namespace detail {
         bucket_ptr get_bucket(std::size_t bucket_index) const
         {
             return buckets_ + static_cast<std::ptrdiff_t>(bucket_index);
+        }
+
+        float load_factor() const
+        {
+            BOOST_ASSERT(this->bucket_count_ != 0);
+            return static_cast<float>(this->size_)
+                / static_cast<float>(this->bucket_count_);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -201,12 +215,13 @@ namespace boost { namespace unordered { namespace detail {
             ::boost::unordered::detail::destroy(raw_ptr->value_ptr());
             allocator_traits<node_allocator>::destroy(node_alloc(), raw_ptr);
             allocator_traits<node_allocator>::deallocate(node_alloc(), real_ptr, 1);
+
+            --this->size_;
         }
 
         void delete_buckets()
         {
             bucket_ptr end = this->get_bucket(this->bucket_count_);
-    
             node_ptr n = (end)->next_;
             while(BOOST_UNORDERED_BORLAND_BOOL(n))
             {
@@ -224,6 +239,7 @@ namespace boost { namespace unordered { namespace detail {
             allocator_traits<bucket_allocator>::deallocate(bucket_alloc(), this->buckets_, this->bucket_count_ + 1);
     
             this->buckets_ = bucket_ptr();
+            BOOST_ASSERT(this->size_ == 0);
         }
 
         std::size_t delete_nodes(node_ptr begin, node_ptr end)
@@ -236,6 +252,57 @@ namespace boost { namespace unordered { namespace detail {
                 ++count;
             }
             return count;
+        }
+
+        void clear()
+        {
+            if(!this->size_) return;
+    
+            bucket_ptr end = this->get_bucket(this->bucket_count_);
+    
+            node_ptr n = (end)->next_;
+            while(BOOST_UNORDERED_BORLAND_BOOL(n))
+            {
+                node_ptr node_to_delete = n;
+                n = n->next_;
+                this->delete_node(node_to_delete);
+            }
+    
+            ++end;
+            for(bucket_ptr begin = this->buckets_; begin != end; ++begin) {
+                begin->next_ = bucket_ptr();
+            }
+    
+            this->size_ = 0;
+        }
+
+        node_ptr erase(node_ptr r)
+        {
+            BOOST_ASSERT(r);
+            node_ptr next = r->next_;
+    
+            bucket_ptr bucket = this->get_bucket(
+                node::get_hash(r) % this->bucket_count_);
+            node_ptr prev = node::unlink_node(*bucket, r);
+    
+            this->fix_buckets(bucket, prev, next);
+    
+            this->delete_node(r);
+    
+            return next;
+        }
+
+        node_ptr erase_range(node_ptr r1, node_ptr r2)
+        {
+            if (r1 == r2) return r2;
+    
+            std::size_t bucket_index = node::get_hash(r1) % this->bucket_count_;
+            node_ptr prev = node::unlink_nodes(
+                this->buckets_[bucket_index], r1, r2);
+            this->fix_buckets_range(bucket_index, prev, r1, r2);
+            this->delete_nodes(r1, r2);
+    
+            return r2;
         }
 
         // This is called after erasing a node or group of nodes to fix up
@@ -324,6 +391,7 @@ namespace boost { namespace unordered { namespace detail {
         
         void copy_buckets_to(buckets&) const;
         void move_buckets_to(buckets&) const;
+        void rehash_impl(std::size_t);
     };
 
     // Assigning and swapping the equality and hash function objects
@@ -643,12 +711,14 @@ namespace boost { namespace unordered { namespace detail {
                 node_ptr first_node = a.release();
                 node::set_hash(first_node, hash);
                 node_ptr end = prev->next_ = first_node;
+                ++dst.size_;
     
                 for(n = n->next_; n != group_end; n = n->next_) {
                     a.construct(node::get_value(n));
                     end = a.release();
                     node::set_hash(end, hash);
                     node::add_after_node(end, first_node);
+                    ++dst.size_;
                 }
                 
                 prev = dst.place_in_bucket(prev, end);
@@ -690,11 +760,38 @@ namespace boost { namespace unordered { namespace detail {
                     end = a.release();
                     node::set_hash(end, hash);
                     node::add_after_node(end, first_node);
+                    ++dst.size_;
                 }
                 
                 prev = dst.place_in_bucket(prev, end);
             }
         }
+    }
+
+    // strong otherwise exception safety
+    template <class A, bool Unique>
+    void buckets<A, Unique>::rehash_impl(std::size_t num_buckets)
+    {
+        BOOST_ASSERT(this->size_);
+
+        buckets dst(this->node_alloc(), num_buckets);
+        dst.create_buckets();
+        
+        bucket_ptr src_start = this->get_bucket(this->bucket_count_);
+        bucket_ptr dst_start = dst.get_bucket(dst.bucket_count_);
+
+        dst_start->next_ = src_start->next_;
+        src_start->next_ = bucket_ptr();
+        dst.size_ = this->size_;
+        this->size_ = 0;
+
+        node_ptr prev = dst_start;
+        while (BOOST_UNORDERED_BORLAND_BOOL(prev->next_))
+            prev = dst.place_in_bucket(prev, node::next_group2(prev));
+
+        // Swap the new nodes back into the container and setup the
+        // variables.
+        dst.swap(*this); // no throw
     }
 }}}
 
