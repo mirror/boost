@@ -114,6 +114,17 @@ namespace boost { namespace unordered { namespace detail {
             size_(),
             allocators_(b.allocators_)
         {
+            swap(b);
+        }
+
+        template <typename T>
+        buckets(table<T>& x, move_tag)
+          : buckets_(),
+            bucket_count_(x.bucket_count_),
+            allocators_(x.allocators_)
+        {
+            swap(x);
+            x.size_ = 0;
         }
         
         inline ~buckets()
@@ -152,10 +163,10 @@ namespace boost { namespace unordered { namespace detail {
             std::swap(size_, other.size_);
         }
 
-        void move(buckets& other)
+        void move_buckets_from(buckets& other)
         {
             BOOST_ASSERT(node_alloc() == other.node_alloc());
-            if(this->buckets_) { this->delete_buckets(); }
+            BOOST_ASSERT(!this->buckets_);
             this->buckets_ = other.buckets_;
             this->bucket_count_ = other.bucket_count_;
             this->size_ = other.size_;
@@ -754,6 +765,7 @@ namespace boost { namespace unordered { namespace detail {
                 node_ptr first_node = a.release();
                 node::set_hash(first_node, hash);
                 node_ptr end = prev->next_ = first_node;
+                ++dst.size_;
     
                 for(n = n->next_; n != group_end; n = n->next_) {
                     a.construct(boost::move(node::get_value(n)));

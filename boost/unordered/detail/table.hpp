@@ -43,7 +43,7 @@ namespace boost { namespace unordered { namespace detail {
         // Members
         
         float mlf_;
-        std::size_t max_load_;
+        std::size_t max_load_; // Only use if this->buckets_.
 
         // Helper methods
 
@@ -195,20 +195,18 @@ namespace boost { namespace unordered { namespace detail {
         table(table& x, move_tag m)
           : buckets(x, m),
             functions(x),
-            mlf_(1.0f),
-            max_load_(0)
-        {
-            this->partial_swap(x);
-        }
+            mlf_(x.mlf_),
+            max_load_(this->buckets_ ? calculate_max_load() : 0) {}
 
+        // TODO: Why do I use x's bucket count?
         table(table& x, node_allocator const& a, move_tag m)
           : buckets(a, x.bucket_count_),
             functions(x),
             mlf_(x.mlf_),
-            max_load_(0)
+            max_load_(x.max_load_)
         {
             if(a == x.node_alloc()) {
-                this->partial_swap(x);
+                this->buckets::swap(x, false_type());
             }
             else if(x.size_) {
                 // Use a temporary table because move_buckets_to leaves the
@@ -231,43 +229,74 @@ namespace boost { namespace unordered { namespace detail {
 
         void assign(table const& x)
         {
+            assign(x, integral_constant<bool,
+                allocator_traits<node_allocator>::
+                propagate_on_container_copy_assignment::value>());
+        }
+
+        void assign(table const& x, false_type)
+        {
             table tmp(x, this->node_alloc());
-            this->fast_swap(tmp);
+            this->swap(tmp, false_type());
+        }
+
+        void assign(table const& x, true_type)
+        {
+            table tmp(x, x.node_alloc());
+            // Need to delete before setting the allocator so that buckets
+            // aren't deleted with the wrong allocator.
+            if(this->buckets_) this->delete_buckets();
+            // TODO: Can allocator assignment throw?
+            this->allocators_ = x.allocators_;
+            this->swap(tmp, false_type());
         }
 
         void move_assign(table& x)
         {
-            // This can throw, but it only affects the function objects
-            // that aren't in use so it is strongly exception safe, via.
-            // double buffering.
-            set_hash_functions<hasher, key_equal> new_func_this(*this, x);
-    
+            move_assign(x, integral_constant<bool,
+                allocator_traits<node_allocator>::
+                propagate_on_container_move_assignment::value>());
+        }
+        
+        void move_assign(table& x, true_type)
+        {
+            if(this->buckets_) this->delete_buckets();
+            this->allocators_ = x.allocators_; // TODO: Move allocators, not copy.
+            move_assign_no_alloc(x);
+        }
+
+        void move_assign(table& x, false_type)
+        {
             if(this->node_alloc() == x.node_alloc()) {
-                this->buckets::move(x); // no throw
-                this->mlf_ = x.mlf_;
-                this->max_load_ = x.max_load_;
+                if(this->buckets_) this->delete_buckets();
+                move_assign_no_alloc(x);
             }
             else {
-                // Create new buckets in separate buckets
-                // which will clean up if anything throws an exception.
-                
-                buckets b(this->node_alloc(), x.min_buckets_for_size(x.size_));
+                set_hash_functions<hasher, key_equal> new_func_this(*this, x);
 
                 if (x.size_) {
-                    // Use a temporary table because move_buckets_to leaves the
-                    // source container in a complete mess.
+                    buckets b(this->node_alloc(), x.min_buckets_for_size(x.size_));
                     buckets tmp(x, move_tag());
                     tmp.move_buckets_to(b);
                     b.swap(*this);
-                    this->mlf_ = x.mlf_;
-                    this->max_load_ = calculate_max_load();
                 }
                 else {
-                    b.swap(*this);
-                    this->mlf_ = x.mlf_;
+                    this->clear();
                 }
+                
+                this->mlf_ = x.mlf_;
+                if (this->buckets_) this->max_load_ = calculate_max_load();
+                new_func_this.commit();
             }
-    
+        }
+        
+        void move_assign_no_alloc(table& x)
+        {
+            set_hash_functions<hasher, key_equal> new_func_this(*this, x);
+            // No throw from here.
+            this->move_buckets_from(x);
+            this->mlf_ = x.mlf_;
+            this->max_load_ = x.max_load_;
             new_func_this.commit();
         }
 
@@ -276,40 +305,28 @@ namespace boost { namespace unordered { namespace detail {
 
         void swap(table& x)
         {
-            // TODO: Should I actually swap the buckets even if this
-            // is with self?
-            if(this != &x) {
-                {
-                    set_hash_functions<hasher, key_equal> op1(*this, x);
-                    set_hash_functions<hasher, key_equal> op2(x, *this);
-    
-                    this->buckets::swap(x, integral_constant<bool,
-                            allocator_traits<node_allocator>::
-                            propagate_on_container_swap::value>());
-    
-                    op1.commit();
-                    op2.commit();
-                }
-
-                std::swap(this->mlf_, x.mlf_);
-                std::swap(this->max_load_, x.max_load_);
-            }
+            swap(x, integral_constant<bool,
+                    allocator_traits<node_allocator>::
+                    propagate_on_container_swap::value>());
         }
 
-        // Swap everything but the allocators
-        void fast_swap(table& x)
+        // Only swaps the allocators if Propagate::value
+        template <typename Propagate>
+        void swap(table& x, Propagate p)
         {
-            {
-                set_hash_functions<hasher, key_equal> op1(*this, x);
-                set_hash_functions<hasher, key_equal> op2(x, *this);
-                op1.commit();
-                op2.commit();
-            }
-            partial_swap(x);
+            set_hash_functions<hasher, key_equal> op1(*this, x);
+            set_hash_functions<hasher, key_equal> op2(x, *this);
+            // I think swap can throw if Propagate::value,
+            // since the allocators' swap can throw. Not sure though.
+            this->buckets::swap(x, p);
+            std::swap(this->mlf_, x.mlf_);
+            std::swap(this->max_load_, x.max_load_);
+            op1.commit();
+            op2.commit();
         }
 
         // Swap everything but the allocators, and the functions objects.
-        void partial_swap(table& x)
+        void swap_contents(table& x)
         {
             this->buckets::swap(x, false_type());
             std::swap(this->mlf_, x.mlf_);
@@ -393,24 +410,22 @@ namespace boost { namespace unordered { namespace detail {
     template <class T>
     inline bool table<T>::reserve_for_insert(std::size_t size)
     {
-        if(size >= max_load_) {
-            if (!this->buckets_) {
-                std::size_t old_bucket_count = this->bucket_count_;
-                this->bucket_count_ = (std::max)(this->bucket_count_,
-                    this->min_buckets_for_size(size));
-                this->create_buckets();
+        if (!this->buckets_) {
+            std::size_t old_bucket_count = this->bucket_count_;
+            this->bucket_count_ = (std::max)(this->bucket_count_,
+                this->min_buckets_for_size(size));
+            this->create_buckets();
+            this->max_load_ = calculate_max_load();
+            return old_bucket_count != this->bucket_count_;
+        }
+        else if(size >= max_load_) {
+            std::size_t num_buckets
+                = this->min_buckets_for_size((std::max)(size,
+                    this->size_ + (this->size_ >> 1)));
+            if (num_buckets != this->bucket_count_) {
+                this->rehash_impl(num_buckets);
                 this->max_load_ = calculate_max_load();
-                return old_bucket_count != this->bucket_count_;
-            }
-            else {
-                std::size_t num_buckets
-                    = this->min_buckets_for_size((std::max)(size,
-                        this->size_ + (this->size_ >> 1)));
-                if (num_buckets != this->bucket_count_) {
-                    this->rehash_impl(num_buckets);
-                    this->max_load_ = calculate_max_load();
-                    return true;
-                }
+                return true;
             }
         }
         
@@ -428,7 +443,6 @@ namespace boost { namespace unordered { namespace detail {
         if(!this->size_) {
             if(this->buckets_) this->delete_buckets();
             this->bucket_count_ = next_prime(min_buckets);
-            this->max_load_ = 0;
         }
         else {
             // no throw:

@@ -21,6 +21,11 @@
 
 namespace boost { namespace unordered { namespace detail {
 
+    // Some forward declarations for buckets and tables
+    
+    template <typename T> class table;
+    template <class A, bool Unique> class buckets;
+
     ////////////////////////////////////////////////////////////////////////////
     //
     // This section implements buckets and nodes. Here's a rough

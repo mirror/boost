@@ -137,7 +137,7 @@ namespace test
             }
 
             void track_deallocate(void* ptr, std::size_t n, std::size_t size,
-                int tag)
+                int tag, bool check_tag_ = true)
             {
                 BOOST_DEDUCED_TYPENAME allocated_memory_type::iterator pos =
                     allocated_memory.find(
@@ -147,7 +147,7 @@ namespace test
                 } else {
                     BOOST_TEST(pos->first.start == ptr);
                     BOOST_TEST(pos->first.end == (char*) ptr + n * size);
-                    BOOST_TEST(pos->second.tag_ == tag);
+                    if (check_tag_) BOOST_TEST(pos->second.tag_ == tag);
                     allocated_memory.erase(pos);
                 }
                 BOOST_TEST(count_allocations > 0);
@@ -168,6 +168,38 @@ namespace test
             }
         };
     }
+
+    namespace detail
+    {
+        // This won't be a problem as I'm only using a single compile unit
+        // in each test (this is actually required by the minimal test
+        // framework).
+        // 
+        // boostinspect:nounnamed
+        namespace {
+            test::detail::memory_tracker<std::allocator<int> > tracker;
+        }
+    }
+    
+    template <bool Value>
+    struct bool_type {
+        enum { value = Value };
+    };
+
+    struct true_type {
+        enum { value = true };
+    };
+
+    struct false_type {
+        enum { value = false };
+    };
+
+    template <typename Alloc>
+    struct is_propagate_on_swap : false_type {};
+    template <typename Alloc>
+    struct is_propagate_on_assign : false_type {};
+    template <typename Alloc>
+    struct is_propagate_on_move : false_type {};
 }
 
 #endif

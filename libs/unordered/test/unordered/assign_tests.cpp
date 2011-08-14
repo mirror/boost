@@ -9,6 +9,7 @@
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
 #include "../objects/test.hpp"
+#include "../objects/cxx11_allocator.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
 #include "../helpers/equivalent.hpp"
@@ -68,7 +69,9 @@ void assign_tests2(T*,
     BOOST_DEDUCED_TYPENAME T::key_equal eq2(2);
     BOOST_DEDUCED_TYPENAME T::allocator_type al1(1);
     BOOST_DEDUCED_TYPENAME T::allocator_type al2(2);
-
+    
+    typedef BOOST_DEDUCED_TYPENAME T::allocator_type allocator_type;
+    
     std::cerr<<"assign_tests2.1\n";
     {
         test::check_instances check_;
@@ -92,7 +95,14 @@ void assign_tests2(T*,
         x2 = x1;
         BOOST_TEST(test::equivalent(x2.hash_function(), hf1));
         BOOST_TEST(test::equivalent(x2.key_eq(), eq1));
-        BOOST_TEST(test::equivalent(x2.get_allocator(), al2));
+        if (test::is_propagate_on_assign<allocator_type>::value) {
+            BOOST_TEST(test::equivalent(x2.get_allocator(), al1));
+            BOOST_TEST(!test::equivalent(x2.get_allocator(), al2));
+        }
+        else {
+            BOOST_TEST(test::equivalent(x2.get_allocator(), al2));
+            BOOST_TEST(!test::equivalent(x2.get_allocator(), al1));
+        }
         test::check_container(x2, v1);
     }
 }
@@ -110,16 +120,56 @@ boost::unordered_multimap<test::object, test::object,
     test::hash, test::equal_to,
     test::allocator<test::object> >* test_multimap;
 
+boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_set_prop_assign;
+boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_multiset_prop_assign;
+boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_map_prop_assign;
+boost::unordered_multimap<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_multimap_prop_assign;
+
+boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_set_no_prop_assign;
+boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_multiset_no_prop_assign;
+boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_map_no_prop_assign;
+boost::unordered_multimap<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_multimap_no_prop_assign;
+
 using test::default_generator;
 using test::generate_collisions;
 
-UNORDERED_TEST(assign_tests1,
-    ((test_set)(test_multiset)(test_map)(test_multimap))
+UNORDERED_TEST(assign_tests1, (
+        (test_set)(test_multiset)(test_map)(test_multimap)
+        (test_set_prop_assign)(test_multiset_prop_assign)(test_map_prop_assign)(test_multimap_prop_assign)
+        (test_set_no_prop_assign)(test_multiset_no_prop_assign)(test_map_no_prop_assign)(test_multimap_no_prop_assign)
+    )
     ((default_generator)(generate_collisions))
 )
 
-UNORDERED_TEST(assign_tests2,
-    ((test_set)(test_multiset)(test_map)(test_multimap))
+UNORDERED_TEST(assign_tests2, (
+        (test_set)(test_multiset)(test_map)(test_multimap)
+        (test_set_prop_assign)(test_multiset_prop_assign)(test_map_prop_assign)(test_multimap_prop_assign)
+        (test_set_no_prop_assign)(test_multiset_no_prop_assign)(test_map_no_prop_assign)(test_multimap_no_prop_assign)
+    )
     ((default_generator)(generate_collisions))
 )
 

@@ -12,6 +12,7 @@
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
 #include "../objects/test.hpp"
+#include "../objects/cxx11_allocator.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
 #include "../helpers/invariants.hpp"
@@ -107,15 +108,24 @@ void swap_tests2(X* ptr = 0,
     }
 
     {
+        test::force_equal_allocator force_(
+            !test::is_propagate_on_swap<allocator_type>::value);
         test::check_instances check_;
 
         test::random_values<X> vx(50, generator), vy(100, generator);
         X x(vx.begin(), vx.end(), 0, hasher(), key_equal(), allocator_type(1));
         X y(vy.begin(), vy.end(), 0, hasher(), key_equal(), allocator_type(2));
-        swap_test_impl(x, y);
+
+        if (test::is_propagate_on_swap<allocator_type>::value ||
+            x.get_allocator() == y.get_allocator())
+        {
+            swap_test_impl(x, y);
+        }
     }
 
     {
+        test::force_equal_allocator force_(
+            !test::is_propagate_on_swap<allocator_type>::value);
         test::check_instances check_;
 
         test::random_values<X> vx(100, generator), vy(100, generator);
@@ -123,31 +133,74 @@ void swap_tests2(X* ptr = 0,
             allocator_type(1));
         X y(vy.begin(), vy.end(), 0, hasher(2), key_equal(2),
             allocator_type(2));
-        swap_test_impl(x, y);
-        swap_test_impl(x, y);
+
+        if (test::is_propagate_on_swap<allocator_type>::value ||
+            x.get_allocator() == y.get_allocator())
+        {
+            swap_test_impl(x, y);
+            swap_test_impl(x, y);
+        }
     }
 }
 
 boost::unordered_set<test::object,
-    test::hash, test::equal_to,
-    test::allocator<test::object> >* test_set;
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_set;
 boost::unordered_multiset<test::object,
-    test::hash, test::equal_to,
-    test::allocator<test::object> >* test_multiset;
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_multiset;
 boost::unordered_map<test::object, test::object,
-    test::hash, test::equal_to,
-    test::allocator<test::object> >* test_map;
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_map;
 boost::unordered_multimap<test::object, test::object,
-    test::hash, test::equal_to,
-    test::allocator<test::object> >* test_multimap;
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_multimap;
 
-UNORDERED_TEST(swap_tests1,
-    ((test_set)(test_multiset)(test_map)(test_multimap))
-)
+boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_swap> >*
+    test_set_prop_swap;
+boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_swap> >*
+    test_multiset_prop_swap;
+boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_swap> >*
+    test_map_prop_swap;
+boost::unordered_multimap<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_swap> >*
+    test_multimap_prop_swap;
 
-UNORDERED_TEST(swap_tests2,
-    ((test_set)(test_multiset)(test_map)(test_multimap))
-)
+boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_swap> >*
+    test_set_no_prop_swap;
+boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_swap> >*
+    test_multiset_no_prop_swap;
+boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_swap> >*
+    test_map_no_prop_swap;
+boost::unordered_multimap<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_swap> >*
+    test_multimap_no_prop_swap;
+
+UNORDERED_TEST(swap_tests1, (
+    (test_set)(test_multiset)(test_map)(test_multimap)
+    (test_set_prop_swap)(test_multiset_prop_swap)(test_map_prop_swap)(test_multimap_prop_swap)
+    (test_set_no_prop_swap)(test_multiset_no_prop_swap)(test_map_no_prop_swap)(test_multimap_no_prop_swap)
+))
+
+UNORDERED_TEST(swap_tests2, (
+    (test_set)(test_multiset)(test_map)(test_multimap)
+    (test_set_prop_swap)(test_multiset_prop_swap)(test_map_prop_swap)(test_multimap_prop_swap)
+    (test_set_no_prop_swap)(test_multiset_no_prop_swap)(test_map_no_prop_swap)(test_multimap_no_prop_swap)
+))
 
 }
 RUN_TESTS()

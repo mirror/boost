@@ -316,7 +316,14 @@ namespace boost { namespace unordered { namespace detail {
         void insert_range_impl(key_type const&, InputIt i, InputIt j)
         {
             node_constructor a(*this);
-    
+
+            // Special case for empty buckets so that we can use
+            // max_load_ (which isn't valid when buckets_ is null).
+            if (!this->buckets_) {
+                insert_range_empty(a, extractor::extract(*i), i, j);
+                if (++i == j) return;
+            }
+
             do {
                 // Note: can't use get_key as '*i' might not be value_type - it
                 // could be a pair with first_types as key_type without const or a
@@ -327,6 +334,16 @@ namespace boost { namespace unordered { namespace detail {
                 // less efficient if copying the full value_type is expensive.
                 insert_range_impl2(a, extractor::extract(*i), i, j);
             } while(++i != j);
+        }
+
+        template <class InputIt>
+        void insert_range_empty(node_constructor& a, key_type const& k,
+            InputIt i, InputIt j)
+        {
+            std::size_t hash = this->hash_function()(k);
+            a.construct(*i);
+            this->reserve_for_insert(this->size_ + insert_size(i, j));
+            add_node(a, hash % this->bucket_count_, hash);
         }
 
         template <class InputIt>
