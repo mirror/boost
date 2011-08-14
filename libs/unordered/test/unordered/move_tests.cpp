@@ -15,6 +15,10 @@
 #include "../helpers/equivalent.hpp"
 #include "../helpers/invariants.hpp"
 
+#if defined(BOOST_MSVC)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
+
 namespace move_tests
 {
     test::seed_t seed(98624);

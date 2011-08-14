@@ -16,6 +16,10 @@
 
 #include <iostream>
 
+#if defined(BOOST_MSVC)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
+
 namespace assign_tests {
 
 test::seed_t seed(96785);

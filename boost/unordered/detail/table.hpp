@@ -134,8 +134,6 @@ namespace boost { namespace unordered { namespace detail {
 
         std::size_t calculate_max_load()
         {
-            BOOST_ASSERT(this->buckets_);
-
             using namespace std;
     
             // From 6.3.1/13:
@@ -196,7 +194,7 @@ namespace boost { namespace unordered { namespace detail {
           : buckets(x, m),
             functions(x),
             mlf_(x.mlf_),
-            max_load_(this->buckets_ ? calculate_max_load() : 0) {}
+            max_load_(calculate_max_load()) {}
 
         // TODO: Why do I use x's bucket count?
         table(table& x, node_allocator const& a, move_tag m)

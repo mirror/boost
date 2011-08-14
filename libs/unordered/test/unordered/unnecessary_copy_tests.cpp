@@ -38,14 +38,21 @@ namespace unnecessary_copy_tests
             x.tag_ = -1; ++moves;
         }
 
-       int tag_;
-    private:
-        // I think the standard might require assignment (or move
-        // assignment) for some operations. That Boost.Unordered doesn't
-        // is an implementation detail. But these tests are very specific
-        // to the implementation, so it's probably okay that this doesn't
-        // meet the standard requirements.
-       count_copies& operator=(count_copies const&);
+        count_copies& operator=(BOOST_COPY_ASSIGN_REF(count_copies) p) // Copy assignment
+        {
+            tag_ = p.tag_;
+            ++copies;
+            return *this;
+        }
+
+        count_copies& operator=(BOOST_RV_REF(count_copies) p) //Move assignment
+        {
+            tag_ = p.tag_;
+            ++moves;
+            return *this;
+        }
+
+        int tag_;
     };
 
     bool operator==(count_copies const& x, count_copies const& y) {

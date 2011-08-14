@@ -149,7 +149,7 @@ namespace test
             // Note that tags will be tested
             // properly in the normal allocator.
             detail::tracker.track_deallocate((void*) p, n, sizeof(T), tag_,
-                (Flags & propagate_swap));
+                (Flags & propagate_swap) ? true : false);
             ::operator delete((void*) p);
         }
 
@@ -198,13 +198,13 @@ namespace test
 
     template <typename T, allocator_flags Flags>
     struct is_propagate_on_swap<cxx11_allocator<T, Flags> >
-        : bool_type<(bool)(Flags & propagate_swap)> {};
+        : bool_type<(Flags & propagate_swap) ? true : false> {};
     template <typename T, allocator_flags Flags>
     struct is_propagate_on_assign<cxx11_allocator<T, Flags> >
-        : bool_type<(bool)(Flags & propagate_assign)> {};
+        : bool_type<(Flags & propagate_assign) ? true : false> {};
     template <typename T, allocator_flags Flags>
     struct is_propagate_on_move<cxx11_allocator<T, Flags> >
-        : bool_type<(bool)(Flags & propagate_move)> {};
+        : bool_type<(Flags & propagate_move) ? true : false> {};
 }
 
 #endif
