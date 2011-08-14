@@ -13,6 +13,8 @@ exe auto_index :
 : <define>BOOST_ALL_NO_LIB=1 <link>static release ;
 
 install aii : auto_index : <location>. ;
+install i : auto_index : <location>../../../dist/bin ;
+
 
 
 
