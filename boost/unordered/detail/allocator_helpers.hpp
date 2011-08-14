@@ -85,20 +85,26 @@ namespace boost { namespace unordered { namespace detail {
         template<typename T> convertible_from_anything(T const&);
     };
 
+    typedef char (&no_type)[1];
+    typedef char (&yes_type)[2];
+
+    template <typename T> struct sfinae {
+        typedef yes_type type;
+    };
+
     // Infrastructure for providing a default type for Tp::tname if absent.
     #define BOOST_DEFAULT_TYPE_TMPLT(tname)                                 \
         template <typename Tp, typename Default>                            \
         struct default_type_ ## tname {                                     \
+            template <typename T>                                           \
+            static BOOST_DEDUCED_TYPENAME sfinae<                           \
+                BOOST_DEDUCED_TYPENAME T::tname>::type test(int);           \
+            template <typename T>                                           \
+            static no_type test(...);                                       \
                                                                             \
-            template <typename X>                                           \
-            static char test(int, BOOST_DEDUCED_TYPENAME X::tname*);        \
-                                                                            \
-            template <typename X>                                           \
-            static int test(convertible_from_anything, void*);              \
+            enum { value = sizeof(test<Tp>(0)) == sizeof(yes_type) };       \
                                                                             \
             struct DefaultWrap { typedef Default tname; };                  \
-                                                                            \
-            static const bool value = (1 == sizeof(test<Tp>(0, 0)));        \
                                                                             \
             typedef BOOST_DEDUCED_TYPENAME                                  \
                 boost::detail::if_true<value>::                             \
