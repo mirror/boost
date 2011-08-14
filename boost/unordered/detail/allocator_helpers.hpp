@@ -239,7 +239,7 @@ namespace boost { namespace unordered { namespace detail {
             if (ptr_) {
                 for(pointer p = ptr_; p != constructed_; ++p)
                     allocator_traits<Allocator>::destroy(alloc_,
-                    	boost::addressof(*p));
+                        boost::addressof(*p));
 
                 allocator_traits<Allocator>::deallocate(alloc_, ptr_, length_);
             }
@@ -254,7 +254,7 @@ namespace boost { namespace unordered { namespace detail {
             pointer end = ptr_ + static_cast<std::ptrdiff_t>(length_);
             for(constructed_ = ptr_; constructed_ != end; ++constructed_)
                 allocator_traits<Allocator>::construct(alloc_,
-                	boost::addressof(*constructed_), v);
+                    boost::addressof(*constructed_), v);
         }
 
         pointer get() const
