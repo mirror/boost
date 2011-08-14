@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>BCP</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="BCP">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -27,7 +27,7 @@
 </h3></div></div></div>
 <div><p class="copyright">Copyright &#169; 2209 John Maddock</p></div>
 <div><div class="legalnotice">
-<a name="id759699"></a><p>
+<a name="id917214"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -38,21 +38,21 @@
 <div class="toc">
 <p><b>Table of Contents</b></p>
 <dl>
-<dt><span class="section"><a href="index.html#bcp.overview"> Overview</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.examples"> Examples</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.syntax"> Syntax</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.overview">Overview</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.examples">Examples</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax">Syntax</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="index.html#bcp.syntax.main"> Behaviour Selection</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.syntax.options"> Options</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.syntax.module"> module-list</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.syntax.output"> output-path</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.main">Behaviour Selection</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.options">Options</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.module">module-list</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.output">output-path</a></span></dt>
 <dt><span class="section"><a href="index.html#bcp.syntax.dependencies">Dependencies</a></span></dt>
 </dl></dd>
 </dl>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="bcp.overview"></a><a class="link" href="index.html#bcp.overview" title="Overview"> Overview</a>
+<a name="bcp.overview"></a><a class="link" href="index.html#bcp.overview" title="Overview">Overview</a>
 </h2></div></div></div>
 <p>
       The bcp utility is a tool for extracting subsets of Boost, it's useful for
@@ -66,7 +66,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="bcp.examples"></a><a class="link" href="index.html#bcp.examples" title="Examples"> Examples</a>
+<a name="bcp.examples"></a><a class="link" href="index.html#bcp.examples" title="Examples">Examples</a>
 </h2></div></div></div>
 <pre class="programlisting">bcp scoped_ptr /foo
 </pre>
@@ -78,13 +78,15 @@
 <p>
       Copies boost/regex.hpp and all dependencies including the regex source code
       (in libs/regex/src) and build files (in libs/regex/build) to /foo. Does not
-      copy the regex documentation, test, or example code.
+      copy the regex documentation, test, or example code. Also does not copy the
+      Boost.Build system.
     </p>
 <pre class="programlisting">bcp regex /foo
 </pre>
 <p>
       Copies the full regex lib (in libs/regex) including dependencies (such as the
-      boost.test source required by the regex test programs) to /foo.
+      boost.test source required by the regex test programs) to /foo. Does not copy
+      the Boost.Build system.
     </p>
 <pre class="programlisting">bcp --namespace=myboost --namespace-alias regex config build /foo
 </pre>
@@ -111,18 +113,18 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="bcp.syntax"></a><a class="link" href="index.html#bcp.syntax" title="Syntax"> Syntax</a>
+<a name="bcp.syntax"></a><a class="link" href="index.html#bcp.syntax" title="Syntax">Syntax</a>
 </h2></div></div></div>
 <div class="toc"><dl>
-<dt><span class="section"><a href="index.html#bcp.syntax.main"> Behaviour Selection</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.syntax.options"> Options</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.syntax.module"> module-list</a></span></dt>
-<dt><span class="section"><a href="index.html#bcp.syntax.output"> output-path</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.main">Behaviour Selection</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.options">Options</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.module">module-list</a></span></dt>
+<dt><span class="section"><a href="index.html#bcp.syntax.output">output-path</a></span></dt>
 <dt><span class="section"><a href="index.html#bcp.syntax.dependencies">Dependencies</a></span></dt>
 </dl></div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="bcp.syntax.main"></a><a class="link" href="index.html#bcp.syntax.main" title="Behaviour Selection"> Behaviour Selection</a>
+<a name="bcp.syntax.main"></a><a class="link" href="index.html#bcp.syntax.main" title="Behaviour Selection">Behaviour Selection</a>
 </h3></div></div></div>
 <pre class="programlisting">bcp --list [options] module-list
 </pre>
@@ -163,7 +165,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="bcp.syntax.options"></a><a class="link" href="index.html#bcp.syntax.options" title="Options"> Options</a>
+<a name="bcp.syntax.options"></a><a class="link" href="index.html#bcp.syntax.options" title="Options">Options</a>
 </h3></div></div></div>
 <pre class="programlisting">--boost=path
 </pre>
@@ -211,7 +213,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="bcp.syntax.module"></a><a class="link" href="index.html#bcp.syntax.module" title="module-list"> module-list</a>
+<a name="bcp.syntax.module"></a><a class="link" href="index.html#bcp.syntax.module" title="module-list">module-list</a>
 </h3></div></div></div>
 <p>
         When the --scan option is not used then a list of boost files or library
@@ -243,7 +245,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="bcp.syntax.output"></a><a class="link" href="index.html#bcp.syntax.output" title="output-path"> output-path</a>
+<a name="bcp.syntax.output"></a><a class="link" href="index.html#bcp.syntax.output" title="output-path">output-path</a>
 </h3></div></div></div>
 <p>
         The path to which files will be copied (this path must exist).
@@ -336,7 +338,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: July 08, 2010 at 22:44:20 GMT</small></p></td>
+<td align="left"><p><small>Last revised: August 14, 2011 at 16:17:07 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
