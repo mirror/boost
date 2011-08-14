@@ -54,6 +54,8 @@ namespace move_tests
         BOOST_DEDUCED_TYPENAME T::allocator_type al;
 
         {
+            test::check_instances check_;
+
             T y(empty(ptr));
             BOOST_TEST(y.empty());
             BOOST_TEST(test::equivalent(y.hash_function(), hf));
@@ -64,6 +66,8 @@ namespace move_tests
         }
 
         {
+            test::check_instances check_;
+
             test::random_values<T> v(1000, generator);
             test::object_count count;
             T y(create(v, count));
@@ -80,6 +84,8 @@ namespace move_tests
         test::random_generator const& generator = test::default_generator)
     {
         {
+            test::check_instances check_;
+
             test::random_values<T> v(500, generator);
             test::object_count count;
             T y;
@@ -104,6 +110,8 @@ namespace move_tests
         test::object_count count;
 
         {
+            test::check_instances check_;
+
             test::random_values<T> v(500, generator);
             T y(create(v, count, hf, eq, al, 0.5));
 #if defined(BOOST_HAS_NRVO)
@@ -118,6 +126,8 @@ namespace move_tests
         }
 
         {
+            test::check_instances check_;
+
             // TODO: To do this correctly requires the fancy new allocator
             // stuff.
             test::random_values<T> v(500, generator);
@@ -132,6 +142,8 @@ namespace move_tests
         }
 /*
         {
+            test::check_instances check_;
+
             test::random_values<T> v(25, generator);
             T y(create(v, count, hf, eq, al, 1.0), al);
 #if !defined(BOOST_NO_RVALUE_REFERENCES)

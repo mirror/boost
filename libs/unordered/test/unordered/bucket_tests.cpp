@@ -25,6 +25,8 @@ test::seed_t seed(54635);
 template <class X>
 void tests(X* = 0, test::random_generator generator = test::default_generator)
 {
+    test::check_instances check_;
+
     typedef BOOST_DEDUCED_TYPENAME X::size_type size_type;
     typedef BOOST_DEDUCED_TYPENAME X::const_local_iterator const_local_iterator;
     test::random_values<X> v(1000, generator);

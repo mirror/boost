@@ -37,16 +37,22 @@ template <class X>
 void swap_tests1(X*, test::random_generator generator = test::default_generator)
 {
     {
+        test::check_instances check_;
+
         X x;
         swap_test_impl(x, x);
     }
 
     {
+        test::check_instances check_;
+
         X x,y;
         swap_test_impl(x, y);
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<X> v(1000, generator);
         X x, y(v.begin(), v.end());
         swap_test_impl(x, y);
@@ -54,6 +60,8 @@ void swap_tests1(X*, test::random_generator generator = test::default_generator)
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<X> vx(1000, generator), vy(1000, generator);
         X x(vx.begin(), vx.end()), y(vy.begin(), vy.end());
         swap_test_impl(x, y);
@@ -72,12 +80,16 @@ void swap_tests2(X* ptr = 0,
     typedef BOOST_DEDUCED_TYPENAME X::allocator_type allocator_type;
 
     {
+        test::check_instances check_;
+
         X x(0, hasher(1), key_equal(1));
         X y(0, hasher(2), key_equal(2));
         swap_test_impl(x, y);
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<X> v(1000, generator);
         X x(v.begin(), v.end(), 0, hasher(1), key_equal(1));
         X y(0, hasher(2), key_equal(2));
@@ -85,6 +97,8 @@ void swap_tests2(X* ptr = 0,
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<X> vx(100, generator), vy(50, generator);
         X x(vx.begin(), vx.end(), 0, hasher(1), key_equal(1));
         X y(vy.begin(), vy.end(), 0, hasher(2), key_equal(2));
@@ -93,6 +107,8 @@ void swap_tests2(X* ptr = 0,
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<X> vx(50, generator), vy(100, generator);
         X x(vx.begin(), vx.end(), 0, hasher(), key_equal(), allocator_type(1));
         X y(vy.begin(), vy.end(), 0, hasher(), key_equal(), allocator_type(2));
@@ -100,6 +116,8 @@ void swap_tests2(X* ptr = 0,
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<X> vx(100, generator), vy(100, generator);
         X x(vx.begin(), vx.end(), 0, hasher(1), key_equal(1),
             allocator_type(1));

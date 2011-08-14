@@ -28,6 +28,8 @@ void assign_tests1(T*,
 
     std::cerr<<"assign_tests1.1\n";
     {
+        test::check_instances check_;
+
         T x;
         x = x;
         BOOST_TEST(x.empty());
@@ -37,6 +39,8 @@ void assign_tests1(T*,
 
     std::cerr<<"assign_tests1.2\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
         T x(v.begin(), v.end());
 
@@ -67,6 +71,8 @@ void assign_tests2(T*,
 
     std::cerr<<"assign_tests2.1\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
         T x1(v.begin(), v.end(), 0, hf1, eq1);
         T x2(0, hf2, eq2);
@@ -78,6 +84,8 @@ void assign_tests2(T*,
 
     std::cerr<<"assign_tests2.2\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v1(100, generator), v2(100, generator);
         T x1(v1.begin(), v1.end(), 0, hf1, eq1, al1);
         T x2(v2.begin(), v2.end(), 0, hf2, eq2, al2);

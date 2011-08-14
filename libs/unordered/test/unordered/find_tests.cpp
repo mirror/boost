@@ -24,6 +24,8 @@ void find_tests1(X*, test::random_generator generator = test::default_generator)
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
 
     {
+        test::check_instances check_;
+
         test::random_values<X> v(500, generator);
         X x(v.begin(), v.end());
         X const& x_const = x;
@@ -69,6 +71,8 @@ void find_tests1(X*, test::random_generator generator = test::default_generator)
     }
 
     {
+        test::check_instances check_;
+
         X x;
 
         test::random_values<X> v2(5, generator);

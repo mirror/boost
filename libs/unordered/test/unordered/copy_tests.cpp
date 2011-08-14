@@ -28,6 +28,8 @@ void copy_construct_tests1(T*,
     BOOST_DEDUCED_TYPENAME T::allocator_type al;
 
     {
+        test::check_instances check_;
+
         T x;
         T y(x);
         BOOST_TEST(y.empty());
@@ -39,6 +41,8 @@ void copy_construct_tests1(T*,
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
 
         T x(v.begin(), v.end());
@@ -49,6 +53,8 @@ void copy_construct_tests1(T*,
     }
 
     {
+        test::check_instances check_;
+
         // In this test I drop the original containers max load factor, so it
         // is much lower than the load factor. The hash table is not allowed
         // to rehash, but the destination container should probably allocate
@@ -77,6 +83,8 @@ void copy_construct_tests2(T* ptr,
     BOOST_DEDUCED_TYPENAME T::allocator_type al2(2);
 
     {
+        test::check_instances check_;
+
         T x(10000, hf, eq, al);
         T y(x);
         BOOST_TEST(y.empty());
@@ -88,6 +96,8 @@ void copy_construct_tests2(T* ptr,
     }
 
     {
+        test::check_instances check_;
+
         T x(1000, hf, eq, al);
         T y(x, al2);
         BOOST_TEST(y.empty());
@@ -99,6 +109,8 @@ void copy_construct_tests2(T* ptr,
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
 
         T x(v.begin(), v.end(), 0, hf, eq, al);
@@ -110,6 +122,8 @@ void copy_construct_tests2(T* ptr,
     }
 
     {
+        test::check_instances check_;
+
         test::random_values<T> v(500, generator);
 
         T x(v.begin(), v.end(), 0, hf, eq, al);

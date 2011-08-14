@@ -26,6 +26,8 @@ template <class X>
 void unique_insert_tests1(X*,
     test::random_generator generator = test::default_generator)
 {
+    test::check_instances check_;
+
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
     typedef test::ordered<X> ordered;
 
@@ -65,6 +67,9 @@ void equivalent_insert_tests1(X*,
 {
     std::cerr<<"insert(value) tests for containers with equivalent keys.\n";
 
+    test::check_instances check_;
+
+
     X x;
     test::ordered<X> tracker = test::create_ordered(x);
 
@@ -102,6 +107,8 @@ void insert_tests2(X*,
     std::cerr<<"insert(begin(), value) tests.\n";
 
     {
+        test::check_instances check_;
+
         X x;
         tracker_type tracker = test::create_ordered(x);
 
@@ -128,6 +135,8 @@ void insert_tests2(X*,
     std::cerr<<"insert(end(), value) tests.\n";
 
     {
+        test::check_instances check_;
+
         X x;
         X const& x_const = x;
         tracker_type tracker = test::create_ordered(x);
@@ -155,6 +164,8 @@ void insert_tests2(X*,
     std::cerr<<"insert(pos, value) tests.\n";
 
     {
+        test::check_instances check_;
+
         X x;
         const_iterator pos = x.begin();
         tracker_type tracker = test::create_ordered(x);
@@ -182,6 +193,8 @@ void insert_tests2(X*,
     std::cerr<<"insert single item range tests.\n";
 
     {
+        test::check_instances check_;
+
         X x;
         tracker_type tracker = test::create_ordered(x);
 
@@ -207,6 +220,8 @@ void insert_tests2(X*,
     std::cerr<<"insert range tests.\n";
 
     {
+        test::check_instances check_;
+
         X x;
 
         test::random_values<X> v(1000, generator);
@@ -219,6 +234,8 @@ void insert_tests2(X*,
     std::cerr<<"insert input iterator range tests.\n";
 
     {
+        test::check_instances check_;
+
         X x;
 
         test::random_values<X> v(1000, generator);
@@ -233,6 +250,8 @@ void insert_tests2(X*,
     std::cerr<<"insert copy iterator range tests.\n";
 
     {
+        test::check_instances check_;
+
         X x;
 
         test::random_values<X> v(1000, generator);
@@ -351,6 +370,8 @@ void map_insert_range_test1(X*,
 {
     std::cerr<<"map_insert_range_test1\n";
 
+    test::check_instances check_;
+
     typedef test::list<
         std::pair<
             BOOST_DEDUCED_TYPENAME X::key_type,
@@ -370,6 +391,8 @@ void map_insert_range_test2(X*,
     test::random_generator generator = test::default_generator)
 {
     std::cerr<<"map_insert_range_test2\n";
+
+    test::check_instances check_;
 
     typedef test::list<
         std::pair<BOOST_DEDUCED_TYPENAME X::key_type const, test::implicitly_convertible>
