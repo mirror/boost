@@ -7,6 +7,8 @@
 #if !defined(BOOST_FUSION_SUPPORT_UNUSED_20070305_1038)
 #define BOOST_FUSION_SUPPORT_UNUSED_20070305_1038
 
+#include <iosfwd>
+
 #include <boost/config.hpp>
 #if defined(BOOST_MSVC)
 # pragma warning(push)
@@ -65,14 +67,12 @@ namespace boost { namespace fusion
         };
     }
 
-    template <typename Out>
-    inline Out& operator<<(Out& out, detail::unused_only const&)
+    inline std::ostream& operator<<(std::ostream& out, detail::unused_only const&)
     {
         return out;
     }
 
-    template <typename In>
-    inline In& operator>>(In& in, unused_type&)
+    inline std::istream& operator>>(std::istream& in, unused_type&)
     {
         return in;
     }
