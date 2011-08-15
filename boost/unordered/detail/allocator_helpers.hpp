@@ -126,8 +126,7 @@ namespace boost { namespace unordered { namespace detail {
     BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
     BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
 
-// Disabling for Visual C++ for now as it hasn't been tested yet.
-#if !defined(BOOST_NO_SFINAE_EXPR) // || BOOST_WORKAROUND(BOOST_MSVC, >= 1400) 
+#if !defined(BOOST_NO_SFINAE_EXPR) || BOOST_WORKAROUND(BOOST_MSVC, >= 1500)
     // Specialization is only needed for Visual C++. Without it SFINAE doesn't
     // kick in.
     template <unsigned int>
