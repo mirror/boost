@@ -11,7 +11,7 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
+#include <boost/fusion/sequence/intrinsic/ext_/segmented_size.hpp>
 
 namespace boost { namespace fusion
 {

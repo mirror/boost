@@ -4,8 +4,8 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_FUSION_SIZE_S_08112006_1141)
-#define BOOST_FUSION_SIZE_S_08112006_1141
+#if !defined(BOOST_FUSION_SEGMENTED_SIZE_08112006_1141)
+#define BOOST_FUSION_SEGMENTED_SIZE_08112006_1141
 
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>

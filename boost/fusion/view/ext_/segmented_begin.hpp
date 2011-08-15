@@ -11,7 +11,7 @@
 
 namespace boost { namespace fusion
 {
-    template<typename Nodes>
+    template<typename Context>
     struct segmented_iterator;
 
     //auto segmented_begin( rng )

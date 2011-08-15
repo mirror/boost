@@ -9,15 +9,18 @@
 
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/fusion/sequence/intrinsic/empty.hpp>
+#include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/container/list/cons.hpp>
+#include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/deref.hpp>
-#include <boost/fusion/algorithm/transformation/pop_front.hpp>
 #include <boost/fusion/view/ext_/detail/begin_impl.hpp>
 
 namespace boost { namespace fusion
 {
-    template<typename Nodes>
+    template<typename First, typename Second>
+    struct iterator_range;
+
+    template<typename Context>
     struct segmented_iterator;
 
     namespace detail
@@ -29,7 +32,10 @@ namespace boost { namespace fusion
 
         template<typename Stack>
         struct is_invalid
-          : result_of::empty<typename Stack::car_type>
+          : result_of::equal_to<
+                typename Stack::car_type::begin_type,
+                typename Stack::car_type::end_type
+            >
         {};
 
         ////Advance the first iterator in the range at the
@@ -37,19 +43,30 @@ namespace boost { namespace fusion
         ////new stack.
         //auto pop_front_car(stack)
         //{
-        //  return cons(pop_front(car(stack)), cdr(stack))
+        //  return cons(iterator_range(next(begin(car(stack))), end(car(stack))), cdr(stack));
         //}
 
         template<typename Stack>
         struct pop_front_car
         {
-            typedef typename Stack::car_type car_type;
-            typedef typename result_of::pop_front<car_type>::type new_car_type;
-            typedef cons<new_car_type, typename Stack::cdr_type> type;
+            typedef 
+                iterator_range<
+                    typename result_of::next<
+                        typename Stack::car_type::begin_type
+                    >::type
+                  , typename Stack::car_type::end_type
+                >
+            car_type;
+            
+            typedef
+                cons<car_type, typename Stack::cdr_type>
+            type;
 
             static type call(Stack const & stack)
             {
-                return type(fusion::pop_front(stack.car), stack.cdr);
+                return type(
+                    car_type(fusion::next(stack.car.first), stack.car.last),
+                    stack.cdr);
             }
         };
 

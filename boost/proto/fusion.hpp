@@ -24,7 +24,7 @@
 #include <boost/fusion/include/transform_view.hpp>
 #include <boost/fusion/support/ext_/is_segmented.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
+#include <boost/fusion/sequence/intrinsic/ext_/segmented_size.hpp>
 #include <boost/fusion/sequence/comparison/enable_comparison.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
 #include <boost/proto/proto_fwd.hpp>

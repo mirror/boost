@@ -16,7 +16,7 @@
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
+#include <boost/fusion/sequence/intrinsic/ext_/segmented_size.hpp>
 #include <boost/fusion/algorithm/transformation/push_back.hpp>
 #include <boost/fusion/algorithm/transformation/push_front.hpp>
 #include <boost/fusion/view/iterator_range.hpp>
@@ -475,14 +475,14 @@ namespace boost { namespace fusion { namespace detail
 
     //auto make_segmented_range(begin, end)
     //{
-    //  return make_segmented_range_reduce(reverse(begin.nodes), reverse(end.nodes));
+    //  return make_segmented_range_reduce(reverse(begin.context), reverse(end.context));
     //}
 
     template<typename Begin, typename End>
     struct make_segmented_range
     {
-        typedef reverse_cons<typename Begin::nodes_type>   reverse_begin_cons;
-        typedef reverse_cons<typename End::nodes_type>     reverse_end_cons;
+        typedef reverse_cons<typename Begin::context_type>   reverse_begin_cons;
+        typedef reverse_cons<typename End::context_type>     reverse_end_cons;
 
         typedef
             make_segmented_range_reduce<
@@ -496,8 +496,8 @@ namespace boost { namespace fusion { namespace detail
         static type call(Begin const & begin, End const & end)
         {
             return impl::call(
-                reverse_begin_cons::call(begin.nodes),
-                reverse_end_cons::call(end.nodes));
+                reverse_begin_cons::call(begin.context),
+                reverse_end_cons::call(end.context));
         }
     };
 
