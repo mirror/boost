@@ -65,7 +65,7 @@ namespace boost { namespace unordered { namespace detail {
         bucket_ptr buckets_;
         std::size_t bucket_count_;
         std::size_t size_;
-        ::boost::compressed_pair<bucket_allocator, node_allocator> allocators_;
+        compressed_pair<bucket_allocator, node_allocator> allocators_;
         
         // Data access
 
@@ -106,22 +106,20 @@ namespace boost { namespace unordered { namespace detail {
         {
         }
 
-        // TODO: Need to move allocators_, not copy. But compressed_pair
-        // doesn't support move parameters.
-        buckets(buckets& b, move_tag)
+        buckets(buckets& b, move_tag m)
           : buckets_(),
             bucket_count_(b.bucket_count_),
             size_(),
-            allocators_(b.allocators_)
+            allocators_(b.allocators_, m)
         {
             swap(b);
         }
 
         template <typename T>
-        buckets(table<T>& x, move_tag)
+        buckets(table<T>& x, move_tag m)
           : buckets_(),
             bucket_count_(x.bucket_count_),
-            allocators_(x.allocators_)
+            allocators_(x.allocators_, m)
         {
             swap(x);
             x.size_ = 0;
@@ -424,7 +422,7 @@ namespace boost { namespace unordered { namespace detail {
         friend class set_hash_functions<H, P>;
         functions& operator=(functions const&);
 
-        typedef ::boost::compressed_pair<H, P> function_pair;
+        typedef compressed_pair<H, P> function_pair;
         typedef BOOST_DEDUCED_TYPENAME ::boost::aligned_storage<
             sizeof(function_pair),
             ::boost::alignment_of<function_pair>::value>::type aligned_function;

@@ -245,7 +245,7 @@ namespace boost { namespace unordered { namespace detail {
             // aren't deleted with the wrong allocator.
             if(this->buckets_) this->delete_buckets();
             // TODO: Can allocator assignment throw?
-            this->allocators_ = x.allocators_;
+            this->allocators_.assign(x.allocators_);
             this->swap(tmp, false_type());
         }
 
@@ -259,7 +259,7 @@ namespace boost { namespace unordered { namespace detail {
         void move_assign(table& x, true_type)
         {
             if(this->buckets_) this->delete_buckets();
-            this->allocators_ = x.allocators_; // TODO: Move allocators, not copy.
+            this->allocators_.move_assign(x.allocators_);
             move_assign_no_alloc(x);
         }
 

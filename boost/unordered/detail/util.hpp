@@ -19,16 +19,17 @@
 #include <boost/assert.hpp>
 #include <boost/iterator.hpp>
 #include <boost/iterator/iterator_categories.hpp>
-#include <boost/compressed_pair.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/type_traits/is_empty.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/preprocessor/seq/size.hpp>
 #include <boost/preprocessor/seq/enum.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/move/move.hpp>
+#include <boost/swap.hpp>
 
 // Template parameters:
 //
@@ -253,6 +254,102 @@ namespace boost { namespace unordered { namespace detail {
         return (std::max)(static_cast<std::size_t>(insert_size(i, j)) + 1,
             num_buckets);
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // compressed_pair
+
+    template <typename T, int Index>
+    struct compressed_base : private T
+    {
+        compressed_base(T const& x) : T(x) {}
+        compressed_base(T& x, move_tag) : T(boost::move(x)) {}
+
+        T& get() { return *this; }
+        T const& get() const { return *this; }
+    };
+    
+    template <typename T, int Index>
+    struct uncompressed_base
+    {
+        uncompressed_base(T const& x) : value_(x) {}
+        uncompressed_base(T& x, move_tag) : value_(boost::move(x)) {}
+
+        T& get() { return value_; }
+        T const& get() const { return value_; }
+    private:
+        T value_;
+    };
+    
+    template <typename T, int Index>
+    struct generate_base
+      : boost::detail::if_true<
+            boost::is_empty<T>::value
+        >:: BOOST_NESTED_TEMPLATE then<
+            compressed_base<T, Index>,
+            uncompressed_base<T, Index>
+        >
+    {};
+    
+    template <typename T1, typename T2>
+    struct compressed_pair
+      : private generate_base<T1, 1>::type,
+        private generate_base<T2, 2>::type
+    {
+        typedef BOOST_DEDUCED_TYPENAME generate_base<T1, 1>::type base1;
+        typedef BOOST_DEDUCED_TYPENAME generate_base<T2, 2>::type base2;
+
+        typedef T1 first_type;
+        typedef T2 second_type;
+        
+        first_type& first() {
+            return static_cast<base1*>(this)->get();
+        }
+
+        first_type const& first() const {
+            return static_cast<base1 const*>(this)->get();
+        }
+
+        second_type& second() {
+            return static_cast<base2*>(this)->get();
+        }
+
+        second_type const& second() const {
+            return static_cast<base2 const*>(this)->get();
+        }
+
+        template <typename First, typename Second>
+        compressed_pair(First const& x1, Second const& x2)
+            : base1(x1), base2(x2) {}
+
+        compressed_pair(compressed_pair const& x)
+            : base1(x.first()), base2(x.second()) {}
+
+        compressed_pair(compressed_pair& x, move_tag m)
+            : base1(x.first(), m), base2(x.second(), m) {}
+
+        void assign(compressed_pair const& x)
+        {
+            first() = x.first();
+            second() = x.second();
+        }
+
+        void move_assign(compressed_pair& x)
+        {
+            first() = boost::move(x.first());
+            second() = boost::move(x.second());
+        }
+        
+        void swap(compressed_pair& x)
+        {
+            boost::swap(first(), x.first());
+            boost::swap(second(), x.second());
+        }
+
+    private:
+        // Prevent assignment just to make use of assign or
+        // move_assign explicit.
+        compressed_pair& operator=(compressed_pair const&);
+    };
 }}}
 
 #endif
