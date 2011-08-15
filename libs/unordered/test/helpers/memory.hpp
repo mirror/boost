@@ -195,11 +195,19 @@ namespace test
     };
 
     template <typename Alloc>
+    struct is_select_on_copy : false_type {};
+    template <typename Alloc>
     struct is_propagate_on_swap : false_type {};
     template <typename Alloc>
     struct is_propagate_on_assign : false_type {};
     template <typename Alloc>
     struct is_propagate_on_move : false_type {};
+
+    template <typename Alloc>
+    int selected_count(Alloc const&)
+    {
+        return 0;
+    }
 }
 
 #endif

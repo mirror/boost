@@ -10,6 +10,7 @@
 #include <boost/limits.hpp>
 #include <cstddef>
 
+#include "../helpers/fwd.hpp"
 #include "../helpers/memory.hpp"
 
 namespace test
@@ -28,15 +29,6 @@ namespace test
         no_propagate_move = allocator_flags_all - propagate_move
     };
     
-    template <int Flag>
-    struct copy_allocator_base
-    {
-        // select_on_copy goes here.
-    };
-
-    template <>
-    struct copy_allocator_base<allocator_false> {};
-
     template <int Flag>
     struct swap_allocator_base
     {
@@ -76,14 +68,11 @@ namespace test
         { force_equal_allocator_value = old_value_; }
     };
 
-    template <typename T, allocator_flags Flags = propagate_swap>
-    struct cxx11_allocator :
-        public copy_allocator_base<Flags & select_copy>,
-        public swap_allocator_base<Flags & propagate_swap>,
-        public assign_allocator_base<Flags & propagate_assign>,
-        public move_allocator_base<Flags & propagate_move>
+    template <typename T>
+    struct cxx11_allocator_base
     {
         int tag_;
+        int selected_;
 
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -93,29 +82,26 @@ namespace test
         typedef T const& const_reference;
         typedef T value_type;
 
-        template <typename U> struct rebind {
-            typedef cxx11_allocator<U, Flags> other;
-        };
-
-        explicit cxx11_allocator(int t = 0) : tag_(t)
+        explicit cxx11_allocator_base(int t)
+            : tag_(t), selected_(0)
         {
             detail::tracker.allocator_ref();
         }
         
-        template <typename Y> cxx11_allocator(
-                cxx11_allocator<Y, Flags> const& x)
-            : tag_(x.tag_)
+        template <typename Y> cxx11_allocator_base(
+                cxx11_allocator_base<Y> const& x)
+            : tag_(x.tag_), selected_(x.selected_)
         {
             detail::tracker.allocator_ref();
         }
 
-        cxx11_allocator(cxx11_allocator const& x)
-            : tag_(x.tag_)
+        cxx11_allocator_base(cxx11_allocator_base const& x)
+            : tag_(x.tag_), selected_(x.selected_)
         {
             detail::tracker.allocator_ref();
         }
 
-        ~cxx11_allocator()
+        ~cxx11_allocator_base()
         {
             detail::tracker.allocator_unref();
         }
@@ -149,7 +135,7 @@ namespace test
             // Note that tags will be tested
             // properly in the normal allocator.
             detail::tracker.track_deallocate((void*) p, n, sizeof(T), tag_,
-                (Flags & propagate_swap) ? true : false);
+                 !force_equal_allocator_value);
             ::operator delete((void*) p);
         }
 
@@ -173,12 +159,88 @@ namespace test
         size_type max_size() const {
             return (std::numeric_limits<size_type>::max)();
         }
+    };
+
+    template <typename T, allocator_flags Flags = propagate_swap,
+        bool SelectCopy = (Flags & select_copy) ? true : false>
+    struct cxx11_allocator :
+        public cxx11_allocator_base<T>,
+        public swap_allocator_base<Flags & propagate_swap>,
+        public assign_allocator_base<Flags & propagate_assign>,
+        public move_allocator_base<Flags & propagate_move>
+    {
+        template <typename U> struct rebind {
+            typedef cxx11_allocator<U, Flags> other;
+        };
+
+        explicit cxx11_allocator(int t = 0)
+            : cxx11_allocator_base<T>(t)
+        {
+        }
+        
+        template <typename Y> cxx11_allocator(
+                cxx11_allocator<Y, Flags> const& x)
+            : cxx11_allocator_base<T>(x)
+        {
+        }
+
+        cxx11_allocator(cxx11_allocator const& x)
+            : cxx11_allocator_base<T>(x)
+        {
+        }
 
         // When not propagating swap, allocators are always equal
         // to avoid undefined behaviour.
         bool operator==(cxx11_allocator const& x) const
         {
-            return force_equal_allocator_value || (tag_ == x.tag_);
+            return force_equal_allocator_value || (this->tag_ == x.tag_);
+        }
+
+        bool operator!=(cxx11_allocator const& x) const
+        {
+            return !(*this == x);
+        }
+    };
+
+    template <typename T, allocator_flags Flags>
+    struct cxx11_allocator<T, Flags, true> : 
+        public cxx11_allocator_base<T>,
+        public swap_allocator_base<Flags & propagate_swap>,
+        public assign_allocator_base<Flags & propagate_assign>,
+        public move_allocator_base<Flags & propagate_move>
+    {
+        cxx11_allocator select_on_container_copy_construction() const
+        {
+            cxx11_allocator tmp(*this);
+            ++tmp.selected_;
+            return tmp;
+        }
+
+        template <typename U> struct rebind {
+            typedef cxx11_allocator<U, Flags> other;
+        };
+
+        explicit cxx11_allocator(int t = 0)
+            : cxx11_allocator_base<T>(t)
+        {
+        }
+        
+        template <typename Y> cxx11_allocator(
+                cxx11_allocator<Y, Flags> const& x)
+            : cxx11_allocator_base<T>(x)
+        {
+        }
+
+        cxx11_allocator(cxx11_allocator const& x)
+            : cxx11_allocator_base<T>(x)
+        {
+        }
+
+        // When not propagating swap, allocators are always equal
+        // to avoid undefined behaviour.
+        bool operator==(cxx11_allocator const& x) const
+        {
+            return force_equal_allocator_value || (this->tag_ == x.tag_);
         }
 
         bool operator!=(cxx11_allocator const& x) const
@@ -197,6 +259,9 @@ namespace test
     }
 
     template <typename T, allocator_flags Flags>
+    struct is_select_on_copy<cxx11_allocator<T, Flags> >
+        : bool_type<(Flags & select_copy) ? true : false> {};
+    template <typename T, allocator_flags Flags>
     struct is_propagate_on_swap<cxx11_allocator<T, Flags> >
         : bool_type<(Flags & propagate_swap) ? true : false> {};
     template <typename T, allocator_flags Flags>
@@ -205,6 +270,12 @@ namespace test
     template <typename T, allocator_flags Flags>
     struct is_propagate_on_move<cxx11_allocator<T, Flags> >
         : bool_type<(Flags & propagate_move) ? true : false> {};
+
+    template <typename T, allocator_flags Flags>
+    int selected_count(cxx11_allocator<T, Flags> const& x)
+    {
+        return x.selected_;
+    }
 }
 
 #endif

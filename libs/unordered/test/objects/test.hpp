@@ -286,13 +286,6 @@ namespace test
         }
     };
 
-    template <typename T>
-    struct is_propagate_on_swap<allocator<T> > : false_type {};
-    template <typename T>
-    struct is_propagate_on_assign<allocator<T> > : false_type {};
-    template <typename T>
-    struct is_propagate_on_move<allocator<T> > : false_type {};
-
     template <class T>
     bool equivalent_impl(allocator<T> const& x, allocator<T> const& y,
         test::derived_type)

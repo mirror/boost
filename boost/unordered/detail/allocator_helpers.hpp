@@ -17,6 +17,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/select_type.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #if (defined(BOOST_NO_STD_ALLOCATOR) || defined(BOOST_DINKUMWARE_STDLIB)) \
     && !defined(__BORLANDC__)
@@ -125,6 +126,69 @@ namespace boost { namespace unordered { namespace detail {
     BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
     BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
 
+// Disabling for Visual C++ for now as it hasn't been tested yet.
+#if !defined(BOOST_NO_SFINAE_EXPR) // || BOOST_WORKAROUND(BOOST_MSVC, >= 1400) 
+    // Specialization is only needed for Visual C++. Without it SFINAE doesn't
+    // kick in.
+    template <unsigned int>
+    struct expr_sfinae;
+    
+    template <>
+    struct expr_sfinae<sizeof(yes_type)> {
+        typedef yes_type type;
+    };
+    
+    template <typename T>
+    struct has_select_on_container_copy_construction
+    {
+        // This needs to be a template for Visual C++.
+        template <typename T2>
+        static yes_type to_yes_type(const T2&);
+
+        template <typename T2>
+        static typename expr_sfinae<sizeof(to_yes_type(
+            ((T2 const*)0)->select_on_container_copy_construction()
+        ))>::type check(T2*);
+
+        static no_type check(void*);
+        
+        enum { value = sizeof(check((T*) 0)) == sizeof(yes_type) };
+    };
+#else
+    template <typename T>
+    struct has_select_on_container_copy_construction
+    {
+        typedef T (T::*SelectFunc)() const;
+
+        template <SelectFunc e> struct sfinae { typedef yes_type type; };
+
+        template <class U>  
+        static typename sfinae<&U::select_on_container_copy_construction>::type
+            test(int);  
+        template <class U>  
+        static no_type test(...);  
+ 
+        enum { value = sizeof(test<T>(1)) == sizeof(yes_type) };
+    };
+
+#endif
+
+    template <typename Alloc>
+    inline BOOST_DEDUCED_TYPENAME boost::enable_if<
+            has_select_on_container_copy_construction<Alloc>, Alloc
+        >::type call_select_on_container_copy_construction(const Alloc& rhs)
+    {
+        return rhs.select_on_container_copy_construction();
+    }
+
+    template <typename Alloc>
+    inline BOOST_DEDUCED_TYPENAME boost::disable_if<
+            has_select_on_container_copy_construction<Alloc>, Alloc
+        >::type call_select_on_container_copy_construction(const Alloc& rhs)
+    {
+        return rhs;
+    }
+
     template <typename Alloc>
     struct allocator_traits
     {
@@ -197,10 +261,11 @@ namespace boost { namespace unordered { namespace detail {
             { return a.max_size(); }
 
         // Allocator propagation on construction
-
-        static Alloc select_on_container_copy_construction(const Alloc& rhs) {
-            //return BOOST_DEFAULT_FUNC(select_on_container_copy_construction,Alloc)(rhs);
-            return rhs;
+        
+        static Alloc select_on_container_copy_construction(Alloc const& rhs)
+        {
+            return boost::unordered::detail::
+                call_select_on_container_copy_construction(rhs);
         }
     
         // Allocator propagation on assignment and swap.
