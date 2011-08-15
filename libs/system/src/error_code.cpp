@@ -84,6 +84,7 @@ namespace
   # if defined(BOOST_WINDOWS_API) || defined(__hpux) || defined(__sun)\
      || (defined(__linux) && (!defined(__USE_XOPEN2K) || defined(BOOST_SYSTEM_USE_STRERROR)))\
      || (defined(__osf__) && !defined(_REENTRANT))\
+     || (defined(__INTEGRITY))\
      || (defined(__vms))\
      || (defined(__QNXNTO__))
       const char * c_str = std::strerror( ev );
