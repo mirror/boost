@@ -252,12 +252,12 @@ void test_cntranslate(std::string c,std::string s,std::string p,int n,std::strin
     strings_equal<char>(c,s,p,n,expected,l,domain);
     strings_equal<wchar_t>(c,s,p,n,expected,l,domain);
     #ifdef BOOST_HAS_CHAR16_T
-	if(backend=="icu" || backend=="std")
-		strings_equal<char16_t>(c,s,p,n,expected,l,domain);
+    if(backend=="icu" || backend=="std")
+        strings_equal<char16_t>(c,s,p,n,expected,l,domain);
     #endif
     #ifdef BOOST_HAS_CHAR32_T
-	if(backend=="icu" || backend=="std")
-		strings_equal<char32_t>(c,s,p,n,expected,l,domain);
+    if(backend=="icu" || backend=="std")
+        strings_equal<char32_t>(c,s,p,n,expected,l,domain);
     #endif
 }
 
@@ -267,12 +267,12 @@ void test_ntranslate(std::string s,std::string p,int n,std::string expected,std:
     strings_equal<char>(s,p,n,expected,l,domain);
     strings_equal<wchar_t>(s,p,n,expected,l,domain);
     #ifdef BOOST_HAS_CHAR16_T
-	if(backend=="icu" || backend=="std")
-		strings_equal<char16_t>(s,p,n,expected,l,domain);
+    if(backend=="icu" || backend=="std")
+        strings_equal<char16_t>(s,p,n,expected,l,domain);
     #endif
     #ifdef BOOST_HAS_CHAR32_T
     if(backend=="icu" || backend=="std")
-		strings_equal<char32_t>(s,p,n,expected,l,domain);
+        strings_equal<char32_t>(s,p,n,expected,l,domain);
     #endif
 }
 
@@ -282,11 +282,11 @@ void test_ctranslate(std::string c,std::string original,std::string expected,std
     strings_equal<wchar_t>(c,original,expected,l,domain);
     #ifdef BOOST_HAS_CHAR16_T
     if(backend=="icu" || backend=="std")
-		strings_equal<char16_t>(c,original,expected,l,domain);
+        strings_equal<char16_t>(c,original,expected,l,domain);
     #endif
     #ifdef BOOST_HAS_CHAR32_T
     if(backend=="icu" || backend=="std")
-	    strings_equal<char32_t>(c,original,expected,l,domain);
+        strings_equal<char32_t>(c,original,expected,l,domain);
     #endif
 }
 
@@ -298,11 +298,11 @@ void test_translate(std::string original,std::string expected,std::locale const 
     strings_equal<wchar_t>(original,expected,l,domain);
     #ifdef BOOST_HAS_CHAR16_T
     if(backend=="icu" || backend=="std")
-	    strings_equal<char16_t>(original,expected,l,domain);
+        strings_equal<char16_t>(original,expected,l,domain);
     #endif
     #ifdef BOOST_HAS_CHAR32_T
     if(backend=="icu" || backend=="std")
-	    strings_equal<char32_t>(original,expected,l,domain);
+        strings_equal<char32_t>(original,expected,l,domain);
     #endif
 }
 
@@ -325,13 +325,13 @@ int main(int argc,char **argv)
         #ifndef BOOST_LOCALE_NO_WINAPI_BACKEND
             "winapi",
         #endif
-		};
+        };
         for(int type = 0 ; type < int(sizeof(def)/sizeof(def[0])) ; type ++ ) {
             boost::locale::localization_backend_manager tmp_backend = boost::locale::localization_backend_manager::global();
             tmp_backend.select(def[type]);
             boost::locale::localization_backend_manager::global(tmp_backend);
-			
-			backend = def[type];
+            
+            backend = def[type];
             
             std::cout << "Testing for backend --------- " << def[type] << std::endl;
 
@@ -421,13 +421,13 @@ int main(int argc,char **argv)
             TEST(same_w(bl::translate(to<wchar_t>("hello")))==to<wchar_t>("שלום"));
             
             #ifdef BOOST_HAS_CHAR16_T
-			if(backend=="icu" || backend=="std")
-				TEST(same_u16(bl::translate(to<char16_t>("hello")))==to<char16_t>("שלום"));
+            if(backend=="icu" || backend=="std")
+                TEST(same_u16(bl::translate(to<char16_t>("hello")))==to<char16_t>("שלום"));
             #endif
             
             #ifdef BOOST_HAS_CHAR32_T
-			if(backend=="icu" || backend=="std")
-				TEST(same_u32(bl::translate(to<char32_t>("hello")))==to<char32_t>("שלום"));
+            if(backend=="icu" || backend=="std")
+                TEST(same_u32(bl::translate(to<char32_t>("hello")))==to<char32_t>("שלום"));
             #endif
 
         }
@@ -532,3 +532,4 @@ int main(int argc,char **argv)
 }
 
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
+// boostinspect:noascii 

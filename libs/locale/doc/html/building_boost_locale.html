@@ -5,10 +5,6 @@
 <title>Boost.Locale: Building The library</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
-<!-- 
-    Switch the lines for stand alone version
-    <link rel="stylesheet" type="text/css" href="http://www.boost.org/style-v2/section-basic.css"> 
--->
 <link rel="stylesheet" type="text/css" href="../style/section-basic.css">
 </head>
 <body>
@@ -18,10 +14,6 @@
 
         <h1 class="heading-title">
             <a href="http://www.boost.org/">
-                <!-- 
-                    Switch the lines for stand alone version
-                    <img src="http://www.boost.org/gfx/space.png" alt= "Boost C++ Libraries" class="heading-logo" /> 
-                -->
                 <img src="../style/space.png" alt= "Boost C++ Libraries" class="heading-logo" />
                 <span class="heading-boost">Boost</span>
                 <span class="heading-cpplibraries">C++ Libraries</span>
@@ -68,32 +60,34 @@
 <h1>Building The library </h1>  </div>
 </div>
 <div class="contents">
-<p>Boost.Locale presently supports CMake build system and Boost Build.</p>
-<dl class="note"><dt><b>Note:</b></dt><dd>You need Boost 1.46 and above to use Boost.Build</dd></dl>
 <ul>
-<li><a class="el" href="building_boost_locale.html#building_boost_locale_bb">Building With Boost.Build</a></li>
-<li><a class="el" href="building_boost_locale.html#building_boost_locale_cmake">Building With CMake</a></li>
+<li><a class="el" href="building_boost_locale.html#building_boost_locale_bb">Building Boost.Locale</a><ul>
+<li><a class="el" href="building_boost_locale.html#bb_building_deps">Dependencies</a></li>
+<li><a class="el" href="building_boost_locale.html#bb_building_proc">Building Process</a></li>
+<li><a class="el" href="building_boost_locale.html#bb_build_opts">Build Options</a></li>
+<li><a class="el" href="building_boost_locale.html#bb_build_test">Running Unit Tests</a></li>
+</ul>
+</li>
 <li><a class="el" href="building_boost_locale.html#binary_compatibility">Binary Compatibility</a></li>
 </ul>
 <h2><a class="anchor" id="building_boost_locale_bb"></a>
-Building With Boost.Build</h2>
-<p>You need Boost 1.46 and above to use Boost.Build, it includes important patches that allow you to build the library correctly.</p>
+Building Boost.Locale</h2>
 <h3><a class="anchor" id="bb_building_deps"></a>
 Dependencies</h3>
 <ul>
-<li>Boost 1.46 and above.</li>
 <li>ICU library 3.6 or above is strongly recommended</li>
 <li>If no ICU library is given, iconv support is required under POSIX platforms.</li>
 </ul>
+<h3><a class="anchor" id="bb_platform_opts"></a>
+Platform Notes</h3>
+<ul>
+<li>If you use Boost.Locale on Windows with MinGW/GCC &lt; 4.5 you'll be able to use static version only. Mingw/GCC prior to 4.5 have no support of dynamic runtime linking.<br/>
+ Using Boost.Locale DLL's with MinGW gcc also requires dynamic linking with the runtime libraries libstdc++ and libgcc. Some gcc builds use static linking by default so make sure you use correct link options with your compiler when you build your own programs.</li>
+<li>The AIX's iconv misses important character sets that Boost.Locale requires, so you need to either use GNU iconv or link with ICU library.</li>
+<li>If iconv library is not found on Darwin/Mac OS X builds make sure there is no multiple iconv installations and provide -sICONV_PATH build option to point to correct location of iconv library.</li>
+</ul>
 <h3><a class="anchor" id="bb_building_proc"></a>
 Building Process</h3>
-<p>First of all we need to prepare our sources of Boost with Boost.Locale</p>
-<ul>
-<li>Download latest version of Boost and extract its sources</li>
-<li>Download the latest version of Boost.Locale and extract its sources</li>
-<li>Copy boost and libs subdirectory of Boost.Locale sources into the location of boost sources.</li>
-<li>Bootstrap latest bjam version running bootstrap.sh or bootstrap.bat.</li>
-</ul>
 <p>Now all you need to do is invoke bjam command:</p>
 <div class="fragment"><pre class="fragment">
 ./bjam --with-locale stage
@@ -157,66 +151,7 @@ Running Unit Tests</h2>
 <p>You can run unit tests by invoking <code>bjam</code> with <code>libs/locale/test</code> project parameter </p>
 <div class="fragment"><pre class="fragment">
 ./bjam libs/locale/test
-</pre></div><h2><a class="anchor" id="building_boost_locale_cmake"></a>
-Building With CMake</h2>
-<dl class="note"><dt><b>Note:</b></dt><dd>CMake build does not provide mangled library names like boost_locale-mt-gd.lib, so if you rely on auto-linking use Boost.Build.</dd></dl>
-<h3><a class="anchor" id="cmake_building_deps"></a>
-Dependencies</h3>
-<ul>
-<li>CMake 2.6 and above.</li>
-<li>Boost 1.35 and above.</li>
-<li>Boost.Thread (when using ICU or when using Boost &lt; 1.43)</li>
-<li>ICU library 3.6 or above is strongly recommended</li>
-<li>If no ICU library is given, iconv support is required under POSIX platforms.</li>
-</ul>
-<h3><a class="anchor" id="cmake_building_proc"></a>
-Building Process</h3>
-<p>The library build should be fairly simple for users familiar with CMake.</p>
-<dl class="note"><dt><b>Note:</b></dt><dd></dd></dl>
-<ul>
-<li>MSVC Users: use <code>nmake</code> for building the library, MSVC projects are not supported!</li>
-<li>Windows users: don't forget to set the PATH environment variable to point to ICU's dlls.</li>
-</ul>
-<p>The simplest way to build the library is:</p>
-<ul>
-<li>Extract its sources</li>
-<li>Go to the sources directory</li>
-<li>Create a subdirectory named "build"</li>
-<li>Go into this directory and run: <div class="fragment"><pre class="fragment">        cmake ..
-        make
-        make test
-</pre></div> For windows you may need to specify: <div class="fragment"><pre class="fragment">        cmake -DCMAKE_INCLUDE_PATH=/path/to/icu/include:/path/to/boost/include -DCMAKE_LIBRARY_PATH=/path/to/icu/lib ..
-</pre></div> And then: <div class="fragment"><pre class="fragment">        nmake
-        nmake test
-</pre></div> Or <div class="fragment"><pre class="fragment">        make &amp;&amp; make test
-</pre></div> Depending on your compiler.</li>
-</ul>
-<h2><a class="anchor" id="cmake_build_opts"></a>
-Build Options</h2>
-<p>This options can be passed to CMake to configure the library to your needs.</p>
-<ul>
-<li><code>DISABLE_SHARED</code> - build only the static library</li>
-<li><code>DISABLE_STATIC</code> - build only the shared library</li>
-<li><code>DISABLE_ICU</code> - Disable the ICU backend (strongly discouraged)</li>
-<li><code>DISABLE_STD_BACKED</code> - Disable the "std" backend</li>
-<li><code>DISABLE_POSIX_BACKEND</code> - Disable the "posix" backend (ON by default on all but Linux and Mac OS X)</li>
-<li><code>DISABLE_WINAPI_BACKEND</code> - Disable the "winapi" backend (ON by default on POSIX platforms).</li>
-<li><code>DISABLE_ICONV</code> - Disable iconv-based conversion (ON by default on Windows)</li>
-</ul>
-<p>Useful CMake options:</p>
-<ul>
-<li><code>CMAKE_INCLUDE_PATH</code> - path to the boost library (if not system-wide)</li>
-<li><code>CMAKE_INSTALL_PREFIX</code> - installation path</li>
-<li><code>CMAKE_BUILD_TYPE</code> - default is Debug on Windows/MSVC and RelWithDebInfo on all other platforms.</li>
-</ul>
-<p>Examples:</p>
-<ul>
-<li>Build Boost.Locale with only the "icu" backend on Linux <div class="fragment"><pre class="fragment">        cmake -DDISABLE_POSIX_BACKEND=ON -DDISABLE_STD_BACKEND=ON -DDISABLE_ICONV=ON ..
-</pre></div></li>
-<li>Build Boost.Locale with the "winapi" and "std" backends on Windows <div class="fragment"><pre class="fragment">        cmake -G <span class="stringliteral">&quot;NMake Makefiles&quot;</span> -DDISABLE_ICU_BACKEND=ON -DCMAKE_INCLUDE_PATH=c:/boost_1_43_0 ..
-</pre></div></li>
-</ul>
-<h2><a class="anchor" id="binary_compatibility"></a>
+</pre></div><h2><a class="anchor" id="binary_compatibility"></a>
 Binary Compatibility</h2>
 <p>Boost.Locale is built with binary compatibility in mind. Switching localization back ends on or off, or using iconv or not, does not affect binary compatibility. So if a dynamic library was built with all possible backends, other dynamic libraries compiled with, for example, only the <code>std</code>, <code>posix</code> or <code>winapi</code> backends would still be binary-compatible with it.</p>
 <p>However this definitely has an effect on some features. For example, if you try to use boundary analysis or a calendar facet when the library does not support the icu backend you would get an exception. </p>

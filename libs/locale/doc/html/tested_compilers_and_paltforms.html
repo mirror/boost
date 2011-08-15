@@ -5,10 +5,6 @@
 <title>Boost.Locale: Tested Compilers and Platforms</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
-<!-- 
-    Switch the lines for stand alone version
-    <link rel="stylesheet" type="text/css" href="http://www.boost.org/style-v2/section-basic.css"> 
--->
 <link rel="stylesheet" type="text/css" href="../style/section-basic.css">
 </head>
 <body>
@@ -18,10 +14,6 @@
 
         <h1 class="heading-title">
             <a href="http://www.boost.org/">
-                <!-- 
-                    Switch the lines for stand alone version
-                    <img src="http://www.boost.org/gfx/space.png" alt= "Boost C++ Libraries" class="heading-logo" /> 
-                -->
                 <img src="../style/space.png" alt= "Boost C++ Libraries" class="heading-logo" />
                 <span class="heading-boost">Boost</span>
                 <span class="heading-cpplibraries">C++ Libraries</span>
@@ -69,48 +61,33 @@
 <h1>Tested Compilers and Platforms </h1>  </div>
 </div>
 <div class="contents">
-<table  border="1" cellpadding="5" cellspacing="3">
-<tr>
-<th>Platform</th><th>Compiler</th><th>Backends</th><th>ICU version</th><th>Notes  </th></tr>
-<tr>
-<td>Linux 2.6 x86_64</td><td>GCC-4.3</td><td>icu/posix/std</td><td>3.8, 4.4, 4.6</td><td>-  </td></tr>
-<tr>
-<td>Linux 2.6 x86</td><td>GCC-4.1</td><td>icu/posix/std</td><td>3.6</td><td>(not tested recently)  </td></tr>
-<tr>
-<td>Linux 2.6 x86_64</td><td>GCC-4.4</td><td>icu/posix/std</td><td>4.2</td><td>-  </td></tr>
-<tr>
-<td>Linux 2.6 x86_64</td><td>GCC-4.5/C++0x</td><td>icu/posix/std</td><td>3.8</td><td>-  </td></tr>
-<tr>
-<td>Linux 2.6 x86_64</td><td>GCC-4.6</td><td>icu/posix/std</td><td>4.2, 4.6</td><td>-  </td></tr>
-<tr>
-<td>Linux 2.6 x86_64</td><td>GCC-4.6/C++0x</td><td>icu/posix/std</td><td>4.2, 4.6</td><td>-  </td></tr>
-<tr>
-<td>Linux 2.6 x86_64</td><td>GCC-4.5/C++0x with char16_t/char32_t</td><td>icu</td><td>3.8 </td><td>Some charXX_t faults in formatting<br/>
- std backend can't be build<br/>
- Standard library issues   </td></tr>
-<tr>
-<td>Linux 2.6 x86_64</td><td>Intel 11.0</td><td>icu/posix/std</td><td>3.8</td><td>-  </td></tr>
-<tr>
-<td>Windows 7 32bit</td><td>MSVC 2010</td><td>icu/winapi/std</td><td>4.6</td><td>-  </td></tr>
-<tr>
-<td>Windows 7 32bit</td><td>MSVC 2010/C++0x with char16_t/char32_t</td><td>icu/winapi/std</td><td>4.6 </td><td>Multiple test faults, because char16_t/char32_t are not defined as distinct types as required by C++ standard.   </td></tr>
-<tr>
-<td>Windows XP 32bit</td><td>MSVC 2008</td><td>icu/winapi/std</td><td>4.2</td><td>-  </td></tr>
-<tr>
-<td>Windows XP 32bit</td><td>MinGW/GCC 4.5</td><td>icu/winapi/std</td><td>4.2</td><td>-  </td></tr>
-<tr>
-<td>Cygwin 1.7</td><td>GCC 4.3</td><td>icu/winapi/std</td><td>3.8</td><td>-  </td></tr>
-<tr>
-<td>Mac OS X 10.6.4</td><td>GCC-4.2</td><td>icu/posix/std</td><td>4.4</td><td>-  </td></tr>
-<tr>
-<td>FreeBSD 8.0</td><td>GCC-4.2.1</td><td>icu/std</td><td>3.8</td><td>-  </td></tr>
-<tr>
-<td>OpenSolaris/SunOS 5.11</td><td>GCC-3.4</td><td>icu/std</td><td>4.2</td><td>iconv is disabled  </td></tr>
-<tr>
-<td>OpenSolaris/SunOS 5.11</td><td>SunCC 5.10/STLport4</td><td>icu</td><td>4.2 </td><td>Some faults in collation, STLport issue<br/>
- iconv is disabled<br/>
- Boost-1.46.x requires patch for Boost.Thread, can be found in <code>libs/locale/build</code>   </td></tr>
-</table>
+<p>Following compilers are tested and known to work with Boost.Locale</p>
+<ul>
+<li>GCC 3.4 to 4.6</li>
+<li>Microsoft Visual Studio 2005 to 2010</li>
+<li>Intel 10 to 12</li>
+<li>Clang 2.8</li>
+<li>Path Scale 4</li>
+<li>Visual Age 10.1</li>
+</ul>
+<p>Following operating systems are tested with Boost.Locale</p>
+<ul>
+<li>Linux</li>
+<li>Windows</li>
+<li>FreeBSD</li>
+<li>Solaris</li>
+<li>Darwin</li>
+<li>Cygwin</li>
+<li>AIX</li>
+</ul>
+<h2><a class="anchor" id="tested_compilers_and_paltforms_issues"></a>
+Known Issues</h2>
+<ul>
+<li>Path Scale and MSVC 9 with STLPort has some test faults regarding invalid UTF-8 sequences in wide file I/O.</li>
+<li>The native iconv library on AIX platform does not support required character encodings, thus either ICU or GNU iconv library should be used.</li>
+<li>Mingw/GCC version 4.5 and above is required to support shared builds of Boost.Locale - versions that allow dynamic link with libstdc++ and libgcc. There is no problems with Cygwin's gcc-4.3 that provides shared versions of runtime libraries.</li>
+<li>In some cases the build system fails to link with iconv library on Darwin system, in such cases explicit path to the location of iconv library should be given using -sICONV_PATH build option. </li>
+</ul>
 </div>
 <hr class="footer"/><address class="footer"><small>
 &copy; Copyright 2009-2011 Artyom Beilis,  Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License</a>, Version 1.0.

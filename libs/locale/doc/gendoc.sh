@@ -8,4 +8,4 @@
 #
 
 
-rm -fr html/* && doxygen && cp index.template.html html/index.html
+rm html/* && doxygen && cp templates/index.template.html html/index.html
