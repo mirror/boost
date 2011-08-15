@@ -17,8 +17,6 @@
 
 namespace boost { namespace fusion
 {
-    struct segmented_iterator_tag;
-
     template<typename Nodes>
     struct segmented_iterator;
 
@@ -226,29 +224,6 @@ namespace boost { namespace fusion
                 return pop_front_car<Stack>::call(stack);
             }
         };
-    }
-
-    namespace extension
-    {
-        template<typename Tag>
-        struct next_impl;
-
-        template<>
-        struct next_impl<segmented_iterator_tag>
-        {
-            template<typename It>
-            struct apply
-            {
-                typedef detail::segmented_next_impl<typename It::nodes_type> impl;
-                typedef segmented_iterator<typename impl::type> type;
-
-                static type call(It const& it)
-                {
-                    return type(impl::call(it.nodes));
-                }
-            };
-        };
-
     }
 }}
 

@@ -7,22 +7,20 @@
 #if !defined(BOOST_FUSION_SEGMENTED_ITERATOR_RANGE_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_ITERATOR_RANGE_HPP_INCLUDED
 
-#include <boost/mpl/and.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/fusion/support/tag_of.hpp>
-#include <boost/fusion/include/begin.hpp>
-#include <boost/fusion/include/end.hpp>
-#include <boost/fusion/include/next.hpp>
-#include <boost/fusion/include/deref.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/sequence/intrinsic/end.hpp>
+#include <boost/fusion/iterator/next.hpp>
+#include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
-#include <boost/fusion/include/push_back.hpp>
-#include <boost/fusion/include/push_front.hpp>
-#include <boost/fusion/include/iterator_range.hpp>
-#include <boost/fusion/include/equal_to.hpp>
+#include <boost/fusion/algorithm/transformation/push_back.hpp>
+#include <boost/fusion/algorithm/transformation/push_front.hpp>
+#include <boost/fusion/view/iterator_range.hpp>
+#include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
 #include <boost/fusion/view/ext_/detail/reverse_cons.hpp>
 #include <boost/fusion/view/ext_/detail/segment_sequence.hpp>
@@ -35,6 +33,12 @@
 //  - The front of each range in the stack (besides the
 //    topmost) is the range above it
   
+namespace boost { namespace fusion
+{
+    template<typename Context>
+    struct segmented_iterator;
+}}
+
 namespace boost { namespace fusion { namespace detail
 {
     //auto make_segment_sequence_front(stack_begin)
@@ -508,13 +512,28 @@ namespace boost { namespace fusion { namespace extension
     template<>
     struct is_segmented_impl<iterator_range_tag>
     {
+    private:
         template<typename Iterator>
         struct is_segmented_iterator
-          : is_same<
-                segmented_iterator_tag,
-                typename traits::tag_of<Iterator>::type>
+          : mpl::false_
         {};
 
+        template<typename Iterator>
+        struct is_segmented_iterator<Iterator &>
+          : is_segmented_iterator<Iterator>
+        {};
+
+        template<typename Iterator>
+        struct is_segmented_iterator<Iterator const>
+          : is_segmented_iterator<Iterator>
+        {};
+
+        template<typename Context>
+        struct is_segmented_iterator<segmented_iterator<Context> >
+          : mpl::true_
+        {};
+
+    public:
         template<typename Sequence>
         struct apply
           : is_segmented_iterator<typename Sequence::begin_type>

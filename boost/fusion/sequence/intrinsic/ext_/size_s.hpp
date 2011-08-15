@@ -13,7 +13,10 @@
 #include <boost/mpl/plus.hpp>
 #include <boost/mpl/size_t.hpp>
 #include <boost/mpl/placeholders.hpp>
-#include <boost/fusion/mpl.hpp>
+#include <boost/fusion/mpl/begin.hpp>
+#include <boost/fusion/mpl/end.hpp>
+#include <boost/fusion/mpl/clear.hpp>
+#include <boost/fusion/mpl/push_front.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/support/ext_/is_segmented.hpp>
