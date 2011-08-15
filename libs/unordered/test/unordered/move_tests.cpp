@@ -153,10 +153,15 @@ namespace move_tests
             T y(create(v, count, hf, eq, al, 1.0), al);
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
             BOOST_TEST(count == test::global_object_count);
-#else
+#elif defined(BOOST_HAS_NRVO)
             BOOST_TEST(
                 test::global_object_count.constructions - count.constructions <=
                 (test::is_map<T>::value ? 50 : 25));
+            BOOST_TEST(count.instances == test::global_object_count.instances);
+#else
+            BOOST_TEST(
+                test::global_object_count.constructions - count.constructions <=
+                (test::is_map<T>::value ? 100 : 50));
             BOOST_TEST(count.instances == test::global_object_count.instances);
 #endif
             test::check_container(y, v);
@@ -188,7 +193,7 @@ namespace move_tests
             test::check_container(y, v2);
             test::check_equivalent_keys(y);
             BOOST_TEST(y.max_load_factor() == 2.0);
-            if (test::is_propagate_on_move<allocator_type>::value) {
+            if (allocator_type::is_propagate_on_move) {
                 BOOST_TEST(test::equivalent(y.get_allocator(), al2));
             }
             else {
@@ -202,14 +207,14 @@ namespace move_tests
             T y(0, hf, eq, al1);
             y = create(v, count, hf, eq, al2, 0.5);
 #if defined(BOOST_HAS_NRVO)
-            if (test::is_propagate_on_move<allocator_type>::value) {
+            if (allocator_type::is_propagate_on_move) {
                 BOOST_TEST(count == test::global_object_count);
             }
 #endif
             test::check_container(y, v);
             test::check_equivalent_keys(y);
             BOOST_TEST(y.max_load_factor() == 0.5);
-            if (test::is_propagate_on_move<allocator_type>::value) {
+            if (allocator_type::is_propagate_on_move) {
                 BOOST_TEST(test::equivalent(y.get_allocator(), al2));
             }
             else {

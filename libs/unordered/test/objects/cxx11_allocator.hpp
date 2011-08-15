@@ -15,39 +15,63 @@
 
 namespace test
 {
-    enum allocator_flags
+    struct allocator_false
     {
-        allocator_false = 0,
-        select_copy = 1,
-        propagate_swap = 2,
-        propagate_assign = 4,
-        propagate_move = 8,
-        allocator_flags_all = 15,
-        no_select_copy = allocator_flags_all - select_copy,
-        no_propagate_swap = allocator_flags_all - propagate_swap,
-        no_propagate_assign = allocator_flags_all - propagate_assign,
-        no_propagate_move = allocator_flags_all - propagate_move
+        enum {
+            is_select_on_copy = 0,
+            is_propagate_on_swap = 0,
+            is_propagate_on_assign = 0,
+            is_propagate_on_move = 0
+        };
+    };
+
+    struct allocator_flags_all
+    {
+        enum {
+            is_select_on_copy = 1,
+            is_propagate_on_swap = 1,
+            is_propagate_on_assign = 1,
+            is_propagate_on_move = 1
+        };
     };
     
-    template <int Flag>
+    struct select_copy : allocator_false
+    { enum { is_select_on_copy = 1 }; };
+    struct propagate_swap : allocator_false
+    { enum { is_propagate_on_swap = 1 }; };
+    struct propagate_assign : allocator_false
+    { enum { is_propagate_on_assign = 1 }; };
+    struct propagate_move : allocator_false
+    { enum { is_propagate_on_move = 1 }; };
+
+    struct no_select_copy : allocator_flags_all
+    { enum { is_select_on_copy = 0 }; };
+    struct no_propagate_swap : allocator_flags_all
+    { enum { is_propagate_on_swap = 0 }; };
+    struct no_propagate_assign : allocator_flags_all
+    { enum { is_propagate_on_assign = 0 }; };
+    struct no_propagate_move : allocator_flags_all
+    { enum { is_propagate_on_move = 0 }; };
+    
+    template <typename Flag>
     struct swap_allocator_base
     {
         struct propagate_on_container_swap {
-            enum { value = Flag != allocator_false }; };
+            enum { value = Flag::is_propagate_on_swap }; };
     };
 
-    template <int Flag>
+    template <typename Flag>
     struct assign_allocator_base
     {
         struct propagate_on_container_copy_assignment {
-            enum { value = Flag != allocator_false }; };
+            enum { value = Flag::is_propagate_on_assign }; };
     };
 
-    template <int Flag>
+    template <typename Flag>
     struct move_allocator_base
     {
         struct propagate_on_container_move_assignment {
-            enum { value = Flag != allocator_false }; };
+            enum { value = Flag::is_propagate_on_move }; };
     };
 
     namespace
@@ -161,13 +185,14 @@ namespace test
         }
     };
 
-    template <typename T, allocator_flags Flags = propagate_swap,
-        bool SelectCopy = (Flags & select_copy) ? true : false>
+    template <typename T, typename Flags = propagate_swap,
+        bool SelectCopy = Flags::is_select_on_copy ? true : false>
     struct cxx11_allocator :
         public cxx11_allocator_base<T>,
-        public swap_allocator_base<Flags & propagate_swap>,
-        public assign_allocator_base<Flags & propagate_assign>,
-        public move_allocator_base<Flags & propagate_move>
+        public swap_allocator_base<Flags>,
+        public assign_allocator_base<Flags>,
+        public move_allocator_base<Flags>,
+        Flags
     {
         template <typename U> struct rebind {
             typedef cxx11_allocator<U, Flags> other;
@@ -202,12 +227,13 @@ namespace test
         }
     };
 
-    template <typename T, allocator_flags Flags>
+    template <typename T, typename Flags>
     struct cxx11_allocator<T, Flags, true> : 
         public cxx11_allocator_base<T>,
-        public swap_allocator_base<Flags & propagate_swap>,
-        public assign_allocator_base<Flags & propagate_assign>,
-        public move_allocator_base<Flags & propagate_move>
+        public swap_allocator_base<Flags>,
+        public assign_allocator_base<Flags>,
+        public move_allocator_base<Flags>,
+        Flags
     {
         cxx11_allocator select_on_container_copy_construction() const
         {
@@ -249,7 +275,7 @@ namespace test
         }
     };
 
-    template <typename T, allocator_flags Flags>
+    template <typename T, typename Flags>
     bool equivalent_impl(
             cxx11_allocator<T, Flags> const& x,
             cxx11_allocator<T, Flags> const& y,
@@ -258,20 +284,7 @@ namespace test
         return x.tag_ == y.tag_;
     }
 
-    template <typename T, allocator_flags Flags>
-    struct is_select_on_copy<cxx11_allocator<T, Flags> >
-        : bool_type<(Flags & select_copy) ? true : false> {};
-    template <typename T, allocator_flags Flags>
-    struct is_propagate_on_swap<cxx11_allocator<T, Flags> >
-        : bool_type<(Flags & propagate_swap) ? true : false> {};
-    template <typename T, allocator_flags Flags>
-    struct is_propagate_on_assign<cxx11_allocator<T, Flags> >
-        : bool_type<(Flags & propagate_assign) ? true : false> {};
-    template <typename T, allocator_flags Flags>
-    struct is_propagate_on_move<cxx11_allocator<T, Flags> >
-        : bool_type<(Flags & propagate_move) ? true : false> {};
-
-    template <typename T, allocator_flags Flags>
+    template <typename T, typename Flags>
     int selected_count(cxx11_allocator<T, Flags> const& x)
     {
         return x.selected_;

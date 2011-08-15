@@ -113,14 +113,14 @@ void swap_tests2(X* ptr = 0,
 
     {
         test::force_equal_allocator force_(
-            !test::is_propagate_on_swap<allocator_type>::value);
+            !allocator_type::is_propagate_on_swap);
         test::check_instances check_;
 
         test::random_values<X> vx(50, generator), vy(100, generator);
         X x(vx.begin(), vx.end(), 0, hasher(), key_equal(), allocator_type(1));
         X y(vy.begin(), vy.end(), 0, hasher(), key_equal(), allocator_type(2));
 
-        if (test::is_propagate_on_swap<allocator_type>::value ||
+        if (allocator_type::is_propagate_on_swap ||
             x.get_allocator() == y.get_allocator())
         {
             swap_test_impl(x, y);
@@ -129,7 +129,7 @@ void swap_tests2(X* ptr = 0,
 
     {
         test::force_equal_allocator force_(
-            !test::is_propagate_on_swap<allocator_type>::value);
+            !allocator_type::is_propagate_on_swap);
         test::check_instances check_;
 
         test::random_values<X> vx(100, generator), vy(100, generator);
@@ -138,7 +138,7 @@ void swap_tests2(X* ptr = 0,
         X y(vy.begin(), vy.end(), 0, hasher(2), key_equal(2),
             allocator_type(2));
 
-        if (test::is_propagate_on_swap<allocator_type>::value ||
+        if (allocator_type::is_propagate_on_swap ||
             x.get_allocator() == y.get_allocator())
         {
             swap_test_impl(x, y);
@@ -193,6 +193,19 @@ boost::unordered_multimap<test::object, test::object,
         test::hash, test::equal_to,
         test::cxx11_allocator<test::object, test::no_propagate_swap> >*
     test_multimap_no_prop_swap;
+
+template <typename T>
+bool is_propagate(T*)
+{
+    return T::allocator_type::is_propagate_on_swap;
+}
+
+UNORDERED_AUTO_TEST(check_traits)
+{
+    BOOST_TEST(!is_propagate(test_set));
+    BOOST_TEST(is_propagate(test_set_prop_swap));
+    BOOST_TEST(!is_propagate(test_set_no_prop_swap));
+}
 
 UNORDERED_TEST(swap_tests1, (
     (test_set)(test_multiset)(test_map)(test_multimap)

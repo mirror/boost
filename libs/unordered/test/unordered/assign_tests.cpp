@@ -99,7 +99,7 @@ void assign_tests2(T*,
         x2 = x1;
         BOOST_TEST(test::equivalent(x2.hash_function(), hf1));
         BOOST_TEST(test::equivalent(x2.key_eq(), eq1));
-        if (test::is_propagate_on_assign<allocator_type>::value) {
+        if (allocator_type::is_propagate_on_assign) {
             BOOST_TEST(test::equivalent(x2.get_allocator(), al1));
             BOOST_TEST(!test::equivalent(x2.get_allocator(), al2));
         }
@@ -160,6 +160,19 @@ boost::unordered_multimap<test::object, test::object,
 
 using test::default_generator;
 using test::generate_collisions;
+
+template <typename T>
+bool is_propagate(T*)
+{
+    return T::allocator_type::is_propagate_on_assign;
+}
+
+UNORDERED_AUTO_TEST(check_traits)
+{
+    BOOST_TEST(!is_propagate(test_set));
+    BOOST_TEST(is_propagate(test_set_prop_assign));
+    BOOST_TEST(!is_propagate(test_set_no_prop_assign));
+}
 
 UNORDERED_TEST(assign_tests1, (
         (test_set)(test_multiset)(test_map)(test_multimap)

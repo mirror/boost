@@ -284,6 +284,13 @@ namespace test
         {
             return tag_ != x.tag_;
         }
+
+        enum {
+            is_select_on_copy = false,
+            is_propagate_on_swap = false,
+            is_propagate_on_assign = false,
+            is_propagate_on_move = false
+        };
     };
 
     template <class T>

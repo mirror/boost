@@ -201,9 +201,9 @@ namespace unnecessary_copy_tests
         COPY_COUNT(1); MOVE_COUNT(0);
         x.emplace(boost::move(a));
 #if defined(BOOST_NO_RVALUE_REFERENCES)
-        COPY_COUNT(1); MOVE_COUNT(1);
-#else
         COPY_COUNT(2); MOVE_COUNT(0);
+#else
+        COPY_COUNT(1); MOVE_COUNT(1);
 #endif
     }
 
@@ -227,11 +227,11 @@ namespace unnecessary_copy_tests
         reset();
         x.emplace();
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+        COPY_COUNT(1); MOVE_COUNT(0);
+#else
         // TODO: I think that in this case the move could be delayed until
         // after checking for a collision, giving MOVE_COUNT(0).
         COPY_COUNT(1); MOVE_COUNT(1);
-#else
-        COPY_COUNT(1); MOVE_COUNT(0);
 #endif
 
         //

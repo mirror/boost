@@ -41,7 +41,7 @@ void copy_construct_tests1(T*,
         BOOST_TEST(test::equivalent(y.get_allocator(), al));
         BOOST_TEST(x.max_load_factor() == y.max_load_factor());
         BOOST_TEST(test::selected_count(y.get_allocator()) ==
-            (test::is_select_on_copy<allocator_type>::value ? 1 : 0));
+            (allocator_type::is_select_on_copy));
         test::check_equivalent_keys(y);
     }
 
@@ -55,7 +55,7 @@ void copy_construct_tests1(T*,
         test::unordered_equivalence_tester<T> equivalent(x);
         BOOST_TEST(equivalent(y));
         BOOST_TEST(test::selected_count(y.get_allocator()) ==
-            (test::is_select_on_copy<allocator_type>::value ? 1 : 0));
+            (allocator_type::is_select_on_copy));
         test::check_equivalent_keys(y);
     }
 
@@ -75,7 +75,7 @@ void copy_construct_tests1(T*,
         // This isn't guaranteed:
         BOOST_TEST(y.load_factor() < y.max_load_factor());
         BOOST_TEST(test::selected_count(y.get_allocator()) ==
-            (test::is_select_on_copy<allocator_type>::value ? 1 : 0));
+            (allocator_type::is_select_on_copy));
         test::check_equivalent_keys(y);
     }
 }
@@ -104,7 +104,7 @@ void copy_construct_tests2(T* ptr,
         BOOST_TEST(test::equivalent(y.get_allocator(), al));
         BOOST_TEST(x.max_load_factor() == y.max_load_factor());
         BOOST_TEST(test::selected_count(y.get_allocator()) ==
-            (test::is_select_on_copy<allocator_type>::value ? 1 : 0));
+            (allocator_type::is_select_on_copy));
         test::check_equivalent_keys(y);
     }
 
@@ -133,7 +133,7 @@ void copy_construct_tests2(T* ptr,
         BOOST_TEST(equivalent(y));
         test::check_equivalent_keys(y);
         BOOST_TEST(test::selected_count(y.get_allocator()) ==
-            (test::is_select_on_copy<allocator_type>::value ? 1 : 0));
+            (allocator_type::is_select_on_copy));
         BOOST_TEST(test::equivalent(y.get_allocator(), al));
     }
 
