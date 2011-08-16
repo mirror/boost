@@ -792,6 +792,7 @@ EOL;
                 <para>This is not specified in the draft standard, but that is probably an oversight. The issue has been raised in
                   <ulink url="http://groups.google.com/group/comp.std.c++/browse_thread/thread/ab7c22a868fd370b">comp.std.c++</ulink>.</para>
               </notes>
+            </overloaded-method>
 <?php endif; ?>
           </method-group>
           <method-group name="bucket interface">
