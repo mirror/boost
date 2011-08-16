@@ -18,8 +18,8 @@
 #include <boost/fusion/mpl/clear.hpp>
 #include <boost/fusion/mpl/push_front.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/support/ext_/is_segmented.hpp>
+#include <boost/fusion/sequence/intrinsic/segments.hpp>
+#include <boost/fusion/support/is_segmented.hpp>
 
 namespace boost { namespace fusion
 {

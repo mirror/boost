@@ -13,8 +13,8 @@
 #include <boost/fusion/view/iterator_range.hpp>
 #include <boost/fusion/container/list/cons.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/support/ext_/is_segmented.hpp>
+#include <boost/fusion/sequence/intrinsic/segments.hpp>
+#include <boost/fusion/support/is_segmented.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {

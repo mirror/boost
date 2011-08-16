@@ -15,15 +15,15 @@
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/deref.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segmented_size.hpp>
+#include <boost/fusion/sequence/intrinsic/segments.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_size.hpp>
 #include <boost/fusion/algorithm/transformation/push_back.hpp>
 #include <boost/fusion/algorithm/transformation/push_front.hpp>
 #include <boost/fusion/view/iterator_range.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
-#include <boost/fusion/view/ext_/segmented_iterator.hpp>
-#include <boost/fusion/view/ext_/detail/reverse_cons.hpp>
-#include <boost/fusion/view/ext_/detail/segment_sequence.hpp>
+#include <boost/fusion/iterator/segmented_iterator.hpp>
+#include <boost/fusion/container/list/detail/reverse_cons.hpp>
+#include <boost/fusion/iterator/segmented_iterator/detail/segment_sequence.hpp>
 
 //  Invariants:
 //  - Each segmented iterator has a stack

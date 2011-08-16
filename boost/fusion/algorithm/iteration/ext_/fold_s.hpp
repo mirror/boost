@@ -8,7 +8,7 @@
 #define BOOST_FUSION_FOLD_S_HPP_INCLUDED
 
 #include <boost/fusion/algorithm/iteration/fold.hpp>
-#include <boost/fusion/view/ext_/segmented_fold_until.hpp>
+#include <boost/fusion/support/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {

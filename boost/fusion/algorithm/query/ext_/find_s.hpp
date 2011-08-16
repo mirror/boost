@@ -10,7 +10,7 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/fusion/algorithm/query/find.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/view/ext_/segmented_fold_until.hpp>
+#include <boost/fusion/support/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {

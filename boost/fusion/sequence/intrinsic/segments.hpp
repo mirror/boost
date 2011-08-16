@@ -11,6 +11,10 @@
 
 namespace boost { namespace fusion
 {
+    // Special tags:
+    struct sequence_facade_tag;
+    struct iterator_range_tag;
+
     // segments: returns a sequence of sequences
     namespace extension
     {
@@ -20,6 +24,16 @@ namespace boost { namespace fusion
             template <typename Sequence>
             struct apply {};
         };
+
+        template <>
+        struct segments_impl<sequence_facade_tag>
+        {
+            template <typename Sequence>
+            struct apply : Sequence::template segments<Sequence> {};
+        }; 
+
+        template <>
+        struct segments_impl<iterator_range_tag>;
     }
 
     namespace result_of

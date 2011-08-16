@@ -12,7 +12,7 @@
 #include <boost/fusion/container/ext_/tree.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
-#include <boost/fusion/view/ext_/segmented_iterator_range.hpp>
+#include <boost/fusion/view/iterator_range/detail/segmented_iterator_range.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>

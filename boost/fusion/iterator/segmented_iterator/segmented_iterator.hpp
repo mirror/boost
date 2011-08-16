@@ -4,8 +4,8 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_FUSION_SEGMENTED_ITERATOR_HPP_INCLUDED)
-#define BOOST_FUSION_SEGMENTED_ITERATOR_HPP_INCLUDED
+#if !defined(BOOST_FUSION_SEGMENTED_ITERATOR_SEGMENTED_ITERATOR_HPP_INCLUDED)
+#define BOOST_FUSION_SEGMENTED_ITERATOR_SEGMENTED_ITERATOR_HPP_INCLUDED
 
 #include <boost/mpl/equal.hpp>
 #include <boost/mpl/transform.hpp>
@@ -18,9 +18,9 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
-#include <boost/fusion/view/ext_/detail/next_impl.hpp>
-#include <boost/fusion/view/ext_/segmented_begin.hpp>
-#include <boost/fusion/view/ext_/segmented_end.hpp>
+#include <boost/fusion/iterator/segmented_iterator/detail/next_impl.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_begin.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_end.hpp>
 #include <boost/fusion/container/vector/convert.hpp>
 
 namespace boost { namespace fusion

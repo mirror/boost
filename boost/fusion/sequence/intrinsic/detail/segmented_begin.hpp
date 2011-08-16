@@ -7,7 +7,7 @@
 #if !defined(BOOST_FUSION_SEGMENTED_BEGIN_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_BEGIN_HPP_INCLUDED
 
-#include <boost/fusion/view/ext_/detail/begin_impl.hpp>
+#include <boost/fusion/iterator/segmented_iterator/detail/begin_impl.hpp>
 
 namespace boost { namespace fusion
 {

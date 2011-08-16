@@ -24,8 +24,8 @@
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/iterator/next.hpp>
-#include <boost/fusion/support/ext_/is_segmented.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
+#include <boost/fusion/support/is_segmented.hpp>
+#include <boost/fusion/sequence/intrinsic/segments.hpp>
 
 // fun(rng, state, context)
 //  rng: a non-segmented range

@@ -13,24 +13,27 @@ namespace boost { namespace fusion
 {
     // Special tags:
     struct sequence_facade_tag;
-    struct boost_tuple_tag; // boost::tuples::tuple tag
-    struct boost_array_tag; // boost::array tag
-    struct mpl_sequence_tag; // mpl sequence tag
-    struct std_pair_tag; // std::pair tag
     struct iterator_range_tag;
 
     namespace extension
     {
-        template<typename Tag>
+        template <typename Tag>
         struct is_segmented_impl
         {
-            template<typename Sequence>
+            template <typename Sequence>
             struct apply
               : mpl::false_
             {};
         };
 
-        template<>
+        template <>
+        struct is_segmented_impl<sequence_facade_tag>
+        {
+            template <typename Sequence>
+            struct apply : Sequence::is_segmented {};
+        };
+
+        template <>
         struct is_segmented_impl<iterator_range_tag>;
     }
 

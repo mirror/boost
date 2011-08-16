@@ -9,7 +9,7 @@
 
 #include <boost/fusion/support/void.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
-#include <boost/fusion/view/ext_/segmented_fold_until.hpp>
+#include <boost/fusion/support/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {

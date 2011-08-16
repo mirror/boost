@@ -8,7 +8,7 @@
 #define BOOST_FUSION_SEGMENTED_END_HPP_INCLUDED
 
 #include <boost/fusion/container/list/cons.hpp>
-#include <boost/fusion/view/ext_/detail/end_impl.hpp>
+#include <boost/fusion/iterator/segmented_iterator/detail/end_impl.hpp>
 
 namespace boost { namespace fusion
 {

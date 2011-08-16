@@ -13,9 +13,9 @@
 #include <boost/fusion/container/generation/make_cons.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/support/ext_/is_segmented.hpp>
-#include <boost/fusion/view/ext_/detail/end_impl.hpp>
-#include <boost/fusion/view/ext_/segmented_fold_until.hpp>
+#include <boost/fusion/support/is_segmented.hpp>
+#include <boost/fusion/iterator/segmented_iterator/detail/end_impl.hpp>
+#include <boost/fusion/support/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {

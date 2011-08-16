@@ -19,12 +19,12 @@
 #include <boost/fusion/container/vector/vector10.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/category_of.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
-#include <boost/fusion/sequence/intrinsic/ext_/segmented_size.hpp>
-#include <boost/fusion/support/ext_/is_segmented.hpp>
-#include <boost/fusion/view/ext_/segmented_iterator.hpp>
-#include <boost/fusion/view/ext_/segmented_begin.hpp>
-#include <boost/fusion/view/ext_/segmented_end.hpp>
+#include <boost/fusion/sequence/intrinsic/segments.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_size.hpp>
+#include <boost/fusion/support/is_segmented.hpp>
+#include <boost/fusion/iterator/segmented_iterator.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_begin.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_end.hpp>
 
 namespace boost { namespace fusion
 {

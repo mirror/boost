@@ -13,7 +13,7 @@
 #include <boost/fusion/container/list/cons.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/deref.hpp>
-#include <boost/fusion/view/ext_/detail/begin_impl.hpp>
+#include <boost/fusion/iterator/segmented_iterator/detail/begin_impl.hpp>
 
 namespace boost { namespace fusion
 {
