@@ -11,6 +11,8 @@
 #define BOOST_UNORDERED_OBJECTS_MINIMAL_HEADER
 
 #include <cstddef>
+#include <boost/move/move.hpp>
+#include <utility>
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
@@ -134,6 +136,38 @@ namespace minimal
         // TODO: This messes up a concept check in the tests.
         //ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
+
+    struct movable_init {};
+
+    class movable1
+    {
+        BOOST_MOVABLE_BUT_NOT_COPYABLE(movable1)
+
+    public:
+        movable1(constructor_param const&) {}
+        movable1() {}
+        explicit movable1(movable_init) {}
+        movable1(BOOST_RV_REF(movable1)) {}
+        movable1& operator=(BOOST_RV_REF(movable1));
+        ~movable1() {}
+    };
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+    class movable2
+    {
+    public:
+        movable2(constructor_param const&) {}
+        explicit movable2(movable_init) {}
+        movable2(movable2&&) {}
+        ~movable2() {}
+    private:
+        movable2() {}
+        movable2(movable2 const&);
+        movable2& operator=(movable2 const&);
+    };
+#else
+    typedef movable1 movable2;
+#endif
 
     template <class T>
     class hash
