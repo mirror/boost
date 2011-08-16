@@ -41,7 +41,9 @@ template class boost::unordered_multiset<
 
 UNORDERED_AUTO_TEST(test0)
 {
-    test::minimal::assignable assignable = test::minimal::assignable::create();
+    test::minimal::constructor_param x;
+
+    test::minimal::assignable assignable(x);
 
     std::cout<<"Test unordered_set.\n";
 
@@ -163,14 +165,12 @@ UNORDERED_AUTO_TEST(test1)
 
 UNORDERED_AUTO_TEST(test2)
 {
-    test::minimal::assignable assignable
-        = test::minimal::assignable::create();
-    test::minimal::copy_constructible copy_constructible
-        = test::minimal::copy_constructible::create();
-    test::minimal::hash<test::minimal::assignable> hash
-        = test::minimal::hash<test::minimal::assignable>::create();
-    test::minimal::equal_to<test::minimal::assignable> equal_to
-        = test::minimal::equal_to<test::minimal::assignable>::create();
+    test::minimal::constructor_param x;
+ 
+    test::minimal::assignable assignable(x);
+    test::minimal::copy_constructible copy_constructible(x);
+    test::minimal::hash<test::minimal::assignable> hash(x);
+    test::minimal::equal_to<test::minimal::assignable> equal_to(x);
 
     std::cout<<"Test unordered_set.\n";
 
@@ -195,6 +195,33 @@ UNORDERED_AUTO_TEST(test2)
     unordered_equivalent_test(multiset, assignable);
     unordered_set_test(multiset, assignable);
     unordered_test(multiset, assignable, assignable, hash, equal_to);
+}
+
+UNORDERED_AUTO_TEST(destructible_tests)
+{
+    test::minimal::constructor_param x;
+
+    test::minimal::destructible destructible(x);
+    test::minimal::hash<test::minimal::destructible> hash(x);
+    test::minimal::equal_to<test::minimal::destructible> equal_to(x);
+
+    std::cout<<"Test unordered_set.\n";
+
+    boost::unordered_set<
+        test::minimal::destructible,
+        test::minimal::hash<test::minimal::destructible>,
+        test::minimal::equal_to<test::minimal::destructible> > set;
+
+    unordered_destructible_test(set);
+
+    std::cout<<"Test unordered_multiset.\n";
+
+    boost::unordered_multiset<
+        test::minimal::destructible,
+        test::minimal::hash<test::minimal::destructible>,
+        test::minimal::equal_to<test::minimal::destructible> > multiset;
+
+    unordered_destructible_test(multiset);
 }
 
 RUN_TESTS()

@@ -21,6 +21,7 @@ namespace test
 {
 namespace minimal
 {
+    class destructible;
     class copy_constructible;
     class copy_constructible_equality_comparable;
     class default_copy_constructible;
@@ -35,10 +36,25 @@ namespace minimal
     template <class T> class allocator;
     template <class T> class cxx11_allocator;
 
+    struct constructor_param
+    {
+        operator int() const { return 0; }
+    };
+
+    class destructible
+    {
+    public:
+        destructible(constructor_param const&) {}
+        ~destructible() {}
+    private:
+        destructible(destructible const&);
+        destructible& operator=(destructible const&);
+    };
+
     class copy_constructible
     {
     public:
-        static copy_constructible create() { return copy_constructible(); }
+        copy_constructible(constructor_param const&) {}
         copy_constructible(copy_constructible const&) {}
         ~copy_constructible() {}
     private:
@@ -49,9 +65,7 @@ namespace minimal
     class copy_constructible_equality_comparable
     {
     public:
-        static copy_constructible_equality_comparable create() {
-            return copy_constructible_equality_comparable();
-        }
+        copy_constructible_equality_comparable(constructor_param const&) {}
 
         copy_constructible_equality_comparable(
             copy_constructible_equality_comparable const&)
@@ -86,10 +100,7 @@ namespace minimal
     class default_copy_constructible
     {
     public:
-        static default_copy_constructible create()
-        {
-            return default_copy_constructible();
-        }
+        default_copy_constructible(constructor_param const&) {}
 
         default_copy_constructible()
         {
@@ -106,13 +117,14 @@ namespace minimal
     private:
         default_copy_constructible& operator=(
             default_copy_constructible const&);
-        ampersand_operator_used operator&() const { return ampersand_operator_used(); }
+        ampersand_operator_used operator&() const {
+            return ampersand_operator_used(); }
     };
 
     class assignable
     {
     public:
-        static assignable create() { return assignable(); }
+        assignable(constructor_param const&) {}
         assignable(assignable const&) {}
         assignable& operator=(assignable const&) { return *this; }
         ~assignable() {}
@@ -127,7 +139,7 @@ namespace minimal
     class hash
     {
     public:
-        static hash create() { return hash<T>(); }
+        hash(constructor_param const&) {}
         hash() {}
         hash(hash const&) {}
         hash& operator=(hash const&) { return *this; }
@@ -142,7 +154,7 @@ namespace minimal
     class equal_to
     {
     public:
-        static equal_to create() { return equal_to<T>(); }
+        equal_to(constructor_param const&) {}
         equal_to() {}
         equal_to(equal_to const&) {}
         equal_to& operator=(equal_to const&) { return *this; }

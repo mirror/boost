@@ -28,6 +28,7 @@ typedef long double comparison_type;
 
 template <class T> void sink(T const&) {}
 template <class T> T rvalue(T const& v) { return v; }
+template <class T> T rvalue_default() { return T(); }
 
 template <class X, class T>
 void container_test(X& r, T const&)
@@ -109,15 +110,48 @@ void container_test(X& r, T const&)
     BOOST_TEST(X().size() == 0);
 
     X a,b;
+    X a_const;
 
     sink(X(a));
     X u2(a);
     X u3 = a;
 
+    a.swap(b);
+    boost::swap(a, b);
+    test::check_return_type<X>::equals_ref(r = a);
+
+    // Allocator
+
+    typedef BOOST_DEDUCED_TYPENAME X::allocator_type allocator_type;
+    test::check_return_type<allocator_type>::equals(a_const.get_allocator());
+    
+    // Avoid unused variable warnings:
+
+    sink(u);
+    sink(u2);
+    sink(u3);
+}
+
+template <class X>
+void unordered_destructible_test(X&)
+{
+    typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
+    typedef BOOST_DEDUCED_TYPENAME X::const_iterator const_iterator;
+    typedef BOOST_DEDUCED_TYPENAME X::size_type size_type;
+
+    X x1;
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+    X x2(rvalue_default<X>());
+    X x3 = rvalue_default<X>();
+    x2 = rvalue_default<X>();
+#endif
+
     X* ptr = new X();
     X& a1 = *ptr;
     (&a1)->~X();
 
+    X a,b;
     X const a_const;
     test::check_return_type<iterator>::equals(a.begin());
     test::check_return_type<const_iterator>::equals(a_const.begin());
@@ -130,7 +164,7 @@ void container_test(X& r, T const&)
 
     a.swap(b);
     boost::swap(a, b);
-    test::check_return_type<X>::equals_ref(r = a);
+ 
     test::check_return_type<size_type>::equals(a.size());
     test::check_return_type<size_type>::equals(a.max_size());
     test::check_return_type<bool>::convertible(a.empty());
@@ -139,12 +173,6 @@ void container_test(X& r, T const&)
 
     typedef BOOST_DEDUCED_TYPENAME X::allocator_type allocator_type;
     test::check_return_type<allocator_type>::equals(a_const.get_allocator());
-    
-    // Avoid unused variable warnings:
-
-    sink(u);
-    sink(u2);
-    sink(u3);
 }
 
 template <class X, class Key>
@@ -215,8 +243,10 @@ void unordered_map_functions(X&, Key const& k, T const&)
 }
 
 template <class X, class Key, class T, class Hash, class Pred>
-void unordered_test(X&, Key& k, T& t, Hash& hf, Pred& eq)
+void unordered_test(X& x, Key& k, T& t, Hash& hf, Pred& eq)
 {
+    unordered_destructible_test(x);
+
     typedef BOOST_DEDUCED_TYPENAME X::key_type key_type;
     typedef BOOST_DEDUCED_TYPENAME X::hasher hasher;
     typedef BOOST_DEDUCED_TYPENAME X::key_equal key_equal;

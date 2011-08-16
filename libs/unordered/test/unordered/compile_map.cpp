@@ -45,11 +45,11 @@ template class boost::unordered_multimap<
 
 UNORDERED_AUTO_TEST(test0)
 {
+    test::minimal::constructor_param x;
+
     typedef std::pair<test::minimal::assignable const,
             test::minimal::copy_constructible> value_type;
-    value_type value(
-            test::minimal::assignable::create(),
-            test::minimal::copy_constructible::create());
+    value_type value(x, x);
 
     std::cout<<"Test unordered_map.\n";
 
@@ -179,14 +179,12 @@ UNORDERED_AUTO_TEST(test1) {
 
 UNORDERED_AUTO_TEST(test2)
 {
-    test::minimal::assignable assignable
-        = test::minimal::assignable::create();
-    test::minimal::copy_constructible copy_constructible
-        = test::minimal::copy_constructible::create();
-    test::minimal::hash<test::minimal::assignable> hash
-        = test::minimal::hash<test::minimal::assignable>::create();
-    test::minimal::equal_to<test::minimal::assignable> equal_to
-        = test::minimal::equal_to<test::minimal::assignable>::create();
+    test::minimal::constructor_param x;
+
+    test::minimal::assignable assignable(x);
+    test::minimal::copy_constructible copy_constructible(x);
+    test::minimal::hash<test::minimal::assignable> hash(x);
+    test::minimal::equal_to<test::minimal::assignable> equal_to(x);
 
     typedef std::pair<test::minimal::assignable const,
             test::minimal::copy_constructible> map_value_type;
