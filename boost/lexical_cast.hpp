@@ -1687,7 +1687,8 @@ namespace boost
                         interpreter(buf, buf + src_len);
 
                 Target result;
-                if(!(interpreter << arg && interpreter >> result))
+                // Disabling ADL, by directly specifying operators.
+                if(!(interpreter.operator <<(arg) && interpreter.operator >>(result)))
                   BOOST_LCAST_THROW_BAD_CAST(Source, Target);
                 return result;
             }

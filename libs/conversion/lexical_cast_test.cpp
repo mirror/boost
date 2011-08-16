@@ -99,6 +99,7 @@ void test_allocator();
 void test_wallocator();
 #endif
 void test_char_types_conversions();
+void operators_overload_test();
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
@@ -140,6 +141,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 #endif
 
     suite->add(BOOST_TEST_CASE(&test_char_types_conversions));
+    suite->add(BOOST_TEST_CASE(&operators_overload_test));
 
     return suite;
 }
@@ -958,7 +960,33 @@ void test_char_types_conversions()
 
 
 
+struct foo_operators_test
+{
+  foo_operators_test() : f(2) {}
+  int f;
+};
 
+template <typename OStream>
+OStream& operator<<(OStream& ostr, const foo_operators_test& foo)
+{
+  ostr << foo.f;
+  return ostr;
+}
 
+template <typename IStream>
+IStream& operator>>(IStream& istr, foo_operators_test& foo)
+{
+  istr >> foo.f;
+  return istr;
+}
 
+void operators_overload_test()
+{
+    foo_operators_test foo;
+    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(foo), "2");
+    BOOST_CHECK_EQUAL((boost::lexical_cast<foo_operators_test>("2")).f, 2);
+
+    // Must compile
+    (void)boost::lexical_cast<foo_operators_test>(foo);
+}
 
