@@ -5,11 +5,11 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
+#include <sstream>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/algorithm/iteration/ext_/for_each_s.hpp>
 #include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/container/ext_/tree.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/view/iterator_range/detail/segmented_iterator_range.hpp>
@@ -20,7 +20,7 @@
 #include <boost/mpl/begin.hpp>
 #include <boost/mpl/next.hpp>
 #include <boost/static_assert.hpp>
-#include <sstream>
+#include "tree.hpp"
 
 struct ostream_fun
 {

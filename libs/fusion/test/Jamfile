@@ -154,18 +154,18 @@ import testing ;
     # Text for extension features, must be explicitly specified on the command line to be run
     # TODO these are not in a test-suite because currently test-suites cannot be marked "explicit"
 
-    run algorithm/ext_/for_each_s.cpp ;
-    explicit for_each_s ;
+    run algorithm/segmented_for_each.cpp ;
+    explicit segmented_for_each ;
 
-    run algorithm/ext_/find_s.cpp ;
-    explicit find_s ;
+    run algorithm/segmented_find.cpp ;
+    explicit segmented_find ;
 
-    run algorithm/ext_/find_if_s.cpp ;
-    explicit find_if_s ;
+    run algorithm/segmented_find_if.cpp ;
+    explicit segmented_find_if ;
 
-    run algorithm/ext_/fold_s.cpp ;
-    explicit fold_s ;
+    run algorithm/segmented_fold.cpp ;
+    explicit segmented_fold ;
 
-    run sequence/ext_/iterator_range_s.cpp ;
-    explicit iterator_range_s ;
+    run sequence/segmented_iterator_range.cpp ;
+    explicit segmented_iterator_range ;
 }

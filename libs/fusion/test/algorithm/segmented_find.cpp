@@ -8,8 +8,8 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/algorithm/query/ext_/find_s.hpp>
-#include <boost/fusion/container/ext_/tree.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
+#include "../sequence/tree.hpp"
 
 struct not_there {};
 
