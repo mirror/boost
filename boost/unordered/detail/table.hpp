@@ -129,7 +129,9 @@ namespace boost { namespace unordered { namespace detail {
     
             // size < mlf_ * count
             return double_to_size_t(ceil(
-                    (double) this->mlf_ * this->max_bucket_count())) - 1;
+                    static_cast<double>(this->mlf_) *
+                    static_cast<double>(this->max_bucket_count())
+                )) - 1;
         }
 
         std::size_t calculate_max_load()
@@ -138,7 +140,11 @@ namespace boost { namespace unordered { namespace detail {
     
             // From 6.3.1/13:
             // Only resize when size >= mlf_ * count
-            return double_to_size_t(ceil((double) mlf_ * this->bucket_count_));
+            return double_to_size_t(ceil(
+                    static_cast<double>(this->mlf_) *
+                    static_cast<double>(this->bucket_count_)
+                )) - 1;
+
         }
 
         void max_load_factor(float z)
