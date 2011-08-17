@@ -10,27 +10,29 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
-#include <boost/fusion/container/list/cons.hpp>
+#include <boost/fusion/container/list/cons_fwd.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/deref.hpp>
-#include <boost/fusion/iterator/segmented_iterator/detail/begin_impl.hpp>
 
 namespace boost { namespace fusion
 {
-    template<typename First, typename Second>
+    template <typename First, typename Second>
     struct iterator_range;
 
-    template<typename Context>
+    template <typename Context>
     struct segmented_iterator;
 
     namespace detail
     {
+        template <typename Range, typename Stack>
+        struct segmented_begin_impl;
+
         //bool is_invalid(stack)
         //{
         //  return empty(car(stack));
         //}
 
-        template<typename Stack>
+        template <typename Stack>
         struct is_invalid
           : result_of::equal_to<
                 typename Stack::car_type::begin_type,
@@ -46,7 +48,7 @@ namespace boost { namespace fusion
         //  return cons(iterator_range(next(begin(car(stack))), end(car(stack))), cdr(stack));
         //}
 
-        template<typename Stack>
+        template <typename Stack>
         struct pop_front_car
         {
             typedef 
@@ -70,7 +72,7 @@ namespace boost { namespace fusion
             }
         };
 
-        template<
+        template <
             typename Stack,
             typename Next   = typename pop_front_car<Stack>::type,
             bool IsInvalid  = is_invalid<Next>::value,
@@ -86,7 +88,7 @@ namespace boost { namespace fusion
         //    return segmented_next_impl_recurse(stack.cdr);
         //}
 
-        template<
+        template <
             typename Stack,
             int StackSize = Stack::size::value>
         struct segmented_next_impl_recurse3
@@ -100,7 +102,7 @@ namespace boost { namespace fusion
             }
         };
 
-        template<typename Stack>
+        template <typename Stack>
         struct segmented_next_impl_recurse3<Stack, 1>
         {
             typedef typename Stack::car_type::end_type end_type;
@@ -122,7 +124,7 @@ namespace boost { namespace fusion
         //    return res;
         //}
 
-        template<
+        template <
             typename Stack,
             typename Range  =
                 typename remove_reference<
@@ -147,7 +149,7 @@ namespace boost { namespace fusion
             }
         };
 
-        template<typename Stack, typename Range, typename Result>
+        template <typename Stack, typename Range, typename Result>
         struct segmented_next_impl_recurse2<Stack, Range, Result, false>
         {
             typedef Result type;
@@ -170,7 +172,7 @@ namespace boost { namespace fusion
         //    return segmented_next_impl_recurse2(next)
         //}
 
-        template<typename Stack, typename Next, bool IsInvalid, int StackSize>
+        template <typename Stack, typename Next, bool IsInvalid, int StackSize>
         struct segmented_next_impl_recurse
         {
             typedef
@@ -183,7 +185,7 @@ namespace boost { namespace fusion
             }
         };
 
-        template<typename Stack, typename Next>
+        template <typename Stack, typename Next>
         struct segmented_next_impl_recurse<Stack, Next, true, 1>
         {
             typedef Next type;
@@ -194,7 +196,7 @@ namespace boost { namespace fusion
             }
         };
 
-        template<typename Stack, typename Next, int StackSize>
+        template <typename Stack, typename Next, int StackSize>
         struct segmented_next_impl_recurse<Stack, Next, false, StackSize>
         {
             typedef segmented_next_impl_recurse2<Next> impl;
@@ -216,11 +218,11 @@ namespace boost { namespace fusion
         //    return next;
         //}
 
-        template<
+        template <
             typename Stack,
             typename Next   = typename pop_front_car<Stack>::type,
             bool IsInvalid  = is_invalid<Next>::value>
-        struct segmented_next_impl
+        struct segmented_next_impl_aux
         {
             typedef segmented_next_impl_recurse<typename Stack::cdr_type> impl;
             typedef typename impl::type type;
@@ -231,8 +233,8 @@ namespace boost { namespace fusion
             }
         };
 
-        template<typename Stack, typename Next>
-        struct segmented_next_impl<Stack, Next, false>
+        template <typename Stack, typename Next>
+        struct segmented_next_impl_aux<Stack, Next, false>
         {
             typedef Next type;
 
@@ -241,6 +243,11 @@ namespace boost { namespace fusion
                 return pop_front_car<Stack>::call(stack);
             }
         };
+
+        template <typename Stack>
+        struct segmented_next_impl
+          : segmented_next_impl_aux<Stack>
+        {};
     }
 }}
 

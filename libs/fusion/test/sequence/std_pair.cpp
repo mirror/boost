@@ -55,8 +55,8 @@ main()
         at_c<1>(p) = "mama mia";
         BOOST_TEST(p == make_vector(6, "mama mia"));
 
-        BOOST_STATIC_ASSERT(result_of::size<pair_type>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<pair_type>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<pair_type>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<pair_type>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == "mama mia");

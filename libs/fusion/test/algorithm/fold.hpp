@@ -59,7 +59,7 @@ struct sum
 
     template<typename Self, typename State, typename T>
     struct result<Self(State,T)>
-      : fusion::result_of::make_pair<
+      : boost::fusion::result_of::make_pair<
             mpl::int_<
                 boost::remove_reference<
                     State
@@ -108,7 +108,7 @@ struct meta_sum
 
 #ifdef BOOST_FUSION_TEST_ITER_FOLD
         typedef typename
-            fusion::result_of::value_of<
+            boost::fusion::result_of::value_of<
                 typename boost::remove_reference<T>::type
             >::type
         t;
@@ -144,7 +144,7 @@ struct fold_test_n
 
         {
             mpl::range_c<int, 1, n+1> init_range;
-            typename fusion::result_of::as_vector<
+            typename boost::fusion::result_of::as_vector<
                 typename mpl::transform<
                     range
                   , mpl::always<int>
@@ -169,20 +169,20 @@ struct fold_test_n
         {
             typedef typename
 #ifdef BOOST_FUSION_TEST_REVERSE_FOLD
-                fusion::result_of::as_vector<
+                boost::fusion::result_of::as_vector<
                     typename mpl::copy<
                         mpl::range_c<int, 1, n+1>
                       , mpl::front_inserter<fusion::vector<> >
                     >::type
                 >::type
 #else
-                fusion::result_of::as_vector<mpl::range_c<int, 1, n+1> >::type
+                boost::fusion::result_of::as_vector<mpl::range_c<int, 1, n+1> >::type
 #endif
             vec;
 
             typedef
                 boost::is_same<
-                    typename fusion::result_of::BOOST_FUSION_TEST_FOLD_NAME<
+                    typename boost::fusion::result_of::BOOST_FUSION_TEST_FOLD_NAME<
                         vec
                       , mpl::vector<mpl::int_<1>, mpl::int_<0> >
                       , meta_sum

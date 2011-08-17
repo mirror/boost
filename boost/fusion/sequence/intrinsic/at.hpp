@@ -9,6 +9,7 @@
 
 #include <boost/mpl/int.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 

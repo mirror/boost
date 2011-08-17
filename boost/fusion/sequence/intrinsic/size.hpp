@@ -7,8 +7,13 @@
 #if !defined(FUSION_SIZE_05052005_0214)
 #define FUSION_SIZE_05052005_0214
 
+#include <boost/utility/enable_if.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/int.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/support/tag_of.hpp>
+#include <boost/fusion/support/is_segmented.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_size.hpp>
 
 namespace boost { namespace fusion
 {
@@ -24,8 +29,17 @@ namespace boost { namespace fusion
         template <typename Tag>
         struct size_impl
         {
+            template<typename Sequence>
+            struct unsegmented_size : Sequence::size {};
+
             template <typename Sequence>
-            struct apply : Sequence::size {};
+            struct apply
+              : mpl::if_<
+                    traits::is_segmented<Sequence>
+                  , detail::segmented_size<Sequence>
+                  , unsegmented_size<Sequence>
+                >::type
+            {};
         };
 
         template <>

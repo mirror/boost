@@ -159,20 +159,20 @@ main()
         typedef joint_view<map_type, set_type> joint_view_type;
         joint_view_type j(m,s);
 
-        BOOST_MPL_ASSERT((result_of::has_key<joint_view_type, void>::type));
-        BOOST_MPL_ASSERT((result_of::has_key<joint_view_type, std::string>::type));
-        BOOST_MPL_ASSERT((result_of::has_key<joint_view_type, float>::type));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<joint_view_type, void>::type));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<joint_view_type, std::string>::type));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<joint_view_type, float>::type));
 
-        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::begin<joint_view_type>::type>::type, void>));
-        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::next<result_of::begin<joint_view_type>::type>::type>::type, std::string>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::begin<joint_view_type>::type>::type, void>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::next<boost::fusion::result_of::begin<joint_view_type>::type>::type>::type, std::string>));
         BOOST_MPL_ASSERT((boost::is_same<
-                result_of::key_of<result_of::next<result_of::next<result_of::begin<joint_view_type>::type>::type>::type>::type
+                boost::fusion::result_of::key_of<boost::fusion::result_of::next<boost::fusion::result_of::next<boost::fusion::result_of::begin<joint_view_type>::type>::type>::type>::type
               , float>));
 
-        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::begin<joint_view_type>::type>::type, int>));
-        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::next<result_of::begin<joint_view_type>::type>::type>::type, std::string>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::begin<joint_view_type>::type>::type, int>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::next<boost::fusion::result_of::begin<joint_view_type>::type>::type>::type, std::string>));
         BOOST_MPL_ASSERT((boost::is_same<
-                result_of::value_of_data<result_of::next<result_of::next<result_of::begin<joint_view_type>::type>::type>::type>::type
+                boost::fusion::result_of::value_of_data<boost::fusion::result_of::next<boost::fusion::result_of::next<boost::fusion::result_of::begin<joint_view_type>::type>::type>::type>::type
               , float>));
 
         std::cout << deref_data(begin(j)) << std::endl;

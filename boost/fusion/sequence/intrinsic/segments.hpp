@@ -7,6 +7,9 @@
 #if !defined(BOOST_FUSION_SEGMENTS_04052005_1141)
 #define BOOST_FUSION_SEGMENTS_04052005_1141
 
+#include <boost/type_traits/is_const.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 
 namespace boost { namespace fusion
@@ -50,15 +53,19 @@ namespace boost { namespace fusion
     }
 
     template <typename Sequence>
-    typename result_of::segments<Sequence>::type
-    segments(Sequence & seq)
+    inline typename
+        lazy_disable_if<
+            is_const<Sequence>
+          , result_of::segments<Sequence>
+        >::type
+    segments(Sequence& seq)
     {
         typedef typename traits::tag_of<Sequence>::type tag_type;
         return extension::segments_impl<tag_type>::template apply<Sequence>::call(seq);
     }
 
     template <typename Sequence>
-    typename result_of::segments<Sequence const>::type
+    inline typename result_of::segments<Sequence const>::type
     segments(Sequence const& seq)
     {
         typedef typename traits::tag_of<Sequence const>::type tag_type;

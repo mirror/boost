@@ -8,6 +8,7 @@
 #if !defined(FUSION_CONS_07172005_0843)
 #define FUSION_CONS_07172005_0843
 
+#include <boost/fusion/container/list/cons_fwd.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
@@ -55,7 +56,7 @@ namespace boost { namespace fusion
         }
     };
 
-    template <typename Car, typename Cdr = nil>
+    template <typename Car, typename Cdr /*= nil*/>
     struct cons : sequence_base<cons<Car, Cdr> >
     {
         typedef mpl::int_<Cdr::size::value+1> size;

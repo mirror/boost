@@ -9,6 +9,7 @@
 #define BOOST_FUSION_AT_KEY_20060304_1755
 
 #include <boost/type_traits/is_const.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/algorithm/query/find.hpp>
 #include <boost/fusion/iterator/deref_data.hpp>
 #include <boost/fusion/support/tag_of.hpp>

@@ -13,48 +13,42 @@
 #include <boost/mpl/plus.hpp>
 #include <boost/mpl/size_t.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/mpl/begin.hpp>
 #include <boost/fusion/mpl/end.hpp>
-#include <boost/fusion/mpl/clear.hpp>
-#include <boost/fusion/mpl/push_front.hpp>
-#include <boost/fusion/sequence/intrinsic/size.hpp>
-#include <boost/fusion/sequence/intrinsic/segments.hpp>
 #include <boost/fusion/support/is_segmented.hpp>
 
-namespace boost { namespace fusion
+namespace boost { namespace fusion { namespace detail
 {
     ///////////////////////////////////////////////////////////////////////////
     // calculates the size of any segmented data structure.
     template<typename Sequence>
     struct segmented_size;
 
-    namespace detail
-    {
-        ///////////////////////////////////////////////////////////////////////////
-        template<typename Sequence, bool IsSegmented = traits::is_segmented<Sequence>::value>
-        struct segmented_size_impl
-          : mpl::fold<
-                typename remove_reference<
-                    typename add_const<
-                        typename result_of::segments<Sequence>::type
-                    >::type
-                >::type,
-                mpl::size_t<0>,
-                mpl::plus<mpl::_1, segmented_size<mpl::_2> >
-            >::type
-        {};
+    ///////////////////////////////////////////////////////////////////////////
+    template<typename Sequence, bool IsSegmented = traits::is_segmented<Sequence>::value>
+    struct segmented_size_impl
+        : mpl::fold<
+            typename remove_reference<
+                typename add_const<
+                    typename result_of::segments<Sequence>::type
+                >::type
+            >::type,
+            mpl::size_t<0>,
+            mpl::plus<mpl::_1, segmented_size<mpl::_2> >
+        >::type
+    {};
 
-        template<typename Sequence>
-        struct segmented_size_impl<Sequence, false>
-          : result_of::size<Sequence>::type
-        {};
-    }
+    template<typename Sequence>
+    struct segmented_size_impl<Sequence, false>
+      : result_of::size<Sequence>::type
+    {};
 
     template<typename Sequence>
     struct segmented_size
-      : detail::segmented_size_impl<Sequence>
+      : segmented_size_impl<Sequence>
     {};
 
-}}
+}}}
 
 #endif

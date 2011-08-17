@@ -8,23 +8,26 @@
 #define BOOST_FUSION_SEGMENTED_BEGIN_IMPL_HPP_INCLUDED
 
 #include <boost/type_traits/remove_const.hpp>
-#include <boost/fusion/view/iterator_range.hpp>
-#include <boost/fusion/container/list/cons.hpp>
-#include <boost/fusion/container/generation/make_cons.hpp>
-#include <boost/fusion/sequence/intrinsic/begin.hpp>
-#include <boost/fusion/sequence/intrinsic/end.hpp>
+#include <boost/fusion/container/list/cons_fwd.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/support/is_segmented.hpp>
-#include <boost/fusion/iterator/segmented_iterator/detail/end_impl.hpp>
-#include <boost/fusion/support/segmented_fold_until.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_end_impl.hpp>
+#include <boost/fusion/support/detail/segmented_fold_until_impl.hpp>
+
+namespace boost { namespace fusion
+{
+    template <typename First, typename Last>
+    struct iterator_range;
+}}
 
 namespace boost { namespace fusion { namespace detail
 {
     struct segmented_begin_fun
     {
-        template<typename Sig>
+        template <typename Sig>
         struct result;
     
-        template<typename This, typename Range, typename State, typename Context>
+        template <typename This, typename Range, typename State, typename Context>
         struct result<This(Range&, State&, Context&)>
         {
             typedef
@@ -42,7 +45,7 @@ namespace boost { namespace fusion { namespace detail
             type;
         };
 
-        template<typename Range, typename State, typename Context>
+        template <typename Range, typename State, typename Context>
         typename result<segmented_begin_fun(Range&, State const&, Context const&)>::type
         operator()(Range& rng, State const&, Context const& context) const
         {
@@ -53,12 +56,12 @@ namespace boost { namespace fusion { namespace detail
                 >
             range_type;
 
-            return fusion::make_cons(range_type(fusion::begin(rng), fusion::end(rng)), context);
+            return cons<range_type, Context>(range_type(fusion::begin(rng), fusion::end(rng)), context);
         }
     };
 
-    template<typename Range, typename Stack, bool IsSegmented = traits::is_segmented<Range>::type::value>
-    struct segmented_begin_impl
+    template <typename Range, typename Stack, bool IsSegmented = traits::is_segmented<Range>::type::value>
+    struct segmented_begin_impl_aux
     {
         typedef
             segmented_end_impl<Range, Stack>
@@ -81,8 +84,8 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template<typename Range, typename Stack>
-    struct segmented_begin_impl<Range, Stack, false>
+    template <typename Range, typename Stack>
+    struct segmented_begin_impl_aux<Range, Stack, false>
     {
         typedef typename result_of::begin<Range>::type  begin_type;
         typedef typename result_of::end<Range>::type    end_type;
@@ -94,6 +97,11 @@ namespace boost { namespace fusion { namespace detail
             return type(pair_type(fusion::begin(rng), fusion::end(rng)), stack);
         }
     };
+
+    template <typename Range, typename Stack>
+    struct segmented_begin_impl
+      : segmented_begin_impl_aux<Range, Stack>
+    {};
 
 }}}
 

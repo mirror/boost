@@ -75,8 +75,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<adapted::point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<adapted::point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<adapted::point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<adapted::point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -122,12 +122,12 @@ main()
 
     {
         // assoc stuff
-        BOOST_MPL_ASSERT((result_of::has_key<adapted::point, ns::x_member>));
-        BOOST_MPL_ASSERT((result_of::has_key<adapted::point, ns::y_member>));
-        BOOST_MPL_ASSERT((boost::mpl::not_<result_of::has_key<adapted::point, ns::z_member> >));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<adapted::point, ns::x_member>));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<adapted::point, ns::y_member>));
+        BOOST_MPL_ASSERT((boost::mpl::not_<boost::fusion::result_of::has_key<adapted::point, ns::z_member> >));
 
-        BOOST_MPL_ASSERT((boost::is_same<result_of::value_at_key<adapted::point, ns::x_member>::type, int>));
-        BOOST_MPL_ASSERT((boost::is_same<result_of::value_at_key<adapted::point, ns::y_member>::type, int>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_at_key<adapted::point, ns::x_member>::type, int>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_at_key<adapted::point, ns::y_member>::type, int>));
 
         ns::point basep(5, 3);
         adapted::point p(basep);

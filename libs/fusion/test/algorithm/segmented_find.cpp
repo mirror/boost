@@ -19,9 +19,9 @@ process_tree(Tree const &tree)
 {
     using namespace boost;
 
-    typedef typename fusion::result_of::find_s<Tree const, short>::type short_iter;
-    typedef typename fusion::result_of::find_s<Tree const, float>::type float_iter;
-    typedef typename fusion::result_of::find_s<Tree const, not_there>::type not_there_iter;
+    typedef typename boost::fusion::result_of::find_s<Tree const, short>::type short_iter;
+    typedef typename boost::fusion::result_of::find_s<Tree const, float>::type float_iter;
+    typedef typename boost::fusion::result_of::find_s<Tree const, not_there>::type not_there_iter;
 
     // find_if_s of a segmented data structure returns generic
     // segmented iterators

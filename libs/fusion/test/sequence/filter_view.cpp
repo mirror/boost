@@ -77,7 +77,7 @@ main()
         filter_view_type view(v);
         std::cout << view << std::endl;
         BOOST_TEST((view == make_vector('@', 987654, true, 6.6)));
-        BOOST_STATIC_ASSERT(result_of::size<filter_view_type>::value == 4);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<filter_view_type>::value == 4);
     }
 
     //cschmidt: This is illegal C++. ADL instantiates less<_, int_<3> > - which
@@ -94,7 +94,7 @@ main()
         filter_view_type view(v);
         std::cout << view << std::endl;
         BOOST_TEST((view == make_vector(1, 2, 0, -1)));
-        BOOST_STATIC_ASSERT(result_of::size<filter_view_type>::value == 4);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<filter_view_type>::value == 4);
 #endif
     }*/
 
@@ -104,7 +104,7 @@ main()
         typedef vector<int> vec;
         typedef filter_view<vec, reject_all> filter_view_type;
 
-        BOOST_MPL_ASSERT((result_of::equal_to<result_of::begin<filter_view_type>::type, result_of::end<filter_view_type>::type>));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::equal_to<boost::fusion::result_of::begin<filter_view_type>::type, boost::fusion::result_of::end<filter_view_type>::type>));
     }
 
     {
@@ -114,11 +114,11 @@ main()
         typedef filter_view<map_type const, is_same<_, pair<double, std::string> > > filter_view_type;
         filter_view_type f(m);
 
-        BOOST_MPL_ASSERT((result_of::has_key<filter_view_type, double>::type));
-        BOOST_MPL_ASSERT_NOT((result_of::has_key<filter_view_type, void>::type));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<filter_view_type, double>::type));
+        BOOST_MPL_ASSERT_NOT((boost::fusion::result_of::has_key<filter_view_type, void>::type));
 
-        BOOST_MPL_ASSERT((is_same<result_of::key_of<result_of::begin<filter_view_type>::type>::type, double>));
-        BOOST_MPL_ASSERT((is_same<result_of::value_of_data<result_of::begin<filter_view_type>::type>::type, std::string>));
+        BOOST_MPL_ASSERT((is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::begin<filter_view_type>::type>::type, double>));
+        BOOST_MPL_ASSERT((is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::begin<filter_view_type>::type>::type, std::string>));
 
         std::cout << deref_data(begin(f)) << std::endl;
         BOOST_TEST((deref_data(begin(f)) == "Bond"));

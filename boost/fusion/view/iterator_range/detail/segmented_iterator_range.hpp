@@ -16,14 +16,11 @@
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/sequence/intrinsic/segments.hpp>
-#include <boost/fusion/sequence/intrinsic/detail/segmented_size.hpp>
 #include <boost/fusion/algorithm/transformation/push_back.hpp>
 #include <boost/fusion/algorithm/transformation/push_front.hpp>
-#include <boost/fusion/view/iterator_range.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
-#include <boost/fusion/iterator/segmented_iterator.hpp>
 #include <boost/fusion/container/list/detail/reverse_cons.hpp>
-#include <boost/fusion/iterator/segmented_iterator/detail/segment_sequence.hpp>
+#include <boost/fusion/iterator/detail/segment_sequence.hpp>
 
 //  Invariants:
 //  - Each segmented iterator has a stack
@@ -35,8 +32,8 @@
   
 namespace boost { namespace fusion
 {
-    template<typename Context>
-    struct segmented_iterator;
+    template <typename First, typename Last>
+    struct iterator_range;
 }}
 
 namespace boost { namespace fusion { namespace detail
@@ -65,7 +62,7 @@ namespace boost { namespace fusion { namespace detail
     //  }
     //}
 
-    template<typename Stack, std::size_t Size = Stack::size::value>
+    template <typename Stack, std::size_t Size = Stack::size::value>
     struct make_segment_sequence_front
     {
         // assert(end(segments(front(car(stack_begin)))) == end(car(cdr(stack_begin))));
@@ -138,7 +135,7 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template<typename Stack>
+    template <typename Stack>
     struct make_segment_sequence_front<Stack, 2>
     {
         // assert(end(front(car(stack_begin))) == end(car(cdr(stack_begin))));
@@ -178,7 +175,7 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template<typename Stack>
+    template <typename Stack>
     struct make_segment_sequence_front<Stack, 1>
     {
         typedef nil type;
@@ -209,7 +206,7 @@ namespace boost { namespace fusion { namespace detail
     //  }
     //}
 
-    template<typename Stack, std::size_t Size = Stack::size::value>
+    template <typename Stack, std::size_t Size = Stack::size::value>
     struct make_segment_sequence_back
     {
         // assert(end(segments(front(car(stack_begin)))) == end(car(cdr(stack_begin))));
@@ -280,7 +277,7 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template<typename Stack>
+    template <typename Stack>
     struct make_segment_sequence_back<Stack, 2>
     {
         // assert(end(front(car(stack_end))) == end(car(cdr(stack_end))));
@@ -320,7 +317,7 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template<typename Stack>
+    template <typename Stack>
     struct make_segment_sequence_back<Stack, 1>
     {
         typedef nil type;
@@ -364,14 +361,14 @@ namespace boost { namespace fusion { namespace detail
     //  }
     //}
 
-    template<
+    template <
         typename StackBegin,
         typename StackEnd,
         int StackBeginSize = StackBegin::size::value,
         int StackEndSize   = StackEnd::size::value>
     struct make_segmented_range_reduce;
 
-    template<
+    template <
         typename StackBegin,
         typename StackEnd,
         bool SameSegment = 
@@ -421,7 +418,7 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template<typename StackBegin, typename StackEnd>
+    template <typename StackBegin, typename StackEnd>
     struct make_segmented_range_reduce2<StackBegin, StackEnd, true>
     {
         typedef
@@ -441,12 +438,12 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template<typename StackBegin, typename StackEnd, int StackBeginSize, int StackEndSize>
+    template <typename StackBegin, typename StackEnd, int StackBeginSize, int StackEndSize>
     struct make_segmented_range_reduce
       : make_segmented_range_reduce2<StackBegin, StackEnd>
     {};
 
-    template<typename StackBegin, typename StackEnd>
+    template <typename StackBegin, typename StackEnd>
     struct make_segmented_range_reduce<StackBegin, StackEnd, 1, 1>
     {
         typedef
@@ -478,7 +475,7 @@ namespace boost { namespace fusion { namespace detail
     //  return make_segmented_range_reduce(reverse(begin.context), reverse(end.context));
     //}
 
-    template<typename Begin, typename End>
+    template <typename Begin, typename End>
     struct make_segmented_range
     {
         typedef reverse_cons<typename Begin::context_type>   reverse_begin_cons;
@@ -500,83 +497,6 @@ namespace boost { namespace fusion { namespace detail
                 reverse_end_cons::call(end.context));
         }
     };
-
-}}}
-
-namespace boost { namespace fusion { namespace extension
-{
-    template<typename Tag>
-    struct is_segmented_impl;
-
-    // An iterator_range of segmented_iterators is segmented
-    template<>
-    struct is_segmented_impl<iterator_range_tag>
-    {
-    private:
-        template<typename Iterator>
-        struct is_segmented_iterator
-          : mpl::false_
-        {};
-
-        template<typename Iterator>
-        struct is_segmented_iterator<Iterator &>
-          : is_segmented_iterator<Iterator>
-        {};
-
-        template<typename Iterator>
-        struct is_segmented_iterator<Iterator const>
-          : is_segmented_iterator<Iterator>
-        {};
-
-        template<typename Context>
-        struct is_segmented_iterator<segmented_iterator<Context> >
-          : mpl::true_
-        {};
-
-    public:
-        template<typename Sequence>
-        struct apply
-          : is_segmented_iterator<typename Sequence::begin_type>
-        {
-            BOOST_MPL_ASSERT_RELATION(
-                is_segmented_iterator<typename Sequence::begin_type>::value,
-                ==,
-                is_segmented_iterator<typename Sequence::end_type>::value);
-        };
-    };
-
-    template<typename Tag>
-    struct segments_impl;
-
-    template<>
-    struct segments_impl<iterator_range_tag>
-    {
-        template<typename Sequence>
-        struct apply
-        {
-            typedef
-                detail::make_segmented_range<
-                    typename Sequence::begin_type,
-                    typename Sequence::end_type
-                >
-            impl;
-
-            BOOST_MPL_ASSERT((traits::is_segmented<typename impl::type>));
-
-            typedef
-                typename result_of::segments<typename impl::type>::type
-            type;
-
-            static type call(Sequence & seq)
-            {
-                return fusion::segments(impl::call(seq.first, seq.last));
-            }
-        };
-    };
-
-    // TODO: default implementation of begin, end, and size
-    //       should check if the sequence is segmented and to
-    //       the right thing.
 
 }}}
 

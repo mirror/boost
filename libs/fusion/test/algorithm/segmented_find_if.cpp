@@ -22,9 +22,9 @@ process_tree(Tree const &tree)
     using namespace boost;
     using mpl::_;
 
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,not_there> >::type not_there_iter;
+    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
+    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
+    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,not_there> >::type not_there_iter;
 
     // find_if_s of a segmented data structure returns generic
     // segmented iterators

@@ -16,7 +16,7 @@
 #endif
 
 #if !defined(FUSION_VALUE_AT)
-#define FUSION_VALUE_AT(S, N) result_of::value_at_c<S, N>
+#define FUSION_VALUE_AT(S, N) boost::fusion::result_of::value_at_c<S, N>
 #endif
 
 namespace test_detail

@@ -40,7 +40,7 @@ main()
     }
 
     {
-        result_of::as_set<list<int, double, std::string> >::type set(1, 1.23, "harru");
+        boost::fusion::result_of::as_set<list<int, double, std::string> >::type set(1, 1.23, "harru");
         std::cout << at_key<int>(set) << std::endl;
         BOOST_TEST(at_key<int>(set) == 1);
     }

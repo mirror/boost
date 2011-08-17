@@ -7,13 +7,11 @@
 #if !defined(BOOST_FUSION_SEGMENTED_BEGIN_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_BEGIN_HPP_INCLUDED
 
-#include <boost/fusion/iterator/segmented_iterator/detail/begin_impl.hpp>
+#include <boost/fusion/sequence/intrinsic/detail/segmented_begin_impl.hpp>
+#include <boost/fusion/iterator/segmented_iterator.hpp>
 
-namespace boost { namespace fusion
+namespace boost { namespace fusion { namespace detail
 {
-    template<typename Context>
-    struct segmented_iterator;
-
     //auto segmented_begin( rng )
     //{
     //    return make_segmented_iterator( segmented_begin_impl( rng, nil ) );
@@ -24,17 +22,17 @@ namespace boost { namespace fusion
     {
         typedef
             segmented_iterator<
-                typename detail::segmented_begin_impl<Range, fusion::nil>::type
+                typename segmented_begin_impl<Range, fusion::nil>::type
             >
         type;
 
         static type call(Range & rng)
         {
             return type(
-                detail::segmented_begin_impl<Range, fusion::nil>::call(rng, fusion::nil()));
+                segmented_begin_impl<Range, fusion::nil>::call(rng, fusion::nil()));
         }
     };
 
-}}
+}}}
 
 #endif

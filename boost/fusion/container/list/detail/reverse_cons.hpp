@@ -7,8 +7,7 @@
 #if !defined(BOOST_FUSION_REVERSE_CONS_HPP_INCLUDED)
 #define BOOST_FUSION_REVERSE_CONS_HPP_INCLUDED
 
-#include <boost/fusion/container/list/cons.hpp>
-#include <boost/fusion/container/generation/make_cons.hpp>
+#include <boost/fusion/container/list/cons_fwd.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {
@@ -24,7 +23,8 @@ namespace boost { namespace fusion { namespace detail
 
         static type call(cons<Car, Cdr> const &cons, State const &state = State())
         {
-            return impl::call(cons.cdr, fusion::make_cons(cons.car, state));
+            typedef fusion::cons<Car, State> cdr_type;
+            return impl::call(cons.cdr, cdr_type(cons.car, state));
         }
     };
 

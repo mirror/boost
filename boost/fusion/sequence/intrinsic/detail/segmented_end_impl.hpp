@@ -10,11 +10,15 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/fusion/view/iterator_range.hpp>
-#include <boost/fusion/container/list/cons.hpp>
-#include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/sequence/intrinsic/segments.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
+#include <boost/fusion/container/list/cons_fwd.hpp>
 #include <boost/fusion/support/is_segmented.hpp>
+
+namespace boost { namespace fusion
+{
+    template <typename First, typename Last>
+    struct iterator_range;
+}}
 
 namespace boost { namespace fusion { namespace detail
 {

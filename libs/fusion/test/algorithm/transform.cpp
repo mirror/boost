@@ -109,46 +109,46 @@ main()
     {
         typedef range_c<int, 5, 9> sequence_type;
         sequence_type sequence;
-        std::cout << transform(sequence, square()) << std::endl;
-        BOOST_TEST((transform(sequence, square()) == make_vector(25, 36, 49, 64)));
+        std::cout << boost::fusion::transform(sequence, square()) << std::endl;
+        BOOST_TEST((boost::fusion::transform(sequence, square()) == make_vector(25, 36, 49, 64)));
     }
 
     {
         typedef range_c<int, 5, 9> mpl_list1;
-        std::cout << transform(mpl_list1(), square()) << std::endl;
-        BOOST_TEST((transform(mpl_list1(), square()) == make_vector(25, 36, 49, 64)));
+        std::cout << boost::fusion::transform(mpl_list1(), square()) << std::endl;
+        BOOST_TEST((boost::fusion::transform(mpl_list1(), square()) == make_vector(25, 36, 49, 64)));
     }
     
     {
         vector<int, int, int> tup(1, 2, 3);
-        std::cout << transform(tup, square()) << std::endl;
-        BOOST_TEST((transform(tup, square()) == make_vector(1, 4, 9)));
+        std::cout << boost::fusion::transform(tup, square()) << std::endl;
+        BOOST_TEST((boost::fusion::transform(tup, square()) == make_vector(1, 4, 9)));
     }
 
     {
         vector<int, int, int> tup1(1, 2, 3);
         vector<int, int, int> tup2(4, 5, 6);
-        std::cout << transform(tup1, tup2, add()) << std::endl;
-        BOOST_TEST((transform(tup1, tup2, add()) == make_vector(5, 7, 9)));
+        std::cout << boost::fusion::transform(tup1, tup2, add()) << std::endl;
+        BOOST_TEST((boost::fusion::transform(tup1, tup2, add()) == make_vector(5, 7, 9)));
     }
 
     {
         // Unary transform that requires lvalues, just check compilation
         vector<int, int, int> tup1(1, 2, 3);
-        BOOST_TEST(at_c<0>(transform(tup1, unary_lvalue_transform())) == &at_c<0>(tup1));
-        BOOST_TEST(*begin(transform(tup1, unary_lvalue_transform())) == &at_c<0>(tup1));
+        BOOST_TEST(at_c<0>(boost::fusion::transform(tup1, unary_lvalue_transform())) == &at_c<0>(tup1));
+        BOOST_TEST(*begin(boost::fusion::transform(tup1, unary_lvalue_transform())) == &at_c<0>(tup1));
     }
 
     {
         vector<int, int, int> tup1(1, 2, 3);
         vector<int, int, int> tup2(4, 5, 6);
-        BOOST_TEST(at_c<0>(transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
-        BOOST_TEST(*begin(transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
+        BOOST_TEST(at_c<0>(boost::fusion::transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
+        BOOST_TEST(*begin(boost::fusion::transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
     }
 
     {
         vector<int, int, int> tup1(1, 2, 3);
-        BOOST_TEST(transform(tup1, twice) == make_vector(2,4,6));
+        BOOST_TEST(boost::fusion::transform(tup1, twice) == make_vector(2,4,6));
     }
 
 

@@ -30,7 +30,7 @@ void test()
         char const* s = "Hello";
         typedef FUSION_SEQUENCE<int, char, double, char const*> seq_type;
         seq_type v(1, 'x', 3.3, s);
-        result_of::begin<seq_type>::type i(v);
+        boost::fusion::result_of::begin<seq_type>::type i(v);
 
         BOOST_TEST(*i == 1);
         BOOST_TEST(*next(i) == 'x');
@@ -62,7 +62,7 @@ void test()
         char const* s = "Hello";
         typedef FUSION_SEQUENCE<int, char, double, char const*> const seq_type;
         seq_type t(1, 'x', 3.3, s);
-        result_of::begin<seq_type>::type i(t);
+        boost::fusion::result_of::begin<seq_type>::type i(t);
 
         BOOST_TEST(*i == 1);
         BOOST_TEST(*next(i) == 'x');
@@ -80,22 +80,22 @@ void test()
 
         typedef FUSION_SEQUENCE<int, char, double, char const*> seq_type;
         typedef FUSION_SEQUENCE<int, char, double, char const*> const cseq_type;
-        typedef result_of::begin<seq_type>::type vi1;
-        typedef result_of::begin<cseq_type>::type vi2;
-        BOOST_STATIC_ASSERT((result_of::equal_to<vi1 const, vi1>::value));
-        BOOST_STATIC_ASSERT((result_of::equal_to<vi1, vi1 const>::value));
-        BOOST_STATIC_ASSERT((result_of::equal_to<vi1, vi2>::value));
-        BOOST_STATIC_ASSERT((result_of::equal_to<vi1 const, vi2>::value));
-        BOOST_STATIC_ASSERT((result_of::equal_to<vi1, vi2 const>::value));
-        BOOST_STATIC_ASSERT((result_of::equal_to<vi1 const, vi2 const>::value));
+        typedef boost::fusion::result_of::begin<seq_type>::type vi1;
+        typedef boost::fusion::result_of::begin<cseq_type>::type vi2;
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::equal_to<vi1 const, vi1>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::equal_to<vi1, vi1 const>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::equal_to<vi1, vi2>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::equal_to<vi1 const, vi2>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::equal_to<vi1, vi2 const>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::equal_to<vi1 const, vi2 const>::value));
     }
 
     {
         typedef FUSION_SEQUENCE<int, int> seq_type;
-        typedef result_of::begin<seq_type>::type begin_type;
-        typedef result_of::end<seq_type>::type end_type;
-        typedef result_of::next<begin_type>::type i1;
-        typedef result_of::next<i1>::type i2;
+        typedef boost::fusion::result_of::begin<seq_type>::type begin_type;
+        typedef boost::fusion::result_of::end<seq_type>::type end_type;
+        typedef boost::fusion::result_of::next<begin_type>::type i1;
+        typedef boost::fusion::result_of::next<i1>::type i2;
 
         BOOST_STATIC_ASSERT((is_same<end_type, i2>::value));
     }
@@ -105,7 +105,7 @@ void test()
         char const* s = "Hello";
         typedef FUSION_SEQUENCE<int, char, double, char const*> seq_type;
         seq_type t(1, 'x', 3.3, s);
-        result_of::begin<seq_type>::type i(t);
+        boost::fusion::result_of::begin<seq_type>::type i(t);
 
         BOOST_TEST(*i == 1);
         BOOST_TEST(*next(i) == 'x');
@@ -138,34 +138,34 @@ void test()
         typedef FUSION_SEQUENCE<int, char, double, char const*> seq_type;
         seq_type t(1, 'x', 3.3, "Hello");
 
-        BOOST_STATIC_ASSERT((result_of::distance<
-            result_of::begin<seq_type>::type
-          , result_of::end<seq_type>::type >::value == 4));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::distance<
+            boost::fusion::result_of::begin<seq_type>::type
+          , boost::fusion::result_of::end<seq_type>::type >::value == 4));
 
         BOOST_TEST(distance(begin(t), end(t)).value == 4);
     }
 
-    { // Testing tuple iterator result_of::value_of, result_of::deref, result_of::value_at
+    { // Testing tuple iterator boost::fusion::result_of::value_of, boost::fusion::result_of::deref, boost::fusion::result_of::value_at
 
         typedef FUSION_SEQUENCE<int, char&> seq_type;
-        typedef result_of::begin<seq_type>::type i0;
-        typedef result_of::next<i0>::type i1;
-        typedef result_of::next<result_of::begin<const seq_type>::type>::type i2;
+        typedef boost::fusion::result_of::begin<seq_type>::type i0;
+        typedef boost::fusion::result_of::next<i0>::type i1;
+        typedef boost::fusion::result_of::next<boost::fusion::result_of::begin<const seq_type>::type>::type i2;
 
         BOOST_STATIC_ASSERT((
-            is_same<result_of::value_at_c<seq_type, 0>::type, int>::value));
+            is_same<boost::fusion::result_of::value_at_c<seq_type, 0>::type, int>::value));
 
         BOOST_STATIC_ASSERT((
-            is_same<result_of::value_at_c<seq_type, 1>::type, char&>::value));
+            is_same<boost::fusion::result_of::value_at_c<seq_type, 1>::type, char&>::value));
 
         BOOST_STATIC_ASSERT((
             is_same<traits::category_of<i0>::type, FUSION_TRAVERSAL_TAG>::value));
 
-        BOOST_STATIC_ASSERT((is_same<result_of::deref<i0>::type, int&>::value));
-        BOOST_STATIC_ASSERT((is_same<result_of::deref<i1>::type, char&>::value));
+        BOOST_STATIC_ASSERT((is_same<boost::fusion::result_of::deref<i0>::type, int&>::value));
+        BOOST_STATIC_ASSERT((is_same<boost::fusion::result_of::deref<i1>::type, char&>::value));
 
-        BOOST_STATIC_ASSERT((is_same<result_of::value_of<i0>::type, int>::value));
-        BOOST_STATIC_ASSERT((is_same<result_of::value_of<i1>::type, char&>::value));
+        BOOST_STATIC_ASSERT((is_same<boost::fusion::result_of::value_of<i0>::type, int>::value));
+        BOOST_STATIC_ASSERT((is_same<boost::fusion::result_of::value_of<i1>::type, char&>::value));
     }
 
     { // Testing advance

@@ -7,6 +7,7 @@
 #if !defined(FUSION_EMPTY_09162005_0335)
 #define FUSION_EMPTY_09162005_0335
 
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/fusion/support/tag_of.hpp>

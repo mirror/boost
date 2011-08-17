@@ -50,15 +50,15 @@ main()
         BOOST_TEST(at_key<std::string>(m) == "Hola");
 
         BOOST_STATIC_ASSERT((
-            boost::is_same<result_of::value_at_key<set_type, int>::type, int>::value));
+            boost::is_same<boost::fusion::result_of::value_at_key<set_type, int>::type, int>::value));
         BOOST_STATIC_ASSERT((
-            boost::is_same<result_of::value_at_key<set_type, std::string>::type, std::string>::value));
+            boost::is_same<boost::fusion::result_of::value_at_key<set_type, std::string>::type, std::string>::value));
 
         std::cout << m << std::endl;
 
-        BOOST_STATIC_ASSERT((result_of::has_key<set_type, int>::value));
-        BOOST_STATIC_ASSERT((result_of::has_key<set_type, std::string>::value));
-        BOOST_STATIC_ASSERT((!result_of::has_key<set_type, double>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::has_key<set_type, int>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::has_key<set_type, std::string>::value));
+        BOOST_STATIC_ASSERT((!boost::fusion::result_of::has_key<set_type, double>::value));
 
         std::cout << deref_data(begin(m)) << std::endl;
         std::cout << deref_data(fusion::next(begin(m))) << std::endl;
@@ -66,10 +66,10 @@ main()
         BOOST_TEST(deref_data(begin(m)) == 123);
         BOOST_TEST(deref_data(fusion::next(begin(m))) == "Hola");
 
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::key_of<result_of::begin<set_type>::type>::type, int>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::key_of<result_of::next<result_of::begin<set_type>::type>::type>::type, std::string>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::value_of_data<result_of::begin<set_type>::type>::type, int>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::value_of_data<result_of::next<result_of::begin<set_type>::type>::type>::type, std::string>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::begin<set_type>::type>::type, int>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::next<boost::fusion::result_of::begin<set_type>::type>::type>::type, std::string>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::begin<set_type>::type>::type, int>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::next<boost::fusion::result_of::begin<set_type>::type>::type>::type, std::string>::value));
     }
     
     {

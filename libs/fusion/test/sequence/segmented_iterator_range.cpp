@@ -12,7 +12,6 @@
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
-#include <boost/fusion/view/iterator_range/detail/segmented_iterator_range.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
@@ -44,8 +43,8 @@ process_tree(Tree const &tree)
     using namespace fusion;
     using mpl::_;
 
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
-    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
+    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
+    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
 
     typedef iterator_range<short_iter, float_iter> slice_t;
     BOOST_STATIC_ASSERT(traits::is_segmented<slice_t>::value);
@@ -89,7 +88,7 @@ main()
             slice_t slice(i1, i3);
             std::cout << slice << std::endl;
             BOOST_TEST((slice == make_vector('x', 3.3)));
-            BOOST_STATIC_ASSERT(result_of::size<slice_t>::value == 2);
+            BOOST_STATIC_ASSERT(boost::fusion::result_of::size<slice_t>::value == 2);
         }
 
         {
@@ -103,7 +102,7 @@ main()
             slice_t slice(i1, i3);
             std::cout << slice << std::endl;
             BOOST_TEST(slice == make_vector());
-            BOOST_STATIC_ASSERT(result_of::size<slice_t>::value == 0);
+            BOOST_STATIC_ASSERT(boost::fusion::result_of::size<slice_t>::value == 0);
         }
     }
 
@@ -121,7 +120,7 @@ main()
         slice_t slice(f, l);
         std::cout << slice << std::endl;
         BOOST_TEST((slice == make_vector(3, 4)));
-        BOOST_STATIC_ASSERT(result_of::size<slice_t>::value == 2);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<slice_t>::value == 2);
     }
 
     {

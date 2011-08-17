@@ -21,7 +21,7 @@
 #endif
 
 #if !defined(FUSION_SIZE)
-#define FUSION_SIZE result_of::size
+#define FUSION_SIZE boost::fusion::result_of::size
 #endif
 
 template <typename S1, typename S2>
@@ -144,8 +144,8 @@ test()
 
         BOOST_STATIC_ASSERT(FUSION_SIZE<t1>::value == 3);
         BOOST_STATIC_ASSERT(FUSION_SIZE<t2>::value == 0);
-        BOOST_STATIC_ASSERT(!result_of::empty<t1>::value);
-        BOOST_STATIC_ASSERT(result_of::empty<t2>::value);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<t1>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::empty<t2>::value);
     }
 
     {   // testing front & back

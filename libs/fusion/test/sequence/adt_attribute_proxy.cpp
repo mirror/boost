@@ -82,65 +82,65 @@ int main()
 
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::value_at_key<et, keys::name>::type,
+            boost::fusion::result_of::value_at_key<et, keys::name>::type,
             std::string
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::value_at_key<et, keys::name>::type,
-            fusion::result_of::value_at_c<et, 0>::type
+            boost::fusion::result_of::value_at_key<et, keys::name>::type,
+            boost::fusion::result_of::value_at_c<et, 0>::type
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::value_at_key<et, keys::age>::type,
+            boost::fusion::result_of::value_at_key<et, keys::age>::type,
             int
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::value_at_key<et, keys::age>::type,
-            fusion::result_of::value_at_c<et, 1>::type
+            boost::fusion::result_of::value_at_key<et, keys::age>::type,
+            boost::fusion::result_of::value_at_c<et, 1>::type
         >));
 
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<et, keys::name>::type,
+            boost::fusion::result_of::at_key<et, keys::name>::type,
             fusion::extension::adt_attribute_proxy<et, 0, false>
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<et, keys::age>::type,
+            boost::fusion::result_of::at_key<et, keys::age>::type,
             fusion::extension::adt_attribute_proxy<et, 1, false>
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<et, keys::name>::type,
-            fusion::result_of::front<et>::type
+            boost::fusion::result_of::at_key<et, keys::name>::type,
+            boost::fusion::result_of::front<et>::type
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<et, keys::age>::type,
-            fusion::result_of::back<et>::type
+            boost::fusion::result_of::at_key<et, keys::age>::type,
+            boost::fusion::result_of::back<et>::type
         >));
 
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<etc, keys::name>::type,
+            boost::fusion::result_of::at_key<etc, keys::name>::type,
             fusion::extension::adt_attribute_proxy<et, 0, true>
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<etc, keys::age>::type,
+            boost::fusion::result_of::at_key<etc, keys::age>::type,
             fusion::extension::adt_attribute_proxy<et, 1, true>
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<etc, keys::name>::type,
-            fusion::result_of::front<etc>::type
+            boost::fusion::result_of::at_key<etc, keys::name>::type,
+            boost::fusion::result_of::front<etc>::type
         >));
     BOOST_MPL_ASSERT((
         boost::is_same<
-            fusion::result_of::at_key<etc, keys::age>::type,
-            fusion::result_of::back<etc>::type
+            boost::fusion::result_of::at_key<etc, keys::age>::type,
+            boost::fusion::result_of::back<etc>::type
         >));
 
     BOOST_MPL_ASSERT((

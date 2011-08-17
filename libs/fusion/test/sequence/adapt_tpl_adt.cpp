@@ -85,8 +85,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);

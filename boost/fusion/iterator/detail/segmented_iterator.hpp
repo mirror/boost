@@ -7,24 +7,22 @@
 #if !defined(BOOST_FUSION_SEGMENTED_ITERATOR_SEGMENTED_ITERATOR_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_ITERATOR_SEGMENTED_ITERATOR_HPP_INCLUDED
 
-#include <boost/mpl/equal.hpp>
-#include <boost/mpl/transform.hpp>
-#include <boost/mpl/placeholders.hpp>
-#include <boost/fusion/mpl/begin.hpp>
-#include <boost/fusion/mpl/end.hpp>
-#include <boost/fusion/mpl/clear.hpp>
-#include <boost/fusion/mpl/push_front.hpp>
+#include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/iterator/iterator_facade.hpp>
 #include <boost/fusion/iterator/deref.hpp>
-#include <boost/fusion/iterator/equal_to.hpp>
-#include <boost/fusion/sequence/intrinsic/begin.hpp>
-#include <boost/fusion/iterator/segmented_iterator/detail/next_impl.hpp>
-#include <boost/fusion/sequence/intrinsic/detail/segmented_begin.hpp>
-#include <boost/fusion/sequence/intrinsic/detail/segmented_end.hpp>
-#include <boost/fusion/container/vector/convert.hpp>
+#include <boost/fusion/iterator/detail/segmented_equal_to.hpp>
+#include <boost/fusion/container/list/detail/reverse_cons.hpp>
 
 namespace boost { namespace fusion
 {
+    struct nil;
+
+    namespace detail
+    {
+        template <typename Stack>
+        struct segmented_next_impl;
+    }
+
     // A segmented iterator wraps a "context", which is a cons list
     // of ranges, the frontmost is range over values and the rest
     // are ranges over internal segments.
@@ -59,16 +57,9 @@ namespace boost { namespace fusion
         // the bottom-most.
         template<typename It1, typename It2>
         struct equal_to
-            : mpl::equal<
-                typename mpl::reverse_transform<
-                    typename result_of::as_vector<typename It1::context_type>::type,
-                    result_of::begin<mpl::_1>
-                >::type,
-                typename mpl::reverse_transform<
-                    typename result_of::as_vector<typename It2::context_type>::type,
-                    result_of::begin<mpl::_1>
-                >::type,
-                result_of::equal_to<mpl::_1, mpl::_2>
+          : detail::segmented_equal_to<
+                typename detail::reverse_cons<typename It1::context_type>::type,
+                typename detail::reverse_cons<typename It2::context_type>::type
             >
         {};
 
