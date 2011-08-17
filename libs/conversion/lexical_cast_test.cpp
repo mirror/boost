@@ -35,11 +35,16 @@
 
 #include <boost/type_traits/integral_promotion.hpp>
 #include <string>
+#include <vector>
 #include <memory>
 
 #if (defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)) \
     && !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
 #define LCAST_TEST_LONGLONG
+#endif
+
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_WSTRING)
+#define BOOST_LCAST_NO_WCHAR_T
 #endif
 
 template<class CharT>
@@ -65,6 +70,7 @@ void test_conversion_to_char();
 void test_conversion_to_int();
 void test_conversion_to_double();
 void test_conversion_to_bool();
+void test_conversion_with_nonconst_char();
 void test_conversion_to_string();
 void test_conversion_from_to_wchar_t_alias();
 void test_conversion_to_pointer();
@@ -86,9 +92,6 @@ void test_conversion_from_to_uintmax_t();
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
 #endif
-void test_conversion_from_to_float();
-void test_conversion_from_to_double();
-void test_conversion_from_to_long_double();
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 void test_traits();
 void test_wtraits();
@@ -96,6 +99,7 @@ void test_allocator();
 void test_wallocator();
 #endif
 void test_char_types_conversions();
+void operators_overload_test();
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
@@ -108,6 +112,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(test_conversion_from_to_wchar_t_alias));
     suite->add(BOOST_TEST_CASE(test_conversion_to_pointer));
     suite->add(BOOST_TEST_CASE(test_conversion_to_string));
+    suite->add(BOOST_TEST_CASE(test_conversion_with_nonconst_char));
 #ifndef BOOST_LCAST_NO_WCHAR_T
     suite->add(BOOST_TEST_CASE(test_conversion_from_wchar_t));
     suite->add(BOOST_TEST_CASE(test_conversion_to_wchar_t));
@@ -128,9 +133,6 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
 #endif
-    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_float));
-    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_double));
-    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_long_double));
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     suite->add(BOOST_TEST_CASE(&test_traits));
     suite->add(BOOST_TEST_CASE(&test_wtraits));
@@ -139,6 +141,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 #endif
 
     suite->add(BOOST_TEST_CASE(&test_char_types_conversions));
+    suite->add(BOOST_TEST_CASE(&operators_overload_test));
 
     return suite;
 }
@@ -201,19 +204,45 @@ void test_conversion_to_int()
         lexical_cast<int>(std::string("Test")), bad_lexical_cast);
 }
 
+void test_conversion_with_nonconst_char()
+{
+    std::vector<char> buffer;
+    buffer.push_back('1');
+    buffer.push_back('\0');
+    BOOST_CHECK_EQUAL(boost::lexical_cast<int>(&buffer[0]), 1);
+
+    std::vector<unsigned char> buffer2;
+    buffer2.push_back('1');
+    buffer2.push_back('\0');
+    BOOST_CHECK_EQUAL(boost::lexical_cast<int>(&buffer2[0]), 1);
+
+    std::vector<unsigned char> buffer3;
+    buffer3.push_back('1');
+    buffer3.push_back('\0');
+    BOOST_CHECK_EQUAL(boost::lexical_cast<int>(&buffer3[0]), 1);
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+    std::vector<wchar_t> buffer4;
+    buffer4.push_back(L'1');
+    buffer4.push_back(L'\0');
+    BOOST_CHECK_EQUAL(boost::lexical_cast<int>(&buffer4[0]), 1);
+#endif
+}
+
 void test_conversion_to_double()
 {
-    BOOST_CHECK_CLOSE(1.0, lexical_cast<double>('1'), (std::numeric_limits<double>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.0, lexical_cast<double>('1'), (std::numeric_limits<double>::epsilon()));
     BOOST_CHECK_THROW(lexical_cast<double>('A'), bad_lexical_cast);
-    BOOST_CHECK_CLOSE(1.0, lexical_cast<double>(1), (std::numeric_limits<double>::epsilon()));
-    BOOST_CHECK_CLOSE(1.23, lexical_cast<double>(1.23), (std::numeric_limits<double>::epsilon()));
-    BOOST_CHECK_CLOSE(1.234567890, 1.234567890, std::numeric_limits<double>::epsilon());
-    BOOST_CHECK_CLOSE(1.0, lexical_cast<double>(true), (std::numeric_limits<double>::epsilon()));
-    BOOST_CHECK_CLOSE(0.0, lexical_cast<double>(false), (std::numeric_limits<double>::epsilon()));
-    BOOST_CHECK_CLOSE(1.23, lexical_cast<double>("1.23"), (std::numeric_limits<double>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.0, lexical_cast<double>(1), (std::numeric_limits<double>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.23, lexical_cast<double>(1.23), (std::numeric_limits<double>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.234567890, lexical_cast<double>(1.234567890), std::numeric_limits<double>::epsilon());
+    BOOST_CHECK_CLOSE_FRACTION(1.234567890, lexical_cast<double>("1.234567890"), std::numeric_limits<double>::epsilon());
+    BOOST_CHECK_CLOSE_FRACTION(1.0, lexical_cast<double>(true), (std::numeric_limits<double>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(0.0, lexical_cast<double>(false), (std::numeric_limits<double>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.23, lexical_cast<double>("1.23"), (std::numeric_limits<double>::epsilon()));
     BOOST_CHECK_THROW(lexical_cast<double>(""), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<double>("Test"), bad_lexical_cast);
-    BOOST_CHECK_CLOSE(1.23, lexical_cast<double>(std::string("1.23")), (std::numeric_limits<double>::epsilon()));
+    BOOST_CHECK_CLOSE_FRACTION(1.23, lexical_cast<double>(std::string("1.23")), (std::numeric_limits<double>::epsilon()));
     BOOST_CHECK_THROW(
         lexical_cast<double>(std::string("")), bad_lexical_cast);
     BOOST_CHECK_THROW(
@@ -679,7 +708,7 @@ void test_conversion_from_to_integral_for_locale()
         BOOST_CHECK_THROW(lexical_cast<T>( np.thousands_sep() + std::string("100") ), bad_lexical_cast);
 
         // Exception must not be thrown, when we are using no separators at all
-        BOOST_CHECK( lexical_cast<T>("10000") == static_cast<T>(10000) );
+        BOOST_CHECK( lexical_cast<T>("30000") == static_cast<T>(30000) );
     }
 
     test_conversion_from_integral_to_integral<T>();
@@ -775,35 +804,6 @@ void test_conversion_from_to_integral()
         BOOST_TEST_MESSAGE("Formatting with thousands_sep has not been tested");
 }
 
-template<class T>
-void test_conversion_from_to_float()
-{
-    char const zero = '0';
-    signed char const szero = '0';
-    unsigned char const uzero = '0';
-    test_conversion_from_integral_to_char<T>(zero);
-    test_conversion_from_char_to_integral<T>(zero);
-    test_conversion_from_integral_to_char<T>(szero);
-    test_conversion_from_char_to_integral<T>(szero);
-    test_conversion_from_integral_to_char<T>(uzero);
-    test_conversion_from_char_to_integral<T>(uzero);
-#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-    wchar_t const wzero = L'0';
-    test_conversion_from_integral_to_char<T>(wzero);
-    test_conversion_from_char_to_integral<T>(wzero);
-#endif
-
-    test_conversion_from_integral_to_integral<T>();
-
-    BOOST_CHECK_CLOSE(lexical_cast<T>("+1"), 1, std::numeric_limits<T>::epsilon()  );
-    BOOST_CHECK_CLOSE(lexical_cast<T>("+9"), 9, std::numeric_limits<T>::epsilon()*9 );
-
-    BOOST_CHECK_THROW(lexical_cast<T>("++1"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<T>("-+9"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<T>("--1"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<T>("+-9"), bad_lexical_cast);
-}
-
 void test_conversion_from_to_short()
 {
     test_conversion_from_to_integral<short>();
@@ -842,19 +842,6 @@ void test_conversion_from_to_intmax_t()
 void test_conversion_from_to_uintmax_t()
 {
     test_conversion_from_to_integral<boost::uintmax_t>();
-}
-
-void test_conversion_from_to_float()
-{
-    test_conversion_from_to_float<float>();
-}
-void test_conversion_from_to_double()
-{
-    test_conversion_from_to_float<double>();
-}
-void test_conversion_from_to_long_double()
-{
-    test_conversion_from_to_float<long double>();
 }
 
 #if defined(BOOST_HAS_LONG_LONG)
@@ -966,16 +953,40 @@ void test_char_types_conversions()
     const wchar_t wc_arr[]=L"Test array of chars";
 
     BOOST_CHECK(boost::lexical_cast<std::wstring>(wc_arr) == std::wstring(wc_arr));
-    BOOST_CHECK(boost::lexical_cast<std::wstring>(c_arr) == std::wstring(wc_arr));
-
-    BOOST_CHECK(boost::lexical_cast<std::wstring>(sc_arr) != std::wstring(wc_arr) );
-    BOOST_CHECK(boost::lexical_cast<std::wstring>(uc_arr) != std::wstring(wc_arr) );
-
-    BOOST_CHECK(boost::lexical_cast<wchar_t>(c_arr[0]) == wc_arr[0]);
     BOOST_CHECK(boost::lexical_cast<wchar_t>(wc_arr[0]) == wc_arr[0]);
-
-    BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(uc_arr[0]), bad_lexical_cast);
-    BOOST_CHECK_THROW(boost::lexical_cast<wchar_t>(sc_arr[0]), bad_lexical_cast);
 
 #endif
 }
+
+
+
+struct foo_operators_test
+{
+  foo_operators_test() : f(2) {}
+  int f;
+};
+
+template <typename OStream>
+OStream& operator<<(OStream& ostr, const foo_operators_test& foo)
+{
+  ostr << foo.f;
+  return ostr;
+}
+
+template <typename IStream>
+IStream& operator>>(IStream& istr, foo_operators_test& foo)
+{
+  istr >> foo.f;
+  return istr;
+}
+
+void operators_overload_test()
+{
+    foo_operators_test foo;
+    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(foo), "2");
+    BOOST_CHECK_EQUAL((boost::lexical_cast<foo_operators_test>("2")).f, 2);
+
+    // Must compile
+    (void)boost::lexical_cast<foo_operators_test>(foo);
+}
+
