@@ -144,7 +144,9 @@ void unordered_destructible_test(X&)
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
     X x2(rvalue_default<X>());
     X x3 = rvalue_default<X>();
-    x2 = rvalue_default<X>();
+    // This can only be done if propagate_on_container_move_assignment::value
+    // is true.
+    // x2 = rvalue_default<X>();
 #endif
 
     X* ptr = new X();

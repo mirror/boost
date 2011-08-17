@@ -143,7 +143,7 @@ namespace boost { namespace unordered { namespace detail {
             return double_to_size_t(ceil(
                     static_cast<double>(this->mlf_) *
                     static_cast<double>(this->bucket_count_)
-                )) - 1;
+                ));
 
         }
 
