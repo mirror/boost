@@ -30,34 +30,12 @@
   BOOST_PP_CAT(has_static_member_data_,name) \
 /**/
 
-/// Generates the macro metafunction name for BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA.
-/**
-    name  = the name of the static member data.
-
-    returns = the generated macro metafunction name.
-*/
-#define BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA_GEN_BASE(name) \
-  BOOST_PP_CAT(mtfc_has_static_member_data_,name) \
-/**/
-
 /// Generates the macro metafunction name within the Boost TTI namespace for BOOST_TTI_HAS_STATIC_MEMBER_DATA.
 /**
     name  = the name of the static member data.
 
     returns = the generated macro metafunction name.
 */
-#define BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN(name) \
-  BOOST_TTI_NAMESPACE::BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN_BASE(name) \
-/**/
-
-/// Generates the macro metafunction name within the Boost TTI namespace for BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA.
-/**
-    name  = the name of the static member data.
-
-    returns = the generated macro metafunction name.
-*/
-#define BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA_GEN(name) \
-  BOOST_TTI_NAMESPACE::BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA_GEN_BASE(name) \
-/**/
+#define BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN_BASE
 
 #endif // TTI_STATIC_MEMBER_DATA_GEN_HPP

@@ -9,30 +9,25 @@
 
 #include <boost/config.hpp>
 #include <boost/mpl/has_xxx.hpp>
+#include <boost/preprocessor/cat.hpp>
 
 #define TTI_DETAIL_TRAIT_HAS_TYPE_MEMBER_TYPE(trait,name) \
-namespace ttimpl \
-  { \
-  BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, false) \
-  } \
-template<class T> \
-struct trait \
-  { \
-  typedef typename ttimpl::trait<T>::type type; \
-  \
-  BOOST_STATIC_CONSTANT(bool,value=type::value); \
-  }; \
+  BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(BOOST_PP_CAT(trait,_detail_mpl), name, false) \
+  template<class T> \
+  struct BOOST_PP_CAT(trait,_detail) \
+    { \
+    typedef typename BOOST_PP_CAT(trait,_detail_mpl)<T>::type type; \
+    \
+    BOOST_STATIC_CONSTANT(bool,value=type::value); \
+    }; \
 /**/
 
 #define TTI_DETAIL_TRAIT_MEMBER_TYPE(trait,name) \
-namespace member_type \
-  { \
   template<class T> \
-  struct trait \
+  struct BOOST_PP_CAT(trait,_detail_member_type) \
     { \
     typedef typename T::name type; \
     }; \
-  } \
 /**/
 
 #endif // TTI_DETAIL_MEM_TYPE_HPP

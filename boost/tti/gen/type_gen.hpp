@@ -30,34 +30,12 @@
   BOOST_PP_CAT(has_type_,name) \
 /**/
 
-/// Generates the macro metafunction name for BOOST_TTI_MTFC_HAS_TYPE.
-/**
-    name  = the name of the type.
-
-    returns = the generated macro metafunction name.
-*/
-#define BOOST_TTI_MTFC_HAS_TYPE_GEN_BASE(name) \
-  BOOST_PP_CAT(mtfc_has_type_,name) \
-/**/
-
 /// Generates the macro metafunction name within the Boost TTI namespace for BOOST_TTI_HAS_TYPE.
 /**
     name  = the name of the type.
 
     returns = the generated macro metafunction name.
 */
-#define BOOST_TTI_HAS_TYPE_GEN(name) \
-  BOOST_TTI_NAMESPACE::BOOST_TTI_HAS_TYPE_GEN_BASE(name) \
-/**/
-
-/// Generates the macro metafunction name within the Boost TTI namespace for BOOST_TTI_MTFC_HAS_TYPE.
-/**
-    name  = the name of the type.
-
-    returns = the generated macro metafunction name.
-*/
-#define BOOST_TTI_MTFC_HAS_TYPE_GEN(name) \
-  BOOST_TTI_NAMESPACE::BOOST_TTI_MTFC_HAS_TYPE_GEN_BASE(name) \
-/**/
+#define BOOST_TTI_HAS_TYPE_GEN BOOST_TTI_HAS_TYPE_GEN_BASE
 
 #endif // TTI_TYPE_GEN_HPP

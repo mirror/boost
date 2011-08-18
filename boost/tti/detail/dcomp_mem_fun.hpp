@@ -14,6 +14,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/quote.hpp>
 #include <boost/function_types/parameter_types.hpp>
+#include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 
@@ -21,7 +22,7 @@
 
 #define TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   template<class T> \
-  struct trait \
+  struct BOOST_PP_CAT(trait,_detail) \
     { \
     template<class F> \
     struct class_type \
@@ -67,7 +68,7 @@
 
 #define TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   template<class T> \
-  struct trait \
+  struct BOOST_PP_CAT(trait,_detail) \
     { \
     template<class F> \
     struct class_type \

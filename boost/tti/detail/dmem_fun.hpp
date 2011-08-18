@@ -9,6 +9,7 @@
 
 #include <boost/config.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include "dptmf.hpp"
 
@@ -16,7 +17,7 @@
 
 #define TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
   template<class T,class C> \
-  struct trait \
+  struct BOOST_PP_CAT(trait,_detail) \
     { \
     template<T> \
     struct helper; \
@@ -37,7 +38,7 @@
 
 #define TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
   template<class T,class C> \
-  struct trait \
+  struct BOOST_PP_CAT(trait,_detail) \
     { \
     template<T> \
     struct helper; \

@@ -11,16 +11,14 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/has_xxx.hpp>
+#include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include "dnotype.hpp"
 
 #define TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
-namespace ttimpl \
-  { \
-  BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, false) \
-  } \
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(BOOST_PP_CAT(trait,_detail_mpl), name, false) \
 template<class T,class U,class B> \
-struct trait \
+struct BOOST_PP_CAT(trait,_detail) \
   { \
   typedef typename \
     boost::mpl::eval_if \
@@ -34,14 +32,14 @@ struct trait \
   }; \
 \
 template<class T,class U> \
-struct trait<T,U,boost::mpl::false_::type> \
+struct BOOST_PP_CAT(trait,_detail)<T,U,boost::mpl::false_::type> \
   { \
   typedef boost::mpl::false_::type type; \
   BOOST_STATIC_CONSTANT(bool,value=type::value); \
   }; \
 \
 template<class T> \
-struct trait<T,notype,boost::mpl::true_::type> \
+struct BOOST_PP_CAT(trait,_detail)<T,BOOST_TTI_NAMESPACE::detail::notype,boost::mpl::true_::type> \
   { \
   typedef boost::mpl::true_::type type; \
   BOOST_STATIC_CONSTANT(bool,value=type::value); \
