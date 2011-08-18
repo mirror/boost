@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/algorithm/iteration/ext_/for_each_s.hpp>
+#include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include "../sequence/tree.hpp"
 
@@ -26,7 +26,7 @@ main()
     using namespace boost::fusion;
 
     {
-        for_each_s(
+        for_each(
             make_tree(
                 make_vector(double(0),'B')
               , make_tree(

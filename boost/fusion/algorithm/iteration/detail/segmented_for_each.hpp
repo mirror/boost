@@ -4,11 +4,12 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_FUSION_FOR_EACH_S_HPP_INCLUDED)
-#define BOOST_FUSION_FOR_EACH_S_HPP_INCLUDED
+#if !defined(BOOST_FUSION_SEGMENTED_FOR_EACH_HPP_INCLUDED)
+#define BOOST_FUSION_SEGMENTED_FOR_EACH_HPP_INCLUDED
 
+#include <boost/mpl/bool.hpp>
 #include <boost/fusion/support/void.hpp>
-#include <boost/fusion/algorithm/iteration/for_each.hpp>
+#include <boost/fusion/algorithm/iteration/for_each_fwd.hpp>
 #include <boost/fusion/support/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
@@ -35,32 +36,13 @@ namespace boost { namespace fusion { namespace detail
             }
         };
     };
+
+    template <typename Sequence, typename F>
+    inline void
+    for_each(Sequence& seq, F const& f, mpl::true_) // segmented implementation
+    {
+        fusion::segmented_fold_until(seq, void_(), segmented_for_each_fun<F>(f));
+    }
 }}}
-
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename F>
-        struct for_each_s
-        {
-            typedef void type;
-        };
-    }
-
-    template <typename Sequence, typename F>
-    inline void
-    for_each_s(Sequence& seq, F const& f)
-    {
-        fusion::segmented_fold_until(seq, void_(), detail::segmented_for_each_fun<F>(f));
-    }
-
-    template <typename Sequence, typename F>
-    inline void
-    for_each_s(Sequence const& seq, F const& f)
-    {
-        fusion::segmented_fold_until(seq, void_(), detail::segmented_for_each_fun<F>(f));
-    }
-}}
 
 #endif
