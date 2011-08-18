@@ -16,22 +16,25 @@ namespace boost { namespace fusion { namespace detail
     template <typename Fun>
     struct segmented_for_each_fun
     {
-        typedef result<void, continue_> result_type;
-
         explicit segmented_for_each_fun(Fun const& f)
           : fun(f)
         {}
 
-        template <typename Sequence, typename State, typename Context>
-        result_type operator()(Sequence& seq, State const&, Context const&) const
-        {
-            fusion::for_each(seq, fun);
-            return void_();
-        }
-
         Fun const& fun;
-    };
 
+        template <typename Sequence, typename State, typename Context>
+        struct apply
+        {
+            typedef void_ type;
+            typedef mpl::true_ continue_type;
+
+            static type call(Sequence& seq, State const&, Context const&, segmented_for_each_fun const& fun)
+            {
+                fusion::for_each(seq, fun.fun);
+                return void_();
+            }
+        };
+    };
 }}}
 
 namespace boost { namespace fusion

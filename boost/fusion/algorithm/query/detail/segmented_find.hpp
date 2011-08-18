@@ -7,7 +7,8 @@
 #if !defined(BOOST_FUSION_SEGMENTED_FIND_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_FIND_HPP_INCLUDED
 
-#include <boost/type_traits/remove_const.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/fusion/algorithm/query/find_fwd.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
@@ -18,63 +19,46 @@ namespace boost { namespace fusion { namespace detail
     template <typename T>
     struct segmented_find_fun
     {
-        template <typename Sig>
-        struct result;
-
-        template <typename This, typename Sequence, typename State, typename Context>
-        struct result<This(Sequence&, State&, Context&)>
+        template <typename Sequence, typename State, typename Context>
+        struct apply
         {
             typedef
                 typename result_of::find<Sequence, T>::type
             iterator_type;
 
             typedef
-                typename result_of::make_segmented_iterator<
-                    iterator_type
-                  , typename remove_const<Context>::type
-                >::type
-            segmented_iterator_type;
-
-            typedef
-                typename mpl::if_<
-                    result_of::equal_to<
-                        iterator_type
-                      , typename result_of::end<Sequence>::type
-                    >
-                  , fusion::result<typename remove_const<State>::type, continue_>,  // NOT FOUND
-                    fusion::result<segmented_iterator_type, break_>                 // FOUND
-                >::type
-            type;
-        };
-
-        template <typename Sequence, typename State, typename Context>
-        typename result<segmented_find_fun(Sequence&, State const&, Context const&)>::type
-        operator()(Sequence& seq, State const&state, Context const& context) const
-        {
-            typedef
                 typename result_of::equal_to<
-                    typename result_of::find<Sequence, T>::type
+                    iterator_type
                   , typename result_of::end<Sequence>::type
                 >::type
-            not_found;
+            continue_type;
 
-            return call(seq, state, context, not_found());
-        }
+            typedef
+                typename mpl::eval_if<
+                    continue_type
+                  , mpl::identity<State>
+                  , result_of::make_segmented_iterator<
+                        iterator_type
+                      , Context
+                    >
+                >::type
+            type;
 
-    private:
-        template <typename Sequence, typename State, typename Context>
-        typename result<segmented_find_fun(Sequence&, State const&, Context const&)>::type
-        call(Sequence&, State const&state, Context const&, mpl::true_) const
-        {
-            return state;
-        }
+            static type call(Sequence& seq, State const&state, Context const& context, segmented_find_fun)
+            {
+                return call_impl(seq, state, context, continue_type());
+            }
 
-        template <typename Sequence, typename State, typename Context>
-        typename result<segmented_find_fun(Sequence&, State const&, Context const&)>::type
-        call(Sequence& seq, State const&, Context const& context, mpl::false_) const
-        {
-            return fusion::make_segmented_iterator(fusion::find<T>(seq), context);
-        }
+            static type call_impl(Sequence&, State const&state, Context const&, mpl::true_)
+            {
+                return state;
+            }
+
+            static type call_impl(Sequence& seq, State const&, Context const& context, mpl::false_)
+            {
+                return fusion::make_segmented_iterator(fusion::find<T>(seq), context);
+            }
+        };
     };
 
     template <typename Sequence, typename T>

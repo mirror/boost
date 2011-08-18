@@ -75,46 +75,6 @@ namespace boost { namespace fusion
         return type(cons<range_type, Context>(range_type(cur, fusion::end(*context.car.first)), context));
     }
 
-    typedef mpl::true_  continue_;
-    typedef mpl::false_ break_;
-
-    template <typename Value, typename Continue>
-    struct result
-    {
-        typedef Value value_type;
-        typedef Continue continue_type;
-
-        result(Value const& val)
-          : value(val)
-        {}
-
-        value_type value;
-    };
-
-    template <typename Continue>
-    struct result<void, Continue>
-    {
-        typedef void_ value_type;
-        typedef Continue continue_type;
-
-        result(void_ const&)
-        {}
-
-        value_type value;
-    };
-
-    template <typename Value>
-    result<Value, continue_> make_result_continue(Value const& val)
-    {
-        return result<Value, continue_>(val);
-    }
-
-    template <typename Value>
-    result<Value, break_> make_result_break(Value const& val)
-    {
-        return result<Value, break_>(val);
-    }
-
     namespace detail
     {
         template <
@@ -125,7 +85,8 @@ namespace boost { namespace fusion
           , typename Fun
           , bool IsEmpty = result_of::empty<
                 typename result_of::value_of<Begin>::type
-            >::type::value>
+            >::type::value
+        >
         struct segmented_fold_until_iterate_skip_empty;
 
         template <
@@ -134,7 +95,8 @@ namespace boost { namespace fusion
           , typename State
           , typename Context
           , typename Fun
-          , bool IsDone = result_of::equal_to<Begin, End>::type::value>
+          , bool IsDone = result_of::equal_to<Begin, End>::type::value
+        >
         struct segmented_fold_until_iterate;
 
         template <
@@ -142,7 +104,8 @@ namespace boost { namespace fusion
           , typename State
           , typename Context
           , typename Fun
-          , bool IsSegmented = traits::is_segmented<Sequence>::type::value>
+          , bool IsSegmented = traits::is_segmented<Sequence>::type::value
+        >
         struct segmented_fold_until_impl;
 
         template <typename Segments, typename State, typename Context, typename Fun>
@@ -187,7 +150,8 @@ namespace boost { namespace fusion
           , typename State
           , typename Context
           , typename Fun
-          , bool IsSegmented>
+          , bool IsSegmented
+        >
         struct segmented_fold_until_impl
         {
             typedef
@@ -204,6 +168,7 @@ namespace boost { namespace fusion
             impl;
 
             typedef typename impl::type type;
+            typedef typename impl::continue_type continue_type;
 
             static type call(Sequence& seq, State const& state, Context const& context, Fun const& fun)
             {
@@ -215,20 +180,20 @@ namespace boost { namespace fusion
             typename Sequence
           , typename State
           , typename Context
-          , typename Fun>
+          , typename Fun
+        >
         struct segmented_fold_until_impl<Sequence, State, Context, Fun, false>
         {
             typedef
-                typename boost::result_of<Fun(
-                    Sequence&
-                  , typename add_reference<typename add_const<typename State::value_type>::type>::type
-                  , Context const&
-                )>::type
-            type;
-            
+                typename Fun::template apply<Sequence, State, Context>
+            apply_type;
+
+            typedef typename apply_type::type type;
+            typedef typename apply_type::continue_type continue_type;
+
             static type call(Sequence& seq, State const& state, Context const& context, Fun const& fun)
             {
-                return fun(seq, state.value, context);
+                return apply_type::call(seq, state, context, fun);
             }
         };
 
@@ -245,6 +210,12 @@ namespace boost { namespace fusion
         //      return state;
         //  }
         //}
+
+        template <typename Apply>
+        struct continue_wrap
+        {
+            typedef typename Apply::continue_type type;
+        };
 
         template <typename Begin, typename End, typename State, typename Context, typename Fun, bool IsEmpty>
         struct segmented_fold_until_iterate_skip_empty
@@ -287,16 +258,24 @@ namespace boost { namespace fusion
 
             typedef
                 typename mpl::eval_if<
-                    typename next_state_type::continue_type
+                    typename fold_recurse_impl::continue_type
                   , next_iteration_impl
                   , mpl::identity<next_state_type>
                 >::type
             type;
 
+            typedef
+                typename mpl::eval_if<
+                    typename fold_recurse_impl::continue_type
+                  , continue_wrap<next_iteration_impl>
+                  , mpl::identity<mpl::false_>
+                >::type
+            continue_type;
+
             static type call(Begin const& beg, End const& end, State const& state
                            , Context const& context, Fun const& fun)
             {
-                return call(beg, end, state, context, fun, typename next_state_type::continue_type());
+                return call(beg, end, state, context, fun, typename fold_recurse_impl::continue_type());
             }
 
             static type call(Begin const& beg, End const& end, State const& state
@@ -339,6 +318,7 @@ namespace boost { namespace fusion
             impl;
             
             typedef typename impl::type type;
+            typedef typename impl::continue_type continue_type;
 
             static type call(Begin const& beg, End const& end, State const& state
                            , Context const& context, Fun const& fun)
@@ -355,6 +335,7 @@ namespace boost { namespace fusion
             impl;
             
             typedef typename impl::type type;
+            typedef typename impl::continue_type continue_type;
 
             static type call(Begin const& beg, End const& end, State const& state
                            , Context const& context, Fun const& fun)
@@ -367,6 +348,7 @@ namespace boost { namespace fusion
         struct segmented_fold_until_iterate<Begin, End, State, Context, Fun, true>
         {
             typedef State type;
+            typedef mpl::true_ continue_type;
 
             static type call(Begin const&, End const&, State const& state
                            , Context const&, Fun const&)
@@ -389,6 +371,7 @@ namespace boost { namespace fusion
             impl;
 
             typedef typename impl::type type;
+            typedef typename impl::continue_type continue_type;
 
             static type call(Segments& segs, State const& state, Context const& context, Fun const& fun)
             {

@@ -31,14 +31,14 @@ namespace boost { namespace fusion
             typedef
                 detail::segmented_fold_until_impl<
                     Sequence
-                  , result<State, continue_>
+                  , State
                   , fusion::nil
                   , Fun
                 >
             filter;
 
             typedef
-                typename filter::type::value_type
+                typename filter::type
             type;
         };
     }
@@ -55,7 +55,7 @@ namespace boost { namespace fusion
             typename result_of::segmented_fold_until<Sequence, State, Fun>::filter
         filter;
         
-        return filter::call(seq, state, fusion::nil(), fun).value;
+        return filter::call(seq, state, fusion::nil(), fun);
     }
 
     template <typename Sequence, typename State, typename Fun>
@@ -66,7 +66,7 @@ namespace boost { namespace fusion
             typename result_of::segmented_fold_until<Sequence const, State, Fun>::filter
         filter;
         
-        return filter::call(seq, state, fusion::nil(), fun).value;
+        return filter::call(seq, state, fusion::nil(), fun);
     }
 }}
 

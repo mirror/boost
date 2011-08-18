@@ -24,30 +24,8 @@ namespace boost { namespace fusion { namespace detail
 {
     struct segmented_begin_fun
     {
-        template <typename Sig>
-        struct result;
-    
-        template <typename This, typename Sequence, typename State, typename Context>
-        struct result<This(Sequence&, State&, Context&)>
-        {
-            typedef
-                iterator_range<
-                    typename fusion::result_of::begin<Sequence>::type
-                  , typename fusion::result_of::end<Sequence>::type
-                >
-            range_type;
-
-            typedef
-                fusion::result<
-                    cons<range_type, typename remove_const<Context>::type>
-                  , fusion::break_
-                >
-            type;
-        };
-
         template <typename Sequence, typename State, typename Context>
-        typename result<segmented_begin_fun(Sequence&, State const&, Context const&)>::type
-        operator()(Sequence& seq, State const&, Context const& context) const
+        struct apply
         {
             typedef
                 iterator_range<
@@ -56,8 +34,14 @@ namespace boost { namespace fusion { namespace detail
                 >
             range_type;
 
-            return cons<range_type, Context>(range_type(fusion::begin(seq), fusion::end(seq)), context);
-        }
+            typedef cons<range_type, Context> type;
+            typedef mpl::false_ continue_type;
+
+            static type call(Sequence& seq, State const&, Context const& context, segmented_begin_fun)
+            {
+                return type(range_type(fusion::begin(seq), fusion::end(seq)), context);
+            }
+        };
     };
 
     template <typename Sequence, typename Stack, bool IsSegmented = traits::is_segmented<Sequence>::type::value>
@@ -70,17 +54,17 @@ namespace boost { namespace fusion { namespace detail
         typedef
             segmented_fold_until_impl<
                 Sequence
-              , result<typename end_impl::type, continue_>
+              , typename end_impl::type
               , Stack
               , segmented_begin_fun
             >
         fold_impl;
 
-        typedef typename fold_impl::type::value_type type;
+        typedef typename fold_impl::type type;
 
         static type call(Sequence& seq, Stack const& stack)
         {
-            return fold_impl::call(seq, end_impl::call(seq, stack), stack, segmented_begin_fun()).value;
+            return fold_impl::call(seq, end_impl::call(seq, stack), stack, segmented_begin_fun());
         }
     };
 
