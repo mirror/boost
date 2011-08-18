@@ -24,7 +24,7 @@ namespace boost { namespace fusion
 
     namespace detail
     {
-        template <typename Range, typename Stack>
+        template <typename Sequence, typename Stack>
         struct segmented_begin_impl;
 
         //bool is_invalid(stack)
@@ -40,7 +40,7 @@ namespace boost { namespace fusion
             >
         {};
 
-        ////Advance the first iterator in the range at the
+        ////Advance the first iterator in the seq at the
         ////top of a stack of iterator ranges. Return the
         ////new stack.
         //auto pop_front_car(stack)
@@ -126,7 +126,7 @@ namespace boost { namespace fusion
 
         template <
             typename Stack,
-            typename Range  =
+            typename Sequence  =
                 typename remove_reference<
                     typename add_const<
                         typename result_of::deref<
@@ -135,7 +135,7 @@ namespace boost { namespace fusion
                     >::type
                 >::type,
             typename Result =
-                typename segmented_begin_impl<Range, Stack>::type,
+                typename segmented_begin_impl<Sequence, Stack>::type,
             bool IsInvalid  =
                 is_invalid<Result>::value>
         struct segmented_next_impl_recurse2
@@ -149,14 +149,14 @@ namespace boost { namespace fusion
             }
         };
 
-        template <typename Stack, typename Range, typename Result>
-        struct segmented_next_impl_recurse2<Stack, Range, Result, false>
+        template <typename Stack, typename Sequence, typename Result>
+        struct segmented_next_impl_recurse2<Stack, Sequence, Result, false>
         {
             typedef Result type;
 
             static type call(Stack const & stack)
             {
-                return segmented_begin_impl<Range, Stack>::call(*stack.car.first, stack);
+                return segmented_begin_impl<Sequence, Stack>::call(*stack.car.first, stack);
             }
         };
 
@@ -210,7 +210,7 @@ namespace boost { namespace fusion
 
         //auto segmented_next_impl(stack)
         //{
-        //  // car(stack) is a range of values, not a range of segments
+        //  // car(stack) is a seq of values, not a seq of segments
         //  auto next = pop_front_car(stack);
         //  if (is_invalid(next))
         //    return segmented_next_impl_recurse(cdr(next));

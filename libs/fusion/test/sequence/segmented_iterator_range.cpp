@@ -8,7 +8,7 @@
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/algorithm/iteration/ext_/for_each_s.hpp>
-#include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
+#include <boost/fusion/algorithm/query/find_if.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
@@ -43,16 +43,16 @@ process_tree(Tree const &tree)
     using namespace fusion;
     using mpl::_;
 
-    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
-    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
+    typedef typename boost::fusion::result_of::find_if<Tree const, is_same<_,short> >::type short_iter;
+    typedef typename boost::fusion::result_of::find_if<Tree const, is_same<_,float> >::type float_iter;
 
     typedef iterator_range<short_iter, float_iter> slice_t;
     BOOST_STATIC_ASSERT(traits::is_segmented<slice_t>::value);
 
-    // find_if_s of a segmented data structure returns generic
+    // find_if of a segmented data structure returns generic
     // segmented iterators
-    short_iter si = find_if_s<is_same<_,short> >(tree);
-    float_iter fi = find_if_s<is_same<_,float> >(tree);
+    short_iter si = find_if<is_same<_,short> >(tree);
+    float_iter fi = find_if<is_same<_,float> >(tree);
 
     // If you put them in an iterator range, the range
     // is automatically a segmented data structure.

@@ -29,8 +29,8 @@ namespace boost { namespace fusion
             {
                 typedef
                     detail::make_segmented_range<
-                        typename Sequence::begin_type,
-                        typename Sequence::end_type
+                        typename Sequence::begin_type
+                      , typename Sequence::end_type
                     >
                 impl;
 

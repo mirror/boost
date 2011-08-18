@@ -53,9 +53,9 @@ namespace boost { namespace fusion
               : is_segmented_iterator<typename Sequence::begin_type>
             {
                 BOOST_MPL_ASSERT_RELATION(
-                    is_segmented_iterator<typename Sequence::begin_type>::value,
-                    ==,
-                    is_segmented_iterator<typename Sequence::end_type>::value);
+                    is_segmented_iterator<typename Sequence::begin_type>::value
+                  , ==
+                  , is_segmented_iterator<typename Sequence::end_type>::value);
             };
         };
     }

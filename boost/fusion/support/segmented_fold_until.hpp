@@ -7,6 +7,8 @@
 #if !defined(BOOST_FUSION_SEGMENTED_FOLD_UNTIL_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_FOLD_UNTIL_HPP_INCLUDED
 
+#include <boost/type_traits/is_const.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/fusion/support/detail/segmented_fold_until_impl.hpp>
 #include <boost/fusion/view/iterator_range.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
@@ -16,45 +18,56 @@
 
 namespace boost { namespace fusion
 {
-    //auto segmented_fold_until(rng, state, fun)
+    //auto segmented_fold_until(seq, state, fun)
     //{
-    //  return first(segmented_fold_until_impl(rng, state, nil, fun));
+    //  return first(segmented_fold_until_impl(seq, state, nil, fun));
     //}
 
     namespace result_of
     {
-        template <typename Range, typename State, typename Fun>
+        template <typename Sequence, typename State, typename Fun>
         struct segmented_fold_until
         {
             typedef
                 detail::segmented_fold_until_impl<
-                    Range,
-                    result<State, continue_>,
-                    fusion::nil,
-                    Fun
+                    Sequence
+                  , result<State, continue_>
+                  , fusion::nil
+                  , Fun
                 >
-            impl;
+            filter;
 
             typedef
-                typename impl::type::value_type
+                typename filter::type::value_type
             type;
         };
     }
 
-    template <typename Range, typename State, typename Fun>
-    typename result_of::segmented_fold_until<Range, State, Fun>::type
-    segmented_fold_until(Range& rng, State const& state, Fun const& fun)
+    template <typename Sequence, typename State, typename Fun>
+    typename 
+        lazy_disable_if<
+            is_const<Sequence>
+          , result_of::segmented_fold_until<Sequence, State, Fun>
+        >::type
+    segmented_fold_until(Sequence& seq, State const& state, Fun const& fun)
     {
-        typedef typename result_of::segmented_fold_until<Range, State, Fun>::impl impl;
-        return impl::call(rng, state, fusion::nil(), fun).value;
+        typedef
+            typename result_of::segmented_fold_until<Sequence, State, Fun>::filter
+        filter;
+        
+        return filter::call(seq, state, fusion::nil(), fun).value;
     }
 
-    template <typename Range, typename State, typename Fun>
-    typename result_of::segmented_fold_until<Range const, State, Fun>::type
-    segmented_fold_until(Range const& rng, State const& state, Fun const& fun)
+    template <typename Sequence, typename State, typename Fun>
+    typename result_of::segmented_fold_until<Sequence const, State, Fun>::type
+    segmented_fold_until(Sequence const& seq, State const& state, Fun const& fun)
     {
-        typedef typename result_of::segmented_fold_until<Range const, State, Fun>::impl impl;
-        return impl::call(rng, state, fusion::nil(), fun).value;
+        typedef
+            typename result_of::segmented_fold_until<Sequence const, State, Fun>::filter
+        filter;
+        
+        return filter::call(seq, state, fusion::nil(), fun).value;
     }
 }}
+
 #endif

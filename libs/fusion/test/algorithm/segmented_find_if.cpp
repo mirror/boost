@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
+#include <boost/fusion/algorithm/query/find_if.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -22,21 +22,21 @@ process_tree(Tree const &tree)
     using namespace boost;
     using mpl::_;
 
-    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
-    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
-    typedef typename boost::fusion::result_of::find_if_s<Tree const, is_same<_,not_there> >::type not_there_iter;
+    typedef typename boost::fusion::result_of::find_if<Tree const, is_same<_,short> >::type short_iter;
+    typedef typename boost::fusion::result_of::find_if<Tree const, is_same<_,float> >::type float_iter;
+    typedef typename boost::fusion::result_of::find_if<Tree const, is_same<_,not_there> >::type not_there_iter;
 
-    // find_if_s of a segmented data structure returns generic
+    // find_if of a segmented data structure returns generic
     // segmented iterators
-    short_iter si = fusion::find_if_s<is_same<_,short> >(tree);
-    float_iter fi = fusion::find_if_s<is_same<_,float> >(tree);
+    short_iter si = fusion::find_if<is_same<_,short> >(tree);
+    float_iter fi = fusion::find_if<is_same<_,float> >(tree);
 
     // they behave like ordinary Fusion iterators ...
     BOOST_TEST((*si == short('d')));
     BOOST_TEST((*fi == float(1)));
 
     // Searching for something that's not there should return the end iterator.
-    not_there_iter nti = fusion::find_if_s<is_same<_,not_there> >(tree);
+    not_there_iter nti = fusion::find_if<is_same<_,not_there> >(tree);
     BOOST_TEST((nti == fusion::end(tree)));
 }
 

@@ -28,14 +28,14 @@ namespace boost { namespace fusion { namespace detail
     ///////////////////////////////////////////////////////////////////////////
     template<typename Sequence, bool IsSegmented = traits::is_segmented<Sequence>::value>
     struct segmented_size_impl
-        : mpl::fold<
+      : mpl::fold<
             typename remove_reference<
                 typename add_const<
                     typename result_of::segments<Sequence>::type
                 >::type
-            >::type,
-            mpl::size_t<0>,
-            mpl::plus<mpl::_1, segmented_size<mpl::_2> >
+            >::type
+          , mpl::size_t<0>
+          , mpl::plus<mpl::_1, segmented_size<mpl::_2> >
         >::type
     {};
 

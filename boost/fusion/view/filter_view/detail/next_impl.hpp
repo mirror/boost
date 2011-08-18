@@ -65,7 +65,7 @@ namespace boost { namespace fusion
                 static type
                 call(Iterator const& i)
                 {
-                    return type(filter::call(i.first));
+                    return type(filter::iter_call(i.first));
                 }
             };
         };

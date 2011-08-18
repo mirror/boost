@@ -22,23 +22,23 @@ namespace boost { namespace fusion
 
 namespace boost { namespace fusion { namespace detail
 {
-    //auto segmented_end_impl( rng, stack )
+    //auto segmented_end_impl( seq, stack )
     //{
-    //    assert(is_segmented(rng));
-    //    auto it = end(segments(rng));
+    //    assert(is_segmented(seq));
+    //    auto it = end(segments(seq));
     //    return cons(iterator_range(it, it), stack);
     //}
 
-    template<typename Range, typename Stack>
+    template <typename Sequence, typename Stack>
     struct segmented_end_impl
     {
-        BOOST_MPL_ASSERT((traits::is_segmented<Range>));
+        BOOST_MPL_ASSERT((traits::is_segmented<Sequence>));
 
         typedef
             typename result_of::end<
                 typename remove_reference<
                     typename add_const<
-                        typename result_of::segments<Range>::type
+                        typename result_of::segments<Sequence>::type
                     >::type
                 >::type
             >::type
@@ -47,9 +47,9 @@ namespace boost { namespace fusion { namespace detail
         typedef iterator_range<end_type, end_type>  pair_type;
         typedef cons<pair_type, Stack>              type;
 
-        static type call(Range & rng, Stack stack)
+        static type call(Sequence & seq, Stack stack)
         {
-            end_type end = fusion::end(fusion::segments(rng));
+            end_type end = fusion::end(fusion::segments(seq));
             return type(pair_type(end, end), stack);
         }
     };

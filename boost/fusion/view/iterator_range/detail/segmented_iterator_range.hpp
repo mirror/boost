@@ -82,16 +82,16 @@ namespace boost { namespace fusion { namespace detail
                             >::type
                         >::type
                     >::type
-                >::type,
-                typename Stack::cdr_type::car_type::end_type
+                >::type
+              , typename Stack::cdr_type::car_type::end_type
             >));
 
         typedef
             iterator_range<
                 typename result_of::next<
                     typename Stack::cdr_type::car_type::begin_type
-                >::type,
-                typename result_of::end<
+                >::type
+              , typename result_of::end<
                     typename remove_reference<
                         typename add_const<
                             typename result_of::segments<
@@ -116,8 +116,8 @@ namespace boost { namespace fusion { namespace detail
         typedef
             segment_sequence<
                 typename result_of::push_front<
-                    rest_type const,
-                    typename recurse::type 
+                    rest_type const
+                  , typename recurse::type 
                 >::type
             >
         type;
@@ -130,8 +130,8 @@ namespace boost { namespace fusion { namespace detail
             //    make_segment_sequence_front(cdr(stack_begin))));
             return type(
                 fusion::push_front(
-                    rest_type(fusion::next(stack.cdr.car.first), fusion::end(fusion::segments(*stack.car.first))),
-                    recurse::call(stack.cdr)));
+                    rest_type(fusion::next(stack.cdr.car.first), fusion::end(fusion::segments(*stack.car.first)))
+                  , recurse::call(stack.cdr)));
         }
     };
 
@@ -149,14 +149,14 @@ namespace boost { namespace fusion { namespace detail
                             >::type
                         >::type
                     >::type
-                >::type,
-                typename Stack::cdr_type::car_type::end_type
+                >::type
+              , typename Stack::cdr_type::car_type::end_type
             >));
 
         typedef
             iterator_range<
-                typename Stack::cdr_type::car_type::begin_type,
-                typename result_of::end<
+                typename Stack::cdr_type::car_type::begin_type
+              , typename result_of::end<
                     typename remove_reference<
                         typename add_const<
                             typename result_of::deref<
@@ -226,8 +226,8 @@ namespace boost { namespace fusion { namespace detail
                             >::type
                         >::type
                     >::type
-                >::type,
-                typename Stack::cdr_type::car_type::end_type
+                >::type
+              , typename Stack::cdr_type::car_type::end_type
             >));
 
         typedef
@@ -246,8 +246,8 @@ namespace boost { namespace fusion { namespace detail
                             >::type
                         >::type
                     >::type
-                >::type,
-                typename Stack::cdr_type::car_type::begin_type
+                >::type
+              , typename Stack::cdr_type::car_type::begin_type
             >
         rest_type;
 
@@ -258,8 +258,8 @@ namespace boost { namespace fusion { namespace detail
         typedef
             segment_sequence<
                 typename result_of::push_back<
-                    rest_type const,
-                    typename recurse::type 
+                    rest_type const
+                  , typename recurse::type 
                 >::type
             >
         type;
@@ -272,8 +272,8 @@ namespace boost { namespace fusion { namespace detail
             //      make_segment_sequence_back(cdr(stack_end))));
             return type(
                 fusion::push_back(
-                    rest_type(fusion::begin(fusion::segments(*stack.car.first)), stack.cdr.car.first),
-                    recurse::call(stack.cdr)));
+                    rest_type(fusion::begin(fusion::segments(*stack.car.first)), stack.cdr.car.first)
+                  , recurse::call(stack.cdr)));
         }
     };
 
@@ -291,8 +291,8 @@ namespace boost { namespace fusion { namespace detail
                             >::type
                         >::type
                     >::type
-                >::type,
-                typename Stack::cdr_type::car_type::end_type
+                >::type
+              , typename Stack::cdr_type::car_type::end_type
             >));
 
         typedef
@@ -305,8 +305,8 @@ namespace boost { namespace fusion { namespace detail
                             >::type
                         >::type
                     >::type
-                >::type,
-                typename Stack::cdr_type::car_type::begin_type
+                >::type
+              , typename Stack::cdr_type::car_type::begin_type
             >
         type;
 
@@ -362,19 +362,19 @@ namespace boost { namespace fusion { namespace detail
     //}
 
     template <
-        typename StackBegin,
-        typename StackEnd,
-        int StackBeginSize = StackBegin::size::value,
-        int StackEndSize   = StackEnd::size::value>
+        typename StackBegin
+      , typename StackEnd
+      , int StackBeginSize = StackBegin::size::value
+      , int StackEndSize   = StackEnd::size::value>
     struct make_segmented_range_reduce;
 
     template <
-        typename StackBegin,
-        typename StackEnd,
-        bool SameSegment = 
+        typename StackBegin
+      , typename StackEnd
+      , bool SameSegment = 
             result_of::equal_to<
-                typename StackBegin::car_type::begin_type,
-                typename StackEnd::car_type::begin_type
+                typename StackBegin::car_type::begin_type
+              , typename StackEnd::car_type::begin_type
             >::type::value>
     struct make_segmented_range_reduce2
     {
@@ -382,8 +382,8 @@ namespace boost { namespace fusion { namespace detail
             iterator_range<
                 typename result_of::next<
                     typename StackBegin::car_type::begin_type
-                >::type,
-                typename StackEnd::car_type::begin_type
+                >::type
+              , typename StackEnd::car_type::begin_type
             >
         rest_type;
 
@@ -391,10 +391,10 @@ namespace boost { namespace fusion { namespace detail
             segment_sequence<
                 typename result_of::push_back<
                     typename result_of::push_front<
-                        rest_type const,
-                        typename make_segment_sequence_front<StackBegin>::type
-                    >::type const,
-                    typename make_segment_sequence_back<StackEnd>::type
+                        rest_type const
+                      , typename make_segment_sequence_front<StackBegin>::type
+                    >::type const
+                  , typename make_segment_sequence_back<StackEnd>::type
                 >::type
             >
         type;
@@ -412,9 +412,9 @@ namespace boost { namespace fusion { namespace detail
             return type(
                 fusion::push_back(
                     fusion::push_front(
-                        rest_type(fusion::next(stack_begin.car.first), stack_end.car.first),
-                        make_segment_sequence_front<StackBegin>::call(stack_begin)),
-                    make_segment_sequence_back<StackEnd>::call(stack_end)));
+                        rest_type(fusion::next(stack_begin.car.first), stack_end.car.first)
+                      , make_segment_sequence_front<StackBegin>::call(stack_begin))
+                  , make_segment_sequence_back<StackEnd>::call(stack_end)));
         }
     };
 
@@ -423,8 +423,8 @@ namespace boost { namespace fusion { namespace detail
     {
         typedef
             make_segmented_range_reduce<
-                typename StackBegin::cdr_type,
-                typename StackEnd::cdr_type
+                typename StackBegin::cdr_type
+              , typename StackEnd::cdr_type
             >
         impl;
 
@@ -448,8 +448,8 @@ namespace boost { namespace fusion { namespace detail
     {
         typedef
             iterator_range<
-                typename StackBegin::car_type::begin_type,
-                typename StackEnd::car_type::begin_type
+                typename StackBegin::car_type::begin_type
+              , typename StackEnd::car_type::begin_type
             >
         range_type;
 
@@ -483,8 +483,8 @@ namespace boost { namespace fusion { namespace detail
 
         typedef
             make_segmented_range_reduce<
-                typename reverse_begin_cons::type,
-                typename reverse_end_cons::type
+                typename reverse_begin_cons::type
+              , typename reverse_end_cons::type
             >
         impl;
 
@@ -493,8 +493,8 @@ namespace boost { namespace fusion { namespace detail
         static type call(Begin const & begin, End const & end)
         {
             return impl::call(
-                reverse_begin_cons::call(begin.context),
-                reverse_end_cons::call(end.context));
+                reverse_begin_cons::call(begin.context)
+              , reverse_end_cons::call(end.context));
         }
     };
 

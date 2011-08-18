@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/algorithm/query/ext_/find_s.hpp>
+#include <boost/fusion/algorithm/query/find.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include "../sequence/tree.hpp"
 
@@ -19,21 +19,21 @@ process_tree(Tree const &tree)
 {
     using namespace boost;
 
-    typedef typename boost::fusion::result_of::find_s<Tree const, short>::type short_iter;
-    typedef typename boost::fusion::result_of::find_s<Tree const, float>::type float_iter;
-    typedef typename boost::fusion::result_of::find_s<Tree const, not_there>::type not_there_iter;
+    typedef typename boost::fusion::result_of::find<Tree const, short>::type short_iter;
+    typedef typename boost::fusion::result_of::find<Tree const, float>::type float_iter;
+    typedef typename boost::fusion::result_of::find<Tree const, not_there>::type not_there_iter;
 
     // find_if_s of a segmented data structure returns generic
     // segmented iterators
-    short_iter si = fusion::find_s<short>(tree);
-    float_iter fi = fusion::find_s<float>(tree);
+    short_iter si = fusion::find<short>(tree);
+    float_iter fi = fusion::find<float>(tree);
 
     // they behave like ordinary Fusion iterators ...
     BOOST_TEST((*si == short('d')));
     BOOST_TEST((*fi == float(1)));
 
     // Searching for something that's not there should return the end iterator.
-    not_there_iter nti = fusion::find_s<not_there>(tree);
+    not_there_iter nti = fusion::find<not_there>(tree);
     BOOST_TEST((nti == fusion::end(tree)));
 }
 

@@ -12,18 +12,18 @@
 
 namespace boost { namespace fusion { namespace detail
 {
-    template<typename Fun>
+    template <typename Fun>
     struct segmented_fold_fun
     {
-        template<typename Sig>
+        template <typename Sig>
         struct result;
 
-        template<typename This, typename Range, typename State, typename Context>
-        struct result<This(Range&, State&, Context&)>
+        template <typename This, typename Sequence, typename State, typename Context>
+        struct result<This(Sequence&, State&, Context&)>
         {
             typedef
                 fusion::result<
-                    typename result_of::fold<Range, State, Fun>::type,
+                    typename result_of::fold<Sequence, State, Fun>::type,
                     continue_
                 >
             type;
@@ -33,11 +33,11 @@ namespace boost { namespace fusion { namespace detail
           : fun(f)
         {}
 
-        template<typename Range, typename State, typename Context>
-        typename result<segmented_fold_fun(Range&, State const&, Context const&)>::type
-        operator()(Range& rng, State const& state, Context const&) const
+        template <typename Sequence, typename State, typename Context>
+        typename result<segmented_fold_fun(Sequence&, State const&, Context const&)>::type
+        operator()(Sequence& seq, State const& state, Context const&) const
         {
-            return fusion::fold(rng, state, fun);
+            return fusion::fold(seq, state, fun);
         }
 
         Fun const& fun;
