@@ -242,7 +242,7 @@ namespace boost { namespace unordered { namespace detail {
             ++end;
             for(bucket_ptr begin = this->buckets_; begin != end; ++begin) {
                 allocator_traits<bucket_allocator>::destroy(bucket_alloc(),
-                	boost::addressof(*begin));
+                    boost::addressof(*begin));
             }
     
             allocator_traits<bucket_allocator>::deallocate(bucket_alloc(), this->buckets_, this->bucket_count_ + 1);
@@ -665,7 +665,7 @@ namespace boost { namespace unordered { namespace detail {
 
             if (node_constructed_)
                 allocator_traits<node_allocator>::destroy(buckets_.node_alloc(),
-                	boost::addressof(*node_));
+                    boost::addressof(*node_));
 
             allocator_traits<node_allocator>::deallocate(buckets_.node_alloc(), node_, 1);
         }
@@ -680,7 +680,7 @@ namespace boost { namespace unordered { namespace detail {
 
             node_ = allocator_traits<node_allocator>::allocate(buckets_.node_alloc(), 1);
             allocator_traits<node_allocator>::construct(buckets_.node_alloc(),
-            	boost::addressof(*node_), node());
+                boost::addressof(*node_), node());
             node_->init(buckets_.bucket_alloc().address(*node_));
 
             node_constructed_ = true;
