@@ -12,7 +12,7 @@ int main()
   
   // Wrong template parameters
   
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(WrongParametersForMP)<AnotherType>));
+  BOOST_MPL_ASSERT((WrongParametersForMP<AnotherType>));
   
   return 0;
 

@@ -7,9 +7,9 @@
 #if !defined(TEST_VM_MF_HAS_TEMPLATE_CHECK_PARAMS_HPP)
 #define TEST_VM_MF_HAS_TEMPLATE_CHECK_PARAMS_HPP
 
-#include <boost/config.hpp>
+#include <boost/preprocessor/config/config.hpp>
 
-#if !defined(BOOST_NO_VARIADIC_MACROS)
+#if BOOST_PP_VARIADICS
 
 #include "test_structs.hpp"
 #include <boost/tti/vm_template_params.hpp>
@@ -33,6 +33,6 @@ BOOST_TTI_MEMBER_TYPE(CType)
 
 BOOST_TTI_MTFC_MEMBER_TYPE(CType)
 
-#endif //!defined(BOOST_NO_VARIADIC_MACROS)
+#endif // BOOST_PP_VARIADICS
 
 #endif // TEST_VM_MF_HAS_TEMPLATE_CHECK_PARAMS_HPP

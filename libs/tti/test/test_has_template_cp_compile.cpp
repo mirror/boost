@@ -17,11 +17,11 @@ int main()
   // Compile time asserts
   
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(ATPMemberTemplate)<AType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(HaveCL)<AType>));
+  BOOST_MPL_ASSERT((HaveCL<AType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(AMemberTemplate)<AType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(HaveAnotherMT)<AType>));
+  BOOST_MPL_ASSERT((HaveAnotherMT<AType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SomeMemberTemplate)<AnotherType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(ATemplateWithParms)<AnotherType>));
+  BOOST_MPL_ASSERT((ATemplateWithParms<AnotherType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SimpleTMP)<AnotherType>));
   
   return 0;

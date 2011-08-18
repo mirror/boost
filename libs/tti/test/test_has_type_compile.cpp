@@ -19,12 +19,12 @@ int main()
   
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TYPE_GEN(AnIntType)<AType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TYPE_GEN(AnIntTypeReference)<AType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(NameStruct)<AType>));
+  BOOST_MPL_ASSERT((NameStruct<AType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TYPE_GEN(BType)<AType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(TheInteger)<AType::BType>));
+  BOOST_MPL_ASSERT((TheInteger<AType::BType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TYPE_GEN(CType)<AType::BType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TYPE_GEN(AnotherIntegerType)<AType::BType::CType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(SomethingElse)<AnotherType>));
+  BOOST_MPL_ASSERT((SomethingElse<AnotherType>));
   
   return 0;
 

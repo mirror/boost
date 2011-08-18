@@ -10,17 +10,17 @@
 int main()
   {
   
-#if !defined(BOOST_NO_VARIADIC_MACROS)
+#if BOOST_PP_VARIADICS
 
   // Wrong enclosing type
   
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(HaveCL)<AnotherType>));
+  BOOST_MPL_ASSERT((HaveCL<AnotherType>));
   
 #else
   
   BOOST_MPL_ASSERT((boost::mpl::false_));
   
-#endif //!defined(BOOST_NO_VARIADIC_MACROS)
+#endif // BOOST_PP_VARIADICS
 
   return 0;
 

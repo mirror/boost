@@ -17,10 +17,10 @@ int main()
   // Compile time asserts
   
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN(VoidFunction)<void (AType::*)()>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(FunctionReturningInt)<int (AType::*)()>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(FunctionReturningInt)<double (AnotherType::*)(int)>));
+  BOOST_MPL_ASSERT((FunctionReturningInt<int (AType::*)()>));
+  BOOST_MPL_ASSERT((FunctionReturningInt<double (AnotherType::*)(int)>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN(aFunction)<AType (AnotherType::*)(int)>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(AnotherIntFunction)<int (AnotherType::*)(AType)>));
+  BOOST_MPL_ASSERT((AnotherIntFunction<int (AnotherType::*)(AType)>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN(sFunction)<AType::AnIntType (AnotherType::*)(int,long,double)>));
   
   return 0;

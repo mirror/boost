@@ -10,7 +10,7 @@
 int main()
   {
   
-#if !defined(BOOST_NO_VARIADIC_MACROS)
+#if BOOST_PP_VARIADICS
 
   using namespace boost::mpl::placeholders;
   
@@ -110,7 +110,7 @@ int main()
               ::value
             ));
   
-#endif //!defined(BOOST_NO_VARIADIC_MACROS)
+#endif // BOOST_PP_VARIADICS
 
   return boost::report_errors();
   

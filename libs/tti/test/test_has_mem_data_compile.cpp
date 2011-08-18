@@ -20,10 +20,10 @@ int main()
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)<AType,int>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)<AnotherType,long>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_DATA_GEN(aMember)<AnotherType,bool>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(CMember)<AnotherType,bool>));
+  BOOST_MPL_ASSERT((CMember<AnotherType,bool>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_DATA_GEN(IntBT)<AType,AType::BType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(NestedData)<AType,AType::BType::CType>));
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(AOther)<AnotherType,AType>));
+  BOOST_MPL_ASSERT((NestedData<AType,AType::BType::CType>));
+  BOOST_MPL_ASSERT((AOther<AnotherType,AType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_DATA_GEN(ONestStr)<AnotherType,AType::AStructType>));
   
   return 0;

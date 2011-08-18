@@ -12,7 +12,7 @@ int main()
   
   // Wrong enclosing type
   
-  BOOST_MPL_ASSERT((BOOST_TTI_TRAIT_GEN(HaveCL)<AnotherType>));
+  BOOST_MPL_ASSERT((HaveCL<AnotherType>));
   
   return 0;
 

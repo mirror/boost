@@ -11,11 +11,11 @@ int main()
   {
   
   BOOST_TEST(BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(ATPMemberTemplate)<AType>::value);
-  BOOST_TEST(BOOST_TTI_TRAIT_GEN(HaveCL)<AType>::value);
+  BOOST_TEST(HaveCL<AType>::value);
   BOOST_TEST(BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(AMemberTemplate)<AType>::value);
-  BOOST_TEST(BOOST_TTI_TRAIT_GEN(HaveAnotherMT)<AType>::value);
+  BOOST_TEST(HaveAnotherMT<AType>::value);
   BOOST_TEST(BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SomeMemberTemplate)<AnotherType>::value);
-  BOOST_TEST(BOOST_TTI_TRAIT_GEN(ATemplateWithParms)<AnotherType>::value);
+  BOOST_TEST(ATemplateWithParms<AnotherType>::value);
   BOOST_TEST(BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SimpleTMP)<AnotherType>::value);
   BOOST_TEST(!BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(TemplateNotExist)<AnotherType>::value);
 
