@@ -7,6 +7,7 @@
 #if !defined(FUSION_ACCUMULATE_09172005_1032)
 #define FUSION_ACCUMULATE_09172005_1032
 
+#include <boost/fusion/algorithm/iteration/accumulate_fwd.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 
 namespace boost { namespace fusion

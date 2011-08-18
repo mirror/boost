@@ -10,6 +10,7 @@
 
 #define BOOST_FUSION_ITER_FOLD
 
+#include <boost/fusion/algorithm/iteration/iter_fold_fwd.hpp>
 #include <boost/fusion/algorithm/iteration/detail/fold.hpp>
 
 #undef BOOST_FUSION_ITER_FOLD

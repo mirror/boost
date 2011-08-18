@@ -7,7 +7,7 @@
 #if !defined(BOOST_FUSION_FOLD_S_HPP_INCLUDED)
 #define BOOST_FUSION_FOLD_S_HPP_INCLUDED
 
-#include <boost/fusion/algorithm/iteration/fold.hpp>
+#include <boost/fusion/algorithm/iteration/fold_fwd.hpp>
 #include <boost/fusion/support/segmented_fold_until.hpp>
 
 namespace boost { namespace fusion { namespace detail
@@ -33,35 +33,27 @@ namespace boost { namespace fusion { namespace detail
             }
         };
     };
-}}}
 
-namespace boost { namespace fusion
-{
-    namespace result_of
+    // The default implementation of this lives in detail/fold.hpp
+    template <typename Sequence, typename State, typename Fun, bool IsSegmented>
+    struct result_of_fold;
+
+    template <typename Sequence, typename State, typename Fun>
+    struct result_of_fold<Sequence, State, Fun, true>
     {
-        template <typename Sequence, typename State, typename F>
-        struct fold_s
-          : result_of::segmented_fold_until<
+        typedef
+            typename result_of::segmented_fold_until<
                 Sequence,
                 State,
-                detail::segmented_fold_fun<F>
-            >
-        {};
-    }
+                segmented_fold_fun<Fun>
+            >::type
+        type;
 
-    template <typename Sequence, typename State, typename F>
-    typename result_of::fold_s<Sequence, State, F>::type
-    fold_s(Sequence& seq, State const& state, F const& f)
-    {
-        return fusion::segmented_fold_until(seq, state, detail::segmented_fold_fun<F>(f));
-    }
-
-    template <typename Sequence, typename State, typename F>
-    typename result_of::fold_s<Sequence const, State, F>::type
-    fold_s(Sequence const& seq, State const& state, F const& f)
-    {
-        return fusion::segmented_fold_until(seq, state, detail::segmented_fold_fun<F>(f));
-    }
-}}
+        static type call(State& state, Sequence& seq, Fun fun)
+        {
+            return fusion::segmented_fold_until(seq, state, segmented_fold_fun<Fun>(fun));
+        }
+    };
+}}}
 
 #endif

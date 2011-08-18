@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/algorithm/iteration/ext_/for_each_s.hpp>
+#include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/algorithm/query/find_if.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
@@ -59,7 +59,7 @@ process_tree(Tree const &tree)
     slice_t slice(si, fi);
 
     std::stringstream sout;
-    fusion::for_each_s(slice, ostream_fun(sout));
+    fusion::for_each(slice, ostream_fun(sout));
     BOOST_TEST((sout.str() == "100 e f 0 B "));
 }
 

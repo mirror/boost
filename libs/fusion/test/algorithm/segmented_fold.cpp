@@ -9,7 +9,7 @@
 #include <iostream>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/algorithm/iteration/ext_/fold_s.hpp>
+#include <boost/fusion/algorithm/iteration/fold.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include "../sequence/tree.hpp"
 
@@ -31,7 +31,7 @@ process_tree(Tree const &tree)
     using namespace boost;
 
     std::stringstream str;
-    fusion::fold_s(tree, &str, write_string());
+    fusion::fold(tree, &str, write_string());
     std::string res = str.str();
 
     BOOST_TEST_EQ(res, "a b c 1 2 3 100 e f 0 B 1 h i 4 5 6 j k l ");
