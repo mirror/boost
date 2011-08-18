@@ -193,6 +193,14 @@ void bcp_implementation::add_file(const fs::path& p)
    //
 static const std::pair<fs::path, fs::path>
    specials[] = {
+      std::pair<fs::path, fs::path>("boost/filesystem/convenience.hpp", "boost/filesystem.hpp"),
+      std::pair<fs::path, fs::path>("boost/filesystem/exception.hpp", "boost/filesystem.hpp"),
+      std::pair<fs::path, fs::path>("boost/filesystem/fstream.hpp", "boost/filesystem.hpp"),
+      std::pair<fs::path, fs::path>("boost/filesystem/operations.hpp", "boost/filesystem.hpp"),
+      std::pair<fs::path, fs::path>("boost/filesystem/path.hpp", "boost/filesystem.hpp"),
+      std::pair<fs::path, fs::path>("boost/filesystem.hpp", "libs/filesystem/build"),
+      std::pair<fs::path, fs::path>("boost/filesystem.hpp", "libs/filesystem/v2"),
+      std::pair<fs::path, fs::path>("boost/filesystem.hpp", "libs/filesystem/v3"),
       std::pair<fs::path, fs::path>("boost/config.hpp", "boost/config"),
       std::pair<fs::path, fs::path>("tools/build/allyourbase.jam", "Jamrules"),
       std::pair<fs::path, fs::path>("tools/build/allyourbase.jam", "project-root.jam"),
