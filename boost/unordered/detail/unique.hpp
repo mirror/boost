@@ -242,9 +242,11 @@ namespace boost { namespace unordered { namespace detail {
 #else
 
         template <class Arg0>
-        emplace_return emplace(Arg0 const& arg0)
+        emplace_return emplace(BOOST_FWD_REF(Arg0) arg0)
         {
-            return emplace_impl(extractor::extract(arg0), arg0);
+            return emplace_impl(
+                extractor::extract(boost::forward<Arg0>(arg0)),
+                boost::forward<Arg0>(arg0));
         }
 
 #define BOOST_UNORDERED_INSERT1_IMPL(z, n, _)                               \

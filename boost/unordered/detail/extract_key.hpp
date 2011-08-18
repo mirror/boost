@@ -38,6 +38,11 @@ namespace detail {
             return v;
         }
 
+        static key_type const& extract(BOOST_RV_REF(key_type) v)
+        {
+            return v;
+        }
+
         static no_key extract()
         {
             return no_key();
@@ -85,6 +90,13 @@ namespace detail {
         {
             return v;
         }
+
+        // TODO: Why does this cause errors?
+        //
+        //static key_type const& extract(BOOST_RV_REF(key_type) v)
+        //{
+        //    return v;
+        //}
 
         template <class Second>
         static key_type const& extract(std::pair<key_type, Second> const& v)
