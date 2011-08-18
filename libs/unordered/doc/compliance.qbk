@@ -4,6 +4,8 @@
 
 [section:compliance C++11 Compliance]
 
+/TODO/: Look into C++11's `std::pair`.
+
 [section:allocator_compliance Use of allocators]
 
 * Objects are not constructed using the allocator. The node containing them
