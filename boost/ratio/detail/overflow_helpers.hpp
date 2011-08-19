@@ -242,7 +242,12 @@ namespace ratio_detail
              >
          >::type type;
   };
-
+  template <class R>
+  struct ratio_add<R, ratio<0> >
+  {
+    typedef R type;
+  };
+   
   template <class R1, class R2>
   struct ratio_subtract
   {
@@ -268,7 +273,13 @@ namespace ratio_detail
              >
          >::type type;
   };
-
+  
+  template <class R>
+  struct ratio_subtract<R, ratio<0> >
+  {
+    typedef R type;
+  };
+  
   template <class R1, class R2>
   struct ratio_multiply
   {
