@@ -10,6 +10,11 @@
 
 #include <boost/fusion/container/vector/limits.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+#include <boost/fusion/container/vector/vector10_fwd.hpp>
+#include <boost/fusion/container/vector/vector20_fwd.hpp>
+#include <boost/fusion/container/vector/vector30_fwd.hpp>
+#include <boost/fusion/container/vector/vector40_fwd.hpp>
+#include <boost/fusion/container/vector/vector50_fwd.hpp>
 
 namespace boost { namespace fusion
 {

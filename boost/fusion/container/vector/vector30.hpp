@@ -7,6 +7,7 @@
 #if !defined(FUSION_VECTOR30_05052005_0206)
 #define FUSION_VECTOR30_05052005_0206
 
+#include <boost/fusion/container/vector/vector30_fwd.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/iterator/next.hpp>

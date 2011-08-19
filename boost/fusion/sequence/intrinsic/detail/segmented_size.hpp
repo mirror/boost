@@ -35,7 +35,7 @@ namespace boost { namespace fusion { namespace detail
                 >::type
             >::type
           , mpl::size_t<0>
-          , mpl::plus<mpl::_1, segmented_size<mpl::_2> >
+          , mpl::plus<mpl::_1, segmented_size<remove_reference<mpl::_2> > >
         >::type
     {};
 

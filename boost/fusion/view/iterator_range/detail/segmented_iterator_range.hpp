@@ -122,7 +122,7 @@ namespace boost { namespace fusion { namespace detail
             >
         type;
 
-        static type call(Stack stack)
+        static type call(Stack const& stack)
         {
             //return segment_sequence(
             //  push_front(
@@ -168,7 +168,7 @@ namespace boost { namespace fusion { namespace detail
             >
         type;
 
-        static type call(Stack stack)
+        static type call(Stack const& stack)
         {
             // return iterator_range(begin(car(cdr(stack_begin))), end(front(car(stack_begin))));
             return type(stack.cdr.car.first, fusion::end(*stack.car.first));
@@ -178,10 +178,11 @@ namespace boost { namespace fusion { namespace detail
     template <typename Stack>
     struct make_segment_sequence_front<Stack, 1>
     {
-        typedef nil type;
-        static type call(Stack const &)
+        typedef typename Stack::cdr_type type; // nil
+
+        static type call(Stack const &stack)
         {
-            return nil();
+            return stack.cdr;
         }
     };    
 
@@ -264,7 +265,7 @@ namespace boost { namespace fusion { namespace detail
             >
         type;
 
-        static type call(Stack stack)
+        static type call(Stack const& stack)
         {
             //  return segment_sequence(
             //    push_back(
@@ -310,7 +311,7 @@ namespace boost { namespace fusion { namespace detail
             >
         type;
 
-        static type call(Stack stack)
+        static type call(Stack const& stack)
         {
             // return iterator_range(begin(front(car(stack_end))), begin(car(cdr(stack_end))));
             return type(fusion::begin(*stack.car.first), stack.cdr.car.first);
@@ -320,10 +321,11 @@ namespace boost { namespace fusion { namespace detail
     template <typename Stack>
     struct make_segment_sequence_back<Stack, 1>
     {
-        typedef nil type;
-        static type call(Stack const &)
+        typedef typename Stack::cdr_type type; // nil
+
+        static type call(Stack const& stack)
         {
-            return nil();
+            return stack.cdr;
         }
     };
     
@@ -490,7 +492,7 @@ namespace boost { namespace fusion { namespace detail
 
         typedef typename impl::type type;
 
-        static type call(Begin const & begin, End const & end)
+        static type call(Begin const& begin, End const& end)
         {
             return impl::call(
                 reverse_begin_cons::call(begin.context)

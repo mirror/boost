@@ -17,7 +17,6 @@
 #include <boost/fusion/support/void.hpp>
 #include <boost/fusion/container/list/cons_fwd.hpp>
 #include <boost/fusion/sequence/intrinsic_fwd.hpp>
-#include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
@@ -83,9 +82,7 @@ namespace boost { namespace fusion
           , typename State
           , typename Context
           , typename Fun
-          , bool IsEmpty = result_of::empty<
-                typename result_of::value_of<Begin>::type
-            >::type::value
+          , bool IsEmpty
         >
         struct segmented_fold_until_iterate_skip_empty;
 
@@ -331,7 +328,15 @@ namespace boost { namespace fusion
         struct segmented_fold_until_iterate
         {
             typedef
-                segmented_fold_until_iterate_skip_empty<Begin, End, State, Context, Fun>
+                typename result_of::empty<
+                    typename remove_reference<
+                        typename result_of::deref<Begin>::type
+                    >::type
+                >::type
+            empty_type;
+
+            typedef
+                segmented_fold_until_iterate_skip_empty<Begin, End, State, Context, Fun, empty_type::value>
             impl;
             
             typedef typename impl::type type;

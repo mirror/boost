@@ -7,6 +7,7 @@
 #if !defined(FUSION_JOINT_VIEW_07162005_0140)
 #define FUSION_JOINT_VIEW_07162005_0140
 
+#include <boost/fusion/view/joint_view/joint_view_fwd.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/support/is_view.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
