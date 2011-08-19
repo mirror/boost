@@ -9,9 +9,9 @@
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "mf/mf_static_mem_data.hpp"
-#include "gen/static_mem_data_gen.hpp"
-#include "detail/dstatic_mem_data.hpp"
+#include <boost/tti/mf/mf_static_mem_data.hpp>
+#include <boost/tti/gen/static_mem_data_gen.hpp>
+#include <boost/tti/detail/dstatic_mem_data.hpp>
 
 /*
 

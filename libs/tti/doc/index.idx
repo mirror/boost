@@ -19,7 +19,6 @@
 !scan boost/tti/gen/static_mem_fun_gen.hpp
 !scan boost/tti/gen/template_gen.hpp
 !scan boost/tti/gen/template_params_gen.hpp
-!scan boost/tti/gen/trait_gen.hpp
 !scan boost/tti/gen/type_gen.hpp
 !scan boost/tti/gen/vm_template_params_gen.hpp
 !scan boost/tti/mf/mf_mem_data.hpp

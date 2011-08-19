@@ -7,9 +7,8 @@
 #if !defined(TTI_COMP_MEM_FUN_GEN_HPP)
 #define TTI_COMP_MEM_FUN_GEN_HPP
 
-#include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "trait_gen.hpp"
+#include <boost/tti/gen/namespace_gen.hpp>
 
 /*
 
@@ -26,16 +25,8 @@
 
     returns = the generated macro metafunction name.
 */
-#define BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN_BASE(name) \
+#define BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN(name) \
   BOOST_PP_CAT(has_comp_member_function_,name) \
 /**/
-
-/// Generates the macro metafunction name within the Boost TTI namespace for BOOST_TTI_HAS_COMP_MEMBER_FUNCTION.
-/**
-    name  = the name of the member function.
-
-    returns = the generated macro metafunction name.
-*/
-#define BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN_BASE
 
 #endif // TTI_COMP_MEM_FUN_GEN_HPP

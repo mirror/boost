@@ -12,7 +12,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #if !defined(BOOST_MSVC)
-#include "dmem_fun.hpp"
+#include <boost/tti/detail/dmem_fun.hpp>
 #endif
 
 #if defined(BOOST_MSVC)

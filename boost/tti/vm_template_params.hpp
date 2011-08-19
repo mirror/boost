@@ -12,9 +12,9 @@
 #if BOOST_PP_VARIADICS
 
 #include <boost/preprocessor/cat.hpp>
-#include "mf/mf_template_params.hpp"
-#include "gen/vm_template_params_gen.hpp"
-#include "detail/dvm_template_params.hpp"
+#include <boost/tti/mf/mf_template_params.hpp>
+#include <boost/tti/gen/vm_template_params_gen.hpp>
+#include <boost/tti/detail/dvm_template_params.hpp>
 
 /*
 

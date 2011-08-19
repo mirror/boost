@@ -75,6 +75,7 @@ alias tti
         [ compile-fail test_has_type_ct_fail5.cpp ]
         [ run test_mem_type.cpp ]
         [ compile test_mem_type_compile.cpp ]
+        [ run test_mf_has_mem_data.cpp ]
     ;
 
 alias ttivm

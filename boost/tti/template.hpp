@@ -10,8 +10,8 @@
 #include <boost/config.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "mf/mf_template.hpp"
-#include "gen/template_gen.hpp"
+#include <boost/tti/mf/mf_template.hpp>
+#include <boost/tti/gen/template_gen.hpp>
 
 /*
 

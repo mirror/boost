@@ -58,7 +58,6 @@ doxygen tti_reference
     $(here)/../../../boost/tti/gen/static_mem_fun_gen.hpp
     $(here)/../../../boost/tti/gen/template_gen.hpp
     $(here)/../../../boost/tti/gen/template_params_gen.hpp
-    $(here)/../../../boost/tti/gen/trait_gen.hpp
     $(here)/../../../boost/tti/gen/type_gen.hpp
     $(here)/../../../boost/tti/gen/vm_template_params_gen.hpp
     $(here)/../../../boost/tti/mf/mf_mem_data.hpp

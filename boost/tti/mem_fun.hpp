@@ -12,9 +12,9 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
-#include "mf/mf_mem_fun.hpp"
-#include "gen/mem_fun_gen.hpp"
-#include "detail/dmem_fun.hpp"
+#include <boost/tti/mf/mf_mem_fun.hpp>
+#include <boost/tti/gen/mem_fun_gen.hpp>
+#include <boost/tti/detail/dmem_fun.hpp>
 
 /*
 

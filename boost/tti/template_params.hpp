@@ -9,9 +9,9 @@
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "mf/mf_template_params.hpp"
-#include "gen/template_params_gen.hpp"
-#include "detail/dtemplate_params.hpp"
+#include <boost/tti/mf/mf_template_params.hpp>
+#include <boost/tti/gen/template_params_gen.hpp>
+#include <boost/tti/detail/dtemplate_params.hpp>
 
 /*
 

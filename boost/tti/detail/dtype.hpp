@@ -12,8 +12,9 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/tti/gen/namespace_gen.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include "dnotype.hpp"
+#include <boost/tti/detail/dnotype.hpp>
 
 #define TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
 BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(BOOST_PP_CAT(trait,_detail_mpl), name, false) \

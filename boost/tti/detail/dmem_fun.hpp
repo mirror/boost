@@ -11,7 +11,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
-#include "dptmf.hpp"
+#include <boost/tti/detail/dptmf.hpp>
 
 #if defined(BOOST_NO_NULLPTR)
 

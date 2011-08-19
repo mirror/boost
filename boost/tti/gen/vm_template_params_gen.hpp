@@ -12,7 +12,7 @@
 #if BOOST_PP_VARIADICS
 
 #include <boost/preprocessor/cat.hpp>
-#include "trait_gen.hpp"
+#include <boost/tti/gen/namespace_gen.hpp>
 
 /*
 
@@ -29,17 +29,9 @@
 
     returns = the generated macro metafunction name.
 */
-#define BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_GEN_BASE(name) \
+#define BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_GEN(name) \
   BOOST_PP_CAT(has_template_check_params_,name) \
 /**/
-
-/// Generates the macro metafunction name within the Boost TTI namespace for BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS.
-/**
-    name  = the name of the class template.
-
-    returns = the generated macro metafunction name.
-*/
-#define BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_GEN BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_GEN_BASE
 
 #endif // BOOST_PP_VARIADICS
 #endif // TTI_VM_TEMPLATE_PARAMS_GEN_HPP

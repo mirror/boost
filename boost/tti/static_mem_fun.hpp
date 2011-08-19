@@ -11,10 +11,10 @@
 #include <boost/function_types/property_tags.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "mf/mf_static_mem_fun.hpp"
-#include "gen/static_mem_fun_gen.hpp"
-#include "detail/dstatic_mem_fun.hpp"
-#include "detail/dtfunction.hpp"
+#include <boost/tti/mf/mf_static_mem_fun.hpp>
+#include <boost/tti/gen/static_mem_fun_gen.hpp>
+#include <boost/tti/detail/dstatic_mem_fun.hpp>
+#include <boost/tti/detail/dtfunction.hpp>
 
 /*
 

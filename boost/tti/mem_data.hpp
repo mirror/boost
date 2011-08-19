@@ -10,9 +10,9 @@
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
-#include "mf/mf_mem_data.hpp"
-#include "gen/mem_data_gen.hpp"
-#include "detail/dmem_data.hpp"
+#include <boost/tti/mf/mf_mem_data.hpp>
+#include <boost/tti/gen/mem_data_gen.hpp>
+#include <boost/tti/detail/dmem_data.hpp>
 
 /*
 

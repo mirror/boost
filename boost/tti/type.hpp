@@ -9,10 +9,10 @@
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "mf/mf_type.hpp"
-#include "gen/type_gen.hpp"
-#include "detail/dtype.hpp"
-#include "detail/dnotype.hpp"
+#include <boost/tti/mf/mf_type.hpp>
+#include <boost/tti/gen/type_gen.hpp>
+#include <boost/tti/detail/dtype.hpp>
+#include <boost/tti/detail/dnotype.hpp>
 
 /*
 

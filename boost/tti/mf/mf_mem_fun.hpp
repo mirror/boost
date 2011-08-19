@@ -14,8 +14,8 @@
 #include <boost/mpl/placeholders.hpp>
 #include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
-#include "../gen/namespace_gen.hpp"
-#include "../detail/dtself.hpp"
+#include <boost/tti/gen/namespace_gen.hpp>
+#include <boost/tti/detail/dtself.hpp>
 
 /*
 

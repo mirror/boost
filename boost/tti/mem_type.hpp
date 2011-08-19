@@ -11,10 +11,10 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "mf/mf_mem_type.hpp"
-#include "gen/mem_type_gen.hpp"
-#include "detail/dmem_type.hpp"
-#include "detail/dnotype.hpp"
+#include <boost/tti/mf/mf_mem_type.hpp>
+#include <boost/tti/gen/mem_type_gen.hpp>
+#include <boost/tti/detail/dmem_type.hpp>
+#include <boost/tti/detail/dnotype.hpp>
 
 /*
 

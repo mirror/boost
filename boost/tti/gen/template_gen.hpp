@@ -7,9 +7,8 @@
 #if !defined(TTI_TEMPLATE_GEN_HPP)
 #define TTI_TEMPLATE_GEN_HPP
 
-#include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include "trait_gen.hpp"
+#include <boost/tti/gen/namespace_gen.hpp>
 
 /*
 
@@ -26,16 +25,8 @@
 
     returns = the generated macro metafunction name.
 */
-#define BOOST_TTI_HAS_TEMPLATE_GEN_BASE(name) \
+#define BOOST_TTI_HAS_TEMPLATE_GEN(name) \
   BOOST_PP_CAT(has_template_,name) \
 /**/
-
-/// Generates the macro metafunction name within the Boost TTI namespace for BOOST_TTI_HAS_TEMPLATE.
-/**
-    name  = the name of the class template.
-
-    returns = the generated macro metafunction name.
-*/
-#define BOOST_TTI_HAS_TEMPLATE_GEN BOOST_TTI_HAS_TEMPLATE_GEN_BASE
 
 #endif // TTI_TEMPLATE_GEN_HPP
