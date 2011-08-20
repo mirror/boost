@@ -30,8 +30,8 @@
 <span class="keyword">struct</span> <span class="identifier">is_empty</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
-        <span class="bold"><strong>Inherits:</strong></span> If T is an empty class type then
-        inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
+        <span class="bold"><strong>Inherits:</strong></span> If T is an empty class type (and
+        not a union type) then inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
         otherwise inherits from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
       </p>
 <p>

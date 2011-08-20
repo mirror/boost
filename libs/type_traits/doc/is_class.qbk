@@ -9,7 +9,7 @@
    template <class T>
    struct is_class : public __tof {};
   
-__inherit If T is a (possibly cv-qualified) class type then inherits from __true_type, 
+__inherit If T is a (possibly cv-qualified) class type (and not a union type) then inherits from __true_type, 
 otherwise inherits from __false_type.
 
 __std_ref 3.9.2 and 9.2.
