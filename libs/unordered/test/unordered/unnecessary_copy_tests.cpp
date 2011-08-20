@@ -305,6 +305,10 @@ namespace unnecessary_copy_tests
         source<count_copies>();
         int source_cost = ::unnecessary_copy_tests::count_copies::moves;
 
+        reset();
+        source<std::pair<count_copies, count_copies> >();
+        int source_pair_cost = ::unnecessary_copy_tests::count_copies::moves;
+
         //
 
         reset();
@@ -333,20 +337,17 @@ namespace unnecessary_copy_tests
 
         // A new object is created by source, but it shouldn't be moved or
         // copied.
-        //
-        // (Note: source_cost is not needed here, because std::pair is not
-        // move enabled).
         reset();
         x.emplace(source<std::pair<count_copies, count_copies> >());
-        COPY_COUNT(2); MOVE_COUNT(0);
+        COPY_COUNT(2); MOVE_COUNT(source_pair_cost);
 
-        // TODO: This doesn't work on older versions of gcc.
-        //count_copies part;
-        std::pair<count_copies const, count_copies> b;
-        //reset();
-        //std::pair<count_copies const&, count_copies const&> a_ref(part, part);
-        //x.emplace(a_ref);
-        //COPY_COUNT(0); MOVE_COUNT(0);
+#if !defined(__GNUC__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 2)
+        count_copies part;
+        reset();
+        std::pair<count_copies const&, count_copies const&> a_ref(part, part);
+        x.emplace(a_ref);
+        COPY_COUNT(2); MOVE_COUNT(0);
+#endif
 
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         // No move should take place.
@@ -359,6 +360,8 @@ namespace unnecessary_copy_tests
         //
         // 2 arguments
         //
+
+        std::pair<count_copies const, count_copies> b;
 
         reset();
         x.emplace(b.first, b.second);
