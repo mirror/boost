@@ -101,7 +101,7 @@ namespace boost { namespace unordered { namespace detail {
             static BOOST_DEDUCED_TYPENAME sfinae<                           \
                 BOOST_DEDUCED_TYPENAME T::tname>::type test(int);           \
             template <typename T>                                           \
-            static no_type test(...);                                       \
+            static no_type test(long);                                      \
                                                                             \
             enum { value = sizeof(test<Tp>(0)) == sizeof(yes_type) };       \
                                                                             \
