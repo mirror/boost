@@ -38,10 +38,12 @@ namespace detail {
             return v;
         }
 
+#if BOOST_UNORDERED_USE_RV_REF
         static key_type const& extract(BOOST_RV_REF(key_type) v)
         {
             return v;
         }
+#endif
 
         static no_key extract()
         {
