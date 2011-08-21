@@ -75,6 +75,13 @@ namespace test {
     namespace {
         object_count& global_object_count = globally_counted_object::count_;
     }
+    
+    struct check_instances {
+        int instances;
+        
+        check_instances() : instances(global_object_count.instances) {}
+        ~check_instances() { BOOST_TEST(global_object_count.instances == instances); }
+    };
 }
 
 #endif

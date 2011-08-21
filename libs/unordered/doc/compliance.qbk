@@ -1,0 +1,54 @@
+[/ Copyright 2011 Daniel James.
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
+
+[section:compliance C++11 Compliance]
+
+/TODO/: Look into C++11's `std::pair`.
+
+[section:allocator_compliance Use of allocators]
+
+* Objects are not constructed using the allocator. The node containing them
+  is constructed using the allocator's `construct` function, but then the
+  object is constructed in a buffer in that node by calling the constructor
+  directly.
+* Similarly the object is destructed by calling its destructor directly, and
+  then the allocator's `destroy` method is used to destruct the node.
+* For most compilers `select_on_container_copy` is only detected for an
+  exact signature match in the allocator itself - not in a base. There is full
+  detection for g++ 4.4 or laster, Visual C++ 2008 or later, Clang and maybe
+  other compilers which support SFINAE for expressions.
+* `pointer_traits` aren't used. Instead, pointer types are obtained from
+  rebound allocators.
+* /TODO/: Any other defficiences of `allocator_traits` emulation.
+* Pointers of base types are used to store the location of a derived type.
+  (/TODO/: I'm not sure if that isn't compliant).
+
+[endsect]
+
+[section:move Move emulation]
+
+Move emulation is implemented using Boost.Move. If rvalue references are
+available it will use them, but if not it uses a close, but imperfect emulation
+and to get the advantage of using movable container elements, you'll need to
+use Boost.Move.
+
+* Non-copyable objects can be stored in the containers, but without support
+  for rvalue references the container will not be movable.
+* The number of arguments used in emplace is limited to /TODO/.
+* Argument forwarding is not perfect.
+* /TODO/: Constructor call for pairs.
+
+[endsect]
+
+[section:other Other]
+
+* When swapping, `Pred` and `Hash` are not currently swapped by calling
+  `swap`, their copy constructors are used.
+* As a consequence when swapping an exception may be throw from their
+  copy constructor.
+
+
+[endsect]
+
+[endsect]

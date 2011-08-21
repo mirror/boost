@@ -9,11 +9,16 @@
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
 #include "../objects/test.hpp"
+#include "../objects/cxx11_allocator.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
 #include "../helpers/equivalent.hpp"
 
 #include <iostream>
+
+#if defined(BOOST_MSVC)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
 
 namespace assign_tests {
 
@@ -28,6 +33,8 @@ void assign_tests1(T*,
 
     std::cerr<<"assign_tests1.1\n";
     {
+        test::check_instances check_;
+
         T x;
         x = x;
         BOOST_TEST(x.empty());
@@ -37,6 +44,8 @@ void assign_tests1(T*,
 
     std::cerr<<"assign_tests1.2\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
         T x(v.begin(), v.end());
 
@@ -64,9 +73,13 @@ void assign_tests2(T*,
     BOOST_DEDUCED_TYPENAME T::key_equal eq2(2);
     BOOST_DEDUCED_TYPENAME T::allocator_type al1(1);
     BOOST_DEDUCED_TYPENAME T::allocator_type al2(2);
-
+    
+    typedef BOOST_DEDUCED_TYPENAME T::allocator_type allocator_type;
+    
     std::cerr<<"assign_tests2.1\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
         T x1(v.begin(), v.end(), 0, hf1, eq1);
         T x2(0, hf2, eq2);
@@ -78,13 +91,22 @@ void assign_tests2(T*,
 
     std::cerr<<"assign_tests2.2\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v1(100, generator), v2(100, generator);
         T x1(v1.begin(), v1.end(), 0, hf1, eq1, al1);
         T x2(v2.begin(), v2.end(), 0, hf2, eq2, al2);
         x2 = x1;
         BOOST_TEST(test::equivalent(x2.hash_function(), hf1));
         BOOST_TEST(test::equivalent(x2.key_eq(), eq1));
-        BOOST_TEST(test::equivalent(x2.get_allocator(), al2));
+        if (allocator_type::is_propagate_on_assign) {
+            BOOST_TEST(test::equivalent(x2.get_allocator(), al1));
+            BOOST_TEST(!test::equivalent(x2.get_allocator(), al2));
+        }
+        else {
+            BOOST_TEST(test::equivalent(x2.get_allocator(), al2));
+            BOOST_TEST(!test::equivalent(x2.get_allocator(), al1));
+        }
         test::check_container(x2, v1);
     }
 }
@@ -102,16 +124,69 @@ boost::unordered_multimap<test::object, test::object,
     test::hash, test::equal_to,
     test::allocator<test::object> >* test_multimap;
 
+boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_set_prop_assign;
+boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_multiset_prop_assign;
+boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_map_prop_assign;
+boost::unordered_multimap<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::propagate_assign> >*
+    test_multimap_prop_assign;
+
+boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_set_no_prop_assign;
+boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_multiset_no_prop_assign;
+boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_map_no_prop_assign;
+boost::unordered_multimap<test::object, test::object,
+        test::hash, test::equal_to,
+        test::cxx11_allocator<test::object, test::no_propagate_assign> >*
+    test_multimap_no_prop_assign;
+
 using test::default_generator;
 using test::generate_collisions;
 
-UNORDERED_TEST(assign_tests1,
-    ((test_set)(test_multiset)(test_map)(test_multimap))
+template <typename T>
+bool is_propagate(T*)
+{
+    return T::allocator_type::is_propagate_on_assign;
+}
+
+UNORDERED_AUTO_TEST(check_traits)
+{
+    BOOST_TEST(!is_propagate(test_set));
+    BOOST_TEST(is_propagate(test_set_prop_assign));
+    BOOST_TEST(!is_propagate(test_set_no_prop_assign));
+}
+
+UNORDERED_TEST(assign_tests1, (
+        (test_set)(test_multiset)(test_map)(test_multimap)
+        (test_set_prop_assign)(test_multiset_prop_assign)(test_map_prop_assign)(test_multimap_prop_assign)
+        (test_set_no_prop_assign)(test_multiset_no_prop_assign)(test_map_no_prop_assign)(test_multimap_no_prop_assign)
+    )
     ((default_generator)(generate_collisions))
 )
 
-UNORDERED_TEST(assign_tests2,
-    ((test_set)(test_multiset)(test_map)(test_multimap))
+UNORDERED_TEST(assign_tests2, (
+        (test_set)(test_multiset)(test_map)(test_multimap)
+        (test_set_prop_assign)(test_multiset_prop_assign)(test_map_prop_assign)(test_multimap_prop_assign)
+        (test_set_no_prop_assign)(test_multiset_no_prop_assign)(test_map_no_prop_assign)(test_multimap_no_prop_assign)
+    )
     ((default_generator)(generate_collisions))
 )
 

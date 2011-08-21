@@ -13,6 +13,9 @@ namespace unnecessary_copy_tests
 {
     struct count_copies
     {
+    private:
+        BOOST_COPYABLE_AND_MOVABLE(count_copies)
+    public:
         static int copies;
         static int moves;
         count_copies() : tag_(0) { ++copies; }
@@ -31,14 +34,25 @@ namespace unnecessary_copy_tests
             : tag_(x.tag_) { ++copies; }
 
         count_copies(count_copies const& x) : tag_(x.tag_) { ++copies; }
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
-        count_copies(count_copies&& x) : tag_(x.tag_) {
+        count_copies(BOOST_RV_REF(count_copies) x) : tag_(x.tag_) {
             x.tag_ = -1; ++moves;
         }
-#endif
-       int tag_;
-    private:
-       count_copies& operator=(count_copies const&);
+
+        count_copies& operator=(BOOST_COPY_ASSIGN_REF(count_copies) p) // Copy assignment
+        {
+            tag_ = p.tag_;
+            ++copies;
+            return *this;
+        }
+
+        count_copies& operator=(BOOST_RV_REF(count_copies) p) //Move assignment
+        {
+            tag_ = p.tag_;
+            ++moves;
+            return *this;
+        }
+
+        int tag_;
     };
 
     bool operator==(count_copies const& x, count_copies const& y) {
@@ -68,31 +82,37 @@ namespace unnecessary_copy_tests
 }
 
 #define COPY_COUNT(n)                                                       \
-    if(count_copies::copies != n) {                                         \
+    if(::unnecessary_copy_tests::count_copies::copies != n) {               \
         BOOST_ERROR("Wrong number of copies.");                             \
         std::cerr                                                           \
-            << "Number of copies: " << count_copies::copies                 \
+            << "Number of copies: "                                         \
+            << ::unnecessary_copy_tests::count_copies::copies               \
             << " expecting: " << n << std::endl;                            \
     }
 #define MOVE_COUNT(n)                                                       \
-    if(count_copies::moves != n) {                                          \
+    if(::unnecessary_copy_tests::count_copies::moves != n) {                \
         BOOST_ERROR("Wrong number of moves.");                              \
         std::cerr                                                           \
-            << "Number of moves: " << count_copies::moves                   \
+            << "Number of moves: "                                          \
+            << ::unnecessary_copy_tests::count_copies::moves                \
             << " expecting: " <<n << std::endl;                             \
     }
 #define COPY_COUNT_RANGE(a, b)                                              \
-    if(count_copies::copies < a || count_copies::copies > b) {              \
+    if(::unnecessary_copy_tests::count_copies::copies < a ||                \
+            ::unnecessary_copy_tests::count_copies::copies > b) {           \
         BOOST_ERROR("Wrong number of copies.");                             \
         std::cerr                                                           \
-            << "Number of copies: " << count_copies::copies                 \
+            << "Number of copies: "                                         \
+            << ::unnecessary_copy_tests::count_copies::copies               \
             << " expecting: [" << a << ", " << b << "]" << std::endl;       \
     }
 #define MOVE_COUNT_RANGE(a, b)                                              \
-    if(count_copies::moves < a || count_copies::moves > b) {                \
+    if(::unnecessary_copy_tests::count_copies::moves < a ||                 \
+            ::unnecessary_copy_tests::count_copies::moves > b) {            \
         BOOST_ERROR("Wrong number of moves.");                              \
         std::cerr                                                           \
-            << "Number of moves: " << count_copies::copies                  \
+            << "Number of moves: "                                          \
+            << ::unnecessary_copy_tests::count_copies::copies               \
             << " expecting: [" << a << ", " << b << "]" << std::endl;       \
     }
 
@@ -136,7 +156,7 @@ namespace unnecessary_copy_tests
         reset();
         T x;
         x.emplace(source<BOOST_DEDUCED_TYPENAME T::value_type>());
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         COPY_COUNT(1);
 #else
         COPY_COUNT(2);
@@ -148,7 +168,7 @@ namespace unnecessary_copy_tests
     UNORDERED_TEST(unnecessary_copy_emplace_rvalue_test,
             ((set)(multiset)(map)(multimap)))
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
     template <class T>
     void unnecessary_copy_emplace_move_test(T*)
     {
@@ -162,11 +182,51 @@ namespace unnecessary_copy_tests
 
     UNORDERED_TEST(unnecessary_copy_emplace_move_test,
             ((set)(multiset)(map)(multimap)))
-
 #endif
+
+    template <class T>
+    void unnecessary_copy_emplace_boost_move_set_test(T*)
+    {
+        reset();
+        T x;
+        BOOST_DEDUCED_TYPENAME T::value_type a;
+        COPY_COUNT(1); MOVE_COUNT(0);
+        x.emplace(boost::move(a));
+        COPY_COUNT(1); MOVE_COUNT(1);
+    }
+
+    UNORDERED_TEST(unnecessary_copy_emplace_boost_move_set_test,
+            ((set)(multiset)))
+
+    template <class T>
+    void unnecessary_copy_emplace_boost_move_map_test(T*)
+    {
+        reset();
+        T x;
+        BOOST_DEDUCED_TYPENAME T::value_type a;
+        COPY_COUNT(1); MOVE_COUNT(0);
+        x.emplace(boost::move(a));
+#if defined(BOOST_NO_RVALUE_REFERENCES)
+        COPY_COUNT(2); MOVE_COUNT(0);
+#else
+        COPY_COUNT(1); MOVE_COUNT(1);
+#endif
+    }
+
+    UNORDERED_TEST(unnecessary_copy_emplace_boost_move_map_test,
+            ((map)(multimap)))
 
     UNORDERED_AUTO_TEST(unnecessary_copy_emplace_set_test)
     {
+        // When calling 'source' the object is moved on some compilers, but not
+        // others. So count that here to adjust later.
+
+        reset();
+        source<count_copies>();
+        int source_cost = ::unnecessary_copy_tests::count_copies::moves;
+
+        //
+
         reset();
         boost::unordered_set<count_copies> x;
         count_copies a;
@@ -181,7 +241,12 @@ namespace unnecessary_copy_tests
         // the existing element.
         reset();
         x.emplace();
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         COPY_COUNT(1); MOVE_COUNT(0);
+#else
+        // source_cost doesn't make much sense here, but it seems to fit.
+        COPY_COUNT(1); MOVE_COUNT(source_cost);
+#endif
 
         //
         // 1 argument
@@ -197,9 +262,9 @@ namespace unnecessary_copy_tests
         // copied.
         reset();
         x.emplace(source<count_copies>());
-        COPY_COUNT(1); MOVE_COUNT(0);
+        COPY_COUNT(1); MOVE_COUNT(source_cost);
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         // No move should take place.
         reset();
         x.emplace(std::move(a));
@@ -233,6 +298,19 @@ namespace unnecessary_copy_tests
 
     UNORDERED_AUTO_TEST(unnecessary_copy_emplace_map_test)
     {
+        // When calling 'source' the object is moved on some compilers, but not
+        // others. So count that here to adjust later.
+
+        reset();
+        source<count_copies>();
+        int source_cost = ::unnecessary_copy_tests::count_copies::moves;
+
+        reset();
+        source<std::pair<count_copies, count_copies> >();
+        int source_pair_cost = ::unnecessary_copy_tests::count_copies::moves;
+
+        //
+
         reset();
         boost::unordered_map<count_copies, count_copies> x;
         // TODO: Run tests for pairs without const etc.
@@ -261,17 +339,17 @@ namespace unnecessary_copy_tests
         // copied.
         reset();
         x.emplace(source<std::pair<count_copies, count_copies> >());
-        COPY_COUNT(2); MOVE_COUNT_RANGE(0,2);
+        COPY_COUNT(2); MOVE_COUNT(source_pair_cost);
 
-        // TODO: This doesn't work on older versions of gcc.
-        //count_copies part;
-        std::pair<count_copies const, count_copies> b;
-        //reset();
-        //std::pair<count_copies const&, count_copies const&> a_ref(part, part);
-        //x.emplace(a_ref);
-        //COPY_COUNT(0); MOVE_COUNT(0);
+#if !defined(__GNUC__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 2)
+        count_copies part;
+        reset();
+        std::pair<count_copies const&, count_copies const&> a_ref(part, part);
+        x.emplace(a_ref);
+        COPY_COUNT(2); MOVE_COUNT(0);
+#endif
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         // No move should take place.
         // (since a is already in the container)
         reset();
@@ -279,10 +357,11 @@ namespace unnecessary_copy_tests
         COPY_COUNT(0); MOVE_COUNT(0);
 #endif
 
-
         //
         // 2 arguments
         //
+
+        std::pair<count_copies const, count_copies> b;
 
         reset();
         x.emplace(b.first, b.second);
@@ -290,12 +369,12 @@ namespace unnecessary_copy_tests
 
         reset();
         x.emplace(source<count_copies>(), source<count_copies>());
-        COPY_COUNT(2); MOVE_COUNT(0);
+        COPY_COUNT(2); MOVE_COUNT(source_cost * 2);
 
         // source<count_copies> creates a single copy.
         reset();
         x.emplace(b.first, source<count_copies>());
-        COPY_COUNT(1); MOVE_COUNT(0);
+        COPY_COUNT(1); MOVE_COUNT(source_cost);
 
         reset();
         x.emplace(count_copies(b.first.tag_), count_copies(b.second.tag_));

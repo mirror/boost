@@ -11,6 +11,8 @@
 #define BOOST_UNORDERED_OBJECTS_MINIMAL_HEADER
 
 #include <cstddef>
+#include <boost/move/move.hpp>
+#include <utility>
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
@@ -21,6 +23,7 @@ namespace test
 {
 namespace minimal
 {
+    class destructible;
     class copy_constructible;
     class copy_constructible_equality_comparable;
     class default_copy_constructible;
@@ -33,11 +36,27 @@ namespace minimal
     template <class T> class ptr;
     template <class T> class const_ptr;
     template <class T> class allocator;
+    template <class T> class cxx11_allocator;
+
+    struct constructor_param
+    {
+        operator int() const { return 0; }
+    };
+
+    class destructible
+    {
+    public:
+        destructible(constructor_param const&) {}
+        ~destructible() {}
+    private:
+        destructible(destructible const&);
+        destructible& operator=(destructible const&);
+    };
 
     class copy_constructible
     {
     public:
-        static copy_constructible create() { return copy_constructible(); }
+        copy_constructible(constructor_param const&) {}
         copy_constructible(copy_constructible const&) {}
         ~copy_constructible() {}
     private:
@@ -48,9 +67,7 @@ namespace minimal
     class copy_constructible_equality_comparable
     {
     public:
-        static copy_constructible_equality_comparable create() {
-            return copy_constructible_equality_comparable();
-        }
+        copy_constructible_equality_comparable(constructor_param const&) {}
 
         copy_constructible_equality_comparable(
             copy_constructible_equality_comparable const&)
@@ -85,10 +102,7 @@ namespace minimal
     class default_copy_constructible
     {
     public:
-        static default_copy_constructible create()
-        {
-            return default_copy_constructible();
-        }
+        default_copy_constructible(constructor_param const&) {}
 
         default_copy_constructible()
         {
@@ -105,13 +119,14 @@ namespace minimal
     private:
         default_copy_constructible& operator=(
             default_copy_constructible const&);
-        ampersand_operator_used operator&() const { return ampersand_operator_used(); }
+        ampersand_operator_used operator&() const {
+            return ampersand_operator_used(); }
     };
 
     class assignable
     {
     public:
-        static assignable create() { return assignable(); }
+        assignable(constructor_param const&) {}
         assignable(assignable const&) {}
         assignable& operator=(assignable const&) { return *this; }
         ~assignable() {}
@@ -122,11 +137,43 @@ namespace minimal
         //ampersand_operator_used operator&() const { return ampersand_operator_used(); }
     };
 
+    struct movable_init {};
+
+    class movable1
+    {
+        BOOST_MOVABLE_BUT_NOT_COPYABLE(movable1)
+
+    public:
+        movable1(constructor_param const&) {}
+        movable1() {}
+        explicit movable1(movable_init) {}
+        movable1(BOOST_RV_REF(movable1)) {}
+        movable1& operator=(BOOST_RV_REF(movable1));
+        ~movable1() {}
+    };
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+    class movable2
+    {
+    public:
+        movable2(constructor_param const&) {}
+        explicit movable2(movable_init) {}
+        movable2(movable2&&) {}
+        ~movable2() {}
+    private:
+        movable2() {}
+        movable2(movable2 const&);
+        movable2& operator=(movable2 const&);
+    };
+#else
+    typedef movable1 movable2;
+#endif
+
     template <class T>
     class hash
     {
     public:
-        static hash create() { return hash<T>(); }
+        hash(constructor_param const&) {}
         hash() {}
         hash(hash const&) {}
         hash& operator=(hash const&) { return *this; }
@@ -141,7 +188,7 @@ namespace minimal
     class equal_to
     {
     public:
-        static equal_to create() { return equal_to<T>(); }
+        equal_to(constructor_param const&) {}
         equal_to() {}
         equal_to(equal_to const&) {}
         equal_to& operator=(equal_to const&) { return *this; }
@@ -278,15 +325,15 @@ namespace minimal
             ::operator delete((void*) p.ptr_);
         }
 
-        void construct(pointer p, T const& t) { new((void*)p.ptr_) T(t); }
+        void construct(T* p, T const& t) { new((void*)p) T(t); }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
-        template<class... Args> void construct(pointer p, Args&&... args) {
-            new((void*)p.ptr_) T(std::forward<Args>(args)...);
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+        template<class... Args> void construct(T* p, Args&&... args) {
+            new((void*)p) T(std::forward<Args>(args)...);
         }
 #endif
 
-        void destroy(pointer p) { ((T*)p.ptr_)->~T(); }
+        void destroy(T* p) { p->~T(); }
 
         size_type max_size() const { return 1000; }
 
@@ -314,6 +361,69 @@ namespace minimal
 
     template <class T>
     void swap(allocator<T>&, allocator<T>&)
+    {
+    }
+
+    // C++11 allocator
+    //
+    // Not a fully minimal C++11 allocator, just what I support. Hopefully will
+    // cut down further in the future.
+
+    template <class T>
+    class cxx11_allocator
+    {
+    public:
+        typedef T value_type;
+        template <class U> struct rebind { typedef cxx11_allocator<U> other; };
+
+        cxx11_allocator() {}
+        template <class Y> cxx11_allocator(cxx11_allocator<Y> const&) {}
+        cxx11_allocator(cxx11_allocator const&) {}
+        ~cxx11_allocator() {}
+
+        T* address(T& r) { return &r; }
+        T const* address(T const& r) { return &r; }
+
+        T* allocate(std::size_t n) {
+            return static_cast<T*>(::operator new(n * sizeof(T)));
+        }
+
+        template <class Y>
+        T* allocate(std::size_t n, const_ptr<Y> u) {
+            return static_cast<T*>(::operator new(n * sizeof(T)));
+        }
+
+        void deallocate(T* p, std::size_t) {
+            ::operator delete((void*) p);
+        }
+
+        void construct(T* p, T const& t) { new((void*)p) T(t); }
+
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+        template<class... Args> void construct(T* p, Args&&... args) {
+            new((void*)p) T(std::forward<Args>(args)...);
+        }
+#endif
+
+        void destroy(T* p) { p->~T(); }
+
+        std::size_t max_size() const { return 1000u; }
+    };
+
+    template <class T>
+    inline bool operator==(cxx11_allocator<T> const&, cxx11_allocator<T> const&)
+    {
+        return true;
+    }
+
+    template <class T>
+    inline bool operator!=(cxx11_allocator<T> const&, cxx11_allocator<T> const&)
+    {
+        return false;
+    }
+
+    template <class T>
+    void swap(cxx11_allocator<T>&, cxx11_allocator<T>&)
     {
     }
 }

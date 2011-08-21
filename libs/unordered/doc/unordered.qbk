@@ -31,6 +31,7 @@
 [include:unordered buckets.qbk]
 [include:unordered hash_equality.qbk]
 [include:unordered comparison.qbk]
+[include:unordered compliance.qbk]
 [include:unordered rationale.qbk]
 [include:unordered changes.qbk]
 [xinclude ref.xml]

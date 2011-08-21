@@ -34,6 +34,16 @@ namespace exception
     template <class T> class allocator;
     object generate(object const*);
 
+    struct true_type
+    {
+        enum { value = true };
+    };
+
+    struct false_type
+    {
+        enum { value = false };
+    };
+
     class object
     {
     public:
@@ -340,15 +350,15 @@ namespace exception
         }
 
         void construct(pointer p, T const& t) {
-            UNORDERED_SCOPE(allocator::construct(pointer, T)) {
+            UNORDERED_SCOPE(allocator::construct(T*, T)) {
                 UNORDERED_EPOINT("Mock allocator construct function.");
                 new(p) T(t);
             }
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
-        template<class... Args> void construct(pointer p, Args&&... args) {
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+        template<class... Args> void construct(T* p, Args&&... args) {
             UNORDERED_SCOPE(allocator::construct(pointer, Args&&...)) {
                 UNORDERED_EPOINT("Mock allocator construct function.");
                 new(p) T(std::forward<Args>(args)...);
@@ -357,7 +367,7 @@ namespace exception
         }
 #endif
 
-        void destroy(pointer p) {
+        void destroy(T* p) {
             detail::tracker.track_destroy((void*) p, sizeof(T), tag_);
             p->~T();
         }
@@ -368,6 +378,10 @@ namespace exception
             }
             return (std::numeric_limits<std::size_t>::max)();
         }
+
+        typedef true_type propagate_on_container_copy_assignment;
+        typedef true_type propagate_on_container_move_assignment;
+        typedef true_type propagate_on_container_swap;
     };
 
     template <class T>

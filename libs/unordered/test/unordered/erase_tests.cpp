@@ -28,6 +28,8 @@ void erase_tests1(Container*,
 {
     std::cerr<<"Erase by key.\n";
     {
+        test::check_instances check_;
+
         test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         for(BOOST_DEDUCED_TYPENAME test::random_values<Container>::iterator
@@ -44,6 +46,8 @@ void erase_tests1(Container*,
 
     std::cerr<<"erase(begin()).\n";
     {
+        test::check_instances check_;
+
         test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         std::size_t size = x.size();
@@ -64,6 +68,8 @@ void erase_tests1(Container*,
 
     std::cerr<<"erase(random position).\n";
     {
+        test::check_instances check_;
+
         test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         std::size_t size = x.size();
@@ -96,6 +102,8 @@ void erase_tests1(Container*,
 
     std::cerr<<"erase(ranges).\n";
     {
+        test::check_instances check_;
+
         test::random_values<Container> v(500, generator);
         Container x(v.begin(), v.end());
 
@@ -118,6 +126,8 @@ void erase_tests1(Container*,
 
     std::cerr<<"quick_erase(begin()).\n";
     {
+        test::check_instances check_;
+
         test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         std::size_t size = x.size();
@@ -136,6 +146,8 @@ void erase_tests1(Container*,
 
     std::cerr<<"quick_erase(random position).\n";
     {
+        test::check_instances check_;
+
         test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         std::size_t size = x.size();
@@ -169,6 +181,8 @@ void erase_tests1(Container*,
 
     std::cerr<<"clear().\n";
     {
+        test::check_instances check_;
+
         test::random_values<Container> v(500, generator);
         Container x(v.begin(), v.end());
         x.clear();

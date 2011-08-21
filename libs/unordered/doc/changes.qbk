@@ -134,4 +134,21 @@ First official release.
 * Fix a bug when inserting into an `unordered_map` or `unordered_set` using
   iterators which returns `value_type` by copy.
 
+[h2 Boost 1.48.0]
+
+This is major change which has been converted to use Boost.Move's move
+emulation, and be more compliant with the C++11 standard. This has resulted
+in some breaking changes:
+
+* Equality comparison has been changed to the C++11 specification.
+  In a container with equivalent keys, elements in a group with equal
+  keys used to have to be in the same order to be considered equal,
+  now they can be a permutation of each other.
+
+* The behaviour of swap is different when the two containers to be
+  swapped has unequal allocators. It used to allocate new nodes using
+  the appropriate allocators, it now swaps the allocators if
+  the allocator has a member structure `propagate_on_container_swap`,
+  such that `propagate_on_container_swap::value` is true.
+
 [endsect]

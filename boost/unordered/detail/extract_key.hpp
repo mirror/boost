@@ -1,17 +1,16 @@
 
-// Copyright (C) 2005-2009 Daniel James
+// Copyright (C) 2005-2011 Daniel James
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_UNORDERED_DETAIL_EXTRACT_KEY_HPP_INCLUDED
 #define BOOST_UNORDERED_DETAIL_EXTRACT_KEY_HPP_INCLUDED
 
-#include <boost/config.hpp>
-#include <boost/type_traits/remove_const.hpp>
-#include <boost/unordered/detail/fwd.hpp>
+#include <boost/unordered/detail/table.hpp>
 
 namespace boost {
-namespace unordered_detail {
+namespace unordered {
+namespace detail {
 
     // key extractors
     //
@@ -39,12 +38,19 @@ namespace unordered_detail {
             return v;
         }
 
+#if BOOST_UNORDERED_USE_RV_REF
+        static key_type const& extract(BOOST_RV_REF(key_type) v)
+        {
+            return v;
+        }
+#endif
+
         static no_key extract()
         {
             return no_key();
         }
         
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         template <class... Args>
         static no_key extract(Args const&...)
         {
@@ -75,7 +81,7 @@ namespace unordered_detail {
     struct map_extractor
     {
         typedef ValueType value_type;
-        typedef BOOST_DEDUCED_TYPENAME boost::remove_const<Key>::type key_type;
+        typedef BOOST_DEDUCED_TYPENAME ::boost::remove_const<Key>::type key_type;
 
         static key_type const& extract(value_type const& v)
         {
@@ -86,6 +92,13 @@ namespace unordered_detail {
         {
             return v;
         }
+
+        // TODO: Why does this cause errors?
+        //
+        //static key_type const& extract(BOOST_RV_REF(key_type) v)
+        //{
+        //    return v;
+        //}
 
         template <class Second>
         static key_type const& extract(std::pair<key_type, Second> const& v)
@@ -100,7 +113,7 @@ namespace unordered_detail {
             return v.first;
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         template <class Arg1, class... Args>
         static key_type const& extract(key_type const& k,
             Arg1 const&, Args const&...)
@@ -143,6 +156,6 @@ namespace unordered_detail {
             return x.second == y.second;
         }
     };
-}}
+}}}
 
 #endif

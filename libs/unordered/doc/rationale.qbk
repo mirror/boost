@@ -126,7 +126,7 @@ a little to accomodate non-C++0x compilers.
 
 It isn't clear how to swap containers when their allocators aren't equal.
 This is 
-[@http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-active.html#431
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#431
 Issue 431: Swapping containers with unequal allocators]. This has been resolved
 with the new allocator specification, so this should be fixed when
 support is added.

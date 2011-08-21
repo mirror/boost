@@ -31,6 +31,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 1\n";
     {
+        test::check_instances check_;
+
         T x(0, hf, eq);
         BOOST_TEST(x.empty());
         BOOST_TEST(test::equivalent(x.hash_function(), hf));
@@ -41,6 +43,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 2\n";
     {
+        test::check_instances check_;
+
         T x(100, hf);
         BOOST_TEST(x.empty());
         BOOST_TEST(x.bucket_count() >= 100);
@@ -52,6 +56,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 3\n";
     {
+        test::check_instances check_;
+
         T x(2000);
         BOOST_TEST(x.empty());
         BOOST_TEST(x.bucket_count() >= 2000);
@@ -63,6 +69,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 4\n";
     {
+        test::check_instances check_;
+
         T x;
         BOOST_TEST(x.empty());
         BOOST_TEST(test::equivalent(x.hash_function(), hf));
@@ -73,6 +81,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 5\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
         T x(v.begin(), v.end(), 10000, hf, eq);
         BOOST_TEST(x.bucket_count() >= 10000);
@@ -85,6 +95,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 6\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(10, generator);
         T x(v.begin(), v.end(), 10000, hf);
         BOOST_TEST(x.bucket_count() >= 10000);
@@ -97,6 +109,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 7\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(100, generator);
         T x(v.begin(), v.end(), 100);
         BOOST_TEST(x.bucket_count() >= 100);
@@ -109,6 +123,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 8\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1, generator);
         T x(v.begin(), v.end());
         BOOST_TEST(test::equivalent(x.hash_function(), hf));
@@ -120,6 +136,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 9\n";
     {
+        test::check_instances check_;
+
         T x(0, hf, eq, al);
         BOOST_TEST(x.empty());
         BOOST_TEST(test::equivalent(x.hash_function(), hf));
@@ -130,6 +148,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 10\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(1000, generator);
         T x(v.begin(), v.end(), 10000, hf, eq, al);
         BOOST_TEST(x.bucket_count() >= 10000);
@@ -142,6 +162,8 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 11\n";
     {
+        test::check_instances check_;
+
         T x(al);
         BOOST_TEST(x.empty());
         BOOST_TEST(test::equivalent(x.hash_function(), hf));
@@ -167,6 +189,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 1\n";
     {
+        test::check_instances check_;
         T x(10000, hf1, eq1);
         BOOST_TEST(x.bucket_count() >= 10000);
         BOOST_TEST(test::equivalent(x.hash_function(), hf1));
@@ -177,6 +200,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 2\n";
     {
+        test::check_instances check_;
         T x(100, hf1);
         BOOST_TEST(x.empty());
         BOOST_TEST(x.bucket_count() >= 100);
@@ -188,6 +212,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 3\n";
     {
+        test::check_instances check_;
         test::random_values<T> v(100, generator);
         T x(v.begin(), v.end(), 0, hf1, eq1);
         BOOST_TEST(test::equivalent(x.hash_function(), hf1));
@@ -199,6 +224,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 4\n";
     {
+        test::check_instances check_;
         test::random_values<T> v(5, generator);
         T x(v.begin(), v.end(), 1000, hf1);
         BOOST_TEST(x.bucket_count() >= 1000);
@@ -212,6 +238,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 5\n";
     {
+        test::check_instances check_;
         test::random_values<T> v(100, generator);
         T x(v.begin(), v.end(), 0, hf, eq, al1);
         T y(x.begin(), x.end(), 0, hf1, eq1, al2);
@@ -223,6 +250,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 6\n";
     {
+        test::check_instances check_;
         test::random_values<T> v(100, generator);
         T x(v.begin(), v.end(), 0, hf1, eq1);
         T y(x.begin(), x.end(), 0, hf, eq);
@@ -234,6 +262,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 7\n";
     {
+        test::check_instances check_;
         test::random_values<T> v(100, generator);
         T x(v.begin(), v.end(), 0, hf1, eq1);
         T y(x.begin(), x.end(), 0, hf2, eq2);
@@ -245,6 +274,7 @@ void constructor_tests2(T*,
 
     std::cerr<<"Construct 8 - from input iterator\n";
     {
+        test::check_instances check_;
         test::random_values<T> v(100, generator);
         BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
             v_begin = v.begin(), v_end = v.end();
@@ -262,6 +292,7 @@ void constructor_tests2(T*,
     
     std::cerr<<"Construct 8.5 - from copy iterator\n";
     {
+        test::check_instances check_;
         test::random_values<T> v(100, generator);
         T x(test::copy_iterator(v.begin()),
             test::copy_iterator(v.end()), 0, hf1, eq1);
@@ -275,6 +306,8 @@ void constructor_tests2(T*,
     
     std::cerr<<"Construct 9\n";
     {
+        test::check_instances check_;
+
         test::random_values<T> v(100, generator);
         T x(50);
         BOOST_TEST(x.bucket_count() >= 50);
@@ -291,6 +324,8 @@ void constructor_tests2(T*,
     
     std::cerr<<"Initializer list construct 1\n";
     {
+        test::check_instances check_;
+
         T x(list);
         BOOST_TEST(x.empty());
         BOOST_TEST(test::equivalent(x.hash_function(), hf));
@@ -300,6 +335,8 @@ void constructor_tests2(T*,
 
     std::cerr<<"Initializer list construct 2\n";
     {
+        test::check_instances check_;
+
         T x(list, 1000);
         BOOST_TEST(x.empty());
         BOOST_TEST(x.bucket_count() >= 1000);
@@ -310,6 +347,8 @@ void constructor_tests2(T*,
 
     std::cerr<<"Initializer list construct 3\n";
     {
+        test::check_instances check_;
+
         T x(list, 10, hf1);
         BOOST_TEST(x.empty());
         BOOST_TEST(x.bucket_count() >= 10);
@@ -320,6 +359,8 @@ void constructor_tests2(T*,
 
     std::cerr<<"Initializer list construct 4\n";
     {
+        test::check_instances check_;
+
         T x(list, 10, hf1, eq1);
         BOOST_TEST(x.empty());
         BOOST_TEST(x.bucket_count() >= 10);
@@ -330,6 +371,8 @@ void constructor_tests2(T*,
 
     std::cerr<<"Initializer list construct 5\n";
     {
+        test::check_instances check_;
+
         T x(list, 10, hf1, eq1, al1);
         BOOST_TEST(x.empty());
         BOOST_TEST(x.bucket_count() >= 10);

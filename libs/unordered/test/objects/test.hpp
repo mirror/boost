@@ -9,11 +9,9 @@
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <cstddef>
-#include <iostream>
 #include "../helpers/fwd.hpp"
 #include "../helpers/count.hpp"
 #include "../helpers/memory.hpp"
-#include <map>
 
 namespace test
 {
@@ -27,7 +25,7 @@ namespace test
     template <class T> class allocator;
     object generate(object const*);
     implicitly_convertible generate(implicitly_convertible const*);
-
+    
     class object : globally_counted_object
     {
         friend class hash;
@@ -185,18 +183,6 @@ namespace test
         }
     };
 
-    namespace detail
-    {
-        // This won't be a problem as I'm only using a single compile unit
-        // in each test (this is actually require by the minimal test
-        // framework).
-        // 
-        // boostinspect:nounnamed
-        namespace {
-            test::detail::memory_tracker<std::allocator<int> > tracker;
-        }
-    }
-
     template <class T>
     class allocator
     {
@@ -268,19 +254,19 @@ namespace test
             ::operator delete((void*) p);
         }
 
-        void construct(pointer p, T const& t) {
+        void construct(T* p, T const& t) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
             new(p) T(t);
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
-        template<class... Args> void construct(pointer p, Args&&... args) {
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+        template<class... Args> void construct(T* p, Args&&... args) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
             new(p) T(std::forward<Args>(args)...);
         }
 #endif
 
-        void destroy(pointer p) {
+        void destroy(T* p) {
             detail::tracker.track_destroy((void*) p, sizeof(T), tag_);
             p->~T();
         }
@@ -298,6 +284,13 @@ namespace test
         {
             return tag_ != x.tag_;
         }
+
+        enum {
+            is_select_on_copy = false,
+            is_propagate_on_swap = false,
+            is_propagate_on_assign = false,
+            is_propagate_on_move = false
+        };
     };
 
     template <class T>

@@ -27,13 +27,12 @@ struct self_swap_base : public test::exception_base
     void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         std::string scope(test::scope);
 
-#if BOOST_UNORDERED_SWAP_METHOD != 2
+        // TODO: In C++11 exceptions are only allowed in the swap function.
         BOOST_TEST(
-                scope == "hash::operator(hash)" ||
+                scope == "hash::hash(hash)" ||
                 scope == "hash::operator=(hash)" ||
-                scope == "equal_to::operator(equal_to)" ||
+                scope == "equal_to::equal_to(equal_to)" ||
                 scope == "equal_to::operator=(equal_to)");
-#endif
 
         test::check_equivalent_keys(x);
     }
@@ -82,13 +81,12 @@ struct swap_base : public test::exception_base
     void check BOOST_PREVENT_MACRO_SUBSTITUTION(data_type const& d) const {
         std::string scope(test::scope);
 
-#if BOOST_UNORDERED_SWAP_METHOD != 2
+        // TODO: In C++11 exceptions are only allowed in the swap function.
         BOOST_TEST(
-                scope == "hash::operator(hash)" ||
+                scope == "hash::hash(hash)" ||
                 scope == "hash::operator=(hash)" ||
-                scope == "equal_to::operator(equal_to)" ||
+                scope == "equal_to::equal_to(equal_to)" ||
                 scope == "equal_to::operator=(equal_to)");
-#endif
         
         test::check_equivalent_keys(d.x);
         test::check_equivalent_keys(d.y);
