@@ -365,14 +365,14 @@ namespace quickbook
             add_anchor(actions,
                 actions.section_id + '.' +
                     detail::make_identifier(content.get_boostbook()),
-                id_generator::generated);
+                id_generator::generated_heading);
         }
         else
         {
             id_generator::categories category =
                 !element_id.empty() ?
                     id_generator::explicit_id :
-                    id_generator::generated;
+                    id_generator::generated_heading;
 
             std::string id =
                 !element_id.empty() ?
@@ -1578,7 +1578,7 @@ namespace quickbook
                 actions.doc_id + "." + actions.qualified_section_id,
             !element_id.empty() ?
                 id_generator::explicit_id :
-                id_generator::generated);
+                id_generator::generated_section);
 
         actions.out << "\n<section id=\"" << full_id << "\">\n";
         actions.out << "<title>";
@@ -1775,7 +1775,7 @@ namespace quickbook
                 quickbook::actions const& actions)
         {
             fs::path current = actions.filename.parent_path();
-            fs::path path(name);
+            fs::path path = detail::generic_to_path(name);
 
             // If the path is relative, try and resolve it.
             if (!path.has_root_directory() && !path.has_root_name())

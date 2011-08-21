@@ -9,6 +9,7 @@
 #include "id_generator.hpp"
 #include "markups.hpp"
 #include "phrase_tags.hpp"
+#include <cctype>
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
 #include <vector>
@@ -78,21 +79,36 @@ namespace quickbook
             x.begin(), x.end(), y.begin(), y.end());
     }
 
+    //
     // id_generator
+    //
 
-    struct id_generator::id
+    static const std::size_t max_size = 32;
+
+    namespace
     {
-        id()
-          : category(id_generator::default_category),
-            used(false),
-            count(0) {}
-    
-        id_generator::categories category;
+        std::string normalize_id(std::string const& id)
+        {
+            std::string result;
 
-        // These are updated when generating ids
-        bool used;
-        int count;
-    };
+            std::string::const_iterator it = id.begin();
+            while (it != id.end()) {
+                if (*it == '_') {
+                    do {
+                        ++it;
+                    } while(it != id.end() && *it == '_');
+
+                    if (it != id.end()) result += '_';
+                }
+                else {
+                    result += *it;
+                    ++it;
+                }
+            }
+            
+            return result;
+        }
+    }
 
     id_generator::id_generator()
     {
@@ -107,25 +123,25 @@ namespace quickbook
             id_generator::categories category)
     {
         std::string result;
-        id_generator::id& id = ids_[value];
+
+        id_data& data = ids.emplace(value, value, category).first->second;
 
         // Doesn't check if explicit ids collide, could probably be a warning.
         if (category == explicit_id)
         {
-            id.category = category;
-            id.used = true;
+            data.category = category;
+            data.used = true;
             result = value;
         }
         else
         {
-            if (category < id.category) id.category = category;
+            if (category < data.category) data.category = category;
 
             // '$' can't appear in quickbook ids, so use it indicate a
             // placeholder id.
             result = "$" +
-                boost::lexical_cast<std::string>(placeholders_.size());
-            placeholders_.push_back(
-                id_generator::placeholder(category, *ids_.find(value)));
+                boost::lexical_cast<std::string>(placeholders.size());
+            placeholders.push_back(placeholder_id(category, &data));
         }
 
         return result;
@@ -137,32 +153,121 @@ namespace quickbook
         if (value.size() <= 1 || *value.begin() != '$')
             return value;
 
-        id_generator::placeholder& placeholder = placeholders_.at(
+        placeholder_id* placeholder = &placeholders.at(
             boost::lexical_cast<int>(std::string(
                 value.begin() + 1, value.end())));
 
-        if (placeholder.final_id.empty())
+        if (placeholder->final_id.empty())
         {
-            if (placeholder.category < id_generator::numbered &&
-                    !placeholder.id.second.used &&
-                    placeholder.id.second.category == placeholder.category)
+            if (placeholder->category < id_generator::numbered &&
+                    !placeholder->data->used &&
+                    placeholder->data->category == placeholder->category)
             {
-                placeholder.id.second.used = true;
-                placeholder.final_id = placeholder.id.first;
+                placeholder->data->used = true;
+                placeholder->final_id = placeholder->data->name;
             }
-            else while(true)
+            else
             {
-                int count = placeholder.id.second.count++;
-                placeholder.final_id = placeholder.id.first +
-                    boost::lexical_cast<std::string>(count);
-                // TODO: Should add final_id to ids_, there are some
-                // edges cases where it could collide.
-                if (ids_.find(placeholder.final_id) == ids_.end())
-                    break;
+                generate_id(placeholder);
             }
         }
 
-        return string_ref(placeholder.final_id);
+        return string_ref(placeholder->final_id);
+    }
+
+    void id_generator::generate_id(placeholder_id* placeholder)
+    {
+        id_data* data = placeholder->data;
+
+        if (!data->generation_data)
+        {
+            std::string const& name = data->name;
+
+            std::size_t seperator = name.rfind('.') + 1;
+            data->generation_data.reset(new id_generation_data(
+                std::string(name, 0, seperator),
+                normalize_id(std::string(name, seperator))
+            ));
+
+            try_potential_id(placeholder);
+        }
+
+        while(!try_counted_id(placeholder)) {};
+    }
+
+    bool id_generator::try_potential_id(placeholder_id* placeholder)
+    {
+        placeholder->final_id =
+            placeholder->data->generation_data->parent +
+            placeholder->data->generation_data->base;
+
+        // Be careful here as it's quite likely that final_id is the
+        // same as the original id, so this will just find the original
+        // data.
+        //
+        // Not caring too much about 'category' and 'used', would want to if
+        // still creating ids.
+        std::pair<boost::unordered_map<std::string, id_data>::iterator, bool>
+            insert = ids.emplace(placeholder->final_id, placeholder->final_id,
+                placeholder->category, true);
+        
+        if (insert.first->second.generation_data)
+        {
+            placeholder->data->generation_data =
+                insert.first->second.generation_data;
+        }
+        else
+        {
+            insert.first->second.generation_data =
+                placeholder->data->generation_data;
+        }
+
+        return insert.second;
+    }
+
+    bool id_generator::try_counted_id(placeholder_id* placeholder)
+    {
+        std::string name =
+            placeholder->data->generation_data->base +
+            (placeholder->data->generation_data->needs_underscore ? "_" : "") +
+            boost::lexical_cast<std::string>(
+                    placeholder->data->generation_data->count);
+
+        if (name.length() > max_size)
+        {
+            std::size_t new_end =
+                placeholder->data->generation_data->base.length() -
+                    (name.length() - max_size);
+
+            while (new_end > 0 &&
+                std::isdigit(placeholder->data->generation_data->base[new_end - 1]))
+                    --new_end;
+
+            placeholder->data->generation_data->base.erase(new_end);
+            placeholder->data->generation_data->new_base_value();
+
+            // Return result of try_potential_id to use the truncated id
+            // without a number.
+            try_potential_id(placeholder);
+            return false;
+        }
+
+        placeholder->final_id =
+            placeholder->data->generation_data->parent + name;
+
+        std::pair<boost::unordered_map<std::string, id_data>::iterator, bool>
+            insert = ids.emplace(placeholder->final_id, placeholder->final_id,
+                placeholder->category, true);
+
+        ++placeholder->data->generation_data->count;
+
+        return insert.second;
+    }
+
+    void id_generator::id_generation_data::new_base_value() {
+        count = 0;
+        needs_underscore = !base.empty() &&
+            std::isdigit(base[base.length() - 1]);
     }
 
     // Very simple xml subset parser which replaces id values.
