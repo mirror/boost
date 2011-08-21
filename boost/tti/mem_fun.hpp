@@ -36,13 +36,13 @@
     
               The metafunction types and return:
     
-                T   = the enclosing type in which to look for our 'name'.
+                TTI_T   = the enclosing type in which to look for our 'name'.
                 
-                R   = the return type of the member function.
+                TTI_R   = the return type of the member function.
                 
-                FS  = an optional parameter which are the parameters of the member function as a boost::mpl forward sequence.
+                TTI_FS  = an optional parameter which are the parameters of the member function as a boost::mpl forward sequence.
                 
-                TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
+                TTI_TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
                 
                 returns = 'value' is true if the 'name' exists, with the appropriate type,
                           otherwise 'value' is false.
@@ -50,9 +50,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
   TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
-  template<class T,class R,class FS = boost::mpl::vector<>,class TAG = boost::function_types::null_tag> \
+  template<class TTI_T,class TTI_R,class TTI_FS = boost::mpl::vector<>,class TTI_TAG = boost::function_types::null_tag> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<typename BOOST_TTI_NAMESPACE::detail::ptmf_seq<T,R,FS,TAG>::type,typename boost::remove_const<T>::type> \
+    BOOST_PP_CAT(trait,_detail)<typename BOOST_TTI_NAMESPACE::detail::ptmf_seq<TTI_T,TTI_R,TTI_FS,TTI_TAG>::type,typename boost::remove_const<TTI_T>::type> \
     { \
     }; \
 /**/
@@ -66,13 +66,13 @@
     
               The metafunction types and return:
     
-                T   = the enclosing type in which to look for our 'name'.
+                TTI_T   = the enclosing type in which to look for our 'name'.
                 
-                R   = the return type of the member function.
+                TTI_R   = the return type of the member function.
                 
-                FS  = an optional parameter which are the parameters of the member function as a boost::mpl forward sequence.
+                TTI_FS  = an optional parameter which are the parameters of the member function as a boost::mpl forward sequence.
                 
-                TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
+                TTI_TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
                 
                 returns = 'value' is true if the 'name' exists, with the appropriate type,
                           otherwise 'value' is false.

@@ -33,11 +33,11 @@
     
               The metafunction types and return:
     
-                T    = the enclosing type.
+                TTI_T    = the enclosing type.
                 
-                Type = the static member data type,
-                       in the form of a data type,
-                       in which to look for our 'name'.
+                TTI_Type = the static member data type,
+                           in the form of a data type,
+                           in which to look for our 'name'.
                        
                 returns = 'value' is true if the 'name' exists within the enclosing type,
                           with the appropriate type,
@@ -46,9 +46,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
   TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
-  template<class T,class Type> \
+  template<class TTI_T,class TTI_Type> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<T,Type> \
+    BOOST_PP_CAT(trait,_detail)<TTI_T,TTI_Type> \
     { \
     }; \
 /**/
@@ -62,11 +62,11 @@
     
               The metafunction types and return:
     
-                T    = the enclosing type.
+                TTI_T    = the enclosing type.
                 
-                Type = the static member data type,
-                       in the form of a data type,
-                       in which to look for our 'name'.
+                TTI_Type = the static member data type,
+                           in the form of a data type,
+                           in which to look for our 'name'.
                        
                 returns = 'value' is true if the 'name' exists within the enclosing type,
                           with the appropriate type,

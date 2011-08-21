@@ -33,7 +33,7 @@
     
               The metafunction types and return:
     
-                T = the enclosing type in which to look for our 'name'.
+                TTI_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' template exists within the enclosing type,
                           otherwise 'value' is false.
@@ -43,9 +43,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_TEMPLATE(trait,name) \
   BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(BOOST_PP_CAT(trait,_detail_mpl), name, false) \
-  template<class T> \
+  template<class TTI_T> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail_mpl)<T> \
+    BOOST_PP_CAT(trait,_detail_mpl)<TTI_T> \
     { \
     }; \
 /**/
@@ -59,7 +59,7 @@
     
               The metafunction types and return:
     
-                T = the enclosing type in which to look for our 'name'.
+                TTI_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' template exists within the enclosing type,
                           otherwise 'value' is false.

@@ -37,7 +37,7 @@
     
               The metafunction types and return:
     
-                T = the enclosing type in which to look for our 'name'.
+                TTI_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' class template with the signature
                           as defined by the 'tpSeq' exists within the enclosing type,
@@ -46,9 +46,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
   TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(BOOST_PP_CAT(trait,_detail),name,tpSeq) \
-  template<class T> \
+  template<class TTI_T> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<T> \
+    BOOST_PP_CAT(trait,_detail)<TTI_T> \
     { \
     }; \
 /**/
@@ -66,7 +66,7 @@
     
               The metafunction types and return:
     
-                T = the enclosing type in which to look for our 'name'.
+                TTI_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' class template with the signature
                           as defined by the 'tpSeq' exists within the enclosing type,

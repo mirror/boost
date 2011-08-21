@@ -34,9 +34,9 @@
     
               The metafunction types and return:
     
-                T   = the enclosing type in which to look for our 'name'.
+                TTI_T   = the enclosing type in which to look for our 'name'.
                 
-                R   = the type of the member data.
+                TTI_R   = the type of the member data.
                 
                 returns = 'value' is true if the 'name' exists, with the appropriate type,
                           otherwise 'value' is false.
@@ -44,9 +44,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_MEMBER_DATA(trait,name) \
   TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
-  template<class T,class R> \
+  template<class TTI_T,class TTI_R> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<typename BOOST_TTI_NAMESPACE::detail::ptmd<T,R>::type,typename boost::remove_const<T>::type> \
+    BOOST_PP_CAT(trait,_detail)<typename BOOST_TTI_NAMESPACE::detail::ptmd<TTI_T,TTI_R>::type,typename boost::remove_const<TTI_T>::type> \
     { \
     }; \
 /**/
@@ -60,9 +60,9 @@
     
               The metafunction types and return:
     
-                T   = the enclosing type in which to look for our 'name'.
+                TTI_T   = the enclosing type in which to look for our 'name'.
                 
-                R   = the type of the member data.
+                TTI_R   = the type of the member data.
                 
                 returns = 'value' is true if the 'name' exists, with the appropriate type,
                           otherwise 'value' is false.

@@ -36,7 +36,7 @@
     
               The metafunction types and return:
               
-                T = the enclosing type.<br />
+                TTI_T = the enclosing type.<br />
                 
                 returns = 'type' is the inner type of 'name' if the inner type exists
                           within the enclosing type, else 'type' is an unspecified type.<br />
@@ -50,12 +50,12 @@
 #define BOOST_TTI_TRAIT_MEMBER_TYPE(trait,name) \
     TTI_DETAIL_TRAIT_HAS_TYPE_MEMBER_TYPE(trait,name) \
     TTI_DETAIL_TRAIT_MEMBER_TYPE(trait,name) \
-    template<class T> \
+    template<class TTI_T> \
     struct trait : \
       boost::mpl::eval_if \
         < \
-        BOOST_PP_CAT(trait,_detail)<T>, \
-        BOOST_PP_CAT(trait,_detail_member_type)<T>, \
+        BOOST_PP_CAT(trait,_detail)<TTI_T>, \
+        BOOST_PP_CAT(trait,_detail_member_type)<TTI_T>, \
         boost::mpl::identity<BOOST_TTI_NAMESPACE::detail::notype> \
         > \
       { \
@@ -71,7 +71,7 @@
     
               The metafunction types and return:
               
-                T = the enclosing type.
+                TTI_T = the enclosing type.
                 
                 returns = 'type' is the inner type of 'name' if the inner type exists
                           within the enclosing type, else 'type' is an unspecified type.

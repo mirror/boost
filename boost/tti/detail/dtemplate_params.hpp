@@ -46,29 +46,6 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
      }; \
 /**/
 
-#define TTI_DETAIL_MTFC_HAS_MEMBER_IMPLEMENTATION(args,introspect_macro) \
-  struct BOOST_PP_ARRAY_ELEM(0, args) \
-    { \
-    template \
-      < \
-      typename T, \
-      typename fallback_ \
-        = boost::mpl::bool_< BOOST_PP_ARRAY_ELEM(3, args) > \
-      > \
-    class apply \
-      { \
-      introspect_macro(args) \
-      public: \
-        static const bool value \
-          = BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args)< T >::value; \
-        typedef typename BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args) \
-          < \
-          T \
-          >::type type; \
-      }; \
-    }; \
-/**/
-
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 
 #define TTI_DETAIL_HAS_MEMBER_MULTI_SUBSTITUTE(z,n,args) \
@@ -190,18 +167,6 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
     ) \
 /**/
 
-#define TTI_DETAIL_MTFC_HAS_MEMBER_WITH_TEMPLATE_SFINAE(args) \
-  TTI_DETAIL_HAS_MEMBER_SUBSTITUTE_WITH_TEMPLATE_SFINAE \
-    ( \
-    args \
-    ) \
-  TTI_DETAIL_MTFC_HAS_MEMBER_IMPLEMENTATION \
-    ( \
-    args, \
-    TTI_DETAIL_HAS_MEMBER_INTROSPECT_WITH_TEMPLATE_SFINAE \
-    ) \
-/**/
-
 #endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 #else // !!defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 
@@ -226,27 +191,10 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
     )  \
 /**/
 
-#define TTI_DETAIL_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
-  struct trait \
-    { \
-    TTI_DETAIL_HAS_MEMBER_WITH_FUNCTION_SFINAE \
-      (  \
-        ( BOOST_PP_ADD(BOOST_PP_SEQ_SIZE(tpSeq),4), ( apply, name, 1, false, BOOST_PP_SEQ_ENUM(tpSeq) ) )  \
-      )  \
-    }; \
-/**/
-
 #else // !!BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 
 #define TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
   TTI_DETAIL_HAS_MEMBER_WITH_TEMPLATE_SFINAE \
-    ( \
-      ( BOOST_PP_ADD(BOOST_PP_SEQ_SIZE(tpSeq),4), ( trait, name, 1, false, BOOST_PP_SEQ_ENUM(tpSeq) ) )  \
-    ) \
-/**/
-
-#define TTI_DETAIL_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
-  TTI_DETAIL_MTFC_HAS_MEMBER_WITH_TEMPLATE_SFINAE \
     ( \
       ( BOOST_PP_ADD(BOOST_PP_SEQ_SIZE(tpSeq),4), ( trait, name, 1, false, BOOST_PP_SEQ_ENUM(tpSeq) ) )  \
     ) \
@@ -257,13 +205,6 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #define TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
   TTI_DETAIL_SAME(trait,name) \
-/**/
-
-#define TTI_DETAIL_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
-  struct trait \
-    { \
-    TTI_DETAIL_SAME(apply,name) \
-    }; \
 /**/
 
 #endif // !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)

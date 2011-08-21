@@ -34,9 +34,9 @@
     
               The metafunction types and return:
     
-                T = the member function type, 
-                    in the form of a member function pointer - 'return_type (Class::*)(parameter_types...)', 
-                    in which to look for our 'name'.
+                TTI_T = the member function type, 
+                        in the form of a member function pointer - 'return_type (Class::*)(parameter_types...)', 
+                        in which to look for our 'name'.
                     
                 returns = 'value' is true if the 'name' exists, with the appropriate type,
                           otherwise 'value' is false.
@@ -44,9 +44,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
-  template<class T> \
+  template<class TTI_T> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<T> \
+    BOOST_PP_CAT(trait,_detail)<TTI_T> \
     { \
     }; \
 /**/
@@ -60,9 +60,9 @@
     
               The metafunction types and return:
     
-                T = the member function type, 
-                    in the form of a member function pointer - 'return_type (Class::*)(parameter_types...)', 
-                    in which to look for our 'name'.
+                TTI_T = the member function type, 
+                        in the form of a member function pointer - 'return_type (Class::*)(parameter_types...)', 
+                        in which to look for our 'name'.
                     
                 returns = 'value' is true if the 'name' exists, with the appropriate type,
                           otherwise 'value' is false.
