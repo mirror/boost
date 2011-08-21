@@ -16,7 +16,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_template
                       <
-                      BOOST_TTI_TRAIT_GEN(AMT)<_>,
+                      AMT<_>,
                       boost::mpl::identity<AType>
                       >
                   ));

@@ -6,6 +6,7 @@
 
 #include "test_mf_mem_type.hpp"
 #include <boost/mpl/assert.hpp>
+#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -26,7 +27,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_TRAIT_GEN(NameStruct)<_>,
+                        NameStruct<_>,
                         boost::mpl::identity<AType>
                         >
                       >
@@ -56,7 +57,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_TRAIT_GEN(TheInteger)<_>,
+                        TheInteger<_>,
                         BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                         >
                       >
@@ -90,7 +91,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_TRAIT_GEN(SomethingElse)<_>,
+                        SomethingElse<_>,
                         boost::mpl::identity<AnotherType>
                         >
                       >
@@ -100,7 +101,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_MTFC_MEMBER_TYPE_GEN(AnIntType),
+                        boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)>,
                         boost::mpl::identity<AType>
                         >
                       >
@@ -110,7 +111,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_TRAIT_GEN(MFNameStruct),
+                        boost::mpl::quote1<NameStruct>,
                         boost::mpl::identity<AType>
                         >
                       >
@@ -120,7 +121,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_MTFC_MEMBER_TYPE_GEN(AnIntTypeReference),
+                        boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(AnIntTypeReference)>,
                         boost::mpl::identity<AType>
                         >
                       >
@@ -130,7 +131,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_MTFC_MEMBER_TYPE_GEN(BType),
+                        boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(BType)>,
                         boost::mpl::identity<AType>
                         >
                       >
@@ -140,7 +141,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_TRAIT_GEN(MFTheInteger),
+                        boost::mpl::quote1<TheInteger>,
                         BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                         >
                       >
@@ -150,7 +151,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_MTFC_MEMBER_TYPE_GEN(CType),
+                        boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(CType)>,
                         BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                         >
                       >
@@ -160,10 +161,10 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_MTFC_MEMBER_TYPE_GEN(AnotherIntegerType),
+                        boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(AnotherIntegerType)>,
                         boost::tti::mf_member_type
                           <
-                          BOOST_TTI_MTFC_MEMBER_TYPE_GEN(CType),
+                          boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(CType)>,
                           BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                           >
                         >
@@ -174,7 +175,7 @@ int main()
                       <
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_TRAIT_GEN(MetaClSomethingElse),
+                        boost::mpl::quote1<SomethingElse>,
                         boost::mpl::identity<AnotherType>
                         >
                       >

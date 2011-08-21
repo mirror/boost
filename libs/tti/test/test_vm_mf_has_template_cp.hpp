@@ -21,17 +21,9 @@ BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(WrongParametersForMP,ManyParameters
 BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS(CTManyParameters,class,class,int,short,class,template <class,int> class InnerTemplate,class)
 BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS(TemplateNotExist,int,class)
 
-BOOST_TTI_VM_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(MF_HT_Str,MStrMemberTemplate,class)
-BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS(AnotherMemberTemplate,int,int)
-BOOST_TTI_VM_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(AllWrongParametersForMP,ManyParameters,class,class,int,class,template <class> class InnerTemplate,class,short)
-BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS(CTManyParameters,class,class,int,short,class,template <class,int> class InnerTemplate,class)
-BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS(TemplateNotExist,int,class)
-
 BOOST_TTI_MEMBER_TYPE(AStructType)
 BOOST_TTI_TRAIT_MEMBER_TYPE(MT_BType,BType)
 BOOST_TTI_MEMBER_TYPE(CType)
-
-BOOST_TTI_MTFC_MEMBER_TYPE(CType)
 
 #endif // BOOST_PP_VARIADICS
 

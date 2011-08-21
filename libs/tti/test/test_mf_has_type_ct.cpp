@@ -6,6 +6,7 @@
 
 #include "test_mf_has_type_ct.hpp"
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -23,7 +24,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_TRAIT_GEN(NameStruct)<_,_>,
+                NameStruct<_,_>,
                 boost::mpl::identity<AType>,
                 BOOST_TTI_MEMBER_TYPE_GEN(AStructType)<AType>
                 >
@@ -50,7 +51,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_TRAIT_GEN(TheInteger)<_,_>,
+                TheInteger<_,_>,
                 BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>,
                 boost::mpl::identity<int>
                 >
@@ -75,7 +76,7 @@ int main()
                 BOOST_TTI_HAS_TYPE_GEN(AnotherIntegerType)<_,_>,
                 boost::tti::mf_member_type
                   <
-                  BOOST_TTI_MTFC_MEMBER_TYPE_GEN(CType),
+                  boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(CType)>,
                   BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                   >,
                 boost::mpl::identity<int>
@@ -85,7 +86,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_TRAIT_GEN(SomethingElse)<_,_>,
+                SomethingElse<_,_>,
                 boost::mpl::identity<AnotherType>,
                 BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)<AType>
                 >
@@ -103,7 +104,7 @@ int main()
 
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_MTFC_HAS_TYPE_GEN(AnIntType),
+                boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(AnIntType)>,
                 boost::mpl::identity<AType>,
                 boost::mpl::identity<int>
                 >
@@ -112,7 +113,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_TRAIT_GEN(MFunctionNameStruct),
+                boost::mpl::quote2<NameStruct>,
                 boost::mpl::identity<AType>,
                 BOOST_TTI_MEMBER_TYPE_GEN(AStructType)<AType>
                 >
@@ -121,7 +122,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_MTFC_HAS_TYPE_GEN(AnIntTypeReference),
+                boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(AnIntTypeReference)>,
                 boost::mpl::identity<AType>,
                 boost::mpl::identity<int &>
                 >
@@ -130,7 +131,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_MTFC_HAS_TYPE_GEN(BType),
+                boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(BType)>,
                 boost::mpl::identity<AType>,
                 BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                 >
@@ -139,7 +140,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_TRAIT_GEN(MFCTheInteger),
+                boost::mpl::quote2<TheInteger>,
                 BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>,
                 boost::mpl::identity<int>
                 >
@@ -148,7 +149,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_MTFC_HAS_TYPE_GEN(CType),
+                boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(CType)>,
                 BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>,
                 boost::tti::mf_member_type
                   <
@@ -161,10 +162,10 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_MTFC_HAS_TYPE_GEN(AnotherIntegerType),
+                boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(AnotherIntegerType)>,
                 boost::tti::mf_member_type
                   <
-                  BOOST_TTI_MTFC_MEMBER_TYPE_GEN(CType),
+                  boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(CType)>,
                   BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                   >,
                 boost::mpl::identity<int>
@@ -174,7 +175,7 @@ int main()
             
   BOOST_TEST((boost::tti::mf_has_type
                 <
-                BOOST_TTI_TRAIT_GEN(FClassSomethingElse),
+                boost::mpl::quote2<SomethingElse>,
                 boost::mpl::identity<AnotherType>,
                 BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)<AType>
                 >
@@ -183,7 +184,7 @@ int main()
             
   BOOST_TEST((!boost::tti::mf_has_type
                 <
-                BOOST_TTI_MTFC_HAS_TYPE_GEN(NoOtherType),
+                boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(NoOtherType)>,
                 boost::mpl::identity<AnotherType>,
                 boost::mpl::identity<double>
                 >

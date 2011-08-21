@@ -21,7 +21,7 @@ int main()
                       BOOST_TTI_MEMBER_TYPE_GEN(AStructType)<AType>,
                       boost::mpl::vector
                         <
-                        BOOST_TTI_TRAIT_GEN(NameIntType)<AnotherType>,
+                        NameIntType<AnotherType>,
                         boost::mpl::identity<double>
                         >
                       >

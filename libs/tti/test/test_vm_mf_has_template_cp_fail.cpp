@@ -22,7 +22,7 @@ int main()
                       boost::tti::mf_member_type
                         <
                         BOOST_TTI_MEMBER_TYPE_GEN(CType)<_>,
-                        BOOST_TTI_TRAIT_GEN(MT_BType)<AType>
+                        MT_BType<AType>
                         >
                       >
                   ));

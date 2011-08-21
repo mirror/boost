@@ -16,7 +16,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_function
                       <
-                      BOOST_TTI_TRAIT_GEN(FunctionReturningInt)<_,_>,
+                      FunctionReturningInt<_,_>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<short>
                       >

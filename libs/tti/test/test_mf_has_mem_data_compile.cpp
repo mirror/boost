@@ -6,6 +6,7 @@
 
 #include "test_mf_has_mem_data.hpp"
 #include <boost/mpl/assert.hpp>
+#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -38,7 +39,7 @@ int main()
                   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_TRAIT_GEN(CMember)<_,_>,
+                      CMember<_,_>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<bool> 
                       >
@@ -54,7 +55,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_TRAIT_GEN(NestedData)<_,_>,
+                      NestedData<_,_>,
                       boost::mpl::identity<AType>,
                       boost::tti::mf_member_type
                         <
@@ -66,7 +67,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_TRAIT_GEN(AOther)<_,_>,
+                      AOther<_,_>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<AType>
                       >
@@ -82,7 +83,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_MTFC_HAS_MEMBER_DATA_GEN(AnInt),
+                      boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)>,
                       boost::mpl::identity<AType>,
                       boost::mpl::identity<int> 
                       >
@@ -90,7 +91,7 @@ int main()
             
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_MTFC_HAS_MEMBER_DATA_GEN(AnInt),
+                      boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<long> 
                       >
@@ -98,7 +99,7 @@ int main()
             
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_MTFC_HAS_MEMBER_DATA_GEN(aMember),
+                      boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(aMember)>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<bool> 
                       >
@@ -106,7 +107,7 @@ int main()
             
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_TRAIT_GEN(MFCMember),
+                      boost::mpl::quote2<CMember>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<bool> 
                       >
@@ -114,7 +115,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_MTFC_HAS_MEMBER_DATA_GEN(IntBT),
+                      boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(IntBT)>,
                       boost::mpl::identity<AType>,
                       BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                       >
@@ -122,11 +123,11 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_TRAIT_GEN(MFNestedData),
+                      boost::mpl::quote2<NestedData>,
                       boost::mpl::identity<AType>,
                       boost::tti::mf_member_type
                         <
-                        BOOST_TTI_MTFC_MEMBER_TYPE_GEN(CType),
+                        boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(CType)>,
                         BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                         >
                       >
@@ -134,7 +135,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_TRAIT_GEN(MFAOther),
+                      boost::mpl::quote2<AOther>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<AType>
                       >
@@ -142,7 +143,7 @@ int main()
   
   BOOST_MPL_ASSERT((boost::tti::mf_has_member_data
                       <
-                      BOOST_TTI_MTFC_HAS_MEMBER_DATA_GEN(ONestStr),
+                      boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(ONestStr)>,
                       boost::mpl::identity<AnotherType>,
                       BOOST_TTI_MEMBER_TYPE_GEN(AStructType)<AType>
                       >
