@@ -595,4 +595,16 @@
       </tgroup>
     </table>
   </section>
+  <section id="identifiers_in_quickbook_1_5.punctuation___stuff">
+    <title><link linkend="identifiers_in_quickbook_1_5.punctuation___stuff">Punctuation
+    &amp; stuff</link></title> <anchor id="identifiers_in_quickbook_1_5.punctuation___stuff.a___b"/>
+    <bridgehead renderas="sect3" id="identifiers_in_quickbook_1_5.punctuation___stuff.h0">
+      <link linkend="identifiers_in_quickbook_1_5.punctuation___stuff.a___b">A +
+      B</link>
+    </bridgehead>
+    <anchor id="identifiers_in_quickbook_1_5.punctuation___stuff.a_b0"/>
+    <bridgehead renderas="sect3" id="identifiers_in_quickbook_1_5.punctuation___stuff.h1">
+      <link linkend="identifiers_in_quickbook_1_5.punctuation___stuff.a_b0">A + B</link>
+    </bridgehead>
+  </section>
 </article>

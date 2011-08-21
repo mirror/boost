@@ -181,12 +181,12 @@ namespace quickbook
 
         if (!data->generation_data)
         {
-            std::string name = normalize_id(data->name);
+            std::string const& name = data->name;
 
             std::size_t seperator = name.rfind('.') + 1;
             data->generation_data.reset(new id_generation_data(
                 std::string(name, 0, seperator),
-                std::string(name, seperator)
+                normalize_id(std::string(name, seperator))
             ));
 
             try_potential_id(placeholder);
