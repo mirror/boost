@@ -26,7 +26,10 @@ namespace quickbook
         enum categories
         {
             explicit_id = 0,    // Explicitly given by user
-            generated,          // Generated from source, e.g. table title
+            generated_doc,      // Generated ids for document.
+            generated_section,  // Generated ids for sections.
+            generated_heading,  // Generated ids for headings.
+            generated,          // Generated ids for other elements.
             numbered,           // Just used to avoid random docbook ids
             default_category
         };
@@ -68,12 +71,6 @@ namespace quickbook
         
         struct id_generation_data
         {
-            id_generation_data()
-              : parent(),
-                base(),
-                needs_underscore(false),
-                count(0) {}
-
             id_generation_data(std::string const& parent, std::string const& base)
               : parent(parent),
                 base(base),

@@ -365,14 +365,14 @@ namespace quickbook
             add_anchor(actions,
                 actions.section_id + '.' +
                     detail::make_identifier(content.get_boostbook()),
-                id_generator::generated);
+                id_generator::generated_heading);
         }
         else
         {
             id_generator::categories category =
                 !element_id.empty() ?
                     id_generator::explicit_id :
-                    id_generator::generated;
+                    id_generator::generated_heading;
 
             std::string id =
                 !element_id.empty() ?
@@ -1578,7 +1578,7 @@ namespace quickbook
                 actions.doc_id + "." + actions.qualified_section_id,
             !element_id.empty() ?
                 id_generator::explicit_id :
-                id_generator::generated);
+                id_generator::generated_section);
 
         actions.out << "\n<section id=\"" << full_id << "\">\n";
         actions.out << "<title>";

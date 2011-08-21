@@ -204,6 +204,9 @@ namespace quickbook
         // Be careful here as it's quite likely that final_id is the
         // same as the original id, so this will just find the original
         // data.
+        //
+        // Not caring too much about 'category' and 'used', would want to if
+        // still creating ids.
         std::pair<boost::unordered_map<std::string, id_data>::iterator, bool>
             insert = ids.emplace(placeholder->final_id, placeholder->final_id,
                 placeholder->category, true);
@@ -263,7 +266,7 @@ namespace quickbook
 
     void id_generator::id_generation_data::new_base_value() {
         count = 0;
-        needs_underscore == !base.empty() &&
+        needs_underscore = !base.empty() &&
             std::isdigit(base[base.length() - 1]);
     }
 
