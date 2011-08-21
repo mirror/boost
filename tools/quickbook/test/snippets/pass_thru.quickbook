@@ -5,6 +5,8 @@
 [import pass_thru.cpp]
 [import pass_thru.py]
 
+[foo_cpp_copyright]
+
 [foo_cpp]
 
 [foo_py]

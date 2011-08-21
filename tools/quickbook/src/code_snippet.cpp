@@ -166,12 +166,12 @@ namespace quickbook
                 // Note: Unlike escaped_comment and ignore, this doesn't
                 // swallow preceeding whitespace.
                 pass_thru_comment
-                    =   "#="
+                    =   "#=" >> (cl::eps_p - '=')
                     >>  (   *(cl::anychar_p - cl::eol_p)
                         >>  (cl::eol_p | cl::end_p)
                         )                           [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
                     |   cl::confix_p(
-                            "\"\"\"=",
+                            "\"\"\"=" >> (cl::eps_p - '='),
                             (*cl::anychar_p)        [boost::bind(&actions_type::pass_thru, &actions, _1, _2)],
                             "\"\"\""
                         )
@@ -288,12 +288,12 @@ namespace quickbook
                 // Note: Unlike escaped_comment and ignore, this doesn't
                 // swallow preceeding whitespace.
                 pass_thru_comment
-                    =   "//="
+                    =   "//=" >> (cl::eps_p - '=')
                     >>  (   *(cl::anychar_p - cl::eol_p)
                         >>  (cl::eol_p | cl::end_p)
                         )                           [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
                     |   cl::confix_p(
-                            "/*=",
+                            "/*=" >> (cl::eps_p - '='),
                             (*cl::anychar_p)        [boost::bind(&actions_type::pass_thru, &actions, _1, _2)],
                             "*/"
                         )
