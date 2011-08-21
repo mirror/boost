@@ -35,14 +35,15 @@ bcp boost/regex.hpp /foo
 ]
 
 Copies boost/regex.hpp and all dependencies including the regex source code (in libs/regex/src) and 
-build files (in libs/regex/build) to /foo.  Does not copy the regex documentation,  test, or example code.
+build files (in libs/regex/build) to /foo.  Does not copy the regex documentation, test, or example code.
+Also does not copy the Boost.Build system.
 
 [pre 
 bcp regex /foo
 ]
 
 Copies the full regex lib (in libs/regex) including dependencies (such as the boost.test source required 
-by the regex test programs) to /foo.
+by the regex test programs) to /foo.  Does not copy the Boost.Build system.
 
 [pre 
 bcp --namespace=myboost --namespace-alias regex config build /foo
