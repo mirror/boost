@@ -9,7 +9,7 @@
    template <class T>
    struct is_empty : public __tof {};
   
-__inherit If T is an empty class type then inherits from __true_type, 
+__inherit If T is an empty class type (and not a union type) then inherits from __true_type, 
 otherwise inherits from __false_type.
 
 __std_ref 10p5.

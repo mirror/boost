@@ -4,28 +4,11 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 import modules ;
-
-path-constant here : . ;
-
-if --enable-index in  [ modules.peek : ARGV ]
-{
-   ECHO "Building the type_traits docs with automatic index generation enabled." ;
-   using auto-index ;
-   project : requirements
-        <auto-index>on <format>pdf:<auto-index-internal>off
-        <format>html:<auto-index-internal>on
-        <auto-index-script>$(here)/index.idx
-        <auto-index-prefix>$(here)/../../.. 
-        <quickbook-define>enable_index ;
-}
-else
-{
-   ECHO "Building the type_traits docs with automatic index generation disabled.  Try building with --enable-index." ;
-}
-
 using quickbook ;
+using auto-index ;
 
 path-constant boost-images : ../../../doc/src/images ;
+path-constant here : . ;
 
 xml type_traits : type_traits.qbk ;
 boostbook standalone
@@ -76,14 +59,14 @@ boostbook standalone
         <format>pdf:<xsl:param>admon.graphics.extension=".svg"
         <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/type_traits/doc/html
+        <format>pdf:<auto-index-internal>off
+        <format>html:<auto-index-internal>on
+        <auto-index-script>$(here)/index.idx
+        <auto-index-prefix>$(here)/../../.. 
+        <auto-index>on
     ;
 
 install pdf-install : standalone : <install-type>PDF <location>. <name>type_traits.pdf ;
-
-
-
-
-
 
 
 

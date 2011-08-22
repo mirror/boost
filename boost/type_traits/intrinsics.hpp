@@ -22,7 +22,7 @@
 // (these should largely ignore cv-qualifiers)
 // BOOST_IS_UNION(T) should evaluate to true if T is a union type
 // BOOST_IS_POD(T) should evaluate to true if T is a POD type
-// BOOST_IS_EMPTY(T) should evaluate to true if T is an empty struct or union
+// BOOST_IS_EMPTY(T) should evaluate to true if T is an empty class type (and not a union)
 // BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) should evaluate to true if "T x;" has no effect
 // BOOST_HAS_TRIVIAL_COPY(T) should evaluate to true if T(t) <==> memcpy
 // BOOST_HAS_TRIVIAL_ASSIGN(T) should evaluate to true if t = u <==> memcpy
@@ -36,7 +36,7 @@
 //
 // BOOST_IS_ABSTRACT(T) true if T is an abstract type
 // BOOST_IS_BASE_OF(T,U) true if T is a base class of U
-// BOOST_IS_CLASS(T) true if T is a class type
+// BOOST_IS_CLASS(T) true if T is a class type (and not a union)
 // BOOST_IS_CONVERTIBLE(T,U) true if T is convertible to U
 // BOOST_IS_ENUM(T) true is T is an enum
 // BOOST_IS_POLYMORPHIC(T) true if T is a polymorphic type
@@ -171,7 +171,7 @@
 #   define BOOST_IS_POD(T) __is_pod(T)
 #   define BOOST_IS_EMPTY(T) __is_empty(T)
 #   define BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) __has_trivial_constructor(T)
-#   define BOOST_HAS_TRIVIAL_COPY(T) (__has_trivial_copy(T) && !is_reference<T>::value && && !is_volatile<T>::value)
+#   define BOOST_HAS_TRIVIAL_COPY(T) (__has_trivial_copy(T) && !is_reference<T>::value && !is_volatile<T>::value)
 #   define BOOST_HAS_TRIVIAL_ASSIGN(T) (__has_trivial_assign(T) && !is_volatile<T>::value)
 #   define BOOST_HAS_TRIVIAL_DESTRUCTOR(T) __has_trivial_destructor(T)
 #   define BOOST_HAS_NOTHROW_CONSTRUCTOR(T) __has_nothrow_constructor(T)
