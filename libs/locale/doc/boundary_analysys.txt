@@ -1,3 +1,5 @@
+// vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 filetype=cpp.doxygen
+
 //
 //  Copyright (c) 2009-2011 Artyom Beilis (Tonkikh)
 //
@@ -6,7 +8,6 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 filetype=cpp.doxygen
 /*!
 \page boundary_analysys Boundary analysis
 
@@ -106,9 +107,8 @@ would be split into following segments in \c ja_JP.UTF-8 (Japanese) locale:
 
 The boundary analysis that is done by Boost.Locale
 is much more complicated then just splitting the text according
-to white space characters.
+to white space characters, even thou it is not perfect. 
 
-Of course it may be not per
 
 \section boundary_analysys_segments_rules Using Rules
 

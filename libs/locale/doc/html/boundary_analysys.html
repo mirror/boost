@@ -123,8 +123,7 @@ std::cout &lt;&lt; std::endl;
 </pre></div><p>This sentence "生きるか死ぬか、それが問題だ。" (<a href="http://tatoeba.org/eng/sentences/show/868189">from Tatoeba database</a>) would be split into following segments in <code>ja_JP.UTF-8</code> (Japanese) locale:</p>
 <div class="fragment"><pre class="fragment">
 "生", "きるか", "死", "ぬか", "、", "それが", "問題", "だ", "。", 
-</pre></div><p>The boundary analysis that is done by Boost.Locale is much more complicated then just splitting the text according to white space characters.</p>
-<p>Of course it may be not per</p>
+</pre></div><p>The boundary analysis that is done by Boost.Locale is much more complicated then just splitting the text according to white space characters, even thou it is not perfect.</p>
 <h2><a class="anchor" id="boundary_analysys_segments_rules"></a>
 Using Rules</h2>
 <p>The segments selection can be customized using <a class="el" href="group__boundary.html#gad19735180401edb15acbdbbeb21e5a73">rule()</a> and <a class="el" href="group__boundary.html#ga205fd51daa439a18527675e663a0802f">full_select()</a> member functions.</p>
