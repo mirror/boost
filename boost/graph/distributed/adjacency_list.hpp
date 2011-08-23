@@ -2931,7 +2931,7 @@ namespace boost {
       return std::make_pair(edge_descriptor(), false);
     } else {
       BOOST_ASSERT(false);
-      exit(1);
+      abort();
     }
   }
 
