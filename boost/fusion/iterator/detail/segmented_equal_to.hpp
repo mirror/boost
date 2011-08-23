@@ -20,25 +20,15 @@ namespace boost { namespace fusion
         template <typename Stack1, typename Stack2>
         struct segmented_equal_to
           : mpl::and_<
-                result_of::equal_to<
-                    typename Stack1::car_type::begin_type,
-                    typename Stack2::car_type::begin_type
-                >,
                 segmented_equal_to<
                     typename Stack1::cdr_type,
                     typename Stack2::cdr_type
                 >
+              , result_of::equal_to<
+                    typename Stack1::car_type::begin_type,
+                    typename Stack2::car_type::begin_type
+                >
             >
-        {};
-
-        template <typename Stack1>
-        struct segmented_equal_to<Stack1, fusion::nil>
-          : mpl::false_
-        {};
-
-        template <typename Stack2>
-        struct segmented_equal_to<fusion::nil, Stack2>
-          : mpl::false_
         {};
 
         template <>

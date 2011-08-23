@@ -7,6 +7,7 @@
 #if !defined(BOOST_FUSION_SEGMENTED_ITERATOR_SEGMENTED_ITERATOR_HPP_INCLUDED)
 #define BOOST_FUSION_SEGMENTED_ITERATOR_SEGMENTED_ITERATOR_HPP_INCLUDED
 
+#include <boost/mpl/bool.hpp>
 #include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/iterator/iterator_facade.hpp>
 #include <boost/fusion/iterator/deref.hpp>
@@ -15,7 +16,6 @@
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/value_of_data.hpp>
 #include <boost/fusion/iterator/detail/segmented_equal_to.hpp>
-#include <boost/fusion/container/list/detail/reverse_cons.hpp>
 
 namespace boost { namespace fusion
 {
@@ -82,13 +82,8 @@ namespace boost { namespace fusion
         //}
         template <typename It>
         struct key_of
-        {
-            typedef
-                typename result_of::key_of<
-                    typename It::context_type::car_type::begin_type
-                >::type
-            type;
-        };
+          : result_of::key_of<typename It::context_type::car_type::begin_type>
+        {};
 
         //auto value_of(it)
         //{
@@ -96,13 +91,8 @@ namespace boost { namespace fusion
         //}
         template <typename It>
         struct value_of
-        {
-            typedef
-                typename result_of::value_of<
-                    typename It::context_type::car_type::begin_type
-                >::type
-            type;
-        };
+          : result_of::value_of<typename It::context_type::car_type::begin_type>
+        {};
 
         //auto value_of_data(it)
         //{
@@ -110,21 +100,26 @@ namespace boost { namespace fusion
         //}
         template <typename It>
         struct value_of_data
-        {
-            typedef
-                typename result_of::value_of_data<
-                    typename It::context_type::car_type::begin_type
-                >::type
-            type;
-        };
+          : result_of::value_of_data<typename It::context_type::car_type::begin_type>
+        {};
 
         // Compare all the segment iterators in each stack, starting with
         // the bottom-most.
-        template <typename It1, typename It2>
+        template <
+            typename It1
+          , typename It2
+          , int Size1 = It1::context_type::size::value
+          , int Size2 = It2::context_type::size::value
+        >
         struct equal_to
+          : mpl::false_
+        {};
+
+        template <typename It1, typename It2, int Size>
+        struct equal_to<It1, It2, Size, Size>
           : detail::segmented_equal_to<
-                typename detail::reverse_cons<typename It1::context_type>::type,
-                typename detail::reverse_cons<typename It2::context_type>::type
+                typename It1::context_type
+              , typename It2::context_type
             >
         {};
 

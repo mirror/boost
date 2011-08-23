@@ -22,19 +22,19 @@ namespace boost { namespace fusion { namespace detail
     //    return make_segmented_iterator( segmented_begin_impl( seq, nil ) );
     //}
 
-    template <typename Sequence>
+    template <typename Sequence, typename Nil = fusion::nil>
     struct segmented_begin
     {
         typedef
             segmented_iterator<
-                typename segmented_begin_impl<Sequence, fusion::nil>::type
+                typename segmented_begin_impl<Sequence, Nil>::type
             >
         type;
 
         static type call(Sequence& seq)
         {
             return type(
-                segmented_begin_impl<Sequence, fusion::nil>::call(seq, fusion::nil()));
+                segmented_begin_impl<Sequence, Nil>::call(seq, Nil()));
         }
     };
 
