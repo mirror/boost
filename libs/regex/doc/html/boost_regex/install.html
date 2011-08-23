@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Building and Installing the Library</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../index.html" title="Boost.Regex">
 <link rel="up" href="../index.html" title="Boost.Regex">
 <link rel="prev" href="configuration/tuning.html" title="Algorithm Tuning">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="configuration/tuning.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="introduction_and_overview.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_regex.install"></a><a class="link" href="install.html" title="Building and Installing the Library">Building and Installing the Library</a>
 </h2></div></div></div>
@@ -49,7 +49,7 @@
       file before you can use it, instructions for specific platforms are as follows:
     </p>
 <a name="boost_regex.install.building_with_bjam"></a><h5>
-<a name="id985242"></a>
+<a name="boost_regex.install.building_with_bjam-heading"></a>
       <a class="link" href="install.html#boost_regex.install.building_with_bjam">Building with bjam</a>
     </h5>
 <p>
@@ -58,7 +58,7 @@
       started guide</a> for more information.
     </p>
 <a name="boost_regex.install.building_with_unicode_and_icu_support"></a><h5>
-<a name="id985266"></a>
+<a name="boost_regex.install.building_with_unicode_and_icu_support-heading"></a>
       <a class="link" href="install.html#boost_regex.install.building_with_unicode_and_icu_support">Building
       With Unicode and ICU Support</a>
     </h5>
@@ -111,9 +111,8 @@
       the library rather than the default ICU binary names.
     </p>
 <p>
-      You might also need to use the options "cxxflags<code class="literal">-option"
-      and "linkflags</code>-option" to set compiler and linker specific
-      options.
+      You might also need to use the options "cxxflags=-option" and "linkflags=-option"
+      to set compiler and linker specific options.
     </p>
 <div class="important"><table border="0" summary="Important">
 <tr>
@@ -158,22 +157,22 @@
       header-include and linker-search paths).
     </p>
 <a name="boost_regex.install.building_via_makefiles"></a><h5>
-<a name="id985488"></a>
+<a name="boost_regex.install.building_via_makefiles-heading"></a>
       <a class="link" href="install.html#boost_regex.install.building_via_makefiles">Building via makefiles</a>
     </h5>
 <a name="boost_regex.install.borland_c___builder_"></a><h6>
-<a name="id985501"></a>
+<a name="boost_regex.install.borland_c___builder_-heading"></a>
       <a class="link" href="install.html#boost_regex.install.borland_c___builder_">Borland C++ Builder:</a>
     </h6>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           Open up a console window and change to the <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">&gt;\</span><span class="identifier">libs</span><span class="special">\</span><span class="identifier">regex</span><span class="special">\</span><span class="identifier">build</span></code> directory.
         </li>
-<li>
+<li class="listitem">
           Select the appropriate makefile (bcb4.mak for C++ Builder 4, bcb5.mak for
           C++ Builder 5, and bcb6.mak for C++ Builder 6).
         </li>
-<li>
+<li class="listitem">
           Invoke the makefile (pass the full path to your version of make if you
           have more than one version installed, the makefile relies on the path to
           make to obtain your C++ Builder installation directory and tools) for example:
@@ -227,7 +226,7 @@
       a lot in compile times!
     </p>
 <a name="boost_regex.install.microsoft_visual_c___6__7__7_1_and_8"></a><h5>
-<a name="id985751"></a>
+<a name="boost_regex.install.microsoft_visual_c___6__7__7_1_and_8-heading"></a>
       <a class="link" href="install.html#boost_regex.install.microsoft_visual_c___6__7__7_1_and_8">Microsoft
       Visual C++ 6, 7, 7.1 and 8</a>
     </h5>
@@ -285,8 +284,8 @@
       There are several important caveats to remember when using Boost.Regex with
       Microsoft's Compiler:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           There have been some reports of compiler-optimization bugs affecting this
           library, (particularly with VC6 versions prior to service patch 5) the
           workaround is to build the library using /Oityb1 rather than /O2. That
@@ -296,26 +295,26 @@
           so it's probably worthwhile applying this workaround in normal practice
           in any case.
         </li>
-<li>
+<li class="listitem">
           If you have replaced the C++ standard library that comes with VC6, then
           when you build the library you must ensure that the environment variables
           "INCLUDE" and "LIB" have been updated to reflect the
           include and library paths for the new library - see vcvars32.bat (part
           of your Visual Studio installation) for more details.
         </li>
-<li>
+<li class="listitem">
           If you are building with the full STLPort v4.x, then use the vc6-stlport.mak
           file provided and set the environment variable STLPORT_PATH to point to
           the location of your STLPort installation (Note that the full STLPort libraries
           appear not to support single-thread static builds).
         </li>
-<li>
+<li class="listitem">
           If you are building your application with /Zc:wchar_t then you will need
           to modify the makefile to add /Zc:wchar_t before building the library.
         </li>
 </ul></div>
 <a name="boost_regex.install.gcc_2_95_and_later_"></a><h6>
-<a name="id985964"></a>
+<a name="boost_regex.install.gcc_2_95_and_later_-heading"></a>
       <a class="link" href="install.html#boost_regex.install.gcc_2_95_and_later_">GCC(2.95 and later)</a>
     </h6>
 <p>
@@ -364,7 +363,7 @@
       see the <a href="../../../../config/index.html" target="_top">config library documentation</a>.
     </p>
 <a name="boost_regex.install.sun_workshop_6_1"></a><h6>
-<a name="id986090"></a>
+<a name="boost_regex.install.sun_workshop_6_1-heading"></a>
       <a class="link" href="install.html#boost_regex.install.sun_workshop_6_1">Sun Workshop 6.1</a>
     </h6>
 <p>
@@ -404,12 +403,12 @@
       This makefile does not set any architecture specific options like -xarch=v9,
       you can set these by defining the appropriate macros, for example:
     </p>
-<pre class="programlisting">dmake CXXFLAGS="-xarch<code class="literal">v9" LDFLAGS</code>"-xarch<code class="literal">v9" LIBSUFFIX</code>"_v9" -f sunpro.mak</pre>
+<pre class="programlisting">dmake CXXFLAGS="-xarch=v9" LDFLAGS="-xarch=v9" LIBSUFFIX="_v9" -f sunpro.mak</pre>
 <p>
       will build v9 variants of the regex library named libboost_regex_v9.a etc.
     </p>
 <a name="boost_regex.install.makefiles_for_other_compilers"></a><h6>
-<a name="id986234"></a>
+<a name="boost_regex.install.makefiles_for_other_compilers-heading"></a>
       <a class="link" href="install.html#boost_regex.install.makefiles_for_other_compilers">Makefiles
       for Other compilers</a>
     </h6>
@@ -420,7 +419,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2010 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 1998-2010 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

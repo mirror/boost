@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>regex_replace</title>
 <link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="regex_search.html" title="regex_search">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="regex_search.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="regex_iterator.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_regex.ref.regex_replace"></a><a class="link" href="regex_replace.html" title="regex_replace">regex_replace</a>
 </h3></div></div></div>
@@ -53,7 +53,7 @@
                                   <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.regex_replace.description"></a><h5>
-<a name="id1076276"></a>
+<a name="boost_regex.ref.regex_replace.description-heading"></a>
         <a class="link" href="regex_replace.html#boost_regex.ref.regex_replace.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
@@ -199,7 +199,7 @@
         and then returns <code class="computeroutput"><span class="identifier">result</span></code>.
       </p>
 <a name="boost_regex.ref.regex_replace.examples"></a><h5>
-<a name="id1077720"></a>
+<a name="boost_regex.ref.regex_replace.examples-heading"></a>
         <a class="link" href="regex_replace.html#boost_regex.ref.regex_replace.examples">Examples</a>
       </h5>
 <p>
@@ -214,10 +214,10 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">fstream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 
-<span class="comment">// purpose:
-</span><span class="comment">// takes the contents of a file and transform to
-</span><span class="comment">// syntax highlighted code in html format
-</span>
+<span class="comment">// purpose:</span>
+<span class="comment">// takes the contents of a file and transform to</span>
+<span class="comment">// syntax highlighted code in html format</span>
+
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e1</span><span class="special">,</span> <span class="identifier">e2</span><span class="special">;</span>
 <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">expression_text</span><span class="special">;</span>
 <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">format_string</span><span class="special">;</span>
@@ -253,15 +253,15 @@
       <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">out_name</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="identifier">i</span><span class="special">])</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="string">".htm"</span><span class="special">));</span>
       <span class="identifier">std</span><span class="special">::</span><span class="identifier">ofstream</span> <span class="identifier">os</span><span class="special">(</span><span class="identifier">out_name</span><span class="special">.</span><span class="identifier">c_str</span><span class="special">());</span>
       <span class="identifier">os</span> <span class="special">&lt;&lt;</span> <span class="identifier">header_text</span><span class="special">;</span>
-      <span class="comment">// strip '&lt;' and '&gt;' first by outputting to a
-</span>      <span class="comment">// temporary string stream
-</span>      <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostringstream</span> <span class="identifier">t</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">ios</span><span class="special">::</span><span class="identifier">out</span> <span class="special">|</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ios</span><span class="special">::</span><span class="identifier">binary</span><span class="special">);</span>
+      <span class="comment">// strip '&lt;' and '&gt;' first by outputting to a</span>
+      <span class="comment">// temporary string stream</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostringstream</span> <span class="identifier">t</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">ios</span><span class="special">::</span><span class="identifier">out</span> <span class="special">|</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ios</span><span class="special">::</span><span class="identifier">binary</span><span class="special">);</span>
       <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream_iterator</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">oi</span><span class="special">(</span><span class="identifier">t</span><span class="special">);</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">oi</span><span class="special">,</span> <span class="identifier">in</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">in</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
       <span class="identifier">e2</span><span class="special">,</span> <span class="identifier">pre_format</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_default</span> <span class="special">|</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">format_all</span><span class="special">);</span>
-      <span class="comment">// then output to final output stream
-</span>      <span class="comment">// adding syntax highlighting:
-</span>      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">s</span><span class="special">(</span><span class="identifier">t</span><span class="special">.</span><span class="identifier">str</span><span class="special">());</span>
+      <span class="comment">// then output to final output stream</span>
+      <span class="comment">// adding syntax highlighting:</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">s</span><span class="special">(</span><span class="identifier">t</span><span class="special">.</span><span class="identifier">str</span><span class="special">());</span>
       <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream_iterator</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">out</span><span class="special">(</span><span class="identifier">os</span><span class="special">);</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
       <span class="identifier">e1</span><span class="special">,</span> <span class="identifier">format_string</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_default</span> <span class="special">|</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">format_all</span><span class="special">);</span>
@@ -278,17 +278,17 @@
 
 
 <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">expression_text</span> <span class="special">=</span> 
-   <span class="comment">// preprocessor directives: index 1
-</span>   <span class="string">"(^[[:blank:]]*#(?:[^\\\\\\n]|\\\\[^\\n[:punct:][:word:]]*[\\n[:punct:][:word:]])*)|"</span>
-   <span class="comment">// comment: index 2
-</span>   <span class="string">"(//[^\\n]*|/\\*.*?\\*/)|"</span>
-   <span class="comment">// literals: index 3
-</span>   <span class="string">"\\&lt;([+-]?(?:(?:0x[[:xdigit:]]+)|(?:(?:[[:digit:]]*\\.)?[[:digit:]]+"</span>
+   <span class="comment">// preprocessor directives: index 1</span>
+   <span class="string">"(^[[:blank:]]*#(?:[^\\\\\\n]|\\\\[^\\n[:punct:][:word:]]*[\\n[:punct:][:word:]])*)|"</span>
+   <span class="comment">// comment: index 2</span>
+   <span class="string">"(//[^\\n]*|/\\*.*?\\*/)|"</span>
+   <span class="comment">// literals: index 3</span>
+   <span class="string">"\\&lt;([+-]?(?:(?:0x[[:xdigit:]]+)|(?:(?:[[:digit:]]*\\.)?[[:digit:]]+"</span>
    <span class="string">"(?:[eE][+-]?[[:digit:]]+)?))u?(?:(?:int(?:8|16|32|64))|L)?)\\&gt;|"</span>
-   <span class="comment">// string literals: index 4
-</span>   <span class="string">"('(?:[^\\\\']|\\\\.)*'|\"(?:[^\\\\\"]|\\\\.)*\")|"</span>
-   <span class="comment">// keywords: index 5
-</span>   <span class="string">"\\&lt;(__asm|__cdecl|__declspec|__export|__far16|__fastcall|__fortran|__import"</span>
+   <span class="comment">// string literals: index 4</span>
+   <span class="string">"('(?:[^\\\\']|\\\\.)*'|\"(?:[^\\\\\"]|\\\\.)*\")|"</span>
+   <span class="comment">// keywords: index 5</span>
+   <span class="string">"\\&lt;(__asm|__cdecl|__declspec|__export|__far16|__fastcall|__fortran|__import"</span>
    <span class="string">"|__pascal|__rtti|__stdcall|_asm|_cdecl|__except|_export|_far16|_fastcall"</span>
    <span class="string">"|__finally|_fortran|_import|_pascal|_stdcall|__thread|__try|asm|auto|bool"</span>
    <span class="string">"|break|case|catch|cdecl|char|class|const|const_cast|continue|default|delete"</span>
@@ -318,7 +318,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2010 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 1998-2010 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

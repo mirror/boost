@@ -764,13 +764,13 @@ template <class I>
 inline std::pair< boost::u8_to_u32_iterator<I>, boost::u8_to_u32_iterator<I> >
    make_utf32_seq(I i, I j, mpl::int_<1> const*)
 {
-   return std::pair< boost::u8_to_u32_iterator<I>, boost::u8_to_u32_iterator<I> >(boost::u8_to_u32_iterator<I>(i), boost::u8_to_u32_iterator<I>(j));
+   return std::pair< boost::u8_to_u32_iterator<I>, boost::u8_to_u32_iterator<I> >(boost::u8_to_u32_iterator<I>(i, i, j), boost::u8_to_u32_iterator<I>(j, i, j));
 }
 template <class I>
 inline std::pair< boost::u16_to_u32_iterator<I>, boost::u16_to_u32_iterator<I> >
    make_utf32_seq(I i, I j, mpl::int_<2> const*)
 {
-   return std::pair< boost::u16_to_u32_iterator<I>, boost::u16_to_u32_iterator<I> >(boost::u16_to_u32_iterator<I>(i), boost::u16_to_u32_iterator<I>(j));
+   return std::pair< boost::u16_to_u32_iterator<I>, boost::u16_to_u32_iterator<I> >(boost::u16_to_u32_iterator<I>(i, i, j), boost::u16_to_u32_iterator<I>(j, i, j));
 }
 template <class I>
 inline std::pair< I, I >
@@ -782,13 +782,15 @@ template <class charT>
 inline std::pair< boost::u8_to_u32_iterator<const charT*>, boost::u8_to_u32_iterator<const charT*> >
    make_utf32_seq(const charT* p, mpl::int_<1> const*)
 {
-   return std::pair< boost::u8_to_u32_iterator<const charT*>, boost::u8_to_u32_iterator<const charT*> >(boost::u8_to_u32_iterator<const charT*>(p), boost::u8_to_u32_iterator<const charT*>(p+std::strlen((const char*)p)));
+   std::size_t len = std::strlen((const char*)p);
+   return std::pair< boost::u8_to_u32_iterator<const charT*>, boost::u8_to_u32_iterator<const charT*> >(boost::u8_to_u32_iterator<const charT*>(p, p, p+len), boost::u8_to_u32_iterator<const charT*>(p+len, p, p+len));
 }
 template <class charT>
 inline std::pair< boost::u16_to_u32_iterator<const charT*>, boost::u16_to_u32_iterator<const charT*> >
    make_utf32_seq(const charT* p, mpl::int_<2> const*)
 {
-   return std::pair< boost::u16_to_u32_iterator<const charT*>, boost::u16_to_u32_iterator<const charT*> >(boost::u16_to_u32_iterator<const charT*>(p), boost::u16_to_u32_iterator<const charT*>(p+u_strlen((const UChar*)p)));
+   std::size_t len = u_strlen((const UChar*)p);
+   return std::pair< boost::u16_to_u32_iterator<const charT*>, boost::u16_to_u32_iterator<const charT*> >(boost::u16_to_u32_iterator<const charT*>(p, p, p + len), boost::u16_to_u32_iterator<const charT*>(p+len, p, p + len));
 }
 template <class charT>
 inline std::pair< const charT*, const charT* >
