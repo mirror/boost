@@ -11,7 +11,7 @@ int main()
   
   // Function signature has type which does not exist
   
-  BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN(sFunction)<AType::AnIntType (NVType::*)(short,long,double)> aVar;
+  BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(sFunction)<AType::AnIntType (NVType::*)(short,long,double)> aVar;
   
   return 0;
 

@@ -18,11 +18,11 @@ int main()
                       <
                       Pickedname<_,_,_>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<short>,
+                      short,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<int>,
-                        boost::mpl::identity<long>
+                        int,
+                        long
                         >
                       >
                   ));

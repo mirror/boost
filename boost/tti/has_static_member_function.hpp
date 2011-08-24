@@ -4,15 +4,15 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_STATIC_MEMBER_FUNCTION_HPP)
-#define TTI_STATIC_MEMBER_FUNCTION_HPP
+#if !defined(TTI_HAS_STATIC_MEMBER_FUNCTION_HPP)
+#define TTI_HAS_STATIC_MEMBER_FUNCTION_HPP
 
 #include <boost/config.hpp>
 #include <boost/function_types/property_tags.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_static_mem_fun.hpp>
-#include <boost/tti/gen/static_mem_fun_gen.hpp>
+#include <boost/tti/mf/mf_has_static_member_function.hpp>
+#include <boost/tti/gen/has_static_member_function_gen.hpp>
 #include <boost/tti/detail/dstatic_mem_fun.hpp>
 #include <boost/tti/detail/dtfunction.hpp>
 
@@ -86,4 +86,4 @@
   ) \
 /**/
 
-#endif // TTI_STATIC_MEMBER_FUNCTION_HPP
+#endif // TTI_HAS_STATIC_MEMBER_FUNCTION_HPP

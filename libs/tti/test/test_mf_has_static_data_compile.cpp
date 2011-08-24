@@ -6,7 +6,6 @@
 
 #include "test_mf_has_static_data.hpp"
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -19,7 +18,7 @@ int main()
     <
     BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN(SomeStaticData)<_,_>,
     boost::mpl::identity<AnotherType>,
-    boost::mpl::identity<double>
+    double
     > aVar;
   
   // Compile time asserts
@@ -28,7 +27,7 @@ int main()
                       <
                       BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN(DSMember)<_,_>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<short>
+                      short
                       >
                   ));
   
@@ -36,7 +35,7 @@ int main()
                       <
                       boost::mpl::quote2<BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN(DSMember)>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<short>
+                      short
                       >
                   ));
   

@@ -6,7 +6,6 @@
 
 #include "test_mf_has_template_cp.hpp"
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {

@@ -8,11 +8,11 @@
 #define TEST_HAS_STATIC_MEMBER_HPP
 
 #include "test_structs.hpp"
-#include <boost/tti/comp_static_mem_fun.hpp>
+#include <boost/tti/has_static_member_function_with_sig.hpp>
 
-BOOST_TTI_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION(HaveTheSIntFunction,SIntFunction)
-BOOST_TTI_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION(TheTIntFunction,TIntFunction)
-BOOST_TTI_HAS_COMP_STATIC_MEMBER_FUNCTION(TSFunction)
-BOOST_TTI_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION(Pickedname,SomeStaticFunction)
+BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG(HaveTheSIntFunction,SIntFunction)
+BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG(TheTIntFunction,TIntFunction)
+BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG(TSFunction)
+BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG(Pickedname,SomeStaticFunction)
 
 #endif // TEST_HAS_STATIC_MEMBER_HPP

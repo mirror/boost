@@ -4,13 +4,13 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_TYPE_HPP)
-#define TTI_TYPE_HPP
+#if !defined(TTI_HAS_TYPE_HPP)
+#define TTI_HAS_TYPE_HPP
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_type.hpp>
-#include <boost/tti/gen/type_gen.hpp>
+#include <boost/tti/mf/mf_has_type.hpp>
+#include <boost/tti/gen/has_type_gen.hpp>
 #include <boost/tti/detail/dtype.hpp>
 #include <boost/tti/detail/dnotype.hpp>
 
@@ -83,4 +83,4 @@
   ) \
 /**/
 
-#endif // TTI_TYPE_HPP
+#endif // TTI_HAS_TYPE_HPP

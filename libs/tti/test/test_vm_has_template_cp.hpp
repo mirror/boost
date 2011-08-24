@@ -12,7 +12,7 @@
 #if BOOST_PP_VARIADICS
 
 #include "test_structs.hpp"
-#include <boost/tti/vm_template_params.hpp>
+#include <boost/tti/vm_has_template_check_params.hpp>
 
 BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS(ATPMemberTemplate,class)
 BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(HaveCL,CLMemberTemplate,class,class)

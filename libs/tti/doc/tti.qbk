@@ -7,7 +7,7 @@
 
 [library The Type Traits Introspection Library
     [quickbook 1.5]
-    [version 1.4]
+    [version 1.5]
     [id tti]
     [dirname tti]
     [copyright 2010 Tropic Software East Inc]

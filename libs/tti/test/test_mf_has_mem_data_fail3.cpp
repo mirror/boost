@@ -18,7 +18,7 @@ int main()
                       <
                       BOOST_TTI_HAS_MEMBER_DATA_GEN(aMember)<_,_>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<bool> 
+                      bool
                       >
                   ));
   

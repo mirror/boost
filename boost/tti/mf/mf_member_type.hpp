@@ -12,6 +12,7 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/mpl/quote.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/tti/gen/namespace_gen.hpp>
 #include <boost/tti/detail/dnotype.hpp>

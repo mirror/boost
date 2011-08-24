@@ -8,8 +8,8 @@
 #define TEST_MF_HAS_MEMBER_FUNCTION_HPP
 
 #include "test_structs.hpp"
-#include <boost/tti/mem_fun.hpp>
-#include <boost/tti/mem_type.hpp>
+#include <boost/tti/has_member_function.hpp>
+#include <boost/tti/member_type.hpp>
 
 BOOST_TTI_HAS_MEMBER_FUNCTION(VoidFunction)
 BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(FunctionReturningInt,IntFunction)

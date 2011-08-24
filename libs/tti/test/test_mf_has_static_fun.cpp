@@ -6,7 +6,6 @@
 
 #include "test_mf_has_static_fun.hpp"
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -17,11 +16,11 @@ int main()
                 <
                 HaveTheSIntFunction<_,_,_>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int>,
+                int,
                 boost::mpl::vector
                   <
-                  boost::mpl::identity<long>,
-                  boost::mpl::identity<double>
+                  long,
+                  double
                   >
                 >
               ::value
@@ -34,8 +33,8 @@ int main()
                 boost::mpl::identity<AType>,
                 boost::mpl::vector
                   <
-                  boost::mpl::identity<long>,
-                  boost::mpl::identity<double>
+                  long,
+                  double
                   >
                 >
               ::value
@@ -49,7 +48,7 @@ int main()
                 boost::mpl::vector
                   <
                   NameIntType<AType>,
-                  boost::mpl::identity<double>
+                  double
                   >
                 >
               ::value
@@ -59,11 +58,11 @@ int main()
                 <
                 boost::mpl::quote4<HaveTheSIntFunction>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int>,
+                int,
                 boost::mpl::vector
                   <
-                  boost::mpl::identity<long>,
-                  boost::mpl::identity<double>
+                  long,
+                  double
                   >
                 >
               ::value
@@ -76,8 +75,8 @@ int main()
                 boost::mpl::identity<AType>,
                 boost::mpl::vector
                   <
-                  boost::mpl::identity<long>,
-                  boost::mpl::identity<double>
+                  long,
+                  double
                   >
                 >
               ::value
@@ -91,7 +90,7 @@ int main()
                 boost::mpl::vector
                   <
                   NameIntType<AType>,
-                  boost::mpl::identity<double>
+                  double
                   >
                 >
               ::value

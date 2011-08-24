@@ -11,6 +11,9 @@
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/mpl/quote.hpp>
+#include <boost/tti/gen/namespace_gen.hpp>
+#include <boost/tti/detail/dtclass.hpp>
 
 /*
 
@@ -56,7 +59,7 @@ namespace boost
         <
         TTI_HasStaticMemberData,
         typename TTI_T::type,
-        typename TTI_R::type
+        typename BOOST_TTI_NAMESPACE::detail::tclass<TTI_R>::type
         >::type 
       {
       };

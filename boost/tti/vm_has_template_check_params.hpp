@@ -4,16 +4,16 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_VM_TEMPLATE_PARAMS_HPP)
-#define TTI_VM_TEMPLATE_PARAMS_HPP
+#if !defined(TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_HPP)
+#define TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_HPP
 
 #include <boost/preprocessor/config/config.hpp>
 
 #if BOOST_PP_VARIADICS
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_template_params.hpp>
-#include <boost/tti/gen/vm_template_params_gen.hpp>
+#include <boost/tti/mf/mf_has_template_check_params.hpp>
+#include <boost/tti/gen/vm_has_template_check_params_gen.hpp>
 #include <boost/tti/detail/dvm_template_params.hpp>
 
 /*
@@ -84,4 +84,4 @@
 /**/
 
 #endif // BOOST_PP_VARIADICS
-#endif // TTI_VM_TEMPLATE_PARAMS_HPP
+#endif // TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_HPP

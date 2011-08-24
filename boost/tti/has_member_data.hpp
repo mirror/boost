@@ -4,14 +4,14 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_MEMBER_DATA_HPP)
-#define TTI_MEMBER_DATA_HPP
+#if !defined(TTI_HAS_MEMBER_DATA_HPP)
+#define TTI_HAS_MEMBER_DATA_HPP
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
-#include <boost/tti/mf/mf_mem_data.hpp>
-#include <boost/tti/gen/mem_data_gen.hpp>
+#include <boost/tti/mf/mf_has_member_data.hpp>
+#include <boost/tti/gen/has_member_data_gen.hpp>
 #include <boost/tti/detail/dmem_data.hpp>
 
 /*
@@ -76,4 +76,4 @@
   ) \
 /**/
 
-#endif // TTI_MEMBER_DATA_HPP
+#endif // TTI_HAS_MEMBER_DATA_HPP

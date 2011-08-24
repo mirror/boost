@@ -18,7 +18,7 @@ int main()
                       <
                       BOOST_TTI_HAS_STATIC_MEMBER_DATA_GEN(SomeStaticData)<_,_>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<int>
+                      int
                       >
                   ));
   

@@ -12,7 +12,7 @@ int main()
   
   // Wrong function signature for sFunction
   
-  BOOST_MPL_ASSERT(( BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN(sFunction)<AType::AnIntType (AnotherType::*)(short,long,double)> ));
+  BOOST_MPL_ASSERT(( BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(sFunction)<AType::AnIntType (AnotherType::*)(short,long,double)> ));
   
   return 0;
 

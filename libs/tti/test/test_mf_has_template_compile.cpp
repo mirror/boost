@@ -6,7 +6,6 @@
 
 #include "test_mf_has_template.hpp"
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {

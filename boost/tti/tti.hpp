@@ -7,15 +7,15 @@
 #if !defined(TT_INTROSPECTION_HPP)
 #define TT_INTROSPECTION_HPP
 
-#include "comp_mem_fun.hpp"
-#include "comp_static_mem_fun.hpp"
-#include "mem_data.hpp"
-#include "mem_fun.hpp"
-#include "mem_type.hpp"
-#include "static_mem_data.hpp"
-#include "static_mem_fun.hpp"
-#include "template.hpp"
-#include "template_params.hpp"
-#include "type.hpp"
+#include "has_member_data.hpp"
+#include "has_member_function.hpp"
+#include "has_member_function_with_sig.hpp"
+#include "has_static_member_data.hpp"
+#include "has_static_member_function.hpp"
+#include "has_static_member_function_with_sig.hpp"
+#include "has_template.hpp"
+#include "has_template_check_params.hpp"
+#include "has_type.hpp"
+#include "member_type.hpp"
 
 #endif // TT_INTROSPECTION_HPP

@@ -6,7 +6,6 @@
 
 #include "test_mf_mem_type.hpp"
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {

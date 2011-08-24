@@ -19,161 +19,16 @@ for passing a macro metafunction becomes `macrometafunction<_>` etc. depending
 on how many parameters are being passed. Thus for two parameters we would have 
 `macrometafunction<_,_>` etc., with another placeholder (`_`) added for each subsequent parameter.
 
-However using a placeholder expression may not be the fastest way when considering compile-time 
-speed. Because of this the TTI library provides a set of macros for each of the macro metafunctions 
-which generate a corresponding metafunction class. We will call this set of macros 
-the 'metafunction class macros'.
-
-These macros take exactly the same macro parameters as their corresponding 
-macro metafunctions. They generate a corresponding metafunction class rather 
-than a metafunction itself, which allows us to pass our macro metafunctions 
-as metadata, just as using placeholder expressions allows us to do.
-
-For these metafunction class macros there is a simple form and a complex form name
-just as there is for the macro metafunctions. For each macro metafunction, 
-the name for the corresponding metafunction class macro is the macro 
-metafunction name with the sequence `MTFC_` ( for "MeTaFunction Class" )
-following the `BOOST_TTI_` ( or `BOOST_TTI_VM_` ) portion of the macro metafunction name. 
-The subsequent metafunction class name, using the simple form, is the same name as 
-the corresponding macro metafunction name but with `mtfc_` prepended to the name. 
-
-As with the complex form name of the macro metafunctions,
-the complex form name of the corresponding metafunction class macros is 
-completely determined by the first 'trait' parameter. 
-
-In the following table I do not specify the macro parameters
-as they are exactly the same as those for their corresponding macro
-metafunction.
-
-[table:tbmetaclasses TTI Metafunction Classes
-  [
-    [Macro Metafunction]
-    [Metafunction Class Macro]
-    [Metafunction Class Name]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_TYPE]]
-    [[macroref BOOST_TTI_MTFC_HAS_TYPE]]
-    [`boost::tti::mtfc_has_type_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_TYPE]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_TYPE]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_TEMPLATE]]
-    [[macroref BOOST_TTI_MTFC_HAS_TEMPLATE]]
-    [`boost::tti::mtfc_has_template_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_TEMPLATE]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS]]
-    [[macroref BOOST_TTI_MTFC_HAS_TEMPLATE_CHECK_PARAMS]]
-    [`boost::tti::mtfc_has_template_check_params_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS]]
-    [[macroref BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS]]
-    [`boost::tti::mtfc_has_template_check_params_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS]]
-    [[macroref BOOST_TTI_VM_MTFC_TRAIT_HAS_TEMPLATE_CHECK_PARAMS]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_MEMBER_DATA]]
-    [[macroref BOOST_TTI_MTFC_HAS_MEMBER_DATA]]
-    [`boost::tti::mtfc_has_member_data_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_MEMBER_DATA]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_DATA]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_HAS_MEMBER_FUNCTION]]
-    [`boost::tti::mtfc_has_member_function_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_MEMBER_FUNCTION]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_COMP_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_HAS_COMP_MEMBER_FUNCTION]]
-    [`boost::tti::mtfc_has_comp_member_function_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_COMP_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_COMP_MEMBER_FUNCTION]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_STATIC_MEMBER_DATA]]
-    [[macroref BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA]]
-    [`boost::tti::mtfc_has_static_member_data_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_DATA]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_DATA]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_HAS_STATIC_MEMBER_FUNCTION]]
-    [`boost::tti::mtfc_has_static_member_function_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_STATIC_MEMBER_FUNCTION]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_HAS_COMP_STATIC_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_HAS_COMP_STATIC_MEMBER_FUNCTION]]
-    [`boost::tti::mtfc_has_comp_static_member_function_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION]]
-    [`boost::tti::'trait'`]
-  ]
-  [
-    [[macroref BOOST_TTI_MEMBER_TYPE]]
-    [[macroref BOOST_TTI_MTFC_MEMBER_TYPE]]
-    [`boost::tti::mtfc_member_type_'name'`]
-  ]
-  [
-    [[macroref BOOST_TTI_TRAIT_MEMBER_TYPE]]
-    [[macroref BOOST_TTI_MTFC_TRAIT_MEMBER_TYPE]]
-    [`boost::tti::'trait'`]
-  ]
-]  
-
-Each of the metafunction classes have exactly the same functionality 
-as their corresponding macro metafunction. The metafunction class generated 
-can be passed as metadata in the same way that their correspending macro 
-metafunctions with placeholder expressions can be passed as metadata. 
+The Boost MPL library also provides the high-level primitive 'quote' which
+creates a metafunction class from any n-ary metafunction. The syntax for this 
+is also fairly easy. The syntax for passing a macro metafunction as a metafunction
+class becomes `boost::mpl::quote(n)<macrometafunction>' where 'n' depends on the 
+actual number of template parameters the macro metafunction has.
 
 As will be seen when we discuss the nullary type metafunctions, each nullary type 
 metafunction takes as its first parameter a macro metafunction as metadata in
 the form of a lambda expression. Therefore we can use either a metafunction
-class generated by one of the macros above, or a placeholder expression, to 
-pass a macro metafunction as metadata to our nullary type metafunctions. Other 
-uses for our macro metafunctions as metadata may be found by the template 
-metaprogrammer using the TTI library.
+class generated by boost::mpl::quote(n), or a placeholder expression, to 
+pass a macro metafunction as metadata to our nullary type metafunctions.
   
 [endsect]

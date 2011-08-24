@@ -6,7 +6,6 @@
 
 #include "test_mf_has_mem_data.hpp"
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -17,7 +16,7 @@ int main()
                 <
                 BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)<_,_>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int> 
+                int
                 >
               ::value
             ));
@@ -26,7 +25,7 @@ int main()
                 <
                 BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)<_,_>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<long> 
+                long 
                 >
               ::value
             ));
@@ -35,7 +34,7 @@ int main()
                 <
                 BOOST_TTI_HAS_MEMBER_DATA_GEN(aMember)<_,_>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<bool> 
+                bool 
                 >
               ::value
             ));
@@ -44,7 +43,7 @@ int main()
                 <
                 CMember<_,_>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<bool> 
+                bool 
                 >
               ::value
             ));
@@ -93,7 +92,7 @@ int main()
                 <
                 boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int> 
+                int 
                 >
               ::value
             ));
@@ -102,7 +101,7 @@ int main()
                 <
                 boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(AnInt)>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<long> 
+                long 
                 >
               ::value
             ));
@@ -111,7 +110,7 @@ int main()
                 <
                 boost::mpl::quote2<BOOST_TTI_HAS_MEMBER_DATA_GEN(aMember)>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<bool> 
+                bool 
                 >
               ::value
             ));
@@ -120,7 +119,7 @@ int main()
                 <
                 boost::mpl::quote2<CMember>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<bool> 
+                bool 
                 >
               ::value
             ));

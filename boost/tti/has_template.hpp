@@ -4,14 +4,14 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_TEMPLATE_HPP)
-#define TTI_TEMPLATE_HPP
+#if !defined(TTI_HAS_TEMPLATE_HPP)
+#define TTI_HAS_TEMPLATE_HPP
 
 #include <boost/config.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_template.hpp>
-#include <boost/tti/gen/template_gen.hpp>
+#include <boost/tti/mf/mf_has_template.hpp>
+#include <boost/tti/gen/has_template_gen.hpp>
 
 /*
 
@@ -75,4 +75,4 @@
   ) \
 /**/
 
-#endif // TTI_TEMPLATE_HPP
+#endif // TTI_HAS_TEMPLATE_HPP

@@ -22,7 +22,7 @@ int main()
                       boost::mpl::vector
                         <
                         NameIntType<AnotherType>,
-                        boost::mpl::identity<double>
+                        double
                         >
                       >
                   ));

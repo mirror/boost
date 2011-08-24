@@ -8,7 +8,7 @@
 #define TEST_HAS_MEMBER_DATA_HPP
 
 #include "test_structs.hpp"
-#include <boost/tti/mem_data.hpp>
+#include <boost/tti/has_member_data.hpp>
 
 BOOST_TTI_HAS_MEMBER_DATA(AnInt)
 BOOST_TTI_HAS_MEMBER_DATA(aMember)

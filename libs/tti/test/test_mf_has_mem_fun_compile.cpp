@@ -6,7 +6,6 @@
 
 #include "test_mf_has_mem_fun.hpp"
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -19,7 +18,7 @@ int main()
     <
     FunctionReturningInt<_,_>,
     boost::mpl::identity<AnotherType>,
-    boost::mpl::identity<short>
+    short
     > aVar;
   
   boost::tti::mf_has_member_function
@@ -29,9 +28,9 @@ int main()
     BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)<AnotherType>,
     boost::mpl::vector
       <
-      boost::mpl::identity<int>,
-      boost::mpl::identity<long>,
-      boost::mpl::identity<double>
+      int,
+      long,
+      double
       >
     > aVar2;
                       
@@ -39,12 +38,12 @@ int main()
     <
     BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(someFunctionMember)<_,_,_>,
     boost::mpl::identity<AnotherType>,
-    boost::mpl::identity<short>,
+    short,
     boost::mpl::vector
       <
-      boost::mpl::identity<double>,
-      boost::mpl::identity<int>,
-      boost::mpl::identity<long>
+      double,
+      int,
+      long
       >
     > aVar3;
     
@@ -54,7 +53,7 @@ int main()
                       <
                       BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(VoidFunction)<_,_>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<void>
+                      void
                       >
                   ));
   
@@ -62,7 +61,7 @@ int main()
                       <
                       FunctionReturningInt<_,_>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<int>
+                      int
                       >
                   ));
   
@@ -70,8 +69,8 @@ int main()
                       <
                       FunctionReturningInt<_,_,_>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<double>,
-                      boost::mpl::vector<boost::mpl::identity<int> >
+                      double,
+                      boost::mpl::vector<int>
                       >
                   ));
                   
@@ -80,7 +79,7 @@ int main()
                       BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(aFunction)<_,_,_>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::vector<boost::mpl::identity<int> >
+                      boost::mpl::vector<int>
                       >
                   ));
   
@@ -88,7 +87,7 @@ int main()
                       <
                       AnotherIntFunction<_,_,_>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<int>,
+                      int,
                       boost::mpl::vector<boost::mpl::identity<AType> >
                       >
                   ));
@@ -100,9 +99,9 @@ int main()
                       BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)<AType>,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<int>,
-                        boost::mpl::identity<long>,
-                        boost::mpl::identity<double>
+                        int,
+                        long,
+                        double
                         >
                       >
                   ));
@@ -111,7 +110,7 @@ int main()
                       <
                       boost::mpl::quote4<BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(VoidFunction)>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<void>
+                      void
                       >
                   ));
   
@@ -119,7 +118,7 @@ int main()
                       <
                       boost::mpl::quote4<FunctionReturningInt>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<int>
+                      int
                       >
                   ));
   
@@ -127,8 +126,8 @@ int main()
                       <
                       boost::mpl::quote4<FunctionReturningInt>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<double>,
-                      boost::mpl::vector<boost::mpl::identity<int> >
+                      double,
+                      boost::mpl::vector<int>
                       >
                   ));
   
@@ -137,7 +136,7 @@ int main()
                       boost::mpl::quote4<BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(aFunction)>,
                       boost::mpl::identity<AnotherType>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::vector<boost::mpl::identity<int> >
+                      boost::mpl::vector<int>
                       >
                   ));
   
@@ -145,7 +144,7 @@ int main()
                       <
                       boost::mpl::quote4<AnotherIntFunction>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<int>,
+                      int,
                       boost::mpl::vector<boost::mpl::identity<AType> >
                       >
                   ));
@@ -157,9 +156,9 @@ int main()
                       BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)<AType>,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<int>,
-                        boost::mpl::identity<long>,
-                        boost::mpl::identity<double> 
+                        int,
+                        long,
+                        double 
                         >
                       >
                   ));

@@ -18,11 +18,11 @@ int main()
                       <
                       HaveTheSIntFunction<_,_,_>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<int>,
+                      int,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<long>,
-                        boost::mpl::identity<double>
+                        long,
+                        double
                         >
                       >
                   ));

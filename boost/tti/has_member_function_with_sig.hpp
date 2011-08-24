@@ -4,14 +4,14 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_COMP_MEM_FUN_HPP)
-#define TTI_COMP_MEM_FUN_HPP
+#if !defined(TTI_HAS_MEMBER_FUNCTION_WITH_SIG_HPP)
+#define TTI_HAS_MEMBER_FUNCTION_WITH_SIG_HPP
 
 #include <boost/config.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/gen/comp_mem_fun_gen.hpp>
+#include <boost/tti/gen/has_member_function_with_sig_gen.hpp>
 #include <boost/tti/detail/dcomp_mem_fun.hpp>
 
 /*
@@ -42,7 +42,7 @@
                           otherwise 'value' is false.
                           
 */
-#define BOOST_TTI_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION_WITH_SIG(trait,name) \
   TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   template<class TTI_T> \
   struct trait : \
@@ -68,12 +68,12 @@
                           otherwise 'value' is false.
                           
 */
-#define BOOST_TTI_HAS_COMP_MEMBER_FUNCTION(name) \
-  BOOST_TTI_TRAIT_HAS_COMP_MEMBER_FUNCTION \
+#define BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG(name) \
+  BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION_WITH_SIG \
   ( \
-  BOOST_TTI_HAS_COMP_MEMBER_FUNCTION_GEN(name), \
+  BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(name), \
   name \
   ) \
 /**/
 
-#endif // TTI_COMP_MEM_FUN_HPP
+#endif // TTI_HAS_MEMBER_FUNCTION_WITH_SIG_HPP

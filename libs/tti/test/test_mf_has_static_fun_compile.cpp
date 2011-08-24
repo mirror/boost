@@ -18,11 +18,11 @@ int main()
     <
     HaveTheSIntFunction<_,_,_>,
     boost::mpl::identity<AType>,
-    boost::mpl::identity<int>,
+    int,
     boost::mpl::vector
       <
-      boost::mpl::identity<long>,
-      boost::mpl::identity<short>
+      long,
+      short
       >
     > aVar;
   
@@ -30,8 +30,8 @@ int main()
     <
     boost::mpl::quote4<Pickedname>,
     boost::mpl::identity<AType>,
-    boost::mpl::identity<double>,
-    boost::mpl::vector<boost::mpl::identity<float> >
+    double,
+    boost::mpl::vector<float>
     > aVar2;
   
   // Compile time asserts
@@ -40,11 +40,11 @@ int main()
                       <
                       HaveTheSIntFunction<_,_,_>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<int>,
+                      int,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<long>,
-                        boost::mpl::identity<double>
+                        long,
+                        double
                         >
                       >
                   ));
@@ -56,8 +56,8 @@ int main()
                       boost::mpl::identity<AType>,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<long>,
-                        boost::mpl::identity<double>
+                        long,
+                        double
                         >
                       >
                   ));
@@ -70,7 +70,7 @@ int main()
                       boost::mpl::vector
                         <
                         NameIntType<AType>,
-                        boost::mpl::identity<double>
+                        double
                         >
                       >
                   ));
@@ -79,11 +79,11 @@ int main()
                       <
                       boost::mpl::quote4<HaveTheSIntFunction>,
                       boost::mpl::identity<AType>,
-                      boost::mpl::identity<int>,
+                      int,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<long>,
-                        boost::mpl::identity<double>
+                        long,
+                        double
                         >
                       >
                   ));
@@ -95,8 +95,8 @@ int main()
                       boost::mpl::identity<AType>,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<long>,
-                        boost::mpl::identity<double>
+                        long,
+                        double
                         >
                       >
                   ));
@@ -109,7 +109,7 @@ int main()
                       boost::mpl::vector
                         <
                         NameIntType<AType>,
-                        boost::mpl::identity<double>
+                        double
                         >
                       >
             ));

@@ -131,7 +131,7 @@ parameters are specified exactly ?
 [heading Template with params using variadic macros]
 
 [
-note Include the `tti_vm.hpp` general header file, or the 
+note Include the `boost/tti/tti_vm.hpp` general header file, or the 
 `vm_template_params.hpp` specific header file,
 when using this macro.
 ]
@@ -177,7 +177,7 @@ Does T have a member function called 'IntFunction' whose type is
 Does T have a member function called 'IntFunction' whose type is 
 'int (short)' ?
 
- BOOST_TTI_HAS_COMP_MEMBER_FUNCTION(IntFunction)
+ BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG(IntFunction)
  
  boost::tti::has_comp_member_function_IntFunction
    <
@@ -215,7 +215,7 @@ is 'int (long,double)' ?
 Does T have a static member function called 'SIntFunction' whose type 
 is 'int (long,double)' ?
 
- BOOST_TTI_HAS_COMP_STATIC_MEMBER_FUNCTION(SIntFunction)
+ BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG(SIntFunction)
  
  boost::tti::has_comp_static_member_function_SIntFunction
    <

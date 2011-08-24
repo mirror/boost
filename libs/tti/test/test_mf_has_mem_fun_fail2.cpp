@@ -18,7 +18,7 @@ int main()
                       <
                       FunctionReturningInt<_,_>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<short>
+                      short
                       >
                   ));
   

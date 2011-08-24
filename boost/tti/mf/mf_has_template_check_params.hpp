@@ -11,6 +11,7 @@
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/mpl/quote.hpp>
 
 /*
 

@@ -6,7 +6,6 @@
 
 #include "test_mf_has_type_ct.hpp"
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/mpl/quote.hpp>
 
 int main()
   {
@@ -17,7 +16,7 @@ int main()
                 <
                 BOOST_TTI_HAS_TYPE_GEN(AnIntType)<_,_>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int>
+                int
                 >
               ::value
             ));
@@ -35,7 +34,7 @@ int main()
                 <
                 BOOST_TTI_HAS_TYPE_GEN(AnIntTypeReference)<_,_>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int &>
+                int &
                 >
               ::value
             ));
@@ -53,7 +52,7 @@ int main()
                 <
                 TheInteger<_,_>,
                 BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>,
-                boost::mpl::identity<int>
+                int
                 >
               ::value
             ));
@@ -79,7 +78,7 @@ int main()
                   boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(CType)>,
                   BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                   >,
-                boost::mpl::identity<int>
+                int
                 >
               ::value
             ));
@@ -97,7 +96,7 @@ int main()
                 <
                 BOOST_TTI_HAS_TYPE_GEN(NoOtherType)<_,_>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<double>
+                double
                 >
               ::value
             ));
@@ -106,7 +105,7 @@ int main()
                 <
                 boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(AnIntType)>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int>
+                int
                 >
               ::value
             ));
@@ -124,7 +123,7 @@ int main()
                 <
                 boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(AnIntTypeReference)>,
                 boost::mpl::identity<AType>,
-                boost::mpl::identity<int &>
+                int &
                 >
               ::value
             ));
@@ -142,7 +141,7 @@ int main()
                 <
                 boost::mpl::quote2<TheInteger>,
                 BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>,
-                boost::mpl::identity<int>
+                int
                 >
               ::value
             ));
@@ -168,7 +167,7 @@ int main()
                   boost::mpl::quote1<BOOST_TTI_MEMBER_TYPE_GEN(CType)>,
                   BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>
                   >,
-                boost::mpl::identity<int>
+                int
                 >
               ::value
             ));
@@ -186,7 +185,7 @@ int main()
                 <
                 boost::mpl::quote2<BOOST_TTI_HAS_TYPE_GEN(NoOtherType)>,
                 boost::mpl::identity<AnotherType>,
-                boost::mpl::identity<double>
+                double
                 >
               ::value
             ));

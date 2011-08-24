@@ -12,10 +12,11 @@
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/mpl/quote.hpp>
 #include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/tti/gen/namespace_gen.hpp>
-#include <boost/tti/detail/dtself.hpp>
+#include <boost/tti/detail/dtclass.hpp>
 
 /*
 
@@ -67,8 +68,8 @@ namespace boost
         <
         TTI_HasStaticMemberFunction,
         typename TTI_T::type,
-        typename TTI_R::type,
-        typename boost::mpl::transform<TTI_FS,BOOST_TTI_NAMESPACE::detail::tself<boost::mpl::_1> >::type,
+        typename BOOST_TTI_NAMESPACE::detail::tclass<TTI_R>::type,
+        typename boost::mpl::transform<TTI_FS,BOOST_TTI_NAMESPACE::detail::tclass<boost::mpl::_1> >::type,
         TTI_TAG
         >::type
       {

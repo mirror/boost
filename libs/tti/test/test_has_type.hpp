@@ -8,7 +8,7 @@
 #define TEST_HAS_TYPE_HPP
 
 #include "test_structs.hpp"
-#include <boost/tti/type.hpp>
+#include <boost/tti/has_type.hpp>
 
 BOOST_TTI_HAS_TYPE(AnIntType)
 BOOST_TTI_TRAIT_HAS_TYPE(NameStruct,AStructType)

@@ -4,16 +4,16 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_MEMBER_FUNCTION_HPP)
-#define TTI_MEMBER_FUNCTION_HPP
+#if !defined(TTI_HAS_MEMBER_FUNCTION_HPP)
+#define TTI_HAS_MEMBER_FUNCTION_HPP
 
 #include <boost/config.hpp>
 #include <boost/function_types/property_tags.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
-#include <boost/tti/mf/mf_mem_fun.hpp>
-#include <boost/tti/gen/mem_fun_gen.hpp>
+#include <boost/tti/mf/mf_has_member_function.hpp>
+#include <boost/tti/gen/has_member_function_gen.hpp>
 #include <boost/tti/detail/dmem_fun.hpp>
 
 /*
@@ -86,4 +86,4 @@
   ) \
 /**/
 
-#endif // TTI_MEMBER_FUNCTION_HPP
+#endif // TTI_HAS_MEMBER_FUNCTION_HPP

@@ -18,12 +18,12 @@ int main()
                       <
                       BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(someFunctionMember)<_,_,_>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<short>,
+                      short,
                       boost::mpl::vector
                         <
-                        boost::mpl::identity<double>,
-                        boost::mpl::identity<int>,
-                        boost::mpl::identity<long>
+                        double,
+                        int,
+                        long
                         >
                       >
                   ));

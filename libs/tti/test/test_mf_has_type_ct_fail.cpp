@@ -18,7 +18,7 @@ int main()
                       <
                       BOOST_TTI_HAS_TYPE_GEN(NoOtherType)<_,_>,
                       boost::mpl::identity<AnotherType>,
-                      boost::mpl::identity<float>
+                      float
                       >
                   ));
   

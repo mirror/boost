@@ -8,7 +8,7 @@
 #define TEST_HAS_TEMPLATE_CHECK_PARAMS_HPP
 
 #include "test_structs.hpp"
-#include <boost/tti/template_params.hpp>
+#include <boost/tti/has_template_check_params.hpp>
 
 BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(ATPMemberTemplate,(class))
 BOOST_TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(HaveCL,CLMemberTemplate,(class)(class))

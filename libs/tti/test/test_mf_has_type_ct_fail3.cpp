@@ -18,7 +18,7 @@ int main()
                       <
                       TheInteger<_,_>,
                       BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>,
-                      boost::mpl::identity<long>
+                      long
                       >
                   ));
   

@@ -8,7 +8,7 @@
 #define TEST_HAS_STATIC_MEMBER_FUNCTION_HPP
 
 #include "test_structs.hpp"
-#include <boost/tti/static_mem_fun.hpp>
+#include <boost/tti/has_static_member_function.hpp>
 
 BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION(HaveTheSIntFunction,SIntFunction)
 BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION(TheTIntFunction,TIntFunction)
