@@ -467,7 +467,7 @@ struct recursive_get_internal_transition_table
     typedef typename generate_state_set<typename StateType::stt>::type composite_states;
     typedef typename ::boost::mpl::fold<
             composite_states, composite_table,
-            ::boost::mpl::insert_range< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
+            ::boost::mpl::insert_range< ::boost::mpl::placeholders::_1, ::boost::mpl::end< ::boost::mpl::placeholders::_1>,
              recursive_get_internal_transition_table< ::boost::mpl::placeholders::_2, is_composite_state< ::boost::mpl::placeholders::_2> >
              >
     >::type type;

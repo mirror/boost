@@ -1002,18 +1002,32 @@ private:
         // add the internal events defined in the internal_transition_table
         // Note: these are added first because they must have a lesser prio
         // than the deeper transitions in the sub regions
-        // we go recursively because our states can also have internal tables or substates etc.
-        typedef typename recursive_get_internal_transition_table<StateType, ::boost::mpl::true_>::type istt_simulated;
+        typedef typename StateType::internal_transition_table istt_simulated;
+
+        // table made of a stt + internal transitions of composite
         typedef typename ::boost::mpl::fold<
             istt_simulated,::boost::mpl::vector0<>,
             ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
                                      make_row_tag< ::boost::mpl::placeholders::_2 , StateType> >
         >::type intermediate;
 
+        // we now look for the events the composite has in its internal transitions
+        // the internal ones are searched recursively in sub-sub... states
+        // we go recursively because our states can also have internal tables or substates etc.
+        typedef typename recursive_get_internal_transition_table<StateType, ::boost::mpl::true_>::type recursive_istt;
+        typedef typename ::boost::mpl::fold<
+                    recursive_istt,::boost::mpl::vector0<>,
+                    ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
+                                             make_row_tag< ::boost::mpl::placeholders::_2 , StateType> >
+                >::type recursive_istt_with_tag;
+
+        typedef typename ::boost::mpl::insert_range< original_table, typename ::boost::mpl::end<original_table>::type, 
+                                                     recursive_istt_with_tag>::type table_with_all_events;
+
         // and add for every event a forwarding row
         typedef typename ::boost::mpl::eval_if<
                 typename CompilePolicy::add_forwarding_rows,
-                add_forwarding_row_helper<original_table,intermediate,StateType>,
+                add_forwarding_row_helper<table_with_all_events,intermediate,StateType>,
                 ::boost::mpl::identity<intermediate>
         >::type type;
     };
