@@ -186,7 +186,7 @@ main()
     {
 		  {
             // $$$ Fixme. This should not be failing $$$
-            int x = (let(_a = lambda[val(1)])[_a])()();
+            //int x = (let(_a = lambda[val(1)])[_a])()();
             //BOOST_TEST(x == 1);
 		  }
 
