@@ -37,6 +37,7 @@
 #include <boost/proto/traits.hpp>
 #include <boost/proto/domain.hpp>
 #include <boost/proto/generate.hpp>
+#include <boost/fusion/include/at_c.hpp>
 #include <boost/fusion/include/begin.hpp>
 #include <boost/fusion/include/next.hpp>
 #include <boost/fusion/include/value_of.hpp>
