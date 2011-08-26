@@ -5,8 +5,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// Written by Daniel James using some code from Pablo Halpern's
-// allocator traits implementation.
+// Allocator traits written by Daniel James based on Pablo Halpern's
+// implementation.
 
 #ifndef BOOST_UNORDERED_DETAIL_ALLOCATOR_UTILITIES_HPP_INCLUDED
 #define BOOST_UNORDERED_DETAIL_ALLOCATOR_UTILITIES_HPP_INCLUDED
@@ -18,6 +18,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/select_type.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/preprocessor/cat.hpp>
 
 #if (defined(BOOST_NO_STD_ALLOCATOR) || defined(BOOST_DINKUMWARE_STDLIB)) \
     && !defined(__BORLANDC__)
@@ -81,38 +82,39 @@ namespace boost { namespace unordered { namespace detail {
     };
 #   endif
 
-    struct convertible_from_anything
-    {
-        template<typename T> convertible_from_anything(T const&);
-    };
+    template <typename T> T& make();
+    struct choice9 { typedef char (&type)[9]; };
+    struct choice8 : choice9 { typedef char (&type)[8]; };
+    struct choice7 : choice8 { typedef char (&type)[7]; };
+    struct choice6 : choice7 { typedef char (&type)[6]; };
+    struct choice5 : choice6 { typedef char (&type)[5]; };
+    struct choice4 : choice5 { typedef char (&type)[4]; };
+    struct choice3 : choice4 { typedef char (&type)[3]; };
+    struct choice2 : choice3 { typedef char (&type)[2]; };
+    struct choice1 : choice2 { typedef char (&type)[1]; };
+    choice1 choose();
 
-    typedef char (&no_type)[1];
-    typedef char (&yes_type)[2];
-
-    template <typename T> struct sfinae {
-        typedef yes_type type;
-    };
-
-    // Infrastructure for providing a default type for Tp::tname if absent.
     #define BOOST_DEFAULT_TYPE_TMPLT(tname)                                 \
         template <typename Tp, typename Default>                            \
         struct default_type_ ## tname {                                     \
-            template <typename T>                                           \
-            static BOOST_DEDUCED_TYPENAME sfinae<                           \
-                BOOST_DEDUCED_TYPENAME T::tname>::type test(int);           \
-            template <typename T>                                           \
-            static no_type test(long);                                      \
                                                                             \
-            enum { value = sizeof(test<Tp>(0)) == sizeof(yes_type) };       \
+            template <typename X>                                           \
+            static choice1::type test(choice1,                              \
+                BOOST_DEDUCED_TYPENAME X::tname* = 0);                      \
+                                                                            \
+            template <typename X>                                           \
+            static choice2::type test(choice2, void* = 0);                  \
                                                                             \
             struct DefaultWrap { typedef Default tname; };                  \
+                                                                            \
+            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
                                                                             \
             typedef BOOST_DEDUCED_TYPENAME                                  \
                 boost::detail::if_true<value>::                             \
                 BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
                 ::type::tname type;                                         \
         }
-    
+
     #define BOOST_DEFAULT_TYPE(T,tname, arg)                                \
         BOOST_DEDUCED_TYPENAME default_type_ ## tname<T, arg>::type
 
@@ -127,47 +129,62 @@ namespace boost { namespace unordered { namespace detail {
     BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
 
 #if !defined(BOOST_NO_SFINAE_EXPR) || BOOST_WORKAROUND(BOOST_MSVC, >= 1500)
-    // Specialization is only needed for Visual C++. Without it SFINAE doesn't
-    // kick in.
-    template <unsigned int>
-    struct expr_sfinae;
-    
-    template <>
-    struct expr_sfinae<sizeof(yes_type)> {
-        typedef yes_type type;
-    };
-    
+
+    template <typename T, unsigned int> struct expr_test;
+    template <typename T> struct expr_test<T, sizeof(char)> : T {};
+    template <typename U> static char for_expr_test(U const&);
+
+#define BOOST_UNORDERED_CHECK_EXPRESSION(count, result, expression)         \
+        template <typename U>                                               \
+        static typename expr_test<                                          \
+            BOOST_PP_CAT(choice, result),                                   \
+            sizeof(for_expr_test(((expression), 0)))>::type test(           \
+            BOOST_PP_CAT(choice, count))
+
+#define BOOST_UNORDERED_DEFAULT_EXPRESSION(count, result)                   \
+        template <typename U>                                               \
+        static BOOST_PP_CAT(choice, result)::type test(                     \
+            BOOST_PP_CAT(choice, count));
+
     template <typename T>
     struct has_select_on_container_copy_construction
     {
-        // This needs to be a template for Visual C++.
-        template <typename T2>
-        static yes_type to_yes_type(const T2&);
-
-        template <typename T2>
-        static typename expr_sfinae<sizeof(to_yes_type(
-            ((T2 const*)0)->select_on_container_copy_construction()
-        ))>::type check(T2*);
-
-        static no_type check(void*);
+        BOOST_UNORDERED_CHECK_EXPRESSION(1, 1, make<U const>().select_on_container_copy_construction());
+        BOOST_UNORDERED_DEFAULT_EXPRESSION(2, 2);
         
-        enum { value = sizeof(check((T*) 0)) == sizeof(yes_type) };
+        enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };
     };
+
 #else
+
+   template <typename T> struct identity { typedef T type; };
+
+#define BOOST_UNORDERED_CHECK_MEMBER(count, result, name, member)           \
+                                                                            \
+    typedef typename identity<member>::type BOOST_PP_CAT(check, count);     \
+                                                                            \
+    template <BOOST_PP_CAT(check, count) e>                                 \
+    struct BOOST_PP_CAT(test, count) {                                      \
+        typedef void* type;                                                 \
+    };                                                                      \
+                                                                            \
+    template <class U> static BOOST_PP_CAT(choice, result)::type            \
+        test(BOOST_PP_CAT(choice, count),                                   \
+            typename BOOST_PP_CAT(test, count)<                             \
+                &U::name>::type = 0)
+
+#define BOOST_UNORDERED_DEFAULT_MEMBER(count, result)                       \
+    template <class U> static BOOST_PP_CAT(choice, result)::type            \
+        test(BOOST_PP_CAT(choice, count), void* = 0)
+
+
     template <typename T>
     struct has_select_on_container_copy_construction
     {
-        typedef T (T::*SelectFunc)() const;
-
-        template <SelectFunc e> struct sfinae { typedef yes_type type; };
-
-        template <class U>  
-        static typename sfinae<&U::select_on_container_copy_construction>::type
-            test(int);  
-        template <class U>  
-        static no_type test(...);  
+        BOOST_UNORDERED_CHECK_MEMBER(1, 1, select_on_container_copy_construction, T (T::*)() const);
+        BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);
  
-        enum { value = sizeof(test<T>(1)) == sizeof(yes_type) };
+        enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };
     };
 
 #endif

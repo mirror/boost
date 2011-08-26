@@ -186,9 +186,14 @@ namespace test
     };
 
     template <typename T, typename Flags = propagate_swap,
-        bool SelectCopy = Flags::is_select_on_copy ? true : false>
-    struct cxx11_allocator :
-        public cxx11_allocator_base<T>,
+        typename Enable = void>
+    struct cxx11_allocator;
+
+    template <typename T, typename Flags>
+    struct cxx11_allocator<
+        T, Flags,
+        typename boost::disable_if_c<Flags::is_select_on_copy>::type
+    > : public cxx11_allocator_base<T>,
         public swap_allocator_base<Flags>,
         public assign_allocator_base<Flags>,
         public move_allocator_base<Flags>,
@@ -228,8 +233,10 @@ namespace test
     };
 
     template <typename T, typename Flags>
-    struct cxx11_allocator<T, Flags, true> : 
-        public cxx11_allocator_base<T>,
+    struct cxx11_allocator<
+        T, Flags,
+        typename boost::enable_if_c<Flags::is_select_on_copy>::type
+    > : public cxx11_allocator_base<T>,
         public swap_allocator_base<Flags>,
         public assign_allocator_base<Flags>,
         public move_allocator_base<Flags>,
