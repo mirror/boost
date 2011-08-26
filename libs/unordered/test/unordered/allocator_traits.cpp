@@ -7,6 +7,7 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/limits.hpp>
 
 // Boilerplate
 
