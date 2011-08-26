@@ -552,7 +552,7 @@ namespace boost { namespace unordered { namespace detail {
                 void*>::type address,
             Arg1&& a1)
     {
-        new(address) T(boost::forward<Arg1>(a1));
+        new(address) T(std::forward<Arg1>(a1));
     }
 
     template <class T, class Arg1>
@@ -561,13 +561,13 @@ namespace boost { namespace unordered { namespace detail {
                 void*>::type address,
             Arg1&& a1)
     {
-        new(address) T(boost::forward<Arg1>(a1), typename T::second_type());
+        new(address) T(std::forward<Arg1>(a1), typename T::second_type());
     }
 
     template <class T, class Arg1, class Arg2>
     inline void construct_impl(void* address, Arg1&& a1, Arg2&& a2)
     {
-        new(address) T(std::forward<Arg1, Arg2>(a1, a2));
+        new(address) T(std::forward<Arg1>(a1), std::forward<Arg2>(a2));
     }
 
     template <class T, class Arg1, class Arg2, class... Args>
