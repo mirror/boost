@@ -517,43 +517,136 @@ namespace boost { namespace unordered { namespace detail {
     ////////////////////////////////////////////////////////////////////////////
     // Node Constructors
 
+    template <typename T, typename Arg1 = void>
+    struct emulated_pair_constructor
+    {
+        enum { value = false };
+    };
+    
+    template <typename A, typename B>
+    struct emulated_pair_constructor<std::pair<A, B>, void>
+    {
+        enum { value = true };
+    };
+    
+    template <typename A, typename B, typename Value>
+    struct emulated_pair_constructor<std::pair<A, B>, Value>
+    {
+        static choice1::type check(choice1, std::pair<A, B> const&);
+        static choice2::type check(choice2, A const&);
+    
+        enum { value = sizeof(check(choose(), make<Value>())) - 1 };
+    };
+
+    template <class T>
+    inline void construct_impl(void* address)
+    {
+        new(address) T();
+    }
+
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
-    template <class T, class... Args>
-    inline void construct_impl(T*, void* address, Args&&... args)
+    template <class T, class Arg1>
+    inline void construct_impl(
+            typename boost::disable_if<emulated_pair_constructor<T, Arg1>,
+                void*>::type address,
+            Arg1&& a1)
     {
-        new(address) T(std::forward<Args>(args)...);
+        new(address) T(boost::forward<Arg1>(a1));
+    }
+
+    template <class T, class Arg1>
+    inline void construct_impl(
+            typename boost::enable_if<emulated_pair_constructor<T, Arg1>,
+                void*>::type address,
+            Arg1&& a1)
+    {
+        new(address) T(boost::forward<Arg1>(a1), typename T::second_type());
+    }
+
+    template <class T, class Arg1, class Arg2>
+    inline void construct_impl(void* address, Arg1&& a1, Arg2&& a2)
+    {
+        new(address) T(std::forward<Arg1, Arg2>(a1, a2));
+    }
+
+    template <class T, class Arg1, class Arg2, class... Args>
+    inline typename boost::disable_if<emulated_pair_constructor<T>, void>::type
+    construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Args&&... args)
+    {
+        new(address) T(std::forward<Arg1, Arg2, Args>(arg1, arg2, args)...);
+    }
+
+    template <class T, class Arg1, class Arg2, class... Args>
+    inline typename boost::enable_if<emulated_pair_constructor<T>, void>::type
+    construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Args&&... args)
+    {
+        new(address) T(std::forward<Arg1>(arg1),
+            typename T::second_type(std::forward<Arg2, Args>(arg2, args)...));
     }
 
 #else
 
-#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                       \
-    template <                                                                 \
-        class T,                                                               \
-        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                           \
-    >                                                                          \
-    inline void construct_impl(                                                \
-        T*, void* address,                                                     \
-        BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                         \
-    )                                                                          \
-    {                                                                          \
-        new(address) T(                                                        \
-            BOOST_UNORDERED_CALL_PARAMS(z, num_params));                       \
-    }                                                                          \
-                                                                               \
-    template <class First, class Second, class Key,                            \
-        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                           \
-    >                                                                          \
-    inline void construct_impl(                                                \
-        std::pair<First, Second>*, void* address,                              \
-        Key const& k, BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))          \
-    {                                                                          \
-        new(address) std::pair<First, Second>(k,                               \
-            Second(BOOST_UNORDERED_CALL_PARAMS(z, num_params)));               \
+    template <class T, class Arg1>
+    inline BOOST_DEDUCED_TYPENAME boost::disable_if<emulated_pair_constructor<T, Arg1>, void>::type
+        construct_impl(void* address, BOOST_FWD_REF(Arg1) a1)
+    {
+        new(address) T(boost::forward<Arg1>(a1));
     }
 
-    BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+    template <class T, class Arg1>
+    inline BOOST_DEDUCED_TYPENAME boost::enable_if<emulated_pair_constructor<T, Arg1>, void>::type
+        construct_impl(void* address, BOOST_FWD_REF(Arg1) a1)
+    {
+        new(address) T(
+            boost::forward<Arg1>(a1),
+            BOOST_DEDUCED_TYPENAME T::second_type()
+        );
+    }
+
+    template <class T, class Arg1, class Arg2>
+    inline void construct_impl(void* address,
+            BOOST_FWD_REF(Arg1) a1, BOOST_FWD_REF(Arg2) a2)
+    {
+        new(address) T(boost::forward<Arg1>(a1), boost::forward<Arg2>(a2));
+    }
+    
+#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                    \
+    template <                                                              \
+        class T,                                                            \
+        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
+    >                                                                       \
+    inline void construct_impl(                                             \
+        BOOST_DEDUCED_TYPENAME                                              \
+        boost::disable_if<emulated_pair_constructor<T>, void*>::type        \
+        address,                                                            \
+        BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                      \
+    )                                                                       \
+    {                                                                       \
+        new(address) T(                                                     \
+            BOOST_UNORDERED_CALL_PARAMS(z, num_params));                    \
+    }
+
+    BOOST_PP_REPEAT_FROM_TO(3, BOOST_UNORDERED_EMPLACE_LIMIT,
         BOOST_UNORDERED_CONSTRUCT_IMPL, _)
+
+#define BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL(z, num_params, _)               \
+    template <class T, class Key,                                           \
+        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
+    >                                                                       \
+    inline void construct_impl(                                             \
+        BOOST_DEDUCED_TYPENAME                                              \
+        boost::enable_if<emulated_pair_constructor<T>, void*>::type         \
+        address,                                                            \
+        Key const& k, BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))       \
+    {                                                                       \
+        new(address) T(k,                                                   \
+            BOOST_DEDUCED_TYPENAME                                          \
+            T::second_type(BOOST_UNORDERED_CALL_PARAMS(z, num_params)));    \
+    }
+
+    BOOST_PP_REPEAT_FROM_TO(2, BOOST_UNORDERED_EMPLACE_LIMIT,
+        BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL, _)
 
 #undef BOOST_UNORDERED_CONSTRUCT_IMPL
 #endif
@@ -594,7 +687,7 @@ namespace boost { namespace unordered { namespace detail {
         void construct(Args&&... args)
         {
             construct_preamble();
-            construct_impl((value_type*) 0, node_->address(),
+            construct_impl<value_type>(node_->address(),
                 std::forward<Args>(args)...);
             value_constructed_ = true;
         }
@@ -609,8 +702,7 @@ namespace boost { namespace unordered { namespace detail {
         )                                                                      \
         {                                                                      \
             construct_preamble();                                              \
-            construct_impl(                                                    \
-                (value_type*) 0, node_->address(),                             \
+            construct_impl<value_type>(node_->address(),                       \
                 BOOST_UNORDERED_CALL_PARAMS(z, num_params)                     \
             );                                                                 \
             value_constructed_ = true;                                         \

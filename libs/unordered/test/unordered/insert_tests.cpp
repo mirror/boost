@@ -514,6 +514,46 @@ UNORDERED_AUTO_TEST(insert_initializer_list_multimap)
 
 #endif
 
+struct overloaded_constructor
+{
+    overloaded_constructor(int x = 1, int y = 2, int z = 3)
+      : x(x), y(y), z(z) {}
+
+    int x, y, z;
+    
+    bool operator==(overloaded_constructor const& rhs) const
+    {
+        return x == rhs.x && y == rhs.y && z == rhs.z;
+    }
+};
+
+// This will actually be deprecated pretty soon.
+
+UNORDERED_AUTO_TEST(map_emplace_test)
+{
+    boost::unordered_map<int, overloaded_constructor> x;
+
+    x.emplace();
+    BOOST_TEST(x.find(0) != x.end() &&
+        x.find(0)->second == overloaded_constructor());
+
+    x.emplace(1);
+    BOOST_TEST(x.find(1) != x.end() &&
+        x.find(1)->second == overloaded_constructor());
+
+    x.emplace(2, 3);
+    BOOST_TEST(x.find(2) != x.end() &&
+        x.find(2)->second == overloaded_constructor(3));
+
+    x.emplace(4, 5, 6);
+    BOOST_TEST(x.find(4) != x.end() &&
+        x.find(4)->second == overloaded_constructor(5, 6));
+
+    x.emplace(7, 8, 9, 10);
+    BOOST_TEST(x.find(7) != x.end() &&
+        x.find(7)->second == overloaded_constructor(8, 9, 10));
+}
+
 }
 
 RUN_TESTS()
