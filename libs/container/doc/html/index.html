@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Chapter&#160;1.&#160;Boost.Container</title>
+<link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.67.0">
+<link rel="start" href="index.html" title="Chapter&#160;1.&#160;Boost.Container">
+<link rel="next" href="container/intro.html" title="Introduction">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
+<td align="center"><a href="../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"><a accesskey="n" href="container/intro.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a></div>
+<div class="chapter" lang="en">
+<div class="titlepage"><div>
+<div><h2 class="title">
+<a name="container"></a>Chapter&#160;1.&#160;Boost.Container</h2></div>
+<div><div class="author"><h3 class="author">
+<span class="firstname">Ion</span> <span class="surname">Gaztanaga</span>
+</h3></div></div>
+<div><p class="copyright">Copyright &#169; 2009-2011 Ion Gaztanaga</p></div>
+<div><div class="legalnotice">
+<a name="id706806"></a><p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></div>
+</div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="section"><a href="container/intro.html">Introduction</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="container/intro.html#container.intro.introduction_building_container">Building
+      Boost.Container</a></span></dt>
+<dt><span class="section"><a href="container/intro.html#container.intro.tested_compilers">Tested compilers</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="container/move_emplace.html">Efficient insertion</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="container/move_emplace.html#container.move_emplace.move_containers">Move-aware containers</a></span></dt>
+<dt><span class="section"><a href="container/move_emplace.html#container.move_emplace.emplace">Emplace: Placement insertion</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="container/containers_of_incomplete_types.html">Containers of
+    Incomplete Types</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="container/containers_of_incomplete_types.html#container.containers_of_incomplete_types.recursive_containers">Recursive
+      containers</a></span></dt>
+<dt><span class="section"><a href="container/containers_of_incomplete_types.html#container.containers_of_incomplete_types.type_erasure">Type
+      Erasure</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="container/non_standard_containers.html">Non-standard containers</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="container/non_standard_containers.html#container.non_standard_containers.stable_vector"><span class="emphasis"><em>stable_vector</em></span></a></span></dt>
+<dt><span class="section"><a href="container/non_standard_containers.html#container.non_standard_containers.flat_xxx"><span class="emphasis"><em>flat_(multi)map/set</em></span>
+      associative containers</a></span></dt>
+<dt><span class="section"><a href="container/non_standard_containers.html#container.non_standard_containers.slist"><span class="emphasis"><em>slist</em></span></a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="container/Cpp11_conformance.html">C++11 Conformance</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="container/Cpp11_conformance.html#container.Cpp11_conformance.move_emplace">Move and Emplace</a></span></dt>
+<dt><span class="section"><a href="container/Cpp11_conformance.html#container.Cpp11_conformance.alloc_traits_move_traits">Stateful
+      allocators and Scoped allocators</a></span></dt>
+<dt><span class="section"><a href="container/Cpp11_conformance.html#container.Cpp11_conformance.initializer_lists">Initializer
+      lists</a></span></dt>
+<dt><span class="section"><a href="container/Cpp11_conformance.html#container.Cpp11_conformance.Vector_bool">vector&lt;bool&gt;</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="container/other_features.html">Other features</a></span></dt>
+<dt><span class="section"><a href="container/history_and_reasons.html">History and reasons to use
+    Boost.Container</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="container/history_and_reasons.html#container.history_and_reasons.boost_container_history">Boost.Container
+      history</a></span></dt>
+<dt><span class="section"><a href="container/history_and_reasons.html#container.history_and_reasons.Why_boost_container">Why
+      Boost.Container?</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="container/acknowledgements_notes.html">Acknowledgements, notes
+    and links</a></span></dt>
+<dt><span class="section"><a href="container/release_notes.html">Release Notes</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html">Boost.Container Reference</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.container_fwd_hpp">Header &lt;boost/container/container_fwd.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.deque_hpp">Header &lt;boost/container/deque.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.flat_map_hpp">Header &lt;boost/container/flat_map.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.flat_set_hpp">Header &lt;boost/container/flat_set.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.list_hpp">Header &lt;boost/container/list.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.map_hpp">Header &lt;boost/container/map.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.set_hpp">Header &lt;boost/container/set.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.slist_hpp">Header &lt;boost/container/slist.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.stable_vector_hpp">Header &lt;boost/container/stable_vector.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.string_hpp">Header &lt;boost/container/string.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="boost_container_reference.html#header.boost.container.vector_hpp">Header &lt;boost/container/vector.hpp&gt;</a></span></dt>
+</dl></dd>
+</dl>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"><p><small>Last revised: August 26, 2011 at 17:45:38 GMT</small></p></td>
+<td align="right"><div class="copyright-footer"></div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"><a accesskey="n" href="container/intro.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a></div>
+</body>
+</html>
