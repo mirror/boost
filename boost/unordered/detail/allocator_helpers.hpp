@@ -144,7 +144,7 @@ namespace boost { namespace unordered { namespace detail {
 #define BOOST_UNORDERED_DEFAULT_EXPRESSION(count, result)                   \
         template <typename U>                                               \
         static BOOST_PP_CAT(choice, result)::type test(                     \
-            BOOST_PP_CAT(choice, count));
+            BOOST_PP_CAT(choice, count))
 
     template <typename T>
     struct has_select_on_container_copy_construction
