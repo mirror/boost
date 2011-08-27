@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 
   // Initialize distances to infinity and set reduction operation to 'min'
   BGL_FORALL_VERTICES(v, g, Graph) {
-    put(distance, v, std::numeric_limits<std::size_t>::max());
+    put(distance, v, (std::numeric_limits<std::size_t>::max)());
   }
   distance.set_reduce(boost::graph::distributed::choose_min_reducer<std::size_t>());
 
