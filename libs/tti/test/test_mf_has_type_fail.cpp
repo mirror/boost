@@ -6,6 +6,7 @@
 
 #include "test_mf_has_type.hpp"
 #include <boost/mpl/assert.hpp>
+#include <boost/tti/mf/mf_has_type.hpp>
 
 int main()
   {

@@ -6,6 +6,7 @@
 
 #include "test_mf_has_template_cp.hpp"
 #include <boost/mpl/assert.hpp>
+#include <boost/tti/mf/mf_has_template_check_params.hpp>
 
 int main()
   {

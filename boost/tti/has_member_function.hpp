@@ -12,7 +12,6 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
-#include <boost/tti/mf/mf_has_member_function.hpp>
 #include <boost/tti/gen/has_member_function_gen.hpp>
 #include <boost/tti/detail/dmem_fun.hpp>
 

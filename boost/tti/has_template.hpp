@@ -10,7 +10,6 @@
 #include <boost/config.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_has_template.hpp>
 #include <boost/tti/gen/has_template_gen.hpp>
 
 /*

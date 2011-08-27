@@ -9,7 +9,6 @@
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_has_static_member_data.hpp>
 #include <boost/tti/gen/has_static_member_data_gen.hpp>
 #include <boost/tti/detail/dstatic_mem_data.hpp>
 

@@ -9,7 +9,6 @@
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_has_type.hpp>
 #include <boost/tti/gen/has_type_gen.hpp>
 #include <boost/tti/detail/dtype.hpp>
 #include <boost/tti/detail/dnotype.hpp>

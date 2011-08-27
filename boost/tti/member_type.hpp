@@ -11,7 +11,6 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_member_type.hpp>
 #include <boost/tti/gen/member_type_gen.hpp>
 #include <boost/tti/detail/dmem_type.hpp>
 #include <boost/tti/detail/dnotype.hpp>

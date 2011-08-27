@@ -6,6 +6,8 @@
 
 #include "test_mf_has_type.hpp"
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/tti/mf/mf_has_type.hpp>
+#include <boost/tti/mf/mf_member_type.hpp>
 
 int main()
   {

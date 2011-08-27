@@ -4,8 +4,8 @@
 <title>Using the Nullary Type Metafunctions</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.0">
-<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;The Type Traits Introspection Library 1.4">
-<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;The Type Traits Introspection Library 1.4">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;The Type Traits Introspection Library 1.5">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;The Type Traits Introspection Library 1.5">
 <link rel="prev" href="tti_metafunctions.html" title="Nullary Type Metafunctions">
 <link rel="next" href="tti_func_templates.html" title="Introspecting Function Templates">
 </head>
@@ -115,7 +115,7 @@
       with any lambda expression as the first template parameter.
     </p>
 <a name="the_type_traits_introspection_library.tti_usingNTM.member_type"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.member_type-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h0"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.member_type">Member
       type</a>
     </h4>
@@ -126,13 +126,13 @@
       using 'boost::tti::mf_member_type'.
     </p>
 <pre class="programlisting"><span class="identifier">BOOST_TTI_MEMBER_TYPE</span><span class="special">(</span><span class="identifier">BType</span><span class="special">)</span>
-<span class="identifier">BOOST_TTI_MTFC_MEMBER_TYPE</span><span class="special">(</span><span class="identifier">CType</span><span class="special">)</span>
+<span class="identifier">BOOST_TTI_MEMBER_TYPE</span><span class="special">(</span><span class="identifier">CType</span><span class="special">)</span>
 <span class="identifier">BOOST_TTI_MEMBER_TYPE</span><span class="special">(</span><span class="identifier">DType</span><span class="special">)</span>
 
 <span class="keyword">typedef</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_member_type</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">member_type_BType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
+  <span class="identifier">member_type_BType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>
   <span class="special">&gt;</span>
 <span class="identifier">BTypeNM</span><span class="special">;</span>
@@ -140,7 +140,7 @@
 <span class="keyword">typedef</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_member_type</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_member_type_CType</span><span class="special">,</span>
+  <span class="identifier">member_type_CType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">BTypeNM</span>
   <span class="special">&gt;</span>
 <span class="identifier">CTypeNM</span><span class="special">;</span>
@@ -148,7 +148,7 @@
 <span class="keyword">typedef</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_member_type</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">member_type_DType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
+  <span class="identifier">member_type_DType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">CTypeNM</span>
   <span class="special">&gt;</span>
 <span class="identifier">DTypeNM</span><span class="special">;</span>
@@ -157,7 +157,7 @@
       We will use these typedefs in the ensuing examples.
     </p>
 <a name="the_type_traits_introspection_library.tti_usingNTM.type"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.type-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h1"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.type">Type</a>
     </h4>
 <p>
@@ -167,7 +167,7 @@
  
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_type</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">has_type_DType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
+  <span class="identifier">has_type_DType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">CTypeNM</span>
   <span class="special">&gt;</span>
 </pre>
@@ -181,7 +181,7 @@
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.type_checking_the_typedef"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.type_checking_the_typedef-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h2"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.type_checking_the_typedef">Type
       checking the typedef</a>
     </h4>
@@ -189,33 +189,33 @@
       Does T have a nested typedef called 'ADoubleType' within 'BType::CType::DType'
       whose type is a 'double' ?
     </p>
-<pre class="programlisting"><span class="identifier">BOOST_TTI_MTFC_HAS_TYPE</span><span class="special">(</span><span class="identifier">ADoubleType</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_TTI_HAS_TYPE</span><span class="special">(</span><span class="identifier">ADoubleType</span><span class="special">)</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_type</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_type_ADoubleType</span><span class="special">,</span>
+  <span class="identifier">has_type_ADoubleType</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">DTypeNM</span><span class="special">,</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>
+  <span class="keyword">double</span>
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.template"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.template-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h3"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.template">Template</a>
     </h4>
 <p>
       Does T have a nested class template called 'AMemberTemplate' within 'BType::CType'
       whose template parameters are all types ('class' or 'typename') ?
     </p>
-<pre class="programlisting"><span class="identifier">BOOST_TTI_MTFC_HAS_TEMPLATE</span><span class="special">(</span><span class="identifier">AMemberTemplate</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_TTI_HAS_TEMPLATE</span><span class="special">(</span><span class="identifier">AMemberTemplate</span><span class="special">)</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_template</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_template_AMemberTemplate</span><span class="special">,</span>
+  <span class="identifier">has_template_AMemberTemplate</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">CTypeNM</span>
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.template_with_params"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.template_with_params-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h4"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.template_with_params">Template
       with params</a>
     </h4>
@@ -227,12 +227,12 @@
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_template_check_params</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">has_template_check_params_ManyParameters</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
+  <span class="identifier">has_template_check_params_ManyParameters</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">BTypeNM</span>
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.template_with_params_using_variadic_macros"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.template_with_params_using_variadic_macros-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h5"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.template_with_params_using_variadic_macros">Template
       with params using variadic macros</a>
     </h4>
@@ -241,36 +241,37 @@
       whose template parameters are specified exactly ?
     </p>
 <p>
-      [ note Include the <code class="computeroutput"><span class="identifier">tti_vm</span><span class="special">.</span><span class="identifier">hpp</span></code> general header file, or the <code class="computeroutput"><span class="identifier">vm_template_params</span><span class="special">.</span><span class="identifier">hpp</span></code> specific header file, when using this
-      macro. ]
+      [ note Include the <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">tti</span><span class="special">/</span><span class="identifier">tti_vm</span><span class="special">.</span><span class="identifier">hpp</span></code> general
+      header file, or the <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">tti</span><span class="special">/</span><span class="identifier">vm_has_template_check_params</span><span class="special">.</span><span class="identifier">hpp</span></code> specific
+      header file, when using this macro. ]
     </p>
-<pre class="programlisting"><span class="identifier">BOOST_TTI_VM_MTFC_HAS_TEMPLATE_CHECK_PARAMS</span><span class="special">(</span><span class="identifier">MoreParameters</span><span class="special">,</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">short</span><span class="special">,</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="keyword">class</span> <span class="identifier">InnerTemplate</span><span class="special">,</span><span class="keyword">class</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS</span><span class="special">(</span><span class="identifier">MoreParameters</span><span class="special">,</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">short</span><span class="special">,</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="keyword">class</span> <span class="identifier">InnerTemplate</span><span class="special">,</span><span class="keyword">class</span><span class="special">)</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_template_check_params</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_template_check_params_MoreParameters</span><span class="special">,</span>
+  <span class="identifier">has_template_check_params_MoreParameters</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">CTypeNM</span>
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.member_data"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.member_data-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h6"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.member_data">Member
       data</a>
     </h4>
 <p>
       Does T have a member data called 'IntBT' whose type is 'BType' ?
     </p>
-<pre class="programlisting"><span class="identifier">BOOST_TTI_MTFC_HAS_MEMBER_DATA</span><span class="special">(</span><span class="identifier">IntBT</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_TTI_HAS_MEMBER_DATA</span><span class="special">(</span><span class="identifier">IntBT</span><span class="special">)</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_member_data</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_member_data_IntBT</span><span class="special">,</span>
+  <span class="identifier">has_member_data_IntBT</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;,</span>
   <span class="identifier">BTypeNM</span>
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.member_function"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.member_function-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h7"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.member_function">Member
       function</a>
     </h4>
@@ -282,15 +283,15 @@
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_member_function</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">has_member_function_IntFunction</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">&gt;,</span>
+  <span class="identifier">has_member_function_IntFunction</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">DTypeNM</span><span class="special">,</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;,</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="keyword">short</span><span class="special">&gt;</span> <span class="special">&gt;,</span>
+  <span class="keyword">int</span><span class="special">,</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">short</span><span class="special">&gt;,</span>
   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function_types</span><span class="special">::</span><span class="identifier">const_qualified</span>
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.static_member_data"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.static_member_data-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h8"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.static_member_data">Static
       member data</a>
     </h4>
@@ -298,17 +299,17 @@
       Does T have a static member data called 'DSMember' within 'BType::CType::DType'
       whose type is 'short' ?
     </p>
-<pre class="programlisting"><span class="identifier">BOOST_TTI_MTFC_HAS_STATIC_MEMBER_DATA</span><span class="special">(</span><span class="identifier">DSMember</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_TTI_HAS_STATIC_MEMBER_DATA</span><span class="special">(</span><span class="identifier">DSMember</span><span class="special">)</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_static_member_data</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mtfc_has_static_member_data_DSMember</span><span class="special">,</span>
+  <span class="identifier">has_static_member_data_DSMember</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">.</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">DTypeNM</span><span class="special">,</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="keyword">short</span><span class="special">&gt;</span>
+  <span class="keyword">short</span>
   <span class="special">&gt;</span>
 </pre>
 <a name="the_type_traits_introspection_library.tti_usingNTM.static_member_function"></a><h4>
-<a name="the_type_traits_introspection_library.tti_usingNTM.static_member_function-heading"></a>
+<a name="the_type_traits_introspection_library.tti_usingNTM.h9"></a>
       <a class="link" href="tti_usingNTM.html#the_type_traits_introspection_library.tti_usingNTM.static_member_function">Static
       member function</a>
     </h4>
@@ -320,16 +321,16 @@
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">mf_has_static_member_function</span>
   <span class="special">&lt;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">tti</span><span class="special">::</span><span class="identifier">has_static_member_function_SIntFunction</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">&gt;,</span>
+  <span class="identifier">has_static_member_function_SIntFunction</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">,</span><span class="identifier">_</span><span class="special">&gt;,</span>
   <span class="identifier">DTypeNM</span><span class="special">,</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;,</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="keyword">long</span><span class="special">&gt;,</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">identity</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="special">&gt;</span>
+  <span class="keyword">int</span><span class="special">,</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">long</span><span class="special">,</span><span class="keyword">double</span><span class="special">&gt;</span>
   <span class="special">&gt;</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2010 Tropic Software East Inc</div></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2010, 2011 Tropic Software East Inc</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

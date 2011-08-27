@@ -6,6 +6,7 @@
 
 #include "test_mf_has_static_fun.hpp"
 #include <boost/mpl/assert.hpp>
+#include <boost/tti/mf/mf_has_static_member_function.hpp>
 
 int main()
   {

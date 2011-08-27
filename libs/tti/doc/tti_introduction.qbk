@@ -73,58 +73,8 @@ macros with variadic macro support, is `boost/tti/tti_vm.hpp`.
 
 There are also separate specific header files for each of the elements to be 
 introspected by the library. This allows for finer-grained inclusion
-of nested elements to be introspected. These header files are: 
-
-[table:tbheaders TTI Header Files
-  [
-    [Inner Element]
-    [File]
-  ]
-  [
-    [Type]
-    [[headerref boost/tti/has_type.hpp `has_type.hpp`]]
-  ]
-  [
-    [Template]
-    [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
-  ]
-  [
-    [Template with params]
-    [[headerref boost/tti/has_template_check_params.hpp `has_template_check_params.hpp`]]
-  ]
-  [
-    [Template with params - variadic macros]
-    [[headerref boost/tti/vm_has_template_check_params.hpp `vm_has_template_check_params.hpp`]]
-  ]
-  [
-    [Member data]
-    [[headerref boost/tti/has_member_data.hpp `has_member_data.hpp`]]
-  ]
-  [
-    [Member function]
-    [[headerref boost/tti/has_member_function.hpp `has_member_function.hpp`]]
-  ]
-  [
-    [Member function - composite syntax]
-    [[headerref boost/tti/has_mem_function_with_sig.hpp `has_member_function_with_sig.hpp`]]
-  ]
-  [
-    [Static member data]
-    [[headerref boost/tti/has_static_member_data.hpp `has_static_member_data.hpp`]]
-  ]
-  [
-    [Static member function]
-    [[headerref boost/tti/has_static_member_function.hpp `has_static_member_function.hpp`]]
-  ]
-  [
-    [Static member function - composite syntax]
-    [[headerref boost/tti/has_static_member_function_with_sig.hpp `has_static_member_function_with_sig.hpp`]]
-  ]
-  [
-    [Member type]
-    [[headerref boost/tti/member_type.hpp `member_type.hpp`]]
-  ]
-]
+of nested elements to be introspected. These individual header files 
+will be given when discussing the individual elements.
 
 If the general header file `boost/tti/tti_vm.hpp`
 or the specific header file 

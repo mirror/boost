@@ -10,7 +10,6 @@
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
-#include <boost/tti/mf/mf_has_member_data.hpp>
 #include <boost/tti/gen/has_member_data_gen.hpp>
 #include <boost/tti/detail/dmem_data.hpp>
 

@@ -9,7 +9,6 @@
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/mf/mf_has_template_check_params.hpp>
 #include <boost/tti/gen/has_template_check_params_gen.hpp>
 #include <boost/tti/detail/dtemplate_params.hpp>
 

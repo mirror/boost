@@ -10,7 +10,7 @@
     [version 1.5]
     [id tti]
     [dirname tti]
-    [copyright 2010 Tropic Software East Inc]
+    [copyright 2010-2011 Tropic Software East Inc]
     [purpose Compile time introspection of a type]
     [category generic]
     [authors [Diener, Edward]]

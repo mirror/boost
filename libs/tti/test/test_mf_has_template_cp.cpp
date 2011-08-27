@@ -6,6 +6,8 @@
 
 #include "test_mf_has_template_cp.hpp"
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/tti/mf/mf_has_template_check_params.hpp>
+#include <boost/tti/mf/mf_member_type.hpp>
 
 int main()
   {

@@ -6,6 +6,7 @@
 
 #include "test_mf_has_mem_fun.hpp"
 #include <boost/mpl/assert.hpp>
+#include <boost/tti/mf/mf_has_member_function.hpp>
 
 int main()
   {

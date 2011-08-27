@@ -75,6 +75,7 @@ doxygen tti_reference
     <doxygen:param>SHOW_INCLUDE_FILES=NO
     <doxygen:param>MAX_INITIALIZER_LINES=0
     <doxygen:param>VERBATIM_HEADERS=NO
+    <doxygen:param>PREDEFINED=BOOST_PP_VARIADICS
     <reftitle>"Reference"
 ;
 
