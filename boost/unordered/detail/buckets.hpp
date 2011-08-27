@@ -574,7 +574,8 @@ namespace boost { namespace unordered { namespace detail {
     inline typename boost::disable_if<emulated_pair_constructor<T>, void>::type
     construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Args&&... args)
     {
-        new(address) T(std::forward<Arg1, Arg2, Args>(arg1, arg2, args)...);
+        new(address) T(std::forward<Arg1>(arg1), std::forward<Arg2>(arg2),
+            std::forward<Args>(args)...);
     }
 
     template <class T, class Arg1, class Arg2, class... Args>
@@ -582,7 +583,8 @@ namespace boost { namespace unordered { namespace detail {
     construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Args&&... args)
     {
         new(address) T(std::forward<Arg1>(arg1),
-            typename T::second_type(std::forward<Arg2, Args>(arg2, args)...));
+            typename T::second_type(
+                std::forward<Arg2>(arg2), std::forward<Args>(args)...));
     }
 
 #else
