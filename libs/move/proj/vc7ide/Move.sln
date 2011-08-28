@@ -132,6 +132,7 @@ Global
 		..\..\doc\Jamfile.v2 = ..\..\doc\Jamfile.v2
 		..\..\..\..\boost\move\move.hpp = ..\..\..\..\boost\move\move.hpp
 		..\..\doc\move.qbk = ..\..\doc\move.qbk
+		..\..\..\..\boost\move\move_helpers.hpp = ..\..\..\..\boost\move\move_helpers.hpp
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
