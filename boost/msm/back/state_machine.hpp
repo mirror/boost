@@ -889,6 +889,8 @@ private:
         typedef T1                  current_state_type;
         typedef T1                  next_state_type;
         typedef Evt                 transition_event;
+        // tag to find out if a row is a forwarding row
+        typedef int                 is_frow;
 
         // Take the transition action and return the next state.
         static HandledEnum execute(library_sm& fsm, int region_index, int , transition_event const& evt)
@@ -898,6 +900,13 @@ private:
              fsm.m_states[region_index]=get_state_id<stt,T1>::type::value;
              return res;
         }
+        // helper metafunctions used by dispatch table and give the frow a new event
+        // (used to avoid double entries in a table because of base events)
+        template <class NewEvent>
+        struct replace_event
+        {
+            typedef frow<T1,NewEvent> type;
+        };
     };
 
     template <class Tag, class Transition,class StateType>

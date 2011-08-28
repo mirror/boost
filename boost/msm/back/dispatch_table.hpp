@@ -18,10 +18,14 @@
 #include <boost/mpl/filter_view.hpp>
 #include <boost/mpl/pop_front.hpp>
 #include <boost/mpl/for_each.hpp>
+#include <boost/mpl/advance.hpp>
+
 #include <boost/type_traits/is_base_of.hpp>
 
 #include <boost/msm/back/metafunctions.hpp>
 #include <boost/msm/back/common_types.hpp>
+
+BOOST_MPL_HAS_XXX_TRAIT_DEF(is_frow)
 
 namespace boost { namespace msm { namespace back 
 {
@@ -94,9 +98,49 @@ struct dispatch_table
     template< typename Entry > 
     struct make_chain_row_from_map_entry
     { 
-        typedef chain_row<typename Entry::second,Event,
+        // if we have more than one frow with the same state as source, remove the ones extra
+        // note: we know the frow's are located at the beginning so we remove at the beginning (number of frows - 1) elements
+        enum {number_frows = ::boost::mpl::count_if< typename Entry::second,has_is_frow< ::boost::mpl::placeholders::_1> >::value};
+
+        //erases the first NumberToDelete rows
+        template<class Sequence, int NumberToDelete>
+        struct erase_first_rows
+        {
+            typedef typename ::boost::mpl::erase<
+                typename Entry::second,
+                typename ::boost::mpl::begin<Sequence>::type,
+                typename ::boost::mpl::advance<
+                        typename ::boost::mpl::begin<Sequence>::type, 
+                        ::boost::mpl::int_<NumberToDelete> >::type
+            >::type type;
+        };
+        // if we have more than 1 frow with this event (not allowed), delete the spare
+        typedef typename ::boost::mpl::eval_if<
+            typename ::boost::mpl::bool_< number_frows >= 2 >::type,
+            erase_first_rows<typename Entry::second,number_frows-1>,
+            ::boost::mpl::identity<typename Entry::second>
+        >::type filtered_stt;
+
+        typedef chain_row<filtered_stt,Event,
             typename Entry::first > type;
     }; 
+    // helper for lazy evaluation in eval_if of change_frow_event
+    template <class Transition,class NewEvent>
+    struct replace_event
+    {
+        typedef typename Transition::template replace_event<NewEvent>::type type;
+    };
+    // changes the event type for a frow to the event we are dispatching
+    // this helps ensure that an event does not get processed more than once because of frows and base events.
+    template <class FrowTransition>
+    struct change_frow_event
+    {
+        typedef typename ::boost::mpl::eval_if<
+            typename has_is_frow<FrowTransition>::type,
+            replace_event<FrowTransition,Event>,
+            boost::mpl::identity<FrowTransition>
+        >::type type;
+    };
     // Compute the maximum state value in the sm so we know how big
     // to make the table
     typedef typename generate_state_set<Stt>::type state_list;
@@ -233,13 +277,13 @@ struct dispatch_table
                                                    ::boost::mpl::push_back< 
                                                         ::boost::mpl::at< ::boost::mpl::placeholders::_1,
                                                         transition_source_type< ::boost::mpl::placeholders::_2> >,
-                                                        ::boost::mpl::placeholders::_2 > 
+                                                        change_frow_event< ::boost::mpl::placeholders::_2 > > 
                                                    > >,
                             // first row on this source state, make a vector with 1 element
                             ::boost::mpl::insert< 
                                         ::boost::mpl::placeholders::_1,
                                         ::boost::mpl::pair<transition_source_type< ::boost::mpl::placeholders::_2>,
-                                        make_vector< ::boost::mpl::placeholders::_2> > >
+                                        make_vector< change_frow_event< ::boost::mpl::placeholders::_2> > > >
                                >
                        >::type map_of_row_seq;
         // and then build chaining rows for all source states having more than 1 row
