@@ -40,7 +40,7 @@ test-suite unordered
         [ run erase_tests.cpp ]
         [ run erase_equiv_tests.cpp ]
         [ run find_tests.cpp ]
-        # [ run at_tests.cpp ]
+        [ run at_tests.cpp ]
         [ run bucket_tests.cpp ]
         [ run load_factor_tests.cpp ]
         [ run rehash_tests.cpp ]
