@@ -93,6 +93,7 @@ namespace boost { namespace unordered { namespace detail {
     struct choice2 : choice3 { typedef char (&type)[2]; };
     struct choice1 : choice2 { typedef char (&type)[1]; };
     choice1 choose();
+    template <typename T> struct wrap { typedef void* type; };
 
     #define BOOST_DEFAULT_TYPE_TMPLT(tname)                                 \
         template <typename Tp, typename Default>                            \
@@ -100,7 +101,9 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
             template <typename X>                                           \
             static choice1::type test(choice1,                              \
-                BOOST_DEDUCED_TYPENAME X::tname* = 0);                      \
+                BOOST_DEDUCED_TYPENAME wrap<                                \
+                    BOOST_DEDUCED_TYPENAME X::tname                         \
+                >::type = 0);                                               \
                                                                             \
             template <typename X>                                           \
             static choice2::type test(choice2, void* = 0);                  \
