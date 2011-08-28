@@ -514,6 +514,85 @@ UNORDERED_AUTO_TEST(insert_initializer_list_multimap)
 
 #endif
 
+struct overloaded_constructor
+{
+    overloaded_constructor(int x1 = 1, int x2 = 2, int x3 = 3, int x4 = 4)
+      : x1(x1), x2(x2), x3(x3), x4(x4) {}
+
+    int x1, x2, x3, x4;
+    
+    bool operator==(overloaded_constructor const& rhs) const
+    {
+        return x1 == rhs.x1 && x2 == rhs.x2 && x3 == rhs.x3 && x4 == rhs.x4;
+    }
+    
+    friend std::size_t hash_value(overloaded_constructor const& x)
+    {
+        std::size_t hash = 0;
+        boost::hash_combine(hash, x.x1);
+        boost::hash_combine(hash, x.x2);
+        boost::hash_combine(hash, x.x3);
+        boost::hash_combine(hash, x.x4);
+        return hash;
+    }
+};
+
+// This will actually be deprecated pretty soon.
+
+UNORDERED_AUTO_TEST(map_emplace_test)
+{
+    boost::unordered_map<int, overloaded_constructor> x;
+
+    x.emplace();
+    BOOST_TEST(x.find(0) != x.end() &&
+        x.find(0)->second == overloaded_constructor());
+
+    x.emplace(1);
+    BOOST_TEST(x.find(1) != x.end() &&
+        x.find(1)->second == overloaded_constructor());
+
+    x.emplace(2, 3);
+    BOOST_TEST(x.find(2) != x.end() &&
+        x.find(2)->second == overloaded_constructor(3));
+
+    x.emplace(4, 5, 6);
+    BOOST_TEST(x.find(4) != x.end() &&
+        x.find(4)->second == overloaded_constructor(5, 6));
+
+    x.emplace(7, 8, 9, 10);
+    BOOST_TEST(x.find(7) != x.end() &&
+        x.find(7)->second == overloaded_constructor(8, 9, 10));
+}
+
+UNORDERED_AUTO_TEST(set_emplace_test)
+{
+    boost::unordered_set<overloaded_constructor> x;
+    overloaded_constructor check;
+
+    x.emplace();
+    BOOST_TEST(x.find(check) != x.end() && *x.find(check) == check);
+
+    x.clear();
+    x.emplace(1);
+    check = overloaded_constructor(1);
+    BOOST_TEST(x.find(check) != x.end() && *x.find(check) == check);
+
+    x.clear();
+    x.emplace(2, 3);
+    check = overloaded_constructor(2, 3);
+    BOOST_TEST(x.find(check) != x.end() && *x.find(check) == check);
+
+    x.clear();
+    x.emplace(4, 5, 6);
+    check = overloaded_constructor(4, 5, 6);
+    BOOST_TEST(x.find(check) != x.end() && *x.find(check) == check);
+
+    x.clear();
+    x.emplace(7, 8, 9, 10);
+    check = overloaded_constructor(7, 8, 9, 10);
+    BOOST_TEST(x.find(check) != x.end() && *x.find(check) == check);
+}
+
 }
 
 RUN_TESTS()

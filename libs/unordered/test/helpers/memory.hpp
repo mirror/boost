@@ -194,8 +194,13 @@ namespace test
         enum { value = false };
     };
 
-    template <typename Alloc>
-    int selected_count(Alloc const&)
+    struct convert_from_anything
+    {
+        template <typename T>
+        convert_from_anything(T const&) {}
+    };
+
+    int selected_count(convert_from_anything)
     {
         return 0;
     }

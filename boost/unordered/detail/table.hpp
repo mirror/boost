@@ -167,7 +167,9 @@ namespace boost { namespace unordered { namespace detail {
             //
             // Or from rehash post-condition:
             // count > size / mlf_
-            return next_prime(double_to_size_t(floor(size / (double) mlf_)) + 1);
+            return next_prime(double_to_size_t(floor(
+                static_cast<double>(size) /
+                static_cast<double>(mlf_))) + 1);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -451,7 +453,9 @@ namespace boost { namespace unordered { namespace detail {
         else {
             // no throw:
             min_buckets = next_prime((std::max)(min_buckets,
-                    double_to_size_t(floor(this->size_ / (double) mlf_)) + 1));
+                double_to_size_t(floor(
+                    static_cast<double>(this->size_) /
+                    static_cast<double>(mlf_))) + 1));
             if(min_buckets != this->bucket_count_) {
                 this->rehash_impl(min_buckets);
                 this->max_load_ = calculate_max_load();
