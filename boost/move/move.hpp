@@ -15,589 +15,607 @@
 #ifndef BOOST_MOVE_MOVE_HPP
 #define BOOST_MOVE_MOVE_HPP
 
+/// @cond
+
 #include <boost/config.hpp>
+
+#ifdef BOOST_MSVC
+   #ifndef _CRT_SECURE_NO_DEPRECATE
+   #define  BOOST_INTERPROCESS_CRT_SECURE_NO_DEPRECATE
+   #define _CRT_SECURE_NO_DEPRECATE
+   #define _SCL_SECURE_NO_WARNINGS
+   #endif
+   #pragma warning (push)
+   #pragma warning(disable:4996)
+#endif
+
 #include <algorithm> //copy, copy_backward
 #include <memory>    //uninitialized_copy
 #include <iterator>  //std::iterator
 
 #define BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
 
-#ifndef BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
-#include <boost/utility/enable_if.hpp>
-#include <boost/utility/addressof.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
-#include <boost/mpl/identity.hpp>
-#include <boost/type_traits/is_class.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/has_trivial_destructor.hpp>
-#include <boost/type_traits/integral_constant.hpp>
-#endif   //#ifdef BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
-/// @cond
+//If boost dependencies are avoided include all machinery
+#if !defined(BOOST_MOVE_AVOID_BOOST_DEPENDENCIES)
+   #include <boost/utility/enable_if.hpp>
+   #include <boost/utility/addressof.hpp>
+   #include <boost/mpl/if.hpp>
+   #include <boost/mpl/bool.hpp>
+   #include <boost/mpl/and.hpp>
+   #include <boost/mpl/not.hpp>
+   #include <boost/mpl/identity.hpp>
+   #include <boost/type_traits/is_class.hpp>
+   #include <boost/type_traits/is_base_of.hpp>
+   #include <boost/type_traits/is_convertible.hpp>
+   #include <boost/type_traits/has_trivial_destructor.hpp>
+   #include <boost/type_traits/integral_constant.hpp>
 
-#ifdef BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
-#define BOOST_MOVE_MPL_NS    ::boost::move_detail
-#define BOOST_MOVE_BOOST_NS  ::boost::move_detail
+   #define BOOST_MOVE_MPL_NS    ::boost::mpl
+   #define BOOST_MOVE_BOOST_NS  ::boost
 #else
-#define BOOST_MOVE_MPL_NS    ::boost::mpl
-#define BOOST_MOVE_BOOST_NS  ::boost
-#endif
+   #define BOOST_MOVE_MPL_NS    ::boost::move_detail
+   #define BOOST_MOVE_BOOST_NS  ::boost::move_detail
+#endif   //#ifdef BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
 
+//Small meta-typetraits to support move
 #ifdef BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
 
-namespace boost {
-namespace move_detail {
+   namespace boost {
+   namespace move_detail {
 
-//if_
-template<bool C, typename T1, typename T2>
-struct if_c
-{
-    typedef T1 type;
-};
-
-template<typename T1, typename T2>
-struct if_c<false,T1,T2>
-{
-    typedef T2 type;
-};
-
-template<typename T1, typename T2, typename T3>
-struct if_
-{
-   typedef typename if_c<0 != T1::value, T2, T3>::type type;
-};
-
-//enable_if_
-template <bool B, class T = void>
-struct enable_if_c
-{
-   typedef T type;
-};
-
-template <class T>
-struct enable_if_c<false, T> {};
-
-template <class Cond, class T = void>
-struct enable_if : public enable_if_c<Cond::value, T> {};
-
-template <class Cond, class T = void>
-struct disable_if : public enable_if_c<!Cond::value, T> {};
-
-//integral_constant
-template<class T, T v>
-struct integral_constant
-{
-   static const T value = v;
-   typedef T value_type;
-   typedef integral_constant<T, v> type;
-};
-
-//identity
-template <class T>
-struct identity
-{
-   typedef T type;
-};
-
-//is_convertible
-template <class T, class U>
-class is_convertible
-{
-   typedef char true_t;
-   class false_t { char dummy[2]; };
-   static true_t dispatch(U);
-   static false_t dispatch(...);
-   static T trigger();
-   public:
-   enum { value = sizeof(dispatch(trigger())) == sizeof(true_t) };
-};
-
-//and_ not_
-template <typename Condition1, typename Condition2, typename Condition3 = integral_constant<bool, true> >
-  struct and_
-    : public integral_constant<bool, Condition1::value && Condition2::value && Condition3::value>
-{};
-
-template <typename Boolean>
-  struct not_
-    : public integral_constant<bool, !Boolean::value>
-{};
-
-//is_lvalue_reference
-template<class T>
-struct is_lvalue_reference
-   : public integral_constant<bool, false>
-{};
-
-template<class T>
-struct is_lvalue_reference<T&>
-   : public integral_constant<bool, true>
-{};
-
-//has_trivial_destructor
-template<class T>
-struct has_trivial_destructor
-   : public integral_constant<bool, false>
-{};
-
-//addressof
-template<class T> struct addr_impl_ref
-{
-   T & v_;
-   inline addr_impl_ref( T & v ): v_( v ) {}
-   inline operator T& () const { return v_; }
-
-   private:
-   addr_impl_ref & operator=(const addr_impl_ref &);
-};
-
-template<class T> struct addressof_impl
-{
-   static inline T * f( T & v, long )
+   //if_
+   template<bool C, typename T1, typename T2>
+   struct if_c
    {
-      return reinterpret_cast<T*>(
-         &const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
+       typedef T1 type;
+   };
+
+   template<typename T1, typename T2>
+   struct if_c<false,T1,T2>
+   {
+       typedef T2 type;
+   };
+
+   template<typename T1, typename T2, typename T3>
+   struct if_
+   {
+      typedef typename if_c<0 != T1::value, T2, T3>::type type;
+   };
+
+   //enable_if_
+   template <bool B, class T = void>
+   struct enable_if_c
+   {
+      typedef T type;
+   };
+
+   template <class T>
+   struct enable_if_c<false, T> {};
+
+   template <class Cond, class T = void>
+   struct enable_if : public enable_if_c<Cond::value, T> {};
+
+   template <class Cond, class T = void>
+   struct disable_if : public enable_if_c<!Cond::value, T> {};
+
+   //integral_constant
+   template<class T, T v>
+   struct integral_constant
+   {
+      static const T value = v;
+      typedef T value_type;
+      typedef integral_constant<T, v> type;
+   };
+
+   //identity
+   template <class T>
+   struct identity
+   {
+      typedef T type;
+   };
+
+   //is_convertible
+   template <class T, class U>
+   class is_convertible
+   {
+      typedef char true_t;
+      class false_t { char dummy[2]; };
+      static true_t dispatch(U);
+      static false_t dispatch(...);
+      static T trigger();
+      public:
+      enum { value = sizeof(dispatch(trigger())) == sizeof(true_t) };
+   };
+
+   //and_ not_
+   template <typename Condition1, typename Condition2, typename Condition3 = integral_constant<bool, true> >
+     struct and_
+       : public integral_constant<bool, Condition1::value && Condition2::value && Condition3::value>
+   {};
+
+   template <typename Boolean>
+     struct not_
+       : public integral_constant<bool, !Boolean::value>
+   {};
+
+   //is_lvalue_reference
+   template<class T>
+   struct is_lvalue_reference
+      : public integral_constant<bool, false>
+   {};
+
+   template<class T>
+   struct is_lvalue_reference<T&>
+      : public integral_constant<bool, true>
+   {};
+
+   //has_trivial_destructor
+   template<class T>
+   struct has_trivial_destructor
+      : public integral_constant<bool, false>
+   {};
+
+   //addressof
+   template<class T> struct addr_impl_ref
+   {
+      T & v_;
+      inline addr_impl_ref( T & v ): v_( v ) {}
+      inline operator T& () const { return v_; }
+
+      private:
+      addr_impl_ref & operator=(const addr_impl_ref &);
+   };
+
+   template<class T> struct addressof_impl
+   {
+      static inline T * f( T & v, long )
+      {
+         return reinterpret_cast<T*>(
+            &const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
+      }
+
+      static inline T * f( T * v, int )
+      {  return v;  }
+   };
+
+   template<class T> T * addressof( T & v )
+   {
+      return ::boost::move_detail::addressof_impl<T>::f
+         ( ::boost::move_detail::addr_impl_ref<T>( v ), 0 );
    }
 
-   static inline T * f( T * v, int )
-   {  return v;  }
-};
+   /*
+   typedef char one;
+   struct two {one _[2];};
 
-template<class T> T * addressof( T & v )
-{
-   return ::boost::move_detail::addressof_impl<T>::f
-      ( ::boost::move_detail::addr_impl_ref<T>( v ), 0 );
-}
+   template <typename B, typename D>
+   struct is_base_of_host
+   {
+     operator B*() const;
+     operator D*();
+   };
 
-/*
-typedef char one;
-struct two {one _[2];};
+   template <typename B, typename D>
+   struct is_base_of
+   {
+      typedef char yes;
+      class no { char dummy[2]; };
 
-template <typename B, typename D>
-struct is_base_of_host
-{
-  operator B*() const;
-  operator D*();
-};
+      template <typename T> 
+      static yes check(D*, T);
+      static no check(B*, int);
 
-template <typename B, typename D>
-struct is_base_of
-{
-   typedef char yes;
-   class no { char dummy[2]; };
+      static const bool value = sizeof(check(is_base_of_host<B,D>(), int())) == sizeof(yes);
+   };
+   */
 
-   template <typename T> 
-   static yes check(D*, T);
-   static no check(B*, int);
-
-   static const bool value = sizeof(check(is_base_of_host<B,D>(), int())) == sizeof(yes);
-};
-*/
-
-}  //namespace move_detail {
-}  //namespace boost {
+   }  //namespace move_detail {
+   }  //namespace boost {
 
 #endif   //BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
 
-/// @endcond
-
+//Compiler workaround detection
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
 
-#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 5)
-
-#ifndef BOOST_CLANG
-#define BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES
-#endif
-
-#else
-
-#if defined(_MSC_VER) && (_MSC_VER == 1600)
-#define BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG
-#endif
-
-#endif
+   #if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 5)
+      //Pre-standard rvalue binding rules
+      #define BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES
+   #elif defined(_MSC_VER) && (_MSC_VER == 1600)
+      //Standard rvalue binding rules but with some bugs
+      #define BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG
+      //Use standard library for MSVC to avoid namespace issues as
+      //some move calls in the STL are not fully qualified.
+      //#define BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE
+   #endif
 
 #endif
 
+/// @endcond
 
 #if defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
-#ifdef __GNUC__ 
-#   define BOOST_MOVE_ATTRIBUTE_MAY_ALIAS __attribute__((__may_alias__)) 
-#else 
-#   define BOOST_MOVE_ATTRIBUTE_MAY_ALIAS 
-#endif
+   //Move emulation rv breaks standard aliasing rules so add workarounds for some compilers
+   #ifdef __GNUC__ 
+      #define BOOST_MOVE_ATTRIBUTE_MAY_ALIAS __attribute__((__may_alias__)) 
+   #else 
+      #define BOOST_MOVE_ATTRIBUTE_MAY_ALIAS
+   #endif
 
-namespace boost {
+   namespace boost {
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                            struct rv
-//
-//////////////////////////////////////////////////////////////////////////////
-template <class T>
-class rv : public T
-{
-   rv();
-   ~rv();
-   rv(rv const&);
-   void operator=(rv const&);
-} BOOST_MOVE_ATTRIBUTE_MAY_ALIAS;
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                            struct rv
+   //
+   //////////////////////////////////////////////////////////////////////////////
+   template <class T>
+   class rv : public T
+   {
+      rv();
+      ~rv();
+      rv(rv const&);
+      void operator=(rv const&);
+   } BOOST_MOVE_ATTRIBUTE_MAY_ALIAS;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                            move_detail::is_rv
-//
-//////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                            move_detail::is_rv
+   //
+   //////////////////////////////////////////////////////////////////////////////
 
-namespace move_detail {
+   namespace move_detail {
 
-template <class T>
-struct is_rv
-   : BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
-{};
+   template <class T>
+   struct is_rv
+      : BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
+   {};
 
-template <class T>
-struct is_rv< rv<T> >
-   : BOOST_MOVE_BOOST_NS::integral_constant<bool, true>
-{};
+   template <class T>
+   struct is_rv< rv<T> >
+      : BOOST_MOVE_BOOST_NS::integral_constant<bool, true>
+   {};
 
-template <class T>
-struct is_rv< const rv<T> >
-   : BOOST_MOVE_BOOST_NS::integral_constant<bool, true>
-{};
+   template <class T>
+   struct is_rv< const rv<T> >
+      : BOOST_MOVE_BOOST_NS::integral_constant<bool, true>
+   {};
 
-}  //namespace move_detail {
+   }  //namespace move_detail {
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                               has_move_emulation_enabled
-//
-//////////////////////////////////////////////////////////////////////////////
-template<class T>
-struct has_move_emulation_enabled
-   : BOOST_MOVE_BOOST_NS::is_convertible< T, ::boost::rv<T>& >
-{};
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                               has_move_emulation_enabled
+   //
+   //////////////////////////////////////////////////////////////////////////////
+   template<class T>
+   struct has_move_emulation_enabled
+      : BOOST_MOVE_BOOST_NS::is_convertible< T, ::boost::rv<T>& >
+   {};
 
-template<class T>
-struct has_move_emulation_enabled<T&>
-   : BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
-{};
+   template<class T>
+   struct has_move_emulation_enabled<T&>
+      : BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
+   {};
 
-template<class T>
-struct has_move_emulation_enabled< ::boost::rv<T> >
-   : BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
-{};
+   template<class T>
+   struct has_move_emulation_enabled< ::boost::rv<T> >
+      : BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
+   {};
 
-template <class T> 
-struct has_nothrow_move
-   : public BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
-{};
+   template <class T> 
+   struct has_nothrow_move
+      : public BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
+   {};
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                            move()
-//
-//////////////////////////////////////////////////////////////////////////////
-template <class T>
-typename BOOST_MOVE_BOOST_NS::disable_if<has_move_emulation_enabled<T>, T&>::type move(T& x)
-{
-   return x;
-}
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                            move()
+   //
+   //////////////////////////////////////////////////////////////////////////////
+   template <class T>
+   typename BOOST_MOVE_BOOST_NS::disable_if<has_move_emulation_enabled<T>, T&>::type move(T& x)
+   {
+      return x;
+   }
 
-template <class T>
-typename BOOST_MOVE_BOOST_NS::enable_if<has_move_emulation_enabled<T>, rv<T>&>::type move(T& x)
-{
-   return *static_cast<rv<T>* >(BOOST_MOVE_BOOST_NS::addressof(x));
-}
+   template <class T>
+   typename BOOST_MOVE_BOOST_NS::enable_if<has_move_emulation_enabled<T>, rv<T>&>::type move(T& x)
+   {
+      return *static_cast<rv<T>* >(BOOST_MOVE_BOOST_NS::addressof(x));
+   }
 
-template <class T>
-typename BOOST_MOVE_BOOST_NS::enable_if<has_move_emulation_enabled<T>, rv<T>&>::type move(rv<T>& x)
-{
-   return x;
-}
+   template <class T>
+   typename BOOST_MOVE_BOOST_NS::enable_if<has_move_emulation_enabled<T>, rv<T>&>::type move(rv<T>& x)
+   {
+      return x;
+   }
 
-#define BOOST_RV_REF(TYPE)\
-   ::boost::rv< TYPE >& \
-//
+   #define BOOST_RV_REF(TYPE)\
+      ::boost::rv< TYPE >& \
+   //
 
-#define BOOST_RV_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
-   ::boost::rv< TYPE<ARG1, ARG2> >& \
-//
+   #define BOOST_RV_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
+      ::boost::rv< TYPE<ARG1, ARG2> >& \
+   //
 
-#define BOOST_RV_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
-   ::boost::rv< TYPE<ARG1, ARG2, ARG3> >& \
-//
+   #define BOOST_RV_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
+      ::boost::rv< TYPE<ARG1, ARG2, ARG3> >& \
+   //
 
 
-#define BOOST_FWD_REF(TYPE)\
-   const TYPE & \
-//
+   #define BOOST_FWD_REF(TYPE)\
+      const TYPE & \
+   //
 
-#define BOOST_CATCH_CONST_RLVALUE(TYPE)\
-   const ::boost::rv< TYPE >& \
-//
+   #define BOOST_CATCH_CONST_RLVALUE(TYPE)\
+      const ::boost::rv< TYPE >& \
+   //
 
-#define BOOST_COPY_ASSIGN_REF(TYPE)\
-   const ::boost::rv< TYPE >& \
-//
+   #define BOOST_COPY_ASSIGN_REF(TYPE)\
+      const ::boost::rv< TYPE >& \
+   //
 
-#define BOOST_MOVE_COPY_ASSIGN_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
-   const ::boost::rv< TYPE<ARG1, ARG2> >& \
-//
+   #define BOOST_MOVE_COPY_ASSIGN_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
+      const ::boost::rv< TYPE<ARG1, ARG2> >& \
+   //
 
-#define BOOST_MOVE_COPY_ASSIGN_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
-   const ::boost::rv< TYPE<ARG1, ARG2, ARG3> >& \
-//
+   #define BOOST_MOVE_COPY_ASSIGN_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
+      const ::boost::rv< TYPE<ARG1, ARG2, ARG3> >& \
+   //
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                            forward()
-//
-//////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                            forward()
+   //
+   //////////////////////////////////////////////////////////////////////////////
 
-template <class T>
-typename BOOST_MOVE_BOOST_NS::enable_if< ::boost::move_detail::is_rv<T>, T &>::type
-   forward(const typename BOOST_MOVE_MPL_NS::identity<T>::type &x)
-{
-   return const_cast<T&>(x);
-}
+   template <class T>
+   typename BOOST_MOVE_BOOST_NS::enable_if< ::boost::move_detail::is_rv<T>, T &>::type
+      forward(const typename BOOST_MOVE_MPL_NS::identity<T>::type &x)
+   {
+      return const_cast<T&>(x);
+   }
 
-template <class T>
-typename BOOST_MOVE_BOOST_NS::disable_if< ::boost::move_detail::is_rv<T>, const T &>::type
-   forward(const typename BOOST_MOVE_MPL_NS::identity<T>::type &x)
-{
-   return x;
-}
+   template <class T>
+   typename BOOST_MOVE_BOOST_NS::disable_if< ::boost::move_detail::is_rv<T>, const T &>::type
+      forward(const typename BOOST_MOVE_MPL_NS::identity<T>::type &x)
+   {
+      return x;
+   }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                         BOOST_MOVABLE_BUT_NOT_COPYABLE
-//
-//////////////////////////////////////////////////////////////////////////////
-#define BOOST_MOVABLE_BUT_NOT_COPYABLE(TYPE)\
-   private:\
-   TYPE(TYPE &);\
-   TYPE& operator=(TYPE &);\
-   public:\
-   operator ::boost::rv<TYPE>&() \
-   {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
-   operator const ::boost::rv<TYPE>&() const \
-   {  return *static_cast<const ::boost::rv<TYPE>* >(this);  }\
-   private:\
-//
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                         BOOST_MOVABLE_BUT_NOT_COPYABLE
+   //
+   //////////////////////////////////////////////////////////////////////////////
+   #define BOOST_MOVABLE_BUT_NOT_COPYABLE(TYPE)\
+      private:\
+      TYPE(TYPE &);\
+      TYPE& operator=(TYPE &);\
+      public:\
+      operator ::boost::rv<TYPE>&() \
+      {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
+      operator const ::boost::rv<TYPE>&() const \
+      {  return *static_cast<const ::boost::rv<TYPE>* >(this);  }\
+      private:\
+   //
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                         BOOST_COPYABLE_AND_MOVABLE
-//
-//////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                         BOOST_COPYABLE_AND_MOVABLE
+   //
+   //////////////////////////////////////////////////////////////////////////////
 
-#define BOOST_COPYABLE_AND_MOVABLE(TYPE)\
-   public:\
-   TYPE& operator=(TYPE &t)\
-   {  this->operator=(static_cast<const ::boost::rv<TYPE> &>(const_cast<const TYPE &>(t))); return *this;}\
-   public:\
-   operator ::boost::rv<TYPE>&() \
-   {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
-   operator const ::boost::rv<TYPE>&() const \
-   {  return *static_cast<const ::boost::rv<TYPE>* >(this);  }\
-   private:\
-//
+   #define BOOST_COPYABLE_AND_MOVABLE(TYPE)\
+      public:\
+      TYPE& operator=(TYPE &t)\
+      {  this->operator=(static_cast<const ::boost::rv<TYPE> &>(const_cast<const TYPE &>(t))); return *this;}\
+      public:\
+      operator ::boost::rv<TYPE>&() \
+      {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
+      operator const ::boost::rv<TYPE>&() const \
+      {  return *static_cast<const ::boost::rv<TYPE>* >(this);  }\
+      private:\
+   //
 
-#define BOOST_COPYABLE_AND_MOVABLE_ALT(TYPE)\
-   public:\
-   operator ::boost::rv<TYPE>&() \
-   {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
-   operator const ::boost::rv<TYPE>&() const \
-   {  return *static_cast<const ::boost::rv<TYPE>* >(this);  }\
-   private:\
-//
+   #define BOOST_COPYABLE_AND_MOVABLE_ALT(TYPE)\
+      public:\
+      operator ::boost::rv<TYPE>&() \
+      {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
+      operator const ::boost::rv<TYPE>&() const \
+      {  return *static_cast<const ::boost::rv<TYPE>* >(this);  }\
+      private:\
+   //
 
-}  //namespace boost
+   }  //namespace boost
 
 #else    //BOOST_NO_RVALUE_REFERENCES
 
-#include <boost/type_traits/remove_reference.hpp>
+   namespace boost{
 
-namespace boost {
+   //! By default this traits returns false. Classes with non-throwing move constructor
+   //! and assignment should specialize this trait to obtain some performance improvements.
+   template <class T> 
+   struct has_nothrow_move
+      : public BOOST_MOVE_MPL_NS::integral_constant<bool, false>
+   {};
 
-//! By default this traits returns false. Classes with non-thworing move construction
-//! and assignment should specialize this trait to obtain some performance improvements.
-template <class T> 
-struct has_nothrow_move
-   : public BOOST_MOVE_MPL_NS::integral_constant<bool, false>
-{};
+   }  //      namespace boost{
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                                  move
-//
-//////////////////////////////////////////////////////////////////////////////
+   #if defined(BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE)
+      #include <utility>
+
+      namespace boost{
+
+      using ::std::move;
+      using ::std::forward;
+      using ::std::move_backward;
+
+      }  //namespace boost
+
+   #else //!BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE
+
+      #include <boost/type_traits/remove_reference.hpp>
+
+      namespace boost {
+
+      //////////////////////////////////////////////////////////////////////////////
+      //
+      //                                  move
+      //
+      //////////////////////////////////////////////////////////////////////////////
+
+      #if defined(BOOST_MOVE_DOXYGEN_INVOKED)
+         //! This function provides a way to convert a reference into a rvalue reference
+         //! in compilers with rvalue references. For other compilers converts T & into
+         //! <i>::boost::rv<T> &</i> so that move emulation is activated.
+         template <class T> inline 
+         rvalue_reference move (input_reference);
+
+      #elif defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
+
+         //Old move approach, lvalues could bind to rvalue references
+         template <class T> inline
+         typename remove_reference<T>::type && move(T&& t)
+         {  return t;   }
+
+      #else //Old move
+
+         template <class T> inline
+         typename remove_reference<T>::type && move(T&& t)
+         { return static_cast<typename remove_reference<T>::type &&>(t); } 
+
+      #endif   //Old move
+
+      //////////////////////////////////////////////////////////////////////////////
+      //
+      //                                  forward
+      //
+      //////////////////////////////////////////////////////////////////////////////
 
 
-#if defined(BOOST_MOVE_DOXYGEN_INVOKED)
-//! This function provides a way to convert a reference into a rvalue reference
-//! in compilers with rvalue references. For other compilers converts T & into
-//! <i>::boost::rv<T> &</i> so that move emulation is activated.
-template <class T> inline 
-rvalue_reference move (input_reference);
+      #if defined(BOOST_MOVE_DOXYGEN_INVOKED)
+         //! This function provides limited form of forwarding that is usually enough for
+         //! in-place construction and avoids the exponential overloading necessary for
+         //! perfect forwarding in C++03.
+         //!
+         //! For compilers with rvalue references this function provides perfect forwarding.
+         //!
+         //! Otherwise:
+         //! * If input_reference binds to const ::boost::rv<T> & then it output_reference is
+         //!   ::boost::rev<T> &
+         //!
+         //! * Else, input_reference is equal to output_reference is equal to input_reference.
+         template <class T> inline output_reference forward(input_reference);
+      #elif defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
 
-#else //BOOST_MOVE_DOXYGEN_INVOKED
+         //Old move approach, lvalues could bind to rvalue references
 
-#if defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
+         template <class T> inline
+         T&& forward (typename BOOST_MOVE_MPL_NS::identity<T>::type&& t)
+         {  return t;   }
 
-//Old move approach, lvalues could bind to rvalue references
-template <class T> inline
-typename remove_reference<T>::type && move(T&& t)
-{  return t;   }
+      #else //Old move
 
-#else //Old move
+         //Implementation #5 from N2951, thanks to Howard Hinnant
 
-template <class T> inline
-typename remove_reference<T>::type && move(T&& t)
-{ return static_cast<typename remove_reference<T>::type &&>(t); } 
+         template <class T, class U>
+         inline T&& forward(U&& t
+             , typename BOOST_MOVE_BOOST_NS::enable_if_c<
+               move_detail::is_lvalue_reference<T>::value ? move_detail::is_lvalue_reference<U>::value : true>::type * = 0/*
+             , typename BOOST_MOVE_BOOST_NS::enable_if_c<
+               move_detail::is_convertible
+                  <typename remove_reference<U>::type*, typename remove_reference<T>::type*>::value>::type * = 0*/)
+         { return static_cast<T&&>(t);   }
 
-#endif   //Old move
+      #endif   //BOOST_MOVE_DOXYGEN_INVOKED
 
-#endif   //BOOST_MOVE_DOXYGEN_INVOKED
+      }  //namespace boost {
 
+   #endif   //#if defined(BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                                  forward
-//
-//////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                         BOOST_ENABLE_MOVE_EMULATION
+   //
+   //////////////////////////////////////////////////////////////////////////////
 
+   ///@cond
 
-#if defined(BOOST_MOVE_DOXYGEN_INVOKED)
-//! This function provides limited form of forwarding that is usually enough for
-//! in-place construction and avoids the exponential overloading necessary for
-//! perfect forwarding in C++03.
-//!
-//! For compilers with rvalue references this function provides perfect forwarding.
-//!
-//! Otherwise:
-//! * If input_reference binds to const ::boost::rv<T> & then it output_reference is
-//!   ::boost::rev<T> &
-//!
-//! * Else, input_reference is equal to output_reference is equal to input_reference.
-template <class T> inline output_reference forward(input_reference);
+   #define BOOST_ENABLE_MOVE_EMULATION(TYPE)\
+      typedef int boost_move_emulation_t;
+   \
+   //
 
-#else
+   /// @endcond
 
-#if defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
+   //! This macro marks a type as movable but not copyable, disabling copy construction
+   //! and assignment. The user will need to write a move constructor/assignment as explained
+   //! in the documentation to fully write a movable but not copyable class.
+   #define BOOST_MOVABLE_BUT_NOT_COPYABLE(TYPE)\
+      public:\
+      typedef int boost_move_emulation_t;\
+      private:\
+      TYPE(const TYPE &);\
+      TYPE& operator=(const TYPE &);\
+   //
 
-//Old move approach, lvalues could bind to rvalue references
+   //! This macro marks a type as copyable and movable.
+   //! The user will need to write a move constructor/assignment and a copy assignment
+   //! as explained in the documentation to fully write a copyable and movable class.
+   #define BOOST_COPYABLE_AND_MOVABLE(TYPE)\
+   //
 
-template <class T> inline
-T&& forward (typename BOOST_MOVE_MPL_NS::identity<T>::type&& t)
-{  return t;   }
+   /// @cond
 
-#else //Old move
+   #define BOOST_RV_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
+      TYPE<ARG1, ARG2> && \
+   //
 
-//Implementation #5 from N2951, thanks to Howard Hinnant
+   #define BOOST_RV_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
+      TYPE<ARG1, ARG2, ARG3> && \
+   //
 
-template <class T, class U>
-inline T&& forward(U&& t
-    , typename BOOST_MOVE_BOOST_NS::enable_if_c<
-      move_detail::is_lvalue_reference<T>::value ? move_detail::is_lvalue_reference<U>::value : true>::type * = 0/*
-    , typename BOOST_MOVE_BOOST_NS::enable_if_c<
-      move_detail::is_convertible
-         <typename remove_reference<U>::type*, typename remove_reference<T>::type*>::value>::type * = 0*/)
-{ return static_cast<T&&>(t);   }
+   /// @endcond
 
-#endif   //Old move
+   //!This macro is used to achieve portable syntax in move
+   //!constructors and assignments for classes marked as
+   //!BOOST_COPYABLE_AND_MOVABLE or BOOST_MOVABLE_BUT_NOT_COPYABLE
+   #define BOOST_RV_REF(TYPE)\
+      TYPE && \
+   //
 
-#endif   //BOOST_MOVE_DOXYGEN_INVOKED
+   //!This macro is used to achieve portable syntax in copy
+   //!assignment for classes marked as BOOST_COPYABLE_AND_MOVABLE.
+   #define BOOST_COPY_ASSIGN_REF(TYPE)\
+      const TYPE & \
+   //
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                         BOOST_ENABLE_MOVE_EMULATION
-//
-//////////////////////////////////////////////////////////////////////////////
+   /// @cond
 
-///@cond
+   #define BOOST_COPY_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
+      const TYPE<ARG1, ARG2> & \
+   //
 
-#define BOOST_ENABLE_MOVE_EMULATION(TYPE)\
-   typedef int boost_move_emulation_t;
-\
-//
+   #define BOOST_COPY_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
+      TYPE<ARG1, ARG2, ARG3>& \
+   //
 
-/// @endcond
+   /// @endcond
 
-//! This macro marks a type as movable but not copyable, disabling copy construction
-//! and assignment. The user will need to write a move constructor/assignment as explained
-//! in the documentation to fully write a movable but not copyable class.
-#define BOOST_MOVABLE_BUT_NOT_COPYABLE(TYPE)\
-   public:\
-   typedef int boost_move_emulation_t;\
-   private:\
-   TYPE(const TYPE &);\
-   TYPE& operator=(const TYPE &);\
-//
+   //! This macro is used to implement portable perfect forwarding
+   //! as explained in the documentation.
+   #define BOOST_FWD_REF(TYPE)\
+      TYPE && \
+   //
 
-//! This macro marks a type as copyable and movable.
-//! The user will need to write a move constructor/assignment and a copy assignment
-//! as explained in the documentation to fully write a copyable and movable class.
-#define BOOST_COPYABLE_AND_MOVABLE(TYPE)\
-//
+   /// @cond
 
-/// @cond
+   #define BOOST_CATCH_CONST_RLVALUE(TYPE)\
+      const TYPE & \
+   //
 
-#define BOOST_RV_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
-   TYPE<ARG1, ARG2> && \
-//
-
-#define BOOST_RV_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
-   TYPE<ARG1, ARG2, ARG3> && \
-//
-
-/// @endcond
-
-//!This macro is used to achieve portable syntax in move
-//!constructors and assignments for classes marked as
-//!BOOST_COPYABLE_AND_MOVABLE or BOOST_MOVABLE_BUT_NOT_COPYABLE
-#define BOOST_RV_REF(TYPE)\
-   TYPE && \
-//
-
-//!This macro is used to achieve portable syntax in copy
-//!assignment for classes marked as BOOST_COPYABLE_AND_MOVABLE.
-#define BOOST_COPY_ASSIGN_REF(TYPE)\
-   const TYPE & \
-//
-
-/// @cond
-
-#define BOOST_COPY_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
-   const TYPE<ARG1, ARG2> & \
-//
-
-#define BOOST_COPY_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
-   TYPE<ARG1, ARG2, ARG3>& \
-//
-
-/// @endcond
-
-//! This macro is used to implement portable perfect forwarding
-//! as explained in the documentation.
-#define BOOST_FWD_REF(TYPE)\
-   TYPE && \
-//
-
-/// @cond
-
-#define BOOST_CATCH_CONST_RLVALUE(TYPE)\
-   const TYPE & \
-//
-
-/// @endcond
-
-}  //namespace boost {
+   /// @endcond
 
 #endif   //BOOST_NO_RVALUE_REFERENCES
 
@@ -866,53 +884,56 @@ inline move_insert_iterator<C> move_inserter(C& x, typename C::iterator it)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+#if !defined(BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE)
 
-//! <b>Effects</b>: Moves elements in the range [first,last) into the range [result,result + (last -
-//!   first)) starting from first and proceeding to last. For each non-negative integer n < (last-first),
-//!   performs *(result + n) = ::boost::move (*(first + n)).
-//!
-//! <b>Effects</b>: result + (last - first).
-//!
-//! <b>Requires</b>: result shall not be in the range [first,last).
-//!
-//! <b>Complexity</b>: Exactly last - first move assignments.
-template <typename I, // I models InputIterator
-          typename O> // O models OutputIterator
-O move(I f, I l, O result)
-{
-   while (f != l) {
-      *result = ::boost::move(*f);
-      ++f; ++result;
+   //! <b>Effects</b>: Moves elements in the range [first,last) into the range [result,result + (last -
+   //!   first)) starting from first and proceeding to last. For each non-negative integer n < (last-first),
+   //!   performs *(result + n) = ::boost::move (*(first + n)).
+   //!
+   //! <b>Effects</b>: result + (last - first).
+   //!
+   //! <b>Requires</b>: result shall not be in the range [first,last).
+   //!
+   //! <b>Complexity</b>: Exactly last - first move assignments.
+   template <typename I, // I models InputIterator
+            typename O> // O models OutputIterator
+   O move(I f, I l, O result)
+   {
+      while (f != l) {
+         *result = ::boost::move(*f);
+         ++f; ++result;
+      }
+      return result;
    }
-   return result;
-}
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                               move_backward
-//
-//////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////
+   //
+   //                               move_backward
+   //
+   //////////////////////////////////////////////////////////////////////////////
 
-//! <b>Effects</b>: Moves elements in the range [first,last) into the range
-//!   [result - (last-first),result) starting from last - 1 and proceeding to
-//!   first. For each positive integer n <= (last - first),
-//!   performs *(result - n) = ::boost::move(*(last - n)).
-//!
-//! <b>Requires</b>: result shall not be in the range [first,last).
-//!
-//! <b>Returns</b>: result - (last - first).
-//!
-//! <b>Complexity</b>: Exactly last - first assignments.
-template <typename I, // I models BidirectionalIterator
-typename O> // O models BidirectionalIterator
-O move_backward(I f, I l, O result)
-{
-   while (f != l) {
-      --l; --result;
-      *result = ::boost::move(*l);
+   //! <b>Effects</b>: Moves elements in the range [first,last) into the range
+   //!   [result - (last-first),result) starting from last - 1 and proceeding to
+   //!   first. For each positive integer n <= (last - first),
+   //!   performs *(result - n) = ::boost::move(*(last - n)).
+   //!
+   //! <b>Requires</b>: result shall not be in the range [first,last).
+   //!
+   //! <b>Returns</b>: result - (last - first).
+   //!
+   //! <b>Complexity</b>: Exactly last - first assignments.
+   template <typename I, // I models BidirectionalIterator
+   typename O> // O models BidirectionalIterator
+   O move_backward(I f, I l, O result)
+   {
+      while (f != l) {
+         --l; --result;
+         *result = ::boost::move(*l);
+      }
+      return result;
    }
-   return result;
-}
+
+#endif   //!defined(BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE)
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -956,6 +977,7 @@ F uninitialized_move(I f, I l, F r,
    return std::uninitialized_copy(f, l, r);
 }
 */
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //                            uninitialized_copy_or_move
@@ -1097,5 +1119,14 @@ struct has_trivial_destructor_after_move
 {};
 
 }  //namespace boost {
+
+#if defined BOOST_MSVC
+   #pragma warning (pop)
+   #ifdef BOOST_INTERPROCESS_CRT_SECURE_NO_DEPRECATE
+   #undef BOOST_INTERPROCESS_CRT_SECURE_NO_DEPRECATE
+   #undef _CRT_SECURE_NO_DEPRECATE
+   #undef _SCL_SECURE_NO_WARNINGS
+   #endif
+#endif
 
 #endif //#ifndef BOOST_MOVE_MOVE_HPP
