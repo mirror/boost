@@ -242,9 +242,8 @@ namespace boost { namespace unordered { namespace detail {
     template <class I>
     inline std::size_t insert_size(I i, I j)
     {
-        BOOST_DEDUCED_TYPENAME ::boost::iterator_traversal<I>::type
-            iterator_traversal_tag;
-        return insert_size(i, j, iterator_traversal_tag);
+        return insert_size(i, j,
+            BOOST_DEDUCED_TYPENAME ::boost::iterator_traversal<I>::type());
     }
     
     template <class I>
