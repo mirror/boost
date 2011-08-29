@@ -13,6 +13,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/tti/gen/has_member_function_gen.hpp>
+#include <boost/tti/gen/namespace_gen.hpp>
 #include <boost/tti/detail/dmem_fun.hpp>
 
 /*
@@ -31,8 +32,15 @@
     
     name  = the name of the inner member.
 
-    returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.<br />
+    generates a metafunction called "trait" where 'trait' is the macro parameter.<br />
     
+              template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T   = the enclosing type in which to look for our 'name'.
@@ -43,7 +51,10 @@
                 
                 TTI_TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
                 
-                returns = 'value' is true if the 'name' exists, with the appropriate type,
+                returns = 'value' is true if the 'name' exists, 
+                          with the appropriate member function type,
+                          as defined by TTI_R, TTI_FS, and TTI_TAG,
+                          within the enclosing TTI_T type, 
                           otherwise 'value' is false.
                           
 */
@@ -61,8 +72,15 @@
 
     name  = the name of the inner member.
 
-    returns = a metafunction called "boost::tti::has_member_function_name" where 'name' is the macro parameter.
+    generates a metafunction called "has_member_function_name" where 'name' is the macro parameter.
     
+              template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG>
+              struct has_member_function_name
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T   = the enclosing type in which to look for our 'name'.
@@ -73,7 +91,10 @@
                 
                 TTI_TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
                 
-                returns = 'value' is true if the 'name' exists, with the appropriate type,
+                returns = 'value' is true if the 'name' exists, 
+                          with the appropriate member function type,
+                          as defined by TTI_R, TTI_FS, and TTI_TAG,
+                          within the enclosing TTI_T type, 
                           otherwise 'value' is false.
                           
 */

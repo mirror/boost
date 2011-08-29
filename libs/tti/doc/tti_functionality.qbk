@@ -35,7 +35,7 @@ templates in whatever scope the user invokes the macro, and come in two forms:
 # In the simplest macro form, which I call the simple form, the 'name' of the inner element 
   is used directly to generate the name 
   of the metafunction as well as serving as the 'name' to introspect. In generating the name of 
-  the metafunction from the macro name, the `BOOST_TTI_` prefix is removed,
+  the metafunction from the macro name, the `BOOST_TTI_` ( or `BOOST_TTI_VM_` ) prefix is removed,
   the rest of the macro name is changed to lower case, and an underscore ( '_' ) followed 
   by the 'name' is appended.  As an example, for the macro `BOOST_TTI_HAS_TYPE(MyType)` the 
   name of the metafunction is `has_type_MyType` and it will look for an inner type called 'MyType'.
@@ -87,7 +87,7 @@ Furthermore because TTI often generates not only a metafunction for the end-user
 supporting detail metafunctions whose identifier, for reasons of programming clarity, is the same 
 as the metafunction with further letters appended to it separated by an underscore, another rule is:
 
-# When using the complex macro form, which fully gives the name of the generated 
+* When using the complex macro form, which fully gives the name of the generated 
 macro metafunction, that name should not end with an underscore.
 
 Following these two simple rules will avoid names with double underscores being 
@@ -105,7 +105,7 @@ As one example of this let's consider two different types called
 'InnerType' exists. For both these types we need only generate a single macro metafunction in 
 the current scope by using:
 
-BOOST_TTI_HAS_TYPE(InnerType)
+ BOOST_TTI_HAS_TYPE(InnerType)
 
 We now have a metafunction, which is a C++ class template, in the current scope whose C++ identifier
 is 'has_type_InnerType'. We can use this same metafunction to introspect the existence of the nested type
@@ -123,7 +123,7 @@ determine if it has either of two overloaded member functions with the same name
 but with the different function signatures of 'int (int)' and 'double (long)'. For both these 
 member functions we need only generate a single macro metafunction in the current scope by using:
 
-BOOST_TTI_HAS_MEMBER_FUNCTION(AMemberFunction)
+ BOOST_TTI_HAS_MEMBER_FUNCTION(AMemberFunction)
 
 We now have a metafunction, which is a C++ class template, in the current scope whose C++ identifier
 is 'has_member_function_AMemberFunction'. We can use this same metafunction to introspect the 

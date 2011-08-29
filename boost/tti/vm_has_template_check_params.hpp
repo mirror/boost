@@ -33,14 +33,21 @@
     
     ...   = variadic macro data which has the class template parameters.
 
-    returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.
+    generates a metafunction called "trait" where 'trait' is the macro parameter.
     
+              template<class TTI_T>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' class template, with the signature
-                          as defined by the '...' variadic macro data, exists within the enclosing type,
+                          as defined by the '...' variadic macro data, exists within the enclosing TTI_T type,
                           otherwise 'value' is false.
     
 */
@@ -62,14 +69,21 @@
     
     ...   = variadic macro data which has the class template parameters.
 
-    returns = a metafunction called "boost::tti::has_template_check_params_name" where 'name' is the macro parameter.
+    generates a metafunction called "has_template_check_params_name" where 'name' is the macro parameter.
     
+              template<class TTI_T>
+              struct has_template_check_params_name
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' class template, with the signature
-                          as defined by the '...' variadic macro data, exists within the enclosing type,
+                          as defined by the '...' variadic macro data, exists within the enclosing TTI_T type,
                           otherwise 'value' is false.
     
 */

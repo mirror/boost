@@ -28,8 +28,15 @@
     
     name  = the name of the inner template.
 
-    returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.
+    generates a metafunction called "trait" where 'trait' is the macro parameter.
     
+              template<class TTI_T>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T = the enclosing type in which to look for our 'name'.
@@ -54,8 +61,15 @@
 
     name  = the name of the inner template.
 
-    returns = a metafunction called "boost::tti::has_template_name" where 'name' is the macro parameter.
+    generates a metafunction called "has_template_name" where 'name' is the macro parameter.
     
+              template<class TTI_T>
+              struct has_template_name
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T = the enclosing type in which to look for our 'name'.

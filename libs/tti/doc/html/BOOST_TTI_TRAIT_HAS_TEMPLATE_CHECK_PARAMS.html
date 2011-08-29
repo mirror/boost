@@ -26,14 +26,15 @@
 
 </span>BOOST_TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait, name, tpSeq)</pre></div>
 <div class="refsect1">
-<a name="id967664"></a><h2>Description</h2>
+<a name="id936371"></a><h2>Description</h2>
 <p>trait = the name of the metafunction within the tti namespace.</p>
 <p>name = the name of the inner class template.</p>
 <p>tpSeq = a Boost PP sequence which has the class template parameters. Each part of the template parameters separated by a comma ( , ) is put in a separate sequence element.</p>
-<p>returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.</p>
+<p>generates a metafunction called "trait" where 'trait' is the macro parameter.</p>
+<p>template&lt;class TTI_T&gt; struct trait { static const value = unspecified; typedef mpl::bool_&lt;true-or-false&gt; type; };</p>
 <p>The metafunction types and return:</p>
 <p>TTI_T = the enclosing type in which to look for our 'name'.</p>
-<p>returns = 'value' is true if the 'name' class template with the signature as defined by the 'tpSeq' exists within the enclosing type, otherwise 'value' is false. </p>
+<p>returns = 'value' is true if the 'name' class template with the signature as defined by the 'tpSeq' exists within the enclosing TTI_T type, otherwise 'value' is false. </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

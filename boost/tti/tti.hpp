@@ -17,5 +17,13 @@
 #include "has_template_check_params.hpp"
 #include "has_type.hpp"
 #include "member_type.hpp"
+#include "mf/mf_has_member_data.hpp"
+#include "mf/mf_has_member_function.hpp"
+#include "mf/mf_has_static_member_data.hpp"
+#include "mf/mf_has_static_member_function.hpp"
+#include "mf/mf_has_template.hpp"
+#include "mf/mf_has_template_check_params.hpp"
+#include "mf/mf_has_type.hpp"
+#include "mf/mf_member_type.hpp"
 
 #endif // TT_INTROSPECTION_HPP

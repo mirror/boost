@@ -26,13 +26,14 @@
 
 </span>BOOST_TTI_MEMBER_TYPE(name)</pre></div>
 <div class="refsect1">
-<a name="id967958"></a><h2>Description</h2>
+<a name="id937556"></a><h2>Description</h2>
 <p>name = the name of the inner type.</p>
-<p>returns = a metafunction called "boost::tti::member_type_name" where 'name' is the macro parameter.</p>
+<p>generates a metafunction called "member_type_name" where 'name' is the macro parameter.</p>
+<p>template&lt;class TTI_T&gt; struct member_type_name { typedef unspecified type; };</p>
 <p>The metafunction types and return:</p>
 <p>TTI_T = the enclosing type.</p>
-<p>returns = 'type' is the inner type of 'name' if the inner type exists within the enclosing type, else 'type' is an unspecified type.</p>
-<p>The purpose of this macro is to encapsulate the 'name' type as the typedef 'type' of a metafunction, but only if it exists within the enclosing type. This allows for a lazy evaluation of inner type existence which can be used by other metafunctions in this library. </p>
+<p>returns = 'type' is the inner type of 'name' if the inner type exists within the enclosing type, else 'type' is an unspecified marker type.</p>
+<p>The purpose of this macro is to encapsulate the 'name' type as the typedef 'type' of a metafunction, but only if it exists within the enclosing type. This allows for an evaluation of inner type existence, without genrating a compiler error, which can be used by other metafunctions in this library. </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

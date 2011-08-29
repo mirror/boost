@@ -30,8 +30,15 @@
     
     name  = the name of the inner member.
 
-    returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.
+    generates a metafunction called "trait" where 'trait' is the macro parameter.
     
+              template<class TTI_T,class TTI_Type>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T    = the enclosing type.
@@ -40,8 +47,9 @@
                            in the form of a composite function type - 'return_type (parameter_types...)',
                            in which to look for our 'name'.
                        
-                returns = 'value' is true if the 'name' exists within the enclosing type,
-                          with the appropriate type,
+                returns = 'value' is true if the 'name' exists 
+                          with the TTI_Type static member function type,
+                          within the enclosing TTI_T type,
                           otherwise 'value' is false.
                           
 */
@@ -59,8 +67,15 @@
 
     name  = the name of the inner member.
 
-    returns = a metafunction called "boost::tti::has_comp_static_member_function_name" where 'name' is the macro parameter.<br />
+    generates a metafunction called "has_static_member_function_with_sig_name" where 'name' is the macro parameter.
     
+              template<class TTI_T,class TTI_Type>
+              struct has_static_member_function_with_sig_name
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T    = the enclosing type.
@@ -69,8 +84,9 @@
                            in the form of a composite function type - 'return_type (parameter_types...)',
                            in which to look for our 'name'.
                        
-                returns = 'value' is true if the 'name' exists within the enclosing type,
-                          with the appropriate type,
+                returns = 'value' is true if the 'name' exists 
+                          with the TTI_Type static member function type,
+                          within the enclosing TTI_T type,
                           otherwise 'value' is false.
                           
 */

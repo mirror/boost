@@ -12,7 +12,6 @@
 #if BOOST_PP_VARIADICS
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/gen/namespace_gen.hpp>
 
 /*
 

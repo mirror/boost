@@ -8,7 +8,6 @@
 #define TTI_COMP_STATIC_MEM_FUN_GEN_HPP
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/gen/namespace_gen.hpp>
 
 /*
 

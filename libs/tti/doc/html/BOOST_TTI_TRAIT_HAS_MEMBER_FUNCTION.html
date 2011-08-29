@@ -26,17 +26,18 @@
 
 </span>BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(trait, name)</pre></div>
 <div class="refsect1">
-<a name="id965752"></a><h2>Description</h2>
+<a name="id935606"></a><h2>Description</h2>
 <p>trait = the name of the metafunction within the tti namespace.</p>
 <p>name = the name of the inner member.</p>
-<p>returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.<br>
+<p>generates a metafunction called "trait" where 'trait' is the macro parameter.<br>
 </p>
+<p>template&lt;class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG&gt; struct trait { static const value = unspecified; typedef mpl::bool_&lt;true-or-false&gt; type; };</p>
 <p>The metafunction types and return:</p>
 <p>TTI_T = the enclosing type in which to look for our 'name'.</p>
 <p>TTI_R = the return type of the member function.</p>
 <p>TTI_FS = an optional parameter which are the parameters of the member function as a boost::mpl forward sequence.</p>
 <p>TTI_TAG = an optional parameter which is a boost::function_types tag to apply to the member function.</p>
-<p>returns = 'value' is true if the 'name' exists, with the appropriate type, otherwise 'value' is false. </p>
+<p>returns = 'value' is true if the 'name' exists, with the appropriate member function type, as defined by TTI_R, TTI_FS, and TTI_TAG, within the enclosing TTI_T type, otherwise 'value' is false. </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

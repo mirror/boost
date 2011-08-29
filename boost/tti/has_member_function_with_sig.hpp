@@ -30,15 +30,23 @@
     
     name  = the name of the inner member.
 
-    returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.<br />
+    generates a metafunction called "trait" where 'trait' is the macro parameter.
     
+              template<class TTI_T>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T = the member function type, 
                         in the form of a member function pointer - 'return_type (Class::*)(parameter_types...)', 
                         in which to look for our 'name'.
                     
-                returns = 'value' is true if the 'name' exists, with the appropriate type,
+                returns = 'value' is true if the 'name' exists, 
+                          with the appropriate member function type as defined by TTI_T,
                           otherwise 'value' is false.
                           
 */
@@ -56,15 +64,23 @@
 
     name  = the name of the inner member.
 
-    returns = a metafunction called "boost::tti::has_comp_member_function_name" where 'name' is the macro parameter.
+    generates a metafunction called "has_member_function_with_sig_name" where 'name' is the macro parameter.
     
+              template<class TTI_T>
+              struct has_member_function_with_sig_name
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
                 TTI_T = the member function type, 
                         in the form of a member function pointer - 'return_type (Class::*)(parameter_types...)', 
                         in which to look for our 'name'.
                     
-                returns = 'value' is true if the 'name' exists, with the appropriate type,
+                returns = 'value' is true if the 'name' exists, 
+                          with the appropriate member function type as defined by TTI_T,
                           otherwise 'value' is false.
                           
 */

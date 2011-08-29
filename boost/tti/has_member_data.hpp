@@ -11,6 +11,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/tti/gen/has_member_data_gen.hpp>
+#include <boost/tti/gen/namespace_gen.hpp>
 #include <boost/tti/detail/dmem_data.hpp>
 
 /*
@@ -27,25 +28,32 @@
 
     trait = the name of the metafunction within the tti namespace.
     
-    name  = the name of the inner member.
+    name  = the name of the inner member to introspect.
 
-    returns = a metafunction called "boost::tti::trait" where 'trait' is the macro parameter.<br />
+    generates a metafunction called "trait" where 'trait' is the macro parameter.
     
+              template<class TTI_T,class TTI_Type>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'.
+                TTI_T    = the enclosing type in which to look for our 'name'.
                 
-                TTI_R   = the type of the member data.
+                TTI_Type = the type of the member data.
                 
-                returns = 'value' is true if the 'name' exists, with the appropriate type,
-                          otherwise 'value' is false.
+                returns  = 'value' is true if the 'name' exists, with the TTI_Type data type,
+                           within the enclosing TTI_T type, otherwise 'value' is false.
                           
 */
 #define BOOST_TTI_TRAIT_HAS_MEMBER_DATA(trait,name) \
   TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
-  template<class TTI_T,class TTI_R> \
+  template<class TTI_T,class TTI_Type> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<typename BOOST_TTI_NAMESPACE::detail::ptmd<TTI_T,TTI_R>::type,typename boost::remove_const<TTI_T>::type> \
+    BOOST_PP_CAT(trait,_detail)<typename BOOST_TTI_NAMESPACE::detail::ptmd<TTI_T,TTI_Type>::type,typename boost::remove_const<TTI_T>::type> \
     { \
     }; \
 /**/
@@ -55,16 +63,23 @@
 
     name  = the name of the inner member.
 
-    returns = a metafunction called "boost::tti::has_member_data_name" where 'name' is the macro parameter.
+    generates a metafunction called "has_member_data_name" where 'name' is the macro parameter.
     
+              template<class TTI_T,class TTI_Type>
+              struct has_member_data_name
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'.
+                TTI_T    = the enclosing type in which to look for our 'name'.
                 
-                TTI_R   = the type of the member data.
+                TTI_Type = the type of the member data.
                 
-                returns = 'value' is true if the 'name' exists, with the appropriate type,
-                          otherwise 'value' is false.
+                returns  = 'value' is true if the 'name' exists, with the TTI_Type data type,
+                           within the enclosing TTI_T type, otherwise 'value' is false.
                           
 */
 #define BOOST_TTI_HAS_MEMBER_DATA(name) \

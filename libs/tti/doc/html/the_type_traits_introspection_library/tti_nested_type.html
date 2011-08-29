@@ -295,15 +295,14 @@
       But this duplicates much of our code when we generated the 'MyFindType' typedef,
       so it would be much better if we could simply pass our 'MyFindType' type to
       some other metafunction which would tell us directly if 'MyFindType' actually
-      exists. And so we can ! The TTI library has a named metafunction in the 'boost::tti'
-      namespace called 'valid_member_type' which takes a type and determines if it
-      'actually exists', returning the compile-time boolean constant called 'value'
-      of 'true' if it does or 'false' if it does not. The meaning of 'actually exists',
-      as far as 'boost::tti::valid_member_type' is concerned, is that the type does
-      not equal the unspecified type which BOOST_TTI_MEMBER_TYPE returns when its
-      nested type does not exist, and therefore 'boost::tti::valid_member_type' is
-      meant to be used with the return 'type' of BOOST_TTI_MEMBER_TYPE, which is
-      what 'MyFindType' represents.
+      exists. And so we can ! The TTI library has a named metafunction called 'boost::tti::valid_member_type'
+      which takes a type and determines if it 'actually exists', returning the compile-time
+      boolean constant called 'value' of 'true' if it does or 'false' if it does
+      not. The meaning of 'actually exists', as far as 'boost::tti::valid_member_type'
+      is concerned, is that the type does not equal the unspecified type which BOOST_TTI_MEMBER_TYPE
+      returns when its nested type does not exist, and therefore 'boost::tti::valid_member_type'
+      is meant to be used with the return 'type' of BOOST_TTI_MEMBER_TYPE, which
+      is what 'MyFindType' represents.
     </p>
 <p>
       The general explanation of 'boost::tti::valid_member_type' is given as:
@@ -359,7 +358,8 @@
               </p>
               <p>
                 returns = true if the type exists, false if it does not. 'Existence'
-                is determined by whether the type does not equal an unspecified type.
+                is determined by whether the type does not equal the unspecified
+                type of BOOST_TTI_MEMBER_TYPE when the type does not exist.
               </p>
             </td>
 <td>

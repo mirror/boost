@@ -26,13 +26,14 @@
 
 </span>BOOST_TTI_HAS_TYPE(name)</pre></div>
 <div class="refsect1">
-<a name="id967834"></a><h2>Description</h2>
+<a name="id937279"></a><h2>Description</h2>
 <p>name = the name of the inner type.</p>
-<p>returns = a metafunction called "boost::tti::has_type_name" where 'name' is the macro parameter.</p>
+<p>generates a metafunction called "has_type_name" where 'name' is the macro parameter.</p>
+<p>template&lt;class TTI_T,class TTI_U&gt; struct has_type_name { static const value = unspecified; typedef mpl::bool_&lt;true-or-false&gt; type; };</p>
 <p>The metafunction types and return:</p>
 <p>TTI_T = the enclosing type in which to look for our 'name'.</p>
 <p>TTI_U = the type of the inner type named 'name' as an optional parameter.</p>
-<p>returns = 'value' is true if the 'name' type exists within the enclosing type and, if type U is specified, the 'name' type is the same as the type U, otherwise 'value' is false. </p>
+<p>returns = 'value' is true if the 'name' type exists within the enclosing type TTI_T and, if type TTI_U is specified, the 'name' type is the same as the type TTI_U, otherwise 'value' is false. </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
