@@ -124,7 +124,9 @@ namespace quickbook
     {
         std::string result;
 
-        id_data& data = ids.emplace(value, value, category).first->second;
+        id_data& data = ids.emplace(boost::unordered::piecewise_construct,
+            boost::make_tuple(value),
+            boost::make_tuple(value, category)).first->second;
 
         // Doesn't check if explicit ids collide, could probably be a warning.
         if (category == explicit_id)
@@ -208,8 +210,10 @@ namespace quickbook
         // Not caring too much about 'category' and 'used', would want to if
         // still creating ids.
         std::pair<boost::unordered_map<std::string, id_data>::iterator, bool>
-            insert = ids.emplace(placeholder->final_id, placeholder->final_id,
-                placeholder->category, true);
+            insert = ids.emplace(boost::unordered::piecewise_construct,
+                boost::make_tuple(placeholder->final_id),
+                boost::make_tuple(placeholder->final_id,
+                    placeholder->category, true));
         
         if (insert.first->second.generation_data)
         {
@@ -256,8 +260,10 @@ namespace quickbook
             placeholder->data->generation_data->parent + name;
 
         std::pair<boost::unordered_map<std::string, id_data>::iterator, bool>
-            insert = ids.emplace(placeholder->final_id, placeholder->final_id,
-                placeholder->category, true);
+            insert = ids.emplace(boost::unordered::piecewise_construct,
+                boost::make_tuple(placeholder->final_id),
+                boost::make_tuple(placeholder->final_id,
+                    placeholder->category, true));
 
         ++placeholder->data->generation_data->count;
 
