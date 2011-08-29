@@ -112,7 +112,7 @@ load factor is /required/ to be less than the maximum is following a call to
 below the max load factor, and set the maximum load factor to be the same as
 or close to the hint - unless your hint is unreasonably small or large.
 
-[table Methods for Controlling Bucket Size
+[table:bucket_size Methods for Controlling Bucket Size
     [[Method] [Description]]
 
     [

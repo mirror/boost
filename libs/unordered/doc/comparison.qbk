@@ -4,7 +4,7 @@
 
 [section:comparison Comparison with Associative Containers]
 
-[table Interface differences.
+[table:interface_differences Interface differences.
     [[Associative Containers] [Unordered Associative Containers]]
 
     [
@@ -88,7 +88,7 @@
     ]
 ]
 
-[table Complexity Guarantees
+[table:complexity_guarantees Complexity Guarantees
     [[Operation] [Associative Containers] [Unordered Associative Containers]]
     [
         [Construction of empty container]

@@ -69,7 +69,7 @@ See the [link hash.custom Boost.Hash documentation] for more detail on how to
 do this.  Remember that it relies on extensions to the draft standard - so it
 won't work on other implementations of the unordered associative containers.
 
-[table Methods for accessing the hash and equality functions.
+[table:access_methods Methods for accessing the hash and equality functions.
     [[Method] [Description]]
 
     [
