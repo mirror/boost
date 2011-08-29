@@ -1,4 +1,4 @@
-
+#include <iostream>
 // Copyright 2006-2009 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -327,6 +327,13 @@ namespace unnecessary_copy_tests
         x.emplace();
         COPY_COUNT(2); MOVE_COUNT(0);
 
+        reset();
+        x.emplace(boost::unordered::piecewise_construct,
+                boost::make_tuple(),
+                boost::make_tuple());
+        COPY_COUNT(2); MOVE_COUNT(0);
+
+
         //
         // 1 argument
         //
@@ -345,19 +352,23 @@ namespace unnecessary_copy_tests
     (defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ > 2) || \
     (defined(BOOST_MSVC) && BOOST_MSVC >= 1600 ) || \
     (!defined(__GNUC__) && !defined(BOOST_MSVC))
+
         count_copies part;
         reset();
         std::pair<count_copies const&, count_copies const&> a_ref(part, part);
         x.emplace(a_ref);
         COPY_COUNT(2); MOVE_COUNT(0);
+
 #endif
 
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+
         // No move should take place.
         // (since a is already in the container)
         reset();
         x.emplace(std::move(a));
         COPY_COUNT(0); MOVE_COUNT(0);
+
 #endif
 
         //
@@ -382,6 +393,41 @@ namespace unnecessary_copy_tests
         reset();
         x.emplace(count_copies(b.first.tag_), count_copies(b.second.tag_));
         COPY_COUNT(2); MOVE_COUNT(0);        
+
+        reset();
+        x.emplace(boost::unordered::piecewise_construct,
+                boost::make_tuple(boost::ref(b.first)),
+                boost::make_tuple(boost::ref(b.second)));
+        COPY_COUNT(0); MOVE_COUNT(0);
+        
+#if !defined(BOOST_NO_0X_HDR_TUPLE) || defined(BOOST_HAS_TR1_TUPLE)
+
+        reset();
+        x.emplace(boost::unordered::piecewise_construct,
+                std::make_tuple(std::ref(b.first)),
+                std::make_tuple(std::ref(b.second)));
+        COPY_COUNT(0); MOVE_COUNT(0);
+
+        // first is const so it is copied.
+        // second is not const so it is moved.
+        std::pair<count_copies const, count_copies> move_source;
+        reset();
+        x.emplace(boost::unordered::piecewise_construct,
+                std::make_tuple(std::move(move_source.first)),
+                std::make_tuple(std::move(move_source.second)));
+        COPY_COUNT(1); MOVE_COUNT(1);
+
+#if defined(__GNUC__) && __GNUC__ > 4 || \
+    defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ >= 6
+        reset();
+        x.emplace(boost::unordered::piecewise_construct,
+                std::forward_as_tuple(b.first),
+                std::forward_as_tuple(b.second));
+        COPY_COUNT(0); MOVE_COUNT(0);
+#endif
+
+#endif
+
     }
 }
 

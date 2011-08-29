@@ -515,7 +515,39 @@ namespace boost { namespace unordered { namespace detail {
     };
 
     ////////////////////////////////////////////////////////////////////////////
-    // Node Constructors
+    //
+    // Value Construction
+
+#define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)                 \
+    template<typename T>                                                    \
+    void construct_from_tuple(T* ptr, namespace_::tuple<>)                  \
+    {                                                                       \
+        new ((void*) ptr) T();                                              \
+    }                                                                       \
+                                                                            \
+    BOOST_PP_REPEAT_FROM_TO(1, n,                                           \
+        BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL, namespace_)
+
+#define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, namespace_)         \
+    template<typename T BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, typename Arg)>\
+    void construct_from_tuple(T* ptr,                                       \
+            namespace_::tuple<BOOST_PP_ENUM_PARAMS_Z(z, n, Arg)> const& x)  \
+    {                                                                       \
+        new ((void*) ptr) T(                                                \
+            BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_GET_TUPLE_ARG, namespace_) \
+        );                                                                  \
+    }
+
+#define BOOST_UNORDERED_GET_TUPLE_ARG(z, n, namespace_)                     \
+    namespace_::get<n>(x)
+
+BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost)
+
+#if !defined(BOOST_NO_0X_HDR_TUPLE)
+BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
+#elif defined(BOOST_HAS_TR1_TUPLE)
+BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
+#endif
 
     template <typename T, typename Arg1 = void>
     struct emulated_pair_constructor
@@ -587,6 +619,15 @@ namespace boost { namespace unordered { namespace detail {
                 std::forward<Arg2>(arg2), std::forward<Args>(args)...));
     }
 
+    template <class T, class Tuple1, class Tuple2>
+    inline typename boost::enable_if<emulated_pair_constructor<T> >::type
+    construct_impl(void* address, boost::unordered::piecewise_construct_t,
+            Tuple1&& tuple1, Tuple2&& tuple2)
+    {
+        construct_from_tuple(&static_cast<T*>(address)->first, tuple1);
+        construct_from_tuple(&static_cast<T*>(address)->second, tuple2);
+    }
+
 #else
 
     template <class T, class Arg1>
@@ -612,7 +653,16 @@ namespace boost { namespace unordered { namespace detail {
     {
         new(address) T(boost::forward<Arg1>(a1), boost::forward<Arg2>(a2));
     }
-    
+
+    template <class T, class Tuple1, class Tuple2>
+    inline typename boost::enable_if<emulated_pair_constructor<T> >::type
+    construct_impl(void* address, boost::unordered::piecewise_construct_t,
+            BOOST_FWD_REF(Tuple1) tuple1, BOOST_FWD_REF(Tuple2) tuple2)
+    {
+        construct_from_tuple(&static_cast<T*>(address)->first, tuple1);
+        construct_from_tuple(&static_cast<T*>(address)->second, tuple2);
+    }
+
 #define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                    \
     template <                                                              \
         class T,                                                            \

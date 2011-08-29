@@ -44,6 +44,9 @@ namespace unordered
         class P = std::equal_to<T>,
         class A = std::allocator<T> >
     class unordered_multiset;
+
+    struct piecewise_construct_t {};
+    const piecewise_construct_t piecewise_construct = piecewise_construct_t();
 }
 }
 

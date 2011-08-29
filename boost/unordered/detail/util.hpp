@@ -24,12 +24,19 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/is_empty.hpp>
 #include <boost/throw_exception.hpp>
-#include <boost/unordered/detail/allocator_helpers.hpp>
-#include <boost/preprocessor/seq/size.hpp>
-#include <boost/preprocessor/seq/enum.hpp>
-#include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/move/move.hpp>
 #include <boost/swap.hpp>
+#include <boost/preprocessor/seq/size.hpp>
+#include <boost/preprocessor/seq/enum.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
+#include <boost/preprocessor/repetition/enum.hpp>
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+#include <boost/tuple/tuple.hpp>
+#if !defined(BOOST_NO_0X_HDR_TUPLE) || defined(BOOST_HAS_TR1_TUPLE)
+#include <tuple>
+#endif
+#include <boost/unordered/detail/allocator_helpers.hpp>
 
 // Template parameters:
 //
