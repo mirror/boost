@@ -92,6 +92,8 @@ So, this implementation uses a prime number for the hash table size.
 
 [h2 Equality operators]
 
+/TODO/: This is out of date.
+
 `operator==` and `operator!=` are not included in the standard, but I've
 added them as I think they could be useful and can be implemented
 fairly efficiently. They are specified differently to the other standard
@@ -115,6 +117,8 @@ that their order can be considered part of the container's value.
 
 [h3 C++0x allocators]
 
+/TODO/: This is out of date.
+
 Recent drafts have included an overhaul of the allocators, but this was
 dependent on concepts which are no longer in the standard.
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2946.pdf n2946]
@@ -123,6 +127,8 @@ an appropriate later version) in a future version of boost, possibly changed
 a little to accomodate non-C++0x compilers.
 
 [h3 Swapping containers with unequal allocators]
+
+/TODO/: This is out of date.
 
 It isn't clear how to swap containers when their allocators aren't equal.
 This is 

@@ -60,10 +60,6 @@ EOL;
 
           </simpara></purpose>
           <description>
-            <para>Based on chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2960.pdf">the working draft of the C++ standard [n2960]</ulink>.
-              But without the updated rules for allocators.
-            </para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -236,6 +232,9 @@ EOL;
             </parameter>
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
+              <pora>If <code>Allocator::select_on_container_copy_construction</code>
+              exists and has the right signature, the allocator will be
+              constructed from its result.</para>
             </description>
             <requires>
               <para><code>value_type</code> is copy constructible</para>
@@ -249,12 +248,18 @@ EOL;
               <para>The move constructor.</para>
             </description>
             <notes>
-              <para>This is emulated on compilers without rvalue references.</para>
+              <para>This is implemented using Boost.Move.</para>
             </notes>
             <requires>
               <para>
                 <code>value_type</code> is move constructible.
-                (TODO: This is not actually required in this implementation).
+              </para>
+              <para>
+                On compilers without rvalue reference support the
+                emulation does not support moving without calling
+                <code>boost::move</code> if <code>value_type</code> is
+                not copyable. So, for example, you can't return the
+                container from a function.
               </para>
             </requires>
           </constructor>
@@ -289,14 +294,12 @@ EOL;
             <type><?php echo $name; ?>&amp;</type>
             <description>
               <para>The assignment operator. Copies the contained elements, hash function, predicate and maximum load factor but not the allocator.</para>
+              <para>If <code>Alloc::propagate_on_container_copy_assignment</code>
+              exists and <code>Alloc::propagate_on_container_copy_assignment::value
+              </code> is true, the allocator is overwritten, if not the
+              copied elements are created using the existing
+              allocator.</para>
             </description>
-            <notes>
-              <para>
-                On compilers without rvalue references, there is a single assignment
-                operator with the signature <code>operator=(<?php echo $name; ?>)</code>
-                in order to emulate move semantics.
-              </para>
-            </notes>
             <requires>
               <para><code>value_type</code> is copy constructible</para>
             </requires>
@@ -308,18 +311,21 @@ EOL;
             <type><?php echo $name; ?>&amp;</type>
             <description>
               <para>The move assignment operator.</para>
+              <para>If <code>Alloc::propagate_on_container_move_assignment</code>
+              exists and <code>Alloc::propagate_on_container_move_assignment::value
+              </code> is true, the allocator is overwritten, if not the
+              moved elements are created using the existing
+              allocator.</para>
             </description>
             <notes>
               <para>
-                On compilers without rvalue references, there is a single assignment
-                operator with the signature <code>operator=(<?php echo $name; ?>)</code>
-                in order to emulate move semantics.
+                On compilers without rvalue references, this is emulated using
+                Boost.Move.
               </para>
             </notes>
             <requires>
               <para>
                 <code>value_type</code> is move constructible.
-                (TODO: This is not actually required in this implementation).
               </para>
             </requires>
           </method>
@@ -406,6 +412,10 @@ EOL;
                 <para>If the compiler doesn't support variadic template arguments or rvalue
                       references, this is emulated for up to 10 arguments, with no support
                       for rvalue references or move semantics.</para>
+                <para>Since existing `std::pair` implementations don't support
+                      <code>std::piecewise_construct</code> this emulates it,
+                      but using <code>boost::unordered::piecewise_construct</code>.
+                </para>
               </notes>
             </method>
             <method name="emplace_hint">
@@ -444,6 +454,9 @@ EOL;
                 <para>If the compiler doesn't support variadic template arguments or rvalue
                       references, this is emulated for up to 10 arguments, with no support
                       for rvalue references or move semantics.</para>
+                <para>Since existing `std::pair` implementations don't support
+                      <code>std::piecewise_construct</code> this emulates it,
+                      but using <code>boost::unordered::piecewise_construct</code>.
               </notes>
             </method>
             <method name="insert">
@@ -601,13 +614,10 @@ EOL;
               </throws>
               <notes>
                 <para>
-                  This method is faster than <methodname>erase</methodname> as
-                  it doesn't have to find the next element in the container -
-                  a potentially costly operation.
-                </para>
-                <para>
-                  As it hasn't been standardized, it's likely that this may
-                  change in the future.
+                  This method was implemented because returning an iterator to
+                  the next element from <code>erase</code> was expensive, but
+                  the container has been redesigned so that is no longer the
+                  case. So this method is now deprecated.
                 </para>
               </notes>
             </method>
@@ -625,10 +635,10 @@ EOL;
               </throws>
               <notes>
                 <para>
-                  This method is now deprecated, use
-                  <methodname>quick_return</methodname> instead. Although be
-                  warned that as that isn't standardized yet, it could also
-                  change.
+                  This method was implemented because returning an iterator to
+                  the next element from <code>erase</code> was expensive, but
+                  the container has been redesigned so that is no longer the
+                  case. So this method is now deprecated.
                 </para>
               </notes>
             </method>
@@ -653,6 +663,7 @@ EOL;
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
+                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.
                 <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
@@ -1006,6 +1017,7 @@ EOL;
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
               </throws>
               <notes>
+                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.
                 <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
