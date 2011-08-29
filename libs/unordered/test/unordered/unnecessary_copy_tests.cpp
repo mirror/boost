@@ -408,14 +408,20 @@ namespace unnecessary_copy_tests
                 std::make_tuple(std::ref(b.second)));
         COPY_COUNT(0); MOVE_COUNT(0);
 
-        // first is const so it is copied.
-        // second is not const so it is moved.
+        std::pair<count_copies const, count_copies> move_source_trial;
+        reset();
+        std::make_tuple(std::move(move_source_trial.first));
+        std::make_tuple(std::move(move_source_trial.second));
+        int tuple_move_cost = ::unnecessary_copy_tests::count_copies::moves;
+        int tuple_copy_cost = ::unnecessary_copy_tests::count_copies::copies;
+
         std::pair<count_copies const, count_copies> move_source;
         reset();
         x.emplace(boost::unordered::piecewise_construct,
                 std::make_tuple(std::move(move_source.first)),
                 std::make_tuple(std::move(move_source.second)));
-        COPY_COUNT(1); MOVE_COUNT(1);
+        COPY_COUNT(tuple_copy_cost);
+        MOVE_COUNT(tuple_move_cost);
 
 #if defined(__GNUC__) && __GNUC__ > 4 || \
     defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ >= 6
