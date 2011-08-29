@@ -668,10 +668,10 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
         class T,                                                            \
         BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
     >                                                                       \
-    inline void construct_impl(                                             \
-        BOOST_DEDUCED_TYPENAME                                              \
-        boost::disable_if<emulated_pair_constructor<T>, void*>::type        \
-        address,                                                            \
+    inline BOOST_DEDUCED_TYPENAME                                           \
+    boost::disable_if<emulated_pair_constructor<T> >::type                  \
+    construct_impl(                                                         \
+        void* address,                                                      \
         BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                      \
     )                                                                       \
     {                                                                       \
@@ -686,11 +686,12 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     template <class T, class Key,                                           \
         BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
     >                                                                       \
-    inline void construct_impl(                                             \
-        BOOST_DEDUCED_TYPENAME                                              \
-        boost::enable_if<emulated_pair_constructor<T>, void*>::type         \
-        address,                                                            \
-        Key const& k, BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))       \
+    inline BOOST_DEDUCED_TYPENAME                                           \
+    boost::enable_if<emulated_pair_constructor<T> >::type                   \
+    construct_impl(                                                         \
+        void* address,                                                      \
+        BOOST_FWD_REF(Key) k,                                               \
+        BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                     \
     {                                                                       \
         new(address) T(k,                                                   \
             BOOST_DEDUCED_TYPENAME                                          \

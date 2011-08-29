@@ -20,6 +20,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/limits.hpp>
+#include <boost/type_traits/add_lvalue_reference.hpp>
 
 #if (defined(BOOST_NO_STD_ALLOCATOR) || defined(BOOST_DINKUMWARE_STDLIB)) \
     && !defined(__BORLANDC__)
@@ -83,7 +84,8 @@ namespace boost { namespace unordered { namespace detail {
     };
 #   endif
 
-    template <typename T> T& make();
+    template <typename T> BOOST_DEDUCED_TYPENAME
+    boost::add_lvalue_reference<T>::type make();
     struct choice9 { typedef char (&type)[9]; };
     struct choice8 : choice9 { typedef char (&type)[8]; };
     struct choice7 : choice8 { typedef char (&type)[7]; };

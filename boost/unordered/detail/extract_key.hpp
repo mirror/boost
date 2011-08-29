@@ -165,10 +165,6 @@ namespace detail {
         }
 #endif
 
-        choice1::type is_key_test(key_type const&);
-        template <typename T>
-        choice2::type is_key_test(T const&);
-
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
 #define BOOST_UNORDERED_KEY_FROM_TUPLE(namespace_)                          \
