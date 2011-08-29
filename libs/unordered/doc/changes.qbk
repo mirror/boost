@@ -151,4 +151,7 @@ in some breaking changes:
   the allocator has a member structure `propagate_on_container_swap`,
   such that `propagate_on_container_swap::value` is true.
 
+* Allocator's `construct` and `destroy` functions are called with raw
+  pointers, rather than the allocator's `pointer` type.
+
 [endsect]
