@@ -232,7 +232,7 @@ EOL;
             </parameter>
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
-              <pora>If <code>Allocator::select_on_container_copy_construction</code>
+              <para>If <code>Allocator::select_on_container_copy_construction</code>
               exists and has the right signature, the allocator will be
               constructed from its result.</para>
             </description>
@@ -457,6 +457,7 @@ EOL;
                 <para>Since existing `std::pair` implementations don't support
                       <code>std::piecewise_construct</code> this emulates it,
                       but using <code>boost::unordered::piecewise_construct</code>.
+                </para>
               </notes>
             </method>
             <method name="insert">
@@ -663,7 +664,7 @@ EOL;
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.
+                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
                 <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
@@ -1017,7 +1018,7 @@ EOL;
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.
+                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
                 <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
