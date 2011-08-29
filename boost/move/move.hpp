@@ -45,7 +45,6 @@
    #include <boost/mpl/not.hpp>
    #include <boost/mpl/identity.hpp>
    #include <boost/type_traits/is_class.hpp>
-   #include <boost/type_traits/is_base_of.hpp>
    #include <boost/type_traits/is_convertible.hpp>
    #include <boost/type_traits/has_trivial_destructor.hpp>
    #include <boost/type_traits/integral_constant.hpp>
@@ -184,31 +183,6 @@
          ( ::boost::move_detail::addr_impl_ref<T>( v ), 0 );
    }
 
-   /*
-   typedef char one;
-   struct two {one _[2];};
-
-   template <typename B, typename D>
-   struct is_base_of_host
-   {
-     operator B*() const;
-     operator D*();
-   };
-
-   template <typename B, typename D>
-   struct is_base_of
-   {
-      typedef char yes;
-      class no { char dummy[2]; };
-
-      template <typename T> 
-      static yes check(D*, T);
-      static no check(B*, int);
-
-      static const bool value = sizeof(check(is_base_of_host<B,D>(), int())) == sizeof(yes);
-   };
-   */
-
    }  //namespace move_detail {
    }  //namespace boost {
 
@@ -217,7 +191,7 @@
 //Compiler workaround detection
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
 
-   #if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 5)
+   #if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 5) && !defined(__clang__)
       //Pre-standard rvalue binding rules
       #define BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES
    #elif defined(_MSC_VER) && (_MSC_VER == 1600)
