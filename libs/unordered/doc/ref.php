@@ -555,15 +555,13 @@ EOL;
               </returns>
               <throws>
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
-                <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
               <notes>
                 <para>
-                  When the number of elements is a lot smaller than the number of buckets
-                  this function can be very inefficient as it has to search through empty
-                  buckets for the next element, in order to return the iterator.
-                  The method <methodname>quick_erase</methodname> is faster, but has yet
-                  to be standardized.
+                  In older versions this could be inefficient because it had to search
+                  through several buckets to find the position of the returned iterator.
+                  The data structure has been changed so that this is no longer the case,
+                  and the alternative erase methods have been deprecated.
                 </para>
               </notes>
             </method>
