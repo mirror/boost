@@ -396,7 +396,7 @@ namespace quickbook
                     it = std::find_first_of(
                         it + 1, end, tag_end.begin(), tag_end.end());
 
-                    while (true) {
+                    for (;;) {
                         while(it != end &&
                                 std::find(whitespace.begin(),
                                     whitespace.end(), *it)
