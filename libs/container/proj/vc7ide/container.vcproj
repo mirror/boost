@@ -181,6 +181,9 @@
 				RelativePath="..\..\doc\container.qbk">
 			</File>
 			<File
+				RelativePath="..\..\doc\index.idx">
+			</File>
+			<File
 				RelativePath="..\..\doc\Jamfile.v2">
 			</File>
 		</Filter>

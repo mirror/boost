@@ -70,7 +70,7 @@ compiler include path.
 [section:move_emplace Efficient insertion]
 
 Move semantics and placement insertion are two features brought by C++11 containers
-that can have a very positive impacto in your C++ applications. Boost.Container implements
+that can have a very positive impact in your C++ applications. Boost.Container implements
 both techniques both for C++11 and C++03 compilers.
 
 [section:move_containers Move-aware containers]
@@ -82,7 +82,7 @@ movable or default constructible types instead of just copy constructible types.
 
 Containers themselves are also movable, with no-throw guarantee if allocator
 or predicate (if present) copy operations are no-throw. This allows
-high performance operations when transfering data between vectors.
+high performance operations when transferring data between vectors.
 Let's see an example:
 
 [import ../example/doc_move_containers.cpp]
@@ -311,7 +311,7 @@ likely to insert a new element anywhere, you'll be shifting N/2 elements.]]
 This class does not satisfy the requirements of a Standard Associative Container, since the complexity of insert is
 O(N) rather than O(log N), but otherwise it is almost a drop-in replacement for set.]]
 
-Following Matt Austerns indications, Andrei Alexandrescu's
+Following Matt Austern's indications, Andrei Alexandrescu's
 [@http://www.bestwebbuys.com/Modern-C-Design-Generic-Programming-and-Design-Patterns-Applied-ISBN-9780201704310?isrc=-rd Modern C++ Design]
 showed `AssocVector`, a `std::map` drop-in
 replacement designed in his [@http://loki-lib.sourceforge.net/ Loki] library:
@@ -427,12 +427,12 @@ Many C++ container implementors felt C++03 guarantees were too weak and started 
 containers experience supporting stateful allocators, offers the following guarantees:
 
 * Allocators are copy-constructed in copy/move constructors
-* If possible, asingle allocator is hold to construct `value_type` and this allocator is copy constructed
-  from the user-supplied allocator object during container's contructor. If the container needs an auxiliary 
+* If possible, a single allocator is hold to construct `value_type` and this allocator is copy constructed
+  from the user-supplied allocator object during container's constructor. If the container needs an auxiliary 
   allocator (e.g. a array allocator used by `deque` or `stable_vector`), that allocator is also 
   copy-constructed from the user-supplied allocator when the container is constructed (i.e. it's 
   not constructed on the fly when auxiliary memory is needed).
-* Allocators are compared for equality when swapping containers. If allocators dont' compare
+* Allocators are compared for equality when swapping containers. If allocators don't compare
   equal allocators are swapped using an unqualified `swap` call.
 
 C++11 further improves stateful allocator support through the
@@ -491,8 +491,8 @@ If you need a memory optimized version of `boost::container::vector<bool>` funct
   with an internal buffer of 11/23 bytes (32/64 bit systems)
   [*without] increasing the usual `sizeof` of the string (3 words).
 
-* `[multi]set/map` containers are size optimized embedding the color bit of the red-black trees into
-   the parent pointer.
+* `[multi]set/map` containers are size optimized embedding the color bit of the red-black tree nodes
+   in the parent pointer.
 
 * `[multi]set/map` containers use no recursive functions so stack problems are avoided.
 
@@ -502,7 +502,8 @@ If you need a memory optimized version of `boost::container::vector<bool>` funct
 
 [section:boost_container_history Boost.Container history]
 
-[*Boost.Container] is a product of a long development effort that started with the experimental Shmem library,
+[*Boost.Container] is a product of a long development effort that started
+[@http://lists.boost.org/Archives/boost/2004/11/76263.php in 2004 with the experimental Shmem library],
 which pioneered the use of standard containers in shared memory. Shmem included modified SGI STL container
 code tweaked to support non-raw `allocator::pointer` types and stateful allocators. Once reviewed,
 Shmem was accepted as [@http://www.boost.org/libs/interprocess/ Boost.Interprocess] and this library
@@ -525,34 +526,45 @@ collect them containers and build [*Boost.Container], a library targeted to a wi
 
 [section:Why_boost_container Why Boost.Container?]
 
-With so many high quality standard library implemenations out there, why would you want to
+With so many high quality standard library implementations out there, why would you want to
 use [*Boost.Container]? There are several reasons for that:
 
 * If you have a C++03 compiler, you can have access to C++11 features and have an easy
   code migration when you change your compiler.
 * It's compatible with [*Boost.Interprocess] shared memory allocators.
 * You have extremely useful new containers like `stable_vector` and `flat_[multi]set/map`.
-* If you work on multiple plataforms, you'll have a portable behaviour without depending
+* If you work on multiple platforms, you'll have a portable behaviour without depending
   on the std-lib implementation conformance of each platform. Some examples:
    * Default constructors don't allocate memory at all, which improves performance and
    usually implies a no-throw guarantee (if predicate's or allocator's default constructor doesn't throw).
    * Small string optimization for [classref boost::container::basic_string basic_string].
-* New extensions beyond the standard based on user feedbak to improve code performance.
+* New extensions beyond the standard based on user feedback to improve code performance.
 
 [endsect]
 
 [endsect]
 
+[include auto_index_helpers.qbk]
 
+[section:index Indexes]
 
+[named_index class_name Class Index]
+[named_index typedef_name Typedef Index]
+[named_index function_name Function Index]
+[/named_index macro_name Macro Index]
+[/index]
+
+[endsect]
+
+[xinclude autodoc.xml]
 
 [section:acknowledgements_notes Acknowledgements, notes and links]
 
 *  Original standard container code comes from [@http://www.sgi.com/tech/stl/ SGI STL library],
    which enhanced the original HP STL code. Most of this code was rewritten for
    [*Boost.Interprocess] and moved to [*Boost.Intrusive]. `deque` and `string` containers still
-   have fragments of the original SGI code. Many thanks to Alexander Stepanov, Meng Lee, and David Musser,
-   Matt Austern, and all HP and SGI STL developers.
+   have fragments of the original SGI code. Many thanks to Alexander Stepanov, Meng Lee, David Musser,
+   Matt Austern... and all HP and SGI STL developers.
 
 *  `flat_[multi]_map/set` containers were originally based on [@http://en.wikipedia.org/wiki/Loki_%28C%2B%2B%29 Loki's]
    AssocVector class. Code was rewritten and expanded for [*Boost.Interprocess], so thanks to Andrei Alexandrescu.
@@ -561,12 +573,12 @@ use [*Boost.Container]? There are several reasons for that:
    [@http://bannalia.blogspot.com/2008/09/introducing-stablevector.html Joaqu\u00EDn M. L\u00F3pez Mu\u00F1oz],
    then adapted for [*Boost.Interprocess]. Thanks for such a great container.
 
-*  Howard Hinnant's help and experience was essential when implementing move semantics, 
-   improving allocator support and implementing small string optimization. Thanks Howard
+*  Howard Hinnant's help and advices were essential when implementing move semantics, 
+   improving allocator support or implementing small string optimization. Thanks Howard
    for your wonderful standard library implementations.
 
 *  And finally thanks to all Boosters who helped all these years, improving, fixing and
-   reviewing the library.
+   reviewing all my libraries.
 
 [endsect]
 
@@ -576,5 +588,3 @@ use [*Boost.Container]? There are several reasons for that:
    and redirected to [*Boost.Container ] via using directives.
 
 [endsect]
-
-[xinclude autodoc.xml]

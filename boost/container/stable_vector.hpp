@@ -335,6 +335,8 @@ struct select_multiallocation_chain<A, 1>
 
 } //namespace stable_vector_detail
 
+#if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+
 #if defined(STABLE_VECTOR_ENABLE_INVARIANT_CHECKING)
 
 #define STABLE_VECTOR_CHECK_INVARIANT \
@@ -345,6 +347,8 @@ BOOST_JOIN(check_invariant_,__LINE__).touch();
 #define STABLE_VECTOR_CHECK_INVARIANT
 
 #endif   //#if defined(STABLE_VECTOR_ENABLE_INVARIANT_CHECKING)
+
+#endif   //#if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
 /// @endcond
 

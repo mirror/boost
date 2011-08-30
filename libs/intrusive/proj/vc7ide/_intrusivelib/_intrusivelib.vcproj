@@ -94,14 +94,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Jamfile"
-			Filter=""
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
-			<File
-				RelativePath="..\..\..\test\Jamfile.v2">
-			</File>
-		</Filter>
-		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
@@ -291,16 +283,6 @@
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\workaround.hpp">
 				</File>
-				<Filter
-					Name="doc"
-					Filter="">
-					<File
-						RelativePath="..\..\..\doc\intrusive.qbk">
-					</File>
-					<File
-						RelativePath="..\..\..\doc\Jamfile.v2">
-					</File>
-				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -320,6 +302,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\test\itestvalue.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\test\Jamfile.v2">
 			</File>
 			<File
 				RelativePath="..\..\..\test\smart_ptr.hpp">
@@ -463,6 +448,19 @@
 			</File>
 			<File
 				RelativePath="..\..\..\perf\perf_list.cpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="doc"
+			Filter="">
+			<File
+				RelativePath="..\..\..\doc\index.idx">
+			</File>
+			<File
+				RelativePath="..\..\..\doc\intrusive.qbk">
+			</File>
+			<File
+				RelativePath="..\..\..\doc\Jamfile.v2">
 			</File>
 		</Filter>
 		<File
