@@ -10,14 +10,14 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include <boost/move/move.hpp>
-#include <boost/interprocess/containers/vector.hpp>
+#include <boost/container/vector.hpp>
 #include "../example/movable.hpp"
 
 int main()
 {
-   namespace bi = ::boost::interprocess;
+   namespace bc = ::boost::container;
    //Default construct 10 movable objects
-   bi::vector<movable> v(10);
+   bc::vector<movable> v(10);
 
    //Test default constructed value
    if(v[0].moved()){
@@ -25,7 +25,7 @@ int main()
    }
 
    //Move values
-   bi::vector<movable> v2
+   bc::vector<movable> v2
       (boost::make_move_iterator(v.begin()), boost::make_move_iterator(v.end()));
 
    //Test values have been moved

@@ -10,11 +10,11 @@
 //////////////////////////////////////////////////////////////////////////////
 
 //[move_inserter_example
-#include <boost/interprocess/containers/list.hpp>
+#include <boost/container/list.hpp>
 #include "movable.hpp"
 #include <cassert>
 
-using namespace ::boost::interprocess;
+using namespace ::boost::container;
 
 typedef list<movable> list_t;
 typedef list_t::iterator l_iterator;

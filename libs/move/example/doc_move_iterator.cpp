@@ -10,13 +10,13 @@
 //////////////////////////////////////////////////////////////////////////////
 
 //[move_iterator_example
-#include <boost/interprocess/containers/vector.hpp>
+#include <boost/container/vector.hpp>
 #include "movable.hpp"
 #include <cassert>
 
 int main()
 {
-   using namespace ::boost::interprocess;
+   using namespace ::boost::container;
 
    //Create a vector with 10 default constructed objects
    vector<movable> v(10);

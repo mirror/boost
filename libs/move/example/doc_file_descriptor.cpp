@@ -56,7 +56,7 @@ class file_descriptor
 //]
 
 //[file_descriptor_example
-#include <boost/interprocess/containers/vector.hpp>
+#include <boost/container/vector.hpp>
 #include <cassert>
 
 //Remember: 'file_descriptor' is NOT copyable, but it
@@ -72,7 +72,7 @@ int main()
    assert(!fd.empty());
 
    //Now move fd into a vector
-   boost::interprocess::vector<file_descriptor> v;
+   boost::container::vector<file_descriptor> v;
    v.push_back(boost::move(fd));
 
    //Check ownership has been transferred
@@ -81,7 +81,7 @@ int main()
 
    //Compilation error if uncommented since file_descriptor is not copyable
    //and vector copy construction requires value_type's copy constructor:
-   //boost::interprocess::vector<file_descriptor> v2(v);
+   //boost::container::vector<file_descriptor> v2(v);
    return 0;
 }
 //]
