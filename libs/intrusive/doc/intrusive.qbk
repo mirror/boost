@@ -3831,7 +3831,7 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [section:release_notes Release Notes]
 
-[section:release_notes_boost_1_47_00 Boost 1.47 Release]
+[section:release_notes_boost_1_48_00 Boost 1.48 Release]
 
 *  Fixed bugs
   [@https://svn.boost.org/trac/boost/ticket/4797 #4797],
@@ -3992,6 +3992,18 @@ helpful discussions.
 
 *  Special thanks to [*Steven Watanabe] and [*Tobias Schwinger] for their
    invaluable suggestions and improvements.
+
+[endsect]
+
+[include auto_index_helpers.qbk]
+
+[section:index Indexes]
+
+[named_index class_name Class Index]
+[named_index typedef_name Typedef Index]
+[named_index function_name Function Index]
+[named_index macro_name Macro Index]
+[/index]
 
 [endsect]
 
