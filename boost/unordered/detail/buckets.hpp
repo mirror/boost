@@ -549,26 +549,80 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
 BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 #endif
 
-    template <typename T, typename Arg1 = void>
-    struct emulated_pair_constructor
-    {
-        enum { value = false };
-    };
-    
-    template <typename A, typename B>
-    struct emulated_pair_constructor<std::pair<A, B>, void>
-    {
-        enum { value = true };
-    };
-    
-    template <typename A, typename B, typename Value>
-    struct emulated_pair_constructor<std::pair<A, B>, Value>
-    {
+    template <typename A, typename B, typename Arg1>
+    struct emulation1 {
         static choice1::type check(choice1, std::pair<A, B> const&);
         static choice2::type check(choice2, A const&);
-    
-        enum { value = sizeof(check(choose(), make<Value>())) - 1 };
+
+        enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice2::type) };
     };
+
+    template <typename A, typename B, typename Arg1>
+    struct piecewise3 {
+        static choice1::type check(choice1, boost::unordered::piecewise_construct_t);
+        static choice2::type check(choice2, A const&);
+        static choice3::type check(choice3, ...);
+
+        enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice1::type) };
+    };
+
+    template <typename A, typename B, typename Arg1>
+    struct emulation3 {
+        static choice1::type check(choice1, boost::unordered::piecewise_construct_t);
+        static choice2::type check(choice2, A const&);
+        static choice3::type check(choice3, ...);
+
+        enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice2::type) };
+    };
+
+    template <typename A, typename B, typename Arg1>
+    struct normal3 {
+        static choice1::type check(choice1, boost::unordered::piecewise_construct_t);
+        static choice2::type check(choice2, A const&);
+        static choice3::type check(choice3, ...);
+
+        enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice3::type) };
+    };
+
+    template <typename T, typename Arg1>
+    struct pair_construct1 {};
+    template <typename A, typename B, typename Arg1>
+    struct pair_construct1<std::pair<A, B>, Arg1>
+        : enable_if<emulation1<A, B, Arg1>, void> {};
+
+    template <typename T, typename Arg1>
+    struct normal_construct1 { typedef void type; };
+    template <typename A, typename B, typename Arg1>
+    struct normal_construct1<std::pair<A, B>, Arg1>
+        : disable_if<emulation1<A, B, Arg1>, void> {};
+
+    template <typename T, typename Arg1>
+    struct piecewise_construct3 {};
+    template <typename A, typename B, typename Arg1>
+    struct piecewise_construct3<std::pair<A, B>, Arg1>
+        : enable_if<piecewise3<A, B, Arg1>, void> {};
+
+    template <typename T, typename Arg1>
+    struct pair_construct3 {};
+    template <typename A, typename B, typename Arg1>
+    struct pair_construct3<std::pair<A, B>, Arg1>
+        : enable_if<emulation3<A, B, Arg1>, void> {};
+
+    template <typename T, typename Arg1>
+    struct normal_construct3 { typedef void type; };
+    template <typename A, typename B, typename Arg1>
+    struct normal_construct3<std::pair<A, B>, Arg1>
+        : enable_if<normal3<A, B, Arg1>, void> {};
+
+    template <typename T>
+    struct pair_construct_n {};
+    template <typename A, typename B>
+    struct pair_construct_n<std::pair<A, B> > { typedef void type; };
+
+    template <typename T>
+    struct normal_construct_n { typedef void type; };
+    template <typename A, typename B>
+    struct normal_construct_n<std::pair<A, B> > {};
 
     template <class T>
     inline void construct_impl(void* address)
@@ -576,129 +630,135 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
         new(address) T();
     }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
-
     template <class T, class Arg1>
-    inline void construct_impl(
-            typename boost::disable_if<emulated_pair_constructor<T, Arg1>,
-                void*>::type address,
-            Arg1&& a1)
-    {
-        new(address) T(std::forward<Arg1>(a1));
-    }
-
-    template <class T, class Arg1>
-    inline void construct_impl(
-            typename boost::enable_if<emulated_pair_constructor<T, Arg1>,
-                void*>::type address,
-            Arg1&& a1)
-    {
-        new(address) T(std::forward<Arg1>(a1), typename T::second_type());
-    }
-
-    template <class T, class Arg1, class Arg2>
-    inline void construct_impl(void* address, Arg1&& a1, Arg2&& a2)
-    {
-        new(address) T(std::forward<Arg1>(a1), std::forward<Arg2>(a2));
-    }
-
-    template <class T, class Arg1, class Arg2, class... Args>
-    inline typename boost::disable_if<emulated_pair_constructor<T>, void>::type
-    construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Args&&... args)
-    {
-        new(address) T(std::forward<Arg1>(arg1), std::forward<Arg2>(arg2),
-            std::forward<Args>(args)...);
-    }
-
-    template <class T, class Arg1, class Arg2, class... Args>
-    inline typename boost::enable_if<emulated_pair_constructor<T>, void>::type
-    construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Args&&... args)
-    {
-        new(address) T(std::forward<Arg1>(arg1),
-            typename T::second_type(
-                std::forward<Arg2>(arg2), std::forward<Args>(args)...));
-    }
-
-    template <class T, class Tuple1, class Tuple2>
-    inline typename boost::enable_if<emulated_pair_constructor<T> >::type
-    construct_impl(void* address, boost::unordered::piecewise_construct_t,
-            Tuple1&& tuple1, Tuple2&& tuple2)
-    {
-        construct_from_tuple(&static_cast<T*>(address)->first, tuple1);
-        construct_from_tuple(&static_cast<T*>(address)->second, tuple2);
-    }
-
-#else
-
-    template <class T, class Arg1>
-    inline BOOST_DEDUCED_TYPENAME boost::disable_if<emulated_pair_constructor<T, Arg1>, void>::type
-        construct_impl(void* address, BOOST_FWD_REF(Arg1) a1)
-    {
-        new(address) T(boost::forward<Arg1>(a1));
-    }
-
-    template <class T, class Arg1>
-    inline BOOST_DEDUCED_TYPENAME boost::enable_if<emulated_pair_constructor<T, Arg1>, void>::type
-        construct_impl(void* address, BOOST_FWD_REF(Arg1) a1)
+    inline BOOST_DEDUCED_TYPENAME normal_construct1<T, Arg1>::type
+        construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1)
     {
         new(address) T(
-            boost::forward<Arg1>(a1),
-            BOOST_DEDUCED_TYPENAME T::second_type()
+            boost::forward<Arg1>(arg1)
         );
     }
 
-    template <class T, class Arg1, class Arg2>
-    inline void construct_impl(void* address,
-            BOOST_FWD_REF(Arg1) a1, BOOST_FWD_REF(Arg2) a2)
+    template <class T, class Arg1>
+    inline BOOST_DEDUCED_TYPENAME pair_construct1<T, Arg1>::type
+        construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1)
     {
-        new(address) T(boost::forward<Arg1>(a1), boost::forward<Arg2>(a2));
+        new((void*)(&static_cast<T*>(address)->first))
+        BOOST_DEDUCED_TYPENAME T::first_type(
+            boost::forward<Arg1>(arg1));
+        new((void*)(&static_cast<T*>(address)->second))
+        BOOST_DEDUCED_TYPENAME T::second_type();
+   }
+
+    template <class T, class Arg1, class Arg2>
+    inline void construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1,
+            BOOST_FWD_REF(Arg2) arg2)
+    {
+        new(address) T(
+            boost::forward<Arg1>(arg1),
+            boost::forward<Arg2>(arg2));
     }
 
-    template <class T, class Tuple1, class Tuple2>
-    inline typename boost::enable_if<emulated_pair_constructor<T> >::type
-    construct_impl(void* address, boost::unordered::piecewise_construct_t,
-            BOOST_FWD_REF(Tuple1) tuple1, BOOST_FWD_REF(Tuple2) tuple2)
+    template <class T, class Arg1, class Arg2, class Arg3>
+    inline BOOST_DEDUCED_TYPENAME piecewise_construct3<T, Arg1>::type
+        construct_impl(void* address, BOOST_FWD_REF(Arg1),
+            BOOST_FWD_REF(Arg2) arg2, BOOST_FWD_REF(Arg3) arg3)
     {
-        construct_from_tuple(&static_cast<T*>(address)->first, tuple1);
-        construct_from_tuple(&static_cast<T*>(address)->second, tuple2);
+        construct_from_tuple(&static_cast<T*>(address)->first, arg2);
+        construct_from_tuple(&static_cast<T*>(address)->second, arg3);
     }
+
+    template <class T, class Arg1, class Arg2, class Arg3>
+    inline BOOST_DEDUCED_TYPENAME pair_construct3<T, Arg1>::type
+        construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1,
+            BOOST_FWD_REF(Arg2) arg2, BOOST_FWD_REF(Arg3) arg3)
+    {
+        new((void*)(&static_cast<T*>(address)->first))
+        BOOST_DEDUCED_TYPENAME T::first_type(
+            boost::forward<Arg1>(arg1));
+        new((void*)(&static_cast<T*>(address)->second))
+        BOOST_DEDUCED_TYPENAME T::second_type(
+            boost::forward<Arg2>(arg2),
+            boost::forward<Arg3>(arg3));
+    }
+
+    template <class T, class Arg1, class Arg2, class Arg3>
+    inline BOOST_DEDUCED_TYPENAME normal_construct3<T, Arg1>::type
+        construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1,
+            BOOST_FWD_REF(Arg2) arg2, BOOST_FWD_REF(Arg3) arg3)
+    {
+        new(address) T(
+            boost::forward<Arg1>(arg1),
+            boost::forward<Arg2>(arg2),
+            boost::forward<Arg3>(arg3));
+    }
+
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+
+    template <class T, class Arg1, class Arg2, class Arg3, class Arg4, class... Args>
+    inline BOOST_DEDUCED_TYPENAME normal_construct_n<T>::type
+        construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3,
+            Arg4&& arg4, Args&&... args)
+    {
+        new(address) T(
+            std::forward<Arg1>(arg1),
+            std::forward<Arg2>(arg2),
+            std::forward<Arg3>(arg3),
+            std::forward<Arg4>(arg4),
+            std::forward<Args>(args)...);
+    }
+
+    template <class T, class Arg1, class Arg2, class Arg3, class Arg4, class... Args>
+    inline BOOST_DEDUCED_TYPENAME pair_construct_n<T>::type
+        construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3,
+            Arg4&& arg4, Args&&... args)
+    {
+        new((void*)(&static_cast<T*>(address)->first))
+        BOOST_DEDUCED_TYPENAME T::first_type(
+            std::forward<Arg1>(arg1));
+        new((void*)(&static_cast<T*>(address)->second))
+        BOOST_DEDUCED_TYPENAME T::second_type(
+            std::forward<Arg2>(arg2),
+            std::forward<Arg3>(arg3),
+            std::forward<Arg4>(arg4),
+            std::forward<Args>(args)...);
+    }
+
+#else
 
 #define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                    \
     template <                                                              \
         class T,                                                            \
         BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
     >                                                                       \
-    inline BOOST_DEDUCED_TYPENAME                                           \
-    boost::disable_if<emulated_pair_constructor<T> >::type                  \
-    construct_impl(                                                         \
-        void* address,                                                      \
-        BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                      \
-    )                                                                       \
+    inline BOOST_DEDUCED_TYPENAME normal_construct_n<T>::type               \
+    construct_impl(void* address,                                           \
+        BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                     \
     {                                                                       \
         new(address) T(                                                     \
             BOOST_UNORDERED_CALL_PARAMS(z, num_params));                    \
     }
 
-    BOOST_PP_REPEAT_FROM_TO(3, BOOST_UNORDERED_EMPLACE_LIMIT,
+    BOOST_PP_REPEAT_FROM_TO(4, BOOST_UNORDERED_EMPLACE_LIMIT,
         BOOST_UNORDERED_CONSTRUCT_IMPL, _)
 
 #define BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL(z, num_params, _)               \
     template <class T, class Key,                                           \
         BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
     >                                                                       \
-    inline BOOST_DEDUCED_TYPENAME                                           \
-    boost::enable_if<emulated_pair_constructor<T> >::type                   \
-    construct_impl(                                                         \
-        void* address,                                                      \
-        BOOST_FWD_REF(Key) k,                                               \
+    inline BOOST_DEDUCED_TYPENAME pair_construct_n<T>::type                 \
+        construct_impl(void* address, BOOST_FWD_REF(Key) key,               \
         BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                     \
     {                                                                       \
-        new(address) T(k,                                                   \
-            BOOST_DEDUCED_TYPENAME                                          \
-            T::second_type(BOOST_UNORDERED_CALL_PARAMS(z, num_params)));    \
+        new((void*)(&static_cast<T*>(address)->first))                      \
+        BOOST_DEDUCED_TYPENAME T::first_type(                               \
+            boost::forward<Key>(key));                                      \
+        new((void*)(&static_cast<T*>(address)->second))                     \
+        BOOST_DEDUCED_TYPENAME T::second_type(                              \
+            BOOST_UNORDERED_CALL_PARAMS(z, num_params));                    \
     }
 
-    BOOST_PP_REPEAT_FROM_TO(2, BOOST_UNORDERED_EMPLACE_LIMIT,
+    BOOST_PP_REPEAT_FROM_TO(3, BOOST_UNORDERED_EMPLACE_LIMIT,
         BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL, _)
 
 #undef BOOST_UNORDERED_CONSTRUCT_IMPL
