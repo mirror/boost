@@ -459,6 +459,9 @@ class vector : private containers_detail::vector_alloc_holder<A>
       containers_detail::default_construct_aux_proxy<T, T*, size_type> proxy(n);
       proxy.uninitialized_copy_all_to(new_mem);
       //All ok, commit
+      this->members_.m_start = ret.first;
+      this->members_.m_size  = n;
+      this->members_.m_capacity = real_cap;
       scoped_alloc.release();
    }
 
