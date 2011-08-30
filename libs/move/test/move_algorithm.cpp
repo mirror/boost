@@ -9,15 +9,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include <boost/move/move.hpp>
-#include <boost/interprocess/containers/vector.hpp>
+#include <boost/container/vector.hpp>
 #include "../example/movable.hpp"
 
 int main()
 {
-   namespace bi = ::boost::interprocess;
+   namespace bc = ::boost::container;
    //Default construct 10 movable objects
-   bi::vector<movable> v(10);
-   bi::vector<movable> v2(10);
+   bc::vector<movable> v(10);
+   bc::vector<movable> v2(10);
 
    //Move to v2
    boost::move(v.begin(), v.end(), v2.begin());

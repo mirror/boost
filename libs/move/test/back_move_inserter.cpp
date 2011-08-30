@@ -9,9 +9,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include <boost/move/move.hpp>
-#include <boost/interprocess/containers/vector.hpp>
-#include <boost/interprocess/containers/list.hpp>
-#include <boost/interprocess/containers/stable_vector.hpp>
+#include <boost/container/deque.hpp>
+#include <boost/container/list.hpp>
+#include <boost/container/stable_vector.hpp>
 #include "../example/movable.hpp"
 
 template<class Container>
@@ -46,15 +46,15 @@ int move_test()
 
 int main()
 {
-   namespace bi = ::boost::interprocess;
+   namespace bc = ::boost::container;
 
-   if(move_test< bi::vector<movable> >()){
+   if(move_test< bc::vector<movable> >()){
       return 1;
    }
-   if(move_test< bi::list<movable> >()){
+   if(move_test< bc::list<movable> >()){
       return 1;
    }
-   if(move_test< bi::stable_vector<movable> >()){
+   if(move_test< bc::stable_vector<movable> >()){
       return 1;
    }
    return 0;

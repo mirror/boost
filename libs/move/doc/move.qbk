@@ -18,11 +18,10 @@
     ]
 ]
 
-[important To be able to use containers of movable-only  values you will need to use containers supporting move sematantics,
- like [*Boost.Interprocess] containers]
+[important To be able to use containers of movable-only  values you will need to use containers
+supporting move semantics, like [*Boost.Container] containers]
 
 [note Tested compilers: MSVC-7.1, 8.0, 9.0, GCC 4.3-MinGW in C++03 and C++0x modes, Intel 10.1]
-
 
 [section:what_is_boost_move What is Boost.Move?]
 
@@ -285,7 +284,7 @@ movable and copyable types are more efficiently handled if those containers
 internally use move semantics instead of copy semantics.
 If the container needs to "change the location" of an element
 internally (e.g. vector reallocation) it will move the element instead of copying it.
-[*Boost.Interprocess] containers are move-aware so you can write the following:
+[*Boost.Container] containers are move-aware so you can write the following:
 
 [file_descriptor_example]
 
