@@ -97,20 +97,7 @@ namespace boost { namespace unordered { namespace detail {
     struct choice1 : choice2 { typedef char (&type)[1]; };
     choice1 choose();
 
-#if !defined(__IBMCPP__)
-
-#define BOOST_UNORDERED_MEMBER_CHECK(tname) BOOST_DEDUCED_TYPENAME X::tname*
-
-#else
-
-    template <typename T> struct wrap { typedef void* type; };
-
-#define BOOST_UNORDERED_MEMBER_CHECK(tname)                                 \
-    BOOST_DEDUCED_TYPENAME wrap<                                            \
-        BOOST_DEDUCED_TYPENAME X::tname                                     \
-    >::type
-
-#endif
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1400
 
     #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
         template <typename Tp, typename Default>                            \
@@ -118,7 +105,7 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
             template <typename X>                                           \
             static choice1::type test(choice1,                              \
-                BOOST_UNORDERED_MEMBER_CHECK(tname) = 0);                   \
+                BOOST_DEDUCED_TYPENAME X::tname* = 0);                      \
                                                                             \
             template <typename X>                                           \
             static choice2::type test(choice2, void* = 0);                  \
@@ -132,6 +119,35 @@ namespace boost { namespace unordered { namespace detail {
                 BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
                 ::type::tname type;                                         \
         }
+
+#else
+
+    template <typename T, typename T2>
+    struct sfinae : T2 {};
+
+    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
+        template <typename Tp, typename Default>                            \
+        struct default_type_ ## tname {                                     \
+                                                                            \
+            template <typename X>                                           \
+            static BOOST_DEDUCED_TYPENAME sfinae<                           \
+                BOOST_DEDUCED_TYPENAME X::tname, choice1>::type             \
+                test(choice1);                                              \
+                                                                            \
+            template <typename X>                                           \
+            static choice2::type test(choice2);                             \
+                                                                            \
+            struct DefaultWrap { typedef Default tname; };                  \
+                                                                            \
+            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
+                                                                            \
+            typedef BOOST_DEDUCED_TYPENAME                                  \
+                boost::detail::if_true<value>::                             \
+                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
+                ::type::tname type;                                         \
+        }
+
+#endif
 
     #define BOOST_UNORDERED_DEFAULT_TYPE(T,tname, arg)                      \
         BOOST_DEDUCED_TYPENAME default_type_ ## tname<T, arg>::type
