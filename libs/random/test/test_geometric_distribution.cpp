@@ -16,9 +16,9 @@
 #define BOOST_RANDOM_ARG1_DEFAULT 0.5
 #define BOOST_RANDOM_ARG1_VALUE 0.25
 
-#define BOOST_RANDOM_DIST0_MIN 1
+#define BOOST_RANDOM_DIST0_MIN 0
 #define BOOST_RANDOM_DIST0_MAX (std::numeric_limits<int>::max)()
-#define BOOST_RANDOM_DIST1_MIN 1
+#define BOOST_RANDOM_DIST1_MIN 0
 #define BOOST_RANDOM_DIST1_MAX (std::numeric_limits<int>::max)()
 
 #define BOOST_RANDOM_TEST1_PARAMS (0.9999)

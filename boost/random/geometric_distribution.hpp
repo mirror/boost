@@ -124,7 +124,7 @@ public:
     RealType p() const { return _p; }
 
     /** Returns the smallest value that the distribution can produce. */
-    IntType min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return IntType(1); }
+    IntType min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return IntType(0); }
 
     /** Returns the largest value that the distribution can produce. */
     IntType max BOOST_PREVENT_MACRO_SUBSTITUTION () const
