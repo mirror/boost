@@ -549,6 +549,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
 BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 #endif
 
+#if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
     template <typename A, typename B, typename Arg1>
     struct emulation1 {
         static choice1::type check(choice1, std::pair<A, B> const&);
@@ -556,45 +557,58 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 
         enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice2::type) };
     };
+#endif
 
+#if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
     template <typename A, typename B, typename Arg1>
-    struct piecewise3 {
+    struct check3_base {
         static choice1::type check(choice1, boost::unordered::piecewise_construct_t);
         static choice2::type check(choice2, A const&);
         static choice3::type check(choice3, ...);
+    };
+#else
+    template <typename A, typename B, typename Arg1>
+    struct check3_base {
+        static choice1::type check(choice1, boost::unordered::piecewise_construct_t);
+        static choice3::type check(choice3, ...);
+    };
+#endif
 
-        enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice1::type) };
+    template <typename A, typename B, typename Arg1>
+    struct piecewise3 {
+        enum { value =
+            sizeof(check3_base<A,B,Arg1>::check(choose(), make<Arg1>())) ==
+            sizeof(choice1::type) };
     };
 
     template <typename A, typename B, typename Arg1>
     struct emulation3 {
-        static choice1::type check(choice1, boost::unordered::piecewise_construct_t);
-        static choice2::type check(choice2, A const&);
-        static choice3::type check(choice3, ...);
-
-        enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice2::type) };
+        enum { value =
+            sizeof(check3_base<A,B,Arg1>::check(choose(), make<Arg1>())) ==
+            sizeof(choice2::type) };
     };
 
     template <typename A, typename B, typename Arg1>
     struct normal3 {
-        static choice1::type check(choice1, boost::unordered::piecewise_construct_t);
-        static choice2::type check(choice2, A const&);
-        static choice3::type check(choice3, ...);
-
-        enum { value = sizeof(check(choose(), make<Arg1>())) == sizeof(choice3::type) };
+        enum { value =
+            sizeof(check3_base<A,B,Arg1>::check(choose(), make<Arg1>())) ==
+            sizeof(choice3::type) };
     };
 
     template <typename T, typename Arg1>
     struct pair_construct1 {};
+    template <typename T, typename Arg1>
+    struct normal_construct1 { typedef void type; };
+
+#if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
     template <typename A, typename B, typename Arg1>
     struct pair_construct1<std::pair<A, B>, Arg1>
         : enable_if<emulation1<A, B, Arg1>, void> {};
 
-    template <typename T, typename Arg1>
-    struct normal_construct1 { typedef void type; };
     template <typename A, typename B, typename Arg1>
     struct normal_construct1<std::pair<A, B>, Arg1>
         : disable_if<emulation1<A, B, Arg1>, void> {};
+#endif
 
     template <typename T, typename Arg1>
     struct piecewise_construct3 {};
@@ -616,13 +630,15 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 
     template <typename T>
     struct pair_construct_n {};
-    template <typename A, typename B>
-    struct pair_construct_n<std::pair<A, B> > { typedef void type; };
-
     template <typename T>
     struct normal_construct_n { typedef void type; };
+
+#if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
+    template <typename A, typename B>
+    struct pair_construct_n<std::pair<A, B> > { typedef void type; };
     template <typename A, typename B>
     struct normal_construct_n<std::pair<A, B> > {};
+#endif
 
     template <class T>
     inline void construct_impl(void* address)

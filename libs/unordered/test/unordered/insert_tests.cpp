@@ -545,13 +545,14 @@ UNORDERED_AUTO_TEST(map_emplace_test)
     BOOST_TEST(x.find(0) != x.end() &&
         x.find(0)->second == overloaded_constructor());
 
-    x.emplace(1);
-    BOOST_TEST(x.find(1) != x.end() &&
-        x.find(1)->second == overloaded_constructor());
-
     x.emplace(2, 3);
     BOOST_TEST(x.find(2) != x.end() &&
         x.find(2)->second == overloaded_constructor(3));
+
+#if defined (BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
+    x.emplace(1);
+    BOOST_TEST(x.find(1) != x.end() &&
+        x.find(1)->second == overloaded_constructor());
 
     x.emplace(4, 5, 6);
     BOOST_TEST(x.find(4) != x.end() &&
@@ -560,6 +561,7 @@ UNORDERED_AUTO_TEST(map_emplace_test)
     x.emplace(7, 8, 9, 10);
     BOOST_TEST(x.find(7) != x.end() &&
         x.find(7)->second == overloaded_constructor(8, 9, 10));
+#endif
 }
 
 UNORDERED_AUTO_TEST(set_emplace_test)
