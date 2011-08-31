@@ -67,7 +67,9 @@ namespace boost { namespace unordered { namespace detail {
     
             return true;
         }
-        
+
+#if !defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
+
         static bool group_equals(node_ptr n1, node_ptr end1,
                 node_ptr n2, node_ptr end2)
         {
@@ -108,7 +110,30 @@ namespace boost { namespace unordered { namespace detail {
             
             return true;
         }
-        
+
+#else
+
+        static bool group_equals(node_ptr n1, node_ptr end1,
+                node_ptr n2, node_ptr end2)
+        {
+            for(;;)
+            {
+                if(!extractor::compare_mapped(
+                    node::get_value(n1), node::get_value(n2)))
+                    return false;
+
+                n1 = n1->next_;
+                n2 = n2->next_;
+
+                if (n1 == end1) return n2 == end2;
+                if (n2 == end2) return false;
+            }
+
+            return true;
+        }
+
+#endif
+
         static bool find(node_ptr n, node_ptr end, value_type const& v)
         {
             for(;n != end; n = n->next_)

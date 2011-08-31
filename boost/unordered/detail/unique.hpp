@@ -60,8 +60,15 @@ namespace boost { namespace unordered { namespace detail {
                 n1; n1 = n1->next_)
             {
                 node_ptr n2 = other.find_matching_node(n1);
+
+#if !defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
                 if(!n2 || node::get_value(n1) != node::get_value(n2))
                     return false;
+#else
+                if(!n2 || !extractor::compare_mapped(
+                        node::get_value(n1), node::get_value(n2)))
+                    return false;
+#endif
             }
     
             return true;
