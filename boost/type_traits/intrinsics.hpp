@@ -131,12 +131,12 @@
 #   if __has_feature(is_union)
 #     define BOOST_IS_UNION(T) __is_union(T)
 #   endif
-// #   if __has_feature(is_pod)
-// #     define BOOST_IS_POD(T) __is_pod(T)
-// #   endif
-// #   if __has_feature(is_empty)
-// #     define BOOST_IS_EMPTY(T) __is_empty(T)
-// #   endif
+#   if __has_feature(is_pod) && defined(_LIBCPP_VERSION)
+#     define BOOST_IS_POD(T) __is_pod(T)
+#   endif
+#   if __has_feature(is_empty) && defined(_LIBCPP_VERSION)
+#     define BOOST_IS_EMPTY(T) __is_empty(T)
+#   endif
 #   if __has_feature(has_trivial_constructor)
 #     define BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) __has_trivial_constructor(T)
 #   endif
