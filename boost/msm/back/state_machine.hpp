@@ -42,6 +42,9 @@
 #include <boost/bind.hpp>
 #include <boost/bind/apply.hpp>
 #include <boost/function.hpp>
+#ifndef BOOST_NO_RTTI
+#include <boost/any.hpp>
+#endif
 
 #include <boost/serialization/base_object.hpp> 
 
@@ -59,7 +62,6 @@
 #include <boost/msm/back/dispatch_table.hpp>
 #include <boost/msm/back/no_fsm_check.hpp>
 #include <boost/msm/back/queue_container_deque.hpp>
-#include <boost/msm/back/any_event.hpp>
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(accept_sig)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(no_automatic_create)
@@ -1826,7 +1828,9 @@ private:
     template <class Event>
     void no_action(Event const&){}
 
-    HandledEnum process_any_event( any_event const& evt) const;
+#ifndef BOOST_NO_RTTI
+    HandledEnum process_any_event( ::boost::any const& evt);
+#endif
 
 private:
     // composite accept implementation. First calls accept on the composite, then accept on all its active states.
