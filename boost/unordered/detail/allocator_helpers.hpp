@@ -225,17 +225,16 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
     template <BOOST_PP_CAT(check, count) e>                                 \
     struct BOOST_PP_CAT(test, count) {                                      \
-        typedef void* type;                                                 \
+        typedef BOOST_PP_CAT(choice, result) type;                          \
     };                                                                      \
                                                                             \
-    template <class U> static BOOST_PP_CAT(choice, result)::type            \
-        test(BOOST_PP_CAT(choice, count),                                   \
-            typename BOOST_PP_CAT(test, count)<                             \
-                &U::name>::type = 0)
+    template <class U> static BOOST_DEDUCED_TYPENAME                        \
+        BOOST_PP_CAT(test, count)<&U::name>::type                           \
+        test(BOOST_PP_CAT(choice, count))
 
 #define BOOST_UNORDERED_DEFAULT_MEMBER(count, result)                       \
     template <class U> static BOOST_PP_CAT(choice, result)::type            \
-        test(BOOST_PP_CAT(choice, count), void* = 0)
+        test(BOOST_PP_CAT(choice, count))
 
 
     template <typename T>
