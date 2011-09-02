@@ -821,8 +821,7 @@ namespace unordered
     std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
         unordered_set<T,H,P,A>::emplace(Args&&... args)
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-            table_.emplace(std::forward<Args>(args)...));
+        return table_.emplace(std::forward<Args>(args)...);
     }
 
     template <class T, class H, class P, class A>
@@ -841,8 +840,7 @@ namespace unordered
                 value_type v
             )
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-                table_.emplace(boost::move(v)));
+        return table_.emplace(boost::move(v));
     }
 
     template <class T, class H, class P, class A>
@@ -866,10 +864,7 @@ namespace unordered
             unordered_set<T,H,P,A>::emplace(                                \
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                      \
         {                                                                   \
-            return                                                          \
-                BOOST_UNORDERED_PAIR_CAST(iterator, bool,                   \
-                    table_.emplace(                                         \
-                        BOOST_UNORDERED_CALL_PARAMS(z, n)));                \
+            return table_.emplace(BOOST_UNORDERED_CALL_PARAMS(z, n));       \
         }                                                                   \
                                                                             \
         template <class T, class H, class P, class A>                       \
@@ -897,8 +892,7 @@ namespace unordered
     std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
         unordered_set<T,H,P,A>::insert(value_type const& obj)
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-                table_.emplace(obj));
+        return table_.emplace(obj);
     }
 
     template <class T, class H, class P, class A>
@@ -914,8 +908,7 @@ namespace unordered
     std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
         unordered_set<T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-                table_.emplace(boost::move(obj)));
+        return table_.emplace(boost::move(obj));
     }
 
     template <class T, class H, class P, class A>
@@ -1025,8 +1018,7 @@ namespace unordered
             BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::const_iterator>
         unordered_set<T,H,P,A>::equal_range(const key_type& k) const
     {
-        return BOOST_UNORDERED_PAIR_CAST(const_iterator, const_iterator,
-            table_.equal_range(k));
+        return table_.equal_range(k);
     }
 
     template <class T, class H, class P, class A>
@@ -1406,8 +1398,7 @@ namespace unordered
             BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::const_iterator>
         unordered_multiset<T,H,P,A>::equal_range(const key_type& k) const
     {
-        return BOOST_UNORDERED_PAIR_CAST(const_iterator, const_iterator,
-            table_.equal_range(k));
+        return table_.equal_range(k);
     }
 
     template <class T, class H, class P, class A>

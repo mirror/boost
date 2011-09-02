@@ -205,22 +205,6 @@ namespace boost { namespace unordered { namespace detail {
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // pair_cast - because some libraries don't have the full pair constructors.
-
-#if 0
-    template <class Dst1, class Dst2, class Src1, class Src2>
-    inline std::pair<Dst1, Dst2> pair_cast(std::pair<Src1, Src2> const& x)
-    {
-        return std::pair<Dst1, Dst2>(Dst1(x.first), Dst2(x.second));
-    }
-
-#define BOOST_UNORDERED_PAIR_CAST(First, Last, Argument) \
-    ::boost::unordered::detail::pair_cast<First, Last>(Argument)
-#else
-#define BOOST_UNORDERED_PAIR_CAST(First, Last, Argument) \
-    Argument
-#endif
-    ////////////////////////////////////////////////////////////////////////////
     // insert_size/initial_size
 
 #if !defined(BOOST_NO_STD_DISTANCE)
