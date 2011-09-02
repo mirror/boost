@@ -78,14 +78,12 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Alloc, typename T>
     struct rebind_wrap
     {
-        typedef BOOST_DEDUCED_TYPENAME
-            Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
+        typedef typename Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
             type;
     };
 #   endif
 
-    template <typename T> BOOST_DEDUCED_TYPENAME
-    boost::add_lvalue_reference<T>::type make();
+    template <typename T> typename boost::add_lvalue_reference<T>::type make();
     struct choice9 { typedef char (&type)[9]; };
     struct choice8 : choice9 { typedef char (&type)[8]; };
     struct choice7 : choice8 { typedef char (&type)[7]; };
@@ -104,8 +102,7 @@ namespace boost { namespace unordered { namespace detail {
         struct default_type_ ## tname {                                     \
                                                                             \
             template <typename X>                                           \
-            static choice1::type test(choice1,                              \
-                BOOST_DEDUCED_TYPENAME X::tname* = 0);                      \
+            static choice1::type test(choice1, typename X::tname* = 0);     \
                                                                             \
             template <typename X>                                           \
             static choice2::type test(choice2, void* = 0);                  \
@@ -114,8 +111,7 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
             enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
                                                                             \
-            typedef BOOST_DEDUCED_TYPENAME                                  \
-                boost::detail::if_true<value>::                             \
+            typedef typename boost::detail::if_true<value>::                \
                 BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
                 ::type::tname type;                                         \
         }
@@ -130,8 +126,7 @@ namespace boost { namespace unordered { namespace detail {
         struct default_type_ ## tname {                                     \
                                                                             \
             template <typename X>                                           \
-            static BOOST_DEDUCED_TYPENAME sfinae<                           \
-                BOOST_DEDUCED_TYPENAME X::tname, choice1>::type             \
+            static typename sfinae<typename X::tname, choice1>::type        \
                 test(choice1);                                              \
                                                                             \
             template <typename X>                                           \
@@ -141,8 +136,7 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
             enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
                                                                             \
-            typedef BOOST_DEDUCED_TYPENAME                                  \
-                boost::detail::if_true<value>::                             \
+            typedef typename boost::detail::if_true<value>::                \
                 BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
                 ::type::tname type;                                         \
         }
@@ -150,7 +144,7 @@ namespace boost { namespace unordered { namespace detail {
 #endif
 
     #define BOOST_UNORDERED_DEFAULT_TYPE(T,tname, arg)                      \
-        BOOST_DEDUCED_TYPENAME default_type_ ## tname<T, arg>::type
+        typename default_type_ ## tname<T, arg>::type
 
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(pointer);
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_pointer);
@@ -228,7 +222,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_PP_CAT(choice, result) type;                          \
     };                                                                      \
                                                                             \
-    template <class U> static BOOST_DEDUCED_TYPENAME                        \
+    template <class U> static typename                                      \
         BOOST_PP_CAT(test, count)<&U::name>::type                           \
         test(BOOST_PP_CAT(choice, count))
 
@@ -261,7 +255,7 @@ namespace boost { namespace unordered { namespace detail {
 #endif
 
     template <typename Alloc>
-    inline BOOST_DEDUCED_TYPENAME boost::enable_if<
+    inline typename boost::enable_if<
             has_select_on_container_copy_construction<Alloc>, Alloc
         >::type call_select_on_container_copy_construction(const Alloc& rhs)
     {
@@ -269,7 +263,7 @@ namespace boost { namespace unordered { namespace detail {
     }
 
     template <typename Alloc>
-    inline BOOST_DEDUCED_TYPENAME boost::disable_if<
+    inline typename boost::disable_if<
             has_select_on_container_copy_construction<Alloc>, Alloc
         >::type call_select_on_container_copy_construction(const Alloc& rhs)
     {
@@ -302,7 +296,7 @@ namespace boost { namespace unordered { namespace detail {
         // For now always use the allocator's const_pointer.
 
         //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_pointer,
-        //    BOOST_DEDUCED_TYPENAME pointer_traits<pointer>::
+        //    typename pointer_traits<pointer>::
         //    BOOST_NESTED_TEMPLATE rebind<const value_type>::other)
         //    const_pointer;
 
@@ -317,7 +311,7 @@ namespace boost { namespace unordered { namespace detail {
         //    void_pointer;
 
         //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_void_pointer,
-        //    BOOST_DEDUCED_TYPENAME pointer_traits<pointer>::
+        //    typename pointer_traits<pointer>::
         //    BOOST_NESTED_TEMPLATE rebind<const void>::other)
         //    const_void_pointer;
 
@@ -409,7 +403,7 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Allocator>
     struct allocator_array_constructor
     {
-        typedef BOOST_DEDUCED_TYPENAME allocator_traits<Allocator>::pointer
+        typedef typename allocator_traits<Allocator>::pointer
             pointer;
 
         Allocator& alloc_;

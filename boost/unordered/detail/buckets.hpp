@@ -41,7 +41,7 @@ namespace boost { namespace unordered { namespace detail {
     public:
         // Types
 
-        typedef BOOST_DEDUCED_TYPENAME ::boost::detail::if_true<Unique>::
+        typedef typename ::boost::detail::if_true<Unique>::
             BOOST_NESTED_TEMPLATE then<
                 ::boost::unordered::detail::ungrouped_node<A>,
                 ::boost::unordered::detail::grouped_node<A>
@@ -49,16 +49,15 @@ namespace boost { namespace unordered { namespace detail {
 
         typedef A value_allocator;
         typedef ::boost::unordered::detail::bucket<A> bucket;
-        typedef BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type value_type;
+        typedef typename allocator_traits<A>::value_type value_type;
 
-        typedef BOOST_DEDUCED_TYPENAME bucket::bucket_allocator
-            bucket_allocator;
-        typedef BOOST_DEDUCED_TYPENAME allocator_traits<bucket_allocator>::pointer bucket_ptr;
-        typedef BOOST_DEDUCED_TYPENAME bucket::node_ptr node_ptr;
+        typedef typename bucket::bucket_allocator bucket_allocator;
+        typedef typename allocator_traits<bucket_allocator>::pointer bucket_ptr;
+        typedef typename bucket::node_ptr node_ptr;
 
-        typedef BOOST_DEDUCED_TYPENAME rebind_wrap<value_allocator, node>::type
+        typedef typename rebind_wrap<value_allocator, node>::type
             node_allocator;
-        typedef BOOST_DEDUCED_TYPENAME allocator_traits<node_allocator>::pointer real_node_ptr;
+        typedef typename allocator_traits<node_allocator>::pointer real_node_ptr;
 
         // Members
 
@@ -423,7 +422,7 @@ namespace boost { namespace unordered { namespace detail {
         functions& operator=(functions const&);
 
         typedef compressed_pair<H, P> function_pair;
-        typedef BOOST_DEDUCED_TYPENAME ::boost::aligned_storage<
+        typedef typename ::boost::aligned_storage<
             sizeof(function_pair),
             ::boost::alignment_of<function_pair>::value>::type aligned_function;
 
@@ -647,7 +646,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     }
 
     template <class T, class Arg1>
-    inline BOOST_DEDUCED_TYPENAME normal_construct1<T, Arg1>::type
+    inline typename normal_construct1<T, Arg1>::type
         construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1)
     {
         new(address) T(
@@ -656,14 +655,14 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     }
 
     template <class T, class Arg1>
-    inline BOOST_DEDUCED_TYPENAME pair_construct1<T, Arg1>::type
+    inline typename pair_construct1<T, Arg1>::type
         construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1)
     {
         new((void*)(&static_cast<T*>(address)->first))
-        BOOST_DEDUCED_TYPENAME T::first_type(
+        typename T::first_type(
             boost::forward<Arg1>(arg1));
         new((void*)(&static_cast<T*>(address)->second))
-        BOOST_DEDUCED_TYPENAME T::second_type();
+        typename T::second_type();
    }
 
     template <class T, class Arg1, class Arg2>
@@ -676,7 +675,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     }
 
     template <class T, class Arg1, class Arg2, class Arg3>
-    inline BOOST_DEDUCED_TYPENAME piecewise_construct3<T, Arg1>::type
+    inline typename piecewise_construct3<T, Arg1>::type
         construct_impl(void* address, BOOST_FWD_REF(Arg1),
             BOOST_FWD_REF(Arg2) arg2, BOOST_FWD_REF(Arg3) arg3)
     {
@@ -685,21 +684,21 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     }
 
     template <class T, class Arg1, class Arg2, class Arg3>
-    inline BOOST_DEDUCED_TYPENAME pair_construct3<T, Arg1>::type
+    inline typename pair_construct3<T, Arg1>::type
         construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1,
             BOOST_FWD_REF(Arg2) arg2, BOOST_FWD_REF(Arg3) arg3)
     {
         new((void*)(&static_cast<T*>(address)->first))
-        BOOST_DEDUCED_TYPENAME T::first_type(
+        typename T::first_type(
             boost::forward<Arg1>(arg1));
         new((void*)(&static_cast<T*>(address)->second))
-        BOOST_DEDUCED_TYPENAME T::second_type(
+        typename T::second_type(
             boost::forward<Arg2>(arg2),
             boost::forward<Arg3>(arg3));
     }
 
     template <class T, class Arg1, class Arg2, class Arg3>
-    inline BOOST_DEDUCED_TYPENAME normal_construct3<T, Arg1>::type
+    inline typename normal_construct3<T, Arg1>::type
         construct_impl(void* address, BOOST_FWD_REF(Arg1) arg1,
             BOOST_FWD_REF(Arg2) arg2, BOOST_FWD_REF(Arg3) arg3)
     {
@@ -712,7 +711,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
     template <class T, class Arg1, class Arg2, class Arg3, class Arg4, class... Args>
-    inline BOOST_DEDUCED_TYPENAME normal_construct_n<T>::type
+    inline typename normal_construct_n<T>::type
         construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3,
             Arg4&& arg4, Args&&... args)
     {
@@ -725,15 +724,15 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     }
 
     template <class T, class Arg1, class Arg2, class Arg3, class Arg4, class... Args>
-    inline BOOST_DEDUCED_TYPENAME pair_construct_n<T>::type
+    inline typename pair_construct_n<T>::type
         construct_impl(void* address, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3,
             Arg4&& arg4, Args&&... args)
     {
         new((void*)(&static_cast<T*>(address)->first))
-        BOOST_DEDUCED_TYPENAME T::first_type(
+        typename T::first_type(
             std::forward<Arg1>(arg1));
         new((void*)(&static_cast<T*>(address)->second))
-        BOOST_DEDUCED_TYPENAME T::second_type(
+        typename T::second_type(
             std::forward<Arg2>(arg2),
             std::forward<Arg3>(arg3),
             std::forward<Arg4>(arg4),
@@ -747,7 +746,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
         class T,                                                            \
         BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
     >                                                                       \
-    inline BOOST_DEDUCED_TYPENAME normal_construct_n<T>::type               \
+    inline typename normal_construct_n<T>::type                             \
     construct_impl(void* address,                                           \
         BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                     \
     {                                                                       \
@@ -762,15 +761,15 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     template <class T, class Key,                                           \
         BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                        \
     >                                                                       \
-    inline BOOST_DEDUCED_TYPENAME pair_construct_n<T>::type                 \
+    inline typename pair_construct_n<T>::type                               \
         construct_impl(void* address, BOOST_FWD_REF(Key) key,               \
         BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                     \
     {                                                                       \
         new((void*)(&static_cast<T*>(address)->first))                      \
-        BOOST_DEDUCED_TYPENAME T::first_type(                               \
+        typename T::first_type(                                             \
             boost::forward<Key>(key));                                      \
         new((void*)(&static_cast<T*>(address)->second))                     \
-        BOOST_DEDUCED_TYPENAME T::second_type(                              \
+        typename T::second_type(                                            \
             BOOST_UNORDERED_CALL_PARAMS(z, num_params));                    \
     }
 
@@ -788,10 +787,10 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     class node_constructor
     {
         typedef ::boost::unordered::detail::buckets<Alloc, Unique> buckets;
-        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
-        typedef BOOST_DEDUCED_TYPENAME buckets::real_node_ptr real_node_ptr;
-        typedef BOOST_DEDUCED_TYPENAME buckets::value_type value_type;
-        typedef BOOST_DEDUCED_TYPENAME buckets::node_allocator node_allocator;
+        typedef typename buckets::node node;
+        typedef typename buckets::real_node_ptr real_node_ptr;
+        typedef typename buckets::value_type value_type;
+        typedef typename buckets::node_allocator node_allocator;
 
         buckets& buckets_;
         real_node_ptr node_;
@@ -858,7 +857,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
         }
 
         // no throw
-        BOOST_DEDUCED_TYPENAME buckets::node_ptr release()
+        typename buckets::node_ptr release()
         {
             real_node_ptr p = node_;
             node_ = real_node_ptr();

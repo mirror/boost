@@ -15,19 +15,19 @@ namespace boost { namespace unordered { namespace detail {
     class unique_table : public T::table_base
     {
     public:
-        typedef BOOST_DEDUCED_TYPENAME T::hasher hasher;
-        typedef BOOST_DEDUCED_TYPENAME T::key_equal key_equal;
-        typedef BOOST_DEDUCED_TYPENAME T::value_allocator value_allocator;
-        typedef BOOST_DEDUCED_TYPENAME T::key_type key_type;
-        typedef BOOST_DEDUCED_TYPENAME T::value_type value_type;
-        typedef BOOST_DEDUCED_TYPENAME T::table_base table_base;
-        typedef BOOST_DEDUCED_TYPENAME T::node_constructor node_constructor;
-        typedef BOOST_DEDUCED_TYPENAME T::node_allocator node_allocator;
+        typedef typename T::hasher hasher;
+        typedef typename T::key_equal key_equal;
+        typedef typename T::value_allocator value_allocator;
+        typedef typename T::key_type key_type;
+        typedef typename T::value_type value_type;
+        typedef typename T::table_base table_base;
+        typedef typename T::node_constructor node_constructor;
+        typedef typename T::node_allocator node_allocator;
 
-        typedef BOOST_DEDUCED_TYPENAME T::node node;
-        typedef BOOST_DEDUCED_TYPENAME T::node_ptr node_ptr;
-        typedef BOOST_DEDUCED_TYPENAME T::bucket_ptr bucket_ptr;
-        typedef BOOST_DEDUCED_TYPENAME T::extractor extractor;
+        typedef typename T::node node;
+        typedef typename T::node_ptr node_ptr;
+        typedef typename T::bucket_ptr bucket_ptr;
+        typedef typename T::extractor extractor;
         
         typedef std::pair<node_ptr, bool> emplace_return;
 
@@ -118,7 +118,7 @@ namespace boost { namespace unordered { namespace detail {
 
         value_type& operator[](key_type const& k)
         {
-            typedef BOOST_DEDUCED_TYPENAME value_type::second_type mapped_type;
+            typedef typename value_type::second_type mapped_type;
     
             std::size_t hash = this->hash_function()(k);
             std::size_t bucket_index = hash % this->bucket_count_;
@@ -399,10 +399,10 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class H, class P, class A>
     struct set : public types<
-        BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
-        BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
+        typename allocator_traits<A>::value_type,
+        typename allocator_traits<A>::value_type,
         H, P, A,
-        set_extractor<BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>,
+        set_extractor<typename allocator_traits<A>::value_type>,
         true>
     {        
         typedef ::boost::unordered::detail::unique_table<set<H, P, A> > impl;
@@ -411,9 +411,9 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class K, class H, class P, class A>
     struct map : public types<
-        K, BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type,
+        K, typename allocator_traits<A>::value_type,
         H, P, A,
-        map_extractor<K, BOOST_DEDUCED_TYPENAME allocator_traits<A>::value_type>,
+        map_extractor<K, typename allocator_traits<A>::value_type>,
         true>
     {
         typedef ::boost::unordered::detail::unique_table<map<K, H, P, A> > impl;

@@ -234,7 +234,7 @@ namespace boost { namespace unordered { namespace detail {
     inline std::size_t insert_size(I i, I j)
     {
         return insert_size(i, j,
-            BOOST_DEDUCED_TYPENAME ::boost::iterator_traversal<I>::type());
+            typename ::boost::iterator_traversal<I>::type());
     }
     
     template <class I>
@@ -285,8 +285,8 @@ namespace boost { namespace unordered { namespace detail {
       : private generate_base<T1, 1>::type,
         private generate_base<T2, 2>::type
     {
-        typedef BOOST_DEDUCED_TYPENAME generate_base<T1, 1>::type base1;
-        typedef BOOST_DEDUCED_TYPENAME generate_base<T2, 2>::type base2;
+        typedef typename generate_base<T1, 1>::type base1;
+        typedef typename generate_base<T2, 2>::type base2;
 
         typedef T1 first_type;
         typedef T2 second_type;

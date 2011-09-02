@@ -35,8 +35,7 @@ namespace detail {
         
         enum { value = sizeof(test(make<T>())) == sizeof(choice2::type) };
         
-        typedef BOOST_DEDUCED_TYPENAME
-            boost::detail::if_true<value>::
+        typedef typename boost::detail::if_true<value>::
             BOOST_NESTED_TEMPLATE then<Key const&, no_key>::type type;
     };
 
@@ -94,7 +93,7 @@ namespace detail {
     struct map_extractor
     {
         typedef ValueType value_type;
-        typedef BOOST_DEDUCED_TYPENAME ::boost::remove_const<Key>::type key_type;
+        typedef typename ::boost::remove_const<Key>::type key_type;
 
         static key_type const& extract(value_type const& v)
         {
@@ -176,11 +175,11 @@ namespace detail {
         }                                                                   \
                                                                             \
         template <typename T, typename T2>                                  \
-        static BOOST_DEDUCED_TYPENAME is_key<key_type, T>::type             \
+        static typename is_key<key_type, T>::type                           \
             extract(boost::unordered::piecewise_construct_t,                \
                 namespace_::tuple<T> const& k, T2&&)                        \
         {                                                                   \
-            return BOOST_DEDUCED_TYPENAME is_key<key_type, T>::type(        \
+            return typename is_key<key_type, T>::type(                      \
                 namespace_::get<0>(k));                                     \
         }
 
@@ -194,11 +193,11 @@ namespace detail {
         }                                                                   \
                                                                             \
         template <typename T>                                               \
-        static BOOST_DEDUCED_TYPENAME is_key<key_type, T>::type             \
+        static typename is_key<key_type, T>::type                           \
             extract(boost::unordered::piecewise_construct_t,                \
                 namespace_::tuple<T> const& k)                              \
         {                                                                   \
-            return BOOST_DEDUCED_TYPENAME is_key<key_type, T>::type(        \
+            return typename is_key<key_type, T>::type(                      \
                 namespace_::get<0>(k));                                     \
         }
 
