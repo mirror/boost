@@ -842,6 +842,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -866,6 +867,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -1740,6 +1742,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -1764,6 +1767,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -2689,6 +2693,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -2715,6 +2720,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -3601,6 +3607,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -3627,6 +3634,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>

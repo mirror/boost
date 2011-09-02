@@ -962,6 +962,7 @@ EOL;
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
@@ -985,6 +986,7 @@ EOL;
               </parameter>
               <type>bool</type>
               <notes>
+                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
                 <para>This is a boost extension.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
