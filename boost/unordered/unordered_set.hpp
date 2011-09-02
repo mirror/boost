@@ -131,9 +131,7 @@ namespace unordered
 
         unordered_set(unordered_set const&);
 
-#if BOOST_UNORDERED_USE_RV_REF
-        unordered_set& operator=(
-                BOOST_RV_REF(unordered_set) x)
+        unordered_set& operator=(BOOST_RV_REF(unordered_set) x)
         {
             table_.move_assign(x.table_);
             return *this;
@@ -143,7 +141,6 @@ namespace unordered
             : table_(other.table_, ::boost::unordered::detail::move_tag())
         {
         }
-#endif
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_set(unordered_set&&, allocator_type const&);
@@ -254,11 +251,9 @@ namespace unordered
 #endif
 
         std::pair<iterator, bool> insert(value_type const&);
+        std::pair<iterator, bool> insert(BOOST_UNORDERED_RV_REF(value_type));
         iterator insert(const_iterator, value_type const&);
-#if BOOST_UNORDERED_USE_RV_REF
-        std::pair<iterator, bool> insert(BOOST_RV_REF(value_type));
-        iterator insert(const_iterator, BOOST_RV_REF(value_type));
-#endif
+        iterator insert(const_iterator, BOOST_UNORDERED_RV_REF(value_type));
         template <class InputIt> void insert(InputIt, InputIt);
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -460,9 +455,7 @@ namespace unordered
 
         unordered_multiset(unordered_multiset const&);
 
-#if BOOST_UNORDERED_USE_RV_REF
-        unordered_multiset& operator=(
-                BOOST_RV_REF(unordered_multiset) x)
+        unordered_multiset& operator=(BOOST_RV_REF(unordered_multiset) x)
         {
             table_.move_assign(x.table_);
             return *this;
@@ -472,7 +465,6 @@ namespace unordered
             : table_(other.table_, ::boost::unordered::detail::move_tag())
         {
         }
-#endif
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_multiset(unordered_multiset&&, allocator_type const&);
@@ -583,11 +575,10 @@ namespace unordered
 #endif
 
         iterator insert(value_type const&);
+        iterator insert(BOOST_UNORDERED_RV_REF(value_type));
         iterator insert(const_iterator, value_type const&);
-#if BOOST_UNORDERED_USE_RV_REF
-        iterator insert(BOOST_RV_REF(value_type));
-        iterator insert(const_iterator, BOOST_RV_REF(value_type));
-#endif
+        iterator insert(const_iterator, BOOST_UNORDERED_RV_REF(value_type));
+
         template <class InputIt>
         void insert(InputIt, InputIt);
 
@@ -895,10 +886,9 @@ namespace unordered
         return iterator(table_.emplace(obj).first);
     }
 
-#if BOOST_UNORDERED_USE_RV_REF
     template <class T, class H, class P, class A>
     std::pair<typename unordered_set<T,H,P,A>::iterator, bool>
-        unordered_set<T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
+        unordered_set<T,H,P,A>::insert(BOOST_UNORDERED_RV_REF(value_type) obj)
     {
         return table_.emplace(boost::move(obj));
     }
@@ -906,11 +896,10 @@ namespace unordered
     template <class T, class H, class P, class A>
     typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::insert(const_iterator,
-                BOOST_RV_REF(value_type) obj)
+                BOOST_UNORDERED_RV_REF(value_type) obj)
     {
         return iterator(table_.emplace(boost::move(obj)).first);
     }
-#endif
 
     template <class T, class H, class P, class A>
     template <class InputIt>
@@ -1275,10 +1264,9 @@ namespace unordered
         return iterator(table_.emplace(obj));
     }
 
-#if BOOST_UNORDERED_USE_RV_REF
     template <class T, class H, class P, class A>
     typename unordered_multiset<T,H,P,A>::iterator
-        unordered_multiset<T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
+        unordered_multiset<T,H,P,A>::insert(BOOST_UNORDERED_RV_REF(value_type) obj)
     {
         return iterator(table_.emplace(boost::move(obj)));
     }
@@ -1286,11 +1274,10 @@ namespace unordered
     template <class T, class H, class P, class A>
     typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::insert(const_iterator,
-                BOOST_RV_REF(value_type) obj)
+                BOOST_UNORDERED_RV_REF(value_type) obj)
     {
         return iterator(table_.emplace(boost::move(obj)));
     }
-#endif
 
     template <class T, class H, class P, class A>
     template <class InputIt>

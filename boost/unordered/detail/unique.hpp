@@ -196,6 +196,14 @@ namespace boost { namespace unordered { namespace detail {
         }
 
 
+#if defined(BOOST_NO_RVALUE_REFERENCES)
+        emplace_return emplace(please_ignore_this_overload const&)
+        {
+            BOOST_ASSERT(false);
+            return emplace_return(this->begin(), false);
+        }
+#endif
+
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
         template<class... Args>

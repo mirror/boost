@@ -228,6 +228,14 @@ namespace boost { namespace unordered { namespace detail {
                 this->find_node(bucket_index, hash, k));
         }
 
+#if defined(BOOST_NO_RVALUE_REFERENCES)
+        node_ptr emplace(please_ignore_this_overload const&)
+        {
+            BOOST_ASSERT(false);
+            return this->begin();
+        }
+#endif
+
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
 
         template <class... Args>

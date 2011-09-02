@@ -23,6 +23,9 @@
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/is_empty.hpp>
+#if defined(BOOST_NO_RVALUE_REFERENCES)
+#include <boost/type_traits/is_class.hpp>
+#endif
 #include <boost/throw_exception.hpp>
 #include <boost/move/move.hpp>
 #include <boost/swap.hpp>
@@ -128,6 +131,36 @@ namespace boost { namespace unordered { namespace detail {
 
 #if defined(BOOST_MSVC)
 #pragma warning(pop)
+#endif
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+
+#define BOOST_UNORDERED_RV_REF(T) BOOST_RV_REF(T)
+
+#else
+
+    struct please_ignore_this_overload {
+        typedef please_ignore_this_overload type;
+    };
+
+    template <typename T>
+    struct rv_ref_impl {
+        typedef BOOST_RV_REF(T) type;
+    };
+
+    template <typename T>
+    struct rv_ref :
+        boost::detail::if_true<
+            boost::is_class<T>::value
+        >::BOOST_NESTED_TEMPLATE then <
+            rv_ref_impl<T>,
+            please_ignore_this_overload
+        >::type
+    {};
+
+#define BOOST_UNORDERED_RV_REF(T) \
+    typename ::boost::unordered::detail::rv_ref<T>::type
+
 #endif
 
     ////////////////////////////////////////////////////////////////////////////
