@@ -181,6 +181,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run ../example/chrono_accuracy_test.cpp ]
         [ chrono-run-mt ../example/test_thread_clock.cpp  ]
         [ chrono-run ../example/french.cpp  ]
+        [ chrono-run ../example/rounding.cpp  ]
         #[ chrono-run ../example/await_keystroke.cpp  ]
         ;
 
