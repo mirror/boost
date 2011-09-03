@@ -9,7 +9,7 @@
 
 [library Boost.Chrono
     [quickbook 1.5]
-    [version 1.1.0]
+    [version 1.2.0]
     [authors [Hinnant, Howard]]
     [authors [Dawes, Beman]]
     [authors [Botet Escriba, Vicente J.]]
@@ -3933,6 +3933,16 @@ All the units are given using the suffix "s" following the System International 
 [/==================================]
 [section:history Appendix A: History]
 [/==================================]
+
+[section [*Version 1.2.0, September 3, 2011] ]
+
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/5669 #5669] Intel compiler failure to compile duration.hpp
+* [@http://svn.boost.org/trac/boost/ticket/2114 #2114] Enable visibility support (Boost.Chorno part)
+
+[endsect] [/section [*Version 1.2.0, September 3, 2011] ]
+
 
 [section [*Version 1.1.0, Mars 17, 2011] ]
 
