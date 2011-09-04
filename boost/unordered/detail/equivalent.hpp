@@ -128,8 +128,6 @@ namespace boost { namespace unordered { namespace detail {
                 if (n1 == end1) return n2 == end2;
                 if (n2 == end2) return false;
             }
-
-            return true;
         }
 
 #endif
