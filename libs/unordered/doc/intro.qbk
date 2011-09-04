@@ -2,15 +2,6 @@
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
 
-[def __tr1__ 
-    [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf
-    C++ Standard Library Technical Report]]
-[def __boost-tr1__
-    [@http://www.boost.org/doc/html/boost_tr1.html
-    Boost.TR1]]
-[def __draft__
-    [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2009/n2960.pdf
-    Working Draft of the C++ Standard]]
 [def __hash-table__ [@http://en.wikipedia.org/wiki/Hash_table
     hash table]]
 [def __hash-function__ [@http://en.wikipedia.org/wiki/Hash_function
@@ -31,12 +22,10 @@ to order their elements. For some data types this is impossible to implement
 or isn't practical. In contrast, a hash table only needs an equality function
 and a hash function for the key.
 
-With this in mind, the __tr1__ introduced the unordered associative containers,
-which are implemented using hash tables, and they have now been added to the
-__draft__.
-
-This library supplies an almost complete implementation of the specification in
-the __draft__.
+With this in mind, unordered associative containers were added to the C++
+standard. This is an implementation of the containers described in C++11,
+with some [link unordered.compliance deviations from the standard] in
+order to work with non-C++11 compilers and libraries.
 
 `unordered_set` and `unordered_multiset` are defined in the header
 <[headerref boost/unordered_set.hpp]>

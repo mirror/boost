@@ -16,7 +16,7 @@
 #include "./compile_tests.hpp"
 
 // Explicit instantiation to catch compile-time errors
-/*
+
 template class boost::unordered_set<
     int,
     boost::hash<int>,
@@ -27,7 +27,7 @@ template class boost::unordered_multiset<
     boost::hash<int>,
     std::equal_to<int>,
     test::minimal::allocator<int> >;
-*/
+
 template class boost::unordered_set<
     test::minimal::assignable,
     test::minimal::hash<test::minimal::assignable>,

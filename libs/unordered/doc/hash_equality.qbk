@@ -67,9 +67,10 @@ so that the hash function doesn't need to be explicitly given:
 
 See the [link hash.custom Boost.Hash documentation] for more detail on how to
 do this.  Remember that it relies on extensions to the draft standard - so it
-won't work on other implementations of the unordered associative containers.
+won't work for other implementations of the unordered associative containers,
+you'll need to explicitly use Boost.Hash.
 
-[table Methods for accessing the hash and equality functions.
+[table:access_methods Methods for accessing the hash and equality functions.
     [[Method] [Description]]
 
     [

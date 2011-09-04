@@ -19,6 +19,8 @@
 #include <boost/detail/select_type.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/limits.hpp>
+#include <boost/type_traits/add_lvalue_reference.hpp>
 
 #if (defined(BOOST_NO_STD_ALLOCATOR) || defined(BOOST_DINKUMWARE_STDLIB)) \
     && !defined(__BORLANDC__)
@@ -76,13 +78,12 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Alloc, typename T>
     struct rebind_wrap
     {
-        typedef BOOST_DEDUCED_TYPENAME
-            Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
+        typedef typename Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
             type;
     };
 #   endif
 
-    template <typename T> T& make();
+    template <typename T> typename boost::add_lvalue_reference<T>::type make();
     struct choice9 { typedef char (&type)[9]; };
     struct choice8 : choice9 { typedef char (&type)[8]; };
     struct choice7 : choice8 { typedef char (&type)[7]; };
@@ -94,13 +95,14 @@ namespace boost { namespace unordered { namespace detail {
     struct choice1 : choice2 { typedef char (&type)[1]; };
     choice1 choose();
 
-    #define BOOST_DEFAULT_TYPE_TMPLT(tname)                                 \
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1400
+
+    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
         template <typename Tp, typename Default>                            \
         struct default_type_ ## tname {                                     \
                                                                             \
             template <typename X>                                           \
-            static choice1::type test(choice1,                              \
-                BOOST_DEDUCED_TYPENAME X::tname* = 0);                      \
+            static choice1::type test(choice1, typename X::tname* = 0);     \
                                                                             \
             template <typename X>                                           \
             static choice2::type test(choice2, void* = 0);                  \
@@ -109,24 +111,50 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
             enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
                                                                             \
-            typedef BOOST_DEDUCED_TYPENAME                                  \
-                boost::detail::if_true<value>::                             \
+            typedef typename boost::detail::if_true<value>::                \
                 BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
                 ::type::tname type;                                         \
         }
 
-    #define BOOST_DEFAULT_TYPE(T,tname, arg)                                \
-        BOOST_DEDUCED_TYPENAME default_type_ ## tname<T, arg>::type
+#else
 
-    BOOST_DEFAULT_TYPE_TMPLT(pointer);
-    BOOST_DEFAULT_TYPE_TMPLT(const_pointer);
-    BOOST_DEFAULT_TYPE_TMPLT(void_pointer);
-    BOOST_DEFAULT_TYPE_TMPLT(const_void_pointer);
-    BOOST_DEFAULT_TYPE_TMPLT(difference_type);
-    BOOST_DEFAULT_TYPE_TMPLT(size_type);
-    BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_copy_assignment);
-    BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
-    BOOST_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
+    template <typename T, typename T2>
+    struct sfinae : T2 {};
+
+    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
+        template <typename Tp, typename Default>                            \
+        struct default_type_ ## tname {                                     \
+                                                                            \
+            template <typename X>                                           \
+            static typename sfinae<typename X::tname, choice1>::type        \
+                test(choice1);                                              \
+                                                                            \
+            template <typename X>                                           \
+            static choice2::type test(choice2);                             \
+                                                                            \
+            struct DefaultWrap { typedef Default tname; };                  \
+                                                                            \
+            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
+                                                                            \
+            typedef typename boost::detail::if_true<value>::                \
+                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
+                ::type::tname type;                                         \
+        }
+
+#endif
+
+    #define BOOST_UNORDERED_DEFAULT_TYPE(T,tname, arg)                      \
+        typename default_type_ ## tname<T, arg>::type
+
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(void_pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_void_pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(difference_type);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(size_type);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_copy_assignment);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
 
 #if !defined(BOOST_NO_SFINAE_EXPR) || BOOST_WORKAROUND(BOOST_MSVC, >= 1500)
 
@@ -146,14 +174,40 @@ namespace boost { namespace unordered { namespace detail {
         static BOOST_PP_CAT(choice, result)::type test(                     \
             BOOST_PP_CAT(choice, count))
 
+#define BOOST_UNORDERED_HAS_EXPRESSION(name, expression)                    \
+    struct BOOST_PP_CAT(has_, name)                                         \
+    {                                                                       \
+        BOOST_UNORDERED_CHECK_EXPRESSION(1, 1, expression);                 \
+        BOOST_UNORDERED_DEFAULT_EXPRESSION(2, 2);                           \
+                                                                            \
+        enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };\
+    }
+
     template <typename T>
-    struct has_select_on_container_copy_construction
-    {
-        BOOST_UNORDERED_CHECK_EXPRESSION(1, 1, make<U const>().select_on_container_copy_construction());
-        BOOST_UNORDERED_DEFAULT_EXPRESSION(2, 2);
-        
-        enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };
-    };
+    BOOST_UNORDERED_HAS_EXPRESSION(
+        select_on_container_copy_construction,
+        make<U const>().select_on_container_copy_construction()
+    );
+
+    // Only supporting the basic copy constructor for now.
+
+    template <typename T, typename ValueType>
+    BOOST_UNORDERED_HAS_EXPRESSION(
+        construct,
+        make<U>().construct(make<ValueType*>(), make<ValueType const>())
+    );
+
+    template <typename T, typename ValueType>
+    BOOST_UNORDERED_HAS_EXPRESSION(
+        destroy,
+        make<U>().destroy(make<ValueType*>())
+    );
+
+    template <typename T>
+    BOOST_UNORDERED_HAS_EXPRESSION(
+        max_size,
+        make<U const>().max_size()
+    );
 
 #else
 
@@ -165,32 +219,43 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
     template <BOOST_PP_CAT(check, count) e>                                 \
     struct BOOST_PP_CAT(test, count) {                                      \
-        typedef void* type;                                                 \
+        typedef BOOST_PP_CAT(choice, result) type;                          \
     };                                                                      \
                                                                             \
-    template <class U> static BOOST_PP_CAT(choice, result)::type            \
-        test(BOOST_PP_CAT(choice, count),                                   \
-            typename BOOST_PP_CAT(test, count)<                             \
-                &U::name>::type = 0)
+    template <class U> static typename                                      \
+        BOOST_PP_CAT(test, count)<&U::name>::type                           \
+        test(BOOST_PP_CAT(choice, count))
 
 #define BOOST_UNORDERED_DEFAULT_MEMBER(count, result)                       \
     template <class U> static BOOST_PP_CAT(choice, result)::type            \
-        test(BOOST_PP_CAT(choice, count), void* = 0)
+        test(BOOST_PP_CAT(choice, count))
 
 
     template <typename T>
     struct has_select_on_container_copy_construction
     {
-        BOOST_UNORDERED_CHECK_MEMBER(1, 1, select_on_container_copy_construction, T (T::*)() const);
+        BOOST_UNORDERED_CHECK_MEMBER(1, 1,
+            select_on_container_copy_construction,
+            T (T::*)() const);
         BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);
  
         enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };
     };
 
+    // Detection isn't reliable enough, so just assume that we have these
+    // functions.
+    
+    template <typename Alloc, typename value_type>
+    struct has_construct : true_type {};
+    template <typename Alloc, typename value_type>
+    struct has_destroy : true_type {};
+    template <typename Alloc>
+    struct has_max_size : true_type {};
+
 #endif
 
     template <typename Alloc>
-    inline BOOST_DEDUCED_TYPENAME boost::enable_if<
+    inline typename boost::enable_if<
             has_select_on_container_copy_construction<Alloc>, Alloc
         >::type call_select_on_container_copy_construction(const Alloc& rhs)
     {
@@ -198,11 +263,25 @@ namespace boost { namespace unordered { namespace detail {
     }
 
     template <typename Alloc>
-    inline BOOST_DEDUCED_TYPENAME boost::disable_if<
+    inline typename boost::disable_if<
             has_select_on_container_copy_construction<Alloc>, Alloc
         >::type call_select_on_container_copy_construction(const Alloc& rhs)
     {
         return rhs;
+    }
+
+    template <typename SizeType, typename Alloc>
+    SizeType call_max_size(const Alloc& a,
+        typename boost::enable_if<has_max_size<Alloc>, void*>::type = 0)
+    {
+        return a.max_size();
+    }
+
+    template <typename SizeType, typename Alloc>
+    SizeType call_max_size(const Alloc&,
+        typename boost::disable_if<has_max_size<Alloc>, void*>::type = 0)
+    {
+        return std::numeric_limits<SizeType>::max();
     }
 
     template <typename Alloc>
@@ -211,35 +290,35 @@ namespace boost { namespace unordered { namespace detail {
         typedef Alloc allocator_type;
         typedef typename Alloc::value_type value_type;
 
-        typedef BOOST_DEFAULT_TYPE(Alloc, pointer, value_type*)
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, pointer, value_type*)
             pointer;
 
         // For now always use the allocator's const_pointer.
 
-        //typedef BOOST_DEFAULT_TYPE(Alloc, const_pointer,
-        //    BOOST_DEDUCED_TYPENAME pointer_traits<pointer>::
+        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_pointer,
+        //    typename pointer_traits<pointer>::
         //    BOOST_NESTED_TEMPLATE rebind<const value_type>::other)
         //    const_pointer;
 
-        typedef BOOST_DEFAULT_TYPE(Alloc, const_pointer, value_type const*)
-            const_pointer;
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_pointer,
+            value_type const*) const_pointer;
 
         // I'm not using void pointers for now.
 
-        //typedef BOOST_DEFAULT_TYPE(Alloc, void_pointer,
+        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, void_pointer,
         //    BOOST_NESTED_TEMPLATE pointer_traits<pointer>::
         //    BOOST_NESTED_TEMPLATE rebind<void>::other)
         //    void_pointer;
 
-        //typedef BOOST_DEFAULT_TYPE(Alloc, const_void_pointer,
-        //    BOOST_DEDUCED_TYPENAME pointer_traits<pointer>::
+        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_void_pointer,
+        //    typename pointer_traits<pointer>::
         //    BOOST_NESTED_TEMPLATE rebind<const void>::other)
         //    const_void_pointer;
 
-        typedef BOOST_DEFAULT_TYPE(Alloc, difference_type, std::ptrdiff_t)
-            difference_type;
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, difference_type,
+            std::ptrdiff_t) difference_type;
 
-        typedef BOOST_DEFAULT_TYPE(Alloc, size_type, std::size_t)
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, size_type, std::size_t)
             size_type;
 
         // TODO: rebind_alloc and rebind_traits
@@ -249,32 +328,49 @@ namespace boost { namespace unordered { namespace detail {
 
         // I never use this, so I'll just comment it out for now.
         //
-        //static pointer allocate(Alloc& a, size_type n, const_void_pointer hint)
+        //static pointer allocate(Alloc& a, size_type n,
+        //        const_void_pointer hint)
         //    { return DEFAULT_FUNC(allocate, pointer)(a, n, hint); }
     
         static void deallocate(Alloc& a, pointer p, size_type n)
             { a.deallocate(p, n); }
 
-        // Only support the basic copy constructor
+    public:
 
-        // template <typename T, typename... Args>
-        // static void construct(Alloc& a, T* p, Args&&... args) {
-        //     DEFAULT_FUNC(construct,void)(a, p, std::forward<Args>(args)...);
-        // }
+        // Only supporting the basic copy constructor for now.
 
         template <typename T>
-        static void construct(Alloc& a, T* p, T const& x) {
+        static void construct(Alloc& a, T* p, T const& x, typename
+                boost::enable_if<has_construct<Alloc, T>, void*>::type = 0)
+        {
             a.construct(p, x);
         }
 
         template <typename T>
-        static void destroy(Alloc& a, T* p) {
-            // DEFAULT_FUNC(destroy,void)(a, p);
+        static void construct(Alloc&, T* p, T const& x, typename
+                boost::disable_if<has_construct<Alloc, T>, void*>::type = 0)
+        {
+            new ((void*) p) T(x);
+        }
+
+        template <typename T>
+        static void destroy(Alloc& a, T* p, typename
+                boost::enable_if<has_destroy<Alloc, T>, void*>::type = 0)
+        {
             a.destroy(p);
         }
 
+        template <typename T>
+        static void destroy(Alloc&, T* p, typename
+                boost::disable_if<has_destroy<Alloc, T>, void*>::type = 0)
+        {
+            p->~T();
+        }
+
         static size_type max_size(const Alloc& a)
-            { return a.max_size(); }
+        {
+            return boost::unordered::detail::call_max_size<size_type>(a);
+        }
 
         // Allocator propagation on construction
         
@@ -286,13 +382,13 @@ namespace boost { namespace unordered { namespace detail {
     
         // Allocator propagation on assignment and swap.
         // Return true if lhs is modified.
-        typedef BOOST_DEFAULT_TYPE(
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(
             Alloc, propagate_on_container_copy_assignment, false_type)
             propagate_on_container_copy_assignment;
-        typedef BOOST_DEFAULT_TYPE(
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(
             Alloc,propagate_on_container_move_assignment, false_type)
             propagate_on_container_move_assignment;
-        typedef BOOST_DEFAULT_TYPE(
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(
             Alloc,propagate_on_container_swap,false_type)
             propagate_on_container_swap;
     };
@@ -307,7 +403,7 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Allocator>
     struct allocator_array_constructor
     {
-        typedef BOOST_DEDUCED_TYPENAME allocator_traits<Allocator>::pointer
+        typedef typename allocator_traits<Allocator>::pointer
             pointer;
 
         Allocator& alloc_;

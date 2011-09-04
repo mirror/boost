@@ -27,6 +27,18 @@ namespace detail {
         template <class T> no_key(T const&) {}
     };
 
+    template <typename Key, typename T>
+    struct is_key {
+        template <typename T2>
+        static choice1::type test(T2 const&);
+        static choice2::type test(Key const&);
+        
+        enum { value = sizeof(test(make<T>())) == sizeof(choice2::type) };
+        
+        typedef typename boost::detail::if_true<value>::
+            BOOST_NESTED_TEMPLATE then<Key const&, no_key>::type type;
+    };
+
     template <class ValueType>
     struct set_extractor
     {
@@ -64,8 +76,8 @@ namespace detail {
             return no_key();
         }
 
-        template <class Arg>
-        static no_key extract(Arg const&, Arg const&)
+        template <class Arg1, class Arg2>
+        static no_key extract(Arg1 const&, Arg2 const&)
         {
             return no_key();
         }
@@ -81,7 +93,7 @@ namespace detail {
     struct map_extractor
     {
         typedef ValueType value_type;
-        typedef BOOST_DEDUCED_TYPENAME ::boost::remove_const<Key>::type key_type;
+        typedef typename ::boost::remove_const<Key>::type key_type;
 
         static key_type const& extract(value_type const& v)
         {
@@ -127,6 +139,7 @@ namespace detail {
             return no_key();
         }
 #else
+
         template <class Arg1>
         static key_type const& extract(key_type const& k, Arg1 const&)
         {
@@ -150,6 +163,54 @@ namespace detail {
             return no_key();
         }
 #endif
+
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+
+#define BOOST_UNORDERED_KEY_FROM_TUPLE(namespace_)                          \
+        template <typename T2>                                              \
+        static no_key extract(boost::unordered::piecewise_construct_t,      \
+                namespace_::tuple<> const&, T2&&)                           \
+        {                                                                   \
+            return no_key();                                                \
+        }                                                                   \
+                                                                            \
+        template <typename T, typename T2>                                  \
+        static typename is_key<key_type, T>::type                           \
+            extract(boost::unordered::piecewise_construct_t,                \
+                namespace_::tuple<T> const& k, T2&&)                        \
+        {                                                                   \
+            return typename is_key<key_type, T>::type(                      \
+                namespace_::get<0>(k));                                     \
+        }
+
+#else
+
+#define BOOST_UNORDERED_KEY_FROM_TUPLE(namespace_)                          \
+        static no_key extract(boost::unordered::piecewise_construct_t,      \
+                namespace_::tuple<> const&)                                 \
+        {                                                                   \
+            return no_key();                                                \
+        }                                                                   \
+                                                                            \
+        template <typename T>                                               \
+        static typename is_key<key_type, T>::type                           \
+            extract(boost::unordered::piecewise_construct_t,                \
+                namespace_::tuple<T> const& k)                              \
+        {                                                                   \
+            return typename is_key<key_type, T>::type(                      \
+                namespace_::get<0>(k));                                     \
+        }
+
+#endif
+
+BOOST_UNORDERED_KEY_FROM_TUPLE(boost)
+
+#if !defined(BOOST_NO_0X_HDR_TUPLE)
+BOOST_UNORDERED_KEY_FROM_TUPLE(std)
+#elif defined(BOOST_HAS_TR1_TUPLE)
+BOOST_UNORDERED_KEY_FROM_TUPLE(std::tr1)
+#endif
+
 
         static bool compare_mapped(value_type const& x, value_type const& y)
         {

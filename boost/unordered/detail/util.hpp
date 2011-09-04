@@ -23,13 +23,23 @@
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/is_empty.hpp>
+#if defined(BOOST_NO_RVALUE_REFERENCES)
+#include <boost/type_traits/is_class.hpp>
+#endif
 #include <boost/throw_exception.hpp>
-#include <boost/unordered/detail/allocator_helpers.hpp>
-#include <boost/preprocessor/seq/size.hpp>
-#include <boost/preprocessor/seq/enum.hpp>
-#include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/move/move.hpp>
 #include <boost/swap.hpp>
+#include <boost/preprocessor/seq/size.hpp>
+#include <boost/preprocessor/seq/enum.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
+#include <boost/preprocessor/repetition/enum.hpp>
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+#include <boost/tuple/tuple.hpp>
+#if !defined(BOOST_NO_0X_HDR_TUPLE) || defined(BOOST_HAS_TR1_TUPLE)
+#include <tuple>
+#endif
+#include <boost/unordered/detail/allocator_helpers.hpp>
 
 // Template parameters:
 //
@@ -123,6 +133,36 @@ namespace boost { namespace unordered { namespace detail {
 #pragma warning(pop)
 #endif
 
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+
+#define BOOST_UNORDERED_RV_REF(T) BOOST_RV_REF(T)
+
+#else
+
+    struct please_ignore_this_overload {
+        typedef please_ignore_this_overload type;
+    };
+
+    template <typename T>
+    struct rv_ref_impl {
+        typedef BOOST_RV_REF(T) type;
+    };
+
+    template <typename T>
+    struct rv_ref :
+        boost::detail::if_true<
+            boost::is_class<T>::value
+        >::BOOST_NESTED_TEMPLATE then <
+            rv_ref_impl<T>,
+            please_ignore_this_overload
+        >::type
+    {};
+
+#define BOOST_UNORDERED_RV_REF(T) \
+    typename ::boost::unordered::detail::rv_ref<T>::type
+
+#endif
+
     ////////////////////////////////////////////////////////////////////////////
     // convert double to std::size_t
 
@@ -198,22 +238,6 @@ namespace boost { namespace unordered { namespace detail {
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // pair_cast - because some libraries don't have the full pair constructors.
-
-#if 0
-    template <class Dst1, class Dst2, class Src1, class Src2>
-    inline std::pair<Dst1, Dst2> pair_cast(std::pair<Src1, Src2> const& x)
-    {
-        return std::pair<Dst1, Dst2>(Dst1(x.first), Dst2(x.second));
-    }
-
-#define BOOST_UNORDERED_PAIR_CAST(First, Last, Argument) \
-    ::boost::unordered::detail::pair_cast<First, Last>(Argument)
-#else
-#define BOOST_UNORDERED_PAIR_CAST(First, Last, Argument) \
-    Argument
-#endif
-    ////////////////////////////////////////////////////////////////////////////
     // insert_size/initial_size
 
 #if !defined(BOOST_NO_STD_DISTANCE)
@@ -242,9 +266,8 @@ namespace boost { namespace unordered { namespace detail {
     template <class I>
     inline std::size_t insert_size(I i, I j)
     {
-        BOOST_DEDUCED_TYPENAME ::boost::iterator_traversal<I>::type
-            iterator_traversal_tag;
-        return insert_size(i, j, iterator_traversal_tag);
+        return insert_size(i, j,
+            typename ::boost::iterator_traversal<I>::type());
     }
     
     template <class I>
@@ -295,8 +318,8 @@ namespace boost { namespace unordered { namespace detail {
       : private generate_base<T1, 1>::type,
         private generate_base<T2, 2>::type
     {
-        typedef BOOST_DEDUCED_TYPENAME generate_base<T1, 1>::type base1;
-        typedef BOOST_DEDUCED_TYPENAME generate_base<T2, 2>::type base2;
+        typedef typename generate_base<T1, 1>::type base1;
+        typedef typename generate_base<T2, 2>::type base2;
 
         typedef T1 first_type;
         typedef T2 second_type;

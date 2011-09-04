@@ -52,8 +52,7 @@ namespace unordered
     private:
 #endif
 
-        typedef BOOST_DEDUCED_TYPENAME
-            ::boost::unordered::detail::rebind_wrap<
+        typedef typename ::boost::unordered::detail::rebind_wrap<
                 allocator_type, value_type>::type
             value_allocator;
         typedef ::boost::unordered::detail::allocator_traits<value_allocator>
@@ -61,16 +60,14 @@ namespace unordered
 
         typedef ::boost::unordered::detail::set<H, P,
             value_allocator> types;
-        typedef BOOST_DEDUCED_TYPENAME types::impl table;
+        typedef typename types::impl table;
 
-        typedef BOOST_DEDUCED_TYPENAME types::node_ptr node_ptr;
+        typedef typename types::node_ptr node_ptr;
 
     public:
 
-        typedef BOOST_DEDUCED_TYPENAME
-            allocator_traits::pointer pointer;
-        typedef BOOST_DEDUCED_TYPENAME
-            allocator_traits::const_pointer const_pointer;
+        typedef typename allocator_traits::pointer pointer;
+        typedef typename allocator_traits::const_pointer const_pointer;
 
         typedef value_type& reference;
         typedef value_type const& const_reference;
@@ -134,9 +131,7 @@ namespace unordered
 
         unordered_set(unordered_set const&);
 
-#if BOOST_UNORDERED_USE_RV_REF
-        unordered_set& operator=(
-                BOOST_RV_REF(unordered_set) x)
+        unordered_set& operator=(BOOST_RV_REF(unordered_set) x)
         {
             table_.move_assign(x.table_);
             return *this;
@@ -146,7 +141,6 @@ namespace unordered
             : table_(other.table_, ::boost::unordered::detail::move_tag())
         {
         }
-#endif
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_set(unordered_set&&, allocator_type const&);
@@ -257,11 +251,9 @@ namespace unordered
 #endif
 
         std::pair<iterator, bool> insert(value_type const&);
+        std::pair<iterator, bool> insert(BOOST_UNORDERED_RV_REF(value_type));
         iterator insert(const_iterator, value_type const&);
-#if BOOST_UNORDERED_USE_RV_REF
-        std::pair<iterator, bool> insert(BOOST_RV_REF(value_type));
-        iterator insert(const_iterator, BOOST_RV_REF(value_type));
-#endif
+        iterator insert(const_iterator, BOOST_UNORDERED_RV_REF(value_type));
         template <class InputIt> void insert(InputIt, InputIt);
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -384,8 +376,7 @@ namespace unordered
     private:
 #endif
 
-        typedef BOOST_DEDUCED_TYPENAME
-            ::boost::unordered::detail::rebind_wrap<
+        typedef typename ::boost::unordered::detail::rebind_wrap<
                 allocator_type, value_type>::type
             value_allocator;
         typedef ::boost::unordered::detail::allocator_traits<value_allocator>
@@ -393,16 +384,14 @@ namespace unordered
 
         typedef ::boost::unordered::detail::multiset<H, P,
             value_allocator> types;
-        typedef BOOST_DEDUCED_TYPENAME types::impl table;
+        typedef typename types::impl table;
 
-        typedef BOOST_DEDUCED_TYPENAME types::node_ptr node_ptr;
+        typedef typename types::node_ptr node_ptr;
 
     public:
 
-        typedef BOOST_DEDUCED_TYPENAME
-            allocator_traits::pointer pointer;
-        typedef BOOST_DEDUCED_TYPENAME
-            allocator_traits::const_pointer const_pointer;
+        typedef typename allocator_traits::pointer pointer;
+        typedef typename allocator_traits::const_pointer const_pointer;
 
         typedef value_type& reference;
         typedef value_type const& const_reference;
@@ -466,9 +455,7 @@ namespace unordered
 
         unordered_multiset(unordered_multiset const&);
 
-#if BOOST_UNORDERED_USE_RV_REF
-        unordered_multiset& operator=(
-                BOOST_RV_REF(unordered_multiset) x)
+        unordered_multiset& operator=(BOOST_RV_REF(unordered_multiset) x)
         {
             table_.move_assign(x.table_);
             return *this;
@@ -478,7 +465,6 @@ namespace unordered
             : table_(other.table_, ::boost::unordered::detail::move_tag())
         {
         }
-#endif
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_multiset(unordered_multiset&&, allocator_type const&);
@@ -589,11 +575,10 @@ namespace unordered
 #endif
 
         iterator insert(value_type const&);
+        iterator insert(BOOST_UNORDERED_RV_REF(value_type));
         iterator insert(const_iterator, value_type const&);
-#if BOOST_UNORDERED_USE_RV_REF
-        iterator insert(BOOST_RV_REF(value_type));
-        iterator insert(const_iterator, BOOST_RV_REF(value_type));
-#endif
+        iterator insert(const_iterator, BOOST_UNORDERED_RV_REF(value_type));
+
         template <class InputIt>
         void insert(InputIt, InputIt);
 
@@ -818,16 +803,15 @@ namespace unordered
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
     template <class T, class H, class P, class A>
     template <class... Args>
-    std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
+    std::pair<typename unordered_set<T,H,P,A>::iterator, bool>
         unordered_set<T,H,P,A>::emplace(Args&&... args)
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-            table_.emplace(std::forward<Args>(args)...));
+        return table_.emplace(std::forward<Args>(args)...);
     }
 
     template <class T, class H, class P, class A>
     template <class... Args>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator
+    typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::emplace_hint(const_iterator, Args&&... args)
     {
         return iterator(table_.emplace(std::forward<Args>(args)...).first);
@@ -835,18 +819,17 @@ namespace unordered
 #else
 
     template <class T, class H, class P, class A>
-    std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
+    std::pair<typename unordered_set<T,H,P,A>::iterator, bool>
         unordered_set<T,H,P,A>::emplace(
                 boost::unordered::detail::empty_emplace,
                 value_type v
             )
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-                table_.emplace(boost::move(v)));
+        return table_.emplace(boost::move(v));
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator
+    typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::emplace_hint(const_iterator,
                 boost::unordered::detail::empty_emplace,
                 value_type v
@@ -860,23 +843,18 @@ namespace unordered
         template <                                                          \
             BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
         >                                                                   \
-        std::pair<                                                          \
-                BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator,    \
-                bool>                                                       \
+        std::pair<typename unordered_set<T,H,P,A>::iterator, bool>          \
             unordered_set<T,H,P,A>::emplace(                                \
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                      \
         {                                                                   \
-            return                                                          \
-                BOOST_UNORDERED_PAIR_CAST(iterator, bool,                   \
-                    table_.emplace(                                         \
-                        BOOST_UNORDERED_CALL_PARAMS(z, n)));                \
+            return table_.emplace(BOOST_UNORDERED_CALL_PARAMS(z, n));       \
         }                                                                   \
                                                                             \
         template <class T, class H, class P, class A>                       \
         template <                                                          \
             BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
         >                                                                   \
-        BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator             \
+        typename unordered_set<T,H,P,A>::iterator                           \
             unordered_set<T,H,P,A>::emplace_hint(                           \
                 const_iterator,                                             \
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                       \
@@ -894,38 +872,34 @@ namespace unordered
 #endif
 
     template <class T, class H, class P, class A>
-    std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
+    std::pair<typename unordered_set<T,H,P,A>::iterator, bool>
         unordered_set<T,H,P,A>::insert(value_type const& obj)
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-                table_.emplace(obj));
+        return table_.emplace(obj);
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator
+    typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::insert(const_iterator,
                 value_type const& obj)
     {
         return iterator(table_.emplace(obj).first);
     }
 
-#if BOOST_UNORDERED_USE_RV_REF
     template <class T, class H, class P, class A>
-    std::pair<BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator, bool>
-        unordered_set<T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
+    std::pair<typename unordered_set<T,H,P,A>::iterator, bool>
+        unordered_set<T,H,P,A>::insert(BOOST_UNORDERED_RV_REF(value_type) obj)
     {
-        return BOOST_UNORDERED_PAIR_CAST(iterator, bool,
-                table_.emplace(boost::move(obj)));
+        return table_.emplace(boost::move(obj));
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator
+    typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::insert(const_iterator,
-                BOOST_RV_REF(value_type) obj)
+                BOOST_UNORDERED_RV_REF(value_type) obj)
     {
         return iterator(table_.emplace(boost::move(obj)).first);
     }
-#endif
 
     template <class T, class H, class P, class A>
     template <class InputIt>
@@ -943,21 +917,21 @@ namespace unordered
 #endif
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator
+    typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::erase(const_iterator position)
     {
         return iterator(table_.erase(position.node_));
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::size_type
+    typename unordered_set<T,H,P,A>::size_type
         unordered_set<T,H,P,A>::erase(const key_type& k)
     {
         return table_.erase_key(k);
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::iterator
+    typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::erase(const_iterator first, const_iterator last)
     {
         return iterator(table_.erase_range(first.node_, last.node_));
@@ -978,14 +952,14 @@ namespace unordered
     // observers
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::hasher
+    typename unordered_set<T,H,P,A>::hasher
         unordered_set<T,H,P,A>::hash_function() const
     {
         return table_.hash_function();
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::key_equal
+    typename unordered_set<T,H,P,A>::key_equal
         unordered_set<T,H,P,A>::key_eq() const
     {
         return table_.key_eq();
@@ -994,7 +968,7 @@ namespace unordered
     // lookup
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::const_iterator
+    typename unordered_set<T,H,P,A>::const_iterator
         unordered_set<T,H,P,A>::find(const key_type& k) const
     {
         return const_iterator(table_.find_node(k));
@@ -1003,7 +977,7 @@ namespace unordered
     template <class T, class H, class P, class A>
     template <class CompatibleKey, class CompatibleHash,
         class CompatiblePredicate>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::const_iterator
+    typename unordered_set<T,H,P,A>::const_iterator
         unordered_set<T,H,P,A>::find(
             CompatibleKey const& k,
             CompatibleHash const& hash,
@@ -1013,7 +987,7 @@ namespace unordered
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::size_type
+    typename unordered_set<T,H,P,A>::size_type
         unordered_set<T,H,P,A>::count(const key_type& k) const
     {
         return table_.count(k);
@@ -1021,16 +995,15 @@ namespace unordered
 
     template <class T, class H, class P, class A>
     std::pair<
-            BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::const_iterator,
-            BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::const_iterator>
+            typename unordered_set<T,H,P,A>::const_iterator,
+            typename unordered_set<T,H,P,A>::const_iterator>
         unordered_set<T,H,P,A>::equal_range(const key_type& k) const
     {
-        return BOOST_UNORDERED_PAIR_CAST(const_iterator, const_iterator,
-            table_.equal_range(k));
+        return table_.equal_range(k);
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_set<T,H,P,A>::size_type
+    typename unordered_set<T,H,P,A>::size_type
         unordered_set<T,H,P,A>::bucket_size(size_type n) const
     {
         return table_.bucket_size(n);
@@ -1206,7 +1179,7 @@ namespace unordered
 
     template <class T, class H, class P, class A>
     template <class... Args>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::emplace(Args&&... args)
     {
         return iterator(table_.emplace(std::forward<Args>(args)...));
@@ -1214,7 +1187,7 @@ namespace unordered
 
     template <class T, class H, class P, class A>
     template <class... Args>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::emplace_hint(
             const_iterator, Args&&... args)
     {
@@ -1224,7 +1197,7 @@ namespace unordered
 #else
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::emplace(
                 boost::unordered::detail::empty_emplace,
                 value_type v
@@ -1234,7 +1207,7 @@ namespace unordered
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::emplace_hint(const_iterator,
                 boost::unordered::detail::empty_emplace,
                 value_type v
@@ -1248,7 +1221,7 @@ namespace unordered
         template <                                                          \
             BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
         >                                                                   \
-        BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator        \
+        typename unordered_multiset<T,H,P,A>::iterator                      \
             unordered_multiset<T,H,P,A>::emplace(                           \
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                      \
         {                                                                   \
@@ -1260,7 +1233,7 @@ namespace unordered
         template <                                                          \
             BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
         >                                                                   \
-        BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator        \
+        typename unordered_multiset<T,H,P,A>::iterator                      \
             unordered_multiset<T,H,P,A>::emplace_hint(                      \
                 const_iterator,                                             \
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                      \
@@ -1277,36 +1250,34 @@ namespace unordered
 #endif
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::insert(value_type const& obj)
     {
         return iterator(table_.emplace(obj));
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::insert(const_iterator,
                 value_type const& obj)
     {
         return iterator(table_.emplace(obj));
     }
 
-#if BOOST_UNORDERED_USE_RV_REF
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
-        unordered_multiset<T,H,P,A>::insert(BOOST_RV_REF(value_type) obj)
+    typename unordered_multiset<T,H,P,A>::iterator
+        unordered_multiset<T,H,P,A>::insert(BOOST_UNORDERED_RV_REF(value_type) obj)
     {
         return iterator(table_.emplace(boost::move(obj)));
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::insert(const_iterator,
-                BOOST_RV_REF(value_type) obj)
+                BOOST_UNORDERED_RV_REF(value_type) obj)
     {
         return iterator(table_.emplace(boost::move(obj)));
     }
-#endif
 
     template <class T, class H, class P, class A>
     template <class InputIt>
@@ -1324,21 +1295,21 @@ namespace unordered
 #endif
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::erase(const_iterator position)
     {
         return iterator(table_.erase(position.node_));
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::size_type
+    typename unordered_multiset<T,H,P,A>::size_type
         unordered_multiset<T,H,P,A>::erase(const key_type& k)
     {
         return table_.erase_key(k);
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::iterator
+    typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::erase(const_iterator first, const_iterator last)
     {
         return iterator(table_.erase_range(first.node_, last.node_));
@@ -1359,14 +1330,14 @@ namespace unordered
     // observers
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::hasher
+    typename unordered_multiset<T,H,P,A>::hasher
         unordered_multiset<T,H,P,A>::hash_function() const
     {
         return table_.hash_function();
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::key_equal
+    typename unordered_multiset<T,H,P,A>::key_equal
         unordered_multiset<T,H,P,A>::key_eq() const
     {
         return table_.key_eq();
@@ -1375,7 +1346,7 @@ namespace unordered
     // lookup
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::const_iterator
+    typename unordered_multiset<T,H,P,A>::const_iterator
         unordered_multiset<T,H,P,A>::find(const key_type& k) const
     {
         return const_iterator(table_.find_node(k));
@@ -1384,7 +1355,7 @@ namespace unordered
     template <class T, class H, class P, class A>
     template <class CompatibleKey, class CompatibleHash,
         class CompatiblePredicate>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::const_iterator
+    typename unordered_multiset<T,H,P,A>::const_iterator
         unordered_multiset<T,H,P,A>::find(
             CompatibleKey const& k,
             CompatibleHash const& hash,
@@ -1394,7 +1365,7 @@ namespace unordered
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::size_type
+    typename unordered_multiset<T,H,P,A>::size_type
         unordered_multiset<T,H,P,A>::count(const key_type& k) const
     {
         return table_.count(k);
@@ -1402,16 +1373,15 @@ namespace unordered
 
     template <class T, class H, class P, class A>
     std::pair<
-            BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::const_iterator,
-            BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::const_iterator>
+            typename unordered_multiset<T,H,P,A>::const_iterator,
+            typename unordered_multiset<T,H,P,A>::const_iterator>
         unordered_multiset<T,H,P,A>::equal_range(const key_type& k) const
     {
-        return BOOST_UNORDERED_PAIR_CAST(const_iterator, const_iterator,
-            table_.equal_range(k));
+        return table_.equal_range(k);
     }
 
     template <class T, class H, class P, class A>
-    BOOST_DEDUCED_TYPENAME unordered_multiset<T,H,P,A>::size_type
+    typename unordered_multiset<T,H,P,A>::size_type
         unordered_multiset<T,H,P,A>::bucket_size(size_type n) const
     {
         return table_.bucket_size(n);

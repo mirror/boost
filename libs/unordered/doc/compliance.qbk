@@ -4,25 +4,42 @@
 
 [section:compliance C++11 Compliance]
 
-/TODO/: Look into C++11's `std::pair`.
-
 [section:allocator_compliance Use of allocators]
 
-* Objects are not constructed using the allocator. The node containing them
-  is constructed using the allocator's `construct` function, but then the
-  object is constructed in a buffer in that node by calling the constructor
-  directly.
-* Similarly the object is destructed by calling its destructor directly, and
-  then the allocator's `destroy` method is used to destruct the node.
-* For most compilers `select_on_container_copy` is only detected for an
-  exact signature match in the allocator itself - not in a base. There is full
-  detection for g++ 4.4 or laster, Visual C++ 2008 or later, Clang and maybe
-  other compilers which support SFINAE for expressions.
-* `pointer_traits` aren't used. Instead, pointer types are obtained from
-  rebound allocators.
-* /TODO/: Any other defficiences of `allocator_traits` emulation.
-* Pointers of base types are used to store the location of a derived type.
-  (/TODO/: I'm not sure if that isn't compliant).
+C++11 introduced a new, mostly backwards compatible, allocator system.
+This uses a traits class, `allocator_traits` to handle the allocator
+adding extra functionality, and making some methods and types optional.
+At the time of writing there isn't a stable release of a standard library
+with `allocator_traits` (libc++ has `allocator_traits` but it hasn't been
+released yet) so a partial implementation is always used.
+
+A full implementation of `allocator_traits` requires sophisticated
+member function detection which requires support for SFINAE expressions,
+or something close. This is available on GCC from version 4.4, Clang and
+Visual C++ 2008 (with a little hacking) or later.
+
+On these compilers, the `construct`, `destroy` and `max_size` member functions
+are optional, as per C++11. On other compilers they are still required.
+
+`propagate_on_container_copy_assignment`,
+`propagate_on_container_move_assignment` and
+`propagate_on_container_swap` are supported on most compilers
+(/TODO/: which ones don't support them?).
+`select_on_container_copy_construction` is also supported, but on
+compilers without full member function detection it must have exactly
+the right function signature, and can't be declared in a base class
+in order for it to be detected.
+
+The use of the allocator's construct and destruct methods might be a bit
+surprising.
+Nodes are constructed and destructed using the allocator, but the objects
+contained in the node are stored in aligned space within the node
+and constructed and destructed by calling the constructor and destructor
+directly. So `construct` and `destroy` are called for the node, but not for
+the object.
+
+`pointer_traits` aren't used. Instead, pointer types are obtained from
+rebound allocators.
 
 [endsect]
 
@@ -35,19 +52,43 @@ use Boost.Move.
 
 * Non-copyable objects can be stored in the containers, but without support
   for rvalue references the container will not be movable.
-* The number of arguments used in emplace is limited to /TODO/.
+* The number of arguments used in `emplace` is limited to /TODO/.
 * Argument forwarding is not perfect.
-* /TODO/: Constructor call for pairs.
 
 [endsect]
 
-[section:other Other]
+[section:pairs Pairs]
 
-* When swapping, `Pred` and `Hash` are not currently swapped by calling
-  `swap`, their copy constructors are used.
-* As a consequence when swapping an exception may be throw from their
-  copy constructor.
+Since the containers use `std::pair` they're limited to the version
+from the current standard library. But since C++11 `std::pair`'s
+`piecewise_construct` based constructor is very useful, `emplace`
+emulates it with a `piecewise_construct` in the `boost::unordered`
+namespace. So for example, the following will work:
 
+    boost::unordered_multimap<std::string, std::complex> x;
+
+    x.emplace(
+        boost::unordered::piecewise_construct,
+        boost::make_tuple("key"), boost::make_tuple(1, 2));
+
+Older drafts of the standard also supported variadic constructors
+for `std::pair`, where the first argument would be used for the
+first part of the pair, and the remaining for the second part.
+For the same example:
+
+    x.emplace("key", 1, 2);
+
+This is emulated in Boost.Unordered, but will be deprecated soon.
+While it is a lot more compact, it lead to ambiguities so it was
+removed.
+
+[endsect]
+
+[section:swap Swapping]
+
+When swapping, `Pred` and `Hash` are not currently swapped by calling
+`swap`, their copy constructors are used. As a consequence when swapping
+an exception may be throw from their  copy constructor.
 
 [endsect]
 
