@@ -55,7 +55,6 @@
 #include <boost/msm/back/fold_to_list.hpp>
 #include <boost/msm/back/metafunctions.hpp>
 #include <boost/msm/back/history_policies.hpp>
-#include <boost/msm/back/bind_helpers.hpp>
 #include <boost/msm/back/common_types.hpp>
 #include <boost/msm/back/args.hpp>
 #include <boost/msm/back/default_compile_policy.hpp>
@@ -1375,15 +1374,12 @@ private:
     bool is_flag_active() const
     {
         flag_handler* flags_entries = get_entries_for_flag<Flag>();
-
-        return std::accumulate(m_states,
-            m_states+nr_regions::value,false,
-            ::boost::bind(typename BinaryOp::type(),
-                    ::boost::bind(::boost::apply<bool>(),
-                    ::boost::bind(::boost::msm::back::deref<flag_handler>(),
-                        ::boost::bind(::boost::msm::back::plus2<flag_handler*,int>(),
-                        flags_entries, _2)),
-                        ::boost::cref(*this)), _1));
+        bool res = (*flags_entries[ m_states[0] ])(*this);
+        for (int i = 1; i < nr_regions::value ; ++i)
+        {
+            res = typename BinaryOp::type() (res,(*flags_entries[ m_states[i] ])(*this)); 
+        }
+        return res;
     }
     // checks if a flag is active using no binary op if 1 region, or OR if > 1 regions
     template <class Flag>
