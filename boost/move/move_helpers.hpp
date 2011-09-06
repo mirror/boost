@@ -27,9 +27,9 @@
 #if defined(BOOST_NO_RVALUE_REFERENCES)
 struct not_a_type;
 #define BOOST_MOVE_CATCH_CONST(U)  \
-   typename ::boost::mpl::if_< ::boost::is_class<T>, BOOST_CATCH_CONST_RLVALUE(U), const U &>::type
+   typename ::boost::mpl::if_< ::boost::is_class<U>, BOOST_CATCH_CONST_RLVALUE(U), const U &>::type
 #define BOOST_MOVE_CATCH_RVALUE(U)\
-   typename ::boost::mpl::if_< ::boost::is_class<T>, BOOST_RV_REF(T), not_a_type>::type
+   typename ::boost::mpl::if_< ::boost::is_class<U>, BOOST_RV_REF(U), not_a_type>::type
 #define BOOST_MOVE_CATCH_FWD(U) BOOST_FWD_REF(U)
 #else
 #define BOOST_MOVE_CATCH_CONST(U)  const U &
@@ -60,9 +60,9 @@ struct not_a_type;
 \
    template<class BOOST_MOVE_TEMPL_PARAM>\
    typename ::boost::enable_if_c\
-                     <  ::boost::is_class<BOOST_MOVE_TEMPL_PARAM>::value   &&\
-                       !::boost::is_same<TYPE, BOOST_MOVE_TEMPL_PARAM>::value &&\
-                       !::boost::move_detail::is_rv<BOOST_MOVE_TEMPL_PARAM>::value\
+                     < (!::boost::is_class<BOOST_MOVE_TEMPL_PARAM>::value || \
+                        !::boost::move_detail::is_rv<BOOST_MOVE_TEMPL_PARAM>::value) && \
+                       !::boost::is_same<TYPE, BOOST_MOVE_TEMPL_PARAM>::value \
                      , RETURN_VALUE >::type\
    PUB_FUNCTION(const BOOST_MOVE_TEMPL_PARAM &u)\
    {\
@@ -127,9 +127,9 @@ struct not_a_type;
 \
    template<class BOOST_MOVE_TEMPL_PARAM>\
    typename ::boost::enable_if_c\
-                     <  ::boost::is_class<BOOST_MOVE_TEMPL_PARAM>::value   &&\
-                       !::boost::is_same<TYPE, BOOST_MOVE_TEMPL_PARAM>::value &&\
-                       !::boost::move_detail::is_rv<BOOST_MOVE_TEMPL_PARAM>::value\
+                     < (!::boost::is_class<BOOST_MOVE_TEMPL_PARAM>::value || \
+                        !::boost::move_detail::is_rv<BOOST_MOVE_TEMPL_PARAM>::value) && \
+                       !::boost::is_same<TYPE, BOOST_MOVE_TEMPL_PARAM>::value \
                      , RETURN_VALUE >::type\
    PUB_FUNCTION(ARG1 arg1, const BOOST_MOVE_TEMPL_PARAM &u)\
    {\
