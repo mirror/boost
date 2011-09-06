@@ -1320,12 +1320,20 @@ class vector : private containers_detail::vector_alloc_holder<A>
    }
 
    template <class FwdIt>
-   void priv_range_insert(pointer pos, FwdIt first, FwdIt last, std::forward_iterator_tag)
+   void priv_range_insert(const_iterator pos, FwdIt first, FwdIt last, std::forward_iterator_tag)
    {
       if(first != last){        
          const size_type n = std::distance(first, last);
          containers_detail::advanced_insert_aux_proxy<T, FwdIt, T*> proxy(first, last);
-         priv_range_insert(pos, n, proxy);
+         priv_range_insert(pos.get_ptr(), n, proxy);
+      }
+   }
+
+   template <class InIt>
+   void priv_range_insert(const_iterator pos, InIt first, InIt last, std::input_iterator_tag)
+   {
+      for(;first != last; ++first){
+         this->emplace(pos, *first);
       }
    }
 
@@ -1756,14 +1764,6 @@ class vector : private containers_detail::vector_alloc_holder<A>
    }
 
    template <class InIt>
-   void priv_range_insert(const_iterator pos, InIt first, InIt last, std::input_iterator_tag)
-   {
-      for(;first != last; ++first){
-         this->insert(pos, ::boost::move(value_type(*first)));
-      }
-   }
-
-   template <class InIt>
    void priv_assign_aux(InIt first, InIt last, std::input_iterator_tag)
    {
       //Overwrite all elements we can from [first, last)
@@ -1925,7 +1925,7 @@ class vector : private containers_detail::vector_alloc_holder<A>
    {
       //Dispatch depending on integer/iterator
       typedef typename std::iterator_traits<InIt>::iterator_category ItCat;
-      this->priv_range_insert(pos.get_ptr(), first, last, ItCat());
+      this->priv_range_insert(pos, first, last, ItCat());
    }
 
    void priv_check_range(size_type n) const 
