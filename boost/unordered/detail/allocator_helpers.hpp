@@ -250,15 +250,10 @@ namespace boost { namespace unordered { namespace detail {
     template <typename T>
     struct has_select_on_container_copy_construction
     {
-#if defined(__IBMCPP__)
-        BOOST_UNORDERED_CHECK_MEMBER(1, 2,
-            select_on_container_copy_construction,
-            T (T::*)());
-#endif
-        BOOST_UNORDERED_CHECK_MEMBER(2, 1,
+        BOOST_UNORDERED_CHECK_MEMBER(1, 1,
             select_on_container_copy_construction,
             T (T::*)() const);
-        BOOST_UNORDERED_DEFAULT_MEMBER(3, 2);
+        BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);
  
         enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };
     };
