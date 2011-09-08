@@ -253,7 +253,10 @@ namespace boost { namespace unordered { namespace detail {
         BOOST_UNORDERED_CHECK_MEMBER(1, 1,
             select_on_container_copy_construction,
             T (T::*)() const);
-        BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);
+        BOOST_UNORDERED_CHECK_MEMBER(2, 2,
+            select_on_container_copy_construction,
+            T (T::*)());
+        BOOST_UNORDERED_DEFAULT_MEMBER(3, 2);
  
         enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };
     };
