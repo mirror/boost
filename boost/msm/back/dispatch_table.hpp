@@ -154,22 +154,47 @@ struct dispatch_table
           : self(self_)
         {}
         // version for transition event not base of our event
+        // first for all transitions, then for internal ones of a fsm
         template <class Transition>
-        void init_event_base_case(Transition const&, ::boost::mpl::true_ const &) const
+        typename ::boost::disable_if<
+            typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
+        ,void>::type
+        init_event_base_case(Transition const&, ::boost::mpl::true_ const &) const
         {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = 
                 (get_state_id<stt,typename Transition::current_state_type>::value));
-            self->entries[state_id] = reinterpret_cast<cell>(&Transition::execute);
+            self->entries[state_id+1] = reinterpret_cast<cell>(&Transition::execute);
         }
-        // version for transition event base of our event
         template <class Transition>
-        void init_event_base_case(Transition const&, ::boost::mpl::false_ const &) const
+        typename ::boost::enable_if<
+            typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
+        ,void>::type
+        init_event_base_case(Transition const&, ::boost::mpl::true_ const &) const
+        {
+            self->entries[0] = reinterpret_cast<cell>(&Transition::execute);
+        }
+
+        // version for transition event base of our event
+        // first for all transitions, then for internal ones of a fsm
+        template <class Transition>
+        typename ::boost::disable_if<
+            typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
+        ,void>::type
+        init_event_base_case(Transition const&, ::boost::mpl::false_ const &) const
         {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = 
                 (get_state_id<stt,typename Transition::current_state_type>::value));
-            self->entries[state_id] = &Transition::execute;
+            self->entries[state_id+1] = &Transition::execute;
+        }
+        template <class Transition>
+        typename ::boost::enable_if<
+            typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
+        ,void>::type
+        init_event_base_case(Transition const&, ::boost::mpl::false_ const &) const
+        {
+            self->entries[0] = &Transition::execute;
         }
         // Cell initializer function object, used with mpl::for_each
         template <class Transition>
@@ -207,18 +232,35 @@ struct dispatch_table
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = (get_state_id<stt,State>::value));
             cell call_no_transition = &Fsm::defer_transition;
-            tofill_entries[state_id] = call_no_transition;
+            tofill_entries[state_id+1] = call_no_transition;
         }
         template <class State>
-        typename ::boost::disable_if<typename has_state_delayed_event<State,Event>::type,void >::type
+        typename ::boost::disable_if<
+            typename ::boost::mpl::or_<
+                typename has_state_delayed_event<State,Event>::type,
+                typename ::boost::is_same<State,Fsm>::type
+            >::type
+        ,void >::type
         operator()(boost::msm::wrap<State> const&,boost::msm::back::dummy<1> = 0)
         {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = (get_state_id<stt,State>::value));
             cell call_no_transition = &Fsm::call_no_transition;
-            tofill_entries[state_id] = call_no_transition;
+            tofill_entries[state_id+1] = call_no_transition;
         }
-
+        // case for internal transitions of this fsm
+        template <class State>
+        typename ::boost::enable_if<
+            typename ::boost::mpl::and_<
+                typename ::boost::mpl::not_<typename has_state_delayed_event<State,Event>::type>::type,
+                typename ::boost::is_same<State,Fsm>::type
+            >::type
+        ,void>::type
+        operator()(boost::msm::wrap<State> const&,boost::msm::back::dummy<2> = 0)
+        {
+            cell call_no_transition = &Fsm::call_no_transition_internal;
+            tofill_entries[0] = call_no_transition;
+        }
         dispatch_table* self;
         cell* tofill_entries;
     };
@@ -241,7 +283,7 @@ struct dispatch_table
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = (get_state_id<stt,State>::value));
             cell call_no_transition = &Fsm::default_eventless_transition;
-            tofill_entries[state_id] = call_no_transition;
+            tofill_entries[state_id+1] = call_no_transition;
         }
 
         dispatch_table* self;
@@ -308,7 +350,8 @@ struct dispatch_table
     static const dispatch_table instance;
 
  public: // data members
-    cell entries[max_state];
+     // +1 => 0 is reserved for this fsm (internal transitions)
+    cell entries[max_state+1];
 };
 
 }}} // boost::msm::back

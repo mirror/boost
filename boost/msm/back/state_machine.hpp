@@ -815,6 +815,43 @@ private:
         }
     };
     template<
+        typename ROW
+    >
+    struct internal_ <ROW,library_sm>
+    {
+        typedef library_sm current_state_type;
+        typedef library_sm next_state_type;
+        typedef typename ROW::Evt transition_event;
+
+        // if a guard condition is here, call it to check that the event is accepted
+        static bool check_guard(library_sm& fsm,transition_event const& evt)
+        {
+            if ( ROW::guard_call(fsm,evt,
+                fsm,
+                fsm,
+                fsm.m_substate_list) )
+                return true;
+            return false;
+        }
+        // Take the transition action and return the next state.
+        static HandledEnum execute(library_sm& fsm, int , int , transition_event const& evt)
+        {
+            if (!check_guard(fsm,evt))
+            {
+                // guard rejected the event, we stay in the current one
+                return HANDLED_GUARD_REJECT;
+            }
+
+            // then call the action method
+            HandledEnum res = ROW::action_call(fsm,evt,
+                fsm,
+                fsm,
+                fsm.m_substate_list);
+            return res;
+        }
+    };
+
+    template<
         typename ROW,
         typename StateType
     >
@@ -831,6 +868,26 @@ private:
             HandledEnum res = ROW::action_call(fsm,evt,
                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                fsm.m_substate_list);
+            return res;
+        }
+    };
+    template<
+        typename ROW
+    >
+    struct a_internal_ <ROW,library_sm>
+    {
+        typedef library_sm current_state_type;
+        typedef library_sm next_state_type;
+        typedef typename ROW::Evt transition_event;
+
+        // Take the transition action and return the next state.
+        static HandledEnum execute(library_sm& fsm, int, int, transition_event const& evt)
+        {
+            // then call the action method
+            HandledEnum res = ROW::action_call(fsm,evt,
+                fsm,
+                fsm,
                 fsm.m_substate_list);
             return res;
         }
@@ -867,6 +924,36 @@ private:
         }
     };
     template<
+        typename ROW
+    >
+    struct g_internal_ <ROW,library_sm>
+    {
+        typedef library_sm current_state_type;
+        typedef library_sm next_state_type;
+        typedef typename ROW::Evt transition_event;
+
+        // if a guard condition is here, call it to check that the event is accepted
+        static bool check_guard(library_sm& fsm,transition_event const& evt)
+        {
+            if ( ROW::guard_call(fsm,evt,
+                fsm,
+                fsm,
+                fsm.m_substate_list) )
+                return true;
+            return false;
+        }
+        // Take the transition action and return the next state.
+        static HandledEnum execute(library_sm& fsm, int, int, transition_event const& evt)
+        {
+            if (!check_guard(fsm,evt))
+            {
+                // guard rejected the event, we stay in the current one
+                return HANDLED_GUARD_REJECT;
+            }
+            return HANDLED_TRUE;
+        }
+    };
+    template<
         typename ROW,
         typename StateType
     >
@@ -874,6 +961,19 @@ private:
     {
         typedef StateType current_state_type;
         typedef StateType next_state_type;
+        typedef typename ROW::Evt transition_event;
+        static HandledEnum execute(library_sm& , int , int , transition_event const& )
+        {
+            return HANDLED_TRUE;
+        }
+    };
+    template<
+        typename ROW
+    >
+    struct _internal_ <ROW,library_sm>
+    {
+        typedef library_sm current_state_type;
+        typedef library_sm next_state_type;
         typedef typename ROW::Evt transition_event;
         static HandledEnum execute(library_sm& , int , int , transition_event const& )
         {
@@ -1009,18 +1109,6 @@ private:
         // first get the table of a composite
         typedef typename recursive_get_transition_table<StateType>::type original_table;
 
-        // add the internal events defined in the internal_transition_table
-        // Note: these are added first because they must have a lesser prio
-        // than the deeper transitions in the sub regions
-        typedef typename StateType::internal_transition_table istt_simulated;
-
-        // table made of a stt + internal transitions of composite
-        typedef typename ::boost::mpl::fold<
-            istt_simulated,::boost::mpl::vector0<>,
-            ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
-                                     make_row_tag< ::boost::mpl::placeholders::_2 , StateType> >
-        >::type intermediate;
-
         // we now look for the events the composite has in its internal transitions
         // the internal ones are searched recursively in sub-sub... states
         // we go recursively because our states can also have internal tables or substates etc.
@@ -1037,8 +1125,8 @@ private:
         // and add for every event a forwarding row
         typedef typename ::boost::mpl::eval_if<
                 typename CompilePolicy::add_forwarding_rows,
-                add_forwarding_row_helper<table_with_all_events,intermediate,StateType>,
-                ::boost::mpl::identity<intermediate>
+                add_forwarding_row_helper<table_with_all_events,::boost::mpl::vector0<>,StateType>,
+                ::boost::mpl::identity< ::boost::mpl::vector0<> >
         >::type type;
     };
     template <class StateType>
@@ -1046,6 +1134,7 @@ private:
     {
         typedef typename create_real_stt<StateType, typename StateType::internal_transition_table >::type type;
     };
+    // typedefs used internally
     typedef typename create_real_stt<Derived>::type real_transition_table;
     typedef typename create_stt<library_sm>::type stt;
     typedef typename get_initial_states<typename Derived::initial_state>::type initial_states;
@@ -1053,6 +1142,9 @@ private:
     typedef typename HistoryPolicy::template apply<nr_regions::value>::type concrete_history;
 
     typedef typename ::boost::fusion::result_of::as_set<state_list>::type substate_list;
+    typedef typename ::boost::msm::back::generate_event_set<
+        typename create_real_stt<library_sm, typename library_sm::internal_transition_table >::type
+    >::type processable_events_internal_table;
 
     // extends the transition table with rows from composite states
     template <class Composite>
@@ -1061,9 +1153,27 @@ private:
         // add the init states
         //typedef typename create_stt<Composite>::type stt;
         typedef typename Composite::stt Stt;
+
+        // add the internal events defined in the internal_transition_table
+        // Note: these are added first because they must have a lesser prio
+        // than the deeper transitions in the sub regions
+        // table made of a stt + internal transitions of composite
+        typedef typename ::boost::mpl::fold<
+            typename Composite::internal_transition_table,::boost::mpl::vector0<>,
+            ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
+                                     make_row_tag< ::boost::mpl::placeholders::_2 , Composite> >
+        >::type internal_stt;
+
+        typedef typename ::boost::mpl::insert_range<
+            Stt,
+            typename ::boost::mpl::end<Stt>::type,
+            internal_stt
+            //typename get_internal_transition_table<Composite, ::boost::mpl::true_ >::type
+        >::type stt_plus_internal;
+
         // for every state, add its transition table (if any)
         // transformed as frow
-        typedef typename ::boost::mpl::fold<state_list,Stt,
+        typedef typename ::boost::mpl::fold<state_list,stt_plus_internal,
                 ::boost::mpl::insert_range< 
                         ::boost::mpl::placeholders::_1, 
                         ::boost::mpl::end< ::boost::mpl::placeholders::_1>,
@@ -1731,6 +1841,35 @@ private:
         bool        handled;
     };
 
+    // helper class called in case the event to process has been found in the fsm's internal stt and is therefore processable
+    template<class Event>
+    struct process_fsm_internal_table
+    {
+        typedef typename ::boost::mpl::has_key<processable_events_internal_table,Event>::type is_event_processable;
+
+        // forward to the correct do_process
+        static void process(Event const& evt,library_sm* self_,HandledEnum& result)
+        {
+            do_process(evt,self_,result,is_event_processable());
+        }
+    private:
+        // the event is processable, let's try!
+        static void do_process(Event const& evt,library_sm* self_,HandledEnum& result, ::boost::mpl::true_)
+        {
+            if (result != HANDLED_TRUE)
+            {
+                typedef dispatch_table<library_sm,complete_table,Event,CompilePolicy> table;
+                HandledEnum res_internal = table::instance.entries[0](*self_, 0, self_->m_states[0], evt);
+                result = (HandledEnum)((int)result | (int)res_internal);
+            }
+        }
+        // version doing nothing if the event is not in the internal stt and we can save ourselves the time trying to process
+        static void do_process(Event const& ,library_sm* ,HandledEnum& , ::boost::mpl::false_)
+        {
+            // do nothing
+        }
+    };
+
     template <class StateType,class Enable=void>
     struct region_processing_helper 
     {
@@ -1742,10 +1881,13 @@ private:
         {
             // use this table as if it came directly from the user
             typedef dispatch_table<library_sm,complete_table,Event,CompilePolicy> table;
+            // +1 because index 0 is reserved for this fsm
             HandledEnum res =
-                table::instance.entries[self->m_states[0]](
+                table::instance.entries[self->m_states[0]+1](
                 *self, 0, self->m_states[0], evt);
             result = (HandledEnum)((int)result | (int)res);
+            // process the event in the internal table of this fsm if the event is processable (present in the table)
+            process_fsm_internal_table<Event>::process(evt,self,result);
         }
         library_sm*     self;
         HandledEnum&    result;
@@ -1765,8 +1907,9 @@ private:
             {
                 // use this table as if it came directly from the user
                 typedef dispatch_table<library_sm,complete_table,Event,CompilePolicy> table;
+                // +1 because index 0 is reserved for this fsm
                 HandledEnum res =
-                    table::instance.entries[self_->m_states[region_id::value]](
+                    table::instance.entries[self_->m_states[region_id::value]+1](
                     *self_, region_id::value , self_->m_states[region_id::value], evt);
                 result_ = (HandledEnum)((int)result_ | (int)res);
                 In< ::boost::mpl::int_<region_id::value+1> >::process(evt,self_,result_);
@@ -1777,7 +1920,11 @@ private:
         {
             // end of processing
             template<class Event>
-            static void process(Event const& ,library_sm*,HandledEnum&){}
+            static void process(Event const& evt,library_sm* self_,HandledEnum& result_)
+            {
+                // process the event in the internal table of this fsm if the event is processable (present in the table)
+                process_fsm_internal_table<Event>::process(evt,self_,result_);
+            }
         };
         public:
         region_processing_helper(library_sm* self_,HandledEnum& result_)
@@ -1785,8 +1932,6 @@ private:
         template<class Event>
         void process(Event const& evt)
         {
-            // use this table as if it came directly from the user
-            typedef dispatch_table<library_sm,complete_table,Event,CompilePolicy> table;
             In< ::boost::mpl::int_<0> >::process(evt,self,result);
         }
 
@@ -2419,6 +2564,14 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     template <class Event>
     static HandledEnum call_no_transition(library_sm& , int , int , Event const& )
     {
+        return HANDLED_FALSE;
+    }
+    // no transition for event for internal transitions (not an error).
+    template <class Event>
+    static HandledEnum call_no_transition_internal(library_sm& , int , int , Event const& )
+    {
+        //// reject to give others a chance to handle
+        //return HANDLED_GUARD_REJECT;
         return HANDLED_FALSE;
     }
     // called for deferred events. Address set in the dispatch_table at init
