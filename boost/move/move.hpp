@@ -15,6 +15,8 @@
 #ifndef BOOST_MOVE_MOVE_HPP
 #define BOOST_MOVE_MOVE_HPP
 
+#if !defined(BOOST_MOVE_DOXYGEN_INVOKED)
+
 /// @cond
 
 #include <boost/config.hpp>
@@ -205,6 +207,8 @@
 #endif
 
 /// @endcond
+
+#endif //#if !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
 #if defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
@@ -508,21 +512,6 @@
 
    #endif   //#if defined(BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE)
 
-   //////////////////////////////////////////////////////////////////////////////
-   //
-   //                         BOOST_ENABLE_MOVE_EMULATION
-   //
-   //////////////////////////////////////////////////////////////////////////////
-
-   ///@cond
-
-   #define BOOST_ENABLE_MOVE_EMULATION(TYPE)\
-      typedef int boost_move_emulation_t;
-   \
-   //
-
-   /// @endcond
-
    //! This macro marks a type as movable but not copyable, disabling copy construction
    //! and assignment. The user will need to write a move constructor/assignment as explained
    //! in the documentation to fully write a movable but not copyable class.
@@ -540,17 +529,8 @@
    #define BOOST_COPYABLE_AND_MOVABLE(TYPE)\
    //
 
-   /// @cond
-
-   #define BOOST_RV_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
-      TYPE<ARG1, ARG2> && \
+   #define BOOST_COPYABLE_AND_MOVABLE_ALT(TYPE)\
    //
-
-   #define BOOST_RV_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
-      TYPE<ARG1, ARG2, ARG3> && \
-   //
-
-   /// @endcond
 
    //!This macro is used to achieve portable syntax in move
    //!constructors and assignments for classes marked as
@@ -565,7 +545,23 @@
       const TYPE & \
    //
 
+   //! This macro is used to implement portable perfect forwarding
+   //! as explained in the documentation.
+   #define BOOST_FWD_REF(TYPE)\
+      TYPE && \
+   //
+
+
+   #if !defined(BOOST_MOVE_DOXYGEN_INVOKED)
    /// @cond
+
+   #define BOOST_RV_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
+      TYPE<ARG1, ARG2> && \
+   //
+
+   #define BOOST_RV_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
+      TYPE<ARG1, ARG2, ARG3> && \
+   //
 
    #define BOOST_COPY_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
       const TYPE<ARG1, ARG2> & \
@@ -575,21 +571,13 @@
       TYPE<ARG1, ARG2, ARG3>& \
    //
 
-   /// @endcond
-
-   //! This macro is used to implement portable perfect forwarding
-   //! as explained in the documentation.
-   #define BOOST_FWD_REF(TYPE)\
-      TYPE && \
-   //
-
-   /// @cond
-
    #define BOOST_CATCH_CONST_RLVALUE(TYPE)\
       const TYPE & \
    //
 
    /// @endcond
+
+   #endif   //#if !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
 #endif   //BOOST_NO_RVALUE_REFERENCES
 
