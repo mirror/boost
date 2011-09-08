@@ -56,6 +56,22 @@ namespace boost { namespace unordered { namespace detail {
 
 namespace boost { namespace unordered { namespace detail {
 
+    // Explicitly call a destructor
+
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4100) // unreferenced formal parameter
+#endif
+
+    template <class T>
+    inline void destroy(T* x) {
+        x->~T();
+    }
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
+
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
     template <typename Alloc>
     struct allocator_traits : std::allocator_traits<Alloc> {};
@@ -364,7 +380,7 @@ namespace boost { namespace unordered { namespace detail {
         static void destroy(Alloc&, T* p, typename
                 boost::disable_if<has_destroy<Alloc, T>, void*>::type = 0)
         {
-            p->~T();
+            ::boost::unordered::detail::destroy(p);
         }
 
         static size_type max_size(const Alloc& a)

@@ -117,22 +117,6 @@ namespace boost { namespace unordered { namespace detail {
     struct map_extractor;
     struct no_key;
 
-    // Explicitly call a destructor
-
-#if defined(BOOST_MSVC)
-#pragma warning(push)
-#pragma warning(disable:4100) // unreferenced formal parameter
-#endif
-
-    template <class T>
-    inline void destroy(T* x) {
-        x->~T();
-    }
-
-#if defined(BOOST_MSVC)
-#pragma warning(pop)
-#endif
-
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
 
 #define BOOST_UNORDERED_RV_REF(T) BOOST_RV_REF(T)
