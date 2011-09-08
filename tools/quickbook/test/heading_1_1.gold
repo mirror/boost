@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="heading_1_1" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
+ xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Heading 1.1</title> <anchor id=".first_heading"/>
+  <bridgehead renderas="sect1" id="heading_1_1.h0">
+    First heading
+  </bridgehead>
+  <section id="heading_1_1.section">
+    <title>Section</title> <anchor id="section.second_heading"/>
+    <bridgehead renderas="sect2" id="heading_1_1.section.h0">
+      Second heading
+    </bridgehead>
+  </section>
+</article>
