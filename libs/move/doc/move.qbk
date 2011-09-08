@@ -717,10 +717,10 @@ operators to references to `::boost::rv`:
 
    #define BOOST_MOVABLE_BUT_NOT_COPYABLE(TYPE)\
       public:\
-      operator ::BOOST_MOVE_NAMESPACE::rv<TYPE>&() \
-      {  return *reinterpret_cast< ::BOOST_MOVE_NAMESPACE::rv<TYPE>* >(this);  }\
-      operator const ::BOOST_MOVE_NAMESPACE::rv<TYPE>&() const \
-      {  return *reinterpret_cast<const ::BOOST_MOVE_NAMESPACE::rv<TYPE>* >(this);  }\
+      operator ::boost::rv<TYPE>&() \
+      {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
+      operator const ::boost::rv<TYPE>&() const \
+      {  return static_cast<const ::boost::rv<TYPE>* >(this);  }\
       private:\
       //More stuff...
 
