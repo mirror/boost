@@ -22,15 +22,6 @@
 #include <boost/limits.hpp>
 #include <boost/type_traits/add_lvalue_reference.hpp>
 
-#if (defined(BOOST_NO_STD_ALLOCATOR) || defined(BOOST_DINKUMWARE_STDLIB)) \
-    && !defined(__BORLANDC__)
-#  define BOOST_UNORDERED_USE_ALLOCATOR_UTILITIES
-#endif
-
-#if defined(BOOST_UNORDERED_USE_ALLOCATOR_UTILITIES)
-#  include <boost/detail/allocator_utilities.hpp>
-#endif
-
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
 #  include <memory>
 #endif
@@ -87,17 +78,12 @@ namespace boost { namespace unordered { namespace detail {
     // Rebind allocators. For some problematic libraries, use rebind_to
     // from <boost/detail/allocator_utilities.hpp>.
 
-#   if defined(BOOST_UNORDERED_USE_ALLOCATOR_UTILITIES)
-    template <typename Alloc, typename T>
-    struct rebind_wrap : ::boost::detail::allocator::rebind_to<Alloc, T> {};
-#   else
     template <typename Alloc, typename T>
     struct rebind_wrap
     {
         typedef typename Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
             type;
     };
-#   endif
 
     template <typename T> typename boost::add_lvalue_reference<T>::type make();
     struct choice9 { typedef char (&type)[9]; };
@@ -476,9 +462,5 @@ namespace boost { namespace unordered { namespace detail {
             allocator_array_constructor const&);
     };
 }}}
-
-#if defined(BOOST_UNORDERED_USE_ALLOCATOR_UTILITIES)
-#  undef BOOST_UNORDERED_USE_ALLOCATOR_UTILITIES
-#endif
 
 #endif
