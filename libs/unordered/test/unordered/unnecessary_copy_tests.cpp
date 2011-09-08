@@ -203,6 +203,7 @@ namespace unnecessary_copy_tests
     {
         reset();
         T x;
+        COPY_COUNT(0); MOVE_COUNT(0);
         BOOST_DEDUCED_TYPENAME T::value_type a;
         COPY_COUNT(1); MOVE_COUNT(0);
         x.emplace(boost::move(a));
