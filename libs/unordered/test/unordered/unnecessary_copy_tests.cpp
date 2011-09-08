@@ -238,6 +238,7 @@ namespace unnecessary_copy_tests
         // 0 arguments
         // 
 
+#if !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x5100))
         // The container will have to create a copy in order to compare with
         // the existing element.
         reset();
@@ -247,6 +248,7 @@ namespace unnecessary_copy_tests
 #else
         // source_cost doesn't make much sense here, but it seems to fit.
         COPY_COUNT(1); MOVE_COUNT(source_cost);
+#endif
 #endif
 
         //
@@ -323,10 +325,12 @@ namespace unnecessary_copy_tests
         // 0 arguments
         //
 
+#if !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x5100))
         // COPY_COUNT(1) would be okay here.
         reset();
         x.emplace();
         COPY_COUNT(2); MOVE_COUNT(0);
+#endif
 
         reset();
         x.emplace(boost::unordered::piecewise_construct,
