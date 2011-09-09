@@ -22,7 +22,7 @@ int main()
     namespace fusion = boost::fusion;
     {
         typedef fusion::vector<std::vector<int>, char> test_vector;
-        BOOST_MPL_ASSERT((boost::is_same<void, fusion::result_of::swap<test_vector, test_vector>::type>));
+        BOOST_MPL_ASSERT((boost::is_same<void, boost::fusion::result_of::swap<test_vector, test_vector>::type>));
 
         test_vector v1(std::vector<int>(1, 101), 'a'), v2(std::vector<int>(1, 202), 'b');
 

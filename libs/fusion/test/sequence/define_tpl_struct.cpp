@@ -51,8 +51,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -89,10 +89,10 @@ main()
     { // begin/end
         using namespace boost::fusion;
 
-        typedef result_of::begin<s<int> >::type b;
-        typedef result_of::end<s<int> >::type e;
+        typedef boost::fusion::result_of::begin<s<int> >::type b;
+        typedef boost::fusion::result_of::end<s<int> >::type e;
         // this fails
-        BOOST_MPL_ASSERT((boost::is_same<result_of::next<b>::type, e>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::next<b>::type, e>));
     }
 
 

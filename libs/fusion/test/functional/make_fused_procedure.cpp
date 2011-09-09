@@ -69,7 +69,7 @@ int main()
     test_func<> f;
     test_func<noncopyable> f_nc;
  
-    fusion::result_of::make_fused_procedure< test_func<> >::type fused_func
+    boost::fusion::result_of::make_fused_procedure< test_func<> >::type fused_func
         = fusion::make_fused_procedure(f);
 
     CHECK_EFFECT(fused_func(lv_vec), 1);

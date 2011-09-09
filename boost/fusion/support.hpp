@@ -10,6 +10,7 @@
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/support/is_iterator.hpp>
 #include <boost/fusion/support/is_sequence.hpp>
+#include <boost/fusion/support/is_segmented.hpp>
 #include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/support/pair.hpp>
 #include <boost/fusion/support/sequence_base.hpp>

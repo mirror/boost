@@ -34,19 +34,19 @@ int main()
         BOOST_TEST(at_c<0>(back(v)) == 2);
         BOOST_TEST(at_c<2>(back(v)) == 'b');
 
-        typedef result_of::begin<view>::type first_iterator;
-        typedef result_of::value_of<first_iterator>::type first_element;
+        typedef boost::fusion::result_of::begin<view>::type first_iterator;
+        typedef boost::fusion::result_of::value_of<first_iterator>::type first_element;
 
-        typedef result_of::at_c<first_element, 0>::type e0;
-        typedef result_of::at_c<first_element, 2>::type e2;
+        typedef boost::fusion::result_of::at_c<first_element, 0>::type e0;
+        typedef boost::fusion::result_of::at_c<first_element, 2>::type e2;
         BOOST_MPL_ASSERT((boost::is_same<e0, int&>));
         BOOST_MPL_ASSERT((boost::is_same<e2, char&>));
 
         BOOST_TEST(size(front(v)) == 3);
 
-        typedef result_of::value_at_c<view, 0>::type first_value_at;
-        typedef result_of::value_at_c<first_value_at, 0>::type v0;
-        typedef result_of::value_at_c<first_value_at, 2>::type v2;
+        typedef boost::fusion::result_of::value_at_c<view, 0>::type first_value_at;
+        typedef boost::fusion::result_of::value_at_c<first_value_at, 0>::type v0;
+        typedef boost::fusion::result_of::value_at_c<first_value_at, 2>::type v2;
 
         BOOST_MPL_ASSERT((boost::is_same<v0, int>));
         BOOST_MPL_ASSERT((boost::is_same<v2, char>));

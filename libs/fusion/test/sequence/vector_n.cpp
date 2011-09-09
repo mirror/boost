@@ -42,10 +42,10 @@ main()
     {
         typedef vector1<int> type;
         type vec;
-        BOOST_STATIC_ASSERT(result_of::size<type>::value == 1);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<type>::value == 1);
 
         BOOST_TEST(at_c<0>(vec) == 0);
-        BOOST_STATIC_ASSERT((boost::is_same<int, result_of::value_at_c<type, 0>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<int, boost::fusion::result_of::value_at_c<type, 0>::type>::value));
 
         // prove that it is mutable
         at_c<0>(vec) = 987;
@@ -77,13 +77,13 @@ main()
     {
         typedef vector2<int, char> type;
         type vec;
-        BOOST_STATIC_ASSERT(result_of::size<type>::value == 2);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<type>::value == 2);
 
         BOOST_TEST(at_c<0>(vec) == 0);
         BOOST_TEST(at_c<1>(vec) == char());
 
-        BOOST_STATIC_ASSERT((boost::is_same<int, result_of::value_at_c<type, 0>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<char, result_of::value_at_c<type, 1>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<int, boost::fusion::result_of::value_at_c<type, 0>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<char, boost::fusion::result_of::value_at_c<type, 1>::type>::value));
     }
 
     {
@@ -103,15 +103,15 @@ main()
     {
         typedef vector3<int, char, double> type;
         type vec;
-        BOOST_STATIC_ASSERT(result_of::size<type>::value == 3);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<type>::value == 3);
 
         BOOST_TEST(at_c<0>(vec) == 0);
         BOOST_TEST(at_c<1>(vec) == char());
         BOOST_TEST(at_c<2>(vec) == double());
 
-        BOOST_STATIC_ASSERT((boost::is_same<int, result_of::value_at_c<type, 0>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<char, result_of::value_at_c<type, 1>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<double, result_of::value_at_c<type, 2>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<int, boost::fusion::result_of::value_at_c<type, 0>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<char, boost::fusion::result_of::value_at_c<type, 1>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<double, boost::fusion::result_of::value_at_c<type, 2>::type>::value));
     }
 
     {
@@ -147,13 +147,13 @@ main()
         BOOST_TEST(at_c<5>(vec) >= 5.9 && at_c<5>(vec) <= 6.1);
         BOOST_TEST(at_c<6>(vec) >= 6.9 && at_c<6>(vec) <= 7.1);
 
-        BOOST_STATIC_ASSERT((boost::is_same<bool, result_of::value_at_c<type, 0>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<char, result_of::value_at_c<type, 1>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<short, result_of::value_at_c<type, 2>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<int, result_of::value_at_c<type, 3>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<long, result_of::value_at_c<type, 4>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<float, result_of::value_at_c<type, 5>::type>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<double, result_of::value_at_c<type, 6>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<bool, boost::fusion::result_of::value_at_c<type, 0>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<char, boost::fusion::result_of::value_at_c<type, 1>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<short, boost::fusion::result_of::value_at_c<type, 2>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<int, boost::fusion::result_of::value_at_c<type, 3>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<long, boost::fusion::result_of::value_at_c<type, 4>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<float, boost::fusion::result_of::value_at_c<type, 5>::type>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<double, boost::fusion::result_of::value_at_c<type, 6>::type>::value));
         cout << "(bool, char, short, int, long, float, double): " << sizeof(vec) << endl;
     }
 

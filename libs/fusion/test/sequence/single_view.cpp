@@ -76,7 +76,7 @@ main()
         BOOST_TEST(end(view1) == advance_c<0>(end(view1)));
         BOOST_TEST(begin(view1) == advance_c<-1>(end(view1)));
         BOOST_TEST(1 == size(view1));
-        BOOST_MPL_ASSERT((boost::is_same<int, result_of::value_at<single_view<int>, boost::mpl::int_<0> >::type>));
+        BOOST_MPL_ASSERT((boost::is_same<int, boost::fusion::result_of::value_at<single_view<int>, boost::mpl::int_<0> >::type>));
 
         single_view<X> view2;
         std::cout << view2 << std::endl;

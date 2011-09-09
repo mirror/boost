@@ -55,7 +55,7 @@ namespace boost { namespace fusion
         typedef Pred pred_type;
 
         filter_iterator(First const& in_first)
-            : first(filter::call(first_converter::call(in_first))) {}
+            : first(filter::iter_call(first_converter::call(in_first))) {}
 
         first_type first;
 

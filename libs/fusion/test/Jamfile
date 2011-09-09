@@ -41,6 +41,10 @@ import testing ;
     [ run algorithm/reverse_fold.cpp :  :  :  : ]
     [ run algorithm/reverse_iter_fold.cpp :  :  :  : ]
     [ run algorithm/reverse.cpp :  :  :  : ]
+    [ run algorithm/segmented_for_each.cpp : : : : ]
+    [ run algorithm/segmented_find.cpp : : : : ]
+    [ run algorithm/segmented_find_if.cpp : : : : ]
+    [ run algorithm/segmented_fold.cpp : : : : ]
     [ run algorithm/transform.cpp :  :  :  : ]
     [ run algorithm/join.cpp :  :  :  : ]
     [ run algorithm/zip.cpp : : : : ]
@@ -83,6 +87,7 @@ import testing ;
     [ run sequence/map_tie.cpp :  :  :  : ]
     [ run sequence/nview.cpp :  :  :  : ]
     [ run sequence/reverse_view.cpp :  :  :  : ]
+    [ run sequence/segmented_iterator_range.cpp : : : : ]
     [ run sequence/set.cpp :  :  :  : ]
     [ run sequence/single_view.cpp :  :  :  : ]
     [ run sequence/std_pair.cpp :  :  :  : ]
@@ -148,18 +153,4 @@ import testing ;
 #   [ compile-fail xxx.cpp :  :  :  :  ]
 
     ;
-}
-
-{
-    # Text for extension features, must be explicitly specified on the command line to be run
-    # TODO these are not in a test-suite because currently test-suites cannot be marked "explicit"
-
-    run algorithm/ext_/for_each_s.cpp ;
-    explicit for_each_s ;
-
-    run algorithm/ext_/find_if_s.cpp ;
-    explicit find_if_s ;
-
-    run sequence/ext_/iterator_range_s.cpp ;
-    explicit iterator_range_s ;
 }

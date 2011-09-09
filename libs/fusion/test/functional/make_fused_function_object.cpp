@@ -73,7 +73,7 @@ int main()
     test_func<> f;
     test_func<noncopyable> f_nc;
  
-    fusion::result_of::make_fused_function_object< test_func<> >::type fused_func
+    boost::fusion::result_of::make_fused_function_object< test_func<> >::type fused_func
         = fusion::make_fused_function_object(f);
 
     BOOST_TEST(fused_func(lv_vec) == 1);

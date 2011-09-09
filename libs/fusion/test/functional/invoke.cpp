@@ -331,7 +331,7 @@ void test_sequence_n(Sequence & seq, mpl::int_<3>)
 template <class Sequence>
 void test_sequence(Sequence & seq)
 {
-    test_sequence_n(seq, mpl::int_<fusion::result_of::size<Sequence>::value>());
+    test_sequence_n(seq, mpl::int_<boost::fusion::result_of::size<Sequence>::value>());
 }
 
 
@@ -340,18 +340,18 @@ void result_type_tests()
     using boost::is_same;
 
     BOOST_TEST(( is_same<
-      fusion::result_of::invoke<int (*)(), fusion::vector0<> >::type, int
+      boost::fusion::result_of::invoke<int (*)(), fusion::vector0<> >::type, int
     >::value ));
 // disabled until boost::result_of supports it
 //    BOOST_TEST(( is_same<
-//      fusion::result_of::invoke<int (*)(...), fusion::vector1<int> >::type, int
+//      boost::fusion::result_of::invoke<int (*)(...), fusion::vector1<int> >::type, int
 //    >::value ));
     BOOST_TEST(( is_same<
-      fusion::result_of::invoke<int (members::*)(), fusion::vector1<members*> >::type, int
+      boost::fusion::result_of::invoke<int (members::*)(), fusion::vector1<members*> >::type, int
     >::value ));
 // disabled until boost::result_of supports it
 //    BOOST_TEST(( is_same<
-//      fusion::result_of::invoke<int (members::*)(...), fusion::vector2<members*,int> >::type, int
+//      boost::fusion::result_of::invoke<int (members::*)(...), fusion::vector2<members*,int> >::type, int
 //    >::value ));
 }
 

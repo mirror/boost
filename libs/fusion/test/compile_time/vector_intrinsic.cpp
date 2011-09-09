@@ -38,17 +38,17 @@ namespace
     fusion::at_c<8>(v);
     fusion::at_c<9>(v);
 
-    typedef typename fusion::result_of::value_at_c<v_type, 0>::type va0;
-    typedef typename fusion::result_of::value_at_c<v_type, 1>::type va1;
-    typedef typename fusion::result_of::value_at_c<v_type, 2>::type va2;
-    typedef typename fusion::result_of::value_at_c<v_type, 3>::type va3;
-    typedef typename fusion::result_of::value_at_c<v_type, 4>::type va4;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 0>::type va0;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 1>::type va1;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 2>::type va2;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 3>::type va3;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 4>::type va4;
 
-    typedef typename fusion::result_of::value_at_c<v_type, 5>::type va5;
-    typedef typename fusion::result_of::value_at_c<v_type, 6>::type va6;
-    typedef typename fusion::result_of::value_at_c<v_type, 7>::type va7;
-    typedef typename fusion::result_of::value_at_c<v_type, 8>::type va8;
-    typedef typename fusion::result_of::value_at_c<v_type, 9>::type va9;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 5>::type va5;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 6>::type va6;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 7>::type va7;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 8>::type va8;
+    typedef typename boost::fusion::result_of::value_at_c<v_type, 9>::type va9;
 
     fusion::begin(v);
     fusion::end(v);

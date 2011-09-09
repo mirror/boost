@@ -92,7 +92,6 @@ main()
 {
     using namespace boost::fusion;
     using namespace boost;
-    using namespace std;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
@@ -111,8 +110,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<ns::point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<ns::point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<ns::point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<ns::point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -149,7 +148,7 @@ main()
     {
         BOOST_MPL_ASSERT((mpl::is_sequence<ns::point>));
         BOOST_MPL_ASSERT((boost::is_same<
-            fusion::result_of::value_at_c<ns::point,0>::type
+            boost::fusion::result_of::value_at_c<ns::point,0>::type
           , mpl::front<ns::point>::type>));
     }
 
@@ -167,8 +166,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<ns::point_with_private_members>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<ns::point_with_private_members>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<ns::point_with_private_members>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<ns::point_with_private_members>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -178,22 +177,22 @@ main()
     {
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point>::type,
+                boost::fusion::result_of::front<ns::point>::type,
                 boost::fusion::extension::adt_attribute_proxy<ns::point,0,false>
             >));
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point>::type::type,
+                boost::fusion::result_of::front<ns::point>::type::type,
                 int
             >));
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point const>::type,
+                boost::fusion::result_of::front<ns::point const>::type,
                 boost::fusion::extension::adt_attribute_proxy<ns::point,0,true>
             >));
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point const>::type::type,
+                boost::fusion::result_of::front<ns::point const>::type::type,
                 int
             >));
     }

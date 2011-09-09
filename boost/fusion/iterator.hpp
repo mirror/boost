@@ -8,6 +8,7 @@
 #define FUSION_ITERATOR_10022005_0559
 
 #include <boost/fusion/iterator/iterator_facade.hpp>
+#include <boost/fusion/iterator/segmented_iterator.hpp>
 #include <boost/fusion/iterator/advance.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/distance.hpp>

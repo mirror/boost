@@ -7,6 +7,7 @@
 #if !defined(FUSION_VECTOR10_05042005_0257)
 #define FUSION_VECTOR10_05042005_0257
 
+#include <boost/fusion/container/vector/vector10_fwd.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/iterator/next.hpp>
@@ -39,7 +40,7 @@ namespace boost { namespace fusion
     struct fusion_sequence_tag;
     struct random_access_traversal_tag;
 
-    template <typename Dummy = void>
+    template <typename Dummy>
     struct vector0 : sequence_base<vector0<Dummy> >
     {
         typedef mpl::vector0<> types;

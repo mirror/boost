@@ -56,15 +56,15 @@ main()
         BOOST_TEST(at_key<double>(m) == "Men");
 
         BOOST_STATIC_ASSERT((
-            boost::is_same<result_of::value_at_key<map_type, int>::type, char>::value));
+            boost::is_same<boost::fusion::result_of::value_at_key<map_type, int>::type, char>::value));
         BOOST_STATIC_ASSERT((
-            boost::is_same<result_of::value_at_key<map_type, double>::type, std::string>::value));
+            boost::is_same<boost::fusion::result_of::value_at_key<map_type, double>::type, std::string>::value));
         
         std::cout << m << std::endl;
 
-        BOOST_STATIC_ASSERT((result_of::has_key<map_type, int>::value));
-        BOOST_STATIC_ASSERT((result_of::has_key<map_type, double>::value));
-        BOOST_STATIC_ASSERT((!result_of::has_key<map_type, std::string>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::has_key<map_type, int>::value));
+        BOOST_STATIC_ASSERT((boost::fusion::result_of::has_key<map_type, double>::value));
+        BOOST_STATIC_ASSERT((!boost::fusion::result_of::has_key<map_type, std::string>::value));
 
         std::cout << deref_data(begin(m)) << std::endl;
         std::cout << deref_data(fusion::next(begin(m))) << std::endl;
@@ -72,10 +72,10 @@ main()
         BOOST_TEST(deref_data(begin(m)) == 'X');
         BOOST_TEST(deref_data(fusion::next(begin(m))) == "Men");
 
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::key_of<result_of::begin<map_type>::type>::type, int>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::key_of<result_of::next<result_of::begin<map_type>::type>::type>::type, double>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::value_of_data<result_of::begin<map_type>::type>::type, char>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<result_of::value_of_data<result_of::next<result_of::begin<map_type>::type>::type>::type, std::string>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::begin<map_type>::type>::type, int>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::next<boost::fusion::result_of::begin<map_type>::type>::type>::type, double>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::begin<map_type>::type>::type, char>::value));
+        BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::next<boost::fusion::result_of::begin<map_type>::type>::type>::type, std::string>::value));
     }
     
     {

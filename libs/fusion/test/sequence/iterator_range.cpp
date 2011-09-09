@@ -50,7 +50,7 @@ main()
             slice_t slice(i1, i3);
             std::cout << slice << std::endl;
             BOOST_TEST((slice == make_vector('x', 3.3)));
-            BOOST_STATIC_ASSERT(result_of::size<slice_t>::value == 2);
+            BOOST_STATIC_ASSERT(boost::fusion::result_of::size<slice_t>::value == 2);
         }
 
         {
@@ -64,7 +64,7 @@ main()
             slice_t slice(i1, i3);
             std::cout << slice << std::endl;
             BOOST_TEST(slice == make_vector());
-            BOOST_STATIC_ASSERT(result_of::size<slice_t>::value == 0);
+            BOOST_STATIC_ASSERT(boost::fusion::result_of::size<slice_t>::value == 0);
         }
     }
 
@@ -82,7 +82,7 @@ main()
         slice_t slice(f, l);
         std::cout << slice << std::endl;
         BOOST_TEST((slice == make_vector(3, 4)));
-        BOOST_STATIC_ASSERT(result_of::size<slice_t>::value == 2);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<slice_t>::value == 2);
     }
 
     {
@@ -90,19 +90,19 @@ main()
         map_type m(make_pair<void>("foo"), make_pair<double>('x'), make_pair<void*>(2));
 
         typedef iterator_range<
-            result_of::begin<map_type>::type
-          , result_of::advance_c<result_of::begin<map_type>::type,2>::type
+            boost::fusion::result_of::begin<map_type>::type
+          , boost::fusion::result_of::advance_c<boost::fusion::result_of::begin<map_type>::type,2>::type
         > range_type;
         range_type r(begin(m), advance_c<2>(begin(m)));
 
-        BOOST_MPL_ASSERT((result_of::has_key<range_type, void>::type));
-        BOOST_MPL_ASSERT((result_of::has_key<range_type, double>::type));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<range_type, void>::type));
+        BOOST_MPL_ASSERT((boost::fusion::result_of::has_key<range_type, double>::type));
 
-        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::begin<range_type>::type>::type, void>));
-        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::next<result_of::begin<range_type>::type>::type>::type, double>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::begin<range_type>::type>::type, void>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::key_of<boost::fusion::result_of::next<boost::fusion::result_of::begin<range_type>::type>::type>::type, double>));
 
-        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::begin<range_type>::type>::type, std::string>));
-        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::next<result_of::begin<range_type>::type>::type>::type, char>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::begin<range_type>::type>::type, std::string>));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::next<boost::fusion::result_of::begin<range_type>::type>::type>::type, char>));
 
         std::cout << deref_data(begin(r)) << std::endl;
         std::cout << deref_data(fusion::next(begin(r))) << std::endl;

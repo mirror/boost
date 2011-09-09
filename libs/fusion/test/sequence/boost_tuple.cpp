@@ -57,8 +57,8 @@ main()
         at_c<1>(t) = "mama mia";
         BOOST_TEST(t == make_vector(6, "mama mia"));
 
-        BOOST_STATIC_ASSERT(result_of::size<tuple_type>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<tuple_type>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<tuple_type>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<tuple_type>::value);
 
         BOOST_TEST(front(t) == 6);
     }

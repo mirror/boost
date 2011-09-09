@@ -30,7 +30,7 @@ void test_set(Set const& set)
     using namespace boost::fusion;
     std::cout << set << std::endl;
     
-    BOOST_STATIC_ASSERT(result_of::size<Set>::value == 3);
+    BOOST_STATIC_ASSERT(boost::fusion::result_of::size<Set>::value == 3);
     BOOST_TEST((*find<int>(set) == 1));
     BOOST_TEST((*find<double>(set) == 1.5));
     BOOST_TEST((*find<std::string>(set) == "hello"));
@@ -47,7 +47,7 @@ void test_map(Map const& map)
     using namespace boost::fusion;
     std::cout << map << std::endl;
     
-    BOOST_STATIC_ASSERT(result_of::size<Map>::value == 3);
+    BOOST_STATIC_ASSERT(boost::fusion::result_of::size<Map>::value == 3);
     BOOST_TEST(((*find<_1>(map)).second == 1));
     BOOST_TEST(((*find<_3>(map)).second == 1.5));
     BOOST_TEST(((*find<_4>(map)).second == std::string("hello")));

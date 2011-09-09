@@ -182,16 +182,16 @@ void test_sequence_n(Sequence & seq, mpl::int_<3>)
 template <class Sequence>
 void test_sequence(Sequence & seq)
 {
-    test_sequence_n(seq, mpl::int_<fusion::result_of::size<Sequence>::value>());
+    test_sequence_n(seq, mpl::int_<boost::fusion::result_of::size<Sequence>::value>());
 }
 
 void result_type_tests()
 {
     using boost::is_same;
 
-    BOOST_TEST(( is_same< fusion::result_of::invoke_function_object< nullary_fobj, fusion::vector<> >::type, int >::value ));
-    BOOST_TEST(( is_same< fusion::result_of::invoke_function_object< fobj, fusion::vector<element1_type> >::type, int >::value ));
-    BOOST_TEST(( is_same< fusion::result_of::invoke_function_object< fobj, fusion::vector<element1_type,element2_type> >::type, int >::value ));
+    BOOST_TEST(( is_same< boost::fusion::result_of::invoke_function_object< nullary_fobj, fusion::vector<> >::type, int >::value ));
+    BOOST_TEST(( is_same< boost::fusion::result_of::invoke_function_object< fobj, fusion::vector<element1_type> >::type, int >::value ));
+    BOOST_TEST(( is_same< boost::fusion::result_of::invoke_function_object< fobj, fusion::vector<element1_type,element2_type> >::type, int >::value ));
 }
 
 
