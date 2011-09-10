@@ -27,6 +27,7 @@ Boost V1.48.0
    as before: these tokens will be silently ignored (after the token positions 
    have been properly updated). Note: this option is supported by the SLex lexer
    module only.
+ - Fixed #5887: flex_string.hpp needs to include <ios>
 
 Boost V1.47.0
 - V2.3.0
