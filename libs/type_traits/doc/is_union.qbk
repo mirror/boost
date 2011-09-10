@@ -30,14 +30,16 @@ __header ` #include <boost/type_traits/is_union.hpp>` or ` #include <boost/type_
 
 __examples
 
-[:`is_union<void>` inherits from `__true_type`.]
+Given `union my_union {};` then:
 
-[:`is_union<const void>::type` is the type `__true_type`.]
+[:`is_union<my_union>` inherits from `__true_type`.]
 
-[:`is_union<void>::value` is an integral constant 
+[:`is_union<const my_union>::type` is the type `__true_type`.]
+
+[:`is_union<my_union>::value` is an integral constant 
 expression that evaluates to /true/.]
 
-[:`is_union<void*>::value` is an integral constant 
+[:`is_union<my_union*>::value` is an integral constant 
 expression that evaluates to /false/.]
 
 [:`is_union<T>::value_type` is the type `bool`.]
