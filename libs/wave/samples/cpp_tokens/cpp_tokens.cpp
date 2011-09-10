@@ -94,6 +94,7 @@ main(int argc, char *argv[])
     ctx.set_language(boost::wave::support_cpp0x);
     ctx.set_language(boost::wave::enable_preserve_comments(ctx.get_language()));
     ctx.set_language(boost::wave::enable_prefer_pp_numbers(ctx.get_language()));
+    ctx.set_language(boost::wave::enable_emit_contnewlines(ctx.get_language()));
 
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
