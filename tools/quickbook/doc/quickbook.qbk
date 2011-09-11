@@ -297,6 +297,10 @@ Boost 1.46.1:
 [heading Version 1.5.6 - Boost 1.48]
 
 * Xml encode escaped punctuation (eg. `\<` is correctly encodes to \<).
+* Rename duplicate generated ids.
+* Close open sections at end of document (still warns about them).
+* New anchor markup for headers, will hopefully generate better pdfs.
+* Remove some whitespace around code from post processed output.
 
 [endsect] [/Change log]
 
