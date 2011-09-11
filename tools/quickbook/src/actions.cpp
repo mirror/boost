@@ -280,7 +280,9 @@ namespace quickbook
         value_consumer values = phrase;
         actions.phrase
             << "<footnote id=\""
-            << actions.ids.add(actions.doc_id + ".f", id_generator::numbered)
+            << actions.ids.add(fully_qualified_id(actions.doc_id,
+                    actions.qualified_section_id, "f"),
+                    id_generator::numbered)
             << "\"><para>"
             << values.consume().get_boostbook()
             << "</para></footnote>";
@@ -1258,17 +1260,16 @@ namespace quickbook
                 }
 
                 unsigned int size = symbol->params.size();
+                std::string callout_base_id =
+                    fully_qualified_id(actions.doc_id,
+                        actions.qualified_section_id, "c");
 
                 for(unsigned int i = 0; i < size; ++i)
                 {
-                    std::string callout_id1 =
-                        actions.ids.add(
-                            actions.doc_id + ".c",
-                            id_generator::numbered);
-                    std::string callout_id2 =
-                        actions.ids.add(
-                            actions.doc_id + ".c",
-                            id_generator::numbered);
+                    std::string callout_id1 = actions.ids.add(
+                        callout_base_id, id_generator::numbered);
+                    std::string callout_id2 = actions.ids.add(
+                        callout_base_id, id_generator::numbered);
 
                     std::string code;
                     code += "<co id=\"" + callout_id1 + "\" ";

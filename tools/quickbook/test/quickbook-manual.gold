@@ -404,7 +404,7 @@ the true business precept.]
         </para>
         <para>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
-          are much stricter<footnote id="quickbook.f0">
+          are much stricter<footnote id="quickbook.syntax.phrase.simple_formatting.f0">
           <para>
             Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
             for sharing these samples and teaching me these obscure formatting rules.
@@ -1030,7 +1030,7 @@ escape (no processing/formatting)
 <programlisting><!--quickbook-escape-prefix-->[footnote A sample footnote]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
-          will generate this<footnote id="quickbook.f1">
+          will generate this<footnote id="quickbook.syntax.phrase.footnotes.f0">
           <para>
             A sample footnote
           </para>
@@ -2796,20 +2796,20 @@ for the journey to old age.]]]
         </para>
         <para>
           
-<programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <co id="quickbook.c0" linkends="quickbook.c1" />
+<programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <co id="quickbook.syntax.block.import.c0" linkends="quickbook.syntax.block.import.c1" />
 <phrase role="special">{</phrase>
-    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <co id="quickbook.c2" linkends="quickbook.c3" />
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <co id="quickbook.syntax.block.import.c2" linkends="quickbook.syntax.block.import.c3" />
 <phrase role="special">}</phrase>
 </programlisting>
         </para>
         <calloutlist>
-          <callout arearefs="quickbook.c0" id="quickbook.c1">
+          <callout arearefs="quickbook.syntax.block.import.c0" id="quickbook.syntax.block.import.c1">
             <para>
               The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
               for details</ulink>
             </para>
           </callout>
-          <callout arearefs="quickbook.c2" id="quickbook.c3">
+          <callout arearefs="quickbook.syntax.block.import.c2" id="quickbook.syntax.block.import.c3">
             <para>
               return 'em, foo-bar man!
             </para>
