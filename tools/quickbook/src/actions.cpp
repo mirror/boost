@@ -320,16 +320,32 @@ namespace quickbook
     }
     
     namespace {
-        void write_bridgehead(collector& out, int level,
-            std::string const& str, std::string const& id, std::string const& linkend)
+        void write_bridgehead(quickbook::actions& actions, int level,
+            std::string const& str, std::string const& id, bool self_link)
         {
-            out << "<bridgehead renderas=\"sect" << level << "\"";
-            if(!id.empty()) out << " id=\"" << id << "\"";
-            out << ">";
-            if(!linkend.empty()) out << "<link linkend=\"" << linkend << "\">";
-            out << str;
-            if(!linkend.empty()) out << "</link>";
-            out << "</bridgehead>";
+            if (self_link && !id.empty())
+            {
+                actions.out << "<bridgehead renderas=\"sect" << level << "\"";
+                actions.out << " id=\"";
+                actions.out << actions.ids.add(
+                    fully_qualified_id(actions.doc_id,
+                        actions.qualified_section_id, "h"),
+                    id_generator::numbered),
+                actions.out << "\">";
+                actions.out << "<phrase id=\"" << id << "\"/>";
+                actions.out << "<link linkend=\"" << id << "\">";
+                actions.out << str;
+                actions.out << "</link>";
+                actions.out << "</bridgehead>";
+            }
+            else
+            {
+                actions.out << "<bridgehead renderas=\"sect" << level << "\"";
+                if(!id.empty()) actions.out << " id=\"" << id << "\"";
+                actions.out << ">";
+                actions.out << str;
+                actions.out << "</bridgehead>";
+            }
         }
     }
 
@@ -360,14 +376,17 @@ namespace quickbook
             level = heading_list.get_tag() - block_tags::heading1 + 1;
         }
 
-        std::string linkend;
+        write_anchors(actions, actions.out);
 
         if (!generic && qbk_version_n < 103) // version 1.2 and below
         {
-            add_anchor(actions,
+            std::string anchor = actions.ids.add(
                 actions.section_id + '.' +
                     detail::make_identifier(content.get_boostbook()),
                 id_generator::generated_heading);
+
+            write_bridgehead(actions, level,
+                content.get_boostbook(), anchor, false);
         }
         else
         {
@@ -385,20 +404,14 @@ namespace quickbook
                             content.get_boostbook()
                     );
 
-            linkend = add_anchor(actions,
+            std::string anchor = actions.ids.add(
                 fully_qualified_id(actions.doc_id,
                     actions.qualified_section_id, id),
-                category);
-        }
+                category);;
 
-        write_anchors(actions, actions.out);        
-        write_bridgehead(actions.out, level,
-            content.get_boostbook(),
-            actions.ids.add(
-                fully_qualified_id(actions.doc_id,
-                    actions.qualified_section_id, "h"),
-                id_generator::numbered),
-            linkend);
+            write_bridgehead(actions, level,
+                content.get_boostbook(), anchor, true);
+        }
     }
 
     void simple_phrase_action::operator()(char mark) const

@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <article id="various_blocks" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>Various blocks</title> <anchor id="various_blocks.blockquotes"/>
+  <title>Various blocks</title>
   <bridgehead renderas="sect2" id="various_blocks.h0">
-    <link linkend="various_blocks.blockquotes">Blockquotes</link>
+    <phrase id="various_blocks.blockquotes"/><link linkend="various_blocks.blockquotes">Blockquotes</link>
   </bridgehead>
   <para>
     Here's a blockquote:
@@ -25,9 +25,8 @@
       Blockquote second paragraph.
     </para>
   </blockquote>
-  <anchor id="various_blocks.admonitions"/>
   <bridgehead renderas="sect2" id="various_blocks.h1">
-    <link linkend="various_blocks.admonitions">Admonitions</link>
+    <phrase id="various_blocks.admonitions"/><link linkend="various_blocks.admonitions">Admonitions</link>
   </bridgehead>
   <warning>
     <para>
@@ -62,17 +61,17 @@
       Warning second paragraph.
     </para>
   </warning>
-  <anchor id="various_blocks.blurb"/>
   <bridgehead renderas="sect2" id="various_blocks.h2">
-    <link linkend="various_blocks.blurb">Blurb</link>
+    <phrase id="various_blocks.blurb"/><link linkend="various_blocks.blurb">Blurb</link>
   </bridgehead>
   <sidebar role="blurb">
   <para>
     Blurb
   </para>
-  </sidebar> <anchor id="various_blocks.inline_blocks"/>
+  </sidebar>
   <bridgehead renderas="sect2" id="various_blocks.h3">
-    <link linkend="various_blocks.inline_blocks">Inline blocks</link>
+    <phrase id="various_blocks.inline_blocks"/><link linkend="various_blocks.inline_blocks">Inline
+    blocks</link>
   </bridgehead>
   <blockquote>
     <para>

@@ -102,10 +102,10 @@
     </itemizedlist>
   </section>
   <section id="quickbook.change_log">
-    <title><link linkend="quickbook.change_log">Change Log</link></title> <anchor
-    id="quickbook.change_log.version_1_3"/>
+    <title><link linkend="quickbook.change_log">Change Log</link></title>
     <bridgehead renderas="sect3" id="quickbook.change_log.h0">
-      <link linkend="quickbook.change_log.version_1_3">Version 1.3</link>
+      <phrase id="quickbook.change_log.version_1_3"/><link linkend="quickbook.change_log.version_1_3">Version
+      1.3</link>
     </bridgehead>
     <itemizedlist>
       <listitem>
@@ -1706,29 +1706,29 @@ escape (no processing/formatting)
 [h5 Heading 5]
 [h6 Heading 6]
 <!--quickbook-escape-postfix--></programlisting>
-        <anchor id="quickbook.syntax.block.headings.heading_1"/>
         <bridgehead renderas="sect1" id="quickbook.syntax.block.headings.h0">
-          <link linkend="quickbook.syntax.block.headings.heading_1">Heading 1</link>
+          <phrase id="quickbook.syntax.block.headings.heading_1"/><link linkend="quickbook.syntax.block.headings.heading_1">Heading
+          1</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_2"/>
         <bridgehead renderas="sect2" id="quickbook.syntax.block.headings.h1">
-          <link linkend="quickbook.syntax.block.headings.heading_2">Heading 2</link>
+          <phrase id="quickbook.syntax.block.headings.heading_2"/><link linkend="quickbook.syntax.block.headings.heading_2">Heading
+          2</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_3"/>
         <bridgehead renderas="sect3" id="quickbook.syntax.block.headings.h2">
-          <link linkend="quickbook.syntax.block.headings.heading_3">Heading 3</link>
+          <phrase id="quickbook.syntax.block.headings.heading_3"/><link linkend="quickbook.syntax.block.headings.heading_3">Heading
+          3</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_4"/>
         <bridgehead renderas="sect4" id="quickbook.syntax.block.headings.h3">
-          <link linkend="quickbook.syntax.block.headings.heading_4">Heading 4</link>
+          <phrase id="quickbook.syntax.block.headings.heading_4"/><link linkend="quickbook.syntax.block.headings.heading_4">Heading
+          4</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_5"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.headings.h4">
-          <link linkend="quickbook.syntax.block.headings.heading_5">Heading 5</link>
+          <phrase id="quickbook.syntax.block.headings.heading_5"/><link linkend="quickbook.syntax.block.headings.heading_5">Heading
+          5</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_6"/>
         <bridgehead renderas="sect6" id="quickbook.syntax.block.headings.h5">
-          <link linkend="quickbook.syntax.block.headings.heading_6">Heading 6</link>
+          <phrase id="quickbook.syntax.block.headings.heading_6"/><link linkend="quickbook.syntax.block.headings.heading_6">Heading
+          6</link>
         </bridgehead>
         <para>
           Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
@@ -1971,9 +1971,9 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
 
 ]
 <!--quickbook-escape-postfix--></programlisting>
-        <anchor id="quickbook.syntax.block.templates.template_identifier"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.templates.h0">
-          <link linkend="quickbook.syntax.block.templates.template_identifier">Template
+          <phrase id="quickbook.syntax.block.templates.template_identifier"/><link
+          linkend="quickbook.syntax.block.templates.template_identifier">Template
           Identifier</link>
         </bridgehead>
         <para>
@@ -1993,9 +1993,9 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
             </simpara>
           </listitem>
         </itemizedlist>
-        <anchor id="quickbook.syntax.block.templates.formal_template_arguments"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.templates.h1">
-          <link linkend="quickbook.syntax.block.templates.formal_template_arguments">Formal
+          <phrase id="quickbook.syntax.block.templates.formal_template_arguments"/><link
+          linkend="quickbook.syntax.block.templates.formal_template_arguments">Formal
           Template Arguments</link>
         </bridgehead>
         <para>
@@ -2013,9 +2013,8 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
           and <literal>what</literal> are actually templates that exist in the duration
           of the template call.
         </para>
-        <anchor id="quickbook.syntax.block.templates.template_body"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.templates.h2">
-          <link linkend="quickbook.syntax.block.templates.template_body">Template
+          <phrase id="quickbook.syntax.block.templates.template_body"/><link linkend="quickbook.syntax.block.templates.template_body">Template
           Body</link>
         </bridgehead>
         <para>
@@ -2040,9 +2039,9 @@ replacement text...
           Phrase templates are typically expanded as part of phrases. Like macros,
           block level elements are not allowed in phrase templates.
         </para>
-        <anchor id="quickbook.syntax.block.templates.template_expansion"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.templates.h3">
-          <link linkend="quickbook.syntax.block.templates.template_expansion">Template
+          <phrase id="quickbook.syntax.block.templates.template_expansion"/><link
+          linkend="quickbook.syntax.block.templates.template_expansion">Template
           Expansion</link>
         </bridgehead>
         <para>
@@ -2083,10 +2082,9 @@ replacement text...
           are separated by the double dot <literal>&quot;..&quot;</literal> and terminated
           by the close parenthesis.
         </para>
-        <anchor id="quickbook.syntax.block.templates.nullary_templates"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.templates.h4">
-          <link linkend="quickbook.syntax.block.templates.nullary_templates">Nullary
-          Templates</link>
+          <phrase id="quickbook.syntax.block.templates.nullary_templates"/><link
+          linkend="quickbook.syntax.block.templates.nullary_templates">Nullary Templates</link>
         </bridgehead>
         <para>
           Nullary templates look and act like simple macros. Example:
@@ -2176,9 +2174,8 @@ for the journey to old age.]]]
           You have a couple of ways to do it. I personally prefer the explicit empty
           brackets, though.
         </para>
-        <anchor id="quickbook.syntax.block.templates.simple_arguments"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.templates.h5">
-          <link linkend="quickbook.syntax.block.templates.simple_arguments">Simple
+          <phrase id="quickbook.syntax.block.templates.simple_arguments"/><link linkend="quickbook.syntax.block.templates.simple_arguments">Simple
           Arguments</link>
         </bridgehead>
         <para>
@@ -2251,9 +2248,9 @@ for the journey to old age.]]]
         <para>
           what do you think man?
         </para>
-        <anchor id="quickbook.syntax.block.templates.punctuation_templates"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.templates.h6">
-          <link linkend="quickbook.syntax.block.templates.punctuation_templates">Punctuation
+          <phrase id="quickbook.syntax.block.templates.punctuation_templates"/><link
+          linkend="quickbook.syntax.block.templates.punctuation_templates">Punctuation
           Templates</link>
         </bridgehead>
         <para>
@@ -2655,9 +2652,8 @@ for the journey to old age.]]]
         <para>
           QuickBook's import facility provides a nice solution.
         </para>
-        <anchor id="quickbook.syntax.block.import.example"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.import.h0">
-          <link linkend="quickbook.syntax.block.import.example">Example</link>
+          <phrase id="quickbook.syntax.block.import.example"/><link linkend="quickbook.syntax.block.import.example">Example</link>
         </bridgehead>
         <para>
           You can effortlessly import code snippets from source code into your QuickBook.
@@ -2733,9 +2729,8 @@ for the journey to old age.]]]
         <para>
           Some trailing text here
         </para>
-        <anchor id="quickbook.syntax.block.import.code_snippet_markup"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.import.h1">
-          <link linkend="quickbook.syntax.block.import.code_snippet_markup">Code
+          <phrase id="quickbook.syntax.block.import.code_snippet_markup"/><link linkend="quickbook.syntax.block.import.code_snippet_markup">Code
           Snippet Markup</link>
         </bridgehead>
         <para>
@@ -2755,9 +2750,8 @@ for the journey to old age.]]]
           The comment <code><phrase role="comment">//]</phrase></code> ends a code-snippet
           This too will not be visible in quickbook.
         </para>
-        <anchor id="quickbook.syntax.block.import.special_comments"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.import.h2">
-          <link linkend="quickbook.syntax.block.import.special_comments">Special
+          <phrase id="quickbook.syntax.block.import.special_comments"/><link linkend="quickbook.syntax.block.import.special_comments">Special
           Comments</link>
         </bridgehead>
         <para>
@@ -2778,9 +2772,8 @@ for the journey to old age.]]]
           slash-slash, tick and white-space shall be ignored. In the second, the
           initial slash-star-tick and the final star-slash shall be ignored.
         </para>
-        <anchor id="quickbook.syntax.block.import.callouts"/>
         <bridgehead renderas="sect5" id="quickbook.syntax.block.import.h3">
-          <link linkend="quickbook.syntax.block.import.callouts">Callouts</link>
+          <phrase id="quickbook.syntax.block.import.callouts"/><link linkend="quickbook.syntax.block.import.callouts">Callouts</link>
         </bridgehead>
         <para>
           Special comments of the form:
@@ -3146,9 +3139,9 @@ comment.box.end.props=]
   </section>
   <section id="quickbook.faq">
     <title><link linkend="quickbook.faq">Frequently Asked Questions</link></title>
-    <anchor id="quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_"/>
     <bridgehead renderas="sect3" id="quickbook.faq.h0">
-      <link linkend="quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_">Can
+      <phrase id="quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_"/><link
+      linkend="quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_">Can
       I use QuickBook for non-Boost documentation?</link>
     </bridgehead>
     <para>

@@ -26,10 +26,9 @@ Code block line 2.
   <para>
     Paragraph.
   </para>
-  <anchor id="indented_code_blocks.code_blocks_separated_by_comment"/>
   <bridgehead renderas="sect2" id="indented_code_blocks.h0">
-    <link linkend="indented_code_blocks.code_blocks_separated_by_comment">Code blocks
-    separated by comment</link>
+    <phrase id="indented_code_blocks.code_blocks_separated_by_comment"/><link linkend="indented_code_blocks.code_blocks_separated_by_comment">Code
+    blocks separated by comment</link>
   </bridgehead>
   
 <programlisting>First code block.

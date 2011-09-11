@@ -11,9 +11,8 @@
     <para>
       Hello.
     </para>
-    <anchor id="section_in_a_template.test.just_to_test_id_generation"/>
     <bridgehead renderas="sect3" id="section_in_a_template.test.h0">
-      <link linkend="section_in_a_template.test.just_to_test_id_generation">Just
+      <phrase id="section_in_a_template.test.just_to_test_id_generation"/><link linkend="section_in_a_template.test.just_to_test_id_generation">Just
       to test id generation</link>
     </bridgehead>
     <para>
