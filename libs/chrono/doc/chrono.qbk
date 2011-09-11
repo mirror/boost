@@ -693,7 +693,7 @@ A clock is a concept which bundles 3 things:
 # A concrete __time_point type.
 # A function called now() which returns the concrete __time_point.
 
-The standard defines tree system-wide clocks that are associated to the computer time.
+The standard defines three system-wide clocks that are associated to the computer time.
 
 * __system_clock represents system-wide realtime clock that can be synchronized with an external clock.
 
