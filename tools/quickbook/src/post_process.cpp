@@ -32,9 +32,14 @@ namespace quickbook
             column = current_indent;
         }
 
-        void break_line()
+        void trim_spaces()
         {
             out.erase(out.find_last_not_of(' ')+1); // trim trailing spaces
+        }
+
+        void break_line()
+        {
+            trim_spaces();
             out += '\n';
             indent();
         }
@@ -338,7 +343,9 @@ namespace quickbook
 
         void do_code(iter_type f, iter_type l) const
         {
-            state.out += '\n';
+            state.printer_.trim_spaces();
+            if (state.out[state.out.size() - 1] != '\n')
+                state.out += '\n';
             // print the string taking care of line
             // ending CR/LF platform issues
             for (iter_type i = f; i != l; ++i)

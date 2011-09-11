@@ -300,13 +300,10 @@
       <para>
         Can be placed anywhere.
       </para>
-      
 <programlisting><!--quickbook-escape-prefix-->[/ comment (no output generated) ]<!--quickbook-escape-postfix-->
 </programlisting>
-      
 <programlisting><!--quickbook-escape-prefix-->[/ comments can be nested [/ some more here] ]<!--quickbook-escape-postfix-->
 </programlisting>
-      
 <programlisting><!--quickbook-escape-prefix-->[/ Quickbook blocks can nest inside comments. [*Comment this out too!] ]<!--quickbook-escape-postfix-->
 </programlisting>
     </section>
@@ -314,7 +311,6 @@
       <title><link linkend="quickbook.syntax.phrase">Phrase Level Elements</link></title>
       <section id="quickbook.syntax.phrase.font_styles">
         <title><link linkend="quickbook.syntax.phrase.font_styles">Font Styles</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -328,7 +324,6 @@
         <para>
           Like all non-terminal phrase level elements, this can of course be nested:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[*['bold-italic]]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -344,7 +339,6 @@
           When you want content that may or must be replaced by the user, use the
           syntax:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[~replacement]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -356,7 +350,6 @@
       </section>
       <section id="quickbook.syntax.phrase.quotations">
         <title><link linkend="quickbook.syntax.phrase.quotations">Quotations</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -374,7 +367,6 @@
         <para>
           Like all phrase elements, quotations may be nested. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->["Here's the rule for bargains: ["Do other men, for they would do you.] That's
 the true business precept.]
 <!--quickbook-escape-postfix--></programlisting>
@@ -392,7 +384,6 @@ the true business precept.]
           Simple markup for formatting text, common in many applications, is now
           supported:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->/italic/, *bold*, _underline_, =teletype=
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -656,7 +647,6 @@ the true business precept.]
           &quot;have&quot; to &quot;full&quot; in the following paragraph will be
           rendered as bold:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->Baa baa black sheep, *have you any wool?
 Yes sir, yes sir, three bags full!*
 One for the master, one for the dame,
@@ -670,7 +660,6 @@ And one for the little boy who lives down the lane.
         <para>
           But in the following paragraph, bold is not applied:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->Baa baa black sheep, *have you any wool?
 Yes sir, yes sir, three bags full!
 One for the master, one for the dame,
@@ -688,7 +677,6 @@ And one for the little boy who lives down the lane.
           Inlining code in paragraphs is quite common when writing C++ documentation.
           We provide a very simple markup for this. For example, this:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->This text has inlined code `int main() { return 0; }` in it.
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -725,7 +713,6 @@ And one for the little boy who lives down the lane.
           the double-tick, instead of the single-tick, we are telling QuickBook to
           use preformatted blocks of code. Example:
         </para>
-        
 <programlisting>``
     #include &lt;iostream&gt;
 
@@ -740,7 +727,6 @@ And one for the little boy who lives down the lane.
           will generate:
         </para>
         <para>
-          
 <programlisting><phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
 <phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
@@ -765,7 +751,6 @@ And one for the little boy who lives down the lane.
           where <literal>source-mode</literal> is one of the supported modes. For
           example, this:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->Python's [python] `import` is rather like C++'s [c++] `#include`. A
 C++ comment `// looks like this` whereas a Python comment [python]
 `# looks like this`.
@@ -832,7 +817,6 @@ C++ comment `// looks like this` whereas a Python comment [python]
       </section>
       <section id="quickbook.syntax.phrase.line_break">
         <title><link linkend="quickbook.syntax.phrase.line_break">line-break</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[br]
 <!--quickbook-escape-postfix--></programlisting>
         <warning>
@@ -847,7 +831,6 @@ C++ comment `// looks like this` whereas a Python comment [python]
       </section>
       <section id="quickbook.syntax.phrase.anchors">
         <title><link linkend="quickbook.syntax.phrase.anchors">Anchors</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[#named_anchor]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -861,7 +844,6 @@ Some link text]</literal>.
       </section>
       <section id="quickbook.syntax.phrase.links">
         <title><link linkend="quickbook.syntax.phrase.links">Links</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[@http://www.boost.org this is [*boost's] website....]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -874,13 +856,11 @@ Some link text]</literal>.
         <para>
           URL links where the link text is the link itself is common. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->see http://spirit.sourceforge.net/
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           so, when the text is absent in a link markup, the URL is assumed. Example:
         </para>
-        
 <programlisting>see <!--quickbook-escape-prefix-->[@http://spirit.sourceforge.net/]<!--quickbook-escape-postfix-->
 </programlisting>
         <para>
@@ -895,7 +875,6 @@ Some link text]</literal>.
         <para>
           You can link within a document using:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[link section_id.normalized_header_text The link text]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -909,7 +888,6 @@ Some link text]</literal>.
         <para>
           In addition, you can link internally to an XML refentry like:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[link xml.refentry The link text]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -920,7 +898,6 @@ Some link text]</literal>.
           Like URLs, the link text is optional. If this is not present, the link
           text will automatically be the refentry. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[link xml.refentry]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -933,7 +910,6 @@ Some link text]</literal>.
           If you want to link to a function, class, member, enum, concept or header
           in the reference section, you can use:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[funcref fully::qualified::function_name The link text]
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
@@ -947,7 +923,6 @@ Some link text]</literal>.
           will automatically be the function, class, member, enum, macro, concept
           or header. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[classref boost::bar::baz]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -959,7 +934,6 @@ Some link text]</literal>.
         <para>
           The escape mark-up is used when we don't want to do any processing.
         </para>
-        
 <programlisting>'''
 escape (no processing/formatting)
 '''
@@ -968,7 +942,6 @@ escape (no processing/formatting)
           Escaping allows us to pass XML markup to <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>
           or <ulink url="http://www.docbook.org/">DocBook</ulink>. For example:
         </para>
-        
 <programlisting>'''
 &lt;emphasis role=&quot;bold&quot;&gt;This is direct XML markup&lt;/emphasis&gt;
 '''
@@ -1014,7 +987,6 @@ escape (no processing/formatting)
       </section>
       <section id="quickbook.syntax.phrase.images">
         <title><link linkend="quickbook.syntax.phrase.images">Images</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[$image.jpg]
 <!--quickbook-escape-postfix--></programlisting>
       </section>
@@ -1026,7 +998,6 @@ escape (no processing/formatting)
           role="special">]</phrase></code> block, and the text will be put at the
           bottom of the current page. For example, this:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[footnote A sample footnote]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1038,7 +1009,7 @@ escape (no processing/formatting)
         </para>
         <section id="quickbook.syntax.phrase.footnotes.macro_expansion">
           <title><link linkend="quickbook.syntax.phrase.footnotes.macro_expansion">Macro
-          Expansion</link></title> 
+          Expansion</link></title>
 <programlisting><!--quickbook-escape-prefix-->__a_macro_identifier__
 <!--quickbook-escape-postfix--></programlisting>
           <para>
@@ -1047,7 +1018,7 @@ escape (no processing/formatting)
         </section>
         <section id="quickbook.syntax.phrase.footnotes.template_expansion">
           <title><link linkend="quickbook.syntax.phrase.footnotes.template_expansion">Template
-          Expansion</link></title> 
+          Expansion</link></title>
 <programlisting><!--quickbook-escape-prefix-->[a_template_identifier]
 <!--quickbook-escape-postfix--></programlisting>
           <para>
@@ -1065,7 +1036,6 @@ escape (no processing/formatting)
           Every document must begin with a Document Info section, which should look
           like this:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[document-type The Document Title
     [quickbook 1.3]
     [version 1.0]
@@ -1161,7 +1131,6 @@ escape (no processing/formatting)
         <para>
           Starting a new section is accomplished with:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[section:id The Section Title]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1176,7 +1145,6 @@ escape (no processing/formatting)
         <para>
           End a section with:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[endsect]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1188,7 +1156,6 @@ escape (no processing/formatting)
         <para>
           You can include another XML file with:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[xinclude file.xml]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1210,7 +1177,7 @@ escape (no processing/formatting)
         <title><link linkend="quickbook.syntax.block.lists">Lists</link></title>
         <section id="quickbook.syntax.block.lists.ordered_lists">
           <title><link linkend="quickbook.syntax.block.lists.ordered_lists">Ordered
-          lists</link></title> 
+          lists</link></title>
 <programlisting># One
 # Two
 # Three
@@ -1242,7 +1209,6 @@ escape (no processing/formatting)
           <para>
             List hierarchies are supported. Example:
           </para>
-          
 <programlisting># One
 # Two
 # Three
@@ -1328,7 +1294,6 @@ escape (no processing/formatting)
           <para>
             Long lines will be wrapped appropriately. Example:
           </para>
-          
 <programlisting># A short item.
 # A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
@@ -1361,7 +1326,7 @@ escape (no processing/formatting)
         </section>
         <section id="quickbook.syntax.block.lists.unordered_lists">
           <title><link linkend="quickbook.syntax.block.lists.unordered_lists">Unordered
-          lists</link></title> 
+          lists</link></title>
 <programlisting><!--quickbook-escape-prefix-->* First
 * Second
 * Third
@@ -1392,7 +1357,6 @@ escape (no processing/formatting)
           <para>
             Mixed lists (ordered and unordered) are supported. Example:
           </para>
-          
 <programlisting><!--quickbook-escape-prefix--># One
 # Two
 # Three
@@ -1446,7 +1410,6 @@ escape (no processing/formatting)
           <para>
             And...
           </para>
-          
 <programlisting><!--quickbook-escape-prefix--># 1
     * 1.a
         # 1.a.1
@@ -1544,7 +1507,6 @@ escape (no processing/formatting)
           highlighted according to the current <link linkend="quickbook.syntax.phrase.source_mode">Source
           Mode</link>:
         </para>
-        
 <programlisting><phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
 <phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
@@ -1554,7 +1516,6 @@ escape (no processing/formatting)
     <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-        
 <programlisting><phrase role="keyword">import</phrase> <phrase role="identifier">cgi</phrase>
 
 <phrase role="keyword">def</phrase> <phrase role="identifier">cookForHtml</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">):</phrase>
@@ -1565,7 +1526,6 @@ escape (no processing/formatting)
         <para>
           Macros that are already defined are expanded in source code. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[def __array__ [@http://www.boost.org/doc/html/array/reference.html array]]
 [def __boost__ [@http://www.boost.org/libs/libraries.htm boost]]
 
@@ -1574,7 +1534,6 @@ escape (no processing/formatting)
         <para>
           Generates:
         </para>
-        
 <programlisting><phrase role="keyword">using</phrase> <ulink url="http://www.boost.org/libs/libraries.htm">boost</ulink><phrase role="special">::</phrase><ulink url="http://www.boost.org/doc/html/array/reference.html">array</ulink><phrase role="special">;</phrase>
 </programlisting>
       </section>
@@ -1589,7 +1548,6 @@ escape (no processing/formatting)
           and Python, the delimiter is the double tick (back-quote): &quot;``&quot;
           and &quot;``&quot;. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->void ``[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]``()
 {
 }
@@ -1597,7 +1555,6 @@ escape (no processing/formatting)
         <para>
           Will generate:
         </para>
-        
 <programlisting><phrase role="keyword">void</phrase> <ulink url="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz">foo</ulink><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
 <phrase role="special">}</phrase>
@@ -1613,7 +1570,6 @@ escape (no processing/formatting)
           Sometimes, you don't want some preformatted text to be parsed as C++. In
           such cases, use the <literal>[pre ... ]</literal> markup block.
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[pre
 
     Some *preformatted* text                    Some *preformatted* text
@@ -1629,7 +1585,6 @@ escape (no processing/formatting)
           level markup, pre (and Code) are the only ones that allow multiple newlines.
           The markup above will generate:
         </para>
-        
 <programlisting>Some <emphasis role="bold">preformatted</emphasis> text                    Some <emphasis role="bold">preformatted</emphasis> text
 
     Some <emphasis role="bold">preformatted</emphasis> text            Some <emphasis role="bold">preformatted</emphasis> text
@@ -1644,7 +1599,6 @@ escape (no processing/formatting)
       </section>
       <section id="quickbook.syntax.block.blockquote">
         <title><link linkend="quickbook.syntax.block.blockquote">Blockquote</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[:sometext...]<!--quickbook-escape-postfix-->
 </programlisting>
         <blockquote>
@@ -1655,7 +1609,6 @@ escape (no processing/formatting)
       </section>
       <section id="quickbook.syntax.block.admonitions">
         <title><link linkend="quickbook.syntax.block.admonitions">Admonitions</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[note This is a note]
 [tip This is a tip]
 [important This is important]
@@ -1698,7 +1651,6 @@ escape (no processing/formatting)
       </section>
       <section id="quickbook.syntax.block.headings">
         <title><link linkend="quickbook.syntax.block.headings">Headings</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[h1 Heading 1]
 [h2 Heading 2]
 [h3 Heading 3]
@@ -1739,7 +1691,6 @@ escape (no processing/formatting)
           For example: Heading 1 in section Section 2 will be normalized to <literal>section_2.heading_1</literal>).
           You can use:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[link section_id.normalized_header_text The link text]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1754,7 +1705,6 @@ escape (no processing/formatting)
           In cases when you don't want to care about the heading level (1 to 6),
           you can use the <emphasis>Generic Heading</emphasis>:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[heading Heading]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1767,7 +1717,6 @@ escape (no processing/formatting)
           if you do not want to start a new section. In many cases, however, headings
           in a particular section is just flat. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[section A]
 [h2 X]
 [h2 Y]
@@ -1781,7 +1730,6 @@ escape (no processing/formatting)
           is rather tedious, however, to scan the section level everytime. If you
           rewrite the example above as shown below, this will be automatic:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[section A]
 [heading X]
 [heading Y]
@@ -1799,7 +1747,6 @@ escape (no processing/formatting)
       </section>
       <section id="quickbook.syntax.block.macros">
         <title><link linkend="quickbook.syntax.block.macros">Macros</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[def macro_identifier some text]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1809,7 +1756,6 @@ escape (no processing/formatting)
           character or the underscore. The replacement text can be any phrase (even
           marked up). Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1]]
 sf_logo
 <!--quickbook-escape-postfix--></programlisting>
@@ -1841,7 +1787,6 @@ sf_logo
         <para>
           Some more examples:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[def :-)            [$theme/smiley.png]]
 [def __spirit__     [@http://spirit.sourceforge.net Spirit]]
 <!--quickbook-escape-postfix--></programlisting>
@@ -1852,7 +1797,6 @@ sf_logo
         <para>
           Invoking these macros:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->Hi __spirit__  :-)
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1964,7 +1908,6 @@ sf_logo
         <para>
           Example template:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template person[name age what]
 
 Hi, my name is [name]. I am [age] years old. I am a [what].
@@ -2022,13 +1965,11 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
           are actually two forms. Templates may be phrase or block level. Phrase
           templates are of the form:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template sample[arg1 arg2...argN] replacement text... ]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           Block templates are of the form:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template sample[arg1 arg2...argN]
 replacement text...
 ]
@@ -2047,14 +1988,12 @@ replacement text...
         <para>
           You expand a template this way:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template_identifier arg1..arg2..arg3]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           At template expansion, you supply the actual arguments. The template will
           be expanded with your supplied arguments. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[person James Bond..39..Spy]
 [person Santa Clause..87..Big Red Fatso]
 <!--quickbook-escape-postfix--></programlisting>
@@ -2089,14 +2028,12 @@ replacement text...
         <para>
           Nullary templates look and act like simple macros. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template alpha[]&apos;&apos;&apos;&amp;#945;&apos;&apos;&apos;]
 [template beta[]&apos;&apos;&apos;&amp;#946;&apos;&apos;&apos;]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           Expanding:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->Some squigles...[*[alpha][beta]]<!--quickbook-escape-postfix--></programlisting>
         <para>
           We have:
@@ -2130,14 +2067,12 @@ replacement text...
           indicates no arguments. If the template body does not look like a template
           argument list, we can elide the empty brackets. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template aristotle_quote Aristotle: [*['Education is the best provision
 for the journey to old age.]]]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           Expanding:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->Here's a quote from [aristotle_quote].
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -2155,13 +2090,11 @@ for the journey to old age.]]]
           use the space escape: &quot;<code><phrase role="special">\</phrase> </code>&quot;.
           Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template tag\ _tag]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           Then expanding:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->`struct` x[tag];
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -2200,7 +2133,6 @@ for the journey to old age.]]]
         <para>
           For example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template simple[a b c d] [a][b][c][d]]
 [simple w x y z]
 <!--quickbook-escape-postfix--></programlisting>
@@ -2220,7 +2152,6 @@ for the journey to old age.]]]
         <para>
           QuickBook only tries to get the arguments it needs. For example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[simple w x y z trail]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -2239,7 +2170,6 @@ for the journey to old age.]]]
           separators. It is possible to combine <literal>&quot;..&quot;</literal>
           separators with the argument passing simplification presented above. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[simple what do you think ..m a n?]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -2261,25 +2191,21 @@ for the journey to old age.]]]
           <link linkend="quickbook.syntax.block.templates.template_identifier">template
           identifiers</link>. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[template ![bar] <!--quickbook-escape-postfix-->&lt;hey&gt;<!--quickbook-escape-prefix-->[bar]<!--quickbook-escape-postfix-->&lt;/hey&gt;<!--quickbook-escape-prefix-->]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           Now, expanding this:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[!baz]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           We will have:
         </para>
-        
 <programlisting>&lt;hey&gt;baz&lt;/hey&gt;
 </programlisting>
       </section>
       <section id="quickbook.syntax.block.blurbs">
         <title><link linkend="quickbook.syntax.block.blurbs">Blurbs</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[blurb :-) [*An eye catching advertisement or note...]
 
     __spirit__ is an object-oriented recursive-descent parser generator framework
@@ -2316,7 +2242,6 @@ for the journey to old age.]]]
       </section>
       <section id="quickbook.syntax.block.tables">
         <title><link linkend="quickbook.syntax.block.tables">Tables</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[table A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
@@ -2411,7 +2336,6 @@ for the journey to old age.]]]
           in [ cells... ]. The syntax is free-format and allows big cells to be formatted
           nicely. Example:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[table Table with fat cells
     [[Heading 1] [Heading 2]]
     [
@@ -2493,7 +2417,6 @@ for the journey to old age.]]]
         <para>
           Here's how to have preformatted blocks of code in a table cell:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[table Table with code
     [[Comment] [Code]]
     [
@@ -2536,7 +2459,6 @@ for the journey to old age.]]]
                 </entry>
                 <entry>
                   <para>
-                    
 <programlisting><phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
 <phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
@@ -2554,7 +2476,6 @@ for the journey to old age.]]]
       </section>
       <section id="quickbook.syntax.block.variable_lists">
         <title><link linkend="quickbook.syntax.block.variable_lists">Variable Lists</link></title>
-        
 <programlisting><!--quickbook-escape-prefix-->[variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
@@ -2603,7 +2524,6 @@ for the journey to old age.]]]
         <para>
           You can include one QuickBook file from another. The syntax is simply:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[include someother.qbk]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -2629,7 +2549,6 @@ for the journey to old age.]]]
           the id defaults to the filename (&quot;someother&quot;, in the example
           above). You can specify the id like this:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[include:someid someother.qbk]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -2659,7 +2578,6 @@ for the journey to old age.]]]
           You can effortlessly import code snippets from source code into your QuickBook.
           The following illustrates how this is done:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[import ../test/stub.cpp]
 [foo]
 [bar]
@@ -2667,7 +2585,6 @@ for the journey to old age.]]]
         <para>
           The first line:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[import ../test/stub.cpp]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -2678,7 +2595,6 @@ for the journey to old age.]]]
           above). This shall be the template identifier for that particular code
           snippet. The second and third line above does the actual template expansion:
         </para>
-        
 <programlisting><!--quickbook-escape-prefix-->[foo]
 [bar]
 <!--quickbook-escape-postfix--></programlisting>
@@ -2707,7 +2623,6 @@ for the journey to old age.]]]
           And any quickbook block markup.
         </para>
         <para>
-          
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!</phrase>
@@ -2719,7 +2634,6 @@ for the journey to old age.]]]
           This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis> function
         </para>
         <para>
-          
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">bar</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, bar man!</phrase>
@@ -2737,7 +2651,6 @@ for the journey to old age.]]]
           Note how the code snippets in <ulink url="../../test/stub.cpp">stub.cpp</ulink>
           get marked up. We use distinguishable comments following the form:
         </para>
-        
 <programlisting><phrase role="comment">//[id</phrase>
 <phrase role="identifier">some</phrase> <phrase role="identifier">code</phrase> <phrase role="identifier">here</phrase>
 <phrase role="comment">//]</phrase>
@@ -2757,13 +2670,11 @@ for the journey to old age.]]]
         <para>
           Special comments of the form:
         </para>
-        
 <programlisting><phrase role="comment">//` some [*quickbook] markup here</phrase>
 </programlisting>
         <para>
           and:
         </para>
-        
 <programlisting><phrase role="comment">/*` some [*quickbook] markup here */</phrase>
 </programlisting>
         <para>
@@ -2778,7 +2689,6 @@ for the journey to old age.]]]
         <para>
           Special comments of the form:
         </para>
-        
 <programlisting><phrase role="comment">/*&lt; some [*quickbook] markup here &gt;*/</phrase>
 </programlisting>
         <para>
@@ -2788,7 +2698,6 @@ for the journey to old age.]]]
           for details. Example:
         </para>
         <para>
-          
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <co id="quickbook.syntax.block.import.c0" linkends="quickbook.syntax.block.import.c1" />
 <phrase role="special">{</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <co id="quickbook.syntax.block.import.c2" linkends="quickbook.syntax.block.import.c3" />
@@ -2920,7 +2829,6 @@ for the journey to old age.]]]
           </simpara>
         </listitem>
       </orderedlist>
-      
 <programlisting><phrase role="identifier">using</phrase> <phrase role="identifier">xsltproc</phrase>
     <phrase role="special">:</phrase> <phrase role="string">&quot;C:/Users/example/Documents/boost/xml/bin/xsltproc.exe&quot;</phrase>
     <phrase role="special">;</phrase>
@@ -2974,7 +2882,6 @@ for the journey to old age.]]]
           </simpara>
         </listitem>
       </orderedlist>
-      
 <programlisting><phrase role="identifier">using</phrase> <phrase role="identifier">quickbook</phrase>
     <phrase role="special">:</phrase> <phrase role="string">&quot;C:/Users/example/Documents/boost/xml/bin/quickbook.exe&quot;</phrase>
     <phrase role="special">;</phrase>
@@ -2994,7 +2901,6 @@ for the journey to old age.]]]
         role="identifier">xml</phrase></code> packages. For example, using <code><phrase
         role="identifier">apt</phrase><phrase role="special">-</phrase><phrase role="identifier">get</phrase></code>:
       </para>
-      
 <programlisting><phrase role="identifier">sudo</phrase> <phrase role="identifier">apt</phrase><phrase role="special">-</phrase><phrase role="identifier">get</phrase> <phrase role="identifier">install</phrase> <phrase role="identifier">xsltprc</phrase> <phrase role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase role="identifier">xsl</phrase> <phrase role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase role="identifier">xml</phrase>
 </programlisting>
       <para>
@@ -3014,7 +2920,6 @@ for the journey to old age.]]]
         the <ulink url="http://boost.org/boost-build2/doc/html/bbv2/advanced/configuration.html">Boost
         Build documentation</ulink>.
       </para>
-      
 <programlisting><phrase role="identifier">using</phrase> <phrase role="identifier">xsltproc</phrase> <phrase role="special">;</phrase>
 
 <phrase role="identifier">using</phrase> <phrase role="identifier">boostbook</phrase>
@@ -3064,7 +2969,6 @@ for the journey to old age.]]]
           </simpara>
         </listitem>
       </orderedlist>
-      
 <programlisting><phrase role="identifier">using</phrase> <phrase role="identifier">quickbook</phrase>
     <phrase role="special">:</phrase> <phrase role="special">/</phrase><phrase role="identifier">usr</phrase><phrase role="special">/</phrase><phrase role="identifier">local</phrase><phrase role="special">/</phrase><phrase role="identifier">bin</phrase><phrase role="special">/</phrase><phrase role="identifier">quickbook</phrase>
     <phrase role="special">;</phrase>
@@ -3113,7 +3017,6 @@ for the journey to old age.]]]
         You can use the following settings to highlight quickbook tags when editing
         quickbook files.
       </para>
-      
 <programlisting><!--quickbook-escape-prefix-->qbk=*.qbk
 lexer.*.qbk=props
 use.tabs.$(qbk)=0
@@ -3162,7 +3065,6 @@ comment.box.end.props=]
     <para>
       For example:
     </para>
-    
 <programlisting>using quickbook ;
 
 xml my_doc : my_doc.qbk ;
@@ -3728,7 +3630,6 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              
 <programlisting><!--quickbook-escape-prefix--># one
 # two
 # three
@@ -3748,7 +3649,6 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              
 <programlisting><!--quickbook-escape-prefix-->* one
 * two
 * three
@@ -3989,7 +3889,6 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              
 <programlisting><!--quickbook-escape-prefix-->[table Title
 [[a][b][c]]
 [[a][b][c]]
@@ -4009,7 +3908,6 @@ boostbook standalone
               </para>
             </entry>
             <entry>
-              
 <programlisting><!--quickbook-escape-prefix-->[variablelist Title
 [[a][b]]
 [[a][b]]

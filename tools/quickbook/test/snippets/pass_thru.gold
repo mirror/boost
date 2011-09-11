@@ -4,7 +4,6 @@
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Pass thru test</title>
   <para>
-    
 <programlisting><phrase role="comment">/*=============================================================================
     Copyright (c) 2011 Daniel James
 
@@ -15,7 +14,6 @@
 </programlisting>
   </para>
   <para>
-    
 <programlisting><phrase role="keyword">struct</phrase> <phrase role="identifier">Foo</phrase><phrase role="special">{</phrase>
 
   <phrase role="identifier">Foo</phrase><phrase role="special">();</phrase>
@@ -31,7 +29,6 @@
 </programlisting>
   </para>
   <para>
-    
 <programlisting><phrase role="keyword">def</phrase> <phrase role="identifier">foo</phrase><phrase role="special">:</phrase>
     <phrase role="keyword">print</phrase><phrase role="special">(</phrase><phrase role="string">'foo'</phrase><phrase role="special">)</phrase>
 </programlisting>
