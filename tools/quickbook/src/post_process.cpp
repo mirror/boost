@@ -352,6 +352,7 @@ namespace quickbook
             {
                 if (*i == '\n')
                 {
+                    state.printer_.trim_spaces();
                     state.out += '\n';
                     ++i;
                     if (i != l && *i != '\r')
@@ -359,6 +360,7 @@ namespace quickbook
                 }
                 else if (*i == '\r')
                 {
+                    state.printer_.trim_spaces();
                     state.out += '\n';
                     ++i;
                     if (i != l && *i != '\n')
