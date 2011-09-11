@@ -758,13 +758,13 @@ A clock is a concept which bundles 3 things:
 # A concrete __time_point type.
 # A function called now() which returns the concrete __time_point.
 
-The standard defines tree system-wide clocks that are associated to the computer time.
+The standard defines three system-wide clocks that are associated to the computer time.
 
 * __system_clock represents system-wide realtime clock that can be synchronized with an external clock.
 
 * __steady_clock can not be changed explicitly and the time since the initial epoch increase in a steady way.
 
-* __high_resolution_clock intend to use the system-wide clock provided by the platform with the higest resolution.
+* __high_resolution_clock intend to use the system-wide clock provided by the platform with the highest resolution.
 
 __Boost_Chrono__ provides them when supported by the underlying platform. A given platform may not be able to supply all three of these clocks.
 
