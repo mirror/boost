@@ -100,6 +100,13 @@ void test_wallocator();
 #endif
 void test_char_types_conversions();
 void operators_overload_test();
+#ifndef BOOST_NO_CHAR16_T
+void test_char16_conversions();
+#endif
+#ifndef BOOST_NO_CHAR32_T
+void test_char32_conversions();
+#endif
+
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
@@ -142,6 +149,12 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 
     suite->add(BOOST_TEST_CASE(&test_char_types_conversions));
     suite->add(BOOST_TEST_CASE(&operators_overload_test));
+#ifndef BOOST_NO_CHAR16_T
+    suite->add(BOOST_TEST_CASE(&test_char16_conversions));
+#endif
+#ifndef BOOST_NO_CHAR32_T
+    suite->add(BOOST_TEST_CASE(&test_char32_conversions));
+#endif
 
     return suite;
 }
@@ -582,7 +595,7 @@ void test_conversion_from_integral_to_string(CharT)
 
         // Test values around zero:
         if(limits::is_signed)
-            for(t = -counter; t < static_cast<T>(counter); ++t)
+            for(t = static_cast<T>(-counter); t < static_cast<T>(counter); ++t)
                 BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
 
         // Test values around 100, 1000, 10000, ...
@@ -679,7 +692,7 @@ void test_conversion_from_string_to_integral(CharT)
 
         // Test values around zero:
         if(limits::is_signed)
-            for(t = -counter; t < static_cast<T>(counter); ++t)
+            for(t = static_cast<T>(-counter); t < static_cast<T>(counter); ++t)
                 BOOST_CHECK(lexical_cast<T>(to_str<CharT>(t)) == t);
 
         // Test values around 100, 1000, 10000, ...
@@ -989,4 +1002,21 @@ void operators_overload_test()
     // Must compile
     (void)boost::lexical_cast<foo_operators_test>(foo);
 }
+
+
+#ifndef BOOST_NO_CHAR16_T
+void test_char16_conversions()
+{
+    BOOST_CHECK(u"100" == lexical_cast<std::u16string>(u"100"));
+    BOOST_CHECK(u"1" == lexical_cast<std::u16string>(u'1'));
+}
+#endif
+
+#ifndef BOOST_NO_CHAR32_T
+void test_char32_conversions()
+{
+    BOOST_CHECK(U"100" == lexical_cast<std::u32string>(U"100"));
+    BOOST_CHECK(U"1" == lexical_cast<std::u32string>(U'1'));
+}
+#endif
 
