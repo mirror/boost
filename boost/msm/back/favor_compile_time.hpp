@@ -55,8 +55,9 @@ private:
     {                                                                                               \
         typedef ::boost::msm::back::recursive_get_transition_table<fsmname>::type stt;              \
         typedef ::boost::msm::back::generate_event_set<stt>::type stt_events;                       \
-        typedef fsmname::processable_events_internal_table internal_events;                         \
-        typedef ::boost::msm::back::set_insert_range<stt_events,internal_events>::type all_events;  \
+        typedef ::boost::msm::back::recursive_get_internal_transition_table<fsmname, ::boost::mpl::true_ >::type istt;    \
+        typedef ::boost::msm::back::generate_event_set<create_real_stt<fsmname,istt>::type >::type istt_events;  \
+        typedef ::boost::msm::back::set_insert_range<stt_events,istt_events>::type all_events;      \
         ::boost::msm::back::HandledEnum res= ::boost::msm::back::HANDLED_FALSE;                     \
         ::boost::mpl::for_each<all_events, ::boost::msm::wrap< ::boost::mpl::placeholders::_1> >    \
         (::boost::msm::back::process_any_event_helper<fsmname>(res,this,any_event));                \
