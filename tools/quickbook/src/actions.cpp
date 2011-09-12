@@ -59,9 +59,7 @@ namespace quickbook
                 it != end; ++it)
             {
                 tgt << "<anchor id=\"";
-                detail::print_string(
-                    actions.ids.add(*it, id_generator::explicit_id),
-                    tgt.get());
+                detail::print_string(*it, tgt.get());
                 tgt << "\"/>";
             }
             
