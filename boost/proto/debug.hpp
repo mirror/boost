@@ -22,7 +22,7 @@
 
 namespace boost { namespace proto
 {
-    namespace tag
+    namespace tagns_ { namespace tag
     {
     #define BOOST_PROTO_DEFINE_TAG_INSERTION(Tag)                               \
         /** \brief INTERNAL ONLY */                                             \
@@ -80,7 +80,7 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_TAG_INSERTION(function)
 
     #undef BOOST_PROTO_DEFINE_TAG_INSERTION
-    }
+    }}
 
     namespace hidden_detail_
     {
