@@ -143,7 +143,8 @@ in some breaking changes:
 * Equality comparison has been changed to the C++11 specification.
   In a container with equivalent keys, elements in a group with equal
   keys used to have to be in the same order to be considered equal,
-  now they can be a permutation of each other.
+  now they can be a permutation of each other. To keep the old
+  behavior define the macro `BOOST_UNORDERED_DEPRECATED_EQUALITY`.
 
 * The behaviour of swap is different when the two containers to be
   swapped has unequal allocators. It used to allocate new nodes using

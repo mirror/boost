@@ -967,9 +967,28 @@ EOL;
                 <paramtype><?php echo $full_type; ?> const&amp;</paramtype>
               </parameter>
               <type>bool</type>
+              <description>
+<?php if($equivalent_keys): ?>
+                <para>Return <code>true</code> if <code>x.size() ==
+                y.size</code> and for every equivalent key group in
+                <code>x</code>, there is a group in <code>y</code>
+                for the same key, which is a permutation (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php else: ?>
+                <para>Return <code>true</code> if <code>x.size() ==
+                y.size</code> and for every element in <code>x</code>,
+                there is an element in <code>y</code> with the same
+                for the same key, with an equal value (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php endif; ?>
+              </description>
               <notes>
-                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
-                <para>This is a boost extension.</para>
+                <para>The behavior of this function was changed to match
+                  the C++11 standard in Boost 1.48. If you wish to use
+                  the old behaviour, define the macro
+                  <code>BOOST_UNORDERED_DEPRECATED_EQUALITY</code>.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
               </notes>
@@ -991,9 +1010,28 @@ EOL;
                 <paramtype><?php echo $full_type; ?> const&amp;</paramtype>
               </parameter>
               <type>bool</type>
+              <description>
+<?php if($equivalent_keys): ?>
+                <para>Return <code>false</code> if <code>x.size() ==
+                y.size</code> and for every equivalent key group in
+                <code>x</code>, there is a group in <code>y</code>
+                for the same key, which is a permutation (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php else: ?>
+                <para>Return <code>false</code> if <code>x.size() ==
+                y.size</code> and for every element in <code>x</code>,
+                there is an element in <code>y</code> with the same
+                for the same key, with an equal value (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php endif; ?>
+              </description>
               <notes>
-                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
-                <para>This is a boost extension.</para>
+                <para>The behavior of this function was changed to match
+                  the C++11 standard in Boost 1.48. If you wish to use
+                  the old behaviour, define the macro
+                  <code>BOOST_UNORDERED_DEPRECATED_EQUALITY</code>.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
               </notes>
