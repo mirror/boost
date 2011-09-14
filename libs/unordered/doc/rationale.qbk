@@ -126,17 +126,6 @@ attempts to respecify them without concepts. I'll try to implement this (or
 an appropriate later version) in a future version of boost, possibly changed
 a little to accomodate non-C++0x compilers.
 
-[h3 Swapping containers with unequal allocators]
-
-/TODO/: This is out of date.
-
-It isn't clear how to swap containers when their allocators aren't equal.
-This is 
-[@http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#431
-Issue 431: Swapping containers with unequal allocators]. This has been resolved
-with the new allocator specification, so this should be fixed when
-support is added.
-
 [h3 Are insert and erase stable for unordered_multiset and unordered_multimap?]
 
 It wan't specified if `unordered_multiset` and `unordered_multimap` preserve the order

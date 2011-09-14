@@ -574,13 +574,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <paramtype>unordered_set&amp;</paramtype>
               </parameter>
               <type>void</type>
+              <description>
+                <para>Swaps the contents of the container with the parameter.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </method>
           </method-group>
@@ -896,13 +902,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <effects>
                 <para><code>x.swap(y)</code></para>
               </effects>
+              <description>
+                <para>Swaps the contents of <code>x</code> and <code>y</code>.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </function>
           </free-function-group>
@@ -1474,13 +1486,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <paramtype>unordered_multiset&amp;</paramtype>
               </parameter>
               <type>void</type>
+              <description>
+                <para>Swaps the contents of the container with the parameter.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </method>
           </method-group>
@@ -1796,13 +1814,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <effects>
                 <para><code>x.swap(y)</code></para>
               </effects>
+              <description>
+                <para>Swaps the contents of <code>x</code> and <code>y</code>.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </function>
           </free-function-group>
@@ -2388,13 +2412,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <paramtype>unordered_map&amp;</paramtype>
               </parameter>
               <type>void</type>
+              <description>
+                <para>Swaps the contents of the container with the parameter.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </method>
           </method-group>
@@ -2751,13 +2781,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <effects>
                 <para><code>x.swap(y)</code></para>
               </effects>
+              <description>
+                <para>Swaps the contents of <code>x</code> and <code>y</code>.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </function>
           </free-function-group>
@@ -3337,13 +3373,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <paramtype>unordered_multimap&amp;</paramtype>
               </parameter>
               <type>void</type>
+              <description>
+                <para>Swaps the contents of the container with the parameter.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </method>
           </method-group>
@@ -3665,13 +3707,19 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <effects>
                 <para><code>x.swap(y)</code></para>
               </effects>
+              <description>
+                <para>Swaps the contents of <code>x</code> and <code>y</code>.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </function>
           </free-function-group>
