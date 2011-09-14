@@ -155,4 +155,12 @@ in some breaking changes:
 * Allocator's `construct` and `destroy` functions are called with raw
   pointers, rather than the allocator's `pointer` type.
 
+* `emplace` used to emulate the variadic pair constructors that
+  appeared in early C++0x drafts. Since they were removed it no
+  longer does so. It does emulate the new `piecewise_construct`
+  pair constructors - only you need to use
+  `boost::piecewise_construct`. To use the old emulation of
+  the variadic consturctors define
+  `BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT`.
+
 [endsect]
