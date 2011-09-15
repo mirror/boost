@@ -412,10 +412,13 @@ EOL;
                 <para>If the compiler doesn't support variadic template arguments or rvalue
                       references, this is emulated for up to 10 arguments, with no support
                       for rvalue references or move semantics.</para>
-                <para>Since existing `std::pair` implementations don't support
+                <para>Since existing <code>std::pair</code> implementations don't support
                       <code>std::piecewise_construct</code> this emulates it,
-                      but using <code>boost::unordered::piecewise_construct</code>.
-                </para>
+                      but using <code>boost::unordered::piecewise_construct</code>.</para>
+                <para>In version of Boost before 1.48 this emulated the variadic pair
+                      constructor from older C++0x drafts. For backwards compatability
+                      this can be enabled by defining the macro
+                      <code>BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT</code>.
               </notes>
             </method>
             <method name="emplace_hint">
@@ -454,9 +457,13 @@ EOL;
                 <para>If the compiler doesn't support variadic template arguments or rvalue
                       references, this is emulated for up to 10 arguments, with no support
                       for rvalue references or move semantics.</para>
-                <para>Since existing `std::pair` implementations don't support
+                <para>Since existing <code>std::pair</code> implementations don't support
                       <code>std::piecewise_construct</code> this emulates it,
                       but using <code>boost::unordered::piecewise_construct</code>.
+                <para>In version of Boost before 1.48 this emulated the variadic pair
+                      constructor from older C++0x drafts. For backwards compatability
+                      this can be enabled by defining the macro
+                      <code>BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT</code>.
                 </para>
               </notes>
             </method>
