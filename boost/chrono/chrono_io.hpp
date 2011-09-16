@@ -668,7 +668,7 @@ public:
         : std::locale::facet(refs), fmt_(fmt), tz_(tz) {}
 
     const string_type& fmt() const BOOST_CHRONO_NOEXCEPT {return fmt_;}
-    chrono::timezone::type timezone() const BOOST_CHRONO_NOEXCEPT {return tz_;}
+    chrono::timezone::type get_timezone() const BOOST_CHRONO_NOEXCEPT {return tz_;}
 };
 
     template <class CharT>
@@ -802,7 +802,7 @@ operator<<(std::basic_ostream<_CharT, _Traits>& os,
                 const F& f = std::use_facet<F>(loc);
                 pb = f.fmt().data();
                 pe = pb + f.fmt().size();
-                tz = f.timezone();
+                tz = f.get_timezone();
             }
             time_t t = system_clock::to_time_t(tp);
             tm tm;
