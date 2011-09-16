@@ -37,13 +37,13 @@ namespace boost { namespace fusion
         template <typename Sequence>
         vector(Sequence const& rhs)
             : vec(rhs) {}
-
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
     explicit
     vector(typename detail::call_param<T0 >::type _0)
         : vec(_0) {}
