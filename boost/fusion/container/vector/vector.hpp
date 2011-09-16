@@ -37,7 +37,6 @@
 #pragma wave option(preserve: 1)
 #endif
 
-
 namespace boost { namespace fusion
 {
     struct void_;
