@@ -183,6 +183,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run ../example/french.cpp  ]
         [ chrono-run ../example/rounding.cpp  ]
         #[ chrono-run ../example/await_keystroke.cpp  ]
+        [ chrono-run ../example/stopwatch_example.cpp  ]
         ;
 
     test-suite "traits"

@@ -22,6 +22,8 @@ int main()
     using namespace boost;
     using namespace boost::chrono;
 
+    cout << "milliseconds(1)  = "
+         <<  milliseconds(1)  << '\n';
     cout << "milliseconds(3) + microseconds(10) = "
          <<  milliseconds(3) + microseconds(10) << '\n';
 
@@ -45,6 +47,7 @@ int main()
          <<  ClockTick(3) + nanoseconds(10) << '\n';
 
     cout << "\nsystem_clock::now() = " << system_clock::now() << '\n';
+    cout << "\nsystem_clock::now() = " << time_fmt(chrono::timezone::local) << system_clock::now() << '\n';
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
     cout << "steady_clock::now() = " << steady_clock::now() << '\n';
 #endif
