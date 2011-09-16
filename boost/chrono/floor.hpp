@@ -19,7 +19,7 @@ namespace boost
   {
 
     /**
-     * round down
+     * rounds down
      */
     template <class To, class Rep, class Period>
     To floor(const duration<Rep, Period>& d)

@@ -19,7 +19,7 @@ namespace boost
   {
 
     /**
-     * round up
+     * rounds up
      */
     template <class To, class Rep, class Period>
     To ceil(const duration<Rep, Period>& d)

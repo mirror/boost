@@ -20,7 +20,7 @@ namespace boost
   {
 
     /**
-     * round to nearest, to even on tie
+     * rounds to nearest, to even on tie
      */
     template <class To, class Rep, class Period>
     To round(const duration<Rep, Period>& d)

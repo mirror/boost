@@ -93,6 +93,12 @@
 #define BOOST_CHRONO_CONST_REF
 #endif
 
+#if defined(BOOST_NO_NOEXCEPT)
+#define BOOST_CHRONO_NOEXCEPT
+#else
+#define BOOST_CHRONO_NOEXCEPT noexcept
+#endif
+
 #define BOOST_CHRONO_STATIC_CONSTEXPR  static BOOST_CHRONO_CONSTEXPR_OR_CONST
 
 
