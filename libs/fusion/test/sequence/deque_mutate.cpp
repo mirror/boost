@@ -1,6 +1,6 @@
 /*=============================================================================
     Copyright (c) 1999-2003 Jaakko Jarvi
-    Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2001-2011 Joel de Guzman
     Copyright (c) 2006
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
