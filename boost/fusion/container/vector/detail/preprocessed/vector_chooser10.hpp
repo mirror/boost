@@ -6,6 +6,16 @@
 
     This is an auto-generated file. Do not edit!
 ==============================================================================*/
+    template <typename T0 , typename T1 , typename T2 , typename T3 , typename T4 , typename T5 , typename T6 , typename T7 , typename T8 , typename T9>
+    struct vector_n_chooser
+    {
+        typedef vector10<T0 , T1 , T2 , T3 , T4 , T5 , T6 , T7 , T8 , T9> type;
+    };
+    template <>
+    struct vector_n_chooser<void_ , void_ , void_ , void_ , void_ , void_ , void_ , void_ , void_ , void_>
+    {
+        typedef vector0<> type;
+    };
     template <typename T0>
     struct vector_n_chooser<
         T0

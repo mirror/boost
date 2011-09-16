@@ -39,18 +39,6 @@ namespace boost { namespace fusion
 
 namespace boost { namespace fusion { namespace detail
 {
-    template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, typename T)>
-    struct vector_n_chooser
-    {
-        typedef BOOST_PP_CAT(vector, FUSION_MAX_VECTOR_SIZE)<BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, T)> type;
-    };
-
-    template <>
-    struct vector_n_chooser<BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, void_ BOOST_PP_INTERCEPT)>
-    {
-        typedef vector0<> type;
-    };
-
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/container/vector/detail/preprocessed/vector_chooser.hpp>
 #else
@@ -70,6 +58,18 @@ namespace boost { namespace fusion { namespace detail
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 1)
 #endif
+
+    template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, typename T)>
+    struct vector_n_chooser
+    {
+        typedef BOOST_PP_CAT(vector, FUSION_MAX_VECTOR_SIZE)<BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, T)> type;
+    };
+
+    template <>
+    struct vector_n_chooser<BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, void_ BOOST_PP_INTERCEPT)>
+    {
+        typedef vector0<> type;
+    };
 
 #define BOOST_PP_FILENAME_1 \
     <boost/fusion/container/vector/detail/vector_n_chooser.hpp>
