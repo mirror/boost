@@ -11,7 +11,7 @@
 #include <boost/chrono/chrono.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/thread_clock.hpp>
-#include "./timer.hpp"
+#include "boost/chrono/stopwatches/simple_stopwatch.hpp"
 #include <cstdlib> // for atol()
 #include <iostream>
 #include <sstream>
@@ -40,12 +40,12 @@ namespace
     timeout_in_clock_t += (timeout_in_secs * CLOCKS_PER_SEC);
     std::cout << "accuracy test. Timeout=" << timeout_in_clock_t << " ticks...";
 
-    boost_ex::chrono::system_timer           sys;
+    boost::chrono::simple_stopwatch<boost::chrono::system_clock>          sys;
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-    boost_ex::chrono::steady_timer        mono;
+    boost::chrono::simple_stopwatch<boost::chrono::steady_clock>          mono;
 #endif
-    boost_ex::chrono::high_resolution_timer  hires;
-    boost_ex::chrono::timer<boost::chrono::process_cpu_clock>          process;
+    boost::chrono::simple_stopwatch<>  hires;
+    boost::chrono::simple_stopwatch<boost::chrono::process_cpu_clock>          process;
 
     std::clock_t now;
     do
@@ -53,12 +53,12 @@ namespace
       now = std::clock();
     } while ( now < timeout_in_clock_t );
 
-    boost_ex::chrono::system_timer::duration sys_dur = sys.elapsed();
+    boost::chrono::simple_stopwatch<boost::chrono::system_clock>::duration sys_dur = sys.elapsed();
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-    boost_ex::chrono::steady_timer::duration mono_dur = mono.elapsed();
+    boost::chrono::simple_stopwatch<boost::chrono::steady_clock>::duration mono_dur = mono.elapsed();
 #endif
-    boost_ex::chrono::high_resolution_timer::duration hires_dur = hires.elapsed();
-    boost::chrono::process_cpu_clock::duration times;
+    boost::chrono::simple_stopwatch<>::duration hires_dur = hires.elapsed();
+    boost::chrono::simple_stopwatch<boost::chrono::process_cpu_clock>::duration times;
     times = process.elapsed();
     std::cout << "accuracy test. Now=" << now << " ticks...";
 
