@@ -6,6 +6,11 @@
 
     This is an auto-generated file. Do not edit!
 ==============================================================================*/
+namespace boost { namespace fusion
+{
+    struct vector_tag;
+    struct fusion_sequence_tag;
+    struct random_access_traversal_tag;
     template <typename T0 , typename T1 , typename T2 , typename T3 , typename T4 , typename T5 , typename T6 , typename T7 , typename T8 , typename T9 , typename T10>
     struct vector_data11
     {
@@ -856,3 +861,4 @@
             return this->at_impl(mpl::int_<I::value>());
         }
     };
+}}

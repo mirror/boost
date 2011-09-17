@@ -6,6 +6,8 @@
 
     This is an auto-generated file. Do not edit!
 ==============================================================================*/
+namespace boost { namespace fusion { namespace detail
+{
     template <>
     struct as_vector<1>
     {
@@ -206,3 +208,4 @@
             return result(*i0 , *i1 , *i2 , *i3 , *i4 , *i5 , *i6 , *i7 , *i8 , *i9);
         }
     };
+}}}

@@ -10,10 +10,6 @@
 #include <boost/fusion/container/list/limits.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
-namespace boost { namespace fusion
-{
-    struct void_;
-
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/container/list/detail/preprocessed/list_fwd.hpp>
 #else
@@ -34,11 +30,16 @@ namespace boost { namespace fusion
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion
+{
+    struct void_;
+
     template <
         BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
             FUSION_MAX_LIST_SIZE, typename T, void_)
     >
     struct list;
+}}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(output: null)
@@ -46,6 +47,5 @@ namespace boost { namespace fusion
 
 #endif // BOOST_FUSION_DONT_USE_PREPROCESSED_FILES
 
-}}
 
 #endif

@@ -6,6 +6,8 @@
 
     This is an auto-generated file. Do not edit!
 ==============================================================================*/
+namespace boost { namespace fusion
+{
     template <typename T0>
     struct vector_data1
     {
@@ -858,3 +860,4 @@
             return this->at_impl(mpl::int_<I::value>());
         }
     };
+}}

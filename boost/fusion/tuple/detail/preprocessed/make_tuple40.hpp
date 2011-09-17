@@ -6,6 +6,8 @@
 
     This is an auto-generated file. Do not edit!
 ==============================================================================*/
+namespace boost { namespace fusion
+{
     template <typename T0>
     inline tuple<typename detail::as_fusion_element<T0>::type>
     make_tuple(T0 const& _0)
@@ -286,3 +288,4 @@
         return tuple<typename detail::as_fusion_element<T0>::type , typename detail::as_fusion_element<T1>::type , typename detail::as_fusion_element<T2>::type , typename detail::as_fusion_element<T3>::type , typename detail::as_fusion_element<T4>::type , typename detail::as_fusion_element<T5>::type , typename detail::as_fusion_element<T6>::type , typename detail::as_fusion_element<T7>::type , typename detail::as_fusion_element<T8>::type , typename detail::as_fusion_element<T9>::type , typename detail::as_fusion_element<T10>::type , typename detail::as_fusion_element<T11>::type , typename detail::as_fusion_element<T12>::type , typename detail::as_fusion_element<T13>::type , typename detail::as_fusion_element<T14>::type , typename detail::as_fusion_element<T15>::type , typename detail::as_fusion_element<T16>::type , typename detail::as_fusion_element<T17>::type , typename detail::as_fusion_element<T18>::type , typename detail::as_fusion_element<T19>::type , typename detail::as_fusion_element<T20>::type , typename detail::as_fusion_element<T21>::type , typename detail::as_fusion_element<T22>::type , typename detail::as_fusion_element<T23>::type , typename detail::as_fusion_element<T24>::type , typename detail::as_fusion_element<T25>::type , typename detail::as_fusion_element<T26>::type , typename detail::as_fusion_element<T27>::type , typename detail::as_fusion_element<T28>::type , typename detail::as_fusion_element<T29>::type , typename detail::as_fusion_element<T30>::type , typename detail::as_fusion_element<T31>::type , typename detail::as_fusion_element<T32>::type , typename detail::as_fusion_element<T33>::type , typename detail::as_fusion_element<T34>::type , typename detail::as_fusion_element<T35>::type , typename detail::as_fusion_element<T36>::type , typename detail::as_fusion_element<T37>::type , typename detail::as_fusion_element<T38>::type , typename detail::as_fusion_element<T39>::type>(
             _0 , _1 , _2 , _3 , _4 , _5 , _6 , _7 , _8 , _9 , _10 , _11 , _12 , _13 , _14 , _15 , _16 , _17 , _18 , _19 , _20 , _21 , _22 , _23 , _24 , _25 , _26 , _27 , _28 , _29 , _30 , _31 , _32 , _33 , _34 , _35 , _36 , _37 , _38 , _39);
     }
+}}

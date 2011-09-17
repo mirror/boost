@@ -35,12 +35,6 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
-namespace boost { namespace fusion
-{
-    struct vector_tag;
-    struct fusion_sequence_tag;
-    struct random_access_traversal_tag;
-
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/container/vector/detail/preprocessed/vector20.hpp>
 #else
@@ -61,18 +55,24 @@ namespace boost { namespace fusion
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion
+{
+    struct vector_tag;
+    struct fusion_sequence_tag;
+    struct random_access_traversal_tag;
+
 // expand vector11 to vector20
 #define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/detail/vector_n.hpp>
 #define BOOST_PP_ITERATION_LIMITS (11, 20)
 #include BOOST_PP_ITERATE()
+
+}}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(output: null)
 #endif
 
 #endif // BOOST_FUSION_DONT_USE_PREPROCESSED_FILES
-
-}}
 
 #endif
 

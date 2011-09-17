@@ -56,6 +56,7 @@ namespace boost { namespace fusion
         vector0(Sequence const& /*seq*/)
         {}
     };
+}}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/container/vector/detail/preprocessed/vector10.hpp>
@@ -77,17 +78,20 @@ namespace boost { namespace fusion
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion
+{
+
 // expand vector1 to vector10
 #define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/detail/vector_n.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, 10)
 #include BOOST_PP_ITERATE()
+
+}}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(output: null)
 #endif
 
 #endif // BOOST_FUSION_DONT_USE_PREPROCESSED_FILES
-
-}}
 
 #endif

@@ -14,8 +14,6 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/fusion/tuple/tuple.hpp>
 
-namespace boost { namespace fusion
-{
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/tuple/detail/preprocessed/tuple_tie.hpp>
 #else
@@ -36,6 +34,8 @@ namespace boost { namespace fusion
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion
+{
 #define BOOST_FUSION_REF(z, n, data) BOOST_PP_CAT(T, n)&
 
 #define BOOST_PP_FILENAME_1 <boost/fusion/tuple/tuple_tie.hpp>
@@ -44,13 +44,13 @@ namespace boost { namespace fusion
 
 #undef BOOST_FUSION_REF
 
+}}
+
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(output: null)
 #endif
 
 #endif // BOOST_FUSION_DONT_USE_PREPROCESSED_FILES
-
-}}
 
 #endif
 #else // defined(BOOST_PP_IS_ITERATING)

@@ -37,8 +37,6 @@ namespace boost { namespace fusion
     struct void_;
 }}
 
-namespace boost { namespace fusion { namespace detail
-{
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/container/vector/detail/preprocessed/vector_chooser.hpp>
 #else
@@ -59,6 +57,8 @@ namespace boost { namespace fusion { namespace detail
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion { namespace detail
+{
     template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, typename T)>
     struct vector_n_chooser
     {

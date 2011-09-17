@@ -13,8 +13,6 @@
 #include <boost/preprocessor/iteration/iterate.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
-namespace boost { namespace fusion
-{
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/container/vector/detail/preprocessed/vector20_fwd.hpp>
 #else
@@ -36,18 +34,19 @@ namespace boost { namespace fusion
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion
+{
     // expand vector11 to vector20
     #define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/vector20_fwd.hpp>
     #define BOOST_PP_ITERATION_LIMITS (11, 20)
     #include BOOST_PP_ITERATE()
+}}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(output: null)
 #endif
 
 #endif // BOOST_FUSION_DONT_USE_PREPROCESSED_FILES
-
-}}
 
 #endif
 

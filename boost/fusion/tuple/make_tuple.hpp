@@ -21,6 +21,7 @@ namespace boost { namespace fusion
     {
         return tuple<>();
     }
+}}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/tuple/detail/preprocessed/make_tuple.hpp>
@@ -42,6 +43,8 @@ namespace boost { namespace fusion
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion
+{
 #define BOOST_FUSION_AS_FUSION_ELEMENT(z, n, data)                               \
     typename detail::as_fusion_element<BOOST_PP_CAT(T, n)>::type
 
@@ -51,13 +54,13 @@ namespace boost { namespace fusion
 
 #undef BOOST_FUSION_AS_FUSION_ELEMENT
 
+}}
+
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(output: null)
 #endif
 
 #endif // BOOST_FUSION_DONT_USE_PREPROCESSED_FILES
-
-}}
 
 #endif
 #else // defined(BOOST_PP_IS_ITERATING)

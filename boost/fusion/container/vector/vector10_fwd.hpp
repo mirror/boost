@@ -17,6 +17,7 @@ namespace boost { namespace fusion
 {
     template <typename Dummy = void>
     struct vector0;
+}}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
 #include <boost/fusion/container/vector/detail/preprocessed/vector10_fwd.hpp>
@@ -34,23 +35,23 @@ namespace boost { namespace fusion
 
     This is an auto-generated file. Do not edit!
 ==============================================================================*/
-
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 1)
 #endif
 
+namespace boost { namespace fusion
+{
     // expand vector1 to vector10
     #define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/vector10_fwd.hpp>
     #define BOOST_PP_ITERATION_LIMITS (1, 10)
     #include BOOST_PP_ITERATE()
+}}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(output: null)
 #endif
 
 #endif // BOOST_FUSION_DONT_USE_PREPROCESSED_FILES
-
-}}
 
 #endif
 
