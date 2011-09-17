@@ -780,7 +780,71 @@ operator>>(std::basic_istream<CharT, Traits>& is,
         is.setstate(is.failbit);
     return is;
 }
-#if 0
+
+#ifndef BOOST_CHRONO_NO_UTC_TIMEPOINT
+
+namespace detail
+{
+        #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+        int is_leap(int year)
+        {
+            if(year % 400 == 0)
+                return 1;
+            if(year % 100 == 0)
+                return 0;
+            if(year % 4 == 0)
+                return 1;
+            return 0;
+        }
+        inline int days_from_0(int year)
+        {
+            year--;
+            return 365 * year + (year / 400) - (year/100) + (year / 4);
+        }
+        int days_from_1970(int year)
+        {
+            static const int days_from_0_to_1970 = days_from_0(1970);
+            return days_from_0(year) - days_from_0_to_1970;
+        }
+        int days_from_1jan(int year,int month,int day)
+        {
+            static const int days[2][12] = {
+                { 0,31,59,90,120,151,181,212,243,273,304,334 },
+                { 0,31,60,91,121,152,182,213,244,274,305,335 }
+            };
+            return days[is_leap(year)][month-1] + day - 1;
+        }
+
+        time_t internal_timegm(std::tm  const *t)
+        {
+            int year = t->tm_year + 1900;
+            int month = t->tm_mon;
+            if(month > 11) {
+                year += month/12;
+                month %= 12;
+            }
+            else if(month < 0) {
+                int years_diff = (-month + 11)/12;
+                year -= years_diff;
+                month+=12 * years_diff;
+            }
+            month++;
+            int day = t->tm_mday;
+            int day_of_year = days_from_1jan(year,month,day);
+            int days_since_epoch = days_from_1970(year) + day_of_year;
+
+            time_t seconds_in_day = 3600 * 24;
+            time_t result =  seconds_in_day * days_since_epoch + 3600 * t->tm_hour + 60 * t->tm_min + t->tm_sec;
+
+            return result;
+        }
+        //~ #else
+        //~ time_t internal_timegm(std::tm  *t)
+            //~ return timegm(t);
+        //~ }
+        #endif
+} // detail
+
 template <class _CharT, class _Traits, class _Duration>
 std::basic_ostream<_CharT, _Traits>&
 operator<<(std::basic_ostream<_CharT, _Traits>& os,
@@ -808,20 +872,35 @@ operator<<(std::basic_ostream<_CharT, _Traits>& os,
             tm tm;
             if (tz == timezone::local)
             {
+                #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+                std::tm *tmp = 0;
+                if ((tmp=localtime(&t)) == 0)
+                  failed = true;
+                tm =*tmp;
+                #else
                 if (localtime_r(&t, &tm) == 0)
                     failed = true;
+                #endif
             }
             else
             {
+                #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+                std::tm *tmp = 0;
+                if((tmp = gmtime(&t)) == 0)
+                    failed = true;
+                tm = *tmp;
+                #else
                 if (gmtime_r(&t, &tm) == 0)
                     failed = true;
+                #endif
+
             }
             if (!failed)
             {
                 const std::time_put<_CharT>& tpf = std::use_facet<std::time_put<_CharT> >(loc);
                 if (pb == pe)
                 {
-                    _CharT pattern[] = {'%', 'F', ' ', '%', 'H', ':', '%', 'M', ':'};
+                    _CharT pattern[] = {'%', 'Y', '-', '%', 'm', ' ', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':'};
                     pb = pattern;
                     pe = pb + sizeof(pattern) / sizeof(_CharT);
                     failed = tpf.put(os, os, os.fill(), &tm, pb, pe).failed();
@@ -862,7 +941,9 @@ operator<<(std::basic_ostream<_CharT, _Traits>& os,
     }
     return os;
 }
+
 namespace detail {
+
 template <class _CharT, class _InputIterator>
 minutes
 extract_z(_InputIterator& b, _InputIterator e,
@@ -918,7 +999,8 @@ extract_z(_InputIterator& b, _InputIterator e,
         err |= std::ios_base::eofbit | std::ios_base::failbit;
     return minutes(min);
 }
-}
+
+} // detail
 
 template <class _CharT, class _Traits, class _Duration>
 std::basic_istream<_CharT, _Traits>&
@@ -976,7 +1058,11 @@ operator>>(std::basic_istream<_CharT, _Traits>& is,
                 if (err & std::ios_base::failbit)
                     goto exit;
                 time_t t;
+                #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+                t = detail::internal_timegm(&tm);
+                #else
                 t = timegm(&tm);
+                #endif
                 tp = system_clock::from_time_t(t) - min
                                  + round<microseconds>(duration<double>(sec));
             }
@@ -1013,7 +1099,11 @@ operator>>(std::basic_istream<_CharT, _Traits>& is,
                 tm.tm_isdst = -1;
                 time_t t;
                 if (tz == timezone::utc || fz != pe)
-                    t = timegm(&tm);
+                #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+                t = detail::internal_timegm(&tm);
+                #else
+                t = timegm(&tm);
+                #endif
                 else
                     t = mktime(&tm);
                 tp = system_clock::from_time_t(t) - min;
@@ -1028,7 +1118,7 @@ operator>>(std::basic_istream<_CharT, _Traits>& is,
     }
     return is;
 }
-#endif
+#endif //UTC
 }  // chrono
 
 }
