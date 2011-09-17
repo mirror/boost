@@ -461,7 +461,7 @@ namespace boost
     namespace detail // lcast_put_unsigned
     {
         template<class Traits, class T, class CharT>
-        CharT* lcast_put_unsigned(T n, CharT* finish)
+        CharT* lcast_put_unsigned(const T n_param, CharT* finish)
         {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
             BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
@@ -470,51 +470,58 @@ namespace boost
             typedef typename Traits::int_type int_type;
             CharT const czero = lcast_char_constants<CharT>::zero;
             int_type const zero = Traits::to_int_type(czero);
+            BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
+                    (sizeof(int_type) > sizeof(T))
+                    , int_type
+                    , T
+            >::type n = n_param;
 
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
             std::locale loc;
-            typedef std::numpunct<CharT> numpunct;
-            numpunct const& np = BOOST_USE_FACET(numpunct, loc);
-            std::string const& grouping = np.grouping();
-            std::string::size_type const grouping_size = grouping.size();
+            if (loc != std::locale::classic()) {
+                typedef std::numpunct<CharT> numpunct;
+                numpunct const& np = BOOST_USE_FACET(numpunct, loc);
+                std::string const grouping = np.grouping();
+                std::string::size_type const grouping_size = grouping.size();
 
-            if ( grouping_size && grouping[0] > 0 )
-            {
+                if ( grouping_size && grouping[0] > 0 )
+                {
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-            // Check that ulimited group is unreachable:
-            BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
+                // Check that ulimited group is unreachable:
+                BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
 #endif
-                CharT thousands_sep = np.thousands_sep();
-                std::string::size_type group = 0; // current group number
-                char last_grp_size = grouping[0];
-                char left = last_grp_size;
+                    CharT thousands_sep = np.thousands_sep();
+                    std::string::size_type group = 0; // current group number
+                    char last_grp_size = grouping[0];
+                    char left = last_grp_size;
 
-                do
-                {
-                    if(left == 0)
+                    do
                     {
-                        ++group;
-                        if(group < grouping_size)
+                        if(left == 0)
                         {
-                            char const grp_size = grouping[group];
-                            last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                            ++group;
+                            if(group < grouping_size)
+                            {
+                                char const grp_size = grouping[group];
+                                last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                            }
+
+                            left = last_grp_size;
+                            --finish;
+                            Traits::assign(*finish, thousands_sep);
                         }
 
-                        left = last_grp_size;
+                        --left;
+
                         --finish;
-                        Traits::assign(*finish, thousands_sep);
-                    }
-
-                    --left;
-
-                    --finish;
-                    int_type const digit = static_cast<int_type>(n % 10U);
-                    Traits::assign(*finish, Traits::to_char_type(zero + digit));
-                    n /= 10;
-                } while(n);
-
-            } else
+                        int_type const digit = static_cast<int_type>(n % 10U);
+                        Traits::assign(*finish, Traits::to_char_type(zero + digit));
+                        n /= 10;
+                    } while(n);
+                    return finish;
+                }
+            }
 #endif
             {
                 do
@@ -551,61 +558,63 @@ namespace boost
 
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
             std::locale loc;
-            typedef std::numpunct<CharT> numpunct;
-            numpunct const& np = BOOST_USE_FACET(numpunct, loc);
-            std::string const& grouping = np.grouping();
-            std::string::size_type const grouping_size = grouping.size();
+            if (loc != std::locale::classic()) {
+                typedef std::numpunct<CharT> numpunct;
+                numpunct const& np = BOOST_USE_FACET(numpunct, loc);
+                std::string const& grouping = np.grouping();
+                std::string::size_type const grouping_size = grouping.size();
 
-            /* According to Programming languages - C++
-             * we MUST check for correct grouping
-             */
-            if (grouping_size && grouping[0] > 0)
-            {
-                unsigned char current_grouping = 0;
-                CharT const thousands_sep = np.thousands_sep();
-                char remained = grouping[current_grouping] - 1;
-                bool shall_we_return = true;
-
-                for(;end>=begin; --end)
+                /* According to Programming languages - C++
+                 * we MUST check for correct grouping
+                 */
+                if (grouping_size && grouping[0] > 0)
                 {
-                    if (remained) {
-                        T const new_sub_value = multiplier * 10 * (*end - czero);
+                    unsigned char current_grouping = 0;
+                    CharT const thousands_sep = np.thousands_sep();
+                    char remained = grouping[current_grouping] - 1;
+                    bool shall_we_return = true;
 
-                        if (*end < czero || *end >= czero + 10
-                                /* detecting overflow */
-                                || new_sub_value/10 != multiplier * (*end - czero)
-                                || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
-                                )
-                            return false;
+                    for(;end>=begin; --end)
+                    {
+                        if (remained) {
+                            T const new_sub_value = multiplier * 10 * (*end - czero);
 
-                        value += new_sub_value;
-                        multiplier *= 10;
-                        --remained;
-                    } else {
-                        if ( !Traits::eq(*end, thousands_sep) ) //|| begin == end ) return false;
-                        {
-                            /*
-                             * According to Programming languages - C++
-                             * Digit grouping is checked. That is, the positions of discarded
-                             * separators is examined for consistency with
-                             * use_facet<numpunct<charT> >(loc ).grouping()
-                             *
-                             * BUT what if there is no separators at all and grouping()
-                             * is not empty? Well, we have no extraced separators, so we
-                             * won`t check them for consistency. This will allow us to
-                             * work with "C" locale from other locales
-                             */
-                            shall_we_return = false;
-                            break;
+                            if (*end < czero || *end >= czero + 10
+                                    /* detecting overflow */
+                                    || new_sub_value/10 != multiplier * (*end - czero)
+                                    || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
+                                    )
+                                return false;
+
+                            value += new_sub_value;
+                            multiplier *= 10;
+                            --remained;
                         } else {
-                            if ( begin == end ) return false;
-                            if (current_grouping < grouping_size-1 ) ++current_grouping;
-                            remained = grouping[current_grouping];
+                            if ( !Traits::eq(*end, thousands_sep) ) //|| begin == end ) return false;
+                            {
+                                /*
+                                 * According to Programming languages - C++
+                                 * Digit grouping is checked. That is, the positions of discarded
+                                 * separators is examined for consistency with
+                                 * use_facet<numpunct<charT> >(loc ).grouping()
+                                 *
+                                 * BUT what if there is no separators at all and grouping()
+                                 * is not empty? Well, we have no extraced separators, so we
+                                 * won`t check them for consistency. This will allow us to
+                                 * work with "C" locale from other locales
+                                 */
+                                shall_we_return = false;
+                                break;
+                            } else {
+                                if ( begin == end ) return false;
+                                if (current_grouping < grouping_size-1 ) ++current_grouping;
+                                remained = grouping[current_grouping];
+                            }
                         }
                     }
-                }
 
-                if (shall_we_return) return true;
+                    if (shall_we_return) return true;
+                }
             }
 #endif
             {
@@ -809,7 +818,11 @@ namespace boost
             std::locale loc;
             typedef std::numpunct<CharT> numpunct;
             numpunct const& np = BOOST_USE_FACET(numpunct, loc);
-            std::string const& grouping = np.grouping();
+            std::string const grouping(
+                    (loc == std::locale::classic())
+                    ? std::string()
+                    : np.grouping()
+            );
             std::string::size_type const grouping_size = grouping.size();
             CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
             CharT const decimal_point = np.decimal_point();

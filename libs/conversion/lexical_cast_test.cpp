@@ -756,6 +756,16 @@ void test_conversion_from_to_integral()
     test_conversion_from_integral_to_char<T>(wzero);
     test_conversion_from_char_to_integral<T>(wzero);
 #endif
+#ifndef BOOST_NO_CHAR16_T
+    char16_t const u16zero = u'0';
+    test_conversion_from_integral_to_char<T>(u16zero);
+    test_conversion_from_char_to_integral<T>(u16zero);
+#endif
+#ifndef BOOST_NO_CHAR32_T
+    char32_t const u32zero = u'0';
+    test_conversion_from_integral_to_char<T>(u32zero);
+    test_conversion_from_char_to_integral<T>(u32zero);
+#endif
 
     BOOST_CHECK(lexical_cast<T>("-1") == static_cast<T>(-1));
     BOOST_CHECK(lexical_cast<T>("-9") == static_cast<T>(-9));
