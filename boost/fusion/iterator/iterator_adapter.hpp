@@ -13,11 +13,10 @@
 
 namespace boost { namespace fusion
 {
-    template <typename Derived_, typename Iterator_>
+    template <typename Derived_, typename Iterator_,
+        typename Category = typename Iterator_::category>
     struct iterator_adapter
-        : iterator_facade<
-            Derived_
-          , typename Iterator_::category>
+        : iterator_facade<Derived_, Category>
     {
         typedef typename
             remove_const<Iterator_>::type
