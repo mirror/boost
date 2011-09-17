@@ -10,6 +10,10 @@
 #ifndef BOOST_CHRONO_PROCESS_CPU_CLOCKS_HPP
 #define BOOST_CHRONO_PROCESS_CPU_CLOCKS_HPP
 
+
+
+#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
+
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
 #include <boost/system/error_code.hpp>
@@ -295,6 +299,7 @@ namespace std {
 #include <boost/config/abi_suffix.hpp> // pops abi_prefix.hpp pragmas
 #else
 #include <boost/chrono/detail/inlined/process_cpu_clocks.hpp>
+#endif
 #endif
 
 #endif  // BOOST_CHRONO_PROCESS_CPU_CLOCKS_HPP

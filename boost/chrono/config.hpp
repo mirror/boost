@@ -73,6 +73,11 @@
 #undef BOOST_CHRONO_THREAD_CLOCK_IS_STEADY
 #endif
 
+#ifdef UNDER_CE
+#else
+#define BOOST_CHRONO_HAS_PROCESS_CLOCKS
+#endif
+
 // unicode support  ------------------------------//
 
 #if defined(BOOST_NO_UNICODE_LITERALS) || defined(BOOST_NO_CHAR16_T) || defined(BOOST_NO_CHAR32_T)

@@ -838,10 +838,6 @@ namespace detail
 
             return result;
         }
-        //~ #else
-        //~ time_t internal_timegm(std::tm  *t)
-            //~ return timegm(t);
-        //~ }
         #endif
 } // detail
 
@@ -1071,7 +1067,7 @@ operator>>(std::basic_istream<_CharT, _Traits>& is,
                 const _CharT z[2] = {'%', 'z'};
                 const _CharT* fz = std::search(pb, pe, z, z+2);
                 tg.get(is, 0, is, err, &tm, pb, fz);
-                minutes min(0);
+                minutes minu(0);
                 if (fz != pe)
                 {
                     if (err != std::ios_base::goodbit)
@@ -1081,7 +1077,7 @@ operator>>(std::basic_istream<_CharT, _Traits>& is,
                     }
                     _I i(is);
                     _I eof;
-                    min = extract_z(i, eof, err, ct);
+                    minu = extract_z(i, eof, err, ct);
                     if (err & std::ios_base::failbit)
                         goto exit;
                     if (fz+2 != pe)
@@ -1106,7 +1102,7 @@ operator>>(std::basic_istream<_CharT, _Traits>& is,
                 #endif
                 else
                     t = mktime(&tm);
-                tp = system_clock::from_time_t(t) - min;
+                tp = system_clock::from_time_t(t) - minu;
             }
         }
         catch (...)
