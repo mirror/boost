@@ -47,19 +47,19 @@ rule chrono-run ( sources )
 {
     return
     [ run $(sources) ../build//boost_chrono
-        : : 
-        :   
+        : :
+        :
             <library>/boost/system//boost_system
         :   $(sources[1]:B)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
-        : : 
-        :   
+        : :
+        :
             <library>/boost/system//boost_system
         :   $(sources[1]:B)_static ]
     [ run $(sources)
-        : : 
+        : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines 
+            # comment one of the following lines
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
         :   $(sources[1]:B)_header ]
@@ -69,19 +69,19 @@ rule chrono-run2 ( sources : name )
 {
     return
     [ run $(sources) ../build//boost_chrono
-        : : 
-        :   
+        : :
+        :
             <library>/boost/system//boost_system
         :   $(name)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
-        : : 
-        :   
+        : :
+        :
             <library>/boost/system//boost_system
         : $(name)_static ]
     [ run $(sources)
-        : : 
-        :   <define>BOOST_CHRONO_HEADER_ONLY 
-            # comment one of the following lines 
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+            # comment one of the following lines
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
         : $(name)_header ]
@@ -93,19 +93,19 @@ rule chrono-run-mt ( sources )
 {
     return
     [ run $(sources) ../build//boost_chrono
-        : : 
-        :   
-            <library>/boost/system//boost_system 
+        : :
+        :
+            <library>/boost/system//boost_system
         :   $(sources[1]:B)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
-        : : 
-        :  
-            <library>/boost/system//boost_system 
+        : :
+        :
+            <library>/boost/system//boost_system
         :  $(sources[1]:B)_static ]
     [ run $(sources)
-        : : 
+        : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines 
+            # comment one of the following lines
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
         :   $(sources[1]:B)_header ]
@@ -115,19 +115,19 @@ rule chrono-run2-mt ( sources : name )
 {
     return
     [ run $(sources) ../build//boost_chrono
-        : : 
-        :   
+        : :
+        :
             <library>/boost/system//boost_system
         :   $(name)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
-        : : 
-        :   
+        : :
+        :
             <library>/boost/system//boost_system
         : $(name)_static ]
     [ run $(sources)
-        : : 
-        :   <define>BOOST_CHRONO_HEADER_ONLY 
-            # comment one of the following lines 
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+            # comment one of the following lines
             #<define>BOOST_SYSTEM_INLINED
             <library>/boost/system//boost_system
         : $(name)_header ]
@@ -137,11 +137,11 @@ rule chrono-compile ( sources )
 {
     return
     [ compile $(sources)
-        : 
+        :
         : $(sources[1]:B)_lib ]
     [ compile $(sources)
-        :   <define>BOOST_CHRONO_HEADER_ONLY 
-            # comment the following line 
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+            # comment the following line
             <define>BOOST_SYSTEM_INLINED
         : $(sources[1]:B)_header ]
     ;
@@ -155,7 +155,7 @@ rule chrono-compile2 ( sources : name )
         : $(name)_lib ]
     [ compile $(sources)
         :  <define>BOOST_CHRONO_HEADER_ONLY
-            # comment the following line 
+            # comment the following line
             <define>BOOST_SYSTEM_INLINED
         : $(name)_header ]
     ;
@@ -238,7 +238,7 @@ rule chrono-compile2 ( sources : name )
         ;
 
     test-suite "clock"
-        :       
+        :
         [ chrono-run2-mt clock/clock_pass.cpp  : clock_clock_pass ]
         ;
 
@@ -255,4 +255,4 @@ rule chrono-compile2 ( sources : name )
         :
         [ chrono-run win32_test.cpp  ]
         ;
-        
+
