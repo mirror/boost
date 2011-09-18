@@ -13,7 +13,7 @@
 #define BOOST_CHRONO_DETAIL_INLINED_WIN_PROCESS_CLOCK_HPP
 
 #include <boost/chrono/config.hpp>
-#include <boost/chrono/system_clocks.hpp>
+//#include <boost/chrono/system_clocks.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <cassert>
 
@@ -36,7 +36,13 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NO
             boost::detail::win32::GetCurrentProcess(), &creation, &exit,
             &system_time, &user_time ) )
     {
-        return time_point(steady_clock::now().time_since_epoch());
+        return time_point(duration(
+            ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
+              | user_time.dwLowDateTime) * 100
+            +
+            ((static_cast<process_system_cpu_clock::rep>(system_time.dwHighDateTime) << 32)
+              | system_time.dwLowDateTime) * 100
+        ));
     }
     else
     {
@@ -60,7 +66,13 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
         {
             ec.clear();
         }
-        return time_point(steady_clock::now().time_since_epoch());
+        return time_point(duration(
+            ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
+              | user_time.dwLowDateTime) * 100
+            +
+            ((static_cast<process_system_cpu_clock::rep>(system_time.dwHighDateTime) << 32)
+              | system_time.dwLowDateTime) * 100
+        ));
     }
     else
     {
@@ -218,7 +230,14 @@ process_cpu_clock::time_point process_cpu_clock::now()  BOOST_CHRONO_NOEXCEPT
             &system_time, &user_time ) )
     {
         time_point::rep r(
-                steady_clock::now().time_since_epoch().count(),
+            ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
+                                    | user_time.dwLowDateTime
+                            ) * 100
+                            +
+                            ((static_cast<process_system_cpu_clock::rep>(system_time.dwHighDateTime) << 32)
+                                    | system_time.dwLowDateTime
+                            ) * 100
+                            ,
                 ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
                         | user_time.dwLowDateTime
                 ) * 100,
@@ -252,7 +271,14 @@ process_cpu_clock::time_point process_cpu_clock::now(
             ec.clear();
         }
         time_point::rep r(
-                steady_clock::now().time_since_epoch().count(), 
+            ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
+                                    | user_time.dwLowDateTime
+                            ) * 100
+                            +
+                            ((static_cast<process_system_cpu_clock::rep>(system_time.dwHighDateTime) << 32)
+                                    | system_time.dwLowDateTime
+                            ) * 100
+                            ,
                 ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
                         | user_time.dwLowDateTime
                 ) * 100, 

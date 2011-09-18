@@ -54,7 +54,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NO
         if ( chrono_detail::tick_factor() != -1 )
         {
             return time_point(
-                    microseconds(c)*chrono_detail::tick_factor());
+                    microseconds(c*chrono_detail::tick_factor()));
         }
         else
         {
@@ -94,7 +94,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
                 ec.clear();
             }
             return time_point(
-                    microseconds(c)*chrono_detail::tick_factor());
+                microseconds(c*chrono_detail::tick_factor()));
         }
         else
         {
@@ -128,7 +128,7 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now() BOOST_CHRONO_NO
         if ( chrono_detail::tick_factor() != -1 )
         {
             return time_point(
-                    microseconds(tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor());
+                microseconds((tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor()));
         }
         else
         {
@@ -168,7 +168,7 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now(
                 ec.clear();
             }
             return time_point(
-                    microseconds(tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor());
+                microseconds((tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor()));
         }
         else
         {
@@ -189,30 +189,6 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now(
     }
 }
 
-process_user_cpu_clock::time_point process_user_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
-{
-    tms tm;
-    clock_t c = ::times( &tm );
-    if ( c == clock_t(-1) ) // error
-    {
-      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
-    }
-    else
-    {
-        if ( chrono_detail::tick_factor() != -1 )
-        {
-            return time_point(
-                    microseconds(tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor());
-        }
-        else
-        {
-          BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
-        }
-    }
-    return time_point();
-}
-
-
 process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
 {
     tms tm;
@@ -227,7 +203,7 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRON
         if ( chrono_detail::tick_factor() != -1 )
         {
             return time_point(
-                    microseconds(tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
+                microseconds((tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor()));
         }
         else
         {
@@ -236,8 +212,8 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRON
     }
 }
 
-process_cpu_clock::time_point process_cpu_clock::now(
-        system::error_code & ec )
+process_system_cpu_clock::time_point process_system_cpu_clock::now(
+        system::error_code & ec)
 {
     tms tm;
     clock_t c = ::times( &tm );
@@ -246,10 +222,10 @@ process_cpu_clock::time_point process_cpu_clock::now(
         if (BOOST_CHRONO_IS_THROWS(ec))
         {
             boost::throw_exception(
-                    system::system_error( 
-                            errno, 
-                            BOOST_CHRONO_SYSTEM_CATEGORY, 
-                            "chrono::process_clock" ));
+                    system::system_error(
+                            errno,
+                            BOOST_CHRONO_SYSTEM_CATEGORY,
+                            "chrono::process_system_cpu_clock" ));
         }
         else
         {
@@ -261,21 +237,22 @@ process_cpu_clock::time_point process_cpu_clock::now(
     {
         if ( chrono_detail::tick_factor() != -1 )
         {
-            time_point::rep r(
-                    c*chrono_detail::tick_factor(),
-                    (tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor(),
-                    (tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
-            return time_point(duration(r));
+            if (!BOOST_CHRONO_IS_THROWS(ec))
+            {
+                ec.clear();
+            }
+            return time_point(
+                microseconds((tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor()));
         }
         else
         {
             if (BOOST_CHRONO_IS_THROWS(ec))
             {
                 boost::throw_exception(
-                        system::system_error( 
-                                errno, 
-                                BOOST_CHRONO_SYSTEM_CATEGORY, 
-                                "chrono::process_clock" ));
+                        system::system_error(
+                                errno,
+                                BOOST_CHRONO_SYSTEM_CATEGORY,
+                                "chrono::process_system_cpu_clock" ));
             }
             else
             {
@@ -299,9 +276,9 @@ process_cpu_clock::time_point process_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
         if ( chrono_detail::tick_factor() != -1 )
         {
             time_point::rep r(
-                    c*chrono_detail::tick_factor(),
-                    (tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor(),
-                    (tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
+                    1000*c*chrono_detail::tick_factor(),
+                    1000*(tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor(),
+                    1000*(tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
             return time_point(duration(r));
         }
         else
@@ -337,9 +314,9 @@ process_cpu_clock::time_point process_cpu_clock::now(
         if ( chrono_detail::tick_factor() != -1 )
         {
             time_point::rep r(
-                    c*chrono_detail::tick_factor(), 
-                    (tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor(), 
-                    (tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
+                1000*c*chrono_detail::tick_factor(),
+                1000*(tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor(),
+                1000*(tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
             return time_point(duration(r));
         }
         else
