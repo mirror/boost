@@ -78,22 +78,12 @@ void check_elapsed(bool check=true)
 {
   typedef boost::chrono::simple_stopwatch<Clock> Stopwatch;
   Stopwatch sw;
-  ex::sleep_for(boost::chrono::milliseconds(10));
+  ex::sleep_for(boost::chrono::milliseconds(100));
   typename Stopwatch::duration d=sw.elapsed();
-  //std::cout << d << std::endl;
-  //std::cout << boost::chrono::duration_cast<boost::chrono::milliseconds>(d) << std::endl;
+  std::cout << d << std::endl;
   if (check)
-  BOOST_TEST(boost::chrono::duration_cast<boost::chrono::milliseconds>(d)>=boost::chrono::milliseconds(10));
+  BOOST_TEST(d >= boost::chrono::milliseconds(100));
 }
-template <typename Clock>
-void check_elapsed2()
-{
-  typedef boost::chrono::simple_stopwatch<Clock> Stopwatch;
-  Stopwatch sw;
-  ex::sleep_for(boost::chrono::milliseconds(10));
-  typename Stopwatch::duration d=sw.elapsed();
-}
-
 
 template <typename Clock>
 void check_all(bool check=true)
@@ -107,21 +97,29 @@ void check_all(bool check=true)
 
 int main()
 {
+  std::cout << "high_resolution_clock=";
   check_all<boost::chrono::high_resolution_clock>();
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+  std::cout << "steady_clock=";
   check_all<boost::chrono::steady_clock>();
 #endif
-  check_all<boost::chrono::system_clock>();
+  std::cout << "system_clock=";
+  check_all<boost::chrono::system_clock>(false);
 
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
-  check_all<boost::chrono::thread_clock>();
+  std::cout << "thread_clock=";
+  check_all<boost::chrono::thread_clock>(false);
 #endif
     
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
-  check_all<boost::chrono::process_real_cpu_clock>();
+  std::cout << "process_real_cpu_clock=";
+  check_all<boost::chrono::process_real_cpu_clock>(false);
+  std::cout << "process_user_cpu_clock=";
   check_all<boost::chrono::process_user_cpu_clock>(false);
+  std::cout << "process_system_cpu_clock=";
   check_all<boost::chrono::process_system_cpu_clock>(false);
-  check_all<boost::chrono::process_cpu_clock>();
+  std::cout << "process_cpu_clock=";
+  check_all<boost::chrono::process_cpu_clock>(false);
 #endif
     
   return boost::report_errors();
