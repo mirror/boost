@@ -36,8 +36,8 @@ namespace boost { namespace chrono {
         typedef chrono::time_point<process_real_cpu_clock>    time_point;
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
-        static BOOST_CHRONO_INLINE time_point now(
-                system::error_code & ec = BOOST_CHRONO_THROWS );
+        static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
+        static BOOST_CHRONO_INLINE time_point now(system::error_code & ec );
     };
 
     class BOOST_CHRONO_DECL process_user_cpu_clock {
@@ -48,8 +48,8 @@ namespace boost { namespace chrono {
         typedef chrono::time_point<process_user_cpu_clock>    time_point;
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
-        static BOOST_CHRONO_INLINE time_point now( 
-                system::error_code & ec = BOOST_CHRONO_THROWS );
+        static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
+        static BOOST_CHRONO_INLINE time_point now(system::error_code & ec );
     };
 
     class BOOST_CHRONO_DECL process_system_cpu_clock {
@@ -60,8 +60,8 @@ namespace boost { namespace chrono {
         typedef chrono::time_point<process_system_cpu_clock>    time_point;
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
-        static BOOST_CHRONO_INLINE time_point now( 
-                system::error_code & ec = BOOST_CHRONO_THROWS );
+        static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
+        static BOOST_CHRONO_INLINE time_point now(system::error_code & ec );
     };
 
         struct process_cpu_clock_times 
@@ -184,8 +184,9 @@ namespace boost { namespace chrono {
         typedef chrono::time_point<process_cpu_clock>  time_point;
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =           true;
 
+        static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
         static BOOST_CHRONO_INLINE time_point now( 
-                system::error_code & ec = BOOST_CHRONO_THROWS );
+                    system::error_code & ec );
     };
 
     template <class CharT, class Traits>

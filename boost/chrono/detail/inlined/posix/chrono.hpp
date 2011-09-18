@@ -17,16 +17,12 @@ namespace boost
 namespace chrono
 {
 
-  system_clock::time_point system_clock::now()
+  system_clock::time_point system_clock::now() BOOST_CHRONO_NOEXCEPT
   {
     timespec ts;
     if ( ::clock_gettime( CLOCK_REALTIME, &ts ) )
     {
-        boost::throw_exception(
-                system::system_error( 
-                        errno, 
-                        BOOST_CHRONO_SYSTEM_CATEGORY, 
-                        "chrono::system_clock" ));
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
     }
 
     return time_point(duration(
@@ -61,28 +57,24 @@ namespace chrono
       static_cast<system_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
   }
 
-  std::time_t system_clock::to_time_t(const system_clock::time_point& t)
+  std::time_t system_clock::to_time_t(const system_clock::time_point& t) BOOST_CHRONO_NOEXCEPT
   {
       return static_cast<std::time_t>( t.time_since_epoch().count() / 1000000000 );
   }
 
-  system_clock::time_point system_clock::from_time_t(std::time_t t)
+  system_clock::time_point system_clock::from_time_t(std::time_t t) BOOST_CHRONO_NOEXCEPT
   {
       return time_point(duration(static_cast<system_clock::rep>(t) * 1000000000));
   }
 
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
 
-  steady_clock::time_point steady_clock::now()
+  steady_clock::time_point steady_clock::now() BOOST_CHRONO_NOEXCEPT
   {
     timespec ts;
     if ( ::clock_gettime( CLOCK_MONOTONIC, &ts ) )
     {
-        boost::throw_exception(
-                system::system_error( 
-                        errno, 
-                        BOOST_CHRONO_SYSTEM_CATEGORY, 
-                        "chrono::steady_clock" ));
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
     }
 
     return time_point(duration(

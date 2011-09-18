@@ -41,6 +41,30 @@ namespace chrono_detail {
     }
 }
 
+process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+{
+
+    tms tm;
+    clock_t c = ::times( &tm );
+    if ( c == clock_t(-1) ) // error
+    {
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+    }
+    else
+    {
+        if ( chrono_detail::tick_factor() != -1 )
+        {
+            return time_point(
+                    microseconds(c)*chrono_detail::tick_factor());
+        }
+        else
+        {
+          BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+        }
+    }
+    return time_point();
+}
+
 process_real_cpu_clock::time_point process_real_cpu_clock::now(
         system::error_code & ec) 
 {
@@ -91,6 +115,29 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
             }
         }
     }
+}
+
+process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+{
+    tms tm;
+    clock_t c = ::times( &tm );
+    if ( c == clock_t(-1) ) // error
+    {
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+    }
+    else
+    {
+        if ( chrono_detail::tick_factor() != -1 )
+        {
+            return time_point(
+                    microseconds(c)*chrono_detail::tick_factor());
+        }
+        else
+        {
+          BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+        }
+    }
+    return time_point();
 }
 
 process_user_cpu_clock::time_point process_user_cpu_clock::now(
@@ -144,6 +191,29 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now(
     }
 }
 
+process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+{
+    tms tm;
+    clock_t c = ::times( &tm );
+    if ( c == clock_t(-1) ) // error
+    {
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+    }
+    else
+    {
+        if ( chrono_detail::tick_factor() != -1 )
+        {
+            return time_point(
+                    microseconds(tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
+        }
+        else
+        {
+          BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+        }
+    }
+return time_point();
+}
+
 process_system_cpu_clock::time_point process_system_cpu_clock::now(
         system::error_code & ec) 
 {
@@ -195,11 +265,35 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now(
     }
 }
 
+process_cpu_clock::time_point process_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+{
+    tms tm;
+    clock_t c = ::times( &tm );
+    if ( c == clock_t(-1) ) // error
+    {
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+    }
+    else
+    {
+        if ( chrono_detail::tick_factor() != -1 )
+        {
+            time_point::rep r(
+                    c*chrono_detail::tick_factor(),
+                    (tm.tms_utime + tm.tms_cutime)*chrono_detail::tick_factor(),
+                    (tm.tms_stime + tm.tms_cstime)*chrono_detail::tick_factor());
+            return time_point(duration(r));
+        }
+        else
+        {
+          BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+        }
+    }
+    return time_point();
+}
+
 process_cpu_clock::time_point process_cpu_clock::now( 
         system::error_code & ec ) 
 {
-    
-    
     tms tm;
     clock_t c = ::times( &tm );
     if ( c == clock_t(-1) ) // error

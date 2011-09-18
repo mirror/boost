@@ -26,6 +26,25 @@ namespace boost
 namespace chrono
 {
 
+process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+{
+
+    //  note that Windows uses 100 nanosecond ticks for FILETIME
+    boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
+
+    if ( boost::detail::win32::GetProcessTimes(
+            boost::detail::win32::GetCurrentProcess(), &creation, &exit,
+            &system_time, &user_time ) )
+    {
+        return time_point(steady_clock::now().time_since_epoch());
+    }
+    else
+    {
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+    }
+    return time_point();
+}
+
 process_real_cpu_clock::time_point process_real_cpu_clock::now(
         system::error_code & ec) 
 {
@@ -33,11 +52,6 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
     //  note that Windows uses 100 nanosecond ticks for FILETIME
     boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
 
-  #ifdef UNDER_CE
-  // Windows CE does not support GetProcessTimes
-    assert( 0 && "GetProcessTimes not supported under Windows CE" );
-  return time_point();
-  #else
     if ( boost::detail::win32::GetProcessTimes(
             boost::detail::win32::GetCurrentProcess(), &creation, &exit,
             &system_time, &user_time ) )
@@ -65,9 +79,32 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
             return time_point();
         }
     }
-  #endif
 
 }
+
+process_user_cpu_clock::time_point process_user_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+{
+
+    //  note that Windows uses 100 nanosecond ticks for FILETIME
+    boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
+
+    if ( boost::detail::win32::GetProcessTimes(
+            boost::detail::win32::GetCurrentProcess(), &creation, &exit,
+            &system_time, &user_time ) )
+    {
+        return time_point(duration(
+                ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
+                  | user_time.dwLowDateTime) * 100
+                ));
+    }
+    else
+    {
+        BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+        return time_point();
+    }
+
+}
+
 process_user_cpu_clock::time_point process_user_cpu_clock::now(
         system::error_code & ec) 
 {
@@ -75,11 +112,6 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now(
     //  note that Windows uses 100 nanosecond ticks for FILETIME
     boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
 
-  #ifdef UNDER_CE
-  // Windows CE does not support GetProcessTimes
-    assert( 0 && "GetProcessTimes not supported under Windows CE" );
-  return time_point();
-  #else
     if ( boost::detail::win32::GetProcessTimes(
             boost::detail::win32::GetCurrentProcess(), &creation, &exit,
             &system_time, &user_time ) )
@@ -110,9 +142,32 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now(
             return time_point();
         }
     }
-  #endif
 
 }
+
+process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+{
+
+    //  note that Windows uses 100 nanosecond ticks for FILETIME
+    boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
+
+    if ( boost::detail::win32::GetProcessTimes(
+            boost::detail::win32::GetCurrentProcess(), &creation, &exit,
+            &system_time, &user_time ) )
+    {
+        return time_point(duration(
+                ((static_cast<process_system_cpu_clock::rep>(system_time.dwHighDateTime) << 32)
+                                    | system_time.dwLowDateTime) * 100
+                ));
+    }
+    else
+    {
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+      return time_point();
+    }
+
+}
+
 process_system_cpu_clock::time_point process_system_cpu_clock::now(
         system::error_code & ec) 
 {
@@ -120,11 +175,6 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now(
     //  note that Windows uses 100 nanosecond ticks for FILETIME
     boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
 
-  #ifdef UNDER_CE
-  // Windows CE does not support GetProcessTimes
-    assert( 0 && "GetProcessTimes not supported under Windows CE" );
-  return time_point();
-  #else
     if ( boost::detail::win32::GetProcessTimes(
             boost::detail::win32::GetCurrentProcess(), &creation, &exit,
             &system_time, &user_time ) )
@@ -155,9 +205,37 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now(
             return time_point();
         }
     }
-  #endif
   
 }
+process_cpu_clock::time_point process_cpu_clock::now()  BOOST_CHRONO_NOEXCEPT
+{
+
+    //  note that Windows uses 100 nanosecond ticks for FILETIME
+    boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
+
+    if ( boost::detail::win32::GetProcessTimes(
+            boost::detail::win32::GetCurrentProcess(), &creation, &exit,
+            &system_time, &user_time ) )
+    {
+        time_point::rep r(
+                steady_clock::now().time_since_epoch().count(),
+                ((static_cast<process_user_cpu_clock::rep>(user_time.dwHighDateTime) << 32)
+                        | user_time.dwLowDateTime
+                ) * 100,
+                ((static_cast<process_system_cpu_clock::rep>(system_time.dwHighDateTime) << 32)
+                        | system_time.dwLowDateTime
+                ) * 100
+        );
+        return time_point(duration(r));
+    }
+    else
+    {
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+      return time_point();
+    }
+
+}
+
 process_cpu_clock::time_point process_cpu_clock::now( 
         system::error_code & ec ) 
 {
@@ -165,11 +243,6 @@ process_cpu_clock::time_point process_cpu_clock::now(
     //  note that Windows uses 100 nanosecond ticks for FILETIME
     boost::detail::win32::FILETIME_ creation, exit, user_time, system_time;
 
-  #ifdef UNDER_CE
-  // Windows CE does not support GetProcessTimes
-    assert( 0 && "GetProcessTimes not supported under Windows CE" );
-  return time_point();
-  #else
     if ( boost::detail::win32::GetProcessTimes(
             boost::detail::win32::GetCurrentProcess(), &creation, &exit,
             &system_time, &user_time ) )
@@ -206,7 +279,6 @@ process_cpu_clock::time_point process_cpu_clock::now(
             return time_point();
         }
     }
-  #endif
 
 }
 } // namespace chrono
