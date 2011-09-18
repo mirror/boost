@@ -63,7 +63,6 @@ namespace boost { namespace fusion { namespace detail
 #pragma wave option(preserve: 1)
 #endif
 
-
 namespace boost { namespace fusion { namespace detail
 {
 #define BOOST_FUSION_NEXT_ITERATOR(z, n, data)                                  \
