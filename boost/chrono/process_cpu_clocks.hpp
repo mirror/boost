@@ -74,6 +74,11 @@ namespace boost { namespace chrono {
                 : real(0)
                 , user(0)
                 , system(0){}
+            explicit process_cpu_clock_times(
+                process_real_cpu_clock::rep r)
+                : real(r)
+                , user(0)
+                , system(0){}
             process_cpu_clock_times(
                 process_real_cpu_clock::rep r,
                 process_user_cpu_clock::rep   u,
@@ -86,6 +91,10 @@ namespace boost { namespace chrono {
             process_user_cpu_clock::rep   user;    // user cpu time
             process_system_cpu_clock::rep system;  // system cpu time
 
+            operator process_real_cpu_clock::rep()
+            {
+              return real;
+            }
             bool operator==(process_cpu_clock_times const& rhs) {
                 return (real==rhs.real &&
                         user==rhs.user &&

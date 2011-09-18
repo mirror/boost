@@ -11,6 +11,8 @@
 
 #include <boost/chrono/chrono.hpp>
 #include <boost/system/error_code.hpp>
+#include <boost/chrono/thread_clock.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
 
 namespace boost
 {
@@ -18,7 +20,7 @@ namespace boost
   {
 
     /**
-     * This class provides the simpler stopwath which is just able to give the elapsed time since its creation.
+     * This class provides the simpler stopwatch which is just able to give the elapsed time since its construction.
      */
     template<typename Clock=high_resolution_clock>
     class simple_stopwatch
@@ -32,7 +34,7 @@ namespace boost
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             Clock::is_steady;
 
 
-      simple_stopwatch() :
+      simple_stopwatch() BOOST_CHRONO_NOEXCEPT :
         start_(clock::now())
       {
       }
@@ -50,7 +52,11 @@ namespace boost
         start_ = tmp;
       }
 
-      duration elapsed()
+      ~simple_stopwatch() BOOST_CHRONO_NOEXCEPT
+      {
+      }
+
+      duration elapsed() BOOST_CHRONO_NOEXCEPT
       {
         return clock::now() - start_;
       }
@@ -67,7 +73,27 @@ namespace boost
 
     private:
       time_point start_;
+      simple_stopwatch(const simple_stopwatch&); // = delete;
+      simple_stopwatch& operator=(const simple_stopwatch&); // = delete;
     };
+
+    typedef simple_stopwatch<system_clock> system_simple_stopwatch;
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+    typedef simple_stopwatch<steady_clock> steady_simple_stopwatch;
+#endif
+    typedef simple_stopwatch<high_resolution_clock> high_resolution_simple_stopwatch;
+
+#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
+    typedef simple_stopwatch<process_user_cpu_clock> process_user_cpu_simple_stopwatch;
+    typedef simple_stopwatch<process_system_cpu_clock> process_system_cpu_simple_stopwatch;
+    typedef simple_stopwatch<process_real_cpu_clock> process_real_cpu_simple_stopwatch;
+    typedef simple_stopwatch<process_cpu_clock> process_cpu_simple_stopwatch;
+#endif
+
+#if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
+    typedef simple_stopwatch<thread_clock> thread_simple_stopwatch;
+#endif
+
 
   } // namespace chrono
 } // namespace boost
