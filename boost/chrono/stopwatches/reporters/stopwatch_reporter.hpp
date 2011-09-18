@@ -42,6 +42,11 @@ namespace boost
       {
       }
 
+      basic_stopwatch_reporter(system::error_code & ec) :
+      Stopwatch(ec), formatter_(), reported_(false)
+      {
+      }
+
       explicit basic_stopwatch_reporter(const typename Formatter::char_type* fmt) :
         formatter_(fmt), reported_(false)
       {
@@ -109,10 +114,17 @@ namespace boost
       //: base_type()
       {
       }
+
+      stopwatch_reporter(system::error_code & ec) :
+        base_type(ec)
+      {
+      }
+
       explicit stopwatch_reporter(formatter_type const& fmt) :
         base_type(fmt)
       {
       }
+
       explicit stopwatch_reporter(const typename Formatter::char_type* fmt) :
         base_type(fmt)
       {
@@ -160,6 +172,10 @@ namespace boost
 
       wstopwatch_reporter() :
         base_type()
+      {
+      }
+      wstopwatch_reporter(system::error_code & ec) :
+        base_type(ec)
       {
       }
       explicit wstopwatch_reporter(formatter_type const& fmt) :
