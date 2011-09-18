@@ -247,6 +247,12 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run2-mt stopwatch/simple_stopwatch_pass.cpp  : simple_stopwatch_pass ]
         ;
 
+    test-suite "stopclocks"
+        :
+        [ chrono-run2-mt ../example/stopwatch_reporter_example.cpp  : stopwatch_reporter_example ]
+        [ chrono-run2-mt stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_pass ]
+        ;
+
     test-suite "io"
         :
         [ chrono-run-mt ../example/io_ex1.cpp  ]
