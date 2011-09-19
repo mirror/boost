@@ -541,9 +541,11 @@ UNORDERED_AUTO_TEST(map_emplace_test)
 {
     boost::unordered_map<int, overloaded_constructor> x;
 
+#if !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x5100))
     x.emplace();
     BOOST_TEST(x.find(0) != x.end() &&
         x.find(0)->second == overloaded_constructor());
+#endif
 
     x.emplace(2, 3);
     BOOST_TEST(x.find(2) != x.end() &&
@@ -569,8 +571,10 @@ UNORDERED_AUTO_TEST(set_emplace_test)
     boost::unordered_set<overloaded_constructor> x;
     overloaded_constructor check;
 
+#if !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x5100))
     x.emplace();
     BOOST_TEST(x.find(check) != x.end() && *x.find(check) == check);
+#endif
 
     x.clear();
     x.emplace(1);

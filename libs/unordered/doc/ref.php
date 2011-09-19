@@ -412,10 +412,13 @@ EOL;
                 <para>If the compiler doesn't support variadic template arguments or rvalue
                       references, this is emulated for up to 10 arguments, with no support
                       for rvalue references or move semantics.</para>
-                <para>Since existing `std::pair` implementations don't support
+                <para>Since existing <code>std::pair</code> implementations don't support
                       <code>std::piecewise_construct</code> this emulates it,
-                      but using <code>boost::unordered::piecewise_construct</code>.
-                </para>
+                      but using <code>boost::unordered::piecewise_construct</code>.</para>
+                <para>In version of Boost before 1.48 this emulated the variadic pair
+                      constructor from older C++0x drafts. For backwards compatability
+                      this can be enabled by defining the macro
+                      <code>BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT</code>.
               </notes>
             </method>
             <method name="emplace_hint">
@@ -454,9 +457,13 @@ EOL;
                 <para>If the compiler doesn't support variadic template arguments or rvalue
                       references, this is emulated for up to 10 arguments, with no support
                       for rvalue references or move semantics.</para>
-                <para>Since existing `std::pair` implementations don't support
+                <para>Since existing <code>std::pair</code> implementations don't support
                       <code>std::piecewise_construct</code> this emulates it,
                       but using <code>boost::unordered::piecewise_construct</code>.
+                <para>In version of Boost before 1.48 this emulated the variadic pair
+                      constructor from older C++0x drafts. For backwards compatability
+                      this can be enabled by defining the macro
+                      <code>BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT</code>.
                 </para>
               </notes>
             </method>
@@ -658,13 +665,19 @@ EOL;
                 <paramtype><?php echo $name; ?>&amp;</paramtype>
               </parameter>
               <type>void</type>
+              <description>
+                <para>Swaps the contents of the container with the parameter.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </method>
           </method-group>
@@ -961,9 +974,28 @@ EOL;
                 <paramtype><?php echo $full_type; ?> const&amp;</paramtype>
               </parameter>
               <type>bool</type>
+              <description>
+<?php if($equivalent_keys): ?>
+                <para>Return <code>true</code> if <code>x.size() ==
+                y.size</code> and for every equivalent key group in
+                <code>x</code>, there is a group in <code>y</code>
+                for the same key, which is a permutation (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php else: ?>
+                <para>Return <code>true</code> if <code>x.size() ==
+                y.size</code> and for every element in <code>x</code>,
+                there is an element in <code>y</code> with the same
+                for the same key, with an equal value (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php endif; ?>
+              </description>
               <notes>
-                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
-                <para>This is a boost extension.</para>
+                <para>The behavior of this function was changed to match
+                  the C++11 standard in Boost 1.48. If you wish to use
+                  the old behaviour, define the macro
+                  <code>BOOST_UNORDERED_DEPRECATED_EQUALITY</code>.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
               </notes>
@@ -985,9 +1017,28 @@ EOL;
                 <paramtype><?php echo $full_type; ?> const&amp;</paramtype>
               </parameter>
               <type>bool</type>
+              <description>
+<?php if($equivalent_keys): ?>
+                <para>Return <code>false</code> if <code>x.size() ==
+                y.size</code> and for every equivalent key group in
+                <code>x</code>, there is a group in <code>y</code>
+                for the same key, which is a permutation (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php else: ?>
+                <para>Return <code>false</code> if <code>x.size() ==
+                y.size</code> and for every element in <code>x</code>,
+                there is an element in <code>y</code> with the same
+                for the same key, with an equal value (using
+                <code>operator==</code> to compare the value types).
+                </para>
+<?php endif; ?>
+              </description>
               <notes>
-                <para><emphasis>TODO</emphasis>: Documentation outdated.</para>
-                <para>This is a boost extension.</para>
+                <para>The behavior of this function was changed to match
+                  the C++11 standard in Boost 1.48. If you wish to use
+                  the old behaviour, define the macro
+                  <code>BOOST_UNORDERED_DEPRECATED_EQUALITY</code>.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
               </notes>
@@ -1014,13 +1065,19 @@ EOL;
               <effects>
                 <para><code>x.swap(y)</code></para>
               </effects>
+              <description>
+                <para>Swaps the contents of <code>x</code> and <code>y</code>.</para>
+                <para>If <code>Allocator::propagate_on_container_swap</code> is declared and
+                  <code>Allocator::propagate_on_container_swap::value</code> is true then the
+                  containers' allocators are swapped. Otherwise, swapping with unequal allocators
+                  results in undefined behavior.</para>
+              </description>
               <throws>
-                <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
+                <para>Doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para><emphasis>TODO</emphasis>: Update swap documentation, no longer correct.</para>
-                <para>For a discussion of the behavior when allocators aren't equal see
-                  <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
+                <para>The exception specifications aren't quite the same as the C++11 standard, as
+                  the equality predieate and hash function are swapped using their copy constructors.</para>
               </notes>
             </function>
           </free-function-group>

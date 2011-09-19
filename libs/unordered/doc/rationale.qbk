@@ -44,6 +44,8 @@ bucket but there are a some serious problems with this:
 
 So chained addressing is used.
 
+[/ (Removing for now as this is out of date)
+
 For containers with unique keys I store the buckets in a single-linked list.
 There are other possible data structures (such as a double-linked list)
 that allow for some operations to be faster (such as erasing and iteration)
@@ -63,6 +65,17 @@ nodes in reverse order. This allows quick navigation to the end of a group (sinc
 the first element points to the last) and can be quickly updated when elements
 are inserted or erased. The main disadvantage of this approach is some hairy code
 for erasing elements.
+]
+
+[/ (Starting to write up new structure, might not be ready in time)
+The node used to be stored in a linked list for each bucket but that
+didn't meet the complexity requirements for C++11, so now the nodes
+are stored in one long single linked list. But there needs a way to get
+the bucket from the node, to do that a copy of the key's hash value is
+stored in the node. Another possibility would be to store a pointer to
+the bucket, or the bucket's index, but storing the hash value allows
+some operations to be faster.
+]
 
 [h2 Number of Buckets]
 
@@ -89,59 +102,5 @@ modulus of a prime, and the extra computation required might negate
 efficiency advantage of power of 2 hash tables.
 
 So, this implementation uses a prime number for the hash table size.
-
-[h2 Equality operators]
-
-/TODO/: This is out of date.
-
-`operator==` and `operator!=` are not included in the standard, but I've
-added them as I think they could be useful and can be implemented
-fairly efficiently. They are specified differently to the other standard
-containers, comparing keys using the equality predicate rather than
-`operator==`.
-
-It's also different to the proposal
-[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2944.pdf n2944].
-which uses the equality operators for the whole of `value_type`. This
-implementation just uses the key equality function for the key,
-and `mapped_type`'s equality operator in `unordered_map` and
-`unordered_multimap` for the mapped part of the element.
-
-Also, in `unordered_multimap`, the mapped values for a group of elements with
-equivalent keys are only considered equal if they are in the same order,
-in n2944 they just need to be a permutation of each other. Since the
-order of elements with equal keys is now defined to be stable, it seems to me
-that their order can be considered part of the container's value.
-
-[h2 Active Issues and Proposals]
-
-[h3 C++0x allocators]
-
-/TODO/: This is out of date.
-
-Recent drafts have included an overhaul of the allocators, but this was
-dependent on concepts which are no longer in the standard.
-[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2946.pdf n2946]
-attempts to respecify them without concepts. I'll try to implement this (or
-an appropriate later version) in a future version of boost, possibly changed
-a little to accomodate non-C++0x compilers.
-
-[h3 Swapping containers with unequal allocators]
-
-/TODO/: This is out of date.
-
-It isn't clear how to swap containers when their allocators aren't equal.
-This is 
-[@http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#431
-Issue 431: Swapping containers with unequal allocators]. This has been resolved
-with the new allocator specification, so this should be fixed when
-support is added.
-
-[h3 Are insert and erase stable for unordered_multiset and unordered_multimap?]
-
-It wan't specified if `unordered_multiset` and `unordered_multimap` preserve the order
-of elements with equivalent keys (i.e. if they're stable under `insert` and `erase`).
-Since [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf
-n2691] it's been specified that they do and this implementation follows that.
 
 [endsect]
