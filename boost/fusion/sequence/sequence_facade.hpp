@@ -17,6 +17,7 @@ namespace boost { namespace fusion
     template <typename Derived, typename Category, typename IsView = mpl::false_>
     struct sequence_facade : sequence_base<Derived>
     {
+        typedef fusion_sequence_tag tag;
         typedef sequence_facade_tag fusion_tag;
         typedef Derived derived_type;
         typedef Category category;
