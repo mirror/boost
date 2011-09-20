@@ -39,10 +39,10 @@
 #else
 # define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_(NESTED, EXPR)                                     \
     BOOST_TYPEOF_NESTED_TYPEDEF_TPL(BOOST_PP_CAT(nested_and_hidden_, NESTED), EXPR)                 \
-    static int const sz = sizeof(boost::proto::detail::check_reference(EXPR));                      \
+    static int const BOOST_PP_CAT(sz, NESTED) = sizeof(boost::proto::detail::check_reference(EXPR));\
     struct NESTED                                                                                   \
       : boost::mpl::if_c<                                                                           \
-            1==sz                                                                                   \
+            1 == BOOST_PP_CAT(sz, NESTED)                                                           \
           , typename BOOST_PP_CAT(nested_and_hidden_, NESTED)::type &                               \
           , typename BOOST_PP_CAT(nested_and_hidden_, NESTED)::type                                 \
         >                                                                                           \
