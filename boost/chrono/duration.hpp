@@ -255,7 +255,7 @@ namespace detail
         }
     };
 
-    // When the denomenator of FromPeriod / ToPeriod is 1, then all we need to do is
+    // When the denominator of FromPeriod / ToPeriod is 1, then all we need to do is
     //   multiply by the numerator of FromPeriod / ToPeriod.  The common_type of
     //   the two representations is used for the intermediate computation before
     //   static_cast'ing to the destination.
