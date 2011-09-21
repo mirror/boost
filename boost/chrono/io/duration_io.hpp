@@ -671,6 +671,5 @@ namespace boost
   } // chrono
 
 }
-#include <boost/chrono/duration_style.hpp>
 
 #endif  // BOOST_CHRONO_CHRONO_IO_HPP

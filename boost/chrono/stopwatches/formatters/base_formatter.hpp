@@ -9,7 +9,7 @@
 
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/chrono_io.hpp>
-#include <boost/chrono/duration_style.hpp>
+#include <boost/chrono/io/duration_io.hpp>
 #include <boost/cstdint.hpp>
 #include <iostream>
 #include <iomanip>
