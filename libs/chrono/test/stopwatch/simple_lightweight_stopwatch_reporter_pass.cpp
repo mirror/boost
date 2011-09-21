@@ -102,7 +102,7 @@ void check_elapsed(bool check=true)
   typename Reporter::duration d=sw.elapsed();
   std::cout << d << std::endl;
   if (check)
-  BOOST_TEST(d >= milliseconds(100));
+    BOOST_TEST(d >= milliseconds(100));
 }
 
 template <typename Clock>
@@ -139,7 +139,7 @@ void check_all(bool check=true)
   check_constructor_throws<Clock>();
   check_elapsed<Clock>(check);
   check_report<Clock>();
-  check_file_line<Clock>();
+  //check_file_line<Clock>();
 }
 
 int main()
