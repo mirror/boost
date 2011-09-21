@@ -62,17 +62,21 @@ namespace boost
 
       ~basic_stopwatch_reporter() BOOST_CHRONO_NOEXCEPT
       {
-        system::error_code ec;
         if (!reported())
         {
-          this->report(ec);
+          this->report();
         }
       }
 
-      inline void report(system::error_code & ec= BOOST_CHRONO_THROWS)
+      inline void report() BOOST_CHRONO_NOEXCEPT
       {
+        formatter_(*this);
         reported_ = true;
+      }
+      inline void report(system::error_code & ec)
+      {
         formatter_(*this, ec);
+        reported_ = true;
       }
       bool reported() const
       {
