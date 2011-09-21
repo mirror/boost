@@ -27,11 +27,11 @@ namespace boost
       typedef std::basic_ostream<CharT, Traits> ostream_type;
 
       base_formatter() :
-        precision_(3), os_(std::cout), style_(duration_style::symbol)
+        precision_(3), os_(std::cout), duration_style_(duration_style::symbol)
       {
       }
       base_formatter(ostream_type& os) :
-        precision_(3), os_(os), style_(duration_style::symbol)
+        precision_(3), os_(os), duration_style_(duration_style::symbol)
       {
       }
 
@@ -47,13 +47,13 @@ namespace boost
       }
       void set_duration_style(duration_style::type style)
       {
-        style_ == style;
+        duration_style_ == style;
       }
 
     protected:
       std::size_t precision_;
       ostream_type & os_;
-      duration_style::type style_;
+      duration_style::type duration_style_;
 
     };
 
