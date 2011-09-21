@@ -59,8 +59,31 @@ void check_default_constructor()
 {
   typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   Reporter _;
-  std::cout << _.elapsed() << std::endl;
 }
+
+struct file_line {
+  file_line(const char* file, std::size_t line)
+  : fmt("%1%[%2%] Elapsed time:")
+  {
+    fmt % file % line;
+  }
+  ~file_line()
+  {
+    std::cout << fmt;
+  }
+  boost::format fmt;
+
+};
+
+template <typename Clock>
+void check_file_line()
+{
+  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
+  Reporter _("%1%\n");
+  file_line fl(__FILE__, __LINE__);
+
+}
+
 
 template <typename Clock>
 void check_constructor_ec()
@@ -69,7 +92,6 @@ void check_constructor_ec()
   boost::system::error_code ec;
   Reporter _(ec);
   BOOST_TEST(ec.value()==0);
-  std::cout << _.elapsed() << std::endl;
 }
 
 template <typename Clock>
@@ -77,7 +99,6 @@ void check_constructor_throws()
 {
   typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   Reporter _(boost::throws());
-  std::cout << _.elapsed() << std::endl;
 }
 
 template <typename Clock>
@@ -98,7 +119,6 @@ void check_report()
   typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   Reporter sw;
   ex::sleep_for(milliseconds(100));
-  std::cout << sw.elapsed() << std::endl;
   sw.report();
 }
 
@@ -111,11 +131,20 @@ void check_all(bool check=true)
   check_constructor_throws<Clock>();
   check_elapsed<Clock>(check);
   check_report<Clock>();
+  check_file_line<Clock>();
 }
 
 int main()
 {
+  typedef simple_stopwatch<high_resolution_clock> Stopwatch;
+  typedef stopwatch_reporter_default_formatter<Stopwatch>::type Formatter;
+  typedef stopwatch_reporter<Stopwatch> Reporter;
+  static Formatter fmtr;
+
+  Reporter _(fmtr);
+
   std::cout << "high_resolution_clock=\n";
+
   check_all<high_resolution_clock>();
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
   std::cout << "steady_clock=\n";
@@ -139,6 +168,6 @@ int main()
   std::cout << "process_cpu_clock=\n";
   check_all<process_cpu_clock>(false);
 #endif
-    
+
   return boost::report_errors();
 }
