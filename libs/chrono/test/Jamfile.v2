@@ -178,7 +178,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run ../example/miscellaneous.cpp ]
         [ chrono-run ../example/test_special_values.cpp ]
         [ chrono-run ../example/manipulate_clock_object.cpp ]
-        [ chrono-run ../example/chrono_accuracy_test.cpp ]
+        #[ chrono-run ../example/chrono_accuracy_test.cpp ]
         [ chrono-run-mt ../example/test_thread_clock.cpp  ]
         [ chrono-run ../example/french.cpp  ]
         [ chrono-run ../example/rounding.cpp  ]
