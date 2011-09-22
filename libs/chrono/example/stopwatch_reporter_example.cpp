@@ -15,19 +15,27 @@ using namespace boost::chrono;
 
 int f1(long j)
 {
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
   stopwatch_reporter<simple_stopwatch<> > sw;
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
 
   for ( long i = 0; i < j; ++i )
     std::sqrt( 123.456L );  // burn some time
 
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
   return 0;
 }
 int main()
 {
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
   stopwatch_reporter<simple_stopwatch<> > sw;
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
 
   f1(1000);
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
   f1(2000);
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
   f1(3000);
+  std::cout << __FILE__ << "[" << __LINE__ << "]" << std::endl;
   return 0;
 }

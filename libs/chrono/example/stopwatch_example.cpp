@@ -8,27 +8,45 @@
 //#include <iostream>
 #include <boost/chrono/stopwatches/simple_stopwatch.hpp>
 #include <boost/chrono/chrono_io.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
 #include <cmath>
 
 using namespace boost::chrono;
 
+namespace ex
+{
+    template<class Rep, class Period>
+    void sleep_for(const duration<Rep, Period>& d)
+    {
+      typedef high_resolution_clock Clock;
+      typename Clock::time_point go =
+          Clock::now() + d;
+      while (Clock::now() < go)
+      {
+      }
+    }
+}
+
 int f1(long j)
 {
-  simple_stopwatch<> sw;
+  simple_stopwatch<process_cpu_clock> sw;
 
   for ( long i = 0; i < j; ++i )
     std::sqrt( 123.456L );  // burn some time
+  ex::sleep_for(milliseconds(100));
 
   std::cout << "f1("<< j <<") Elapsed time: " << sw.elapsed() << std::endl;
   return 0;
 }
 int main()
 {
-  simple_stopwatch<> sw;
+  simple_stopwatch<process_cpu_clock> sw;
 
   f1(1000);
   f1(2000);
   f1(3000);
-  std::cout << "main() Elapsed time: " << sw.elapsed() << std::endl;
+  std::cout << "main() Elapsed time: " << duration_cast<duration<process_times<double>,boost::ratio<1> > >(sw.elapsed()) << std::endl;
+  std::cout << "main() Elapsed time: " << duration_cast<duration<process_times<nanoseconds::rep>,boost::milli> >(sw.elapsed()) << std::endl;
+  //std::cout << "main() Elapsed time: " << sw.elapsed() << std::endl;
   return 0;
 }
