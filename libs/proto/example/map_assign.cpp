@@ -51,6 +51,7 @@ struct insert
 struct MapListOf
   : proto::or_<
         proto::when<
+            // map_list_of(a,b)
             proto::function<
                 proto::terminal<map_list_of_tag>
               , proto::terminal<_>
@@ -63,6 +64,7 @@ struct MapListOf
             )
         >
       , proto::when<
+            // map_list_of(a,b)(c,d)...
             proto::function<
                 MapListOf
               , proto::terminal<_>

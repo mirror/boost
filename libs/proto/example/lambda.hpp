@@ -2,7 +2,6 @@
     #ifndef BOOST_LAMBDA_HPP_EAN_04_19_2008
     #define BOOST_LAMBDA_HPP_EAN_04_19_2008
 
-    #define BOOST_MPL_LIMIT_METAFUNCTION_ARITY 10
     #define BOOST_PROTO_MAX_ARITY 10
     #define BOOST_PROTO_MAX_FUNCTION_CALL_ARITY 5
 
@@ -57,7 +56,7 @@
             struct rethrow_ {};
             struct switch_ {};
             struct default_ {};
-            template<int I> struct case_ { BOOST_STATIC_CONSTANT(int, value = I); };
+            template<int I> struct case_ { static const int value = I; };
             template<typename E> struct catch_ { typedef E exception_type; };
             struct catch_all_ { typedef catch_all_ exception_type; };
         };
@@ -70,7 +69,7 @@
             typedef placeholder<Int> type;
             typedef placeholder<typename Int::next> next;
             typedef placeholder<typename Int::prior> prior;
-            BOOST_STATIC_CONSTANT(value_type, value = Int::value);
+            static const value_type value = Int::value;
 
             friend std::ostream &operator<<(std::ostream &sout, placeholder)
             {
@@ -505,7 +504,7 @@
             static yes_type test_is_stream(std::basic_ostream<Char, Traits> &);
         public:
             typedef bool value_type;
-            BOOST_STATIC_CONSTANT(bool, value = sizeof(yes_type) == sizeof(test_is_stream(t)));
+            static const bool value = sizeof(yes_type == sizeof(test_is_stream(t)));
             typedef mpl::bool_<value> type;
         };
 
