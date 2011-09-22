@@ -32,6 +32,7 @@ namespace boost
         utc, local
       };
     };
+    typedef timezone::type timezone_type;
 
     template<class CharT>
     class time_punct: public std::locale::facet
@@ -41,7 +42,7 @@ namespace boost
 
     private:
       string_type fmt_;
-      chrono::timezone::type tz_;
+      chrono::timezone_type tz_;
 
     public:
       static std::locale::id id;
@@ -51,7 +52,7 @@ namespace boost
       {
       }
 
-      time_punct(timezone::type tz, string_type fmt, size_t refs = 0)
+      time_punct(timezone_type tz, string_type fmt, size_t refs = 0)
       // todo use move semantic when available.
       :
         std::locale::facet(refs), fmt_(fmt), tz_(tz)
@@ -62,7 +63,7 @@ namespace boost
       {
         return fmt_;
       }
-      chrono::timezone::type get_timezone() const BOOST_CHRONO_NOEXCEPT
+      chrono::timezone_type get_timezone() const BOOST_CHRONO_NOEXCEPT
       {
         return tz_;
       }
@@ -108,14 +109,14 @@ namespace boost
 
       class time_man
       {
-        timezone::type form_;
+        timezone_type form_;
       public:
-        explicit time_man(timezone::type f) :
+        explicit time_man(timezone_type f) :
           form_(f)
         {
         }
         // explicit
-        operator timezone::type() const
+        operator timezone_type() const
         {
           return form_;
         }
@@ -125,7 +126,7 @@ namespace boost
       std::basic_ostream<CharT, Traits>&
       operator <<(std::basic_ostream<CharT, Traits>& os, time_man m)
       {
-        os.imbue(std::locale(os.getloc(), new time_punct<CharT> (static_cast<timezone::type> (m), std::basic_string<
+        os.imbue(std::locale(os.getloc(), new time_punct<CharT> (static_cast<timezone_type> (m), std::basic_string<
             CharT>())));
         return os;
       }
@@ -134,14 +135,14 @@ namespace boost
       std::basic_istream<CharT, Traits>&
       operator >>(std::basic_istream<CharT, Traits>& is, time_man m)
       {
-        is.imbue(std::locale(is.getloc(), new time_punct<CharT> (static_cast<timezone::type> (m), std::basic_string<
+        is.imbue(std::locale(is.getloc(), new time_punct<CharT> (static_cast<timezone_type> (m), std::basic_string<
             CharT>())));
         return is;
       }
 
     }
 
-    inline detail::time_man time_fmt(timezone::type f)
+    inline detail::time_man time_fmt(timezone_type f)
     {
       return detail::time_man(f);
     }
@@ -261,7 +262,7 @@ namespace boost
         {
           const _CharT* pb = 0; //nullptr;
           const _CharT* pe = pb;
-          timezone::type tz = timezone::utc;
+          timezone_type tz = timezone::utc;
           typedef time_punct<_CharT> F;
           std::locale loc = os.getloc();
           if (std::has_facet<F>(loc))
@@ -420,20 +421,19 @@ namespace boost
           const _CharT* pe = pb;
           typedef time_punct<_CharT> F;
           std::locale loc = is.getloc();
-          timezone::type tz = timezone::utc;
+          timezone_type tz = timezone::utc;
           if (std::has_facet<F>(loc))
           {
             const F& f = std::use_facet<F>(loc);
             pb = f.fmt().data();
             pe = pb + f.fmt().size();
-            tz = f.timezone::type();
+            tz = f.timezone_type();
           }
           const std::time_get<_CharT>& tg = std::use_facet<
               std::time_get<_CharT> >(loc);
           const std::ctype<_CharT>& ct =
               std::use_facet<std::ctype<_CharT> >(loc);
-          tm tm =
-          { 0 };
+          tm tm; // {0}
           typedef std::istreambuf_iterator<_CharT, _Traits> _I;
           if (pb == pe)
           {

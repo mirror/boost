@@ -643,11 +643,14 @@ namespace boost
             }
             common_type_t t = r * num;
             t /= den;
-            if ((duration_values<Rep>::max)() < t)
-            {
-              // Conversion to Period overflowed
-              is.setstate(is.failbit);
-              return is;
+            if (t>0) {
+              Rep pt = t;
+              if ((duration_values<Rep>::max)() < pt)
+              {
+                // Conversion to Period overflowed
+                is.setstate(is.failbit);
+                return is;
+              }
             }
             // Success!  Store it.
             r = Rep(t);
