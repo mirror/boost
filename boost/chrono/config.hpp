@@ -66,6 +66,10 @@
 #     define BOOST_CHRONO_HAS_THREAD_CLOCK
 #     define BOOST_CHRONO_THREAD_CLOCK_IS_STEADY true
 #   endif
+#   if defined(sun) || defined(__sun)
+#     undef BOOST_CHRONO_HAS_THREAD_CLOCK
+#     undef BOOST_CHRONO_THREAD_CLOCK_IS_STEADY
+#   endif
 # endif
 
 #if defined(BOOST_CHRONO_THREAD_DISABLED) && defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
