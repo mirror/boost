@@ -19,8 +19,10 @@
 #include <boost/detail/select_type.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/enum.hpp>
 #include <boost/limits.hpp>
 #include <boost/type_traits/add_lvalue_reference.hpp>
+#include <boost/pointer_to_other.hpp>
 
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
 #  include <memory>
@@ -96,6 +98,22 @@ namespace boost { namespace unordered { namespace detail {
     struct choice2 : choice3 { typedef char (&type)[2]; };
     struct choice1 : choice2 { typedef char (&type)[1]; };
     choice1 choose();
+
+    typedef choice1::type yes_type;
+    typedef choice2::type no_type;
+
+    struct private_type
+    {
+       private_type const &operator,(int) const;
+    };
+
+    template <typename T>
+    no_type is_private_type(T const&);
+    yes_type is_private_type(private_type const&);
+
+    struct convert_from_anything {
+        convert_from_anything(...);
+    };
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1400
 
@@ -176,44 +194,40 @@ namespace boost { namespace unordered { namespace detail {
         static BOOST_PP_CAT(choice, result)::type test(                     \
             BOOST_PP_CAT(choice, count))
 
-#define BOOST_UNORDERED_HAS_EXPRESSION(name, expression)                    \
+#define BOOST_UNORDERED_HAS_FUNCTION(name, thing, args, _)                  \
     struct BOOST_PP_CAT(has_, name)                                         \
     {                                                                       \
-        BOOST_UNORDERED_CHECK_EXPRESSION(1, 1, expression);                 \
+        BOOST_UNORDERED_CHECK_EXPRESSION(1, 1, make< thing >().name args);  \
         BOOST_UNORDERED_DEFAULT_EXPRESSION(2, 2);                           \
                                                                             \
         enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };\
     }
 
     template <typename T>
-    BOOST_UNORDERED_HAS_EXPRESSION(
-        select_on_container_copy_construction,
-        make<U const>().select_on_container_copy_construction()
+    BOOST_UNORDERED_HAS_FUNCTION(
+        select_on_container_copy_construction, U const, (), 0
     );
 
     // Only supporting the basic copy constructor for now.
 
     template <typename T, typename ValueType>
-    BOOST_UNORDERED_HAS_EXPRESSION(
-        construct,
-        make<U>().construct(make<ValueType*>(), make<ValueType const>())
+    BOOST_UNORDERED_HAS_FUNCTION(
+        construct, U, (make<ValueType*>(), make<ValueType const>()), 2
     );
 
     template <typename T, typename ValueType>
-    BOOST_UNORDERED_HAS_EXPRESSION(
-        destroy,
-        make<U>().destroy(make<ValueType*>())
+    BOOST_UNORDERED_HAS_FUNCTION(
+        destroy, U, (make<ValueType*>()), 1
     );
 
     template <typename T>
-    BOOST_UNORDERED_HAS_EXPRESSION(
-        max_size,
-        make<U const>().max_size()
+    BOOST_UNORDERED_HAS_FUNCTION(
+        max_size, U const, (), 0
     );
 
 #else
 
-   template <typename T> struct identity { typedef T type; };
+    template <typename T> struct identity { typedef T type; };
 
 #define BOOST_UNORDERED_CHECK_MEMBER(count, result, name, member)           \
                                                                             \
@@ -232,27 +246,73 @@ namespace boost { namespace unordered { namespace detail {
     template <class U> static BOOST_PP_CAT(choice, result)::type            \
         test(BOOST_PP_CAT(choice, count))
 
+#define BOOST_UNORDERED_WRAP_PARAMATERS(z, n, data) convert_from_anything
+
+#define BOOST_UNORDERED_HAS_MEMBER(name)                                    \
+    struct BOOST_PP_CAT(has_, name)                                         \
+    {                                                                       \
+        struct base_mixin { void name(); };                                 \
+        struct base : public T, public base_mixin {};                       \
+                                                                            \
+        BOOST_UNORDERED_CHECK_MEMBER(1, 1, name, void (base_mixin::*)());   \
+        BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);                               \
+                                                                            \
+        enum { value = sizeof(choice2::type) ==                             \
+            sizeof(test<base>(choose()))                                    \
+        };                                                                  \
+    }
+
+#define BOOST_UNORDERED_HAS_FUNCTION(name, thing, args, arg_count)          \
+    struct BOOST_PP_CAT(has_, name)                                         \
+    {                                                                       \
+        struct base_mixin { void name(); };                                 \
+        struct base : public T, public base_mixin {};                       \
+                                                                            \
+        BOOST_UNORDERED_CHECK_MEMBER(1, 1, name, void (base_mixin::*)());   \
+        BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);                               \
+                                                                            \
+        enum { has_member = sizeof(choice2::type) ==                        \
+            sizeof(test<base>(choose()))                                    \
+        };                                                                  \
+                                                                            \
+        template <typename U>                                               \
+        struct wrap : U                                                     \
+        {                                                                   \
+            using U::name;                                                  \
+            private_type name(                                              \
+            BOOST_PP_ENUM(arg_count, BOOST_UNORDERED_WRAP_PARAMATERS, _)    \
+            );                                                              \
+        };                                                                  \
+                                                                            \
+        template <typename U>                                               \
+        struct impl                                                         \
+        {                                                                   \
+            enum { value = sizeof(is_private_type((                         \
+                make<wrap< thing > >().name args                            \
+            , 0))) == sizeof(yes_type) };                                   \
+        };                                                                  \
+                                                                            \
+        enum { value =                                                      \
+            boost::detail::if_true<has_member>::                            \
+            BOOST_NESTED_TEMPLATE then<impl<T>, false_type>::type::value    \
+        };                                                                  \
+    }
 
     template <typename T>
-    struct has_select_on_container_copy_construction
-    {
-        BOOST_UNORDERED_CHECK_MEMBER(1, 1,
-            select_on_container_copy_construction,
-            T (T::*)() const);
-        BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);
- 
-        enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };
-    };
+    BOOST_UNORDERED_HAS_MEMBER(select_on_container_copy_construction);
 
-    // Detection isn't reliable enough, so just assume that we have these
-    // functions.
-    
-    template <typename Alloc, typename value_type>
-    struct has_construct : true_type {};
-    template <typename Alloc, typename value_type>
-    struct has_destroy : true_type {};
-    template <typename Alloc>
-    struct has_max_size : true_type {};
+    template <typename T, typename ValueType>
+    BOOST_UNORDERED_HAS_FUNCTION(
+        construct, U, (make<ValueType*>(), make<ValueType const>()), 2
+    );
+
+    template <typename T, typename ValueType>
+    BOOST_UNORDERED_HAS_FUNCTION(
+        destroy, U, (make<ValueType*>()), 1
+    );
+
+    template <typename T>
+    BOOST_UNORDERED_HAS_MEMBER(max_size);
 
 #endif
 
@@ -295,27 +355,20 @@ namespace boost { namespace unordered { namespace detail {
         typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, pointer, value_type*)
             pointer;
 
-        // For now always use the allocator's const_pointer.
-
-        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_pointer,
-        //    typename pointer_traits<pointer>::
-        //    BOOST_NESTED_TEMPLATE rebind<const value_type>::other)
-        //    const_pointer;
+        template <typename T>
+        struct pointer_to_other : boost::pointer_to_other<pointer, T> {};
 
         typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_pointer,
-            value_type const*) const_pointer;
+            typename pointer_to_other<const value_type>::type)
+            const_pointer;
 
-        // I'm not using void pointers for now.
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, void_pointer,
+            typename pointer_to_other<void>::type)
+            void_pointer;
 
-        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, void_pointer,
-        //    BOOST_NESTED_TEMPLATE pointer_traits<pointer>::
-        //    BOOST_NESTED_TEMPLATE rebind<void>::other)
-        //    void_pointer;
-
-        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_void_pointer,
-        //    typename pointer_traits<pointer>::
-        //    BOOST_NESTED_TEMPLATE rebind<const void>::other)
-        //    const_void_pointer;
+        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_void_pointer,
+            typename pointer_to_other<const void>::type)
+            const_void_pointer;
 
         typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, difference_type,
             std::ptrdiff_t) difference_type;

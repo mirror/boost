@@ -136,8 +136,17 @@ void test_allocator1()
 
 // allocator 2
 
+template <typename Alloc>
+struct allocator2_base
+{
+    Alloc select_on_container_copy_construction() const {
+        ++selected;
+        return Alloc();
+    }
+};
+
 template <typename T>
-struct allocator2
+struct allocator2 : allocator2_base<allocator2<T> >
 {
     typedef T value_type;
     typedef T* pointer;
@@ -149,12 +158,6 @@ struct allocator2
     typedef no_type propagate_on_container_copy_assignment;
     typedef no_type propagate_on_container_move_assignment;
     typedef no_type propagate_on_container_swap;
-
-    // Note: Not const - so it shouldn't be called.
-    allocator2<T> select_on_container_copy_construction() {
-        ++selected;
-        return allocator2<T>();
-    }
 };
 
 void test_allocator2()
@@ -169,7 +172,7 @@ void test_allocator2()
     BOOST_TEST(!traits::propagate_on_container_copy_assignment::value);
     BOOST_TEST(!traits::propagate_on_container_move_assignment::value);
     BOOST_TEST(!traits::propagate_on_container_swap::value);
-    BOOST_TEST(call_select<allocator>() == 0);
+    BOOST_TEST(call_select<allocator>() == 1);
 }
 
 // allocator 3
