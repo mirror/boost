@@ -32,6 +32,7 @@
 #include <boost/proto/args.hpp>
 #include <boost/proto/traits.hpp>
 #include <boost/proto/generate.hpp>
+#include <boost/proto/detail/remove_typename.hpp>
 
 #ifdef _MSC_VER
 #define BOOST_PROTO_DISABLE_MSVC_C4522 __pragma(warning(disable: 4522))
@@ -160,15 +161,16 @@ namespace boost { namespace proto
                                                                                                     \
         typedef Expr proto_base_expr_; /**< INTERNAL ONLY */                                        \
         typedef typename proto_base_expr_::proto_base_expr proto_base_expr;                         \
-        typedef Domain proto_domain;                                                                \
+        typedef BOOST_PROTO_REMOVE_TYPENAME(Domain) proto_domain;                                   \
         typedef Derived proto_derived_expr;                                                         \
+        typedef Domain::proto_generator proto_generator;                                            \
         typedef typename proto_base_expr::proto_tag proto_tag;                                      \
         typedef typename proto_base_expr::proto_args proto_args;                                    \
         typedef typename proto_base_expr::proto_arity proto_arity;                                  \
         typedef typename proto_base_expr::proto_grammar proto_grammar;                              \
         typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;        \
         typedef void proto_is_expr_; /**< INTERNAL ONLY */                                          \
-        static const long proto_arity_c = proto_base_expr::proto_arity_c;                \
+        static const long proto_arity_c = proto_base_expr::proto_arity_c;                           \
         typedef boost::proto::tag::proto_expr fusion_tag;                                           \
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)                        \
                                                                                                     \
@@ -197,7 +199,6 @@ namespace boost { namespace proto
     #define BOOST_PROTO_BASIC_EXTENDS(Expr, Derived, Domain)                                        \
         BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)                                           \
         typedef void proto_is_aggregate_;                                                           \
-        typedef Domain::proto_generator proto_generator;                                            \
         /**< INTERNAL ONLY */
 
     #define BOOST_PROTO_EXTENDS_COPY_ASSIGN_IMPL_(This, Const, Typename)                            \
@@ -504,8 +505,7 @@ namespace boost { namespace proto
             {}
 
             typedef extends proto_extends;
-            BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
-            typedef typename Domain::proto_generator proto_generator;
+            BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, typename Domain)
             BOOST_PROTO_EXTENDS_ASSIGN_CONST_()
             BOOST_PROTO_EXTENDS_SUBSCRIPT_CONST()
 
@@ -533,8 +533,7 @@ namespace boost { namespace proto
             {}
 
             typedef extends proto_extends;
-            BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
-            typedef typename Domain::proto_generator proto_generator;
+            BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, typename Domain)
             BOOST_PROTO_EXTENDS_ASSIGN_()
             BOOST_PROTO_EXTENDS_SUBSCRIPT()
 

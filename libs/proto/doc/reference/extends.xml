@@ -378,6 +378,10 @@ struct my_expr
 <macroname>BOOST_PROTO_EXTENDS_SUBSCRIPT</macroname>()
 <macroname>BOOST_PROTO_EXTENDS_FUNCTION</macroname>()</programlisting>
       </para>
+      <para>If the <computeroutput>Domain</computeroutput> parameter is dependent, you can specify it as
+        <computeroutput>typename Domain</computeroutput>, as in
+        <computeroutput>BOOST_PROTO_EXTENDS(Expr, Derived, typename Domain)</computeroutput>
+      </para>
       <para>
         <emphasis role="bold">Example:</emphasis><programlisting>template&lt; class Expr &gt;
 struct my_expr;
@@ -420,9 +424,14 @@ my_expr&lt; <classname alt="boost::proto::terminal">proto::terminal</classname>&
         <computeroutput>Derived</computeroutput> is the type of the enclosing struct.
         <computeroutput>Domain</computeroutput> is the Proto domain to which this expression extension belongs.
         (See <computeroutput><classname alt="boost::proto::domain">proto::domain&lt;&gt;</classname></computeroutput>.)
+        Can be preceeded with "<computeroutput>typename</computeroutput>" if the specified domain is a dependent type.
       </para>
       <para><computeroutput>BOOST_PROTO_BASIC_EXTENDS()</computeroutput> adds to its enclosing struct
         exactly one data member of type <computeroutput>Expr</computeroutput>. 
+      </para>
+      <para>If the <computeroutput>Domain</computeroutput> parameter is dependent, you can specify it as
+        <computeroutput>typename Domain</computeroutput>, as in
+        <computeroutput>BOOST_PROTO_BASIC_EXTENDS(Expr, Derived, typename Domain)</computeroutput>
       </para>
       <para>
         <emphasis role="bold">Example:</emphasis><programlisting>template&lt; class Expr &gt;
