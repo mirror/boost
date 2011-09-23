@@ -410,7 +410,7 @@ namespace boost { namespace unordered { namespace detail {
         static void construct(Alloc&, T* p, T const& x, typename
                 boost::disable_if<has_construct<Alloc, T>, void*>::type = 0)
         {
-            new ((void*) p) T(x);
+            new (p) T(x);
         }
 
         template <typename T>
