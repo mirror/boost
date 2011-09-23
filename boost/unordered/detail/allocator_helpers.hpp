@@ -178,6 +178,9 @@ namespace boost { namespace unordered { namespace detail {
 
 #if !defined(BOOST_NO_SFINAE_EXPR) || BOOST_WORKAROUND(BOOST_MSVC, >= 1500)
 
+#   define BOOST_UNORDERED_HAVE_CALL_0_DETECTION 1
+#   define BOOST_UNORDERED_HAVE_CALL_N_DETECTION 1
+
     template <typename T, unsigned int> struct expr_test;
     template <typename T> struct expr_test<T, sizeof(char)> : T {};
     template <typename U> static char for_expr_test(U const&);
@@ -203,29 +206,11 @@ namespace boost { namespace unordered { namespace detail {
         enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };\
     }
 
-    template <typename T>
-    BOOST_UNORDERED_HAS_FUNCTION(
-        select_on_container_copy_construction, U const, (), 0
-    );
-
-    // Only supporting the basic copy constructor for now.
-
-    template <typename T, typename ValueType>
-    BOOST_UNORDERED_HAS_FUNCTION(
-        construct, U, (make<ValueType*>(), make<ValueType const>()), 2
-    );
-
-    template <typename T, typename ValueType>
-    BOOST_UNORDERED_HAS_FUNCTION(
-        destroy, U, (make<ValueType*>()), 1
-    );
-
-    template <typename T>
-    BOOST_UNORDERED_HAS_FUNCTION(
-        max_size, U const, (), 0
-    );
-
 #else
+
+#   define BOOST_UNORDERED_HAVE_CALL_0_DETECTION 0
+#   define BOOST_UNORDERED_HAVE_CALL_N_DETECTION \
+    !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x5100))
 
     template <typename T> struct identity { typedef T type; };
 
@@ -298,9 +283,27 @@ namespace boost { namespace unordered { namespace detail {
         };                                                                  \
     }
 
+#endif
+
+#if BOOST_UNORDERED_HAVE_CALL_0_DETECTION
+    template <typename T>
+    BOOST_UNORDERED_HAS_FUNCTION(
+        select_on_container_copy_construction, U const, (), 0
+    );
+
+    template <typename T>
+    BOOST_UNORDERED_HAS_FUNCTION(
+        max_size, U const, (), 0
+    );
+#else
     template <typename T>
     BOOST_UNORDERED_HAS_MEMBER(select_on_container_copy_construction);
 
+    template <typename T>
+    BOOST_UNORDERED_HAS_MEMBER(max_size);
+#endif
+
+#if BOOST_UNORDERED_HAVE_CALL_N_DETECTION
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_FUNCTION(
         construct, U, (make<ValueType*>(), make<ValueType const>()), 2
@@ -310,10 +313,12 @@ namespace boost { namespace unordered { namespace detail {
     BOOST_UNORDERED_HAS_FUNCTION(
         destroy, U, (make<ValueType*>()), 1
     );
+#else
+    template <typename T>
+    BOOST_UNORDERED_HAS_MEMBER(construct);
 
     template <typename T>
-    BOOST_UNORDERED_HAS_MEMBER(max_size);
-
+    BOOST_UNORDERED_HAS_MEMBER(destroy);
 #endif
 
     template <typename Alloc>
@@ -512,5 +517,21 @@ namespace boost { namespace unordered { namespace detail {
             allocator_array_constructor const&);
     };
 }}}
+
+#undef BOOST_UNORDERED_DEFAULT_TYPE_TMPLT
+#undef BOOST_UNORDERED_DEFAULT_TYPE
+#undef BOOST_UNORDERED_HAVE_CALL_0_DETECTION
+#undef BOOST_UNORDERED_HAVE_CALL_N_DETECTION
+#undef BOOST_UNORDERED_HAS_FUNCTION
+#if defined(BOOST_UNORDERED_CHECK_EXPRESSION)
+#   undef BOOST_UNORDERED_CHECK_EXPRESSION
+#   undef BOOST_UNORDERED_DEFAULT_EXPRESSION
+#endif
+#if defined(BOOST_UNORDERED_HAS_MEMBER)
+#   undef BOOST_UNORDERED_HAS_MEMBER
+#   undef BOOST_UNORDERED_CHECK_MEMBER
+#   undef BOOST_UNORDERED_DEFAULT_MEMBER
+#   undef BOOST_UNORDERED_WRAP_PARAMATERS
+#endif
 
 #endif
