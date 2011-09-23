@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/matches.hpp">
   <para>
     Contains definition of the
@@ -427,25 +427,29 @@ struct IsIntegral2 :
       <struct name="switch_">
         <template>
           <template-type-parameter name="Cases"/>
+	  <template-type-parameter name="Transform"/>
         </template>
-        <inherit><classname>proto::transform</classname>&lt;switch_&lt;Cases&gt; &gt;</inherit>
-        <purpose>For matching one of a set of alternate grammars, which are looked up based on an
-          expression's tag type. When used as a transform,
+        <inherit><classname>proto::transform</classname>&lt;switch_&lt;Cases, Transform&gt; &gt;</inherit>
+        <purpose>For matching one of a set of alternate grammars, which are looked up based on
+          the result type of the transform passed in second template parameter. 
+          If no transform is passed, the default one is <computeroutput>proto::tag_of()</computeroutput>
+          so the default matching is based on the expression's tag type. When used as a transform,
           <computeroutput>proto::switch_&lt;&gt;</computeroutput> applies the transform associated
           with the sub-grammar that matches the expression.</purpose>
         <description>
-          <para>
-            An expression type <computeroutput>E</computeroutput> matches
-            <computeroutput>proto::switch_&lt;C&gt;</computeroutput> if
-            <computeroutput>E</computeroutput> matches
-            <computeroutput>C::case_&lt;E::proto_tag&gt;</computeroutput>.
+	      <para>
+	        An expression type <computeroutput>E</computeroutput> matches
+            <computeroutput>proto::switch_&lt;C,T&gt;</computeroutput> if
+	        <computeroutput>E</computeroutput> matches
+            <computeroutput>C::case_&lt;boost::result_of&lt;T(E)&gt;::type&gt;</computeroutput>.
           </para>
-          <para>
-            When applying <computeroutput>proto::switch_&lt;C&gt;</computeroutput> as a transform
-            with an expression <computeroutput>e</computeroutput> of type
-            <computeroutput>E</computeroutput>, state <computeroutput>s</computeroutput> and
-            data <computeroutput>d</computeroutput>, it is equivalent to
-            <computeroutput>C::case_&lt;E::proto_tag&gt;()(e, s, d)</computeroutput>.
+	      <para>
+	        When applying <computeroutput>proto::switch_&lt;C,T&gt;</computeroutput> as a
+            transform with an expression <computeroutput>e</computeroutput> of type
+            <computeroutput>E</computeroutput>, state <computeroutput>s</computeroutput> of
+            type <computeroutput>S</computeroutput> and data <computeroutput>d</computeroutput>
+            of type <computeroutput>D</computeroutput>, it is equivalent to
+            <computeroutput>C::case_&lt;boost::result_of&lt;T(E,S,D)&gt;::type&gt;()(e, s, d)</computeroutput>.
           </para>
         </description>
         <struct name="impl">
@@ -455,7 +459,10 @@ struct IsIntegral2 :
             <template-type-parameter name="Data"/>
           </template>
           <inherit><type>
-    Cases::template case_&lt;typename Expr::tag_type&gt;::template impl&lt;Expr, State, Data&gt;</type></inherit>
+    Cases::template case_&lt;
+      typename <classname>when</classname>&lt;_, Transform&gt;::template impl&lt;Expr, State, Data&gt;::result_type 
+    &gt;::template impl&lt;Expr, State, Data&gt;</type>
+          </inherit>
         </struct>
         <typedef name="proto_grammar">
           <type>switch_</type>

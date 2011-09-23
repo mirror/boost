@@ -310,9 +310,9 @@ namespace boost { namespace proto
             >
             struct impl
               : detail::make_expr_<
-                  Tag
-                , Domain
-                  BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A)
+                    Tag
+                  , Domain
+                    BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A)
                 >
             {};
         };

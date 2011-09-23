@@ -173,8 +173,8 @@ namespace boost { namespace proto
                 typename uncvref<
                     typename Grammar::template impl<
                         typename result_of::child_c<Expr, 1>::type
-                        , State
-                        , Data
+                      , State
+                      , Data
                     >::result_type
                 >::type
             >

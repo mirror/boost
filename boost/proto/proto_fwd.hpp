@@ -269,6 +269,9 @@ namespace boost { namespace proto
 
     using namespace tagns_;
 
+    template<typename Expr>
+    struct tag_of;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     struct _;
 
@@ -359,7 +362,7 @@ namespace boost { namespace proto
     template<typename Condition, typename Then = _, typename Else = not_<_> >
     struct if_;
 
-    template<typename Cases>
+    template<typename Cases, typename Transform = tag_of<_>()>
     struct switch_;
 
     template<typename T>
@@ -460,9 +463,6 @@ namespace boost { namespace proto
 
     template<typename SubDomain, typename SuperDomain>
     struct is_sub_domain_of;
-
-    template<typename Expr>
-    struct tag_of;
 
     template<typename Expr>
     struct arity_of;
