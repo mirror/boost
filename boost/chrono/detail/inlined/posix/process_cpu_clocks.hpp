@@ -14,8 +14,9 @@
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/assert.hpp>
 
-# include <sys/times.h>
-# include <unistd.h>
+#include <sys/times.h>
+#include <unistd.h>
+#include <time.h>  // for clock_gettime
 
 
 namespace boost { namespace chrono {
@@ -42,7 +43,16 @@ namespace chrono_detail
 
 process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
 {
+#if defined(_POSIX_CPUTIME)
+  timespec ts;
+  if ( ::clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &ts ) )
+  {
+    BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+  }
 
+  return time_point(duration(
+    static_cast<system_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
+#else
     tms tm;
     clock_t c = ::times( &tm );
     if ( c == clock_t(-1) ) // error
@@ -62,6 +72,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NO
         }
     }
     return time_point();
+#endif
 }
 process_real_cpu_clock::time_point process_real_cpu_clock::now(
         system::error_code & ec) 
