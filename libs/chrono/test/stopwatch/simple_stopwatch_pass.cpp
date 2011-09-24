@@ -16,10 +16,6 @@
 #include <boost/chrono/stopwatches/simple_stopwatch.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/thread_clock.hpp>
-#include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
-#include <boost/chrono/stopwatches/reporters/process_default_formatter.hpp>
-#include <boost/chrono/stopwatches/reporters/thread_default_formatter.hpp>
-#include <boost/chrono/chrono_io.hpp>
 #include <boost/system/system_error.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -83,7 +79,6 @@ void check_elapsed(bool check=true)
   Stopwatch sw;
   ex::sleep_for(boost::chrono::milliseconds(100));
   typename Stopwatch::duration d=sw.elapsed();
-  std::cout << d << std::endl;
   if (check)
     BOOST_TEST(d >= boost::chrono::milliseconds(100));
 }
