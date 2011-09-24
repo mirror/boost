@@ -101,10 +101,10 @@ namespace boost { namespace chrono {
             rep   user;    // user cpu time
             rep system;  // system cpu time
 
-            //            operator rep()
-            //{
-            //  return real;
-            //}
+            operator rep()
+            {
+              return real;
+            }
             template <typename Rep2>
             bool operator==(process_times<Rep2> const& rhs) {
                 return (real==rhs.real &&
@@ -253,6 +253,16 @@ namespace chrono
         const duration<process_times<Rep2>, Period2>& rhs)
   {
     return rhs < lhs;
+  }
+
+  template <class Rep1, class Period1, class Rep2, class Period2>
+  inline BOOST_CHRONO_CONSTEXPR
+  bool
+  operator< (const duration<process_times<Rep1>, Period1>& lhs,
+        const duration<process_times<Rep2>, Period2>& rhs)
+  {
+    return boost::chrono::detail::duration_lt<
+      duration<Rep1, Period1>, duration<Rep2, Period2> >()(lhs, rhs);
   }
 
 
