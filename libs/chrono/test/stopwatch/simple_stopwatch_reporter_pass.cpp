@@ -78,9 +78,10 @@ struct file_line {
 template <typename Clock>
 void check_file_line()
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
+  typedef stopwatch_reporter<simple_stopwatch<Clock>, elapsed_formatter > Reporter;
   Reporter _("%1%\n");
   file_line fl(__FILE__, __LINE__);
+  ex::sleep_for(milliseconds(100));
 
 }
 
@@ -131,7 +132,7 @@ void check_all(bool check=true)
   check_constructor_throws<Clock>();
   check_elapsed<Clock>(check);
   check_report<Clock>();
-  //check_file_line<Clock>();
+  check_file_line<Clock>();
 }
 
 int main()

@@ -122,12 +122,13 @@ template <typename Clock>
 void check_file_line()
 {
   typedef simple_stopwatch<Clock> Stopwatch;
-  typedef typename stopwatch_reporter_default_formatter<Stopwatch>::type Formatter;
-  typedef lightweight_stopwatch_reporter<Stopwatch> Reporter;
+  typedef elapsed_formatter Formatter;
+  typedef lightweight_stopwatch_reporter<Stopwatch,Formatter> Reporter;
   static Formatter fmtr("%1%[%2%] Elapsed time: %3%\n");
   fmtr % __FILE__ % __LINE__;
 
   Reporter _(fmtr);
+  ex::sleep_for(milliseconds(100));
 }
 
 template <typename Clock>
@@ -139,7 +140,7 @@ void check_all(bool check=true)
   check_constructor_throws<Clock>();
   check_elapsed<Clock>(check);
   check_report<Clock>();
-  //check_file_line<Clock>();
+  check_file_line<Clock>();
 }
 
 int main()
