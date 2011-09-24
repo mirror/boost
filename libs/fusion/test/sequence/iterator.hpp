@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2011 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <string>
@@ -113,7 +113,7 @@ void test()
         BOOST_TEST(*next(next(next(i))) == s);
 
         next(next(next(next(i)))); // end
-        
+
 #ifdef FUSION_TEST_FAIL
         next(next(next(next(next(i))))); // past the end: must not compile
 #endif
