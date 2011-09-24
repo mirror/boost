@@ -16,4 +16,10 @@
 #include <boost/fusion/adapted/std_pair.hpp>
 #include <boost/fusion/adapted/struct.hpp>
 
+// The std_tuple_iterator adaptor only supports implementations
+// using variadic templates
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#include <boost/fusion/adapted/std_tuple.hpp>
+#endif
+
 #endif
