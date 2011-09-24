@@ -244,18 +244,25 @@ rule chrono-compile2 ( sources : name )
     test-suite "stopwatch"
         :
         [ chrono-run2-mt stopwatch/simple_stopwatch_pass.cpp  : simple_stopwatch_pass ]
+        ;
+
+    test-suite "stopwatch_ex"
+        :
         [ chrono-run ../example/stopwatch_example.cpp  ]
         ;
 
     test-suite "stopclock"
         :
-        [ chrono-run2-mt ../example/lightweight_stopwatch_reporter_example.cpp  : lightweight_stopwatch_reporter_example ]
-        [ chrono-run2-mt ../example/stopwatch_reporter_example.cpp  : stopwatch_reporter_example ]
         [ chrono-run2-mt stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_pass ]
         [ chrono-run2-mt stopwatch/simple_lightweight_stopwatch_reporter_pass.cpp  : simple_lightweight_stopwatch_reporter_pass ]
         ;
+    test-suite "stopclock_ex"
+        :
+        [ chrono-run2-mt ../example/lightweight_stopwatch_reporter_example.cpp  : lightweight_stopwatch_reporter_example ]
+        [ chrono-run2-mt ../example/stopwatch_reporter_example.cpp  : stopwatch_reporter_example ]
+        ;
 
-    test-suite "io"
+    test-suite "io_ex"
         :
         [ chrono-run-mt ../example/io_ex1.cpp  ]
         [ chrono-run ../example/io_ex2.cpp  ]
