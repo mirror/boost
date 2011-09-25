@@ -271,6 +271,12 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run ../example/io_ex5.cpp  ]
         ;
 
+    test-suite "io"
+        :
+        [ chrono-run io/duration_input.cpp  ]
+        [ chrono-run io/duration_output.cpp  ]
+        ;
+
     test-suite "win32"
         :
         [ chrono-run win32_test.cpp  ]
