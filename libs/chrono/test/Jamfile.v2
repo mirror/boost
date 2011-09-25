@@ -275,6 +275,8 @@ rule chrono-compile2 ( sources : name )
         :
         [ chrono-run io/duration_input.cpp  ]
         [ chrono-run io/duration_output.cpp  ]
+        [ chrono-run io/time_point_input.cpp  ]
+        [ chrono-run io/time_point_output.cpp  ]
         ;
 
     test-suite "win32"

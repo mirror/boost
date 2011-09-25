@@ -1,16 +1,6 @@
-//  io_ex2.cpp  ----------------------------------------------------------//
-
-//  Copyright 2010 Howard Hinnant
-//  Copyright 2010 Vicente J. Botet Escriba
-
+//  Copyright 2011 Vicente J. Botet Escriba
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
-
-/*
- This code was adapted by Vicente J. Botet Escriba from Hinnant's html documentation.
- Many thanks to Howard for making his code available under the Boost license.
-
- */
 
 #include <boost/chrono/chrono_io.hpp>
 #include <sstream>
@@ -53,6 +43,8 @@ int main()
   test_good("5000 hours", hours(5000));
   test_good("5000 minutes", minutes(5000));
   test_good("5000 seconds", seconds(5000));
+  test_good("1 seconds", seconds(1));
+  test_good("-1 seconds", seconds(-1));
   test_good("5000 milliseconds", milliseconds(5000));
   test_good("5000 microseconds", microseconds(5000));
   test_good("5000 nanoseconds", nanoseconds(5000));
