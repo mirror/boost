@@ -11,6 +11,7 @@
 
 #ifndef BOOST_CHRONO_IO_DURATION_IO_HPP
 #define BOOST_CHRONO_IO_DURATION_IO_HPP
+#include <iostream>
 
 #include <boost/chrono/chrono.hpp>
 #include <boost/ratio/ratio_io.hpp>
@@ -291,7 +292,7 @@ namespace boost
     {
 
       //! the type of the state to restore
-      typedef std::basic_ios<CharT, Traits> state_type;
+      typedef std::basic_ostream<CharT, Traits> state_type;
       //! the type of aspect to save
       typedef duration_style::type aspect_type;
 
@@ -306,13 +307,13 @@ namespace boost
         typedef duration_punct<CharT> Facet;
         std::locale loc = s_save_.getloc();
         if (!std::has_facet<Facet>(loc))
-        s_save_.imbue(std::locale(loc, new Facet()));
+          s_save_.imbue(std::locale(loc, new Facet()));
 
-        const Facet& f = std::use_facet<Facet>(loc);
+        const Facet& f = std::use_facet<Facet>(s_save_.getloc());
         if (f.is_long_name())
-        a_save_ = duration_style::prefix_text;
+          a_save_ = duration_style::prefix_text;
         else
-        a_save_ = duration_style::symbol;
+          a_save_ = duration_style::symbol;
       }
 
       /**
@@ -363,7 +364,7 @@ namespace boost
           std::locale loc = os.getloc();
 
           if (!std::has_facet<Facet>(loc))
-          os.imbue(std::locale(loc, new Facet));
+            os.imbue(std::locale(loc, new Facet));
           const Facet& f = std::use_facet<Facet>(os.getloc());
           return os << d.count() << ' ' << f.template name<Rep,Period>(d);
         }
@@ -411,7 +412,7 @@ namespace boost
       typedef duration_punct<CharT> Facet;
       std::locale loc = is.getloc();
       if (!std::has_facet<Facet>(loc))
-      is.imbue(std::locale(loc, new Facet));
+        is.imbue(std::locale(loc, new Facet));
       loc = is.getloc();
       const Facet& f = std::use_facet<Facet>(loc);
       typedef typename chrono_detail::duration_io_intermediate<Rep>::type intermediate_type;
