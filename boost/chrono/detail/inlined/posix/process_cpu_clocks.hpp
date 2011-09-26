@@ -51,7 +51,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NO
   }
 
   return time_point(duration(
-    static_cast<system_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
+    static_cast<process_real_cpu_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
 #else
     tms tm;
     clock_t c = ::times( &tm );

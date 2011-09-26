@@ -249,21 +249,21 @@ namespace boost
 #endif
     } // detail
 
-    template<class _CharT, class _Traits, class _Duration>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& os, const time_point<
-        system_clock, _Duration>& tp)
+    template<class CharT, class Traits, class Duration>
+    std::basic_ostream<CharT, Traits>&
+    operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<
+        system_clock, Duration>& tp)
     {
-      typename std::basic_ostream<_CharT, _Traits>::sentry ok(os);
+      typename std::basic_ostream<CharT, Traits>::sentry ok(os);
       if (ok)
       {
         bool failed = false;
         try
         {
-          const _CharT* pb = 0; //nullptr;
-          const _CharT* pe = pb;
+          const CharT* pb = 0; //nullptr;
+          const CharT* pe = pb;
           timezone_type tz = timezone::utc;
-          typedef time_punct<_CharT> F;
+          typedef time_punct<CharT> F;
           std::locale loc = os.getloc();
           if (std::has_facet<F>(loc))
           {
@@ -290,7 +290,7 @@ namespace boost
 #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
             std::tm *tmp = 0;
             if((tmp = gmtime(&t)) == 0)
-            failed = true;
+              failed = true;
             tm = *tmp;
 #else
             if (gmtime_r(&t, &tm) == 0)
@@ -300,36 +300,36 @@ namespace boost
           }
           if (!failed)
           {
-            const std::time_put<_CharT>& tpf = std::use_facet<std::time_put<
-                _CharT> >(loc);
+            const std::time_put<CharT>& tpf = std::use_facet<std::time_put<
+                CharT> >(loc);
             if (pb == pe)
             {
-              _CharT
+              CharT
                   pattern[] =
                       { '%', 'Y', '-', '%', 'm', ' ', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':' };
               pb = pattern;
-              pe = pb + sizeof(pattern) / sizeof(_CharT);
+              pe = pb + sizeof(pattern) / sizeof(CharT);
               failed = tpf.put(os, os, os.fill(), &tm, pb, pe).failed();
               if (!failed)
               {
                 duration<double> d = tp - system_clock::from_time_t(t)
                     + seconds(tm.tm_sec);
                 if (d.count() < 10)
-                  os << _CharT('0');
+                  os << CharT('0');
                 std::ios::fmtflags flgs = os.flags();
                 os.setf(std::ios::fixed, std::ios::floatfield);
                 os << d.count();
                 os.flags(flgs);
                 if (tz == timezone::local)
                 {
-                  _CharT sub_pattern[] =
+                  CharT sub_pattern[] =
                   { ' ', '%', 'z' };
                   pb = sub_pattern;
-                  pe = pb + +sizeof(sub_pattern) / sizeof(_CharT);
+                  pe = pb + +sizeof(sub_pattern) / sizeof(CharT);
                   failed = tpf.put(os, os, os.fill(), &tm, pb, pe).failed();
                 } else
                 {
-                  _CharT sub_pattern[] =
+                  CharT sub_pattern[] =
                   { ' ', '+', '0', '0', '0', '0', 0 };
                   os << sub_pattern;
                 }
@@ -350,9 +350,9 @@ namespace boost
     namespace detail
     {
 
-      template<class _CharT, class _InputIterator>
-      minutes extract_z(_InputIterator& b, _InputIterator e, std::ios_base::iostate& err, const std::ctype<
-          _CharT>& ct)
+      template<class CharT, class InputIterator>
+      minutes extract_z(InputIterator& b, InputIterator e, std::ios_base::iostate& err, const std::ctype<
+          CharT>& ct)
       {
         int min = 0;
         if (b != e)
@@ -406,20 +406,20 @@ namespace boost
 
     } // detail
 
-    template<class _CharT, class _Traits, class _Duration>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& is, time_point<
-        system_clock, _Duration>& tp)
+    template<class CharT, class Traits, class Duration>
+    std::basic_istream<CharT, Traits>&
+    operator>>(std::basic_istream<CharT, Traits>& is, time_point<
+        system_clock, Duration>& tp)
     {
-      typename std::basic_istream<_CharT, _Traits>::sentry ok(is);
+      typename std::basic_istream<CharT, Traits>::sentry ok(is);
       if (ok)
       {
         std::ios_base::iostate err = std::ios_base::goodbit;
         try
         {
-          const _CharT* pb = 0;//nullptr;
-          const _CharT* pe = pb;
-          typedef time_punct<_CharT> F;
+          const CharT* pb = 0;//nullptr;
+          const CharT* pe = pb;
+          typedef time_punct<CharT> F;
           std::locale loc = is.getloc();
           timezone_type tz = timezone::utc;
           if (std::has_facet<F>(loc))
@@ -429,32 +429,32 @@ namespace boost
             pe = pb + f.fmt().size();
             tz = f.timezone_type();
           }
-          const std::time_get<_CharT>& tg = std::use_facet<
-              std::time_get<_CharT> >(loc);
-          const std::ctype<_CharT>& ct =
-              std::use_facet<std::ctype<_CharT> >(loc);
+          const std::time_get<CharT>& tg = std::use_facet<
+              std::time_get<CharT> >(loc);
+          const std::ctype<CharT>& ct =
+              std::use_facet<std::ctype<CharT> >(loc);
           tm tm; // {0}
-          typedef std::istreambuf_iterator<_CharT, _Traits> _I;
+          typedef std::istreambuf_iterator<CharT, Traits> It;
           if (pb == pe)
           {
-            _CharT
+            CharT
                 pattern[] =
                     { '%', 'Y', '-', '%', 'm', '-', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':' };
             pb = pattern;
-            pe = pb + sizeof(pattern) / sizeof(_CharT);
+            pe = pb + sizeof(pattern) / sizeof(CharT);
             tg.get(is, 0, is, err, &tm, pb, pe);
             if (err & std::ios_base::failbit)
               goto exit;
             double sec;
-            _CharT c = _CharT();
+            CharT c = CharT();
             is >> sec;
             if (is.fail())
             {
               err |= std::ios_base::failbit;
               goto exit;
             }
-            _I i(is);
-            _I eof;
+            It i(is);
+            It eof;
             c = *i;
             if (++i == eof || c != ' ')
             {
@@ -474,9 +474,9 @@ namespace boost
                 + round<microseconds> (duration<double> (sec));
           } else
           {
-            const _CharT z[2] =
+            const CharT z[2] =
             { '%', 'z' };
-            const _CharT* fz = std::search(pb, pe, z, z + 2);
+            const CharT* fz = std::search(pb, pe, z, z + 2);
             tg.get(is, 0, is, err, &tm, pb, fz);
             minutes minu(0);
             if (fz != pe)
@@ -486,8 +486,8 @@ namespace boost
                 err |= std::ios_base::failbit;
                 goto exit;
               }
-              _I i(is);
-              _I eof;
+              It i(is);
+              It eof;
               minu = extract_z(i, eof, err, ct);
               if (err & std::ios_base::failbit)
                 goto exit;
