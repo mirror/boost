@@ -1,7 +1,7 @@
 
 [article BCP
     [quickbook 1.4]
-    [copyright 2209 John Maddock]
+    [copyright 2009 John Maddock]
     [purpose Regular Expressions]
     [license
         Distributed under the Boost Software License, Version 1.0.
@@ -208,3 +208,4 @@ specific, and may not contain all the headers needed if you so much as change a 
 
 [endsect]
 [endsect]
+
