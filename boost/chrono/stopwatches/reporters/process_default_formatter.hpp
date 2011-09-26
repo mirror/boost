@@ -14,6 +14,8 @@
 #include <boost/chrono/stopwatches/simple_stopwatch.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 
+#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
+
 namespace boost
 {
   namespace chrono
@@ -71,6 +73,7 @@ namespace boost
 } // namespace boost
 
 
+#endif
 
 #endif
 
