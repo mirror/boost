@@ -62,20 +62,24 @@
 <p>
         <span class="bold"><strong>Examples:</strong></span>
       </p>
+<p>
+        Given <code class="computeroutput"><span class="keyword">union</span> <span class="identifier">my_union</span>
+        <span class="special">{};</span></code> then:
+      </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;</span></code>
+          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;</span></code>
           inherits from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">void</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">my_union</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
           is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
+          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
           that evaluates to <span class="emphasis"><em>true</em></span>.
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">*&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
+          <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">*&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
           that evaluates to <span class="emphasis"><em>false</em></span>.
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
