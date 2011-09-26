@@ -5,7 +5,7 @@
 # bring in rules for testing
 import testing ;
 
-project : requirements <toolset>msvc:<asynch-exceptions>on ;
+project : requirements <toolset>msvc:<asynch-exceptions>on <toolset>gcc:<cxxflags>-Wconversion ;
 
 test-suite "foreach"
     : [ run stl_byval.cpp ]
@@ -32,5 +32,9 @@ test-suite "foreach"
       [ run rvalue_nonconst_r.cpp ]
       [ run dependent_type.cpp ]
       [ run misc.cpp ]
+      [ run noncopyable_rvalue_const.cpp ]
+      [ run noncopyable_rvalue_nonconst.cpp ]
+      [ run noncopyable_rvalue_const_r.cpp ]
+      [ run noncopyable_rvalue_nonconst_r.cpp ]
       [ compile noncopyable.cpp ]
     ;
