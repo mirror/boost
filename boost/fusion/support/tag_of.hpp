@@ -58,8 +58,8 @@ namespace boost { namespace fusion
 
         template <typename Sequence, typename Active>
         struct tag_of
-          : mpl::eval_if< fusion::detail::is_mpl_sequence<Sequence>,
-              mpl::identity<mpl::identity<mpl_sequence_tag> >,
+          : mpl::if_< fusion::detail::is_mpl_sequence<Sequence>,
+              mpl::identity<mpl_sequence_tag>,
               tag_of_fallback<Sequence> >::type
         {};
 
