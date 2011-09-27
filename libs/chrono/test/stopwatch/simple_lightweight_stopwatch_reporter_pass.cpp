@@ -154,10 +154,10 @@ int main()
   Reporter _(fmtr);
 
   std::cout << "high_resolution_clock=\n";
-  check_all<high_resolution_clock>();
+  check_all<high_resolution_clock>(false);
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
   std::cout << "steady_clock=\n";
-  check_all<steady_clock>();
+  check_all<steady_clock>(false);
 #endif
   std::cout << "system_clock=\n";
   check_all<system_clock>(false);

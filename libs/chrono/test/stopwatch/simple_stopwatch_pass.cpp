@@ -96,10 +96,10 @@ void check_all(bool check=true)
 int main()
 {
   std::cout << "high_resolution_clock=";
-  check_all<boost::chrono::high_resolution_clock>();
+  check_all<boost::chrono::high_resolution_clock>(false);
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
   std::cout << "steady_clock=";
-  check_all<boost::chrono::steady_clock>();
+  check_all<boost::chrono::steady_clock>(false);
 #endif
   std::cout << "system_clock=";
   check_all<boost::chrono::system_clock>(false);

@@ -53,16 +53,16 @@ void check_all()
   test_good_prefix<Clock>("2 milliseconds", milliseconds(2));
   test_good_prefix<Clock>("2 microseconds", microseconds(2));
   test_good_prefix<Clock>("2 nanoseconds", nanoseconds(2));
-  test_good_prefix<Clock>("2 deciseconds", duration<int_least64_t, deci> (2));
-  test_good_prefix<Clock>("2 [1/30]seconds", duration<int_least64_t, ratio<1, 30> > (2));
+  test_good_prefix<Clock>("2 deciseconds", duration<boost::int_least64_t, deci> (2));
+  test_good_prefix<Clock>("2 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (2));
 
   test_good_symbol<Clock>("2 h", hours(2));
   test_good_symbol<Clock>("2 m", minutes(2));
   test_good_symbol<Clock>("2 s", seconds(2));
   test_good_symbol<Clock>("2 ms", milliseconds(2));
   test_good_symbol<Clock>("2 ns", nanoseconds(2));
-  test_good_symbol<Clock>("2 ds", duration<int_least64_t, deci> (2));
-  test_good_symbol<Clock>("2 [1/30]s", duration<int_least64_t, ratio<1, 30> > (2));
+  test_good_symbol<Clock>("2 ds", duration<boost::int_least64_t, deci> (2));
+  test_good_symbol<Clock>("2 [1/30]s", duration<boost::int_least64_t, ratio<1, 30> > (2));
 }
 
 int main()

@@ -48,16 +48,16 @@ int main()
   test_good("5000 milliseconds", milliseconds(5000));
   test_good("5000 microseconds", microseconds(5000));
   test_good("5000 nanoseconds", nanoseconds(5000));
-  test_good("5000 deciseconds", duration<int_least64_t, deci> (5000));
-  test_good("5000 [1/30]seconds", duration<int_least64_t, ratio<1, 30> > (5000));
+  test_good("5000 deciseconds", duration<boost::int_least64_t, deci> (5000));
+  test_good("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
 
   test_good("5000 h", hours(5000));
   test_good("5000 m", minutes(5000));
   test_good("5000 s", seconds(5000));
   test_good("5000 ms", milliseconds(5000));
   test_good("5000 ns", nanoseconds(5000));
-  test_good("5000 ds", duration<int_least64_t, deci> (5000));
-  test_good("5000 [1/30]s", duration<int_least64_t, ratio<1, 30> > (5000));
+  test_good("5000 ds", duration<boost::int_least64_t, deci> (5000));
+  test_good("5000 [1/30]s", duration<boost::int_least64_t, ratio<1, 30> > (5000));
 
   test_good("5000 milliseconds", seconds(5));
   test_good("5 milliseconds", nanoseconds(5000000));
