@@ -33,7 +33,7 @@ namespace boost { namespace fusion
 
 namespace boost { namespace mpl
 {
-    template<typename>
+    template <typename>
     struct sequence_tag;
 
     template <typename... Elements>
