@@ -74,7 +74,7 @@ namespace
   // strerror_r is preferred because it is always thread safe,
   // however, we fallback to strerror in certain cases because:
   //   -- Windows doesn't provide strerror_r.
-  //   -- HP and Sundo provide strerror_r on newer systems, but there is
+  //   -- HP and Sun do provide strerror_r on newer systems, but there is
   //      no way to tell if is available at runtime and in any case their
   //      versions of strerror are thread safe anyhow.
   //   -- Linux only sometimes provides strerror_r.
