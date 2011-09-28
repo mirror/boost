@@ -236,10 +236,10 @@ namespace boost { namespace unordered { namespace detail {
 #define BOOST_UNORDERED_HAS_MEMBER(name)                                    \
     struct BOOST_PP_CAT(has_, name)                                         \
     {                                                                       \
-        struct base_mixin { void name(); };                                 \
+        struct base_mixin { int name; };                                    \
         struct base : public T, public base_mixin {};                       \
                                                                             \
-        BOOST_UNORDERED_CHECK_MEMBER(1, 1, name, void (base_mixin::*)());   \
+        BOOST_UNORDERED_CHECK_MEMBER(1, 1, name, int base_mixin::*);        \
         BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);                               \
                                                                             \
         enum { value = sizeof(choice2::type) ==                             \
