@@ -247,7 +247,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run2 stopwatch/basic_stopwatch_pass.cpp  : basic_stopwatch_pass ]
         [ chrono-run2 stopwatch/basic_stopwatch_last_lap_pass.cpp  : basic_stopwatch_last_lap_pass ]
         [ chrono-run2 stopwatch/basic_stopwatch_laps_accumulator_set_pass.cpp  : basic_stopwatch_laps_accumulator_set_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_laps_container_pass.cpp  : basic_stopwatch_laps_container_pass ]
+        [ chrono-run2 stopwatch/basic_stopwatch_laps_container_pass.cpp  : basic_stopwatch_laps_accumulator_set_pass ]
         [ chrono-run2 stopwatch/suspendable_stopwatch_pass.cpp  : suspendable_stopwatch_pass ]
         ;
 
@@ -259,11 +259,9 @@ rule chrono-compile2 ( sources : name )
     test-suite "stopclock"
         :
         [ chrono-run2-mt stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_pass ]
-        [ chrono-run2-mt stopwatch/simple_lightweight_stopwatch_reporter_pass.cpp  : simple_lightweight_stopwatch_reporter_pass ]
         ;
     test-suite "stopclock_ex"
         :
-        [ chrono-run2-mt ../example/lightweight_stopwatch_reporter_example.cpp  : lightweight_stopwatch_reporter_example ]
         [ chrono-run2-mt ../example/stopwatch_reporter_example.cpp  : stopwatch_reporter_example ]
         ;
 
