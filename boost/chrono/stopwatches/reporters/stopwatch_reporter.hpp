@@ -79,9 +79,15 @@ namespace boost
         formatter_(*this, ec);
         reported_ = true;
       }
+
       bool reported() const
       {
         return reported_;
+      }
+
+      formatter_type& format()
+      {
+        return formatter_;
       }
 
     protected:
