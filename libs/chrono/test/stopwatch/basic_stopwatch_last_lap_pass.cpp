@@ -37,7 +37,7 @@ void check_default_constructor()
 {
   Stopwatch sw;
   BOOST_TEST(sw.is_running());
-  BOOST_TEST(sw.get_laps_memory().last()==Stopwatch::duration::zero());
+  BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
 template <typename Stopwatch>
@@ -48,7 +48,7 @@ void check_dont_start_constructor()
   ex::sleep_for<typename Stopwatch::clock>(boost::chrono::milliseconds(100));
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(d == Stopwatch::duration::zero());
-  BOOST_TEST(sw.get_laps_memory().last()==Stopwatch::duration::zero());
+  BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
 template <typename Stopwatch>
@@ -58,7 +58,7 @@ void check_constructor_ec()
   Stopwatch sw(ec);
   BOOST_TEST(sw.is_running());
   BOOST_TEST(ec.value()==0);
-  BOOST_TEST(sw.get_laps_memory().last()==Stopwatch::duration::zero());
+  BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
 template <typename Stopwatch>
@@ -66,7 +66,7 @@ void check_constructor_throws()
 {
   Stopwatch sw(boost::throws());
   BOOST_TEST(sw.is_running());
-  BOOST_TEST(sw.get_laps_memory().last()==Stopwatch::duration::zero());
+  BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
 template <typename Stopwatch>
@@ -78,7 +78,7 @@ void check_elapsed()
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(sw.is_running());
   BOOST_TEST(d >= boost::chrono::milliseconds(100));
-  BOOST_TEST(sw.get_laps_memory().last()==Stopwatch::duration::zero());
+  BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
 template <typename Stopwatch>
@@ -94,7 +94,7 @@ void check_start_start()
   BOOST_TEST(sw.is_running());
   BOOST_TEST(d >= boost::chrono::milliseconds(100));
   BOOST_TEST(d < boost::chrono::milliseconds(200));
-  BOOST_TEST(sw.get_laps_memory().last()==Stopwatch::duration::zero());
+  BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
 template <typename Stopwatch>
@@ -110,7 +110,7 @@ void check_dont_start_start()
   BOOST_TEST(sw.is_running());
   BOOST_TEST(d >= boost::chrono::milliseconds(100));
   BOOST_TEST(d < boost::chrono::milliseconds(200));
-  BOOST_TEST(sw.get_laps_memory().last()==Stopwatch::duration::zero());
+  BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
 template <typename Stopwatch>
@@ -126,7 +126,7 @@ void check_dont_start_start_stop()
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d >= boost::chrono::milliseconds(0));
-  BOOST_TEST(sw.get_laps_memory().last()==boost::chrono::milliseconds(100));
+  BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
 }
 
 template <typename Stopwatch>
@@ -143,7 +143,7 @@ void check_dont_start_scoped_run()
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d >= boost::chrono::milliseconds(0));
-  BOOST_TEST(sw.get_laps_memory().last()==boost::chrono::milliseconds(100));
+  BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
 
   BOOST_TEST(!sw.is_running());
   {
@@ -155,7 +155,7 @@ void check_dont_start_scoped_run()
   d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d >= boost::chrono::milliseconds(0));
-  BOOST_TEST(sw.get_laps_memory().last()==boost::chrono::milliseconds(200));
+  BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(200));
 }
 
 template <typename Stopwatch>
@@ -169,7 +169,7 @@ void check_stop()
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d == boost::chrono::milliseconds(0));
-  BOOST_TEST(sw.get_laps_memory().last()==boost::chrono::milliseconds(100));
+  BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
 }
 
 template <typename Stopwatch>
@@ -183,14 +183,14 @@ void check_stop_stop()
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d == boost::chrono::milliseconds(0));
-  BOOST_TEST(sw.get_laps_memory().last()==boost::chrono::milliseconds(100));
+  BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
   ex::sleep_for<typename Stopwatch::clock>(boost::chrono::milliseconds(100));
   sw.stop();
   BOOST_TEST(!sw.is_running());
   d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d == boost::chrono::milliseconds(0));
-  BOOST_TEST(sw.get_laps_memory().last()==boost::chrono::milliseconds(100));
+  BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
 }
 
 

@@ -14,7 +14,7 @@
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/chrono/stopwatches/basic_stopwatch.hpp>
-#include <boost/chrono/stopwatches/memories/laps_accumulator_set.hpp>
+#include <boost/chrono/stopwatches/memories/laps_sequence_container.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -38,7 +38,7 @@ void check_default_constructor()
   Stopwatch sw;
   BOOST_TEST(sw.is_running());
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==0);
+  BOOST_TEST(sw.get_laps_collector().container().size()==0);
 }
 
 template <typename Stopwatch>
@@ -50,7 +50,7 @@ void check_dont_start_constructor()
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(d == Stopwatch::duration::zero());
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==0);
+  BOOST_TEST(sw.get_laps_collector().container().size()==0);
 }
 
 template <typename Stopwatch>
@@ -61,7 +61,7 @@ void check_constructor_ec()
   BOOST_TEST(sw.is_running());
   BOOST_TEST(ec.value()==0);
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==0);
+  BOOST_TEST(sw.get_laps_collector().container().size()==0);
 }
 
 template <typename Stopwatch>
@@ -70,7 +70,7 @@ void check_constructor_throws()
   Stopwatch sw(boost::throws());
   BOOST_TEST(sw.is_running());
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==0);
+  BOOST_TEST(sw.get_laps_collector().container().size()==0);
 }
 
 template <typename Stopwatch>
@@ -83,7 +83,7 @@ void check_elapsed()
   BOOST_TEST(sw.is_running());
   BOOST_TEST(d >= boost::chrono::milliseconds(100));
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==0);
+  BOOST_TEST(sw.get_laps_collector().container().size()==0);
 }
 
 template <typename Stopwatch>
@@ -100,7 +100,7 @@ void check_start_start()
   BOOST_TEST(d >= boost::chrono::milliseconds(100));
   BOOST_TEST(d < boost::chrono::milliseconds(200));
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==0);
+  BOOST_TEST(sw.get_laps_collector().container().size()==0);
 }
 
 template <typename Stopwatch>
@@ -117,7 +117,7 @@ void check_dont_start_start()
   BOOST_TEST(d >= boost::chrono::milliseconds(100));
   BOOST_TEST(d < boost::chrono::milliseconds(200));
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==0);
+  BOOST_TEST(sw.get_laps_collector().container().size()==0);
 }
 
 template <typename Stopwatch>
@@ -134,7 +134,7 @@ void check_dont_start_start_stop()
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d == boost::chrono::milliseconds(0));
   BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
+  BOOST_TEST(sw.get_laps_collector().container().size()==1);
 }
 
 template <typename Stopwatch>
@@ -151,7 +151,7 @@ void check_dont_start_scoped_run()
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d == boost::chrono::milliseconds(0));
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
+  BOOST_TEST(sw.get_laps_collector().container().size()==1);
 }
 
 template <typename Stopwatch>
@@ -166,7 +166,7 @@ void check_stop()
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d == boost::chrono::milliseconds(0));
   BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
+  BOOST_TEST(sw.get_laps_collector().container().size()==1);
 }
 
 template <typename Stopwatch>
@@ -188,7 +188,7 @@ void check_stop_stop()
   BOOST_TEST(!sw.is_running());
   BOOST_TEST(d == boost::chrono::milliseconds(0));
   BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
-  BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
+  BOOST_TEST(sw.get_laps_collector().container().size()==1);
 }
 
 
@@ -215,6 +215,6 @@ void check_all()
 int main()
 {
   std::cout << "cycle_count=";
-  check_all<boost::chrono::basic_stopwatch< ex::cycle_count<1500>, boost::chrono::laps_accumulator_set<ex::cycle_count<1500>::duration> > >();
+  check_all<boost::chrono::basic_stopwatch< ex::cycle_count<1500>, boost::chrono::laps_sequence_container<ex::cycle_count<1500>::duration> > >();
   return boost::report_errors();
 }
