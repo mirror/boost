@@ -14,7 +14,7 @@
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/chrono/stopwatches/basic_stopwatch.hpp>
-#include <boost/chrono/stopwatches/memories/laps_sequence_container.hpp>
+#include <boost/chrono/stopwatches/collectors/laps_sequence_container.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
