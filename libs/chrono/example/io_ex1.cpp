@@ -13,8 +13,10 @@ Many thanks to Howard for making his code available under the Boost license.
 */
 
 #include <iostream>
+#include <boost/chrono/config.hpp>
 #include <boost/chrono/chrono_io.hpp>
 #include <boost/chrono/thread_clock.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
 
 int main()
 {
@@ -56,9 +58,11 @@ int main()
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
     cout << "\nthread_clock::now() = " << thread_clock::now() << '\n';
 #endif
+#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
     cout << "\nprocess_real_cpu_clock::now() = " << process_real_cpu_clock::now() << '\n';
     cout << "\nprocess_user_cpu_clock::now() = " << process_user_cpu_clock::now() << '\n';
     cout << "\nprocess_system_cpu_clock::now() = " << process_system_cpu_clock::now() << '\n';
     cout << "\nprocess_cpu_clock::now() = " << process_cpu_clock::now() << '\n';
+#endif
     return 0;
 }
