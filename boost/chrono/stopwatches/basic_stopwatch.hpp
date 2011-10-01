@@ -11,7 +11,7 @@
 
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
-#include <boost/chrono/stopwatches/memories/no_memory.hpp>
+#include <boost/chrono/stopwatches/collectors/no_memory.hpp>
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/system/error_code.hpp>
 
