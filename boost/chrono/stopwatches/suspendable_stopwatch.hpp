@@ -9,10 +9,11 @@
 
 #include <utility>
 
-//#include <boost/chrono/chrono.hpp>
+#include <boost/chrono/config.hpp>
 #include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
 #include <boost/chrono/stopwatches/memories/no_memory.hpp>
 #include <boost/system/error_code.hpp>
+#include <boost/chrono/system_clocks.hpp>
 
 namespace boost
 {
@@ -25,24 +26,24 @@ namespace boost
     static const dont_start_t dont_start =
     { };
 
-    template<typename Clock, typename LapsMemory=no_memory<typename Clock::duration> >
+    template<typename Clock=high_resolution_clock, typename LapsCollector=no_memory<typename Clock::duration> >
     class suspendable_stopwatch
     {
     public:
-      typedef LapsMemory laps_memory;
+      typedef LapsCollector laps_collector;
       typedef Clock clock;
       typedef typename Clock::duration duration;
       typedef typename Clock::time_point time_point;
       typedef typename Clock::rep rep;
       typedef typename Clock::period period;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             Clock::is_steady;
+      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
 
       explicit suspendable_stopwatch(
           system::error_code & ec =  BOOST_CHRONO_THROWS
           ) :
         start_(duration::zero()),
         running_(false),
-        storage_(),
+        laps_collector_(),
         suspended_(false),
         partial_(duration::zero())
       {
@@ -53,19 +54,19 @@ namespace boost
           ) :
           start_(duration::zero()),
           running_(false),
-          storage_(),
+          laps_collector_(),
           suspended_(false),
           partial_(duration::zero())
       {
       }
 
       explicit suspendable_stopwatch(
-          laps_memory const& acc,
+          laps_collector const& acc,
           system::error_code & ec = BOOST_CHRONO_THROWS
           ) :
           start_(duration::zero()),
           running_(false),
-          storage_(acc),
+          laps_collector_(acc),
           suspended_(false),
           partial_(duration::zero())
       {
@@ -73,12 +74,12 @@ namespace boost
       }
 
       suspendable_stopwatch(
-          laps_memory const& acc,
+          laps_collector const& acc,
           const dont_start_t&
           ) :
             start_(duration::zero()),
             running_(false),
-            storage_(acc),
+            laps_collector_(acc),
             suspended_(false),
             partial_(duration::zero())
       {
@@ -100,7 +101,7 @@ namespace boost
         if (running_)
         {
           partial_ += tmp - start_;
-          storage_.store(partial_);
+          laps_collector_.store(partial_);
           partial_ = duration::zero();
         }
         else
@@ -130,7 +131,7 @@ namespace boost
           if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return;
 
           partial_ += tmp - start_;
-          storage_.store(partial_);
+          laps_collector_.store(partial_);
           start_ = time_point(duration::zero());
           running_ = false;
           suspended_ = false;
@@ -210,31 +211,31 @@ namespace boost
       void reset(
           )
       {
-        storage_.reset();
+        laps_collector_.reset();
         running_ = false;
         suspended_ = false;
         partial_ = duration::zero();
         start_ = time_point(duration::zero());
       }
 
-      laps_memory const& get_laps_memory()
+      laps_collector const& get_laps_memory()
       {
-        return storage_;
+        return laps_collector_;
       }
 
 
-      typedef stopwatch_runner<suspendable_stopwatch<Clock, LapsMemory> >
+      typedef stopwatch_runner<suspendable_stopwatch<Clock, LapsCollector> >
           scoped_run;
-      typedef stopwatch_stopper<suspendable_stopwatch<Clock, LapsMemory> >
+      typedef stopwatch_stopper<suspendable_stopwatch<Clock, LapsCollector> >
           scoped_stop;
-      typedef stopwatch_suspender<suspendable_stopwatch<Clock, LapsMemory> >
+      typedef stopwatch_suspender<suspendable_stopwatch<Clock, LapsCollector> >
           scoped_suspend;
-      typedef stopwatch_resumer<suspendable_stopwatch<Clock, LapsMemory> >
+      typedef stopwatch_resumer<suspendable_stopwatch<Clock, LapsCollector> >
           scoped_resume;
     private:
       time_point start_;
       bool running_;
-      laps_memory storage_;
+      laps_collector laps_collector_;
       bool suspended_;
       duration partial_;
     };

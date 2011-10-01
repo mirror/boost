@@ -56,7 +56,7 @@ namespace boost
         formatter_(fmt), reported_(false)
       {
       }
-      explicit basic_stopwatch_reporter(formatter_type const& fmt) :
+      explicit basic_stopwatch_reporter(formatter_type fmt) :
         formatter_(fmt), reported_(false)
       {
       }

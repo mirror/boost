@@ -42,11 +42,13 @@ namespace boost
         this->base_type::store(d);
         acc_(d.count());
       }
+
       void reset()
       {
         this->base_type::reset();
         acc_ = storage_type();
       }
+
       storage_type const& accumulator_set() const  { return acc_; }
 
 
