@@ -247,7 +247,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run2 stopwatch/basic_stopwatch_pass.cpp  : basic_stopwatch_pass ]
         [ chrono-run2 stopwatch/basic_stopwatch_last_lap_pass.cpp  : basic_stopwatch_last_lap_pass ]
         [ chrono-run2 stopwatch/basic_stopwatch_laps_accumulator_set_pass.cpp  : basic_stopwatch_laps_accumulator_set_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_laps_container_pass.cpp  : basic_stopwatch_laps_container_set_pass ]
+        [ chrono-run2 stopwatch/basic_stopwatch_laps_container_pass.cpp  : basic_stopwatch_laps_container_pass ]
         [ chrono-run2 stopwatch/suspendable_stopwatch_pass.cpp  : suspendable_stopwatch_pass ]
         ;
 
