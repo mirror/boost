@@ -14,10 +14,10 @@
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/chrono/stopwatches/simple_stopwatch.hpp>
+#include <libs/chrono/test/cycle_count.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
-#include <boost/chrono/stopwatches/reporters/process_default_formatter.hpp>
-#include <boost/chrono/stopwatches/reporters/thread_default_formatter.hpp>
+
 #include <boost/chrono/chrono_io.hpp>
 #include <boost/system/system_error.hpp>
 #include <boost/detail/lightweight_test.hpp>
@@ -28,36 +28,21 @@
 
 using namespace boost::chrono;
 
-namespace ex
-{
-    template<class Rep, class Period>
-    void sleep_for(const duration<Rep, Period>& d)
-    {
-      typedef high_resolution_clock Clock;
-      typename Clock::time_point go =
-          Clock::now() + d;
-      while (Clock::now() < go)
-      {
-      }
-    }
-}
 
-template <typename Clock>
+template <typename Reporter>
 void check_invariants()
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   typedef Reporter Stopwatch;
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::rep, typename Stopwatch::clock::duration::rep>::value), NOTHING, ());
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::period, typename Stopwatch::clock::duration::period>::value), NOTHING, ());
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::duration, typename Stopwatch::clock::time_point::duration>::value), NOTHING, ());
     BOOST_CHRONO_STATIC_ASSERT(Stopwatch::is_steady == Stopwatch::clock::is_steady, NOTHING, ());
-    BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::stopwatch, simple_stopwatch<Clock> >::value), NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::stopwatch, simple_stopwatch<typename Stopwatch::clock> >::value), NOTHING, ());
 }
 
-template <typename Clock>
+template <typename Reporter>
 void check_default_constructor()
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   Reporter _;
 }
 
@@ -75,75 +60,85 @@ struct file_line {
 
 };
 
-template <typename Clock>
-void check_file_line()
+template <typename Reporter>
+void check_file_line2()
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock>, elapsed_formatter > Reporter;
   Reporter _("%1%\n");
   file_line fl(__FILE__, __LINE__);
-  ex::sleep_for(milliseconds(100));
+  ex::sleep_for<typename Reporter::clock>(milliseconds(100));
+
+}
+template <typename Reporter>
+void check_file_line()
+{
+  Reporter rp("%1%[%2%] Elapsed time: %3%\n");
+  rp.format() % __FILE__ % __LINE__;
+
+  ex::sleep_for<typename Reporter::clock>(milliseconds(100));
 
 }
 
 
-template <typename Clock>
+template <typename Reporter>
 void check_constructor_ec()
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   boost::system::error_code ec;
   Reporter _(ec);
   BOOST_TEST(ec.value()==0);
 }
 
-template <typename Clock>
+template <typename Reporter>
 void check_constructor_throws()
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   Reporter _(boost::throws());
 }
 
-template <typename Clock>
+template <typename Reporter>
 void check_elapsed(bool check=true)
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   Reporter sw;
-  ex::sleep_for(milliseconds(100));
+  ex::sleep_for<typename Reporter::clock>(milliseconds(100));
   typename Reporter::duration d=sw.elapsed();
   std::cout << d << std::endl;
   if (check)
     BOOST_TEST(d >= milliseconds(100));
 }
 
-template <typename Clock>
+template <typename Reporter>
 void check_report()
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
   Reporter sw;
-  ex::sleep_for(milliseconds(100));
+  ex::sleep_for<typename Reporter::clock>(milliseconds(100));
   sw.report();
 }
 
 template <typename Clock>
 void check_all(bool check=true)
 {
-  check_invariants<Clock>();
-  check_default_constructor<Clock>();
-  check_constructor_ec<Clock>();
-  check_constructor_throws<Clock>();
-  check_elapsed<Clock>(check);
-  check_report<Clock>();
-  check_file_line<Clock>();
+  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
+  typedef stopwatch_reporter<simple_stopwatch<Clock>, elapsed_formatter > ReporterE;
+
+  check_invariants<Reporter>();
+  check_default_constructor<Reporter>();
+  check_constructor_ec<Reporter>();
+  check_constructor_throws<Reporter>();
+  check_elapsed<Reporter>(check);
+  check_report<Reporter>();
+  check_file_line<ReporterE>();
 }
 
 int main()
 {
-  typedef simple_stopwatch<high_resolution_clock> Stopwatch;
+  typedef simple_stopwatch<high_resolution_clock > Stopwatch;
   typedef stopwatch_reporter_default_formatter<Stopwatch>::type Formatter;
   typedef stopwatch_reporter<Stopwatch> Reporter;
   static Formatter fmtr;
 
   Reporter _(fmtr);
 
+  check_all<ex::cycle_count<1500> >(true);
+
+#if 0
   std::cout << "high_resolution_clock=\n";
 
   check_all<high_resolution_clock>();
@@ -168,6 +163,7 @@ int main()
   check_all<process_system_cpu_clock>(false);
   std::cout << "process_cpu_clock=\n";
   check_all<process_cpu_clock>(false);
+#endif
 #endif
 
   return boost::report_errors();
