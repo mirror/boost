@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="Library"
+	Name="Serialization"
 	ProjectGUID="{30E10563-960A-11D7-9FE9-525400E2CF85}"
 	RootNamespace="Library"
 	Keyword="Win32Proj">
@@ -44,7 +44,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_45.dll"
+				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_47.dll"
 				GenerateDebugInformation="TRUE"
 				GenerateMapFile="TRUE"/>
 			<Tool
@@ -155,7 +155,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ConfigurationName)\libboost_serialization-vc71-mt-sgd-1.45.lib"/>
+				OutputFile="&apos;$(ConfigurationName)\libboost_serialization-vc71-mt-sgd-1_47.lib&quot;"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool

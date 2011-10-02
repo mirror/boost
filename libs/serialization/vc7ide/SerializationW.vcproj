@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="LibraryW"
+	Name="SerializationW"
 	ProjectGUID="{30E10563-960A-11D7-9FE9-525400E2CF85}"
 	Keyword="Win32Proj">
 	<Platforms>
