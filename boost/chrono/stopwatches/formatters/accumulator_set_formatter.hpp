@@ -11,6 +11,13 @@
 #include <boost/system/error_code.hpp>
 #include <boost/current_function.hpp>
 //#include <boost/chrono/stopwatches/detail/adaptive_string.hpp>
+#include <boost/accumulators/framework/accumulator_set.hpp>
+#include <boost/accumulators/statistics/count.hpp>
+#include <boost/accumulators/statistics/sum.hpp>
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/accumulators.hpp>
 #include <boost/format.hpp>
 #include <boost/format/group.hpp>
 #include <boost/cstdint.hpp>
@@ -73,29 +80,36 @@ namespace boost
       {
 
 
-        typedef typename Stopwatch::laps_collector laps_collector;
-        laps_collector const& acc = this->get_laps_collector();
+        typedef typename Stopwatch::laps_collector::storage_type laps_collector_acc;
+        laps_collector_acc const& acc = stopwatch_.get_laps_collector().accumulator_set();
+
         typedef typename Stopwatch::duration duration_t;
 
         this->os_ << static_cast<format_type&>(*this)
         % boost::accumulators::count(acc)
-        % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_), boost::chrono::duration<
+        % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_),
+            (boost::accumulators::count(acc)==0) ? boost::chrono::duration<double, Ratio>(duration_t::zero()) :
+                boost::chrono::duration<
             double, Ratio>(duration_t(boost::accumulators::sum(acc))))
-        % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_), boost::chrono::duration<
+        % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_),
+            (boost::accumulators::count(acc)==0) ? boost::chrono::duration<double, Ratio>(duration_t::zero()) :
+            boost::chrono::duration<
             double, Ratio>(duration_t((boost::accumulators::min)(acc))))
-        % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_), boost::chrono::duration<
+        % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_),
+            (boost::accumulators::count(acc)==0) ? boost::chrono::duration<double, Ratio>(duration_t::zero()) :
+            boost::chrono::duration<
             double, Ratio>(duration_t((boost::accumulators::max)(acc))))
         % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_), ((boost::accumulators::count(acc)
             > 0) ? boost::chrono::duration<double, Ratio>(duration_t(boost::accumulators::sum(acc)
             / boost::accumulators::count(acc))) : boost::chrono::duration<
-            double, Ratio>(duration_t(0))))
+            double, Ratio>(duration_t::zero())))
         ;
 
       }
     };
 
-    typedef basic_accumulator_set_formatter<milli, char> elapsed_formatter;
-    typedef basic_accumulator_set_formatter<milli, wchar_t> welapsed_formatter;
+    typedef basic_accumulator_set_formatter<milli, char> accumulator_set_formatter;
+    typedef basic_accumulator_set_formatter<milli, wchar_t> waccumulator_set_formatter;
 
   } // namespace chrono
 } // namespace boost

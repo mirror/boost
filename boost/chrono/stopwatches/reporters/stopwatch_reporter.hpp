@@ -20,6 +20,7 @@
 
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter_default_formatter.hpp>
 #include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
+#include <boost/chrono/stopwatches/dont_start.hpp>
 #include <boost/chrono/chrono.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/cstdint.hpp>
@@ -34,6 +35,7 @@ namespace boost
     class basic_stopwatch_reporter: public Stopwatch
     {
     public:
+      typedef Stopwatch base_type;
       typedef typename Stopwatch::clock clock;
       typedef Stopwatch stopwatch;
       typedef Formatter formatter_type;
@@ -43,8 +45,16 @@ namespace boost
       {
       }
 
-      basic_stopwatch_reporter(system::error_code & ec) :
-      Stopwatch(ec), formatter_(), reported_(false)
+      explicit basic_stopwatch_reporter(system::error_code & ec) :
+        base_type(ec), formatter_(), reported_(false)
+      {
+      }
+
+      explicit basic_stopwatch_reporter(
+          const dont_start_t& tag
+      ) BOOST_CHRONO_NOEXCEPT :
+      base_type(tag),
+        formatter_(), reported_(false)
       {
       }
 
@@ -126,8 +136,15 @@ namespace boost
       {
       }
 
-      stopwatch_reporter(system::error_code & ec) :
+      explicit stopwatch_reporter(system::error_code & ec) :
         base_type(ec)
+      {
+      }
+
+      explicit stopwatch_reporter(
+          const dont_start_t& tag
+      ) BOOST_CHRONO_NOEXCEPT :
+      base_type(tag)
       {
       }
 
@@ -185,10 +202,18 @@ namespace boost
         base_type()
       {
       }
-      wstopwatch_reporter(system::error_code & ec) :
+      explicit wstopwatch_reporter(system::error_code & ec) :
         base_type(ec)
       {
       }
+
+      explicit wstopwatch_reporter(
+          const dont_start_t& tag
+      ) BOOST_CHRONO_NOEXCEPT :
+      base_type(tag)
+      {
+      }
+
       explicit wstopwatch_reporter(formatter_type const& fmt) :
         base_type(fmt)
       {

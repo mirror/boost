@@ -12,6 +12,7 @@
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
 #include <boost/chrono/stopwatches/collectors/no_memory.hpp> // default laps_collector
+#include <boost/chrono/stopwatches/dont_start.hpp>
 #include <boost/chrono/system_clocks.hpp> // default_clock
 #include <boost/system/error_code.hpp>
 
@@ -20,18 +21,6 @@ namespace boost
   namespace chrono
   {
 
-    /**
-     * Type used to don't start a basic_stopwatch at construction time.
-     */
-    struct dont_start_t
-    {
-    };
-
-    /**
-     * Instance used to don't start a basic_stopwatch at construction time.
-     */
-    static const dont_start_t dont_start =
-    { };
 
     /**
      * A basic_stopwatch is a model of @c Stopwatch taking as parameters the @c Clock and the @c LapsCollector.
@@ -112,6 +101,24 @@ namespace boost
       /**
        * Starting constructor from a LapsCollector instance.
        *
+       * Effects: Copies the LapsCollector. Starts the stopwatch.
+       * Post-conditions: is_running() if no error occur.
+       *
+       * Remark: The LapsCollector is copied and owned by the stopwatch.
+       */
+      explicit basic_stopwatch(
+          laps_collector const& acc
+          ) :
+        start_(duration::zero()),
+        running_(false),
+        laps_collector_(acc)
+      {
+        start();
+      }
+
+      /**
+       * Starting constructor from a LapsCollector instance.
+       *
        * Effects: Assign the error code if any internal error occur while retrieving the current time.
        * Effects: Copies the LapsCollector. Starts the stopwatch.
        * Post-conditions: is_running() if no error occur.
@@ -120,7 +127,7 @@ namespace boost
        */
       explicit basic_stopwatch(
           laps_collector const& acc,
-          system::error_code & ec = BOOST_CHRONO_THROWS
+          system::error_code & ec
           ) :
         start_(duration::zero()),
         running_(false),
