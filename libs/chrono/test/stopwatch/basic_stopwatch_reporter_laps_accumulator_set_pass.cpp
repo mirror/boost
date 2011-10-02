@@ -259,5 +259,5 @@ int main()
 
   check_all<ex::cycle_count<1500> >();
 
-  return 1+boost::report_errors();
+  return boost::report_errors();
 }
