@@ -6,6 +6,7 @@
 //  See http://www.boost.org/libs/chrono/stopwatches for documentation.
 
 //#include <iostream>
+#include <boost/chrono/stopwatches/simple_stopwatch.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
 #include <boost/chrono/chrono_io.hpp>
