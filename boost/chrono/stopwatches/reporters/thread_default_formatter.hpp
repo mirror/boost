@@ -11,29 +11,10 @@
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
 
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter_default_formatter.hpp>
+#include <boost/chrono/stopwatches/reporters/clock_default_formatter.hpp>
 #include <boost/chrono/stopwatches/formatters/elapsed_formatter.hpp>
-#include <boost/chrono/stopwatches/simple_stopwatch.hpp>
 #include <boost/chrono/thread_clock.hpp>
 
-namespace boost
-{
-  namespace chrono
-  {
-
-    template<>
-    struct stopwatch_reporter_default_formatter<simple_stopwatch<thread_clock> >
-    {
-      typedef elapsed_formatter type;
-    };
-
-    template<>
-    struct wstopwatch_reporter_default_formatter<simple_stopwatch<thread_clock> >
-    {
-      typedef welapsed_formatter type;
-    };
-
-  } // namespace chrono
-} // namespace boost
 
 
 #endif

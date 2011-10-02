@@ -9,9 +9,9 @@
 #define BOOST_CHRONO_STOPWATCHES_REPORTERS_PROCESS_DEFAULT_FORMATTER_HPP
 
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter_default_formatter.hpp>
+#include <boost/chrono/stopwatches/reporters/clock_default_formatter.hpp>
 #include <boost/chrono/stopwatches/formatters/elapsed_formatter.hpp>
 #include <boost/chrono/stopwatches/formatters/times_formatter.hpp>
-#include <boost/chrono/stopwatches/simple_stopwatch.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
@@ -22,49 +22,13 @@ namespace boost
   {
 
     template<>
-    struct stopwatch_reporter_default_formatter<simple_stopwatch<process_real_cpu_clock> >
-    {
-      typedef elapsed_formatter type;
-    };
-
-    template<>
-    struct wstopwatch_reporter_default_formatter<simple_stopwatch<process_real_cpu_clock> >
-    {
-      typedef welapsed_formatter type;
-    };
-
-    template<>
-    struct stopwatch_reporter_default_formatter<simple_stopwatch<process_user_cpu_clock> >
-    {
-      typedef elapsed_formatter type;
-    };
-
-    template<>
-    struct wstopwatch_reporter_default_formatter<simple_stopwatch<process_user_cpu_clock> >
-    {
-      typedef welapsed_formatter type;
-    };
-
-    template<>
-    struct stopwatch_reporter_default_formatter<simple_stopwatch<process_system_cpu_clock> >
-    {
-      typedef elapsed_formatter type;
-    };
-
-    template<>
-    struct wstopwatch_reporter_default_formatter<simple_stopwatch<process_system_cpu_clock> >
-    {
-      typedef welapsed_formatter type;
-    };
-
-    template<>
-    struct stopwatch_reporter_default_formatter<simple_stopwatch<process_cpu_clock> >
+    struct clock_default_formatter<process_cpu_clock>
     {
       typedef times_formatter type;
     };
 
     template<>
-    struct wstopwatch_reporter_default_formatter<simple_stopwatch<process_cpu_clock> >
+    struct wclock_default_formatter<process_cpu_clock>
     {
       typedef wtimes_formatter type;
     };
@@ -76,5 +40,4 @@ namespace boost
 #endif
 
 #endif
-
 

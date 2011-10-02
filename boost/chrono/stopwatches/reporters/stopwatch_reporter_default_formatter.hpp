@@ -8,16 +8,24 @@
 #ifndef BOOST_CHRONO_STOPWATCHES_REPORTERS_DEFAULT_FORMATTER_HPP
 #define BOOST_CHRONO_STOPWATCHES_REPORTERS_DEFAULT_FORMATTER_HPP
 
+#include <boost/chrono/stopwatches/reporters/clock_default_formatter.hpp>
+
 namespace boost
 {
   namespace chrono
   {
 
     template<class Stopwatch>
-    struct stopwatch_reporter_default_formatter;
+    struct stopwatch_reporter_default_formatter
+    : clock_default_formatter<typename Stopwatch::clock>
+    {
+    };
 
     template<class Stopwatch>
-    struct wstopwatch_reporter_default_formatter;
+    struct wstopwatch_reporter_default_formatter
+    : wclock_default_formatter<typename Stopwatch::clock>
+    {
+    };
 
   } // namespace chrono
 } // namespace boost
