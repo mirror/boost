@@ -218,6 +218,16 @@ namespace chrono
   inline BOOST_CHRONO_CONSTEXPR
   bool
   operator==(const duration<process_times<Rep1>, Period1>& lhs,
+        const duration<process_times<Rep2>, Period2>& rhs)
+  {
+      return boost::chrono::detail::duration_eq<
+          duration<process_times<Rep1>, Period1>, duration<process_times<Rep2>, Period2> >()(lhs, rhs);
+  }
+
+  template <class Rep1, class Period1, class Rep2, class Period2>
+  inline BOOST_CHRONO_CONSTEXPR
+  bool
+  operator==(const duration<process_times<Rep1>, Period1>& lhs,
         const duration<Rep2, Period2>& rhs)
   {
       return boost::chrono::detail::duration_eq<
