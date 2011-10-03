@@ -45,9 +45,10 @@ namespace boost
       }
     }
 
+
     process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
     {
-
+#if 0
       tms tm;
       clock_t c = ::times(&tm);
       if (c == clock_t(-1)) // error
@@ -65,11 +66,22 @@ namespace boost
         }
       }
       return time_point();
+#else
+      clock_t c = ::clock();
+      if (c == clock_t(-1)) // error
+      {
+        BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+      }
+      return time_point(
+          duration(c*(1000000000l/CLOCKS_PER_SEC))
+      );
+#endif
     }
 
     process_real_cpu_clock::time_point process_real_cpu_clock::now(system::error_code & ec)
     {
 
+#if 0
       tms tm;
       clock_t c = ::times(&tm);
       if (c == clock_t(-1)) // error
@@ -104,6 +116,25 @@ namespace boost
           }
         }
       }
+#else
+      clock_t c = ::clock();
+      if (c == clock_t(-1)) // error
+      {
+        if (BOOST_CHRONO_IS_THROWS(ec))
+        {
+          boost::throw_exception(system::system_error(errno, BOOST_CHRONO_SYSTEM_CATEGORY, "chrono::process_real_cpu_clock"));
+        } else
+        {
+          ec.assign(errno, BOOST_CHRONO_SYSTEM_CATEGORY);
+          return time_point();
+        }
+      }
+      return time_point(
+          duration(c*(1000000000l/CLOCKS_PER_SEC))
+      );
+
+#endif
+
     }
 
     process_user_cpu_clock::time_point process_user_cpu_clock::now(system::error_code & ec)

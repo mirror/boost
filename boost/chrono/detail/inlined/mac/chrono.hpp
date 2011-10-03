@@ -114,8 +114,7 @@ steady_full()
     static const double factor = chrono_detail::compute_steady_factor(err);
     if (err != 0) 
     {
-        boost::throw_exception(
-            system::system_error( err, BOOST_CHRONO_SYSTEM_CATEGORY, "chrono::steady_clock" ));
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
     }
     return static_cast<steady_clock::rep>(mach_absolute_time() * factor);
 }
