@@ -13,6 +13,12 @@
 
 using namespace boost::chrono;
 
+#ifdef BOOST_CHRONO_HAS_PROCESS_CLOCKS
+typedef process_cpu_clock clock_type;
+#else
+typedef high_resolution_clock clock_type;
+#endif
+
 namespace ex
 {
     template<class Rep, class Period>
@@ -29,7 +35,7 @@ namespace ex
 
 int f1(long j)
 {
-  simple_stopwatch<process_cpu_clock> sw;
+  simple_stopwatch<clock_type> sw;
 
   for ( long i = 0; i < j; ++i )
     std::sqrt( 123.456L );  // burn some time
@@ -40,13 +46,15 @@ int f1(long j)
 }
 int main()
 {
-  simple_stopwatch<process_cpu_clock> sw;
+  simple_stopwatch<clock_type> sw;
 
   f1(1000);
   f1(2000);
   f1(3000);
+#ifdef BOOST_CHRONO_HAS_PROCESS_CLOCKS
   std::cout << "main() Elapsed time: " << duration_cast<duration<process_times<double>,boost::ratio<1> > >(sw.elapsed()) << std::endl;
   std::cout << "main() Elapsed time: " << duration_cast<duration<process_times<nanoseconds::rep>,boost::milli> >(sw.elapsed()) << std::endl;
+#endif
   //std::cout << "main() Elapsed time: " << sw.elapsed() << std::endl;
   return 0;
 }
