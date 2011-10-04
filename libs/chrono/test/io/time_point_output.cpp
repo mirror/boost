@@ -21,7 +21,7 @@ void test_good_symbol(const char* str, D d)
 {
   std::ostringstream out;
   boost::chrono::time_point<Clock,D> tp(d);
-  out << boost::chrono::duration_short << tp;
+  out << boost::chrono::duration_fmt(boost::chrono::duration_style::symbol) << tp;
   BOOST_TEST(out.good());
   BOOST_TEST((out.str() == std::string(str)+boost::chrono::clock_string<Clock,char>::since()));
 }

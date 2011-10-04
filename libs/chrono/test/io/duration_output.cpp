@@ -19,7 +19,7 @@ template<typename D>
 void test_good_symbol(const char* str, D d)
 {
   std::ostringstream out;
-  out << boost::chrono::duration_short << d;
+  out << boost::chrono::duration_fmt(boost::chrono::duration_style::symbol) << d;
   BOOST_TEST(out.good());
   BOOST_TEST(out.str() == str);
 }
