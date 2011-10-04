@@ -45,13 +45,16 @@ namespace boost
     {
     public:
       typedef std::basic_string<CharT> string_type;
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
       enum
       {
-        use_long, use_short
+        use_long=duration_style::prefix, use_short=duration_style::symbol
       };
+#endif
 
     private:
-      bool use_short_;
+      duration_style::type style_;
+
       string_type long_seconds_;
       string_type long_minutes_;
       string_type long_hours_;
@@ -100,19 +103,42 @@ namespace boost
       }
 
       void init_C();
+
     public:
       static std::locale::id id;
 
-      explicit duration_punct(int use = use_long, size_t refs = 0) :
-        std::locale::facet(refs), use_short_(use == use_short)
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
+      explicit duration_punct(int use = duration_style::prefix, size_t refs = 0) :
+        std::locale::facet(refs), style_(duration_style::type(use))
       {
         init_C();
       }
+
+#else
+      explicit duration_punct(duration_style::type style= duration_style::prefix, size_t refs = 0) :
+        std::locale::facet(refs), style_(style)
+      {
+      }
+#endif
 
       duration_punct(int use, const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs =
               0);
 
       duration_punct(int use, const duration_punct& d, size_t refs = 0);
+
+
+      bool is_symbol() const BOOST_CHRONO_NOEXCEPT
+      {
+        return (style_==duration_style::symbol);
+      }
+      bool is_prefix() const BOOST_CHRONO_NOEXCEPT
+      {
+        return (style_==duration_style::prefix);
+      }
+      duration_style::type get_duration_style() const BOOST_CHRONO_NOEXCEPT
+      {
+        return style_;
+      }
 
       template<class Period>
       string_type short_name() const
@@ -129,7 +155,7 @@ namespace boost
       template<class Period>
       string_type name() const
       {
-        if (use_short_)
+        if (is_symbol())
           return short_name<Period> ();
         else
           return long_name<Period> ();
@@ -137,7 +163,7 @@ namespace boost
       template<class Rep, class Period>
       string_type name(duration<Rep, Period> const&) const
       {
-        if (use_short_)
+        if (is_symbol())
           return short_name<Period> ();
         else
           return long_name<Period> ();
@@ -145,11 +171,11 @@ namespace boost
 
       bool is_short_name() const
       {
-        return use_short_;
+        return is_symbol();
       }
       bool is_long_name() const
       {
-        return !use_short_;
+        return is_prefix();
       }
     };
 
@@ -175,7 +201,7 @@ namespace boost
 
     template<class CharT>
     duration_punct<CharT>::duration_punct(int use, const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs) :
-      std::locale::facet(refs), use_short_(use == use_short),
+      std::locale::facet(refs), style_(duration_style::type(use)),
           long_seconds_(long_seconds), long_minutes_(long_minutes),
           long_hours_(long_hours), short_seconds_(short_seconds),
           short_minutes_(short_minutes), short_hours_(short_hours)
@@ -184,12 +210,14 @@ namespace boost
 
     template<class CharT>
     duration_punct<CharT>::duration_punct(int use, const duration_punct& d, size_t refs) :
-      std::locale::facet(refs), use_short_(use == use_short),
+      std::locale::facet(refs), style_(duration_style::type(use)),
           long_seconds_(d.long_seconds_), long_minutes_(d.long_minutes_),
           long_hours_(d.long_hours_), short_seconds_(d.short_seconds_),
           short_minutes_(d.short_minutes_), short_hours_(d.short_hours_)
     {
     }
+
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
 
     template<class CharT, class Traits>
     std::basic_ostream<CharT, Traits>&
@@ -200,10 +228,10 @@ namespace boost
       if (std::has_facet<Facet>(loc))
       {
         const Facet& f = std::use_facet<Facet>(loc);
-        if (f.is_long_name())
-          os.imbue(std::locale(loc, new Facet(Facet::use_short, f)));
+        if (f.is_prefix())
+          os.imbue(std::locale(loc, new Facet(duration_style::symbol, f)));
       } else
-        os.imbue(std::locale(loc, new Facet(Facet::use_short)));
+        os.imbue(std::locale(loc, new Facet(duration_style::symbol)));
       return os;
     }
 
@@ -216,11 +244,12 @@ namespace boost
       if (std::has_facet<Facet>(loc))
       {
         const Facet& f = std::use_facet<Facet>(loc);
-        if (f.is_short_name())
-          os.imbue(std::locale(loc, new Facet(Facet::use_long, f)));
+        if (f.is_symbol())
+          os.imbue(std::locale(loc, new Facet(duration_style::prefix, f)));
       }
       return os;
     }
+#endif
 
 
     /**
@@ -234,7 +263,7 @@ namespace boost
       /**
        * explicit manipulator constructor from a @c duration_style
        */
-      explicit duration_fmt(duration_style::type style)BOOST_CHRONO_NOEXCEPT
+      explicit duration_fmt(duration_style::type style) BOOST_CHRONO_NOEXCEPT
       : style_(style)
       {}
 
@@ -257,28 +286,38 @@ namespace boost
     /**
      * Change the duration_punc facet associated to the output stream depending on the duration_format style parameter.
      */
-    template<class charT, class traits>
-    std::basic_ostream<charT, traits>&
-    operator <<(std::basic_ostream<charT, traits>& os, duration_fmt d)
+    template<class CharT, class Traits>
+    std::basic_ostream<CharT, Traits>&
+    operator <<(std::basic_ostream<CharT, Traits>& os, duration_fmt d)
     {
-      if (d.get_duration_style() == duration_style::symbol)
-      os << duration_short;
-      else if (d.get_duration_style() == duration_style::prefix)
-      os << duration_long;
+      typedef duration_punct<CharT> Facet;
+      std::locale loc = os.getloc();
+      if (std::has_facet<Facet>(loc))
+      {
+        const Facet& f = std::use_facet<Facet>(loc);
+        if (f.get_duration_style()!=d.get_duration_style())
+          os.imbue(std::locale(loc, new Facet(d.get_duration_style(), f)));
+      } else
+        os.imbue(std::locale(loc, new Facet(d.get_duration_style())));
       return os;
     }
 
     /**
      * Change the duration_punc facet associated to the input stream depending on the duration_format style parameter.
      */
-    template<class charT, class traits>
-    std::basic_istream<charT, traits>&
-    operator >>(std::basic_istream<charT, traits>& is, duration_fmt d)
+    template<class CharT, class Traits>
+    std::basic_istream<CharT, Traits>&
+    operator >>(std::basic_istream<CharT, Traits>& is, duration_fmt d)
     {
-      if (d.get_duration_style() == duration_style::symbol)
-      is >> duration_short;
-      else if (d.get_duration_style() == duration_style::prefix)
-      is >> duration_long;
+      typedef duration_punct<CharT> Facet;
+      std::locale loc = is.getloc();
+      if (std::has_facet<Facet>(loc))
+      {
+        const Facet& f = std::use_facet<Facet>(loc);
+        if (f.get_duration_style()!=d.get_duration_style())
+          is.imbue(std::locale(loc, new Facet(d.get_duration_style(), f)));
+      } else
+        is.imbue(std::locale(loc, new Facet(d.get_duration_style())));
       return is;
     }
 
@@ -310,10 +349,7 @@ namespace boost
           s_save_.imbue(std::locale(loc, new Facet()));
 
         const Facet& f = std::use_facet<Facet>(s_save_.getloc());
-        if (f.is_long_name())
-          a_save_ = duration_style::prefix;
-        else
-          a_save_ = duration_style::symbol;
+        a_save_ = f.get_duration_style();
       }
 
       /**
