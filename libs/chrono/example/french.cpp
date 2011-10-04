@@ -7,6 +7,10 @@
 
 // Adapted to Boost from the original Hawards's code
 
+#if defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
+#undef BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
+#endif
+
 #include <boost/chrono/chrono_io.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/thread_clock.hpp>
@@ -22,7 +26,7 @@ int main()
 
     cout.imbue(locale(locale(), new duration_punct<char>
         (
-            duration_punct<char>::use_long,
+            duration_style::prefix,
             "secondes", "minutes", "heures",
             "s", "m", "h"
         )));
@@ -31,4 +35,5 @@ int main()
     seconds s(15);
     milliseconds ms(763);
     cout << h << ", " << m << ", " << s << " et " << ms << '\n';
+    return 0;
 }

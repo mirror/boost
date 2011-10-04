@@ -37,7 +37,7 @@ int main()
          <<  ClockTick(3) + nanoseconds(10) << '\n';
 
     cout << "\nSet cout to use short names:\n";
-    cout << duration_short;
+    cout << duration_fmt(duration_style::symbol);
 
     cout << "milliseconds(3) + microseconds(10) = "
          <<  milliseconds(3) + microseconds(10) << '\n';
@@ -53,7 +53,7 @@ int main()
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
     cout << "steady_clock::now() = " << steady_clock::now() << '\n';
 #endif
-    cout << "\nSet cout to use long names:\n" << duration_long
+    cout << "\nSet cout to use long names:\n" <<     cout << duration_fmt(duration_style::prefix)
          << "high_resolution_clock::now() = " << high_resolution_clock::now() << '\n';
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
     cout << "\nthread_clock::now() = " << thread_clock::now() << '\n';
