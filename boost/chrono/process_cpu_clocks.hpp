@@ -101,7 +101,7 @@ namespace boost { namespace chrono {
             rep   user;    // user cpu time
             rep system;  // system cpu time
 
-            operator rep()
+            operator rep() const
             {
               return real;
             }
@@ -206,6 +206,15 @@ template <class Rep1, class Rep2>
 struct common_type<
   chrono::process_times<Rep1>,
   Rep2
+>
+{
+  typedef chrono::process_times<typename common_type<Rep1, Rep2>::type> type;
+};
+
+template <class Rep1, class Rep2>
+struct common_type<
+  Rep1,
+  chrono::process_times<Rep2>
 >
 {
   typedef chrono::process_times<typename common_type<Rep1, Rep2>::type> type;
