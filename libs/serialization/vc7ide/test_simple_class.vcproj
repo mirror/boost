@@ -98,7 +98,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(ConfigurationName)"
+				AdditionalLibraryDirectories="&quot;$(ConfigurationName)&quot;;..\..\stage\lib"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool
@@ -132,9 +132,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				ImproveFloatingPointConsistency="TRUE"
+				ImproveFloatingPointConsistency="FALSE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ARCHIVE_TEST=binary_archive.hpp"
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="TRUE"
@@ -151,10 +151,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="Library"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(ConfigurationName)"
+				AdditionalLibraryDirectories="&quot;$(ConfigurationName)&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool
@@ -182,6 +181,9 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{30E10563-960A-11D7-9FE9-525400E2CF85}"
+			Name="Library"/>
 	</References>
 	<Files>
 		<File

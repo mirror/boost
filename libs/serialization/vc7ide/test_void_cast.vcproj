@@ -135,6 +135,7 @@
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1"
+				MinimalRebuild="TRUE"
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="TRUE"

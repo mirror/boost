@@ -383,7 +383,8 @@ interface and the standard template driven implementation.  This composition is
 accomplished by the templates
 <a target=polymorphic_iarchive_route_hpp href="../../../boost/archive/detail/polymorphic_iarchive_route.hpp"><code style="white-space: normal">polymorphic_iarchive_route.hpp</code></a>
 and
-<a target=polymorphic_oarchive_route_hpp href="../../../boost/archive/detail/polymorphic_oarchive_route.hpp"><code style="white-space: normal">polymorphic_oarchive_route.hpp</code></a>.
+<a target=polymorphic_oarchive_route_hpp href="../../../boost/archive/detail/polymorphic_oarchive_route.hpp"><code style="white-space: normal">polymorphic_oarchive_route.hpp</code></a>
+which redirect calls to the polymorphic archives to the specific archive.
 As these contain no code specific to the particular implementation archive, they can be used to create
 a polymorphic archive implementation from any functioning templated archive implementation.
 <p>
@@ -399,14 +400,27 @@ of the standard text archive classes
 and
 <a target=text_oarchive_hpp href="../../../boost/archive/text_oarchive.hpp"><code style="white-space: normal">text_oarchive.hpp</code></a>
 respectively. All included polymorphic archives use the same naming scheme.
+
 <h4>Usage</h4>
 Polymorphic archives address the issues raised above regarding templated implementation.
 That is, there is no replicated code, and no recompilation for new archives.  This will
 result in smaller executables for program which use more than one type of archive, and 
-smaller DLLS. There is a
-penalty for calling archive functions through a virtual function dispatch table and there
-is no possibility for a compiler to <code style="white-space: normal">inline</code> archive functions.  This will result
-in a detectable degradation in performance for saving and loading archives.
+smaller DLLS. There is a penalty for calling archive functions through a virtual function 
+dispatch table and there is no possibility for a compiler to <code style="white-space: normal">inline</code> 
+archive functions.  This will result in a detectable degradation in performance for 
+saving and loading archives.
+<p>
+Note this the concept and of polymophic archives is fundamentally incompatible with the
+serialization of new types are are marked "primitive" by the user with:
+<pre><code> 
+BOOST_CLASS_IMPLEMENTATION(my_primitive_type, boost::serialization::primitive_type)
+</code></pre>
+
+Code to implement serialization for these types is instantiated "on the fly" in the user's program.
+But this conflicts with the whole purpose of the polymorphic archive. An attempt to
+serialize such a primitive type will result in a compilation error since the common polymorhic
+interface is static and cannot instantiate code for a new type.
+
 <p>
 The main utility of polymorphic archives will be to permit the buiding of class DLLs that will
 include serialization code for all present and future archives with no redundant code.
