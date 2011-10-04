@@ -42,7 +42,7 @@ namespace
 
     boost::chrono::simple_stopwatch<boost::chrono::system_clock>          sys;
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-    boost::chrono::simple_stopwatch<boost::chrono::steady_clock>          mono;
+    boost::chrono::simple_stopwatch<boost::chrono::steady_clock>          steady;
 #endif
     boost::chrono::simple_stopwatch<>  hires;
     boost::chrono::simple_stopwatch<boost::chrono::process_cpu_clock>          process;
@@ -55,7 +55,7 @@ namespace
 
     boost::chrono::simple_stopwatch<boost::chrono::system_clock>::duration sys_dur = sys.elapsed();
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-    boost::chrono::simple_stopwatch<boost::chrono::steady_clock>::duration mono_dur = mono.elapsed();
+    boost::chrono::simple_stopwatch<boost::chrono::steady_clock>::duration steady_dur = steady.elapsed();
 #endif
     boost::chrono::simple_stopwatch<>::duration hires_dur = hires.elapsed();
     boost::chrono::simple_stopwatch<boost::chrono::process_cpu_clock>::duration times;
@@ -79,10 +79,10 @@ namespace
       && sys_dur < timeout_in_nanoseconds + maximum_delta );
 
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-    std::cout << mono_dur.count() << " mono_dur\n";
+    std::cout << steady_dur.count() << " steady_dur\n";
 
-    BOOST_TEST( mono_dur > timeout_in_nanoseconds - maximum_delta
-      && mono_dur < timeout_in_nanoseconds + maximum_delta );
+    BOOST_TEST( steady_dur > timeout_in_nanoseconds - maximum_delta
+      && steady_dur < timeout_in_nanoseconds + maximum_delta );
 #endif
 
     std::cout << hires_dur.count() << " hires_dur\n";
@@ -92,8 +92,8 @@ namespace
 
     std::cout << times.count().real << " times.real\n";
 
-//    BOOST_TEST( times.count().real > timeout_in_nanoseconds - maximum_delta
-//      && times.count().real < timeout_in_nanoseconds + maximum_delta );
+    BOOST_TEST( ns(times.count().real) > timeout_in_nanoseconds - maximum_delta
+      && ns(times.count().real) < timeout_in_nanoseconds + maximum_delta );
   }
 
 }
