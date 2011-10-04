@@ -62,7 +62,7 @@ int main()
   using namespace boost::chrono;
   using namespace boost;
 
-  test_good("5000 hours", hours(5000), duration_style::prefix_text);
+  test_good("5000 hours", hours(5000), duration_style::prefix);
   test_good("5000 h", hours(5000), duration_style::symbol);
 
   test_good_prefix("5000 hours", hours(5000));

@@ -42,7 +42,7 @@ void check_all()
   using namespace boost::chrono;
   using namespace boost;
 
-  test_good<Clock>("2 hours", hours(2), duration_style::prefix_text);
+  test_good<Clock>("2 hours", hours(2), duration_style::prefix);
   test_good<Clock>("2 h", hours(2), duration_style::symbol);
 
   test_good_prefix<Clock>("2 hours", hours(2));
