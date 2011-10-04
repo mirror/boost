@@ -36,7 +36,7 @@ namespace boost
     {
       enum type
       {
-        prefix_text, symbol
+        prefix, symbol
       };
     };
 
@@ -263,7 +263,7 @@ namespace boost
     {
       if (d.get_duration_style() == duration_style::symbol)
       os << duration_short;
-      else if (d.get_duration_style() == duration_style::prefix_text)
+      else if (d.get_duration_style() == duration_style::prefix)
       os << duration_long;
       return os;
     }
@@ -277,7 +277,7 @@ namespace boost
     {
       if (d.get_duration_style() == duration_style::symbol)
       is >> duration_short;
-      else if (d.get_duration_style() == duration_style::prefix_text)
+      else if (d.get_duration_style() == duration_style::prefix)
       is >> duration_long;
       return is;
     }
@@ -311,7 +311,7 @@ namespace boost
 
         const Facet& f = std::use_facet<Facet>(s_save_.getloc());
         if (f.is_long_name())
-          a_save_ = duration_style::prefix_text;
+          a_save_ = duration_style::prefix;
         else
           a_save_ = duration_style::symbol;
       }
