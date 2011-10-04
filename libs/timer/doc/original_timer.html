@@ -5,14 +5,66 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
-<title>Boost Timer Documentation</title>
+<title>Original Timers</title>
+<style type="text/css">
+ ins {background-color:#A0FFA0}
+ del {background-color:#FFA0A0}
+ body
+ { 
+   font-family: sans-serif;
+   max-width : 8.5in;
+   margin: 1em;
+ }
+</style>
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000">
 
-<h1>
-<img src="../../boost.png" alt="boost.png (6897 bytes)" align="center" width="277" height="86">
- Timer Library</h1>
+<table border="0" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="750">
+  <tr>
+    <td width="300">
+<a href="../../../index.htm">
+<img src="../../../boost.png" alt="boost.png (6897 bytes)" align="middle" width="300" height="86" border="0"></a></td>
+    <td align="middle" width="430">
+    <font size="7">Timer Library<br>
+    Original Timers and Progress Display</font></td>
+  </tr>
+</table>
+
+<table border="0" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" bgcolor="#D7EEFF" width="100%">
+  <tr>
+    <td><a href="index.html">Timer Home</a> &nbsp;&nbsp;
+    <a href="cpu_timers.html">CPU timers</a> &nbsp;&nbsp;
+    <a href="original_timer.html">Original timers</a> &nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+
+<p></p>
+
+<center>
+  <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="80%">
+    <tr>
+      <td width="100%" bgcolor="#FFFF66">
+<p><i><b>These timers are deprecated.</b></i> They date from the earliest days 
+of Boost and do not conform 
+to current Boost practice.</p>
+<ul>
+  <li>The interfaces are the same across all platforms, but the semantics differ 
+  according to platform. Wall-clock time is measured on Windows, while CPU time 
+  is measured on POSIX-like systems.</li>
+  <li>The internal implementation uses only C/C++ standard library functions, so 
+  cannot supply desirable precision and functionality.</li>
+  <li>The headers live in the main Boost header directory.</li>
+  <li>The content are in namespace <code>boost</code>.</li>
+</ul>
+      Please see the Version 2
+    <a href="cpu_timers.html">CPU timers</a> for replacements that conform to 
+      current Boost practice.</td>
+    </tr>
+  </table>
+</center>
+  
 <p>The timer library provides two headers and three classes: </p>
 
 <blockquote>
@@ -201,12 +253,14 @@ compiler (Microsoft and Borland were tested) and the operating system version
 (Windows NT, Windows 95, etc.)&nbsp; Thus the std::clock() function was much
 more reliable, and so was retained even on this platform with its own timer API.</p>
 <hr>
-<p>© Copyright Beman Dawes 1999.<br>
-Distributed under the Boost Software License, Version 1.0. See
-<a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
+<p><font size="2">Revised:
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->04 October 2011<!--webbot bot="Timestamp" endspan i-checksum="32185" --></font></p>
 
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->November 07, 2007<!--webbot bot="Timestamp" i-checksum="39599" endspan -->
-</p>
+<p><font size="2">© Copyright Beman Dawes 1999.</font></p>
+
+<p><font size="2">Distributed under the Boost Software License, Version 1.0. See
+</font>
+<a href="http://www.boost.org/LICENSE_1_0.txt"><font size="2">www.boost.org/LICENSE_1_0.txt</font></a></p>
 
 </body>
 
