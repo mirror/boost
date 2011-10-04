@@ -20,6 +20,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/chrono/detail/scan_keyword.hpp>
+#include <boost/chrono/io/duration_unit_string.hpp>
 #include <locale>
 
 namespace boost
@@ -55,6 +56,7 @@ namespace boost
     private:
       duration_style::type style_;
 
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
       string_type long_seconds_;
       string_type long_minutes_;
       string_type long_hours_;
@@ -103,6 +105,7 @@ namespace boost
       }
 
       void init_C();
+#endif
 
     public:
       static std::locale::id id;
@@ -114,17 +117,23 @@ namespace boost
         init_C();
       }
 
+      duration_punct(int use, const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs =
+              0);
+
+      duration_punct(int use, const duration_punct& d, size_t refs = 0);
+
 #else
       explicit duration_punct(duration_style::type style= duration_style::prefix, size_t refs = 0) :
         std::locale::facet(refs), style_(style)
       {
       }
+      explicit duration_punct(duration_style::type style, const duration_punct&, size_t refs = 0) :
+        std::locale::facet(refs), style_(style)
+      {
+      }
 #endif
 
-      duration_punct(int use, const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs =
-              0);
 
-      duration_punct(int use, const duration_punct& d, size_t refs = 0);
 
 
       bool is_symbol() const BOOST_CHRONO_NOEXCEPT
@@ -139,6 +148,7 @@ namespace boost
       {
         return style_;
       }
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
 
       template<class Period>
       string_type short_name() const
@@ -177,10 +187,13 @@ namespace boost
       {
         return is_prefix();
       }
+#endif
     };
 
     template<class CharT>
     std::locale::id duration_punct<CharT>::id;
+
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
 
     template<class CharT>
     void duration_punct<CharT>::init_C()
@@ -199,6 +212,8 @@ namespace boost
       long_hours_.assign(h, h + sizeof(h) / sizeof(h[0]));
     }
 
+
+
     template<class CharT>
     duration_punct<CharT>::duration_punct(int use, const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs) :
       std::locale::facet(refs), style_(duration_style::type(use)),
@@ -216,9 +231,6 @@ namespace boost
           short_minutes_(d.short_minutes_), short_hours_(d.short_hours_)
     {
     }
-
-#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
-
     template<class CharT, class Traits>
     std::basic_ostream<CharT, Traits>&
     duration_short(std::basic_ostream<CharT, Traits>& os)
@@ -402,7 +414,12 @@ namespace boost
           if (!std::has_facet<Facet>(loc))
             os.imbue(std::locale(loc, new Facet));
           const Facet& f = std::use_facet<Facet>(os.getloc());
+
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
           return os << d.count() << ' ' << f.template name<Rep,Period>(d);
+#else
+          return os << d.count() << ' ' << duration_unit_string<CharT>(f.is_prefix(), d);
+#endif
         }
         catch (...)
         {
@@ -490,8 +507,13 @@ namespace boost
               ++i;
               const std::basic_string<CharT> units[] =
               {
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
                 f.template long_name<ratio<1> >(),
                 f.template short_name<ratio<1> >()
+#else
+                duration_unit_string<CharT>(true, seconds(2)),
+                duration_unit_string<CharT>(false, seconds(1))
+#endif
               };
               std::ios_base::iostate err = std::ios_base::goodbit;
               const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
@@ -510,8 +532,10 @@ namespace boost
             else
             {
               // parse SI name, short or long
+
               const std::basic_string<CharT> units[] =
               {
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
                 f.template long_name<atto>(),
                 f.template short_name<atto>(),
                 f.template long_name<femto>(),
@@ -550,13 +574,76 @@ namespace boost
                 f.template short_name<ratio<60> >(),
                 f.template long_name<ratio<3600> >(),
                 f.template short_name<ratio<3600> >()
-              };
+#else
+                duration_unit_string<CharT>(true, duration<Rep, atto>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, atto>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, atto>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, femto>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, femto>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, femto>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, pico>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, pico>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, pico>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, nano>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, nano>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, nano>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, micro>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, micro>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, micro>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, milli>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, milli>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, milli>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, centi>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, centi>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, centi>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, deci>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, deci>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, deci>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, deca>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, deca>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, deca>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, hecto>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, hecto>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, hecto>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, kilo>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, kilo>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, kilo>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, mega>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, mega>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, mega>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, giga>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, giga>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, giga>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, giga>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, tera>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, giga>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, peta>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, peta>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, peta>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, exa>(2)),
+                duration_unit_string<CharT>(true, duration<Rep, exa>(1)),
+                duration_unit_string<CharT>(false, duration<Rep, exa>(1)),
+                duration_unit_string<CharT>(true, duration<Rep, ratio<1> >(2)),
+                duration_unit_string<CharT>(true, duration<Rep, ratio<1> >(1)),
+                duration_unit_string<CharT>(false, duration<Rep, ratio<1> >(1)),
+                duration_unit_string<CharT>(true, duration<Rep, ratio<60> >(2)),
+                duration_unit_string<CharT>(true, duration<Rep, ratio<60> >(1)),
+                duration_unit_string<CharT>(false, duration<Rep, ratio<60> >(1)),
+                duration_unit_string<CharT>(true, duration<Rep, ratio<3600> >(2)),
+                duration_unit_string<CharT>(true, duration<Rep, ratio<3600> >(1)),
+                duration_unit_string<CharT>(false, duration<Rep, ratio<3600> >(1)),
+#endif
+                };
               std::ios_base::iostate err = std::ios_base::goodbit;
               const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
                   units, units + sizeof(units)/sizeof(units[0]),
                   //~ std::use_facet<std::ctype<CharT> >(loc),
                   err);
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
               switch ((k - units) / 2)
+#else
+              switch ((k - units) / 3)
+#endif
               {
                 case 0:
                 num = 1ULL;
