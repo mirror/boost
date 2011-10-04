@@ -534,13 +534,7 @@ namespace chrono {
     {
       typedef typename common_type<duration<Rep1, Period1>,
         duration<Rep2, Period2> >::type CD;
-#if 0
-      CD result = lhs;
-      result += rhs;
-      return result;
-#else
       return CD(CD(lhs).count()+CD(rhs).count());
-#endif
     }
 
     // Duration -
@@ -553,13 +547,7 @@ namespace chrono {
     {
       typedef typename common_type<duration<Rep1, Period1>,
             duration<Rep2, Period2> >::type CD;
-#if 0
-      CD result = lhs;
-      result -= rhs;
-      return result;
-#else
       return CD(CD(lhs).count()-CD(rhs).count());
-#endif
     }
 
     // Duration *
@@ -577,13 +565,7 @@ namespace chrono {
     {
       typedef typename common_type<Rep1, Rep2>::type CR;
       typedef duration<CR, Period> CD;
-#if 0
-      CD r = d;
-        r *= static_cast<CR>(s);
-        return r;
-#else
       return CD(CD(d).count()*static_cast<CR>(s));
-#endif
     }
 
     template <class Rep1, class Period, class Rep2>
@@ -613,13 +595,7 @@ namespace chrono {
         typedef typename common_type<Rep1, Rep2>::type CR;
         typedef duration<CR, Period> CD;
 
-#if 0
-        CD r = d;
-        r /= static_cast<CR>(s);
-        return r;
-#else
       return CD(CD(d).count()/static_cast<CR>(s));
-#endif
     }
 
     template <class Rep1, class Period1, class Rep2, class Period2>
@@ -644,12 +620,7 @@ namespace chrono {
         typedef typename common_type<Rep1, Rep2>::type CR;
         typedef duration<CR, Period> CD;
 
-#if 0
-        CD r = d;
-        return  static_cast<CR>(s)/r.count();
-#else
       return static_cast<CR>(s)/CD(d).count();
-#endif
     }
     #endif
     // Duration %
@@ -665,14 +636,8 @@ namespace chrono {
         typedef typename common_type<Rep1, Rep2>::type CR;
         typedef duration<CR, Period> CD;
 
-#if 0
-        CD r = d;
-        r %= static_cast<CR>(s);
-        return r;
-#else
       return CD(CD(d).count()%static_cast<CR>(s));
-#endif
-      }
+    }
 
     template <class Rep1, class Period1, class Rep2, class Period2>
     inline BOOST_CHRONO_CONSTEXPR
@@ -682,14 +647,8 @@ namespace chrono {
         typedef typename common_type<duration<Rep1, Period1>,
                                  duration<Rep2, Period2> >::type CD;
 
-#if 0
-        CD r(lhs);
-        r%=CD(rhs);
-        return r;
-#else
       return CD(CD(lhs).count()%CD(rhs).count());
-#endif
-      }
+    }
 
 
 //----------------------------------------------------------------------------//

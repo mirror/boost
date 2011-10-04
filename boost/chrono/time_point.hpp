@@ -244,13 +244,7 @@ namespace chrono {
           Clock,
           CDuration
       > TimeResult;
-#if 0
-        TimeResult r(lhs);
-        r += rhs;
-        return r;
-#else
         return TimeResult(lhs.time_since_epoch() + CDuration(rhs));
-#endif
     }
 
     // time_point operator+(duration x, time_point y);
