@@ -15,6 +15,7 @@ Many thanks to Howard for making his code available under the Boost license.
 #include <iostream>
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/chrono_io.hpp>
+#include <boost/chrono/system_clocks.hpp>
 #include <boost/chrono/thread_clock.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 
