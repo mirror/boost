@@ -18,6 +18,7 @@
 #include <locale>
 #include <boost/chrono/detail/scan_keyword.hpp>
 #include <boost/chrono/round.hpp>
+#include <boost/chrono/io/translate.hpp>
 
 namespace boost
 {
@@ -152,7 +153,7 @@ namespace boost
     operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<Clock,
         Duration>& tp)
     {
-      return os << tp.time_since_epoch() << clock_string<Clock, CharT>::since();
+      return os << tp.time_since_epoch() << epoch_translate(clock_string<Clock, CharT>::since());
     }
 
     template<class CharT, class Traits, class Clock, class Duration>
@@ -165,7 +166,7 @@ namespace boost
       if (is.good())
       {
         const std::basic_string<CharT> units =
-            clock_string<Clock, CharT>::since();
+            epoch_translate(clock_string<Clock, CharT>::since());
         std::ios_base::iostate err = std::ios_base::goodbit;
         typedef std::istreambuf_iterator<CharT, Traits> in_iterator;
         in_iterator i(is);

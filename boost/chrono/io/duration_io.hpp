@@ -127,7 +127,7 @@ namespace boost
         std::locale::facet(refs), style_(style)
       {
       }
-      explicit duration_punct(duration_style::type style, const duration_punct&, size_t refs = 0) :
+      duration_punct(duration_style::type style, const duration_punct&, size_t refs = 0) :
         std::locale::facet(refs), style_(style)
       {
       }
@@ -418,7 +418,7 @@ namespace boost
 #if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
           return os << d.count() << ' ' << f.template name<Rep,Period>(d);
 #else
-          return os << d.count() << ' ' << duration_unit_string<CharT>(f.is_prefix(), d);
+          return os << d.count() << ' ' << duration_unit<CharT>(f.is_prefix(), d);
 #endif
         }
         catch (...)
@@ -511,8 +511,8 @@ namespace boost
                 f.template long_name<ratio<1> >(),
                 f.template short_name<ratio<1> >()
 #else
-                duration_unit_string<CharT>(true, seconds(2)),
-                duration_unit_string<CharT>(false, seconds(1))
+                duration_unit<CharT>(true, seconds(2)),
+                duration_unit<CharT>(false, seconds(1))
 #endif
               };
               std::ios_base::iostate err = std::ios_base::goodbit;
@@ -575,63 +575,63 @@ namespace boost
                 f.template long_name<ratio<3600> >(),
                 f.template short_name<ratio<3600> >()
 #else
-                duration_unit_string<CharT>(true, duration<Rep, atto>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, atto>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, atto>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, femto>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, femto>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, femto>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, pico>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, pico>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, pico>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, nano>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, nano>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, nano>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, micro>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, micro>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, micro>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, milli>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, milli>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, milli>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, centi>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, centi>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, centi>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, deci>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, deci>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, deci>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, deca>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, deca>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, deca>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, hecto>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, hecto>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, hecto>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, kilo>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, kilo>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, kilo>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, mega>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, mega>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, mega>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, giga>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, giga>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, giga>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, giga>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, tera>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, giga>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, peta>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, peta>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, peta>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, exa>(2)),
-                duration_unit_string<CharT>(true, duration<Rep, exa>(1)),
-                duration_unit_string<CharT>(false, duration<Rep, exa>(1)),
-                duration_unit_string<CharT>(true, duration<Rep, ratio<1> >(2)),
-                duration_unit_string<CharT>(true, duration<Rep, ratio<1> >(1)),
-                duration_unit_string<CharT>(false, duration<Rep, ratio<1> >(1)),
-                duration_unit_string<CharT>(true, duration<Rep, ratio<60> >(2)),
-                duration_unit_string<CharT>(true, duration<Rep, ratio<60> >(1)),
-                duration_unit_string<CharT>(false, duration<Rep, ratio<60> >(1)),
-                duration_unit_string<CharT>(true, duration<Rep, ratio<3600> >(2)),
-                duration_unit_string<CharT>(true, duration<Rep, ratio<3600> >(1)),
-                duration_unit_string<CharT>(false, duration<Rep, ratio<3600> >(1)),
+                duration_unit<CharT>(true, duration<Rep, atto>(2)),
+                duration_unit<CharT>(true, duration<Rep, atto>(1)),
+                duration_unit<CharT>(false, duration<Rep, atto>(1)),
+                duration_unit<CharT>(true, duration<Rep, femto>(2)),
+                duration_unit<CharT>(true, duration<Rep, femto>(1)),
+                duration_unit<CharT>(false, duration<Rep, femto>(1)),
+                duration_unit<CharT>(true, duration<Rep, pico>(2)),
+                duration_unit<CharT>(true, duration<Rep, pico>(1)),
+                duration_unit<CharT>(false, duration<Rep, pico>(1)),
+                duration_unit<CharT>(true, duration<Rep, nano>(2)),
+                duration_unit<CharT>(true, duration<Rep, nano>(1)),
+                duration_unit<CharT>(false, duration<Rep, nano>(1)),
+                duration_unit<CharT>(true, duration<Rep, micro>(2)),
+                duration_unit<CharT>(true, duration<Rep, micro>(1)),
+                duration_unit<CharT>(false, duration<Rep, micro>(1)),
+                duration_unit<CharT>(true, duration<Rep, milli>(2)),
+                duration_unit<CharT>(true, duration<Rep, milli>(1)),
+                duration_unit<CharT>(false, duration<Rep, milli>(1)),
+                duration_unit<CharT>(true, duration<Rep, centi>(2)),
+                duration_unit<CharT>(true, duration<Rep, centi>(1)),
+                duration_unit<CharT>(false, duration<Rep, centi>(1)),
+                duration_unit<CharT>(true, duration<Rep, deci>(2)),
+                duration_unit<CharT>(true, duration<Rep, deci>(1)),
+                duration_unit<CharT>(false, duration<Rep, deci>(1)),
+                duration_unit<CharT>(true, duration<Rep, deca>(2)),
+                duration_unit<CharT>(true, duration<Rep, deca>(1)),
+                duration_unit<CharT>(false, duration<Rep, deca>(1)),
+                duration_unit<CharT>(true, duration<Rep, hecto>(2)),
+                duration_unit<CharT>(true, duration<Rep, hecto>(1)),
+                duration_unit<CharT>(false, duration<Rep, hecto>(1)),
+                duration_unit<CharT>(true, duration<Rep, kilo>(2)),
+                duration_unit<CharT>(true, duration<Rep, kilo>(1)),
+                duration_unit<CharT>(false, duration<Rep, kilo>(1)),
+                duration_unit<CharT>(true, duration<Rep, mega>(2)),
+                duration_unit<CharT>(true, duration<Rep, mega>(1)),
+                duration_unit<CharT>(false, duration<Rep, mega>(1)),
+                duration_unit<CharT>(true, duration<Rep, giga>(2)),
+                duration_unit<CharT>(true, duration<Rep, giga>(1)),
+                duration_unit<CharT>(false, duration<Rep, giga>(1)),
+                duration_unit<CharT>(true, duration<Rep, giga>(2)),
+                duration_unit<CharT>(true, duration<Rep, tera>(1)),
+                duration_unit<CharT>(false, duration<Rep, giga>(1)),
+                duration_unit<CharT>(true, duration<Rep, peta>(2)),
+                duration_unit<CharT>(true, duration<Rep, peta>(1)),
+                duration_unit<CharT>(false, duration<Rep, peta>(1)),
+                duration_unit<CharT>(true, duration<Rep, exa>(2)),
+                duration_unit<CharT>(true, duration<Rep, exa>(1)),
+                duration_unit<CharT>(false, duration<Rep, exa>(1)),
+                duration_unit<CharT>(true, duration<Rep, ratio<1> >(2)),
+                duration_unit<CharT>(true, duration<Rep, ratio<1> >(1)),
+                duration_unit<CharT>(false, duration<Rep, ratio<1> >(1)),
+                duration_unit<CharT>(true, duration<Rep, ratio<60> >(2)),
+                duration_unit<CharT>(true, duration<Rep, ratio<60> >(1)),
+                duration_unit<CharT>(false, duration<Rep, ratio<60> >(1)),
+                duration_unit<CharT>(true, duration<Rep, ratio<3600> >(2)),
+                duration_unit<CharT>(true, duration<Rep, ratio<3600> >(1)),
+                duration_unit<CharT>(false, duration<Rep, ratio<3600> >(1)),
 #endif
                 };
               std::ios_base::iostate err = std::ios_base::goodbit;
