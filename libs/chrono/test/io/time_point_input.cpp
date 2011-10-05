@@ -5,6 +5,9 @@
 #include <boost/chrono/chrono_io.hpp>
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/chrono/system_clocks.hpp>
+#include <boost/chrono/thread_clock.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
 
 template<typename Clock, typename D>
 void test_good(std::string str, D res)
