@@ -1,7 +1,7 @@
 //  chrono_io
 //
 //  (C) Copyright Howard Hinnant
-//  (C) Copyright 2010 Vicente J. Botet Escriba
+//  (C) Copyright 2010-2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -12,7 +12,6 @@
 #ifndef BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 #define BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 
-#include <boost/chrono/io/clock_string.hpp>
 #include <boost/chrono/io/duration_io.hpp>
 #include <boost/chrono/chrono.hpp>
 #include <locale>
