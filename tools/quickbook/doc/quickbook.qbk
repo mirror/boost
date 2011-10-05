@@ -2184,12 +2184,12 @@ case, check out [@http://www.pkgsrc.org pkgsrc].
 
 [endsect] [/ macosx]
 
-[section:windows Windows 2000, XP, 2003, Vista]
+[section:windows Windows 2000, XP, 2003, Vista, 7]
 
 [:['Section contributed by Julio M. Merino Vidal]]
 
 The following instructions apply to any Windows system based on Windows
-2000, including Windows XP, Windows 2003 Server and Windows Vista. The
+2000, including Windows XP, Windows 2003 Server, Windows Vista, and Windows 7. The
 paths shown below are taken from a Windows Vista machine; you will need to
 adjust them to match your system in case you are running an older version.
 
