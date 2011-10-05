@@ -67,7 +67,7 @@
 // global unit, this is not safe, but until the unit test framework uses
 // shared_ptr throughout this is about as good as it gets :-(
 //
-boost::unit_test_framework::test_suite* get_master_unit(const char* name = 0);
+boost::unit_test::test_suite* get_master_unit(const char* name = 0);
 
 //
 // initialisation class:
@@ -113,7 +113,7 @@ int error_count = 0;
    }\
    }while(0)
 
-#define BOOST_MESSAGE(message)\
+#define BOOST_TEST_MESSAGE(message)\
    do{ std::cout << __FILE__ << ":" << __LINE__ << ": " << message << std::endl; }while(0)
 
 #define BOOST_CHECK(pred)\
