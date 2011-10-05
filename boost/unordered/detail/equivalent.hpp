@@ -614,7 +614,6 @@ namespace boost { namespace unordered { namespace detail {
             previous_pointer prev = static_cast<previous_pointer>(begin->group_prev_);
 
             if(prev->next_ != static_cast<link_pointer>(begin)) {
-std::cout << "A" << std::endl;
                 // The node is at the beginning of a group.
 
                 // Find the previous node pointer:
@@ -626,7 +625,6 @@ std::cout << "A" << std::endl;
                 if (end) split_group(end);
             }
             else {
-std::cout << "B" << std::endl;
                 node_pointer group1 = split_group(begin);
 
                 if (end) {
