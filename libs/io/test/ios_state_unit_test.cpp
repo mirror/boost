@@ -639,14 +639,14 @@ ios_word_saver_unit_test
 
 
 // Unit test program
-boost::unit_test_framework::test_suite *
+boost::unit_test::test_suite *
 init_unit_test_suite
 (
     int         ,   // "argc" is unused
     char *      []  // "argv" is unused
 )
 {
-    boost::unit_test_framework::test_suite *  test
+    boost::unit_test::test_suite *  test
      = BOOST_TEST_SUITE( "I/O state saver test" );
 
     test->add( BOOST_TEST_CASE(ios_flags_saver_unit_test) );
