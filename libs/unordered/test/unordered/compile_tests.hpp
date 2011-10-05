@@ -413,6 +413,7 @@ void unordered_copyable_test(X& x, Key& k, T& t, Hash& hf, Pred& eq)
     BOOST_DEDUCED_TYPENAME X::value_type* j = 0;
 
     X(i, j, 10, hf, eq);
+
     X a5(i, j, 10, hf, eq);
     X(i, j, 10, hf);
     X a6(i, j, 10, hf);

@@ -23,6 +23,7 @@
 #include <boost/limits.hpp>
 #include <boost/type_traits/add_lvalue_reference.hpp>
 #include <boost/pointer_to_other.hpp>
+#include <boost/assert.hpp>
 
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
 #  include <memory>
@@ -454,14 +455,14 @@ namespace boost { namespace unordered { namespace detail {
     };
 #endif
 
-    // allocator_array_constructor
+    // array_constructor
     //
     // Allocate and construct an array in an exception safe manner, and
     // clean up if an exception is thrown before the container takes charge
     // of it.
 
     template <typename Allocator>
-    struct allocator_array_constructor
+    struct array_constructor
     {
         typedef typename allocator_traits<Allocator>::pointer
             pointer;
@@ -471,14 +472,14 @@ namespace boost { namespace unordered { namespace detail {
         pointer constructed_;
         std::size_t length_;
 
-        allocator_array_constructor(Allocator& a)
+        array_constructor(Allocator& a)
             : alloc_(a), ptr_(), constructed_(), length_(0)
         {
             constructed_ = pointer();
             ptr_ = pointer();
         }
 
-        ~allocator_array_constructor() {
+        ~array_constructor() {
             if (ptr_) {
                 for(pointer p = ptr_; p != constructed_; ++p)
                     allocator_traits<Allocator>::destroy(alloc_,
@@ -512,9 +513,9 @@ namespace boost { namespace unordered { namespace detail {
             return p;
         }
     private:
-        allocator_array_constructor(allocator_array_constructor const&);
-        allocator_array_constructor& operator=(
-            allocator_array_constructor const&);
+        array_constructor(array_constructor const&);
+        array_constructor& operator=(
+            array_constructor const&);
     };
 }}}
 

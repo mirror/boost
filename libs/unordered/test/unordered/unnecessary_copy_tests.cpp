@@ -245,9 +245,11 @@ namespace unnecessary_copy_tests
         x.emplace();
 #if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         COPY_COUNT(1); MOVE_COUNT(0);
-#else
+#elif !defined(BOOST_NO_RVALUE_REFERENCES)
         // source_cost doesn't make much sense here, but it seems to fit.
         COPY_COUNT(1); MOVE_COUNT(source_cost);
+#else
+        COPY_COUNT(1); MOVE_COUNT(1 + source_cost);
 #endif
 #endif
 
@@ -357,7 +359,6 @@ namespace unnecessary_copy_tests
     (defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ > 2) || \
     (defined(BOOST_MSVC) && BOOST_MSVC >= 1600 ) || \
     (!defined(__GNUC__) && !defined(BOOST_MSVC))
-
         count_copies part;
         reset();
         std::pair<count_copies const&, count_copies const&> a_ref(part, part);

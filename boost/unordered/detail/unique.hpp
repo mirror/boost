@@ -7,66 +7,277 @@
 #ifndef BOOST_UNORDERED_DETAIL_UNIQUE_HPP_INCLUDED
 #define BOOST_UNORDERED_DETAIL_UNIQUE_HPP_INCLUDED
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+#endif
+
+#include <boost/unordered/detail/table.hpp>
+#include <boost/unordered/detail/emplace_args.hpp>
 #include <boost/unordered/detail/extract_key.hpp>
+#include <boost/throw_exception.hpp>
+#include <stdexcept>
 
 namespace boost { namespace unordered { namespace detail {
 
-    template <class T>
-    class unique_table : public T::table_base
-    {
-    public:
-        typedef typename T::hasher hasher;
-        typedef typename T::key_equal key_equal;
-        typedef typename T::value_allocator value_allocator;
-        typedef typename T::key_type key_type;
-        typedef typename T::value_type value_type;
-        typedef typename T::table_base table_base;
-        typedef typename T::node_constructor node_constructor;
-        typedef typename T::node_allocator node_allocator;
+    template <typename VoidPointer, typename T> struct node;
+    template <typename T> struct ptr_node;
+    template <typename Types> struct table_impl;
 
-        typedef typename T::node node;
-        typedef typename T::node_ptr node_ptr;
-        typedef typename T::bucket_ptr bucket_ptr;
-        typedef typename T::extractor extractor;
-        
-        typedef std::pair<node_ptr, bool> emplace_return;
+    template <typename VoidPointer, typename T>
+    struct node :
+        ::boost::unordered::detail::value_base<T>
+    {
+        typedef VoidPointer link_pointer;
+
+        link_pointer next_;
+        std::size_t hash_;
+
+        node() :
+            next_(),
+            hash_(0)
+        {}
+
+        void init(link_pointer)
+        {
+        }
+    };
+
+    template <typename T>
+    struct ptr_node :
+        ::boost::unordered::detail::value_base<T>,
+        ::boost::unordered::detail::ptr_bucket
+    {
+        typedef ::boost::unordered::detail::ptr_bucket bucket_base;
+        typedef ptr_bucket* link_pointer;
+
+        std::size_t hash_;
+
+        ptr_node() :
+            bucket_base(),
+            hash_(0)
+        {}
+
+        void init(link_pointer)
+        {
+        }
+    };
+
+    // If the allocator uses raw pointers use ptr_node
+    // Otherwise use node.
+
+    template <typename A, typename T, typename VoidPointer, typename NodePtr, typename BucketPtr>
+    struct pick_node2
+    {
+        typedef ::boost::unordered::detail::node<VoidPointer, T> node;
+
+        typedef typename ::boost::unordered::detail::allocator_traits<
+            typename ::boost::unordered::detail::rebind_wrap<A, node>::type
+        >::pointer node_pointer;
+
+        typedef ::boost::unordered::detail::bucket<node_pointer> bucket;
+        typedef VoidPointer link_pointer;
+    };
+
+    template <typename A, typename T>
+    struct pick_node2<A, T, void*,
+        ::boost::unordered::detail::ptr_node<T>*,
+        ::boost::unordered::detail::ptr_bucket*>
+    {
+        typedef ::boost::unordered::detail::ptr_node<T> node;
+        typedef ::boost::unordered::detail::ptr_bucket bucket;
+        typedef bucket* link_pointer;
+    };
+
+    template <typename A, typename T>
+    struct pick_node
+    {
+        typedef ::boost::unordered::detail::allocator_traits<
+            typename ::boost::unordered::detail::rebind_wrap<A,
+                ::boost::unordered::detail::ptr_node<T> >::type
+        > tentative_node_traits;
+
+        typedef ::boost::unordered::detail::allocator_traits<
+            typename ::boost::unordered::detail::rebind_wrap<A,
+                ::boost::unordered::detail::ptr_bucket >::type
+        > tentative_bucket_traits;
+
+        typedef pick_node2<A, T,
+            typename tentative_node_traits::void_pointer,
+            typename tentative_node_traits::pointer,
+            typename tentative_bucket_traits::pointer> pick;
+
+        typedef typename pick::node node;
+        typedef typename pick::bucket bucket;
+        typedef typename pick::link_pointer link_pointer;
+    };
+
+    template <typename A, typename H, typename P>
+    struct set
+    {
+        typedef set<A, H, P> types;
+
+        typedef A allocator;
+        typedef H hasher;
+        typedef P key_equal;
+
+        typedef ::boost::unordered::detail::allocator_traits<A> traits;
+        typedef typename traits::value_type value_type;
+        typedef typename traits::void_pointer void_pointer;
+        typedef value_type key_type;
+
+        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::node node;
+        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
+        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
+        typedef ::boost::unordered::detail::table_impl<types> table;
+
+        typedef ::boost::unordered::detail::set_extractor<value_type> extractor;
+    };
+
+    template <typename A, typename K, typename H, typename P>
+    struct map
+    {
+        typedef map<A, K, H, P> types;
+
+        typedef A allocator;
+        typedef H hasher;
+        typedef P key_equal;
+        typedef K key_type;
+
+        typedef ::boost::unordered::detail::allocator_traits<A> traits;
+        typedef typename traits::value_type value_type;
+        typedef typename traits::void_pointer void_pointer;
+
+        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::node node;
+        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
+        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
+        typedef ::boost::unordered::detail::table_impl<types> table;
+
+        typedef ::boost::unordered::detail::map_extractor<key_type, value_type> extractor;
+    };
+
+    template <typename Types>
+    struct table_impl : ::boost::unordered::detail::table<Types>
+    {
+        typedef ::boost::unordered::detail::table<Types> table;
+        typedef typename table::value_type value_type;
+        typedef typename table::bucket bucket;
+        typedef typename table::buckets buckets;
+        typedef typename table::node_pointer node_pointer;
+        typedef typename table::node_allocator node_allocator;
+        typedef typename table::node_allocator_traits node_allocator_traits;
+        typedef typename table::bucket_pointer bucket_pointer;
+        typedef typename table::link_pointer link_pointer;
+        typedef typename table::previous_pointer previous_pointer;
+        typedef typename table::hasher hasher;
+        typedef typename table::key_equal key_equal;
+        typedef typename table::key_type key_type;
+        typedef typename table::node_constructor node_constructor;
+        typedef typename table::extractor extractor;
+
+        typedef std::pair<node_pointer, bool> emplace_return;
 
         // Constructors
 
-        unique_table(std::size_t n, hasher const& hf, key_equal const& eq,
-            value_allocator const& a)
-          : table_base(n, hf, eq, a) {}
-        unique_table(unique_table const& x)
-          : table_base(x,
-                allocator_traits<node_allocator>::
+        table_impl(std::size_t n,
+                hasher const& hf,
+                key_equal const& eq,
+                node_allocator const& a)
+          : table(n, hf, eq, a)
+        {}
+
+        table_impl(table_impl const& x)
+          : table(x, node_allocator_traits::
                 select_on_container_copy_construction(x.node_alloc())) {}
-        unique_table(unique_table const& x, value_allocator const& a)
-          : table_base(x, a) {}
-        unique_table(unique_table& x, move_tag m)
-          : table_base(x, m) {}
-        unique_table(unique_table& x, value_allocator const& a,
-            move_tag m)
-          : table_base(x, a, m) {}
-        ~unique_table() {}
+
+        table_impl(table_impl const& x,
+                node_allocator const& a)
+          : table(x, a)
+        {}
+
+        table_impl(table_impl& x,
+                ::boost::unordered::detail::move_tag m)
+          : table(x, m)
+        {}
+
+        table_impl(table_impl& x,
+                node_allocator const& a,
+                ::boost::unordered::detail::move_tag m)
+          : table(x, a, m)
+        {}
+
+        // Accessors
+
+        template <class Key, class Pred>
+        node_pointer find_node_impl(
+                std::size_t hash,
+                Key const& k,
+                Pred const& eq) const
+        {
+            std::size_t bucket_index = hash % this->bucket_count_;
+            node_pointer n = this->get_start(bucket_index);
+
+            for (;;)
+            {
+                if (!n) return n;
+
+                std::size_t node_hash = n->hash_;
+                if (hash == node_hash)
+                {
+                    if (eq(k, this->get_key(n->value())))
+                        return n;
+                }
+                else
+                {
+                    if (node_hash % this->bucket_count_ != bucket_index)
+                        return node_pointer();
+                }
+
+                n = static_cast<node_pointer>(n->next_);
+            }
+        }
+
+        std::size_t count(key_type const& k) const
+        {
+            return this->find_node(k) ? 1 : 0;
+        }
+
+        value_type& at(key_type const& k) const
+        {
+            if (this->size_) {
+                node_pointer it = this->find_node(k);
+                if (it) return it->value();
+            }
+
+            ::boost::throw_exception(
+                std::out_of_range("Unable to find key in unordered_map."));
+        }
+
+        std::pair<node_pointer, node_pointer>
+            equal_range(key_type const& k) const
+        {
+            node_pointer n = this->find_node(k);
+            return std::make_pair(n,
+                n ? static_cast<node_pointer>(n->next_) : n);
+        }
 
         // equals
 
-        bool equals(unique_table const& other) const
+        bool equals(table_impl const& other) const
         {
             if(this->size_ != other.size_) return false;
             if(!this->size_) return true;
     
-            for(node_ptr n1 = this->get_bucket(this->bucket_count_)->next_;
-                n1; n1 = n1->next_)
+            for(node_pointer n1 = this->get_start(); n1;
+                n1 = static_cast<node_pointer>(n1->next_))
             {
-                node_ptr n2 = other.find_matching_node(n1);
+                node_pointer n2 = other.find_matching_node(n1);
 
 #if !defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
-                if(!n2 || node::get_value(n1) != node::get_value(n2))
+                if(!n2 || n1->value() != n2->value())
                     return false;
 #else
                 if(!n2 || !extractor::compare_mapped(
-                        node::get_value(n1), node::get_value(n2)))
+                        n1->value(), n2->value()))
                     return false;
 #endif
             }
@@ -74,247 +285,147 @@ namespace boost { namespace unordered { namespace detail {
             return true;
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        // A convenience method for adding nodes.
+        // Emplace/Insert
 
-        node_ptr add_node(
+        inline node_pointer add_node(
                 node_constructor& a,
-                std::size_t bucket_index,
-                std::size_t hash)        
+                std::size_t hash)
         {
-            bucket_ptr b = this->get_bucket(bucket_index);
-            node_ptr n = a.release();
-            node::set_hash(n, hash);
+            node_pointer n = a.release();
+            n->hash_ = hash;
     
+            bucket_pointer b = this->get_bucket(hash % this->bucket_count_);
+
             if (!b->next_)
             {
-                bucket_ptr start_node = this->get_bucket(this->bucket_count_);
+                previous_pointer start_node = this->get_previous_start();
                 
                 if (start_node->next_) {
-                    this->buckets_[
-                        node::get_hash(start_node->next_) % this->bucket_count_
-                    ].next_ = n;
+                    this->get_bucket(
+                        static_cast<node_pointer>(start_node->next_)->hash_ %
+                            this->bucket_count_)->next_ = n;
                 }
-    
+
                 b->next_ = start_node;
                 n->next_ = start_node->next_;
-                start_node->next_ = n;
+                start_node->next_ = static_cast<link_pointer>(n);
             }
             else
             {
                 n->next_ = b->next_->next_;
-                b->next_->next_ = n;
+                b->next_->next_ = static_cast<link_pointer>(n);
             }
-    
+
             ++this->size_;
             return n;
         }
-
-        ////////////////////////////////////////////////////////////////////////////
-        // Insert methods
-
-        // if hash function throws, basic exception safety
-        // strong otherwise
 
         value_type& operator[](key_type const& k)
         {
             typedef typename value_type::second_type mapped_type;
     
             std::size_t hash = this->hash_function()(k);
-            std::size_t bucket_index = hash % this->bucket_count_;
-            node_ptr pos = this->find_node(bucket_index, hash, k);
+            node_pointer pos = this->find_node(hash, k);
     
-            if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                return node::get_value(pos);
-            }
+            if (pos) return pos->value();
     
             // Create the node before rehashing in case it throws an
             // exception (need strong safety in such a case).
-            node_constructor a(*this);
-            a.construct_pair(k, (mapped_type*) 0);
+            node_constructor a(this->node_alloc());
+            a.construct_node();
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+            a.construct_value(boost::unordered::piecewise_construct,
+                boost::make_tuple(k), boost::make_tuple());
+#else
+            a.construct_value(
+                boost::unordered::detail::create_emplace_args(
+                    boost::unordered::piecewise_construct,
+                    boost::make_tuple(k),
+                    boost::make_tuple()));
+#endif
     
-            // reserve has basic exception safety if the hash function
-            // throws, strong otherwise.
-            if(this->reserve_for_insert(this->size_ + 1))
-                bucket_index = hash % this->bucket_count_;
-    
-            // Nothing after this point can throw.
-    
-            return node::get_value(add_node(a, bucket_index, hash));
+            this->reserve_for_insert(this->size_ + 1);
+            return add_node(a, hash)->value();
         }
-
-        emplace_return emplace_impl_with_node(node_constructor& a)
-        {
-            // No side effects in this initial code
-            key_type const& k = this->get_key(a.value());
-            std::size_t hash = this->hash_function()(k);
-            std::size_t bucket_index = hash % this->bucket_count_;
-            node_ptr pos = this->find_node(bucket_index, hash, k);
-            
-            if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                // Found an existing key, return it (no throw).
-                return emplace_return(pos, false);
-            }
-    
-            // reserve has basic exception safety if the hash function
-            // throws, strong otherwise.
-            if(this->reserve_for_insert(this->size_ + 1))
-                bucket_index = hash % this->bucket_count_;
-    
-            // Nothing after this point can throw.
-    
-            return emplace_return(add_node(a, bucket_index, hash), true);
-        }
-
-        emplace_return insert(value_type const& v)
-        {
-            key_type const& k = extractor::extract(v);
-            std::size_t hash = this->hash_function()(k);
-            std::size_t bucket_index = hash % this->bucket_count_;
-            node_ptr pos = this->find_node(bucket_index, hash, k);
-    
-            if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                // Found an existing key, return it (no throw).
-                return emplace_return(pos, false);
-            }
-    
-            // Isn't in table, add to bucket.
-    
-            // Create the node before rehashing in case it throws an
-            // exception (need strong safety in such a case).
-            node_constructor a(*this);
-            a.construct(v);
-    
-            // reserve has basic exception safety if the hash function
-            // throws, strong otherwise.
-            if(this->reserve_for_insert(this->size_ + 1))
-                bucket_index = hash % this->bucket_count_;
-    
-            // Nothing after this point can throw.
-    
-            return emplace_return(add_node(a, bucket_index, hash), true);
-        }
-
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
-        emplace_return emplace(please_ignore_this_overload const&)
+        emplace_return emplace(::boost::unordered::detail::emplace_args1<
+                ::boost::unordered::detail::please_ignore_this_overload> const&)
         {
             BOOST_ASSERT(false);
             return emplace_return(this->begin(), false);
         }
 #endif
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
-
-        template<class... Args>
-        emplace_return emplace(Args&&... args)
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        emplace_return emplace(BOOST_UNORDERED_EMPLACE_ARGS)
         {
+#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
             return emplace_impl(
-                    extractor::extract(std::forward<Args>(args)...),
-                    std::forward<Args>(args)...);
+                extractor::extract(BOOST_UNORDERED_EMPLACE_FORWARD),
+                BOOST_UNORDERED_EMPLACE_FORWARD);
+
+#else
+            return emplace_impl(
+                extractor::extract(args.a0, args.a1),
+                BOOST_UNORDERED_EMPLACE_FORWARD);
+#endif
         }
 
-        template<class... Args>
-        emplace_return emplace_impl(key_type const& k, Args&&... args)
+#if !defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+        template <typename A0>
+        emplace_return emplace(
+                boost::unordered::detail::emplace_args1<A0> const& args)
         {
-            // No side effects in this initial code
+            return emplace_impl(extractor::extract(args.a0), args);
+        }
+#endif
+
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        emplace_return emplace_impl(key_type const& k,
+            BOOST_UNORDERED_EMPLACE_ARGS)
+        {
             std::size_t hash = this->hash_function()(k);
-            std::size_t bucket_index = hash % this->bucket_count_;
-            node_ptr pos = this->find_node(bucket_index, hash, k);
+            node_pointer pos = this->find_node(hash, k);
     
-            if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                // Found an existing key, return it (no throw).
-                return emplace_return(pos, false);
-            }
-    
-            // Doesn't already exist, add to bucket.
-            // Side effects only in this block.
+            if (pos) return emplace_return(pos, false);
     
             // Create the node before rehashing in case it throws an
             // exception (need strong safety in such a case).
-            node_constructor a(*this);
-            a.construct(std::forward<Args>(args)...);
+            node_constructor a(this->node_alloc());
+            a.construct_node();
+            a.construct_value(BOOST_UNORDERED_EMPLACE_FORWARD);
     
             // reserve has basic exception safety if the hash function
             // throws, strong otherwise.
-            if(this->reserve_for_insert(this->size_ + 1))
-                bucket_index = hash % this->bucket_count_;
-    
-            // Nothing after this point can throw.
-    
-            return emplace_return(add_node(a, bucket_index, hash), true);
+            this->reserve_for_insert(this->size_ + 1);
+            return emplace_return(this->add_node(a, hash), true);
         }
 
-        template<class... Args>
-        emplace_return emplace_impl(no_key, Args&&... args)
+        emplace_return emplace_impl_with_node(node_constructor& a)
         {
-            // Construct the node regardless - in order to get the key.
-            // It will be discarded if it isn't used
-            node_constructor a(*this);
-            a.construct(std::forward<Args>(args)...);
+            key_type const& k = this->get_key(a.value());
+            std::size_t hash = this->hash_function()(k);
+            node_pointer pos = this->find_node(hash, k);
+
+            if (pos) return emplace_return(pos, false);
+
+            // reserve has basic exception safety if the hash function
+            // throws, strong otherwise.
+            this->reserve_for_insert(this->size_ + 1);
+            return emplace_return(this->add_node(a, hash), true);
+        }
+
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        emplace_return emplace_impl(no_key, BOOST_UNORDERED_EMPLACE_ARGS)
+        {
+            // Don't have a key, so construct the node first in order
+            // to be able to lookup the position.
+            node_constructor a(this->node_alloc());
+            a.construct_node();
+            a.construct_value(BOOST_UNORDERED_EMPLACE_FORWARD);
             return emplace_impl_with_node(a);
         }
-#else
-
-        template <class Arg0>
-        emplace_return emplace(BOOST_FWD_REF(Arg0) arg0)
-        {
-            return emplace_impl(
-                extractor::extract(boost::forward<Arg0>(arg0)),
-                boost::forward<Arg0>(arg0));
-        }
-
-#define BOOST_UNORDERED_INSERT1_IMPL(z, n, _)                               \
-        template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                      \
-        emplace_return emplace(                                             \
-            BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                          \
-        {                                                                   \
-            return emplace_impl(extractor::extract(arg0, arg1),             \
-                    BOOST_UNORDERED_CALL_PARAMS(z, n));                     \
-        }
-
-#define BOOST_UNORDERED_INSERT2_IMPL(z, n, _)                               \
-        template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                      \
-        emplace_return emplace_impl(key_type const& k,                      \
-           BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                           \
-        {                                                                   \
-            std::size_t hash = this->hash_function()(k);                    \
-            std::size_t bucket_index = hash % this->bucket_count_;          \
-            node_ptr pos = this->find_node(bucket_index, hash, k);          \
-                                                                            \
-            if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {                        \
-                return emplace_return(pos, false);                          \
-            } else {                                                        \
-                node_constructor a(*this);                                  \
-                a.construct(BOOST_UNORDERED_CALL_PARAMS(z, n));             \
-                                                                            \
-                if(this->reserve_for_insert(this->size_ + 1))               \
-                    bucket_index = hash % this->bucket_count_;              \
-                                                                            \
-                return emplace_return(                                      \
-                    add_node(a, bucket_index, hash),                        \
-                    true);                                                  \
-            }                                                               \
-        }                                                                   \
-                                                                            \
-        template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                      \
-        emplace_return emplace_impl(no_key,                                 \
-           BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                           \
-        {                                                                   \
-            node_constructor a(*this);                                      \
-            a.construct(BOOST_UNORDERED_CALL_PARAMS(z, n));                 \
-            return emplace_impl_with_node(a);                               \
-        }
-
-        BOOST_PP_REPEAT_FROM_TO(2, BOOST_UNORDERED_EMPLACE_LIMIT,
-            BOOST_UNORDERED_INSERT1_IMPL, _)
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
-            BOOST_UNORDERED_INSERT2_IMPL, _)
-
-#undef BOOST_UNORDERED_INSERT1_IMPL
-#undef BOOST_UNORDERED_INSERT2_IMPL
-
-#endif
 
         ////////////////////////////////////////////////////////////////////////
         // Insert range methods
@@ -330,14 +441,14 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         template <class InputIt>
-        void insert_range_impl(key_type const&, InputIt i, InputIt j)
+        void insert_range_impl(key_type const& k, InputIt i, InputIt j)
         {
-            node_constructor a(*this);
+            node_constructor a(this->node_alloc());
 
             // Special case for empty buckets so that we can use
             // max_load_ (which isn't valid when buckets_ is null).
             if (!this->buckets_) {
-                insert_range_empty(a, extractor::extract(*i), i, j);
+                insert_range_empty(a, k, i, j);
                 if (++i == j) return;
             }
 
@@ -358,9 +469,11 @@ namespace boost { namespace unordered { namespace detail {
             InputIt i, InputIt j)
         {
             std::size_t hash = this->hash_function()(k);
-            a.construct(*i);
-            this->reserve_for_insert(this->size_ + insert_size(i, j));
-            add_node(a, hash % this->bucket_count_, hash);
+            a.construct_node();
+            a.construct_value2(*i);
+            this->reserve_for_insert(this->size_ +
+                ::boost::unordered::detail::insert_size(i, j));
+            this->add_node(a, hash);
         }
 
         template <class InputIt>
@@ -369,63 +482,216 @@ namespace boost { namespace unordered { namespace detail {
         {
             // No side effects in this initial code
             std::size_t hash = this->hash_function()(k);
-            std::size_t bucket_index = hash % this->bucket_count_;
-            node_ptr pos = this->find_node(bucket_index, hash, k);
+            node_pointer pos = this->find_node(hash, k);
     
-            if (!BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                // Doesn't already exist, add to bucket.
-                // Side effects only in this block.
+            if (!pos) {
+                a.construct_node();
+                a.construct_value2(*i);
     
-                // Create the node before rehashing in case it throws an
-                // exception (need strong safety in such a case).
-                a.construct(*i);
-    
-                // reserve has basic exception safety if the hash function
-                // throws, strong otherwise.
-                if(this->size_ + 1 >= this->max_load_) {
-                    this->reserve_for_insert(this->size_ + insert_size(i, j));
-                    bucket_index = hash % this->bucket_count_;
-                }
+                if(this->size_ + 1 >= this->max_load_)
+                    this->reserve_for_insert(this->size_ +
+                        ::boost::unordered::detail::insert_size(i, j));
     
                 // Nothing after this point can throw.
-                add_node(a, bucket_index, hash);
+                this->add_node(a, hash);
             }
         }
 
         template <class InputIt>
         void insert_range_impl(no_key, InputIt i, InputIt j)
         {
-            node_constructor a(*this);
+            node_constructor a(this->node_alloc());
 
             do {
-                // No side effects in this initial code
-                a.construct(*i);
+                a.construct_node();
+                a.construct_value2(*i);
                 emplace_impl_with_node(a);
             } while(++i != j);
         }
-    };
 
-    template <class H, class P, class A>
-    struct set : public types<
-        typename allocator_traits<A>::value_type,
-        typename allocator_traits<A>::value_type,
-        H, P, A,
-        set_extractor<typename allocator_traits<A>::value_type>,
-        true>
-    {        
-        typedef ::boost::unordered::detail::unique_table<set<H, P, A> > impl;
-        typedef ::boost::unordered::detail::table<set<H, P, A> > table_base;
-    };
+        ////////////////////////////////////////////////////////////////////////////
+        // Erase
+        //
+        // no throw
 
-    template <class K, class H, class P, class A>
-    struct map : public types<
-        K, typename allocator_traits<A>::value_type,
-        H, P, A,
-        map_extractor<K, typename allocator_traits<A>::value_type>,
-        true>
-    {
-        typedef ::boost::unordered::detail::unique_table<map<K, H, P, A> > impl;
-        typedef ::boost::unordered::detail::table<map<K, H, P, A> > table_base;
+        std::size_t erase_key(key_type const& k)
+        {
+            if(!this->size_) return 0;
+
+            std::size_t hash = this->hash_function()(k);
+            std::size_t bucket_index = hash % this->bucket_count_;
+            bucket_pointer bucket = this->get_bucket(bucket_index);
+
+            previous_pointer prev = bucket->next_;
+            if (!prev) return 0;
+
+            for (;;)
+            {
+                if (!prev->next_) return 0;
+                std::size_t node_hash = static_cast<node_pointer>(prev->next_)->hash_;
+                if (node_hash % this->bucket_count_ != bucket_index)
+                    return 0;
+                if (node_hash == hash &&
+                    this->key_eq()(k, this->get_key(static_cast<node_pointer>(prev->next_)->value())))
+                    break;
+                prev = static_cast<previous_pointer>(prev->next_);
+            }
+
+            node_pointer pos = static_cast<node_pointer>(prev->next_);
+            node_pointer end = static_cast<node_pointer>(pos->next_);
+            prev->next_ = pos->next_;
+            this->fix_buckets(bucket, prev, end);
+            return this->delete_nodes(pos, end);
+        }
+
+        node_pointer erase(node_pointer r)
+        {
+            BOOST_ASSERT(r);
+            node_pointer next = static_cast<node_pointer>(r->next_);
+
+            bucket_pointer bucket = this->get_bucket(
+                r->hash_ % this->bucket_count_);
+            previous_pointer prev = unlink_node(*bucket, r);
+
+            this->fix_buckets(bucket, prev, next);
+
+            this->delete_node(r);
+
+            return next;
+        }
+
+        node_pointer erase_range(node_pointer r1, node_pointer r2)
+        {
+            if (r1 == r2) return r2;
+
+            std::size_t bucket_index = r1->hash_ % this->bucket_count_;
+            previous_pointer prev = unlink_nodes(
+                *this->get_bucket(bucket_index), r1, r2);
+            this->fix_buckets_range(bucket_index, prev, r1, r2);
+            this->delete_nodes(r1, r2);
+
+            return r2;
+        }
+
+        static previous_pointer unlink_node(bucket& b, node_pointer n)
+        {
+            return unlink_nodes(b, n, static_cast<node_pointer>(n->next_));
+        }
+
+        static previous_pointer unlink_nodes(bucket& b, node_pointer begin, node_pointer end)
+        {
+            previous_pointer prev = b.next_;
+            link_pointer begin_void = static_cast<link_pointer>(begin);
+            while(prev->next_ != begin_void) prev = static_cast<previous_pointer>(prev->next_);
+            prev->next_ = static_cast<link_pointer>(end);
+            return prev;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
+        // copy_buckets_to
+        //
+        // Basic exception safety. If an exception is thrown this will
+        // leave dst partially filled and the buckets unset.
+
+        static void copy_buckets_to(buckets const& src, buckets& dst)
+        {
+            BOOST_ASSERT(!dst.buckets_);
+
+            dst.create_buckets();
+
+            node_constructor a(dst.node_alloc());
+
+            node_pointer n = src.get_start();
+            previous_pointer prev = dst.get_previous_start();
+
+            while(n) {
+                a.construct_node();
+                a.construct_value2(n->value());
+
+                node_pointer node = a.release();
+                node->hash_ = n->hash_;
+                prev->next_ = static_cast<link_pointer>(node);
+                ++dst.size_;
+                n = static_cast<node_pointer>(n->next_);
+
+                prev = place_in_bucket(dst, prev);
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
+        // move_buckets_to
+        //
+        // Basic exception safety. The source nodes are left in an unusable state
+        // if an exception throws.
+
+        static void move_buckets_to(buckets& src, buckets& dst)
+        {
+            BOOST_ASSERT(!dst.buckets_);
+
+            dst.create_buckets();
+
+            node_constructor a(dst.node_alloc());
+
+            node_pointer n = src.get_start();
+            previous_pointer prev = dst.get_previous_start();
+
+            while(n) {
+                a.construct_node();
+                a.construct_value2(boost::move(n->value()));
+
+                node_pointer node = a.release();
+                node->hash_ = n->hash_;
+                prev->next_ = static_cast<link_pointer>(node);
+                ++dst.size_;
+                n = static_cast<node_pointer>(n->next_);
+
+                prev = place_in_bucket(dst, prev);
+            }
+        }
+
+        // strong otherwise exception safety
+        void rehash_impl(std::size_t num_buckets)
+        {
+            BOOST_ASSERT(this->size_);
+
+            buckets dst(this->node_alloc(), num_buckets);
+            dst.create_buckets();
+
+            previous_pointer src_start = this->get_previous_start();
+            previous_pointer dst_start = dst.get_previous_start();
+
+            dst_start->next_ = src_start->next_;
+            src_start->next_ = link_pointer();
+            dst.size_ = this->size_;
+            this->size_ = 0;
+
+            previous_pointer prev = dst.get_previous_start();
+            while (prev->next_)
+                prev = place_in_bucket(dst, prev);
+
+            // Swap the new nodes back into the container and setup the
+            // variables.
+            dst.swap(*this); // no throw
+        }
+
+        // Iterate through the nodes placing them in the correct buckets.
+        // pre: prev->next_ is not null.
+        static previous_pointer place_in_bucket(buckets& dst, previous_pointer prev)
+        {
+            node_pointer n = static_cast<node_pointer>(prev->next_);
+            bucket_pointer b = dst.get_bucket(n->hash_ % dst.bucket_count_);
+
+            if (!b->next_) {
+                b->next_ = prev;
+                return static_cast<previous_pointer>(n);
+            }
+            else {
+                prev->next_ = n->next_;
+                n->next_ = b->next_->next_;
+                b->next_->next_ = static_cast<link_pointer>(n);
+                return prev;
+            }
+        }
     };
 }}}
 
