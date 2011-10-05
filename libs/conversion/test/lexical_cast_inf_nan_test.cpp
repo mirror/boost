@@ -170,7 +170,7 @@ void test_inf_nan_long_double()
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
-    unit_test_framework::test_suite *suite =
+    unit_test::test_suite *suite =
         BOOST_TEST_SUITE("lexical_cast inf anf nan parsing unit test");
     suite->add(BOOST_TEST_CASE(&test_inf_nan_float));
     suite->add(BOOST_TEST_CASE(&test_inf_nan_double));
