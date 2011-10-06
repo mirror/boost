@@ -34,7 +34,7 @@ behavior for overflow is undefined for all conversions (except the
 aforementioned unsigned to unsigned) makes any code that may produce
 positive or negative overflows exposed to portability issues.
 
-`numeric_cast` adheres to the rules for implicit conversions mandated by
+By default `numeric_cast` adheres to the rules for implicit conversions mandated by
 the C++ Standard, such as truncating floating point types when converting
 to integral types. The implementation must guarantee that for a conversion
 to a type that can hold all possible values of the source type, there will
@@ -43,21 +43,50 @@ be no runtime overhead.
 [endsect]
 
 [section numeric_cast]
-
-    template<typename Target, typename Source> inline
-    typename boost::numeric::converter<Target,Source>::result_type
-    numeric_cast ( Source arg )
+    
+    template <typename Target, typename Source> inline
+    Target numeric_cast( Source arg )
     {
-        return boost::numeric::converter<Target,Source>::convert(arg);
+        typedef conversion_traits<Target, Source>   conv_traits;
+        typedef numeric_cast_traits<Target, Source> cast_traits;
+        typedef converter
+            <
+                Target,
+                Source, 
+                conv_traits,
+                typename cast_traits::overflow_policy, 
+                typename cast_traits::rounding_policy, 
+                raw_converter<conv_traits>,
+                typename cast_traits::range_checking_policy
+            > converter;
+        return converter::convert(arg);
     }
 
 `numeric_cast` returns the result of converting a value of type Source
-to a value of type Target. If out-of-range is detected, an exception is
-thrown (see 
+to a value of type Target. If out-of-range is detected, an overflow policy
+is executed whose default behavior is to throw an an exception (see 
 [link numeric_conversion_bad_numeric_cast bad_numeric_cast],
 [link numeric_conversion_negative_overflow negative_overflow] and
 [link numeric_conversion_possitive_overflow positive_overflow]
 ).
+
+[endsect]
+
+[section numeric_cast_traits]
+
+    template <typename Target, typename Source, typename EnableIf = void>
+    struct numeric_cast_traits
+    {
+        typedef def_overflow_handler    overflow_policy;
+        typedef UseInternalRangeChecker range_checking_policy;
+        typedef Trunc<Source>           rounding_policy;
+    };
+
+The behavior of `numeric_cast` may be tailored for custom numeric types through
+the specialization of `numeric_cast_traits`. (see 
+[link boost_numericconversion.type_requirements_and_user_defined_types_support User Defined Types] 
+for details.
+)
 
 [endsect]
 
