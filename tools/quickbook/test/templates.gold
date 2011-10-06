@@ -36,7 +36,6 @@
     <para>
       wxyz wxyz trail
     </para>
-    
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> &quot;Hello, World&quot; <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
@@ -143,7 +142,6 @@
       </listitem>
     </itemizedlist>
     <para/>
-    
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase>
 </programlisting>
     <para>
@@ -176,7 +174,6 @@
       </listitem>
       <listitem>
         <simpara>
-          
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase>
 </programlisting>
         </simpara>

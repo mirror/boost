@@ -6,7 +6,6 @@
   <section id="code_block_3.python_code_block">
     <title>Python code block</title>
     <para>
-      
 <programlisting><phrase role="keyword">print</phrase> <phrase role="string">&quot;\xfabln\xeck&quot;</phrase>
 </programlisting>
     </para>
@@ -17,7 +16,6 @@
       This isn't valid C++ but I think we should accept it;
     </para>
     <para>
-      [cpp] 
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase><phrase role="special">&lt;&lt;</phrase><phrase role="string">&quot;\xfabln\xeck&quot;</phrase><phrase role="special">&lt;&lt;</phrase><phrase role="string">&quot;\n&quot;</phrase><phrase role="special">;</phrase>
 </programlisting>
     </para>

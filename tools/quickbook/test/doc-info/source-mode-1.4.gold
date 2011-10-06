@@ -16,23 +16,18 @@
     </articlepurpose>
   </articleinfo>
   <para>
-    
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase></programlisting>
   </para>
   <para>
-    
 <programlisting><phrase role="keyword">def</phrase> <phrase role="identifier">foo</phrase><phrase role="special">():</phrase></programlisting>
   </para>
   <para>
-    
 <programlisting><phrase role="keyword">def</phrase> <phrase role="identifier">foo</phrase><phrase role="special">(</phrase><phrase role="identifier">x</phrase><phrase role="special">):</phrase></programlisting>
   </para>
   <para>
-    
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase></programlisting>
   </para>
   <para>
-    
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase></programlisting>
   </para>
 </article>

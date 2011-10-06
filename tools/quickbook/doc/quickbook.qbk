@@ -90,6 +90,12 @@ generate __boostbook__ instead of HTML. The __boostbook__ documentation format
 is an extension of __docbook__, an SGML or XML based format for describing
 documentation.
 
+[tip You don't need to know anything about __boostbook__ or __docbook__
+to use QuickBook. A basic understanding of __docbook__ might help, but
+shouldn't be necessary. For really advanced stuff you will need to know
+__docbook__, but you can ignore it at first, and maybe continue to do so.
+]
+
 QuickBook is a WikiWiki style documentation tool geared towards C++
 documentation using simple rules and markup for simple formatting tasks.
 QuickBook extends the WikiWiki concept. Like the WikiWiki, QuickBook documents are
@@ -297,6 +303,10 @@ Boost 1.46.1:
 [heading Version 1.5.6 - Boost 1.48]
 
 * Xml encode escaped punctuation (eg. `\<` is correctly encodes to \<).
+* Rename duplicate generated ids.
+* Close open sections at end of document (still warns about them).
+* New anchor markup for headers, will hopefully generate better pdfs.
+* Remove some whitespace around code from post processed output.
 
 [endsect] [/Change log]
 
@@ -2180,12 +2190,12 @@ case, check out [@http://www.pkgsrc.org pkgsrc].
 
 [endsect] [/ macosx]
 
-[section:windows Windows 2000, XP, 2003, Vista]
+[section:windows Windows 2000, XP, 2003, Vista, 7]
 
 [:['Section contributed by Julio M. Merino Vidal]]
 
 The following instructions apply to any Windows system based on Windows
-2000, including Windows XP, Windows 2003 Server and Windows Vista. The
+2000, including Windows XP, Windows 2003 Server, Windows Vista, and Windows 7. The
 paths shown below are taken from a Windows Vista machine; you will need to
 adjust them to match your system in case you are running an older version.
 

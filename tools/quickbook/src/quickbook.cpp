@@ -35,7 +35,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.5.6 (release)"
+#define QUICKBOOK_VERSION "Quickbook Version 1.5.6"
 
 namespace quickbook
 {
@@ -116,10 +116,6 @@ namespace quickbook
         actions& actor)
     {        
         bool r = parse_file(filein_, actor);
-        if (actor.section_level != 0)
-            detail::outwarn(filein_)
-                << "Warning missing [endsect] detected at end of file."
-                << std::endl;
 
         if(actor.error_count)
         {
