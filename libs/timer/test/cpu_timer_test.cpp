@@ -13,11 +13,7 @@
 #include <cstdlib> // for atol()
 #include <iostream>
 #include <string>
-
-namespace old
-{
-#include <boost/timer.hpp>
-}
+#include <ctime>
 
 using std::string;
 using std::cout;
@@ -87,31 +83,34 @@ namespace
     // This test is designed to account for C timer resolution and for the possibility
     // that another active process may take up a lot of time.
 
-    cout << "  CLOCKS_PER_SEC is " << CLOCKS_PER_SEC << endl;
+    cpu_timer t;    // calls start(), so ensures any cpu_timer dll loaded
+    std::time(0);   // ensure any system dll's loaded
 
-    double c_t_elapsed;
+    std::time_t stop_time, start_time = std::time(0);
 
-    old::boost::timer c_t;
-    cpu_timer t;
+    // wait until the time() clock ticks
+    while (std::time(0) == start_time) {}
+    
+    // start both timers
+    start_time = std::time(0);
+    t.start();
 
-    while (t.elapsed().wall < 1000000000) {}
+    // wait until the time() clock ticks again
+    while (std::time(0) == start_time) {}
 
+    // stop both timers
+    stop_time = std::time(0);
     t.stop();
-    c_t_elapsed = c_t.elapsed();
 
-    cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    cout.precision(9);
+    cout << "     std::time() elapsed is " << (stop_time - start_time) * 1.0L << " seconds\n";
+    cout << "  cpu_timer wall elapsed is " << t.elapsed().wall / 1000000000.0L << " seconds\n";
+    cout << "  The two clocks whose elapsed time is compared by this test are started\n"
+            "  and stopped one right after the other. If the operating system suspends\n"
+            "  the process in the interim, the test may fail. Thus no single failure\n"
+            "  of this test is meaningful.\n";
 
-    cout << "  c_t_elapsed is " << c_t_elapsed << endl;
-    cout << "  t.elapsed().wall is " << t.elapsed().wall << endl;
-    cout << "  t.elapsed().wall/1000000000.0L is "
-         << t.elapsed().wall/1000000000.0L << endl;
-    cout << "  c_t_elapsed * 1.05L is "
-         << c_t_elapsed * 1.05L << endl;
-
-    BOOST_TEST(t.elapsed().wall >= 1000000000);
-
-    BOOST_TEST(t.elapsed().wall / 1000000000.0L <= c_t_elapsed * 1.05L); 
+    BOOST_TEST(t.elapsed().wall / 1000000000.0L > (stop_time - start_time) * 0.95L);
+    BOOST_TEST(t.elapsed().wall / 1000000000.0L < (stop_time - start_time) * 1.05L);
 
     cout << "  C library consistency test complete" << endl; 
   }
