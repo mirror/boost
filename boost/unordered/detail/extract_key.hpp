@@ -93,7 +93,7 @@ namespace detail {
     struct map_extractor
     {
         typedef ValueType value_type;
-        typedef typename ::boost::remove_const<Key>::type key_type;
+        typedef typename boost::remove_const<Key>::type key_type;
 
         static key_type const& extract(value_type const& v)
         {

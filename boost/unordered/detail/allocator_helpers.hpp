@@ -24,32 +24,40 @@
 #include <boost/type_traits/add_lvalue_reference.hpp>
 #include <boost/pointer_to_other.hpp>
 #include <boost/assert.hpp>
+#include <boost/utility/addressof.hpp>
 
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
 #  include <memory>
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
-#include <type_traits>
+#  include <type_traits>
+#endif
+
 namespace boost { namespace unordered { namespace detail {
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Integral_constrant, true_type, false_type
+    //
+    // Uses the standard versions if available.
+
+#if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
+
     using std::integral_constant;
     using std::true_type;
     using std::false_type;
-}}}
+
 #else
-namespace boost { namespace unordered { namespace detail {
+
     template <typename T, T Value>
     struct integral_constant { enum { value = Value }; };
-    typedef integral_constant<bool, true> true_type;
-    typedef integral_constant<bool, false> false_type;
-}}}
+
+    typedef boost::unordered::detail::integral_constant<bool, true> true_type;
+    typedef boost::unordered::detail::integral_constant<bool, false> false_type;
+
 #endif
 
-// TODO: Use std::addressof if available?
-#include <boost/utility/addressof.hpp>
-
-namespace boost { namespace unordered { namespace detail {
-
+    ////////////////////////////////////////////////////////////////////////////
     // Explicitly call a destructor
 
 #if defined(BOOST_MSVC)
@@ -66,27 +74,10 @@ namespace boost { namespace unordered { namespace detail {
 #pragma warning(pop)
 #endif
 
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
-    template <typename Alloc>
-    struct allocator_traits : std::allocator_traits<Alloc> {};
-    
-    template <typename Alloc, typename T>
-    struct rebind_wrap
-    {
-        typedef typename allocator_traits<Alloc>::rebind_alloc<T> type;
-    };
-#else
-    // rebind_wrap
+    ////////////////////////////////////////////////////////////////////////////
+    // Bits and pieces for implementing traits
     //
-    // Rebind allocators. For some problematic libraries, use rebind_to
-    // from <boost/detail/allocator_utilities.hpp>.
-
-    template <typename Alloc, typename T>
-    struct rebind_wrap
-    {
-        typedef typename Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
-            type;
-    };
+    // Some of these are also used elsewhere
 
     template <typename T> typename boost::add_lvalue_reference<T>::type make();
     struct choice9 { typedef char (&type)[9]; };
@@ -116,67 +107,6 @@ namespace boost { namespace unordered { namespace detail {
         convert_from_anything(...);
     };
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1400
-
-    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
-        template <typename Tp, typename Default>                            \
-        struct default_type_ ## tname {                                     \
-                                                                            \
-            template <typename X>                                           \
-            static choice1::type test(choice1, typename X::tname* = 0);     \
-                                                                            \
-            template <typename X>                                           \
-            static choice2::type test(choice2, void* = 0);                  \
-                                                                            \
-            struct DefaultWrap { typedef Default tname; };                  \
-                                                                            \
-            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
-                                                                            \
-            typedef typename boost::detail::if_true<value>::                \
-                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
-                ::type::tname type;                                         \
-        }
-
-#else
-
-    template <typename T, typename T2>
-    struct sfinae : T2 {};
-
-    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
-        template <typename Tp, typename Default>                            \
-        struct default_type_ ## tname {                                     \
-                                                                            \
-            template <typename X>                                           \
-            static typename sfinae<typename X::tname, choice1>::type        \
-                test(choice1);                                              \
-                                                                            \
-            template <typename X>                                           \
-            static choice2::type test(choice2);                             \
-                                                                            \
-            struct DefaultWrap { typedef Default tname; };                  \
-                                                                            \
-            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
-                                                                            \
-            typedef typename boost::detail::if_true<value>::                \
-                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
-                ::type::tname type;                                         \
-        }
-
-#endif
-
-    #define BOOST_UNORDERED_DEFAULT_TYPE(T,tname, arg)                      \
-        typename default_type_ ## tname<T, arg>::type
-
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(pointer);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_pointer);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(void_pointer);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_void_pointer);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(difference_type);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(size_type);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_copy_assignment);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
-    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
-
 #if !defined(BOOST_NO_SFINAE_EXPR) || BOOST_WORKAROUND(BOOST_MSVC, >= 1500)
 
 #   define BOOST_UNORDERED_HAVE_CALL_0_DETECTION 1
@@ -188,9 +118,11 @@ namespace boost { namespace unordered { namespace detail {
 
 #define BOOST_UNORDERED_CHECK_EXPRESSION(count, result, expression)         \
         template <typename U>                                               \
-        static typename expr_test<                                          \
+        static typename boost::unordered::detail::expr_test<                \
             BOOST_PP_CAT(choice, result),                                   \
-            sizeof(for_expr_test(((expression), 0)))>::type test(           \
+            sizeof(boost::unordered::detail::for_expr_test((                \
+                (expression),                                               \
+            0)))>::type test(                                               \
             BOOST_PP_CAT(choice, count))
 
 #define BOOST_UNORDERED_DEFAULT_EXPRESSION(count, result)                   \
@@ -273,9 +205,10 @@ namespace boost { namespace unordered { namespace detail {
         template <typename U>                                               \
         struct impl                                                         \
         {                                                                   \
-            enum { value = sizeof(is_private_type((                         \
-                make<wrap< thing > >().name args                            \
-            , 0))) == sizeof(yes_type) };                                   \
+            enum { value = sizeof(                                          \
+                boost::unordered::detail::is_private_type((                 \
+                    make<wrap< thing > >().name args                        \
+                , 0))) == sizeof(yes_type) };                               \
         };                                                                  \
                                                                             \
         enum { value =                                                      \
@@ -285,6 +218,95 @@ namespace boost { namespace unordered { namespace detail {
     }
 
 #endif
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Allocator traits
+    //
+    // Uses the standard versions if available.
+    // (although untested as I don't have access to a standard version yet)
+
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+
+    template <typename Alloc>
+    struct allocator_traits : std::allocator_traits<Alloc> {};
+
+    template <typename Alloc, typename T>
+    struct rebind_wrap
+    {
+        typedef typename std::allocator_traits<Alloc>::rebind_alloc<T> type;
+    };
+
+#else
+
+    // TODO: Does this match std::allocator_traits<Alloc>::rebind_alloc<T>?
+    template <typename Alloc, typename T>
+    struct rebind_wrap
+    {
+        typedef typename Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
+            type;
+    };
+
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1400
+
+    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
+        template <typename Tp, typename Default>                            \
+        struct default_type_ ## tname {                                     \
+                                                                            \
+            template <typename X>                                           \
+            static choice1::type test(choice1, typename X::tname* = 0);     \
+                                                                            \
+            template <typename X>                                           \
+            static choice2::type test(choice2, void* = 0);                  \
+                                                                            \
+            struct DefaultWrap { typedef Default tname; };                  \
+                                                                            \
+            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
+                                                                            \
+            typedef typename boost::detail::if_true<value>::                \
+                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
+                ::type::tname type;                                         \
+        }
+
+#else
+
+    template <typename T, typename T2>
+    struct sfinae : T2 {};
+
+    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
+        template <typename Tp, typename Default>                            \
+        struct default_type_ ## tname {                                     \
+                                                                            \
+            template <typename X>                                           \
+            static typename boost::unordered::detail::sfinae<               \
+                    typename X::tname, choice1>::type                       \
+                test(choice1);                                              \
+                                                                            \
+            template <typename X>                                           \
+            static choice2::type test(choice2);                             \
+                                                                            \
+            struct DefaultWrap { typedef Default tname; };                  \
+                                                                            \
+            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
+                                                                            \
+            typedef typename boost::detail::if_true<value>::                \
+                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
+                ::type::tname type;                                         \
+        }
+
+#endif
+
+    #define BOOST_UNORDERED_DEFAULT_TYPE(T,tname, arg)                      \
+        typename default_type_ ## tname<T, arg>::type
+
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(void_pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_void_pointer);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(difference_type);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(size_type);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_copy_assignment);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
+    BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
 
 #if BOOST_UNORDERED_HAVE_CALL_0_DETECTION
     template <typename T>
@@ -425,7 +447,7 @@ namespace boost { namespace unordered { namespace detail {
         static void destroy(Alloc&, T* p, typename
                 boost::disable_if<has_destroy<Alloc, T>, void*>::type = 0)
         {
-            ::boost::unordered::detail::destroy(p);
+            boost::unordered::detail::destroy(p);
         }
 
         static size_type max_size(const Alloc& a)
@@ -453,6 +475,10 @@ namespace boost { namespace unordered { namespace detail {
             Alloc,propagate_on_container_swap,false_type)
             propagate_on_container_swap;
     };
+
+#undef BOOST_UNORDERED_DEFAULT_TYPE_TMPLT
+#undef BOOST_UNORDERED_DEFAULT_TYPE
+
 #endif
 
     // array_constructor
@@ -464,8 +490,8 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Allocator>
     struct array_constructor
     {
-        typedef typename allocator_traits<Allocator>::pointer
-            pointer;
+        typedef boost::unordered::detail::allocator_traits<Allocator> traits;
+        typedef typename traits::pointer pointer;
 
         Allocator& alloc_;
         pointer ptr_;
@@ -482,10 +508,9 @@ namespace boost { namespace unordered { namespace detail {
         ~array_constructor() {
             if (ptr_) {
                 for(pointer p = ptr_; p != constructed_; ++p)
-                    allocator_traits<Allocator>::destroy(alloc_,
-                        boost::addressof(*p));
+                    traits::destroy(alloc_, boost::addressof(*p));
 
-                allocator_traits<Allocator>::deallocate(alloc_, ptr_, length_);
+                traits::deallocate(alloc_, ptr_, length_);
             }
         }
 
@@ -494,11 +519,10 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(!ptr_);
             length_ = l;
-            ptr_ = allocator_traits<Allocator>::allocate(alloc_, length_);
+            ptr_ = traits::allocate(alloc_, length_);
             pointer end = ptr_ + static_cast<std::ptrdiff_t>(length_);
             for(constructed_ = ptr_; constructed_ != end; ++constructed_)
-                allocator_traits<Allocator>::construct(alloc_,
-                    boost::addressof(*constructed_), v);
+                traits::construct(alloc_, boost::addressof(*constructed_), v);
         }
 
         pointer get() const
@@ -514,25 +538,8 @@ namespace boost { namespace unordered { namespace detail {
         }
     private:
         array_constructor(array_constructor const&);
-        array_constructor& operator=(
-            array_constructor const&);
+        array_constructor& operator=(array_constructor const&);
     };
 }}}
-
-#undef BOOST_UNORDERED_DEFAULT_TYPE_TMPLT
-#undef BOOST_UNORDERED_DEFAULT_TYPE
-#undef BOOST_UNORDERED_HAVE_CALL_0_DETECTION
-#undef BOOST_UNORDERED_HAVE_CALL_N_DETECTION
-#undef BOOST_UNORDERED_HAS_FUNCTION
-#if defined(BOOST_UNORDERED_CHECK_EXPRESSION)
-#   undef BOOST_UNORDERED_CHECK_EXPRESSION
-#   undef BOOST_UNORDERED_DEFAULT_EXPRESSION
-#endif
-#if defined(BOOST_UNORDERED_HAS_MEMBER)
-#   undef BOOST_UNORDERED_HAS_MEMBER
-#   undef BOOST_UNORDERED_CHECK_MEMBER
-#   undef BOOST_UNORDERED_DEFAULT_MEMBER
-#   undef BOOST_UNORDERED_WRAP_PARAMATERS
-#endif
 
 #endif

@@ -37,11 +37,11 @@ namespace boost
                 unordered_multiset<T, H, P, A> &m2);
     }
 
-    using ::boost::unordered::unordered_set;
-    using ::boost::unordered::unordered_multiset;
-    using ::boost::unordered::swap;
-    using ::boost::unordered::operator==;
-    using ::boost::unordered::operator!=;
+    using boost::unordered::unordered_set;
+    using boost::unordered::unordered_multiset;
+    using boost::unordered::swap;
+    using boost::unordered::operator==;
+    using boost::unordered::operator!=;
 }
 
 #endif

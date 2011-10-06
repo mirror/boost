@@ -23,7 +23,7 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename VoidPointer, typename T>
     struct grouped_node :
-        ::boost::unordered::detail::value_base<T>
+        boost::unordered::detail::value_base<T>
     {
         typedef VoidPointer link_pointer;
 
@@ -45,10 +45,10 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename T>
     struct grouped_ptr_node :
-        ::boost::unordered::detail::value_base<T>,
-        ::boost::unordered::detail::ptr_bucket
+        boost::unordered::detail::value_base<T>,
+        boost::unordered::detail::ptr_bucket
     {
-        typedef ::boost::unordered::detail::ptr_bucket bucket_base;
+        typedef boost::unordered::detail::ptr_bucket bucket_base;
         typedef ptr_bucket* link_pointer;
 
         link_pointer group_prev_;
@@ -72,37 +72,37 @@ namespace boost { namespace unordered { namespace detail {
     template <typename A, typename T, typename VoidPointer, typename NodePtr, typename BucketPtr>
     struct pick_grouped_node2
     {
-        typedef ::boost::unordered::detail::grouped_node<VoidPointer, T> node;
+        typedef boost::unordered::detail::grouped_node<VoidPointer, T> node;
 
-        typedef typename ::boost::unordered::detail::allocator_traits<
-            typename ::boost::unordered::detail::rebind_wrap<A, node>::type
+        typedef typename boost::unordered::detail::allocator_traits<
+            typename boost::unordered::detail::rebind_wrap<A, node>::type
         >::pointer node_pointer;
 
-        typedef ::boost::unordered::detail::bucket<node_pointer> bucket;
+        typedef boost::unordered::detail::bucket<node_pointer> bucket;
         typedef VoidPointer link_pointer;
     };
 
     template <typename A, typename T>
     struct pick_grouped_node2<A, T, void*,
-        ::boost::unordered::detail::grouped_ptr_node<T>*,
-        ::boost::unordered::detail::ptr_bucket*>
+        boost::unordered::detail::grouped_ptr_node<T>*,
+        boost::unordered::detail::ptr_bucket*>
     {
-        typedef ::boost::unordered::detail::grouped_ptr_node<T> node;
-        typedef ::boost::unordered::detail::ptr_bucket bucket;
+        typedef boost::unordered::detail::grouped_ptr_node<T> node;
+        typedef boost::unordered::detail::ptr_bucket bucket;
         typedef bucket* link_pointer;
     };
 
     template <typename A, typename T>
     struct pick_grouped_node
     {
-        typedef ::boost::unordered::detail::allocator_traits<
-            typename ::boost::unordered::detail::rebind_wrap<A,
-                ::boost::unordered::detail::grouped_ptr_node<T> >::type
+        typedef boost::unordered::detail::allocator_traits<
+            typename boost::unordered::detail::rebind_wrap<A,
+                boost::unordered::detail::grouped_ptr_node<T> >::type
         > tentative_node_traits;
 
-        typedef ::boost::unordered::detail::allocator_traits<
-            typename ::boost::unordered::detail::rebind_wrap<A,
-                ::boost::unordered::detail::ptr_bucket >::type
+        typedef boost::unordered::detail::allocator_traits<
+            typename boost::unordered::detail::rebind_wrap<A,
+                boost::unordered::detail::ptr_bucket >::type
         > tentative_bucket_traits;
 
         typedef pick_grouped_node2<A, T,
@@ -124,17 +124,17 @@ namespace boost { namespace unordered { namespace detail {
         typedef H hasher;
         typedef P key_equal;
 
-        typedef ::boost::unordered::detail::allocator_traits<A> traits;
+        typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
         typedef typename traits::void_pointer void_pointer;
         typedef value_type key_type;
 
-        typedef typename ::boost::unordered::detail::pick_grouped_node<A, value_type>::node node;
-        typedef typename ::boost::unordered::detail::pick_grouped_node<A, value_type>::bucket bucket;
-        typedef typename ::boost::unordered::detail::pick_grouped_node<A, value_type>::link_pointer link_pointer;
-        typedef ::boost::unordered::detail::grouped_table_impl<types> table;
+        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::node node;
+        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::bucket bucket;
+        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::link_pointer link_pointer;
+        typedef boost::unordered::detail::grouped_table_impl<types> table;
 
-        typedef ::boost::unordered::detail::set_extractor<value_type> extractor;
+        typedef boost::unordered::detail::set_extractor<value_type> extractor;
     };
 
     template <typename A, typename K, typename H, typename P>
@@ -147,22 +147,22 @@ namespace boost { namespace unordered { namespace detail {
         typedef P key_equal;
         typedef K key_type;
 
-        typedef ::boost::unordered::detail::allocator_traits<A> traits;
+        typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
         typedef typename traits::void_pointer void_pointer;
 
-        typedef typename ::boost::unordered::detail::pick_grouped_node<A, value_type>::node node;
-        typedef typename ::boost::unordered::detail::pick_grouped_node<A, value_type>::bucket bucket;
-        typedef typename ::boost::unordered::detail::pick_grouped_node<A, value_type>::link_pointer link_pointer;
-        typedef ::boost::unordered::detail::grouped_table_impl<types> table;
+        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::node node;
+        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::bucket bucket;
+        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::link_pointer link_pointer;
+        typedef boost::unordered::detail::grouped_table_impl<types> table;
 
-        typedef ::boost::unordered::detail::map_extractor<key_type, value_type> extractor;
+        typedef boost::unordered::detail::map_extractor<key_type, value_type> extractor;
     };
 
     template <typename Types>
-    struct grouped_table_impl : ::boost::unordered::detail::table<Types>
+    struct grouped_table_impl : boost::unordered::detail::table<Types>
     {
-        typedef ::boost::unordered::detail::table<Types> table;
+        typedef boost::unordered::detail::table<Types> table;
         typedef typename table::value_type value_type;
         typedef typename table::bucket bucket;
         typedef typename table::buckets buckets;
@@ -197,13 +197,13 @@ namespace boost { namespace unordered { namespace detail {
         {}
 
         grouped_table_impl(grouped_table_impl& x,
-                ::boost::unordered::detail::move_tag m)
+                boost::unordered::detail::move_tag m)
           : table(x, m)
         {}
 
         grouped_table_impl(grouped_table_impl& x,
                 node_allocator const& a,
-                ::boost::unordered::detail::move_tag m)
+                boost::unordered::detail::move_tag m)
           : table(x, a, m)
         {}
 
@@ -441,8 +441,8 @@ namespace boost { namespace unordered { namespace detail {
         }
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
-        node_pointer emplace(::boost::unordered::detail::emplace_args1<
-                ::boost::unordered::detail::please_ignore_this_overload> const&)
+        node_pointer emplace(boost::unordered::detail::emplace_args1<
+                boost::unordered::detail::please_ignore_this_overload> const&)
         {
             BOOST_ASSERT(false);
             return this->begin();
@@ -465,12 +465,12 @@ namespace boost { namespace unordered { namespace detail {
         // if hash function throws, or inserting > 1 element, basic exception
         // safety. Strong otherwise
         template <class I>
-        typename ::boost::unordered::detail::enable_if_forward<I, void>::type
+        typename boost::unordered::detail::enable_if_forward<I, void>::type
             insert_range(I i, I j)
         {
             if(i == j) return;
 
-            std::size_t distance = ::boost::unordered::detail::distance(i, j);
+            std::size_t distance = boost::unordered::detail::distance(i, j);
             if(distance == 1) {
                 node_constructor a(this->node_alloc());
                 a.construct_node();
@@ -491,7 +491,7 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         template <class I>
-        typename ::boost::unordered::detail::disable_if_forward<I, void>::type
+        typename boost::unordered::detail::disable_if_forward<I, void>::type
             insert_range(I i, I j)
         {
             node_constructor a(this->node_alloc());
@@ -614,6 +614,7 @@ namespace boost { namespace unordered { namespace detail {
             previous_pointer prev = static_cast<previous_pointer>(begin->group_prev_);
 
             if(prev->next_ != static_cast<link_pointer>(begin)) {
+std::cout << "A" << std::endl;
                 // The node is at the beginning of a group.
 
                 // Find the previous node pointer:
@@ -625,6 +626,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (end) split_group(end);
             }
             else {
+std::cout << "B" << std::endl;
                 node_pointer group1 = split_group(begin);
 
                 if (end) {

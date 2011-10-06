@@ -54,14 +54,14 @@ namespace unordered
 
     private:
 
-        typedef typename ::boost::unordered::detail::rebind_wrap<
+        typedef typename boost::unordered::detail::rebind_wrap<
                 allocator_type, value_type>::type
             value_allocator;
 
-        typedef ::boost::unordered::detail::allocator_traits<value_allocator>
+        typedef boost::unordered::detail::allocator_traits<value_allocator>
             allocator_traits;
 
-        typedef ::boost::unordered::detail::map<value_allocator, K, H, P>
+        typedef boost::unordered::detail::map<value_allocator, K, H, P>
             types;
         typedef typename types::table table;
 
@@ -90,7 +90,7 @@ namespace unordered
         // constructors
 
         explicit unordered_map(
-                size_type = ::boost::unordered::detail::default_bucket_count,
+                size_type = boost::unordered::detail::default_bucket_count,
                 const hasher& = hasher(),
                 const key_equal& = key_equal(),
                 const allocator_type& = allocator_type());
@@ -122,7 +122,7 @@ namespace unordered
         unordered_map(unordered_map const&, allocator_type const&);
 
         unordered_map(BOOST_RV_REF(unordered_map) other)
-            : table_(other.table_, ::boost::unordered::detail::move_tag())
+            : table_(other.table_, boost::unordered::detail::move_tag())
         {
         }
 
@@ -133,7 +133,7 @@ namespace unordered
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_map(
                 std::initializer_list<value_type>,
-                size_type = ::boost::unordered::detail::default_bucket_count,
+                size_type = boost::unordered::detail::default_bucket_count,
                 const hasher& = hasher(),
                 const key_equal&l = key_equal(),
                 const allocator_type& = allocator_type());
@@ -237,7 +237,7 @@ namespace unordered
             )                                                               \
             {                                                               \
                 return table_.emplace(                                      \
-                    ::boost::unordered::detail::create_emplace_args(        \
+                    boost::unordered::detail::create_emplace_args(          \
                         BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_CALL_FORWARD,  \
                             a)                                              \
                 ));                                                         \
@@ -252,7 +252,7 @@ namespace unordered
             )                                                               \
             {                                                               \
                 return iterator(table_.emplace(                             \
-                    ::boost::unordered::detail::create_emplace_args(        \
+                    boost::unordered::detail::create_emplace_args(          \
                         BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_CALL_FORWARD,  \
                             a)                                              \
                 )).first);                                                  \
@@ -445,14 +445,14 @@ namespace unordered
 
     private:
 
-        typedef typename ::boost::unordered::detail::rebind_wrap<
+        typedef typename boost::unordered::detail::rebind_wrap<
                 allocator_type, value_type>::type
             value_allocator;
 
-        typedef ::boost::unordered::detail::allocator_traits<value_allocator>
+        typedef boost::unordered::detail::allocator_traits<value_allocator>
             allocator_traits;
 
-        typedef ::boost::unordered::detail::multimap<value_allocator, K, H, P>
+        typedef boost::unordered::detail::multimap<value_allocator, K, H, P>
             types;
         typedef typename types::table table;
 
@@ -481,7 +481,7 @@ namespace unordered
         // constructors
 
         explicit unordered_multimap(
-                size_type = ::boost::unordered::detail::default_bucket_count,
+                size_type = boost::unordered::detail::default_bucket_count,
                 const hasher& = hasher(),
                 const key_equal& = key_equal(),
                 const allocator_type& = allocator_type());
@@ -513,7 +513,7 @@ namespace unordered
         unordered_multimap(unordered_multimap const&, allocator_type const&);
 
         unordered_multimap(BOOST_RV_REF(unordered_multimap) other)
-            : table_(other.table_, ::boost::unordered::detail::move_tag())
+            : table_(other.table_, boost::unordered::detail::move_tag())
         {
         }
 
@@ -524,7 +524,7 @@ namespace unordered
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_multimap(
                 std::initializer_list<value_type>,
-                size_type = ::boost::unordered::detail::default_bucket_count,
+                size_type = boost::unordered::detail::default_bucket_count,
                 const hasher& = hasher(),
                 const key_equal&l = key_equal(),
                 const allocator_type& = allocator_type());
@@ -628,7 +628,7 @@ namespace unordered
             )                                                               \
             {                                                               \
                 return iterator(table_.emplace(                             \
-                    ::boost::unordered::detail::create_emplace_args(        \
+                    boost::unordered::detail::create_emplace_args(          \
                         BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_CALL_FORWARD,  \
                             a)                                              \
                 )));                                                        \
@@ -643,7 +643,7 @@ namespace unordered
             )                                                               \
             {                                                               \
                 return iterator(table_.emplace(                             \
-                    ::boost::unordered::detail::create_emplace_args(        \
+                    boost::unordered::detail::create_emplace_args(          \
                         BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_CALL_FORWARD,  \
                             a)                                              \
                 )));                                                        \
@@ -828,7 +828,7 @@ namespace unordered
 
     template <class K, class T, class H, class P, class A>
     unordered_map<K,T,H,P,A>::unordered_map(allocator_type const& a)
-      : table_(::boost::unordered::detail::default_bucket_count,
+      : table_(boost::unordered::detail::default_bucket_count,
             hasher(), key_equal(), a)
     {
     }
@@ -843,7 +843,7 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     template <class InputIt>
     unordered_map<K,T,H,P,A>::unordered_map(InputIt f, InputIt l)
-      : table_(::boost::unordered::detail::initial_size(f, l),
+      : table_(boost::unordered::detail::initial_size(f, l),
         hasher(), key_equal(), allocator_type())
     {
         table_.insert_range(f, l);
@@ -856,7 +856,7 @@ namespace unordered
             size_type n,
             const hasher &hf,
             const key_equal &eql)
-      : table_(::boost::unordered::detail::initial_size(f, l, n),
+      : table_(boost::unordered::detail::initial_size(f, l, n),
             hf, eql, allocator_type())
     {
         table_.insert_range(f, l);
@@ -870,7 +870,7 @@ namespace unordered
             const hasher &hf,
             const key_equal &eql,
             const allocator_type &a)
-      : table_(::boost::unordered::detail::initial_size(f, l, n), hf, eql, a)
+      : table_(boost::unordered::detail::initial_size(f, l, n), hf, eql, a)
     {
         table_.insert_range(f, l);
     }
@@ -890,7 +890,7 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     unordered_map<K,T,H,P,A>::unordered_map(
             unordered_map&& other, allocator_type const& a)
-      : table_(other.table_, a, ::boost::unordered::detail::move_tag())
+      : table_(other.table_, a, boost::unordered::detail::move_tag())
     {
     }
 
@@ -903,7 +903,7 @@ namespace unordered
             std::initializer_list<value_type> list, size_type n,
             const hasher &hf, const key_equal &eql, const allocator_type &a)
       : table_(
-            ::boost::unordered::detail::initial_size(
+            boost::unordered::detail::initial_size(
                 list.begin(), list.end(), n),
             hf, eql, a)
     {
@@ -1155,7 +1155,7 @@ namespace unordered
 
     template <class K, class T, class H, class P, class A>
     unordered_multimap<K,T,H,P,A>::unordered_multimap(allocator_type const& a)
-      : table_(::boost::unordered::detail::default_bucket_count,
+      : table_(boost::unordered::detail::default_bucket_count,
             hasher(), key_equal(), a)
     {
     }
@@ -1170,7 +1170,7 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     template <class InputIt>
     unordered_multimap<K,T,H,P,A>::unordered_multimap(InputIt f, InputIt l)
-      : table_(::boost::unordered::detail::initial_size(f, l),
+      : table_(boost::unordered::detail::initial_size(f, l),
         hasher(), key_equal(), allocator_type())
     {
         table_.insert_range(f, l);
@@ -1183,7 +1183,7 @@ namespace unordered
             size_type n,
             const hasher &hf,
             const key_equal &eql)
-      : table_(::boost::unordered::detail::initial_size(f, l, n),
+      : table_(boost::unordered::detail::initial_size(f, l, n),
             hf, eql, allocator_type())
     {
         table_.insert_range(f, l);
@@ -1197,7 +1197,7 @@ namespace unordered
             const hasher &hf,
             const key_equal &eql,
             const allocator_type &a)
-      : table_(::boost::unordered::detail::initial_size(f, l, n), hf, eql, a)
+      : table_(boost::unordered::detail::initial_size(f, l, n), hf, eql, a)
     {
         table_.insert_range(f, l);
     }
@@ -1217,7 +1217,7 @@ namespace unordered
     template <class K, class T, class H, class P, class A>
     unordered_multimap<K,T,H,P,A>::unordered_multimap(
             unordered_multimap&& other, allocator_type const& a)
-      : table_(other.table_, a, ::boost::unordered::detail::move_tag())
+      : table_(other.table_, a, boost::unordered::detail::move_tag())
     {
     }
 
@@ -1230,7 +1230,7 @@ namespace unordered
             std::initializer_list<value_type> list, size_type n,
             const hasher &hf, const key_equal &eql, const allocator_type &a)
       : table_(
-            ::boost::unordered::detail::initial_size(
+            boost::unordered::detail::initial_size(
                 list.begin(), list.end(), n),
             hf, eql, a)
     {

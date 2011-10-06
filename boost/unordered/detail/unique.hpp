@@ -25,7 +25,7 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename VoidPointer, typename T>
     struct node :
-        ::boost::unordered::detail::value_base<T>
+        boost::unordered::detail::value_base<T>
     {
         typedef VoidPointer link_pointer;
 
@@ -44,10 +44,10 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename T>
     struct ptr_node :
-        ::boost::unordered::detail::value_base<T>,
-        ::boost::unordered::detail::ptr_bucket
+        boost::unordered::detail::value_base<T>,
+        boost::unordered::detail::ptr_bucket
     {
-        typedef ::boost::unordered::detail::ptr_bucket bucket_base;
+        typedef boost::unordered::detail::ptr_bucket bucket_base;
         typedef ptr_bucket* link_pointer;
 
         std::size_t hash_;
@@ -68,37 +68,37 @@ namespace boost { namespace unordered { namespace detail {
     template <typename A, typename T, typename VoidPointer, typename NodePtr, typename BucketPtr>
     struct pick_node2
     {
-        typedef ::boost::unordered::detail::node<VoidPointer, T> node;
+        typedef boost::unordered::detail::node<VoidPointer, T> node;
 
-        typedef typename ::boost::unordered::detail::allocator_traits<
-            typename ::boost::unordered::detail::rebind_wrap<A, node>::type
+        typedef typename boost::unordered::detail::allocator_traits<
+            typename boost::unordered::detail::rebind_wrap<A, node>::type
         >::pointer node_pointer;
 
-        typedef ::boost::unordered::detail::bucket<node_pointer> bucket;
+        typedef boost::unordered::detail::bucket<node_pointer> bucket;
         typedef VoidPointer link_pointer;
     };
 
     template <typename A, typename T>
     struct pick_node2<A, T, void*,
-        ::boost::unordered::detail::ptr_node<T>*,
-        ::boost::unordered::detail::ptr_bucket*>
+        boost::unordered::detail::ptr_node<T>*,
+        boost::unordered::detail::ptr_bucket*>
     {
-        typedef ::boost::unordered::detail::ptr_node<T> node;
-        typedef ::boost::unordered::detail::ptr_bucket bucket;
+        typedef boost::unordered::detail::ptr_node<T> node;
+        typedef boost::unordered::detail::ptr_bucket bucket;
         typedef bucket* link_pointer;
     };
 
     template <typename A, typename T>
     struct pick_node
     {
-        typedef ::boost::unordered::detail::allocator_traits<
-            typename ::boost::unordered::detail::rebind_wrap<A,
-                ::boost::unordered::detail::ptr_node<T> >::type
+        typedef boost::unordered::detail::allocator_traits<
+            typename boost::unordered::detail::rebind_wrap<A,
+                boost::unordered::detail::ptr_node<T> >::type
         > tentative_node_traits;
 
-        typedef ::boost::unordered::detail::allocator_traits<
-            typename ::boost::unordered::detail::rebind_wrap<A,
-                ::boost::unordered::detail::ptr_bucket >::type
+        typedef boost::unordered::detail::allocator_traits<
+            typename boost::unordered::detail::rebind_wrap<A,
+                boost::unordered::detail::ptr_bucket >::type
         > tentative_bucket_traits;
 
         typedef pick_node2<A, T,
@@ -120,17 +120,17 @@ namespace boost { namespace unordered { namespace detail {
         typedef H hasher;
         typedef P key_equal;
 
-        typedef ::boost::unordered::detail::allocator_traits<A> traits;
+        typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
         typedef typename traits::void_pointer void_pointer;
         typedef value_type key_type;
 
-        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::node node;
-        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
-        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
-        typedef ::boost::unordered::detail::table_impl<types> table;
+        typedef typename boost::unordered::detail::pick_node<A, value_type>::node node;
+        typedef typename boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
+        typedef typename boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
+        typedef boost::unordered::detail::table_impl<types> table;
 
-        typedef ::boost::unordered::detail::set_extractor<value_type> extractor;
+        typedef boost::unordered::detail::set_extractor<value_type> extractor;
     };
 
     template <typename A, typename K, typename H, typename P>
@@ -143,22 +143,22 @@ namespace boost { namespace unordered { namespace detail {
         typedef P key_equal;
         typedef K key_type;
 
-        typedef ::boost::unordered::detail::allocator_traits<A> traits;
+        typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
         typedef typename traits::void_pointer void_pointer;
 
-        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::node node;
-        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
-        typedef typename ::boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
-        typedef ::boost::unordered::detail::table_impl<types> table;
+        typedef typename boost::unordered::detail::pick_node<A, value_type>::node node;
+        typedef typename boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
+        typedef typename boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
+        typedef boost::unordered::detail::table_impl<types> table;
 
-        typedef ::boost::unordered::detail::map_extractor<key_type, value_type> extractor;
+        typedef boost::unordered::detail::map_extractor<key_type, value_type> extractor;
     };
 
     template <typename Types>
-    struct table_impl : ::boost::unordered::detail::table<Types>
+    struct table_impl : boost::unordered::detail::table<Types>
     {
-        typedef ::boost::unordered::detail::table<Types> table;
+        typedef boost::unordered::detail::table<Types> table;
         typedef typename table::value_type value_type;
         typedef typename table::bucket bucket;
         typedef typename table::buckets buckets;
@@ -195,13 +195,13 @@ namespace boost { namespace unordered { namespace detail {
         {}
 
         table_impl(table_impl& x,
-                ::boost::unordered::detail::move_tag m)
+                boost::unordered::detail::move_tag m)
           : table(x, m)
         {}
 
         table_impl(table_impl& x,
                 node_allocator const& a,
-                ::boost::unordered::detail::move_tag m)
+                boost::unordered::detail::move_tag m)
           : table(x, a, m)
         {}
 
@@ -248,7 +248,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (it) return it->value();
             }
 
-            ::boost::throw_exception(
+            boost::throw_exception(
                 std::out_of_range("Unable to find key in unordered_map."));
         }
 
@@ -349,8 +349,8 @@ namespace boost { namespace unordered { namespace detail {
         }
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
-        emplace_return emplace(::boost::unordered::detail::emplace_args1<
-                ::boost::unordered::detail::please_ignore_this_overload> const&)
+        emplace_return emplace(boost::unordered::detail::emplace_args1<
+                boost::unordered::detail::please_ignore_this_overload> const&)
         {
             BOOST_ASSERT(false);
             return emplace_return(this->begin(), false);
@@ -472,7 +472,7 @@ namespace boost { namespace unordered { namespace detail {
             a.construct_node();
             a.construct_value2(*i);
             this->reserve_for_insert(this->size_ +
-                ::boost::unordered::detail::insert_size(i, j));
+                boost::unordered::detail::insert_size(i, j));
             this->add_node(a, hash);
         }
 
@@ -490,7 +490,7 @@ namespace boost { namespace unordered { namespace detail {
     
                 if(this->size_ + 1 >= this->max_load_)
                     this->reserve_for_insert(this->size_ +
-                        ::boost::unordered::detail::insert_size(i, j));
+                        boost::unordered::detail::insert_size(i, j));
     
                 // Nothing after this point can throw.
                 this->add_node(a, hash);

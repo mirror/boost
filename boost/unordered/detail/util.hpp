@@ -33,22 +33,22 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename I>
     struct is_forward :
-        ::boost::is_convertible<
-            typename ::boost::iterator_traversal<I>::type,
-            ::boost::forward_traversal_tag>
+        boost::is_convertible<
+            typename boost::iterator_traversal<I>::type,
+            boost::forward_traversal_tag>
     {};
 
     template <typename I, typename ReturnType>
     struct enable_if_forward :
-        ::boost::enable_if_c<
-            ::boost::unordered::detail::is_forward<I>::value,
+        boost::enable_if_c<
+            boost::unordered::detail::is_forward<I>::value,
             ReturnType>
     {};
 
     template <typename I, typename ReturnType>
     struct disable_if_forward :
-        ::boost::disable_if_c<
-            ::boost::unordered::detail::is_forward<I>::value,
+        boost::disable_if_c<
+            boost::unordered::detail::is_forward<I>::value,
             ReturnType>
     {};
 
@@ -135,7 +135,7 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class I>
     inline typename
-        ::boost::unordered::detail::enable_if_forward<I, std::size_t>::type
+        boost::unordered::detail::enable_if_forward<I, std::size_t>::type
         insert_size(I i, I j)
     {
         return std::distance(i, j);
@@ -143,7 +143,7 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class I>
     inline typename
-        ::boost::unordered::detail::disable_if_forward<I, std::size_t>::type
+        boost::unordered::detail::disable_if_forward<I, std::size_t>::type
         insert_size(I, I)
     {
         return 1;
@@ -151,11 +151,11 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class I>
     inline std::size_t initial_size(I i, I j,
-        std::size_t num_buckets = ::boost::unordered::detail::default_bucket_count)
+        std::size_t num_buckets = boost::unordered::detail::default_bucket_count)
     {
         // TODO: Why +1?
         return (std::max)(
-            ::boost::unordered::detail::insert_size(i, j) + 1,
+            boost::unordered::detail::insert_size(i, j) + 1,
             num_buckets);
     }
 

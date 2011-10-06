@@ -16,6 +16,7 @@
 #include <boost/unordered/detail/emplace_args.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
+#include <boost/swap.hpp>
 #include <boost/assert.hpp>
 
 #if defined(BOOST_MSVC)
@@ -28,7 +29,7 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Types> struct table;
     template <typename NodePointer> struct bucket;
     struct ptr_bucket;
-    template <typename Allocator, typename Bucket, typename Node> struct buckets;
+    template <typename A, typename Bucket, typename Node> struct buckets;
 
     ///////////////////////////////////////////////////////////////////
     //
@@ -40,7 +41,8 @@ namespace boost { namespace unordered { namespace detail {
     private:
 
         typedef NodeAlloc node_allocator;
-        typedef ::boost::unordered::detail::allocator_traits<NodeAlloc> node_allocator_traits;
+        typedef boost::unordered::detail::allocator_traits<NodeAlloc>
+            node_allocator_traits;
         typedef typename node_allocator_traits::value_type node;
         typedef typename node_allocator_traits::pointer node_pointer;
         typedef typename node::value_type value_type;
@@ -68,9 +70,8 @@ namespace boost { namespace unordered { namespace detail {
         void construct_value(BOOST_UNORDERED_EMPLACE_ARGS)
         {
             BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
-            ::boost::unordered::detail::construct_impl<value_type>(
-                node_->value_ptr(),
-                BOOST_UNORDERED_EMPLACE_FORWARD);
+            boost::unordered::detail::construct_impl(
+                node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
             value_constructed_ = true;
         }
 
@@ -78,7 +79,7 @@ namespace boost { namespace unordered { namespace detail {
         void construct_value2(BOOST_FWD_REF(A0) a0)
         {
             BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
-            ::boost::unordered::detail::construct_impl2<value_type>(
+            boost::unordered::detail::construct_impl2(
                 node_->value_ptr(), boost::forward<A0>(a0));
             value_constructed_ = true;
         }
@@ -106,11 +107,12 @@ namespace boost { namespace unordered { namespace detail {
     {
         if (node_) {
             if (value_constructed_) {
-                ::boost::unordered::detail::destroy(node_->value_ptr());
+                boost::unordered::detail::destroy(node_->value_ptr());
             }
 
             if (node_constructed_) {
-                node_allocator_traits::destroy(alloc_, boost::addressof(*node_));
+                node_allocator_traits::destroy(alloc_,
+                    boost::addressof(*node_));
             }
 
             node_allocator_traits::deallocate(alloc_, node_, 1);
@@ -126,7 +128,8 @@ namespace boost { namespace unordered { namespace detail {
 
             node_ = node_allocator_traits::allocate(alloc_, 1);
 
-            node_allocator_traits::construct(alloc_, boost::addressof(*node_), node());
+            node_allocator_traits::construct(alloc_,
+                boost::addressof(*node_), node());
             node_->init(static_cast<typename node::link_pointer>(node_));
             node_constructed_ = true;
         }
@@ -135,7 +138,7 @@ namespace boost { namespace unordered { namespace detail {
 
             if (value_constructed_)
             {
-                ::boost::unordered::detail::destroy(node_->value_ptr());
+                boost::unordered::detail::destroy(node_->value_ptr());
                 value_constructed_ = false;
             }
         }
@@ -187,28 +190,38 @@ namespace boost { namespace unordered { namespace detail {
         buckets(buckets const&);
         buckets& operator=(buckets const&);
     public:
-        typedef ::boost::unordered::detail::allocator_traits<A> traits;
+        typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
         typedef typename traits::void_pointer void_pointer;
 
         typedef Node node;
         typedef Bucket bucket;
-        typedef typename ::boost::unordered::detail::rebind_wrap<A, node>::type node_allocator;
-        typedef typename ::boost::unordered::detail::rebind_wrap<A, bucket>::type bucket_allocator;
-        typedef ::boost::unordered::detail::allocator_traits<node_allocator> node_allocator_traits;
-        typedef ::boost::unordered::detail::allocator_traits<bucket_allocator> bucket_allocator_traits;
-        typedef typename node_allocator_traits::pointer node_pointer;
-        typedef typename node_allocator_traits::const_pointer const_node_pointer;
-        typedef typename bucket_allocator_traits::pointer bucket_pointer;
-        typedef typename bucket::previous_pointer previous_pointer;
-        typedef ::boost::unordered::detail::node_constructor<node_allocator> node_constructor;
+        typedef typename boost::unordered::detail::rebind_wrap<A, node>::type
+            node_allocator;
+        typedef typename boost::unordered::detail::rebind_wrap<A, bucket>::type
+            bucket_allocator;
+        typedef boost::unordered::detail::allocator_traits<node_allocator>
+            node_allocator_traits;
+        typedef boost::unordered::detail::allocator_traits<bucket_allocator>
+            bucket_allocator_traits;
+        typedef typename node_allocator_traits::pointer
+            node_pointer;
+        typedef typename node_allocator_traits::const_pointer
+            const_node_pointer;
+        typedef typename bucket_allocator_traits::pointer
+            bucket_pointer;
+        typedef typename bucket::previous_pointer
+            previous_pointer;
+        typedef boost::unordered::detail::node_constructor<node_allocator>
+            node_constructor;
 
         // Members
 
         bucket_pointer buckets_;
         std::size_t bucket_count_;
         std::size_t size_;
-        ::boost::unordered::detail::compressed<bucket_allocator, node_allocator> allocators_;
+        boost::unordered::detail::compressed<bucket_allocator, node_allocator>
+            allocators_;
 
         // Data access
 
@@ -235,7 +248,8 @@ namespace boost { namespace unordered { namespace detail {
         std::size_t max_bucket_count() const
         {
             // -1 to account for the start bucket.
-            return prev_prime(bucket_allocator_traits::max_size(bucket_alloc()) - 1);
+            return boost::unordered::detail::prev_prime(
+                bucket_allocator_traits::max_size(bucket_alloc()) - 1);
         }
 
         bucket_pointer get_bucket(std::size_t bucket_index) const
@@ -261,7 +275,8 @@ namespace boost { namespace unordered { namespace detail {
         node_pointer get_start(std::size_t bucket_index) const
         {
             previous_pointer prev = this->get_previous_start(bucket_index);
-            return prev ? static_cast<node_pointer>(prev->next_) : node_pointer();
+            return prev ? static_cast<node_pointer>(prev->next_) :
+                node_pointer();
         }
 
         float load_factor() const
@@ -298,7 +313,7 @@ namespace boost { namespace unordered { namespace detail {
         {
         }
 
-        buckets(buckets& b, ::boost::unordered::detail::move_tag m) :
+        buckets(buckets& b, boost::unordered::detail::move_tag m) :
             buckets_(),
             bucket_count_(b.bucket_count_),
             size_(),
@@ -308,8 +323,8 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         template <typename Types>
-        buckets(::boost::unordered::detail::table<Types>& x,
-                ::boost::unordered::detail::move_tag m) :
+        buckets(boost::unordered::detail::table<Types>& x,
+                boost::unordered::detail::move_tag m) :
             buckets_(),
             bucket_count_(x.bucket_count_),
             size_(),
@@ -324,7 +339,7 @@ namespace boost { namespace unordered { namespace detail {
 
         void create_buckets()
         {
-            ::boost::unordered::detail::array_constructor<bucket_allocator>
+            boost::unordered::detail::array_constructor<bucket_allocator>
                 constructor(bucket_alloc());
     
             // Creates an extra bucket to act as the start node.
@@ -335,8 +350,9 @@ namespace boost { namespace unordered { namespace detail {
                 node_constructor a(this->node_alloc());
                 a.construct_node();
 
-                (constructor.get() + static_cast<std::ptrdiff_t>(this->bucket_count_))->next_ =
-                    a.release();
+                (constructor.get() +
+                    static_cast<std::ptrdiff_t>(this->bucket_count_))->next_ =
+                        a.release();
             }
 
             this->buckets_ = constructor.release();
@@ -348,17 +364,17 @@ namespace boost { namespace unordered { namespace detail {
         void swap(buckets& other, false_type = false_type())
         {
             BOOST_ASSERT(node_alloc() == other.node_alloc());
-            std::swap(buckets_, other.buckets_);
-            std::swap(bucket_count_, other.bucket_count_);
-            std::swap(size_, other.size_);
+            boost::swap(buckets_, other.buckets_);
+            boost::swap(bucket_count_, other.bucket_count_);
+            boost::swap(size_, other.size_);
         }
 
         void swap(buckets& other, true_type)
         {
             allocators_.swap(other.allocators_);
-            std::swap(buckets_, other.buckets_);
-            std::swap(bucket_count_, other.bucket_count_);
-            std::swap(size_, other.size_);
+            boost::swap(buckets_, other.buckets_);
+            boost::swap(bucket_count_, other.bucket_count_);
+            boost::swap(size_, other.size_);
         }
 
         void move_buckets_from(buckets& other)
@@ -378,7 +394,7 @@ namespace boost { namespace unordered { namespace detail {
 
         inline void delete_node(node_pointer n)
         {
-            ::boost::unordered::detail::destroy(n->value_ptr());
+            boost::unordered::detail::destroy(n->value_ptr());
             node_allocator_traits::destroy(node_alloc(), boost::addressof(*n));
             node_allocator_traits::deallocate(node_alloc(), n, 1);
             --size_;
@@ -426,10 +442,12 @@ namespace boost { namespace unordered { namespace detail {
                 bucket_pointer end = this->get_bucket(this->bucket_count_ + 1);
                 for(bucket_pointer it = this->buckets_; it != end; ++it)
                 {
-                    bucket_allocator_traits::destroy(bucket_alloc(), boost::addressof(*it));
+                    bucket_allocator_traits::destroy(bucket_alloc(),
+                        boost::addressof(*it));
                 }
 
-                bucket_allocator_traits::deallocate(bucket_alloc(), this->buckets_, this->bucket_count_ + 1);
+                bucket_allocator_traits::deallocate(bucket_alloc(),
+                    this->buckets_, this->bucket_count_ + 1);
     
                 this->buckets_ = bucket_pointer();
             }
@@ -460,7 +478,8 @@ namespace boost { namespace unordered { namespace detail {
 
         // This is called after erasing a node or group of nodes to fix up
         // the bucket pointers.
-        void fix_buckets(bucket_pointer bucket, previous_pointer prev, node_pointer next)
+        void fix_buckets(bucket_pointer bucket,
+                previous_pointer prev, node_pointer next)
         {
             if (!next)
             {
@@ -481,8 +500,8 @@ namespace boost { namespace unordered { namespace detail {
 
         // This is called after erasing a range of nodes to fix any bucket
         // pointers into that range.
-        void fix_buckets_range(
-            std::size_t bucket_index, previous_pointer prev, node_pointer begin, node_pointer end)
+        void fix_buckets_range(std::size_t bucket_index,
+                previous_pointer prev, node_pointer begin, node_pointer end)
         {
             node_pointer n = begin;
     
@@ -550,9 +569,9 @@ namespace boost { namespace unordered { namespace detail {
 
         typedef compressed<H, P> function_pair;
 
-        typedef typename ::boost::aligned_storage<
+        typedef typename boost::aligned_storage<
             sizeof(function_pair),
-            ::boost::alignment_of<function_pair>::value>::type aligned_function;
+            boost::alignment_of<function_pair>::value>::type aligned_function;
 
         bool current_; // The currently active functions.
         aligned_function funcs_[2];
@@ -574,7 +593,7 @@ namespace boost { namespace unordered { namespace detail {
         
         void destroy(bool which)
         {
-            ::boost::unordered::detail::destroy((function_pair*)(&funcs_[which]));
+            boost::unordered::detail::destroy((function_pair*)(&funcs_[which]));
         }
         
     public:
@@ -592,7 +611,7 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         ~functions() {
-            destroy(current_);
+            this->destroy(current_);
         }
 
         H const& hash_function() const {
