@@ -155,7 +155,7 @@ void check_stop()
   BOOST_TEST(!sw.is_running());
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
 }
 
 template <typename Stopwatch>
@@ -168,12 +168,12 @@ void check_stop_stop()
   BOOST_TEST(!sw.is_running());
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
   sw.stop();
   BOOST_TEST(!sw.is_running());
   d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
 }
 
 

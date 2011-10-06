@@ -132,7 +132,7 @@ void check_dont_start_start_stop()
   BOOST_TEST(!sw.is_running());
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
   BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
   BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
 }
@@ -150,7 +150,7 @@ void check_dont_start_scoped_run()
   BOOST_TEST(!sw.is_running());
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
   BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
 }
 
@@ -164,7 +164,7 @@ void check_stop()
   BOOST_TEST(!sw.is_running());
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
   BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
   BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
 }
@@ -179,14 +179,14 @@ void check_stop_stop()
   BOOST_TEST(!sw.is_running());
   typename Stopwatch::duration d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
   BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
   ex::sleep_for<typename Stopwatch::clock>(boost::chrono::milliseconds(100));
   sw.stop();
   BOOST_TEST(!sw.is_running());
   d=sw.elapsed();
   BOOST_TEST(!sw.is_running());
-  BOOST_TEST(d == boost::chrono::milliseconds(0));
+  BOOST_TEST(d == boost::chrono::milliseconds(100));
   BOOST_TEST(sw.get_laps_collector().last()==boost::chrono::milliseconds(100));
   BOOST_TEST(boost::accumulators::count(sw.get_laps_collector().accumulator_set())==1);
 }
