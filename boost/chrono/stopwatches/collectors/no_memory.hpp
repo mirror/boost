@@ -19,6 +19,7 @@ namespace boost
     {
       typedef Duration duration;
 
+      duration elapsed() const  { return duration::zero(); }
       duration last() const  { return duration::zero(); }
       void store(duration const& )  {}
       void reset() {}

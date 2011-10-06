@@ -16,6 +16,7 @@
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/framework/features.hpp>
 
 namespace boost
 {
@@ -51,6 +52,7 @@ namespace boost
 
       storage_type const& accumulator_set() const  { return acc_; }
 
+      duration elapsed() const  { return duration(accumulators::sum(acc_)); }
 
     };
 

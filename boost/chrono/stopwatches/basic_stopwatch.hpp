@@ -297,14 +297,12 @@ namespace boost
       }
 
       /**
-       * Elapsed time getter.
+       * Elapsed time getter for the current lap.
        *
-       * Effects: Assign the error code if any internal error occur while retrieving the current time.
-       *
-       * Returns: the elapsed time since the start if no internal error occur.
+       * Returns: the elapsed time since the last start if no internal error occur.
        *
        */
-      duration elapsed() const
+      duration elapsed_current_lap() const
       {
         if (is_running())
         {
@@ -314,6 +312,44 @@ namespace boost
         {
           return duration::zero();
         }
+      }
+
+      /**
+       * Elapsed time getter for the current lap.
+       *
+       * Effects: Assign the error code if any internal error occur while retrieving the current time.
+       *
+       * Returns: the elapsed time since the start if no internal error occur.
+       *
+       */
+      duration elapsed_current_lap(
+          system::error_code & ec
+          ) const
+      {
+        if (is_running())
+        {
+            time_point tmp = clock::now(ec);
+            if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return duration::zero();
+
+            return tmp - start_;
+        } else
+        {
+          return duration::zero();
+        }
+      }
+
+
+      /**
+       * Elapsed time getter.
+       *
+       * Effects: Assign the error code if any internal error occur while retrieving the current time.
+       *
+       * Returns: the elapsed time since the start if no internal error occur.
+       *
+       */
+      duration elapsed() const
+      {
+        return laps_collector_.elapsed()+elapsed_current_lap();
       }
 
       /**
@@ -328,16 +364,21 @@ namespace boost
           system::error_code & ec
           ) const
       {
-        if (is_running())
-        {
-            time_point tmp = clock::now(ec);
-            if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return duration::zero();
+        duration tmp = elapsed_current_lap(ec);
+        if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return duration::zero();
+        return laps_collector_.elapsed() + tmp;
+      }
 
-            return tmp - start_;
-        } else
-        {
-          return duration::zero();
-        }
+      /**
+       * Elapsed time for the last lap.
+       *
+       * Returns: the elapsed time of the last lap.
+       *
+       */
+
+      duration last() const
+      {
+        return laps_collector_.last();
       }
       /**
        * Resets the stopwatch.

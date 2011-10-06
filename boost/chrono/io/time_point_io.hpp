@@ -142,10 +142,153 @@ namespace boost
 
     }
 
+    template<class CharT>
+    inline
+    detail::time_manip<CharT>
+    time_fmt(timezone_type tz, const CharT* fmt)
+    {
+        return detail::time_manip<CharT>(tz, fmt);
+    }
+
+    template<class CharT>
+    inline
+    detail::time_manip<CharT>
+    time_fmt(timezone tz, std::basic_string<CharT> fmt)
+    {
+      // todo move semantics
+      return detail::time_manip<CharT>(tz, fmt);
+    }
+
     inline detail::time_man time_fmt(timezone_type f)
     {
       return detail::time_man(f);
     }
+
+    /**
+     * time_fmt_io_saver i/o saver.
+     *
+     * See Boost.IO i/o state savers for a motivating compression.
+     */
+    template<typename CharT = char, typename Traits = std::char_traits<CharT> >
+    struct time_fmt_io_saver
+    {
+
+      //! the type of the state to restore
+      typedef std::basic_ostream<CharT, Traits> state_type;
+      //! the type of aspect to save
+      typedef std::basic_string<CharT, Traits> aspect_type;
+
+      /**
+       * Explicit construction from an i/o stream.
+       *
+       * Store a reference to the i/o stream and the value of the associated @c time format .
+       */
+      explicit time_fmt_io_saver(state_type &s) :
+      s_save_(s)
+      {
+        typedef duration_punct<CharT> Facet;
+        std::locale loc = s_save_.getloc();
+        if (!std::has_facet<Facet>(loc))
+          s_save_.imbue(std::locale(loc, new Facet()));
+
+        const Facet& f = std::use_facet<Facet>(s_save_.getloc());
+        a_save_ = f.get_duration_style();
+      }
+
+      /**
+       * Construction from an i/o stream and a @c time format  to restore.
+       *
+       * Stores a reference to the i/o stream and the value @c new_value to restore given as parameter.
+       */
+      time_fmt_io_saver(state_type &s, aspect_type new_value) :
+      s_save_(s), a_save_(new_value)
+      {
+      }
+
+      /**
+       * Destructor.
+       *
+       * Restores the i/o stream with the format to be restored.
+       */
+      ~time_fmt_io_saver()
+      {
+        this->restore();
+      }
+
+      /**
+       * Restores the i/o stream with the time format to be restored.
+       */
+      void restore()
+      {
+        s_save_ << time_fmt(a_save_);
+      }
+    private:
+      state_type& s_save_;
+      aspect_type a_save_;
+    };
+
+    /**
+     * timezone_io_saver i/o saver.
+     *
+     * See Boost.IO i/o state savers for a motivating compression.
+     */
+    template<typename CharT = char, typename Traits = std::char_traits<CharT> >
+    struct timezone_io_saver
+    {
+
+      //! the type of the state to restore
+      typedef std::basic_ostream<CharT, Traits> state_type;
+      //! the type of aspect to save
+      typedef timezone_type aspect_type;
+
+      /**
+       * Explicit construction from an i/o stream.
+       *
+       * Store a reference to the i/o stream and the value of the associated @c timezone.
+       */
+      explicit timezone_io_saver(state_type &s) :
+      s_save_(s)
+      {
+        typedef duration_punct<CharT> Facet;
+        std::locale loc = s_save_.getloc();
+        if (!std::has_facet<Facet>(loc))
+          s_save_.imbue(std::locale(loc, new Facet()));
+
+        const Facet& f = std::use_facet<Facet>(s_save_.getloc());
+        a_save_ = f.get_duration_style();
+      }
+
+      /**
+       * Construction from an i/o stream and a @c timezone to restore.
+       *
+       * Stores a reference to the i/o stream and the value @c new_value to restore given as parameter.
+       */
+      timezone_io_saver(state_type &s, aspect_type new_value) :
+      s_save_(s), a_save_(new_value)
+      {
+      }
+
+      /**
+       * Destructor.
+       *
+       * Restores the i/o stream with the format to be restored.
+       */
+      ~timezone_io_saver()
+      {
+        this->restore();
+      }
+
+      /**
+       * Restores the i/o stream with the timezone to be restored.
+       */
+      void restore()
+      {
+        s_save_ << time_fmt(a_save_);
+      }
+    private:
+      state_type& s_save_;
+      aspect_type a_save_;
+    };
 
     template<class CharT, class Traits, class Clock, class Duration>
     std::basic_ostream<CharT, Traits>&

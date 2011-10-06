@@ -24,6 +24,8 @@ namespace boost
       typedef Duration duration;
       typedef typename duration::rep rep;
       typedef SequenceContainer storage_type;
+      typedef typename SequenceContainer::iterator iterator;
+      typedef typename SequenceContainer::const_iterator const_iterator;
       storage_type cont_;
 
       void store(duration const& d)
@@ -43,6 +45,12 @@ namespace boost
           return duration::zero();
         else
           return *cont_.begin();
+      }
+
+      duration elapsed() const  {
+        duration elapsed_ = duration::zero();
+        for (const_iterator it = cont_.begin(); it !=cont_.end(); ++it) elapsed_ += *it;
+        return elapsed_;
       }
 
     };

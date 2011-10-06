@@ -28,6 +28,7 @@ namespace boost
         last_ = duration::zero();
       }
       duration last() const  { return last_; }
+      duration elapsed() const  { return duration::zero(); }
 
     };
 
