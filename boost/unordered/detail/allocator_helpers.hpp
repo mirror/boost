@@ -133,7 +133,8 @@ namespace boost { namespace unordered { namespace detail {
 #define BOOST_UNORDERED_HAS_FUNCTION(name, thing, args, _)                  \
     struct BOOST_PP_CAT(has_, name)                                         \
     {                                                                       \
-        BOOST_UNORDERED_CHECK_EXPRESSION(1, 1, make< thing >().name args);  \
+        BOOST_UNORDERED_CHECK_EXPRESSION(1, 1,                              \
+            boost::unordered::detail::make< thing >().name args);           \
         BOOST_UNORDERED_DEFAULT_EXPRESSION(2, 2);                           \
                                                                             \
         enum { value = sizeof(test<T>(choose())) == sizeof(choice1::type) };\
@@ -149,7 +150,8 @@ namespace boost { namespace unordered { namespace detail {
 
 #define BOOST_UNORDERED_CHECK_MEMBER(count, result, name, member)           \
                                                                             \
-    typedef typename identity<member>::type BOOST_PP_CAT(check, count);     \
+    typedef typename boost::unordered::detail::identity<member>::type       \
+        BOOST_PP_CAT(check, count);                                         \
                                                                             \
     template <BOOST_PP_CAT(check, count) e>                                 \
     struct BOOST_PP_CAT(test, count) {                                      \
@@ -207,7 +209,8 @@ namespace boost { namespace unordered { namespace detail {
         {                                                                   \
             enum { value = sizeof(                                          \
                 boost::unordered::detail::is_private_type((                 \
-                    make<wrap< thing > >().name args                        \
+                    boost::unordered::detail::make<wrap< thing > >()        \
+                        .name args                                          \
                 , 0))) == sizeof(yes_type) };                               \
         };                                                                  \
                                                                             \
@@ -329,12 +332,14 @@ namespace boost { namespace unordered { namespace detail {
 #if BOOST_UNORDERED_HAVE_CALL_N_DETECTION
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_FUNCTION(
-        construct, U, (make<ValueType*>(), make<ValueType const>()), 2
+        construct, U, (
+            boost::unordered::detail::make<ValueType*>(),
+            boost::unordered::detail::make<ValueType const>()), 2
     );
 
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_FUNCTION(
-        destroy, U, (make<ValueType*>()), 1
+        destroy, U, (boost::unordered::detail::make<ValueType*>()), 1
     );
 #else
     template <typename T>
@@ -345,31 +350,35 @@ namespace boost { namespace unordered { namespace detail {
 #endif
 
     template <typename Alloc>
-    inline typename boost::enable_if<
-            has_select_on_container_copy_construction<Alloc>, Alloc
+    inline typename boost::enable_if_c<
+            boost::unordered::detail::
+            has_select_on_container_copy_construction<Alloc>::value, Alloc
         >::type call_select_on_container_copy_construction(const Alloc& rhs)
     {
         return rhs.select_on_container_copy_construction();
     }
 
     template <typename Alloc>
-    inline typename boost::disable_if<
-            has_select_on_container_copy_construction<Alloc>, Alloc
+    inline typename boost::disable_if_c<
+            boost::unordered::detail::
+            has_select_on_container_copy_construction<Alloc>::value, Alloc
         >::type call_select_on_container_copy_construction(const Alloc& rhs)
     {
         return rhs;
     }
 
     template <typename SizeType, typename Alloc>
-    SizeType call_max_size(const Alloc& a,
-        typename boost::enable_if<has_max_size<Alloc>, void*>::type = 0)
+    inline typename boost::enable_if_c<
+            boost::unordered::detail::has_max_size<Alloc>::value, SizeType
+        >::type call_max_size(const Alloc& a)
     {
         return a.max_size();
     }
 
     template <typename SizeType, typename Alloc>
-    SizeType call_max_size(const Alloc&,
-        typename boost::disable_if<has_max_size<Alloc>, void*>::type = 0)
+    inline typename boost::disable_if_c<
+            boost::unordered::detail::has_max_size<Alloc>::value, SizeType
+        >::type call_max_size(const Alloc&)
     {
         return std::numeric_limits<SizeType>::max();
     }
@@ -423,29 +432,33 @@ namespace boost { namespace unordered { namespace detail {
         // Only supporting the basic copy constructor for now.
 
         template <typename T>
-        static void construct(Alloc& a, T* p, T const& x, typename
-                boost::enable_if<has_construct<Alloc, T>, void*>::type = 0)
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_construct<Alloc, T>::value>::type
+            construct(Alloc& a, T* p, T const& x)
         {
             a.construct(p, x);
         }
 
         template <typename T>
-        static void construct(Alloc&, T* p, T const& x, typename
-                boost::disable_if<has_construct<Alloc, T>, void*>::type = 0)
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_construct<Alloc, T>::value>::type
+            construct(Alloc&, T* p, T const& x)
         {
-            new (p) T(x);
+            new ((void*) p) T(x);
         }
 
         template <typename T>
-        static void destroy(Alloc& a, T* p, typename
-                boost::enable_if<has_destroy<Alloc, T>, void*>::type = 0)
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc& a, T* p)
         {
             a.destroy(p);
         }
 
         template <typename T>
-        static void destroy(Alloc&, T* p, typename
-                boost::disable_if<has_destroy<Alloc, T>, void*>::type = 0)
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc&, T* p)
         {
             boost::unordered::detail::destroy(p);
         }

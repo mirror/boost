@@ -160,7 +160,7 @@ BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EARGS,
         boost::detail::if_true<
             boost::is_class<T>::value
         >::BOOST_NESTED_TEMPLATE then <
-            rv_ref_impl<T>,
+            boost::unordered::detail::rv_ref_impl<T>,
             please_ignore_this_overload
         >::type
     {};
@@ -227,7 +227,8 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
         static choice3::type check(choice3, ...);
 
         enum { value =
-            sizeof(check(choose(), make<A0>())) == sizeof(choice2::type) };
+            sizeof(check(choose(), boost::unordered::detail::make<A0>())) ==
+                sizeof(choice2::type) };
     };
 #endif
 
@@ -242,7 +243,8 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 
         static choice3::type check(choice3, ...);
 
-        enum { value = sizeof(check(choose(), make<A0>())) };
+        enum { value =
+            sizeof(check(choose(), boost::unordered::detail::make<A0>())) };
     };
 
     template <typename A, typename B, typename A0>
@@ -273,9 +275,9 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     inline typename enable_if<piecewise3<A, B, A0>, void>::type
         construct_impl(std::pair<A, B>* address, A0&&, A1&& a1, A2&& a2)
     {
-        construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(
             boost::addressof(address->first), a1);
-        construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(
             boost::addressof(address->second), a2);
     }
 
@@ -291,7 +293,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 
     template <typename A, typename B, typename A0, typename A1, typename A2>
     inline typename enable_if<emulation3<A, B, A0>, void>::type
-        construct_impl(T* address, A0&& a0, A1&& a1, A2&& a2)
+        construct_impl(std::pair<A, B>* address, A0&& a0, A1&& a1, A2&& a2)
     {
         new((void*) boost::addressof(address->first)) A(std::forward<A0>(a0));
         new((void*) boost::addressof(address->second)) B(
@@ -345,9 +347,9 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
         construct_impl(std::pair<A, B>* address,
             boost::unordered::detail::emplace_args3<A0, A1, A2> const& args)
     {
-        construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(
             boost::addressof(address->first), args.a1);
-        construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(
             boost::addressof(address->second), args.a2);
     }
 
