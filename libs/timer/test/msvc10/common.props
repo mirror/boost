@@ -7,7 +7,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_ALL_NO_LIB;BOOST_ALL_DYN_LINK;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <PostBuildEvent>
       <Command>"$(TargetDir)\$(TargetName).exe"</Command>

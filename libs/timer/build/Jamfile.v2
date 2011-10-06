@@ -14,7 +14,7 @@ project boost/timer
       <link>static:<define>BOOST_TIMER_STATIC_LINK=1
     ;
 
-SOURCES = auto_timers auto_timers_construction cpu_timer ;
+SOURCES = auto_timers_construction cpu_timer ;
 
 lib boost_timer
    : $(SOURCES).cpp  ../../chrono/build//boost_chrono

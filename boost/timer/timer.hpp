@@ -53,29 +53,27 @@ namespace timer
   const short         default_places = 6;
 
   BOOST_TIMER_DECL
-  const std::string&  default_format();
+  std::string format(const cpu_times& times, short places, const std::string& fmt); 
 
   BOOST_TIMER_DECL
-  std::string format(const cpu_times& times,
-                     short places = default_places,
-                     const std::string& fmt = default_format()); 
+  std::string format(const cpu_times& times, short places = default_places); 
 
-//  cpu_timer  ---------------------------------------------------------------------//
+//  cpu_timer  -------------------------------------------------------------------------//
 
   class BOOST_TIMER_DECL cpu_timer
   {
   public:
 
-    //  constructors, destructor
+    //  constructor
     cpu_timer()                                    { start(); }
-   ~cpu_timer()                                    {}
 
     //  observers
     bool              is_stopped() const           { return m_is_stopped; }
     cpu_times         elapsed() const;  // does not stop()
-    std::string       format(int places = default_places,
-                             const std::string& format = default_format()) const
-                                 { return timer::format(elapsed(), places, format); }
+    std::string       format(short places, const std::string& format) const
+                            { return ::boost::timer::format(elapsed(), places, format); }
+    std::string       format(short places = default_places) const
+                            { return ::boost::timer::format(elapsed(), places); }
     //  actions
     void              start();
     const cpu_times&  stop();
@@ -96,15 +94,15 @@ namespace timer
     //  require including <iostream>, with its high costs, even when the standard
     //  streams are not actually used.
 
-    explicit auto_cpu_timer(short places = default_places,
-                            const std::string& format = default_format());
-    explicit auto_cpu_timer(const std::string& format);
-    explicit auto_cpu_timer(std::ostream& os,
-                            short places = default_places,
-                            const std::string& format = default_format())
+    explicit auto_cpu_timer(short places = default_places);                          // #1
+             auto_cpu_timer(short places, const std::string& format);                // #2
+    explicit auto_cpu_timer(const std::string& format);                              // #3
+             auto_cpu_timer(std::ostream& os, short places,
+                            const std::string& format)                               // #4
                                    : m_places(places), m_os(os), m_format(format)
                                    { start(); }
-    auto_cpu_timer(std::ostream& os, const std::string& format)
+    explicit auto_cpu_timer(std::ostream& os, short places = default_places);        // #5
+             auto_cpu_timer(std::ostream& os, const std::string& format)             // #6
                                    : m_places(default_places), m_os(os), m_format(format)
                                    { start(); }
 
@@ -113,7 +111,7 @@ namespace timer
     void   report(); 
 
   private:
-    int             m_places;
+    short           m_places;
     std::ostream&   m_os;
     std::string     m_format;  
   };

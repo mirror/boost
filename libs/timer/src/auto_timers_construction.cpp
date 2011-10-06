@@ -23,14 +23,23 @@
 #include <boost/timer/timer.hpp>
 #include <iostream>
 
+namespace
+{
+  // CAUTION: must be identical to same constant in cpu_timer.cpp
+  const std::string default_fmt(" %ws wall, %us user + %ss system = %ts CPU (%p%)\n");
+}
+
 namespace boost
 {
   namespace timer
   {
-    auto_cpu_timer::auto_cpu_timer(short places, const std::string& format)
+    auto_cpu_timer::auto_cpu_timer(short places)                                  // #1
+      : m_places(places), m_os(std::cout), m_format(default_fmt) { start(); }
+
+    auto_cpu_timer::auto_cpu_timer(short places, const std::string& format)       // #2
       : m_places(places), m_os(std::cout), m_format(format) { start(); }
 
-    auto_cpu_timer::auto_cpu_timer(const std::string& format)
+    auto_cpu_timer::auto_cpu_timer(const std::string& format)                     // #3
       : m_places(default_places), m_os(std::cout), m_format(format) { start(); }
 
   } // namespace timer

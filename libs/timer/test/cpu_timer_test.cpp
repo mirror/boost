@@ -121,7 +121,7 @@ namespace
 
 //--------------------------------------------------------------------------------------//
 
-int cpp_main(int argc, char * argv[])
+int cpp_main(int, char *[])
 {
   cout << "----------  timer_test  ----------\n";
 
