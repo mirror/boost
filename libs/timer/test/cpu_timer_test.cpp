@@ -109,8 +109,9 @@ namespace
             "  the process in the interim, the test may fail. Thus no single failure\n"
             "  of this test is meaningful.\n";
 
-    BOOST_TEST(t.elapsed().wall / 1000000000.0L > (stop_time - start_time) * 0.95L);
-    BOOST_TEST(t.elapsed().wall / 1000000000.0L < (stop_time - start_time) * 1.05L);
+    //  These tests allow lots of fuzz to reduce false positives
+    BOOST_TEST(t.elapsed().wall / 1000000000.0L > (stop_time - start_time) * 0.75L);
+    BOOST_TEST(t.elapsed().wall / 1000000000.0L < (stop_time - start_time) * 1.25L);
 
     cout << "  C library consistency test complete" << endl; 
   }
