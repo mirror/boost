@@ -69,7 +69,8 @@ namespace boost { namespace unordered { namespace detail {
     // If the allocator uses raw pointers use grouped_ptr_node
     // Otherwise use grouped_node.
 
-    template <typename A, typename T, typename VoidPointer, typename NodePtr, typename BucketPtr>
+    template <typename A, typename T,
+            typename VoidPointer, typename NodePtr, typename BucketPtr>
     struct pick_grouped_node2
     {
         typedef boost::unordered::detail::grouped_node<VoidPointer, T> node;
@@ -118,7 +119,7 @@ namespace boost { namespace unordered { namespace detail {
     template <typename A, typename H, typename P>
     struct multiset
     {
-        typedef multiset<A, H, P> types;
+        typedef boost::unordered::detail::multiset<A, H, P> types;
 
         typedef A allocator;
         typedef H hasher;
@@ -129,18 +130,19 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename traits::void_pointer void_pointer;
         typedef value_type key_type;
 
-        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::node node;
-        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::bucket bucket;
-        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::link_pointer link_pointer;
-        typedef boost::unordered::detail::grouped_table_impl<types> table;
+        typedef boost::unordered::detail::pick_grouped_node<A, value_type> pick;
+        typedef typename pick::node node;
+        typedef typename pick::bucket bucket;
+        typedef typename pick::link_pointer link_pointer;
 
+        typedef boost::unordered::detail::grouped_table_impl<types> table;
         typedef boost::unordered::detail::set_extractor<value_type> extractor;
     };
 
     template <typename A, typename K, typename H, typename P>
     struct multimap
     {
-        typedef multimap<A, K, H, P> types;
+        typedef boost::unordered::detail::multimap<A, K, H, P> types;
 
         typedef A allocator;
         typedef H hasher;
@@ -151,12 +153,14 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename traits::value_type value_type;
         typedef typename traits::void_pointer void_pointer;
 
-        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::node node;
-        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::bucket bucket;
-        typedef typename boost::unordered::detail::pick_grouped_node<A, value_type>::link_pointer link_pointer;
-        typedef boost::unordered::detail::grouped_table_impl<types> table;
+        typedef boost::unordered::detail::pick_grouped_node<A, value_type> pick;
+        typedef typename pick::node node;
+        typedef typename pick::bucket bucket;
+        typedef typename pick::link_pointer link_pointer;
 
-        typedef boost::unordered::detail::map_extractor<key_type, value_type> extractor;
+        typedef boost::unordered::detail::grouped_table_impl<types> table;
+        typedef boost::unordered::detail::map_extractor<key_type, value_type>
+            extractor;
     };
 
     template <typename Types>
@@ -234,7 +238,8 @@ namespace boost { namespace unordered { namespace detail {
                         return node_pointer();
                 }
 
-                n = static_cast<node_pointer>(static_cast<node_pointer>(n->group_prev_)->next_);
+                n = static_cast<node_pointer>(
+                    static_cast<node_pointer>(n->group_prev_)->next_);
             }
         }
 
@@ -273,8 +278,10 @@ namespace boost { namespace unordered { namespace detail {
             {
                 node_pointer n2 = other.find_matching_node(n1);
                 if (!n2) return false;
-                node_pointer end1 = static_cast<node_pointer>(static_cast<node_pointer>(n1->group_prev_)->next_);
-                node_pointer end2 = static_cast<node_pointer>(static_cast<node_pointer>(n2->group_prev_)->next_);
+                node_pointer end1 = static_cast<node_pointer>(
+                    static_cast<node_pointer>(n1->group_prev_)->next_);
+                node_pointer end2 = static_cast<node_pointer>(
+                    static_cast<node_pointer>(n2->group_prev_)->next_);
                 if (!group_equals(n1, end1, n2, end2)) return false;
                 n1 = end1;    
             }
@@ -319,7 +326,8 @@ namespace boost { namespace unordered { namespace detail {
                 value_type const& v = n1->value();
                 if (find(start, n1, v)) continue;
                 std::size_t matches = count_equal(n2, end2, v);
-                if (!matches || matches != 1 + count_equal(static_cast<node_pointer>(n1->next_), end1, v))
+                if (!matches || matches != 1 + count_equal(
+                        static_cast<node_pointer>(n1->next_), end1, v))
                     return false;
             }
             
@@ -334,7 +342,8 @@ namespace boost { namespace unordered { namespace detail {
             return false;
         }
 
-        static std::size_t count_equal(node_pointer n, node_pointer end, value_type const& v)
+        static std::size_t count_equal(node_pointer n, node_pointer end,
+            value_type const& v)
         {
             std::size_t count = 0;
             for(;n != end; n = static_cast<node_pointer>(n->next_))
@@ -371,7 +380,8 @@ namespace boost { namespace unordered { namespace detail {
         {
             n->next_ = static_cast<node_pointer>(pos->group_prev_)->next_;
             n->group_prev_ = pos->group_prev_;
-            static_cast<node_pointer>(pos->group_prev_)->next_ = static_cast<link_pointer>(n);
+            static_cast<node_pointer>(pos->group_prev_)->next_ =
+                static_cast<link_pointer>(n);
             pos->group_prev_ = static_cast<link_pointer>(n);
         }
 
@@ -402,8 +412,8 @@ namespace boost { namespace unordered { namespace detail {
                     
                     if (start_node->next_) {
                         this->get_bucket(
-                            static_cast<node_pointer>(start_node->next_)->hash_ %
-                                this->bucket_count_)->next_ = n;
+                            static_cast<node_pointer>(start_node->next_)->hash_
+                                % this->bucket_count_)->next_ = n;
                     }
     
                     b->next_ = start_node;
@@ -502,7 +512,7 @@ namespace boost { namespace unordered { namespace detail {
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // Erase
         //
         // no throw
@@ -521,18 +531,21 @@ namespace boost { namespace unordered { namespace detail {
             for (;;)
             {
                 if (!prev->next_) return 0;
-                std::size_t node_hash = static_cast<node_pointer>(prev->next_)->hash_;
+                std::size_t node_hash =
+                    static_cast<node_pointer>(prev->next_)->hash_;
                 if (node_hash % this->bucket_count_ != bucket_index)
                     return 0;
                 if (node_hash == hash &&
-                    this->key_eq()(k, this->get_key(static_cast<node_pointer>(prev->next_)->value())))
+                    this->key_eq()(k, this->get_key(
+                        static_cast<node_pointer>(prev->next_)->value())))
                     break;
                 prev = static_cast<previous_pointer>(
                     static_cast<node_pointer>(prev->next_)->group_prev_);
             }
 
             node_pointer pos = static_cast<node_pointer>(prev->next_);
-            link_pointer end1 = static_cast<node_pointer>(pos->group_prev_)->next_;
+            link_pointer end1 =
+                static_cast<node_pointer>(pos->group_prev_)->next_;
             node_pointer end = static_cast<node_pointer>(end1);
             prev->next_ = end1;
             this->fix_buckets(bucket, prev, end);
@@ -571,7 +584,8 @@ namespace boost { namespace unordered { namespace detail {
         static previous_pointer unlink_node(bucket& b, node_pointer n)
         {
             node_pointer next = static_cast<node_pointer>(n->next_);
-            previous_pointer prev = static_cast<previous_pointer>(n->group_prev_);
+            previous_pointer prev =
+                static_cast<previous_pointer>(n->group_prev_);
 
             if(prev->next_ != n) {
                 // The node is at the beginning of a group.
@@ -579,7 +593,8 @@ namespace boost { namespace unordered { namespace detail {
                 // Find the previous node pointer:
                 prev = b.next_;
                 while(prev->next_ != n) {
-                    prev = static_cast<previous_pointer>(static_cast<node_pointer>(prev->next_)->group_prev_);
+                    prev = static_cast<previous_pointer>(
+                        static_cast<node_pointer>(prev->next_)->group_prev_);
                 }
 
                 // Remove from group
@@ -609,12 +624,13 @@ namespace boost { namespace unordered { namespace detail {
             return prev;
         }
 
-        static previous_pointer unlink_nodes(bucket& b, node_pointer begin, node_pointer end)
+        static previous_pointer unlink_nodes(bucket& b,
+                node_pointer begin, node_pointer end)
         {
-            previous_pointer prev = static_cast<previous_pointer>(begin->group_prev_);
+            previous_pointer prev = static_cast<previous_pointer>(
+                begin->group_prev_);
 
             if(prev->next_ != static_cast<link_pointer>(begin)) {
-std::cout << "A" << std::endl;
                 // The node is at the beginning of a group.
 
                 // Find the previous node pointer:
@@ -626,7 +642,6 @@ std::cout << "A" << std::endl;
                 if (end) split_group(end);
             }
             else {
-std::cout << "B" << std::endl;
                 node_pointer group1 = split_group(begin);
 
                 if (end) {
@@ -653,7 +668,8 @@ std::cout << "B" << std::endl;
         {
             // Find first node in group.
             node_pointer first = split;
-            while (static_cast<node_pointer>(first->group_prev_)->next_ == static_cast<link_pointer>(first))
+            while (static_cast<node_pointer>(first->group_prev_)->next_ ==
+                    static_cast<link_pointer>(first))
                 first = static_cast<node_pointer>(first->group_prev_);
 
             if(first == split) return split;
@@ -665,7 +681,7 @@ std::cout << "B" << std::endl;
             return first;
         }
 
-        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // copy_buckets_to
         //
         // Basic exception safety. If an exception is thrown this will
@@ -712,11 +728,11 @@ std::cout << "B" << std::endl;
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // move_buckets_to
         //
-        // Basic exception safety. The source nodes are left in an unusable state
-        // if an exception throws.
+        // Basic exception safety. The source nodes are left in an unusable
+        // state if an exception throws.
 
         static void move_buckets_to(buckets& src, buckets& dst)
         {
@@ -788,7 +804,8 @@ std::cout << "B" << std::endl;
 
         // Iterate through the nodes placing them in the correct buckets.
         // pre: prev->next_ is not null.
-        static previous_pointer place_in_bucket(buckets& dst, previous_pointer prev, node_pointer end)
+        static previous_pointer place_in_bucket(buckets& dst,
+                previous_pointer prev, node_pointer end)
         {
             bucket_pointer b = dst.get_bucket(end->hash_ % dst.bucket_count_);
 

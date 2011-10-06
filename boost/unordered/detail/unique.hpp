@@ -65,7 +65,8 @@ namespace boost { namespace unordered { namespace detail {
     // If the allocator uses raw pointers use ptr_node
     // Otherwise use node.
 
-    template <typename A, typename T, typename VoidPointer, typename NodePtr, typename BucketPtr>
+    template <typename A, typename T,
+            typename VoidPointer, typename NodePtr, typename BucketPtr>
     struct pick_node2
     {
         typedef boost::unordered::detail::node<VoidPointer, T> node;
@@ -114,7 +115,7 @@ namespace boost { namespace unordered { namespace detail {
     template <typename A, typename H, typename P>
     struct set
     {
-        typedef set<A, H, P> types;
+        typedef boost::unordered::detail::set<A, H, P> types;
 
         typedef A allocator;
         typedef H hasher;
@@ -125,18 +126,19 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename traits::void_pointer void_pointer;
         typedef value_type key_type;
 
-        typedef typename boost::unordered::detail::pick_node<A, value_type>::node node;
-        typedef typename boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
-        typedef typename boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
-        typedef boost::unordered::detail::table_impl<types> table;
+        typedef boost::unordered::detail::pick_node<A, value_type> pick;
+        typedef typename pick::node node;
+        typedef typename pick::bucket bucket;
+        typedef typename pick::link_pointer link_pointer;
 
+        typedef boost::unordered::detail::table_impl<types> table;
         typedef boost::unordered::detail::set_extractor<value_type> extractor;
     };
 
     template <typename A, typename K, typename H, typename P>
     struct map
     {
-        typedef map<A, K, H, P> types;
+        typedef boost::unordered::detail::map<A, K, H, P> types;
 
         typedef A allocator;
         typedef H hasher;
@@ -147,12 +149,14 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename traits::value_type value_type;
         typedef typename traits::void_pointer void_pointer;
 
-        typedef typename boost::unordered::detail::pick_node<A, value_type>::node node;
-        typedef typename boost::unordered::detail::pick_node<A, value_type>::bucket bucket;
-        typedef typename boost::unordered::detail::pick_node<A, value_type>::link_pointer link_pointer;
-        typedef boost::unordered::detail::table_impl<types> table;
+        typedef boost::unordered::detail::pick_node<A, value_type> pick;
+        typedef typename pick::node node;
+        typedef typename pick::bucket bucket;
+        typedef typename pick::link_pointer link_pointer;
 
-        typedef boost::unordered::detail::map_extractor<key_type, value_type> extractor;
+        typedef boost::unordered::detail::table_impl<types> table;
+        typedef boost::unordered::detail::map_extractor<key_type, value_type>
+            extractor;
     };
 
     template <typename Types>
@@ -454,12 +458,13 @@ namespace boost { namespace unordered { namespace detail {
 
             do {
                 // Note: can't use get_key as '*i' might not be value_type - it
-                // could be a pair with first_types as key_type without const or a
-                // different second_type.
+                // could be a pair with first_types as key_type without const or
+                // a different second_type.
                 //
-                // TODO: Might be worth storing the value_type instead of the key
-                // here. Could be more efficient if '*i' is expensive. Could be
-                // less efficient if copying the full value_type is expensive.
+                // TODO: Might be worth storing the value_type instead of the
+                // key here. Could be more efficient if '*i' is expensive. Could
+                // be less efficient if copying the full value_type is
+                // expensive.
                 insert_range_impl2(a, extractor::extract(*i), i, j);
             } while(++i != j);
         }
@@ -509,7 +514,7 @@ namespace boost { namespace unordered { namespace detail {
             } while(++i != j);
         }
 
-        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // Erase
         //
         // no throw
@@ -528,11 +533,13 @@ namespace boost { namespace unordered { namespace detail {
             for (;;)
             {
                 if (!prev->next_) return 0;
-                std::size_t node_hash = static_cast<node_pointer>(prev->next_)->hash_;
+                std::size_t node_hash =
+                    static_cast<node_pointer>(prev->next_)->hash_;
                 if (node_hash % this->bucket_count_ != bucket_index)
                     return 0;
                 if (node_hash == hash &&
-                    this->key_eq()(k, this->get_key(static_cast<node_pointer>(prev->next_)->value())))
+                        this->key_eq()(k, this->get_key(
+                        static_cast<node_pointer>(prev->next_)->value())))
                     break;
                 prev = static_cast<previous_pointer>(prev->next_);
             }
@@ -578,16 +585,18 @@ namespace boost { namespace unordered { namespace detail {
             return unlink_nodes(b, n, static_cast<node_pointer>(n->next_));
         }
 
-        static previous_pointer unlink_nodes(bucket& b, node_pointer begin, node_pointer end)
+        static previous_pointer unlink_nodes(bucket& b,
+                node_pointer begin, node_pointer end)
         {
             previous_pointer prev = b.next_;
             link_pointer begin_void = static_cast<link_pointer>(begin);
-            while(prev->next_ != begin_void) prev = static_cast<previous_pointer>(prev->next_);
+            while(prev->next_ != begin_void)
+                prev = static_cast<previous_pointer>(prev->next_);
             prev->next_ = static_cast<link_pointer>(end);
             return prev;
         }
 
-        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // copy_buckets_to
         //
         // Basic exception safety. If an exception is thrown this will
@@ -618,11 +627,11 @@ namespace boost { namespace unordered { namespace detail {
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // move_buckets_to
         //
-        // Basic exception safety. The source nodes are left in an unusable state
-        // if an exception throws.
+        // Basic exception safety. The source nodes are left in an unusable
+        // state if an exception throws.
 
         static void move_buckets_to(buckets& src, buckets& dst)
         {
@@ -676,7 +685,8 @@ namespace boost { namespace unordered { namespace detail {
 
         // Iterate through the nodes placing them in the correct buckets.
         // pre: prev->next_ is not null.
-        static previous_pointer place_in_bucket(buckets& dst, previous_pointer prev)
+        static previous_pointer place_in_bucket(buckets& dst,
+                previous_pointer prev)
         {
             node_pointer n = static_cast<node_pointer>(prev->next_);
             bucket_pointer b = dst.get_bucket(n->hash_ % dst.bucket_count_);
