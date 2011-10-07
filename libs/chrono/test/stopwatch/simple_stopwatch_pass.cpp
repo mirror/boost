@@ -37,6 +37,7 @@ void check_default_constructor()
   Stopwatch _;
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 template <typename Stopwatch>
 void check_constructor_ec()
 {
@@ -50,7 +51,7 @@ void check_constructor_throws()
 {
   Stopwatch _(boost::throws());
 }
-
+#endif
 
 template <typename Stopwatch>
 void check_elapsed(bool check=true)
@@ -68,8 +69,10 @@ void check_all(bool check=true)
   typedef boost::chrono::simple_stopwatch<Clock> Stopwatch;
   check_invariants<Stopwatch>();
   check_default_constructor<Stopwatch>();
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   check_constructor_ec<Stopwatch>();
   check_constructor_throws<Stopwatch>();
+#endif
   check_elapsed<Stopwatch>(check);
 }
 

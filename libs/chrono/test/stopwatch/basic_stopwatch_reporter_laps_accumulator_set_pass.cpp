@@ -57,6 +57,7 @@ void check_dont_start_constructor()
   BOOST_TEST(d == Stopwatch::duration::zero());
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 template <typename Stopwatch>
 void check_constructor_ec()
 {
@@ -72,6 +73,7 @@ void check_constructor_throws()
   Stopwatch sw(boost::throws());
   BOOST_TEST(sw.is_running());
 }
+#endif
 
 template <typename Stopwatch>
 void check_elapsed()
@@ -229,8 +231,10 @@ void check_all()
 
   check_invariants<Reporter>();
   check_default_constructor<Reporter>();
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   check_constructor_ec<Reporter>();
   check_constructor_throws<Reporter>();
+#endif
   check_elapsed<Reporter>();
 
   check_report<Reporter>();

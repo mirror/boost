@@ -79,6 +79,7 @@ void check_file_line()
 }
 
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 template <typename Reporter>
 void check_constructor_ec()
 {
@@ -92,6 +93,7 @@ void check_constructor_throws()
 {
   Reporter _(boost::throws());
 }
+#endif
 
 template <typename Reporter>
 void check_elapsed(bool check=true)
@@ -120,8 +122,10 @@ void check_all(bool check=true)
 
   check_invariants<Reporter>();
   check_default_constructor<Reporter>();
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   check_constructor_ec<Reporter>();
   check_constructor_throws<Reporter>();
+#endif
   check_elapsed<Reporter>(check);
   check_report<Reporter>();
   check_file_line<ReporterE>();

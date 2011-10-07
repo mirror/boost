@@ -51,6 +51,7 @@ void check_dont_start_constructor()
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 template <typename Stopwatch>
 void check_constructor_ec()
 {
@@ -68,6 +69,7 @@ void check_constructor_throws()
   BOOST_TEST(sw.is_running());
   BOOST_TEST(sw.get_laps_collector().last()==Stopwatch::duration::zero());
 }
+#endif
 
 template <typename Stopwatch>
 void check_elapsed()
@@ -199,8 +201,10 @@ void check_all()
 {
   check_invariants<Stopwatch>();
   check_default_constructor<Stopwatch>();
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   check_constructor_ec<Stopwatch>();
   check_constructor_throws<Stopwatch>();
+#endif
   check_elapsed<Stopwatch>();
 
   check_start_start<Stopwatch>();
