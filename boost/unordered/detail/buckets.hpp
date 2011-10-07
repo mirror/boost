@@ -564,7 +564,7 @@ namespace boost { namespace unordered { namespace detail {
     template <class H, class P>
     class functions
     {
-        friend class set_hash_functions<H, P>;
+        friend class boost::unordered::detail::set_hash_functions<H, P>;
         functions& operator=(functions const&);
 
         typedef compressed<H, P> function_pair;

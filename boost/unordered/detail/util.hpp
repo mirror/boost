@@ -151,7 +151,8 @@ namespace boost { namespace unordered { namespace detail {
 
     template <class I>
     inline std::size_t initial_size(I i, I j,
-        std::size_t num_buckets = boost::unordered::detail::default_bucket_count)
+        std::size_t num_buckets =
+            boost::unordered::detail::default_bucket_count)
     {
         // TODO: Why +1?
         return (std::max)(
@@ -189,15 +190,15 @@ namespace boost { namespace unordered { namespace detail {
       : boost::detail::if_true<
             boost::is_empty<T>::value
         >:: BOOST_NESTED_TEMPLATE then<
-            compressed_base<T, Index>,
-            uncompressed_base<T, Index>
+            boost::unordered::detail::compressed_base<T, Index>,
+            boost::unordered::detail::uncompressed_base<T, Index>
         >
     {};
     
     template <typename T1, typename T2>
     struct compressed
-      : private generate_base<T1, 1>::type,
-        private generate_base<T2, 2>::type
+      : private boost::unordered::detail::generate_base<T1, 1>::type,
+        private boost::unordered::detail::generate_base<T2, 2>::type
     {
         typedef typename generate_base<T1, 1>::type base1;
         typedef typename generate_base<T2, 2>::type base2;

@@ -22,9 +22,11 @@ namespace boost { namespace unordered { namespace iterator_detail {
     // all no throw
 
     template <typename NodePointer, typename Value> struct iterator;
-    template <typename ConstNodePointer, typename NodePointer, typename Value> struct c_iterator;
+    template <typename ConstNodePointer, typename NodePointer,
+        typename Value> struct c_iterator;
     template <typename NodePointer, typename Value> struct l_iterator;
-    template <typename ConstNodePointer, typename NodePointer, typename Value> struct cl_iterator;
+    template <typename ConstNodePointer, typename NodePointer,
+        typename Value> struct cl_iterator;
 
     // Local Iterators
     //
@@ -37,7 +39,8 @@ namespace boost { namespace unordered { namespace iterator_detail {
             NodePointer, Value&>
     {
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-        template <typename ConstNodePointer, typename NodePointer2, typename Value2>
+        template <typename ConstNodePointer, typename NodePointer2,
+                typename Value2>
         friend struct boost::unordered::iterator_detail::cl_iterator;
     private:
 #endif
@@ -102,11 +105,12 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
         cl_iterator() : ptr_() {}
 
-        cl_iterator(node_pointer x, std::size_t b, std::size_t c)
-            : ptr_(x), bucket_(b), bucket_count_(c) {}
+        cl_iterator(node_pointer x, std::size_t b, std::size_t c) :
+            ptr_(x), bucket_(b), bucket_count_(c) {}
 
-        cl_iterator(boost::unordered::iterator_detail::l_iterator<NodePointer, Value> const& x)
-            : ptr_(x.ptr_), bucket_(x.bucket_), bucket_count_(x.bucket_count_)
+        cl_iterator(boost::unordered::iterator_detail::l_iterator<
+                NodePointer, Value> const& x) :
+            ptr_(x.ptr_), bucket_(x.bucket_), bucket_count_(x.bucket_count_)
         {}
 
         Value const&
@@ -147,7 +151,8 @@ namespace boost { namespace unordered { namespace iterator_detail {
             NodePointer, Value&>
     {
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-        template <typename ConstNodePointer, typename NodePointer2, typename Value2>
+        template <typename ConstNodePointer, typename NodePointer2,
+                typename Value2>
         friend struct boost::unordered::iterator_detail::c_iterator;
     private:
 #endif
@@ -169,11 +174,14 @@ namespace boost { namespace unordered { namespace iterator_detail {
         }
 
         iterator& operator++() {
-            node_ = node_ = static_cast<node_pointer>(node_->next_); return *this;
+            node_ = node_ = static_cast<node_pointer>(node_->next_);
+            return *this;
         }
 
         iterator operator++(int) {
-            iterator tmp(node_); node_ = node_ = static_cast<node_pointer>(node_->next_); return tmp;
+            iterator tmp(node_);
+            node_ = node_ = static_cast<node_pointer>(node_->next_);
+            return tmp;
         }
 
         bool operator==(iterator const& x) const {
@@ -191,7 +199,8 @@ namespace boost { namespace unordered { namespace iterator_detail {
             std::forward_iterator_tag, Value, std::ptrdiff_t,
             ConstNodePointer, Value const&>
     {
-        friend struct boost::unordered::iterator_detail::iterator<NodePointer, Value>;
+        friend struct boost::unordered::iterator_detail::iterator<
+                NodePointer, Value>;
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
         template <typename K, typename T, typename H, typename P, typename A>
@@ -215,7 +224,8 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
         explicit c_iterator(node_pointer const& x) : node_(x) {}
 
-        c_iterator(boost::unordered::iterator_detail::iterator<NodePointer, Value> const& x) : node_(x.node_) {}
+        c_iterator(boost::unordered::iterator_detail::iterator<
+                NodePointer, Value> const& x) : node_(x.node_) {}
 
         Value const& operator*() const {
             return node_->value();
@@ -226,11 +236,14 @@ namespace boost { namespace unordered { namespace iterator_detail {
         }
 
         c_iterator& operator++() {
-            node_ = static_cast<node_pointer>(node_->next_); return *this;
+            node_ = static_cast<node_pointer>(node_->next_);
+            return *this;
         }
 
         c_iterator operator++(int) {
-            c_iterator tmp(node_); node_ = node_ = static_cast<node_pointer>(node_->next_); return tmp;
+            c_iterator tmp(node_);
+            node_ = node_ = static_cast<node_pointer>(node_->next_);
+            return tmp;
         }
 
         friend bool operator==(c_iterator const& x, c_iterator const& y) {
@@ -248,7 +261,7 @@ namespace boost { namespace unordered { namespace detail {
     ////////////////////////////////////////////////////////////////////////////
     // convert double to std::size_t
 
-    inline std::size_t double_to_size_t(double f)
+    inline std::size_t double_to_size(double f)
     {
         return f >= static_cast<double>(
             (std::numeric_limits<std::size_t>::max)()) ?
@@ -320,10 +333,15 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename buckets::node_pointer node_pointer;
         typedef typename buckets::const_node_pointer const_node_pointer;
 
-        typedef boost::unordered::iterator_detail::iterator<node_pointer, value_type> iterator;
-        typedef boost::unordered::iterator_detail::c_iterator<const_node_pointer, node_pointer, value_type> c_iterator;
-        typedef boost::unordered::iterator_detail::l_iterator<node_pointer, value_type> l_iterator;
-        typedef boost::unordered::iterator_detail::cl_iterator<const_node_pointer, node_pointer, value_type> cl_iterator;
+        typedef boost::unordered::iterator_detail::
+            iterator<node_pointer, value_type> iterator;
+        typedef boost::unordered::iterator_detail::
+            c_iterator<const_node_pointer, node_pointer, value_type> c_iterator;
+        typedef boost::unordered::iterator_detail::
+            l_iterator<node_pointer, value_type> l_iterator;
+        typedef boost::unordered::iterator_detail::
+            cl_iterator<const_node_pointer, node_pointer, value_type>
+            cl_iterator;
 
         // Members
 
@@ -338,7 +356,7 @@ namespace boost { namespace unordered { namespace detail {
             using namespace std;
     
             // size < mlf_ * count
-            return boost::unordered::detail::double_to_size_t(ceil(
+            return boost::unordered::detail::double_to_size(ceil(
                     static_cast<double>(this->mlf_) *
                     static_cast<double>(this->max_bucket_count())
                 )) - 1;
@@ -350,7 +368,7 @@ namespace boost { namespace unordered { namespace detail {
     
             // From 6.3.1/13:
             // Only resize when size >= mlf_ * count
-            return boost::unordered::detail::double_to_size_t(ceil(
+            return boost::unordered::detail::double_to_size(ceil(
                     static_cast<double>(this->mlf_) *
                     static_cast<double>(this->bucket_count_)
                 ));
@@ -378,7 +396,7 @@ namespace boost { namespace unordered { namespace detail {
             // count > size / mlf_
 
             return boost::unordered::detail::next_prime(
-                boost::unordered::detail::double_to_size_t(floor(
+                boost::unordered::detail::double_to_size(floor(
                     static_cast<double>(size) /
                     static_cast<double>(mlf_))) + 1);
         }
@@ -494,10 +512,12 @@ namespace boost { namespace unordered { namespace detail {
                 move_assign_no_alloc(x);
             }
             else {
-                set_hash_functions<hasher, key_equal> new_func_this(*this, x);
+                boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                    new_func_this(*this, x);
 
                 if (x.size_) {
-                    buckets b(this->node_alloc(), x.min_buckets_for_size(x.size_));
+                    buckets b(this->node_alloc(),
+                        x.min_buckets_for_size(x.size_));
                     buckets tmp(x, move_tag());
                     table_impl::move_buckets_to(tmp, b);
                     b.swap(*this);
@@ -514,7 +534,8 @@ namespace boost { namespace unordered { namespace detail {
         
         void move_assign_no_alloc(table& x)
         {
-            set_hash_functions<hasher, key_equal> new_func_this(*this, x);
+            boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                new_func_this(*this, x);
             // No throw from here.
             this->move_buckets_from(x);
             this->mlf_ = x.mlf_;
@@ -537,8 +558,10 @@ namespace boost { namespace unordered { namespace detail {
         template <typename Propagate>
         void swap(table& x, Propagate p)
         {
-            set_hash_functions<hasher, key_equal> op1(*this, x);
-            set_hash_functions<hasher, key_equal> op2(x, *this);
+            boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                op1(*this, x);
+            boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                op2(x, *this);
             // I think swap can throw if Propagate::value,
             // since the allocators' swap can throw. Not sure though.
             this->buckets::swap(x, p);
@@ -647,7 +670,7 @@ namespace boost { namespace unordered { namespace detail {
         }
         else {
             min_buckets = next_prime((std::max)(min_buckets,
-                boost::unordered::detail::double_to_size_t(floor(
+                boost::unordered::detail::double_to_size(floor(
                     static_cast<double>(this->size_) /
                     static_cast<double>(mlf_))) + 1));
 

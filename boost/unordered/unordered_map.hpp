@@ -258,7 +258,8 @@ namespace unordered
                 )).first);                                                  \
             }
 
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EMPLACE, _)
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+            BOOST_UNORDERED_EMPLACE, _)
 
 #undef BOOST_UNORDERED_EMPLACE
 
@@ -536,7 +537,8 @@ namespace unordered
 
         // Assign
 
-        unordered_multimap& operator=(BOOST_COPY_ASSIGN_REF(unordered_multimap) x)
+        unordered_multimap& operator=(
+                BOOST_COPY_ASSIGN_REF(unordered_multimap) x)
         {
             table_.assign(x.table_);
             return *this;
@@ -649,7 +651,8 @@ namespace unordered
                 )));                                                        \
             }
 
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EMPLACE, _)
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+            BOOST_UNORDERED_EMPLACE, _)
 
 #undef BOOST_UNORDERED_EMPLACE
 

@@ -256,7 +256,8 @@ namespace unordered
                 )).first);                                                  \
             }
 
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EMPLACE, _)
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+            BOOST_UNORDERED_EMPLACE, _)
 
 #undef BOOST_UNORDERED_EMPLACE
 
@@ -298,7 +299,8 @@ namespace unordered
             return this->emplace_hint(hint, x);
         }
 
-        iterator insert(const_iterator hint, BOOST_UNORDERED_RV_REF(value_type) x)
+        iterator insert(const_iterator hint,
+                BOOST_UNORDERED_RV_REF(value_type) x)
         {
             return this->emplace_hint(hint, boost::move(x));
         }
@@ -518,7 +520,8 @@ namespace unordered
 
         // Assign
 
-        unordered_multiset& operator=(BOOST_COPY_ASSIGN_REF(unordered_multiset) x)
+        unordered_multiset& operator=(
+                BOOST_COPY_ASSIGN_REF(unordered_multiset) x)
         {
             table_.assign(x.table_);
             return *this;
@@ -631,7 +634,8 @@ namespace unordered
                 )));                                                        \
             }
 
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EMPLACE, _)
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+            BOOST_UNORDERED_EMPLACE, _)
 
 #undef BOOST_UNORDERED_EMPLACE
 
@@ -673,7 +677,8 @@ namespace unordered
             return this->emplace_hint(hint, x);
         }
 
-        iterator insert(const_iterator hint, BOOST_UNORDERED_RV_REF(value_type) x)
+        iterator insert(const_iterator hint,
+                BOOST_UNORDERED_RV_REF(value_type) x)
         {
             return this->emplace_hint(hint, boost::move(x));
         }
@@ -1190,7 +1195,8 @@ namespace unordered
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
     template <class T, class H, class P, class A>
-    void unordered_multiset<T,H,P,A>::insert(std::initializer_list<value_type> list)
+    void unordered_multiset<T,H,P,A>::insert(
+            std::initializer_list<value_type> list)
     {
         table_.insert_range(list.begin(), list.end());
     }
@@ -1212,7 +1218,8 @@ namespace unordered
 
     template <class T, class H, class P, class A>
     typename unordered_multiset<T,H,P,A>::iterator
-        unordered_multiset<T,H,P,A>::erase(const_iterator first, const_iterator last)
+        unordered_multiset<T,H,P,A>::erase(
+                const_iterator first, const_iterator last)
     {
         return iterator(table_.erase_range(first.node_, last.node_));
     }
