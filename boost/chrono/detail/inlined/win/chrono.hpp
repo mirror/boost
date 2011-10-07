@@ -23,7 +23,7 @@ namespace chrono
 namespace chrono_detail
 {
 
-  BOOST_CHRONO_INLINE double get_nanosecs_per_tic()
+  BOOST_CHRONO_INLINE double get_nanosecs_per_tic() BOOST_CHRONO_NOEXCEPT
   {
       boost::detail::win32::LARGE_INTEGER_ freq;
       if ( !boost::detail::win32::QueryPerformanceFrequency( &freq ) )
@@ -33,7 +33,7 @@ namespace chrono_detail
 
 }
 
-  steady_clock::time_point steady_clock::now()
+  steady_clock::time_point steady_clock::now() BOOST_CHRONO_NOEXCEPT
   {
     static double nanosecs_per_tic = chrono_detail::get_nanosecs_per_tic();
 
@@ -41,15 +41,7 @@ namespace chrono_detail
     if ( (nanosecs_per_tic <= 0.0L) ||
             (!boost::detail::win32::QueryPerformanceCounter( &pcount )) )
     {
-        boost::detail::win32::DWORD_ cause =
-            (nanosecs_per_tic <= 0.0L
-                    ? ERROR_NOT_SUPPORTED
-                    : boost::detail::win32::GetLastError());
-        boost::throw_exception(
-                system::system_error(
-                        cause,
-                        BOOST_CHRONO_SYSTEM_CATEGORY,
-                        "chrono::steady_clock" ));
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
     }
 
     return steady_clock::time_point(steady_clock::duration(
@@ -92,7 +84,7 @@ namespace chrono_detail
   }
 
   BOOST_CHRONO_INLINE
-  system_clock::time_point system_clock::now()
+  system_clock::time_point system_clock::now() BOOST_CHRONO_NOEXCEPT
   {
     boost::detail::win32::FILETIME_ ft;
   #if defined(UNDER_CE)
@@ -128,7 +120,7 @@ namespace chrono_detail
   }
 
   BOOST_CHRONO_INLINE
-  std::time_t system_clock::to_time_t(const system_clock::time_point& t)
+  std::time_t system_clock::to_time_t(const system_clock::time_point& t) BOOST_CHRONO_NOEXCEPT
   {
       __int64 temp = t.time_since_epoch().count();
 
@@ -143,7 +135,7 @@ namespace chrono_detail
   }
 
   BOOST_CHRONO_INLINE
-  system_clock::time_point system_clock::from_time_t(std::time_t t)
+  system_clock::time_point system_clock::from_time_t(std::time_t t) BOOST_CHRONO_NOEXCEPT
   {
       __int64 temp = t;
       temp *= 10000000;

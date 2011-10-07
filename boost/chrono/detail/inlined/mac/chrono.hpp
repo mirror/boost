@@ -26,7 +26,7 @@ namespace chrono
 // which has a field for seconds and a field for microseconds.
 //    Fill in the timeval and then convert that to the time_point
 system_clock::time_point
-system_clock::now()
+system_clock::now() BOOST_CHRONO_NOEXCEPT
 {
     timeval tv;
     gettimeofday(&tv, 0);
@@ -49,14 +49,14 @@ system_clock::now(system::error_code & ec)
 //    an integral count of seconds since New Years 1970 (same epoch as timeval).
 //    Just get the duration out of the time_point and truncate it to seconds.
 time_t
-system_clock::to_time_t(const time_point& t)
+system_clock::to_time_t(const time_point& t) BOOST_CHRONO_NOEXCEPT
 {
     return time_t(duration_cast<seconds>(t.time_since_epoch()).count());
 }
 
 // Just turn the time_t into a count of seconds and construct a time_point with it.
 system_clock::time_point
-system_clock::from_time_t(time_t t)
+system_clock::from_time_t(time_t t) BOOST_CHRONO_NOEXCEPT
 {
     return system_clock::time_point(seconds(t));
 }
@@ -114,8 +114,7 @@ steady_full()
     static const double factor = chrono_detail::compute_steady_factor(err);
     if (err != 0) 
     {
-        boost::throw_exception(
-            system::system_error( err, BOOST_CHRONO_SYSTEM_CATEGORY, "chrono::steady_clock" ));
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
     }
     return static_cast<steady_clock::rep>(mach_absolute_time() * factor);
 }
@@ -191,17 +190,13 @@ init_steady_clock_ec(kern_return_t & err)
 }
 
 steady_clock::time_point
-steady_clock::now()
+steady_clock::now() BOOST_CHRONO_NOEXCEPT
 {
     static kern_return_t err;
     static chrono_detail::FP fp = chrono_detail::init_steady_clock(err);
     if ( err != 0  ) 
     {     
-        boost::throw_exception(
-                system::system_error( 
-                        err, 
-                        BOOST_CHRONO_SYSTEM_CATEGORY, 
-                        "chrono::steady_clock" ));
+      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
     }
     return time_point(duration(fp()));
 }

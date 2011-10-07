@@ -127,11 +127,11 @@ namespace chrono {
       typedef chrono::time_point<system_clock>     time_point;
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             false;
 
-      static BOOST_CHRONO_INLINE time_point  now();                         // throws on error
-      static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);  // never throws
+      static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+      static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
 
-      static BOOST_CHRONO_INLINE std::time_t to_time_t(const time_point& t);
-      static BOOST_CHRONO_INLINE time_point  from_time_t(std::time_t t);
+      static BOOST_CHRONO_INLINE std::time_t to_time_t(const time_point& t) BOOST_CHRONO_NOEXCEPT;
+      static BOOST_CHRONO_INLINE time_point  from_time_t(std::time_t t) BOOST_CHRONO_NOEXCEPT;
   };
 
 //----------------------------------------------------------------------------//
@@ -151,8 +151,8 @@ namespace chrono {
       typedef chrono::time_point<steady_clock>  time_point;
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
-      static BOOST_CHRONO_INLINE time_point  now();                         // throws on error
-      static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);  // never throws
+      static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+      static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
   };
 #endif
 //----------------------------------------------------------------------------//

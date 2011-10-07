@@ -137,6 +137,7 @@ int main()
     check_clock_now_throws<boost::chrono::thread_clock>();
 #endif
     
+#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
     check_clock_invariants<boost::chrono::process_real_cpu_clock>();
     BOOST_CHRONO_STATIC_ASSERT(boost::chrono::process_real_cpu_clock::is_steady, NOTHING, ());   
     check_clock_now<boost::chrono::process_real_cpu_clock>();
@@ -160,6 +161,7 @@ int main()
     check_clock_now<boost::chrono::process_cpu_clock>();
     check_clock_now_ec<boost::chrono::process_cpu_clock>();
     check_clock_now_throws<boost::chrono::process_cpu_clock>();
+#endif
     
     return boost::report_errors();
 }

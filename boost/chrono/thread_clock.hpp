@@ -10,6 +10,8 @@
 #ifndef BOOST_CHRONO_THREAD_CLOCK_HPP
 #define BOOST_CHRONO_THREAD_CLOCK_HPP
 
+#if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
+
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
@@ -19,8 +21,6 @@
 #ifndef BOOST_CHRONO_HEADER_ONLY
 #include <boost/config/abi_prefix.hpp> // must be the last #include
 #endif
-
-#if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
 
 namespace boost { namespace chrono {
 
@@ -32,18 +32,19 @@ public:
     typedef chrono::time_point<thread_clock>    time_point;
     BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
 
-    static BOOST_CHRONO_INLINE time_point now( );
+    static BOOST_CHRONO_INLINE time_point now( ) BOOST_CHRONO_NOEXCEPT;
     static BOOST_CHRONO_INLINE time_point now( system::error_code & ec );
 };
 } // namespace chrono
 } // namespace boost
 
-#endif
 
 #ifndef BOOST_CHRONO_HEADER_ONLY
 #include <boost/config/abi_suffix.hpp> // pops abi_prefix.hpp pragmas
 #else
 #include <boost/chrono/detail/inlined/thread_clock.hpp>
+#endif
+
 #endif
 
 #endif  // BOOST_CHRONO_THREAD_CLOCK_HPP

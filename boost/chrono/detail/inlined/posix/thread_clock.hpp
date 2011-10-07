@@ -19,7 +19,7 @@
 
 namespace boost { namespace chrono {
 
-    thread_clock::time_point thread_clock::now( ) 
+    thread_clock::time_point thread_clock::now( ) BOOST_CHRONO_NOEXCEPT
     {
       struct timespec ts;
 #if defined CLOCK_THREAD_CPUTIME_ID
@@ -35,11 +35,7 @@ namespace boost { namespace chrono {
         if ( ::clock_gettime( clock_id, &ts ) )
 #endif
         {
-            boost::throw_exception(
-                    system::system_error( 
-                            errno, 
-                            BOOST_CHRONO_SYSTEM_CATEGORY, 
-                            "chrono::thread_clock" ));
+          BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
         }
 
         // transform to nanoseconds
