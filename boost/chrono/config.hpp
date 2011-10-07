@@ -148,6 +148,8 @@
 #endif
 
 
+//#define  BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+
 //  enable automatic library variant selection  ------------------------------//
 
 #if !defined(BOOST_CHRONO_SOURCE) && !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_CHRONO_NO_LIB)

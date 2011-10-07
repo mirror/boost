@@ -20,23 +20,22 @@ namespace boost
     {
     public:
       typedef Stopwatch stopwatch;
-      stopwatch_runner(stopwatch & a, system::error_code & ec =
-          BOOST_CHRONO_THROWS) :
+      stopwatch_runner(stopwatch & a) :
+        stopwatch_(a)
+      {
+        stopwatch_.start();
+      }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      stopwatch_runner(stopwatch & a, system::error_code & ec) :
         stopwatch_(a)
       {
         stopwatch_.start(ec);
       }
+#endif
       ~stopwatch_runner()
       {
-        system::error_code ec;
-        stopwatch_.stop(ec);
+        stopwatch_.stop();
       }
-#if 0
-      typename Stopwatch::duration elapsed(system::error_code & ec = BOOST_CHRONO_THROWS)
-      {
-        return stopwatch_.elapsed(ec)-stopwatch_.get_storage();
-      }
-#endif
     private:
       stopwatch& stopwatch_;
       stopwatch_runner();//= delete;
@@ -50,23 +49,22 @@ namespace boost
     {
     public:
       typedef Stopwatch stopwatch;
-      stopwatch_stopper(stopwatch & a, system::error_code & ec =
-          BOOST_CHRONO_THROWS) :
+      stopwatch_stopper(stopwatch & a) :
+        stopwatch_(a)
+      {
+        stopwatch_.stop();
+      }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      stopwatch_stopper(stopwatch & a, system::error_code & ec) :
         stopwatch_(a)
       {
         stopwatch_.stop(ec);
       }
+#endif
       ~stopwatch_stopper()
       {
-        system::error_code ec;
-        stopwatch_.start(ec);
+        stopwatch_.start();
       }
-#if 0
-      typename Stopwatch::duration elapsed(system::error_code & ec = BOOST_CHRONO_THROWS)
-      {
-        return stopwatch_.elapsed(ec)-stopwatch_.get_storage();
-      }
-#endif
     private:
       stopwatch& stopwatch_;
       stopwatch_stopper();//= delete;
@@ -80,16 +78,22 @@ namespace boost
     {
     public:
       typedef Stopwatch stopwatch;
-      stopwatch_suspender(stopwatch & a, system::error_code & ec =
-          BOOST_CHRONO_THROWS) :
+      stopwatch_suspender(stopwatch & a) :
+        stopwatch_(a)
+      {
+        stopwatch_.suspend();
+      }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      stopwatch_suspender(stopwatch & a, system::error_code & ec) :
         stopwatch_(a)
       {
         stopwatch_.suspend(ec);
       }
+#endif
+
       ~stopwatch_suspender()
       {
-        system::error_code ec;
-        stopwatch_.resume(ec);
+        stopwatch_.resume();
       }
     private:
       stopwatch& stopwatch_;
@@ -103,16 +107,21 @@ namespace boost
     {
     public:
       typedef Stopwatch stopwatch;
-      stopwatch_resumer(stopwatch & a, system::error_code & ec =
-          BOOST_CHRONO_THROWS) :
+      stopwatch_resumer(stopwatch & a) :
+        stopwatch_(a)
+      {
+        stopwatch_.resume();
+      }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      stopwatch_resumer(stopwatch & a, system::error_code & ec) :
         stopwatch_(a)
       {
         stopwatch_.resume(ec);
       }
+#endif
       ~stopwatch_resumer()
       {
-        system::error_code ec;
-        stopwatch_.suspend(ec);
+        stopwatch_.suspend();
       }
     private:
       stopwatch& stopwatch_;

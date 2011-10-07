@@ -15,8 +15,10 @@
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 #include <boost/system/error_code.hpp>
 #include <boost/chrono/detail/system.hpp>
+#endif
 #include <boost/chrono/io/clock_string.hpp>
 
 #ifndef BOOST_CHRONO_HEADER_ONLY
@@ -34,7 +36,9 @@ public:
     BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
 
     static BOOST_CHRONO_INLINE time_point now( ) BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
     static BOOST_CHRONO_INLINE time_point now( system::error_code & ec );
+#endif
 };
 
 template <class CharT>

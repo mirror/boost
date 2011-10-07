@@ -1,4 +1,4 @@
-//  system_clocks.hpp  --------------------------------------------------------------//
+//  boost/chrono/system_clocks.hpp  --------------------------------------------------------------//
 
 //  Copyright 2008 Howard Hinnant
 //  Copyright 2008 Beman Dawes
@@ -62,8 +62,10 @@ TODO:
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 #include <boost/chrono/detail/system.hpp>
 #include <boost/system/error_code.hpp>
+#endif
 #include <boost/chrono/io/clock_string.hpp>
 
 #include <ctime>
@@ -129,7 +131,9 @@ namespace chrono {
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             false;
 
       static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
+#endif
 
       static BOOST_CHRONO_INLINE std::time_t to_time_t(const time_point& t) BOOST_CHRONO_NOEXCEPT;
       static BOOST_CHRONO_INLINE time_point  from_time_t(std::time_t t) BOOST_CHRONO_NOEXCEPT;
@@ -153,7 +157,9 @@ namespace chrono {
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
       static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
+#endif
   };
 #endif
 //----------------------------------------------------------------------------//

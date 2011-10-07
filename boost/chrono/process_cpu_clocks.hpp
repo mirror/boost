@@ -16,9 +16,11 @@
 
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
-#include <boost/system/error_code.hpp>
 #include <boost/operators.hpp>
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+#include <boost/system/error_code.hpp>
 #include <boost/chrono/detail/system.hpp>
+#endif
 #include <iostream>
 #include <boost/type_traits/common_type.hpp>
 #include <boost/chrono/io/clock_string.hpp>
@@ -39,7 +41,9 @@ namespace boost { namespace chrono {
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
         static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         static BOOST_CHRONO_INLINE time_point now(system::error_code & ec );
+#endif
     };
 
     class BOOST_CHRONO_DECL process_user_cpu_clock {
@@ -51,7 +55,9 @@ namespace boost { namespace chrono {
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
         static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         static BOOST_CHRONO_INLINE time_point now(system::error_code & ec );
+#endif
     };
 
     class BOOST_CHRONO_DECL process_system_cpu_clock {
@@ -63,7 +69,9 @@ namespace boost { namespace chrono {
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
         static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         static BOOST_CHRONO_INLINE time_point now(system::error_code & ec );
+#endif
     };
 
         template <typename Rep>
@@ -299,8 +307,9 @@ namespace chrono
         BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =           true;
 
         static BOOST_CHRONO_INLINE time_point now() BOOST_CHRONO_NOEXCEPT;
-        static BOOST_CHRONO_INLINE time_point now( 
-                    system::error_code & ec );
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+        static BOOST_CHRONO_INLINE time_point now(system::error_code & ec );
+#endif
     };
 
     template <class CharT, class Traits, typename Rep>

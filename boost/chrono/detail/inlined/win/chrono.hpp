@@ -49,6 +49,7 @@ namespace chrono_detail
   }
 
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   steady_clock::time_point steady_clock::now( system::error_code & ec )
   {
     static double nanosecs_per_tic = chrono_detail::get_nanosecs_per_tic();
@@ -82,6 +83,7 @@ namespace chrono_detail
     return time_point(duration(
       static_cast<steady_clock::rep>(nanosecs_per_tic * pcount.QuadPart)));
   }
+#endif
 
   BOOST_CHRONO_INLINE
   system_clock::time_point system_clock::now() BOOST_CHRONO_NOEXCEPT
@@ -99,6 +101,7 @@ namespace chrono_detail
       (static_cast<__int64>( ft.dwHighDateTime ) << 32) | ft.dwLowDateTime));
   }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   BOOST_CHRONO_INLINE
   system_clock::time_point system_clock::now( system::error_code & ec )
   {
@@ -118,6 +121,7 @@ namespace chrono_detail
     return time_point(duration(
       (static_cast<__int64>( ft.dwHighDateTime ) << 32) | ft.dwLowDateTime));
   }
+#endif
 
   BOOST_CHRONO_INLINE
   std::time_t system_clock::to_time_t(const system_clock::time_point& t) BOOST_CHRONO_NOEXCEPT

@@ -69,10 +69,13 @@ namespace boost
 //      }
 
       template<class Stopwatch>
-      void operator()(Stopwatch & stopwatch_, system::error_code & ec= BOOST_CHRONO_THROWS)
+      void operator()(Stopwatch & stopwatch_
+          //, system::error_code & ec= BOOST_CHRONO_THROWS
+          )
       {
         typedef typename Stopwatch::duration duration_t;
-        duration_t d = stopwatch_.elapsed(ec);
+        duration_t d = stopwatch_.elapsed();
+        //duration_t d = stopwatch_.elapsed(ec);
 
         if (d < duration_t::zero())
           return;

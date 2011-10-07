@@ -38,6 +38,7 @@ namespace boost
         start_(clock::now())
       {
       }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       explicit simple_stopwatch(system::error_code & ec) :
         start_(duration::zero())
       {
@@ -51,6 +52,7 @@ namespace boost
         }
         start_ = tmp;
       }
+#endif
 
       ~simple_stopwatch() BOOST_CHRONO_NOEXCEPT
       {
@@ -60,6 +62,8 @@ namespace boost
       {
         return clock::now() - start_;
       }
+
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       duration elapsed(system::error_code & ec)
       {
         time_point tmp = clock::now(ec);
@@ -70,6 +74,7 @@ namespace boost
         }
         return tmp - start_;
       }
+#endif
 
     private:
       time_point start_;

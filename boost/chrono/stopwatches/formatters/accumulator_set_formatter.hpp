@@ -78,8 +78,9 @@ namespace boost
       //      }
 
       template<class Stopwatch>
-      void operator()(Stopwatch & stopwatch_, system::error_code & ec =
-          BOOST_CHRONO_THROWS)
+      void operator()(Stopwatch & stopwatch_
+          //, system::error_code & ec = BOOST_CHRONO_THROWS
+          )
       {
 
         typedef typename Stopwatch::laps_collector::storage_type

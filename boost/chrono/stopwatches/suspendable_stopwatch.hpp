@@ -38,8 +38,18 @@ namespace boost
       typedef typename Clock::period period;
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
 
+      suspendable_stopwatch() :
+        start_(duration::zero()),
+        running_(false),
+        laps_collector_(),
+        suspended_(false),
+        partial_(duration::zero())
+      {
+        start();
+      }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       explicit suspendable_stopwatch(
-          system::error_code & ec =  BOOST_CHRONO_THROWS
+          system::error_code & ec
           ) :
         start_(duration::zero()),
         running_(false),
@@ -49,6 +59,8 @@ namespace boost
       {
         start(ec);
       }
+#endif
+
       explicit suspendable_stopwatch(
           const dont_start_t&
           ) :
@@ -61,8 +73,21 @@ namespace boost
       }
 
       explicit suspendable_stopwatch(
+          laps_collector const& acc
+          ) :
+          start_(duration::zero()),
+          running_(false),
+          laps_collector_(acc),
+          suspended_(false),
+          partial_(duration::zero())
+      {
+        start();
+      }
+
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      explicit suspendable_stopwatch(
           laps_collector const& acc,
-          system::error_code & ec = BOOST_CHRONO_THROWS
+          system::error_code & ec
           ) :
           start_(duration::zero()),
           running_(false),
@@ -72,6 +97,7 @@ namespace boost
       {
         start(ec);
       }
+#endif
 
       suspendable_stopwatch(
           laps_collector const& acc,
@@ -87,13 +113,28 @@ namespace boost
 
       ~suspendable_stopwatch()
       {
-        system::error_code ec;
-        stop(ec);
+        stop();
       }
 
-      void restart(
-          system::error_code & ec = BOOST_CHRONO_THROWS
-          )
+      void restart()
+      {
+        time_point tmp = clock::now();
+
+        if (running_)
+        {
+          partial_ += tmp - start_;
+          laps_collector_.store(partial_);
+          partial_ = duration::zero();
+        }
+        else
+        {
+          running_ = true;
+        }
+        start_ = tmp;
+      }
+
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      void restart(system::error_code & ec)
       {
         time_point tmp = clock::now(ec);
         if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return;
@@ -110,10 +151,16 @@ namespace boost
         }
         start_ = tmp;
       }
+#endif
 
-      void start(
-          system::error_code & ec = BOOST_CHRONO_THROWS
-          )
+      void start()
+      {
+          start_ = clock::now();;
+          partial_ = duration::zero();
+          running_ = true;
+      }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      void start(system::error_code & ec)
       {
           time_point tmp = clock::now(ec);
           if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return;
@@ -122,10 +169,19 @@ namespace boost
           start_ = tmp;
           running_ = true;
       }
+#endif
 
-      void stop(
-          system::error_code & ec = BOOST_CHRONO_THROWS
-          )
+      void stop()
+      {
+          partial_ += clock::now() - start_;
+          laps_collector_.store(partial_);
+          start_ = time_point(duration::zero());
+          running_ = false;
+          suspended_ = false;
+      }
+
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      void stop(system::error_code & ec)
       {
           time_point tmp = clock::now(ec);
           if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return;
@@ -136,10 +192,22 @@ namespace boost
           running_ = false;
           suspended_ = false;
       }
+#endif
 
-      void suspend(
-          system::error_code & ec = BOOST_CHRONO_THROWS
-          )
+      void suspend()
+      {
+        if (is_running())
+        {
+          if (!suspended_)
+          {
+            partial_ += clock::now() - start_;
+            suspended_ = true;
+          }
+        }
+      }
+
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      void suspend(system::error_code & ec)
       {
         if (is_running())
         {
@@ -160,10 +228,19 @@ namespace boost
           ec.clear();
         }
       }
+#endif
 
-      void resume(
-          system::error_code & ec = BOOST_CHRONO_THROWS
-          )
+      void resume()
+      {
+        if (suspended_)
+        {
+          start_ = clock::now();
+          suspended_ = false;
+        }
+      }
+
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      void resume(system::error_code & ec)
       {
         if (suspended_)
         {
@@ -177,6 +254,7 @@ namespace boost
           ec.clear();
         }
       }
+#endif
 
       bool is_running() const {
         return running_;
@@ -185,9 +263,24 @@ namespace boost
         return suspended_;
       }
 
-      duration elapsed(
-          system::error_code & ec = BOOST_CHRONO_THROWS
-          ) const
+      duration elapsed() const
+      {
+        if (is_running())
+        {
+          if (suspended_) {
+            return partial_;
+          }
+          else
+          {
+            return partial_ + clock::now() - start_;
+          }
+        } else
+        {
+          return duration::zero();
+        }
+      }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+      duration elapsed(system::error_code & ec) const
       {
         if (is_running())
         {
@@ -206,7 +299,7 @@ namespace boost
           return duration::zero();
         }
       }
-
+#endif
 
       void reset(
           )

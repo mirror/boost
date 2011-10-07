@@ -33,6 +33,7 @@ system_clock::now() BOOST_CHRONO_NOEXCEPT
     return time_point(seconds(tv.tv_sec) + microseconds(tv.tv_usec));
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 system_clock::time_point
 system_clock::now(system::error_code & ec)
 {
@@ -44,7 +45,7 @@ system_clock::now(system::error_code & ec)
     }
     return time_point(seconds(tv.tv_sec) + microseconds(tv.tv_usec));
 }
-
+#endif
 // Take advantage of the fact that on this platform time_t is nothing but
 //    an integral count of seconds since New Years 1970 (same epoch as timeval).
 //    Just get the duration out of the time_point and truncate it to seconds.
@@ -82,6 +83,7 @@ steady_simplified()
     return mach_absolute_time();
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 BOOST_CHRONO_STATIC
 steady_clock::rep
 steady_simplified_ec(system::error_code & ec)
@@ -92,7 +94,7 @@ steady_simplified_ec(system::error_code & ec)
     }
     return mach_absolute_time();
 }
-
+#endif
 
 BOOST_CHRONO_STATIC
 double
@@ -119,6 +121,7 @@ steady_full()
     return static_cast<steady_clock::rep>(mach_absolute_time() * factor);
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 BOOST_CHRONO_STATIC
 steady_clock::rep
 steady_full_ec(system::error_code & ec)
@@ -147,10 +150,12 @@ steady_full_ec(system::error_code & ec)
     }
     return static_cast<steady_clock::rep>(mach_absolute_time() * factor);
 }
+#endif
 
 typedef steady_clock::rep (*FP)();
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 typedef steady_clock::rep (*FP_ec)(system::error_code &);
-
+#endif
 
 BOOST_CHRONO_STATIC
 FP
@@ -170,6 +175,7 @@ init_steady_clock(kern_return_t & err)
     return &chrono_detail::steady_full;
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 BOOST_CHRONO_STATIC
 FP_ec
 init_steady_clock_ec(kern_return_t & err)
@@ -187,6 +193,7 @@ init_steady_clock_ec(kern_return_t & err)
     }
     return &chrono_detail::steady_full_ec;
 }
+#endif
 }
 
 steady_clock::time_point
@@ -201,6 +208,7 @@ steady_clock::now() BOOST_CHRONO_NOEXCEPT
     return time_point(duration(fp()));
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 steady_clock::time_point
 steady_clock::now(system::error_code & ec)
 {
@@ -228,6 +236,6 @@ steady_clock::now(system::error_code & ec)
     }
     return time_point(duration(fp(ec)));
 }
-
+#endif
 }  // namespace chrono
 }  // namespace boost

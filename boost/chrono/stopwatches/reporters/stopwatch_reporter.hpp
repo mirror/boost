@@ -45,10 +45,12 @@ namespace boost
       {
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       explicit basic_stopwatch_reporter(system::error_code & ec) :
         base_type(ec), formatter_(), reported_(false)
       {
       }
+#endif
 
       explicit basic_stopwatch_reporter(
           const dont_start_t& tag
@@ -84,11 +86,11 @@ namespace boost
         formatter_(*this);
         reported_ = true;
       }
-      inline void report(system::error_code & ec)
-      {
-        formatter_(*this, ec);
-        reported_ = true;
-      }
+//      inline void report(system::error_code & ec)
+//      {
+//        formatter_(*this, ec);
+//        reported_ = true;
+//      }
 
       bool reported() const
       {
@@ -132,15 +134,15 @@ namespace boost
       typedef Formatter formatter_type;
 
       stopwatch_reporter()
-      //: base_type()
       {
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       explicit stopwatch_reporter(system::error_code & ec) :
         base_type(ec)
       {
       }
-
+#endif
       explicit stopwatch_reporter(
           const dont_start_t& tag
       ) BOOST_CHRONO_NOEXCEPT :
@@ -202,11 +204,12 @@ namespace boost
         base_type()
       {
       }
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       explicit wstopwatch_reporter(system::error_code & ec) :
         base_type(ec)
       {
       }
-
+#endif
       explicit wstopwatch_reporter(
           const dont_start_t& tag
       ) BOOST_CHRONO_NOEXCEPT :

@@ -39,6 +39,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NO
     );
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 process_real_cpu_clock::time_point process_real_cpu_clock::now(
         system::error_code & ec)
 {
@@ -59,6 +60,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
       duration(c*(1000000000l/CLOCKS_PER_SEC))
     );
 }
+#endif
 
 process_user_cpu_clock::time_point process_user_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
 {
@@ -83,6 +85,7 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now() BOOST_CHRONO_NO
 
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 process_user_cpu_clock::time_point process_user_cpu_clock::now(
         system::error_code & ec)
 {
@@ -122,6 +125,7 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now(
     }
 
 }
+#endif
 
 process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
 {
@@ -146,6 +150,7 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRON
 
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 process_system_cpu_clock::time_point process_system_cpu_clock::now(
         system::error_code & ec)
 {
@@ -185,6 +190,8 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now(
     }
 
 }
+#endif
+
 process_cpu_clock::time_point process_cpu_clock::now()  BOOST_CHRONO_NOEXCEPT
 {
 
@@ -214,6 +221,7 @@ process_cpu_clock::time_point process_cpu_clock::now()  BOOST_CHRONO_NOEXCEPT
 
 }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 process_cpu_clock::time_point process_cpu_clock::now(
         system::error_code & ec )
 {
@@ -259,6 +267,7 @@ process_cpu_clock::time_point process_cpu_clock::now(
     }
 
 }
+#endif
 } // namespace chrono
 } // namespace boost
 

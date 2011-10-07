@@ -66,6 +66,7 @@ namespace boost
         start();
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       /**
        * Default constructor.
        *
@@ -82,7 +83,7 @@ namespace boost
       {
         start(ec);
       }
-
+#endif
       /**
        * Not starting constructor.
        *
@@ -116,6 +117,7 @@ namespace boost
         start();
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       /**
        * Starting constructor from a LapsCollector instance.
        *
@@ -135,6 +137,7 @@ namespace boost
       {
         start(ec);
       }
+#endif
 
       /**
        * Not starting constructor from a LapsCollector instance.
@@ -186,6 +189,7 @@ namespace boost
         start_ = tmp;
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       /**
        * Restart the stopwatch.
        *
@@ -211,6 +215,7 @@ namespace boost
         }
         start_ = tmp;
       }
+#endif
 
       /**
        * Start the stopwatch.
@@ -225,6 +230,7 @@ namespace boost
           running_ = true;
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       /**
        * Start the stopwatch.
        *
@@ -243,7 +249,7 @@ namespace boost
           start_ = tmp;
           running_ = true;
       }
-
+#endif
 
       /**
        * Start the stopwatch.
@@ -264,6 +270,7 @@ namespace boost
         }
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       /**
        * Start the stopwatch.
        *
@@ -288,6 +295,7 @@ namespace boost
           running_ = false;
         }
       }
+#endif
 
       /**
        * States if the Stopwatch is running.
@@ -314,6 +322,7 @@ namespace boost
         }
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       /**
        * Elapsed time getter for the current lap.
        *
@@ -337,7 +346,7 @@ namespace boost
           return duration::zero();
         }
       }
-
+#endif
 
       /**
        * Elapsed time getter.
@@ -352,6 +361,7 @@ namespace boost
         return laps_collector_.elapsed()+elapsed_current_lap();
       }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       /**
        * Elapsed time getter.
        *
@@ -368,7 +378,7 @@ namespace boost
         if (!BOOST_CHRONO_IS_THROWS(ec) && ec) return duration::zero();
         return laps_collector_.elapsed() + tmp;
       }
-
+#endif
       /**
        * Elapsed time for the last lap.
        *
