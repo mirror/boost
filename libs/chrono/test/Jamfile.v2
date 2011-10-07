@@ -59,9 +59,7 @@ rule chrono-run ( sources )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -81,9 +79,7 @@ rule chrono-run2 ( sources : name )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         : $(name)_header ]
     ;
 }
@@ -105,9 +101,7 @@ rule chrono-run-mt ( sources )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -127,9 +121,7 @@ rule chrono-run2-mt ( sources : name )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         : $(name)_header ]
     ;
 }
@@ -150,9 +142,7 @@ rule chrono-run-check ( sources )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -173,9 +163,7 @@ rule chrono-run-check2 ( sources : name )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         : $(name)_header ]
     ;
 }
@@ -186,9 +174,7 @@ rule chrono-run-header ( sources )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -199,9 +185,7 @@ rule chrono-run-header2 ( sources : name )
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment one of the following lines
-            #<define>BOOST_SYSTEM_INLINED
-            <library>/boost/system//boost_system
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         : $(name)_header ]
     ;
 }
@@ -214,8 +198,7 @@ rule chrono-compile ( sources )
         : $(sources[1]:B)_lib ]
     [ compile $(sources)
         :   <define>BOOST_CHRONO_HEADER_ONLY
-            # comment the following line
-            <define>BOOST_SYSTEM_INLINED
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         : $(sources[1]:B)_header ]
     ;
 }
@@ -228,8 +211,7 @@ rule chrono-compile2 ( sources : name )
         : $(name)_lib ]
     [ compile $(sources)
         :  <define>BOOST_CHRONO_HEADER_ONLY
-            # comment the following line
-            <define>BOOST_SYSTEM_INLINED
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         : $(name)_header ]
     ;
 }
