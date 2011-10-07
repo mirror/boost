@@ -34,13 +34,13 @@ namespace boost
   namespace timer
   {
     auto_cpu_timer::auto_cpu_timer(short places)                                  // #1
-      : m_places(places), m_os(std::cout), m_format(default_fmt) { start(); }
+      : m_places(places), m_os(&std::cout), m_format(default_fmt) { start(); }
 
     auto_cpu_timer::auto_cpu_timer(short places, const std::string& format)       // #2
-      : m_places(places), m_os(std::cout), m_format(format) { start(); }
+      : m_places(places), m_os(&std::cout), m_format(format) { start(); }
 
     auto_cpu_timer::auto_cpu_timer(const std::string& format)                     // #3
-      : m_places(default_places), m_os(std::cout), m_format(format) { start(); }
+      : m_places(default_places), m_os(&std::cout), m_format(format) { start(); }
 
   } // namespace timer
 } // namespace boost

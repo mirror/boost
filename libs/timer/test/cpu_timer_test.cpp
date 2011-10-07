@@ -18,6 +18,7 @@
 using std::string;
 using std::cout;
 using std::endl;
+using boost::timer::default_places;
 using boost::timer::nanosecond_type;
 using boost::timer::cpu_times;
 using boost::timer::format;
@@ -26,9 +27,98 @@ using boost::timer::auto_cpu_timer;
 
 namespace
 {
+  void unit_test()
+  {
+    cout << "unit test..." << endl;
+
+    string default_format(" %ws wall, %us user + %ss system = %ts CPU (%p%)\n");
+
+    // each constructor
+    auto_cpu_timer t1;
+    BOOST_TEST(!t1.is_stopped());
+    BOOST_TEST(&t1.ostream() == &cout);
+    BOOST_TEST_EQ(t1.places(), default_places);
+    BOOST_TEST_EQ(t1.format_string(), default_format);
+    t1.stop();
+    BOOST_TEST(t1.is_stopped());
+    auto_cpu_timer t1a(t1);
+    BOOST_TEST(t1a.is_stopped());
+    BOOST_TEST_EQ(t1a.elapsed().wall, t1.elapsed().wall);
+    BOOST_TEST_EQ(t1a.elapsed().user, t1.elapsed().user);
+    BOOST_TEST_EQ(t1a.elapsed().system, t1.elapsed().system);
+    BOOST_TEST(&t1a.ostream() == &cout);
+    BOOST_TEST_EQ(t1a.places(), default_places);
+    BOOST_TEST_EQ(t1a.format_string(), default_format);
+ 
+    auto_cpu_timer t1b;
+    BOOST_TEST(!t1b.is_stopped());
+    t1b = t1;
+    BOOST_TEST(t1b.is_stopped());
+    BOOST_TEST_EQ(t1b.elapsed().wall, t1.elapsed().wall);
+    BOOST_TEST_EQ(t1b.elapsed().user, t1.elapsed().user);
+    BOOST_TEST_EQ(t1b.elapsed().system, t1.elapsed().system);
+    BOOST_TEST(&t1b.ostream() == &cout);
+    BOOST_TEST_EQ(t1b.places(), default_places);
+    BOOST_TEST_EQ(t1b.format_string(), default_format);
+
+    auto_cpu_timer t2(1);
+    BOOST_TEST(!t2.is_stopped());
+    BOOST_TEST(&t2.ostream() == &cout);
+    BOOST_TEST_EQ(t2.places(), 1);
+    BOOST_TEST_EQ(t2.format_string(), default_format);
+
+    auto_cpu_timer t3("foo");
+    BOOST_TEST(!t3.is_stopped());
+    BOOST_TEST(&t3.ostream() == &cout);
+    BOOST_TEST_EQ(t3.places(), default_places);
+    BOOST_TEST_EQ(t3.format_string(), string("foo"));
+
+    auto_cpu_timer t4(1, "foo");
+    BOOST_TEST(!t4.is_stopped());
+    BOOST_TEST(&t4.ostream() == &cout);
+    BOOST_TEST_EQ(t4.places(), 1);
+    BOOST_TEST_EQ(t4.format_string(), string("foo"));
+
+    auto_cpu_timer t5(std::cerr);
+    BOOST_TEST(!t5.is_stopped());
+    BOOST_TEST(&t5.ostream() == &std::cerr);
+    BOOST_TEST_EQ(t5.places(), default_places);
+    BOOST_TEST_EQ(t5.format_string(), default_format);
+
+    auto_cpu_timer t6(std::cerr, 1);
+    BOOST_TEST(!t6.is_stopped());
+    BOOST_TEST(&t6.ostream() == &std::cerr);
+    BOOST_TEST_EQ(t6.places(), 1);
+    BOOST_TEST_EQ(t6.format_string(), default_format);
+
+    auto_cpu_timer t7(std::cerr, "foo");
+    BOOST_TEST(!t7.is_stopped());
+    BOOST_TEST(&t7.ostream() == &std::cerr);
+    BOOST_TEST_EQ(t7.places(), default_places);
+    BOOST_TEST_EQ(t7.format_string(), string("foo"));
+
+    auto_cpu_timer t8(std::cerr, 1, "foo");
+    BOOST_TEST(!t8.is_stopped());
+    BOOST_TEST(&t8.ostream() == &std::cerr);
+    BOOST_TEST_EQ(t8.places(), 1);
+    BOOST_TEST_EQ(t8.format_string(), string("foo"));
+
+    t1.stop();
+    t1a.stop();
+    t1b.stop();
+    t2.stop();
+    t3.stop();
+    t4.stop();
+    t5.stop();
+    t6.stop();
+    t7.stop();
+    t8.stop();
+
+    cout << "  unit test complete\n";
+  }
+
   void format_test()
   {
-    cout << "format test..." << endl;
 
     cpu_times times;
     times.wall = 5123456789LL;
@@ -125,6 +215,7 @@ int cpp_main(int, char *[])
 {
   cout << "----------  timer_test  ----------\n";
 
+  unit_test();
   format_test();
   std_c_consistency_test();
 

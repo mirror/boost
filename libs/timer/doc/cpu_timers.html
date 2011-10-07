@@ -64,13 +64,15 @@
       <a href="#Class-cpu_timer">Class <code>cpu_timer</code></a><br>
       &nbsp;&nbsp;<code>&nbsp; <a href="#cpu_timer-constructors">cpu_timer</a></code><a href="#cpu_timer-constructors"> 
 constructors, destructor</a><br>
-      &nbsp;&nbsp;<code>&nbsp; <a href="#cpu_timer-observers">cpu_timer</a></code><a href="#cpu_timer-observers"> 
+      &nbsp;&nbsp;&nbsp; &nbsp;<code><a href="#cpu_timer-observers">cpu_timer</a></code><a href="#cpu_timer-observers"> 
 observers</a><br>
       &nbsp;&nbsp;<code>&nbsp; <a href="#cpu_timer-actions">cpu_timer</a></code><a href="#cpu_timer-actions"> 
 actions</a><br>
       &nbsp; <a href="#Class-auto_cpu_timer">Class <code>auto_cpu_timer</code></a><br>
       &nbsp;&nbsp;&nbsp;<code> <a href="#auto_cpu_timer-constructors">auto_cpu_timer</a></code><a href="#auto_cpu_timer-constructors"> constructors</a><br>
       &nbsp;&nbsp;&nbsp;<code> <a href="#auto_cpu_timer-destructor">auto_cpu_timer</a></code><a href="#auto_cpu_timer-destructor"> destructor</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#auto_cpu_timer-observers"><code>
+      auto_cpu_timer</code> observers</a><br>
       &nbsp;&nbsp;&nbsp;<code> <a href="#auto_cpu_timer-actions">auto_cpu_timer</a></code><a href="#auto_cpu_timer-actions"> actions</a><br>
       <a href="#Timer-accuracy">Timer accuracy</a><br>
 &nbsp; <a href="#Resolution">Resolution</a><br>
@@ -348,37 +350,33 @@ GetProcessTimes()</code> on Windows.</p>
     {
     public:
 
-      //  constructor, destructor
+      //  constructor
       <a href="#cpu_timer-ctor">cpu_timer</a>() noexcept;
-     <a href="#cpu_timer-dtor">~cpu_timer</a>() noexcept {}
-
-      //  compiler generated
+ 
+      //  compiler generated; shown for exposition only
+     ~cpu_timer() noexcept = default; 
       cpu_timer(const cpu_timer&amp;) = default;
-      cpu_timer&amp; operator=(const cpu_timer&amp;) = default;
+      cpu_timer&amp; operator=(const cpu_timer&amp;) = default;      
 
       //  observers
-      bool              <a href="#is_stopped">is_stopped</a>() const noexcept;
-      cpu_times         <a href="#elapsed">elapsed</a>() const noexcept;
-      std::string       <a href="#cpu_timer-format">format</a>(int places, const std::string&amp; format) const;
-      std::string       <a href="#cpu_timer-format">format</a>(int places = default_places) const;
+      bool         <a href="#is_stopped">is_stopped</a>() const noexcept;
+      cpu_times    <a href="#elapsed">elapsed</a>() const noexcept;
+      std::string  <a href="#cpu_timer-format">format</a>(int places, const std::string&amp; format) const;
+      std::string  <a href="#cpu_timer-format">format</a>(int places = default_places) const;
 
       //  actions
-      void              <a href="#start">start</a>() noexcept;
-      const cpu_times&amp;  <a href="#stop">stop</a>() noexcept;
-      void              <a href="#resume">resume</a>() noexcept;
+      void         <a href="#start">start</a>() noexcept;
+      void         <a href="#stop">stop</a>() noexcept;
+      void         <a href="#resume">resume</a>() noexcept;
     };</pre>
     </td>
   </tr>
 </table>
-<h3><a name="cpu_timer-constructors"><code>cpu_timer</code> constructor</a>, destructor</h3>
+<h3><a name="cpu_timer-constructors"><code>cpu_timer</code> constructor</a></h3>
 <pre><span style="background-color: #D7EEFF"><a name="cpu_timer-ctor">cpu_timer</a>() noexcept;</span></pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>
   cpu_timer</code>. Calls<code> start()</code>.</p>
-</blockquote>
-<pre><span style="background-color: #D7EEFF">~<a name="cpu_timer-dtor">cpu_timer</a>() noexcept {}</span></pre>
-<blockquote>
-  <p><i>Effects:</i> None</p>
 </blockquote>
 <h3><a name="cpu_timer-observers"><code>cpu_timer</code> 
 observers</a></h3>
@@ -417,7 +415,7 @@ actions</a></h3>
 <p><i>Postconditions:</i> <code>!is_stopped()</code>.</p>
 
 </blockquote>
-<pre><span style="background-color: #D7EEFF">cpu_times</span><span style="background-color: #D7EEFF"> <a name="stop">stop</a>() noexcept;</span></pre>
+<pre><span style="background-color: #D7EEFF">void <a name="stop">stop</a>() noexcept;</span></pre>
 <blockquote>
 
 <p><i>Effects:</i> If <code>!is_stopped()</code>, stores the difference between 
@@ -426,8 +424,6 @@ stored by the most recent call to <a href="#start">start()</a> or
 <a href="#resume">resume()</a>.</p>
 
 <p><i>Postconditions:</i> <code>is_stopped()</code>.</p>
-
-<p><i>Returns:</i> The stored times.</p>
 
 </blockquote>
 <pre><span style="background-color: #D7EEFF">void <a name="resume">resume</a>() noexcept;</span></pre>
@@ -464,10 +460,17 @@ on destruction.</p>
 
      <a href="#auto_cpu_timer-destructor">~auto_cpu_timer</a>() noexcept;
 
-      cpu_timer(const cpu_timer&amp;) = default;
-      cpu_timer&amp; operator=(const cpu_timer&amp;) = default;
+      // compiler generated special member functions
+      auto_cpu_timer(const auto_cpu_timer&amp;) = default;
+      auto_cpu_timer&amp; operator=(const auto_cpu_timer&amp;) = default;
 
-      void            <a href="#report">report</a>();
+      // <a href="#auto_cpu_timer-observers">observers</a>
+      std::ostream&amp;      <a href="#ostream">ostream</a>() const noexcept;
+      short              <a href="#places">places</a>() const noexcept;
+      const std::string&amp; <a href="#format_string">format_string</a>() const noexcept;
+
+      // <a href="#auto_cpu_timer-actions">actions</a>
+      void               <a href="#report">report</a>();
     };</pre>
     </td>
   </tr>
@@ -486,32 +489,57 @@ explicit <a name="auto_cpu_timer-3">auto_cpu_timer</a>(const</span><span style="
 </span></pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>
-  auto_cpu_timer</code>, storing <code>os</code>, <code>places</code>, and <code>
-  format</code>. For the overloads without a <code>format</code> 
-argument, the <a href="#Default-format">default format</a> is stored as the
-  <code>format</code>. For the overloads without an <code>os</code> 
-argument, std::cout is stored as the <code>os</code>.</p>
+  auto_cpu_timer</code> and stores the ostream, places, and format string data 
+  needed to establish the postconditions.</p>
+  <p><i>Postconditions:</i></p>
+  <ul>
+    <li>For overloads with an <code>os</code> argument, <code>ostream() == os</code>. 
+    Otherwise <code>ostream() == std::cout</code>.</li>
+    <li><code>places() == places</code>.</li>
+    <li>For overloads with a <code>format</code> argument, <code>format_string() 
+    == format</code>. Otherwise <code>format_string() == std::cout</code></li>
+  </ul>
 </blockquote>
 <h3><a name="auto_cpu_timer-destructor"><code>auto_cpu_timer</code> destructor</a></h3>
 <pre><span style="background-color: #D7EEFF">~</span><span style="background-color: #D7EEFF">auto_cpu_timer</span><span style="background-color: #D7EEFF">() noexcept;</span></pre>
 <blockquote>
-<p dir="ltr"><i>Effects: </i>If <code>!is_stopped()</code>, <a href="#report">
-report()</a>. Otherwise, no effects.</p>
+<p dir="ltr"><i>Effects: </i>If <code>!is_stopped()</code>, stop(), <a href="#report">
+report()</a>.</p>
 <p dir="ltr">[<i>Note:</i> Because the function is <code>noexcept</code>, 
 implementation requires a try/catch or equivalent to ensure no exception 
 escapes. <i>--end note</i>]</p>
+</blockquote>
+<h3><a name="auto_cpu_timer-observers">auto_cpu_timer observers</a></h3>
+<p>The observers allow testing of constructor postconditions and specification 
+of other functionality without resorting to &quot;for exposition only&quot; private 
+members.</p>
+<pre><span style="background-color: #D7EEFF">std::ostream&amp; <a name="ostream">ostream</a>() const noexcept;</span></pre>
+<blockquote>
+  <p><i>Returns:</i> The ostream stored by construction or subsequent copy 
+  assignment.</p>
+</blockquote>
+<pre><span style="background-color: #D7EEFF">short <a name="places">places</a>() const noexcept;</span></pre>
+<blockquote>
+  <p><i>Returns:</i> The places stored by construction or subsequent copy 
+  assignment.</p>
+</blockquote>
+<pre><span style="background-color: #D7EEFF">const std::string&amp; <a name="format_string">format_string</a>() const noexcept;</span></pre>
+<blockquote>
+  <p><i>Returns:</i> The format string stored by construction or subsequent copy 
+  assignment.</p>
 </blockquote>
 <h3><a name="auto_cpu_timer-actions"><code>auto_cpu_timer</code> actions</a></h3>
 <pre><span style="background-color: #D7EEFF">void <a name="report">report</a>();</span></pre>
 <blockquote>
   <p><i>Effects: </i>As if:</p>
   <blockquote>
-    <pre>m_os &lt;&lt; timer::format(stop(), m_places, m_format);
-resume();</pre>
+    <pre>ostream() &lt;&lt; timer::format(elapsed(), places(), format_string());</pre>
   </blockquote>
 
-  <p>[<i>Note:</i> <code>stop()</code> is called because doing I/O while the 
-  timer is running might produce misleading results. <i>--end note</i>]</p>
+  <p>[<i>Note: </i>It may be desirable to call <code>stop()</code> before 
+  calling <code>report()</code> because doing I/O while the 
+  timer is running might produce misleading results. <code>resume()</code> may 
+  be called afterwards to continue timing. <i>--end note</i>]</p>
 
 </blockquote>
 
@@ -645,7 +673,7 @@ resume();</pre>
 
 <hr>
 <p><font size="2">Revised:
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->06 October 2011<!--webbot bot="Timestamp" endspan i-checksum="32189" --></font></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->07 October 2011<!--webbot bot="Timestamp" endspan i-checksum="32191" --></font></p>
 <p><font size="2">© Copyright Beman Dawes, 2006<br>
 © Copyright Beman Dawes and Robert Stewart, 2011</font></p>
 <p><font size="2">Distributed under the Boost Software License, Version 1.0.  See <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/ LICENSE_1_0.txt</a></font></p>

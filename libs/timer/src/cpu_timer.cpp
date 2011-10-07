@@ -191,10 +191,10 @@ namespace boost
       get_cpu_times(m_times);
     }
 
-    const cpu_times& cpu_timer::stop()
+    void cpu_timer::stop()
     {
       if (is_stopped())
-        return m_times;
+        return;
       m_is_stopped = true;
       
       cpu_times current;
@@ -202,7 +202,6 @@ namespace boost
       m_times.wall = (current.wall - m_times.wall);
       m_times.user = (current.user - m_times.user);
       m_times.system = (current.system - m_times.system);
-      return m_times;
     }
 
     cpu_times cpu_timer::elapsed() const
@@ -232,21 +231,21 @@ namespace boost
     //  auto_cpu_timer  ----------------------------------------------------------------//
 
     auto_cpu_timer::auto_cpu_timer(std::ostream& os, short places)        // #5
-      : m_places(places), m_os(os), m_format(default_fmt)
+      : m_places(places), m_os(&os), m_format(default_fmt)
     { 
       start();
     }
 
     void auto_cpu_timer::report()
     {
-        show_time(stop(), m_os, m_format, m_places);
-        resume();
+        show_time(elapsed(), ostream(), format_string(), places());
     }
 
     auto_cpu_timer::~auto_cpu_timer()
     { 
       if (!is_stopped())
       {
+        stop();  // the sooner we stop(), the better
         try
         {
           report();
