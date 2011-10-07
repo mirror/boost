@@ -50,15 +50,15 @@
     <td width="100%" bgcolor="#E8F5FF">
       <a href="#Introduction">Introduction</a><br>
       <a href="#Example">Using the timers</a><br>
-&nbsp; <a href="#using-auto_cpu_timer">Using <code>auto_cpu_time</code>r</a><br>
+&nbsp; <a href="#using-auto_cpu_timer">Using <code>auto_cpu_timer</code></a><br>
 &nbsp; <a href="#using-cpu_timer">Using <code>cpu_timer</code></a><br>
       <a href="#Reference">Reference</a><br>
       <code>&nbsp;<a href="#Synopsis">&lt;boost/timer/timer.hpp&gt;</a></code><a href="#Synopsis"> 
       synopsis</a><br>
+&nbsp; <a href="#Default-format">Default format</a><br>
       &nbsp; <a href="#nanosecond_type">Typedef <code>nanosecond_type</code></a><br>
 &nbsp;
       <a href="#Non-member-functions">Non-member functions</a><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code><a href="#default_format">default_format()</a></code><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#format"><code>format()</code></a><br>
       &nbsp;
       <a href="#Class-cpu_timer">Class <code>cpu_timer</code></a><br>
@@ -228,17 +228,19 @@ library</i>. </p>
       
     const int           <a name="default_places">default_places</a> = 6;
 
-    const std::string&amp;  <a href="#default_format">default_format</a>();
+    std::string format(const cpu_times&amp; times, short places, const std::string&amp; format); 
+    std::string format(const cpu_times&amp; times, short places = default_places); 
 
-    std::string format(const cpu_times&amp; times,
-                       short places = default_places,
-                       const std::string&amp; format = default_format()); 
   } // namespace timer
 } // namespace boost</pre>
     </blockquote>
     </td>
   </tr>
 </table>
+
+<h3><a name="Default-format">Default format</a></h3>
+
+<p>The default format is &quot; %ws wall, %us user + %ss system = %ts CPU (%p%)\n&quot;.</p>
 
 <h3>Typedef <a name="nanosecond_type"><code>nanosecond_type</code></a></h3>
 
@@ -272,14 +274,8 @@ POSIX.</p>
 
 <h3><a name="Non-member-functions">Non-member functions</a></h3>
 
-<pre><span style="background-color: #D7EEFF">const std::string&amp;  </span><span style="background-color: #D7EEFF"><a name="default_format">default_format</a>();</span></pre>
-<blockquote>
-  <p><i>Returns:</i> <code>std::string(&quot; %ws wall, %us user + %ss system = %ts 
-  CPU (%p%)\n&quot;)</code>.</p>
-</blockquote>
-<pre><span style="background-color: #D7EEFF">std::string </span><a name="format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(const</span><span style="background-color: #D7EEFF"> </span><a href="#cpu_times"><span style="background-color: #D7EEFF">cpu_times</span></a><span style="background-color: #D7EEFF">&amp; times,
-                   short places = </span><span style="background-color: #D7EEFF"><a href="#default_places">default_places</a>,
-                   const std::string&amp; format = <a href="#default_format">default_format</a>()); </span></pre>
+<pre><span style="background-color: #D7EEFF">std::string </span><a name="format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(const </span><a href="#cpu_times"><span style="background-color: #D7EEFF">cpu_times</span></a><span style="background-color: #D7EEFF">&amp; times, short places, const std::string&amp; format);
+std::string </span><a name="format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(const </span><a href="#cpu_times"><span style="background-color: #D7EEFF">cpu_times</span></a><span style="background-color: #D7EEFF">&amp; times, short places = default_places);</span></pre>
 <blockquote>
 
 <p><i>Overview: </i>Converts the <code>times</code> argument's values to strings 
@@ -288,9 +284,8 @@ inserts them into a return string under control of the <code>format</code>
 string.</p>
 
 <p><i>Effects:</i> If <code>places</code> is less than 0,&nbsp; it is set to <code>default_places</code>. If <code>places</code> is 
-more than 9, it is set to 9. if the <code>format</code> 
-argument is <code>empty()</code>, it is set to <code>
-default_format</code>.</p>
+more than 9, it is set to 9. For the overload without the <code>format</code> 
+argument, the <a href="#Default-format">default format</a> is used as <code>format</code>.</p>
 
 <p><i>Returns:</i> A string that is a copy of <code>format</code>, except that any 
 instances of the sequences shown below are replaced by the indicated value. 
@@ -364,8 +359,9 @@ GetProcessTimes()</code> on Windows.</p>
       //  observers
       bool              <a href="#is_stopped">is_stopped</a>() const noexcept;
       cpu_times         <a href="#elapsed">elapsed</a>() const noexcept;
-      std::string       <a href="#cpu_timer-format">format</a>(int places = default_places,
-                               const std::string&amp; format = default_format()) const;
+      std::string       <a href="#cpu_timer-format">format</a>(int places, const std::string&amp; format) const;
+      std::string       <a href="#cpu_timer-format">format</a>(int places = default_places) const;
+
       //  actions
       void              <a href="#start">start</a>() noexcept;
       const cpu_times&amp;  <a href="#stop">stop</a>() noexcept;
@@ -404,12 +400,12 @@ observers</a></h3>
   values.</p>
 
 </blockquote>
-<pre><span style="background-color: #D7EEFF">std::string <a name="cpu_timer-format">format</a>(int</span><span style="background-color: #D7EEFF"> places = </span><span style="background-color: #D7EEFF"><a href="#default_places">default_places</a>,
-                   const std::string&amp; format = <a href="#default_format">default_format</a>()) const;</span></pre>
+<pre><span style="background-color: #D7EEFF">std::string       </span><a href="#cpu_timer-format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(int</span><span style="background-color: #D7EEFF"> places, const std::string&amp; format) const;
+std::string       </span><a href="#cpu_timer-format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(int</span><span style="background-color: #D7EEFF"> places = </span><span style="background-color: #D7EEFF">default_places</span><span style="background-color: #D7EEFF">) const;</span></pre>
 <blockquote>
   <p><i>Overview:</i> Returns a string for the current elapsed time as formatted 
-  by the <a href="#format">format function</a>.</p>
-  <p><i>Returns:</i> <code><a href="#format">timer::format</a>(<a href="#elapsed">elapsed</a>(), places, format)</code>.</p>
+  by the <a href="#format">format non-member function</a>.</p>
+  <p><i>Returns:</i> <code>boost::<a href="#format">timer::format</a>(<a href="#elapsed">elapsed</a>(), places<i>[, format]</i>)</code>.</p>
 </blockquote>
 <h3><a name="cpu_timer-actions"><code>cpu_timer</code> 
 actions</a></h3>
@@ -459,13 +455,12 @@ on destruction.</p>
     class <a name="auto_cpu_timer">auto_cpu_timer</a> : public <a href="#cpu_timer">cpu_timer</a>
     {
     public:
-      explicit <a href="#auto_cpu_timer-1">auto_cpu_timer</a>(short places = <a href="#default_places">default_places</a>,
-                              const std::string&amp; format = <a href="#default_format">default_format</a>());
-      explicit <a href="#auto_cpu_timer-2">auto_cpu_timer</a>(const std::string&amp; format);
-      explicit <a href="#auto_cpu_timer-3">auto_cpu_timer</a>(std::ostream&amp; os,
-                              short places = <a href="#default_places">default_places</a>,
-                              const std::string&amp; format = <a href="#default_format">default_format</a>());
-      <a href="#auto_cpu_timer-4">auto_cpu_timer</a>(std::ostream&amp; os, const std::string&amp; format);
+      explicit <a href="#auto_cpu_timer-1">auto_cpu_timer</a>(short places = default_places);
+               <a href="#auto_cpu_timer-2">auto_cpu_timer</a>(short places, const std::string&amp; format);
+      explicit <a href="#auto_cpu_timer-3">auto_cpu_timer</a>(const std::string&amp; format);
+               <a href="#auto_cpu_timer-4">auto_cpu_timer</a>(std::ostream&amp; os, short places, const std::string&amp; format);
+      explicit <a href="#auto_cpu_timer-5">auto_cpu_timer</a>(std::ostream&amp; os, short places = default_places);
+               <a href="#auto_cpu_timer-6">auto_cpu_timer</a>(std::ostream&amp; os, const std::string&amp; format);
 
      <a href="#auto_cpu_timer-destructor">~auto_cpu_timer</a>() noexcept;
 
@@ -473,11 +468,6 @@ on destruction.</p>
       cpu_timer&amp; operator=(const cpu_timer&amp;) = default;
 
       void            <a href="#report">report</a>();
-
-    private:
-      std::ostream&   m_os;               // <b><i>exposition only</i></b>
-      short           m_places;           // <b><i>exposition only</i></b>
-      std::string     m_format;           // <b><i>exposition only</i></b>
     };</pre>
     </td>
   </tr>
@@ -486,49 +476,21 @@ on destruction.</p>
 argument argument imply <code>
 std::cout</code>. An argument default is avoided as it would require including <code>&lt;iostream&gt;</code>, 
 with its high costs, even when the standard streams are not used. <i>--end note</i>]</p>
+
 <h3><a name="auto_cpu_timer-constructors"><code>auto_cpu_timer</code> constructors</a></h3>
-<pre><span style="background-color: #D7EEFF">explicit <a name="auto_cpu_timer-1">auto_cpu_timer</a>(short places = </span><a href="#default_places"><span style="background-color: #D7EEFF">default_places</span></a><span style="background-color: #D7EEFF">,
-                        const std::string&amp; format = default_format());</span></pre>
+
+<pre><span style="background-color: #D7EEFF">explicit <a name="auto_cpu_timer-1">auto_cpu_timer</a>(short</span><span style="background-color: #D7EEFF"> places = </span><span style="background-color: #D7EEFF">default_places</span><span style="background-color: #D7EEFF">);
+         <a name="auto_cpu_timer-2">auto_cpu_timer</a>(short</span><span style="background-color: #D7EEFF"> places, const std::string&amp; format);
+explicit <a name="auto_cpu_timer-3">auto_cpu_timer</a>(const</span><span style="background-color: #D7EEFF"> std::string&amp; format);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+         <a name="auto_cpu_timer-4">auto_cpu_timer</a>(std::ostream</span><span style="background-color: #D7EEFF">&amp; </span><span style="background-color: #D7EEFF">os</span><span style="background-color: #D7EEFF">, short places, const std::string&amp; format);<br>explicit <a name="auto_cpu_timer-5">auto_cpu_timer</a>(std::ostream</span><span style="background-color: #D7EEFF">&amp; </span><span style="background-color: #D7EEFF">os</span><span style="background-color: #D7EEFF">, short places = </span><span style="background-color: #D7EEFF">default_places</span><span style="background-color: #D7EEFF">);<br>         <a name="auto_cpu_timer-6">auto_cpu_timer</a>(std::ostream</span><span style="background-color: #D7EEFF">&amp; </span><span style="background-color: #D7EEFF">os</span><span style="background-color: #D7EEFF">, const std::string&amp; format);
+</span></pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>
-  auto_cpu_timer</code>.</p>
-  <p><i>Postconditions:
-  </i>As if<i><br>
-  </i><code>&nbsp; m_os == std::cout</code>,<code><br>
-  &nbsp; m_places == places</code>,<code><br>
-&nbsp; m_format ==  format</code></p>
-</blockquote>
-<pre><span style="background-color: #D7EEFF">explicit <a name="auto_cpu_timer-2">auto_cpu_timer</a>(const</span><span style="background-color: #D7EEFF"> std::string&amp; format);</span></pre>
-<blockquote>
-  <p><i>Effects:</i> Constructs an object of type <code>
-  auto_cpu_timer</code>.</p>
-  <p><i>Postconditions:
-  </i>As if<i><br>
-  </i><code>&nbsp; m_os == std::cout</code>,<code><br>
-  &nbsp; m_places == default_places</code>,<code><br>
-&nbsp; m_format == format</code></p>
-</blockquote>
-<pre><span style="background-color: #D7EEFF">explicit <a name="auto_cpu_timer-3">auto_cpu_timer</a>(std::ostream</span><span style="background-color: #D7EEFF">&amp; </span><span style="background-color: #D7EEFF">os</span><span style="background-color: #D7EEFF">,
-                        short places = </span><a href="#default_places">default_places</a><span style="background-color: #D7EEFF">,
-                        const std::string&amp; format = </span><span style="background-color: #D7EEFF">default_format());</span></pre>
-<blockquote>
-  <p><i>Effects:</i> Constructs an object of type <code>
-  auto_cpu_timer</code>.</p>
-  <p><i>Postconditions:
-  </i>As if<i><br>
-  </i><code>&nbsp; m_os == os</code>,<code><br>
-  &nbsp; m_places == places</code>,<code><br>
-&nbsp; m_format == format</code></p>
-</blockquote>
-<pre><span style="background-color: #D7EEFF"><a name="auto_cpu_timer-4">auto_cpu_timer</a>(std::ostream</span><span style="background-color: #D7EEFF">&amp; </span><span style="background-color: #D7EEFF">os</span><span style="background-color: #D7EEFF">, const std::string&amp; format);</span></pre>
-<blockquote>
-  <p><i>Effects:</i> Constructs an object of type <code>
-  auto_cpu_timer</code>.</p>
-  <p><i>Postconditions:
-  </i>As if<i><br>
-  </i><code>&nbsp; m_os == os</code>,<code><br>
-  &nbsp; m_places ==  </code><a href="#default_places">default_places</a>,<code><br>
-&nbsp; m_format == format</code></p>
+  auto_cpu_timer</code>, storing <code>os</code>, <code>places</code>, and <code>
+  format</code>. For the overloads without a <code>format</code> 
+argument, the <a href="#Default-format">default format</a> is stored as the
+  <code>format</code>. For the overloads without an <code>os</code> 
+argument, std::cout is stored as the <code>os</code>.</p>
 </blockquote>
 <h3><a name="auto_cpu_timer-destructor"><code>auto_cpu_timer</code> destructor</a></h3>
 <pre><span style="background-color: #D7EEFF">~</span><span style="background-color: #D7EEFF">auto_cpu_timer</span><span style="background-color: #D7EEFF">() noexcept;</span></pre>
@@ -683,7 +645,7 @@ resume();</pre>
 
 <hr>
 <p><font size="2">Revised:
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->04 October 2011<!--webbot bot="Timestamp" endspan i-checksum="32185" --></font></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->06 October 2011<!--webbot bot="Timestamp" endspan i-checksum="32189" --></font></p>
 <p><font size="2">© Copyright Beman Dawes, 2006<br>
 © Copyright Beman Dawes and Robert Stewart, 2011</font></p>
 <p><font size="2">Distributed under the Boost Software License, Version 1.0.  See <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/ LICENSE_1_0.txt</a></font></p>
