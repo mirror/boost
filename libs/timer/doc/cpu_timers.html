@@ -205,18 +205,35 @@ while (more_transactions)
 
   <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
     <tr>
-      <td rowspan="2">O/S</td>
-      <td rowspan="2">Processor</td>
-      <td colspan="2" align="center">Wall-clock</td>
-      <td colspan="2" align="center">CPU</td>
+      <td rowspan="2" bgcolor="#D7EEFF">O/S</td>
+      <td rowspan="2" bgcolor="#D7EEFF">Processor</td>
+      <td colspan="2" align="center" bgcolor="#D7EEFF">Wall-clock</td>
+      <td colspan="2" align="center" bgcolor="#D7EEFF">CPU</td>
     </tr>
     <tr>
-      <td>Resolution</td>
-      <td>Comments</td>
-      <td align="center">User<br>
+      <td bgcolor="#D7EEFF">Resolution</td>
+      <td bgcolor="#D7EEFF">Comments</td>
+      <td align="center" bgcolor="#D7EEFF">User<br>
       Resolution</td>
-      <td align="center">System<br>
+      <td align="center" bgcolor="#D7EEFF">System<br>
       Resolution</td>
+    </tr>
+    <tr>
+      <td>Mac OS X Lion</td>
+      <td>Intel circa 2007</td>
+      <td align="right">2100ns<br>
+      2200ns</td>
+      <td>Some variation within a range.</td>
+      <td>10000000ns</td>
+      <td>10000000ns</td>
+    </tr>
+    <tr>
+      <td>Ubuntu Linux 11.4</td>
+      <td>Intel circa 2005</td>
+      <td align="right">516ns</td>
+      <td>Very little variation, typically less than 5ns </td>
+      <td>10000000ns</td>
+      <td>10000000ns</td>
     </tr>
     <tr>
       <td>Windows 7</td>
@@ -243,24 +260,7 @@ while (more_transactions)
       <td>15625000ns</td>
       <td>15625000ns</td>
     </tr>
-    <tr>
-      <td>Mac OS X Lion</td>
-      <td>Intel circa 2007</td>
-      <td align="right">2100ns<br>
-      2200ns</td>
-      <td>Some variation within a range.</td>
-      <td>10000000ns</td>
-      <td>10000000ns</td>
-    </tr>
-    <tr>
-      <td>Ubuntu Linux 11.4</td>
-      <td>Intel circa 2005</td>
-      <td align="right">516ns</td>
-      <td>Very little variation, typically less than 5ns </td>
-      <td>10000000ns</td>
-      <td>10000000ns</td>
-    </tr>
-</table>
+    </table>
 
   <h3><a name="Other-concerns">Other concerns</a></h3>
 
@@ -272,7 +272,7 @@ while (more_transactions)
   <p><code>cpu_timer</code> and <code>auto_cpu_timer</code> obtain Wall-clock 
   timings from Boost.Chrono's <code>high_resolution_clock</code>. On Intel 
   compatible CPU's running Windows, Linux, and Mac OS X, this is a &quot;steady 
-  clock&quot;, but may not be steady on other platforms. <code>
+  clock&quot; [C++11 20.11.3], but may not be steady on other platforms. <code>
   <a href="../test/cpu_timer_info.cpp">cpu_timer_info.cpp</a></code> reports 
   whether or not the <code>high_resolution_clock</code> is steady on a 
   particular platform.</p>
@@ -290,21 +290,22 @@ while (more_transactions)
   than release builds, because  compiler optimization is turned off and 
   because libraries often supply very expensive error checks on debug builds.</p>
 
-  <p>Synthetic benchmark code may be optimized way by release builds. It may be 
+  <p>Synthetic benchmark code may be optimized way, particularly if NDEBUG is 
+  defined. It may be 
   necessary to inspect generated code to verify this isn't happening.</p>
 
   <h3 dir="ltr"><a name="Recommendations">Recommendations</a></h3>
 
   <p dir="ltr">Think about what is important to your application. For a 
-  production process, the wall clock time may be what is most important. For 
-  studying the efficiency of code, total CPU time (user + system) is often a much better measure.</p>
+  production process, the wall clock time may be what is most important. To 
+  study the efficiency of code, total CPU time (user + system) is often a much better measure.</p>
 
   <p dir="ltr">A useful recommendation is to never trust timings unless they are 
   (1) at least 100 times longer than the CPU time resolution, (2) run multiple 
   times, and (3) run on release builds. And results that are too good to be true 
-  need to be further investigate.</p>
+  need to be should be investigated skeptically.</p>
 
-  <p>Shared libraries (DLL's) may incur extra time delays, including expensive 
+  <p>Shared libraries (DLLs and .so's) may incur extra time delays, including expensive 
   disk accesses, the first time a timer or other function is called. If that 
   would be misleading, static linking should be considered.</p>
 
@@ -631,7 +632,7 @@ explicit <a name="auto_cpu_timer-3">auto_cpu_timer</a>(const</span><span style="
 <p dir="ltr"><i>Effects: </i>If <code>!is_stopped()</code>, stop(), <a href="#report">
 report()</a>.</p>
 <p dir="ltr">[<i>Note:</i> Because the function is <code>noexcept</code>, 
-implementation requires a try/catch or equivalent to ensure no exception 
+implementation must ensure no exception 
 escapes. <i>--end note</i>]</p>
 </blockquote>
 <h3><a name="auto_cpu_timer-observers">auto_cpu_timer observers</a></h3>
