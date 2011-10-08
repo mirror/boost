@@ -29,6 +29,7 @@ namespace chrono
       static_cast<system_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
   }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   system_clock::time_point system_clock::now(system::error_code & ec)
   {
     timespec ts;
@@ -56,6 +57,7 @@ namespace chrono
     return time_point(duration(
       static_cast<system_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
   }
+#endif
 
   std::time_t system_clock::to_time_t(const system_clock::time_point& t) BOOST_CHRONO_NOEXCEPT
   {
@@ -81,6 +83,7 @@ namespace chrono
       static_cast<steady_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
   }
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
   steady_clock::time_point steady_clock::now(system::error_code & ec)
   {
     timespec ts;
@@ -108,6 +111,7 @@ namespace chrono
     return time_point(duration(
       static_cast<steady_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
   }
+#endif
 #endif
 
 }  // namespace chrono

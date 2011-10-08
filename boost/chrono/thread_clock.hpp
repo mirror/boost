@@ -1,6 +1,6 @@
-//  boost/chrono/process_cpu_clocks.hpp  -----------------------------------------------------------//
+//  boost/chrono/thread_clock.hpp  -----------------------------------------------------------//
 
-//  Copyright 2009-2010 Vicente J. Botet Escriba
+//  Copyright 2009-2011 Vicente J. Botet Escriba
 
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
@@ -15,8 +15,11 @@
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 #include <boost/system/error_code.hpp>
 #include <boost/chrono/detail/system.hpp>
+#endif
+#include <boost/chrono/clock_string.hpp>
 
 #ifndef BOOST_CHRONO_HEADER_ONLY
 #include <boost/config/abi_prefix.hpp> // must be the last #include
@@ -33,8 +36,31 @@ public:
     BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
 
     static BOOST_CHRONO_INLINE time_point now( ) BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
     static BOOST_CHRONO_INLINE time_point now( system::error_code & ec );
+#endif
 };
+
+template <class CharT>
+struct clock_string<thread_clock, CharT>
+{
+  static std::basic_string<CharT> name()
+  {
+    static const CharT u[] =
+    { 't', 'h', 'r', 'e', 'd', '_',
+      'c', 'l','o', 'c', 'k'};
+    static const std::basic_string<CharT> str(u, u + sizeof(u)/sizeof(u[0]));
+    return str;
+  }
+  static std::basic_string<CharT> since()
+  {
+    const CharT u[] =
+    { ' ', 's', 'i', 'n', 'c', 'e', ' ', 't', 'r', 'e', 'a', 'd', ' ', 's', 't', 'a', 'r', 't', '-', 'u', 'p'};
+    const std::basic_string<CharT> str(u, u + sizeof(u)/sizeof(u[0]));
+    return str;
+  }
+};
+
 } // namespace chrono
 } // namespace boost
 

@@ -1,8 +1,8 @@
-//  chrono.hpp  --------------------------------------------------------------//
+//  boost/chrono/system_clocks.hpp  --------------------------------------------------------------//
 
 //  Copyright 2008 Howard Hinnant
 //  Copyright 2008 Beman Dawes
-//  Copyright 2009-2010 Vicente J. Botet Escriba
+//  Copyright 2009-2011 Vicente J. Botet Escriba
 
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
@@ -62,8 +62,11 @@ TODO:
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 #include <boost/chrono/detail/system.hpp>
 #include <boost/system/error_code.hpp>
+#endif
+#include <boost/chrono/clock_string.hpp>
 
 #include <ctime>
 
@@ -128,7 +131,9 @@ namespace chrono {
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             false;
 
       static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
+#endif
 
       static BOOST_CHRONO_INLINE std::time_t to_time_t(const time_point& t) BOOST_CHRONO_NOEXCEPT;
       static BOOST_CHRONO_INLINE time_point  from_time_t(std::time_t t) BOOST_CHRONO_NOEXCEPT;
@@ -152,7 +157,9 @@ namespace chrono {
       BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
 
       static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
+#endif
   };
 #endif
 //----------------------------------------------------------------------------//
@@ -162,6 +169,53 @@ namespace chrono {
 //  As permitted, steady_clock or system_clock is a typedef for high_resolution_clock.
 //  See synopsis.
 
+
+  template<class CharT>
+  struct clock_string<system_clock, CharT>
+  {
+    static std::basic_string<CharT> name()
+    {
+      static const CharT u[] =
+      { 's', 'y', 's', 't', 'e', 'm', '_', 'c', 'l', 'o', 'c', 'k' };
+      static const std::basic_string<CharT> str(u, u + sizeof(u)
+          / sizeof(u[0]));
+      return str;
+    }
+    static std::basic_string<CharT> since()
+    {
+      static const CharT
+          u[] =
+              { ' ', 's', 'i', 'n', 'c', 'e', ' ', 'J', 'a', 'n', ' ', '1', ',', ' ', '1', '9', '7', '0' };
+      static const std::basic_string<CharT> str(u, u + sizeof(u)
+          / sizeof(u[0]));
+      return str;
+    }
+  };
+
+#ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
+
+  template<class CharT>
+  struct clock_string<steady_clock, CharT>
+  {
+    static std::basic_string<CharT> name()
+    {
+      static const CharT
+          u[] =
+              { 's', 't', 'e', 'a', 'd', 'y', '_', 'c', 'l', 'o', 'c', 'k' };
+      static const std::basic_string<CharT> str(u, u + sizeof(u)
+          / sizeof(u[0]));
+      return str;
+    }
+    static std::basic_string<CharT> since()
+    {
+      const CharT u[] =
+      { ' ', 's', 'i', 'n', 'c', 'e', ' ', 'b', 'o', 'o', 't' };
+      const std::basic_string<CharT> str(u, u + sizeof(u) / sizeof(u[0]));
+      return str;
+    }
+  };
+
+#endif
 
 } // namespace chrono
 } // namespace boost

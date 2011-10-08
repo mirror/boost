@@ -43,6 +43,8 @@ namespace boost { namespace chrono {
             static_cast<thread_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
 
     }
+
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
     thread_clock::time_point thread_clock::now( system::error_code & ec ) 
     {
       struct timespec ts;
@@ -82,4 +84,5 @@ namespace boost { namespace chrono {
             static_cast<thread_clock::rep>( ts.tv_sec ) * 1000000000 + ts.tv_nsec));
 
     }
+#endif
 } }

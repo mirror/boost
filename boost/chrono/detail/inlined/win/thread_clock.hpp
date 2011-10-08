@@ -24,6 +24,7 @@ namespace boost
 namespace chrono
 {
 
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 thread_clock::time_point thread_clock::now( system::error_code & ec )
 {
     //  note that Windows uses 100 nanosecond ticks for FILETIME
@@ -65,6 +66,7 @@ thread_clock::time_point thread_clock::now( system::error_code & ec )
         }
     }
 }
+#endif
 
 thread_clock::time_point thread_clock::now() BOOST_CHRONO_NOEXCEPT
 {
