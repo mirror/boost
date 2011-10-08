@@ -18,6 +18,7 @@
 #include <boost/chrono/detail/scan_keyword.hpp>
 #include <boost/chrono/round.hpp>
 #include <boost/chrono/io/translate.hpp>
+#include <boost/chrono/clock_string.hpp>
 
 namespace boost
 {
