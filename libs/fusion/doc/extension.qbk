@@ -390,7 +390,7 @@ for a variety of types.
 
 [heading Description]
 The __sequence_facade__ template provides an intrusive mechanism for
-producing a conforming Fusion iterator.
+producing a conforming Fusion sequence.
 
 [heading Synopsis]
     template<typename Derived, typename TravesalTag, typename IsView = mpl::false_>
@@ -415,6 +415,8 @@ The user must the implement the key expressions required by their sequence type.
 [[`sequence::template end<Seq>::call(seq)`][An iterator to the end of sequence `seq`]]
 [[`sequence::template size<Seq>::type`][The size of a sequence of type `Seq` as an __mpl_integral_constant__]]
 [[`sequence::template size<Seq>::call(seq)`][The size of sequence `seq`]]
+[[`sequence::template empty<Seq>::type`][Returns `mpl::true_` if `Seq` has zero elements, `mpl::false_` otherwise.]]
+[[`sequence::template empty<Seq>::call`][Returns a type convertible to `bool` that evaluates to true if the sequence is empty, else, evaluates to false. ]]
 [[`sequence::template at<Seq, N>::type`][The type of element `N` in a sequence of type `Seq`]]
 [[`sequence::template at<Seq, N>::call(seq)`][Element `N` in sequence `seq`]]
 [[`sequence::template value_at<Sequence, N>::type`][The type of the `N`th element in a sequence of type `Seq`]]
@@ -465,8 +467,8 @@ The user must the implement the key expressions required by their iterator type.
 [[`iterator::template advance<It, N>::call(it)`][An iterator advanced `N` elements from `it`][Implemented in terms of `next` and `prior`]]
 [[`iterator::template distance<It1, It2>::type`][The distance between iterators of type `It1` and `It2` as an __mpl_integral_constant__][None]]
 [[`iterator::template distance<It1, It2>::call(it1, it2)`][The distance between iterator `it1` and `it2`][None]]
-[[`iterator::template equal_to<It1, It2>::type`][The distance between iterators of type `It1` and `It2`][`boost::same_type<It1, It2>::type`]]
-[[`iterator::template equal_to<It1, It2>::call(it1, it2)`][The distance between iterators `it1` and `it2`][`boost::same_type<It1, It2>::type()`]]
+[[`iterator::template equal_to<It1, It2>::type`][Returns `mpl::true_` if `It1` is equal to `It2`, `mpl::false_` otherwise.][`boost::same_type<It1, It2>::type`]]
+[[`iterator::template equal_to<It1, It2>::call(it1, it2)`][Returns a type convertible to `bool` that evaluates to `true` if `It1` is equal to `It2`, `false` otherwise.][`boost::same_type<It1, It2>::type()`]]
 [[`iterator::template key_of<It>::type`][The key type associated with the element from `It`][None]]
 [[`iterator::template value_of_data<It>::type`][The type of the data property associated with the element from `It`][None]]
 [[`iterator::template deref_data<It>::type`][The type that will be returned by dereferencing the data property of the element from `It`][None]]

@@ -1120,7 +1120,7 @@ the actual element type, use __result_of_value_at__].
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`N`][An __mpl_integral_constant__][Index of element]]
 ]
 
@@ -1162,7 +1162,7 @@ get the actual element type, use __result_of_value_at_c__].
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`M`][Positive integer index][Index of element]]
 ]
 
@@ -1201,7 +1201,7 @@ Returns the actual type at a given index from the __sequence__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`N`][An __mpl_integral_constant__][Index of element]]
 ]
 
@@ -1240,7 +1240,7 @@ Returns the actual type at a given index from the __sequence__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __random_access_sequence__][Argument sequence]]
     [[`M`][Positive integer index][Index of element]]
 ]
 
@@ -1278,7 +1278,7 @@ Returns the result type of __has_key__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __associative_sequence__][Argument sequence]]
     [[`Key`][Any type][Key type]]
 ]
 
@@ -1321,7 +1321,7 @@ you want to get the actual element type, use __result_of_value_at_key__].
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __associative_sequence__][Argument sequence]]
     [[`Key`][Any type][Key type]]
 ]
 
@@ -1359,7 +1359,7 @@ Returns the actual element type associated with a Key from the __sequence__.
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
-    [[`Seq`][A model of __forward_sequence__][Argument sequence]]
+    [[`Seq`][A model of __associative_sequence__][Argument sequence]]
     [[`Key`][Any type][Key type]]
 ]
 
@@ -1425,12 +1425,19 @@ operators for free.
 
 [section I/O]
 
-The I/O operators: `<<` and `>>` work generically on all Fusion sequences.
-The global `operator<<` has been overloaded for generic output streams such
-that __sequence__(s) are output by recursively calling `operator<<` for each
-element. Analogously, the global `operator>>` has been overloaded to
-extract __sequence__(s) from generic input streams by recursively calling
-`operator>>` for each element.
+The I/O operators: `<<` and `>>` work generically on all Fusion
+sequences. The I/O operators are overloaded in namespace `boost::fusion`
+[footnote __sequences__ and __views__ residing in different namespaces
+will have to either provide their own I/O operators (possibly forwarding
+to fusion's I/O operators) or hoist fusion's I/O operators (using
+declaration), in their own namespaces for proper argument dependent
+lookup.]
+
+The `operator<<` has been overloaded for generic output streams such
+that __sequence__(s) are output by recursively calling `operator<<` for
+each element. Analogously, the global `operator>>` has been overloaded
+to extract __sequence__(s) from generic input streams by recursively
+calling `operator>>` for each element.
 
 The default delimiter between the elements is space, and the __sequence__
 is enclosed in parenthesis. For Example:

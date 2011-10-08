@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2001-2011 Joel de Guzman
     Copyright (c) 2005-2006 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -12,6 +12,9 @@ namespace boost { namespace fusion
 {
     namespace traits
     {
+        template <typename Sequence, typename Active = void>
+        struct tag_of_fallback;
+
         template<typename T, typename Active = void>
         struct tag_of;
     }

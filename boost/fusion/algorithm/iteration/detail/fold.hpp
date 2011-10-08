@@ -1,35 +1,12 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2001-2011 Joel de Guzman
     Copyright (c) 2006 Dan Marsden
     Copyright (c) 2009-2010 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-
-#ifndef BOOST_FUSION_ALGORITHM_ITERATION_DETAIL_FOLD_HPP
-#define BOOST_FUSION_ALGORITHM_ITERATION_DETAIL_FOLD_HPP
-
-#include <boost/config.hpp>
-#include <boost/fusion/sequence/intrinsic/begin.hpp>
-#include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/sequence/intrinsic/empty.hpp>
-#include <boost/fusion/sequence/intrinsic/size.hpp>
-#include <boost/fusion/support/is_segmented.hpp>
-#include <boost/fusion/iterator/equal_to.hpp>
-#include <boost/fusion/iterator/deref.hpp>
-#include <boost/fusion/iterator/value_of.hpp>
-#include <boost/fusion/iterator/prior.hpp>
-#include <boost/fusion/iterator/next.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/utility/result_of.hpp>
-#include <boost/type_traits/add_const.hpp>
-#include <boost/type_traits/add_reference.hpp>
-
-#endif
 
 #ifdef BOOST_FUSION_REVERSE_FOLD
 #   ifdef BOOST_FUSION_ITER_FOLD
@@ -186,7 +163,7 @@ namespace boost { namespace fusion
         {
             template<typename State, typename It0, typename F>
             static Result
-            call(State const& state,It0 const& it0,F f)
+            call(State const& state,It0 const& it0, F)
             {
                 return static_cast<Result>(state);
             }
@@ -425,7 +402,7 @@ namespace boost { namespace fusion
       , State const
       , F
     >::type
-    BOOST_FUSION_FOLD_NAME(Seq& seq,State const& state,F f)
+    BOOST_FUSION_FOLD_NAME(Seq& seq, State const& state, F f)
     {
         return result_of::BOOST_FUSION_FOLD_NAME<Seq,State const,F>::call(
             state,
@@ -439,7 +416,7 @@ namespace boost { namespace fusion
       , State const
       , F
     >::type
-    BOOST_FUSION_FOLD_NAME(Seq const& seq,State const& state,F f)
+    BOOST_FUSION_FOLD_NAME(Seq const& seq, State const& state, F f)
     {
         return result_of::BOOST_FUSION_FOLD_NAME<Seq const,State const,F>::call(
             state,
