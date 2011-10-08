@@ -163,19 +163,19 @@ namespace boost { namespace unordered { namespace detail {
     template <class U> static BOOST_PP_CAT(choice, result)::type            \
         test(BOOST_PP_CAT(choice, count))
 
-#define BOOST_UNORDERED_WRAP_PARAMATERS(z, n, data) congert_from_anything
-
 #define BOOST_UNORDERED_HAS_MEMBER(name)                                    \
     struct BOOST_PP_CAT(has_, name)                                         \
     {                                                                       \
-        struct base_mixin { int name; };                                    \
-        struct base : public T, public base_mixin {};                       \
+        struct impl {                                                       \
+            struct base_mixin { int name; };                                \
+            struct base : public T, public base_mixin {};                   \
                                                                             \
-        BOOST_UNORDERED_CHECK_MEMBER(1, 1, name, int base_mixin::*);        \
-        BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);                               \
+            BOOST_UNORDERED_CHECK_MEMBER(1, 1, name, int base_mixin::*);    \
+            BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);                           \
+        };                                                                  \
                                                                             \
         enum { value = sizeof(choice2::type) ==                             \
-            sizeof(test<base>(choose()))                                    \
+            sizeof(impl::test<impl::base>(choose()))                        \
         };                                                                  \
     }
 
