@@ -19,15 +19,16 @@
 
 namespace boost { namespace unordered { namespace detail {
 
-    template <typename VoidPointer, typename T> struct node;
+    template <typename A, typename T> struct node;
     template <typename T> struct ptr_node;
     template <typename Types> struct table_impl;
 
-    template <typename VoidPointer, typename T>
+    template <typename A, typename T>
     struct node :
         boost::unordered::detail::value_base<T>
     {
-        typedef VoidPointer link_pointer;
+        typedef typename ::boost::unordered::detail::rebind_wrap<
+            A, node<A, T> >::type::pointer link_pointer;
 
         link_pointer next_;
         std::size_t hash_;
@@ -65,22 +66,21 @@ namespace boost { namespace unordered { namespace detail {
     // If the allocator uses raw pointers use ptr_node
     // Otherwise use node.
 
-    template <typename A, typename T,
-            typename VoidPointer, typename NodePtr, typename BucketPtr>
+    template <typename A, typename T, typename NodePtr, typename BucketPtr>
     struct pick_node2
     {
-        typedef boost::unordered::detail::node<VoidPointer, T> node;
+        typedef boost::unordered::detail::node<A, T> node;
 
         typedef typename boost::unordered::detail::allocator_traits<
             typename boost::unordered::detail::rebind_wrap<A, node>::type
         >::pointer node_pointer;
 
         typedef boost::unordered::detail::bucket<node_pointer> bucket;
-        typedef VoidPointer link_pointer;
+        typedef node_pointer link_pointer;
     };
 
     template <typename A, typename T>
-    struct pick_node2<A, T, void*,
+    struct pick_node2<A, T,
         boost::unordered::detail::ptr_node<T>*,
         boost::unordered::detail::ptr_bucket*>
     {
@@ -103,7 +103,6 @@ namespace boost { namespace unordered { namespace detail {
         > tentative_bucket_traits;
 
         typedef pick_node2<A, T,
-            typename tentative_node_traits::void_pointer,
             typename tentative_node_traits::pointer,
             typename tentative_bucket_traits::pointer> pick;
 
@@ -123,7 +122,6 @@ namespace boost { namespace unordered { namespace detail {
 
         typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
-        typedef typename traits::void_pointer void_pointer;
         typedef value_type key_type;
 
         typedef boost::unordered::detail::pick_node<A, value_type> pick;
@@ -147,7 +145,6 @@ namespace boost { namespace unordered { namespace detail {
 
         typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
-        typedef typename traits::void_pointer void_pointer;
 
         typedef boost::unordered::detail::pick_node<A, value_type> pick;
         typedef typename pick::node node;

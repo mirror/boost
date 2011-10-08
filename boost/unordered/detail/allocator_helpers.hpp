@@ -356,13 +356,13 @@ namespace boost { namespace unordered { namespace detail {
             typename pointer_to_other<const value_type>::type)
             const_pointer;
 
-        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, void_pointer,
-            typename pointer_to_other<void>::type)
-            void_pointer;
-
-        typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_void_pointer,
-            typename pointer_to_other<const void>::type)
-            const_void_pointer;
+        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, void_pointer,
+        //    typename pointer_to_other<void>::type)
+        //    void_pointer;
+        //
+        //typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, const_void_pointer,
+        //    typename pointer_to_other<const void>::type)
+        //    const_void_pointer;
 
         typedef BOOST_UNORDERED_DEFAULT_TYPE(Alloc, difference_type,
             std::ptrdiff_t) difference_type;

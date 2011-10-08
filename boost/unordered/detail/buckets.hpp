@@ -192,7 +192,6 @@ namespace boost { namespace unordered { namespace detail {
     public:
         typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
-        typedef typename traits::void_pointer void_pointer;
 
         typedef Node node;
         typedef Bucket bucket;
