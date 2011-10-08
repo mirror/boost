@@ -21,6 +21,11 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
+#if defined(BOOST_MSVC)
+#   pragma warning ( push )
+#   pragma warning ( disable : 4913 4244 )
+#endif
+
 namespace boost {
 namespace detail {
 
@@ -187,5 +192,9 @@ struct trait_impl {
 BOOST_TT_AUX_BOOL_TRAIT_DEF2(BOOST_TT_TRAIT_NAME, Lhs, Ret=::boost::detail::BOOST_JOIN(BOOST_TT_TRAIT_NAME,_impl)::dont_care, (::boost::detail::BOOST_JOIN(BOOST_TT_TRAIT_NAME,_impl)::trait_impl< Lhs, Ret >::value))
 
 } // namespace boost
+
+#if defined(BOOST_MSVC)
+#   pragma warning (pop)
+#endif
 
 #include <boost/type_traits/detail/bool_trait_undef.hpp>

@@ -34,7 +34,7 @@
 #   pragma GCC system_header
 #elif BOOST_MSVC
 #   pragma warning ( push )
-#   pragma warning ( disable : 4146 4804 )
+#   pragma warning ( disable : 4146 4804 4913 4244 )
 #endif
 
 namespace boost {
