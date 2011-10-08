@@ -14,8 +14,9 @@
 
 #include <boost/move/move.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/inc.hpp>
+#include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
-#include <boost/preprocessor/repetition/enum_shifted.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
@@ -382,22 +383,26 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
         BOOST_PP_ENUM_PARAMS_Z(z, num_params, typename A)                   \
     >                                                                       \
     inline void construct_impl(std::pair<A, B>* address,                    \
-        boost::unordered::detail::BOOST_PP_CAT(emplace_args,num_params) <   \
-            BOOST_PP_ENUM_PARAMS_Z(z, num_params, A)                        \
-        > const& args)                                                      \
+        boost::unordered::detail::BOOST_PP_CAT(emplace_args, num_params) <  \
+                BOOST_PP_ENUM_PARAMS_Z(z, num_params, A)                    \
+            > const& args)                                                  \
     {                                                                       \
         new((void*) boost::addressof(address->first)) A(                    \
             boost::forward<A0>(args.a0));                                   \
         new((void*) boost::addressof(address->second)) B(                   \
-            BOOST_PP_ENUM_SHIFTED_##z(num_params,                           \
-                BOOST_UNORDERED_CALL_FORWARD, args.a));                     \
+            BOOST_PP_ENUM_##z(BOOST_PP_DEC(num_params),                     \
+                BOOST_UNORDERED_CALL_FORWARD2, args.a));                    \
     }
+
+#define BOOST_UNORDERED_CALL_FORWARD2(z, i, a) \
+    BOOST_UNORDERED_CALL_FORWARD(z, BOOST_PP_INC(i), a)
 
     BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL(1, 2, _)
     BOOST_PP_REPEAT_FROM_TO(4, BOOST_UNORDERED_EMPLACE_LIMIT,
         BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL, _)
 
 #undef BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL
+#undef BOOST_UNORDERED_CALL_FORWARD2
 
 #endif // BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT
 #endif // BOOST_UNORDERED_STD_FORWARD_MOVE
