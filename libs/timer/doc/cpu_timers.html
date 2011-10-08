@@ -61,8 +61,7 @@
       synopsis</a><br>
 &nbsp; <a href="#Default-format">Default format</a><br>
       &nbsp; <a href="#nanosecond_type">Typedef <code>nanosecond_type</code></a><br>
-&nbsp;
-      <a href="#Non-member-functions">Non-member functions</a><br>
+&nbsp; <a href="#Namespace-scope-functions">Namespace scope functions</a><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#format"><code>format()</code></a><br>
       &nbsp;
       <a href="#Class-cpu_timer">Class <code>cpu_timer</code></a><br>
@@ -79,17 +78,16 @@ actions</a><br>
       auto_cpu_timer</code> observers</a><br>
       &nbsp;&nbsp;&nbsp;<code> <a href="#auto_cpu_timer-actions">auto_cpu_timer</a></code><a href="#auto_cpu_timer-actions"> actions</a><br>
       <a href="#History">History</a><br>
-      <a href="#Acknowledgements">Acknowledgements</a><br>
-  </tr>
+      <a href="#Acknowledgements">Acknowledgements</a></tr>
 </table>
 
 <p>Knowing how long a program takes to execute is useful in both test and 
 production environments. It may also be helpful if such timing information is broken down 
-into wall-clock time, CPU time spent by the user, and CPU time spent by the 
+into wall clock time, CPU time spent by the user, and CPU time spent by the 
 operating system servicing user requests.</p>
 
 <p>Class <code><a href="#Class-cpu_timer">cpu_timer</a></code> measures 
-wall-clock time, user CPU process time, and system CPU process time.  Class <code>
+wall clock time, user CPU process time, and system CPU process time.  Class <code>
 <a href="#Class-auto_cpu_timer">auto_cpu_timer</a></code> is a refinement of
 <code>cpu_timer</code> that automatically reports the elapsed times when an <code>
 auto_cpu_timer</code> object is destroyed.</p>
@@ -298,7 +296,7 @@ while (more_transactions)
   <h3 dir="ltr"><a name="Recommendations">Recommendations</a></h3>
 
   <p dir="ltr">Think about what is important to your application. For a 
-  production process, the wall-clock time may be what is most important. For 
+  production process, the wall clock time may be what is most important. For 
   studying the efficiency of code, total CPU time (user + system) is often a much better measure.</p>
 
   <p dir="ltr">A useful recommendation is to never trust timings unless they are 
@@ -335,7 +333,7 @@ library</i>. </p>
 {
   namespace timer
   {
-    class <a href="#Class-cpu_timer">cpu_timer</a>;       // wall-clock, user, and system timer
+    class <a href="#Class-cpu_timer">cpu_timer</a>;       // wall clock, user, and system timer
     class <a href="#Class-auto_cpu_timer">auto_cpu_timer</a>;  // automatic report() on destruction 
 
     typedef boost::int_least64_t nanosecond_type;
@@ -384,65 +382,62 @@ POSIX.</p>
 
 <h3><a name="cpu_times">Struct <code>cpu_times</code></a></h3>
 
-<p>Struct <code>cpu_times</code> packages three elapsed times:</p>
+<p>Struct <code>cpu_times</code> packages the elapsed wall clock time, user 
+process CPU time, and system process CPU time. See
+<a href="#Current-time-values">Current time values</a> for definitions of the 
+source of these elapsed times.</p>
 
-<ul>
-  <li>Wall clock elapsed time, equivalent to the time that would be recorded by 
-  a stopwatch.</li>
-  <li>User elapsed CPU time. Defined by POSIX as &quot;the CPU time charged for the 
-  execution of user instructions of the calling process.&quot;</li>
-  <li>System elapsed CPU time. Defined by POSIX as &quot;the CPU time charged for 
-  execution by the system on behalf of the calling process.&quot;</li>
-</ul>
+<pre><span style="background-color: #D7EEFF">void clear();</span></pre>
+<blockquote>
+  <p><i>Effects:</i> <code>wall = user = system = 0LL</code>.</p>
+</blockquote>
 
-<h3><a name="Non-member-functions">Non-member functions</a></h3>
+<h3><a name="Namespace-scope-functions">Namespace scope functions</a></h3>
 
 <pre><span style="background-color: #D7EEFF">std::string </span><a name="format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(const </span><a href="#cpu_times"><span style="background-color: #D7EEFF">cpu_times</span></a><span style="background-color: #D7EEFF">&amp; times, short places, const std::string&amp; format);
 std::string </span><a name="format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(const </span><a href="#cpu_times"><span style="background-color: #D7EEFF">cpu_times</span></a><span style="background-color: #D7EEFF">&amp; times, short places = default_places);</span></pre>
 <blockquote>
 
-<p><i>Overview: </i>Converts the <code>times</code> argument's values to strings 
-representing seconds to a given number of decimal <code>places</code>, and 
-inserts them into a return string under control of the <code>format</code> 
-string.</p>
+<p><i>Overview: </i>Converts <code>times</code>'s values to strings representing 
+seconds to <code>places</code> decimal places, and inserts them into the return 
+string as controlled by <code>format</code>.</p>
 
-<p><i>Effects:</i> If <code>places</code> is less than 0,&nbsp; it is set to <code>default_places</code>. If <code>places</code> is 
-more than 9, it is set to 9. For the overload without the <code>format</code> 
+<p><i>Remarks:</i> For the overload without the <code>format</code> 
 argument, the <a href="#Default-format">default format</a> is used as <code>format</code>.</p>
 
 <p><i>Returns:</i> A string that is a copy of <code>format</code>, except that any 
 instances of the sequences shown below are replaced by the indicated value. 
 Times are reported in seconds, 
-shown to <code>places</code> decimal places. Percentage is reported to one 
+shown to <code>std::max(0, std::min(default_places, 9))</code> decimal places. Percentage is reported to one 
 decimal place. [<i>Note:</i> percentage may exceed 100% due to differences in 
 how operating systems measure various times. <i>--end note</i>]</p>
 
 <p><i><b><a name="Format-replacement-sequences">Format replacement sequences</a></b></i></p>
 
-  <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="39%">
+  <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
     <tr>
-      <td width="25%"><b><i>Sequence</i></b></td>
-      <td width="75%"><b><i>Replacement value</i></b></td>
+      <td align="center" bgcolor="#D7EEFF"><b><i>Sequence</i></b></td>
+      <td align="center" bgcolor="#D7EEFF"><b><i>Replacement value</i></b></td>
     </tr>
     <tr>
-      <td width="25%" align="center"><code>%w</code></td>
-      <td width="75%"><code>times.wall</code></td>
+      <td align="center"><code>%w</code></td>
+      <td><code>times.wall</code></td>
     </tr>
     <tr>
-      <td width="25%" align="center"><code>%u</code></td>
-      <td width="75%"><code>times.user</code></td>
+      <td align="center"><code>%u</code></td>
+      <td><code>times.user</code></td>
     </tr>
     <tr>
-      <td width="25%" align="center"><code>%s</code></td>
-      <td width="75%"><code>times.system</code></td>
+      <td align="center"><code>%s</code></td>
+      <td><code>times.system</code></td>
     </tr>
     <tr>
-      <td width="25%" align="center"><code>%t</code></td>
-      <td width="75%"><code>times.user + times.system</code></td>
+      <td align="center"><code>%t</code></td>
+      <td><code>times.user + times.system</code></td>
     </tr>
     <tr>
-      <td width="25%" align="center"><code>%p</code></td>
-      <td width="75%">The percentage of <code>times.wall</code> represented by <code>
+      <td align="center"><code>%p</code></td>
+      <td>The percentage of <code>times.wall</code> represented by <code>
       times.user + times.system</code></td>
     </tr>
   </table>
@@ -450,15 +445,25 @@ how operating systems measure various times. <i>--end note</i>]</p>
 
 <h3><a name="Class-cpu_timer">Class <code>cpu_timer</code></a></h3>
 
-<p> <code>cpu_timer</code> objects measure wall-clock elapsed time, process elapsed 
-time charged to the user, and process elapsed time charged to the system.</p>
+<p> <code>cpu_timer</code> objects measure wall clock elapsed time and process elapsed 
+time charged to the user and system.</p>
 
-<p><i><b><a name="Current-time-values">Current time values</a></b></i> are 
-obtained as follows: Current wall-clock time is obtained from the Boost.Chrono <code>
-high_resolution_clock</code>. Current user and system time values are obtained 
-from the appropriate operating system API functions such as <code>times()</code> 
-on POSIX or <code>
-GetProcessTimes()</code> on Windows.</p>
+<p><i><b><a name="Current-time-values">Current time values</a></b></i> are the 
+current wall clock time, user process time, and system process time as provided 
+by the operating system:</p>
+
+<ul>
+  <li>Wall clock time is time as would be measured by 
+  an ordinary wristwatch or clock on the wall.</li>
+  <li>User process time is &quot;the CPU time charged for the 
+  execution of user instructions of the calling process.&quot; See
+  <a href="http://pubs.opengroup.org/onlinepubs/9699919799/functions/times.html">
+  POSIX</a>.</li>
+  <li>System process time is &quot;the CPU time charged for 
+  execution by the system on behalf of the calling process.&quot; See
+  <a href="http://pubs.opengroup.org/onlinepubs/9699919799/functions/times.html">
+  POSIX</a>.</li>
+</ul>
 
 <h3> <a name="cpu_timer-synopsis"> <code>cpu_timer</code> synopsis</a></h3>
 
@@ -503,20 +508,18 @@ GetProcessTimes()</code> on Windows.</p>
 observers</a></h3>
 <pre><span style="background-color: #D7EEFF">bool</span><span style="background-color: #D7EEFF"> <a name="is_stopped">is_stopped</a>() const noexcept;</span></pre>
 <blockquote>
-  <p><i>Returns:</i> <code>true</code> if the most recent call to an
-  <a href="#cpu_timer-actions">action</a> function was to <a href="#stop">stop()</a>, 
+  <p><i>Returns:</i> <code>true</code> if <a href="#stop">stop()</a> was the most recent 
+  <a href="#cpu_timer-actions">action</a> function called, 
   otherwise <code>false</code>.</p>
 </blockquote>
 <pre><span style="background-color: #D7EEFF">cpu_times</span><span style="background-color: #D7EEFF"> <a name="elapsed">elapsed</a>() const noexcept;</span></pre>
 <blockquote>
-  <p><i>Overview:</i> If the timer is running, returns the cumulative elapsed 
-  time. If the timer is stopped, returns the cumulative elapsed time previously 
-  stored by <a href="#stop">stop()</a>.</p>
 
-  <p><i>Returns:</i> If <code>is_stopped()</code>, the stored time values. 
-  Otherwise, the difference between the 
-  <a href="#Current-time-values">current time values</a> and the stored time 
-  values.</p>
+  <p><i>Returns:</i> If <code>is_stopped()</code>, the accumulated elapsed times 
+  as of the previous <a href="#stop">stop()</a>. Otherwise, the elapsed times 
+  accumulated between the most recent call to <a href="#start">start()</a> or
+<a href="#resume">resume()</a> and the <a href="#Current-time-values">current 
+  time values</a>.</p>
 
 </blockquote>
 <pre><span style="background-color: #D7EEFF">std::string       </span><a href="#cpu_timer-format"><span style="background-color: #D7EEFF">format</span></a><span style="background-color: #D7EEFF">(int</span><span style="background-color: #D7EEFF"> places, const std::string&amp; format) const;
@@ -531,7 +534,7 @@ actions</a></h3>
 <pre><span style="background-color: #D7EEFF">void <a name="start">start</a>() noexcept;</span></pre>
 <blockquote>
 
-<p dir="ltr"><i>Effects:</i> Stores the <a href="#Current-time-values">current time values</a>.</p>
+<p dir="ltr"><i>Effects:</i> Begins accumulating elapsed time as of the <a href="#Current-time-values">current time values</a>.</p>
 
 <p><i>Postconditions:</i> <code>!is_stopped()</code>.</p>
 
@@ -539,10 +542,14 @@ actions</a></h3>
 <pre><span style="background-color: #D7EEFF">void <a name="stop">stop</a>() noexcept;</span></pre>
 <blockquote>
 
-<p><i>Effects:</i> If <code>!is_stopped()</code>, stores the difference between 
-the <a href="#Current-time-values">current time values</a> and the time values 
-stored by the most recent call to <a href="#start">start()</a> or
-<a href="#resume">resume()</a>.</p>
+<p><i>Effects:</i> If <code>!is_stopped()</code>, stops accumulating elapsed 
+time as of the <a href="#Current-time-values">current time values</a>.</p>
+
+<blockquote>
+
+<p>[<i>Note:</i> This is observable via <code>elapsed()</code>. <i>-- end note</i>]</p>
+
+</blockquote>
 
 <p><i>Postconditions:</i> <code>is_stopped()</code>.</p>
 
@@ -550,11 +557,8 @@ stored by the most recent call to <a href="#start">start()</a> or
 <pre><span style="background-color: #D7EEFF">void <a name="resume">resume</a>() noexcept;</span></pre>
 <blockquote>
   <p><i>Overview:</i> Restarts the timer, accumulating additional elapsed time.</p>
-  <p><i>Effects:</i> If is_stopped(), store the
-<a href="#Current-time-values">current time values</a> less the previously 
-  stored cumulative elapsed times.&nbsp; Otherwise, no effect. [<i>Note</i>: 
-  Subtracting the previous elapsed times has the effect of accumulating 
-  additional elapsed time. <i>--end note</i>]</p>
+  <p><i>Effects:</i> If <code>is_stopped()</code>, resumes accumulating 
+  additional elapsed time, as of the <a href="#Current-time-values">current time values</a>. Otherwise, no effect.</p>
 </blockquote>
 <h3><a name="Class-auto_cpu_timer">Class <code>auto_cpu_timer</code></a></h3>
 
@@ -678,7 +682,7 @@ members.</p>
 
 <hr>
 <p><font size="2">Revised:
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->07 October 2011<!--webbot bot="Timestamp" endspan i-checksum="32191" --></font></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->08 October 2011<!--webbot bot="Timestamp" endspan i-checksum="32193" --></font></p>
 <p><font size="2">© Copyright Beman Dawes, 2006<br>
 © Copyright Beman Dawes and Robert Stewart, 2011</font></p>
 <p><font size="2">Distributed under the Boost Software License, Version 1.0.  See <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/ LICENSE_1_0.txt</a></font></p>
