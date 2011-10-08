@@ -19,7 +19,7 @@
 #include <boost/system/error_code.hpp>
 #include <boost/chrono/detail/system.hpp>
 #endif
-#include <boost/chrono/io/clock_string.hpp>
+#include <boost/chrono/clock_string.hpp>
 
 #ifndef BOOST_CHRONO_HEADER_ONLY
 #include <boost/config/abi_prefix.hpp> // must be the last #include

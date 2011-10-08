@@ -66,7 +66,7 @@ TODO:
 #include <boost/chrono/detail/system.hpp>
 #include <boost/system/error_code.hpp>
 #endif
-#include <boost/chrono/io/clock_string.hpp>
+#include <boost/chrono/clock_string.hpp>
 
 #include <ctime>
 

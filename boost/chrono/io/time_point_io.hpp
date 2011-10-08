@@ -7,7 +7,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
 // This code was adapted by Vicente from Howard Hinnant's experimental work
-// on chrono i/o under lvm/libc++  to Boost
+// on chrono i/o to Boost
 
 #ifndef BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 #define BOOST_CHRONO_IO_TIME_POINT_IO_HPP

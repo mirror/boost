@@ -23,7 +23,7 @@
 #endif
 #include <iostream>
 #include <boost/type_traits/common_type.hpp>
-#include <boost/chrono/io/clock_string.hpp>
+#include <boost/chrono/clock_string.hpp>
 
 
 #ifndef BOOST_CHRONO_HEADER_ONLY
