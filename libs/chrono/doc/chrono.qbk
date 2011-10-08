@@ -102,7 +102,7 @@
 
 [template chrono_conf[link_text] [link chrono.reference.cpp0x.chrono_chrono_hpp.conf [link_text]]]
 
-[def __BOOST_CHRONO_HEADER_ONLY [link chrono.reference.cpp0x.chrono_hpp.conf.header_only `BOOST_CHRONO_HEADER_ONLY`]]
+[def __BOOST_CHRONO_HEADER_ONLY [link chrono.reference.cpp0x.chrono_chrono_hpp.conf.header_only `BOOST_CHRONO_HEADER_ONLY`]]
 [def __BOOST_SYSTEM_INLINED `BOOST_SYSTEM_INLINED`]
 
 [def __BOOST_CHRONO_USES_STATIC_ASSERT [chrono_conf `BOOST_CHRONO_USES_STATIC_ASSERT`]]
@@ -2363,12 +2363,40 @@ As `constexpr` will not be supported by some compilers, it is replaced in the co
 
 The documentation doesn't use these macros.
 
+[/=============================================]
+[section:chrono_include_hpp Header `<boost/chrono/include.hpp>`]
+[/=============================================]
+
+Include all the chrono header files.
+
+    #include <boost/chrono/chrono.hpp>
+    #include <boost/chrono/chrono_io.hpp>
+    #include <boost/chrono/process_cpu_clocks.hpp>
+    #include <boost/chrono/thread_clocks.hpp>
+    #include <boost/chrono/ceil.hpp>
+    #include <boost/chrono/floor.hpp>
+    #include <boost/chrono/round.hpp>
+
+[endsect]
+
 [section:cpp0x Included on the C++11 Recommendation]
 
 
 [/=============================================]
 [section:chrono_hpp Header `<boost/chrono.hpp>`]
 [/=============================================]
+
+Include only the standard files.
+
+    #include <boost/chrono/chrono.hpp>
+
+[endsect]
+
+[/=============================================]
+[section:chrono_chrono_hpp Header `<boost/chrono.hpp>`]
+[/=============================================]
+
+Include only the standard files.
 
     #include <boost/chrono/duration.hpp>
     #include <boost/chrono/time_point.hpp>
@@ -2414,11 +2442,23 @@ Depending on the static assertion used system you will have an hint of the faili
 
 [endsect]
 
+[section:no_hybrid Don't provide Hybrid Error Handling]
+
+When `BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING` is defined the lib don't provides the hybrid error handling prototypes:
+
+  Clock::time_point Clock::now(system::error_code&ec=boost::thows());
+
+This allow to be closer to the standard and to avoid the Boost.System dependency, making possible to have Boost.Chrono as a header-only library.
+
+[endsect] [/section:header_only How to Build Boost.Chrono as a Header Only Library?]
+
 [section:header_only How to Build Boost.Chrono as a Header Only Library?]
 
 When `BOOST_CHRONO_HEADER_ONLY` is defined the lib is header-only.
 
 If in addition `BOOST_USE_WINDOWS_H` is defined `<windows.h>` is included, otherwise files in `boost/detail/win` are used to reduce the impact of including `<windows.h>`.
+
+However, you will either need to define `BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING` or link with Boost.System.
 
 [endsect] [/section:header_only How to Build Boost.Chrono as a Header Only Library?]
 
@@ -3716,6 +3756,38 @@ __high_resolution_clock satisfy the __clock_req.
 
 [endsect]
 
+[/==================================================================]
+[section:clock_strings_hpp Header `<boost/chrono/clock_strings.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+    namespace chrono {
+
+        template <class __Clock, class CharT>
+        struct clock_string;
+
+    }
+    }
+
+[section:clock_string Template Class `clock_string<>`]
+
+    template <class __Clock, class CharT>
+    struct clock_string;
+
+This template must be specialized for specific clocks. The specialization must define the following functions
+
+        static std::basic_string<CharT> name();
+        static std::basic_string<CharT> since();
+
+`clock_string<>::name()` return the clock name, which usually corresponds to the class name.
+
+`clock_string<>::since()` return the textual format of the clock epoch.
+
+
+[endsect]
+
+[endsect] [/section:clock_strings_hpp Header `<boost/chrono/clock_strings.hpp>`]
+
 [/=============================================]
 [section:chrono_typeof_hpp Header `<boost/chrono/typeof/boost/chrono/chrono.hpp>`]
 [/=============================================]
@@ -3739,9 +3811,6 @@ Register __duration`<>` and __time_point`<>` class templates to [*Boost.Typeof].
 
         template <class CharT>
         class duration_punct;
-
-        template <class Clock, class CharT>
-        struct clock_string;
 
         template <class CharT, class Traits>
             std::basic_ostream<CharT, Traits>&
@@ -3802,130 +3871,6 @@ The __duration unit names can be customized through the facet: __duration_punct.
             bool is_short_name() const;
             bool is_long_name() const;
         };
-
-[endsect]
-
-[section:clock_string Template Class `clock_string<>`]
-
-    template <class Clock, class CharT>
-    struct clock_string;
-
-This template must be specialized for specific clocks. The specialization must define the following functions
-
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-
-`clock_string<>::name()` return the clock name, which usually corresponds to the class name.
-`clock_string<>::since()` return the textual format of the clock epoch.
-
-
-[endsect]
-
-[section:clock_string_system_clock `clock_string<system_clock>` Specialization]
-
-    template <class CharT>
-    struct clock_string<system_clock, CharT>
-    {
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-    };
-
-`clock_string<>::name()` returns "system_clock".
-`clock_string<>::since()` returns " since Jan 1, 1970"
-
-
-[endsect]
-
-[section:clock_string_steady_clock `clock_string<steady_clock>` Specialization]
-
-    #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-
-    template <class CharT>
-    struct clock_string<steady_clock, CharT>
-    {
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-    };
-    #endif
-
-`clock_string<>::name()` returns "steady_clock".
-`clock_string<>::since()` returns " since boot"
-
-[endsect]
-
-[section:clock_string_thread_clock `clock_string<thread_clock>` Specialization]
-
-    #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
-    template <class CharT>
-    struct clock_string<thread_clock, CharT>
-    {
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-    };
-    #endif
-
-`clock_string<>::name()` returns "thread_clock".
-`clock_string<>::since()` returns " since thread start-up"
-
-
-[endsect]
-
-[section:clock_string_process_real_cpu_clock `clock_string<process_real_cpu_clock>` Specialization]
-
-    template <class CharT>
-    struct clock_string<process_real_cpu_clock, CharT>
-    {
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-    };
-
-`clock_string<>::name()` returns "process_real_cpu_clock".
-`clock_string<>::since()` returns " since process start-up"
-
-[endsect]
-
-[section:clock_string_process_user_cpu_clock `clock_string<process_user_cpu_clock>` Specialization]
-
-    template <class CharT>
-    struct clock_string<process_user_cpu_clock, CharT>
-    {
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-    };
-
-`clock_string<>::name()` returns "process_user_cpu_clock".
-`clock_string<>::since()` returns " since process start-up"
-
-
-[endsect]
-
-[section:clock_string_process_system_cpu_clock `clock_string<process_system_cpu_clock>` Specialization]
-
-    template <class CharT>
-    struct clock_string<process_system_cpu_clock, CharT>
-    {
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-    };
-
-`clock_string<>::name()` returns "process_system_cpu_clock".
-`clock_string<>::since()` returns " since process start-up"
-
-
-[endsect]
-
-[section:clock_string_process_cpu_clock `clock_string<process_cpu_clock>` Specialization]
-
-    template <class CharT>
-    struct clock_string<process_cpu_clock, CharT>
-    {
-        static std::basic_string<CharT> name();
-        static std::basic_string<CharT> since();
-    };
-
-`clock_string<>::name()` returns "process_cpu_clock".
-`clock_string<>::since()` returns " since process start-up"
-
 
 [endsect]
 
@@ -4931,8 +4876,10 @@ All the units are given using the suffix "s" following the System International 
 
 [*New Features:]
 
-* [@http://svn.boost.org/trac/boost/ticket/5979 #5979]  Added chrono rounding utilities as defined By Howard Hinnant [@http://home.roadrunner.com/~hinnant/duration_io/chrono_util.html here].
+* [@http://svn.boost.org/trac/boost/ticket/5979 #5979] Added chrono rounding utilities as defined By Howard Hinnant [@http://home.roadrunner.com/~hinnant/duration_io/chrono_util.html here].
 * [@http://svn.boost.org/trac/boost/ticket/5978 #5978] Add BOOST_CHRONO_HAS_PROCESS_CLOCKS to know if process clocks are available.
+* [@http://svn.boost.org/trac/boost/ticket/5998 #5998] Make possible to don't provide hybrid error handling.
+
 * [@http://svn.boost.org/trac/boost/ticket/5906 #5906] Take in account the constexpr as defined in the standard.
 * [@http://svn.boost.org/trac/boost/ticket/5907 #5907] Take in account noexcept for compilers supporting it.
 
