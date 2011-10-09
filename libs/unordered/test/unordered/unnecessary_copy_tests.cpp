@@ -357,8 +357,7 @@ namespace unnecessary_copy_tests
 
 #if (defined(__GNUC__) && __GNUC__ > 4) || \
     (defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ > 2) || \
-    (defined(BOOST_MSVC) && BOOST_MSVC >= 1600 ) || \
-    (!defined(__GNUC__) && !defined(BOOST_MSVC))
+    (defined(BOOST_MSVC) && BOOST_MSVC >= 1600 )
         count_copies part;
         reset();
         std::pair<count_copies const&, count_copies const&> a_ref(part, part);
