@@ -46,6 +46,10 @@ __examples
 
 [*See also:] [link boost_typetraits.category.value_traits.operators Operator Type Traits]
 
+[*Limitation:]
+
+* Requires a compiler with working SFINAE.
+
 [*Known issues:]
 
 * This trait cannot detect whether binary `operator==` is public or not:

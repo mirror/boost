@@ -414,6 +414,10 @@ struct has_unary_minus : ::boost::integral_constant<bool,(::boost::detail::has_u
 } // namespace boost
 ``
 
+[heading Limitation]
+
+* Requires a compiler with working SFINAE.
+
 [heading Known issues]
 
 * These traits cannot detect whether the operators are public or not:
