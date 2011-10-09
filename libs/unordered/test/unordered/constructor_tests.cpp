@@ -15,8 +15,6 @@
 #include "../helpers/input_iterator.hpp"
 #include "../helpers/invariants.hpp"
 
-#include <iostream>
-
 namespace constructor_tests {
 
 test::seed_t seed(356730);

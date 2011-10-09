@@ -57,9 +57,12 @@ void assign_tests1(T*,
 
         T y;
         y.max_load_factor(x.max_load_factor() / 20);
+        float mlf = x.max_load_factor();
         y = x;
+        tracker.compare(x);
         tracker.compare(y);
-        BOOST_TEST(x.max_load_factor() == y.max_load_factor());
+        BOOST_TEST(x.max_load_factor() == mlf);
+        BOOST_TEST(y.max_load_factor() == mlf);
     }
 }
 

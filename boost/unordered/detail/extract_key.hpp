@@ -33,7 +33,8 @@ namespace detail {
         static choice1::type test(T2 const&);
         static choice2::type test(Key const&);
         
-        enum { value = sizeof(test(make<T>())) == sizeof(choice2::type) };
+        enum { value = sizeof(test(boost::unordered::detail::make<T>())) ==
+            sizeof(choice2::type) };
         
         typedef typename boost::detail::if_true<value>::
             BOOST_NESTED_TEMPLATE then<Key const&, no_key>::type type;
@@ -93,7 +94,7 @@ namespace detail {
     struct map_extractor
     {
         typedef ValueType value_type;
-        typedef typename ::boost::remove_const<Key>::type key_type;
+        typedef typename boost::remove_const<Key>::type key_type;
 
         static key_type const& extract(value_type const& v)
         {

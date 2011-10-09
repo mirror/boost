@@ -128,7 +128,7 @@ UNORDERED_AUTO_TEST(test1)
     std::equal_to<int> equal_to;
     int value = 0;
 
-    std::cout<<"Test unordered_set.\n";
+    std::cout<<"Test unordered_set." << std::endl;
 
     boost::unordered_set<int> set;
     
@@ -145,7 +145,7 @@ UNORDERED_AUTO_TEST(test1)
     unordered_set_test(set2, value);
     unordered_copyable_test(set2, value, value, hash, equal_to);
 
-    std::cout<<"Test unordered_multiset.\n";
+    std::cout<<"Test unordered_multiset." << std::endl;
 
     boost::unordered_multiset<int> multiset;
     
