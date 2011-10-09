@@ -65,6 +65,7 @@ namespace proto = boost::proto;
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(tag_type)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(action_name)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(not_intern_euml_state)
 
 namespace boost { namespace msm { namespace front { namespace euml
 {
@@ -158,6 +159,19 @@ struct get_fct
 >::type type;
 };
 
+// used to differentiate between different types of euml_state's
+template <class T,class Enable=void>
+struct get_state_name 
+{
+    typedef T type;
+};
+
+template <class T>
+struct get_state_name<T,typename ::boost::enable_if<has_not_intern_euml_state<T> >::type>
+{
+    typedef typename T::In::type type;
+};
+
 template <class T>
 struct get_action_name 
 {
@@ -225,15 +239,26 @@ struct euml_event: proto::extends<typename proto::terminal<event_tag>::type, EVT
     };
 };
 template <class STATE>
-struct euml_state: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, state_domain>
+struct euml_state_intern: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, state_domain>
 {
     typedef state_tag euml_tag_type;
     using proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>::operator=;
     template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5 
 #ifdef BOOST_MSVC 
- ,class Arg6 
+        ,class Arg6 
 #endif
->
+    >
+    struct In
+    {
+        typedef STATE type;
+    };
+};
+template <class STATE>
+struct euml_state: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, state_domain>
+{
+    typedef state_tag euml_tag_type;
+    typedef int not_intern_euml_state;
+    using proto::extends<typename proto::terminal<state_tag>::type, STATE, state_domain>::operator=;
     struct In
     {
         typedef STATE type;
@@ -1334,6 +1359,37 @@ struct Process_ <ToProcessEvt,Param1,Param2,Param3,void>
         (Param3()(evt,fsm,state)).process_event(ToProcessEvt());
     }
 };
+
+//version for process_(event_)
+template <>
+struct Process_ <GetEvent_<void>,void,void,void,void>
+    : euml_action<Process_<GetEvent_<void>, void, void, void, void > >
+{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef void type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef void type;
+    };
+
+    typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
+
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    void operator()(EVT const& evt,FSM& fsm,SourceState& ,TargetState& )const
+    {
+        fsm.process_event(evt);
+    }
+    template <class Event,class FSM,class STATE>
+    void operator()(Event const& evt,FSM& fsm,STATE&  )const
+    {
+        fsm.process_event(evt);
+    }
+};
+
 struct process_tag {};
 struct Process_Helper: proto::extends< proto::terminal<process_tag>::type, Process_Helper, sm_domain>
 {
@@ -1350,6 +1406,177 @@ struct Process_Helper: proto::extends< proto::terminal<process_tag>::type, Proce
     };
 };
 Process_Helper const process_ = Process_Helper();
+
+template <class Param1, class Param2, class Param3, class Param4>
+struct Reprocess_ : euml_action<Reprocess_<Param1, Param2, Param3, Param4> >
+{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef void type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef void type;
+    };
+
+    typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
+
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    void operator()(EVT const& evt,FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        (Param1()(evt,fsm,src,tgt)).process_event(evt);
+        (Param2()(evt,fsm,src,tgt)).process_event(evt);
+        (Param3()(evt,fsm,src,tgt)).process_event(evt);
+        (Param4()(evt,fsm,src,tgt)).process_event(evt);
+    }
+    template <class Event,class FSM,class STATE>
+    void operator()(Event const& evt,FSM& fsm,STATE&  state)const
+    {
+        (Param1()(evt,fsm,state)).process_event(evt);
+        (Param2()(evt,fsm,state)).process_event(evt);
+        (Param3()(evt,fsm,state)).process_event(evt);
+        (Param4()(evt,fsm,state)).process_event(evt);
+    }
+};
+template <>
+struct Reprocess_ <void,void,void,void>
+    : euml_action<Reprocess_<void, void, void, void > >
+{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef void type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef void type;
+    };
+
+    typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
+
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    void operator()(EVT const& evt,FSM& fsm,SourceState& ,TargetState& )const
+    {
+        fsm.process_event(evt);
+    }
+    template <class Event,class FSM,class STATE>
+    void operator()(Event const& evt,FSM& fsm,STATE&  )const
+    {
+        fsm.process_event(evt);
+    }
+};
+
+template <class Param1>
+struct Reprocess_ <Param1,void,void,void>
+    : euml_action<Reprocess_<Param1, void, void, void> >
+{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef void type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef void type;
+    };
+
+    typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
+
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    void operator()(EVT const& evt,FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        (Param1()(evt,fsm,src,tgt)).process_event(evt);
+    }
+    template <class Event,class FSM,class STATE>
+    void operator()(Event const& evt,FSM& fsm,STATE&  state)const
+    {
+        (Param1()(evt,fsm,state)).process_event(evt);
+    }
+};
+
+template <class Param1, class Param2>
+struct Reprocess_ <Param1,Param2,void,void>
+    : euml_action<Reprocess_<Param1, Param2, void, void> >
+{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef void type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef void type;
+    };
+
+    typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
+
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    void operator()(EVT const& evt,FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        (Param1()(evt,fsm,src,tgt)).process_event(evt);
+        (Param2()(evt,fsm,src,tgt)).process_event(evt);
+    }
+    template <class Event,class FSM,class STATE>
+    void operator()(Event const& evt,FSM& fsm,STATE&  state)const
+    {
+        (Param1()(evt,fsm,state)).process_event(evt);
+        (Param2()(evt,fsm,state)).process_event(evt);
+    }
+};
+
+template <class Param1, class Param2, class Param3>
+struct Reprocess_ <Param1,Param2,Param3,void>
+    : euml_action<Reprocess_<Param1, Param2, Param3, void> >
+{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef void type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef void type;
+    };
+
+    typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
+
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    void operator()(EVT const& evt,FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        (Param1()(evt,fsm,src,tgt)).process_event(evt);
+        (Param2()(evt,fsm,src,tgt)).process_event(evt);
+        (Param3()(evt,fsm,src,tgt)).process_event(evt);
+    }
+    template <class Event,class FSM,class STATE>
+    void operator()(Event const& evt,FSM& fsm,STATE&  state)const
+    {
+        (Param1()(evt,fsm,state)).process_event(evt);
+        (Param2()(evt,fsm,state)).process_event(evt);
+        (Param3()(evt,fsm,state)).process_event(evt);
+    }
+};
+struct reprocess_tag {};
+struct Reprocess_Helper: proto::extends< proto::terminal<reprocess_tag>::type, Reprocess_Helper, sm_domain>
+{
+    Reprocess_Helper(){}
+    using proto::extends< proto::terminal<reprocess_tag>::type, Reprocess_Helper, sm_domain>::operator=;
+    template <class Arg1,class Arg2,class Arg3,class Arg4,class Arg5 
+#ifdef BOOST_MSVC 
+ ,class Arg6 
+#endif
+>
+    struct In
+    {
+        typedef Reprocess_<Arg1,Arg2,Arg3,Arg4> type;
+    };
+};
+Reprocess_Helper const reprocess_ = Reprocess_Helper();
 
 template <class ToProcessEvt,class Value,class Param1, class Param2, class Param3>
 struct Process2_ : euml_action<Process2_<ToProcessEvt,Value, Param1, Param2, Param3> >
