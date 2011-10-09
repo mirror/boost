@@ -11,6 +11,7 @@
 #define BOOST_CHRONO_PROCESS_CPU_CLOCKS_HPP
 
 
+#include <boost/chrono/config.hpp>
 
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
 
@@ -177,13 +178,13 @@ namespace boost { namespace chrono {
             }
 
             template <class CharT, class Traits>
-            void print(std::basic_ostream<CharT, Traits>& os) const 
+            void print(std::basic_ostream<CharT, Traits>& os) const
             {
                 os <<  "{"<< real <<";"<< user <<";"<< system << "}";
             }
 
             template <class CharT, class Traits>
-            void read(std::basic_istream<CharT, Traits>& is) const 
+            void read(std::basic_istream<CharT, Traits>& is) const
             {
                 typedef std::istreambuf_iterator<CharT, Traits> in_iterator;
                 in_iterator i(is);
@@ -313,8 +314,8 @@ namespace chrono
     };
 
     template <class CharT, class Traits, typename Rep>
-    std::basic_ostream<CharT, Traits>& 
-    operator<<(std::basic_ostream<CharT, Traits>& os, 
+    std::basic_ostream<CharT, Traits>&
+    operator<<(std::basic_ostream<CharT, Traits>& os,
         process_times<Rep> const& rhs)
     {
         rhs.print(os);
@@ -322,8 +323,8 @@ namespace chrono
     }
 
     template <class CharT, class Traits, typename Rep>
-    std::basic_istream<CharT, Traits>& 
-    operator>>(std::basic_istream<CharT, Traits>& is, 
+    std::basic_istream<CharT, Traits>&
+    operator>>(std::basic_istream<CharT, Traits>& is,
         process_times<Rep> const& rhs)
     {
         rhs.read(is);
@@ -465,8 +466,8 @@ namespace std {
                       (std::numeric_limits<Rep>::max)());
         }
         static Res lowest() throw()
-        { 
-            return (min)(); 
+        {
+            return (min)();
         }
         static const int digits = std::numeric_limits<Rep>::digits+
                         std::numeric_limits<Rep>::digits+

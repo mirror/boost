@@ -10,9 +10,9 @@
 #ifndef BOOST_CHRONO_THREAD_CLOCK_HPP
 #define BOOST_CHRONO_THREAD_CLOCK_HPP
 
+#include <boost/chrono/config.hpp>
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
 
-#include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
