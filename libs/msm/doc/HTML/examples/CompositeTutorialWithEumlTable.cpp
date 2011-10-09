@@ -112,8 +112,9 @@ namespace
 
     };
     // Playing Submachine back-end
-    struct Playing_impl : public boost::msm::back::state_machine<Playing_>,
-                          public msm::front::euml::euml_state<Playing_>
+    typedef boost::msm::back::state_machine<Playing_> Playing_helper;
+    struct Playing_impl : public Playing_helper,
+                          public msm::front::euml::euml_state<Playing_helper>
     {
     };
 

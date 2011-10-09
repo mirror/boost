@@ -126,51 +126,44 @@
             <title>Founding idea</title>
             <para>Let's start with an example taken from the C++ Template Metaprogramming
                 book:</para>
-            <para>
-                <code>class player : public state_machine&lt;player></code></para>
-            <para><code>{ </code></para>
-            <para><code>// The list of FSM states enum states { Empty, Open, Stopped, Playing,
-                    Paused , initial_state = Empty }; </code></para>
-            <para><code>// transition actions void start_playback(play const&amp;) { std::cout
-                    &lt;&lt; "player::start_playback\n"; } </code></para>
-            <para><code>void open_drawer(open_close const&amp;) { std::cout &lt;&lt;
-                    "player::open_drawer\n"; } </code></para>
-            <para><code>void close_drawer(open_close const&amp;) { std::cout &lt;&lt;
-                    "player::close_drawer\n"; } </code></para>
-            <para><code>void store_cd_info(cd_detected const&amp;) { std::cout &lt;&lt;
-                    "player::store_cd_info\n"; } </code></para>
-            <para><code>void stop_playback(stop const&amp;) { std::cout &lt;&lt;
-                    "player::stop_playback\n"; } </code></para>
-            <para><code>void pause_playback(pause const&amp;) { std::cout &lt;&lt;
-                    "player::pause_playback\n"; } </code></para>
-            <para><code>void resume_playback(play const&amp;) { std::cout &lt;&lt;
-                    "player::resume_playback\n"; } </code></para>
-            <para><code>void stop_and_open(open_close const&amp;) { std::cout &lt;&lt;
-                    "player::stop_and_open\n"; } </code></para>
-            <para><code>friend class state_machine&lt;player>; </code></para>
-            <para><code>typedef player p; // makes transition table cleaner </code></para>
-            <para><code>// Transition table </code></para>
-            <para><code>struct transition_table : mpl::vector11&lt; </code></para>
-            <para><code>row &lt; Stopped , play , Playing , &amp;p::start_playback >, </code></para>
-            <para><code>row &lt; Stopped , open_close , Open , &amp;p::open_drawer >, </code></para>
-            <para><code>row &lt; Open , open_close , Empty , &amp;p::close_drawer >, </code></para>
-            <para><code>row &lt; Empty , open_close , Open , &amp;p::open_drawer >, </code></para>
-            <para><code>row &lt; Empty , cd_detected , Stopped , &amp;p::store_cd_info >,
-                </code></para>
-            <para><code>row &lt; Playing , stop , Stopped , &amp;p::stop_playback >, </code></para>
-            <para><code>row &lt; Playing , pause , Paused , &amp;p::pause_playback >, </code></para>
-            <para><code>row &lt; Playing , open_close , Open , &amp;p::stop_and_open >,
-                </code></para>
-            <para><code>row &lt; Paused , play , Playing , &amp;p::resume_playback >, </code></para>
-            <para><code>row &lt; Paused , stop , Stopped , &amp;p::stop_playback >, </code></para>
-            <para><code>row &lt; Paused , open_close , Open , &amp;p::stop_and_open > </code></para>
-            <para><code>> {}; </code></para>
-            <para><code>// Replaces the default no-transition response. </code></para>
-            <para><code>template &lt;class Event> int no_transition(int state, Event const&amp; e) {
-                    std::cout &lt;&lt; "no transition from state " &lt;&lt; state &lt;&lt; " on
-                    event " &lt;&lt; typeid(e).name() &lt;&lt; std::endl; return state; } };</code>
-            </para>
-            <para><code>void test() { player p; p.process_event(open_close());...}</code></para>
+            <programlisting>class player : public state_machine&lt;player>
+{ 
+  // The list of FSM states enum states { Empty, Open, Stopped, Playing, Paused , initial_state = Empty }; 
+
+  // transition actions 
+  void start_playback(play const&amp;) { std::cout &lt;&lt; "player::start_playback\n"; } 
+  void open_drawer(open_close const&amp;) { std::cout &lt;&lt; "player::open_drawer\n"; } 
+  // more transition actions
+  ...
+  typedef player p; // makes transition table cleaner 
+  struct transition_table : mpl::vector11&lt; 
+  //    Start     Event        Target      Action                       
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Stopped , play       ,  Playing  , &amp;p::start_playback        >,
+    row&lt; Stopped , open_close ,  Open     , &amp;::open_drawer            >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Open    , open_close ,  Empty    , &amp;p::close_drawer          >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Empty   , open_close ,  Open     , &amp;p::open_drawer           >,
+    row&lt; Empty   , cd_detected,  Stopped  , &amp;p::store_cd_info         >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Playing , stop       ,  Stopped  , &amp;p::stop_playback         >,
+    row&lt; Playing , pause      ,  Paused   , &amp;p::pause_playback        >,
+    row&lt; Playing , open_close ,  Open     , &amp;p::stop_and_open         >,
+  //   +---------+------------+-----------+---------------------------+ 
+    row&lt; Paused  , play       ,  Playing  , &amp;p::resume_playback       >,
+    row&lt; Paused  , stop       ,  Stopped  , &amp;p::stop_playback         >,
+    row&lt; Paused  , open_close ,  Open     , &amp;p::stop_and_open         >
+  //   +---------+------------+-----------+---------------------------+ 
+  > {};
+  // Replaces the default no-transition response. 
+  template &lt;class Event> 
+  int no_transition(int state, Event const&amp; e)
+  { 
+    std::cout &lt;&lt; "no transition from state " &lt;&lt; state &lt;&lt; " on event " &lt;&lt; typeid(e).name() &lt;&lt; std::endl; 
+    return state; 
+  }
+};                        </programlisting>
             <para>This example is the foundation for the idea driving MSM: a descriptive and
                 expressive language based on a transition table with as little syntactic noise as
                 possible, all this while offering as many features from the UML 2.0 standard as
@@ -1900,12 +1893,16 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         xlink:href="examples/CompositeTutorialWithEumlTable.cpp">composite</link> implementation is slightly trickier because the submachine
                         has to be a msm::back::state_machine and a msm::front::euml::state. For
                         example:</para>
-                    <programlisting>struct front_end : public msm::front::state_machine_def&lt;front_end>
+                    <programlisting>// front-end like always
+struct front_end : public boost::msm::front::state_machine_def&lt;front_end>
 {
 ...
 };
-struct submachine : public boost::msm::back::state_machine&lt;front_end>,
-                    public msm::front::euml::euml_state&lt;submachine>
+// back-end like always
+typedef boost::msm::back::state_machine&lt;front_end> back_end;
+// this is new: make the submachine a eUML type
+struct submachine : public back_end,
+                    public boost::msm::front::euml::euml_state&lt;back_end>
 {
 };</programlisting>
                     <para>Unfortunately, there is a bug with VC, which appears from time to time and
@@ -2562,6 +2559,13 @@ struct Open_impl : public Open_def
                                     call process_event (some_event) on the current state machine or
                                     on the one(s) passed as 2nd , 3rd, 4th, 5th argument. This allow
                                     sending events to several external machines</para>
+                            </listitem>
+                            <listitem>
+                                <para>process_(event_): reprocesses the event which triggered the
+                                    transition</para>
+                            </listitem>
+                            <listitem>
+                                <para>reprocess_(): same as above but shorter to write</para>
                             </listitem>
                             <listitem>
                                 <para>process2_(some_event,Value [, some state machine] [, some
@@ -3901,6 +3905,60 @@ typename ::boost::enable_if&lt;
         <chapter>
             <title>Version history</title>
             <sect1>
+                <title>From V2.21 to V2.22 (Boost 1.48)</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>eUML: added easier event reprocessing:
+                                    <code>process(event_)</code> and <code>reprocess()</code></para>
+                        </listitem>
+                        <listitem>
+                            <para>Rewrite of internal transition tables. There were a few bugs
+                                (failing recursivity in internal transition tables of sub-sub
+                                machines) and a missing feature (unused internal transition table of
+                                the main state machine).</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfixes<itemizedlist>
+                                    <listitem>
+                                        <para>Reverted favor_compile_time policy to Boost 1.46
+                                            state</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para><code>none</code> event now is convertible from any
+                                            other event </para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>eUML and pseudo exit states</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>Fixed not working Flag_AND</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>Fixed rare bugs causing multiple processing of the
+                                            same event in a submachine whose transition table
+                                            contains this event and a base event of it.</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>gcc warnings about unused variables</para>
+                                    </listitem>
+                                </itemizedlist></para>
+                        </listitem>
+                        <listitem>
+                            <para>Breaking change: the new internal transition table feature causes
+                                a minor breaking change. In a submachine, the "Fsm" template
+                                parameter for guards / actions of an internal table declared using
+                                    <code>internal_transition_table</code> now is the submachine,
+                                not the higher-level state machine. Internal transitions declared
+                                using internal rows in the higher-level state machine keep their
+                                behavior (the "Fsm" parameter is the higher-level state machine). To
+                                sum up, the internal transition "Fsm" parameter is the closest state
+                                machine containing this transition.</para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+            </sect1>
+            <sect1>
                 <title>From V2.20 to V2.21 (Boost 1.47)</title>
                 <para>
                     <itemizedlist>
@@ -3910,7 +3968,7 @@ typename ::boost::enable_if&lt;
                         </listitem>
                         <listitem>
                             <para><command xlink:href="#eUML-phoenix">Added partial support for
-                                    Boost.Phoenix functors in eUML</command></para>
+                                Boost.Phoenix functors in eUML</command></para>
                         </listitem>
                         <listitem>
                             <para>Added the possibility to choose when <command xlink:href="#backend-state-switch">state switching</command>
@@ -3918,34 +3976,34 @@ typename ::boost::enable_if&lt;
                         </listitem>
                         <listitem>
                             <para>Bugfixes<itemizedlist>
-                                    <listitem>
-                                        <para>Trac 5117, 5253, 5533, 5573</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>gcc warnings about unused variables</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>better implemenation of favor_compile_time back-end
-                                            policy</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>bug with eUML and state construction</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>incorrect eUML event and state macros</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>incorrect event type passed to a direct entry state's
-                                            on_entry action</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>more examples</para>
-                                    </listitem>
-                                </itemizedlist></para>
+                                <listitem>
+                                    <para>Trac 5117, 5253, 5533, 5573</para>
+                                </listitem>
+                                <listitem>
+                                    <para>gcc warnings about unused variables</para>
+                                </listitem>
+                                <listitem>
+                                    <para>better implemenation of favor_compile_time back-end
+                                        policy</para>
+                                </listitem>
+                                <listitem>
+                                    <para>bug with eUML and state construction</para>
+                                </listitem>
+                                <listitem>
+                                    <para>incorrect eUML event and state macros</para>
+                                </listitem>
+                                <listitem>
+                                    <para>incorrect event type passed to a direct entry state's
+                                        on_entry action</para>
+                                </listitem>
+                                <listitem>
+                                    <para>more examples</para>
+                                </listitem>
+                            </itemizedlist></para>
                         </listitem>
                     </itemizedlist>
                 </para>
-            </sect1>
+            </sect1>            
             <sect1>
                 <title>From V2.12 to V2.20 (Boost 1.46)</title>
                 <para>
