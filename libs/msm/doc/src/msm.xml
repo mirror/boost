@@ -2561,6 +2561,13 @@ struct Open_impl : public Open_def
                                     sending events to several external machines</para>
                             </listitem>
                             <listitem>
+                                <para>process_(event_): reprocesses the event which triggered the
+                                    transition</para>
+                            </listitem>
+                            <listitem>
+                                <para>reprocess_(): same as above but shorter to write</para>
+                            </listitem>
+                            <listitem>
                                 <para>process2_(some_event,Value [, some state machine] [, some
                                     state machine] [, some state machine]) will call process_event
                                     (some_event(Value)) on the current state machine or on the
@@ -3898,6 +3905,60 @@ typename ::boost::enable_if&lt;
         <chapter>
             <title>Version history</title>
             <sect1>
+                <title>From V2.21 to V2.22 (Boost 1.48)</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>eUML: added easier event reprocessing:
+                                    <code>process(event_)</code> and <code>reprocess()</code></para>
+                        </listitem>
+                        <listitem>
+                            <para>Rewrite of internal transition tables. There were a few bugs
+                                (failing recursivity in internal transition tables of sub-sub
+                                machines) and a missing feature (unused internal transition table of
+                                the main state machine).</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfixes<itemizedlist>
+                                    <listitem>
+                                        <para>Reverted favor_compile_time policy to Boost 1.46
+                                            state</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para><code>none</code> event now is convertible from any
+                                            other event </para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>eUML and pseudo exit states</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>Fixed not working Flag_AND</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>Fixed rare bugs causing multiple processing of the
+                                            same event in a submachine whose transition table
+                                            contains this event and a base event of it.</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>gcc warnings about unused variables</para>
+                                    </listitem>
+                                </itemizedlist></para>
+                        </listitem>
+                        <listitem>
+                            <para>Breaking change: the new internal transition table feature causes
+                                a minor breaking change. In a submachine, the "Fsm" template
+                                parameter for guards / actions of an internal table declared using
+                                    <code>internal_transition_table</code> now is the submachine,
+                                not the higher-level state machine. Internal transitions declared
+                                using internal rows in the higher-level state machine keep their
+                                behavior (the "Fsm" parameter is the higher-level state machine). To
+                                sum up, the internal transition "Fsm" parameter is the closest state
+                                machine containing this transition.</para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+            </sect1>
+            <sect1>
                 <title>From V2.20 to V2.21 (Boost 1.47)</title>
                 <para>
                     <itemizedlist>
@@ -3907,7 +3968,7 @@ typename ::boost::enable_if&lt;
                         </listitem>
                         <listitem>
                             <para><command xlink:href="#eUML-phoenix">Added partial support for
-                                    Boost.Phoenix functors in eUML</command></para>
+                                Boost.Phoenix functors in eUML</command></para>
                         </listitem>
                         <listitem>
                             <para>Added the possibility to choose when <command xlink:href="#backend-state-switch">state switching</command>
@@ -3915,34 +3976,34 @@ typename ::boost::enable_if&lt;
                         </listitem>
                         <listitem>
                             <para>Bugfixes<itemizedlist>
-                                    <listitem>
-                                        <para>Trac 5117, 5253, 5533, 5573</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>gcc warnings about unused variables</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>better implemenation of favor_compile_time back-end
-                                            policy</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>bug with eUML and state construction</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>incorrect eUML event and state macros</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>incorrect event type passed to a direct entry state's
-                                            on_entry action</para>
-                                    </listitem>
-                                    <listitem>
-                                        <para>more examples</para>
-                                    </listitem>
-                                </itemizedlist></para>
+                                <listitem>
+                                    <para>Trac 5117, 5253, 5533, 5573</para>
+                                </listitem>
+                                <listitem>
+                                    <para>gcc warnings about unused variables</para>
+                                </listitem>
+                                <listitem>
+                                    <para>better implemenation of favor_compile_time back-end
+                                        policy</para>
+                                </listitem>
+                                <listitem>
+                                    <para>bug with eUML and state construction</para>
+                                </listitem>
+                                <listitem>
+                                    <para>incorrect eUML event and state macros</para>
+                                </listitem>
+                                <listitem>
+                                    <para>incorrect event type passed to a direct entry state's
+                                        on_entry action</para>
+                                </listitem>
+                                <listitem>
+                                    <para>more examples</para>
+                                </listitem>
+                            </itemizedlist></para>
                         </listitem>
                     </itemizedlist>
                 </para>
-            </sect1>
+            </sect1>            
             <sect1>
                 <title>From V2.12 to V2.20 (Boost 1.46)</title>
                 <para>

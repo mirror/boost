@@ -412,7 +412,8 @@ struct Open_impl : public Open_def
                                     machine] [, some state machine] [, some state machine]) will
                                     call process_event (some_event) on the current state machine or
                                     on the one(s) passed as 2nd , 3rd, 4th, 5th argument. This allow
-                                    sending events to several external machines</p></li><li class="listitem"><p>process2_(some_event,Value [, some state machine] [, some
+                                    sending events to several external machines</p></li><li class="listitem"><p>process_(event_): reprocesses the event which triggered the
+                                    transition</p></li><li class="listitem"><p>reprocess_(): same as above but shorter to write</p></li><li class="listitem"><p>process2_(some_event,Value [, some state machine] [, some
                                     state machine] [, some state machine]) will call process_event
                                     (some_event(Value)) on the current state machine or on the
                                     one(s) passed as 3rd, 4th, 5th argument</p></li><li class="listitem"><p>is_ flag_(some_flag[, some state machine]) will call
@@ -432,7 +433,7 @@ struct Open_impl : public Open_def
                         MSM_EUML_METHOD or MSM_EUML_FUNCTION will create a correct functor. Your own
                         eUML functors written as described at the beginning of this section will
                         also work well, <span class="underline">except</span>, for the
-                        moment, with the while_, if_then_, if_then_else_ functions.</p></div><div class="sect2" title="Phoenix-like STL support"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2091"></a>Phoenix-like STL support</h3></div></div></div><p>eUML supports most C++ operators (except address-of). For example it is
+                        moment, with the while_, if_then_, if_then_else_ functions.</p></div><div class="sect2" title="Phoenix-like STL support"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2097"></a>Phoenix-like STL support</h3></div></div></div><p>eUML supports most C++ operators (except address-of). For example it is
                         possible to write event_(some_attribute)++ or [source_(some_bool) &amp;&amp;
                         fsm_(some_other_bool)]. But a programmer needs more than operators in his
                         daily programming. The STL is clearly a must have. Therefore, eUML comes in
@@ -461,7 +462,7 @@ struct Open_impl : public Open_def
                                     current state has an attribute m_src_it (an iterator). If this
                                     iterator != fsm.m_src_container.end(), process OneSong on fsm,
                                     copy-constructed from state.m_src_it which we
-                                    post-increment</p></li></ul></div></div><div class="sect2" title="Writing actions with Boost.Phoenix (in development)"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2144"></a><span class="command"><strong><a name="eUML-phoenix"></a></strong></span>Writing actions with Boost.Phoenix (in development)</h3></div></div></div><p> It is also possible to write actions, guards, state entry and exit
+                                    post-increment</p></li></ul></div></div><div class="sect2" title="Writing actions with Boost.Phoenix (in development)"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2150"></a><span class="command"><strong><a name="eUML-phoenix"></a></strong></span>Writing actions with Boost.Phoenix (in development)</h3></div></div></div><p> It is also possible to write actions, guards, state entry and exit
                         actions using a reduced set of Boost.Phoenix capabilities. This feature
                         is still in development stage, so you might get here and there some
                         surprise. Simple cases, however, should work well. What will not work
