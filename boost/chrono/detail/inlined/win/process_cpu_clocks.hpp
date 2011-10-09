@@ -8,11 +8,11 @@
 //  See http://www.boost.org/libs/chrono for documentation.
 
 //--------------------------------------------------------------------------------------//
-#ifndef BOOST_CHRONO_DETAIL_INLINED_PROCESS_CPU_CLOCKS_HPP
-#define BOOST_CHRONO_DETAIL_INLINED_PROCESS_CPU_CLOCKS_HPP
-
+#ifndef BOOST_CHRONO_DETAIL_INLINED_WIN_PROCESS_CPU_CLOCKS_HPP
+#define BOOST_CHRONO_DETAIL_INLINED_WIN_PROCESS_CPU_CLOCKS_HPP
 
 #include <boost/chrono/config.hpp>
+
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
 
 #include <boost/version.hpp>
