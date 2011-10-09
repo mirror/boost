@@ -175,7 +175,7 @@ namespace boost { namespace unordered { namespace detail {
         };                                                                  \
                                                                             \
         enum { value = sizeof(choice2::type) ==                             \
-            sizeof(impl::test<impl::base>(choose()))                        \
+            sizeof(impl::test<typename impl::base>(choose()))               \
         };                                                                  \
     }
 
