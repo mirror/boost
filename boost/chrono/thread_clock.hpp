@@ -7,6 +7,8 @@
 
 //  See http://www.boost.org/libs/system for documentation.
 
+#include <boost/chrono/config.hpp>
+
 #ifndef BOOST_CHRONO_THREAD_CLOCK_HPP
 #define BOOST_CHRONO_THREAD_CLOCK_HPP
 
