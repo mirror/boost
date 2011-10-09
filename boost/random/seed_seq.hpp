@@ -98,8 +98,8 @@ public:
             r3 = r3 ^ (r3 >> 27);
             r3 = (r3 * 1566083941u) & mask;
             value_type r4 = r3 - k%m;
-            *(first + (k+p)%n) ^= r4;
-            *(first + (k+q)%n) ^= r3;
+            *(first + (k+p)%n) ^= r3;
+            *(first + (k+q)%n) ^= r4;
             *(first + k%n) = r4;
         }
     }
