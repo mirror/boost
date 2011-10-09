@@ -13,6 +13,8 @@
 #define BOOST_TT_TRAIT_OP ++
 #define BOOST_TT_FORBIDDEN_IF\
    ::boost::type_traits::ice_or<\
+      /* bool */\
+      ::boost::is_same< bool, Rhs_nocv >::value,\
       /* void* */\
       ::boost::type_traits::ice_and<\
          ::boost::is_pointer< Rhs_noref >::value,\
