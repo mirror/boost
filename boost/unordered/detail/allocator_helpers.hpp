@@ -172,11 +172,13 @@ namespace boost { namespace unordered { namespace detail {
                                                                             \
             BOOST_UNORDERED_CHECK_MEMBER(1, 1, name, int base_mixin::*);    \
             BOOST_UNORDERED_DEFAULT_MEMBER(2, 2);                           \
+                                                                            \
+            enum { value = sizeof(choice2::type) ==                         \
+                sizeof(test<base>(choose()))                                \
+            };                                                              \
         };                                                                  \
                                                                             \
-        enum { value = sizeof(choice2::type) ==                             \
-            sizeof(impl::test<typename impl::base>(choose()))               \
-        };                                                                  \
+        enum { value = impl::value };                                       \
     }
 
 #endif
