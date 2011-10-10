@@ -46,6 +46,7 @@ test-suite phoenix_bind :
 #    [ run bind/bind_function_object_tests_phx2.cpp ]
     [ run bind/bind_member_function_tests.cpp ]
     [ run bind/bind_member_variable_tests.cpp ]
+    [ run bind/bug5782.cpp ]
     ;
     
 test-suite phoenix_statement :
@@ -115,6 +116,7 @@ test-suite phoenix_boost_bind_compatibility :
 test-suite phoenix_regression :
     [ run regression/bug4853.cpp ]
     [ run regression/bug5626.cpp ]
+    [ run regression/bug5968.cpp ]
     ;
 
 test-suite phoenix_include :
@@ -155,7 +157,7 @@ test-suite phoenix_include :
     [ run include/object/static_cast.cpp ]
     [ run include/operator/arithmetic.cpp ]
     [ run include/operator/bitwise.cpp ]
-    [ run include/operator/comparision.cpp ]
+    [ run include/operator/comparison.cpp ]
     [ run include/operator/if_else.cpp ]
     [ run include/operator/io.cpp ]
     [ run include/operator/logical.cpp ]

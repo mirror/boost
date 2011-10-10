@@ -65,7 +65,7 @@
               , A
               , const& a
             )
-          , Context & ctx
+          , Context const & ctx
         ) const
         {
 #define EVAL_a(_,n,__) \
