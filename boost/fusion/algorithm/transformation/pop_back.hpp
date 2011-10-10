@@ -78,6 +78,51 @@ namespace boost { namespace fusion
               , mpl::int_<(Last::is_last?1:0)>
             >::type
         {};
+
+
+        template <typename Iterator, bool IsLast>
+        struct prior_impl
+        {
+            typedef typename Iterator::iterator_base_type base_type;
+
+            typedef typename
+                result_of::prior<base_type>::type
+            base_prior;
+
+            typedef pop_back_iterator<base_prior, false> type;
+
+            static type
+            call(Iterator const& i)
+            {
+                return type(fusion::prior(i.iterator_base));
+            }
+        };
+
+        template <typename Iterator>
+        struct prior_impl<Iterator, true>
+        {
+            // If this is the last iterator, we'll have to double back
+            typedef typename Iterator::iterator_base_type base_type;
+
+            typedef typename
+                result_of::prior<
+                  typename result_of::prior<base_type>::type
+                >::type
+            base_prior;
+
+            typedef pop_back_iterator<base_prior, false> type;
+
+            static type
+            call(Iterator const& i)
+            {
+                return type(fusion::prior(
+                    fusion::prior(i.iterator_base)));
+            }
+        };
+
+        template <typename Iterator>
+        struct prior : prior_impl<Iterator, Iterator::is_last>
+        {};
     };
 
     namespace result_of
