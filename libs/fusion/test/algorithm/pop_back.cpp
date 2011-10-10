@@ -15,6 +15,9 @@
 #include <boost/fusion/algorithm/transformation/pop_back.hpp>
 #include <boost/fusion/algorithm/transformation/push_back.hpp>
 #include <boost/fusion/algorithm/query/find.hpp>
+#include <boost/fusion/include/back.hpp>
+#include <boost/fusion/include/array.hpp>
+#include <boost/array.hpp>
 #include <boost/mpl/vector_c.hpp>
 
 int
@@ -85,11 +88,16 @@ main()
         auto i1 = find<int>(popv);
         auto i2 = find<double>(pop);
 
-        assert(i1 != end(pop));
-        assert(i2 != end(pop));
-        assert(i1 != i2);
+        BOOST_TEST(i1 != end(pop));
+        BOOST_TEST(i2 != end(pop));
+        BOOST_TEST(i1 != i2);
     }
 #endif
+
+    {
+        boost::array<std::size_t, 2> a = { 10, 50 };
+        BOOST_TEST(back(pop_back(a)) == 10);
+    }
 
     return boost::report_errors();
 }
