@@ -12,16 +12,19 @@
 #define BOOST_SIGNALS2_FOREIGN_PTR_HPP
 
 #include <algorithm>
+#include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/smart_ptr/bad_weak_ptr.hpp>
 #include <boost/utility/swap.hpp>
 
+#if !defined(BOOST_INTEL_STDCXX0X)
 namespace std
 {
   template<typename T> class shared_ptr;
   template<typename T> class weak_ptr;
 }
+#endif
 
 namespace boost
 {
