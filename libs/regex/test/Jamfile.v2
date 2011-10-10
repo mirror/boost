@@ -189,6 +189,8 @@ test-suite regex
 
 ;
 
+compile test_consolidated.cpp ;
+
 build-project ../example ;
 
 
