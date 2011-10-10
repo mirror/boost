@@ -19,7 +19,7 @@
 
 namespace boost { namespace chrono {
 
-    thread_clock::time_point thread_clock::now( ) BOOST_CHRONO_NOEXCEPT
+    thread_clock::time_point thread_clock::now( ) BOOST_NOEXCEPT
     {
       struct timespec ts;
 #if defined CLOCK_THREAD_CPUTIME_ID

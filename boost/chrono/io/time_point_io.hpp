@@ -60,11 +60,11 @@ namespace boost
       {
       }
 
-      const string_type& fmt() const BOOST_CHRONO_NOEXCEPT
+      const string_type& fmt() const BOOST_NOEXCEPT
       {
         return fmt_;
       }
-      chrono::timezone_type get_timezone() const BOOST_CHRONO_NOEXCEPT
+      chrono::timezone_type get_timezone() const BOOST_NOEXCEPT
       {
         return tz_;
       }

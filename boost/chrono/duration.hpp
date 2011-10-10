@@ -229,7 +229,7 @@ namespace detail
     template <class FromDuration, class ToDuration, class Period>
     struct duration_cast_aux<FromDuration, ToDuration, Period, true, true>
     {
-        BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
+        BOOST_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
             return ToDuration(static_cast<typename ToDuration::rep>(fd.count()));
         }
@@ -244,7 +244,7 @@ namespace detail
     template <class FromDuration, class ToDuration, class Period>
     struct duration_cast_aux<FromDuration, ToDuration, Period, true, false>
     {
-        BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
+        BOOST_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
             typedef typename common_type<
                 typename ToDuration::rep,
@@ -263,7 +263,7 @@ namespace detail
     template <class FromDuration, class ToDuration, class Period>
     struct duration_cast_aux<FromDuration, ToDuration, Period, false, true>
     {
-        BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
+        BOOST_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
             typedef typename common_type<
               typename ToDuration::rep,
@@ -283,7 +283,7 @@ namespace detail
     template <class FromDuration, class ToDuration, class Period>
     struct duration_cast_aux<FromDuration, ToDuration, Period, false, false>
     {
-        BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
+        BOOST_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
             typedef typename common_type<
               typename ToDuration::rep,
@@ -306,7 +306,7 @@ namespace detail
             Period::num == 1,
             Period::den == 1
         > Aux;
-        BOOST_CHRONO_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
+        BOOST_CONSTEXPR ToDuration operator()(const FromDuration& fd) const
         {
             return Aux()(fd);
         }
@@ -376,13 +376,13 @@ namespace detail {
 template <class Rep>
 struct duration_values
 {
-    static BOOST_CHRONO_CONSTEXPR Rep zero() {return Rep(0);}
-    static BOOST_CHRONO_CONSTEXPR Rep max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    static BOOST_CONSTEXPR Rep zero() {return Rep(0);}
+    static BOOST_CONSTEXPR Rep max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     {
         return (std::numeric_limits<Rep>::max)();
     }
 
-    static BOOST_CHRONO_CONSTEXPR Rep min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    static BOOST_CONSTEXPR Rep min BOOST_PREVENT_MACRO_SUBSTITUTION ()
     {
         return detail::numeric_limits<Rep>::lowest();
     }
@@ -429,10 +429,10 @@ namespace chrono {
         rep rep_;
     public:
 
-        BOOST_CHRONO_CONSTEXPR
+        BOOST_CONSTEXPR
         duration() : rep_(duration_values<rep>::zero()) { }
         template <class Rep2>
-        BOOST_CHRONO_CONSTEXPR
+        BOOST_CONSTEXPR
         explicit duration(const Rep2& r
         , typename boost::enable_if <
                     mpl::and_ <
@@ -448,7 +448,7 @@ namespace chrono {
                 >::type* = 0
             ) : rep_(r) { }
         ~duration() {} //= default;
-        BOOST_CHRONO_CONSTEXPR
+        BOOST_CONSTEXPR
         duration(const duration& rhs) : rep_(rhs.rep_) {} // = default;
         duration& operator=(const duration& rhs) // = default;
         {
@@ -458,7 +458,7 @@ namespace chrono {
 
         // conversions
         template <class Rep2, class Period2>
-        BOOST_CHRONO_CONSTEXPR
+        BOOST_CONSTEXPR
         duration(const duration<Rep2, Period2>& d
         , typename boost::enable_if <
                     mpl::or_ <
@@ -474,14 +474,14 @@ namespace chrono {
 
         // observer
 
-        BOOST_CHRONO_CONSTEXPR
+        BOOST_CONSTEXPR
         rep count() const {return rep_;}
 
         // arithmetic
 
-        BOOST_CHRONO_CONSTEXPR
+        BOOST_CONSTEXPR
         duration  operator+() const {return *this;}
-        BOOST_CHRONO_CONSTEXPR
+        BOOST_CONSTEXPR
         duration  operator-() const {return duration(-rep_);}
         duration& operator++()      {++rep_; return *this;}
         duration  operator++(int)   {return duration(rep_++);}
@@ -506,15 +506,15 @@ namespace chrono {
         }
         // 20.9.3.4 duration special values [time.duration.special]
 
-        static BOOST_CHRONO_CONSTEXPR duration zero()
+        static BOOST_CONSTEXPR duration zero()
         {
             return duration(duration_values<rep>::zero());
         }
-        static BOOST_CHRONO_CONSTEXPR duration min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+        static BOOST_CONSTEXPR duration min BOOST_PREVENT_MACRO_SUBSTITUTION ()
         {
             return duration((duration_values<rep>::min)());
         }
-        static BOOST_CHRONO_CONSTEXPR duration max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+        static BOOST_CONSTEXPR duration max BOOST_PREVENT_MACRO_SUBSTITUTION ()
         {
             return duration((duration_values<rep>::max)());
         }
@@ -527,7 +527,7 @@ namespace chrono {
     // Duration +
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
     operator+(const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)
@@ -540,7 +540,7 @@ namespace chrono {
     // Duration -
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
     operator-(const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)
@@ -553,7 +553,7 @@ namespace chrono {
     // Duration *
 
     template <class Rep1, class Period, class Rep2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename boost::enable_if <
         mpl::and_ <
         boost::is_convertible<Rep1, typename common_type<Rep1, Rep2>::type>,
@@ -569,7 +569,7 @@ namespace chrono {
     }
 
     template <class Rep1, class Period, class Rep2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename boost::enable_if <
         mpl::and_ <
         boost::is_convertible<Rep1, typename common_type<Rep1, Rep2>::type>,
@@ -585,7 +585,7 @@ namespace chrono {
     // Duration /
 
     template <class Rep1, class Period, class Rep2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename boost::disable_if <boost::chrono::detail::is_duration<Rep2>,
       typename boost::chrono::detail::duration_divide_result<
         duration<Rep1, Period>, Rep2>::type
@@ -599,7 +599,7 @@ namespace chrono {
     }
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename common_type<Rep1, Rep2>::type
     operator/(const duration<Rep1, Period1>& lhs, const duration<Rep2, Period2>& rhs)
     {
@@ -610,7 +610,7 @@ namespace chrono {
 
     #ifdef BOOST_CHRONO_EXTENSIONS
     template <class Rep1, class Rep2, class Period>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename boost::disable_if <boost::chrono::detail::is_duration<Rep1>,
       typename boost::chrono::detail::duration_divide_result2<
         Rep1, duration<Rep2, Period> >::type
@@ -626,7 +626,7 @@ namespace chrono {
     // Duration %
 
     template <class Rep1, class Period, class Rep2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename boost::disable_if <boost::chrono::detail::is_duration<Rep2>,
       typename boost::chrono::detail::duration_modulo_result<
         duration<Rep1, Period>, Rep2>::type
@@ -640,7 +640,7 @@ namespace chrono {
     }
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename common_type<duration<Rep1, Period1>, duration<Rep2, Period2> >::type
     operator%(const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs) {
@@ -700,7 +700,7 @@ namespace detail
     // Duration ==
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     bool
     operator==(const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)
@@ -712,7 +712,7 @@ namespace detail
     // Duration !=
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     bool
     operator!=(const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)
@@ -723,7 +723,7 @@ namespace detail
     // Duration <
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     bool
     operator< (const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)
@@ -735,7 +735,7 @@ namespace detail
     // Duration >
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     bool
     operator> (const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)
@@ -746,7 +746,7 @@ namespace detail
     // Duration <=
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     bool
     operator<=(const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)
@@ -771,7 +771,7 @@ namespace detail
 
     // Compile-time select the most efficient algorithm for the conversion...
     template <class ToDuration, class Rep, class Period>
-    inline BOOST_CHRONO_CONSTEXPR
+    inline BOOST_CONSTEXPR
     typename boost::enable_if <
       boost::chrono::detail::is_duration<ToDuration>, ToDuration>::type
     duration_cast(const duration<Rep, Period>& fd)

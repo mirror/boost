@@ -128,15 +128,15 @@ namespace chrono {
       typedef duration::rep                        rep;
       typedef duration::period                     period;
       typedef chrono::time_point<system_clock>     time_point;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             false;
+      BOOST_STATIC_CONSTEXPR bool is_steady =             false;
 
-      static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+      static BOOST_CHRONO_INLINE time_point  now() BOOST_NOEXCEPT;
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
 #endif
 
-      static BOOST_CHRONO_INLINE std::time_t to_time_t(const time_point& t) BOOST_CHRONO_NOEXCEPT;
-      static BOOST_CHRONO_INLINE time_point  from_time_t(std::time_t t) BOOST_CHRONO_NOEXCEPT;
+      static BOOST_CHRONO_INLINE std::time_t to_time_t(const time_point& t) BOOST_NOEXCEPT;
+      static BOOST_CHRONO_INLINE time_point  from_time_t(std::time_t t) BOOST_NOEXCEPT;
   };
 
 //----------------------------------------------------------------------------//
@@ -154,9 +154,9 @@ namespace chrono {
       typedef duration::rep                        rep;
       typedef duration::period                     period;
       typedef chrono::time_point<steady_clock>  time_point;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
+      BOOST_STATIC_CONSTEXPR bool is_steady =             true;
 
-      static BOOST_CHRONO_INLINE time_point  now() BOOST_CHRONO_NOEXCEPT;
+      static BOOST_CHRONO_INLINE time_point  now() BOOST_NOEXCEPT;
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       static BOOST_CHRONO_INLINE time_point  now(system::error_code & ec);
 #endif

@@ -36,7 +36,7 @@ namespace boost
       typedef typename Clock::time_point time_point;
       typedef typename Clock::rep rep;
       typedef typename Clock::period period;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
+      BOOST_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
 
       suspendable_stopwatch() :
         start_(duration::zero()),

@@ -40,7 +40,7 @@ namespace boost
       typedef Stopwatch stopwatch;
       typedef Formatter formatter_type;
 
-      basic_stopwatch_reporter() BOOST_CHRONO_NOEXCEPT :
+      basic_stopwatch_reporter() BOOST_NOEXCEPT :
         formatter_(), reported_(false)
       {
       }
@@ -54,7 +54,7 @@ namespace boost
 
       explicit basic_stopwatch_reporter(
           const dont_start_t& tag
-      ) BOOST_CHRONO_NOEXCEPT :
+      ) BOOST_NOEXCEPT :
       base_type(tag),
         formatter_(), reported_(false)
       {
@@ -73,7 +73,7 @@ namespace boost
       {
       }
 
-      ~basic_stopwatch_reporter() BOOST_CHRONO_NOEXCEPT
+      ~basic_stopwatch_reporter() BOOST_NOEXCEPT
       {
         if (!reported())
         {
@@ -81,7 +81,7 @@ namespace boost
         }
       }
 
-      inline void report() BOOST_CHRONO_NOEXCEPT
+      inline void report() BOOST_NOEXCEPT
       {
         formatter_(*this);
         reported_ = true;
@@ -145,7 +145,7 @@ namespace boost
 #endif
       explicit stopwatch_reporter(
           const dont_start_t& tag
-      ) BOOST_CHRONO_NOEXCEPT :
+      ) BOOST_NOEXCEPT :
       base_type(tag)
       {
       }
@@ -212,7 +212,7 @@ namespace boost
 #endif
       explicit wstopwatch_reporter(
           const dont_start_t& tag
-      ) BOOST_CHRONO_NOEXCEPT :
+      ) BOOST_NOEXCEPT :
       base_type(tag)
       {
       }

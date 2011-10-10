@@ -49,7 +49,7 @@ namespace boost
       typedef typename Clock::time_point time_point;
       typedef typename Clock::rep rep;
       typedef typename Clock::period period;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
+      BOOST_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
 
       /**
        * Default constructor.
@@ -412,7 +412,7 @@ namespace boost
        * Returns: the LapCollector instance.
        *
        */
-      laps_collector const& get_laps_collector() BOOST_CHRONO_NOEXCEPT
+      laps_collector const& get_laps_collector() BOOST_NOEXCEPT
       {
         return laps_collector_;
       }

@@ -22,7 +22,7 @@ namespace ex
       typedef long long rep;
       typedef boost::chrono::duration<rep, period> duration;
       typedef boost::chrono::time_point<cycle_count> time_point;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             true;
+      BOOST_STATIC_CONSTEXPR bool is_steady =             true;
       static long long ticks_;
 
       static time_point now()

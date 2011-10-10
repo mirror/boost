@@ -136,15 +136,15 @@ namespace boost
 
 
 
-      bool is_symbol() const BOOST_CHRONO_NOEXCEPT
+      bool is_symbol() const BOOST_NOEXCEPT
       {
         return (style_==duration_style::symbol);
       }
-      bool is_prefix() const BOOST_CHRONO_NOEXCEPT
+      bool is_prefix() const BOOST_NOEXCEPT
       {
         return (style_==duration_style::prefix);
       }
-      duration_style::type get_duration_style() const BOOST_CHRONO_NOEXCEPT
+      duration_style::type get_duration_style() const BOOST_NOEXCEPT
       {
         return style_;
       }
@@ -275,7 +275,7 @@ namespace boost
       /**
        * explicit manipulator constructor from a @c duration_style
        */
-      explicit duration_fmt(duration_style::type style) BOOST_CHRONO_NOEXCEPT
+      explicit duration_fmt(duration_style::type style) BOOST_NOEXCEPT
       : style_(style)
       {}
 
@@ -284,14 +284,14 @@ namespace boost
        * explicit conversion to the @c duration_style scoped enum.
        */
       explicit
-      operator duration_style::type() const BOOST_CHRONO_NOEXCEPT
+      operator duration_style::type() const BOOST_NOEXCEPT
       { return style_;}
 #endif
 
       /**
        * gets the @c duration_style scoped enum.
        */
-      duration_style::type get_duration_style() const BOOST_CHRONO_NOEXCEPT
+      duration_style::type get_duration_style() const BOOST_NOEXCEPT
       { return style_;}
     };
 

@@ -2486,7 +2486,7 @@ Output is:
 [section:reference Reference ]
 [/=================]
 
-As `constexpr` will not be supported by some compilers, it is replaced in the code by BOOST_CHRONO_CONSTEXPR for constexpr functions and BOOST_CHRONO_STATIC_CONSTEXPR for struct/class static fields. The same applies to `noexecpt` which is replaced by BOOST_CHRONO_NOEXCEPT in the code.
+As `constexpr` will not be supported by some compilers, it is replaced in the code by `BOOST_CONSTEXPR` for `constexpr` functions and `BOOST_STATIC_CONSTEXPR` for struct/class static fields. The same applies to `noexecpt` which is replaced by `BOOST_NOEXCEPT` in the code.
 
 The documentation doesn't use these macros.
 
@@ -5812,7 +5812,7 @@ In addition, the user needs to define the macro BOOST_CHRONO_IO_USES_EXTERNAL_LO
 
 * [@http://svn.boost.org/trac/boost/ticket/5979 #5979] Added chrono rounding utilities as defined By Howard Hinnant [@http://home.roadrunner.com/~hinnant/duration_io/chrono_util.html here].
 * [@http://svn.boost.org/trac/boost/ticket/5978 #5978] Add BOOST_CHRONO_HAS_PROCESS_CLOCKS to know if process clocks are available.
-* [@http://svn.boost.org/trac/boost/ticket/5978 #5978] Add BOOST_CHRONO_HAS_PROCESS_CLOCKS to know if process clocks are available.
+* [@http://svn.boost.org/trac/boost/ticket/5998 #5998] Make possible to don't provide hybrid error handling.
 * [@http://svn.boost.org/trac/boost/ticket/5906 #5906] Take in account the constexpr as defined in the standard.
 * [@http://svn.boost.org/trac/boost/ticket/5907 #5907] Take in account noexcept for compilers supporting it.
 

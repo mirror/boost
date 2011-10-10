@@ -35,9 +35,9 @@ public:
     typedef duration::rep                        rep;
     typedef duration::period                     period;
     typedef chrono::time_point<thread_clock>    time_point;
-    BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
+    BOOST_STATIC_CONSTEXPR bool is_steady =             BOOST_CHRONO_THREAD_CLOCK_IS_STEADY;
 
-    static BOOST_CHRONO_INLINE time_point now( ) BOOST_CHRONO_NOEXCEPT;
+    static BOOST_CHRONO_INLINE time_point now( ) BOOST_NOEXCEPT;
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
     static BOOST_CHRONO_INLINE time_point now( system::error_code & ec );
 #endif

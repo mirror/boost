@@ -31,10 +31,10 @@ namespace boost
       typedef typename Clock::time_point time_point;
       typedef typename Clock::rep rep;
       typedef typename Clock::period period;
-      BOOST_CHRONO_STATIC_CONSTEXPR bool is_steady =             Clock::is_steady;
+      BOOST_STATIC_CONSTEXPR bool is_steady =             Clock::is_steady;
 
 
-      simple_stopwatch() BOOST_CHRONO_NOEXCEPT :
+      simple_stopwatch() BOOST_NOEXCEPT :
         start_(clock::now())
       {
       }
@@ -54,11 +54,11 @@ namespace boost
       }
 #endif
 
-      ~simple_stopwatch() BOOST_CHRONO_NOEXCEPT
+      ~simple_stopwatch() BOOST_NOEXCEPT
       {
       }
 
-      duration elapsed() BOOST_CHRONO_NOEXCEPT
+      duration elapsed() BOOST_NOEXCEPT
       {
         return clock::now() - start_;
       }
