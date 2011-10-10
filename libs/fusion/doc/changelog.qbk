@@ -1,5 +1,5 @@
 [/==============================================================================
-    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+    Copyright (C) 2001-2011 Joel de Guzman, Dan Marsden, Tobias Schwinger
     Copyright (C) 2010 Christopher Schmidt
 
     Use, modification and distribution is subject to the Boost Software
@@ -12,10 +12,10 @@ This section summarizes significant changes to the Fusion library.
 
 * Sep 27, 2006: Added `boost::tuple` support. (Joel de Guzman)
 * Nov 17, 2006: Added `boost::variant` support. (Joel de Guzman)
-* Feb 15, 2007: Added functional module. (Tobias Schwinger)
-* April 2, 2007: Added struct adapter. (Joel de Guzman)
-* May 8, 2007: Added associative struct adapter. (Dan Marsden)
-* Dec 20, 2007: Removed `boost::variant` support. After thorough
+* Feb 15, 2011: Added functional module. (Tobias Schwinger)
+* April 2, 2011: Added struct adapter. (Joel de Guzman)
+* May 8, 2011: Added associative struct adapter. (Dan Marsden)
+* Dec 20, 2011: Removed `boost::variant` support. After thorough
   investigation, I think now that the move to make variant a
   fusion sequence is rather quirky. A variant will always
   have a size==1 regardless of the number of types it can contain
