@@ -348,7 +348,10 @@ The platform has the POSIX header `<dirent.h>`.
 The platform has the functions `expm1`, `expm1f` and `expm1l` in `<math.h>`
 ]]
 [[`BOOST_HAS_FTIME`][Platform][
-The platform has the Win32 API `GetSystemTimeAsFileTime`.
+The platform has the Win32 API type FTIME.
+]]
+[[`BOOST_HAS_GETSYSTEMTIMEASFILETIME`][Platform][
+The platform has the Win32 API GetSystemTimeAsFileTime.
 ]]
 [[`BOOST_HAS_GETTIMEOFDAY`][Platform][
 The platform has the POSIX API `gettimeofday`.

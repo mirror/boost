@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Jun  1 21:44:56 2011
+//  This file was automatically generated on Wed Jul 13 18:50:14 2011
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -633,6 +633,11 @@ namespace boost_has_expm1 = empty_boost;
 #else
 namespace boost_has_ftime = empty_boost;
 #endif
+#ifdef BOOST_HAS_GETSYSTEMTIMEASFILETIME
+#include "boost_has_getsystemtimeasfiletime.ipp"
+#else
+namespace boost_has_getsystemtimeasfiletime = empty_boost;
+#endif
 #ifdef BOOST_HAS_GETTIMEOFDAY
 #include "boost_has_gettimeofday.ipp"
 #else
@@ -884,6 +889,11 @@ int main( int, char *[] )
    if(0 != boost_has_ftime::test())
    {
       std::cerr << "Failed test for BOOST_HAS_FTIME at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_getsystemtimeasfiletime::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_GETSYSTEMTIMEASFILETIME at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_has_gettimeofday::test())
