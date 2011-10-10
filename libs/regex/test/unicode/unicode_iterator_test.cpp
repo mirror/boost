@@ -30,7 +30,7 @@
 template <class I>
 typename I::value_type iterate_over(I a, I b)
 {
-   typedef I::value_type value_type;
+   typedef typename I::value_type value_type;
    value_type v = 0;
    while(a != b)
    {
