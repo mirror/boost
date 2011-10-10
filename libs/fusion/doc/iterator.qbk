@@ -1,5 +1,6 @@
 [/==============================================================================
-    Copyright (C) 2001-2011 Joel de Guzman, Dan Marsden, Tobias Schwinger
+    Copyright (C) 2001-2011 Joel de Guzman
+    Copyright (C) 2006 Dan Marsden
 
     Use, modification and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -994,9 +995,9 @@ Returns the key type associated with the element referenced by an associative it
 [heading Example]
     typedef __map__<__pair__<float,int> > vec;
     typedef __result_of_begin__<vec>::type first;
-	
+
     BOOST_MPL_ASSERT((boost::is_same<__result_of_key_of__<first>::type, float>));
-    
+
 [endsect]
 
 [section value_of_data]
@@ -1033,9 +1034,9 @@ Returns the type of the data property associated with the element referenced by 
 [heading Example]
     typedef __map__<__pair__<float,int> > vec;
     typedef __result_of_begin__<vec>::type first;
-	
+
     BOOST_MPL_ASSERT((boost::is_same<__result_of_value_of_data__<first>::type, int>));
-    
+
 [endsect]
 
 [section deref_data]

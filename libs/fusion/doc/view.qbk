@@ -1,5 +1,6 @@
 [/==============================================================================
-    Copyright (C) 2001-2011 Joel de Guzman, Dan Marsden, Tobias Schwinger
+    Copyright (C) 2001-2011 Joel de Guzman
+    Copyright (C) 2006 Dan Marsden
 
     Use, modification and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -482,7 +483,7 @@ defined in the implemented models.
 
 [heading Description]
 
-`nview` presents a view which iterates over a given __sequence__ in a specified order. 
+`nview` presents a view which iterates over a given __sequence__ in a specified order.
 An `nview` is constructed from an arbitrary __sequence__ and a list of indicies specifying
 the elements to iterate over.
 
@@ -506,15 +507,15 @@ the elements to iterate over.
     [[Parameter]            [Description]                   [Default]]
     [[`Sequence`]           [An arbitrary Fusion __forward_sequence__]
                                                             []]
-    [[`Indicies`]           [A `mpl::vector_c<int, ...>` holding the indicies defining 
+    [[`Indicies`]           [A `mpl::vector_c<int, ...>` holding the indicies defining
                              the required iteration order.] []]
-    [[`I1`, `I2`, `I3`...]  [A list of integers specifying the required 
+    [[`I1`, `I2`, `I3`...]  [A list of integers specifying the required
                              iteration order.]              [`INT_MAX` for `I2`, `I3`...]]
 ]
 
 [heading Model of]
 
-* __random_access_sequence__ (see __traversal_concept__) 
+* __random_access_sequence__ (see __traversal_concept__)
 
 [variablelist Notation
     [[`NV`]            [A `nview` type]]
