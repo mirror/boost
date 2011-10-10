@@ -160,6 +160,7 @@ the following invariants always hold:
 * __std_pair__ iterator
 * __boost_array__ iterator
 * __vector__ iterator
+* __map__ iterator
 * __single_view__ iterator
 * __iterator_range__ (where adapted sequence is a __bidirectional_sequence__)
 * __transform_view__ (where adapted sequence is a __bidirectional_sequence__)
@@ -205,6 +206,7 @@ the following expressions must be valid:
 
 [heading Models]
 * __vector__ iterator
+* __map__ iterator
 * __std_pair__ iterator
 * __boost_array__ iterator
 * __single_view__ iterator

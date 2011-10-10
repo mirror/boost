@@ -188,6 +188,7 @@ are not defined in __forward_sequence__.
 * __std_pair__
 * __boost_array__
 * __vector__
+* __map__
 * __reverse_view__
 * __single_view__
 * __iterator_range__ (where adapted sequence is a Bidirectional Sequence)
@@ -264,6 +265,7 @@ are not defined in __bidirectional_sequence__.
 * __std_pair__
 * __boost_array__
 * __vector__
+* __map__
 * __reverse_view__
 * __single_view__
 * __iterator_range__ (where adapted sequence is a Random Access Sequence)

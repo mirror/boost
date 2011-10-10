@@ -419,7 +419,7 @@ including any Fusion header to change the default. Example:
 [heading Model of]
 
 * __associative_sequence__
-* __forward_sequence__
+* __random_access_sequence__
 
 [variablelist Notation
     [[`M`]              [A `map` type]]
@@ -431,7 +431,7 @@ including any Fusion header to change the default. Example:
 [heading Expression Semantics]
 
 Semantics of an expression is defined only where it differs from, or is not
-defined in __random_access_sequence__ and __associative_sequence__.
+defined in __forward_sequence__ and __associative_sequence__.
 
 [table
     [[Expression]           [Semantics]]
