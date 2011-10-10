@@ -80,7 +80,7 @@ namespace boost { namespace fusion
         {};
 
 
-        template <typename Iterator, bool IsLast>
+        template <typename Iterator, bool IsLast_>
         struct prior_impl
         {
             typedef typename Iterator::iterator_base_type base_type;
