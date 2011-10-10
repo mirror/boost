@@ -8,7 +8,7 @@
 ===============================================================================/]
 [library Fusion
     [quickbook 1.3]
-    [version 2.3]
+    [version 2.2]
     [authors [de Guzman, Joel], [Marsden, Dan], [Schwinger, Tobias]]
     [copyright 2001 2002 2003 2004 2005 2006 2011 Joel de Guzman, Dan Marsden, Tobias Schwinger]
     [purpose Statically Typed Heterogeneous Data Structures and Algorithms]
