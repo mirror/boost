@@ -533,13 +533,31 @@ g_row &lt; Empty , play , Playing , &amp;player_::condition2 &gt;</pre><p>
                             transition. In our case, event6 is convertible from event5. Notice that
                             the forwarded event must be named in the exit point definition. For
                             example, we could define event6 as simply as:</p><p>
-                            </p><pre class="programlisting">struct event6 
+                            </p><pre class="programlisting">struct event 
 { 
-    event6(){} 
+    event(){} 
     template &lt;class Event&gt; 
-    event6(Event const&amp;){} 
+    event(Event const&amp;){} 
 }; //convertible from any event</pre><p>
-                        </p></div></div><div class="sect2" title="Flags"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1032"></a>Flags</h3></div></div></div><p>This <a class="link" href="examples/Flags.cpp" target="_top">tutorial</a> is devoted to a
+                            <span class="underline">Note</span>: There is a current
+                            limitation if you need not only convert but also get some data from the
+                            original event. Consider:</p><pre class="programlisting">struct event1 
+{ 
+    event1(int val_):val(val_) {}
+    int val;
+}; // forwarded from exit point
+struct event2 
+{ 
+    template &lt;class Event&gt; 
+    event2(Event const&amp; e):val(e.val){} // compiler will complain about another event not having any val
+    int val;
+}; // what the higher-level fsm wants to get</pre><p>The solution is to provide two constructors:</p><pre class="programlisting">struct event2 
+{ 
+    template &lt;class Event&gt; 
+    event2(Event const&amp; ):val(0){} // will not be used
+    event2(event1 const&amp; e)):val(e.val){} // the conversion constructor
+    int val;
+}; // what the higher-level fsm wants to get</pre></div></div><div class="sect2" title="Flags"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1041"></a>Flags</h3></div></div></div><p>This <a class="link" href="examples/Flags.cpp" target="_top">tutorial</a> is devoted to a
                         concept not defined in UML: flags. It has been added into MSM after proving
                         itself useful on many occasions. Please, do not be frightened as we are not
                         talking about ugly shortcuts made of an improbable collusion of
@@ -571,7 +589,7 @@ g_row &lt; Empty , play , Playing , &amp;player_::condition2 &gt;</pre><p>
                         all of the active states are flagged for the state to be active. You can
                         also AND the active states:</p><p>
                         </p><pre class="programlisting">if (p.is_flag_active&lt;CDLoaded,player::Flag_AND&gt;()) ...</pre><p>
-                    </p><p>The following diagram displays the flag situation in the tutorial.</p><p><span class="inlinemediaobject"><img src="../images/FlagsTutorial.jpg" width="60%"></span></p></div><div class="sect2" title="Event Hierarchy"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1086"></a><span class="command"><strong><a name="event-hierarchy"></a></strong></span>Event Hierarchy</h3></div></div></div><p>There are cases where one needs transitions based on categories of events.
+                    </p><p>The following diagram displays the flag situation in the tutorial.</p><p><span class="inlinemediaobject"><img src="../images/FlagsTutorial.jpg" width="60%"></span></p></div><div class="sect2" title="Event Hierarchy"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1095"></a><span class="command"><strong><a name="event-hierarchy"></a></strong></span>Event Hierarchy</h3></div></div></div><p>There are cases where one needs transitions based on categories of events.
                         An example is text parsing. Let's say you want to parse a string and use a
                         state machine to manage your parsing state. You want to parse 4 digits and
                         decide to use a state for every matched digit. Your state machine could look
@@ -584,7 +602,7 @@ struct char_0 : public digit {}; </pre><p>And to the same for other digits, we c
                         and this will cause a transition with "digit" as trigger to be taken.</p><p>An <a class="link" href="examples/ParsingDigits.cpp" target="_top">example</a> with
                         performance measurement, taken from the documentation of Boost.Xpressive
                         illustrates this example. You might notice that the performance is actually
-                        very good (in this case even better).</p></div><div class="sect2" title="Customizing a state machine / Getting more speed"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1107"></a>Customizing a state machine / Getting more speed</h3></div></div></div><p>MSM is offering many UML features at a high-speed, but sometimes, you just
+                        very good (in this case even better).</p></div><div class="sect2" title="Customizing a state machine / Getting more speed"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1116"></a>Customizing a state machine / Getting more speed</h3></div></div></div><p>MSM is offering many UML features at a high-speed, but sometimes, you just
                         need more speed and are ready to give up some features in exchange. A
                         process_event is handling several tasks: </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>checking for terminate/interrupt states</p></li><li class="listitem"><p>handling the message queue (for entry/exit/transition actions
                                     generating themselves events)</p></li><li class="listitem"><p>handling deferred events</p></li><li class="listitem"><p>catching exceptions (or not)</p></li><li class="listitem"><p>handling the state switching and action calls</p></li></ul></div><p>Of these tasks, only the last one is absolutely necessary to
@@ -610,7 +628,7 @@ struct char_0 : public digit {}; </pre><p>And to the same for other digits, we c
    };</pre><p><span class="underline">Important note</span>: As exit pseudo
                         states are using the message queue to forward events out of a submachine,
                         the <code class="code">no_message_queue</code> option cannot be used with state machines
-                        containing an exit pseudo state.</p></div><div class="sect2" title="Choosing the initial event"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1156"></a>Choosing the initial event</h3></div></div></div><p>A state machine is started using the <code class="code">start</code> method. This
+                        containing an exit pseudo state.</p></div><div class="sect2" title="Choosing the initial event"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1165"></a>Choosing the initial event</h3></div></div></div><p>A state machine is started using the <code class="code">start</code> method. This
                         causes the initial state's entry behavior to be executed. Like every entry
                         behavior, it becomes as parameter the event causing the state to be entered.
                         But when the machine starts, there was no event triggered. In this case, MSM
@@ -622,7 +640,7 @@ struct char_0 : public digit {}; </pre><p>And to the same for other digits, we c
 struct player_ : public msm::front::state_machine_def&lt;player_&gt;{
 ...
 typedef my_initial_event initial_event; 
-};</pre></div><div class="sect2" title="Containing state machine (deprecated)"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1169"></a> Containing state machine (deprecated)</h3></div></div></div><p>This feature is still supported in MSM for backward compatibility but made
+};</pre></div><div class="sect2" title="Containing state machine (deprecated)"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1178"></a> Containing state machine (deprecated)</h3></div></div></div><p>This feature is still supported in MSM for backward compatibility but made
                         obsolete by the fact that every guard/action/entry action/exit action get
                         the state machine passed as argument and might be removed at a later
                         time.</p><p>All of the states defined in the state machine are created upon state
