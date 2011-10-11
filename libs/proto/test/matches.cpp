@@ -17,8 +17,9 @@
 #include <boost/proto/transform/arg.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace boost;
-using namespace proto;
+namespace mpl = boost::mpl;
+namespace proto = boost::proto;
+namespace fusion = boost::fusion;
 
 struct int_convertible
 {
@@ -27,26 +28,26 @@ struct int_convertible
 };
 
 struct Input
-  : or_<
-        shift_right< terminal< std::istream & >, _ >
-      , shift_right< Input, _ >
+  : proto::or_<
+        proto::shift_right< proto::terminal< std::istream & >, proto::_ >
+      , proto::shift_right< Input, proto::_ >
     >
 {};
 
 struct Output
-  : or_<
-        shift_left< terminal< std::ostream & >, _ >
-      , shift_left< Output, _ >
+  : proto::or_<
+        proto::shift_left< proto::terminal< std::ostream & >, proto::_ >
+      , proto::shift_left< Output, proto::_ >
     >
 {};
 
-terminal< std::istream & >::type const cin_ = {std::cin};
-terminal< std::ostream & >::type const cout_ = {std::cout};
+proto::terminal< std::istream & >::type const cin_ = {std::cin};
+proto::terminal< std::ostream & >::type const cout_ = {std::cout};
 
 struct Anything
-  : or_<
-        terminal<_>
-      , nary_expr<_, vararg<Anything> >
+  : proto::or_<
+        proto::terminal<proto::_>
+      , proto::nary_expr<proto::_, proto::vararg<Anything> >
     >
 {};
 
@@ -117,92 +118,92 @@ struct my_expr
 
 void test_matches()
 {
-    assert_matches< _ >( lit(1) );
-    assert_matches< _ >( as_child(1) );
-    assert_matches< _ >( as_expr(1) );
+    proto::assert_matches< proto::_ >( proto::lit(1) );
+    proto::assert_matches< proto::_ >( proto::as_child(1) );
+    proto::assert_matches< proto::_ >( proto::as_expr(1) );
 
-    assert_matches< terminal<int> >( lit(1) );
-    assert_matches< terminal<int> >( as_child(1) );
-    assert_matches< terminal<int> >( as_expr(1) );
+    proto::assert_matches< proto::terminal<int> >( proto::lit(1) );
+    proto::assert_matches< proto::terminal<int> >( proto::as_child(1) );
+    proto::assert_matches< proto::terminal<int> >( proto::as_expr(1) );
 
-    assert_matches_not< terminal<int> >( lit('a') );
-    assert_matches_not< terminal<int> >( as_child('a') );
-    assert_matches_not< terminal<int> >( as_expr('a') );
+    proto::assert_matches_not< proto::terminal<int> >( proto::lit('a') );
+    proto::assert_matches_not< proto::terminal<int> >( proto::as_child('a') );
+    proto::assert_matches_not< proto::terminal<int> >( proto::as_expr('a') );
 
-    assert_matches< terminal<convertible_to<int> > >( lit('a') );
-    assert_matches< terminal<convertible_to<int> > >( as_child('a') );
-    assert_matches< terminal<convertible_to<int> > >( as_expr('a') );
+    proto::assert_matches< proto::terminal<proto::convertible_to<int> > >( proto::lit('a') );
+    proto::assert_matches< proto::terminal<proto::convertible_to<int> > >( proto::as_child('a') );
+    proto::assert_matches< proto::terminal<proto::convertible_to<int> > >( proto::as_expr('a') );
 
-    assert_matches_not< terminal<int> >( lit((int_convertible())) );
-    assert_matches_not< terminal<int> >( as_child((int_convertible())) );
-    assert_matches_not< terminal<int> >( as_expr((int_convertible())) );
+    proto::assert_matches_not< proto::terminal<int> >( proto::lit((int_convertible())) );
+    proto::assert_matches_not< proto::terminal<int> >( proto::as_child((int_convertible())) );
+    proto::assert_matches_not< proto::terminal<int> >( proto::as_expr((int_convertible())) );
 
-    assert_matches< terminal<convertible_to<int> > >( lit((int_convertible())) );
-    assert_matches< terminal<convertible_to<int> > >( as_child((int_convertible())) );
-    assert_matches< terminal<convertible_to<int> > >( as_expr((int_convertible())) );
+    proto::assert_matches< proto::terminal<proto::convertible_to<int> > >( proto::lit((int_convertible())) );
+    proto::assert_matches< proto::terminal<proto::convertible_to<int> > >( proto::as_child((int_convertible())) );
+    proto::assert_matches< proto::terminal<proto::convertible_to<int> > >( proto::as_expr((int_convertible())) );
 
-    assert_matches< if_<is_same<_value, int>() > >( lit(1) );
-    assert_matches_not< if_<is_same<_value, int>() > >( lit('a') );
+    proto::assert_matches< proto::if_<boost::is_same<proto::_value, int>() > >( proto::lit(1) );
+    proto::assert_matches_not< proto::if_<boost::is_same<proto::_value, int>() > >( proto::lit('a') );
 
-    assert_matches<
-        and_<
-            terminal<_>
-          , if_<is_same<_value, int>() >
+    proto::assert_matches<
+        proto::and_<
+            proto::terminal<proto::_>
+          , proto::if_<boost::is_same<proto::_value, int>() >
         >
-    >( lit(1) );
+    >( proto::lit(1) );
 
-    assert_matches_not<
-        and_<
-            terminal<_>
-          , if_<is_same<_value, int>() >
+    proto::assert_matches_not<
+        proto::and_<
+            proto::terminal<proto::_>
+          , proto::if_<boost::is_same<proto::_value, int>() >
         >
-    >( lit('a') );
+    >( proto::lit('a') );
 
-    assert_matches< terminal<char const *> >( lit("hello") );
-    assert_matches< terminal<char const *> >( as_child("hello") );
-    assert_matches< terminal<char const *> >( as_expr("hello") );
+    proto::assert_matches< proto::terminal<char const *> >( proto::lit("hello") );
+    proto::assert_matches< proto::terminal<char const *> >( proto::as_child("hello") );
+    proto::assert_matches< proto::terminal<char const *> >( proto::as_expr("hello") );
 
-    assert_matches< terminal<char const[6]> >( lit("hello") );
-    assert_matches< terminal<char const (&)[6]> >( as_child("hello") );
-    assert_matches< terminal<char const[6]> >( as_expr("hello") );
+    proto::assert_matches< proto::terminal<char const[6]> >( proto::lit("hello") );
+    proto::assert_matches< proto::terminal<char const (&)[6]> >( proto::as_child("hello") );
+    proto::assert_matches< proto::terminal<char const[6]> >( proto::as_expr("hello") );
 
-    assert_matches< terminal<char [6]> >( lit("hello") );
-    assert_matches< terminal<char [6]> >( as_child("hello") );
-    assert_matches< terminal<char [6]> >( as_expr("hello") );
+    proto::assert_matches< proto::terminal<char [6]> >( proto::lit("hello") );
+    proto::assert_matches< proto::terminal<char [6]> >( proto::as_child("hello") );
+    proto::assert_matches< proto::terminal<char [6]> >( proto::as_expr("hello") );
 
-    assert_matches< terminal<char const[N]> >( lit("hello") );
-    assert_matches< terminal<char const (&)[N]> >( as_child("hello") );
-    assert_matches< terminal<char const[N]> >( as_expr("hello") );
+    proto::assert_matches< proto::terminal<char const[proto::N]> >( proto::lit("hello") );
+    proto::assert_matches< proto::terminal<char const (&)[proto::N]> >( proto::as_child("hello") );
+    proto::assert_matches< proto::terminal<char const[proto::N]> >( proto::as_expr("hello") );
 
-    assert_matches< terminal<char [N]> >( lit("hello") );
-    assert_matches< terminal<char [N]> >( as_child("hello") );
-    assert_matches< terminal<char [N]> >( as_expr("hello") );
+    proto::assert_matches< proto::terminal<char [proto::N]> >( proto::lit("hello") );
+    proto::assert_matches< proto::terminal<char [proto::N]> >( proto::as_child("hello") );
+    proto::assert_matches< proto::terminal<char [proto::N]> >( proto::as_expr("hello") );
 
-    assert_matches< terminal<wchar_t const[N]> >( lit(L"hello") );
-    assert_matches< terminal<wchar_t const (&)[N]> >( as_child(L"hello") );
-    assert_matches< terminal<wchar_t const[N]> >( as_expr(L"hello") );
+    proto::assert_matches< proto::terminal<wchar_t const[proto::N]> >( proto::lit(L"hello") );
+    proto::assert_matches< proto::terminal<wchar_t const (&)[proto::N]> >( proto::as_child(L"hello") );
+    proto::assert_matches< proto::terminal<wchar_t const[proto::N]> >( proto::as_expr(L"hello") );
 
-    assert_matches< terminal<wchar_t [N]> >( lit(L"hello") );
-    assert_matches< terminal<wchar_t [N]> >( as_child(L"hello") );
-    assert_matches< terminal<wchar_t [N]> >( as_expr(L"hello") );
+    proto::assert_matches< proto::terminal<wchar_t [proto::N]> >( proto::lit(L"hello") );
+    proto::assert_matches< proto::terminal<wchar_t [proto::N]> >( proto::as_child(L"hello") );
+    proto::assert_matches< proto::terminal<wchar_t [proto::N]> >( proto::as_expr(L"hello") );
 
-    assert_matches_not< if_<is_same<_value, int>()> >( lit("hello") );
+    proto::assert_matches_not< proto::if_<boost::is_same<proto::_value, int>()> >( proto::lit("hello") );
 
-    assert_matches< terminal<std::string> >( lit(std::string("hello")) );
-    assert_matches< terminal<std::string> >( as_child(std::string("hello")) );
-    assert_matches< terminal<std::string> >( as_expr(std::string("hello")) );
+    proto::assert_matches< proto::terminal<std::string> >( proto::lit(std::string("hello")) );
+    proto::assert_matches< proto::terminal<std::string> >( proto::as_child(std::string("hello")) );
+    proto::assert_matches< proto::terminal<std::string> >( proto::as_expr(std::string("hello")) );
 
-    assert_matches< terminal<std::basic_string<_> > >( lit(std::string("hello")) );
-    assert_matches< terminal<std::basic_string<_> > >( as_child(std::string("hello")) );
-    assert_matches< terminal<std::basic_string<_> > >( as_expr(std::string("hello")) );
+    proto::assert_matches< proto::terminal<std::basic_string<proto::_> > >( proto::lit(std::string("hello")) );
+    proto::assert_matches< proto::terminal<std::basic_string<proto::_> > >( proto::as_child(std::string("hello")) );
+    proto::assert_matches< proto::terminal<std::basic_string<proto::_> > >( proto::as_expr(std::string("hello")) );
 
-    assert_matches_not< terminal<std::basic_string<_> > >( lit(1) );
-    assert_matches_not< terminal<std::basic_string<_> > >( as_child(1) );
-    assert_matches_not< terminal<std::basic_string<_> > >( as_expr(1) );
+    proto::assert_matches_not< proto::terminal<std::basic_string<proto::_> > >( proto::lit(1) );
+    proto::assert_matches_not< proto::terminal<std::basic_string<proto::_> > >( proto::as_child(1) );
+    proto::assert_matches_not< proto::terminal<std::basic_string<proto::_> > >( proto::as_expr(1) );
 
-    assert_matches_not< terminal<std::basic_string<_,_,_> > >( lit(1) );
-    assert_matches_not< terminal<std::basic_string<_,_,_> > >( as_child(1) );
-    assert_matches_not< terminal<std::basic_string<_,_,_> > >( as_expr(1) );
+    proto::assert_matches_not< proto::terminal<std::basic_string<proto::_,proto::_,proto::_> > >( proto::lit(1) );
+    proto::assert_matches_not< proto::terminal<std::basic_string<proto::_,proto::_,proto::_> > >( proto::as_child(1) );
+    proto::assert_matches_not< proto::terminal<std::basic_string<proto::_,proto::_,proto::_> > >( proto::as_expr(1) );
 
     #if BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(61700))
     typedef std::string const const_string;
@@ -210,100 +211,100 @@ void test_matches()
     typedef std::string const_string;
     #endif
     
-    assert_matches< terminal<std::basic_string<_> const & > >( lit(const_string("hello")) );
-    assert_matches< terminal<std::basic_string<_> const & > >( as_child(const_string("hello")) );
-    assert_matches_not< terminal<std::basic_string<_> const & > >( as_expr(const_string("hello")) );
+    proto::assert_matches< proto::terminal<std::basic_string<proto::_> const & > >( proto::lit(const_string("hello")) );
+    proto::assert_matches< proto::terminal<std::basic_string<proto::_> const & > >( proto::as_child(const_string("hello")) );
+    proto::assert_matches_not< proto::terminal<std::basic_string<proto::_> const & > >( proto::as_expr(const_string("hello")) );
 
-    assert_matches< terminal< void(&)() > >( lit(a_function) );
-    assert_matches< terminal< void(&)() > >( as_child(a_function) );
-    assert_matches< terminal< void(&)() > >( as_expr(a_function) );
+    proto::assert_matches< proto::terminal< void(&)() > >( proto::lit(a_function) );
+    proto::assert_matches< proto::terminal< void(&)() > >( proto::as_child(a_function) );
+    proto::assert_matches< proto::terminal< void(&)() > >( proto::as_expr(a_function) );
 
-    assert_matches_not< terminal< void(*)() > >( lit(a_function) );
-    assert_matches_not< terminal< void(*)() > >( as_child(a_function) );
-    assert_matches_not< terminal< void(*)() > >( as_expr(a_function) );
+    proto::assert_matches_not< proto::terminal< void(*)() > >( proto::lit(a_function) );
+    proto::assert_matches_not< proto::terminal< void(*)() > >( proto::as_child(a_function) );
+    proto::assert_matches_not< proto::terminal< void(*)() > >( proto::as_expr(a_function) );
 
-    assert_matches< terminal< convertible_to<void(*)()> > >( lit(a_function) );
-    assert_matches< terminal< convertible_to<void(*)()> > >( as_child(a_function) );
-    assert_matches< terminal< convertible_to<void(*)()> > >( as_expr(a_function) );
+    proto::assert_matches< proto::terminal< proto::convertible_to<void(*)()> > >( proto::lit(a_function) );
+    proto::assert_matches< proto::terminal< proto::convertible_to<void(*)()> > >( proto::as_child(a_function) );
+    proto::assert_matches< proto::terminal< proto::convertible_to<void(*)()> > >( proto::as_expr(a_function) );
 
-    assert_matches< terminal< void(*)() > >( lit(&a_function) );
-    assert_matches< terminal< void(*)() > >( as_child(&a_function) );
-    assert_matches< terminal< void(*)() > >( as_expr(&a_function) );
+    proto::assert_matches< proto::terminal< void(*)() > >( proto::lit(&a_function) );
+    proto::assert_matches< proto::terminal< void(*)() > >( proto::as_child(&a_function) );
+    proto::assert_matches< proto::terminal< void(*)() > >( proto::as_expr(&a_function) );
 
-    assert_matches< terminal< void(* const &)() > >( lit(&a_function) );
-    assert_matches< terminal< void(* const &)() > >( as_child(&a_function) );
-    assert_matches_not< terminal< void(* const &)() > >( as_expr(&a_function) );
+    proto::assert_matches< proto::terminal< void(* const &)() > >( proto::lit(&a_function) );
+    proto::assert_matches< proto::terminal< void(* const &)() > >( proto::as_child(&a_function) );
+    proto::assert_matches_not< proto::terminal< void(* const &)() > >( proto::as_expr(&a_function) );
 
-    assert_matches<
-        or_<
-            if_<is_same<_value, char>() >
-          , if_<is_same<_value, int>() >
+    proto::assert_matches<
+        proto::or_<
+            proto::if_<boost::is_same<proto::_value, char>() >
+          , proto::if_<boost::is_same<proto::_value, int>() >
         >
-    >( lit(1) );
+    >( proto::lit(1) );
 
-    assert_matches_not<
-        or_<
-            if_<is_same<_value, char>() >
-          , if_<is_same<_value, int>() >
+    proto::assert_matches_not<
+        proto::or_<
+            proto::if_<boost::is_same<proto::_value, char>() >
+          , proto::if_<boost::is_same<proto::_value, int>() >
         >
-    >( lit(1u) );
+    >( proto::lit(1u) );
 
-    assert_matches< Input >( cin_ >> 1 >> 2 >> 3 );
-    assert_matches_not< Output >( cin_ >> 1 >> 2 >> 3 );
+    proto::assert_matches< Input >( cin_ >> 1 >> 2 >> 3 );
+    proto::assert_matches_not< Output >( cin_ >> 1 >> 2 >> 3 );
 
-    assert_matches< Output >( cout_ << 1 << 2 << 3 );
-    assert_matches_not< Input >( cout_ << 1 << 2 << 3 );
+    proto::assert_matches< Output >( cout_ << 1 << 2 << 3 );
+    proto::assert_matches_not< Input >( cout_ << 1 << 2 << 3 );
 
-    assert_matches< function< terminal<int>, vararg< terminal<char> > > >( lit(1)('a','b','c','d') );
-    assert_matches_not< function< terminal<int>, vararg< terminal<char> > > >( lit(1)('a','b','c',"d") );
+    proto::assert_matches< proto::function< proto::terminal<int>, proto::vararg< proto::terminal<char> > > >( proto::lit(1)('a','b','c','d') );
+    proto::assert_matches_not< proto::function< proto::terminal<int>, proto::vararg< proto::terminal<char> > > >( proto::lit(1)('a','b','c',"d") );
 
-    assert_matches< Anything >( cout_ << 1 << +lit('a') << lit(1)('a','b','c',"d") );
+    proto::assert_matches< Anything >( cout_ << 1 << +proto::lit('a') << proto::lit(1)('a','b','c',"d") );
 
-    assert_matches< proto::switch_<MyCases> >( lit(1) >> 'a' );
-    assert_matches< proto::switch_<MyCases> >( lit(1) + 'a' );
-    assert_matches_not< proto::switch_<MyCases> >( lit(1) << 'a' );
+    proto::assert_matches< proto::switch_<MyCases> >( proto::lit(1) >> 'a' );
+    proto::assert_matches< proto::switch_<MyCases> >( proto::lit(1) + 'a' );
+    proto::assert_matches_not< proto::switch_<MyCases> >( proto::lit(1) << 'a' );
 
     number<int, two_complement_c> num;
-    assert_matches<NumberGrammar>(proto::as_expr(num));
+    proto::assert_matches<NumberGrammar>(proto::as_expr(num));
 
     // check custom terminal types
     {
         proto::nullary_expr<my_terminal, int>::type i = {0};
 
-        assert_matches<proto::nullary_expr<my_terminal, _> >( i );
-        assert_matches_not<proto::terminal<_> >( i );
+        proto::assert_matches<proto::nullary_expr<my_terminal, proto::_> >( i );
+        proto::assert_matches_not<proto::terminal<proto::_> >( i );
 
         proto::terminal<int>::type j = {0};
-        assert_matches<proto::terminal<_> >( j );
-        assert_matches_not<proto::nullary_expr<my_terminal, _> >( j );
+        proto::assert_matches<proto::terminal<proto::_> >( j );
+        proto::assert_matches_not<proto::nullary_expr<my_terminal, proto::_> >( j );
 
-        assert_matches<proto::nullary_expr<_, _> >( i );
+        proto::assert_matches<proto::nullary_expr<proto::_, proto::_> >( i );
     }
 
     // check 0 and 1 arg forms or or_ and and_
     {
-        assert_matches< proto::and_<> >( lit(1) );
-        assert_matches_not< proto::or_<> >( lit(1) );
+        proto::assert_matches< proto::and_<> >( proto::lit(1) );
+        proto::assert_matches_not< proto::or_<> >( proto::lit(1) );
 
-        assert_matches< proto::and_<proto::terminal<int> > >( lit(1) );
-        assert_matches< proto::or_<proto::terminal<int> > >( lit(1) );
+        proto::assert_matches< proto::and_<proto::terminal<int> > >( proto::lit(1) );
+        proto::assert_matches< proto::or_<proto::terminal<int> > >( proto::lit(1) );
     }
 
     // Test lambda matches with arrays, a corner case that had
     // a bug that was reported by Antoine de Maricourt on boost@lists.boost.org
     {
         a_template<int[3]> a;
-        assert_matches< proto::terminal< a_template<_> > >( lit(a) );
+        proto::assert_matches< proto::terminal< a_template<proto::_> > >( proto::lit(a) );
     }
 
     // Test that the actual derived expression type makes it through to proto::if_
     {
         my_expr<proto::terminal<int>::type> e = {{1}};
-        assert_matches< proto::if_<boost::is_same<domain_of<_>, my_domain>()> >( e );
+        proto::assert_matches< proto::if_<boost::is_same<proto::domain_of<proto::_>, my_domain>()> >( e );
     }
 }
 
-using namespace unit_test;
+using namespace boost::unit_test;
 ///////////////////////////////////////////////////////////////////////////////
 // init_unit_test_suite
 //

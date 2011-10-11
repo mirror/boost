@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// make_expr.hpp
+// proto::make_expr.hpp
 //
 //  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -12,282 +12,282 @@
 #include <boost/fusion/tuple.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace boost;
-using namespace proto;
+namespace fusion = boost::fusion;
+namespace proto = boost::proto;
 
 template<typename E> struct ewrap;
 
 struct mydomain
-  : domain<generator<ewrap> >
+  : proto::domain<proto::generator<ewrap> >
 {};
 
 template<typename E> struct ewrap
-  : extends<E, ewrap<E>, mydomain>
+  : proto::extends<E, ewrap<E>, mydomain>
 {
     explicit ewrap(E const &e = E())
-      : extends<E, ewrap<E>, mydomain>(e)
+      : proto::extends<E, ewrap<E>, mydomain>(e)
     {}
 };
 
 void test_make_expr()
 {
     int i = 42;
-    terminal<int>::type t1 = make_expr<tag::terminal>(1);
-    terminal<int>::type t2 = make_expr<tag::terminal>(i);
-    unary_plus<terminal<int>::type>::type p1 = make_expr<tag::unary_plus>(1);
-    unary_plus<terminal<int>::type>::type p2 = make_expr<tag::unary_plus>(i);
+    proto::terminal<int>::type t1 = proto::make_expr<proto::tag::terminal>(1);
+    proto::terminal<int>::type t2 = proto::make_expr<proto::tag::terminal>(i);
+    proto::unary_plus<proto::terminal<int>::type>::type p1 = proto::make_expr<proto::tag::unary_plus>(1);
+    proto::unary_plus<proto::terminal<int>::type>::type p2 = proto::make_expr<proto::tag::unary_plus>(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::unary_plus
+                proto::tag::unary_plus
               , proto::list1<
-                    ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                    ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p3_type;
-    p3_type p3 = make_expr<tag::unary_plus, mydomain>(i);
+    p3_type p3 = proto::make_expr<proto::tag::unary_plus, mydomain>(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::plus
+                proto::tag::plus
               , proto::list2<
                     p3_type
-                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                  , ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p4_type;
-    p4_type p4 = make_expr<tag::plus>(p3, 0);
+    p4_type p4 = proto::make_expr<proto::tag::plus>(p3, 0);
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
 void test_make_expr_ref()
 {
     int i = 42;
-    terminal<int const &>::type t1 = make_expr<tag::terminal>(boost::cref(1)); // DANGEROUS
-    terminal<int &>::type t2 = make_expr<tag::terminal>(boost::ref(i));
+    proto::terminal<int const &>::type t1 = proto::make_expr<proto::tag::terminal>(boost::cref(1)); // DANGEROUS
+    proto::terminal<int &>::type t2 = proto::make_expr<proto::tag::terminal>(boost::ref(i));
     BOOST_CHECK_EQUAL(&i, &proto::value(t2));
-    unary_plus<terminal<int const &>::type>::type p1 = make_expr<tag::unary_plus>(boost::cref(1)); // DANGEROUS
-    unary_plus<terminal<int &>::type>::type p2 = make_expr<tag::unary_plus>(boost::ref(i));
+    proto::unary_plus<proto::terminal<int const &>::type>::type p1 = proto::make_expr<proto::tag::unary_plus>(boost::cref(1)); // DANGEROUS
+    proto::unary_plus<proto::terminal<int &>::type>::type p2 = proto::make_expr<proto::tag::unary_plus>(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::unary_plus
+                proto::tag::unary_plus
               , proto::list1<
-                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                    ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int &> > >
                 >
             >
         >
     p3_type;
-    p3_type p3 = make_expr<tag::unary_plus, mydomain>(boost::ref(i));
+    p3_type p3 = proto::make_expr<proto::tag::unary_plus, mydomain>(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::plus
+                proto::tag::plus
               , proto::list2<
                     p3_type &
-                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                  , ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p4_type;
-    p4_type p4 = make_expr<tag::plus>(boost::ref(p3), 0);
+    p4_type p4 = proto::make_expr<proto::tag::plus>(boost::ref(p3), 0);
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
 void test_make_expr_functional()
 {
     int i = 42;
-    terminal<int>::type t1 = functional::make_expr<tag::terminal>()(1);
-    terminal<int>::type t2 = functional::make_expr<tag::terminal>()(i);
-    unary_plus<terminal<int>::type>::type p1 = functional::make_expr<tag::unary_plus>()(1);
-    unary_plus<terminal<int>::type>::type p2 = functional::make_expr<tag::unary_plus>()(i);
+    proto::terminal<int>::type t1 = proto::functional::make_expr<proto::tag::terminal>()(1);
+    proto::terminal<int>::type t2 = proto::functional::make_expr<proto::tag::terminal>()(i);
+    proto::unary_plus<proto::terminal<int>::type>::type p1 = proto::functional::make_expr<proto::tag::unary_plus>()(1);
+    proto::unary_plus<proto::terminal<int>::type>::type p2 = proto::functional::make_expr<proto::tag::unary_plus>()(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::unary_plus
+                proto::tag::unary_plus
               , proto::list1<
-                    ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                    ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p3_type;
-    p3_type p3 = functional::make_expr<tag::unary_plus, mydomain>()(i);
+    p3_type p3 = proto::functional::make_expr<proto::tag::unary_plus, mydomain>()(i);
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::plus
+                proto::tag::plus
               , proto::list2<
                     p3_type
-                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                  , ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p4_type;
-    p4_type p4 = functional::make_expr<tag::plus>()(p3, 0);
+    p4_type p4 = proto::functional::make_expr<proto::tag::plus>()(p3, 0);
 }
 
 void test_make_expr_functional_ref()
 {
     int i = 42;
-    terminal<int const &>::type t1 = functional::make_expr<tag::terminal>()(boost::cref(1)); // DANGEROUS
-    terminal<int &>::type t2 = functional::make_expr<tag::terminal>()(boost::ref(i));
+    proto::terminal<int const &>::type t1 = proto::functional::make_expr<proto::tag::terminal>()(boost::cref(1)); // DANGEROUS
+    proto::terminal<int &>::type t2 = proto::functional::make_expr<proto::tag::terminal>()(boost::ref(i));
     BOOST_CHECK_EQUAL(&i, &proto::value(t2));
-    unary_plus<terminal<int const &>::type>::type p1 = functional::make_expr<tag::unary_plus>()(boost::cref(1)); // DANGEROUS
-    unary_plus<terminal<int &>::type>::type p2 = functional::make_expr<tag::unary_plus>()(boost::ref(i));
+    proto::unary_plus<proto::terminal<int const &>::type>::type p1 = proto::functional::make_expr<proto::tag::unary_plus>()(boost::cref(1)); // DANGEROUS
+    proto::unary_plus<proto::terminal<int &>::type>::type p2 = proto::functional::make_expr<proto::tag::unary_plus>()(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::unary_plus
+                proto::tag::unary_plus
               , proto::list1<
-                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                    ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int &> > >
                 >
             >
         >
     p3_type;
-    p3_type p3 = functional::make_expr<tag::unary_plus, mydomain>()(boost::ref(i));
+    p3_type p3 = proto::functional::make_expr<proto::tag::unary_plus, mydomain>()(boost::ref(i));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::plus
+                proto::tag::plus
               , proto::list2<
                     p3_type &
-                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                  , ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p4_type;
-    p4_type p4 = functional::make_expr<tag::plus>()(boost::ref(p3), 0);
+    p4_type p4 = proto::functional::make_expr<proto::tag::plus>()(boost::ref(p3), 0);
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
 void test_unpack_expr()
 {
     int i = 42;
-    terminal<int>::type t1 = unpack_expr<tag::terminal>(fusion::make_tuple(1));
-    terminal<int &>::type t2 = unpack_expr<tag::terminal>(fusion::make_tuple(boost::ref(i)));
-    unary_plus<terminal<int>::type>::type p1 = unpack_expr<tag::unary_plus>(fusion::make_tuple(1));
-    unary_plus<terminal<int &>::type>::type p2 = unpack_expr<tag::unary_plus>(fusion::make_tuple(boost::ref(i)));
+    proto::terminal<int>::type t1 = proto::unpack_expr<proto::tag::terminal>(fusion::make_tuple(1));
+    proto::terminal<int &>::type t2 = proto::unpack_expr<proto::tag::terminal>(fusion::make_tuple(boost::ref(i)));
+    proto::unary_plus<proto::terminal<int>::type>::type p1 = proto::unpack_expr<proto::tag::unary_plus>(fusion::make_tuple(1));
+    proto::unary_plus<proto::terminal<int &>::type>::type p2 = proto::unpack_expr<proto::tag::unary_plus>(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::unary_plus
+                proto::tag::unary_plus
               , proto::list1<
-                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                    ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int &> > >
                 >
             >
         >
     p3_type;
-    p3_type p3 = unpack_expr<tag::unary_plus, mydomain>(fusion::make_tuple(boost::ref(i)));
+    p3_type p3 = proto::unpack_expr<proto::tag::unary_plus, mydomain>(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::plus
+                proto::tag::plus
               , proto::list2<
                     p3_type &
-                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                  , ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p4_type;
-    p4_type p4 = unpack_expr<tag::plus>(fusion::make_tuple(boost::ref(p3), 0));
+    p4_type p4 = proto::unpack_expr<proto::tag::plus>(fusion::make_tuple(boost::ref(p3), 0));
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
 void test_unpack_expr_functional()
 {
     int i = 42;
-    terminal<int>::type t1 = functional::unpack_expr<tag::terminal>()(fusion::make_tuple(1));
-    terminal<int &>::type t2 = functional::unpack_expr<tag::terminal>()(fusion::make_tuple(boost::ref(i)));
-    unary_plus<terminal<int>::type>::type p1 = functional::unpack_expr<tag::unary_plus>()(fusion::make_tuple(1));
-    unary_plus<terminal<int &>::type>::type p2 = functional::unpack_expr<tag::unary_plus>()(fusion::make_tuple(boost::ref(i)));
+    proto::terminal<int>::type t1 = proto::functional::unpack_expr<proto::tag::terminal>()(fusion::make_tuple(1));
+    proto::terminal<int &>::type t2 = proto::functional::unpack_expr<proto::tag::terminal>()(fusion::make_tuple(boost::ref(i)));
+    proto::unary_plus<proto::terminal<int>::type>::type p1 = proto::functional::unpack_expr<proto::tag::unary_plus>()(fusion::make_tuple(1));
+    proto::unary_plus<proto::terminal<int &>::type>::type p2 = proto::functional::unpack_expr<proto::tag::unary_plus>()(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p2)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::unary_plus
+                proto::tag::unary_plus
               , proto::list1<
-                    ewrap<proto::basic_expr<tag::terminal, proto::term<int &> > >
+                    ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int &> > >
                 >
             >
         >
     p3_type;
-    p3_type p3 = functional::unpack_expr<tag::unary_plus, mydomain>()(fusion::make_tuple(boost::ref(i)));
+    p3_type p3 = proto::functional::unpack_expr<proto::tag::unary_plus, mydomain>()(fusion::make_tuple(boost::ref(i)));
     BOOST_CHECK_EQUAL(proto::value(proto::child(p3)), 42);
 
     typedef
         ewrap<
             proto::basic_expr<
-                tag::plus
+                proto::tag::plus
               , proto::list2<
                     p3_type &
-                  , ewrap<proto::basic_expr<tag::terminal, proto::term<int> > >
+                  , ewrap<proto::basic_expr<proto::tag::terminal, proto::term<int> > >
                 >
             >
         >
     p4_type;
-    p4_type p4 = functional::unpack_expr<tag::plus>()(fusion::make_tuple(boost::ref(p3), 0));
+    p4_type p4 = proto::functional::unpack_expr<proto::tag::plus>()(fusion::make_tuple(boost::ref(p3), 0));
     BOOST_CHECK_EQUAL(proto::value(proto::child(proto::left(p4))), 42);
 }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
-#define _byref(x) call<_byref(x)>
-#define _byval(x) call<_byval(x)>
-#define Minus(x) call<Minus(x)>
+#define _byref(x) call<proto::_byref(x)>
+#define _byval(x) call<proto::_byval(x)>
+#define Minus(x) proto::call<Minus(x)>
 #endif
 
 // Turn all terminals held by reference into ones held by value
 struct ByVal
-  : or_<
-        when<terminal<_>, _make_terminal(_byval(_value))>
-      , when<nary_expr<_, vararg<ByVal> > >
+  : proto::or_<
+        proto::when<proto::terminal<proto::_>, proto::_make_terminal(proto::_byval(proto::_value))>
+      , proto::when<proto::nary_expr<proto::_, proto::vararg<ByVal> > >
     >
 {};
 
 // Turn all terminals held by value into ones held by reference (not safe in general)
 struct ByRef
-  : or_<
-        when<terminal<_>, _make_terminal(_byref(_value))>
-      , when<nary_expr<_, vararg<ByRef> > >
+  : proto::or_<
+        proto::when<proto::terminal<proto::_>, proto::_make_terminal(proto::_byref(proto::_value))>
+      , proto::when<proto::nary_expr<proto::_, proto::vararg<ByRef> > >
     >
 {};
 
-// turn all plus nodes to minus nodes:
+// turn all proto::plus nodes to minus nodes:
 struct Minus
-  : or_<
-        when<terminal<_> >
-      , when<plus<Minus, Minus>, _make_minus(Minus(_left), Minus(_right)) >
+  : proto::or_<
+        proto::when<proto::terminal<proto::_> >
+      , proto::when<proto::plus<Minus, Minus>, proto::_make_minus(Minus(proto::_left), Minus(proto::_right)) >
     >
 {};
 
 struct Square
-  : or_<
-        // Not creating new terminal nodes here,
+  : proto::or_<
+        // Not creating new proto::terminal nodes here,
         // so hold the existing terminals by reference:
-        when<terminal<_>, _make_multiplies(_, _)>
-      , when<plus<Square, Square> >
+        proto::when<proto::terminal<proto::_>, proto::_make_multiplies(proto::_, proto::_)>
+      , proto::when<proto::plus<Square, Square> >
     >
 {};
 
@@ -299,61 +299,61 @@ struct Square
 
 void test_make_expr_transform()
 {
-    plus<
-        terminal<int>::type
-      , terminal<int>::type
-    >::type t1 = ByVal()(as_expr(1) + 1);
+    proto::plus<
+        proto::terminal<int>::type
+      , proto::terminal<int>::type
+    >::type t1 = ByVal()(proto::as_expr(1) + 1);
 
-    plus<
-        terminal<int const &>::type
-      , terminal<int const &>::type
-    >::type t2 = ByRef()(as_expr(1) + 1);
+    proto::plus<
+        proto::terminal<int const &>::type
+      , proto::terminal<int const &>::type
+    >::type t2 = ByRef()(proto::as_expr(1) + 1);
 
-    minus<
-        terminal<int>::type const &
-      , terminal<int const &>::type const &
-    >::type t3 = Minus()(as_expr(1) + 1);
+    proto::minus<
+        proto::terminal<int>::type const &
+      , proto::terminal<int const &>::type const &
+    >::type t3 = Minus()(proto::as_expr(1) + 1);
 
-    plus<
-        multiplies<terminal<int>::type const &, terminal<int>::type const &>::type
-      , multiplies<terminal<int const &>::type const &, terminal<int const &>::type const &>::type
-    >::type t4 = Square()(as_expr(1) + 1);
+    proto::plus<
+        proto::multiplies<proto::terminal<int>::type const &, proto::terminal<int>::type const &>::type
+      , proto::multiplies<proto::terminal<int const &>::type const &, proto::terminal<int const &>::type const &>::type
+    >::type t4 = Square()(proto::as_expr(1) + 1);
 }
 
 
 struct length_impl {};
 struct dot_impl {};
 
-terminal<length_impl>::type const length = {{}};
-terminal<dot_impl>::type const dot = {{}};
+proto::terminal<length_impl>::type const length = {{}};
+proto::terminal<dot_impl>::type const dot = {{}};
 
 // work around msvc bugs...
 #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500))
-#define _byref(a) call<_byref(a)>
-#define _byval(a) call<_byval(a)>
-#define _child1(a) call<_child1(a)>
-#define _make_terminal(a) call<_make_terminal(a)>
-#define _make_function(a,b,c) call<_make_function(a,b,c)>
-#define dot_impl() make<dot_impl()>
+#define _byref(a) call<proto::_byref(a)>
+#define _byval(a) call<proto::_byval(a)>
+#define _child1(a) call<proto::_child1(a)>
+#define _make_terminal(a) call<proto::_make_terminal(a)>
+#define _make_function(a,b,c) call<proto::_make_function(a,b,c)>
+#define dot_impl() proto::make<dot_impl()>
 #endif
 
 // convert length(a) < length(b) to dot(a,a) < dot(b,b)
 struct Convert
-  : when<
-        less<
-            function<terminal<length_impl>, _>
-          , function<terminal<length_impl>, _>
+  : proto::when<
+        proto::less<
+            proto::function<proto::terminal<length_impl>, proto::_>
+          , proto::function<proto::terminal<length_impl>, proto::_>
         >
-      , _make_less(
-            _make_function(
-                _make_terminal(dot_impl())
-              , _child1(_child0)
-              , _child1(_child0)
+      , proto::_make_less(
+            proto::_make_function(
+                proto::_make_terminal(dot_impl())
+              , proto::_child1(proto::_child0)
+              , proto::_child1(proto::_child0)
             )
-          , _make_function(
-                _make_terminal(dot_impl())
-              , _child1(_child1)
-              , _child1(_child1)
+          , proto::_make_function(
+                proto::_make_terminal(dot_impl())
+              , proto::_child1(proto::_child1)
+              , proto::_child1(proto::_child1)
             )
         )
     >
@@ -384,13 +384,13 @@ void test_make_expr_transform2()
 #undef dot_impl
 #endif
 
-using namespace unit_test;
+using namespace boost::unit_test;
 ///////////////////////////////////////////////////////////////////////////////
 // init_unit_test_suite
 //
 test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
-    test_suite *test = BOOST_TEST_SUITE("test make_expr, unpack_expr and friends");
+    test_suite *test = BOOST_TEST_SUITE("test proto::make_expr, proto::unpack_expr and friends");
 
     test->add(BOOST_TEST_CASE(&test_make_expr));
     test->add(BOOST_TEST_CASE(&test_make_expr_ref));
