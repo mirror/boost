@@ -104,7 +104,8 @@ namespace boost { namespace unordered { namespace detail {
     yes_type is_private_type(private_type const&);
 
     struct convert_from_anything {
-        convert_from_anything(...);
+        template <typename T>
+        convert_from_anything(T const&);
     };
 
 #if !defined(BOOST_NO_SFINAE_EXPR) || BOOST_WORKAROUND(BOOST_MSVC, >= 1500)

@@ -225,7 +225,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
     struct emulation1 {
         static choice1::type test(choice1, std::pair<A, B> const&);
         static choice2::type test(choice2, A const&);
-        static choice3::type test(choice3, ...);
+        static choice3::type test(choice3, convert_from_anything const&);
 
         enum { value =
             sizeof(test(choose(), boost::unordered::detail::make<A0>())) ==
