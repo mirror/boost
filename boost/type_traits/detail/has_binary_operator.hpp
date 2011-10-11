@@ -38,7 +38,7 @@
 // cannot find another implementation -> declared as system header to suppress these warnings.
 #if defined(__GNUC__) && ((__GNUC__==3 && __GNUC_MINOR__>=1) || (__GNUC__>3))
 #   pragma GCC system_header
-#elif BOOST_MSVC
+#elif defined(BOOST_MSVC)
 #   pragma warning ( push )
 #   pragma warning ( disable : 4018 4244 4547 4800 4804 4805 4913 )
 #endif
@@ -222,7 +222,7 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF3(BOOST_TT_TRAIT_NAME, Lhs, Rhs=Lhs, Ret=::boost::det
 
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC)
 #   pragma warning ( pop )
 #endif
 

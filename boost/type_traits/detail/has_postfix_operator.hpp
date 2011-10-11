@@ -21,9 +21,12 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-#if defined(BOOST_MSVC)
+// avoid warnings
+#if defined(__GNUC__) && ((__GNUC__==3 && __GNUC_MINOR__>=1) || (__GNUC__>3))
+#   pragma GCC system_header
+#elif defined(BOOST_MSVC)
 #   pragma warning ( push )
-#   pragma warning ( disable : 4913 4244 )
+#   pragma warning ( disable : 4244 4913 )
 #endif
 
 namespace boost {
@@ -194,7 +197,7 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF2(BOOST_TT_TRAIT_NAME, Lhs, Ret=::boost::detail::BOOS
 } // namespace boost
 
 #if defined(BOOST_MSVC)
-#   pragma warning (pop)
+#   pragma warning ( pop )
 #endif
 
 #include <boost/type_traits/detail/bool_trait_undef.hpp>
