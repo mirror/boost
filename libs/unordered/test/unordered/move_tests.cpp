@@ -193,12 +193,15 @@ namespace move_tests
             test::check_container(y, v2);
             test::check_equivalent_keys(y);
             BOOST_TEST(y.max_load_factor() == 2.0);
+
+#if defined(BOOST_HAS_NRVO)
             if (allocator_type::is_propagate_on_move) {
                 BOOST_TEST(test::equivalent(y.get_allocator(), al2));
             }
             else {
                 BOOST_TEST(test::equivalent(y.get_allocator(), al1));
             }
+#endif
         }
 
         {
@@ -214,6 +217,72 @@ namespace move_tests
             test::check_container(y, v);
             test::check_equivalent_keys(y);
             BOOST_TEST(y.max_load_factor() == 0.5);
+
+#if defined(BOOST_HAS_NRVO)
+            if (allocator_type::is_propagate_on_move) {
+                BOOST_TEST(test::equivalent(y.get_allocator(), al2));
+            }
+            else {
+                BOOST_TEST(test::equivalent(y.get_allocator(), al1));
+            }
+#endif
+        }
+
+        {
+            test::check_instances check_;
+
+            test::random_values<T> v(500, generator);
+            T y(0, hf, eq, al1);
+
+            T x(0, hf, eq, al2);
+            x.max_load_factor(0.25);
+            x.insert(v.begin(), v.end());
+
+            test::object_count count = test::global_object_count;
+            y = boost::move(x);
+            if (allocator_type::is_propagate_on_move) {
+                BOOST_TEST(count == test::global_object_count);
+            }
+            test::check_container(y, v);
+            test::check_equivalent_keys(y);
+            BOOST_TEST(y.max_load_factor() == 0.25);
+
+            if (allocator_type::is_propagate_on_move) {
+                BOOST_TEST(test::equivalent(y.get_allocator(), al2));
+            }
+            else {
+                BOOST_TEST(test::equivalent(y.get_allocator(), al1));
+            }
+        }
+
+        {
+            test::check_instances check_;
+
+            test::random_values<T> v1(1000, generator);
+            test::random_values<T> v2(200, generator);
+
+            T x(0, hf, eq, al2);
+            x.max_load_factor(0.5);
+            x.insert(v2.begin(), v2.end());
+
+            test::object_count count1 = test::global_object_count;
+
+            T y(v1.begin(), v1.end(), 0, hf, eq, al1);
+            y = boost::move(x);
+
+            test::object_count count2 = test::global_object_count;
+
+            if (allocator_type::is_propagate_on_move) {
+                BOOST_TEST(count1.instances ==
+                    test::global_object_count.instances);
+                BOOST_TEST(count2.constructions ==
+                    test::global_object_count.constructions);
+            }
+
+            test::check_container(y, v2);
+            test::check_equivalent_keys(y);
+            BOOST_TEST(y.max_load_factor() == 0.5);
+
             if (allocator_type::is_propagate_on_move) {
                 BOOST_TEST(test::equivalent(y.get_allocator(), al2));
             }
