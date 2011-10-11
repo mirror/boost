@@ -889,6 +889,26 @@ the arguments is itself a macro (see 16.3.1 in C++ standard). This is normally
 used to create a mangled name in combination with a predefined macro such a
 \_\_LINE__.
 ]]
+[[`BOOST_FORCEINLINE`][
+This macro can be used in place of the `inline` keyword to instruct the compiler
+that a function should always be inlined.
+Overuse of this macro can lead to significant bloat, while good use can increase
+performance in certain cases, such as computation-intensive code built through
+generative programming techniques.
+
+Usage example:
+``
+  template<class T>
+  BOOST_FORCEINLINE T& f(T& t)
+  {
+      return t;
+  }
+``
+
+Note that use of this macro can lead to cryptic error messages with some compilers.
+Consider defining it to `inline` before including the Boost.Config header in order to be
+able to debug errors more easily.
+]]
 ]
 
 [endsect]

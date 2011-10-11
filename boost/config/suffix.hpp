@@ -688,5 +688,17 @@ namespace std{ using ::type_info; }
 
 #define BOOST_STATIC_CONSTEXPR  static BOOST_CONSTEXPR_OR_CONST
 
+// BOOST_FORCEINLINE ---------------------------------------------//
+// Macro to use in place of 'inline' to force a function to be inline
+#if !defined(BOOST_FORCEINLINE)
+#  if defined(_MSC_VER)
+#    define BOOST_FORCEINLINE __forceinline
+#  elif defined(__GNUC__) && __GNUC__ > 3
+#    define BOOST_FORCEINLINE inline __attribute__ ((always_inline))
+#  else
+#    define BOOST_FORCEINLINE inline
+#  endif
+#endif
+
 #endif
 

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
@@ -315,7 +315,7 @@
 <td>
                 <p>
                   The compiler fails to compile a nested class that has a dependent
-                  base class:
+                  base class: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">foo</span> <span class="special">:</span> <span class="special">{</span>
@@ -341,8 +341,9 @@
 <td>
                 <p>
                   Template value parameters cannot have a dependent type, for example:
+                  
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span> 
 <span class="keyword">class</span> <span class="identifier">X</span> <span class="special">{</span> <span class="special">...</span> <span class="special">};</span>
 </pre>
 <p>
@@ -421,7 +422,7 @@
 <td>
                 <p>
                   The compiler does not perform function template ordering or its
-                  function template ordering is incorrect.
+                  function template ordering is incorrect. 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="comment">// #1</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
@@ -1313,7 +1314,7 @@
 <td>
                 <p>
                   The compiler does not allow a void function to return the result
-                  of calling another void function.
+                  of calling another void function. 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">void</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">{}</span>
 <span class="keyword">void</span> <span class="identifier">g</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">f</span><span class="special">();</span> <span class="special">}</span>
@@ -2917,12 +2918,12 @@
                 <p>
                   Some compilers don't support the use of <code class="computeroutput"><span class="identifier">constexpr</span></code>.
                   This macro expands to nothing on those compilers, and <code class="computeroutput"><span class="identifier">constexpr</span></code> elsewhere. For example,
-                  when defining a constexpr function or constructor replace:
+                  when defining a constexpr function or constructor replace: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">constexpr</span> <span class="identifier">tuple</span><span class="special">();</span>
 </pre>
 <p>
-                  with:
+                  with: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_CONSTEXPR</span> <span class="identifier">tuple</span><span class="special">();</span>
 </pre>
@@ -2942,11 +2943,12 @@
                   This macro expands to <code class="computeroutput"><span class="keyword">const</span></code>
                   on those compilers, and <code class="computeroutput"><span class="identifier">constexpr</span></code>
                   elsewhere. For example, when defining const expr variables replace:
+                  
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">constexpr</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
 </pre>
 <p>
-                  with:
+                  with: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">BOOST_CONSTEXPR_OR_CONST</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
 </pre>
@@ -2964,12 +2966,12 @@
                 <p>
                   This is a shortcut for <code class="computeroutput"><span class="keyword">static</span>
                   <span class="identifier">BOOST_CONSTEXPR_OR_CONST</span></code>For
-                  example, when defining const expr variables replace:
+                  example, when defining const expr variables replace: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">constexpr</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
 </pre>
 <p>
-                  with:
+                  with: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_STATIC_CONSTEXPR</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
 </pre>
@@ -2980,6 +2982,7 @@
 <tr>
 <td>
                 <p>
+                  
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_NOEXCEPT</span>
 <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
@@ -2996,6 +2999,7 @@
                 </p>
                 <div class="blockquote"><blockquote class="blockquote">
 <p>
+                    
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
@@ -3011,6 +3015,7 @@
                 </p>
                 <div class="blockquote"><blockquote class="blockquote">
 <p>
+                    
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span> <span class="identifier">noexcept</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span> <span class="identifier">noexcept</span><span class="special">((</span><span class="identifier">Predicate</span><span class="special">))</span>
@@ -3061,12 +3066,12 @@
                 <p>
                   This macro is used where a compiler specific workaround is required
                   that is not otherwise described by one of the other Boost.Config
-                  macros. To use the macro you must first
+                  macros. To use the macro you must first 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">workaround</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-                  usage is then:
+                  usage is then: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#if</span> <span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">MACRONAME</span><span class="special">,</span> <span class="identifier">CONDITION</span><span class="special">)</span>
    <span class="comment">// workaround code goes here...</span>
@@ -3109,12 +3114,12 @@
                   Sometimes you have a function name with the same name as a C macro,
                   for example "min" and "max" member functions,
                   in which case one can prevent the function being expanded as a
-                  macro using:
+                  macro using: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">someclass</span><span class="special">.</span><span class="identifier">min</span> <span class="identifier">BOOST_PREVENT_MACRO_SUBSTITUTION</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">,</span> <span class="identifier">arg2</span><span class="special">);</span>
 </pre>
 <p>
-                  The following also works in most, but not all, contexts:
+                  The following also works in most, but not all, contexts: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="special">(</span><span class="identifier">someclass</span><span class="special">.</span><span class="identifier">max</span><span class="special">)(</span><span class="identifier">arg1</span><span class="special">,</span> <span class="identifier">arg2</span><span class="special">);</span>
 </pre>
@@ -3209,14 +3214,14 @@
                   integral constant members, we must use enums as a workaround if
                   we want the constants to be available at compile-time. This macro
                   gives us a convenient way to declare such constants. For example
-                  instead of:
+                  instead of: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">value</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
-                  use:
+                  use: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
    <span class="identifier">BOOST_STATIC_CONSTANT</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">value</span> <span class="special">=</span> <span class="number">2</span><span class="special">);</span>
@@ -3249,7 +3254,7 @@
                 <p>
                   Some compilers silently "fold" different function template
                   instantiations if some of the template parameters don't appear
-                  in the function parameter list. For instance:
+                  in the function parameter list. For instance: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">ostream</span><span class="special">&gt;</span>
@@ -3273,7 +3278,7 @@
                   incorrectly outputs <code class="literal">2 2 double double</code> on VC++
                   6. These macros, to be used in the function parameter list, fix
                   the problem without effects on the calling syntax. For instance,
-                  in the case above write:
+                  in the case above write: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">BOOST_EXPLICIT_TEMPLATE_NON_TYPE</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">n</span><span class="special">))</span> <span class="special">{</span> <span class="special">...</span> <span class="special">}</span>
@@ -3380,6 +3385,40 @@
                   when one of the arguments is itself a macro (see 16.3.1 in C++
                   standard). This is normally used to create a mangled name in combination
                   with a predefined macro such a __LINE__.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_FORCEINLINE</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  This macro can be used in place of the <code class="computeroutput"><span class="keyword">inline</span></code>
+                  keyword to instruct the compiler that a function should always
+                  be inlined. Overuse of this macro can lead to significant bloat,
+                  while good use can increase performance in certain cases, such
+                  as computation-intensive code built through generative programming
+                  techniques.
+                </p>
+                <p>
+                  Usage example: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">BOOST_FORCEINLINE</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">t</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+                </p>
+                <p>
+                  Note that use of this macro can lead to cryptic error messages
+                  with some compilers. Consider defining it to <code class="computeroutput"><span class="keyword">inline</span></code>
+                  before including the Boost.Config header in order to be able to
+                  debug errors more easily.
                 </p>
               </td>
 </tr>
@@ -3783,7 +3822,7 @@
                     RTTI. Examples include class for objects that will be thrown
                     as exceptions or used in dynamic_casts, across shared library
                     boundaries. For example, a header-only exception class might
-                    look like this:
+                    look like this: 
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">class</span> <span class="identifier">BOOST_SYMBOL_VISIBLE</span> <span class="identifier">my_exception</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span> <span class="special">{</span> <span class="special">...</span> <span class="special">};</span>
 </pre>
@@ -3821,7 +3860,7 @@
 <span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_ALL_DYN_LINK</span><span class="special">)</span> <span class="special">||</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_FOO_DYN_LINK</span><span class="special">)</span>
 <span class="preprocessor"># if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_FOO_SOURCE</span><span class="special">)</span>
 <span class="preprocessor">#   define</span> <span class="identifier">BOOST_FOO_DECL</span> <span class="identifier">BOOST_SYMBOL_EXPORT</span>
-<span class="preprocessor"># else</span>
+<span class="preprocessor"># else</span> 
 <span class="preprocessor">#   define</span> <span class="identifier">BOOST_FOO_DECL</span> <span class="identifier">BOOST_SYMBOL_IMPORT</span>
 <span class="preprocessor"># endif</span>
 <span class="preprocessor">#else</span>
@@ -3843,7 +3882,7 @@
           <span class="bold"><strong>boost/libs/foo/src/foo.cpp</strong></span>
         </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_FOO_SOURCE</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">foo</span><span class="special">/</span><span class="identifier">foo</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">foo</span><span class="special">/</span><span class="identifier">foo</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>    
 <span class="special">...</span>
 <span class="keyword">void</span> <span class="identifier">BOOST_FOO_DECL</span> <span class="identifier">f</span><span class="special">()</span>
 <span class="special">{</span>
