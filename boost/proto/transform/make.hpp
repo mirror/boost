@@ -37,8 +37,13 @@ namespace boost { namespace proto
     namespace detail
     {
         template<typename T>
+        struct is_transform_wrap
+          : is_transform<T>
+        {};
+
+        template<typename T>
         struct is_applyable
-          : mpl::and_<is_callable<T>, is_transform<T> >
+          : mpl::and_<is_callable<T>, is_transform_wrap<T> >
         {};
 
         template<typename T, bool HasType = mpl::aux::has_type<T>::value>
