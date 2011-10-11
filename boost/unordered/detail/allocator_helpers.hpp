@@ -339,7 +339,7 @@ namespace boost { namespace unordered { namespace detail {
             boost::unordered::detail::has_max_size<Alloc>::value, SizeType
         >::type call_max_size(const Alloc&)
     {
-        return std::numeric_limits<SizeType>::max();
+        return (std::numeric_limits<SizeType>::max)();
     }
 
     template <typename Alloc>

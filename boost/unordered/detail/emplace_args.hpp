@@ -223,29 +223,29 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 #if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
     template <typename A, typename B, typename A0>
     struct emulation1 {
-        static choice1::type check(choice1, std::pair<A, B> const&);
-        static choice2::type check(choice2, A const&);
-        static choice3::type check(choice3, ...);
+        static choice1::type test(choice1, std::pair<A, B> const&);
+        static choice2::type test(choice2, A const&);
+        static choice3::type test(choice3, ...);
 
         enum { value =
-            sizeof(check(choose(), boost::unordered::detail::make<A0>())) ==
+            sizeof(test(choose(), boost::unordered::detail::make<A0>())) ==
                 sizeof(choice2::type) };
     };
 #endif
 
     template <typename A, typename B, typename A0>
     struct check3_base {
-        static choice1::type check(choice1,
+        static choice1::type test(choice1,
             boost::unordered::piecewise_construct_t);
 
 #if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
-        static choice2::type check(choice2, A const&);
+        static choice2::type test(choice2, A const&);
 #endif
 
-        static choice3::type check(choice3, ...);
+        static choice3::type test(choice3, ...);
 
         enum { value =
-            sizeof(check(choose(), boost::unordered::detail::make<A0>())) };
+            sizeof(test(choose(), boost::unordered::detail::make<A0>())) };
     };
 
     template <typename A, typename B, typename A0>
