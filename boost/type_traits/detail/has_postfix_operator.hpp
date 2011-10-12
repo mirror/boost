@@ -40,7 +40,23 @@ namespace BOOST_JOIN(BOOST_TT_TRAIT_NAME,_impl) {
 template <typename T> T &make();
 
 
-// 2. checks if the operator returns void or not
+// 2. we provide our operator definition for types that do not have one already
+
+// a type returned from operator BOOST_TT_TRAIT_OP when no such operator is
+// found in the type's own namespace (our own operator is used) so that we have
+// a means to know that our operator was used
+struct no_operator { };
+
+// this class allows implicit conversions and makes the following operator
+// definition less-preferred than any other such operators that might be found
+// via argument-dependent name lookup
+struct any { template <class T> any(T const&); };
+
+// when operator BOOST_TT_TRAIT_OP is not available, this one is used
+no_operator operator BOOST_TT_TRAIT_OP (const any&, int);
+
+
+// 3. checks if the operator returns void or not
 // conditions: Lhs!=void
 
 // we first redefine "operator," so that we have no compilation error if
@@ -63,11 +79,10 @@ struct operator_returns_void {
    static ::boost::type_traits::yes_type returns_void(returns_void_t);
    static ::boost::type_traits::no_type returns_void(int);
    BOOST_STATIC_CONSTANT(bool, value = (sizeof(::boost::type_traits::yes_type)==sizeof(returns_void((make<Lhs>() BOOST_TT_TRAIT_OP,returns_void_t())))));
-   //BOOST_STATIC_CONSTANT(bool, value = (::boost::is_same< bool volatile, Lhs >::value));
 };
 
 
-// 3. checks if the return type is Ret or Ret==dont_care
+// 4. checks if the return type is Ret or Ret==dont_care
 // conditions: Lhs!=void
 
 struct dont_care { };
@@ -112,22 +127,6 @@ struct operator_returns_Ret < Lhs, Ret, false > {
 };
 
 
-// 4. we provide our operator definition for types that do not have one already
-
-// a type returned from operator BOOST_TT_TRAIT_OP when no such operator is
-// found in the type's own namespace (our own operator is used) so that we have
-// a means to know that our operator was used
-struct no_operator { };
-
-// this class allows implicit conversions and makes the following operator
-// definition less-preferred than any other such operators that might be found
-// via argument-dependent name lookup
-struct any { template <class T> any(T const&); };
-
-// when operator BOOST_TT_TRAIT_OP is not available, this one is used
-no_operator operator BOOST_TT_TRAIT_OP (const any&, int);
-
-
 // 5. checks for operator existence
 // condition: Lhs!=void
 
@@ -146,7 +145,7 @@ struct operator_exists {
 };
 
 
-// 5. main trait: to avoid any compilation error, this class behaves
+// 6. main trait: to avoid any compilation error, this class behaves
 // differently when operator BOOST_TT_TRAIT_OP(Lhs) is forbidden by the
 // standard.
 // Forbidden_if is a bool that is:

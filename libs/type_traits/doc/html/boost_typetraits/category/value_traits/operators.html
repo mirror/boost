@@ -1168,7 +1168,23 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="identifier">make</span><span class="special">();</span>
 
 
-<span class="comment">// 2. checks if the operator returns void or not</span>
+<span class="comment">// 2. we provide our operator definition for types that do not have one already</span>
+
+<span class="comment">// a type returned from operator- when no such operator is</span>
+<span class="comment">// found in the type's own namespace (our own operator is used) so that we have</span>
+<span class="comment">// a means to know that our operator was used</span>
+<span class="keyword">struct</span> <span class="identifier">no_operator</span> <span class="special">{</span> <span class="special">};</span>
+
+<span class="comment">// this class allows implicit conversions and makes the following operator</span>
+<span class="comment">// definition less-preferred than any other such operators that might be found</span>
+<span class="comment">// via argument-dependent name lookup</span>
+<span class="keyword">struct</span> <span class="identifier">any</span> <span class="special">{</span> <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">any</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;);</span> <span class="special">};</span>
+
+<span class="comment">// when operator- is not available, this one is used</span>
+<span class="identifier">no_operator</span> <span class="keyword">operator</span><span class="special">-(</span><span class="keyword">const</span> <span class="identifier">any</span><span class="special">&amp;);</span>
+
+
+<span class="comment">// 3. checks if the operator returns void or not</span>
 <span class="comment">// conditions: Rhs!=void</span>
 
 <span class="comment">// we first redefine "operator," so that we have no compilation error if</span>
@@ -1193,7 +1209,7 @@
 <span class="special">};</span>
 
 
-<span class="comment">// 3. checks if the return type is Ret or Ret==dont_care</span>
+<span class="comment">// 4. checks if the return type is Ret or Ret==dont_care</span>
 <span class="comment">// conditions: Rhs!=void</span>
 
 <span class="keyword">struct</span> <span class="identifier">dont_care</span> <span class="special">{</span> <span class="special">};</span>
@@ -1238,22 +1254,6 @@
 <span class="special">};</span>
 
 
-<span class="comment">// 4. we provide our operator definition for types that do not have one already</span>
-
-<span class="comment">// a type returned from operator- when no such operator is</span>
-<span class="comment">// found in the type's own namespace (our own operator is used) so that we have</span>
-<span class="comment">// a means to know that our operator was used</span>
-<span class="keyword">struct</span> <span class="identifier">no_operator</span> <span class="special">{</span> <span class="special">};</span>
-
-<span class="comment">// this class allows implicit conversions and makes the following operator</span>
-<span class="comment">// definition less-preferred than any other such operators that might be found</span>
-<span class="comment">// via argument-dependent name lookup</span>
-<span class="keyword">struct</span> <span class="identifier">any</span> <span class="special">{</span> <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">any</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;);</span> <span class="special">};</span>
-
-<span class="comment">// when operator- is not available, this one is used</span>
-<span class="identifier">no_operator</span> <span class="keyword">operator</span><span class="special">-(</span><span class="keyword">const</span> <span class="identifier">any</span><span class="special">&amp;);</span>
-
-
 <span class="comment">// 5. checks for operator existence</span>
 <span class="comment">// condition: Rhs!=void</span>
 
@@ -1272,7 +1272,7 @@
 <span class="special">};</span>
 
 
-<span class="comment">// 5. main trait: to avoid any compilation error, this class behaves</span>
+<span class="comment">// 6. main trait: to avoid any compilation error, this class behaves</span>
 <span class="comment">// differently when operator-(Rhs) is forbidden by the standard.</span>
 <span class="comment">// Forbidden_if is a bool that is:</span>
 <span class="comment">// - true when the operator-(Rhs) is forbidden by the standard</span>
