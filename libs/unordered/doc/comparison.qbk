@@ -1,4 +1,4 @@
-[/ Copyright 2006-2008 Daniel James.
+[/ Copyright 2006-2011 Daniel James.
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
 
@@ -66,15 +66,12 @@
     [
         [No equivalent]
         [Local iterators can be used to iterate through individual buckets.
-            (I don't think that the order of local iterators and iterators are
+            (The order of local iterators and iterators aren't
             required to have any correspondence.)]
     ]
     [
         [Can be compared using the `==`, `!=`, `<`, `<=`, `>`, `>=` operators.]
-        [No comparison operators are defined in the standard, although
-            [link unordered.rationale.equality_operators
-            implementations might extend the containers to support `==` and
-            `!=`].]
+        [Can be compared using the `==` and `!=` operators.]
     ]
     [
         []
