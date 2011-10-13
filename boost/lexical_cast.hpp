@@ -46,6 +46,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/container/container_fwd.hpp>
 #include <cwchar>
 
 
@@ -142,6 +143,12 @@ namespace boost
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template<class CharT, class Traits, class Alloc>
     struct stream_char< std::basic_string<CharT,Traits,Alloc> >
+    {
+        typedef CharT type;
+    };
+
+    template<class CharT, class Traits, class Alloc>
+    struct stream_char< ::boost::container::basic_string<CharT,Traits,Alloc> >
     {
         typedef CharT type;
     };
@@ -259,10 +266,37 @@ namespace boost
             typedef Traits type;
         };
 
+        template<class CharT, class Traits, class Alloc, class Source>
+        struct deduce_char_traits< CharT
+                                 , ::boost::container::basic_string<CharT,Traits,Alloc>
+                                 , Source
+                                 >
+        {
+            typedef Traits type;
+        };
+
+        template<class CharT, class Target, class Traits, class Alloc>
+        struct deduce_char_traits< CharT
+                                 , Target
+                                 , ::boost::container::basic_string<CharT,Traits,Alloc>
+                                 >
+        {
+            typedef Traits type;
+        };
+
         template<class CharT, class Traits, class Alloc1, class Alloc2>
         struct deduce_char_traits< CharT
                                  , std::basic_string<CharT,Traits,Alloc1>
                                  , std::basic_string<CharT,Traits,Alloc2>
+                                 >
+        {
+            typedef Traits type;
+        };
+
+        template<class CharT, class Traits, class Alloc1, class Alloc2>
+        struct deduce_char_traits< CharT
+                                 , ::boost::container::basic_string<CharT,Traits,Alloc1>
+                                 , ::boost::container::basic_string<CharT,Traits,Alloc2>
                                  >
         {
             typedef Traits type;
@@ -1257,6 +1291,14 @@ namespace boost
                 return true;
             }
 
+            template<class Alloc>
+            bool operator<<(::boost::container::basic_string<CharT,Traits,Alloc> const& str)
+            {
+                start = const_cast<CharT*>(str.data());
+                finish = start + str.length();
+                return true;
+            }
+
             bool operator<<(bool value)
             {
                 CharT const czero = lcast_char_constants<CharT>::zero;
@@ -1462,6 +1504,9 @@ namespace boost
 #else
             template<class Alloc>
             bool operator>>(std::basic_string<CharT,Traits,Alloc>& str) { str.assign(start, finish); return true; }
+
+            template<class Alloc>
+            bool operator>>(::boost::container::basic_string<CharT,Traits,Alloc>& str) { str.assign(start, finish); return true; }
 #endif
             /*
              * case "-0" || "0" || "+0" :   output = false; return true;
@@ -1598,6 +1643,12 @@ namespace boost
             BOOST_STATIC_CONSTANT(bool, value = true );
         };
 
+        template<typename CharT, typename Traits, typename Alloc>
+        struct is_stdstring< ::boost::container::basic_string<CharT, Traits, Alloc> >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true );
+        };
+
         template<typename T>
         struct is_char_or_wchar
         {
@@ -1694,6 +1745,18 @@ namespace boost
 
         template<typename CharT, typename Traits, typename Alloc>
         struct is_char_array_to_stdstring< std::basic_string<CharT, Traits, Alloc>, const CharT* >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true );
+        };
+
+        template<typename CharT, typename Traits, typename Alloc>
+        struct is_char_array_to_stdstring< ::boost::container::basic_string<CharT, Traits, Alloc>, CharT* >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true );
+        };
+
+        template<typename CharT, typename Traits, typename Alloc>
+        struct is_char_array_to_stdstring< ::boost::container::basic_string<CharT, Traits, Alloc>, const CharT* >
         {
             BOOST_STATIC_CONSTANT(bool, value = true );
         };
