@@ -187,6 +187,12 @@ namespace boost { namespace proto
         struct not_a_domain;
         struct not_a_grammar;
         struct not_a_generator;
+
+        template<typename T, typename Void = void>
+        struct is_transform_;
+
+        template<typename T, typename Void = void>
+        struct is_aggregate_;
     }
 
     typedef detail::ignore const ignore;
@@ -682,10 +688,10 @@ namespace boost { namespace proto
     template<typename T>
     struct is_callable;
 
-    template<typename T, typename Void = void>
+    template<typename T>
     struct is_transform;
 
-    template<typename T, typename Void = void>
+    template<typename T>
     struct is_aggregate;
 
     #define BOOST_PROTO_UNEXPR() typedef int proto_is_expr_;

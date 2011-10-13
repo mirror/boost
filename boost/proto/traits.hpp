@@ -127,6 +127,19 @@ namespace boost { namespace proto
     {};
     #endif
 
+    namespace detail
+    {
+        template<typename T, typename Void /*= void*/>
+        struct is_transform_
+          : mpl::false_
+        {};
+
+        template<typename T>
+        struct is_transform_<T, typename T::proto_is_transform_>
+          : mpl::true_
+        {};
+    }
+
     /// \brief Boolean metafunction which detects whether a type is
     /// a PrimitiveTransform type or not.
     ///
@@ -142,15 +155,33 @@ namespace boost { namespace proto
     /// for \c void, <tt>is_transform\<T\>::value</tt> is \c true. (Note: this is
     /// the case for any type that derives from an instantiation of \c proto::transform.)
     /// \li Otherwise, <tt>is_transform\<T\>::value</tt> is \c false.
-    template<typename T, typename Void /*= void*/>
+    template<typename T>
     struct is_transform
-      : mpl::false_
+      : proto::detail::is_transform_<T>
     {};
 
-    template<typename T>
-    struct is_transform<T, typename T::proto_is_transform_>
-      : mpl::true_
-    {};
+    namespace detail
+    {
+        template<typename T, typename Void /*= void*/>
+        struct is_aggregate_
+          : is_pod<T>
+        {};
+
+        template<typename Tag, typename Args, long N>
+        struct is_aggregate_<proto::expr<Tag, Args, N>, void>
+          : mpl::true_
+        {};
+
+        template<typename Tag, typename Args, long N>
+        struct is_aggregate_<proto::basic_expr<Tag, Args, N>, void>
+          : mpl::true_
+        {};
+
+        template<typename T>
+        struct is_aggregate_<T, typename T::proto_is_aggregate_>
+          : mpl::true_
+        {};
+    }
 
     /// \brief A Boolean metafunction that indicates whether a type requires
     /// aggregate initialization.
@@ -161,27 +192,9 @@ namespace boost { namespace proto
     /// If <tt>is_aggregate\<T\>::value</tt> is \c true, then an object of
     /// type T will be initialized as <tt>T t = {a0,a1,...aN};</tt>. Otherwise,
     /// it will be initialized as <tt>T t(a0,a1,...aN)</tt>.
-    template<typename T, typename Void>
-    struct is_aggregate
-      : is_pod<T>
-    {};
-
-    /// \brief Specialization of <tt>is_aggregate\<\></tt> that indicates
-    /// that objects of <tt>expr\<\></tt> type require aggregate initialization.
-    template<typename Tag, typename Args, long N>
-    struct is_aggregate<proto::expr<Tag, Args, N>, void>
-      : mpl::true_
-    {};
-
-    template<typename Tag, typename Args, long N>
-    struct is_aggregate<proto::basic_expr<Tag, Args, N>, void>
-      : mpl::true_
-    {};
-
-    /// INTERNAL ONLY
     template<typename T>
-    struct is_aggregate<T, typename T::proto_is_aggregate_>
-      : mpl::true_
+    struct is_aggregate
+      : proto::detail::is_aggregate_<T>
     {};
 
     /// \brief A Boolean metafunction that indicates whether a given

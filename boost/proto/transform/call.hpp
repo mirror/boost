@@ -124,7 +124,7 @@ namespace boost { namespace proto
         /// a typedef for <tt>boost::result_of\<Fun(Expr, State, Data)\>::type</tt>.
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 
@@ -193,7 +193,7 @@ namespace boost { namespace proto
         /// \param d An arbitrary data
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 
@@ -271,7 +271,7 @@ namespace boost { namespace proto
         /// \param d An arbitrary data
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 
@@ -337,7 +337,7 @@ namespace boost { namespace proto
 
         template<typename Expr, typename State, typename Data>
         struct impl
-          : impl2<Expr, State, Data, is_transform<Fun>::value>
+          : impl2<Expr, State, Data, detail::is_transform_<Fun>::value>
         {};
     };
 

@@ -112,7 +112,7 @@ namespace boost { namespace proto
         };
         #endif
 
-        template<typename Type, bool IsAggregate = is_aggregate<Type>::value>
+        template<typename Type, bool IsAggregate = detail::is_aggregate_<Type>::value>
         struct construct_
         {
             typedef Type result_type;

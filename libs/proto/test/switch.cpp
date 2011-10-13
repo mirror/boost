@@ -15,8 +15,7 @@
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/bool.hpp>
 
-using namespace boost;
-using namespace proto;
+namespace proto = boost::proto;
 
 struct MyCases
 {
@@ -41,7 +40,7 @@ struct ArityOf;
 struct ArityOfCases
 {
     template<typename ArityOf>
-    struct  case_
+    struct case_
       : proto::not_<proto::_>
     {};
 };
@@ -49,7 +48,7 @@ struct ArityOfCases
 
 template<>
 struct ArityOfCases::case_<boost::mpl::long_<1> >
-: boost::proto::when<boost::proto::_, boost::mpl::false_()>
+  : boost::proto::when<boost::proto::_, boost::mpl::false_()>
 {};
 
 template<>
@@ -67,21 +66,21 @@ struct ArityOf
 void test_switch()
 {
     // Tests for backward compatibility
-    assert_matches<proto::switch_<MyCases> >(lit(1) >> 'a');
-    assert_matches<proto::switch_<MyCases> >(lit(1) + 'a');
-    assert_matches_not<proto::switch_<MyCases> >(lit(1) << 'a');
+    proto::assert_matches<proto::switch_<MyCases> >(proto::lit(1) >> 'a');
+    proto::assert_matches<proto::switch_<MyCases> >(proto::lit(1) + 'a');
+    proto::assert_matches_not<proto::switch_<MyCases> >(proto::lit(1) << 'a');
 
     //Test new matching on the Transform result type
     ArityOf ar;
 
-    assert_matches_not<ArityOf>(lit(1));
-    assert_matches<ArityOf>(lit(1) + 2);
-    assert_matches<ArityOf>(!lit(1));
-    BOOST_CHECK_EQUAL(ar(!lit(1)), false);
-    BOOST_CHECK_EQUAL(ar(lit(1) + 2), true);
+    proto::assert_matches_not<ArityOf>(proto::lit(1));
+    proto::assert_matches<ArityOf>(proto::lit(1) + 2);
+    proto::assert_matches<ArityOf>(!proto::lit(1));
+    BOOST_CHECK_EQUAL(ar(!proto::lit(1)), false);
+    BOOST_CHECK_EQUAL(ar(proto::lit(1) + 2), true);
 }
 
-using namespace unit_test;
+using namespace boost::unit_test;
 ///////////////////////////////////////////////////////////////////////////////
 // init_unit_test_suite
 //
