@@ -26,7 +26,7 @@ namespace boost
       return plural;
     }
 
-    template <class CharT, class Rep>
+    template <class CharT>
     std::basic_string<CharT> duration_symbol_translate(std::basic_string<CharT> const &symbol)
     {
       return symbol;

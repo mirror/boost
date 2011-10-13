@@ -127,7 +127,7 @@ namespace boost
     template <class CharT, class Rep, class Period>
     std::basic_string<CharT> duration_unit(bool is_prefix, duration<Rep,Period> const& d) {
       if (is_prefix) {
-          duration_prefix_translate(
+          return duration_prefix_translate(
               duration_unit_strings<Period, CharT>::singular(),
               duration_unit_strings<Period, CharT>::plural(),
               d.count()
