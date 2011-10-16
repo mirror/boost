@@ -19,7 +19,7 @@
 const char *get_shared_memory_name()
 {
    std::stringstream s;
-   s << "process_" << boost::interprocess::detail::get_current_process_id();
+   s << "process_" << boost::interprocess::ipcdetail::get_current_process_id();
    static std::string str = s.str();
    return str.c_str();
 }
