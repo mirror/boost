@@ -251,7 +251,7 @@ inline u32regex do_make_u32regex(InputIterator i,
                               const boost::mpl::int_<1>*)
 {
    typedef boost::u8_to_u32_iterator<InputIterator, UChar32> conv_type;
-   return u32regex(conv_type(i), conv_type(j), opt);
+   return u32regex(conv_type(i, i, j), conv_type(j, i, j), opt);
 }
 
 template <class InputIterator>
@@ -261,7 +261,7 @@ inline u32regex do_make_u32regex(InputIterator i,
                               const boost::mpl::int_<2>*)
 {
    typedef boost::u16_to_u32_iterator<InputIterator, UChar32> conv_type;
-   return u32regex(conv_type(i), conv_type(j), opt);
+   return u32regex(conv_type(i, i, j), conv_type(j, i, j), opt);
 }
 
 template <class InputIterator>
@@ -282,7 +282,7 @@ inline u32regex do_make_u32regex(InputIterator i,
    typedef boost::u8_to_u32_iterator<InputIterator, UChar32> conv_type;
    typedef std::vector<UChar32> vector_type;
    vector_type v;
-   conv_type a(i), b(j);
+   conv_type a(i, i, j), b(j, i, j);
    while(a != b)
    {
       v.push_back(*a);
@@ -302,7 +302,7 @@ inline u32regex do_make_u32regex(InputIterator i,
    typedef boost::u16_to_u32_iterator<InputIterator, UChar32> conv_type;
    typedef std::vector<UChar32> vector_type;
    vector_type v;
-   conv_type a(i), b(j);
+   conv_type a(i, i, j), b(j, i, j);
    while(a != b)
    {
       v.push_back(*a);
@@ -425,7 +425,7 @@ bool do_regex_match(BidiIterator first, BidiIterator last,
    typedef match_results<conv_type>                   match_type;
    typedef typename match_type::allocator_type        alloc_type;
    match_type what;
-   bool result = ::boost::regex_match(conv_type(first), conv_type(last), what, e, flags);
+   bool result = ::boost::regex_match(conv_type(first, first, last), conv_type(last, first, last), what, e, flags);
    // copy results across to m:
    if(result) copy_results(m, what);
    return result;
@@ -441,7 +441,7 @@ bool do_regex_match(BidiIterator first, BidiIterator last,
    typedef match_results<conv_type>                   match_type;
    typedef typename match_type::allocator_type        alloc_type;
    match_type what;
-   bool result = ::boost::regex_match(conv_type(first), conv_type(last), what, e, flags);
+   bool result = ::boost::regex_match(conv_type(first, first, last), conv_type(last, first, last), what, e, flags);
    // copy results across to m:
    if(result) copy_results(m, what);
    return result;
@@ -600,7 +600,7 @@ bool do_regex_search(BidiIterator first, BidiIterator last,
    typedef match_results<conv_type>                   match_type;
    typedef typename match_type::allocator_type        alloc_type;
    match_type what;
-   bool result = ::boost::regex_search(conv_type(first), conv_type(last), what, e, flags, conv_type(base));
+   bool result = ::boost::regex_search(conv_type(first, first, last), conv_type(last, first, last), what, e, flags, conv_type(base));
    // copy results across to m:
    if(result) copy_results(m, what);
    return result;
@@ -617,7 +617,7 @@ bool do_regex_search(BidiIterator first, BidiIterator last,
    typedef match_results<conv_type>                   match_type;
    typedef typename match_type::allocator_type        alloc_type;
    match_type what;
-   bool result = ::boost::regex_search(conv_type(first), conv_type(last), what, e, flags, conv_type(base));
+   bool result = ::boost::regex_search(conv_type(first, first, last), conv_type(last, first, last), what, e, flags, conv_type(base));
    // copy results across to m:
    if(result) copy_results(m, what);
    return result;

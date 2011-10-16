@@ -1226,7 +1226,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
                for(unsigned int i = 0; i < (1u << CHAR_BIT); ++i)
                {
                   charT c = static_cast<charT>(i);
-                  if(&c != re_is_set_member(&c, &c + 1, static_cast<re_set_long<mask_type>*>(state), *m_pdata, m_icase))
+                  if(&c != re_is_set_member(&c, &c + 1, static_cast<re_set_long<mask_type>*>(state), *m_pdata, l_icase))
                      l_map[i] |= mask;
                }
             }
