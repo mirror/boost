@@ -10,10 +10,10 @@
 project boost/chrono
     : source-location ../src
     : requirements
-        <target-os>freebsd:<threading>multi
-        <target-os>linux:<threading>multi
-        <toolset>pgi:<threading>multi
-        <threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
+        <target-os>freebsd:<linkflags>"-lrt" 
+        <target-os>linux:<linkflags>"-lrt" 
+        <toolset>pgi:<linkflags>"-lrt" 
+        #<threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
         #<define>BOOST_SYSTEM_INLINED
         #<define>BOOST_COMMON_TYPE_USES_STATIC_ASSERT
