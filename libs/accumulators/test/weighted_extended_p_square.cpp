@@ -71,10 +71,12 @@ void test_stat()
     }
 
     // check for uniform distribution
-    for (std::size_t i = 0; i < probs_uniform.size(); ++i)
-    {
-        BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[i], probs_uniform[i], epsilon);
-    }
+    BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[0], probs_uniform[0], 6*epsilon);
+    BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[1], probs_uniform[1], 3*epsilon);
+    BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[2], probs_uniform[2], epsilon);
+    BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[3], probs_uniform[3], epsilon);
+    BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[4], probs_uniform[4], epsilon);
+    BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[5], probs_uniform[5], epsilon);
 
     // check for standard normal distribution
     for (std::size_t i = 0; i < probs_normal1.size(); ++i)

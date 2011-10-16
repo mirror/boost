@@ -56,10 +56,10 @@ void test_stat()
         acc8(sample);
     }
 
-    BOOST_CHECK_CLOSE( p_square_quantile(acc0), 0.001, 15*epsilon );
-    BOOST_CHECK_CLOSE( p_square_quantile(acc1), 0.01 , 5*epsilon );
-    BOOST_CHECK_CLOSE( p_square_quantile(acc2), 0.1  , epsilon );
-    BOOST_CHECK_CLOSE( p_square_quantile(acc3), 0.25 , epsilon );
+    BOOST_CHECK_CLOSE( p_square_quantile(acc0), 0.001, 18*epsilon );
+    BOOST_CHECK_CLOSE( p_square_quantile(acc1), 0.01 , 7*epsilon );
+    BOOST_CHECK_CLOSE( p_square_quantile(acc2), 0.1  , 3*epsilon );
+    BOOST_CHECK_CLOSE( p_square_quantile(acc3), 0.25 , 2*epsilon );
     BOOST_CHECK_CLOSE( p_square_quantile(acc4), 0.5  , epsilon );
     BOOST_CHECK_CLOSE( p_square_quantile(acc5), 0.75 , epsilon );
     BOOST_CHECK_CLOSE( p_square_quantile(acc6), 0.9  , epsilon );
