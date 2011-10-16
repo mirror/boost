@@ -121,7 +121,7 @@
       class false_t { char dummy[2]; };
       static true_t dispatch(U);
       static false_t dispatch(...);
-      static T trigger();
+      static T &trigger();
       public:
       enum { value = sizeof(dispatch(trigger())) == sizeof(true_t) };
    };
@@ -718,13 +718,13 @@ namespace move_detail {
 
 template <class I>
 struct is_move_iterator
-   : public BOOST_MOVE_MPL_NS::integral_constant<bool, false>
+   : public BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
 {
 };
 
 template <class I>
 struct is_move_iterator< ::boost::move_iterator<I> >
-   : public BOOST_MOVE_MPL_NS::integral_constant<bool, true>
+   : public BOOST_MOVE_BOOST_NS::integral_constant<bool, true>
 {
 };
 
