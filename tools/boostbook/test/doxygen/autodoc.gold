@@ -22,4 +22,8 @@ Line 1<sbr/>
 
 This is a test function. <classname alt="example::example">Link to class</classname> <classname alt="example::example_template">Link to class template</classname> <note><para>This is a note.</para></note>
 <para><emphasis role="bold">See Also:</emphasis><para><classname alt="example::example">example::example</classname> and <classname alt="example::example_template">example_template</classname> </para></para>
-</para></description><requires><para>i &gt; j</para></requires><returns><para>The answer </para></returns></function></namespace><macro name="EXAMPLE" kind="functionlike"><macro-parameter name="m"/><purpose>Documentation for macro example. </purpose></macro></header></library-reference>
+</para></description><requires><para>i &gt; j</para></requires><returns><para>The answer </para></returns></function><function name="namespace_func_template"><type>void</type><template>
+          <template-type-parameter name="TypeParameter"><purpose><para>A template parameter </para></purpose></template-type-parameter>
+          <template-nontype-parameter name="NonTypeParameter"><type>int</type><purpose><para>This is a non-type template parameter </para></purpose></template-nontype-parameter>
+        </template><description><para>Testing a function template. 
+</para></description></function></namespace><macro name="EXAMPLE" kind="functionlike"><macro-parameter name="m"/><purpose>Documentation for macro example. </purpose></macro></header></library-reference>

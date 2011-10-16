@@ -114,6 +114,14 @@ namespace example
      * \see example::example and example_template
      */
     int namespace_func(int i, int j);
+    
+    /**
+     * Testing a function template.
+     * \tparam TypeParameter A template parameter
+     * \tparam NonTypeParameter This is a non-type template parameter
+     */
+    template <typename TypeParameter, int NonTypeParameter>
+    void namespace_func_template();
 }
 
 #define EXAMPLE(m) The macro
