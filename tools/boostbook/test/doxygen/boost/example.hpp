@@ -47,6 +47,8 @@ namespace example
         
         /// INTERNAL ONLY
         enum internal_enum { internal_enumerator };
+
+        explicit operator int();
     protected:
         int protected_integer;
         static int protected_static_integer;
