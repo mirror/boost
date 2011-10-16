@@ -33,7 +33,9 @@
 // Some compilers support rvalue references and auto type deduction.
 // With these C++0x features, temporary collections can be bound to 
 // rvalue references and their lifetime is extended. No copy/move is needed.
-#if !defined(BOOST_NO_DECLTYPE) && !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_DECLTYPE) && !defined(BOOST_NO_RVALUE_REFERENCES)                          \
+ && !(BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 4) && !defined(BOOST_INTEL) &&      \
+                                                                   !defined(BOOST_CLANG))
 # define BOOST_FOREACH_USE_RVALUE_REFERENCE_BINDING
 // Some compilers let us detect even const-qualified rvalues at compile-time
 #elif !defined(BOOST_NO_RVALUE_REFERENCES)                                                       \
@@ -1052,49 +1054,22 @@ rderef(auto_any_t cur, type2type<T, C> *)
 
 namespace boost { namespace foreach_detail_
 {
-    template<typename Cond, typename T>
-    inline typename boost::mpl::if_<Cond, T const, T>::type &add_const_if(T &t)
-    {
-        return t;
-    }
-    
     template<typename T>
     typename remove_cv<typename decay<T>::type>::type decay_copy(T &&);
     
     template<typename T>
     T const add_const_if_rvalue(T &&);
 }}
-
-#  define BOOST_FOREACH_IS_RVALUE(COL)                                                                           \
-    (true ? 0 : boost::foreach_detail_::is_rvalue(COL))
-
-# if (BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 4) && !defined(BOOST_INTEL) && !defined(BOOST_CLANG))
-#  define BOOST_FOREACH_AUTO_OBJECT(NAME, EXPR)                                                                   \
-    if (bool BOOST_PP_CAT(NAME, _defined) = false) {} else                                                        \
-    for (auto NAME = (EXPR); !BOOST_PP_CAT(NAME, _defined); BOOST_PP_CAT(NAME, _defined) = true)
-# else
-#  define BOOST_FOREACH_AUTO_OBJECT(NAME, EXPR)                                                                   \
+# define BOOST_FOREACH_AUTO_OBJECT(NAME, EXPR)                                                                    \
     if (bool BOOST_PP_CAT(NAME, _defined) = false) {} else                                                        \
     for (decltype(boost::foreach_detail_::decay_copy(EXPR)) NAME = (EXPR);                                        \
         !BOOST_PP_CAT(NAME, _defined); BOOST_PP_CAT(NAME, _defined) = true)
-# endif
 
 // If EXPR is an rvalue, bind it to a const rvalue reference.
-# if (BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 4) && !defined(BOOST_INTEL) && !defined(BOOST_CLANG))
-#  define BOOST_FOREACH_AUTO_REF_REF(NAME, EXPR)                                                                  \
-    if (bool BOOST_PP_CAT(NAME, _tmp_defined) = false) {} else                                                    \
-    for (auto &&BOOST_PP_CAT(NAME, _tmp) = (EXPR);                                                                \
-        !BOOST_PP_CAT(NAME, _tmp_defined); BOOST_PP_CAT(NAME, _tmp_defined) = true)                               \
-    if (bool BOOST_PP_CAT(NAME, _defined) = false) {} else                                                        \
-    for (auto &&NAME = boost::foreach_detail_::add_const_if< boost::is_rvalue_reference<decltype( (EXPR) ) &&> >( \
-            BOOST_PP_CAT(NAME, _tmp));                                                                            \
-        !BOOST_PP_CAT(NAME, _defined); BOOST_PP_CAT(NAME, _defined) = true)
-# else
-#  define BOOST_FOREACH_AUTO_REF_REF(NAME, EXPR)                                                                  \
+# define BOOST_FOREACH_AUTO_REF_REF(NAME, EXPR)                                                                   \
     if (bool BOOST_PP_CAT(NAME, _defined) = false) {} else                                                        \
     for (decltype(boost::foreach_detail_::add_const_if_rvalue(EXPR)) &&NAME = (EXPR);                             \
         !BOOST_PP_CAT(NAME, _defined); BOOST_PP_CAT(NAME, _defined) = true)
-# endif
 
 #elif defined(BOOST_FOREACH_COMPILE_TIME_CONST_RVALUE_DETECTION)
 ///////////////////////////////////////////////////////////////////////////////
