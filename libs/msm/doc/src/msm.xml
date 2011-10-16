@@ -1371,13 +1371,34 @@ g_row &lt; Empty , play , Playing , &amp;player_::condition2 ></programlisting>
                             the forwarded event must be named in the exit point definition. For
                             example, we could define event6 as simply as:</para>
                         <para>
-                            <programlisting>struct event6 
+                            <programlisting>struct event 
 { 
-    event6(){} 
+    event(){} 
     template &lt;class Event> 
-    event6(Event const&amp;){} 
+    event(Event const&amp;){} 
 }; //convertible from any event</programlisting>
-                        </para>
+                            <emphasis role="underline">Note</emphasis>: There is a current
+                            limitation if you need not only convert but also get some data from the
+                            original event. Consider:</para>
+                        <programlisting>struct event1 
+{ 
+    event1(int val_):val(val_) {}
+    int val;
+}; // forwarded from exit point
+struct event2 
+{ 
+    template &lt;class Event> 
+    event2(Event const&amp; e):val(e.val){} // compiler will complain about another event not having any val
+    int val;
+}; // what the higher-level fsm wants to get</programlisting>
+                        <para>The solution is to provide two constructors:</para>
+                        <programlisting>struct event2 
+{ 
+    template &lt;class Event> 
+    event2(Event const&amp; ):val(0){} // will not be used
+    event2(event1 const&amp; e)):val(e.val){} // the conversion constructor
+    int val;
+}; // what the higher-level fsm wants to get</programlisting>
                     </sect3>
                 </sect2>
                 <sect2>
