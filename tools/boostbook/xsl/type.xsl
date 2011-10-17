@@ -395,6 +395,8 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:with-param name="compact" select="$compact"/>
           <xsl:with-param name="indentation" select="$indentation"/>
           <xsl:with-param name="is-reference" select="false()"/>
+          <xsl:with-param name="max-type-length" select="$max-type-length"/>
+          <xsl:with-param name="max-name-length" select="$max-name-length"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>

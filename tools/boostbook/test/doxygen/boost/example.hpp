@@ -37,6 +37,16 @@ namespace example
         mutable int mutable_integer;
         const int const_integer;
         static const int static_const_integer;
+
+        // Visual check of typedef alignment.
+        /** This type has documentation. */
+        typedef int documented_type1;
+        /** \brief This type has documentation. */
+        typedef long documented_type2;
+        /** This type has documentation. */
+        typedef long double documented_type3;
+        typedef short undocumented_type1;
+        typedef double undocumented_type2;
         
         class inner_class {
         public:
