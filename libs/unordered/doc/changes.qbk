@@ -134,16 +134,23 @@ First official release.
 * Fix a bug when inserting into an `unordered_map` or `unordered_set` using
   iterators which returns `value_type` by copy.
 
-[h2 Boost 1.48.0]
+[h2 Boost 1.48.0 - Major update]
 
 This is major change which has been converted to use Boost.Move's move
-emulation, and be more compliant with the C++11 standard. This has resulted
-in some breaking changes:
+emulation, and be more compliant with the C++11 standard. See the
+[link unordered.compliance compliance section] for details.
+
+The container now meets C++11's complexity requirements, but to do so
+uses a little more memory. This means that `quick_erase` and
+`erase_return_void` are no longer required, they'll be removed in a
+future version.
+
+C++11 support has resulted in some breaking changes:
 
 * Equality comparison has been changed to the C++11 specification.
   In a container with equivalent keys, elements in a group with equal
   keys used to have to be in the same order to be considered equal,
-  now they can be a permutation of each other. To keep the old
+  now they can be a permutation of each other. To use the old
   behavior define the macro `BOOST_UNORDERED_DEPRECATED_EQUALITY`.
 
 * The behaviour of swap is different when the two containers to be

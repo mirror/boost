@@ -14,11 +14,16 @@
     ]
 ]
 
+[def __issues__
+    [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1837.pdf
+    Library Extension Technical Report Issues List]]
+
 [include:hash intro.qbk]
 [include:hash tutorial.qbk]
 [include:hash portability.qbk]
 [include:hash disable.qbk]
 [include:hash changes.qbk]
+[include:hash rationale.qbk]
 [xinclude ref.xml]
 [include:hash links.qbk]
 [include:hash thanks.qbk]

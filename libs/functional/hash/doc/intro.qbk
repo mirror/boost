@@ -18,9 +18,6 @@
 [def __multi-index-short__ [@boost:/libs/multi_index/doc/index.html
     Boost.MultiIndex]]
 [def __bimap__ [@boost:/libs/bimap/index.html Boost.Bimap]]
-[def __issues__
-    [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1837.pdf
-    Library Extension Technical Report Issues List]]
 [def __hash-function__ [@http://en.wikipedia.org/wiki/Hash_function hash function]]
 [def __hash-table__ [@http://en.wikipedia.org/wiki/Hash_table hash table]]
 
@@ -43,6 +40,13 @@ __issues__ (page 63), this adds support for:
 * `std::pair`
 * the standard containers.
 * extending [classref boost::hash] for custom types.
+
+[note
+This hash function is designed to be used in containers based on
+the STL and is not suitable as a general purpose hash function.
+For more details see the [link hash.rationale rationale].
+]
+
 
 [endsect]
 

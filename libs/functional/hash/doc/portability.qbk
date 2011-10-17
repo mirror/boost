@@ -90,16 +90,4 @@ boost namespace:
 Full code for this example is at
 [@boost:/libs/functional/hash/examples/portable.cpp /libs/functional/hash/examples/portable.cpp].
 
-[h2 Other Issues]
-
-On Visual C++ versions 6.5 and 7.0, `hash_value` isn't overloaded for built in
-arrays. __boost_hash__, [funcref boost::hash_combine] and [funcref boost::hash_range] all use a workaround to
-support built in arrays so this shouldn't be a problem in most cases.
-
-On Visual C++ versions 6.5 and 7.0, function pointers aren't currently supported.
-
-When using GCC on Solaris, `boost::hash_value(long double)` treats
-`long double`s as `double`s - so the hash function doesn't take into account the
-full range of values.
-
 [endsect]
