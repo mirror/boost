@@ -34,7 +34,7 @@
 // With these C++0x features, temporary collections can be bound to 
 // rvalue references and their lifetime is extended. No copy/move is needed.
 #if !defined(BOOST_NO_DECLTYPE) && !defined(BOOST_NO_RVALUE_REFERENCES)                          \
- && !(BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 4) && !defined(BOOST_INTEL) &&      \
+ && !(BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ <= 4) && !defined(BOOST_INTEL) &&      \
                                                                    !defined(BOOST_CLANG))
 # define BOOST_FOREACH_USE_RVALUE_REFERENCE_BINDING
 // Some compilers let us detect even const-qualified rvalues at compile-time
