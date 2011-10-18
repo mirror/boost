@@ -38,7 +38,7 @@ namespace boost { namespace type_of {
 
 #endif//BOOST_NO_SFINAE
 
-#define BOOST_TYPEOF(expr) BOOST_TYPEOF_KEYWORD((expr))
+#define BOOST_TYPEOF(expr) BOOST_TYPEOF_KEYWORD(boost::type_of::ensure_obj(expr))
 #define BOOST_TYPEOF_TPL BOOST_TYPEOF
 
 #define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
