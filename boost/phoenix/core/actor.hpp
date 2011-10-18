@@ -160,7 +160,7 @@ namespace boost { namespace phoenix
     template <typename Expr>
     struct actor
     {
-        typedef Expr/*typename
+        typedef typename
             mpl::eval_if_c<
                 mpl::or_<
                     is_custom_terminal<Expr>
@@ -168,7 +168,7 @@ namespace boost { namespace phoenix
                 >::value
               , proto::terminal<Expr>
               , mpl::identity<Expr>
-            >::type*/
+            >::type
             expr_type;
         
         BOOST_PROTO_BASIC_EXTENDS(expr_type, actor<expr_type>, phoenix_domain)
