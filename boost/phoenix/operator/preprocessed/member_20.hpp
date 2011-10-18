@@ -10,7 +10,7 @@ namespace boost { namespace phoenix
     namespace expression { template <typename Lhs, typename Rhs> struct mem_ptr : expr<proto::tag:: mem_ptr, Lhs, Rhs> {}; } namespace rule { struct mem_ptr : expression:: mem_ptr<meta_grammar, meta_grammar> {}; } template <typename Dummy> struct meta_grammar::case_<proto::tag:: mem_ptr, Dummy> : enable_rule<rule:: mem_ptr, Dummy> {}; namespace functional { typedef proto::functional::make_expr<proto::tag:: mem_ptr> make_mem_ptr; } namespace result_of { template <typename Lhs, typename Rhs> struct make_mem_ptr : boost::result_of< functional:: make_mem_ptr( Lhs, Rhs ) > {}; } template <typename Rhs, typename Lhs> inline typename result_of::make_mem_ptr<Rhs, Lhs>::type make_mem_ptr(Lhs const & lhs, Rhs const & rhs) { return functional::make_mem_ptr()(lhs, rhs); }
     template <typename Object, typename MemPtr>
     inline
-    typename enable_if<
+    typename boost::enable_if<
         is_member_function_pointer<MemPtr>
       , detail::mem_fun_ptr_gen<actor<Object>, MemPtr> const
     >::type
