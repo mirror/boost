@@ -139,7 +139,11 @@ private:
         }
 
         {
-            unsigned int rn[] = { std::rand(), std::rand(), std::rand() };
+            unsigned int rn[] = 
+                { static_cast<unsigned int>(std::rand())
+                , static_cast<unsigned int>(std::rand())
+                , static_cast<unsigned int>(std::rand())
+                };
             sha.process_bytes( (unsigned char const*)rn, sizeof( rn ) );
         }
 
