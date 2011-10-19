@@ -211,4 +211,8 @@ namespace boost { namespace program_options {
 
 }}
 
+#if defined(BOOST_MSVC)
+#   pragma warning (pop)
+#endif
+
 #endif
