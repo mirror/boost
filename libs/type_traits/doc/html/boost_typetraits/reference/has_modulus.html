@@ -60,6 +60,7 @@
         <span class="bold"><strong>Header:</strong></span> <code class="computeroutput"><span class="preprocessor">#include</span>
         <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">has_modulus</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
         or <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">has_operator</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        or <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       </p>
 <p>
         <span class="bold"><strong>Examples:</strong></span>
@@ -125,6 +126,41 @@
 <span class="keyword">struct</span> <span class="identifier">B</span> <span class="special">{</span> <span class="keyword">operator</span> <span class="identifier">A</span><span class="special">();</span> <span class="special">};</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_modulus</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">;</span> <span class="comment">// this is fine</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_modulus</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">;</span> <span class="comment">// error: ambiguous overload</span>
+</pre>
+          </li>
+<li class="listitem">
+            There is an issue when applying this trait to template classes. If <code class="computeroutput"><span class="keyword">operator</span><span class="special">%</span></code>
+            is defined but does not bind for a given template type, it is still detected
+            by the trait which returns <code class="computeroutput"><span class="keyword">true</span></code>
+            instead of <code class="computeroutput"><span class="keyword">false</span></code>. Example:
+            
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">has_modulus</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">contains</span> <span class="special">{</span> <span class="identifier">T</span> <span class="identifier">data</span><span class="special">;</span> <span class="special">};</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">%(</span><span class="keyword">const</span> <span class="identifier">contains</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">lhs</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">contains</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">rhs</span><span class="special">)</span> <span class="special">{</span>
+	<span class="keyword">return</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">data</span><span class="special">,</span> <span class="identifier">rhs</span><span class="special">.</span><span class="identifier">data</span><span class="special">);</span>
+<span class="special">}</span>
+
+<span class="keyword">class</span> <span class="identifier">bad</span> <span class="special">{</span> <span class="special">};</span>
+<span class="keyword">class</span> <span class="identifier">good</span> <span class="special">{</span> <span class="special">};</span>
+<span class="keyword">bool</span> <span class="identifier">f</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">good</span><span class="special">&amp;,</span> <span class="keyword">const</span> <span class="identifier">good</span><span class="special">&amp;)</span> <span class="special">{</span> <span class="special">}</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">&lt;&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">boolalpha</span><span class="special">;</span>
+	<span class="comment">// works fine for contains&lt;good&gt;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">&lt;&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_modulus</span><span class="special">&lt;</span> <span class="identifier">contains</span><span class="special">&lt;</span> <span class="identifier">good</span> <span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&lt;&lt;</span><span class="char">'\n'</span><span class="special">;</span> <span class="comment">// true</span>
+	<span class="identifier">contains</span><span class="special">&lt;</span><span class="identifier">good</span><span class="special">&gt;</span> <span class="identifier">g</span><span class="special">;</span>
+	<span class="identifier">g</span><span class="special">%</span><span class="identifier">g</span><span class="special">;</span> <span class="comment">// ok</span>
+	<span class="comment">// does not work for contains&lt;bad&gt;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">&lt;&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_modulus</span><span class="special">&lt;</span> <span class="identifier">contains</span><span class="special">&lt;</span> <span class="identifier">bad</span> <span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&lt;&lt;</span><span class="char">'\n'</span><span class="special">;</span> <span class="comment">// true, should be false</span>
+	<span class="identifier">contains</span><span class="special">&lt;</span><span class="identifier">bad</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">;</span>
+	<span class="identifier">b</span><span class="special">%</span><span class="identifier">b</span><span class="special">;</span> <span class="comment">// compile time error</span>
+	<span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
 </pre>
           </li>
 <li class="listitem">

@@ -425,7 +425,6 @@ if an operator is defined as a private member of type `T` then
 the instantiation of the corresponding trait will produce a compiler error.
 For this reason these traits cannot be used to determine whether a type has a
 public operator or not.
-
 ``
 struct A { private: A operator-(); };
 boost::has_unary_minus<A>::value; // error: A::operator-() is private
@@ -435,16 +434,15 @@ boost::has_unary_minus<A>::value; // error: A::operator-() is private
 convertible to `A`. In this case, the compiler will report an ambiguous overload
 because both the existing operator and the one we provide (with argument of type
 `any`) need type conversion, so that none is preferred.
-
 ``
 struct A { };
 void operator-(const A&);
 struct B { operator A(); };
 boost::has_unary_minus<A>::value; // this is fine
 boost::has_unary_minus<B>::value; // error: ambiguous overload between
-                                           // operator-(const any&) and
-                                           // operator-(const A&)
-                                           // both need type conversion
+                                  // operator-(const any&) and
+                                  // operator-(const A&)
+                                  // both need type conversion
 ``
 ``
 struct B { };
@@ -452,9 +450,44 @@ struct A { A(const B&) { } };
 void operator-(const A&);
 boost::has_unary_minus<A>::value; // this is fine
 boost::has_unary_minus<B>::value; // error: ambiguous overload between
-                                           // operator-(const any&) and
-                                           // operator-(const A&)
-                                           // both need type conversion
+                                  // operator-(const any&) and
+                                  // operator-(const A&)
+                                  // both need type conversion
+``
+
+* There is an issue when applying these traits to template classes.
+If the operator is defined but does not bind for a given template type,
+it is still detected by the trait which returns `true` instead of `false`.
+This applies in particular to the containers of the standard library and `operator==`.
+Example:
+``
+#include <boost/type_traits/has_equal_to.hpp>
+#include <iostream>
+
+template <class T>
+struct contains { T data; };
+
+template <class T>
+bool operator==(const contains<T> &lhs, const contains<T> &rhs) {
+	return f(lhs.data, rhs.data);
+}
+
+class bad { };
+class good { };
+bool f(const good&, const good&) { }
+
+int main() {
+	std::cout<<std::boolalpha;
+	// works fine for contains<good>
+	std::cout<<boost::has_equal_to< contains< good > >::value<<'\n'; // true
+	contains<good> g;
+	g==g; // ok
+	// does not work for contains<bad>
+	std::cout<<boost::has_equal_to< contains< bad > >::value<<'\n'; // true, should be false
+	contains<bad> b;
+	b==b; // compile time error
+	return 0;
+}
 ``
 
 * `volatile` qualifier is not properly handled and would lead to undefined behavior
