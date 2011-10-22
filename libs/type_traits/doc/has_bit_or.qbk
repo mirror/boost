@@ -26,7 +26,7 @@ f(lhs|rhs); // is valid if has_bit_or<Lhs, Rhs, Ret>::value==true
 ``
 If `Ret=void`, the return type is checked to be exactly `void`.
 
-__header `#include <boost/type_traits/has_bit_or.hpp>` or `#include <boost/type_traits/has_operator.hpp>`
+__header `#include <boost/type_traits/has_bit_or.hpp>` or `#include <boost/type_traits/has_operator.hpp>` or `#include <boost/type_traits.hpp>`
 
 __examples
 
@@ -67,6 +67,40 @@ void operator|(const A&, const A&);
 struct B { operator A(); };
 boost::has_bit_or<A>::value; // this is fine
 boost::has_bit_or<B>::value; // error: ambiguous overload
+``
+
+* There is an issue when applying this trait to template classes.
+If `operator|` is defined but does not bind for a given template type,
+it is still detected by the trait which returns `true` instead of `false`.
+Example:
+``
+#include <boost/type_traits/has_bit_or.hpp>
+#include <iostream>
+
+template <class T>
+struct contains { T data; };
+
+template <class T>
+bool operator|(const contains<T> &lhs, const contains<T> &rhs) {
+	return f(lhs.data, rhs.data);
+}
+
+class bad { };
+class good { };
+bool f(const good&, const good&) { }
+
+int main() {
+	std::cout<<std::boolalpha;
+	// works fine for contains<good>
+	std::cout<<boost::has_bit_or< contains< good > >::value<<'\n'; // true
+	contains<good> g;
+	g|g; // ok
+	// does not work for contains<bad>
+	std::cout<<boost::has_bit_or< contains< bad > >::value<<'\n'; // true, should be false
+	contains<bad> b;
+	b|b; // compile time error
+	return 0;
+}
 ``
 
 * `volatile` qualifier is not properly handled and would lead to undefined behavior
