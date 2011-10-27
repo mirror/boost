@@ -51,8 +51,14 @@ void check_all()
   test_good_prefix<Clock>("2 hours", hours(2));
   test_good_prefix<Clock>("2 minutes", minutes(2));
   test_good_prefix<Clock>("2 seconds", seconds(2));
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
   test_good_prefix<Clock>("1 seconds", seconds(1));
   test_good_prefix<Clock>("-1 seconds", seconds(-1));
+#else
+  test_good_prefix<Clock>("1 second", seconds(1));
+  test_good_prefix<Clock>("-1 second", seconds(-1));
+#endif
+  test_good_prefix<Clock>("0 seconds", seconds(0));
   test_good_prefix<Clock>("2 milliseconds", milliseconds(2));
   test_good_prefix<Clock>("2 microseconds", microseconds(2));
   test_good_prefix<Clock>("2 nanoseconds", nanoseconds(2));

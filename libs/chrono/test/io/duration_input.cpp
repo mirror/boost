@@ -17,7 +17,7 @@ void test_good(const char* str, D res)
 }
 
 template<typename DFail, typename DGood>
-void test_fail(const char* str, DFail r, DGood res)
+void test_fail(const char* str, DFail, DGood res)
 {
   {
     std::istringstream in(str);

@@ -28,6 +28,7 @@ template<typename D>
 void test_good(const char* str, D d, boost::chrono::duration_style::type style)
 {
   std::ostringstream out;
+
   out << boost::chrono::duration_fmt(style) << d;
   BOOST_TEST(out.good());
   BOOST_TEST(out.str() == str);
@@ -36,25 +37,17 @@ void test_good(const char* str, D d, boost::chrono::duration_style::type style)
 template<typename D>
 void test_state_saver(const char* str, const char* str2, D d, boost::chrono::duration_style::type style)
 {
-  std::cout << __FILE__ << ":" << __LINE__ << std::endl;
   std::ostringstream out;
   {
     boost::chrono::duration_style_io_saver<> ios(out);
-    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     out << boost::chrono::duration_fmt(style) << d;
-    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     BOOST_TEST(out.good());
-    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     BOOST_TEST(out.str() == str);
-    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
   }
-  std::cout << __FILE__ << ":" << __LINE__ << std::endl;
   out << " " <<  d;
-  std::cout << __FILE__ << ":" << __LINE__ << std::endl;
   BOOST_TEST(out.good());
-  std::cout << __FILE__ << ":" << __LINE__ << std::endl;
   BOOST_TEST(out.str() == str2);
-  std::cout << __FILE__ << ":" << __LINE__ << std::endl;
+  //std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 }
 
 int main()
@@ -68,8 +61,14 @@ int main()
   test_good_prefix("5000 hours", hours(5000));
   test_good_prefix("5000 minutes", minutes(5000));
   test_good_prefix("5000 seconds", seconds(5000));
+  test_good_prefix("0 seconds", seconds(0));
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
   test_good_prefix("1 seconds", seconds(1));
   test_good_prefix("-1 seconds", seconds(-1));
+#else
+  test_good_prefix("1 second", seconds(1));
+  test_good_prefix("-1 second", seconds(-1));
+#endif
   test_good_prefix("5000 milliseconds", milliseconds(5000));
   test_good_prefix("5000 microseconds", microseconds(5000));
   test_good_prefix("5000 nanoseconds", nanoseconds(5000));
