@@ -450,7 +450,7 @@ namespace boost
             {
               CharT
                   pattern[] =
-                      { '%', 'Y', '-', '%', 'm', ' ', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':' };
+                      { '%', 'Y', '-', '%', 'm', '-', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':' };
               pb = pattern;
               pe = pb + sizeof(pattern) / sizeof(CharT);
               failed = tpf.put(os, os, os.fill(), &tm, pb, pe).failed();
