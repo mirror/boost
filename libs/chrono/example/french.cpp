@@ -7,10 +7,13 @@
 
 // Adapted to Boost from the original Hawards's code
 
+
+#include <boost/chrono/config.hpp>
 #if defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
 #undef BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
-#endif
+#undef BOOST_CHRONO_IO_USE_XALLOC
 
+#endif
 #include <boost/chrono/chrono_io.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/thread_clock.hpp>
