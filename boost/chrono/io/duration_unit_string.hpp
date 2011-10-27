@@ -54,7 +54,7 @@ namespace boost
         { 's', 'e', 'c', 'o', 'n', 'd', 's' };
         static const std::basic_string<CharT> suffix(u, u + sizeof(u)
             / sizeof(u[0]));
-        return ::boost::ratio_string<ratio<1>, CharT>::long_name()+suffix;
+        return suffix;
       }
       static std::basic_string<CharT> singular()
       {
@@ -62,7 +62,7 @@ namespace boost
         { 's', 'e', 'c', 'o', 'n', 'd' };
         static const std::basic_string<CharT> suffix(u, u + sizeof(u)
             / sizeof(u[0]));
-        return ::boost::ratio_string<ratio<1>, CharT>::long_name()+suffix;
+        return suffix;
       }
       static std::basic_string<CharT> symbol()
       {
