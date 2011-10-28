@@ -64,5 +64,7 @@ int main()
   test_good("4000 ms", seconds(4));
   test_fail("3001 ms", seconds(3), milliseconds(3001));
 
+  return boost::report_errors();
+
 }
 

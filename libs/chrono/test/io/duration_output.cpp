@@ -85,5 +85,7 @@ int main()
 
   test_state_saver("5000 h", "5000 h 5000 hours", hours(5000), duration_style::symbol);
 
+  return boost::report_errors();
+
 }
 

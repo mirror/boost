@@ -85,29 +85,32 @@ void check_all()
 
 int main()
 {
-  std::cout << "high_resolution_clock=";
+  std::cout << "high_resolution_clock=" << std::endl;
   check_all<boost::chrono::high_resolution_clock>();
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
-  std::cout << "steady_clock=";
+  std::cout << "steady_clock="<< std::endl;
   check_all<boost::chrono::steady_clock>();
 #endif
   //std::cout << "system_clock=";
   //check_all<boost::chrono::system_clock>();
 
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
-  std::cout << "thread_clock=";
+  std::cout << "thread_clock="<< std::endl;
   check_all<boost::chrono::thread_clock>();
 #endif
 
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
-  std::cout << "process_real_cpu_clock=";
+  std::cout << "process_real_cpu_clock="<< std::endl;
   check_all<boost::chrono::process_real_cpu_clock>();
-  std::cout << "process_user_cpu_clock=";
+  std::cout << "process_user_cpu_clock="<< std::endl;
   check_all<boost::chrono::process_user_cpu_clock>();
-  std::cout << "process_system_cpu_clock=";
+  std::cout << "process_system_cpu_clock="<< std::endl;
   check_all<boost::chrono::process_system_cpu_clock>();
-  std::cout << "process_cpu_clock=";
+  std::cout << "process_cpu_clock="<< std::endl;
   check_all<boost::chrono::process_cpu_clock>();
 #endif
+
+  return boost::report_errors();
+
 }
 
