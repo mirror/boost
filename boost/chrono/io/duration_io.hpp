@@ -27,7 +27,6 @@ namespace boost
 {
   namespace chrono
   {
-
     /**
      * Scoped enumeration emulation stating whether the duration I/O style is long or short.
      * prefix_text means duration::rep with whatever stream/locale settings are set for it followed by a long name representing the unit
@@ -40,6 +39,34 @@ namespace boost
         prefix, symbol
       };
     };
+    namespace detail {
+
+      enum chrono_fmt_masks
+      {
+        duration_style_mask=1<<0, timezone_mask = 1<<1, registerd_callback_mask = 1<<2
+      };
+      inline int chrono_io_masks_index() {
+       static const int v_ = std::ios_base::xalloc();
+       return v_;
+      }
+      inline duration_style::type get_duration_style(std::ios_base & ios) {
+       long iw = ios.iword(chrono_io_masks_index());
+       return (iw & duration_style_mask) ? duration_style::symbol : duration_style::prefix;
+      }
+      inline void set_duration_style(std::ios_base& ios, duration_style::type style) {
+       long& iw = ios.iword(chrono_io_masks_index());
+       iw &= ~duration_style_mask;
+       iw |= (style?duration_style_mask:0) ;
+      }
+      inline bool is_registerd(std::ios_base & ios) {
+        long iw = ios.iword(chrono_io_masks_index());
+        return (iw & registerd_callback_mask) ;
+       }
+       inline void set_registered(std::ios_base& ios) {
+        long& iw = ios.iword(chrono_io_masks_index());
+        iw |= registerd_callback_mask ;
+       }
+    }
 
     template<class CharT>
     class duration_punct: public std::locale::facet
@@ -54,8 +81,9 @@ namespace boost
 #endif
 
     private:
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
       duration_style::type style_;
-
+#endif
 #if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
       string_type long_seconds_;
       string_type long_minutes_;
@@ -111,31 +139,60 @@ namespace boost
       static std::locale::id id;
 
 #if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
-      explicit duration_punct(int use = duration_style::prefix, size_t refs = 0) :
-        std::locale::facet(refs), style_(duration_style::type(use))
+      explicit duration_punct(
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+          int use = duration_style::prefix,
+#endif
+          size_t refs = 0) :
+        std::locale::facet(refs)
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+      , style_(duration_style::type(use))
+#endif
       {
         init_C();
       }
 
-      duration_punct(int use, const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs =
+      duration_punct(
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+          int use,
+#endif
+          const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs =
               0);
 
-      duration_punct(int use, const duration_punct& d, size_t refs = 0);
+      duration_punct(
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+          int use,
+#endif
+          const duration_punct& d, size_t refs = 0);
 
 #else
-      explicit duration_punct(duration_style::type style= duration_style::prefix, size_t refs = 0) :
-        std::locale::facet(refs), style_(style)
+      explicit duration_punct(
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+          duration_style::type style= duration_style::prefix,
+#endif
+          size_t refs = 0) :
+        std::locale::facet(refs)
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+      , style_(style)
+#endif
       {
       }
-      duration_punct(duration_style::type style, const duration_punct&, size_t refs = 0) :
-        std::locale::facet(refs), style_(style)
+      duration_punct(
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+          duration_style::type style,
+#endif
+          const duration_punct&, size_t refs = 0) :
+        std::locale::facet(refs)
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+      , style_(style)
+#endif
       {
       }
 #endif
 
 
 
-
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
       bool is_symbol() const BOOST_NOEXCEPT
       {
         return (style_==duration_style::symbol);
@@ -148,6 +205,7 @@ namespace boost
       {
         return style_;
       }
+#endif
 #if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
 
       template<class Period>
@@ -215,8 +273,15 @@ namespace boost
 
 
     template<class CharT>
-    duration_punct<CharT>::duration_punct(int use, const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs) :
-      std::locale::facet(refs), style_(duration_style::type(use)),
+    duration_punct<CharT>::duration_punct(
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+        int use,
+#endif
+        const string_type& long_seconds, const string_type& long_minutes, const string_type& long_hours, const string_type& short_seconds, const string_type& short_minutes, const string_type& short_hours, size_t refs) :
+      std::locale::facet(refs),
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+      style_(duration_style::type(use)),
+#endif
           long_seconds_(long_seconds), long_minutes_(long_minutes),
           long_hours_(long_hours), short_seconds_(short_seconds),
           short_minutes_(short_minutes), short_hours_(short_hours)
@@ -224,8 +289,15 @@ namespace boost
     }
 
     template<class CharT>
-    duration_punct<CharT>::duration_punct(int use, const duration_punct& d, size_t refs) :
-      std::locale::facet(refs), style_(duration_style::type(use)),
+    duration_punct<CharT>::duration_punct(
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+        int use,
+#endif
+        const duration_punct& d, size_t refs) :
+      std::locale::facet(refs),
+#if ! defined BOOST_CHRONO_IO_USE_XALLOC
+      style_(duration_style::type(use)),
+#endif
           long_seconds_(d.long_seconds_), long_minutes_(d.long_minutes_),
           long_hours_(d.long_hours_), short_seconds_(d.short_seconds_),
           short_minutes_(d.short_minutes_), short_hours_(d.short_hours_)
@@ -302,6 +374,9 @@ namespace boost
     std::basic_ostream<CharT, Traits>&
     operator <<(std::basic_ostream<CharT, Traits>& os, duration_fmt d)
     {
+#if  defined BOOST_CHRONO_IO_USE_XALLOC
+      detail::set_duration_style(os, d.get_duration_style());
+#else
       typedef duration_punct<CharT> Facet;
       std::locale loc = os.getloc();
       if (std::has_facet<Facet>(loc))
@@ -311,6 +386,7 @@ namespace boost
           os.imbue(std::locale(loc, new Facet(d.get_duration_style(), f)));
       } else
         os.imbue(std::locale(loc, new Facet(d.get_duration_style())));
+#endif
       return os;
     }
 
@@ -321,6 +397,9 @@ namespace boost
     std::basic_istream<CharT, Traits>&
     operator >>(std::basic_istream<CharT, Traits>& is, duration_fmt d)
     {
+#if  defined BOOST_CHRONO_IO_USE_XALLOC
+      detail::set_duration_style(is, d.get_duration_style());
+#else
       typedef duration_punct<CharT> Facet;
       std::locale loc = is.getloc();
       if (std::has_facet<Facet>(loc))
@@ -330,6 +409,7 @@ namespace boost
           is.imbue(std::locale(loc, new Facet(d.get_duration_style(), f)));
       } else
         is.imbue(std::locale(loc, new Facet(d.get_duration_style())));
+#endif
       return is;
     }
 
@@ -355,6 +435,10 @@ namespace boost
       explicit duration_style_io_saver(state_type &s) :
       s_save_(s)
       {
+#if  defined BOOST_CHRONO_IO_USE_XALLOC
+        a_save_ = detail::get_duration_style(s_save_);
+
+#else
         typedef duration_punct<CharT> Facet;
         std::locale loc = s_save_.getloc();
         if (!std::has_facet<Facet>(loc))
@@ -362,6 +446,7 @@ namespace boost
 
         const Facet& f = std::use_facet<Facet>(s_save_.getloc());
         a_save_ = f.get_duration_style();
+#endif
       }
 
       /**
@@ -389,7 +474,11 @@ namespace boost
        */
       void restore()
       {
+#if  defined BOOST_CHRONO_IO_USE_XALLOC
+        detail::set_duration_style(s_save_, a_save_);
+#else
         s_save_ << duration_fmt(a_save_);
+#endif
       }
     private:
       state_type& s_save_;
@@ -409,6 +498,19 @@ namespace boost
         bool failed = false;
         try
         {
+#if  defined BOOST_CHRONO_IO_USE_XALLOC
+
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
+          std::locale loc = os.getloc();
+
+          if (!std::has_facet<Facet>(loc))
+            os.imbue(std::locale(loc, new Facet));
+          const Facet& f = std::use_facet<Facet>(os.getloc());
+          return os << d.count() << ' ' << f.template name<Rep,Period>(d);
+#else
+          return os << d.count() << ' ' << duration_unit<CharT>(detail::get_duration_style(os)==duration_style::prefix, d);
+#endif
+#else
           std::locale loc = os.getloc();
 
           if (!std::has_facet<Facet>(loc))
@@ -419,6 +521,7 @@ namespace boost
           return os << d.count() << ' ' << f.template name<Rep,Period>(d);
 #else
           return os << d.count() << ' ' << duration_unit<CharT>(f.is_prefix(), d);
+#endif
 #endif
         }
         catch (...)
@@ -462,12 +565,14 @@ namespace boost
     std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
     {
+#if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
       typedef duration_punct<CharT> Facet;
       std::locale loc = is.getloc();
       if (!std::has_facet<Facet>(loc))
         is.imbue(std::locale(loc, new Facet));
       loc = is.getloc();
       const Facet& f = std::use_facet<Facet>(loc);
+#endif
       typedef typename chrono_detail::duration_io_intermediate<Rep>::type intermediate_type;
       intermediate_type r;
       // read value into r
