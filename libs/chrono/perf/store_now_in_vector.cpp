@@ -15,7 +15,8 @@
 #include <unistd.h>
 #endif
 
-static const std::size_t size = 10000000;
+//static const std::size_t size = 10000000;
+static const std::size_t size = 10000;
 
 typedef boost::chrono::simple_stopwatch<boost::chrono::high_resolution_clock> Stopwatch;
 typedef boost::chrono::stopwatch_reporter<Stopwatch> Reporter;
