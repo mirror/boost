@@ -91,6 +91,7 @@
 // deprecated i/o
 #define BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
 #define BOOST_CHRONO_IO_USE_XALLOC
+//#define BOOST_CHRONO_IS_LOCALIZABLE
 
 // unicode support  ------------------------------//
 

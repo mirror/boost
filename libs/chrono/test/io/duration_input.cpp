@@ -3,6 +3,7 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/chrono/chrono_io.hpp>
+#include <boost/chrono/io/unit_strings.hpp>
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -52,7 +53,7 @@ int main()
   test_good("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
 
   test_good("5000 h", hours(5000));
-  test_good("5000 m", minutes(5000));
+  test_good("5000 min", minutes(5000));
   test_good("5000 s", seconds(5000));
   test_good("5000 ms", milliseconds(5000));
   test_good("5000 ns", nanoseconds(5000));

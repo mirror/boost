@@ -20,6 +20,7 @@
 #include <boost/chrono/io/translate.hpp>
 #include <boost/chrono/clock_string.hpp>
 #include <cstring>
+#include <string.h>
 
 namespace boost
 {

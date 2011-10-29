@@ -12,6 +12,7 @@ void test_good_prefix(const char* str, D d)
   std::ostringstream out;
   out << d;
   BOOST_TEST(out.good());
+
   BOOST_TEST(out.str() == str);
 }
 
@@ -47,7 +48,6 @@ void test_state_saver(const char* str, const char* str2, D d, boost::chrono::dur
   out << " " <<  d;
   BOOST_TEST(out.good());
   BOOST_TEST(out.str() == str2);
-  //std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 }
 
 int main()
@@ -76,7 +76,7 @@ int main()
   test_good_prefix("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
 
   test_good_symbol("5000 h", hours(5000));
-  test_good_symbol("5000 m", minutes(5000));
+  test_good_symbol("5000 min", minutes(5000));
   test_good_symbol("5000 s", seconds(5000));
   test_good_symbol("5000 ms", milliseconds(5000));
   test_good_symbol("5000 ns", nanoseconds(5000));

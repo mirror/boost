@@ -20,25 +20,16 @@
 #include <boost/mpl/if.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/chrono/detail/scan_keyword.hpp>
+#include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/io/duration_unit_string.hpp>
+//#include <boost/format.hpp>
 #include <locale>
 
 namespace boost
 {
   namespace chrono
   {
-    /**
-     * Scoped enumeration emulation stating whether the duration I/O style is long or short.
-     * prefix_text means duration::rep with whatever stream/locale settings are set for it followed by a long name representing the unit
-     * symbol means duration::rep with whatever stream/locale settings are set for it followed by a SI unit abbreviation
-     */
-    struct duration_style
-    {
-      enum type
-      {
-        prefix, symbol
-      };
-    };
+
     namespace detail {
 
       enum chrono_fmt_masks
@@ -508,7 +499,33 @@ namespace boost
           const Facet& f = std::use_facet<Facet>(os.getloc());
           return os << d.count() << ' ' << f.template name<Rep,Period>(d);
 #else
-          return os << d.count() << ' ' << duration_unit<CharT>(detail::get_duration_style(os)==duration_style::prefix, d);
+#if  defined BOOST_CHRONO_IS_LOCALIZABLE
+          duration_style::type style = detail::get_duration_style(os);
+//          if (ratio_string_is_localizable<Period>())
+//          {
+//            std::cout << __FILE__ << ":"<< __LINE__ << ": " << std::endl;
+            return os << to_basic_string<CharT>(detail::get_duration_style(os), d, os.getloc());
+
+//            return os << basic_format<CharT>(
+//                translated_duration_unit<CharT, Rep, Period>(os.getloc(), style==duration_style::prefix, d),
+//                os.getloc()
+//                )
+//              % d.count();
+//          }
+//          else
+//          {
+            std::cout << __FILE__ << ":"<< __LINE__ << ": " << std::endl;
+            return os << to_basic_string<CharT>(detail::get_duration_style(os), d, os.getloc());
+//            return os << basic_format<CharT>(
+//                translated_duration_unit<CharT, ratio<1> >(os.getloc(), style==duration_style::prefix),
+//                os.getloc()
+//                )
+//              % d.count()
+//              % ratio_string<Period, CharT>::symbol();
+//          }
+#else
+          return os << d.count() << ' ' << duration_unit<CharT>(os.getloc(), detail::get_duration_style(os)==duration_style::prefix, d);
+#endif
 #endif
 #else
           std::locale loc = os.getloc();
@@ -520,7 +537,7 @@ namespace boost
 #if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
           return os << d.count() << ' ' << f.template name<Rep,Period>(d);
 #else
-          return os << d.count() << ' ' << duration_unit<CharT>(f.is_prefix(), d);
+          return os << d.count() << ' ' << duration_unit<CharT>(os.getloc(), f.is_prefix(), d);
 #endif
 #endif
         }
@@ -616,8 +633,8 @@ namespace boost
                 f.template long_name<ratio<1> >(),
                 f.template short_name<ratio<1> >()
 #else
-                duration_unit<CharT>(true, seconds(2)),
-                duration_unit<CharT>(false, seconds(1))
+                duration_unit<CharT>(is.getloc(), true, seconds(2)),
+                duration_unit<CharT>(is.getloc(), false, seconds(1))
 #endif
               };
               std::ios_base::iostate err = std::ios_base::goodbit;
@@ -680,63 +697,63 @@ namespace boost
                 f.template long_name<ratio<3600> >(),
                 f.template short_name<ratio<3600> >()
 #else
-                duration_unit<CharT>(true, duration<Rep, atto>(2)),
-                duration_unit<CharT>(true, duration<Rep, atto>(1)),
-                duration_unit<CharT>(false, duration<Rep, atto>(1)),
-                duration_unit<CharT>(true, duration<Rep, femto>(2)),
-                duration_unit<CharT>(true, duration<Rep, femto>(1)),
-                duration_unit<CharT>(false, duration<Rep, femto>(1)),
-                duration_unit<CharT>(true, duration<Rep, pico>(2)),
-                duration_unit<CharT>(true, duration<Rep, pico>(1)),
-                duration_unit<CharT>(false, duration<Rep, pico>(1)),
-                duration_unit<CharT>(true, duration<Rep, nano>(2)),
-                duration_unit<CharT>(true, duration<Rep, nano>(1)),
-                duration_unit<CharT>(false, duration<Rep, nano>(1)),
-                duration_unit<CharT>(true, duration<Rep, micro>(2)),
-                duration_unit<CharT>(true, duration<Rep, micro>(1)),
-                duration_unit<CharT>(false, duration<Rep, micro>(1)),
-                duration_unit<CharT>(true, duration<Rep, milli>(2)),
-                duration_unit<CharT>(true, duration<Rep, milli>(1)),
-                duration_unit<CharT>(false, duration<Rep, milli>(1)),
-                duration_unit<CharT>(true, duration<Rep, centi>(2)),
-                duration_unit<CharT>(true, duration<Rep, centi>(1)),
-                duration_unit<CharT>(false, duration<Rep, centi>(1)),
-                duration_unit<CharT>(true, duration<Rep, deci>(2)),
-                duration_unit<CharT>(true, duration<Rep, deci>(1)),
-                duration_unit<CharT>(false, duration<Rep, deci>(1)),
-                duration_unit<CharT>(true, duration<Rep, deca>(2)),
-                duration_unit<CharT>(true, duration<Rep, deca>(1)),
-                duration_unit<CharT>(false, duration<Rep, deca>(1)),
-                duration_unit<CharT>(true, duration<Rep, hecto>(2)),
-                duration_unit<CharT>(true, duration<Rep, hecto>(1)),
-                duration_unit<CharT>(false, duration<Rep, hecto>(1)),
-                duration_unit<CharT>(true, duration<Rep, kilo>(2)),
-                duration_unit<CharT>(true, duration<Rep, kilo>(1)),
-                duration_unit<CharT>(false, duration<Rep, kilo>(1)),
-                duration_unit<CharT>(true, duration<Rep, mega>(2)),
-                duration_unit<CharT>(true, duration<Rep, mega>(1)),
-                duration_unit<CharT>(false, duration<Rep, mega>(1)),
-                duration_unit<CharT>(true, duration<Rep, giga>(2)),
-                duration_unit<CharT>(true, duration<Rep, giga>(1)),
-                duration_unit<CharT>(false, duration<Rep, giga>(1)),
-                duration_unit<CharT>(true, duration<Rep, giga>(2)),
-                duration_unit<CharT>(true, duration<Rep, tera>(1)),
-                duration_unit<CharT>(false, duration<Rep, giga>(1)),
-                duration_unit<CharT>(true, duration<Rep, peta>(2)),
-                duration_unit<CharT>(true, duration<Rep, peta>(1)),
-                duration_unit<CharT>(false, duration<Rep, peta>(1)),
-                duration_unit<CharT>(true, duration<Rep, exa>(2)),
-                duration_unit<CharT>(true, duration<Rep, exa>(1)),
-                duration_unit<CharT>(false, duration<Rep, exa>(1)),
-                duration_unit<CharT>(true, duration<Rep, ratio<1> >(2)),
-                duration_unit<CharT>(true, duration<Rep, ratio<1> >(1)),
-                duration_unit<CharT>(false, duration<Rep, ratio<1> >(1)),
-                duration_unit<CharT>(true, duration<Rep, ratio<60> >(2)),
-                duration_unit<CharT>(true, duration<Rep, ratio<60> >(1)),
-                duration_unit<CharT>(false, duration<Rep, ratio<60> >(1)),
-                duration_unit<CharT>(true, duration<Rep, ratio<3600> >(2)),
-                duration_unit<CharT>(true, duration<Rep, ratio<3600> >(1)),
-                duration_unit<CharT>(false, duration<Rep, ratio<3600> >(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, atto>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, atto>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, atto>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, femto>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, femto>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, femto>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, pico>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, pico>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, pico>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, nano>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, nano>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, nano>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, micro>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, micro>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, micro>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, milli>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, milli>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, milli>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, centi>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, centi>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, centi>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, deci>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, deci>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, deci>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, deca>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, deca>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, deca>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, hecto>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, hecto>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, hecto>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, kilo>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, kilo>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, kilo>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, mega>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, mega>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, mega>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, giga>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, giga>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, giga>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, giga>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, tera>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, giga>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, peta>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, peta>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, peta>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, exa>(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, exa>(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, exa>(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, ratio<1> >(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, ratio<1> >(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, ratio<1> >(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, ratio<60> >(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, ratio<60> >(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, ratio<60> >(1)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, ratio<3600> >(2)),
+                duration_unit<CharT>(is.getloc(), true, duration<Rep, ratio<3600> >(1)),
+                duration_unit<CharT>(is.getloc(), false, duration<Rep, ratio<3600> >(1)),
 #endif
                 };
               std::ios_base::iostate err = std::ios_base::goodbit;
