@@ -108,7 +108,7 @@ namespace boost { namespace unordered { namespace detail {
         convert_from_anything(T const&);
     };
 
-#if !defined(BOOST_NO_SFINAE_EXPR) || BOOST_WORKAROUND(BOOST_MSVC, >= 1500)
+#if !defined(BOOST_NO_SFINAE_EXPR)
 
 #   define BOOST_UNORDERED_HAVE_CALL_DETECTION 1
 

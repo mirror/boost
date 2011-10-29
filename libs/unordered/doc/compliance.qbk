@@ -36,9 +36,7 @@ A full implementation of `allocator_traits` requires sophisticated
 member function detection so that the fallback is used whenever the
 member function call is not well formed.
 This requires support for SFINAE expressions, which are available on
-GCC from version 4.4 and Clang. They aren't supported by
-Visual C++ 2008/2010, but with a bit of hacking it's possible to support
-certain use cases.
+GCC from version 4.4 and Clang.
 
 On other compilers, there's just a test to see if the allocator has
 a member, but no check that it can be called. So rather than using a
