@@ -499,30 +499,32 @@ namespace boost
           const Facet& f = std::use_facet<Facet>(os.getloc());
           return os << d.count() << ' ' << f.template name<Rep,Period>(d);
 #else
-#if  defined BOOST_CHRONO_IS_LOCALIZABLE
-          duration_style::type style = detail::get_duration_style(os);
-//          if (ratio_string_is_localizable<Period>())
-//          {
-//            std::cout << __FILE__ << ":"<< __LINE__ << ": " << std::endl;
-            return os << to_basic_string<CharT>(detail::get_duration_style(os), d, os.getloc());
+#if  defined BOOST_CHRONO_IS_LOCALIZABLE_VIRTUAL
+          return os << to_basic_string<CharT>(detail::get_duration_style(os), d, os.getloc());
+#elif defined BOOST_CHRONO_IS_LOCALIZABLE_TRANSLATE
 
-//            return os << basic_format<CharT>(
-//                translated_duration_unit<CharT, Rep, Period>(os.getloc(), style==duration_style::prefix, d),
-//                os.getloc()
-//                )
-//              % d.count();
-//          }
-//          else
-//          {
+          duration_style::type style = detail::get_duration_style(os);
+          if (ratio_string_is_localizable<Period>())
+          {
+            std::cout << __FILE__ << ":"<< __LINE__ << ": " << std::endl;
+
+            return os << basic_format<CharT>(
+                translated_duration_unit<CharT, Rep, Period>(os.getloc(), style==duration_style::prefix, d),
+                os.getloc()
+                )
+              % d.count();
+          }
+          else
+          {
             std::cout << __FILE__ << ":"<< __LINE__ << ": " << std::endl;
             return os << to_basic_string<CharT>(detail::get_duration_style(os), d, os.getloc());
-//            return os << basic_format<CharT>(
-//                translated_duration_unit<CharT, ratio<1> >(os.getloc(), style==duration_style::prefix),
-//                os.getloc()
-//                )
-//              % d.count()
-//              % ratio_string<Period, CharT>::symbol();
-//          }
+            return os << basic_format<CharT>(
+                translated_duration_unit<CharT, ratio<1> >(os.getloc(), style==duration_style::prefix),
+                os.getloc()
+                )
+              % d.count()
+              % ratio_string<Period, CharT>::symbol();
+          }
 #else
           return os << d.count() << ' ' << duration_unit<CharT>(os.getloc(), detail::get_duration_style(os)==duration_style::prefix, d);
 #endif
@@ -590,6 +592,10 @@ namespace boost
       loc = is.getloc();
       const Facet& f = std::use_facet<Facet>(loc);
 #endif
+#if  defined BOOST_CHRONO_IS_LOCALIZABLE_VIRTUAL2
+#elif defined BOOST_CHRONO_IS_LOCALIZABLE_TRANSLATE2
+#else
+
       typedef typename chrono_detail::duration_io_intermediate<Rep>::type intermediate_type;
       intermediate_type r;
       // read value into r
@@ -914,6 +920,7 @@ namespace boost
       }
       else
       is.setstate(is.failbit);
+#endif
       return is;
     }
 

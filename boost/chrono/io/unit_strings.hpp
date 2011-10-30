@@ -11,6 +11,7 @@
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/io/duration_style.hpp>
+#include <boost/chrono/process_cpu_clocks.hpp>
 #include <string>
 #include <iostream>
 //#include <locale>
@@ -21,20 +22,21 @@ namespace boost
   namespace chrono
   {
 
-    class rt_duration {
+    namespace detail
+    {
+
+    class rt_ratio {
     public:
-      template <typename Rep, typename Period>
-      rt_duration(duration<Rep, Period> const& d)
+      template <typename Period>
+      rt_ratio(Period const&)
       : num(Period::type::num)
       , den(Period::type::den)
-      , count(d.count())
       {}
-
 
       intmax_t num;
       intmax_t den;
-      int_least64_t count;
     };
+    }
 
     template <typename CharT>
     class chrono_units: public std::locale::facet
@@ -51,66 +53,65 @@ namespace boost
 
       // used for ouput
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, atto> value) const = 0;
+      to_string(duration_style::type style, atto, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, pico> value) const = 0;
+      to_string(duration_style::type style, pico, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, nanoseconds value) const = 0;
+      to_string(duration_style::type style, nano, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, microseconds value) const = 0;
+      to_string(duration_style::type style, micro, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, milliseconds value) const = 0;
+      to_string(duration_style::type style, milli, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, centi> value) const = 0;
+      to_string(duration_style::type style, centi, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, deci> value) const = 0;
+      to_string(duration_style::type style, deci, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, seconds value) const = 0;
+      to_string(duration_style::type style, ratio<1>, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, deca> value) const = 0;
+      to_string(duration_style::type style, deca, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, hecto> value) const = 0;
+      to_string(duration_style::type style, hecto, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, kilo> value) const = 0;
+      to_string(duration_style::type style, kilo, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, mega> value) const = 0;
+      to_string(duration_style::type style, mega, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, tera> value) const = 0;
+      to_string(duration_style::type style, tera, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, peta> value) const = 0;
+      to_string(duration_style::type style, peta, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, duration<boost::int_least64_t, exa> value) const = 0;
+      to_string(duration_style::type style, exa, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, rt_duration value) const = 0;
+      to_string(duration_style::type style, detail::rt_ratio, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, minutes value) const = 0;
+      to_string(duration_style::type style, ratio<60>, int_least64_t) const = 0;
       virtual std::basic_string<CharT>
-      to_string(duration_style::type style, hours value) const = 0;
+      to_string(duration_style::type style, ratio<3600>, int_least64_t) const = 0;
 
       // used for input
       virtual std::size_t plural_forms() const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, atto>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, pico>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, nanoseconds, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, microseconds, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, milliseconds, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, centi>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, deci>, std::size_t pf) const = 0;
-      virtual std::basic_string<CharT> plural_form(duration_style::type style, seconds, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, deca>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, hecto>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, kilo>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, mega>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, giga>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, tera>, std::size_t pf) const = 0;
-//      virtual std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, exa>, std::size_t pf) const = 0;
-      virtual std::basic_string<CharT> plural_form(duration_style::type style, minutes, std::size_t pf) const = 0;
-      virtual std::basic_string<CharT> plural_form(duration_style::type style, hours, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, atto, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, pico, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, nano, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, micro, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, milli, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, centi, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, deci, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> plural_form(duration_style::type style, ratio<1>, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, deca, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, hecto, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, kilo, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, mega, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, giga, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, tera, std::size_t pf) const = 0;
+//      virtual std::basic_string<CharT> plural_form(duration_style::type style, exa, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> plural_form(duration_style::type style, ratio<60>, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> plural_form(duration_style::type style, ratio<3600>, std::size_t pf) const = 0;
 
       virtual std::size_t plural_form(int_least64_t value) const = 0;
 
     };
-
 
     template<class CharT>
     std::locale::id chrono_units<CharT>::id;
@@ -129,89 +130,89 @@ namespace boost
       bool swaps_value_unit_order() const
       { return false; }
 
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, atto> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, atto, int_least64_t value) const
       {
-        return to_string(style, atto())+to_string(style, seconds(value.count()));
+        return to_string(style, atto())+to_string(style, ratio<1>(), value);
       }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, pico> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, pico, int_least64_t  value) const
       {
-        return to_string(style, pico())+to_string(style, seconds(value.count()));
-      }
-
-      std::basic_string<CharT> to_string(duration_style::type style, nanoseconds value) const
-      {
-        return to_string(style, nano())+to_string(style, seconds(value.count()));
-      }
-      std::basic_string<CharT> to_string(duration_style::type style, microseconds value) const
-      {
-        return to_string(style, micro())+to_string(style, seconds(value.count()));
-      }
-      std::basic_string<CharT> to_string(duration_style::type style, milliseconds value) const
-      {
-        return to_string(style, milli())+to_string(style, seconds(value.count()));
-      }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, centi> value) const
-      {
-        return to_string(style, centi())+to_string(style, seconds(value.count()));
-      }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, deci> value) const
-      {
-        return to_string(style, deci())+to_string(style, seconds(value.count()));
-      }
-      std::basic_string<CharT> to_string(duration_style::type style, seconds value) const
-      {
-        return plural_form(style, value, plural_form(value.count()));
-      }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, deca> value) const
-      {
-        return to_string(style, deca())+to_string(style, seconds(value.count()));
-      }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, hecto> value) const
-      {
-        return to_string(style, hecto())+to_string(style, seconds(value.count()));
+        return to_string(style, pico())+to_string(style, ratio<1>(), value);
       }
 
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, kilo> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, nano, int_least64_t  value) const
       {
-        return to_string(style, kilo())+to_string(style, seconds(value.count()));
+        return to_string(style, nano())+to_string(style, ratio<1>(), value);
       }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, mega> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, micro, int_least64_t  value) const
       {
-        return to_string(style, mega())+to_string(style, seconds(value.count()));
+        return to_string(style, micro())+to_string(style, ratio<1>(), value);
       }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, giga> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, milli, int_least64_t  value) const
       {
-        return to_string(style, giga())+to_string(style, seconds(value.count()));
+        return to_string(style, milli())+to_string(style, ratio<1>(), value);
       }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, tera> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, centi, int_least64_t  value) const
       {
-        return to_string(style, tera())+to_string(style, seconds(value.count()));
+        return to_string(style, centi())+to_string(style, ratio<1>(), value);
       }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, peta> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, deci, int_least64_t  value) const
       {
-        return to_string(style, peta())+to_string(style, seconds(value.count()));
+        return to_string(style, deci())+to_string(style, ratio<1>(), value);
       }
-      std::basic_string<CharT> to_string(duration_style::type style, duration<boost::int_least64_t, exa> value) const
+      std::basic_string<CharT> to_string(duration_style::type style, ratio<1> u, int_least64_t  value) const
       {
-        return to_string(style, exa())+to_string(style, seconds(value.count()));
+        return plural_form(style, u, plural_form(value));
       }
-
-      std::basic_string<CharT> to_string(duration_style::type style, minutes value) const
+      std::basic_string<CharT> to_string(duration_style::type style, deca, int_least64_t  value) const
       {
-        return plural_form(style, value, plural_form(value.count()));
+        return to_string(style, deca())+to_string(style, ratio<1>(), value);
       }
-
-      std::basic_string<CharT> to_string(duration_style::type style, hours value) const
+      std::basic_string<CharT> to_string(duration_style::type style, hecto, int_least64_t  value) const
       {
-        return plural_form(style, value, plural_form(value.count()));
+        return to_string(style, hecto())+to_string(style, ratio<1>(), value);
       }
 
-      std::basic_string<CharT> to_string(duration_style::type style, rt_duration value) const
+      std::basic_string<CharT> to_string(duration_style::type style, kilo, int_least64_t  value) const
+      {
+        return to_string(style, kilo())+to_string(style, ratio<1>(), value);
+      }
+      std::basic_string<CharT> to_string(duration_style::type style, mega, int_least64_t  value) const
+      {
+        return to_string(style, mega())+to_string(style, ratio<1>(), value);
+      }
+      std::basic_string<CharT> to_string(duration_style::type style, giga, int_least64_t  value) const
+      {
+        return to_string(style, giga())+to_string(style, ratio<1>(), value);
+      }
+      std::basic_string<CharT> to_string(duration_style::type style, tera, int_least64_t  value) const
+      {
+        return to_string(style, tera())+to_string(style, ratio<1>(), value);
+      }
+      std::basic_string<CharT> to_string(duration_style::type style, peta, int_least64_t  value) const
+      {
+        return to_string(style, peta())+to_string(style, ratio<1>(), value);
+      }
+      std::basic_string<CharT> to_string(duration_style::type style, exa, int_least64_t  value) const
+      {
+        return to_string(style, exa())+to_string(style, ratio<1>(), value);
+      }
+
+      std::basic_string<CharT> to_string(duration_style::type style, ratio<60> u, int_least64_t  value) const
+      {
+        return plural_form(style, u, plural_form(value));
+      }
+
+      std::basic_string<CharT> to_string(duration_style::type style, ratio<3600> u, int_least64_t  value) const
+      {
+        return plural_form(style, u, plural_form(value));
+      }
+
+      std::basic_string<CharT> to_string(duration_style::type style, detail::rt_ratio rtr, int_least64_t  value) const
       {
         std::basic_ostringstream<CharT> os;
-        os << CharT('[') << value.num << CharT('/')
-                            << value.den << CharT(']');
-        return os.str()+to_string(style, seconds(value.count));
+        os << CharT('[') << rtr.num << CharT('/')
+                            << rtr.den << CharT(']');
+        return os.str()+to_string(style, ratio<1>(), value);
       }
       std::size_t plural_forms() const
       {
@@ -223,7 +224,7 @@ namespace boost
         return (value==-1 || value==1) ? 0 : 1;
       }
 
-      std::basic_string<CharT> plural_form(duration_style::type style, seconds, std::size_t pf) const
+      std::basic_string<CharT> plural_form(duration_style::type style, ratio<1>, std::size_t pf) const
       {
         static const CharT t[] =
         { 's' };
@@ -245,7 +246,7 @@ namespace boost
         throw "exception";
       }
 
-      std::basic_string<CharT> plural_form(duration_style::type style, minutes, std::size_t pf) const
+      std::basic_string<CharT> plural_form(duration_style::type style, ratio<60>, std::size_t pf) const
       {
         static const CharT t[] =
         { 'm', 'i', 'n' };
@@ -268,7 +269,7 @@ namespace boost
         throw "exception";
       }
 
-      std::basic_string<CharT> plural_form(duration_style::type style, hours, std::size_t pf) const
+      std::basic_string<CharT> plural_form(duration_style::type style, ratio<3600>, std::size_t pf) const
       {
         static const CharT t[] =
         { 'h' };
@@ -288,7 +289,30 @@ namespace boost
         // assert
         throw "exception";
       }
-
+//      std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, atto>, std::size_t pf) const
+//      {
+//        return to_string(style, atto())+plural_form(style, ratio<1>(), pf);
+//      }
+//      std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, pico>, std::size_t pf) const
+//      {
+//        return to_string(style, pico())+plural_form(style, ratio<1>(), pf);
+//      }
+//      std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, nano>, std::size_t pf) const
+//      {
+//        return to_string(style, nano())+plural_form(style, ratio<1>(), pf);
+//      }
+//      std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, micro>, std::size_t pf) const
+//      {
+//        return to_string(style, micro())+plural_form(style, ratio<1>(), pf);
+//      }
+//      std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, milli>, std::size_t pf) const
+//      {
+//        return to_string(style, milli())+plural_form(style, ratio<1>(), pf);
+//      }
+//      std::basic_string<CharT> plural_form(duration_style::type style, duration<boost::int_least64_t, centi>, std::size_t pf) const
+//      {
+//        return to_string(style, centi())+plural_form(style, ratio<1>(), pf);
+//      }
 
     protected:
 
@@ -566,20 +590,25 @@ namespace boost
     {
       std::locale nloc;
       if (!std::has_facet<chrono_units<CharT> >(loc))
+      {
         nloc =std::locale(loc, new chrono_units_default<CharT>());
+      }
       else
+      {
         nloc=loc;
+      }
       chrono_units<CharT> const & f = std::use_facet<chrono_units<CharT> >(nloc);
 
-      if (f.swaps_value_unit_order()) {
-        std::basic_string<CharT> tmp = f.to_string(style, value);
-        tmp += " " + to_basic_string<CharT>(value.count(), nloc);
-        return f.to_string(style, value)   + " " + to_basic_string<CharT>(value.count(), nloc);
+      if (f.swaps_value_unit_order())
+      {
+        return f.to_string(style, Period(), int_least64_t(value.count()))   + " " + to_basic_string<CharT>(value.count(), nloc);
       }
-      else {
-        return to_basic_string<CharT>(value.count(), nloc) + " " + f.to_string(style, value) ;
+      else
+      {
+        return to_basic_string<CharT>(value.count(), nloc) + " " + f.to_string(style, Period(), int_least64_t(value.count())) ;
       }
     }
+
 
     template <typename CharT, typename Rep, typename Period>
     typename disable_if<is_localizable<Period> , std::basic_string<CharT> >::type
@@ -591,14 +620,79 @@ namespace boost
     {
       std::locale nloc;
       if (!std::has_facet<chrono_units<CharT> >(loc))
+      {
         nloc =std::locale(loc, new chrono_units_default<CharT>());
+      }
       else
+      {
         nloc=loc;
+      }
       chrono_units<CharT> const & f = std::use_facet<chrono_units<CharT> >(nloc);
       if (f.swaps_value_unit_order())
-        return f.to_string(style, rt_duration(value)) + " " + to_basic_string<CharT>(value.count(), nloc);
+      {
+        return f.to_string(style, detail::rt_ratio(Period()), int_least64_t(value.count())) + " " + to_basic_string<CharT>(value.count(), nloc);
+      }
       else
-        return to_basic_string<CharT>(value.count(), nloc) + " " + f.to_string(style, rt_duration(value));
+      {
+        return to_basic_string<CharT>(value.count(), nloc) + " " + f.to_string(style, detail::rt_ratio(Period()), int_least64_t(value.count()));
+      }
+    }
+
+    template <typename CharT, typename Rep, typename Period>
+    typename enable_if<is_localizable<Period>, std::basic_string<CharT> >::type
+    to_basic_string(
+        duration_style::type style,
+        duration<process_times<Rep>,Period> value,
+        std::locale const &loc
+        )
+    {
+      std::locale nloc;
+      if (!std::has_facet<chrono_units<CharT> >(loc))
+      {
+        nloc =std::locale(loc, new chrono_units_default<CharT>());
+      }
+      else
+      {
+        nloc=loc;
+      }
+      chrono_units<CharT> const & f = std::use_facet<chrono_units<CharT> >(nloc);
+
+      if (f.swaps_value_unit_order())
+      {
+        return f.to_string(style, nano(), int_least64_t(value.count()))   + " " + to_basic_string<CharT>(value.count(), nloc);
+      }
+      else
+      {
+        return to_basic_string<CharT>(value.count(), nloc) + " " + f.to_string(style, nano(), int_least64_t(value.count())) ;
+      }
+    }
+
+    template <typename CharT, typename Rep, typename Period>
+    typename disable_if<is_localizable<Period> , std::basic_string<CharT> >::type
+    to_basic_string(
+        duration_style::type style,
+        duration<process_times<Rep>,Period> value,
+        std::locale const& loc
+        )
+    {
+      std::locale nloc;
+      if (!std::has_facet<chrono_units<CharT> >(loc))
+      {
+        nloc =std::locale(loc, new chrono_units_default<CharT>());
+      }
+      else
+      {
+        nloc=loc;
+      }
+      chrono_units<CharT> const & f = std::use_facet<chrono_units<CharT> >(nloc);
+      if (f.swaps_value_unit_order())
+      {
+        return f.to_string(style, detail::rt_ratio(nano()), int_least64_t(value.count())) + " " + to_basic_string<CharT>(value.count(), nloc);
+      }
+      else
+      {
+        return to_basic_string<CharT>(value.count(), nloc) + " " + f.to_string(style, detail::rt_ratio(nano()), int_least64_t(value.count()));
+      }
     }
 
     template <typename CharT, typename Rep, typename Period>
