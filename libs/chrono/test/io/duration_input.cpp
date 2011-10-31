@@ -3,7 +3,6 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/chrono/chrono_io.hpp>
-#include <boost/chrono/io/unit_strings.hpp>
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
 

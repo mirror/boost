@@ -25,9 +25,7 @@
 #include <boost/chrono/io/ios_base_state.hpp>
 //#include <boost/format.hpp>
 #include <locale>
-#if  defined BOOST_CHRONO_USES_DURATION_PUT
 #include <boost/chrono/io/duration_put.hpp>
-#endif
 namespace boost
 {
   namespace chrono
@@ -446,6 +444,12 @@ namespace boost
       aspect_type a_save_;
     };
 
+    /**
+     *
+     * @param os
+     * @param d
+     * @return @c os
+     */
     template <class CharT, class Traits, class Rep, class Period>
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d)
@@ -575,6 +579,12 @@ namespace boost
 
     }
 
+    /**
+     *
+     * @param is the input stream
+     * @param d the duration
+     * @return @c is
+     */
     template <class CharT, class Traits, class Rep, class Period>
     std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)

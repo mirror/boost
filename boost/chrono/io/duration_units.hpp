@@ -5,8 +5,8 @@
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
 
-#ifndef BOOST_CHRONO_IO_UNIT_STRINGS_HPP
-#define BOOST_CHRONO_IO_UNIT_STRINGS_HPP
+#ifndef BOOST_CHRONO_IO_DURATION_UNITS_HPP
+#define BOOST_CHRONO_IO_DURATION_UNITS_HPP
 
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>

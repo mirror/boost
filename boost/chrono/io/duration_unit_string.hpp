@@ -13,7 +13,7 @@
 #include <boost/ratio/ratio_io.hpp>
 #include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/io/translate.hpp>
-#include <boost/chrono/io/unit_strings.hpp>
+#include <boost/chrono/io/duration_units.hpp>
 
 #include <string>
 #include <locale>
