@@ -325,14 +325,11 @@ namespace boost
 
         duration_units<CharT> const &facet = std::use_facet<duration_units<CharT> >(is.getloc());
 
-        // unit is num / den (yet to be determined)
-        unsigned long long num = 0;
-        unsigned long long den = 0;
         if (*i == '[')
         {
           // parse [N/D]s or [N/D]seconds format
           ++i;
-          i=std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, num);
+          i=std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, rt.num);
           if ((err & std::ios_base::failbit) != 0)
           {
             return i;
@@ -349,7 +346,7 @@ namespace boost
             err |= std::ios_base::failbit;
             return i;
           }
-          i=std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, den);
+          i=std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, rt.den);
           if ((err & std::ios_base::failbit) != 0)
           {
             return i;
@@ -459,83 +456,65 @@ namespace boost
               units + sizeof (units) / sizeof (units[0]),
               //~ std::use_facet<std::ctype<CharT> >(loc),
               err);
+
           switch ( (k - units) / 3)
           {
           case 0:
-            num = 1ULL;
-            den = 1000000000000000000ULL;
+            rt = detail::rt_ratio(atto());
             break;
           case 1:
-            num = 1ULL;
-            den = 1000000000000000ULL;
+            rt = detail::rt_ratio(femto());
             break;
           case 2:
-            num = 1ULL;
-            den = 1000000000000ULL;
+            rt = detail::rt_ratio(pico());
             break;
           case 3:
-            num = 1ULL;
-            den = 1000000000ULL;
+            rt = detail::rt_ratio(nano());
             break;
           case 4:
-            num = 1ULL;
-            den = 1000000ULL;
+            rt = detail::rt_ratio(micro());
             break;
           case 5:
-            num = 1ULL;
-            den = 1000ULL;
+            rt = detail::rt_ratio(milli());
             break;
           case 6:
-            num = 1ULL;
-            den = 100ULL;
+            rt = detail::rt_ratio(centi());
             break;
           case 7:
-            num = 1ULL;
-            den = 10ULL;
+            rt = detail::rt_ratio(deci());
             break;
           case 8:
-            num = 10ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(deca());
             break;
           case 9:
-            num = 100ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(hecto());
             break;
           case 10:
-            num = 1000ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(kilo());
             break;
           case 11:
-            num = 1000000ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(mega());
             break;
           case 12:
-            num = 1000000000ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(giga());
             break;
           case 13:
-            num = 1000000000000ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(tera());
             break;
           case 14:
-            num = 1000000000000000ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(peta());
             break;
           case 15:
-            num = 1000000000000000000ULL;
-            den = 1ULL;
+            rt = detail::rt_ratio(exa());
             break;
           case 16:
-            num = 1;
-            den = 1;
+            rt = detail::rt_ratio(ratio<1>());
             break;
           case 17:
-            num = 60;
-            den = 1;
+            rt = detail::rt_ratio(ratio<60>());
             break;
           case 18:
-            num = 3600;
-            den = 1;
+            rt = detail::rt_ratio(ratio<3600>());
             break;
           default:
             err = std::ios_base::failbit;
@@ -544,7 +523,6 @@ namespace boost
         }
         // unit is num/den
 
-        rt = detail::rt_ratio(num,den);
         return i;
       }
 
