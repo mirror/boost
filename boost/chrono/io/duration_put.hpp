@@ -94,7 +94,6 @@ namespace boost
         if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
             std::locale(ios.getloc(), new duration_units_default<CharT> ()));
 
-#if 1
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         for (; pattern != pat_end; ++pattern)
         {
@@ -133,44 +132,6 @@ namespace boost
             else
                 *s++ = *pattern;
         }
-
-#else
-        for (; pattern != pat_end; ++pattern)
-        {
-          // FIXME: Shouldn't "uvx" be a basic_string<CharT> ?????
-          if ( (*pattern != CharT('%')) || ( (pattern + 1) == pat_end) || (!std::strchr("uvx", * (pattern + 1))))
-          {
-            *s++ = *pattern;
-          }
-          else
-          {
-            ++pattern;
-            switch (*pattern)
-            {
-            case 'v':
-            {
-              s = put_value(s, ios, d);
-              break;
-            }
-            case 'u':
-            {
-              s = put_unit(s, ios, d);
-              break;
-            }
-            case 'x':
-            {
-              std::basic_string<CharT> pat = std::use_facet<duration_units<CharT> >(ios.getloc()).get_pattern();
-              pattern = pat.data();
-              pat_end = pattern + pat.size();
-              break;
-            }
-            default:
-              BOOST_ASSERT(false && "Boost::Chrono internal error.");
-              break;
-            }
-          }
-        }
-#endif
         return s;
       }
 

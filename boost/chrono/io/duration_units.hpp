@@ -81,6 +81,10 @@ namespace boost
     {
     };
     template <>
+    struct is_localizable<giga> : true_type
+    {
+    };
+    template <>
     struct is_localizable<tera> : true_type
     {
     };
@@ -113,7 +117,7 @@ namespace boost
         {
         }
 
-        rt_ratio(intmax_t n=0, intmax_t d=0) :
+        rt_ratio(intmax_t n = 0, intmax_t d = 0) :
           num(n), den(d)
         {
         }
@@ -225,11 +229,10 @@ namespace boost
        */
       template <typename Period>
       typename enable_if<is_localizable<Period> , std::basic_string<CharT> >::type get_plural_form(
-          duration_style::type style, std::size_t pf) const
+          duration_style_type style, std::size_t pf) const
       {
         return do_get_plural_form(style, Period(), pf);
       }
-
 
       /**
        *
@@ -247,63 +250,64 @@ namespace boost
 
       // used for ouput
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, atto, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, atto, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, pico, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, femto, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, nano, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, pico, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, micro, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, nano, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, milli, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, micro, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, centi, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, milli, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, deci, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, centi, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, ratio<1> , int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, deci, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, deca, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, ratio<1> , int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, hecto, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, deca, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, kilo, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, hecto, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, mega, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, kilo, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, tera, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, mega, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, peta, int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, tera, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, exa, int_least64_t) const = 0;
-      virtual iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, detail::rt_ratio,
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, peta, int_least64_t) const = 0;
+      virtual iter_type
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, exa, int_least64_t) const = 0;
+      virtual iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, detail::rt_ratio,
           int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, ratio<60> , int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, ratio<60> , int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style::type style, ratio<3600> , int_least64_t) const = 0;
+      do_put(iter_type s, std::ios_base& ios, duration_style_type style, ratio<3600> , int_least64_t) const = 0;
 
       // used for input
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, atto, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, pico, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, nano, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, micro, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, milli, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, centi, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, deci, std::size_t pf) const = 0;
-      virtual std::basic_string<CharT>
-      do_get_plural_form(duration_style::type style, ratio<1> , std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, deca, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, hecto, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, kilo, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, mega, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, giga, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, tera, std::size_t pf) const = 0;
-      //      virtual std::basic_string<CharT> do_get_plural_form(duration_style::type style, exa, std::size_t pf) const = 0;
-      virtual std::basic_string<CharT>
-      do_get_plural_form(duration_style::type style, ratio<60> , std::size_t pf) const = 0;
-      virtual std::basic_string<CharT>
-      do_get_plural_form(duration_style::type style, ratio<3600> , std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, atto, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, femto, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, pico, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, nano, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, micro, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, milli, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, centi, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, deci, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, ratio<1> , std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, deca, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, hecto, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, kilo, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, mega, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, giga, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, tera, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, peta, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, exa, std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, ratio<60> , std::size_t pf) const = 0;
+      virtual std::basic_string<CharT> do_get_plural_form(duration_style_type style, ratio<3600> , std::size_t pf) const = 0;
 
     };
 
@@ -348,117 +352,123 @@ namespace boost
         return pattern;
       }
 
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, atto u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, atto u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, pico u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, femto u, int_least64_t value) const
+      {
+        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
+        std::copy(str.begin(), str.end(), s);
+        return do_put(s, ios, style, ratio<1> (), value);
+      }
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, pico u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
 
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, nano u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, nano u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, micro u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, micro u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, milli u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, milli u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, centi u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, centi u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, deci u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, deci u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base&, duration_style::type style, ratio<1> u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base&, duration_style_type style, ratio<1> u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_plural_form(style, u, do_get_plural_form(value));
         return std::copy(str.begin(), str.end(), s);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, deca u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, deca u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, hecto u, int_least64_t value) const
-      {
-        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
-      }
-
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, kilo u, int_least64_t value) const
-      {
-        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, mega u, int_least64_t value) const
-      {
-        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, giga u, int_least64_t value) const
-      {
-        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, tera u, int_least64_t value) const
-      {
-        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, peta u, int_least64_t value) const
-      {
-        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, exa u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, hecto u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
         return do_put(s, ios, style, ratio<1> (), value);
       }
 
-      iter_type do_put(iter_type s, std::ios_base&, duration_style::type style, ratio<60> u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, kilo u, int_least64_t value) const
+      {
+        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
+        std::copy(str.begin(), str.end(), s);
+        return do_put(s, ios, style, ratio<1> (), value);
+      }
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, mega u, int_least64_t value) const
+      {
+        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
+        std::copy(str.begin(), str.end(), s);
+        return do_put(s, ios, style, ratio<1> (), value);
+      }
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, giga u, int_least64_t value) const
+      {
+        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
+        std::copy(str.begin(), str.end(), s);
+        return do_put(s, ios, style, ratio<1> (), value);
+      }
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, tera u, int_least64_t value) const
+      {
+        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
+        std::copy(str.begin(), str.end(), s);
+        return do_put(s, ios, style, ratio<1> (), value);
+      }
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, peta u, int_least64_t value) const
+      {
+        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
+        std::copy(str.begin(), str.end(), s);
+        return do_put(s, ios, style, ratio<1> (), value);
+      }
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, exa u, int_least64_t value) const
+      {
+        std::basic_string<CharT> str = do_get_ratio_prefix(style, u);
+        std::copy(str.begin(), str.end(), s);
+        return do_put(s, ios, style, ratio<1> (), value);
+      }
+
+      iter_type do_put(iter_type s, std::ios_base&, duration_style_type style, ratio<60> u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_plural_form(style, u, do_get_plural_form(value));
         return std::copy(str.begin(), str.end(), s);
       }
 
-      iter_type do_put(iter_type s, std::ios_base&, duration_style::type style, ratio<3600> u, int_least64_t value) const
+      iter_type do_put(iter_type s, std::ios_base&, duration_style_type style, ratio<3600> u, int_least64_t value) const
       {
         std::basic_string<CharT> str = do_get_plural_form(style, u, do_get_plural_form(value));
         return std::copy(str.begin(), str.end(), s);
       }
 
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style::type style, detail::rt_ratio rtr,
+      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, detail::rt_ratio rtr,
           int_least64_t value) const
       {
         *s++ = CharT('[');
@@ -470,7 +480,7 @@ namespace boost
         return do_put(s, ios, style, ratio<1> (), value);
       }
 
-      std::basic_string<CharT> do_get_plural_form(duration_style::type style, ratio<1> , std::size_t pf) const
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, ratio<1> , std::size_t pf) const
       {
         static const CharT t[] =
         { 's' };
@@ -489,7 +499,7 @@ namespace boost
         throw "exception";
       }
 
-      std::basic_string<CharT> do_get_plural_form(duration_style::type style, ratio<60> , std::size_t pf) const
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, ratio<60> , std::size_t pf) const
       {
         static const CharT t[] =
         { 'm', 'i', 'n' };
@@ -509,7 +519,7 @@ namespace boost
         throw "exception";
       }
 
-      std::basic_string<CharT> do_get_plural_form(duration_style::type style, ratio<3600> , std::size_t pf) const
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, ratio<3600> , std::size_t pf) const
       {
         static const CharT t[] =
         { 'h' };
@@ -527,34 +537,74 @@ namespace boost
         // assert
         throw "exception";
       }
-      //      std::basic_string<CharT> do_get_plural_form(duration_style::type style, duration<boost::int_least64_t, atto>, std::size_t pf) const
-      //      {
-      //        return to_string(style, atto())+do_get_plural_form(style, ratio<1>(), pf);
-      //      }
-      //      std::basic_string<CharT> do_get_plural_form(duration_style::type style, duration<boost::int_least64_t, pico>, std::size_t pf) const
-      //      {
-      //        return to_string(style, pico())+do_get_plural_form(style, ratio<1>(), pf);
-      //      }
-      //      std::basic_string<CharT> do_get_plural_form(duration_style::type style, duration<boost::int_least64_t, nano>, std::size_t pf) const
-      //      {
-      //        return to_string(style, nano())+do_get_plural_form(style, ratio<1>(), pf);
-      //      }
-      //      std::basic_string<CharT> do_get_plural_form(duration_style::type style, duration<boost::int_least64_t, micro>, std::size_t pf) const
-      //      {
-      //        return to_string(style, micro())+do_get_plural_form(style, ratio<1>(), pf);
-      //      }
-      //      std::basic_string<CharT> do_get_plural_form(duration_style::type style, duration<boost::int_least64_t, milli>, std::size_t pf) const
-      //      {
-      //        return to_string(style, milli())+do_get_plural_form(style, ratio<1>(), pf);
-      //      }
-      //      std::basic_string<CharT> do_get_plural_form(duration_style::type style, duration<boost::int_least64_t, centi>, std::size_t pf) const
-      //      {
-      //        return to_string(style, centi())+do_get_plural_form(style, ratio<1>(), pf);
-      //      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, atto u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, femto u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, pico u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, nano u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, micro u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, milli u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, centi u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, deci u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, deca u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, hecto u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, kilo u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, mega u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, giga u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, tera u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, peta u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
+      std::basic_string<CharT> do_get_plural_form(duration_style_type style, exa u, std::size_t pf) const
+      {
+        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+      }
 
     protected:
 
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, atto) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, atto) const
       {
         static const CharT u[] =
         { 'a', 't', 't', 'o' };
@@ -566,7 +616,19 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, pico) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, femto) const
+      {
+        static const CharT u[] =
+        { 'f', 'e', 'm', 't', 'o' };
+        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
+        static const CharT v[] =
+        { 'f' };
+        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
+
+        if (style == duration_style::symbol) return symbol;
+        return prefix;
+      }
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, pico) const
       {
         static const CharT u[] =
         { 'p', 'i', 'c', 'o' };
@@ -578,7 +640,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, nano) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, nano) const
       {
         static const CharT u[] =
         { 'n', 'a', 'n', 'o' };
@@ -590,7 +652,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, micro) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, micro) const
       {
         static const CharT u[] =
         { 'm', 'i', 'c', 'r', 'o' };
@@ -603,7 +665,7 @@ namespace boost
         return prefix;
       }
 
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, milli) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, milli) const
       {
         static const CharT u[] =
         { 'm', 'i', 'l', 'l', 'i' };
@@ -615,7 +677,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, centi) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, centi) const
       {
         static const CharT u[] =
         { 'c', 'e', 'n', 't', 'i' };
@@ -627,7 +689,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, deci) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, deci) const
       {
         static const CharT u[] =
         { 'd', 'e', 'c', 'i' };
@@ -639,7 +701,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, deca) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, deca) const
       {
         static const CharT u[] =
         { 'd', 'e', 'c', 'a' };
@@ -651,7 +713,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, hecto) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, hecto) const
       {
         static const CharT u[] =
         { 'h', 'e', 'c', 't', 'o' };
@@ -663,7 +725,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, kilo) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, kilo) const
       {
         static const CharT u[] =
         { 'k', 'i', 'l', 'o' };
@@ -675,7 +737,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, mega) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, mega) const
       {
         static const CharT u[] =
         { 'm', 'e', 'g', 'a' };
@@ -687,7 +749,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, giga) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, giga) const
       {
         static const CharT u[] =
         { 'g', 'i', 'g', 'a' };
@@ -699,7 +761,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, tera) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, tera) const
       {
         static const CharT u[] =
         { 't', 'e', 'r', 'a' };
@@ -711,7 +773,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, peta) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, peta) const
       {
         static const CharT u[] =
         { 'p', 'e', 't', 'a' };
@@ -723,7 +785,7 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         return prefix;
       }
-      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style::type style, exa) const
+      virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, exa) const
       {
         static const CharT u[] =
         { 'e', 'x', 'a' };
@@ -752,7 +814,7 @@ namespace boost
   template <typename CharT, typename Rep, typename Period>
   typename enable_if<is_localizable<Period>, std::basic_string<CharT> >::type
   to_basic_string(
-      duration_style::type style,
+      duration_style_type style,
       duration<Rep,Period> value,
       std::locale const &loc
   )
@@ -781,7 +843,7 @@ namespace boost
   template <typename CharT, typename Rep, typename Period>
   typename disable_if<is_localizable<Period> , std::basic_string<CharT> >::type
   to_basic_string(
-      duration_style::type style,
+      duration_style_type style,
       duration<Rep,Period> value,
       std::locale const& loc
   )
@@ -809,7 +871,7 @@ namespace boost
   template <typename CharT, typename Rep, typename Period>
   typename enable_if<is_localizable<Period>, std::basic_string<CharT> >::type
   to_basic_string(
-      duration_style::type style,
+      duration_style_type style,
       duration<process_times<Rep>,Period> value,
       std::locale const &loc
   )
@@ -838,7 +900,7 @@ namespace boost
   template <typename CharT, typename Rep, typename Period>
   typename disable_if<is_localizable<Period> , std::basic_string<CharT> >::type
   to_basic_string(
-      duration_style::type style,
+      duration_style_type style,
       duration<process_times<Rep>,Period> value,
       std::locale const& loc
   )
@@ -865,7 +927,7 @@ namespace boost
 
   template <typename CharT, typename Rep, typename Period>
   std::basic_string<CharT>
-  to_basic_string(duration_style::type style, duration<Rep,Period> value)
+  to_basic_string(duration_style_type style, duration<Rep,Period> value)
   {
     return to_basic_string<CharT>(style, value, std::locale());
   }
