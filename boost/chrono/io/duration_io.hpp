@@ -15,17 +15,14 @@
 
 #include <boost/chrono/chrono.hpp>
 #include <boost/ratio/ratio_io.hpp>
-#include <boost/type_traits/is_scalar.hpp>
-#include <boost/type_traits/is_signed.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/math/common_factor_rt.hpp>
-#include <boost/chrono/detail/scan_keyword.hpp>
+
 #include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/io/duration_unit_string.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
 //#include <boost/format.hpp>
 #include <locale>
 #include <boost/chrono/io/duration_put.hpp>
+#include <boost/chrono/io/duration_get.hpp>
 namespace boost
 {
   namespace chrono
@@ -562,22 +559,6 @@ namespace boost
       return os;
     }
 
-    namespace chrono_detail
-    {
-      template <class Rep, bool = is_scalar<Rep>::value>
-      struct duration_io_intermediate
-      {
-        typedef Rep type;
-      };
-
-      template <class Rep>
-      struct duration_io_intermediate<Rep, true>
-      {
-        typedef typename mpl::if_c<is_floating_point<Rep>::value, long double, typename mpl::if_c<
-            is_signed<Rep>::value, long long, unsigned long long>::type>::type type;
-      };
-
-    }
 
     /**
      *
@@ -610,21 +591,20 @@ namespace boost
             is.imbue(std::locale(is.getloc(), new duration_get<CharT>()));
           }
           std::use_facet<duration_get<CharT> >(is.getloc())
-          .get(is, std::istreambuf_iterator<CharT,Traits>()
-              ,is, err, d);
+          .get(is, std::istreambuf_iterator<CharT,Traits>() ,is, err, d);
         }
       } // try
 
       catch(...)
       {
-        bool flag = FALSE;
+        bool flag = false;
         try
         {
           is.setstate(std::ios_base::failbit);
         }
         catch( std::ios_base::failure )
         {
-          flag= TRUE;
+          flag= true;
         }
         if ( flag ) throw;
       }
@@ -635,7 +615,7 @@ namespace boost
 #elif defined BOOST_CHRONO_IS_LOCALIZABLE_TRANSLATE2
 #else
 
-      typedef typename chrono_detail::duration_io_intermediate<Rep>::type intermediate_type;
+      typedef typename detail::duration_io_intermediate<Rep>::type intermediate_type;
       intermediate_type r;
       // read value into r
       is >> r;

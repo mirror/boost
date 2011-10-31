@@ -1,4 +1,4 @@
-//  boost/chrono/io/detail/fmt_masks.hpp
+//  boost/chrono/io/ios_base_state.hpp
 //
 //  (C) Copyright 2010-2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,

@@ -1,4 +1,5 @@
 //
+//  (C) Copyright Howard Hinnant
 //  (C) Copyright 2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -109,6 +110,11 @@ namespace boost
         template <typename Period>
         rt_ratio(Period const&) :
           num(Period::type::num), den(Period::type::den)
+        {
+        }
+
+        rt_ratio(intmax_t n=0, intmax_t d=0) :
+          num(n), den(d)
         {
         }
 
@@ -223,6 +229,7 @@ namespace boost
       {
         return do_get_plural_form(style, Period(), pf);
       }
+
 
       /**
        *

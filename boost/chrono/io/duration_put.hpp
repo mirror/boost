@@ -1,4 +1,5 @@
 //
+//  (C) Copyright Howard Hinnant
 //  (C) Copyright 2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -66,7 +67,7 @@ namespace boost
        * @param s an output stream iterator
        * @param ios a reference to a ios_base
        * @param d the duration
-       * @param pattern begin of the formatting patter
+       * @param pattern begin of the formatting pattern
        * @param pat_end end of the formatting pattern
        *
        * @Effects Steps through the sequence from @c pattern to @c pat_end,
@@ -93,6 +94,47 @@ namespace boost
         if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
             std::locale(ios.getloc(), new duration_units_default<CharT> ()));
 
+#if 1
+        const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
+        for (; pattern != pat_end; ++pattern)
+        {
+            if (ct.narrow(*pattern, 0) == '%')
+            {
+                if (++pattern == pat_end)
+                {
+                    *s++ = pattern[-1];
+                    break;
+                }
+                char fmt = ct.narrow(*pattern, 0);
+                switch (fmt)
+                {
+                case 'v':
+                {
+                  s = put_value(s, ios, d);
+                  break;
+                }
+                case 'u':
+                {
+                  s = put_unit(s, ios, d);
+                  break;
+                }
+                case 'x':
+                {
+                  std::basic_string<CharT> pat = std::use_facet<duration_units<CharT> >(ios.getloc()).get_pattern();
+                  pattern = pat.data();
+                  pat_end = pattern + pat.size();
+                  break;
+                }
+                default:
+                  BOOST_ASSERT(false && "Boost::Chrono internal error.");
+                  break;
+                }
+            }
+            else
+                *s++ = *pattern;
+        }
+
+#else
         for (; pattern != pat_end; ++pattern)
         {
           // FIXME: Shouldn't "uvx" be a basic_string<CharT> ?????
@@ -107,12 +149,12 @@ namespace boost
             {
             case 'v':
             {
-              put_value(s, ios, d);
+              s = put_value(s, ios, d);
               break;
             }
             case 'u':
             {
-              put_unit(s, ios, d);
+              s = put_unit(s, ios, d);
               break;
             }
             case 'x':
@@ -128,6 +170,7 @@ namespace boost
             }
           }
         }
+#endif
         return s;
       }
 
@@ -158,7 +201,7 @@ namespace boost
        * @param s an output stream iterator
        * @param ios a reference to a ios_base
        * @param d the duration
-       * @Effects Calls do_put_value(s, f, d).
+       * @Effects As if std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, ' ', static_cast<long int> (d.count())).
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
@@ -174,12 +217,16 @@ namespace boost
        * @param ios a reference to a ios_base
        * @param d the duration
        * @param pattern
-       * @Effects Calls do_put_unit(s, f, d).
+       * @Effects imbue in @c ios the @c duration_units_default facet if not already present.
+       * @Effects Calls std::use_facet<duration_units<CharT> >(ios.getloc()).put(s, ios, d).
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
       iter_type put_unit(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d) const
       {
+        if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
+            std::locale(ios.getloc(), new duration_units_default<CharT> ()));
+
         return std::use_facet<duration_units<CharT> >(ios.getloc()).put(s, ios, d);
       }
 

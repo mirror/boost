@@ -12,7 +12,7 @@ void test_good(const char* str, D res)
   std::istringstream in(str);
   D d(0);
   in >> d;
-  BOOST_TEST(in.good());
+  BOOST_TEST(!in.fail());
   BOOST_TEST(d == res);
 }
 
@@ -30,7 +30,7 @@ void test_fail(const char* str, DFail, DGood res)
     std::istringstream in(str);
     DGood d = DGood::zero();
     in >> d;
-    BOOST_TEST(in.good());
+    BOOST_TEST(!in.fail());
     BOOST_TEST(d == res);
   }
 }
