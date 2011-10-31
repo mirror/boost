@@ -12,9 +12,12 @@
 
 namespace boost_no_char32_t {
 
+void quiet_warning(const char32_t*){}
+
 int test()
 {
   const char32_t* p = U"abc";
+  quiet_warning(p);
   return 0;
 }
 

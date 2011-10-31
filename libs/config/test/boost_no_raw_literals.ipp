@@ -12,10 +12,15 @@
 
 namespace boost_no_raw_literals {
 
+void quiet_warning(const char*){}
+void quiet_warning(const wchar_t*){}
+
 int test()
 {
   const char* s = R"(abc)";
+  quiet_warning(s);
   const wchar_t* ws = LR"(abc)";
+  quiet_warning(ws);
   return 0;
 }
 

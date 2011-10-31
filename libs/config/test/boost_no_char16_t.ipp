@@ -13,9 +13,12 @@
 
 namespace boost_no_char16_t {
 
+void quiet_warning(const char16_t*){}
+
 int test()
 {
   const char16_t* p = u"abc";
+  quiet_warning(p);
   return 0;
 }
 

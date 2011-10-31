@@ -11,7 +11,7 @@
 //  DESCRIPTION:   The compiler does not support C++0x =delete functions
 
 #if defined(__GNUC__) && !defined(__GXX_EXPERIMENTAL_CXX0X__) && !defined(BOOST_INTEL_STDCXX0X)
-#  error Deleted functions aren't really supported in non-C++0x mode
+#  error Deleted functions are not supported in non-C++0x mode
 #endif
 
 namespace boost_no_deleted_functions {

@@ -12,10 +12,12 @@
 
 namespace boost_no_unicode_literals {
 
+void quiet_warning(const char*){}
 
 int test()
 {
   const char* c8 = u8"";
+  quiet_warning(c8);
   return 0;
 }
 
