@@ -21,16 +21,24 @@
 namespace boost
 {
   template <>
-  struct ratio_string_is_localizable<ratio<60> > : true_type {};
+  struct ratio_string_is_localizable<ratio<60> > : true_type
+  {
+  };
 
   template <>
-  struct ratio_string_id<ratio<60> > : integral_constant<int,60> {};
+  struct ratio_string_id<ratio<60> > : integral_constant<int, 60>
+  {
+  };
 
   template <>
-  struct ratio_string_is_localizable<ratio<3600> > : true_type {};
+  struct ratio_string_is_localizable<ratio<3600> > : true_type
+  {
+  };
 
   template <>
-  struct ratio_string_id<ratio<3600> > : integral_constant<int,3600> {};
+  struct ratio_string_id<ratio<3600> > : integral_constant<int, 3600>
+  {
+  };
 
   namespace chrono
   {
@@ -41,9 +49,8 @@ namespace boost
       static std::basic_string<CharT> name()
       {
         static const CharT u[] =
-        { '%', '1', '%', ' '};
-        static const std::basic_string<CharT> str(u, u + sizeof(u)
-            / sizeof(u[0]));
+        { '%', '1', '%', ' ' };
+        static const std::basic_string<CharT> str(u, u + sizeof (u) / sizeof (u[0]));
         return str;
       }
     };
@@ -53,14 +60,11 @@ namespace boost
       static std::basic_string<CharT> name()
       {
         static const CharT u[] =
-        { '%', '2', '%'};
-        static const std::basic_string<CharT> str(u, u + sizeof(u)
-            / sizeof(u[0]));
+        { '%', '2', '%' };
+        static const std::basic_string<CharT> str(u, u + sizeof (u) / sizeof (u[0]));
         return str;
       }
     };
-
-
 
     template <class Period, class CharT>
     struct duration_unit_strings
@@ -69,42 +73,38 @@ namespace boost
       {
         static const CharT u[] =
         { 's', 'e', 'c', 'o', 'n', 'd', 's' };
-        static const std::basic_string<CharT> suffix(u, u + sizeof(u)
-            / sizeof(u[0]));
-        return ::boost::ratio_string<Period, CharT>::prefix()+suffix;
+        static const std::basic_string<CharT> suffix(u, u + sizeof (u) / sizeof (u[0]));
+        return ::boost::ratio_string<Period, CharT>::prefix() + suffix;
       }
       static std::basic_string<CharT> singular()
       {
         static const CharT u[] =
         { 's', 'e', 'c', 'o', 'n', 'd' };
-        static const std::basic_string<CharT> suffix(u, u + sizeof(u)
-            / sizeof(u[0]));
-        return ::boost::ratio_string<Period, CharT>::prefix()+suffix;
+        static const std::basic_string<CharT> suffix(u, u + sizeof (u) / sizeof (u[0]));
+        return ::boost::ratio_string<Period, CharT>::prefix() + suffix;
       }
       static std::basic_string<CharT> symbol()
       {
         static const std::basic_string<CharT> str(1, 's');
-        return ::boost::ratio_string<Period, CharT>::symbol()+str;
+        return ::boost::ratio_string<Period, CharT>::symbol() + str;
       }
     };
 
     template <class CharT>
-    struct duration_unit_strings<ratio<1>, CharT >
+    struct duration_unit_strings<ratio<1> , CharT>
     {
       static std::basic_string<CharT> plural()
       {
         static const CharT u[] =
         { 's', 'e', 'c', 'o', 'n', 'd', 's' };
-        static const std::basic_string<CharT> suffix(u, u + sizeof(u)
-            / sizeof(u[0]));
+        static const std::basic_string<CharT> suffix(u, u + sizeof (u) / sizeof (u[0]));
         return suffix;
       }
       static std::basic_string<CharT> singular()
       {
         static const CharT u[] =
         { 's', 'e', 'c', 'o', 'n', 'd' };
-        static const std::basic_string<CharT> suffix(u, u + sizeof(u)
-            / sizeof(u[0]));
+        static const std::basic_string<CharT> suffix(u, u + sizeof (u) / sizeof (u[0]));
         return suffix;
       }
       static std::basic_string<CharT> symbol()
@@ -115,51 +115,46 @@ namespace boost
     };
 
     template <class CharT>
-    struct duration_unit_strings<ratio<60>, CharT >
+    struct duration_unit_strings<ratio<60> , CharT>
     {
       static std::basic_string<CharT> plural()
       {
         static const CharT u[] =
         { 'm', 'i', 'n', 'u', 't', 'e', 's' };
-        static const std::basic_string<CharT> str(u, u + sizeof(u)
-            / sizeof(u[0]));
+        static const std::basic_string<CharT> str(u, u + sizeof (u) / sizeof (u[0]));
         return str;
       }
       static std::basic_string<CharT> singular()
       {
         static const CharT u[] =
         { 'm', 'i', 'n', 'u', 't', 'e' };
-        static const std::basic_string<CharT> str(u, u + sizeof(u)
-            / sizeof(u[0]));
+        static const std::basic_string<CharT> str(u, u + sizeof (u) / sizeof (u[0]));
         return str;
       }
       static std::basic_string<CharT> symbol()
       {
         static const CharT u[] =
         { 'm', 'i', 'n' };
-        static const std::basic_string<CharT> str(u, u + sizeof(u)
-            / sizeof(u[0]));
+        static const std::basic_string<CharT> str(u, u + sizeof (u) / sizeof (u[0]));
         return str;
       }
     };
 
     template <class CharT>
-    struct duration_unit_strings<ratio<3600>, CharT >
+    struct duration_unit_strings<ratio<3600> , CharT>
     {
       static std::basic_string<CharT> plural()
       {
         static const CharT u[] =
         { 'h', 'o', 'u', 'r', 's' };
-        static const std::basic_string<CharT> str(u, u + sizeof(u)
-            / sizeof(u[0]));
+        static const std::basic_string<CharT> str(u, u + sizeof (u) / sizeof (u[0]));
         return str;
       }
       static std::basic_string<CharT> singular()
       {
         static const CharT u[] =
         { 'h', 'o', 'u', 'r' };
-        static const std::basic_string<CharT> str(u, u + sizeof(u)
-            / sizeof(u[0]));
+        static const std::basic_string<CharT> str(u, u + sizeof (u) / sizeof (u[0]));
         return str;
       }
       static std::basic_string<CharT> symbol()
@@ -169,62 +164,51 @@ namespace boost
       }
     };
 
-
     template <class CharT, class Rep, class Period>
-    std::basic_string<CharT> duration_unit(std::locale const &loc, bool is_prefix, duration<Rep,Period> const& d) {
-      if (is_prefix) {
-        return translate(loc,
-            ratio_string_id<Period>(),
-            duration_unit_strings<Period, CharT>::singular(),
-            duration_unit_strings<Period, CharT>::plural(),
-            d.count()
-        );
+    std::basic_string<CharT> duration_unit(std::locale const &loc, bool is_prefix, duration<Rep, Period> const& d)
+    {
+      if (is_prefix)
+      {
+        return translate(loc, ratio_string_id<Period> (), duration_unit_strings<Period, CharT>::singular(),
+            duration_unit_strings<Period, CharT>::plural(), d.count());
       }
       else
       {
-        return translate(loc,
-            ratio_string_id<Period>(),
-            duration_unit_strings<Period, CharT>::symbol()
-        );
+        return translate(loc, ratio_string_id<Period> (), duration_unit_strings<Period, CharT>::symbol());
       }
     }
 
     template <class CharT, class Rep, class Period>
-    std::basic_string<CharT> translated_duration_unit(std::locale const &loc, bool is_prefix, duration<Rep,Period> const& d) {
-      if (is_prefix) {
-          return translate(loc,
-              ratio_string_id<Period>(),
-              value<CharT>::name()+duration_unit_strings<Period, CharT>::singular(),
-              value<CharT>::name()+duration_unit_strings<Period, CharT>::plural(),
-              d.count()
-        );
+    std::basic_string<CharT> translated_duration_unit(std::locale const &loc, bool is_prefix,
+        duration<Rep, Period> const& d)
+    {
+      if (is_prefix)
+      {
+        return translate(loc, ratio_string_id<Period> (),
+            value<CharT>::name() + duration_unit_strings<Period, CharT>::singular(),
+            value<CharT>::name() + duration_unit_strings<Period, CharT>::plural(), d.count());
       }
       else
       {
-        return translate(loc,
-            ratio_string_id<Period>(),
-            value<CharT>::name()+duration_unit_strings<Period, CharT>::symbol()
-        );
+        return translate(loc, ratio_string_id<Period> (),
+            value<CharT>::name() + duration_unit_strings<Period, CharT>::symbol());
       }
     }
 
     template <class CharT, class Period>
-    std::basic_string<CharT> translated_duration_unit(std::locale const &loc, bool is_prefix) {
-      if (is_prefix) {
-          return translate(loc,
-              ratio_string_id<Period>(),
-              value<CharT>::name()+period<CharT>::name()+duration_unit_strings<Period, CharT>::plural()
-        );
+    std::basic_string<CharT> translated_duration_unit(std::locale const &loc, bool is_prefix)
+    {
+      if (is_prefix)
+      {
+        return translate(loc, ratio_string_id<Period> (),
+            value<CharT>::name() + period<CharT>::name() + duration_unit_strings<Period, CharT>::plural());
       }
       else
       {
-        return translate(loc,
-            ratio_string_id<Period>(),
-            value<CharT>::name()+period<CharT>::name()+duration_unit_strings<Period, CharT>::symbol()
-        );
+        return translate(loc, ratio_string_id<Period> (),
+            value<CharT>::name() + period<CharT>::name() + duration_unit_strings<Period, CharT>::symbol());
       }
     }
-
 
   } // chrono
 

@@ -19,6 +19,7 @@
 #include <boost/chrono/round.hpp>
 #include <boost/chrono/io/translate.hpp>
 #include <boost/chrono/clock_string.hpp>
+#include <boost/chrono/io/ios_base_state.hpp>
 #include <cstring>
 #include <string.h>
 
@@ -28,113 +29,8 @@ namespace boost
   namespace chrono
   {
 
-    struct timezone
-    {
-      enum type
-      {
-        utc, local
-      };
-    };
 
-    typedef timezone::type timezone_type;
-    namespace detail
-    {
 
-      inline timezone_type get_timezone(std::ios_base & ios)
-      {
-        long iw = ios.iword(chrono_io_masks_index());
-        return (iw & timezone_mask) ? timezone::local : timezone::utc;
-      }
-      inline void set_timezone(std::ios_base& ios, timezone_type style)
-      {
-        long& iw = ios.iword(chrono_io_masks_index());
-        iw &= ~timezone_mask;
-        iw |= (style ? timezone_mask : 0);
-      }
-
-      template<typename CharT>
-      class time_info
-      {
-      public:
-
-        time_info(std::basic_string<CharT> fmt) :
-          fmt_(fmt)
-        {
-        }
-
-        static inline std::basic_string<CharT> get_time_fmt(std::ios_base & ios)
-        {
-          register_once(index(), ios);
-          void* &pw = ios.pword(index());
-          if (pw == 0)
-          {
-            return "";
-          }
-          return static_cast<const time_info<CharT>*> (pw)->fmt_;
-        }
-        static inline void set_time_fmt(std::ios_base& ios, std::basic_string<
-            CharT> fmt)
-        {
-
-          register_once(index(), ios);
-          void*& pw = ios.pword(index());
-          if (pw != 0)
-          {
-            delete static_cast<time_info<CharT>*> (pw);
-          }
-          pw = new time_info(fmt);
-
-        }
-      private:
-        static inline void callback(std::ios_base::event evt, std::ios_base& ios, int index)
-        {
-          switch (evt)
-          {
-          case std::ios_base::erase_event:
-          {
-            void*& pw = ios.pword(index);
-            if (pw != 0)
-            {
-              time_info* tmi = static_cast<time_info<CharT>*> (pw);
-              delete tmi;
-              pw = 0;
-            }
-            break;
-          }
-          case std::ios_base::copyfmt_event:
-          {
-            void*& pw = ios.pword(index);
-            if (pw != 0)
-            {
-              pw = new time_info(static_cast<time_info<CharT>*> (pw)->fmt_);
-            }
-            break;
-          }
-          default:
-            break;
-          }
-        }
-
-        static inline void register_once(int index, std::ios_base& ios)
-        {
-          if (!detail::is_registerd(ios))
-          {
-            detail::set_registered(ios);
-            ios.register_callback(callback, index);
-          }
-        }
-
-        static inline int index()
-        {
-          static const int v_ = std::ios_base::xalloc();
-          return v_;
-        }
-
-        std::basic_string<CharT> fmt_;
-
-      };
-
-    }
 #if ! defined BOOST_CHRONO_IO_USE_XALLOC
 
     template<class CharT>
@@ -201,8 +97,8 @@ namespace boost
 #if ! defined BOOST_CHRONO_IO_USE_XALLOC
         os.imbue(std::locale(os.getloc(), new time_punct<CharT> (m.tz_, m.fmt_)));
 #else
-        detail::time_info<CharT>::set_time_fmt(os, m.fmt_);
-        detail::set_timezone(os, m.tz_);
+        set_time_fmt<CharT>(os, m.fmt_);
+        set_timezone(os, m.tz_);
 #endif
         return os;
       }
@@ -215,8 +111,8 @@ namespace boost
 #if ! defined BOOST_CHRONO_IO_USE_XALLOC
         is.imbue(std::locale(is.getloc(), new time_punct<CharT> (m.tz_, m.fmt_)));
 #else
-        detail::time_info<CharT>::set_time_fmt(is, m.fmt_);
-        detail::set_timezone(is, m.tz_);
+        set_time_fmt<CharT>(is, m.fmt_);
+        set_timezone(is, m.tz_);
 #endif
         return is;
       }
@@ -244,8 +140,8 @@ namespace boost
         os.imbue(std::locale(os.getloc(), new time_punct<CharT> (static_cast<timezone_type> (m), std::basic_string<
                     CharT>())));
 #else
-        detail::time_info<CharT>::set_time_fmt(os, "");
-        detail::set_timezone(os, static_cast<timezone_type> (m));
+        set_time_fmt<CharT>(os, "");
+        set_timezone(os, static_cast<timezone_type> (m));
 #endif
         return os;
       }
@@ -258,8 +154,8 @@ namespace boost
         is.imbue(std::locale(is.getloc(), new time_punct<CharT> (static_cast<timezone_type> (m), std::basic_string<
                     CharT>())));
 #else
-        detail::time_info<CharT>::set_time_fmt(is, "");
-        detail::set_timezone(is, static_cast<timezone_type> (m));
+        set_time_fmt<CharT>(is, "");
+        set_timezone(is, static_cast<timezone_type> (m));
 #endif
         return is;
       }
@@ -543,11 +439,11 @@ namespace boost
           const CharT* pb = 0; //nullptr;
           const CharT* pe = pb;
           std::basic_string<CharT> fmt =
-              detail::time_info<CharT>::get_time_fmt(os);
+              get_time_fmt<CharT>(os);
           pb = fmt.data();
           pe = pb + fmt.size();
 
-          timezone_type tz = detail::get_timezone(os);
+          timezone_type tz = get_timezone(os);
           std::locale loc = os.getloc();
 #endif
           time_t t = system_clock::to_time_t(tp);
@@ -717,11 +613,11 @@ namespace boost
           const CharT* pb = 0; //nullptr;
           const CharT* pe = pb;
           std::basic_string<CharT> fmt =
-              detail::time_info<CharT>::get_time_fmt(is);
+              get_time_fmt<CharT>(is);
           pb = fmt.data();
           pe = pb + fmt.size();
 
-          timezone_type tz = detail::get_timezone(is);
+          timezone_type tz = get_timezone(is);
           std::locale loc = is.getloc();
 #endif
           const std::time_get<CharT>& tg =

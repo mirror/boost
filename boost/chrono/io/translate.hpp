@@ -16,13 +16,15 @@ namespace boost
   namespace chrono
   {
 
-
 #if !defined BOOST_CHRONO_SPECIFIC_TRANSLATE
     template <class CharT, class Rep>
-    std::basic_string<CharT> duration_prefix_translate(std::basic_string<CharT> const &singular, std::basic_string<CharT> const &plural, Rep v)
+    std::basic_string<CharT> duration_prefix_translate(std::basic_string<CharT> const &singular,
+        std::basic_string<CharT> const &plural, Rep v)
     {
-      if ( v == 1  ) return singular;
-      if ( v == -1  ) return singular;
+      if (v == 1)
+        return singular;
+      if (v == -1)
+        return singular;
       return plural;
     }
 
@@ -38,22 +40,23 @@ namespace boost
       return epoch;
     }
     template <class CharT>
-    std::basic_string<CharT> translate(std::locale const &, int , std::basic_string<CharT> const &dfault)
+    std::basic_string<CharT> translate(std::locale const &, int, std::basic_string<CharT> const &dfault)
     {
       return dfault;
     }
 
     template <class CharT>
-    std::basic_string<CharT> translate(std::locale const &, int , std::basic_string<CharT> const &singular, std::basic_string<CharT> const &plural, int v)
+    std::basic_string<CharT> translate(std::locale const &, int, std::basic_string<CharT> const &singular,
+        std::basic_string<CharT> const &plural, int v)
     {
-      if ( v == 1  ) return singular;
-      if ( v == -1  ) return singular;
+      if (v == 1)
+        return singular;
+      if (v == -1)
+        return singular;
       return plural;
     }
 
 #endif
-
-
 
   } // chrono
 

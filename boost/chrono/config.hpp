@@ -91,7 +91,8 @@
 // deprecated i/o
 #define BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
 #define BOOST_CHRONO_IO_USE_XALLOC
-#define BOOST_CHRONO_IS_LOCALIZABLE_VIRTUAL
+#define BOOST_CHRONO_USES_DURATION_PUT
+//#define BOOST_CHRONO_IS_LOCALIZABLE_VIRTUAL
 //#define BOOST_CHRONO_IS_LOCALIZABLE_TRANSLATE
 
 // unicode support  ------------------------------//
@@ -102,7 +103,6 @@
 #define BOOST_CHRONO_HAS_UNICODE_SUPPORT 1
 #endif
 
-
 #if ! defined BOOST_NOEXCEPT
 #if defined(BOOST_NO_NOEXCEPT)
 #define BOOST_NOEXCEPT
@@ -110,7 +110,6 @@
 #define BOOST_NOEXCEPT noexcept
 #endif
 #endif
-
 
 #ifdef BOOST_CHRONO_HEADER_ONLY
 #define BOOST_CHRONO_INLINE inline
@@ -141,7 +140,6 @@
 #define BOOST_CHRONO_DECL
 #endif
 
-
 //#define  BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 
 //  enable automatic library variant selection  ------------------------------//
@@ -165,4 +163,3 @@
 #endif  // auto-linking disabled
 #endif // BOOST_CHRONO_HEADER_ONLY
 #endif // BOOST_CHRONO_CONFIG_HPP
-

@@ -29,6 +29,8 @@ namespace boost
         prefix, symbol
       };
     };
+    typedef duration_style::type duration_style_type;
+
 
   } // chrono
 
