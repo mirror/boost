@@ -418,9 +418,9 @@ template <>
 struct ratio_string<milli, char16_t>
 {
     static std::u16string short_name() {return std::u16string(1, u'm');}
-    static std::u32string long_name()  {return std::u16string(u"milli");}
-    static std::u32string symbol() {return short_name();}
-    static std::u32string prefix() {return long_name();}
+    static std::u16string long_name()  {return std::u16string(u"milli");}
+    static std::u16string symbol() {return short_name();}
+    static std::u16string prefix() {return long_name();}
 };
 
 template <>

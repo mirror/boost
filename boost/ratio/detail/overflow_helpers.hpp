@@ -242,8 +242,8 @@ namespace ratio_detail
              >
          >::type type;
   };
-  template <class R>
-  struct ratio_add<R, ratio<0> >
+  template <class R, boost::intmax_t D>
+  struct ratio_add<R, ratio<0,D> >
   {
     typedef R type;
   };
@@ -274,8 +274,8 @@ namespace ratio_detail
          >::type type;
   };
   
-  template <class R>
-  struct ratio_subtract<R, ratio<0> >
+  template <class R, boost::intmax_t D>
+  struct ratio_subtract<R, ratio<0,D> >
   {
     typedef R type;
   };
