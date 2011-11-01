@@ -570,6 +570,8 @@ namespace boost
     std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
     {
+      std::ios_base::iostate err = std::ios_base::goodbit;
+
 #if !defined BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
       typedef duration_punct<CharT> Facet;
       std::locale loc = is.getloc();
@@ -580,7 +582,6 @@ namespace boost
 #endif
 #if  defined BOOST_CHRONO_USES_DURATION_GET
 
-      std::ios_base::iostate err = std::ios_base::goodbit;
       try
       {
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
@@ -658,8 +659,9 @@ namespace boost
                   f.template long_name<ratio<1> >(),
                   f.template short_name<ratio<1> >()
 #else
-                  duration_unit<CharT> (is.getloc(), true, seconds(2)), duration_unit<CharT> (is.getloc(), false,
-                      seconds(1))
+                  duration_unit<CharT> (is.getloc(), true, seconds(2)),
+                  duration_unit<CharT> (is.getloc(), true, seconds(1)),
+                  duration_unit<CharT> (is.getloc(), false, seconds(1))
 #endif
                   };
               std::ios_base::iostate err = std::ios_base::goodbit;
@@ -667,7 +669,7 @@ namespace boost
                   units + sizeof (units) / sizeof (units[0]),
                   //~ std::use_facet<std::ctype<CharT> >(loc),
                   err);
-              switch ( (k - units) / 2)
+              switch ( (k - units) / 3)
               {
               case 0:
                 break;
@@ -761,9 +763,9 @@ namespace boost
                   duration_unit<CharT> (is.getloc(), true, duration<Rep, giga> (2)),
                   duration_unit<CharT> (is.getloc(), true, duration<Rep, giga> (1)),
                   duration_unit<CharT> (is.getloc(), false, duration<Rep, giga> (1)),
-                  duration_unit<CharT> (is.getloc(), true, duration<Rep, giga> (2)),
+                  duration_unit<CharT> (is.getloc(), true, duration<Rep, tera> (2)),
                   duration_unit<CharT> (is.getloc(), true, duration<Rep, tera> (1)),
-                  duration_unit<CharT> (is.getloc(), false, duration<Rep, giga> (1)),
+                  duration_unit<CharT> (is.getloc(), false, duration<Rep, tera> (1)),
                   duration_unit<CharT> (is.getloc(), true, duration<Rep, peta> (2)),
                   duration_unit<CharT> (is.getloc(), true, duration<Rep, peta> (1)),
                   duration_unit<CharT> (is.getloc(), false, duration<Rep, peta> (1)),
@@ -781,7 +783,6 @@ namespace boost
                   duration_unit<CharT> (is.getloc(), false, duration<Rep, ratio<3600> > (1)),
 #endif
                   };
-              std::ios_base::iostate err = std::ios_base::goodbit;
               const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e, units,
                   units + sizeof (units) / sizeof (units[0]),
                   //~ std::use_facet<std::ctype<CharT> >(loc),
@@ -893,19 +894,11 @@ namespace boost
             den *= n2;
             // num / den is now factor to multiply by r
             typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
-            if (is_integral<intermediate_type>::value)
-            {
-              // Reduce r * num / den
-              common_type_t t = math::gcd<common_type_t>(r, den);
-              r /= t;
-              den /= t;
-              if (den != 1)
-              {
-                // Conversion to Period is integral and not exact
-                is.setstate(is.failbit);
-                return is;
-              }
+            if (!detail::reduce(r, den, err)) {
+              is.setstate(is.failbit);
+              return is;
             }
+
             if (r > ( (duration_values<common_type_t>::max)() / num))
             {
               // Conversion to Period overflowed
@@ -927,6 +920,7 @@ namespace boost
             // Success!  Store it.
             r = Rep(t);
             d = duration<Rep, Period> (r);
+            if (i == e) is.setstate(is.eofbit);
           }
           else
             is.setstate(is.failbit | is.eofbit);

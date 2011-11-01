@@ -42,6 +42,31 @@ namespace boost
             is_signed<Rep>::value, long long, unsigned long long>::type>::type type;
       };
 
+      template <typename intermediate_type>
+      typename enable_if<is_integral<intermediate_type>, bool>::type
+      reduce(intermediate_type& r, unsigned long long& den, std::ios_base::iostate& err)
+      {
+        typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
+
+          // Reduce r * num / den
+        common_type_t t = math::gcd<common_type_t>(common_type_t(r), common_type_t(den));
+        r /= t;
+        den /= t;
+        if (den != 1)
+        {
+          // Conversion to Period is integral and not exact
+          err |= std::ios_base::failbit;
+          return false;
+        }
+        return true;
+      }
+      template <typename intermediate_type>
+      typename disable_if<is_integral<intermediate_type>, bool>::type
+      reduce(intermediate_type& , unsigned long long& , std::ios_base::iostate& )
+      {
+        return true;
+      }
+
     }
 
     /**
@@ -142,6 +167,7 @@ namespace boost
         typedef typename detail::duration_io_intermediate<Rep>::type intermediate_type;
         intermediate_type r;
         detail::rt_ratio rt;
+        bool value_found=false, unit_found=false, loc_found=false;
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         err = std::ios_base::goodbit;
@@ -164,6 +190,15 @@ namespace boost
                 {
                 case 'v':
                 {
+                  if (value_found) {
+                    err |= std::ios_base::failbit;
+                    break;
+                  }
+                  if (value_found) {
+                    err |= std::ios_base::failbit;
+                    break;
+                  }
+                  value_found=true;
                   s=get_value(s, end, ios, err, r);
                   if ((err & std::ios_base::failbit) != 0)
                   {
@@ -173,12 +208,27 @@ namespace boost
                 }
                 case 'u':
                 {
+                  if (unit_found) {
+                    err |= std::ios_base::failbit;
+                    break;
+                  }
+                  unit_found=true;
                   s = get_unit<Rep>(s, end, ios, err, rt);
-                  break;
+                  if ((err & std::ios_base::failbit) != 0)
+                  {
+                    return s;
+                  }                  break;
                 }
                 case 'x':
                 {
+                  if (unit_found || value_found || loc_found) {
+                    err |= std::ios_base::failbit;
+                    break;
+                  }
+                  loc_found=true;
                   std::basic_string<CharT> pat = std::use_facet<duration_units<CharT> >(ios.getloc()).get_pattern();
+                  if (pattern+1 != pat_end)
+                  pat.append(pattern+1, pat_end);
                   pattern = pat.data();
                   pat_end = pattern + pat.size();
                   break;
@@ -207,8 +257,6 @@ namespace boost
             }
 
         }
-        if (s == end)
-            err |= std::ios_base::eofbit;
 
         unsigned long long num = rt.num;
         unsigned long long den = rt.den;
@@ -231,21 +279,12 @@ namespace boost
         num *= d2;
         den *= n2;
 
-        // num / den is now factor to multiply by r
         typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
-        if (is_integral<intermediate_type>::value)
-        {
-          // Reduce r * num / den
-          common_type_t t = math::gcd<common_type_t>(r, den);
-          r /= t;
-          den /= t;
-          if (den != 1)
-          {
-            // Conversion to Period is integral and not exact
-            err |= std::ios_base::failbit;
-            return s;
-          }
-        }
+
+        // num / den is now factor to multiply by r
+        if (!detail::reduce(r, den, err))
+          return s;
+
         if (r > ( (duration_values<common_type_t>::max)() / num))
         {
           // Conversion to Period overflowed
@@ -267,6 +306,7 @@ namespace boost
         // Success!  Store it.
         r = Rep(t);
         d = duration<Rep, Period> (r);
+
 
         return s;
       }
@@ -320,9 +360,8 @@ namespace boost
       iter_type get_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
           detail::rt_ratio &rt) const
       {
-        if (!std::has_facet<duration_units<CharT> >(is.getloc())) is.imbue(
-            std::locale(is.getloc(), new duration_units_default<CharT> ()));
-
+        if (!std::has_facet<duration_units<CharT> >(is.getloc()))
+          is.imbue(std::locale(is.getloc(), new duration_units_default<CharT> ()));
         duration_units<CharT> const &facet = std::use_facet<duration_units<CharT> >(is.getloc());
 
         if (*i == '[')
@@ -370,7 +409,8 @@ namespace boost
           const std::basic_string<CharT> units[] =
           {
               facet.template get_plural_form<ratio<1> >(duration_style::prefix, 1),
-              facet.template get_plural_form<ratio<1> >(duration_style::symbol, 1)
+              facet.template get_plural_form<ratio<1> >(duration_style::prefix, 0),
+              facet.template get_plural_form<ratio<1> >(duration_style::symbol, 0)
           };
           // FIXME is this necessary?????
           err = std::ios_base::goodbit;
@@ -378,7 +418,7 @@ namespace boost
               units + sizeof (units) / sizeof (units[0]),
               //~ std::use_facet<std::ctype<CharT> >(loc),
               err);
-          switch ( (k - units) / 2)
+          switch ( (k - units) / 3)
           {
           case 0:
             break;
@@ -451,7 +491,7 @@ namespace boost
               facet.template get_plural_form<ratio<3600> >(duration_style::prefix, 0),
               facet.template get_plural_form<ratio<3600> >(duration_style::symbol, 0)
               };
-          std::ios_base::iostate err = std::ios_base::goodbit;
+          err = std::ios_base::goodbit;
           const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e, units,
               units + sizeof (units) / sizeof (units[0]),
               //~ std::use_facet<std::ctype<CharT> >(loc),
