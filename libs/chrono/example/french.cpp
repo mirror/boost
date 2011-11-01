@@ -39,6 +39,12 @@
       {
       }
     protected:
+
+      std::size_t do_get_plural_form(int_least64_t value) const
+      {
+        return (value == -1 || value == 0 || value == 1) ? 0 : 1;
+      }
+
       std::basic_string<CharT> do_get_plural_form(duration_style_type style, ratio<1> , std::size_t pf) const
       {
         static const CharT t[] =
@@ -122,5 +128,6 @@ int main()
     seconds s(15);
     milliseconds ms(763);
     cout << h << ", " << m << ", " << s << " et " << ms << '\n';
+    cout << hours(0) << ", " << minutes(0) << ", " << s << " et " << ms << '\n';
     return 0;
 }
