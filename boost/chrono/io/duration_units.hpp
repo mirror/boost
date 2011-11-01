@@ -18,6 +18,7 @@
 #include <iostream>
 //#include <locale>
 #include <boost/utility/enable_if.hpp>
+#include <algorithm>
 
 namespace boost
 {
