@@ -133,7 +133,7 @@ namespace boost
      * as the number of plural forms, the plural form associated to a duration,
      * the text associated to a plural form and a duration's period,
      */
-    template <typename CharT, class OutputIterator = std::ostreambuf_iterator<CharT> >
+    template <typename CharT=char, class OutputIterator = std::ostreambuf_iterator<CharT> >
     class duration_units: public std::locale::facet
     {
     public:
@@ -317,7 +317,7 @@ namespace boost
 
     ///////////////////////////
     // This class is used to define the strings for the default English
-    template <typename CharT, class OutputIterator = std::ostreambuf_iterator<CharT> >
+    template <typename CharT=char, class OutputIterator = std::ostreambuf_iterator<CharT> >
     class duration_units_default: public duration_units<CharT, OutputIterator>
     {
     public:
@@ -325,7 +325,7 @@ namespace boost
       typedef OutputIterator iter_type;
 
       explicit duration_units_default(size_t refs = 0) :
-        duration_units<CharT> (refs)
+        duration_units<CharT, OutputIterator> (refs)
       {
       }
       bool swaps_value_unit_order() const
