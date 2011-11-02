@@ -23,6 +23,7 @@
 #include <locale>
 #include <boost/chrono/io/duration_put.hpp>
 #include <boost/chrono/io/duration_get.hpp>
+#include <boost/chrono/io/utility/manip_base.hpp>
 namespace boost
 {
   namespace chrono
@@ -290,6 +291,47 @@ namespace boost
     }
 #endif
 
+#if 1
+    /**
+     * duration parameterized manipulator.
+     */
+
+    class duration_fmt : public manip<duration_fmt>
+    {
+      duration_style::type style_;
+    public:
+
+      /**
+       * explicit manipulator constructor from a @c duration_style
+       */
+      explicit duration_fmt(duration_style::type style) BOOST_NOEXCEPT
+      : style_(style)
+      {}
+
+      /**
+       * Change the duration_style ios state;
+       */
+      template <typename out_stream>
+      void operator()(out_stream &ios) const
+      //void operator()(std::ios_base &ios) const
+      {
+#if  defined BOOST_CHRONO_IO_USE_XALLOC
+        set_duration_style(ios, style_);
+#else
+        typedef duration_punct<typename out_stream::char_type > Facet;
+        std::locale loc = ios.getloc();
+        if (std::has_facet<Facet>(loc))
+        {
+          const Facet& f = std::use_facet<Facet>(loc);
+          if (f.get_duration_style()!=style_)
+          ios.imbue(std::locale(loc, new Facet(style_, f)));
+        }
+        else
+        ios.imbue(std::locale(loc, new Facet(style_)));
+#endif
+      }
+    };
+#else
     /**
      * duration parameterized manipulator.
      */
@@ -301,7 +343,7 @@ namespace boost
       /**
        * explicit manipulator constructor from a @c duration_style
        */
-      explicit duration_fmt(duration_style::type style)BOOST_NOEXCEPT
+      explicit duration_fmt(duration_style::type style) BOOST_NOEXCEPT
       : style_(style)
       {}
 
@@ -344,7 +386,6 @@ namespace boost
 #endif
       return os;
     }
-
     /**
      * Change the duration_punc facet associated to the input stream depending on the duration_format style parameter.
      */
@@ -368,6 +409,9 @@ namespace boost
 #endif
       return is;
     }
+
+#endif
+
 
     /**
      * duration_style i/o saver.

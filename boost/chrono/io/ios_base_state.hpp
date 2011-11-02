@@ -72,37 +72,42 @@ namespace boost
     {
 
       template<typename CharT>
-      class time_info
+      class ios_base_data
       {
       public:
 
-        time_info(std::basic_string<CharT> fmt) :
-          fmt_(fmt)
+        ios_base_data() :
+          time_fmt_(""),
+          duration_fmt_("")
         {
         }
 
-        static inline std::basic_string<CharT> get_time_fmt(std::ios_base & ios)
+        static inline ios_base_data<CharT>& instance(std::ios_base & ios)
         {
           register_once(index(), ios);
           void* &pw = ios.pword(index());
           if (pw == 0)
           {
-            return "";
+            pw = new ios_base_data<CharT>();
           }
-          return static_cast<const time_info<CharT>*> (pw)->fmt_;
+          return *static_cast<ios_base_data<CharT>*> (pw);
         }
-        static inline void set_time_fmt(std::ios_base& ios, std::basic_string<
-            CharT> fmt)
+
+        inline std::basic_string<CharT> get_time_fmt()
         {
-
-          register_once(index(), ios);
-          void*& pw = ios.pword(index());
-          if (pw != 0)
-          {
-            delete static_cast<time_info<CharT>*> (pw);
-          }
-          pw = new time_info(fmt);
-
+          return time_fmt_;
+        }
+        inline void set_time_fmt(std::basic_string<CharT> fmt)
+        {
+          time_fmt_=fmt;
+        }
+        inline std::basic_string<CharT> get_duration_fmt()
+        {
+          return duration_fmt_;
+        }
+        inline void set_duration_fmt(std::basic_string<CharT> fmt)
+        {
+          duration_fmt_=fmt;
         }
       private:
         static inline void callback(std::ios_base::event evt, std::ios_base& ios, int index)
@@ -114,7 +119,7 @@ namespace boost
             void*& pw = ios.pword(index);
             if (pw != 0)
             {
-              time_info* tmi = static_cast<time_info<CharT>*> (pw);
+              ios_base_data* tmi = static_cast<ios_base_data<CharT>*> (pw);
               delete tmi;
               pw = 0;
             }
@@ -125,7 +130,7 @@ namespace boost
             void*& pw = ios.pword(index);
             if (pw != 0)
             {
-              pw = new time_info(static_cast<time_info<CharT>*> (pw)->fmt_);
+              pw = new ios_base_data(*static_cast<ios_base_data<CharT>*> (pw));
             }
             break;
           }
@@ -149,7 +154,8 @@ namespace boost
           return v_;
         }
 
-        std::basic_string<CharT> fmt_;
+        std::basic_string<CharT> time_fmt_;
+        std::basic_string<CharT> duration_fmt_;
 
       };
 
@@ -158,14 +164,14 @@ namespace boost
     template<typename CharT>
     static inline std::basic_string<CharT> get_time_fmt(std::ios_base & ios)
     {
-      return detail::time_info<CharT>::get_time_fmt(ios);
+      return detail::ios_base_data<CharT>::instance(ios).get_time_fmt();
     }
     template<typename CharT>
     static inline void set_time_fmt(std::ios_base& ios, std::basic_string<
         CharT> fmt)
     {
 
-      detail::time_info<CharT>::set_time_fmt(ios, fmt);
+      detail::ios_base_data<CharT>::instance(ios).set_time_fmt(fmt);
 
     }
   } // chrono

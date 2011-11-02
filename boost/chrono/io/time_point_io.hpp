@@ -22,14 +22,12 @@
 #include <boost/chrono/io/ios_base_state.hpp>
 #include <cstring>
 #include <string.h>
+#include <boost/chrono/io/utility/manip_base.hpp>
 
 namespace boost
 {
-
   namespace chrono
   {
-
-
 
 #if ! defined BOOST_CHRONO_IO_USE_XALLOC
 
@@ -72,6 +70,71 @@ namespace boost
     std::locale::id time_punct<CharT>::id;
 #endif
 
+#if 1
+    namespace detail
+    {
+
+      template<class CharT>
+      class time_manip : public manip<time_manip<CharT> >
+      {
+        std::basic_string<CharT> fmt_;
+        timezone_type tz_;
+      public:
+
+        time_manip(timezone_type tz, std::basic_string<CharT> fmt)
+        // todo move semantics
+        : fmt_(fmt), tz_(tz)
+        {
+        }
+
+        /**
+         * Change the timezone_type and time format ios state;
+         */
+        template <typename out_stream>
+        void operator()(out_stream &ios) const
+        //void operator()(std::ios_base &ios) const
+        {
+  #if ! defined BOOST_CHRONO_IO_USE_XALLOC
+          ios.imbue(std::locale(ios.getloc(), new time_punct<CharT> (tz_, fmt_)));
+  #else
+          set_time_fmt<CharT>(ios, fmt_);
+          set_timezone(ios, tz_);
+  #endif
+        }
+      };
+
+      class time_man : public manip<time_man>
+      {
+        timezone_type tz_;
+      public:
+
+        time_man(timezone_type tz)
+        // todo move semantics
+        : tz_(tz)
+        {
+        }
+
+        /**
+         * Change the timezone_type and time format ios state;
+         */
+        template <typename out_stream>
+        void operator()(out_stream &ios) const
+        //void operator()(std::ios_base &ios) const
+        {
+  #if ! defined BOOST_CHRONO_IO_USE_XALLOC
+          //ios.imbue(std::locale(ios.getloc(), new time_punct<typename out_stream::char_type> (tz_, std::basic_string<typename out_stream::char_type>())));
+          ios.imbue(std::locale(ios.getloc(), new time_punct<typename out_stream::char_type> (tz_, "")));
+  #else
+          //set_time_fmt<CharT>(ios, std::basic_string<typename out_stream::char_type>());
+          set_time_fmt<typename out_stream::char_type>(ios, "");
+          set_timezone(ios, tz_);
+  #endif
+        }
+      };
+
+  }
+
+#else
     namespace detail
     {
       template<class CharT>
@@ -140,7 +203,7 @@ namespace boost
         os.imbue(std::locale(os.getloc(), new time_punct<CharT> (static_cast<timezone_type> (m), std::basic_string<
                     CharT>())));
 #else
-        set_time_fmt<CharT>(os, "");
+        set_time_fmt<CharT>(os, std::basic_string<CharT>());
         set_timezone(os, static_cast<timezone_type> (m));
 #endif
         return os;
@@ -161,6 +224,7 @@ namespace boost
       }
 
     }
+#endif
 
     template<class CharT>
     inline detail::time_manip<CharT> time_fmt(timezone_type tz, const CharT* fmt)
