@@ -91,8 +91,7 @@ namespace boost
       iter_type put(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d, const CharT* pattern,
           const CharT* pat_end) const
       {
-        if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
-            std::locale(ios.getloc(), new duration_units_default<CharT> ()));
+        duration_units<CharT,OutputIterator> const& units_facet = duration_units<CharT,OutputIterator>::imbue_if_has_not(ios);
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         for (; pattern != pat_end; ++pattern)
@@ -119,7 +118,7 @@ namespace boost
                 }
                 case 'x':
                 {
-                  std::basic_string<CharT> pat = std::use_facet<duration_units<CharT> >(ios.getloc()).get_pattern();
+                  std::basic_string<CharT> pat = units_facet.get_pattern();
                   pattern = pat.data();
                   pat_end = pattern + pat.size();
                   break;
@@ -150,10 +149,7 @@ namespace boost
       template <typename Rep, typename Period>
       iter_type put(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d) const
       {
-        if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
-            std::locale(ios.getloc(), new duration_units_default<CharT> ()));
-
-        std::basic_string<CharT> str = std::use_facet<duration_units<CharT> >(ios.getloc()).get_pattern();
+        std::basic_string<CharT> str = duration_units<CharT,OutputIterator>::imbue_if_has_not(ios).get_pattern();
         return put(s, ios, d, str.data(), str.data() + str.size());
       }
 
@@ -179,16 +175,13 @@ namespace boost
        * @param d the duration
        * @param pattern
        * @Effects imbue in @c ios the @c duration_units_default facet if not already present.
-       * @Effects Calls std::use_facet<duration_units<CharT> >(ios.getloc()).put(s, ios, d).
+       * @Effects Calls std::use_facet<duration_units<CharT,OutputIterator> >(ios.getloc()).put(s, ios, d).
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
       iter_type put_unit(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d) const
       {
-        if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
-            std::locale(ios.getloc(), new duration_units_default<CharT> ()));
-
-        return std::use_facet<duration_units<CharT> >(ios.getloc()).put(s, ios, d);
+        return duration_units<CharT,OutputIterator>::imbue_if_has_not(ios).put(s, ios, d);
       }
 
       /**

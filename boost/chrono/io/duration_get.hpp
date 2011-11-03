@@ -161,9 +161,6 @@ namespace boost
           duration<Rep, Period> &d, const char_type *pattern, const char_type *pat_end) const
       {
 
-        if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
-            std::locale(ios.getloc(), new duration_units_default<CharT> ()));
-
         typedef typename detail::duration_io_intermediate<Rep>::type intermediate_type;
         intermediate_type r;
         detail::rt_ratio rt;
@@ -226,7 +223,7 @@ namespace boost
                     break;
                   }
                   loc_found=true;
-                  std::basic_string<CharT> pat = std::use_facet<duration_units<CharT> >(ios.getloc()).get_pattern();
+                  std::basic_string<CharT> pat = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
                   if (pattern+1 != pat_end)
                   pat.append(pattern+1, pat_end);
                   pattern = pat.data();
@@ -327,10 +324,7 @@ namespace boost
       iter_type get(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err,
           duration<Rep, Period> & d) const
       {
-        if (!std::has_facet<duration_units<CharT> >(ios.getloc())) ios.imbue(
-            std::locale(ios.getloc(), new duration_units_default<CharT> ()));
-
-        std::basic_string < CharT > str = std::use_facet<duration_units<CharT> >(ios.getloc()).get_pattern();
+        std::basic_string < CharT > str = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
         return get(s, end, ios, err, d, str.data(), str.data() + str.size());
       }
 
@@ -360,9 +354,7 @@ namespace boost
       iter_type get_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
           detail::rt_ratio &rt) const
       {
-        if (!std::has_facet<duration_units<CharT> >(is.getloc()))
-          is.imbue(std::locale(is.getloc(), new duration_units_default<CharT> ()));
-        duration_units<CharT> const &facet = std::use_facet<duration_units<CharT> >(is.getloc());
+        duration_units<CharT> const &facet = duration_units<CharT>::imbue_if_has_not(is);
 
         if (*i == '[')
         {
@@ -582,8 +574,8 @@ namespace boost
     /**
      * Unique identifier for this type of facet.
      */
-    template <class CharT, class OutputIterator>
-    std::locale::id duration_get<CharT, OutputIterator>::id;
+    template <class CharT, class InputIterator>
+    std::locale::id duration_get<CharT, InputIterator>::id;
 
   } // chrono
 }

@@ -24,19 +24,32 @@ namespace boost
   namespace chrono
   {
 
+    /**
+     * @c ios_base_state_ptr is a smart pointer to a ios_base specific state.
+     */
     template<typename T>
     class ios_base_state_ptr
     {
     public:
+      /**
+       * Explicit constructor.
+       * @param ios the ios
+       * @Effects Constructs a @c ios_base_state_ptr by storing the associated @c ios.
+       */
       explicit ios_base_state_ptr(std::ios_base& ios) :
         ios_(ios)
       {
       }
-      //ios_base_state_ptr(std::ios_base ios, void (*cleanup_function)(T*));
       ~ios_base_state_ptr()
       {
       }
 
+      /**
+       * @Effects Allocates the index if not already done
+       * Registers the callback responsible of maintaining the state pointer coherency, if not already done.
+       * Retrieves the associated ios pointer
+       * @return the retrieved pointer.
+       */
       T const* get() const BOOST_NOEXCEPT
       {
         register_once(index(), ios_);
@@ -57,6 +70,10 @@ namespace boost
         }
         return static_cast<T*> (pw);
       }
+      /**
+       * @Effects as if @c return get();
+       * @return the retrieved pointer.
+       */
       T * operator->() BOOST_NOEXCEPT
       {
         return get();
@@ -66,6 +83,11 @@ namespace boost
         return get();
       }
 
+      /**
+       * @Effects as if @c return *get();
+       * @return a reference to the retrieved state.
+       * @Remark The behavior is undefined if @c get()==0.
+       */
       T & operator*() BOOST_NOEXCEPT
       {
         return *get();
@@ -75,6 +97,10 @@ namespace boost
         return *get();
       }
 
+      /**
+       * @Effects reset the current pointer after storing in a temporary variable the pointer to the current state.
+       * @return the stored state pointer.
+       */
       T * release()BOOST_NOEXCEPT
       {
         T const* f = get();
@@ -82,18 +108,23 @@ namespace boost
         return f;
       }
 
-      void reset(T* new_value=0) BOOST_NOEXCEPT
+      /**
+       *
+       * @param new_ptr the new pointer.
+       * @Effects deletes the current state and replace it with the new one.
+       */
+      void reset(T* new_ptr=0) BOOST_NOEXCEPT
       {
         register_once(index(), ios_);
         void*& pw = ios_.pword(index());
-        if (pw != 0)
-        {
-          delete static_cast<T*> (pw);
-        }
-        pw = new_value;
+        delete static_cast<T*> (pw);
+        pw = new_ptr;
       }
 
       //explicit
+      /**
+       * Explicit conversion to bool.
+       */
       operator bool() const BOOST_NOEXCEPT
       {
         return get()!=0;
@@ -177,9 +208,9 @@ namespace boost
     };
 
     /**
-     *
-
-
+     * @c ios_base_state is a non null variant of @c ios_base_state_ptr.
+     * @tparm T
+     * @Requires Must be DefaultConstructible and HeapAllocatable
      */
     template<typename T>
     class ios_base_state : public ios_base_state_ptr<T>
@@ -194,7 +225,6 @@ namespace boost
           this->base_type::reset(new T());
         }
       }
-      //ios_base_state(std::ios_base ios, void (*cleanup_function)(T*));
       ~ios_base_state()
       {
       }
@@ -228,7 +258,7 @@ namespace boost
 
       long flags() const BOOST_NOEXCEPT
       {
-        return get();
+        return value();
       }
       long flags(long v) BOOST_NOEXCEPT
       {
@@ -239,7 +269,7 @@ namespace boost
 
       long setf(long v)
       {
-          long tmp = get();
+          long tmp = value();
           ref() |= v;
           return tmp;
       }
@@ -251,7 +281,7 @@ namespace boost
 
       long setf(long v, long mask)
       {
-          long tmp = get();
+          long tmp = value();
           unsetf(mask);
           ref() |= v & mask;
           return tmp;
@@ -266,7 +296,7 @@ namespace boost
         return ios_;
       }
     private:
-      long get() const BOOST_NOEXCEPT
+      long value() const BOOST_NOEXCEPT
       {
         return ios_.iword(index());
       }
