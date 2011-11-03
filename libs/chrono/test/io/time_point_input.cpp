@@ -20,7 +20,7 @@ void test_good(std::string str, D res)
 }
 
 template<typename Clock, typename D>
-void test_fail(const char* str, D r)
+void test_fail(const char* str, D )
 {
   std::istringstream in(str+boost::chrono::clock_string<Clock,char>::since());
   boost::chrono::time_point<Clock,D> tp;
@@ -40,7 +40,7 @@ void test_fail_no_epoch(const char* str, D r)
 }
 
 template<typename Clock, typename D>
-void test_fail_epoch(const char* str, D r)
+void test_fail_epoch(const char* str, D)
 {
   std::istringstream in(str);
   boost::chrono::time_point<Clock,D> tp;
