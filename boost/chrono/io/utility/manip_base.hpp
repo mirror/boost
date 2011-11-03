@@ -15,8 +15,20 @@
 
 /**
  *
- * @Example
- * @code
+
+ */
+
+namespace boost
+{
+  namespace chrono
+  {
+
+    /**
+     * manip is a manipulator mixin class following the CRTP.
+     * @tparam Final the derived from manip and final type
+     *
+     * @Example
+     * @code
 
     class mendl: public manip<mendl>
     {
@@ -36,33 +48,31 @@
       size_t count;
     };
 
- * @codeend
- */
-
-namespace boost
-{
-  namespace chrono
-  {
-
-
-    /**
-     *
-     * @param os
-     * @param m
-     * @return
+     * @codeend
      */
-
     template <typename Final>
     class manip
     {
     public:
+      /**
+       *
+       * @param ios the io stream or ios_base.
+       * @Effects calls to the manipulator final functor.
+       */
       template <typename out_stream>
-      void operator()(out_stream &out) const
+      void operator()(out_stream &ios) const
       {
-        (*static_cast<const Final *> (this))(out);
+        (*static_cast<const Final *> (this))(ios);
       }
     };
 
+    /**
+     * @c manip stream inserter
+     * @param out the io stream or ios_base.
+     * @param op the manipulator instance.
+     * @Effects if @c out is good calls to the manipulator functor @op.
+     * @return @c out
+     */
     template <typename out_stream, typename manip_type>
     out_stream &operator<<(out_stream &out, const manip<manip_type> &op)
     {
@@ -71,6 +81,13 @@ namespace boost
       return out;
     }
 
+    /**
+     * @c manip stream extractor
+     * @param in the io stream or ios_base.
+     * @param op  the manipulator instance.
+     * @Effects if @c in is good calls to the manipulator functor @op.
+     * @return @c in
+     */
     template <typename in_stream, typename manip_type>
     in_stream &operator>>(in_stream &in, const manip<manip_type> &op)
     {

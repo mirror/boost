@@ -15,11 +15,52 @@
 #include <locale>
 #include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/io/timezone.hpp>
+#include <boost/chrono/io/utility/ios_base_state_ptr.hpp>
 
 namespace boost
 {
   namespace chrono
   {
+
+    class fmt_masks : ios_base_flags<fmt_masks>
+    {
+      typedef ios_base_flags<fmt_masks> base_type;
+
+    public:
+      fmt_masks(std::ios_base& ios): base_type(ios) {}
+      enum type
+      {
+        uses_symbol = 1 << 0,
+        uses_local  = 1 << 1
+      };
+
+      inline duration_style::type get_duration_style()
+      {
+        return (flags() & uses_symbol) ? duration_style::symbol : duration_style::prefix;
+      }
+      inline void set_duration_style(duration_style::type style)
+      {
+        if (style == duration_style::symbol)
+          setf(uses_symbol);
+        else
+          unsetf(uses_symbol);
+      }
+
+      inline timezone_type get_timezone()
+      {
+        return (flags() & uses_local) ? timezone::local : timezone::utc;
+      }
+      inline void set_timezone(timezone_type tz)
+      {
+        if (tz == timezone::local)
+          setf(uses_local);
+        else
+          unsetf(uses_local);
+      }
+    };
+
+
+#if 0
     namespace detail
     {
 
@@ -27,6 +68,7 @@ namespace boost
       {
         duration_style_mask = 1 << 0, timezone_mask = 1 << 1, registerd_callback_mask = 1 << 2
       };
+
       inline int chrono_io_masks_index()
       {
         static const int v_ = std::ios_base::xalloc();
@@ -43,34 +85,39 @@ namespace boost
         iw |= registerd_callback_mask;
       }
     }// detail
+#endif
 
     inline duration_style::type get_duration_style(std::ios_base & ios)
     {
-      long iw = ios.iword(detail::chrono_io_masks_index());
-      return (iw & detail::duration_style_mask) ? duration_style::symbol : duration_style::prefix;
+      return fmt_masks(ios).get_duration_style();
+      //long iw = ios.iword(detail::chrono_io_masks_index());
+      //return (iw & detail::duration_style_mask) ? duration_style::symbol : duration_style::prefix;
     }
     inline void set_duration_style(std::ios_base& ios, duration_style::type style)
     {
-      long& iw = ios.iword(detail::chrono_io_masks_index());
-      iw &= ~detail::duration_style_mask;
-      iw |= (style ? detail::duration_style_mask : 0);
+      fmt_masks(ios).set_duration_style(style);
+      //long& iw = ios.iword(detail::chrono_io_masks_index());
+      //iw &= ~detail::duration_style_mask;
+      //iw |= (style ? detail::duration_style_mask : 0);
     }
 
     inline timezone_type get_timezone(std::ios_base & ios)
     {
-      long iw = ios.iword(detail::chrono_io_masks_index());
-      return (iw & detail::timezone_mask) ? timezone::local : timezone::utc;
+      return fmt_masks(ios).get_timezone();
+      //long iw = ios.iword(detail::chrono_io_masks_index());
+      //return (iw & detail::timezone_mask) ? timezone::local : timezone::utc;
     }
-    inline void set_timezone(std::ios_base& ios, timezone_type style)
+    inline void set_timezone(std::ios_base& ios, timezone_type tz)
     {
-      long& iw = ios.iword(detail::chrono_io_masks_index());
-      iw &= ~detail::timezone_mask;
-      iw |= (style ? detail::timezone_mask : 0);
+      fmt_masks(ios).set_timezone(tz);
+      //long& iw = ios.iword(detail::chrono_io_masks_index());
+      //iw &= ~detail::timezone_mask;
+      //iw |= (style ? detail::timezone_mask : 0);
     }
 
     namespace detail
     {
-
+#if 0
       template<typename CharT>
       class ios_base_data
       {
@@ -158,9 +205,25 @@ namespace boost
         std::basic_string<CharT> duration_fmt_;
 
       };
+#else
+      template<typename CharT>
+      struct ios_base_data_aux
+      {
+        std::basic_string<CharT> time_fmt;
+        std::basic_string<CharT> duration_fmt;
+      public:
 
+        ios_base_data_aux() :
+          time_fmt(""),
+          duration_fmt("")
+        {
+        }
+      };
+
+#endif
     } // detail
 
+#if 0
     template<typename CharT>
     static inline std::basic_string<CharT> get_time_fmt(std::ios_base & ios)
     {
@@ -170,10 +233,23 @@ namespace boost
     static inline void set_time_fmt(std::ios_base& ios, std::basic_string<
         CharT> fmt)
     {
-
       detail::ios_base_data<CharT>::instance(ios).set_time_fmt(fmt);
-
     }
+#else
+    template<typename CharT>
+    static inline std::basic_string<CharT> get_time_fmt(std::ios_base & ios)
+    {
+      ios_base_state<detail::ios_base_data_aux<CharT> > ptr(ios);
+      return ptr->time_fmt;
+    }
+    template<typename CharT>
+    static inline void set_time_fmt(std::ios_base& ios, std::basic_string<
+        CharT> const& fmt)
+    {
+      ios_base_state<detail::ios_base_data_aux<CharT> > ptr(ios);
+      ptr->time_fmt = fmt;
+    }
+#endif
   } // chrono
 } // boost
 
