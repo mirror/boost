@@ -178,6 +178,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename table::key_type key_type;
         typedef typename table::node_constructor node_constructor;
         typedef typename table::extractor extractor;
+        typedef typename table::iterator iterator;
 
         // Constructors
 
@@ -255,13 +256,15 @@ namespace boost { namespace unordered { namespace detail {
             return count;
         }
 
-        std::pair<node_pointer, node_pointer>
+        std::pair<iterator, iterator>
             equal_range(key_type const& k) const
         {
             node_pointer n = this->find_node(k);
-            return std::make_pair(n,
-                n ? static_cast<node_pointer>(
-                        static_cast<node_pointer>(n->group_prev_)->next_) : n);
+            return std::make_pair(
+                iterator(n), iterator(n ?
+                    static_cast<node_pointer>(
+                        static_cast<node_pointer>(n->group_prev_)->next_) :
+                    n));
         }
 
         // Equality

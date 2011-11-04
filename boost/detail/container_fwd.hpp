@@ -16,6 +16,13 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+// Define BOOST_DETAIL_NO_CONTAINER_FWD if you don't want this header to      //
+// forward declare standard containers.                                       //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 #if !defined(BOOST_DETAIL_NO_CONTAINER_FWD)
 #  if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
      // STLport
@@ -31,13 +38,15 @@
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
      // GNU libstdc++ 3
-#    if defined(_GLIBCXX_DEBUG) || defined(_GLIBCXX_PARALLEL)
+#    if defined(_GLIBCXX_DEBUG) \
+        || defined(_GLIBCXX_PARALLEL) \
+        || defined(_GLIBCXX_PROFILE)
 #      define BOOST_DETAIL_NO_CONTAINER_FWD
 #    endif
 #  elif defined(__STL_CONFIG_H)
      // generic SGI STL
      //
-     // Forward declaration seems to be okay, but it has a copule of odd
+     // Forward declaration seems to be okay, but it has a couple of odd
      // implementations.
 #    define BOOST_CONTAINER_FWD_BAD_BITSET
 #    if !defined(__STL_NON_TYPE_TMPL_PARAM_BUG)

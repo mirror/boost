@@ -174,8 +174,9 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename table::key_type key_type;
         typedef typename table::node_constructor node_constructor;
         typedef typename table::extractor extractor;
+        typedef typename table::iterator iterator;
 
-        typedef std::pair<node_pointer, bool> emplace_return;
+        typedef std::pair<iterator, bool> emplace_return;
 
         // Constructors
 
@@ -253,12 +254,12 @@ namespace boost { namespace unordered { namespace detail {
                 std::out_of_range("Unable to find key in unordered_map."));
         }
 
-        std::pair<node_pointer, node_pointer>
+        std::pair<iterator, iterator>
             equal_range(key_type const& k) const
         {
             node_pointer n = this->find_node(k);
-            return std::make_pair(n,
-                n ? static_cast<node_pointer>(n->next_) : n);
+            return std::make_pair(iterator(n),
+                iterator(n ? static_cast<node_pointer>(n->next_) : n));
         }
 
         // equals
@@ -354,7 +355,7 @@ namespace boost { namespace unordered { namespace detail {
                 boost::unordered::detail::please_ignore_this_overload> const&)
         {
             BOOST_ASSERT(false);
-            return emplace_return(this->begin(), false);
+            return emplace_return(iterator(this->begin()), false);
         }
 #endif
 
@@ -389,7 +390,7 @@ namespace boost { namespace unordered { namespace detail {
             std::size_t hash = this->hash_function()(k);
             node_pointer pos = this->find_node(hash, k);
     
-            if (pos) return emplace_return(pos, false);
+            if (pos) return emplace_return(iterator(pos), false);
     
             // Create the node before rehashing in case it throws an
             // exception (need strong safety in such a case).
@@ -400,7 +401,7 @@ namespace boost { namespace unordered { namespace detail {
             // reserve has basic exception safety if the hash function
             // throws, strong otherwise.
             this->reserve_for_insert(this->size_ + 1);
-            return emplace_return(this->add_node(a, hash), true);
+            return emplace_return(iterator(this->add_node(a, hash)), true);
         }
 
         emplace_return emplace_impl_with_node(node_constructor& a)
@@ -409,12 +410,12 @@ namespace boost { namespace unordered { namespace detail {
             std::size_t hash = this->hash_function()(k);
             node_pointer pos = this->find_node(hash, k);
 
-            if (pos) return emplace_return(pos, false);
+            if (pos) return emplace_return(iterator(pos), false);
 
             // reserve has basic exception safety if the hash function
             // throws, strong otherwise.
             this->reserve_for_insert(this->size_ + 1);
-            return emplace_return(this->add_node(a, hash), true);
+            return emplace_return(iterator(this->add_node(a, hash)), true);
         }
 
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>

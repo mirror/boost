@@ -90,7 +90,7 @@ namespace boost { namespace unordered { namespace detail {
     {                                                                       \
         BOOST_PP_REPEAT_##z(n, BOOST_UNORDERED_EARGS_MEMBER, _)             \
         BOOST_PP_CAT(emplace_args, n) (                                     \
-            BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, B, a)                       \
+            BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, Arg, a)                     \
         ) : BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_EARGS_INIT, _)             \
         {}                                                                  \
                                                                             \
@@ -112,8 +112,8 @@ namespace boost { namespace unordered { namespace detail {
 #if defined(BOOST_NO_RVALUE_REFERENCES)
 
 #define BOOST_UNORDERED_EARGS_MEMBER(z, n, _)                               \
-    typedef BOOST_FWD_REF(BOOST_PP_CAT(A, n)) BOOST_PP_CAT(B, n);           \
-    BOOST_PP_CAT(B, n) BOOST_PP_CAT(a, n);
+    typedef BOOST_FWD_REF(BOOST_PP_CAT(A, n)) BOOST_PP_CAT(Arg, n);         \
+    BOOST_PP_CAT(Arg, n) BOOST_PP_CAT(a, n);
 
 #define BOOST_UNORDERED_EARGS_INIT(z, n, _)                                 \
     BOOST_PP_CAT(a, n)(                                                     \
@@ -123,8 +123,8 @@ namespace boost { namespace unordered { namespace detail {
 
 #define BOOST_UNORDERED_EARGS_MEMBER(z, n, _)                               \
     typedef typename boost::add_lvalue_reference<BOOST_PP_CAT(A, n)>::type  \
-        BOOST_PP_CAT(B, n);                                                 \
-    BOOST_PP_CAT(B, n) BOOST_PP_CAT(a, n);
+        BOOST_PP_CAT(Arg, n);                                               \
+    BOOST_PP_CAT(Arg, n) BOOST_PP_CAT(a, n);
 
 #define BOOST_UNORDERED_EARGS_INIT(z, n, _)                                 \
     BOOST_PP_CAT(a, n)(BOOST_PP_CAT(a, n))
