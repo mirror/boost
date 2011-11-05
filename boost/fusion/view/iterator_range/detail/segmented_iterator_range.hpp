@@ -29,11 +29,21 @@
 //  - All other ranges point to ranges
 //  - The front of each range in the stack (besides the
 //    topmost) is the range above it
-  
+
 namespace boost { namespace fusion
 {
     template <typename First, typename Last>
     struct iterator_range;
+
+    namespace result_of
+    {
+        template <typename Sequence, typename T>
+        struct push_back;
+    }
+
+    template <typename Sequence, typename T>
+    typename result_of::push_back<Sequence const, T>::type
+    push_back(Sequence const& seq, T const& x);
 }}
 
 namespace boost { namespace fusion { namespace detail
@@ -117,7 +127,7 @@ namespace boost { namespace fusion { namespace detail
             segment_sequence<
                 typename result_of::push_front<
                     rest_type const
-                  , typename recurse::type 
+                  , typename recurse::type
                 >::type
             >
         type;
@@ -184,7 +194,7 @@ namespace boost { namespace fusion { namespace detail
         {
             return stack.cdr;
         }
-    };    
+    };
 
     //auto make_segment_sequence_back(stack_end)
     //{
@@ -260,7 +270,7 @@ namespace boost { namespace fusion { namespace detail
             segment_sequence<
                 typename result_of::push_back<
                     rest_type const
-                  , typename recurse::type 
+                  , typename recurse::type
                 >::type
             >
         type;
@@ -328,7 +338,7 @@ namespace boost { namespace fusion { namespace detail
             return stack.cdr;
         }
     };
-    
+
     //auto make_segmented_range_reduce(stack_begin, stack_end)
     //{
     //  if (size(stack_begin) == 1 && size(stack_end) == 1)
@@ -373,7 +383,7 @@ namespace boost { namespace fusion { namespace detail
     template <
         typename StackBegin
       , typename StackEnd
-      , bool SameSegment = 
+      , bool SameSegment =
             result_of::equal_to<
                 typename StackBegin::car_type::begin_type
               , typename StackEnd::car_type::begin_type
