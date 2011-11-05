@@ -11,6 +11,7 @@
 
 #include <boost/chrono/config.hpp>
 #include <string>
+#include <locale>
 
 namespace boost
 {

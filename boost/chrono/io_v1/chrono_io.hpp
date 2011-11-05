@@ -95,12 +95,6 @@ public:
         string_type singular() const
     {
       return string_type(long_name(typename Period::type()), 0, long_name(typename Period::type()).size()-1);
-//      string_type res;
-//      res.assign(
-//          long_name<Period>().data(),
-//          long_name<Period>().data() + long_name<Period>().size()-1
-//          );
-//      return res;
     }
 
     template <class Period>

@@ -12,65 +12,22 @@
 #ifndef BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 #define BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 
-#include <boost/chrono/io/duration_io.hpp>
-#include <boost/chrono/chrono.hpp>
-#include <locale>
-#include <boost/chrono/detail/scan_keyword.hpp>
-#include <boost/chrono/round.hpp>
 #include <boost/chrono/io/translate.hpp>
-#include <boost/chrono/clock_string.hpp>
+#include <boost/chrono/io/duration_io.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
-#include <cstring>
-#include <string.h>
 #include <boost/chrono/io/utility/manip_base.hpp>
+#include <boost/chrono/chrono.hpp>
+#include <boost/chrono/clock_string.hpp>
+#include <boost/chrono/round.hpp>
+#include <boost/chrono/detail/scan_keyword.hpp>
+#include <cstring>
+#include <locale>
+#include <string.h>
 
 namespace boost
 {
   namespace chrono
   {
-
-#if ! defined BOOST_CHRONO_IO_USE_XALLOC
-
-    template<class CharT>
-    class time_punct: public std::locale::facet
-    {
-    public:
-      typedef std::basic_string<CharT> string_type;
-
-    private:
-      string_type fmt_;
-      chrono::timezone_type tz_;
-
-    public:
-      static std::locale::id id;
-
-      explicit time_punct(size_t refs = 0) :
-      std::locale::facet(refs), tz_(timezone::utc)
-      {
-      }
-
-      time_punct(timezone_type tz, string_type fmt, size_t refs = 0)
-      // todo use move semantic when available.
-      :
-      std::locale::facet(refs), fmt_(fmt), tz_(tz)
-      {
-      }
-
-      const string_type& fmt() const BOOST_NOEXCEPT
-      {
-        return fmt_;
-      }
-      chrono::timezone_type get_timezone() const BOOST_NOEXCEPT
-      {
-        return tz_;
-      }
-    };
-
-    template<class CharT>
-    std::locale::id time_punct<CharT>::id;
-#endif
-
-#if 1
     namespace detail
     {
 
@@ -94,12 +51,8 @@ namespace boost
         void operator()(out_stream &ios) const
         //void operator()(std::ios_base &ios) const
         {
-  #if ! defined BOOST_CHRONO_IO_USE_XALLOC
-          ios.imbue(std::locale(ios.getloc(), new time_punct<CharT> (tz_, fmt_)));
-  #else
           set_time_fmt<CharT>(ios, fmt_);
           set_timezone(ios, tz_);
-  #endif
         }
       };
 
@@ -121,110 +74,12 @@ namespace boost
         void operator()(out_stream &ios) const
         //void operator()(std::ios_base &ios) const
         {
-  #if ! defined BOOST_CHRONO_IO_USE_XALLOC
-          //ios.imbue(std::locale(ios.getloc(), new time_punct<typename out_stream::char_type> (tz_, std::basic_string<typename out_stream::char_type>())));
-          ios.imbue(std::locale(ios.getloc(), new time_punct<typename out_stream::char_type> (tz_, "")));
-  #else
-          //set_time_fmt<CharT>(ios, std::basic_string<typename out_stream::char_type>());
           set_time_fmt<typename out_stream::char_type>(ios, "");
           set_timezone(ios, tz_);
-  #endif
         }
       };
 
   }
-
-#else
-    namespace detail
-    {
-      template<class CharT>
-      struct time_manip
-      {
-        std::basic_string<CharT> fmt_;
-        timezone_type tz_;
-
-        time_manip(timezone_type tz, std::basic_string<CharT> fmt)
-        // todo move semantics
-        :
-          fmt_(fmt), tz_(tz)
-        {
-        }
-      };
-
-      // todo move semantics
-      template<class CharT, class Traits>
-      std::basic_ostream<CharT, Traits>&
-      operator <<(std::basic_ostream<CharT, Traits>& os, time_manip<CharT> m)
-      {
-        // todo move semantics
-#if ! defined BOOST_CHRONO_IO_USE_XALLOC
-        os.imbue(std::locale(os.getloc(), new time_punct<CharT> (m.tz_, m.fmt_)));
-#else
-        set_time_fmt<CharT>(os, m.fmt_);
-        set_timezone(os, m.tz_);
-#endif
-        return os;
-      }
-
-      template<class CharT, class Traits>
-      std::basic_istream<CharT, Traits>&
-      operator >>(std::basic_istream<CharT, Traits>& is, time_manip<CharT> m)
-      {
-        // todo move semantics
-#if ! defined BOOST_CHRONO_IO_USE_XALLOC
-        is.imbue(std::locale(is.getloc(), new time_punct<CharT> (m.tz_, m.fmt_)));
-#else
-        set_time_fmt<CharT>(is, m.fmt_);
-        set_timezone(is, m.tz_);
-#endif
-        return is;
-      }
-
-      class time_man
-      {
-        timezone_type form_;
-      public:
-        explicit time_man(timezone_type f) :
-          form_(f)
-        {
-        }
-        // explicit
-        operator timezone_type() const
-        {
-          return form_;
-        }
-      };
-
-      template<class CharT, class Traits>
-      std::basic_ostream<CharT, Traits>&
-      operator <<(std::basic_ostream<CharT, Traits>& os, time_man m)
-      {
-#if ! defined BOOST_CHRONO_IO_USE_XALLOC
-        os.imbue(std::locale(os.getloc(), new time_punct<CharT> (static_cast<timezone_type> (m), std::basic_string<
-                    CharT>())));
-#else
-        set_time_fmt<CharT>(os, std::basic_string<CharT>());
-        set_timezone(os, static_cast<timezone_type> (m));
-#endif
-        return os;
-      }
-
-      template<class CharT, class Traits>
-      std::basic_istream<CharT, Traits>&
-      operator >>(std::basic_istream<CharT, Traits>& is, time_man m)
-      {
-#if ! defined BOOST_CHRONO_IO_USE_XALLOC
-        is.imbue(std::locale(is.getloc(), new time_punct<CharT> (static_cast<timezone_type> (m), std::basic_string<
-                    CharT>())));
-#else
-        set_time_fmt<CharT>(is, "");
-        set_timezone(is, static_cast<timezone_type> (m));
-#endif
-        return is;
-      }
-
-    }
-#endif
 
     template<class CharT>
     inline detail::time_manip<CharT> time_fmt(timezone_type tz, const CharT* fmt)
@@ -472,20 +327,6 @@ namespace boost
         bool failed = false;
         try
         {
-#if ! defined BOOST_CHRONO_IO_USE_XALLOC
-          const CharT* pb = 0; //nullptr;
-          const CharT* pe = pb;
-          timezone_type tz = timezone::utc;
-          typedef time_punct<CharT> F;
-          std::locale loc = os.getloc();
-          if (std::has_facet<F>(loc))
-          {
-            const F& f = std::use_facet<F>(loc);
-            pb = f.fmt().data();
-            pe = pb + f.fmt().size();
-            tz = f.get_timezone();
-          }
-#else
           const CharT* pb = 0; //nullptr;
           const CharT* pe = pb;
           std::basic_string<CharT> fmt =
@@ -495,7 +336,6 @@ namespace boost
 
           timezone_type tz = get_timezone(os);
           std::locale loc = os.getloc();
-#endif
           time_t t = system_clock::to_time_t(tp);
           tm tm;
           if (tz == timezone::local)
@@ -646,20 +486,6 @@ namespace boost
         std::ios_base::iostate err = std::ios_base::goodbit;
         try
         {
-#if ! defined BOOST_CHRONO_IO_USE_XALLOC
-          const CharT* pb = 0;//nullptr;
-          const CharT* pe = pb;
-          typedef time_punct<CharT> F;
-          std::locale loc = is.getloc();
-          timezone_type tz = timezone::utc;
-          if (std::has_facet<F>(loc))
-          {
-            const F& f = std::use_facet<F>(loc);
-            pb = f.fmt().data();
-            pe = pb + f.fmt().size();
-            tz = f.timezone_type();
-          }
-#else
           const CharT* pb = 0; //nullptr;
           const CharT* pe = pb;
           std::basic_string<CharT> fmt =
@@ -669,7 +495,6 @@ namespace boost
 
           timezone_type tz = get_timezone(is);
           std::locale loc = is.getloc();
-#endif
           const std::time_get<CharT>& tg =
               std::use_facet<std::time_get<CharT> >(loc);
           const std::ctype<CharT>& ct = std::use_facet<std::ctype<CharT> >(loc);
