@@ -32,6 +32,10 @@ namespace boost
     {
     public:
       /**
+       * The pointee type
+       */
+      typedef T element_type;
+      /**
        * Explicit constructor.
        * @param ios the ios
        * @Effects Constructs a @c ios_base_state_ptr by storing the associated @c ios.
