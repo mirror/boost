@@ -12,6 +12,7 @@
 #include <boost/chrono/config.hpp>
 #include <string>
 #include <boost/type_traits/is_scalar.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_signed.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/math/common_factor_rt.hpp>
@@ -172,7 +173,7 @@ namespace boost
         {
             if (s == end)
             {
-                err |= std::ios_base::failbit;
+                err |= std::ios_base::eofbit;
                 break;
             }
             if (ct.narrow(*pattern, 0) == '%')
@@ -180,7 +181,7 @@ namespace boost
                 if (++pattern == pat_end)
                 {
                     err |= std::ios_base::failbit;
-                    break;
+                    return s;
                 }
                 char cmd = ct.narrow(*pattern, 0);
                 switch (cmd)
@@ -189,15 +190,15 @@ namespace boost
                 {
                   if (value_found) {
                     err |= std::ios_base::failbit;
-                    break;
+                    return s;
                   }
                   if (value_found) {
                     err |= std::ios_base::failbit;
-                    break;
+                    return s;
                   }
                   value_found=true;
                   s=get_value(s, end, ios, err, r);
-                  if ((err & std::ios_base::failbit) != 0)
+                  if ( err & (std::ios_base::badbit |std::ios_base::failbit) )
                   {
                     return s;
                   }
@@ -207,20 +208,21 @@ namespace boost
                 {
                   if (unit_found) {
                     err |= std::ios_base::failbit;
-                    break;
+                    return s;
                   }
                   unit_found=true;
                   s = get_unit<Rep>(s, end, ios, err, rt);
-                  if ((err & std::ios_base::failbit) != 0)
+                  if ( err & (std::ios_base::badbit |std::ios_base::failbit) )
                   {
                     return s;
-                  }                  break;
+                  }
+                  break;
                 }
                 case 'x':
                 {
                   if (unit_found || value_found || loc_found) {
                     err |= std::ios_base::failbit;
-                    break;
+                    return s;
                   }
                   loc_found=true;
                   std::basic_string<CharT> pat = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
