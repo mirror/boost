@@ -11,19 +11,18 @@
 
 #ifndef BOOST_CHRONO_IO_DURATION_IO_HPP
 #define BOOST_CHRONO_IO_DURATION_IO_HPP
-#include <iostream>
 
 #include <boost/chrono/chrono.hpp>
 #include <boost/ratio/ratio_io.hpp>
-
 #include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/io/duration_unit_string.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
-//#include <boost/format.hpp>
-#include <locale>
 #include <boost/chrono/io/duration_put.hpp>
 #include <boost/chrono/io/duration_get.hpp>
 #include <boost/chrono/io/utility/manip_base.hpp>
+#include <locale>
+#include <iostream>
+
 namespace boost
 {
   namespace chrono
