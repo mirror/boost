@@ -59,7 +59,10 @@ void check_all()
   test_good<Clock>("5000 minutes", minutes(5000));
   test_good<Clock>("5000 seconds", seconds(5000));
   test_good<Clock>("1 seconds", seconds(1));
+  test_good<Clock>("1 second", seconds(1));
   test_good<Clock>("-1 seconds", seconds(-1));
+  test_good<Clock>("0 second", seconds(0));
+  test_good<Clock>("0 seconds", seconds(0));
   test_good<Clock>("5000 milliseconds", milliseconds(5000));
   test_good<Clock>("5000 microseconds", microseconds(5000));
   test_good<Clock>("5000 nanoseconds", nanoseconds(5000));
@@ -67,7 +70,11 @@ void check_all()
   test_good<Clock>("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
 
   test_good<Clock>("5000 h", hours(5000));
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
   test_good<Clock>("5000 min", minutes(5000));
+#else
+  test_good<Clock>("5000 m", minutes(5000));
+#endif
   test_good<Clock>("5000 s", seconds(5000));
   test_good<Clock>("5000 ms", milliseconds(5000));
   test_good<Clock>("5000 ns", nanoseconds(5000));

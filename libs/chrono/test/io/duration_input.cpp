@@ -3,7 +3,7 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/chrono/chrono_io.hpp>
-#include <boost/chrono/io/duration_units.hpp>
+//#include <boost/chrono/io/duration_units.hpp>
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -13,7 +13,6 @@ void test_good2(const char* str, D res)
   std::istringstream in(str);
   D d(0);
   in >> d;
-  std::cerr << d << " * " << str << " * " << res << " st " << in.rdstate() <<  std::endl;
   BOOST_TEST(in.eof());
   BOOST_TEST(!in.fail());
   BOOST_TEST(d == res);
@@ -24,7 +23,6 @@ void test_good(const char* str, D res)
   std::istringstream in(str);
   D d(0);
   in >> d;
-  std::cerr << d << " * " << str << " * " << res << " st " << in.rdstate() <<  std::endl;
   BOOST_TEST(in.eof());
   BOOST_TEST(!in.fail());
   BOOST_TEST(d == res);
@@ -37,7 +35,6 @@ void test_fail(const char* str, DFail res)
     std::istringstream in(str);
     DFail d = DFail::zero();
     in >> d;
-    std::cerr << d << " * " << str << " * " << res << " st " << in.rdstate() <<  std::endl;
     BOOST_TEST(in.fail());
     BOOST_TEST(d == DFail::zero());
   }
@@ -50,7 +47,6 @@ void test_not_eof(const char* str, D res)
     std::istringstream in(str);
     D d = D::zero();
     in >> d;
-    //std::cerr << d << " " << str << " " << res <<  std::endl;
     BOOST_TEST(!in.eof());
     BOOST_TEST(d == res);
   }
@@ -100,7 +96,11 @@ io/duration_input.cpp:52:   instantiated from here
   test_good("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
   test_good("5000 [1/30]second", duration<boost::int_least64_t, ratio<1, 30> > (5000));
   test_good("5000 h", hours(5000));
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
   test_good("5000 min", minutes(5000));
+#else
+  test_good("5000 m", minutes(5000));
+#endif
   test_good("5000 s", seconds(5000));
   test_good("5000 ms", milliseconds(5000));
   test_good("5000 ns", nanoseconds(5000));

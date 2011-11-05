@@ -13,7 +13,11 @@
 #ifndef BOOST_CHRONO_CHRONO_IO_HPP
 #define BOOST_CHRONO_CHRONO_IO_HPP
 
+#include <boost/chrono/config.hpp>
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
 #include <boost/chrono/io/time_point_io.hpp>
 #include <boost/chrono/io/duration_io.hpp>
-
+#else
+#include <boost/chrono/io_v1/chrono_io.hpp>
+#endif
 #endif  // BOOST_CHRONO_CHRONO_IO_HPP

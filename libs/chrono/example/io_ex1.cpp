@@ -38,8 +38,11 @@ int main()
          <<  ClockTick(3) + nanoseconds(10) << '\n';
 
     cout << "\nSet cout to use short names:\n";
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
     cout << duration_fmt(duration_style::symbol);
-
+#else
+    cout << duration_short;
+#endif
     cout << "milliseconds(3) + microseconds(10) = "
          <<  milliseconds(3) + microseconds(10) << '\n';
 
@@ -50,15 +53,21 @@ int main()
          <<  ClockTick(3) + nanoseconds(10) << '\n';
 
     cout << "\nsystem_clock::now() = " << system_clock::now() << '\n';
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
     cout << "\nsystem_clock::now() = " << time_fmt(chrono::timezone::local) << system_clock::now() << '\n';
     cout << "\nsystem_clock::now() = " << time_fmt(chrono::timezone::local,"%Y/%m/%d") << system_clock::now() << '\n';
-
+#endif
 
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY
     cout << "steady_clock::now() = " << steady_clock::now() << '\n';
 #endif
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
     cout << "\nSet cout to use long names:\n" <<     cout << duration_fmt(duration_style::prefix)
          << "high_resolution_clock::now() = " << high_resolution_clock::now() << '\n';
+#else
+    cout << "\nSet cout to use long names:\n" <<     cout << duration_long
+         << "high_resolution_clock::now() = " << high_resolution_clock::now() << '\n';
+#endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
     cout << "\nthread_clock::now() = " << thread_clock::now() << '\n';
 #endif

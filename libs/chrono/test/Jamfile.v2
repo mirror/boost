@@ -51,6 +51,7 @@ rule chrono-run ( sources )
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -61,9 +62,40 @@ rule chrono-run ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_header ]
     ;
 }
+
+rule chrono-v1-v2-run ( sources )
+{
+    return
+    [ run $(sources) ../build//boost_chrono
+        : :
+        :
+            <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   $(sources[1]:B)_shared ]
+    [ run $(sources) ../build//boost_chrono/<link>static
+        : :
+        :
+            <library>/boost/system//boost_system
+        :   v1_$(sources[1]:B)_static ]
+    [ run $(sources)
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   $(sources[1]:B)_header ]
+    [ run $(sources)
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   v1_$(sources[1]:B)_header ]
+    ;
+}
+
 rule chrono-run2 ( sources : name )
 {
     return
@@ -71,6 +103,7 @@ rule chrono-run2 ( sources : name )
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(name)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -81,7 +114,56 @@ rule chrono-run2 ( sources : name )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(name)_header ]
+    ;
+}
+
+rule stopwatch-run ( sources + )
+{
+    return
+    [ run $(sources) ../build//boost_chrono
+        : :
+        :
+            <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   $(sources[1]:B)_shared ]
+    ;
+}
+
+rule stopwatch-run2 ( sources + : name )
+{
+    return
+    [ run $(sources) ../build//boost_chrono
+        : :
+        :
+            <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   $(name)_shared ]
+    ;
+}
+
+rule date-run ( sources + )
+{
+    return
+    [ run $(sources) ../build//boost_chrono
+        : :
+        :
+            <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   $(sources[1]:B)_shared ]
+    ;
+}
+
+rule date-run-2 ( sources + : name )
+{
+    return
+    [ run $(sources) ../build//boost_chrono
+        : :
+        :
+            <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   $(name)_shared ]
     ;
 }
 
@@ -93,6 +175,7 @@ rule chrono-run-mt ( sources )
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -103,6 +186,7 @@ rule chrono-run-mt ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -113,6 +197,7 @@ rule chrono-run2-mt ( sources : name )
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(name)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -123,6 +208,7 @@ rule chrono-run2-mt ( sources : name )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(name)_header ]
     ;
 }
@@ -134,16 +220,19 @@ rule chrono-run-check ( sources )
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_shared ]
     [ run $(sources) 
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_static ]
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -155,16 +244,19 @@ rule chrono-run-check2 ( sources : name )
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(name)_shared ]
     [ run $(sources) 
         : :
         :
             <library>/boost/system//boost_system
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(name)_static ]
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(name)_header ]
     ;
 }
@@ -176,7 +268,25 @@ rule chrono-run-header ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_header ]
+    ;
+}
+
+rule chrono-v1-v2-run-header ( sources )
+{
+    return
+    [ run $(sources)
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        :   $(sources[1]:B)_header ]
+    [ run $(sources)
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+        :   v1_$(sources[1]:B)header ]
     ;
 }
 
@@ -187,6 +297,7 @@ rule chrono-run-header2 ( sources : name )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(name)_header ]
     ;
 }
@@ -196,10 +307,12 @@ rule chrono-compile ( sources )
     return
     [ compile $(sources)
         :
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(sources[1]:B)_lib ]
     [ compile $(sources)
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(sources[1]:B)_header ]
     ;
 }
@@ -209,10 +322,12 @@ rule chrono-compile2 ( sources : name )
     return
     [ compile $(sources)
         :
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(name)_lib ]
     [ compile $(sources)
         :  <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         : $(name)_header ]
     ;
 }
@@ -299,48 +414,48 @@ rule chrono-compile2 ( sources : name )
 
     test-suite "stopwatch"
         :
-        [ chrono-run2 stopwatch/simple_stopwatch_pass.cpp  : simple_stopwatch_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_pass.cpp  : basic_stopwatch_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_last_lap_pass.cpp  : basic_stopwatch_last_lap_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_laps_accumulator_set_pass.cpp  : basic_stopwatch_laps_accumulator_set_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_laps_container_pass.cpp  : basic_stopwatch_laps_container_pass ]
+        [ stopwatch-run2 stopwatch/simple_stopwatch_pass.cpp  : simple_stopwatch_pass ]
+        [ stopwatch-run2 stopwatch/basic_stopwatch_pass.cpp  : basic_stopwatch_pass ]
+        [ stopwatch-run2 stopwatch/basic_stopwatch_last_lap_pass.cpp  : basic_stopwatch_last_lap_pass ]
+        [ stopwatch-run2 stopwatch/basic_stopwatch_laps_accumulator_set_pass.cpp  : basic_stopwatch_laps_accumulator_set_pass ]
+        [ stopwatch-run2 stopwatch/basic_stopwatch_laps_container_pass.cpp  : basic_stopwatch_laps_container_pass ]
 
-        [ chrono-run2 stopwatch/suspendable_stopwatch_pass.cpp  : suspendable_stopwatch_pass ]
+        [ stopwatch-run2 stopwatch/suspendable_stopwatch_pass.cpp  : suspendable_stopwatch_pass ]
         ;
 
     test-suite "stopwatch_ex"
         :
-        [ chrono-run ../example/stopwatch_example.cpp  ]
+        [ stopwatch-run2 ../example/stopwatch_example.cpp  : stopwatch_example ]
         ;
 
     test-suite "stopclock"
         :
-        [ chrono-run2 stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_reporter_pass.cpp  : basic_stopwatch_reporter_pass ]
-        [ chrono-run2 stopwatch/basic_stopwatch_reporter_laps_accumulator_set_pass.cpp  : basic_stopwatch_reporter_laps_accumulator_set_pass ]
+        [ stopwatch-run2 stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_pass ]
+        [ stopwatch-run2 stopwatch/basic_stopwatch_reporter_pass.cpp  : basic_stopwatch_reporter_pass ]
+        [ stopwatch-run2 stopwatch/basic_stopwatch_reporter_laps_accumulator_set_pass.cpp  : basic_stopwatch_reporter_laps_accumulator_set_pass ]
 
         ;
     test-suite "stopclock_ex"
         :
-        [ chrono-run2-mt ../example/stopwatch_reporter_example.cpp  : stopwatch_reporter_example ]
+        [ stopwatch-run2 ../example/stopwatch_reporter_example.cpp  : stopwatch_reporter_example ]
         ;
 
     test-suite "io_ex"
         :
-        [ chrono-run-mt ../example/io_ex1.cpp  ]
-        [ chrono-run-header ../example/io_ex2.cpp  ]
-        [ chrono-run ../example/io_ex3.cpp  ]
-        [ chrono-run ../example/io_ex4.cpp  ]
-        [ chrono-run ../example/io_ex5.cpp  ]
-        [ chrono-run ../example/french.cpp  ]
+        [ chrono-v1-v2-run ../example/io_ex1.cpp  ]
+        [ chrono-v1-v2-run-header ../example/io_ex2.cpp  ]
+        [ chrono-v1-v2-run ../example/io_ex3.cpp  ]
+        [ chrono-v1-v2-run ../example/io_ex4.cpp  ]
+        [ chrono-v1-v2-run ../example/io_ex5.cpp  ]
+        [ chrono-v1-v2-run ../example/french.cpp  ]
         ;
 
     test-suite "io"
         :
-        [ chrono-run-header io/duration_input.cpp  ]
-        [ chrono-run-header io/duration_output.cpp  ]
-        [ chrono-run-header io/time_point_input.cpp  ]
-        [ chrono-run-header io/time_point_output.cpp  ]
+        [ chrono-v1-v2-run-header io/duration_input.cpp  ]
+        [ chrono-v1-v2-run-header io/duration_output.cpp  ]
+        [ chrono-v1-v2-run-header io/time_point_input.cpp  ]
+        [ chrono-v1-v2-run-header io/time_point_output.cpp  ]
         ;
 
     test-suite "win32"
