@@ -265,15 +265,8 @@ namespace boost
        * Store a reference to the i/o stream and the value of the associated @c time format .
        */
       explicit time_fmt_io_saver(state_type &s) :
-        s_save_(s)
+        s_save_(s), a_save_(get_time_fmt(s_save_))
       {
-        typedef duration_punct<CharT> Facet;
-        std::locale loc = s_save_.getloc();
-        if (!std::has_facet<Facet>(loc))
-          s_save_.imbue(std::locale(loc, new Facet()));
-
-        const Facet& f = std::use_facet<Facet>(s_save_.getloc());
-        a_save_ = f.get_duration_style();
       }
 
       /**
@@ -301,7 +294,7 @@ namespace boost
        */
       void restore()
       {
-        s_save_ << time_fmt(a_save_);
+        set_time_fmt(a_save_, a_save_);
       }
     private:
       state_type& s_save_;
@@ -328,15 +321,8 @@ namespace boost
        * Store a reference to the i/o stream and the value of the associated @c timezone.
        */
       explicit timezone_io_saver(state_type &s) :
-        s_save_(s)
+        s_save_(s), a_save_(get_timezone(s_save_))
       {
-        typedef duration_punct<CharT> Facet;
-        std::locale loc = s_save_.getloc();
-        if (!std::has_facet<Facet>(loc))
-          s_save_.imbue(std::locale(loc, new Facet()));
-
-        const Facet& f = std::use_facet<Facet>(s_save_.getloc());
-        a_save_ = f.get_duration_style();
       }
 
       /**
@@ -364,7 +350,7 @@ namespace boost
        */
       void restore()
       {
-        s_save_ << time_fmt(a_save_);
+        set_timezone(s_save_, a_save_);
       }
     private:
       state_type& s_save_;
