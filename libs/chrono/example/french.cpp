@@ -9,19 +9,14 @@
 
 
 #include <boost/chrono/config.hpp>
-
-#if ! defined BOOST_CHRONO_USES_DURATION_PUT
-#undef BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
-#undef BOOST_CHRONO_IO_USE_XALLOC
-#endif
-
 #include <boost/chrono/chrono_io.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/thread_clock.hpp>
 #include <iostream>
 #include <locale>
 
-#if defined BOOST_CHRONO_USES_DURATION_PUT
+
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
 #include <boost/chrono/io/duration_units.hpp>
 
     using namespace boost;
@@ -112,13 +107,12 @@ int main()
     using namespace boost;
     using namespace boost::chrono;
 
-#if defined BOOST_CHRONO_USES_DURATION_PUT
+#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
     cout.imbue(locale(locale(), new duration_units_fr<>()));
 #else
-
     cout.imbue(locale(locale(), new duration_punct<char>
         (
-            duration_style::prefix,
+            duration_punct<char>::use_long,
             "secondes", "minutes", "heures",
             "s", "m", "h"
         )));
