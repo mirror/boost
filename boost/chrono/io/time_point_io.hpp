@@ -48,7 +48,7 @@ namespace boost
         /**
          * Change the timezone_type and time format ios state;
          */
-        template <typename out_stream>
+        //template <typename out_stream>
         void operator()(std::ios_base &ios) const
         {
           set_time_fmt<CharT>(ios, fmt_);
@@ -70,11 +70,11 @@ namespace boost
         /**
          * Change the timezone_type and time format ios state;
          */
-        template <typename out_stream>
-        void operator()(out_stream &ios) const
-        //void operator()(std::ios_base &ios) const
+        //template <typename out_stream>
+        //void operator()(out_stream &ios) const
+        void operator()(std::ios_base &ios) const
         {
-          set_time_fmt<typename out_stream::char_type>(ios, "");
+          //set_time_fmt<typename out_stream::char_type>(ios, "");
           set_timezone(ios, tz_);
         }
       };

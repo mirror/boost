@@ -272,6 +272,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
     const Facet& f = std::use_facet<Facet>(loc);
     typedef typename chrono_detail::duration_io_intermediate<Rep>::type intermediate_type;
     intermediate_type r;
+    std::ios_base::iostate err = std::ios_base::goodbit;
     // read value into r
     is >> r;
     if (is.good())
@@ -312,7 +313,6 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                         f.template plural<ratio<1> >(),
                         f.template short_name<ratio<1> >()
                     };
-                    std::ios_base::iostate err = std::ios_base::goodbit;
                     const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
                                   units, units + sizeof(units)/sizeof(units[0]),
                                   //~ std::use_facet<std::ctype<CharT> >(loc),
@@ -390,12 +390,10 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                         f.template plural<ratio<3600> >(),
                         f.template short_name<ratio<3600> >()
                     };
-                    std::ios_base::iostate err = std::ios_base::goodbit;
                     const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
                                   units, units + sizeof(units)/sizeof(units[0]),
                                   //~ std::use_facet<std::ctype<CharT> >(loc),
                                   err);
-                    is.setstate(err);
                     switch ((k - units) / 3)
                     {
                     case 0:
@@ -475,7 +473,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                         den = 1;
                         break;
                     default:
-                        is.setstate(err);
+                        is.setstate(err|is.failbit);
                         return is;
                     }
                 }
@@ -492,7 +490,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                     den > (std::numeric_limits<unsigned long long>::max)() / n2)
                 {
                     // (num/den) / Period overflows
-                    is.setstate(is.failbit);
+                    is.setstate(err|is.failbit);
                     return is;
                 }
                 num *= d2;
@@ -500,18 +498,17 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
 
                 typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
 
-                std::ios_base::iostate err = std::ios_base::goodbit;
                 // num / den is now factor to multiply by r
                 if (!chrono_detail::reduce(r, den, err))
                 {
-                  is.setstate(err);
+                  is.setstate(err|is.failbit);
                   return is;
                 }
 
                 if (r > ((duration_values<common_type_t>::max)() / num))
                 {
                     // Conversion to Period overflowed
-                    is.setstate(is.failbit);
+                    is.setstate(err|is.failbit);
                     return is;
                 }
                 common_type_t t = r * num;
@@ -523,13 +520,15 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                   if ( (duration_values<Rep>::max)() < pt)
                   {
                     // Conversion to Period overflowed
-                    err |= std::ios_base::failbit;
+                    is.setstate(err|is.failbit);
                     return is;
                   }
                 }
                 // Success!  Store it.
                 r = Rep(t);
                 d = duration<Rep, Period>(r);
+                is.setstate(err);
+                return is;
             }
             else {
                 is.setstate(is.failbit | is.eofbit);
@@ -539,14 +538,16 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
         else
         {
             if (i == e)
-                is.setstate(is.eofbit);
-            is.setstate(is.failbit);
+              is.setstate(is.failbit|is.eofbit);
+            else
+              is.setstate(is.failbit);
+            return is;
         }
     }
     else {
-        is.setstate(is.failbit);
+        //is.setstate(is.failbit);
+      return is;
     }
-    return is;
 }
 
 
