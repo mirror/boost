@@ -140,6 +140,7 @@
 #endif
 
 //#define  BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+#define  BOOST_CHRONO_USES_RATIO_IO
 
 //  enable automatic library variant selection  ------------------------------//
 

@@ -79,7 +79,7 @@ namespace boost
         }
       };
 
-  }
+    }
 
     template<class CharT>
     inline detail::time_manip<CharT> time_fmt(timezone_type tz, const CharT* fmt)

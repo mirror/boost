@@ -10,15 +10,16 @@
 #define BOOST_CHRONO_IO_DURATION_UNITS_HPP
 
 #include <boost/chrono/config.hpp>
+#include <boost/ratio/ratio_io.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
-#include <string>
-#include <iostream>
-#include <ios>
-//#include <locale>
 #include <boost/utility/enable_if.hpp>
+#include <string>
+//#include <iostream>
+#include <ios>
+#include <locale>
 #include <algorithm>
 
 namespace boost
@@ -666,196 +667,83 @@ namespace boost
 
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, atto) const
       {
-        static const CharT u[] =
-        { 'a', 't', 't', 'o' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'a' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<atto,CharT>::symbol();
+        return ratio_string<atto,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, femto) const
       {
-        static const CharT u[] =
-        { 'f', 'e', 'm', 't', 'o' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'f' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<femto,CharT>::symbol();
+        return ratio_string<femto,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, pico) const
       {
-        static const CharT u[] =
-        { 'p', 'i', 'c', 'o' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'p' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<pico,CharT>::symbol();
+        return ratio_string<pico,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, nano) const
       {
-        static const CharT u[] =
-        { 'n', 'a', 'n', 'o' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'n' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<nano,CharT>::symbol();
+        return ratio_string<nano,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, micro) const
       {
-        static const CharT u[] =
-        { 'm', 'i', 'c', 'r', 'o' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'u' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<micro,CharT>::symbol();
+        return ratio_string<micro,CharT>::prefix();
       }
-
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, milli) const
       {
-        static const CharT u[] =
-        { 'm', 'i', 'l', 'l', 'i' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'm' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<milli,CharT>::symbol();
+        return ratio_string<milli,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, centi) const
       {
-        static const CharT u[] =
-        { 'c', 'e', 'n', 't', 'i' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'c' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<centi,CharT>::symbol();
+        return ratio_string<centi,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, deci) const
       {
-        static const CharT u[] =
-        { 'd', 'e', 'c', 'i' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'd' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<deci,CharT>::symbol();
+        return ratio_string<deci,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, deca) const
       {
-        static const CharT u[] =
-        { 'd', 'e', 'c', 'a' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'd', 'a' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<deca,CharT>::symbol();
+        return ratio_string<deca,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, hecto) const
       {
-        static const CharT u[] =
-        { 'h', 'e', 'c', 't', 'o' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'h' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<hecto,CharT>::symbol();
+        return ratio_string<hecto,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, kilo) const
       {
-        static const CharT u[] =
-        { 'k', 'i', 'l', 'o' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'k' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<kilo,CharT>::symbol();
+        return ratio_string<kilo,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, mega) const
       {
-        static const CharT u[] =
-        { 'm', 'e', 'g', 'a' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'M' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<mega,CharT>::symbol();
+        return ratio_string<mega,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, giga) const
       {
-        static const CharT u[] =
-        { 'g', 'i', 'g', 'a' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'G' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<giga,CharT>::symbol();
+        return ratio_string<giga,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, tera) const
       {
-        static const CharT u[] =
-        { 't', 'e', 'r', 'a' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'T' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<tera,CharT>::symbol();
+        return ratio_string<tera,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, peta) const
       {
-        static const CharT u[] =
-        { 'p', 'e', 't', 'a' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'P' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<peta,CharT>::symbol();
+        return ratio_string<peta,CharT>::prefix();
       }
       virtual std::basic_string<CharT> do_get_ratio_prefix(duration_style_type style, exa) const
       {
-        static const CharT u[] =
-        { 'e', 'x', 'a' };
-        static const std::basic_string<CharT> prefix(u, u + sizeof (u) / sizeof (u[0]));
-        static const CharT v[] =
-        { 'E' };
-        static const std::basic_string<CharT> symbol(v, v + sizeof (v) / sizeof (v[0]));
-
-        if (style == duration_style::symbol) return symbol;
-        return prefix;
+        if (style == duration_style::symbol) return ratio_string<exa,CharT>::symbol();
+        return ratio_string<exa,CharT>::prefix();
       }
 
     };
