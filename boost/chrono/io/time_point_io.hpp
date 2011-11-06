@@ -1,4 +1,4 @@
-//  chrono_io
+//  boost/chrono/io/time_point_io.hpp
 //
 //  (C) Copyright Howard Hinnant
 //  (C) Copyright 2010-2011 Vicente J. Botet Escriba
@@ -12,7 +12,8 @@
 #ifndef BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 #define BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 
-#include <boost/chrono/io/translate.hpp>
+#include <boost/chrono/io/time_point_put.hpp>
+#include <boost/chrono/io/time_point_get.hpp>
 #include <boost/chrono/io/duration_io.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
 #include <boost/chrono/io/utility/manip_base.hpp>
@@ -48,8 +49,7 @@ namespace boost
          * Change the timezone_type and time format ios state;
          */
         template <typename out_stream>
-        void operator()(out_stream &ios) const
-        //void operator()(std::ios_base &ios) const
+        void operator()(std::ios_base &ios) const
         {
           set_time_fmt<CharT>(ios, fmt_);
           set_timezone(ios, tz_);
@@ -217,8 +217,55 @@ namespace boost
     operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<Clock,
         Duration>& tp)
     {
-      return os << tp.time_since_epoch() << epoch_translate(clock_string<Clock,
-          CharT>::since());
+
+#if 0
+      return os << tp.time_since_epoch() << clock_string<Clock,
+          CharT>::since();
+#else
+        typedef std::basic_string<CharT, Traits> string_type;
+        bool failed = false;
+        try
+        {
+          std::ios_base::iostate err = std::ios_base::goodbit;
+          try
+          {
+            typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
+            if (opfx)
+            {
+              if (!std::has_facet<time_point_put<CharT> >(os.getloc()))
+              {
+                os.imbue(std::locale(os.getloc(), new time_point_put<CharT> ()));
+              }
+              if (std::use_facet<time_point_put<CharT> >(os.getloc()) .put(os, os, tp) .failed())
+              {
+                err = std::ios_base::badbit;
+              }
+              os.width(0);
+            }
+          }
+          catch (...)
+          {
+            bool flag = false;
+            try
+            {
+              os.setstate(std::ios_base::failbit);
+            }
+            catch (std::ios_base::failure )
+            {
+              flag = true;
+            }
+            if (flag) throw;
+          }
+          if (err) os.setstate(err);
+          return os;
+        }
+        catch (...)
+        {
+          failed = true;
+        }
+        if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
+        return os;
+#endif
     }
 
     template<class CharT, class Traits, class Clock, class Duration>
@@ -226,12 +273,13 @@ namespace boost
     operator>>(std::basic_istream<CharT, Traits>& is, time_point<Clock,
         Duration>& tp)
     {
+#if 0
       Duration d;
       is >> d;
       if (is.good())
       {
-        const std::basic_string<CharT> units = epoch_translate(clock_string<
-            Clock, CharT>::since());
+        const std::basic_string<CharT> units = clock_string<
+            Clock, CharT>::since();
         std::ios_base::iostate err = std::ios_base::goodbit;
         typedef std::istreambuf_iterator<CharT, Traits> in_iterator;
         in_iterator i(is);
@@ -251,6 +299,38 @@ namespace boost
       else
         is.setstate(is.failbit);
       return is;
+#else
+      std::ios_base::iostate err = std::ios_base::goodbit;
+
+      try
+      {
+        typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
+        if(ipfx)
+        {
+          if (!std::has_facet<time_point_get<CharT> >(is.getloc()))
+          {
+            is.imbue(std::locale(is.getloc(), new time_point_get<CharT>()));
+          }
+          std::use_facet<time_point_get<CharT> >(is.getloc())
+          .get(is, std::istreambuf_iterator<CharT,Traits>() ,is, err, tp);
+        }
+      }
+      catch(...)
+      {
+        bool flag = false;
+        try
+        {
+          is.setstate(std::ios_base::failbit);
+        }
+        catch( std::ios_base::failure )
+        {
+          flag= true;
+        }
+        if ( flag ) throw;
+      }
+      if ( err ) is.setstate(err);
+      return is;
+#endif
     }
 
 #ifndef BOOST_CHRONO_NO_UTC_TIMEPOINT

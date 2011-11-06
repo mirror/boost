@@ -91,10 +91,7 @@
 // deprecated i/o
 //#define BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
 
-#define BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED
-#define BOOST_CHRONO_IO_USE_XALLOC
-#define BOOST_CHRONO_USES_DURATION_PUT
-#define BOOST_CHRONO_USES_DURATION_GET
+// this doesn't works yet in compilers other than clang-3.0
 //#define BOOST_CHRONO_USES_DURATION_UNITS_GLOBAL
 
 // unicode support  ------------------------------//

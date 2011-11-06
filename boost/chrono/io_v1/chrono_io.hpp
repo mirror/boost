@@ -576,10 +576,11 @@ operator>>(std::basic_istream<CharT, Traits>& is,
                       &units, &units + 1,
                       //~ std::use_facet<std::ctype<CharT> >(is.getloc()),
                       err) - &units;
+        is.setstate(err);
         if (k == 1)
         {
+          is.setstate(err | is.failbit);
             // failed to read epoch string
-            is.setstate(err);
             return is;
         }
         tp = time_point<Clock, Duration>(d);
