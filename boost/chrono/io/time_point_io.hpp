@@ -218,10 +218,6 @@ namespace boost
         Duration>& tp)
     {
 
-#if 0
-      return os << tp.time_since_epoch() << clock_string<Clock,
-          CharT>::since();
-#else
         typedef std::basic_string<CharT, Traits> string_type;
         bool failed = false;
         try
@@ -265,7 +261,6 @@ namespace boost
         }
         if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
         return os;
-#endif
     }
 
     template<class CharT, class Traits, class Clock, class Duration>
@@ -273,33 +268,6 @@ namespace boost
     operator>>(std::basic_istream<CharT, Traits>& is, time_point<Clock,
         Duration>& tp)
     {
-#if 0
-      Duration d;
-      is >> d;
-      if (is.good())
-      {
-        const std::basic_string<CharT> units = clock_string<
-            Clock, CharT>::since();
-        std::ios_base::iostate err = std::ios_base::goodbit;
-        typedef std::istreambuf_iterator<CharT, Traits> in_iterator;
-        in_iterator i(is);
-        in_iterator e;
-        std::ptrdiff_t k =
-            chrono_detail::scan_keyword(i, e, &units, &units + 1,
-            //~ std::use_facet<std::ctype<CharT> >(is.getloc()),
-            err) - &units;
-        if (k == 1)
-        {
-          // failed to read epoch string
-          is.setstate(err);
-          return is;
-        }
-        tp = time_point<Clock, Duration> (d);
-      }
-      else
-        is.setstate(is.failbit);
-      return is;
-#else
       std::ios_base::iostate err = std::ios_base::goodbit;
 
       try
@@ -330,7 +298,6 @@ namespace boost
       }
       if ( err ) is.setstate(err);
       return is;
-#endif
     }
 
 #ifndef BOOST_CHRONO_NO_UTC_TIMEPOINT

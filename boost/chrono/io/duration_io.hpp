@@ -114,18 +114,15 @@ namespace boost
     };
 
     /**
-     *
-     * @param os
-     * @param d
+     * duration stream inserter
+     * @param os the output stream
+     * @param d to value to insert
      * @return @c os
      */
     template <class CharT, class Traits, class Rep, class Period>
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d)
     {
-      typename std::basic_ostream<CharT, Traits>::sentry ok(os);
-      if (ok)
-      {
         typedef std::basic_string<CharT, Traits> string_type;
         bool failed = false;
         try
@@ -168,7 +165,6 @@ namespace boost
           failed = true;
         }
         if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
-      }
       return os;
     }
 

@@ -19,7 +19,6 @@
 #include <boost/chrono/detail/scan_keyword.hpp>
 #include <boost/assert.hpp>
 #include <locale>
-
 /**
  * Duration formatting facet for input.
  */
@@ -94,6 +93,7 @@ namespace boost
        * Type of character the facet is instantiated on.
        */
       typedef CharT char_type;
+      typedef std::basic_string<CharT> string_type;
       /**
        * Type of iterator used to scan the character buffer.
        */
@@ -225,7 +225,7 @@ namespace boost
                     return s;
                   }
                   loc_found=true;
-                  std::basic_string<CharT> pat = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
+                  string_type pat = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
                   if (pattern+1 != pat_end)
                   pat.append(pattern+1, pat_end);
                   pattern = pat.data();
@@ -400,7 +400,7 @@ namespace boost
             err |= std::ios_base::failbit;
             return i;
           }
-          const std::basic_string<CharT> units[] =
+          const string_type units[] =
           {
               facet.template get_plural_form<ratio<1> >(duration_style::prefix, 1),
               facet.template get_plural_form<ratio<1> >(duration_style::prefix, 0),
@@ -408,7 +408,7 @@ namespace boost
           };
           // FIXME is this necessary?????
           err = std::ios_base::goodbit;
-          const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e, units,
+          const string_type* k = chrono_detail::scan_keyword(i, e, units,
               units + sizeof (units) / sizeof (units[0]),
               //~ std::use_facet<std::ctype<CharT> >(loc),
               err);
@@ -424,74 +424,43 @@ namespace boost
         else
         {
           // parse SI name, short or long
+          std::size_t pfs = facet.get_plural_forms()+1;
 
-          const std::basic_string<CharT> units[] =
-          {
-              facet.template get_plural_form<atto>(duration_style::prefix, 1),
-              facet.template get_plural_form<atto>(duration_style::prefix, 0),
-              facet.template get_plural_form<atto>(duration_style::symbol, 0),
-              facet.template get_plural_form<femto>(duration_style::prefix, 1),
-              facet.template get_plural_form<femto>(duration_style::prefix, 0),
-              facet.template get_plural_form<femto>(duration_style::symbol, 0),
-              facet.template get_plural_form<pico>(duration_style::prefix, 1),
-              facet.template get_plural_form<pico>(duration_style::prefix, 0),
-              facet.template get_plural_form<pico>(duration_style::symbol, 0),
-              facet.template get_plural_form<nano>(duration_style::prefix, 1),
-              facet.template get_plural_form<nano>(duration_style::prefix, 0),
-              facet.template get_plural_form<nano>(duration_style::symbol, 0),
-              facet.template get_plural_form<micro>(duration_style::prefix, 1),
-              facet.template get_plural_form<micro>(duration_style::prefix, 0),
-              facet.template get_plural_form<micro>(duration_style::symbol, 0),
-              facet.template get_plural_form<milli>(duration_style::prefix, 1),
-              facet.template get_plural_form<milli>(duration_style::prefix, 0),
-              facet.template get_plural_form<milli>(duration_style::symbol, 0),
-              facet.template get_plural_form<centi>(duration_style::prefix, 1),
-              facet.template get_plural_form<centi>(duration_style::prefix, 0),
-              facet.template get_plural_form<centi>(duration_style::symbol, 0),
-              facet.template get_plural_form<deci>(duration_style::prefix, 1),
-              facet.template get_plural_form<deci>(duration_style::prefix, 0),
-              facet.template get_plural_form<deci>(duration_style::symbol, 0),
-              facet.template get_plural_form<deca>(duration_style::prefix, 1),
-              facet.template get_plural_form<deca>(duration_style::prefix, 0),
-              facet.template get_plural_form<deca>(duration_style::symbol, 0),
-              facet.template get_plural_form<hecto>(duration_style::prefix, 1),
-              facet.template get_plural_form<hecto>(duration_style::prefix, 0),
-              facet.template get_plural_form<hecto>(duration_style::symbol, 0),
-              facet.template get_plural_form<kilo>(duration_style::prefix, 1),
-              facet.template get_plural_form<kilo>(duration_style::prefix, 0),
-              facet.template get_plural_form<kilo>(duration_style::symbol, 0),
-              facet.template get_plural_form<mega>(duration_style::prefix, 1),
-              facet.template get_plural_form<mega>(duration_style::prefix, 0),
-              facet.template get_plural_form<mega>(duration_style::symbol, 0),
-              facet.template get_plural_form<giga>(duration_style::prefix, 1),
-              facet.template get_plural_form<giga>(duration_style::prefix, 0),
-              facet.template get_plural_form<giga>(duration_style::symbol, 0),
-              facet.template get_plural_form<tera>(duration_style::prefix, 1),
-              facet.template get_plural_form<tera>(duration_style::prefix, 0),
-              facet.template get_plural_form<tera>(duration_style::symbol, 0),
-              facet.template get_plural_form<peta>(duration_style::prefix, 1),
-              facet.template get_plural_form<peta>(duration_style::prefix, 0),
-              facet.template get_plural_form<peta>(duration_style::symbol, 0),
-              facet.template get_plural_form<exa>(duration_style::prefix, 1),
-              facet.template get_plural_form<exa>(duration_style::prefix, 0),
-              facet.template get_plural_form<exa>(duration_style::symbol, 0),
-              facet.template get_plural_form<ratio<1> >(duration_style::prefix, 1),
-              facet.template get_plural_form<ratio<1> >(duration_style::prefix, 0),
-              facet.template get_plural_form<ratio<1> >(duration_style::symbol, 0),
-              facet.template get_plural_form<ratio<60> >(duration_style::prefix, 1),
-              facet.template get_plural_form<ratio<60> >(duration_style::prefix, 0),
-              facet.template get_plural_form<ratio<60> >(duration_style::symbol, 0),
-              facet.template get_plural_form<ratio<3600> >(duration_style::prefix, 1),
-              facet.template get_plural_form<ratio<3600> >(duration_style::prefix, 0),
-              facet.template get_plural_form<ratio<3600> >(duration_style::symbol, 0)
-              };
+          // scoped_ptr ???
+          string_type* units= new string_type[19*pfs]();
+          string_type* it = units;
+          it = facet.fill_units(it, atto());
+          it = facet.fill_units(it, femto());
+          it = facet.fill_units(it, pico());
+          it = facet.fill_units(it, nano());
+          it = facet.fill_units(it, micro());
+          it = facet.fill_units(it, milli());
+          it = facet.fill_units(it, centi());
+          it = facet.fill_units(it, deci());
+          it = facet.fill_units(it, deca());
+          it = facet.fill_units(it, hecto());
+          it = facet.fill_units(it, kilo());
+          it = facet.fill_units(it, mega());
+          it = facet.fill_units(it, giga());
+          it = facet.fill_units(it, tera());
+          it = facet.fill_units(it, peta());
+          it = facet.fill_units(it, exa());
+          it = facet.fill_units(it, ratio<1>());
+          it = facet.fill_units(it, ratio<60>());
+          it = facet.fill_units(it, ratio<3600>());
+
+          string_type* units_end=  units +19*pfs;
+
+
           err = std::ios_base::goodbit;
-          const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e, units,
-              units + sizeof (units) / sizeof (units[0]),
+          const string_type* k = chrono_detail::scan_keyword(i, e, units,
+              units_end,
               //~ std::use_facet<std::ctype<CharT> >(loc),
               err);
 
-          switch ( (k - units) / 3)
+          std::size_t index =  (k - units) / pfs;
+          delete []units;
+          switch ( index )
           {
           case 0:
             rt = detail::rt_ratio(atto());
@@ -552,6 +521,7 @@ namespace boost
             break;
           default:
             err = std::ios_base::failbit;
+            std::cout << __FILE__ << ":" << __LINE__ << std::endl;
             return i;
           }
         }
