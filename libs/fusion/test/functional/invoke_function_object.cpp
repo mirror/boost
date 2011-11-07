@@ -75,6 +75,8 @@ struct fobj
 
     int operator()(int i, object &, object_nc &)       { return 10 + i; }
     int operator()(int i, object &, object_nc &) const { return 11 + i; }
+    int operator()(int i, object const &, object_nc &);
+    int operator()(int i, object const &, object_nc &) const;
 };
 
 struct nullary_fobj
