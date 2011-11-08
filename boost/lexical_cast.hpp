@@ -1147,7 +1147,7 @@ namespace boost
                 bool const result = !(stream << input).fail();
                 start = stringbuffer.pbase();
                 finish = stringbuffer.pptr();
-                return result;
+                return result && (start != finish);
             }
 
             template <class T>
