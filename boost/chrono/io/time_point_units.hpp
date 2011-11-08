@@ -179,6 +179,15 @@ namespace boost
 
         return pattern;
       }
+//      std::basic_string<CharT> get_date_time_pattern() const
+//          {
+//            static const CharT t[] =
+//            { '%', 'd', '%', 'e' };
+//            static const std::basic_string<CharT> pattern(t, t + sizeof (t) / sizeof (t[0]));
+//
+//            return pattern;
+//          }
+
 
       iter_type do_put(iter_type s, std::ios_base& , system_clock c) const
       {

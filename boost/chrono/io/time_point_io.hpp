@@ -384,7 +384,7 @@ namespace boost
           timezone_type tz = get_timezone(os);
           std::locale loc = os.getloc();
           time_t t = system_clock::to_time_t(tp);
-          tm tm;
+          std::tm tm;
           if (tz == timezone::local)
           {
 #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)

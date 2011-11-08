@@ -15,7 +15,6 @@
 #include <boost/chrono/chrono.hpp>
 #include <boost/ratio/ratio_io.hpp>
 #include <boost/chrono/io/duration_style.hpp>
-#include <boost/chrono/io/duration_unit_string.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
 #include <boost/chrono/io/duration_put.hpp>
 #include <boost/chrono/io/duration_get.hpp>

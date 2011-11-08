@@ -211,7 +211,7 @@ namespace boost
                     return s;
                   }
                   unit_found=true;
-                  s = get_unit<Rep>(s, end, ios, err, rt);
+                  s = get_unit(s, end, ios, err, rt);
                   if ( err & (std::ios_base::badbit |std::ios_base::failbit) )
                   {
                     return s;
@@ -352,7 +352,6 @@ namespace boost
        * @Effects Calls do_put_unit(s, ios, d).
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
        */
-      template <typename Rep>
       iter_type get_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
           detail::rt_ratio &rt) const
       {

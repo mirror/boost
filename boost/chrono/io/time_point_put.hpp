@@ -154,6 +154,38 @@ namespace boost
         return put(s, ios, tp, str.data(), str.data() + str.size());
       }
 
+//      /*
+//       *
+//       */
+//
+//      template <class Clock, class Duration>
+//      iter_type put(iter_type s, std::ios_base& ios, time_point<Clock, Duration> const& tp, const CharT* pattern,
+//          const CharT* pat_end) const
+//      {
+//        time_point_units<CharT,OutputIterator> const& units_facet = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios);
+//
+//        return s;
+//      }
+
+//      /**
+//       *
+//       * @param s an output stream iterator
+//       * @param ios a reference to a ios_base
+//       * @param d the duration
+//       * @Effects imbue in @c ios the @c time_point_units_default facet if not already present.
+//       * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
+//       * @code
+//       *   return put(s, ios, d, str.data(), str.data() + str.size());
+//       * @codeend
+//       * @Returns An iterator pointing immediately after the last character produced.
+//       */
+//      template <class Duration>
+//      iter_type put(iter_type s, std::ios_base& ios, time_point<system_clock, Duration> const& tp) const
+//      {
+//        std::basic_string<CharT> str = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios).get_date_time_pattern();
+//        return put(s, ios, tp, str.data(), str.data() + str.size());
+//      }
+
       /**
        *
        * @param s an output stream iterator
