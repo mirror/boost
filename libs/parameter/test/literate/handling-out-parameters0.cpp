@@ -1,5 +1,5 @@
 
-#line 620 "../../../../libs/parameter/doc/index.rst"
+#line 620 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter.hpp>
 
 namespace boost
@@ -20,7 +20,7 @@ BOOST_PARAMETER_NAME(color_map)
 
 BOOST_PARAMETER_FUNCTION((void), f, tag,
   (required (graph, *))
-#line 612 "../../../../libs/parameter/doc/index.rst"
+#line 612 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 (optional
     (visitor,            *, boost::dfs_visitor<>())
     (root_vertex,        *, *vertices(graph).first)
@@ -28,6 +28,6 @@ BOOST_PARAMETER_FUNCTION((void), f, tag,
     (in_out(color_map), *,
       default_color_map(num_vertices(graph), index_map) )
 )
-#line 642 "../../../../libs/parameter/doc/index.rst"
+#line 642 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 ) {}
 

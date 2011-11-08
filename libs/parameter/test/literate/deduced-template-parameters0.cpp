@@ -1,5 +1,5 @@
 
-#line 1524 "../../../../libs/parameter/doc/index.rst"
+#line 1557 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/noncopyable.hpp>
@@ -16,7 +16,7 @@ BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type)
 BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable)
 
 }}
-#line 1513 "../../../../libs/parameter/doc/index.rst"
+#line 1546 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 namespace boost { namespace python {
 
 namespace detail { struct bases_base {}; }
@@ -28,10 +28,10 @@ struct bases : detail::bases_base
 }}
 
 
-#line 1567 "../../../../libs/parameter/doc/index.rst"
+#line 1600 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/type_traits/is_class.hpp>
 namespace boost { namespace python {
-#line 1545 "../../../../libs/parameter/doc/index.rst"
+#line 1578 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 typedef parameter::parameters<
     required<tag::class_type, is_class<_> >
 
@@ -53,7 +53,7 @@ typedef parameter::parameters<
   , parameter::optional<deduced<tag::copyable>, is_same<noncopyable,_> >
 
 > class_signature;
-#line 1571 "../../../../libs/parameter/doc/index.rst"
+#line 1604 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 template <
     class A0
   , class A1 = parameter::void_
@@ -85,16 +85,16 @@ struct class_
 
 
 
-#line 1611 "../../../../libs/parameter/doc/index.rst"
+#line 1644 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 struct B {};
 struct D {};
 
 using boost::python::bases;
-#line 1607 "../../../../libs/parameter/doc/index.rst"
+#line 1640 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 typedef boost::python::class_<B, boost::noncopyable> c1;
 
 typedef boost::python::class_<D, std::auto_ptr<D>, bases<B> > c2;
-#line 1617 "../../../../libs/parameter/doc/index.rst"
+#line 1650 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 BOOST_MPL_ASSERT((boost::is_same<c1::class_type, B>));
 BOOST_MPL_ASSERT((boost::is_same<c1::base_list, bases<> >));
 BOOST_MPL_ASSERT((boost::is_same<c1::held_type, B>));

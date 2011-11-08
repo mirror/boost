@@ -1,8 +1,8 @@
 
-#line 1797 "../../../../libs/parameter/doc/index.rst"
+#line 1830 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter.hpp>
 #include <cassert>
-#line 1780 "../../../../libs/parameter/doc/index.rst"
+#line 1813 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 BOOST_PARAMETER_NAME(name)
 BOOST_PARAMETER_NAME(index)
 
@@ -19,7 +19,7 @@ int deduce_arg_types(ArgumentPack const& args)
 {
     return deduce_arg_types_impl(args[_name], args[_index|42]);
 }
-#line 1801 "../../../../libs/parameter/doc/index.rst"
+#line 1834 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 int a1 = deduce_arg_types((_name = "foo"));
 int a2 = deduce_arg_types((_name = "foo", _index = 3));
 

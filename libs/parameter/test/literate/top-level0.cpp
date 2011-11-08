@@ -1,5 +1,5 @@
 
-#line 35 "../../../../libs/parameter/doc/index.rst"
+#line 35 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter.hpp>
 
 namespace test

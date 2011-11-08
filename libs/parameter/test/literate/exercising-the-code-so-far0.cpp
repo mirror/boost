@@ -1,5 +1,5 @@
 
-#line 1382 "../../../../libs/parameter/doc/index.rst"
+#line 1415 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/noncopyable.hpp>
@@ -20,7 +20,7 @@ struct bases
 {};
 
 }}
-#line 1369 "../../../../libs/parameter/doc/index.rst"
+#line 1402 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 namespace boost { namespace python {
 
 using boost::mpl::_;
@@ -34,7 +34,7 @@ typedef parameter::parameters<
 
 }}
 
-#line 1421 "../../../../libs/parameter/doc/index.rst"
+#line 1454 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 namespace boost { namespace python {
 
 template <
@@ -76,7 +76,7 @@ using boost::python::bases;
 
 struct B {};
 struct D {};
-#line 1462 "../../../../libs/parameter/doc/index.rst"
+#line 1495 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 typedef boost::python::class_<
     class_type<B>, copyable<boost::noncopyable>
 > c1;
@@ -85,7 +85,7 @@ typedef boost::python::class_<
     D, held_type<std::auto_ptr<D> >, base_list<bases<B> >
 > c2;
 
-#line 1482 "../../../../libs/parameter/doc/index.rst"
+#line 1515 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 BOOST_MPL_ASSERT((boost::is_same<c1::class_type, B>));
 BOOST_MPL_ASSERT((boost::is_same<c1::base_list, bases<> >));
 BOOST_MPL_ASSERT((boost::is_same<c1::held_type, B>));

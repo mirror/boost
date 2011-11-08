@@ -1,10 +1,10 @@
 
-#line 1878 "../../../../libs/parameter/doc/index.rst"
+#line 1911 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter.hpp>
 #include <string>
 
 namespace parameter = boost::parameter;
-#line 1861 "../../../../libs/parameter/doc/index.rst"
+#line 1894 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 BOOST_PARAMETER_NAME(s1)
 BOOST_PARAMETER_NAME(s2)
 BOOST_PARAMETER_NAME(s3)
@@ -21,7 +21,7 @@ std::string f(ArgumentPack const& args)
 }
 
 std::string x = f((_s1="hello,", _s2=" world", _s3="hi world"));
-#line 1884 "../../../../libs/parameter/doc/index.rst"
+#line 1917 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 int main()
 {}
 

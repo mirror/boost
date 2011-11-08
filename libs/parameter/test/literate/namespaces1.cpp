@@ -1,9 +1,9 @@
 
-#line 2069 "../../../../libs/parameter/doc/index.rst"
-#line 2054 "../../../../libs/parameter/doc/index.rst"
+#line 2100 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
+#line 2085 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter.hpp>
 #include <iostream>
-#line 2040 "../../../../libs/parameter/doc/index.rst"
+#line 2071 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 namespace lib
 {
   BOOST_PARAMETER_NAME(name)
@@ -18,11 +18,11 @@ namespace lib
       return index;
   }
 }
-#line 2080 "../../../../libs/parameter/doc/index.rst"
+#line 2111 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 using lib::_name;
 using lib::_index;
 
 int x = lib::f(_name = "jill", _index = 1);
-#line 2089 "../../../../libs/parameter/doc/index.rst"
+#line 2120 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 int main() {}
 

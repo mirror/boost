@@ -1,5 +1,5 @@
 
-#line 472 "../../../../libs/parameter/doc/index.rst"
+#line 472 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter/name.hpp>
 
 BOOST_PARAMETER_NAME(graph)
@@ -17,7 +17,7 @@ struct dfs_visitor
 int vertex_index = 0;
 
 }
-#line 446 "../../../../libs/parameter/doc/index.rst"
+#line 446 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter/preprocessor.hpp>
 
 namespace graphs

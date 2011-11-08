@@ -1,4 +1,4 @@
-#line 397 "../../../../libs/parameter/doc/index.rst"
+#line 397 "/home/daniel/dev/boost/trunk/libs/parameter/doc/index.rst"
 #include <boost/parameter/name.hpp>
 
 namespace graphs
