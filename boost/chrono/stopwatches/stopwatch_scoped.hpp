@@ -7,6 +7,8 @@
 #ifndef BOOST_CHRONO_STOPWATCHES_STOPWATCH_SCOPED_HPP
 #define BOOST_CHRONO_STOPWATCHES_STOPWATCH_SCOPED_HPP
 
+#include <boost/chrono/config.hpp>
+
 #include <boost/chrono/chrono.hpp>
 #include <boost/system/error_code.hpp>
 

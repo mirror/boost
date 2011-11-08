@@ -8,6 +8,8 @@
 #ifndef BOOST_CHRONO_STOPWATCHES_REPORTERS_THREAD_DEFAULT_FORMATTER_HPP
 #define BOOST_CHRONO_STOPWATCHES_REPORTERS_THREAD_DEFAULT_FORMATTER_HPP
 
+#include <boost/chrono/config.hpp>
+
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
 
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter_default_formatter.hpp>

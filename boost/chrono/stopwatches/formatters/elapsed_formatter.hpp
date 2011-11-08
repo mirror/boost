@@ -27,7 +27,7 @@ namespace boost
   namespace chrono
   {
 
-    template<typename Ratio = milli, typename CharT = char,
+    template<typename Ratio, typename CharT,
         typename Traits = std::char_traits<CharT>,
         class Alloc = std::allocator<CharT> >
     class basic_elapsed_formatter: public base_formatter<CharT, Traits>, public basic_format<CharT, Traits>

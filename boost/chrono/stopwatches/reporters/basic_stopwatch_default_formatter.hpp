@@ -19,17 +19,23 @@ namespace boost
   namespace chrono
   {
 
-    template <typename Clock, typename Features, typename Weight>
-    struct stopwatch_reporter_default_formatter<basic_stopwatch<Clock,laps_accumulator_set<typename Clock::duration,Features, Weight> > >
+    template <typename CharT, typename Clock, typename Features, typename Weight>
+    struct basic_stopwatch_reporter_default_formatter<CharT, basic_stopwatch<Clock,laps_accumulator_set<typename Clock::duration,Features, Weight> > >
     {
-      typedef accumulator_set_formatter type;
+      typedef basic_accumulator_set_formatter<milli,CharT> type;
     };
 
-    template <typename Clock, typename Features, typename Weight>
-    struct wstopwatch_reporter_default_formatter<basic_stopwatch<Clock,laps_accumulator_set<typename Clock::duration,Features, Weight> > >
-    {
-      typedef waccumulator_set_formatter type;
-    };
+//    template <typename Clock, typename Features, typename Weight>
+//    struct stopwatch_reporter_default_formatter<basic_stopwatch<Clock,laps_accumulator_set<typename Clock::duration,Features, Weight> > >
+//    {
+//      typedef accumulator_set_formatter type;
+//    };
+//
+//    template <typename Clock, typename Features, typename Weight>
+//    struct wstopwatch_reporter_default_formatter<basic_stopwatch<Clock,laps_accumulator_set<typename Clock::duration,Features, Weight> > >
+//    {
+//      typedef waccumulator_set_formatter type;
+//    };
 
   } // namespace chrono
 } // namespace boost

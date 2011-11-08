@@ -8,6 +8,8 @@
 #ifndef BOOST_CHRONO_STOPWATCHES_REPORTERS_PROCESS_DEFAULT_FORMATTER_HPP
 #define BOOST_CHRONO_STOPWATCHES_REPORTERS_PROCESS_DEFAULT_FORMATTER_HPP
 
+#include <boost/chrono/config.hpp>
+
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter_default_formatter.hpp>
 #include <boost/chrono/stopwatches/reporters/clock_default_formatter.hpp>
 #include <boost/chrono/stopwatches/formatters/elapsed_formatter.hpp>
@@ -21,17 +23,23 @@ namespace boost
   namespace chrono
   {
 
-    template<>
-    struct clock_default_formatter<process_cpu_clock>
+    template <typename CharT>
+    struct basic_clock_default_formatter<CharT, process_cpu_clock>
     {
-      typedef times_formatter type;
+      typedef basic_times_formatter<milli, CharT> type;
     };
 
-    template<>
-    struct wclock_default_formatter<process_cpu_clock>
-    {
-      typedef wtimes_formatter type;
-    };
+//    template<>
+//    struct clock_default_formatter<process_cpu_clock>
+//    {
+//      typedef times_formatter type;
+//    };
+//
+//    template<>
+//    struct wclock_default_formatter<process_cpu_clock>
+//    {
+//      typedef wtimes_formatter type;
+//    };
 
   } // namespace chrono
 } // namespace boost

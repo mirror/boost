@@ -7,16 +7,7 @@
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
 
-template<typename D>
-void test_good2(const char* str, D res)
-{
-  std::istringstream in(str);
-  D d(0);
-  in >> d;
-  BOOST_TEST(in.eof());
-  BOOST_TEST(!in.fail());
-  BOOST_TEST(d == res);
-}
+
 template<typename D>
 void test_good(const char* str, D res)
 {
@@ -26,6 +17,7 @@ void test_good(const char* str, D res)
   BOOST_TEST(in.eof());
   BOOST_TEST(!in.fail());
   BOOST_TEST(d == res);
+  std::cout << str << " " << res << " " << d << std::endl;
 }
 
 template<typename DFail>
@@ -37,6 +29,7 @@ void test_fail(const char* str, DFail res)
     in >> d;
     BOOST_TEST(in.fail());
     BOOST_TEST(d == DFail::zero());
+    std::cout << str << " " << res << " " << d << std::endl;
   }
 }
 
@@ -49,6 +42,7 @@ void test_not_eof(const char* str, D res)
     in >> d;
     BOOST_TEST(!in.eof());
     BOOST_TEST(d == res);
+    std::cout << str << " " << res << " " << d << std::endl;
   }
 }
 int main()
@@ -56,7 +50,7 @@ int main()
   using namespace boost::chrono;
   using namespace boost;
 
-  test_good2("5000", 5000);
+  test_good("5000", 5000);
 
   test_good("5000 hours", hours(5000));
   test_good("5000 minutes", minutes(5000));

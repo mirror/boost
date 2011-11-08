@@ -63,17 +63,17 @@ namespace boost
   namespace chrono
   {
 
-    template <long long speed>
-    struct stopwatch_reporter_default_formatter<simple_stopwatch<ex::cycle_count<speed> > >
+    template <typename CharT, long long speed>
+    struct basic_stopwatch_reporter_default_formatter<CharT, simple_stopwatch<ex::cycle_count<speed> > >
     {
-      typedef elapsed_formatter type;
+      typedef basic_elapsed_formatter<milli, CharT> type;
     };
 
-    template <long long speed>
-    struct wstopwatch_reporter_default_formatter<simple_stopwatch<ex::cycle_count<speed> > >
-    {
-      typedef welapsed_formatter type;
-    };
+//    template <long long speed>
+//    struct wstopwatch_reporter_default_formatter<simple_stopwatch<ex::cycle_count<speed> > >
+//    {
+//      typedef welapsed_formatter type;
+//    };
 
   } // namespace chrono
 } // namespace boost

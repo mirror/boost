@@ -7,13 +7,13 @@
 #ifndef BOOST_CHRONO_STOPWATCHES_SUSPENDABLE_STOPWATCH__HPP
 #define BOOST_CHRONO_STOPWATCHES_SUSPENDABLE_STOPWATCH__HPP
 
-#include <utility>
-
 #include <boost/chrono/config.hpp>
+
 #include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
 #include <boost/chrono/stopwatches/collectors/no_memory.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/chrono/system_clocks.hpp>
+#include <utility>
 
 namespace boost
 {

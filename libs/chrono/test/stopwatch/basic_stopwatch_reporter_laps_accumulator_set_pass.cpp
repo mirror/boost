@@ -255,7 +255,7 @@ void check_all()
 int main()
 {
   typedef basic_stopwatch<high_resolution_clock > Stopwatch;
-  typedef stopwatch_reporter_default_formatter<Stopwatch>::type Formatter;
+  typedef basic_stopwatch_reporter_default_formatter<char, Stopwatch>::type Formatter;
   typedef stopwatch_reporter<Stopwatch> Reporter;
   static Formatter fmtr;
 

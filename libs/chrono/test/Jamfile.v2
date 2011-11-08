@@ -286,7 +286,7 @@ rule chrono-v1-v2-run-header ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-        :   v1_$(sources[1]:B)header ]
+        :   v1_$(sources[1]:B)_header ]
     ;
 }
 

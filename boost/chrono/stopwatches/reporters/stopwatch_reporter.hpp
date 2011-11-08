@@ -8,6 +8,8 @@
 #ifndef BOOST_CHRONO_STOPWATCHES_REPORTERS_STOPWATCH_REPORTER_HPP
 #define BOOST_CHRONO_STOPWATCHES_REPORTERS_STOPWATCH_REPORTER_HPP
 
+#include <boost/chrono/config.hpp>
+
 #if !defined(BOOST_ENABLE_WARNINGS) && !defined(BOOST_CHRONO_ENABLE_WARNINGS)
 #if defined __GNUC__
 #pragma GCC system_header
@@ -31,7 +33,7 @@ namespace boost
   namespace chrono
   {
 
-    template<class Stopwatch, class Formatter>
+    template<class CharT, class Stopwatch, class Formatter=basic_stopwatch_reporter_default_formatter<CharT, Stopwatch> >
     class basic_stopwatch_reporter: public Stopwatch
     {
     public:
@@ -112,22 +114,22 @@ namespace boost
 
 
     template<class Stopwatch,
-        class Formatter = typename stopwatch_reporter_default_formatter<
+        class Formatter = typename basic_stopwatch_reporter_default_formatter<char,
             Stopwatch>::type>
     class stopwatch_reporter;
 
     template<class Stopwatch, class Formatter>
-    struct stopwatch_reporter_default_formatter<stopwatch_reporter<Stopwatch,
+    struct basic_stopwatch_reporter_default_formatter<char, stopwatch_reporter<Stopwatch,
         Formatter> >
     {
       typedef Formatter type;
     };
 
     template<class Stopwatch, class Formatter>
-    class stopwatch_reporter: public basic_stopwatch_reporter<Stopwatch,
+    class stopwatch_reporter: public basic_stopwatch_reporter<char, Stopwatch,
         Formatter>
     {
-      typedef basic_stopwatch_reporter<Stopwatch, Formatter> base_type;
+      typedef basic_stopwatch_reporter<char, Stopwatch, Formatter> base_type;
     public:
       typedef typename Stopwatch::clock clock;
       typedef Stopwatch stopwatch;
@@ -179,22 +181,22 @@ namespace boost
     };
 
     template<class Stopwatch,
-        class Formatter = typename wstopwatch_reporter_default_formatter<
+        class Formatter = typename basic_stopwatch_reporter_default_formatter<wchar_t,
             Stopwatch>::type>
     class wstopwatch_reporter;
 
     template<class Stopwatch, class Formatter>
-    struct wstopwatch_reporter_default_formatter<wstopwatch_reporter<
+    struct basic_stopwatch_reporter_default_formatter<wchar_t, wstopwatch_reporter<
         Stopwatch, Formatter> >
     {
       typedef Formatter type;
     };
 
     template<class Stopwatch, class Formatter>
-    class wstopwatch_reporter: public basic_stopwatch_reporter<Stopwatch,
+    class wstopwatch_reporter: public basic_stopwatch_reporter<wchar_t, Stopwatch,
         Formatter>
     {
-      typedef basic_stopwatch_reporter<Stopwatch, Formatter> base_type;
+      typedef basic_stopwatch_reporter<wchar_t, Stopwatch, Formatter> base_type;
     public:
       typedef typename Stopwatch::clock clock;
       typedef Stopwatch stopwatch;

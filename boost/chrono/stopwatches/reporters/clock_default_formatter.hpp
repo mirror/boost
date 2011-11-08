@@ -15,17 +15,23 @@ namespace boost
   namespace chrono
   {
 
-    template<class Clock>
-    struct clock_default_formatter
+    template<class CharT, class Clock>
+    struct basic_clock_default_formatter
     {
-      typedef elapsed_formatter type;
+      typedef basic_elapsed_formatter<milli, CharT> type;
     };
 
-    template<class Clock>
-    struct wclock_default_formatter
-    {
-      typedef welapsed_formatter type;
-    };
+//    template<class Clock>
+//    struct clock_default_formatter
+//    {
+//      typedef elapsed_formatter type;
+//    };
+//
+//    template<class Clock>
+//    struct wclock_default_formatter
+//    {
+//      typedef welapsed_formatter type;
+//    };
   } // namespace chrono
 } // namespace boost
 
