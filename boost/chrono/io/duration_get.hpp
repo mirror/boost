@@ -312,8 +312,10 @@ namespace boost
 
       /**
        *
-       * @param s an input stream iterator
+       * @param s start input stream iterator
+       * @param end end input stream iterator
        * @param ios a reference to a ios_base
+       * @param err the ios_base state
        * @param d the duration
        * @Effects imbue in @c ios the @c duration_units_default facet if not already present.
        * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
@@ -332,9 +334,11 @@ namespace boost
 
       /**
        *
-       * @param s an input stream iterator
+       * @param s start input stream iterator
+       * @param end end input stream iterator
        * @param ios a reference to a ios_base
-       * @param d the duration
+       * @param err the ios_base state
+       * @param r a reference to the duration representation
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
        */
       template <typename Rep>
@@ -343,13 +347,15 @@ namespace boost
         return std::use_facet<std::num_get<CharT, iter_type> >(ios.getloc()).get(s, end, ios, err, r);
       }
 
+
+
       /**
        *
-       * @param s an output stream iterator
+       * @param s start input stream iterator
+       * @param e end input stream iterator
        * @param ios a reference to a ios_base
-       * @param d the duration
-       * @param pattern
-       * @Effects Calls do_put_unit(s, ios, d).
+       * @param err the ios_base state
+       * @param rt a reference to the duration run-time ratio.
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
        */
       iter_type get_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
@@ -422,109 +428,8 @@ namespace boost
         }
         else
         {
-          // parse SI name, short or long
-          std::size_t pfs = facet.get_plural_forms()+1;
-
-          // scoped_ptr ???
-          string_type* units= new string_type[19*pfs]();
-          string_type* it = units;
-          it = facet.fill_units(it, atto());
-          it = facet.fill_units(it, femto());
-          it = facet.fill_units(it, pico());
-          it = facet.fill_units(it, nano());
-          it = facet.fill_units(it, micro());
-          it = facet.fill_units(it, milli());
-          it = facet.fill_units(it, centi());
-          it = facet.fill_units(it, deci());
-          it = facet.fill_units(it, deca());
-          it = facet.fill_units(it, hecto());
-          it = facet.fill_units(it, kilo());
-          it = facet.fill_units(it, mega());
-          it = facet.fill_units(it, giga());
-          it = facet.fill_units(it, tera());
-          it = facet.fill_units(it, peta());
-          it = facet.fill_units(it, exa());
-          it = facet.fill_units(it, ratio<1>());
-          it = facet.fill_units(it, ratio<60>());
-          it = facet.fill_units(it, ratio<3600>());
-
-          string_type* units_end=  units +19*pfs;
-
-
-          err = std::ios_base::goodbit;
-          const string_type* k = chrono_detail::scan_keyword(i, e, units,
-              units_end,
-              //~ std::use_facet<std::ctype<CharT> >(loc),
-              err);
-
-          std::size_t index =  (k - units) / pfs;
-          delete []units;
-          switch ( index )
-          {
-          case 0:
-            rt = detail::rt_ratio(atto());
-            break;
-          case 1:
-            rt = detail::rt_ratio(femto());
-            break;
-          case 2:
-            rt = detail::rt_ratio(pico());
-            break;
-          case 3:
-            rt = detail::rt_ratio(nano());
-            break;
-          case 4:
-            rt = detail::rt_ratio(micro());
-            break;
-          case 5:
-            rt = detail::rt_ratio(milli());
-            break;
-          case 6:
-            rt = detail::rt_ratio(centi());
-            break;
-          case 7:
-            rt = detail::rt_ratio(deci());
-            break;
-          case 8:
-            rt = detail::rt_ratio(deca());
-            break;
-          case 9:
-            rt = detail::rt_ratio(hecto());
-            break;
-          case 10:
-            rt = detail::rt_ratio(kilo());
-            break;
-          case 11:
-            rt = detail::rt_ratio(mega());
-            break;
-          case 12:
-            rt = detail::rt_ratio(giga());
-            break;
-          case 13:
-            rt = detail::rt_ratio(tera());
-            break;
-          case 14:
-            rt = detail::rt_ratio(peta());
-            break;
-          case 15:
-            rt = detail::rt_ratio(exa());
-            break;
-          case 16:
-            rt = detail::rt_ratio(ratio<1>());
-            break;
-          case 17:
-            rt = detail::rt_ratio(ratio<60>());
-            break;
-          case 18:
-            rt = detail::rt_ratio(ratio<3600>());
-            break;
-          default:
-            err = std::ios_base::failbit;
-            std::cout << __FILE__ << ":" << __LINE__ << std::endl;
-            return i;
-          }
+          return do_get_prefix_unit(i, e, is, err, rt);
         }
-        // unit is num/den
 
         return i;
       }
@@ -540,6 +445,130 @@ namespace boost
       ~duration_get()
       {
       }
+
+    protected:
+
+      /**
+       * Extracts the run-time ratio associated to the duration when it is given in prefix form.
+       *
+       * This is an extension point of this facet so that we can take in account other periods that can have a useful
+       * translation in other contexts, as e.g. days and weeks.
+       * @param s start input stream iterator.
+       * @param e end input stream iterator.
+       * @param ios a reference to a ios_base.
+       * @param err the ios_base state.
+       * @param rt a reference to the duration run-time ratio.
+       * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name.
+       */
+      virtual iter_type do_get_prefix_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
+          detail::rt_ratio &rt) const
+      {
+        duration_units<CharT> const &facet = duration_units<CharT>::imbue_if_has_not(is);
+
+        // parse SI name, short or long
+        std::size_t pfs = facet.get_plural_forms()+1;
+
+        // scoped_ptr ???
+        string_type* units= new string_type[19*pfs]();
+        string_type* it = units;
+        it = facet.fill_units(it, atto());
+        it = facet.fill_units(it, femto());
+        it = facet.fill_units(it, pico());
+        it = facet.fill_units(it, nano());
+        it = facet.fill_units(it, micro());
+        it = facet.fill_units(it, milli());
+        it = facet.fill_units(it, centi());
+        it = facet.fill_units(it, deci());
+        it = facet.fill_units(it, deca());
+        it = facet.fill_units(it, hecto());
+        it = facet.fill_units(it, kilo());
+        it = facet.fill_units(it, mega());
+        it = facet.fill_units(it, giga());
+        it = facet.fill_units(it, tera());
+        it = facet.fill_units(it, peta());
+        it = facet.fill_units(it, exa());
+        it = facet.fill_units(it, ratio<1>());
+        it = facet.fill_units(it, ratio<60>());
+        it = facet.fill_units(it, ratio<3600>());
+
+        string_type* units_end=  units +19*pfs;
+
+
+        err = std::ios_base::goodbit;
+        const string_type* k = chrono_detail::scan_keyword(i, e, units,
+            units_end,
+            //~ std::use_facet<std::ctype<CharT> >(loc),
+            err);
+
+        std::size_t index =  (k - units) / pfs;
+        delete []units;
+        switch ( index )
+        {
+        case 0:
+          rt = detail::rt_ratio(atto());
+          break;
+        case 1:
+          rt = detail::rt_ratio(femto());
+          break;
+        case 2:
+          rt = detail::rt_ratio(pico());
+          break;
+        case 3:
+          rt = detail::rt_ratio(nano());
+          break;
+        case 4:
+          rt = detail::rt_ratio(micro());
+          break;
+        case 5:
+          rt = detail::rt_ratio(milli());
+          break;
+        case 6:
+          rt = detail::rt_ratio(centi());
+          break;
+        case 7:
+          rt = detail::rt_ratio(deci());
+          break;
+        case 8:
+          rt = detail::rt_ratio(deca());
+          break;
+        case 9:
+          rt = detail::rt_ratio(hecto());
+          break;
+        case 10:
+          rt = detail::rt_ratio(kilo());
+          break;
+        case 11:
+          rt = detail::rt_ratio(mega());
+          break;
+        case 12:
+          rt = detail::rt_ratio(giga());
+          break;
+        case 13:
+          rt = detail::rt_ratio(tera());
+          break;
+        case 14:
+          rt = detail::rt_ratio(peta());
+          break;
+        case 15:
+          rt = detail::rt_ratio(exa());
+          break;
+        case 16:
+          rt = detail::rt_ratio(ratio<1>());
+          break;
+        case 17:
+          rt = detail::rt_ratio(ratio<60>());
+          break;
+        case 18:
+          rt = detail::rt_ratio(ratio<3600>());
+          break;
+        default:
+          err = std::ios_base::failbit;
+          std::cout << __FILE__ << ":" << __LINE__ << std::endl;
+          return i;
+        }
+        return i;
+
+      }
     };
 
     /**
@@ -548,8 +577,9 @@ namespace boost
     template <class CharT, class InputIterator>
     std::locale::id duration_get<CharT, InputIterator>::id;
 
+
   } // chrono
 }
 // boost
 
-#endif  // BOOST_CHRONO_CHRONO_IO_HPP
+#endif  // header
