@@ -25,6 +25,7 @@
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/chrono/detail/scan_keyword.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/chrono/detail/no_warning/signed_unsigned_cmp.hpp>
 
 namespace boost
 {
@@ -505,7 +506,8 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                   return is;
                 }
 
-                if (r > ((duration_values<common_type_t>::max)() / num))
+                //if (r > ((duration_values<common_type_t>::max)() / num))
+                if (chrono::detail::gt(r,((duration_values<common_type_t>::max)() / num)))
                 {
                     // Conversion to Period overflowed
                     is.setstate(err|is.failbit);

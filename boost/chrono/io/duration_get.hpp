@@ -17,8 +17,11 @@
 #include <boost/mpl/if.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/chrono/detail/scan_keyword.hpp>
+#include <boost/chrono/detail/no_warning/signed_unsigned_cmp.hpp>
+
 #include <boost/assert.hpp>
 #include <locale>
+
 /**
  * Duration formatting facet for input.
  */
@@ -284,7 +287,8 @@ namespace boost
         if (!detail::reduce(r, den, err))
           return s;
 
-        if (r > ( (duration_values<common_type_t>::max)() / num))
+        //if (r > ( (duration_values<common_type_t>::max)() / num))
+        if (chrono::detail::gt(r,((duration_values<common_type_t>::max)() / num)))
         {
           // Conversion to Period overflowed
           err |= std::ios_base::failbit;
