@@ -289,6 +289,7 @@ namespace boost
 
         //if (r > ( (duration_values<common_type_t>::max)() / num))
         if (chrono::detail::gt(r,((duration_values<common_type_t>::max)() / num)))
+        //if (common_type_t(r) > ( (duration_values<common_type_t>::max)() / num))
         {
           // Conversion to Period overflowed
           err |= std::ios_base::failbit;
@@ -309,7 +310,6 @@ namespace boost
         // Success!  Store it.
         r = Rep(t);
         d = duration<Rep, Period> (r);
-
 
         return s;
       }
@@ -467,7 +467,9 @@ namespace boost
       virtual iter_type do_get_prefix_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
           detail::rt_ratio &rt) const
       {
+        std::cerr << __FILE__ << ":" << __LINE__ << " " << std::endl;
         duration_units<CharT> const &facet = duration_units<CharT>::imbue_if_has_not(is);
+
 
         // parse SI name, short or long
         std::size_t pfs = facet.get_plural_forms()+1;
@@ -497,12 +499,13 @@ namespace boost
 
         string_type* units_end=  units +19*pfs;
 
-
         err = std::ios_base::goodbit;
+        std::cerr << __FILE__ << ":" << __LINE__ << " " << std::endl;
         const string_type* k = chrono_detail::scan_keyword(i, e, units,
             units_end,
             //~ std::use_facet<std::ctype<CharT> >(loc),
             err);
+        std::cerr << __FILE__ << ":" << __LINE__ << " err" << err << std::endl;
 
         std::size_t index =  (k - units) / pfs;
         delete []units;
@@ -570,6 +573,8 @@ namespace boost
           std::cout << __FILE__ << ":" << __LINE__ << std::endl;
           return i;
         }
+        std::cerr << __FILE__ << ":" << __LINE__ << " " << std::endl;
+
         return i;
 
       }
