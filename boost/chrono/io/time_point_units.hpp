@@ -129,7 +129,7 @@ namespace boost
       do_put(iter_type s, std::ios_base& ios, steady_clock) const = 0;
       virtual std::basic_string<CharT> do_get_epoch(steady_clock) const=0;
 
-//#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
+#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
       virtual iter_type do_put(iter_type s, std::ios_base& ios, process_real_cpu_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(process_real_cpu_clock) const=0;
       virtual iter_type do_put(iter_type s, std::ios_base& ios, process_user_cpu_clock c) const =0;
@@ -138,7 +138,7 @@ namespace boost
       virtual std::basic_string<CharT> do_get_epoch(process_system_cpu_clock) const=0;
       virtual iter_type do_put(iter_type s, std::ios_base& ios, process_cpu_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(process_cpu_clock) const=0;
-//#endif
+#endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
       virtual iter_type do_put(iter_type s, std::ios_base& ios, thread_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(thread_clock) const=0;
@@ -208,7 +208,7 @@ namespace boost
         return clock_string<steady_clock,CharT>::since();
       }
 
-//#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
+#if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
       iter_type do_put(iter_type s, std::ios_base& , process_real_cpu_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
@@ -246,7 +246,7 @@ namespace boost
         return clock_string<process_cpu_clock,CharT>::since();
       }
 
-//#endif
+#endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
       iter_type do_put(iter_type s, std::ios_base& , thread_clock c) const
       {
