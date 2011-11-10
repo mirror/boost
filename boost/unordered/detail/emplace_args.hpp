@@ -26,8 +26,6 @@
 
 #if !defined(BOOST_NO_0X_HDR_TUPLE)
 #include <tuple>
-#elif defined(BOOST_HAS_TR1_TUPLE)
-#include <tr1/tuple>
 #endif
 
 #if defined(BOOST_MSVC)
@@ -204,8 +202,6 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost)
 
 #if !defined(BOOST_NO_0X_HDR_TUPLE)
 BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
-#elif defined(BOOST_HAS_TR1_TUPLE)
-BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::tr1)
 #endif
 
 #undef BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE
