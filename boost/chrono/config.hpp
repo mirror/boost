@@ -113,7 +113,7 @@
 
 #ifdef BOOST_CHRONO_HEADER_ONLY
 #define BOOST_CHRONO_INLINE inline
-#define BOOST_CHRONO_STATIC
+#define BOOST_CHRONO_STATIC inline
 #define BOOST_CHRONO_DECL
 
 #else
