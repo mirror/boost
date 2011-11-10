@@ -64,8 +64,8 @@ void test_stat()
         acc_immediate(value, weight = rng());
     }
 
-    BOOST_CHECK_CLOSE(1., weighted_variance(acc_lazy), 1.);
-    BOOST_CHECK_CLOSE(1., weighted_variance(acc_immediate), 1.);
+    BOOST_CHECK_CLOSE(1., weighted_variance(acc_lazy), 5.);
+    BOOST_CHECK_CLOSE(1., weighted_variance(acc_immediate), 5.);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

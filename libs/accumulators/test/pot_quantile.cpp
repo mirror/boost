@@ -74,13 +74,13 @@ void test_stat()
         acc6(sample);
     }
 
-    BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.999), 3.090232, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability = 0.999), 3.090232, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability = 0.001), -3.090232, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc4, quantile_probability = 0.001), -3.090232, epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.999), 3.090232, 3*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability = 0.999), 3.090232, 2*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability = 0.001), -3.090232, 2*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc4, quantile_probability = 0.001), -3.090232, 2*epsilon );
 
-    BOOST_CHECK_CLOSE( quantile(acc5, quantile_probability = 0.999), 6.908, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc6, quantile_probability = 0.999), 6.908, epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc5, quantile_probability = 0.999), 6.908, 3*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc6, quantile_probability = 0.999), 6.908, 3*epsilon );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

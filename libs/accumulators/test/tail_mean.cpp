@@ -58,18 +58,18 @@ void test_stat()
     BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc0, quantile_probability = 0.975), 0.9875, epsilon );
     BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc0, quantile_probability = 0.99), 0.995, epsilon );
     BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc0, quantile_probability = 0.999), 0.9995, epsilon );
-    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.05), 0.025, epsilon );
-    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.025), 0.0125, epsilon );
-    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.01), 0.005, 5 );
-    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.001), 0.0005, 10 );
+    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.05), 0.025, 5*epsilon );
+    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.025), 0.0125, 6*epsilon );
+    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.01), 0.005, 8*epsilon );
+    BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc1, quantile_probability = 0.001), 0.0005, 25*epsilon );
     BOOST_CHECK_CLOSE( tail_mean(acc2, quantile_probability = 0.95), 0.975, epsilon );
     BOOST_CHECK_CLOSE( tail_mean(acc2, quantile_probability = 0.975), 0.9875, epsilon );
     BOOST_CHECK_CLOSE( tail_mean(acc2, quantile_probability = 0.99), 0.995, epsilon );
     BOOST_CHECK_CLOSE( tail_mean(acc2, quantile_probability = 0.999), 0.9995, epsilon );
-    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.05), 0.025, epsilon );
-    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.025), 0.0125, epsilon );
-    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.01), 0.005, 5 );
-    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.001), 0.0005, 10 );
+    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.05), 0.025, 5*epsilon );
+    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.025), 0.0125, 6*epsilon );
+    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.01), 0.005, 8*epsilon );
+    BOOST_CHECK_CLOSE( tail_mean(acc3, quantile_probability = 0.001), 0.0005, 25*epsilon );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

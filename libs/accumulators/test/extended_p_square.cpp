@@ -28,7 +28,7 @@ void test_stat()
     typedef accumulator_set<double, stats<tag::extended_p_square> > accumulator_t;
 
     // tolerance
-    double epsilon = 2;
+    double epsilon = 3;
 
     // a random number generator
     boost::lagged_fibonacci607 rng;
@@ -50,8 +50,9 @@ void test_stat()
     for (int i=0; i<10000; ++i)
         acc(rng());
 
-    BOOST_CHECK_CLOSE(extended_p_square(acc)[0], probs[0], 25);
-    BOOST_CHECK_CLOSE(extended_p_square(acc)[1], probs[1], 10);
+    BOOST_CHECK_GE(extended_p_square(acc)[0], 0.0005);
+    BOOST_CHECK_LE(extended_p_square(acc)[0], 0.0015);
+    BOOST_CHECK_CLOSE(extended_p_square(acc)[1], probs[1], 15);
     BOOST_CHECK_CLOSE(extended_p_square(acc)[2], probs[2], 5);
 
     for (std::size_t i=3; i<probs.size(); ++i)

@@ -46,9 +46,9 @@ void test_stat()
         acc_cdist(sample, weight = std::exp(0.5 * (sample - mu) * (sample - mu) * ( 1./sigma_narrow/sigma_narrow - 1./sigma/sigma )));
     }
 
-    BOOST_CHECK_CLOSE(1., weighted_median(acc), 1e-1);
-    BOOST_CHECK_CLOSE(1., weighted_median(acc_dens), 1e-1);
-    BOOST_CHECK_CLOSE(1., weighted_median(acc_cdist), 1e-1);
+    BOOST_CHECK_CLOSE(1., weighted_median(acc), 2);
+    BOOST_CHECK_CLOSE(1., weighted_median(acc_dens), 3);
+    BOOST_CHECK_CLOSE(1., weighted_median(acc_cdist), 3);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

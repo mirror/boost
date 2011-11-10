@@ -74,7 +74,7 @@ void test_stat()
         acc7(sample7, weight = std::exp(-mu7 * (sample7 - 0.5 * mu7)));
     }
     // check for uniform distribution with weight = 1
-    BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc0), 0.001, 15 );
+    BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc0), 0.001, 28 );
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc1), 0.025, 5 );
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc2), 0.975, epsilon );
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc3), 0.999, epsilon );

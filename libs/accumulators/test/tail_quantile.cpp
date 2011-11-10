@@ -58,16 +58,16 @@ void test_stat()
     BOOST_CHECK_CLOSE( quantile(acc0, quantile_probability = 0.975), 0.975, epsilon );
     BOOST_CHECK_CLOSE( quantile(acc0, quantile_probability = 0.99 ), 0.99,  epsilon );
     BOOST_CHECK_CLOSE( quantile(acc0, quantile_probability = 0.999), 0.999, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.05 ), 0.05,  2 );
-    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.025), 0.025, 2 );
-    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.01 ), 0.01,  3 );
-    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.001), 0.001, 20 );
+    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.05 ), 0.05,  4*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.025), 0.025, 5*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.01 ), 0.01,  7*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.001), 0.001, 22*epsilon );
 
     // check standard normal distribution
     BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.975),  1.959963, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.999),  3.090232, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability  = 0.025), -1.959963, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability  = 0.001), -3.090232, epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.999),  3.090232, 3*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability  = 0.025), -1.959963, 2*epsilon );
+    BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability  = 0.001), -3.090232, 3*epsilon );
 
 }
 
