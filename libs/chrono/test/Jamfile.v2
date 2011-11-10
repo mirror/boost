@@ -128,6 +128,12 @@ rule stopwatch-run ( sources + )
             <library>/boost/system//boost_system
             <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(sources[1]:B)_shared ]
+    [ run $(sources)
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        : $(name)_header ]
     ;
 }
 
@@ -140,6 +146,12 @@ rule stopwatch-run2 ( sources + : name )
             <library>/boost/system//boost_system
             <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
         :   $(name)_shared ]
+    [ run $(sources)
+        : :
+        :   <define>BOOST_CHRONO_HEADER_ONLY
+           <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+        : $(name)_header ]
     ;
 }
 
