@@ -445,6 +445,8 @@ rule chrono-compile2 ( sources : name )
         [ stopwatch-run2 stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_pass ]
         [ stopwatch-run2 stopwatch/basic_stopwatch_reporter_pass.cpp  : basic_stopwatch_reporter_pass ]
         [ stopwatch-run2 stopwatch/basic_stopwatch_reporter_laps_accumulator_set_pass.cpp  : basic_stopwatch_reporter_laps_accumulator_set_pass ]
+        [ stopwatch-run2 stopwatch/laps_stopclock_pass.cpp  : laps_stopclock_pass ]
+        [ stopwatch-run2 stopwatch/laps_stopclock_laps_accumulator_set_pass.cpp  : laps_stopclock_laps_accumulator_set_pass ]
 
         ;
     test-suite "stopclock_ex"

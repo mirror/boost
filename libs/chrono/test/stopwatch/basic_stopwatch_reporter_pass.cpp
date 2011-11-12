@@ -1,19 +1,10 @@
-//===----------------------------------------------------------------------===//
-//
-//                     The LLVM Compiler Infrastructure
-//
-// This file is dual licensed under the MIT and the University of Illinois Open
-// Source Licenses. See LICENSE.TXT for details.
-//
-//===----------------------------------------------------------------------===//
-//  Adaptation to Boost of the libcxx
-//  Copyright 2010 Vicente J. Botet Escriba
+//  Copyright 2010-2011 Vicente J. Botet Escriba
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono/stopwatches/basic_stopwatch.hpp>
+#include <boost/chrono/stopwatches/laps_stopwatch.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
@@ -224,8 +215,8 @@ void check_report()
 template <typename Clock>
 void check_all()
 {
-  typedef stopwatch_reporter<basic_stopwatch<Clock> > Reporter;
-  typedef stopwatch_reporter<basic_stopwatch<Clock>, elapsed_formatter > ReporterE;
+  typedef stopwatch_reporter<laps_stopwatch<Clock> > Reporter;
+  typedef stopwatch_reporter<laps_stopwatch<Clock>, elapsed_formatter > ReporterE;
 
   check_invariants<Reporter>();
   check_default_constructor<Reporter>();
@@ -251,7 +242,7 @@ void check_all()
 
 int main()
 {
-  typedef basic_stopwatch<high_resolution_clock > Stopwatch;
+  typedef laps_stopwatch<high_resolution_clock > Stopwatch;
   typedef basic_stopwatch_reporter_default_formatter<char, Stopwatch>::type Formatter;
   typedef stopwatch_reporter<Stopwatch> Reporter;
   static Formatter fmtr;

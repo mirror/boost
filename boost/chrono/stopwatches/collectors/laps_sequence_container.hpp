@@ -1,4 +1,4 @@
-//  boost/chrono/stopwatches/stopwatch_reporter.hpp
+//  boost/chrono/stopwatches/collectors/laps_sequence_container.hpp
 //  Copyright 2011 Vicente J. Botet Escriba
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or

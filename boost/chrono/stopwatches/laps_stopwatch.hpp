@@ -1,11 +1,12 @@
-//  boost/chrono/stopwatches/basic_stopwatch.hpp  ------------------------------------------------------------//
+//  boost/chrono/stopwatches/laps_stopwatch.hpp  -----------------------------//
+
 //  Copyright 2011 Vicente J. Botet Escriba
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //  See http://www.boost.org/libs/libs/chrono/stopwatches for documentation.
 
-#ifndef BOOST_CHRONO_STOPWATCHES_BASIC_STOPWATCH__HPP
-#define BOOST_CHRONO_STOPWATCHES_BASIC_STOPWATCH__HPP
+#ifndef BOOST_CHRONO_STOPWATCHES_LAPS_STOPWATCH_HPP
+#define BOOST_CHRONO_STOPWATCHES_LAPS_STOPWATCH_HPP
 
 
 #include <boost/chrono/config.hpp>
@@ -24,7 +25,7 @@ namespace boost
 
 
     /**
-     * A basic_stopwatch is a model of @c Stopwatch taking as parameters the @c Clock and the @c LapsCollector.
+     * A laps_stopwatch is a model of @c Stopwatch taking as parameters the @c Clock and the @c LapsCollector.
      *
      * The main difference respect to a @c simple_stopwatch is that the user can stop it.
      * Each sequence of start-stop results in a new elapsed duration sample that is provided to the LapsCollector.
@@ -41,7 +42,7 @@ namespace boost
      * as it is the single one ensured on all platforms.
      */
     template<typename Clock=high_resolution_clock, typename LapsCollector=no_memory<typename Clock::duration> >
-    class basic_stopwatch
+    class laps_stopwatch
     {
     public:
       typedef LapsCollector laps_collector;
@@ -58,7 +59,7 @@ namespace boost
        * Effects: Starts the stopwatch.
        * Post-conditions: is_running().
        */
-      explicit basic_stopwatch()
+      explicit laps_stopwatch()
       :
         start_(duration::zero()),
         running_(false),
@@ -75,7 +76,7 @@ namespace boost
        * Effects: Starts the stopwatch.
        * Post-conditions: is_running() if no error occur.
        */
-      explicit basic_stopwatch(
+      explicit laps_stopwatch(
           system::error_code & ec
           ) :
         start_(duration::zero()),
@@ -91,7 +92,7 @@ namespace boost
        * Effects: Don't starts the stopwatch.
        * Post-conditions: ! is_running() if no error occur.
        */
-      explicit basic_stopwatch(
+      explicit laps_stopwatch(
           const dont_start_t&
           ) :
         start_(duration::zero()),
@@ -108,7 +109,7 @@ namespace boost
        *
        * Remark: The LapsCollector is copied and owned by the stopwatch.
        */
-      explicit basic_stopwatch(
+      explicit laps_stopwatch(
           laps_collector const& acc
           ) :
         start_(duration::zero()),
@@ -128,7 +129,7 @@ namespace boost
        *
        * Remark: The LapsCollector is copied and owned by the stopwatch.
        */
-      explicit basic_stopwatch(
+      explicit laps_stopwatch(
           laps_collector const& acc,
           system::error_code & ec
           ) :
@@ -148,7 +149,7 @@ namespace boost
        *
        * Remark: The LapsCollector is copied and owned by the stopwatch.
        */
-      basic_stopwatch(
+      laps_stopwatch(
           laps_collector const& acc,
           const dont_start_t&
           ) :
@@ -163,7 +164,7 @@ namespace boost
        *
        * Effects: Do nothing.
        */
-      ~basic_stopwatch()
+      ~laps_stopwatch()
       {
       }
 
@@ -421,12 +422,12 @@ namespace boost
       /**
        * Useful typedef for scoped run
        */
-      typedef stopwatch_runner<basic_stopwatch<Clock, LapsCollector> >
+      typedef stopwatch_runner<laps_stopwatch<Clock, LapsCollector> >
           scoped_run;
       /**
        * Useful typedef for scoped stop
        */
-      typedef stopwatch_stopper<basic_stopwatch<Clock, LapsCollector> >
+      typedef stopwatch_stopper<laps_stopwatch<Clock, LapsCollector> >
           scoped_stop;
 
     private:
@@ -438,4 +439,4 @@ namespace boost
   } // namespace chrono
 } // namespace boost
 
-#endif
+#endif // header

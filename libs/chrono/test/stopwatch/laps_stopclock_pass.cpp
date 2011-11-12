@@ -4,13 +4,19 @@
 
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono/stopwatches/laps_stopwatch.hpp>
+#include <boost/chrono/stopwatches/reporters/laps_stopclock.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
+#include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
+
+#include <boost/chrono/chrono_io.hpp>
+#include <boost/system/system_error.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 #if !defined(BOOST_NO_STATIC_ASSERT)
 #define NOTHING ""
 #endif
+
+using namespace boost::chrono;
 
 
 template <typename Stopwatch>
@@ -161,33 +167,88 @@ void check_stop_stop()
 }
 
 
-template <typename Stopwatch>
-void check_all()
-{
-  check_invariants<Stopwatch>();
-  check_default_constructor<Stopwatch>();
-#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-  check_constructor_ec<Stopwatch>();
-  check_constructor_throws<Stopwatch>();
-#endif
-  check_elapsed<Stopwatch>();
 
-  check_start_start<Stopwatch>();
-  check_dont_start_constructor<Stopwatch>();
-  check_dont_start_start<Stopwatch>();
-  check_dont_start_start_stop<Stopwatch>();
-  check_dont_start_scoped_run<Stopwatch>();
-  check_stop<Stopwatch>();
-  check_stop_stop<Stopwatch>();
+struct file_line {
+  file_line(const char* file, std::size_t line)
+  : fmt("%1%[%2%] Elapsed time:")
+  {
+    fmt % file % line;
+  }
+  ~file_line()
+  {
+    std::cout << fmt;
+  }
+  boost::format fmt;
+
+};
+
+template <typename Reporter>
+void check_file_line2()
+{
+  Reporter _("%1%\n");
+  file_line fl(__FILE__, __LINE__);
+  ex::sleep_for<typename Reporter::clock>(milliseconds(100));
+
+}
+template <typename Reporter>
+void check_file_line()
+{
+  Reporter rp("%1%[%2%] Elapsed time: %3%\n");
+  rp.format() % __FILE__ % __LINE__;
+
+  ex::sleep_for<typename Reporter::clock>(milliseconds(100));
 
 }
 
+template <typename Reporter>
+void check_report()
+{
+  Reporter sw;
+  ex::sleep_for<typename Reporter::clock>(milliseconds(100));
+  sw.report();
+}
+
+
+
+
+template <typename Clock>
+void check_all()
+{
+  typedef laps_stopclock<Clock> Reporter;
+  typedef laps_stopclock<Clock, no_memory<typename Clock::duration>, elapsed_formatter > ReporterE;
+
+  check_invariants<Reporter>();
+  check_default_constructor<Reporter>();
+#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+  check_constructor_ec<Reporter>();
+  check_constructor_throws<Reporter>();
+#endif
+  check_elapsed<Reporter>();
+
+  check_report<Reporter>();
+  check_file_line<ReporterE>();
+
+  check_start_start<Reporter>();
+  check_dont_start_constructor<Reporter>();
+  check_dont_start_start<Reporter>();
+  check_dont_start_start_stop<Reporter>();
+  check_dont_start_scoped_run<Reporter>();
+  check_stop<Reporter>();
+  check_stop_stop<Reporter>();
+
+
+}
 
 int main()
 {
-  std::cout << "cycle_count=";
-  check_all<boost::chrono::laps_stopwatch< ex::cycle_count<1500> > >();
+  typedef laps_stopclock<high_resolution_clock > Reporter;
 
+  static Reporter::formatter_type fmtr;
+
+  //Reporter _(fmtr);
+  Reporter _;
+
+  check_all<ex::cycle_count<1500> >();
 
   return boost::report_errors();
 }
