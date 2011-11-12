@@ -230,14 +230,14 @@ namespace boost
           {
             if (!std::has_facet<time_point_put<CharT> >(os.getloc()))
             {
-              if (time_point_put<CharT> ().put(os, os, tp) .failed())
+              if (time_point_put<CharT> ().put(os, os, os.fill(), tp) .failed())
               {
                 err = std::ios_base::badbit;
               }
             }
             else
             {
-              if (std::use_facet<time_point_put<CharT> >(os.getloc()) .put(os, os, tp) .failed())
+              if (std::use_facet<time_point_put<CharT> >(os.getloc()) .put(os, os, os.fill(), tp).failed())
               {
                 err = std::ios_base::badbit;
               }

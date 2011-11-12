@@ -135,12 +135,12 @@ namespace boost
           {
             if (!std::has_facet<duration_put<CharT> >(os.getloc()))
             {
-              if (duration_put<CharT> ().put(os, os, d) .failed())
+              if (duration_put<CharT> ().put(os, os, os.fill(), d) .failed())
               {
                 err = std::ios_base::badbit;
               }
             }
-            else if (std::use_facet<duration_put<CharT> >(os.getloc()) .put(os, os, d) .failed())
+            else if (std::use_facet<duration_put<CharT> >(os.getloc()) .put(os, os, os.fill(), d) .failed())
             {
               err = std::ios_base::badbit;
             }

@@ -88,24 +88,24 @@ namespace boost
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
-      iter_type put(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d, const CharT* pattern,
+      iter_type put(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d, const CharT* pattern,
           const CharT* pat_end) const
       {
         if (std::has_facet<duration_units<CharT, OutputIterator> >(ios.getloc()))
         {
           duration_units<CharT, OutputIterator> const&facet = std::use_facet<duration_units<CharT, OutputIterator> >(
               ios.getloc());
-          return put(facet, s, ios, d, pattern, pat_end);
+          return put(facet, s, ios, fill, d, pattern, pat_end);
         }
         else
         {
           duration_units_default<CharT, OutputIterator> facet;
-          return put(facet, s, ios, d, pattern, pat_end);
+          return put(facet, s, ios, fill, d, pattern, pat_end);
         }
       }
 
       template <typename Rep, typename Period>
-      iter_type put(duration_units<CharT, OutputIterator> const& units_facet, iter_type s, std::ios_base& ios,
+      iter_type put(duration_units<CharT, OutputIterator> const& units_facet, iter_type s, std::ios_base& ios, char_type fill,
           duration<Rep, Period> const& d, const CharT* pattern, const CharT* pat_end) const
       {
 
@@ -124,7 +124,7 @@ namespace boost
             {
             case 'v':
             {
-              s = put_value(s, ios, d);
+              s = put_value(s, ios, fill, d);
               break;
             }
             case 'u':
@@ -163,20 +163,20 @@ namespace boost
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
-      iter_type put(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d) const
+      iter_type put(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d) const
       {
         if (std::has_facet<duration_units<CharT, OutputIterator> >(ios.getloc()))
         {
           duration_units<CharT, OutputIterator> const&facet = std::use_facet<duration_units<CharT, OutputIterator> >(
               ios.getloc());
           std::basic_string<CharT> str = facet.get_pattern();
-          return put(facet, s, ios, d, str.data(), str.data() + str.size());
+          return put(facet, s, ios, fill, d, str.data(), str.data() + str.size());
         }
         else
         {
           duration_units_default<CharT, OutputIterator> facet;
           std::basic_string<CharT> str = facet.get_pattern();
-          return put(facet, s, ios, d, str.data(), str.data() + str.size());
+          return put(facet, s, ios, fill, d, str.data(), str.data() + str.size());
         }
       }
 
@@ -189,9 +189,9 @@ namespace boost
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
-      iter_type put_value(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d) const
+      iter_type put_value(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d) const
       {
-        return std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, ' ',
+        return std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, fill,
             static_cast<long int> (d.count()));
       }
 
