@@ -59,6 +59,13 @@ namespace boost
       }
     };
 
+    namespace detail
+    {
+      namespace /**/ {
+        xalloc_key_initializer_t<ios_base_flags<fmt_masks> > fmt_masks_xalloc_key_initializer;
+      } // namespace
+    } // namespace detail
+
     inline duration_style::type get_duration_style(std::ios_base & ios)
     {
       return fmt_masks(ios).get_duration_style();
@@ -95,6 +102,17 @@ namespace boost
       };
 
     } // detail
+    namespace detail
+    {
+      namespace /**/ {
+        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char> >  > ios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<wchar_t> >  > wios_base_data_aux_xalloc_key_initializer;
+#if BOOST_CHRONO_HAS_UNICODE_SUPPORT
+        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char16_t> >  > c16_ios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char32_t> >  > ios_base_data_aux_xalloc_key_initializer;
+#endif
+      } // namespace
+    } // namespace detail
 
     template<typename CharT>
     static inline std::basic_string<CharT> get_time_fmt(std::ios_base & ios)

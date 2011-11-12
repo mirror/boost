@@ -23,6 +23,36 @@ namespace boost
 {
   namespace chrono
   {
+    namespace detail
+    {
+
+      template<typename T>
+      struct xalloc_key_holder
+      {
+          static int value;
+          static bool initialized;
+      };
+
+      template<typename T>
+      int xalloc_key_holder<T>::value = 0;
+
+      template<typename T>
+      bool xalloc_key_holder<T>::initialized = false;
+
+      template<typename T>
+      struct xalloc_key_initializer_t
+      {
+          xalloc_key_initializer_t()
+          {
+              if (!xalloc_key_holder<T>::initialized)
+              {
+                  xalloc_key_holder<T>::value = std::ios_base::xalloc();
+                  xalloc_key_holder<T>::initialized = true;
+              }
+          }
+      };
+    }
+
 
     /**
      * @c ios_base_state_ptr is a smart pointer to a ios_base specific state.
@@ -192,8 +222,7 @@ namespace boost
 
       static inline int index()
       {
-        static const int v_ = std::ios_base::xalloc();
-        return v_;
+        return detail::xalloc_key_holder<ios_base_state_ptr<T> >::value;
       }
 
       static inline void register_once(int indx, std::ios_base& ios)
@@ -310,8 +339,7 @@ namespace boost
       }
       static inline int index()
       {
-        static const int v_ = std::ios_base::xalloc();
-        return v_;
+        return detail::xalloc_key_holder<ios_base_flags<Base> >::value;
       }
 
       std::ios_base& ios_;
