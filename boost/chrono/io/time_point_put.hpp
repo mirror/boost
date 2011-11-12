@@ -88,49 +88,66 @@ namespace boost
        *
        * @Returns An iterator pointing immediately after the last character produced.
        */
+
       template <class Clock, class Duration>
-      iter_type put(iter_type s, std::ios_base& ios, time_point<Clock, Duration> const& tp, const CharT* pattern,
+      iter_type put(iter_type i, std::ios_base& ios, time_point<Clock, Duration> const& tp, const CharT* pattern,
           const CharT* pat_end) const
       {
-        time_point_units<CharT,OutputIterator> const& units_facet = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios);
+        if (std::has_facet<time_point_units<CharT, OutputIterator> >(ios.getloc()))
+        {
+          time_point_units<CharT, OutputIterator> const &facet =
+              std::use_facet<time_point_units<CharT, OutputIterator> >(ios.getloc());
+          return put(facet, i, ios, tp, pattern, pat_end);
+        }
+        else
+        {
+          time_point_units_default<CharT, OutputIterator> facet;
+          return put(facet, i, ios, tp, pattern, pat_end);
+        }
+      }
+
+      template <class Clock, class Duration>
+      iter_type put(time_point_units<CharT, OutputIterator> const& units_facet, iter_type s, std::ios_base& ios,
+          time_point<Clock, Duration> const& tp, const CharT* pattern, const CharT* pat_end) const
+      {
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         for (; pattern != pat_end; ++pattern)
         {
-            if (ct.narrow(*pattern, 0) == '%')
+          if (ct.narrow(*pattern, 0) == '%')
+          {
+            if (++pattern == pat_end)
             {
-                if (++pattern == pat_end)
-                {
-                    *s++ = pattern[-1];
-                    break;
-                }
-                char fmt = ct.narrow(*pattern, 0);
-                switch (fmt)
-                {
-                case 'd':
-                {
-                  s = put_duration(s, ios, tp.time_since_epoch());
-                  break;
-                }
-                case 'e':
-                {
-                  s = put_epoch<Clock>(s, ios);
-                  break;
-                }
-                case 'x':
-                {
-                  std::basic_string<CharT> pat = units_facet.get_pattern();
-                  pattern = pat.data();
-                  pat_end = pattern + pat.size();
-                  break;
-                }
-                default:
-                  BOOST_ASSERT(false && "Boost::Chrono internal error.");
-                  break;
-                }
+              *s++ = pattern[-1];
+              break;
             }
-            else
-                *s++ = *pattern;
+            char fmt = ct.narrow(*pattern, 0);
+            switch (fmt)
+            {
+            case 'd':
+            {
+              s = put_duration(s, ios, tp.time_since_epoch());
+              break;
+            }
+            case 'e':
+            {
+              s = put_epoch<Clock> (units_facet, s, ios);
+              break;
+            }
+              //                case 'x':
+              //                {
+              //                  std::basic_string<CharT> pat = units_facet.get_pattern();
+              //                  pattern = pat.data();
+              //                  pat_end = pattern + pat.size();
+              //                  break;
+              //                }
+            default:
+              BOOST_ASSERT(false && "Boost::Chrono internal error.");
+              break;
+            }
+          }
+          else
+            *s++ = *pattern;
         }
         return s;
       }
@@ -148,43 +165,54 @@ namespace boost
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <class Clock, class Duration>
-      iter_type put(iter_type s, std::ios_base& ios, time_point<Clock, Duration> const& tp) const
+      iter_type put(iter_type i, std::ios_base& ios, time_point<Clock, Duration> const& tp) const
       {
-        std::basic_string<CharT> str = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios).get_pattern();
-        return put(s, ios, tp, str.data(), str.data() + str.size());
+        if (std::has_facet<time_point_units<CharT, OutputIterator> >(ios.getloc()))
+        {
+          time_point_units<CharT, OutputIterator> const &facet =
+              std::use_facet<time_point_units<CharT, OutputIterator> >(ios.getloc());
+          std::basic_string<CharT> str = facet.get_pattern();
+          return put(facet, i, ios, tp, str.data(), str.data() + str.size());
+        }
+        else
+        {
+          time_point_units_default<CharT, OutputIterator> facet;
+          std::basic_string<CharT> str = facet.get_pattern();
+          return put(facet, i, ios, tp, str.data(), str.data() + str.size());
+        }
       }
 
-//      /*
-//       *
-//       */
-//
-//      template <class Clock, class Duration>
-//      iter_type put(iter_type s, std::ios_base& ios, time_point<Clock, Duration> const& tp, const CharT* pattern,
-//          const CharT* pat_end) const
-//      {
-//        time_point_units<CharT,OutputIterator> const& units_facet = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios);
-//
-//        return s;
-//      }
+      //      /*
+      //       *
+      //       */
+      //
+      //      template <class Clock, class Duration>
+      //      iter_type put(iter_type s, std::ios_base& ios, time_point<Clock, Duration> const& tp, const CharT* pattern,
+      //          const CharT* pat_end) const
+      //      {
+      //        time_point_units<CharT,OutputIterator> const& units_facet = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios);
+      //
+      //        return s;
+      //      }
 
-//      /**
-//       *
-//       * @param s an output stream iterator
-//       * @param ios a reference to a ios_base
-//       * @param d the duration
-//       * @Effects imbue in @c ios the @c time_point_units_default facet if not already present.
-//       * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
-//       * @code
-//       *   return put(s, ios, d, str.data(), str.data() + str.size());
-//       * @codeend
-//       * @Returns An iterator pointing immediately after the last character produced.
-//       */
-//      template <class Duration>
-//      iter_type put(iter_type s, std::ios_base& ios, time_point<system_clock, Duration> const& tp) const
-//      {
-//        std::basic_string<CharT> str = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios).get_date_time_pattern();
-//        return put(s, ios, tp, str.data(), str.data() + str.size());
-//      }
+      //      /**
+      //       *
+      //       * @param s an output stream iterator
+      //       * @param ios a reference to a ios_base
+      //       * @param d the duration
+      //       * @Effects imbue in @c ios the @c time_point_units_default facet if not already present.
+      //       * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
+      //       * @code
+      //       *   return put(s, ios, d, str.data(), str.data() + str.size());
+      //       * @codeend
+      //       * @Returns An iterator pointing immediately after the last character produced.
+      //       */
+      //      template <class Duration>
+      //      iter_type put(iter_type s, std::ios_base& ios, time_point<system_clock, Duration> const& tp) const
+      //      {
+      //        std::basic_string<CharT> str = time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios).get_date_time_pattern();
+      //        return put(s, ios, tp, str.data(), str.data() + str.size());
+      //      }
 
       /**
        *
@@ -195,14 +223,18 @@ namespace boost
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
-      iter_type put_duration(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d) const
+      iter_type put_duration(iter_type i, std::ios_base& ios, duration<Rep, Period> const& d) const
       {
-        if (!std::has_facet<duration_put<CharT> >(ios.getloc()))
+        if (std::has_facet<duration_put<CharT> >(ios.getloc()))
         {
-          ios.imbue(std::locale(ios.getloc(), new duration_put<CharT>()));
+          duration_put<CharT> const &facet = std::use_facet<duration_put<CharT> >(ios.getloc());
+          return facet.put(i, ios, d);
         }
-        return std::use_facet<duration_put<CharT> >(ios.getloc())
-        .put(s, ios, d);
+        else
+        {
+          duration_put<CharT> facet;
+          return facet.put(i, ios, d);
+        }
       }
 
       /**
@@ -215,10 +247,26 @@ namespace boost
        * @Effects Calls std::use_facet<time_point_units<CharT,OutputIterator> >(ios.getloc()).put(s, ios, d).
        * @Returns An iterator pointing immediately after the last character produced.
        */
+
       template <typename Clock>
-      iter_type put_epoch(iter_type s, std::ios_base& ios) const
+      iter_type put_epoch(iter_type i, std::ios_base& is) const
       {
-        return time_point_units<CharT,OutputIterator>::imbue_if_has_not(ios).template put<Clock>(s, ios);
+        if (std::has_facet<time_point_units<CharT> >(is.getloc()))
+        {
+          time_point_units<CharT> const &facet = std::use_facet<time_point_units<CharT> >(is.getloc());
+          return put_epoch<Clock> (facet, i, is);
+        }
+        else
+        {
+          time_point_units_default<CharT> facet;
+          return put_epoch<Clock> (facet, i, is);
+        }
+      }
+
+      template <typename Clock>
+      iter_type put_epoch(time_point_units<CharT, OutputIterator> const& facet, iter_type s, std::ios_base& ios) const
+      {
+        return facet.template put<Clock> (s, ios);
       }
 
       /**

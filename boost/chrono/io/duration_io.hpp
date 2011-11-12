@@ -31,7 +31,7 @@ namespace boost
      * duration parameterized manipulator.
      */
 
-    class duration_fmt : public manip<duration_fmt>
+    class duration_fmt: public manip<duration_fmt>
     {
       duration_style::type style_;
     public:
@@ -39,7 +39,7 @@ namespace boost
       /**
        * explicit manipulator constructor from a @c duration_style
        */
-      explicit duration_fmt(duration_style::type style) BOOST_NOEXCEPT
+      explicit duration_fmt(duration_style::type style)BOOST_NOEXCEPT
       : style_(style)
       {}
 
@@ -49,6 +49,7 @@ namespace boost
       template <typename out_stream>
       void operator()(out_stream &ios) const
       //void operator()(std::ios_base &ios) const
+
       {
         set_duration_style(ios, style_);
       }
@@ -122,48 +123,51 @@ namespace boost
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d)
     {
-        typedef std::basic_string<CharT, Traits> string_type;
-        bool failed = false;
+      typedef std::basic_string<CharT, Traits> string_type;
+      bool failed = false;
+      try
+      {
+        std::ios_base::iostate err = std::ios_base::goodbit;
         try
         {
-          std::ios_base::iostate err = std::ios_base::goodbit;
-          try
+          typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
+          if (opfx)
           {
-            typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
-            if (opfx)
+            if (!std::has_facet<duration_put<CharT> >(os.getloc()))
             {
-              if (!std::has_facet<duration_put<CharT> >(os.getloc()))
-              {
-                os.imbue(std::locale(os.getloc(), new duration_put<CharT> ()));
-              }
-              if (std::use_facet<duration_put<CharT> >(os.getloc()) .put(os, os, d) .failed())
+              if (duration_put<CharT> ().put(os, os, d) .failed())
               {
                 err = std::ios_base::badbit;
               }
-              os.width(0);
             }
-          }
-          catch (...)
-          {
-            bool flag = false;
-            try
+            else if (std::use_facet<duration_put<CharT> >(os.getloc()) .put(os, os, d) .failed())
             {
-              os.setstate(std::ios_base::failbit);
+              err = std::ios_base::badbit;
             }
-            catch (std::ios_base::failure )
-            {
-              flag = true;
-            }
-            if (flag) throw;
+            os.width(0);
           }
-          if (err) os.setstate(err);
-          return os;
         }
         catch (...)
         {
-          failed = true;
+          bool flag = false;
+          try
+          {
+            os.setstate(std::ios_base::failbit);
+          }
+          catch (std::ios_base::failure )
+          {
+            flag = true;
+          }
+          if (flag) throw;
         }
-        if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
+        if (err) os.setstate(err);
+        return os;
+      }
+      catch (...)
+      {
+        failed = true;
+      }
+      if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
       return os;
     }
 
@@ -182,30 +186,33 @@ namespace boost
       try
       {
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
-        if(ipfx)
+        if (ipfx)
         {
           if (!std::has_facet<duration_get<CharT> >(is.getloc()))
           {
-            is.imbue(std::locale(is.getloc(), new duration_get<CharT>()));
+            duration_get<CharT> ().get(is, std::istreambuf_iterator<CharT, Traits>(), is, err, d);
           }
-          std::use_facet<duration_get<CharT> >(is.getloc())
-          .get(is, std::istreambuf_iterator<CharT,Traits>() ,is, err, d);
+          else
+          {
+            std::use_facet<duration_get<CharT> >(is.getloc()) .get(is, std::istreambuf_iterator<CharT, Traits>(), is,
+                err, d);
+          }
         }
       }
-      catch(...)
+      catch (...)
       {
         bool flag = false;
         try
         {
           is.setstate(std::ios_base::failbit);
         }
-        catch( std::ios_base::failure )
+        catch (std::ios_base::failure )
         {
-          flag= true;
+          flag = true;
         }
-        if ( flag ) throw;
+        if (flag) throw;
       }
-      if ( err ) is.setstate(err);
+      if (err) is.setstate(err);
       return is;
     }
 

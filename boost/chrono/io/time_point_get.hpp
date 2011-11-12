@@ -112,106 +112,126 @@ namespace boost
        *
        * Returns: s
        */
+
       template <class Clock, class Duration>
-      iter_type get(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err,
+      iter_type get(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
           time_point<Clock, Duration> &tp, const char_type *pattern, const char_type *pat_end) const
       {
-        std::cerr << __FILE__ <<":"<< __LINE__ <<  " err "<< err << std::endl;
+        if (std::has_facet<time_point_units<CharT> >(is.getloc()))
+        {
+          time_point_units<CharT> const &facet = std::use_facet<time_point_units<CharT> >(is.getloc());
+          return get(facet, i, e, is, err, tp, pattern, pat_end);
+        }
+        else
+        {
+          time_point_units_default<CharT> facet;
+          return get(facet, i, e, is, err, tp, pattern, pat_end);
+        }
+      }
+
+      template <class Clock, class Duration>
+      iter_type get(time_point_units<CharT> const &facet, iter_type s, iter_type end, std::ios_base& ios,
+          std::ios_base::iostate& err, time_point<Clock, Duration> &tp, const char_type *pattern,
+          const char_type *pat_end) const
+      {
 
         Duration d;
-        bool duration_found=false, epoch_found=false, loc_found=false;
+        bool duration_found = false, epoch_found = false, loc_found = false;
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         err = std::ios_base::goodbit;
         while (pattern != pat_end && err == std::ios_base::goodbit)
         {
-          std::cerr << __FILE__ <<":"<< __LINE__ <<  " err "<< err << std::endl;
-            if (s == end)
+          std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+          if (s == end)
+          {
+            err |= std::ios_base::eofbit;
+            break;
+          }
+          if (ct.narrow(*pattern, 0) == '%')
+          {
+            if (++pattern == pat_end)
             {
-                err |= std::ios_base::eofbit;
-                break;
+              err |= std::ios_base::failbit;
+              return s;
             }
-            if (ct.narrow(*pattern, 0) == '%')
+            char cmd = ct.narrow(*pattern, 0);
+            switch (cmd)
             {
-                if (++pattern == pat_end)
-                {
-                    err |= std::ios_base::failbit;
-                    return s;
-                }
-                char cmd = ct.narrow(*pattern, 0);
-                switch (cmd)
-                {
-                case 'd':
-                {
-                  if (duration_found || loc_found) {
-                    err |= std::ios_base::failbit;
-                    return s;
-                  }
-                  duration_found=true;
-                  s = get_duration(s, end, ios, err,  d);
-                  std::cerr << __FILE__ <<":"<< __LINE__ <<  " err "<< err << std::endl;
-                  if ( err & (std::ios_base::badbit |std::ios_base::failbit) )
-                  {
-                    return s;
-                  }
-                  break;
-                }
-                case 'e':
-                {
-                  if (epoch_found || loc_found) {
-                    err |= std::ios_base::failbit;
-                    return s;
-                  }
-                  epoch_found=true;
-                  s = get_epoch<Clock>(s, end, ios, err);
-                  std::cerr << __FILE__ <<":"<< __LINE__ <<  " err "<< err << std::endl;
-                  if ( err & (std::ios_base::badbit |std::ios_base::failbit) )
-                  {
-                    return s;
-                  }
-                  break;
-                }
-                case 'x':
-                {
-                  if (duration_found || epoch_found || loc_found) {
-                    err |= std::ios_base::failbit;
-                    return s;
-                  }
-                  loc_found=true;
-                  std::basic_string<CharT> pat = time_point_units<CharT>::imbue_if_has_not(ios).get_pattern();
-                  if (pattern+1 != pat_end)
-                  pat.append(pattern+1, pat_end);
-                  pattern = pat.data();
-                  pat_end = pattern + pat.size();
-                  break;
-                }
-                default:
-                  BOOST_ASSERT(false && "Boost::Chrono internal error.");
-                  break;
-                }
-
-                ++pattern;
-            }
-            else if (ct.is(std::ctype_base::space, *pattern))
+            case 'd':
             {
-                for (++pattern; pattern != pat_end && ct.is(std::ctype_base::space, *pattern); ++pattern)
-                    ;
-                for (        ;    s != end    && ct.is(std::ctype_base::space, *s);    ++s)
-                    ;
-            }
-            else if (ct.toupper(*s) == ct.toupper(*pattern))
-            {
-                ++s;
-                ++pattern;
-            }
-            else {
+              if (duration_found || loc_found)
+              {
                 err |= std::ios_base::failbit;
+                return s;
+              }
+              duration_found = true;
+              s = get_duration(s, end, ios, err, d);
+              std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+              if (err & (std::ios_base::badbit | std::ios_base::failbit))
+              {
+                return s;
+              }
+              break;
             }
+            case 'e':
+            {
+              if (epoch_found || loc_found)
+              {
+                err |= std::ios_base::failbit;
+                return s;
+              }
+              epoch_found = true;
+              s = get_epoch<Clock> (facet, s, end, ios, err);
+              std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+              if (err & (std::ios_base::badbit | std::ios_base::failbit))
+              {
+                return s;
+              }
+              break;
+            }
+              //                case 'x':
+              //                {
+              //                  if (duration_found || epoch_found || loc_found) {
+              //                    err |= std::ios_base::failbit;
+              //                    return s;
+              //                  }
+              //                  loc_found=true;
+              //                  std::basic_string<CharT> pat = time_point_units<CharT>::imbue_if_has_not(ios).get_pattern();
+              //                  if (pattern+1 != pat_end)
+              //                  pat.append(pattern+1, pat_end);
+              //                  pattern = pat.data();
+              //                  pat_end = pattern + pat.size();
+              //                  break;
+              //                }
+            default:
+              BOOST_ASSERT(false && "Boost::Chrono internal error.");
+              break;
+            }
+
+            ++pattern;
+          }
+          else if (ct.is(std::ctype_base::space, *pattern))
+          {
+            for (++pattern; pattern != pat_end && ct.is(std::ctype_base::space, *pattern); ++pattern)
+              ;
+            for (; s != end && ct.is(std::ctype_base::space, *s); ++s)
+              ;
+          }
+          else if (ct.toupper(*s) == ct.toupper(*pattern))
+          {
+            ++s;
+            ++pattern;
+          }
+          else
+          {
+            err |= std::ios_base::failbit;
+          }
         }
 
         // Success!  Store it.
-        tp = time_point<Clock, Duration>(d);
-        std::cerr << __FILE__ <<":"<< __LINE__ <<  " err "<< err << std::endl;
+        tp = time_point<Clock, Duration> (d);
+        std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
 
         return s;
       }
@@ -229,11 +249,21 @@ namespace boost
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
        */
       template <class Clock, class Duration>
-      iter_type get(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err,
+      iter_type get(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
           time_point<Clock, Duration> &tp) const
       {
-        std::basic_string < CharT > str = time_point_units<CharT>::imbue_if_has_not(ios).get_pattern();
-        return get(s, end, ios, err, tp, str.data(), str.data() + str.size());
+        if (std::has_facet<time_point_units<CharT> >(is.getloc()))
+        {
+          time_point_units<CharT> const &facet = std::use_facet<time_point_units<CharT> >(is.getloc());
+          std::basic_string<CharT> str = facet.get_pattern();
+          return get(facet, i, e, is, err, tp, str.data(), str.data() + str.size());
+        }
+        else
+        {
+          time_point_units_default<CharT> facet;
+          std::basic_string<CharT> str = facet.get_pattern();
+          return get(facet, i, e, is, err, tp, str.data(), str.data() + str.size());
+        }
       }
 
       /**
@@ -244,14 +274,26 @@ namespace boost
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
        */
       template <typename Rep, typename Period>
-      iter_type get_duration(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err, duration<Rep, Period>& d) const
+      iter_type get_duration(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
+          duration<Rep, Period>& d) const
       {
-        if (!std::has_facet<duration_get<CharT> >(ios.getloc()))
+        if (std::has_facet<duration_get<CharT> >(is.getloc()))
         {
-          ios.imbue(std::locale(ios.getloc(), new duration_get<CharT>()));
+          duration_get<CharT> const &facet = std::use_facet<duration_get<CharT> >(is.getloc());
+          return get_duration(facet, i, e, is, err, d);
         }
-        return std::use_facet<duration_get<CharT> >(ios.getloc())
-        .get(s, end, ios, err, d);
+        else
+        {
+          duration_get<CharT> facet;
+          return get_duration(facet, i, e, is, err, d);
+        }
+      }
+
+      template <typename Rep, typename Period>
+      iter_type get_duration(duration_get<CharT> const& facet, iter_type s, iter_type end, std::ios_base& ios,
+          std::ios_base::iostate& err, duration<Rep, Period>& d) const
+      {
+        return facet.get(s, end, ios, err, d);
       }
 
       /**
@@ -266,21 +308,34 @@ namespace boost
       template <class Clock>
       iter_type get_epoch(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err) const
       {
-        time_point_units<CharT> const &facet = time_point_units<CharT>::imbue_if_has_not(is);
+        if (std::has_facet<time_point_units<CharT> >(is.getloc()))
+        {
+          time_point_units<CharT> const &facet = std::use_facet<time_point_units<CharT> >(is.getloc());
+          return get_epoch(facet, i, e, is, err);
+        }
+        else
+        {
+          time_point_units_default<CharT> facet;
+          return get_epoch(facet, i, e, is, err);
+        }
+      }
 
-        const std::basic_string<CharT> units = facet.get_epoch<Clock>();
+      template <class Clock>
+      iter_type get_epoch(time_point_units<CharT> const &facet, iter_type i, iter_type e, std::ios_base&,
+          std::ios_base::iostate& err) const
+      {
+        const std::basic_string<CharT> units = facet.get_epoch<Clock> ();
         err = std::ios_base::goodbit;
-        std::ptrdiff_t k =
-            chrono_detail::scan_keyword(i, e, &units, &units + 1,
-            //~ std::use_facet<std::ctype<CharT> >(ios.getloc()),
+        std::ptrdiff_t k = chrono_detail::scan_keyword(i, e, &units, &units + 1,
+        //~ std::use_facet<std::ctype<CharT> >(ios.getloc()),
             err) - &units;
-        std::cerr << __FILE__ <<":"<< __LINE__ <<  " err "<< err << std::endl;
+        std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
         if (k == 1)
         {
           err |= std::ios_base::failbit;
           return i;
         }
-        std::cerr << __FILE__ <<":"<< __LINE__ <<  " err "<< err << std::endl;
+        std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
         return i;
       }
 

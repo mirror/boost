@@ -46,12 +46,12 @@ namespace boost
       };
 
       template <typename intermediate_type>
-      typename enable_if<is_integral<intermediate_type>, bool>::type
-      reduce(intermediate_type& r, unsigned long long& den, std::ios_base::iostate& err)
+      typename enable_if<is_integral<intermediate_type> , bool>::type reduce(intermediate_type& r,
+          unsigned long long& den, std::ios_base::iostate& err)
       {
         typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
 
-          // Reduce r * num / den
+        // Reduce r * num / den
         common_type_t t = math::gcd<common_type_t>(common_type_t(r), common_type_t(den));
         r /= t;
         den /= t;
@@ -64,8 +64,8 @@ namespace boost
         return true;
       }
       template <typename intermediate_type>
-      typename disable_if<is_integral<intermediate_type>, bool>::type
-      reduce(intermediate_type& , unsigned long long& , std::ios_base::iostate& )
+      typename disable_if<is_integral<intermediate_type> , bool>::type reduce(intermediate_type&, unsigned long long&,
+          std::ios_base::iostate&)
       {
         return true;
       }
@@ -164,99 +164,120 @@ namespace boost
       iter_type get(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err,
           duration<Rep, Period> &d, const char_type *pattern, const char_type *pat_end) const
       {
+        if (std::has_facet<duration_units<CharT> >(ios.getloc()))
+        {
+          duration_units<CharT> const&facet = std::use_facet<duration_units<CharT> >(ios.getloc());
+          return get(facet, s, end, ios, err, d, pattern, pat_end);
+        }
+        else
+        {
+          duration_units_default<CharT> facet;
+          return get(facet, s, end, ios, err, d, pattern, pat_end);
+        }
+      }
+
+      template <typename Rep, typename Period>
+      iter_type get(duration_units<CharT> const&facet, iter_type s, iter_type end, std::ios_base& ios,
+          std::ios_base::iostate& err, duration<Rep, Period> &d, const char_type *pattern, const char_type *pat_end) const
+      {
 
         typedef typename detail::duration_io_intermediate<Rep>::type intermediate_type;
         intermediate_type r;
         detail::rt_ratio rt;
-        bool value_found=false, unit_found=false, loc_found=false;
+        bool value_found = false, unit_found = false;
+        //bool loc_found=false;
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         err = std::ios_base::goodbit;
         while (pattern != pat_end && err == std::ios_base::goodbit)
         {
-            if (s == end)
+          if (s == end)
+          {
+            err |= std::ios_base::eofbit;
+            break;
+          }
+          if (ct.narrow(*pattern, 0) == '%')
+          {
+            if (++pattern == pat_end)
             {
-                err |= std::ios_base::eofbit;
-                break;
+              err |= std::ios_base::failbit;
+              return s;
             }
-            if (ct.narrow(*pattern, 0) == '%')
+            char cmd = ct.narrow(*pattern, 0);
+            switch (cmd)
             {
-                if (++pattern == pat_end)
-                {
-                    err |= std::ios_base::failbit;
-                    return s;
-                }
-                char cmd = ct.narrow(*pattern, 0);
-                switch (cmd)
-                {
-                case 'v':
-                {
-                  if (value_found) {
-                    err |= std::ios_base::failbit;
-                    return s;
-                  }
-                  if (value_found) {
-                    err |= std::ios_base::failbit;
-                    return s;
-                  }
-                  value_found=true;
-                  s=get_value(s, end, ios, err, r);
-                  if ( err & (std::ios_base::badbit |std::ios_base::failbit) )
-                  {
-                    return s;
-                  }
-                  break;
-                }
-                case 'u':
-                {
-                  if (unit_found) {
-                    err |= std::ios_base::failbit;
-                    return s;
-                  }
-                  unit_found=true;
-                  s = get_unit(s, end, ios, err, rt);
-                  if ( err & (std::ios_base::badbit |std::ios_base::failbit) )
-                  {
-                    return s;
-                  }
-                  break;
-                }
-                case 'x':
-                {
-                  if (unit_found || value_found || loc_found) {
-                    err |= std::ios_base::failbit;
-                    return s;
-                  }
-                  loc_found=true;
-                  string_type pat = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
-                  if (pattern+1 != pat_end)
-                  pat.append(pattern+1, pat_end);
-                  pattern = pat.data();
-                  pat_end = pattern + pat.size();
-                  break;
-                }
-                default:
-                  BOOST_ASSERT(false && "Boost::Chrono internal error.");
-                  break;
-                }
-
-                ++pattern;
-            }
-            else if (ct.is(std::ctype_base::space, *pattern))
+            case 'v':
             {
-                for (++pattern; pattern != pat_end && ct.is(std::ctype_base::space, *pattern); ++pattern)
-                    ;
-                for (        ;    s != end    && ct.is(std::ctype_base::space, *s);    ++s)
-                    ;
-            }
-            else if (ct.toupper(*s) == ct.toupper(*pattern))
-            {
-                ++s;
-                ++pattern;
-            }
-            else {
+              if (value_found)
+              {
                 err |= std::ios_base::failbit;
+                return s;
+              }
+              if (value_found)
+              {
+                err |= std::ios_base::failbit;
+                return s;
+              }
+              value_found = true;
+              s = get_value(s, end, ios, err, r);
+              if (err & (std::ios_base::badbit | std::ios_base::failbit))
+              {
+                return s;
+              }
+              break;
             }
+            case 'u':
+            {
+              if (unit_found)
+              {
+                err |= std::ios_base::failbit;
+                return s;
+              }
+              unit_found = true;
+              s = get_unit(facet, s, end, ios, err, rt);
+              if (err & (std::ios_base::badbit | std::ios_base::failbit))
+              {
+                return s;
+              }
+              break;
+            }
+              //                case 'x':
+              //                {
+              //                  if (unit_found || value_found || loc_found) {
+              //                    err |= std::ios_base::failbit;
+              //                    return s;
+              //                  }
+              //                  loc_found=true;
+              //                  string_type pat = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
+              //                  if (pattern+1 != pat_end)
+              //                  pat.append(pattern+1, pat_end);
+              //                  pattern = pat.data();
+              //                  pat_end = pattern + pat.size();
+              //                  break;
+              //                }
+            default:
+              BOOST_ASSERT(false && "Boost::Chrono internal error.");
+              break;
+            }
+
+            ++pattern;
+          }
+          else if (ct.is(std::ctype_base::space, *pattern))
+          {
+            for (++pattern; pattern != pat_end && ct.is(std::ctype_base::space, *pattern); ++pattern)
+              ;
+            for (; s != end && ct.is(std::ctype_base::space, *s); ++s)
+              ;
+          }
+          else if (ct.toupper(*s) == ct.toupper(*pattern))
+          {
+            ++s;
+            ++pattern;
+          }
+          else
+          {
+            err |= std::ios_base::failbit;
+          }
 
         }
 
@@ -271,8 +292,8 @@ namespace boost
         den /= gcd_d1_d2;
         unsigned long long n2 = Period::num / gcd_n1_n2;
         unsigned long long d2 = Period::den / gcd_d1_d2;
-        if (num > (std::numeric_limits<unsigned long long>::max)() / d2 || den > (std::numeric_limits<
-            unsigned long long>::max)() / n2)
+        if (num > (std::numeric_limits<unsigned long long>::max)() / d2 || den
+            > (std::numeric_limits<unsigned long long>::max)() / n2)
         {
           // (num/den) / Period overflows
           err |= std::ios_base::failbit;
@@ -284,11 +305,10 @@ namespace boost
         typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
 
         // num / den is now factor to multiply by r
-        if (!detail::reduce(r, den, err))
-          return s;
+        if (!detail::reduce(r, den, err)) return s;
 
         //if (r > ( (duration_values<common_type_t>::max)() / num))
-        if (chrono::detail::gt(r,((duration_values<common_type_t>::max)() / num)))
+        if (chrono::detail::gt(r, ( (duration_values<common_type_t>::max)() / num)))
         //if (common_type_t(r) > ( (duration_values<common_type_t>::max)() / num))
         {
           // Conversion to Period overflowed
@@ -321,8 +341,7 @@ namespace boost
        * @param ios a reference to a ios_base
        * @param err the ios_base state
        * @param d the duration
-       * @Effects imbue in @c ios the @c duration_units_default facet if not already present.
-       * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
+       * Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
        * @code
        *   return get(s, end, ios, err, ios, d, str.data(), str.data() + str.size());
        * @codeend
@@ -332,8 +351,19 @@ namespace boost
       iter_type get(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err,
           duration<Rep, Period> & d) const
       {
-        std::basic_string < CharT > str = duration_units<CharT>::imbue_if_has_not(ios).get_pattern();
-        return get(s, end, ios, err, d, str.data(), str.data() + str.size());
+        if (std::has_facet<duration_units<CharT> >(ios.getloc()))
+        {
+          duration_units<CharT> const&facet = std::use_facet<duration_units<CharT> >(ios.getloc());
+          std::basic_string<CharT> str = facet.get_pattern();
+          return get(facet, s, end, ios, err, d, str.data(), str.data() + str.size());
+        }
+        else
+        {
+          duration_units_default<CharT> facet;
+          std::basic_string<CharT> str = facet.get_pattern();
+          return get(facet, s, end, ios, err, d, str.data(), str.data() + str.size());
+        }
+
       }
 
       /**
@@ -351,8 +381,6 @@ namespace boost
         return std::use_facet<std::num_get<CharT, iter_type> >(ios.getloc()).get(s, end, ios, err, r);
       }
 
-
-
       /**
        *
        * @param s start input stream iterator
@@ -362,22 +390,34 @@ namespace boost
        * @param rt a reference to the duration run-time ratio.
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
        */
-      iter_type get_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
-          detail::rt_ratio &rt) const
+      iter_type get_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err, detail::rt_ratio &rt) const
       {
-        duration_units<CharT> const &facet = duration_units<CharT>::imbue_if_has_not(is);
+        if (std::has_facet<duration_units<CharT> >(is.getloc()))
+        {
+          return get_unit(std::use_facet<duration_units<CharT> >(is.getloc()), i, e, is, err, rt);
+        }
+        else
+        {
+          duration_units_default<CharT> facet;
+          return get_unit(facet, i, e, is, err, rt);
+        }
+      }
+
+      iter_type get_unit(duration_units<CharT> const &facet, iter_type i, iter_type e, std::ios_base& is,
+          std::ios_base::iostate& err, detail::rt_ratio &rt) const
+      {
 
         if (*i == '[')
         {
           // parse [N/D]s or [N/D]seconds format
           ++i;
-          i=std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, rt.num);
-          if ((err & std::ios_base::failbit) != 0)
+          i = std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, rt.num);
+          if ( (err & std::ios_base::failbit) != 0)
           {
             return i;
           }
 
-          if (i==e)
+          if (i == e)
           {
             err |= std::ios_base::failbit;
             return i;
@@ -388,12 +428,12 @@ namespace boost
             err |= std::ios_base::failbit;
             return i;
           }
-          i=std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, rt.den);
-          if ((err & std::ios_base::failbit) != 0)
+          i = std::use_facet<std::num_get<CharT, iter_type> >(is.getloc()).get(i, e, is, err, rt.den);
+          if ( (err & std::ios_base::failbit) != 0)
           {
             return i;
           }
-          if (i==e)
+          if (i == e)
           {
             err |= std::ios_base::failbit;
             return i;
@@ -404,22 +444,19 @@ namespace boost
             return i;
           }
           ++i;
-          if (i==e)
+          if (i == e)
           {
             err |= std::ios_base::failbit;
             return i;
           }
           const string_type units[] =
-          {
-              facet.template get_plural_form<ratio<1> >(duration_style::prefix, 1),
-              facet.template get_plural_form<ratio<1> >(duration_style::prefix, 0),
-              facet.template get_plural_form<ratio<1> >(duration_style::symbol, 0)
-          };
+          { facet.template get_plural_form<ratio<1> > (duration_style::prefix, 1), facet.template get_plural_form<
+              ratio<1> > (duration_style::prefix, 0), facet.template get_plural_form<ratio<1> > (
+              duration_style::symbol, 0) };
           // FIXME is this necessary?????
           err = std::ios_base::goodbit;
-          const string_type* k = chrono_detail::scan_keyword(i, e, units,
-              units + sizeof (units) / sizeof (units[0]),
-              //~ std::use_facet<std::ctype<CharT> >(loc),
+          const string_type* k = chrono_detail::scan_keyword(i, e, units, units + sizeof (units) / sizeof (units[0]),
+          //~ std::use_facet<std::ctype<CharT> >(loc),
               err);
           switch ( (k - units) / 3)
           {
@@ -432,7 +469,7 @@ namespace boost
         }
         else
         {
-          return do_get_prefix_unit(i, e, is, err, rt);
+          return do_get_prefix_unit(facet, i, e, is, err, rt);
         }
 
         return i;
@@ -452,6 +489,20 @@ namespace boost
 
     protected:
 
+      virtual iter_type do_get_prefix_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
+          detail::rt_ratio &rt) const
+      {
+        if (std::has_facet<duration_units<CharT> >(is.getloc()))
+        {
+          return do_get_prefix_unit(std::use_facet<duration_units<CharT> >(is.getloc()), i, e, is, err, rt);
+        }
+        else
+        {
+          duration_units_default<CharT> facet;
+          return do_get_prefix_unit(facet, i, e, is, err, rt);
+        }
+      }
+
       /**
        * Extracts the run-time ratio associated to the duration when it is given in prefix form.
        *
@@ -464,18 +515,14 @@ namespace boost
        * @param rt a reference to the duration run-time ratio.
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name.
        */
-      virtual iter_type do_get_prefix_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
-          detail::rt_ratio &rt) const
+      virtual iter_type do_get_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
+          std::ios_base&, std::ios_base::iostate& err, detail::rt_ratio &rt) const
       {
-        std::cerr << __FILE__ << ":" << __LINE__ << " " << std::endl;
-        duration_units<CharT> const &facet = duration_units<CharT>::imbue_if_has_not(is);
-
-
         // parse SI name, short or long
-        std::size_t pfs = facet.get_plural_forms()+1;
+        std::size_t pfs = facet.get_plural_forms() + 1;
 
         // scoped_ptr ???
-        string_type* units= new string_type[19*pfs]();
+        string_type* units = new string_type[19 * pfs]();
         string_type* it = units;
         it = facet.fill_units(it, atto());
         it = facet.fill_units(it, femto());
@@ -493,23 +540,22 @@ namespace boost
         it = facet.fill_units(it, tera());
         it = facet.fill_units(it, peta());
         it = facet.fill_units(it, exa());
-        it = facet.fill_units(it, ratio<1>());
-        it = facet.fill_units(it, ratio<60>());
-        it = facet.fill_units(it, ratio<3600>());
+        it = facet.fill_units(it, ratio<1> ());
+        it = facet.fill_units(it, ratio<60> ());
+        it = facet.fill_units(it, ratio<3600> ());
 
-        string_type* units_end=  units +19*pfs;
+        string_type* units_end = units + 19 * pfs;
 
         err = std::ios_base::goodbit;
         std::cerr << __FILE__ << ":" << __LINE__ << " " << std::endl;
-        const string_type* k = chrono_detail::scan_keyword(i, e, units,
-            units_end,
-            //~ std::use_facet<std::ctype<CharT> >(loc),
+        const string_type* k = chrono_detail::scan_keyword(i, e, units, units_end,
+        //~ std::use_facet<std::ctype<CharT> >(loc),
             err);
         std::cerr << __FILE__ << ":" << __LINE__ << " err" << err << std::endl;
 
-        std::size_t index =  (k - units) / pfs;
-        delete []units;
-        switch ( index )
+        std::size_t index = (k - units) / pfs;
+        delete[] units;
+        switch (index)
         {
         case 0:
           rt = detail::rt_ratio(atto());
@@ -560,13 +606,13 @@ namespace boost
           rt = detail::rt_ratio(exa());
           break;
         case 16:
-          rt = detail::rt_ratio(ratio<1>());
+          rt = detail::rt_ratio(ratio<1> ());
           break;
         case 17:
-          rt = detail::rt_ratio(ratio<60>());
+          rt = detail::rt_ratio(ratio<60> ());
           break;
         case 18:
-          rt = detail::rt_ratio(ratio<3600>());
+          rt = detail::rt_ratio(ratio<3600> ());
           break;
         default:
           err = std::ios_base::failbit;
@@ -585,7 +631,6 @@ namespace boost
      */
     template <class CharT, class InputIterator>
     std::locale::id duration_get<CharT, InputIterator>::id;
-
 
   } // chrono
 }
