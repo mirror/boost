@@ -403,6 +403,11 @@ namespace boost
         }
       }
 
+//      iter_type get_unit(duration_units<CharT> const &facet, iter_type i, iter_type e, std::ios_base& is,
+//          std::ios_base::iostate& err, detail::rt_ratio &rt) const
+//      {
+//      }
+
       iter_type get_unit(duration_units<CharT> const &facet, iter_type i, iter_type e, std::ios_base& is,
           std::ios_base::iostate& err, detail::rt_ratio &rt) const
       {
@@ -449,30 +454,14 @@ namespace boost
             err |= std::ios_base::failbit;
             return i;
           }
-          const string_type units[] =
-          { facet.template get_plural_form<ratio<1> > (duration_style::prefix, 1), facet.template get_plural_form<
-              ratio<1> > (duration_style::prefix, 0), facet.template get_plural_form<ratio<1> > (
-              duration_style::symbol, 0) };
-          // FIXME is this necessary?????
-          err = std::ios_base::goodbit;
-          const string_type* k = chrono_detail::scan_keyword(i, e, units, units + sizeof (units) / sizeof (units[0]),
-          //~ std::use_facet<std::ctype<CharT> >(loc),
-              err);
-          switch ( (k - units) / 3)
-          {
-          case 0:
-            break;
-          default:
-            err |= std::ios_base::failbit;
-            return i;
-          }
+          return do_get_n_d_prefix_unit(facet, i, e, is, err);
         }
         else
         {
           return do_get_prefix_unit(facet, i, e, is, err, rt);
         }
 
-        return i;
+        //return i;
       }
 
       /**
@@ -489,18 +478,32 @@ namespace boost
 
     protected:
 
-      virtual iter_type do_get_prefix_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
-          detail::rt_ratio &rt) const
+      virtual iter_type do_get_n_d_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
+          std::ios_base&, std::ios_base::iostate& err) const
       {
-        if (std::has_facet<duration_units<CharT> >(is.getloc()))
+        // parse SI name, short or long
+        std::size_t pfs = facet.get_plural_forms() + 1;
+
+        // scoped_ptr ???
+        string_type* units = new string_type[pfs]();
+        string_type* it = units;
+        it = facet.fill_units(it, ratio<1>());
+        string_type* units_end = units + pfs;
+
+        err = std::ios_base::goodbit;
+        const string_type* k = chrono_detail::scan_keyword(i, e, units, units_end,
+        //~ std::use_facet<std::ctype<CharT> >(loc),
+            err);
+        switch ( (k - units) / 3)
         {
-          return do_get_prefix_unit(std::use_facet<duration_units<CharT> >(is.getloc()), i, e, is, err, rt);
+        case 0:
+          break;
+        default:
+          err |= std::ios_base::failbit;
+          std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
+          return i;
         }
-        else
-        {
-          duration_units_default<CharT> facet;
-          return do_get_prefix_unit(facet, i, e, is, err, rt);
-        }
+        return i;
       }
 
       /**
@@ -547,11 +550,9 @@ namespace boost
         string_type* units_end = units + 19 * pfs;
 
         err = std::ios_base::goodbit;
-        std::cerr << __FILE__ << ":" << __LINE__ << " " << std::endl;
         const string_type* k = chrono_detail::scan_keyword(i, e, units, units_end,
         //~ std::use_facet<std::ctype<CharT> >(loc),
             err);
-        std::cerr << __FILE__ << ":" << __LINE__ << " err" << err << std::endl;
 
         std::size_t index = (k - units) / pfs;
         delete[] units;
@@ -616,11 +617,9 @@ namespace boost
           break;
         default:
           err = std::ios_base::failbit;
-          std::cout << __FILE__ << ":" << __LINE__ << std::endl;
+          std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
           return i;
         }
-        std::cerr << __FILE__ << ":" << __LINE__ << " " << std::endl;
-
         return i;
 
       }
