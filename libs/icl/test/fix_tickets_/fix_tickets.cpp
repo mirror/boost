@@ -65,9 +65,9 @@ BOOST_AUTO_TEST_CASE(ticket_6095_Marvin_Sielenkemper_isEmptyTest)
 
     Value const max(Limits::max());
 
-	Interval::interval_type piff = Interval::open(max,     max);
+    Interval::interval_type piff = Interval::open(max,     max);
 
-	BOOST_CHECK(!icl::is_empty(Interval::open(max - 2, max)));
+    BOOST_CHECK(!icl::is_empty(Interval::open(max - 2, max)));
     BOOST_CHECK( icl::is_empty(Interval::open(max - 1, max)));
     BOOST_CHECK( icl::is_empty(Interval::open(max,     max)));
 }
