@@ -108,8 +108,8 @@ namespace boost
         xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char> >  > ios_base_data_aux_xalloc_key_initializer;
         xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<wchar_t> >  > wios_base_data_aux_xalloc_key_initializer;
 #if BOOST_CHRONO_HAS_UNICODE_SUPPORT
-        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char16_t> >  > c16_ios_base_data_aux_xalloc_key_initializer;
-        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char32_t> >  > ios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char16_t> >  > u16ios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char32_t> >  > u32ios_base_data_aux_xalloc_key_initializer;
 #endif
       } // namespace
     } // namespace detail

@@ -20,4 +20,7 @@
 #else
 #include <boost/chrono/io_v1/chrono_io.hpp>
 #endif
+
+#include <boost/chrono/io/utility/to_string.hpp>
+
 #endif  // BOOST_CHRONO_CHRONO_IO_HPP
