@@ -257,7 +257,7 @@ Boost 1.46.0:
 * Allow import, include and xinclude in conditional phrases. Will
   allow more block elements in a future version.
 * Rearrange the structure of the grammar.
-* Use filesystem 3. Remove cygwin support.
+* Use filesystem 3. Remove cygwin 1.5 support.
 
 Boost 1.46.1:
 
