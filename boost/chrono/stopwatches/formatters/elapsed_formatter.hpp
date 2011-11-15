@@ -1,4 +1,4 @@
-//  boost/chrono/stopwatches/elapsed_formatter.hpp  ------------------------------------------------------------//
+//  boost/chrono/stopwatches/formatters/elapsed_formatter.hpp  ------------------------------------------------------------//
 //  Copyright 2011 Vicente J. Botet Escriba
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
@@ -80,6 +80,7 @@ namespace boost
         if (d < duration_t::zero())
           return;
 
+        duration_style_io_saver dsios(this->os_);
         this->os_ << static_cast<format_type&>(*this)
             % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_), boost::chrono::duration<
                     double, Ratio>(d))

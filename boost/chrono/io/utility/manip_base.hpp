@@ -10,8 +10,7 @@
 #ifndef BOOST_CHRONO_UTILITY_MANIP_BASE_PTR_HPP
 #define BOOST_CHRONO_UTILITY_MANIP_BASE_PTR_HPP
 
-#include <locale>
-#include <boost/assert.hpp>
+#include <ios>
 
 /**
  *
@@ -59,8 +58,8 @@ namespace boost
        * @param ios the io stream or ios_base.
        * @Effects calls to the manipulator final functor.
        */
-      template <typename out_stream>
-      void operator()(out_stream &ios) const
+      //template <typename out_stream>
+      void operator()(std::ios_base &ios) const
       {
         (*static_cast<const Final *> (this))(ios);
       }

@@ -55,10 +55,10 @@ namespace boost
 
 
     /**
-     * @c ios_base_state_ptr is a smart pointer to a ios_base specific state.
+     * @c ios_state_ptr is a smart pointer to a ios_base specific state.
      */
     template<typename T>
-    class ios_base_state_ptr
+    class ios_state_ptr
     {
     public:
       /**
@@ -68,13 +68,13 @@ namespace boost
       /**
        * Explicit constructor.
        * @param ios the ios
-       * @Effects Constructs a @c ios_base_state_ptr by storing the associated @c ios.
+       * @Effects Constructs a @c ios_state_ptr by storing the associated @c ios.
        */
-      explicit ios_base_state_ptr(std::ios_base& ios) :
+      explicit ios_state_ptr(std::ios_base& ios) :
         ios_(ios)
       {
       }
-      ~ios_base_state_ptr()
+      ~ios_state_ptr()
       {
       }
 
@@ -222,7 +222,7 @@ namespace boost
 
       static inline int index()
       {
-        return detail::xalloc_key_holder<ios_base_state_ptr<T> >::value;
+        return detail::xalloc_key_holder<ios_state_ptr<T> >::value;
       }
 
       static inline void register_once(int indx, std::ios_base& ios)
@@ -241,24 +241,24 @@ namespace boost
     };
 
     /**
-     * @c ios_base_state is a non null variant of @c ios_base_state_ptr.
+     * @c ios_state_not_null_ptr is a non null variant of @c ios_state_ptr.
      * @tparm T
      * @Requires Must be DefaultConstructible and HeapAllocatable
      */
     template<typename T>
-    class ios_base_state : public ios_base_state_ptr<T>
+    class ios_state_not_null_ptr : public ios_state_ptr<T>
     {
-      typedef ios_base_state_ptr<T> base_type;
+      typedef ios_state_ptr<T> base_type;
     public:
-      explicit ios_base_state(std::ios_base& ios) :
-      ios_base_state_ptr<T>(ios)
+      explicit ios_state_not_null_ptr(std::ios_base& ios) :
+      ios_state_ptr<T>(ios)
       {
         if (this->get()==0)
         {
           this->base_type::reset(new T());
         }
       }
-      ~ios_base_state()
+      ~ios_state_not_null_ptr()
       {
       }
 
@@ -277,15 +277,15 @@ namespace boost
  *
  */
     template<typename Base>
-    class ios_base_flags
+    class ios_flags
     {
     public:
-      explicit ios_base_flags(std::ios_base& ios) :
+      explicit ios_flags(std::ios_base& ios) :
         ios_(ios)
       {
       }
-      //ios_base_state_ptr(std::ios_base ios, void (*cleanup_function)(T*));
-      ~ios_base_flags()
+      //ios_state_ptr(std::ios_base ios, void (*cleanup_function)(T*));
+      ~ios_flags()
       {
       }
 
@@ -339,7 +339,7 @@ namespace boost
       }
       static inline int index()
       {
-        return detail::xalloc_key_holder<ios_base_flags<Base> >::value;
+        return detail::xalloc_key_holder<ios_flags<Base> >::value;
       }
 
       std::ios_base& ios_;

@@ -90,6 +90,7 @@ namespace boost
 
         typedef typename Stopwatch::duration duration_t;
 
+        duration_style_io_saver dsios(this->os_);
         this->os_
             << static_cast<format_type&> (*this)
                 % boost::accumulators::count(acc)

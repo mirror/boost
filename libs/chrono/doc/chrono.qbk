@@ -9,7 +9,7 @@
 
 [library Boost.Chrono
     [quickbook 1.5]
-    [version 1.3.0]
+    [version 2.0.0]
     [authors [Hinnant, Howard]]
     [authors [Dawes, Beman]]
     [authors [Botet Escriba, Vicente J.]]
@@ -324,8 +324,8 @@
 
 [def __BasicStopwatch [link chrono.reference.stopwatches.stopwatch_req `BasicStopwatch`]]
 [def __basic_stopwatch_concept [link chrono.reference.stopwatches.stopwatch_req `BasicStopwatch`]]
-[def __basic_stopwatch [link chrono.reference.stopwatches.stopwatch_hpp.simple_stopwatch `basic_stopwatch`]]
-[def __basic_stopclock [link chrono.reference.stopwatches.stopwatch_hpp.simple_stopwatch `basic_stopclock`]]
+[def __laps_stopwatch [link chrono.reference.stopwatches.stopwatch_hpp.simple_stopwatch `laps_stopwatch`]]
+[def __laps_stopclock [link chrono.reference.stopwatches.stopwatch_hpp.simple_stopwatch `basic_stopclock`]]
 
 [def __SuspendableStopwatch [link chrono.reference.stopwatches.suspendable_stopwatch_req `SuspendableStopwatch`]]
 [def __suspendable_stopwatch_concept [link chrono.reference.stopwatches.suspendable_stopwatch_req `SuspendableStopwatch`]]
@@ -498,16 +498,16 @@ On top of the core facilities, __Boost_Chrono provides:
     * __BasicStopwatch concept.
     * __SuspendableStopwatch concept.
     * __simple_stopwatch, model of __SimpleStopwatch capturing elapsed __Clock times.
-    * __basic_stopwatch, model of __BasicStopwatch allowing in addition to start and stop the capture of elapsed __Clock times.
+    * __laps_stopwatch, model of __BasicStopwatch allowing in addition to start and stop the capture of elapsed __Clock times.
     * __suspendable_stopwatch, model of __SuspendableStopwatch allowing in addition to suspend and resume the capture of elapsed __Clock times.
 
-__basic_stopwatch and __suspendable_stopwatch have LapsCollector template parameter that allows to store information of the samples defined by a cycle start-stop.
+__laps_stopwatch and __suspendable_stopwatch have LapsCollector template parameter that allows to store information of the samples defined by a cycle start-stop.
 
 * Stopclocks: a complete time reporting package that can be invoked in a single line of code.
     * __stopwatch_reporter`<__Stopwatch,__Formatter>`, convenient reporting to an output stream (including wide char streams) of the elapsed time of models of __Stopwatch results.
     * Some basic __Formatters.
     * `__simple_stopclock<__Clock>` shortcut of `__stopwatch_reporter<__simple_stopwatch<__Clock>>`
-    * `__basic_stopclock<__Clock>` shortcut of `__stopwatch_reporter<__basic_stopwatch<__Clock>>`
+    * `__basic_stopclock<__Clock>` shortcut of `__stopwatch_reporter<__laps_stopwatch<__Clock>>`
     * `__suspendable_stopclock<__Clock>` shortcut of `__stopwatch_reporter<__suspendable_stopwatch<__Clock>>`
 
 
@@ -1217,11 +1217,21 @@ If you would like to programmatically inspect `__thread_clock::duration`, you ca
 
 [section:duration_io duration]
 
-Any __duration can be streamed out to a `basic_ostream`. The run-time value of the __duration is formatted according to the rules and current format settings for __duration`::rep`. This is followed by a single space and then the compile-time unit name of the __duration. This unit name is built on the string returned from `ratio_string<>` and the data used to construct the __duration_punct which was inserted into the stream's locale. If a __duration_punct has not been inserted into the stream's locale, a default constructed __duration_punct will be added to the stream's locale.
+Any __duration can be streamed out to a `basic_ostream`. The run-time value of the __duration is formatted according to the rules and current format settings for __duration`::rep` get_duration_style and the durationpunct facet. 
+
+the format is either
+
+<value> <unit>
+<unit> <value>
+
+
+
+[warning Need to be changed 
+This is followed by a single space and then the compile-time unit name of the __duration. This unit name is built on the string returned from `ratio_string<>` and the data used to construct the __duration_punct which was inserted into the stream's locale. If a __duration_punct has not been inserted into the stream's locale, a default constructed __duration_punct will be added to the stream's locale.
 
 __duration unit names come in two varieties: long(prefix) and short(symbol). The default constructed __duration_punct provides names in the long(prefix) format. These names are English descriptions. Other languages are supported by constructing a __duration_punct with the proper spellings for "hours", "minutes" and "seconds", and their abbreviations (for the short format). The short or long format can be easily chosen by streaming a `duration_short()` or `duration_long()` manipulator respectively or using the parameterized manimulator `duration_fmt(duration_style::prefix)` or `duration_fmt(duration_style::symbol)`.
 
-
+]
 __example
 
     #include <iostream>
@@ -1269,10 +1279,10 @@ The output could be
 
 As can be seen, each duration type can be streamed without having to manually stream the compile-time units after the run-time value. And when the compile-time unit is known to be a "common unit", English names are used. For "uncommon units" a unit name is composed from the reduced numerator and denominator of the associated __ratio. Whatever stream/locale settings are set for `duration::rep` are used for the value. Additionally, when the value is 1, singular forms for the units are used.
 
-Sometimes it is desired to shorten these names by using the SI symbols instead of SI prefixes. This can be accomplished with the use of the duration_short manipulator:
+Sometimes it is desired to shorten these names by using the SI symbols instead of SI prefixes. This can be accomplished with the use of the __duration_symbol manipulator [footnote __duration_short in V1]:
 
         cout << "\nSet cout to use short names:\n";
-        cout << boost::chrono::duration_short;
+        cout << boost::chrono::duration_prefix;
 
         cout << "milliseconds(3) + microseconds(10) = "
              <<  boost::chrono::milliseconds(3) + boost::chrono::microseconds(10) << '\n';
@@ -1307,9 +1317,9 @@ When the format decision is taken at runtime, it could be better to use the para
 
 
 
-Parsing a __duration follows rules analogous to the __duration converting constructor. A value and a unit (short or long) are read from the `basic_istream`. If the __duration has an integral representation, then the value parsed must be exactly representable in the target __duration (after conversion to the target __duration units), else `failbit` is set. __durations based on floating-point representations can be parsed using any units that do not cause overflow.
+Parsing a __duration follows rules analogous to the __duration converting constructor. A value and a unit (SI symbol or prefixed) are read from the `basic_istream`. If the __duration has an integral representation, then the value parsed must be exactly representable in the target __duration (after conversion to the target __duration units), else __failbit is set. __durations based on floating-point representations can be parsed using any units that do not cause overflow.
 
-For example a stream containing "5000 milliseconds" can be parsed into seconds, but if the stream contains "5001 milliseconds", parsing into `seconds` will cause `failbit` to be set.
+For example a stream containing "5000 milliseconds" can be parsed into seconds, but if the stream contains "3001 ms", parsing into `seconds` will cause __failbit to be set.
 
 __example
 
@@ -1515,7 +1525,18 @@ The output could be:
 
 [endsect]
 
-[endsect]
+[section Low level I/O]
+[/====================]
+
+The I/O interface described in the preceding I/O sections were at the user level. These services are based on low level services that are useful when writing libraries. The low level services are related to access to the associated ios state and locale facets. The design follows the C++ IOStreams standard design:
+
+The library encapsulate the locale-dependent parsing and formatting of __duration into a new facet class. Let's focus on formatting in this example. The concerned facet class is  __duration_put, analogous to time_put, money_put, etc. 
+
+The use of this facet is similar to the time_put facet. duration_put provides a put function 
+
+[endsect] [/ Low level I/O]
+
+[endsect] [/ I/O]
 
 [section Stopwatches and Stopclocks]
 
@@ -1554,7 +1575,7 @@ We can replace the lines
         ...
         std::cout << sw.elapsed() << std::endl;
 
-using the __stopwatch_reporter`<>` class. THis class provides a run time reporting package that can be invoked in a single line of code to report the usage of a __Clock. For example
+using the __stopwatch_reporter`<>` class. This class provides a run time reporting package that can be invoked in a single line of code to report the usage of a __Clock. For example
 
     using namespace boost::chrono;
 
@@ -1579,7 +1600,7 @@ __stopwatch_reporter is a template class with a __Stopwatch and a __Formatter as
 
 We can use even a shorter line using the __stopclock class, which allows to replace
 
-        stopwatch_reporter<basic_stopwatch<> > _;
+        stopwatch_reporter<laps_stopwatch<> > _;
 
 by
 
@@ -2503,6 +2524,7 @@ Include all the chrono header files.
     #include <boost/chrono/ceil.hpp>
     #include <boost/chrono/floor.hpp>
     #include <boost/chrono/round.hpp>
+    #include <boost/chrono/stopwatches.hpp>
 
 [endsect]
 
@@ -3887,12 +3909,12 @@ __high_resolution_clock satisfy the __clock_req.
 [/==================================================================]
 
     namespace boost {
-    namespace chrono {
+      namespace chrono {
 
         template <class __Clock, class CharT>
         struct clock_string;
 
-    }
+      }
     }
 
 [section:clock_string Template Class `clock_string<>`]
@@ -3928,89 +3950,41 @@ Register __duration`<>` and __time_point`<>` class templates to [*Boost.Typeof].
 [section:chrono_io_hpp Header `<boost/chrono/chrono_io.hpp>`]
 [/==================================================================]
 
-This file includes the i/o of the two major components, duration and time_point.
-
-        #include <boost/chrono/io/duration_io.hpp>
-        #include <boost/chrono/io/time_point_io.hpp>
-
-[endsect] [/section:chrono_io_hpp Header `<boost/chrono/chrono_io.hpp>`]
-
-[/==================================================================]
-[section:duration_io_hpp Header `<boost/chrono/io/duration_io.hpp>`]
-[/==================================================================]
-
+[section:v1 I/O V1]
 
     namespace boost {
       namespace chrono {
 
-        // typedefs
-        struct __duration_style
-        {
-          enum type {
-            __prefix, __symbol
-          };
-        };
-        typedef duration_style::type duration_style_type;
 
         // facets
 
         template <class CharT>
-        class __duration_punct;
+        class __duration_punct; // DEPRECATED since V2
 
         // manipulators
 
         template <class CharT, class Traits>
         std::basic_ostream<CharT, Traits>&
-        __duration_short(std::basic_ostream<CharT, Traits>& os); // DEPRECATED
+        __duration_short(std::basic_ostream<CharT, Traits>& os); // DEPRECATED since V2
 
         template <class CharT, class Traits>
         std::basic_ostream<CharT, Traits>&
-        __duration_long(std::basic_ostream<CharT, Traits>& os); // DEPRECATED
-
-        class __duration_fmt;
-
-        template<class CharT, class Traits>
-        std::basic_ostream<CharT, Traits>&
-        __duration_fmt__op_out(std::basic_ostream<CharT, Traits>& os, duration_fmt d);
-
-        template<class CharT, class Traits>
-        std::basic_istream<CharT, Traits>&
-        __duration_fmt__op_in(std::basic_istream<CharT, Traits>& is, duration_fmt d);
-
-        // i/o state savers
-
-        template<typename CharT = char, typename Traits = std::char_traits<CharT> >
-        struct __duration_style_io_saver;
+        __duration_long(std::basic_ostream<CharT, Traits>& os); // DEPRECATED since V2
 
         // duration I/O
 
         template <class CharT, class Traits, class Rep, class Period>
             std::basic_ostream<CharT, Traits>&
-            __duration__op_out(std::basic_ostream<CharT, Traits>& os, const __duration<Rep, Period>& d);
+            __v1_duration__op_out(std::basic_ostream<CharT, Traits>& os, const __duration<Rep, Period>& d);
 
         template <class CharT, class Traits, class Rep, class Period>
             std::basic_istream<CharT, Traits>&
-            __duration__op_in(std::basic_istream<CharT, Traits>& is, __duration<Rep, Period>& d)
+            __v1_duration__op_in(std::basic_istream<CharT, Traits>& is, __duration<Rep, Period>& d)
 
       }
     }
 
-[section:duration_style Scoped enum `duration_style`]
-
-        struct duration_style
-        {
-          enum type {
-            prefix, symbol
-          };
-        };
-        typedef duration_style::type duration_style_type;
-
-__duration unit names come in two varieties: prefix and symbol.
-
-[endsect] [/section:duration_style Scoped enum `duration_style`]
-
-
-[section:duration_punct Template Class `duration_punct<>`]
+[section:duration_punct Template Class `duration_punct<>` ]
 
 The __duration unit names can be customized through the facet: __duration_punct.
 
@@ -4101,7 +4075,216 @@ __returns `true` if the stored __duration_style is __prefix, otherwise `false`.
 
 [endsect] [/section:duration_punct Template Class `duration_punct<>`]
 
+[section:duration_short Non Member Function `duration_short(basic_istream<>&`]
+
+The short or long format can be easily chosen by streaming a `duration_short` or `duration_long` manipulator respectively.
+
+        template <class CharT, class Traits>
+            std::basic_ostream<CharT, Traits>&
+            duration_short(std::basic_ostream<CharT, Traits>& os);
+
+__effects Set the __duration_punct facet to stream __durations and __time_points as abbreviations.
+
+__returns os
+
+[endsect]
+[section:duration_long Non Member Function `duration_long(basic_istream<>&`]
+
+        template <class CharT, class Traits>
+            std::basic_ostream<CharT, Traits>&
+            duration_long(std::basic_ostream<CharT, Traits>& os);
+
+
+__effects Set the __duration_punct facet to stream durations and time_points as long text.
+
+__returns the output stream
+
+
+[endsect]
+
+
+[endsect]
+
+[section:v2 I/O V2]
+
+This file includes the i/o of the two major components, duration and time_point.
+
+        #include <boost/chrono/io/duration_style.hpp>
+        #include <boost/chrono/io/timezone.hpp>
+        #include <boost/chrono/io/ios_state.hpp>
+        #include <boost/chrono/io/duration_get.hpp>
+        #include <boost/chrono/io/duration_put.hpp>
+        #include <boost/chrono/io/duration_units.hpp>
+        #include <boost/chrono/io/duration_io.hpp>
+        #include <boost/chrono/io/time_point_get.hpp>
+        #include <boost/chrono/io/time_point_put.hpp>
+        #include <boost/chrono/io/time_point_units.hpp>
+        #include <boost/chrono/io/time_point_io.hpp>
+
+[endsect]
+
+[endsect] [/section:chrono_io_hpp Header `<boost/chrono/chrono_io.hpp>`]
+
+[/==================================================================]
+[section:duration_style_hpp Header `<boost/chrono/io/duration_style.hpp>`]
+[/==================================================================]
+
+
+    namespace boost {
+      namespace chrono {
+
+        // typedefs
+        struct __duration_style
+        {
+          enum type {
+            __prefix, __symbol
+          };
+        };
+        typedef duration_style::type duration_style_type;
+      }
+    }
+        
+[section:duration_style Scoped enum `duration_style`]
+
+        struct duration_style
+        {
+          enum type {
+            prefix, symbol
+          };
+        };
+        typedef duration_style::type duration_style_type;
+
+__duration unit names come in two varieties: prefix and symbol.
+
+[endsect] [/section:duration_style Scoped enum `duration_style`]
+
+[endsect] [/section:duration_style_hpp Header `<boost/chrono/io/duration_style.hpp>`]
+
+[/==================================================================]
+[section:ios_state_hpp Header `<boost/chrono/io/ios_sate.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+        // i/o state savers
+
+        duration_style::type __get_duration_style(std::ios_base & ios);
+        void __set_duration_style(std::ios_base& ios, duration_style::type style);
+
+        template<typename CharT = char, typename Traits = std::char_traits<CharT> >
+        struct __duration_style_io_saver;
+
+      }
+    }
+    
+[section:ioss I/O State Savers]
+[section:duration_style_io_saver Template Class `duration_style_io_saver`]
+
+        // i/o state savers
+
+        struct duration_style_io_saver
+        {
+          typedef std::ios_base state_type;
+          typedef __duration_style aspect_type;
+
+          explicit __duration_style_io_saver__c1(state_type &s);
+          __duration_style_io_saver__c2(state_type &s, aspect_type new_value);
+          __duration_style_io_saver__d();
+          void __duration_style_io_saver__restore();
+        };
+
+
+The `state_type` is a version of the IOStreams base class `std::ios_base`. 
+
+[section:c1 Constructor `duration_style_io_saver(state_type&)`]
+
+The first constructor takes a stream object and saves a reference to the stream and the current value of a particular stream attribute.
+
+          explicit duration_style_io_saver(state_type &s);
+
+__effects Constructs a __duration_style_io_saver by storing `s`.
+
+__postcondition `static_cast<duration_style>(*this) == f`.
+
+[endsect]
+
+[section:c2 Constructor `duration_style_io_saver(state_type, aspect_type)`]
+
+The second constructor works like the first, and uses its second argument to change the stream's attribute to the new aspect_type value given.
+
+          explicit duration_style_io_saver(state_type &s, aspect_type new_value);
+
+__effects Constructs a __duration_style_io_saver by storing `s`.
+
+__postcondition `static_cast<duration_style>(*this) == f`.
+
+[endsect]
+
+[section:d Destructor `~duration_style_io_saver()`]
+
+The destructor restores the stream's attribute to the saved value.
+
+          ~duration_style_io_saver();
+
+__effects As if __duration_style_io_saver__restore().
+
+[endsect]
+[section:restore Member Function `restore()`]
+
+The restoration can be activated early (and often) with the restore member function.
+
+          void restore();
+
+__effects Restores the stream's __duration_style attribute to the saved value.
+
+[endsect]
+
+
+[endsect]
+[endsect]
+
+[endsect] [/section:ios_state_hpp Header `<boost/chrono/io/ios_sate.hpp>`]
+
+[/==================================================================]
+[section:duration_io_hpp Header `<boost/chrono/io/duration_io.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+        // manipulators
+
+        std::ios_base& __symbol_format(ios_base& ios);
+        std::ios_base& __name_format(ios_base& ios);
+        class __duration_fmt;
+        template<class CharT, class Traits>
+        std::basic_ostream<CharT, Traits>&
+        __duration_fmt__op_out(std::basic_ostream<CharT, Traits>& os, duration_fmt d);
+
+        template<class CharT, class Traits>
+        std::basic_istream<CharT, Traits>&
+        __duration_fmt__op_in(std::basic_istream<CharT, Traits>& is, duration_fmt d);
+
+
+        // duration I/O
+
+        template <class CharT, class Traits, class Rep, class Period>
+            std::basic_ostream<CharT, Traits>&
+            __duration__op_out(std::basic_ostream<CharT, Traits>& os, const __duration<Rep, Period>& d);
+
+        template <class CharT, class Traits, class Rep, class Period>
+            std::basic_istream<CharT, Traits>&
+            __duration__op_in(std::basic_istream<CharT, Traits>& is, __duration<Rep, Period>& d)
+
+      }
+    }
+
+
 [section:manipulators I/O Manipulators]
+
+There is a parameterized manimulator that takes the duration_style as parameter.
+The symbol or name format can be easily chosen by streaming a `symbol_format` or `name_format` manipulators respectively.
 
 [section:duration_fmt Template Class `duration_fmt`]
 
@@ -4150,7 +4333,7 @@ __returns: The stored __duration_fmt `f`.
     basic_ostream<CharT, Traits>&
     operator<<(basic_ostream<CharT, Traits>& s, duration_fmt d);
 
-__effects: `s.imbue(locale(s.getloc(), new durationpunct(static_cast<duration_style>(d))))`.
+__effects: `set_duration_style(s, static_cast<duration_style>(d))))`.
 
 __returns: `s`.
 
@@ -4161,106 +4344,34 @@ __returns: `s`.
     basic_istream<CharT, Traits>&
     operator>>(basic_istream<CharT, Traits>& s, duration_fmt d);
 
-__effects: `s.imbue(locale(s.getloc(), new durationpunct(static_cast<duration_style>(d))))`.
+__effects: `set_duration_style(s, static_cast<duration_style>(d))))`.
 
 __returns: `s`.
 
 [endsect]
 [endsect]
 
-[section:duration_short Non Member Function `duration_short(basic_istream<>&`]
+[section:symbol_format Non Member Function `symbol_format(ios_base&`]
 
-The short or long format can be easily chosen by streaming a `duration_short` or `duration_long` manipulator respectively.
+        std::ios_base& __symbol_format(ios_base& ios);
 
-        template <class CharT, class Traits>
-            std::basic_ostream<CharT, Traits>&
-            duration_short(std::basic_ostream<CharT, Traits>& os);
+__effects: `set_duration_style(s, duration_style::symbol)`.
 
-__effects Set the __duration_punct facet to stream __durations and __time_points as abbreviations.
-
-__returns os
+__returns `ios`
 
 [endsect]
-[section:duration_long Non Member Function `duration_long(basic_istream<>&`]
+[section:name_format Non Member Function `name_format(ios_base&`]
 
-        template <class CharT, class Traits>
-            std::basic_ostream<CharT, Traits>&
-            duration_long(std::basic_ostream<CharT, Traits>& os);
+        std::ios_base& __name_format(ios_base& ios);
 
+__effects: `set_duration_style(s, duration_style::prefix)`.
 
-__effects Set the __duration_punct facet to stream durations and time_points as long text.
-
-__returns the output stream
+__returns `ios`
 
 
 [endsect]
 [endsect]
-[section:ioss I/O State Savers]
-[section:duration_style_io_saver Template Class `duration_style_io_saver`]
 
-        // i/o state savers
-
-        template<typename CharT = char, typename Traits = std::char_traits<CharT> >
-        struct duration_style_io_saver
-        {
-          typedef std::basic_ios<CharT, Traits> state_type;
-          typedef __duration_style aspect_type;
-
-          explicit __duration_style_io_saver__c1(state_type &s);
-          __duration_style_io_saver__c2(state_type &s, aspect_type new_value);
-          __duration_style_io_saver__d();
-          void __duration_style_io_saver__restore();
-        };
-
-
-The `state_type` is a version of the IOStreams base class template `std::basic_ios<CharT, Traits>`, where `CharT` is a character type and `Traits` is a character traits class. The user would usually place an actual input, output, or combined stream object for the state-type parameter, and not a base class object.
-
-[section:c1 Constructor `duration_style_io_saver(state_type&)`]
-
-The first constructor takes a stream object and saves a reference to the stream and the current value of a particular stream attribute.
-
-          explicit duration_style_io_saver(state_type &s);
-
-__effects Constructs a __duration_style_io_saver by storing `s`.
-
-__postcondition `static_cast<duration_style>(*this) == f`.
-
-[endsect]
-
-[section:c2 Constructor `duration_style_io_saver(state_type, aspect_type)`]
-
-The second constructor works like the first, and uses its second argument to change the stream's attribute to the new aspect_type value given.
-
-          explicit duration_style_io_saver(state_type &s, aspect_type new_value);
-
-__effects Constructs a __duration_style_io_saver by storing `s`.
-
-__postcondition `static_cast<duration_style>(*this) == f`.
-
-[endsect]
-
-[section:d Destructor `~duration_style_io_saver()`]
-
-The destructor restores the stream's attribute to the saved value.
-
-          ~duration_style_io_saver();
-
-__effects As if __duration_style_io_saver__restore().
-
-[endsect]
-[section:restore Member Function `restore()`]
-
-The restoration can be activated early (and often) with the restore member function.
-
-          void restore();
-
-__effects Restores the stream's __duration_style attribute to the saved value.
-
-[endsect]
-
-
-[endsect]
-[endsect]
 
 [section:streams I/O Streams Operations]
 
@@ -4323,12 +4434,11 @@ __returns `is`
 [endsect] [/section:duration_io_hpp Header `<boost/chrono/io/duration_io.hpp>`]
 
 [/==================================================================]
-[section:time_point_io_hpp Header `<boost/chrono/io/time_point_io.hpp>`]
+[section:timezone_hpp Header `<boost/chrono/io/timezone.hpp>`]
 [/==================================================================]
 
-
     namespace boost {
-    namespace chrono {
+      namespace chrono {
 
         struct __timezone
         {
@@ -4336,7 +4446,32 @@ __returns `is`
             __utc, __local
           };
         };
+      }
+    }
+        
+[section:timezone Scoped enum `timezone`]
+
+        struct timezone
+        {
+          enum type {
+            utc, local
+          };
+        };
         typedef timezone::type timezone_type;
+
+
+[endsect] [/section:timezone Scoped enum `timezone`]
+        
+        
+[endsect] [/section:timezone_hpp Header `<boost/chrono/io/timezone.hpp>`]
+
+[/==================================================================]
+[section:time_point_io_hpp Header `<boost/chrono/io/time_point_io.hpp>`]
+[/==================================================================]
+
+
+    namespace boost {
+    namespace chrono {
 
         // facets
 
@@ -4404,18 +4539,6 @@ __returns `is`
     }
 
 
-[section:timezone Scoped enum `timezone`]
-
-        struct timezone
-        {
-          enum type {
-            utc, local
-          };
-        };
-        typedef timezone::type timezone_type;
-
-
-[endsect] [/section:timezone Scoped enum `timezone`]
 
 [section:time_punct Template Class `time_punct <>`]
 
@@ -5309,14 +5432,13 @@ In this table `S` denote a SimpleStopwatch type. `s` is an instance of `S`, `ec`
 
 [table SimpleStopwatch Requirements
     [[expression]        [return type]  [operational semantics]]
-    [[`S::clock`]        [A model of __Clock.]  [The clock associated to this Stopwatch.]]
-    [[`S::duration`]        [`S::clock::duration`]  [The __duration type of the `clock`.]]
-    [[`S::time_point`]        [`S::clock::time_point`]  [The __time_point type of the `clock`.]]
-    [[`s.elapsed()`]        [`S::duration`]  [the elapsed time while the SimpleStopwatch was running.]]
-    [[`s.reset()`]        []  [Resets as if it was constructed again.]]
-
-    [[`s.elapsed(ec)`]        [`S::duration`]  [the elapsed time while the SimpleStopwatch was running.]]
-    [[`s.reset(ec)`]        []  [Resets as if it was constructed again.]]
+    [[`S::clock`]        [A model of __Clock.]          [The clock associated to this Stopwatch.]]
+    [[`S::duration`]     [`S::clock::duration`]         [The __duration type of the `clock`.]]
+    [[`S::time_point`]   [`S::clock::time_point`]       [The __time_point type of the `clock`.]]
+    [[`s.elapsed()`]     [`S::duration`]                [the elapsed time while the SimpleStopwatch was running.]]
+    [[`s.reset()`]       [-]                            [Resets as if it was constructed again.]]
+    [[`s.elapsed(ec)`]   [`S::duration`]                [the elapsed time while the SimpleStopwatch was running.]]
+    [[`s.reset(ec)`]     [-]                            [Resets as if it was constructed again.]]
 ]
 
 [section:elapsed Member Function `elapsed()`]
@@ -5359,18 +5481,18 @@ A `S` meets the `Stopwatch` requirements if:
 In this table `S` denote `Stopwatch` type. `s` is an instance of `S`, `ec` is instance of `system::error_code`.
 
 [table Stopwatch Requirements
-    [[expression]        [return type]  [operational semantics]]
-    [[`S::laps_collector `]        [ A model of __LapsCollector]  [Collects the laps's samples.]]
-    [[`S::scoped_run`]        [`__stopwatch_runner<S>`]  [RAI which `start`/`stop` the `stopwatch`.]]
-    [[`S::scoped_stop`]        [`__stopwatch_stopper<S>`]  [RAI which `stop`/`start` the `stopwatch`.]]
-    [[`s.start()`]        []  [starts a Stopwatch.]]
-    [[`s.restart()`]        []  [restarts a Stopwatch.]]
-    [[`s.stop()`]        []  [stops a Stopwatch.]]
-    [[`s.is_running()`]        [bool]  [true if the Stopwatch is running.]]
-    [[`s.lap_collector()`]        [`S::laps_collector const&`]  [the elapsed time while the Stopwatch was running.]]
-    [[`s.start(ec)`]        []  [starts a Stopwatch.]]
-    [[`s.restart(ec)`]        []  [restarts a Stopwatch.]]
-    [[`s.stop(ec)`]        []  [stops a Stopwatch.]]
+    [[expression]                [return type]                      [operational semantics]]
+    [[`S::laps_collector `]      [ A model of __LapsCollector]      [Collects the laps's samples.]]
+    [[`S::scoped_run`]           [`__stopwatch_runner<S>`]          [RAI which `start`/`stop` the `stopwatch`.]]
+    [[`S::scoped_stop`]          [`__stopwatch_stopper<S>`]         [RAI which `stop`/`start` the `stopwatch`.]]
+    [[`s.start()`]               [-]                                [starts a Stopwatch.]]
+    [[`s.restart()`]             [-]                                [restarts a Stopwatch.]]
+    [[`s.stop()`]                [-]                                [stops a Stopwatch.]]
+    [[`s.is_running()`]          [bool]                             [true if the Stopwatch is running.]]
+    [[`s.lap_collector()`]       [`S::laps_collector const&`]       [the elapsed time while the Stopwatch was running.]]
+    [[`s.start(ec)`]             [-]                                [starts a Stopwatch.]]
+    [[`s.restart(ec)`]           [-]                                [restarts a Stopwatch.]]
+    [[`s.stop(ec)`]              [-]                                [stops a Stopwatch.]]
 ]
 
 [section:start Member Function `start()`]
@@ -5452,10 +5574,11 @@ A `S` meets the `SuspendableStopwatch` requirements if:
 In this table `S` denote `SuspendableStopwatch` type, `s` is an instance of `S`, `ec` is instance of `system::error_code`.
 
 [table Stopwatch Requirements
-    [[`S::scoped_resume`]        [`__stopwatch_resumer<S>`]  [RAI which `resume`/`suspend` the `stopwatch`.]]
-    [[`S::scoped_resume`]        [`__stopwatch_resumer<S>`]  [RAI which `resume`/`suspend` the `stopwatch`.]]
-    [[`s.resume()`]        []  [resume a Stopwatch.]]
-    [[`s.suspend()`]        []  [suspends a Stopwatch.]]
+    [[expression]               [return type]                       [operational semantics]]
+    [[`S::scoped_resume`]       [`__stopwatch_resumer<S>`]          [RAI which `resume`/`suspend` the `stopwatch`.]]
+    [[`S::scoped_resume`]       [`__stopwatch_resumer<S>`]          [RAI which `resume`/`suspend` the `stopwatch`.]]
+    [[`s.resume()`]             [-]                                 [resumes a Stopwatch.]]
+    [[`s.suspend()`]            [-]                                 [suspends a Stopwatch.]]
 ]
 
 
@@ -5784,7 +5907,7 @@ All the units are given using the suffix "s" following the System International 
 [/==================================]
 [section:history Appendix: History]
 [/==================================]
-[section [*Version 1.3.0, January 1, 2012] ]
+[section [*Version 2.0.0, January 1, 2012] ]
 
 [*New Features:]
 
@@ -5795,35 +5918,39 @@ All the units are given using the suffix "s" following the System International 
 
 [*Deprecated:]
 
-* chrono I/O: The manipulators duration_short, duration long are depreceated. You should use the parameterized form duration_fmt instead.
-* chrono I/O: The duraction_punc<> facet observers is_short_name, is_long_name are depreceated. You should use is_prefix and is_symbol instead.
-* chrono I/O: The duraction_punc<> facet constructors taking as argument the literals duraction_punc<>::use_long or use short are depreceated. You should use duration_style::prefix and duration_style::symbol instead.
-* chrono I/O: The duraction_punc<> facet constructors taking the long names for seconds, minutes and hours and the associated observers short_name, long_name and name are depreceated.
-Boost.Chrono allows the user to use an interface that could be customized to take care of locale issues. The default behavior been to return the English words.
+* The chrono i/o version included in Boost.Chrono 1.2.0 has been completmly refactored in version 2.0.0 
+* chrono I/O: The manipulators __duration_short, __duration_long are depreceated. You should use the parameterized form __duration_fmt or the renamed manipulators __duration_symbol and __duration_prefix  instead.
+* chrono I/O: The duraction_punc<> facet is depreceated. You should use the __get_duration_style free function to get the informations and use the duration_units facet for localization purposes.
 
-When BOOST_CHRONO_IO_V1_DONT_PROVIDE_DEPRECATED is defined the preceding deprecated functions are not available.
-In addition, the user needs to define the macro BOOST_CHRONO_IO_USES_EXTERNAL_LOCALIZATION to be able to customize the locale interface.
+When BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1 is defined the preceding deprecated functions are not available.
 
-[endsect] [/section [*Version 1.3.0] ]
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/6092 #6092] Input from non integral durations makes the compiler fail.
+* [@http://svn.boost.org/trac/boost/ticket/6093 #6093] [1/3]second fails as valid duration input.
+* [@http://svn.boost.org/trac/boost/ticket/6113 #6113] duplicate symbol when BOOST_CHRONO_HEADER_ONLY is defined.
+
+[/* [@http://svn.boost.org/trac/boost/ticket/6094 #6094] 1 secondALPHA should be an invalid input for a duration.]
+
+[endsect] [/section [*Version 2.0.0] ]
 
 [section [*Version 1.2.0, October 17, 2011] ]
 
 [*New Features:]
 
 * [@http://svn.boost.org/trac/boost/ticket/5979 #5979] Added chrono rounding utilities as defined By Howard Hinnant [@http://home.roadrunner.com/~hinnant/duration_io/chrono_util.html here].
-* [@http://svn.boost.org/trac/boost/ticket/5978 #5978] Add BOOST_CHRONO_HAS_PROCESS_CLOCKS to know if process clocks are available.
+* [@http://svn.boost.org/trac/boost/ticket/5978 #5978] Added BOOST_CHRONO_HAS_PROCESS_CLOCKS to know if process clocks are available.
 * [@http://svn.boost.org/trac/boost/ticket/5998 #5998] Make possible to don't provide hybrid error handling.
 * [@http://svn.boost.org/trac/boost/ticket/5906 #5906] Take in account the constexpr as defined in the standard.
 * [@http://svn.boost.org/trac/boost/ticket/5907 #5907] Take in account noexcept for compilers supporting it.
 
 [*Fixes:]
 
-* [@http://svn.boost.org/trac/boost/ticket/5669 #5669] Intel compiler failure to compile duration.hpp
 * [@http://svn.boost.org/trac/boost/ticket/2114 #2114] Enable visibility support (Boost.Chorno part)
+* [@http://svn.boost.org/trac/boost/ticket/5669 #5669] Intel compiler failure to compile duration.hpp
 * [@http://svn.boost.org/trac/boost/ticket/5909 #5909] process_cpu_clock::now() on MAC gives time_points 1/1000 times.
 * [@http://svn.boost.org/trac/boost/ticket/5946 #5946] Process real cpu clock returns the system steady clock (windows).
 * [@http://svn.boost.org/trac/boost/ticket/5974 #5974] Process real cpu clock should use clock() instead of times() in MAC which is twice faster and have better resolution.
-
 
 [*Cleanup:]
 

@@ -1,4 +1,4 @@
-//  boost/chrono/stopwatches/stopwatch_formatter.hpp  ------------------------------------------------------------//
+//  boost/chrono/stopwatches/formatters/times_formatter.hpp  ------------------------------------------------------------//
 //  Copyright 2011 Vicente J. Botet Escriba
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
@@ -85,6 +85,7 @@ namespace boost
         else
           p=0;
 
+        duration_style_io_saver dsios(this->os_);
         this->os_ << static_cast<format_type&>(*this)
             % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_), boost::chrono::duration<double, Ratio>(nanoseconds(times.real)))
             % io::group(std::fixed, std::setprecision(this->precision_), duration_fmt(this->duration_style_), boost::chrono::duration<double, Ratio>(nanoseconds(times.user)))

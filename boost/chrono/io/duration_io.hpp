@@ -46,9 +46,7 @@ namespace boost
       /**
        * Change the duration_style ios state;
        */
-      template <typename out_stream>
-      void operator()(out_stream &ios) const
-      //void operator()(std::ios_base &ios) const
+      void operator()(std::ios_base &ios) const
 
       {
         set_duration_style(ios, style_);
@@ -60,12 +58,11 @@ namespace boost
      *
      * See Boost.IO i/o state savers for a motivating compression.
      */
-    template <typename CharT = char, typename Traits = std::char_traits<CharT> >
     struct duration_style_io_saver
     {
 
       //! the type of the state to restore
-      typedef std::basic_ostream<CharT, Traits> state_type;
+      typedef std::ios_base state_type;
       //! the type of aspect to save
       typedef duration_style::type aspect_type;
 

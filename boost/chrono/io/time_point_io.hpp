@@ -49,7 +49,6 @@ namespace boost
         /**
          * Change the timezone_type and time format ios state;
          */
-        //template <typename out_stream>
         void operator()(std::ios_base &ios) const
         {
           set_time_fmt<CharT> (ios, fmt_);
@@ -72,8 +71,6 @@ namespace boost
         /**
          * Change the timezone_type and time format ios state;
          */
-        //template <typename out_stream>
-        //void operator()(out_stream &ios) const
         void operator()(std::ios_base &ios) const
         {
           //set_time_fmt<typename out_stream::char_type>(ios, "");
@@ -162,12 +159,11 @@ namespace boost
      *
      * See Boost.IO i/o state savers for a motivating compression.
      */
-    template <typename CharT = char, typename Traits = std::char_traits<CharT> >
     struct timezone_io_saver
     {
 
       //! the type of the state to restore
-      typedef std::basic_ostream<CharT, Traits> state_type;
+      typedef std::ios_base state_type;
       //! the type of aspect to save
       typedef timezone_type aspect_type;
 

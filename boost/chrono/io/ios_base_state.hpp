@@ -1,4 +1,4 @@
-//  boost/chrono/io/ios_base_state.hpp
+//  boost/chrono/io/ios_state_not_null_ptr.hpp
 //
 //  (C) Copyright 2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,
@@ -22,9 +22,9 @@ namespace boost
   namespace chrono
   {
 
-    class fmt_masks : ios_base_flags<fmt_masks>
+    class fmt_masks : public ios_flags<fmt_masks>
     {
-      typedef ios_base_flags<fmt_masks> base_type;
+      typedef ios_flags<fmt_masks> base_type;
 
     public:
       fmt_masks(std::ios_base& ios): base_type(ios) {}
@@ -62,7 +62,7 @@ namespace boost
     namespace detail
     {
       namespace /**/ {
-        xalloc_key_initializer_t<ios_base_flags<fmt_masks> > fmt_masks_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_flags<fmt_masks> > fmt_masks_xalloc_key_initializer;
       } // namespace
     } // namespace detail
 
@@ -74,6 +74,16 @@ namespace boost
     {
       fmt_masks(ios).set_duration_style(style);
     }
+    inline std::ios_base&  symbol_format(std::ios_base& ios)
+    {
+      fmt_masks(ios).setf(fmt_masks::uses_symbol);
+      return ios;
+    }
+    inline std::ios_base&  name_format(std::ios_base& ios)
+    {
+      fmt_masks(ios).unsetf(fmt_masks::uses_symbol);
+      return ios;
+    }
 
     inline timezone_type get_timezone(std::ios_base & ios)
     {
@@ -82,6 +92,17 @@ namespace boost
     inline void set_timezone(std::ios_base& ios, timezone_type tz)
     {
       fmt_masks(ios).set_timezone(tz);
+    }
+    inline std::ios_base& local_timezone(std::ios_base& ios)
+    {
+      fmt_masks(ios).setf(fmt_masks::uses_local);
+      return ios;
+    }
+
+    inline std::ios_base& utc_timezone(std::ios_base& ios)
+    {
+      fmt_masks(ios).unsetf(fmt_masks::uses_local);
+      return ios;
     }
 
     namespace detail
@@ -105,11 +126,11 @@ namespace boost
     namespace detail
     {
       namespace /**/ {
-        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char> >  > ios_base_data_aux_xalloc_key_initializer;
-        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<wchar_t> >  > wios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_state_not_null_ptr<detail::ios_base_data_aux<char> >  > ios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_state_not_null_ptr<detail::ios_base_data_aux<wchar_t> >  > wios_base_data_aux_xalloc_key_initializer;
 #if BOOST_CHRONO_HAS_UNICODE_SUPPORT
-        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char16_t> >  > u16ios_base_data_aux_xalloc_key_initializer;
-        xalloc_key_initializer_t<ios_base_state<detail::ios_base_data_aux<char32_t> >  > u32ios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_state_not_null_ptr<detail::ios_base_data_aux<char16_t> >  > u16ios_base_data_aux_xalloc_key_initializer;
+        xalloc_key_initializer_t<ios_state_not_null_ptr<detail::ios_base_data_aux<char32_t> >  > u32ios_base_data_aux_xalloc_key_initializer;
 #endif
       } // namespace
     } // namespace detail
@@ -117,14 +138,14 @@ namespace boost
     template<typename CharT>
     static inline std::basic_string<CharT> get_time_fmt(std::ios_base & ios)
     {
-      ios_base_state<detail::ios_base_data_aux<CharT> > ptr(ios);
+      ios_state_not_null_ptr<detail::ios_base_data_aux<CharT> > ptr(ios);
       return ptr->time_fmt;
     }
     template<typename CharT>
     static inline void set_time_fmt(std::ios_base& ios, std::basic_string<
         CharT> const& fmt)
     {
-      ios_base_state<detail::ios_base_data_aux<CharT> > ptr(ios);
+      ios_state_not_null_ptr<detail::ios_base_data_aux<CharT> > ptr(ios);
       ptr->time_fmt = fmt;
     }
 

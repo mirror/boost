@@ -45,7 +45,7 @@ void test_state_saver(const char* str, const char* str2, D d, boost::chrono::dur
 {
   std::ostringstream out;
   {
-    boost::chrono::duration_style_io_saver<> ios(out);
+    boost::chrono::duration_style_io_saver ios(out);
     out << boost::chrono::duration_fmt(style) << d;
     BOOST_TEST(out.good());
     BOOST_TEST(out.str() == str);
