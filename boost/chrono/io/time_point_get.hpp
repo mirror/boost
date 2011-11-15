@@ -324,7 +324,7 @@ namespace boost
       iter_type get_epoch(time_point_units<CharT> const &facet, iter_type i, iter_type e, std::ios_base&,
           std::ios_base::iostate& err) const
       {
-        const std::basic_string<CharT> units = facet.get_epoch<Clock> ();
+        const std::basic_string<CharT> units = facet.template get_epoch<Clock> ();
         err = std::ios_base::goodbit;
         std::ptrdiff_t k = chrono_detail::scan_keyword(i, e, &units, &units + 1,
         //~ std::use_facet<std::ctype<CharT> >(ios.getloc()),
