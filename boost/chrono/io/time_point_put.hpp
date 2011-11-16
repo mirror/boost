@@ -80,7 +80,7 @@ namespace boost
        * in the order in which they appear in the pattern. Pattern sequences are
        * identified by converting each character @c c to a @c char value as if by
        * @c ct.narrow(c,0), where @c ct is a reference to @c ctype<charT> obtained from
-       * @c ios.getloc(). The first character of each sequence is equal to @c Õ%Õ,
+       * @c ios.getloc(). The first character of each sequence is equal to @c '%',
        * followed by a pattern specifier character @c spec, which can be @c 'v' for
        * the duration value or @c 'u' for the duration unit. .
        * For each valid pattern sequence identified, calls

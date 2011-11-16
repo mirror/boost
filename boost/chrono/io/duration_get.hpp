@@ -138,13 +138,15 @@ namespace boost
        * - The expression err == std::ios_base::goodbit evaluates to false.
        * - The expression s == end evaluates to true, in which case the
        * function evaluates err = std::ios_base::eofbit | std::ios_base::failbit.
-       * - The next element of pattern is equal to Õ%Õ, followed by a conversion
+       * - The next element of pattern is equal to '%', followed by a conversion
        * specifier character, format.
        * If the number of elements in the range [pattern,pat_end) is not
        * sufficient to unambiguously determine whether the conversion
        * specification is complete and valid, the function evaluates
        * err = std::ios_base::failbit. Otherwise, the function evaluates
-       * s = do_get(s, end, ios, err, d). If err == std::ios_base::goodbit holds after
+       * s = get_value(s, end, ios, err, r) when the conversion specification is 'v' and
+       * s = get_value(s, end, ios, err, rt) when the conversion specification is 'u'.
+       * If err == std::ios_base::goodbit holds after
        * the evaluation of the expression, the function increments pattern to
        * point just past the end of the conversion specification and continues
        * looping.
@@ -158,6 +160,7 @@ namespace boost
        * evaluates ++pattern, ++s and continues looping. Otherwise, the function
        * evaluates err = std::ios_base::failbit.
        *
+       * Once r and rt are retrieved,
        * Returns: s
        */
       template <typename Rep, typename Period>
@@ -208,11 +211,6 @@ namespace boost
             {
             case 'v':
             {
-              if (value_found)
-              {
-                err |= std::ios_base::failbit;
-                return s;
-              }
               if (value_found)
               {
                 err |= std::ios_base::failbit;
@@ -372,7 +370,12 @@ namespace boost
        * @param end end input stream iterator
        * @param ios a reference to a ios_base
        * @param err the ios_base state
-       * @param r a reference to the duration representation
+       * @param r a reference to the duration representation.
+       * @Effects As if
+       * @code
+       * return std::use_facet<std::num_get<cahr_type, iter_type> >(ios.getloc()).get(s, end, ios, err, r);
+       * @endcode
+       *
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
        */
       template <typename Rep>
@@ -478,6 +481,19 @@ namespace boost
 
     protected:
 
+      /**
+       * Extracts the run-time ratio associated to the duration when it is given in prefix form.
+       *
+       * This is an extension point of this facet so that we can take in account other periods that can have a useful
+       * translation in other contexts, as e.g. days and weeks.
+       *
+       * @param facet the duration_units facet
+       * @param i
+       * @param e
+       * @param
+       * @param err
+       * @return
+       */
       virtual iter_type do_get_n_d_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
           std::ios_base&, std::ios_base::iostate& err) const
       {
@@ -490,7 +506,7 @@ namespace boost
         it = facet.fill_units(it, ratio<1>());
         string_type* units_end = units + pfs;
 
-        err = std::ios_base::goodbit;
+        //err = std::ios_base::goodbit;
         const string_type* k = chrono_detail::scan_keyword(i, e, units, units_end,
         //~ std::use_facet<std::ctype<CharT> >(loc),
             err);
@@ -511,11 +527,14 @@ namespace boost
        *
        * This is an extension point of this facet so that we can take in account other periods that can have a useful
        * translation in other contexts, as e.g. days and weeks.
+       *
+       * @param facet the duration_units facet
        * @param s start input stream iterator.
        * @param e end input stream iterator.
        * @param ios a reference to a ios_base.
        * @param err the ios_base state.
        * @param rt a reference to the duration run-time ratio.
+       * @Effects
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name.
        */
       virtual iter_type do_get_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
