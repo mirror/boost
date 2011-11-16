@@ -142,7 +142,7 @@ namespace boost
         err = std::ios_base::goodbit;
         while (pattern != pat_end && err == std::ios_base::goodbit)
         {
-          std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+          //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
           if (s == end)
           {
             err |= std::ios_base::eofbit;
@@ -167,7 +167,7 @@ namespace boost
               }
               duration_found = true;
               s = get_duration(s, end, ios, err, d);
-              std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+              //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
               if (err & (std::ios_base::badbit | std::ios_base::failbit))
               {
                 return s;
@@ -183,7 +183,7 @@ namespace boost
               }
               epoch_found = true;
               s = get_epoch<Clock> (facet, s, end, ios, err);
-              std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+              //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
               if (err & (std::ios_base::badbit | std::ios_base::failbit))
               {
                 return s;
@@ -231,7 +231,7 @@ namespace boost
 
         // Success!  Store it.
         tp = time_point<Clock, Duration> (d);
-        std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+        //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
 
         return s;
       }
@@ -329,13 +329,13 @@ namespace boost
         std::ptrdiff_t k = chrono_detail::scan_keyword(i, e, &units, &units + 1,
         //~ std::use_facet<std::ctype<CharT> >(ios.getloc()),
             err) - &units;
-        std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+        //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
         if (k == 1)
         {
           err |= std::ios_base::failbit;
           return i;
         }
-        std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+        //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
         return i;
       }
 
