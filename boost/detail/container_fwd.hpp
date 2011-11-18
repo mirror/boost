@@ -117,11 +117,7 @@ namespace std
     template <class charT> struct char_traits;
 #endif
 
-    #if BOOST_CLANG
-        template <class T> struct complex;
-    #else
-        template <class T> class complex;
-    #endif
+    template <class T> class complex;
 
 #if !defined(BOOST_CONTAINER_FWD_BAD_DEQUE)
     template <class T, class Allocator> class deque;
