@@ -69,14 +69,14 @@ namespace boost
        * @param ios
        * @Effects As if
        * @code
-       * return do_put(s, ios, Clock());
+       * return do_put_epoch(s, ios, Clock());
        * @endcode
        * @return @ s
        */
       template <typename Clock>
-      iter_type put(iter_type s, std::ios_base& ios) const
+      iter_type put_epoch(iter_type s, std::ios_base& ios) const
       {
-        return do_put(s, ios, Clock());
+        return do_put_epoch(s, ios, Clock());
       }
 
       /**
@@ -116,28 +116,28 @@ namespace boost
        * @return
        */
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, system_clock) const = 0;
+      do_put_epoch(iter_type s, std::ios_base& ios, system_clock) const = 0;
       /**
        *  customization point for getting the system_clock timepoint's epoch.
        */
       virtual std::basic_string<CharT> do_get_epoch(system_clock) const=0;
 
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, steady_clock) const = 0;
+      do_put_epoch(iter_type s, std::ios_base& ios, steady_clock) const = 0;
       virtual std::basic_string<CharT> do_get_epoch(steady_clock) const=0;
 
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
-      virtual iter_type do_put(iter_type s, std::ios_base& ios, process_real_cpu_clock c) const =0;
+      virtual iter_type do_put_epoch(iter_type s, std::ios_base& ios, process_real_cpu_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(process_real_cpu_clock) const=0;
-      virtual iter_type do_put(iter_type s, std::ios_base& ios, process_user_cpu_clock c) const =0;
+      virtual iter_type do_put_epoch(iter_type s, std::ios_base& ios, process_user_cpu_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(process_user_cpu_clock) const=0;
-      virtual iter_type do_put(iter_type s, std::ios_base& ios, process_system_cpu_clock c) const =0;
+      virtual iter_type do_put_epoch(iter_type s, std::ios_base& ios, process_system_cpu_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(process_system_cpu_clock) const=0;
-      virtual iter_type do_put(iter_type s, std::ios_base& ios, process_cpu_clock c) const =0;
+      virtual iter_type do_put_epoch(iter_type s, std::ios_base& ios, process_cpu_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(process_cpu_clock) const=0;
 #endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
-      virtual iter_type do_put(iter_type s, std::ios_base& ios, thread_clock c) const =0;
+      virtual iter_type do_put_epoch(iter_type s, std::ios_base& ios, thread_clock c) const =0;
       virtual std::basic_string<CharT> do_get_epoch(thread_clock) const=0;
 #endif
 
@@ -181,7 +181,7 @@ namespace boost
 //          }
 
 
-      iter_type do_put(iter_type s, std::ios_base& , system_clock c) const
+      iter_type do_put_epoch(iter_type s, std::ios_base& , system_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
         return std::copy(str.begin(), str.end(), s);
@@ -190,7 +190,7 @@ namespace boost
       {
         return clock_string<system_clock,CharT>::since();
       }
-      iter_type do_put(iter_type s, std::ios_base& , steady_clock c) const
+      iter_type do_put_epoch(iter_type s, std::ios_base& , steady_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
         return std::copy(str.begin(), str.end(), s);
@@ -201,7 +201,7 @@ namespace boost
       }
 
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
-      iter_type do_put(iter_type s, std::ios_base& , process_real_cpu_clock c) const
+      iter_type do_put_epoch(iter_type s, std::ios_base& , process_real_cpu_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
         return std::copy(str.begin(), str.end(), s);
@@ -210,7 +210,7 @@ namespace boost
       {
         return clock_string<process_real_cpu_clock,CharT>::since();
       }
-      iter_type do_put(iter_type s, std::ios_base& , process_user_cpu_clock c) const
+      iter_type do_put_epoch(iter_type s, std::ios_base& , process_user_cpu_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
         return std::copy(str.begin(), str.end(), s);
@@ -219,7 +219,7 @@ namespace boost
       {
         return clock_string<process_user_cpu_clock,CharT>::since();
       }
-      iter_type do_put(iter_type s, std::ios_base& , process_system_cpu_clock c) const
+      iter_type do_put_epoch(iter_type s, std::ios_base& , process_system_cpu_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
         return std::copy(str.begin(), str.end(), s);
@@ -228,7 +228,7 @@ namespace boost
       {
         return clock_string<process_system_cpu_clock,CharT>::since();
       }
-      iter_type do_put(iter_type s, std::ios_base& , process_cpu_clock c) const
+      iter_type do_put_epoch(iter_type s, std::ios_base& , process_cpu_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
         return std::copy(str.begin(), str.end(), s);
@@ -240,7 +240,7 @@ namespace boost
 
 #endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
-      iter_type do_put(iter_type s, std::ios_base& , thread_clock c) const
+      iter_type do_put_epoch(iter_type s, std::ios_base& , thread_clock c) const
       {
         std::basic_string<CharT> str = do_get_epoch(c);
         return std::copy(str.begin(), str.end(), s);

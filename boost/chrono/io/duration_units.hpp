@@ -169,19 +169,19 @@ namespace boost
        * @param ios
        * @param d
        * @Effects puts the unit associated to the duration @c d in @c s taken in account the @c ios state flags.
-       * The implementation uses the non template virtual function do_put as if
+       * The implementation uses the non template virtual function do_put_unit as if
        * @code
-       *   return do_put(s, ios, get_duration_style(ios), Period(), int_least64_t(d.count()));
+       *   return do_put_unit(s, ios, get_duration_style(ios), Period(), int_least64_t(d.count()));
        * @codeend
        *
        * where @get_duration_style gives the duration style associated to @ios.
        * @return s
        */
       template <typename Rep, typename Period>
-      typename enable_if<is_localizable<Period> , iter_type>::type put(iter_type s, std::ios_base& ios,
+      typename enable_if<is_localizable<Period> , iter_type>::type put_unit(iter_type s, std::ios_base& ios,
           duration<Rep, Period> const& d) const
       {
-        return do_put(s, ios, get_duration_style(ios), Period(), int_least64_t(d.count()));
+        return do_put_unit(s, ios, get_duration_style(ios), Period(), int_least64_t(d.count()));
       }
 
       /**
@@ -195,9 +195,9 @@ namespace boost
        * @param ios
        * @param d
        * @Effects puts the unit associated to the duration @c d in @c s taken in account the @c ios state flags.
-       * The implementation uses the non template virtual function do_put as if
+       * The implementation uses the non template virtual function do_put_unit as if
        * @code
-       *   return do_put(s, ios, get_duration_style(ios), detail::rt_ratio(Period()), int_least64_t(d.count()));
+       *   return do_put_unit(s, ios, get_duration_style(ios), detail::rt_ratio(Period()), int_least64_t(d.count()));
        * @codeend
        *
        * where @get_duration_style gives the duration style associated to @ios and
@@ -205,10 +205,10 @@ namespace boost
        * @return s
        */
       template <typename Rep, typename Period>
-      typename disable_if<is_localizable<Period> , iter_type>::type put(iter_type s, std::ios_base& ios,
+      typename disable_if<is_localizable<Period> , iter_type>::type put_unit(iter_type s, std::ios_base& ios,
           duration<Rep, Period> const& d) const
       {
-        return do_put(s, ios, get_duration_style(ios), detail::rt_ratio(Period()), int_least64_t(d.count()));
+        return do_put_unit(s, ios, get_duration_style(ios), detail::rt_ratio(Period()), int_least64_t(d.count()));
       }
 
       /**
@@ -304,43 +304,43 @@ namespace boost
 
       // used for ouput
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, atto, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, atto, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, femto, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, femto, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, pico, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, pico, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, nano, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, nano, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, micro, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, micro, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, milli, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, milli, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, centi, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, centi, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, deci, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deci, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, ratio<1> , int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, ratio<1> , int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, deca, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deca, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, hecto, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, hecto, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, kilo, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, kilo, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, mega, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, mega, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, tera, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, tera, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, peta, int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, peta, int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, exa, int_least64_t) const = 0;
-      virtual iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, detail::rt_ratio,
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, exa, int_least64_t) const = 0;
+      virtual iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, detail::rt_ratio,
           int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, ratio<60> , int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, ratio<60> , int_least64_t) const = 0;
       virtual iter_type
-      do_put(iter_type s, std::ios_base& ios, duration_style_type style, ratio<3600> , int_least64_t) const = 0;
+      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, ratio<3600> , int_least64_t) const = 0;
 
       // used for input
       virtual string_type do_get_plural_form(duration_style_type style, atto, std::size_t pf) const = 0;
@@ -404,123 +404,123 @@ namespace boost
         return pattern;
       }
 
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, atto u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, atto u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, femto u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, femto u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, pico u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, pico u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
 
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, nano u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, nano u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, micro u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, micro u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, milli u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, milli u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, centi u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, centi u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, deci u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deci u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base&, duration_style_type style, ratio<1> u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base&, duration_style_type style, ratio<1> u, int_least64_t value) const
       {
         string_type str = do_get_plural_form(style, u, do_get_plural_form(value));
         return std::copy(str.begin(), str.end(), s);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, deca u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deca u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, hecto u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, hecto u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
 
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, kilo u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, kilo u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, mega u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, mega u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, giga u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, giga u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, tera u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, tera u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, peta u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, peta u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, exa u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, exa u, int_least64_t value) const
       {
         string_type str = do_get_ratio_prefix(style, u);
         std::copy(str.begin(), str.end(), s);
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
 
-      iter_type do_put(iter_type s, std::ios_base&, duration_style_type style, ratio<60> u, int_least64_t value) const
-      {
-        string_type str = do_get_plural_form(style, u, do_get_plural_form(value));
-        return std::copy(str.begin(), str.end(), s);
-      }
-
-      iter_type do_put(iter_type s, std::ios_base&, duration_style_type style, ratio<3600> u, int_least64_t value) const
+      iter_type do_put_unit(iter_type s, std::ios_base&, duration_style_type style, ratio<60> u, int_least64_t value) const
       {
         string_type str = do_get_plural_form(style, u, do_get_plural_form(value));
         return std::copy(str.begin(), str.end(), s);
       }
 
-      iter_type do_put(iter_type s, std::ios_base& ios, duration_style_type style, detail::rt_ratio rtr,
+      iter_type do_put_unit(iter_type s, std::ios_base&, duration_style_type style, ratio<3600> u, int_least64_t value) const
+      {
+        string_type str = do_get_plural_form(style, u, do_get_plural_form(value));
+        return std::copy(str.begin(), str.end(), s);
+      }
+
+      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, detail::rt_ratio rtr,
           int_least64_t value) const
       {
         *s++ = CharT('[');
@@ -529,7 +529,7 @@ namespace boost
         std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, ' ', rtr.den);
         *s++ = CharT(']');
 
-        return do_put(s, ios, style, ratio<1> (), value);
+        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
 
       string_type do_get_plural_form(duration_style_type style, ratio<1> , std::size_t pf) const

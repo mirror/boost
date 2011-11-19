@@ -225,7 +225,7 @@ namespace boost
       iter_type put_unit(duration_units<CharT, OutputIterator> const& facet, iter_type s, std::ios_base& ios,
           duration<Rep, Period> const& d) const
       {
-        return facet.put(s, ios, d);
+        return facet.put_unit(s, ios, d);
       }
 
       /**

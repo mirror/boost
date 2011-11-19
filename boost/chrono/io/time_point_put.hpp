@@ -266,7 +266,7 @@ namespace boost
       template <typename Clock>
       iter_type put_epoch(time_point_units<CharT, OutputIterator> const& facet, iter_type s, std::ios_base& ios) const
       {
-        return facet.template put<Clock> (s, ios);
+        return facet.template put_epoch<Clock> (s, ios);
       }
 
       /**
