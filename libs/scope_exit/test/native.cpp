@@ -1,4 +1,4 @@
-// Copyright Alexander Nasonov 2007-2008
+// Copyright Alexander Nasonov 2007-2008, 2011
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -169,10 +169,52 @@ void test_types()
     BOOST_CHECK(results[1] == false);
 }
 
+void test_cxx0x()
+{
+#if defined(BOOST_SCOPE_EXIT_AUX_CXX0X)
+    int i = 0, j = 1;
+
+    {
+        BOOST_SCOPE_EXIT((=))
+        {
+            i = j = 1; // modify copies
+        };
+    }
+    BOOST_CHECK(i == 0);
+    BOOST_CHECK(j == 1);
+
+    {
+        BOOST_SCOPE_EXIT((&))
+        {
+            i = 1;
+            j = 2;
+        };
+        BOOST_CHECK(i == 0);
+        BOOST_CHECK(j == 1);
+    }
+    BOOST_CHECK(i == 1);
+    BOOST_CHECK(j == 2);
+
+    {
+        BOOST_SCOPE_EXIT((=)(&j))
+        {
+            i = 2; // modify a copy
+            j = 3;
+        };
+        BOOST_CHECK(i == 1);
+        BOOST_CHECK(j == 2);
+    }
+    BOOST_CHECK(i == 1);
+    BOOST_CHECK(j == 3);
+
+#endif
+}
+
 test_suite* init_unit_test_suite( int, char* [] )
 {
     framework::master_test_suite().p_name.value = "Unit test for ScopeExit";
     framework::master_test_suite().add( BOOST_TEST_CASE( &test_non_local ));
     framework::master_test_suite().add( BOOST_TEST_CASE( &test_types     ));
+    framework::master_test_suite().add( BOOST_TEST_CASE( &test_cxx0x     ));
     return 0;
 }

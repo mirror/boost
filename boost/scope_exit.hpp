@@ -1,4 +1,4 @@
-// Copyright Alexander Nasonov 2006-2009
+// Copyright Alexander Nasonov 2006-2009, 2011
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -8,6 +8,55 @@
 #define FILE_boost_scope_exit_hpp_INCLUDED
 
 #include <boost/config.hpp>
+
+#if !defined(BOOST_NO_LAMBDAS) \
+ && !defined(BOOST_NO_AUTO_DECLARATIONS) \
+ && !defined(BOOST_SCOPE_EXIT_FORCE_CXX98)
+#define BOOST_SCOPE_EXIT_AUX_CXX0X
+#endif
+
+#if defined(BOOST_SCOPE_EXIT_AUX_CXX0X)
+
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/seq/enum.hpp>
+
+namespace boost { namespace scope_exit {  namespace aux {
+
+template<class F>
+struct guard
+{
+    F fn_;
+    guard(F f) : fn_(f) {}
+    ~guard() { fn_(); }
+};
+
+struct guard_maker
+{
+    template<class F>
+    guard<F> operator%(F f) const
+    {
+        return guard<F>(f);
+    }
+};
+
+} } }
+
+#define BOOST_SCOPE_EXIT_AUX_IMPL(id, seq) \
+    auto BOOST_PP_CAT(boost_se_fn_, id) =  \
+        ::boost::scope_exit::aux::guard_maker() % \
+            [BOOST_PP_SEQ_ENUM(seq)]() mutable -> void
+
+#if defined(BOOST_MSVC)
+#define BOOST_SCOPE_EXIT(seq) BOOST_SCOPE_EXIT_AUX_IMPL(__COUNTER__, seq)
+#else
+#define BOOST_SCOPE_EXIT(seq) BOOST_SCOPE_EXIT_AUX_IMPL(__LINE__, seq)
+#endif
+
+#define BOOST_SCOPE_EXIT_TPL(seq) BOOST_SCOPE_EXIT(seq)
+
+#define BOOST_SCOPE_EXIT_END ;
+
+#else
 
 #include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -263,5 +312,6 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
 #define BOOST_SCOPE_EXIT_TPL(seq) BOOST_SCOPE_EXIT(seq)
 #endif
 
-#endif // #ifndef FILE_boost_scope_exit_hpp_INCLUDED
+#endif // #if defined(BOOST_SCOPE_EXIT_AUX_CXX0X)
 
+#endif // #ifndef FILE_boost_scope_exit_hpp_INCLUDED

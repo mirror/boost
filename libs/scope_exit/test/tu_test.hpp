@@ -18,9 +18,7 @@ inline int inline_f()
     return i;
 }
 
-#if !defined(BOOST_SCOPE_EXIT_AUX_GCC)
-#error "BOOST_SCOPE_EXIT_AUX_GCC undefined!"
-#elif BOOST_SCOPE_EXIT_AUX_GCC == 0 || BOOST_SCOPE_EXIT_AUX_GCC >= 304
+#if !defined(BOOST_SCOPE_EXIT_AUX_GCC) || BOOST_SCOPE_EXIT_AUX_GCC >= 304
 template<class Int>
 Int template_f(Int i)
 {
