@@ -1,4 +1,4 @@
-# Copyright (c) 2004 Michael Stevens
+# Copyright (c) 2004-2011 Michael Stevens, David Bellot
 # Use, modification and distribution are subject to the
 # Boost Software License, Version 1.0. (See accompanying file
 # LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -132,6 +132,10 @@ test-suite numeric/uBLAS
       ]
       [ run test_complex_norms.cpp
       ]
-	[ run test_assignment.cpp
-	]
+	  [ run test_assignment.cpp
+	  ]
+	  [ run test_triangular.cpp
+	  ]
+	  [ run test_inplace_solve.cpp
+	  ]
     ;
