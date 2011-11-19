@@ -96,6 +96,9 @@ namespace boost
        * Type of character the facet is instantiated on.
        */
       typedef CharT char_type;
+      /**
+       * Type of character string passed to member functions.
+       */
       typedef std::basic_string<CharT> string_type;
       /**
        * Type of iterator used to scan the character buffer.

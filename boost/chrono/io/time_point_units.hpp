@@ -26,70 +26,53 @@ namespace boost
   {
 
     /**
-     * @c time_point_units facet gives useful information about the duration units,
-     * as the number of plural forms, the plural form associated to a duration,
-     * the text associated to a plural form and a duration's period,
+     * @c time_point_units facet gives useful information about the time_point pattern,
+     * the text associated to a time_point's epoch,
      */
     template <typename CharT=char, class OutputIterator = std::ostreambuf_iterator<CharT> >
     class time_point_units: public std::locale::facet
     {
-      static time_point_units* global_;
     public:
+      /**
+       * Type of character the facet is instantiated on.
+       */
       typedef CharT char_type;
+      /**
+       * Type of iterator used to scan the character buffer.
+       */
       typedef OutputIterator iter_type;
 
+      /**
+       * Unique identifier for this type of facet.
+       */
       static std::locale::id id;
 
+      /**
+       * Construct a @c time_point_units facet.
+       * @param refs
+       * @Effects Construct a @c time_point_units facet.
+       * If the @c refs argument is @c 0 then destruction of the object is
+       * delegated to the @c locale, or locales, containing it. This allows
+       * the user to ignore lifetime management issues. On the other had,
+       * if @c refs is @c 1 then the object must be explicitly deleted;
+       * the @c locale will not do so. In this case, the object can be
+       * maintained across the lifetime of multiple locales.
+       */
       explicit time_point_units(size_t refs = 0) :
         std::locale::facet(refs)
       {
       }
 
       /**
-       * @Return Gets the global time_point_units,
-       * used when the stream has no associated time_point_units facet.
-       * @Throws an exception if the global is 0.
-      Ê
-      */
-      static time_point_units* global()
-      {
-        return global_;
-      }
-
-      /**
-      If the facet is not 0, sets the new global time_point_units, after deleting the preceding one. This is used when the stream has no associated time_point_units facet.
-      Otherwise throw an exception.
-      */
-      static void global(time_point_units* ptr)
-      {
-        global_ = ptr;
-      }
-
-      /**
-       * Factory cloning a the global instance.
-       * @return a clone of the global instance.
+       *
+       * @param s
+       * @param ios
+       * @Effects As if
+       * @code
+       * return do_put(s, ios, Clock());
+       * @endcode
+       * @return @ s
        */
-      static time_point_units* make()
-      {
-        return global_->clone();;
-      }
-
-      /**
-       * imbue a clone of this facet in @c ios.
-       * @param ios the ios to imbue.
-       */
-#if defined BOOST_CHRONO_USES_DURATION_UNITS_GLOBAL
-      // FIXME: This cause a linker problem on compilers other than clang-3.0 c++03 or c++0x
-      static time_point_units<CharT,OutputIterator> const& imbue_if_has_not(std::ios_base& ios)
-      {
-        if (!std::has_facet<time_point_units<CharT,OutputIterator> >(ios.getloc()))
-          ios.imbue(std::locale(ios.getloc(), make()));
-        return std::use_facet<time_point_units<CharT,OutputIterator> >(ios.getloc());
-      }
-#else
-      static inline time_point_units<CharT,OutputIterator> const& imbue_if_has_not(std::ios_base& ios);
-#endif
-
       template <typename Clock>
       iter_type put(iter_type s, std::ios_base& ios) const
       {
@@ -97,8 +80,7 @@ namespace boost
       }
 
       /**
-       *
-       * @return the pattern to be used by default.
+       * @return the pattern to be used by default calling @c do_get_pattern().
        */
       std::basic_string<CharT> get_pattern() const
       {
@@ -106,8 +88,7 @@ namespace boost
       }
 
       /**
-       *
-       * @return the pattern to be used by default.
+       * @return the epoch associated to the clock @c Clock calling @c do_get_epoch(Clock())
        */
       template <typename Clock>
       std::basic_string<CharT> get_epoch() const
@@ -116,13 +97,29 @@ namespace boost
       }
 
     protected:
+      /**
+       * Destroy the facet.
+       */
       virtual ~time_point_units() {};
-      virtual time_point_units<CharT, OutputIterator>* clone() const = 0;
 
+      /**
+       *  customization point for getting the timepoint's pattern.
+       */
       virtual std::basic_string<CharT> do_get_pattern() const=0;
 
+      /**
+       * Customization point for inserting the system_clock timepoint's epoch.
+       *
+       * @param s start of the output stream
+       * @param ios the associated ios_base
+       * @param c tag used to make it possible to override system_clock pattern.
+       * @return
+       */
       virtual iter_type
       do_put(iter_type s, std::ios_base& ios, system_clock) const = 0;
+      /**
+       *  customization point for getting the system_clock timepoint's epoch.
+       */
       virtual std::basic_string<CharT> do_get_epoch(system_clock) const=0;
 
       virtual iter_type
@@ -166,11 +163,6 @@ namespace boost
 
 
     protected:
-      time_point_units<CharT, OutputIterator>* clone() const
-      {
-        return new time_point_units_default<CharT, OutputIterator>();
-      }
-
       std::basic_string<CharT> do_get_pattern() const
       {
         static const CharT t[] =
@@ -260,21 +252,6 @@ namespace boost
 #endif
 
     };
-
-    template <typename CharT, class OutputIterator>
-    time_point_units<CharT, OutputIterator>* time_point_units<CharT, OutputIterator>::global_=new time_point_units_default<CharT, OutputIterator>();
-
-#if ! defined BOOST_CHRONO_USES_DURATION_UNITS_GLOBAL
-    template <typename CharT, class OutputIterator>
-    time_point_units<CharT,OutputIterator> const&
-    time_point_units<CharT, OutputIterator>::imbue_if_has_not(std::ios_base& ios)
-    {
-        if (!std::has_facet<time_point_units<CharT,OutputIterator> >(ios.getloc())) ios.imbue(
-            std::locale(ios.getloc(), new time_point_units_default<CharT,OutputIterator>()));
-        return std::use_facet<time_point_units<CharT,OutputIterator> >(ios.getloc());
-    }
-
-#endif
 
 
   } // chrono

@@ -137,11 +137,18 @@ namespace boost
     template <typename CharT=char, class OutputIterator = std::ostreambuf_iterator<CharT> >
     class duration_units: public std::locale::facet
     {
-      static duration_units* global_;
-
     public:
+      /**
+       * Type of character the facet is instantiated on.
+       */
       typedef CharT char_type;
+      /**
+       * Type of character string passed to member functions.
+       */
       typedef std::basic_string<CharT> string_type;
+      /**
+       * Type of iterator used to scan the character buffer.
+       */
       typedef OutputIterator iter_type;
 
       static std::locale::id id;
@@ -150,53 +157,6 @@ namespace boost
         std::locale::facet(refs)
       {
       }
-
-      /**
-       * @Return Gets the global duration_units,
-       * used when the stream has no associated duration_units facet.
-       * @Throws an exception if the global is 0.
-      Ê
-      */
-      static duration_units* global()
-      {
-        return global_;
-      }
-
-      /**
-      If the facet is not 0, sets the new global duration_units, after deleting the preceding one. This is used when the stream has no associated duration_units facet.
-      Otherwise throw an exception.
-      */
-      static void global(duration_units* ptr)
-      {
-        global_ = ptr;
-      }
-
-      /**
-       * Factory cloning a the global instance.
-       * @return a clone of the global instance.
-       */
-      static duration_units* make()
-      {
-        return global_->clone();;
-      }
-
-      /**
-       * imbue a clone of this facet in @c ios.
-       * @param ios the ios to imbue.
-       */
-#if defined BOOST_CHRONO_USES_DURATION_UNITS_GLOBAL
-      // FIXME: This cause a linker problem on compilers other than clang-3.0 c++03 or c++0x
-      static duration_units<CharT,OutputIterator> const& imbue_if_has_not(std::ios_base& ios)
-      {
-        if (!std::has_facet<duration_units<CharT,OutputIterator> >(ios.getloc()))
-          ios.imbue(std::locale(ios.getloc(), make()));
-        return std::use_facet<duration_units<CharT,OutputIterator> >(ios.getloc());
-      }
-#else
-      static inline duration_units<CharT,OutputIterator> const& imbue_if_has_not(std::ios_base& ios);
-#endif
-      /* TBR */
-      virtual bool swaps_value_unit_order() const = 0;
 
       /**
        *
@@ -338,8 +298,6 @@ namespace boost
     protected:
 
       virtual ~duration_units() {}
-      virtual duration_units<CharT, OutputIterator>* clone() const = 0;
-
       virtual string_type do_get_pattern() const=0;
       virtual std::size_t do_get_plural_forms() const = 0;
       virtual std::size_t do_get_plural_form(int_least64_t value) const = 0;
@@ -426,17 +384,7 @@ namespace boost
       }
       ~duration_units_default() {}
 
-      bool swaps_value_unit_order() const
-      {
-        return false;
-      }
-
     protected:
-      duration_units<CharT, OutputIterator>* clone() const
-      {
-        return new duration_units_default<CharT, OutputIterator>();
-      }
-
       std::size_t do_get_plural_forms() const
       {
         return 2;
@@ -796,22 +744,6 @@ namespace boost
       }
 
     };
-
-    template <typename CharT, class OutputIterator>
-    duration_units<CharT, OutputIterator>* duration_units<CharT, OutputIterator>::global_=new duration_units_default<CharT, OutputIterator>();
-
-#if ! defined BOOST_CHRONO_USES_DURATION_UNITS_GLOBAL
-    template <typename CharT, class OutputIterator>
-    duration_units<CharT,OutputIterator> const&
-    duration_units<CharT, OutputIterator>::imbue_if_has_not(std::ios_base& ios)
-    {
-        if (!std::has_facet<duration_units<CharT,OutputIterator> >(ios.getloc())) ios.imbue(
-            std::locale(ios.getloc(), new duration_units_default<CharT,OutputIterator>()));
-        return std::use_facet<duration_units<CharT,OutputIterator> >(ios.getloc());
-    }
-
-#endif
-
 
   } // chrono
 
