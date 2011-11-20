@@ -135,7 +135,7 @@ namespace boost
      * as the number of plural forms, the plural form associated to a duration,
      * the text associated to a plural form and a duration's period,
      */
-    template <typename CharT = char, class OutputIterator = std::ostreambuf_iterator<CharT> >
+    template <typename CharT = char>
     class duration_units: public std::locale::facet
     {
     public:
@@ -147,69 +147,12 @@ namespace boost
        * Type of character string passed to member functions.
        */
       typedef std::basic_string<CharT> string_type;
-      /**
-       * Type of iterator used to scan the character buffer.
-       */
-      typedef OutputIterator iter_type;
 
       static std::locale::id id;
 
       explicit duration_units(size_t refs = 0) :
         std::locale::facet(refs)
       {
-      }
-
-      /**
-       *
-       * @tparam Rep
-       * @tparam Period
-       * @Requires Rep must be explicitly convertible to int_least64_t.
-       * @Requires Period is named.
-       *
-       * @param s
-       * @param ios
-       * @param d
-       * @Effects puts the unit associated to the duration @c d in @c s taken in account the @c ios state flags.
-       * The implementation uses the non template virtual function do_put_unit as if
-       * @code
-       *   return do_put_unit(s, ios, get_duration_style(ios), Period(), int_least64_t(d.count()));
-       * @codeend
-       *
-       * where @get_duration_style gives the duration style associated to @ios.
-       * @return s
-       */
-      template <typename Rep, typename Period>
-      typename enable_if<detail::is_localizable<Period>, iter_type>::type put_unit(iter_type s, std::ios_base& ios,
-          duration<Rep, Period> const& d) const
-      {
-        return do_put_unit(s, ios, get_duration_style(ios), Period(), int_least64_t(d.count()));
-      }
-
-      /**
-       *
-       * @tparam Rep
-       * @tparam Period
-       * @Requires Rep must be explicitly convertible to int_least64_t.
-       * @Requires Period is not named, that is its textual representation is in the form [N/D].
-       *
-       * @param s
-       * @param ios
-       * @param d
-       * @Effects puts the unit associated to the duration @c d in @c s taken in account the @c ios state flags.
-       * The implementation uses the non template virtual function do_put_unit as if
-       * @code
-       *   return do_put_unit(s, ios, get_duration_style(ios), rt_ratio(Period()), int_least64_t(d.count()));
-       * @codeend
-       *
-       * where @get_duration_style gives the duration style associated to @ios and
-       * rt_ratio is a class that flats the template ration on a run-time ration so we can use it in virtual functions.
-       * @return s
-       */
-      template <typename Rep, typename Period>
-      typename disable_if<detail::is_localizable<Period>, iter_type>::type put_unit(iter_type s, std::ios_base& ios,
-          duration<Rep, Period> const& d) const
-      {
-        return do_put_unit(s, ios, get_duration_style(ios), rt_ratio(Period()), int_least64_t(d.count()));
       }
 
       const string_type* get_n_d_prefix_units_start() const
@@ -247,6 +190,31 @@ namespace boost
       {
         return do_get_pattern();
       }
+      /**
+       *
+       * @return the unit associated to this duration.
+       */
+      template <typename Rep, typename Period>
+      string_type get_unit(duration_style::type style, duration<Rep, Period> const& d) const
+      {
+        return do_get_unit(style, rt_ratio(Period()), d.count());
+      }
+      /**
+       *
+       * @return the unit associated to this duration.
+       */
+      template <typename Rep, typename Period>
+      string_type get_n_d_unit(duration_style::type style, duration<Rep, Period> const& d) const
+      {
+        return do_get_n_d_unit(style, rt_ratio(Period()), d.count());
+      }
+
+      template <typename Period>
+      bool is_named_unit() const
+      {
+        return do_is_named_unit(rt_ratio(Period()));
+      }
+
 
     protected:
 
@@ -260,65 +228,27 @@ namespace boost
       virtual const string_type* do_get_prefix_units_end() const = 0;
       virtual bool do_match_n_d_prefix_unit(const string_type* k) const = 0;
       virtual bool do_match_prefix_unit(const string_type* k, rt_ratio& rt) const = 0;
-
-      // used for ouput
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, atto, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, femto, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, pico, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, nano, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, micro, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, milli, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, centi, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deci, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, ratio<1> , int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deca, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, hecto, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, kilo, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, mega, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, tera, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, peta, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, exa, int_least64_t) const = 0;
-      virtual iter_type
-          do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, rt_ratio, int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, ratio<60> , int_least64_t) const = 0;
-      virtual iter_type
-      do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, ratio<3600> , int_least64_t) const = 0;
+      virtual string_type do_get_n_d_unit(duration_style::type style, rt_ratio rt, intmax_t v) const = 0;
+      virtual string_type do_get_unit(duration_style::type style,rt_ratio rt, intmax_t v) const = 0;
+      virtual bool do_is_named_unit(rt_ratio rt) const =0;
 
     };
 
-    template <typename CharT, class OutputIterator>
-    std::locale::id duration_units<CharT, OutputIterator>::id;
+    template <typename CharT>
+    std::locale::id duration_units<CharT>::id;
 
     // This class is used to define the strings for the default English
-    template <typename CharT = char, class OutputIterator = std::ostreambuf_iterator<CharT> >
-    class duration_units_default: public duration_units<CharT, OutputIterator>
+    template <typename CharT = char>
+    class duration_units_default: public duration_units<CharT>
     {
       static const std::size_t pfs_ = 2;
 
     public:
       typedef CharT char_type;
       typedef std::basic_string<CharT> string_type;
-      typedef OutputIterator iter_type;
 
       explicit duration_units_default(size_t refs = 0) :
-        duration_units<CharT, OutputIterator> (refs)
+        duration_units<CharT> (refs)
       {
         string_type* it = n_d_prefix_units_;
         it = fill_units(it, ratio<1> ());
@@ -438,13 +368,115 @@ namespace boost
         return n_d_prefix_units_ + (pfs_ + 1);
       }
 
-      virtual const string_type* do_get_prefix_units_start() const
+      const string_type* do_get_prefix_units_start() const
       {
         return prefix_units_;
       }
-      virtual const string_type* do_get_prefix_units_end() const
+      const string_type* do_get_prefix_units_end() const
       {
         return prefix_units_ + 19 * (pfs_ + 1);
+      }
+
+      bool do_is_named_unit(rt_ratio rt) const
+      {
+        if (rt.num==1) {
+          switch (rt.den)
+          {
+          case BOOST_RATIO_INTMAX_C(1):
+          case BOOST_RATIO_INTMAX_C(10):
+          case BOOST_RATIO_INTMAX_C(100):
+          case BOOST_RATIO_INTMAX_C(1000):
+          case BOOST_RATIO_INTMAX_C(1000000):
+          case BOOST_RATIO_INTMAX_C(1000000000):
+          case BOOST_RATIO_INTMAX_C(1000000000000):
+          case BOOST_RATIO_INTMAX_C(1000000000000000):
+          case BOOST_RATIO_INTMAX_C(1000000000000000000):
+            return true;
+          default:
+            return false;
+          }
+        } else if (rt.den==1) {
+          switch (rt.num)
+          {
+          case BOOST_RATIO_INTMAX_C(10):
+          case BOOST_RATIO_INTMAX_C(60):
+          case BOOST_RATIO_INTMAX_C(100):
+          case BOOST_RATIO_INTMAX_C(1000):
+          case BOOST_RATIO_INTMAX_C(3600):
+          case BOOST_RATIO_INTMAX_C(1000000):
+          case BOOST_RATIO_INTMAX_C(1000000000):
+          case BOOST_RATIO_INTMAX_C(1000000000000):
+          case BOOST_RATIO_INTMAX_C(1000000000000000):
+          case BOOST_RATIO_INTMAX_C(1000000000000000000):
+            return true;
+          default:
+            return false;
+          }
+        }
+        return false;
+
+      }
+
+      std::string do_get_n_d_unit(duration_style::type style, rt_ratio, intmax_t ) const
+      {
+        return do_get_plural_form(style, ratio<1>(), 1);
+      }
+      std::string do_get_unit(duration_style::type style, rt_ratio rt, intmax_t v) const
+      {
+        if (rt.num==1) {
+          switch (rt.den)
+          {
+          case BOOST_RATIO_INTMAX_C(1):
+            return do_get_plural_form(style, ratio<1>(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(10):
+            return do_get_plural_form(style, deci(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(100):
+            return do_get_plural_form(style, centi(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(1000):
+            return do_get_plural_form(style, milli(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(1000000):
+            return do_get_plural_form(style, micro(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(1000000000):
+            return do_get_plural_form(style, nano(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(1000000000000):
+            return do_get_plural_form(style, pico(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(1000000000000000):
+            return do_get_plural_form(style, femto(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(1000000000000000000):
+            return do_get_plural_form(style, atto(), do_get_plural_form(v));
+          default:
+            ;
+          }
+        } else if (rt.den==1) {
+          switch (rt.num)
+          {
+          case BOOST_RATIO_INTMAX_C(10):
+             return do_get_plural_form(style, deca(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(60):
+            return do_get_plural_form(style, ratio<60>(), do_get_plural_form(v));
+          case BOOST_RATIO_INTMAX_C(100):
+             return do_get_plural_form(style, hecto(), do_get_plural_form(v));
+           case BOOST_RATIO_INTMAX_C(1000):
+             return do_get_plural_form(style, kilo(), do_get_plural_form(v));
+           case BOOST_RATIO_INTMAX_C(3600):
+             return do_get_plural_form(style, ratio<3600>(), do_get_plural_form(v));
+           case BOOST_RATIO_INTMAX_C(1000000):
+             return do_get_plural_form(style, mega(), do_get_plural_form(v));
+           case BOOST_RATIO_INTMAX_C(1000000000):
+             return do_get_plural_form(style, giga(), do_get_plural_form(v));
+           case BOOST_RATIO_INTMAX_C(1000000000000):
+             return do_get_plural_form(style, tera(), do_get_plural_form(v));
+           case BOOST_RATIO_INTMAX_C(1000000000000000):
+             return do_get_plural_form(style, peta(), do_get_plural_form(v));
+           case BOOST_RATIO_INTMAX_C(1000000000000000000):
+             return do_get_plural_form(style, exa(), do_get_plural_form(v));
+           default:
+             ;
+           }
+        }
+
+        return "";
+
       }
 
       virtual std::size_t do_get_plural_forms() const
@@ -464,134 +496,6 @@ namespace boost
         static const string_type pattern(t, t + sizeof (t) / sizeof (t[0]));
 
         return pattern;
-      }
-
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, atto u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, femto u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, pico u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, nano u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, micro u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, milli u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, centi u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deci u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base&, duration_style_type style, ratio<1> u, int_least64_t value) const
-      {
-        string_type str = do_get_plural_form(style, u, do_get_plural_form(value));
-        return std::copy(str.begin(), str.end(), s);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, deca u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, hecto u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, kilo u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, mega u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, giga u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, tera u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, peta u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, exa u, int_least64_t value) const
-      {
-        string_type str = do_get_ratio_prefix(style, u);
-        std::copy(str.begin(), str.end(), s);
-        return do_put_unit(s, ios, style, ratio<1> (), value);
-      }
-
-      iter_type do_put_unit(iter_type s, std::ios_base&, duration_style_type style, ratio<60> u, int_least64_t value) const
-      {
-        string_type str = do_get_plural_form(style, u, do_get_plural_form(value));
-        return std::copy(str.begin(), str.end(), s);
-      }
-
-      iter_type do_put_unit(iter_type s, std::ios_base&, duration_style_type style, ratio<3600> u, int_least64_t value) const
-      {
-        string_type str = do_get_plural_form(style, u, do_get_plural_form(value));
-        return std::copy(str.begin(), str.end(), s);
-      }
-
-      iter_type do_put_unit(iter_type s, std::ios_base& ios, duration_style_type style, rt_ratio rtr,
-          int_least64_t value) const
-      {
-        *s++ = CharT('[');
-        std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, ' ', rtr.num);
-        *s++ = CharT('/');
-        std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, ' ', rtr.den);
-        *s++ = CharT(']');
-
-        return do_put_unit(s, ios, style, ratio<1> (), value);
       }
 
       string_type do_get_plural_form(duration_style_type style, ratio<1> , std::size_t pf) const

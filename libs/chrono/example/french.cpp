@@ -22,19 +22,19 @@
     using namespace boost;
     using namespace boost::chrono;
 
-    template <typename CharT=char, class OutputIterator = std::ostreambuf_iterator<CharT> >
-    class duration_units_fr: public duration_units_default<CharT, OutputIterator>
+    template <typename CharT=char>
+    class duration_units_fr: public duration_units_default<CharT>
     {
     public:
       typedef CharT char_type;
-      typedef OutputIterator iter_type;
 
       explicit duration_units_fr(size_t refs = 0) :
-        duration_units_default<CharT, OutputIterator>(refs)
+        duration_units_default<CharT>(refs)
       {
       }
     protected:
 
+      using duration_units_default<CharT>::do_get_plural_form;
       std::size_t do_get_plural_form(boost::int_least64_t value) const
       {
         return (value == -1 || value == 0 || value == 1) ? 0 : 1;

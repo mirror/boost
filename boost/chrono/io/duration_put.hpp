@@ -42,6 +42,10 @@ namespace boost
        */
       typedef CharT char_type;
       /**
+       * Type of character string passed to member functions.
+       */
+      typedef std::basic_string<CharT> string_type;
+      /**
        * Type of iterator used to write in the character buffer.
        */
       typedef OutputIterator iter_type;
@@ -91,21 +95,21 @@ namespace boost
       iter_type put(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d, const CharT* pattern,
           const CharT* pat_end) const
       {
-        if (std::has_facet<duration_units<CharT, OutputIterator> >(ios.getloc()))
+        if (std::has_facet<duration_units<CharT> >(ios.getloc()))
         {
-          duration_units<CharT, OutputIterator> const&facet = std::use_facet<duration_units<CharT, OutputIterator> >(
+          duration_units<CharT> const&facet = std::use_facet<duration_units<CharT> >(
               ios.getloc());
           return put(facet, s, ios, fill, d, pattern, pat_end);
         }
         else
         {
-          duration_units_default<CharT, OutputIterator> facet;
+          duration_units_default<CharT> facet;
           return put(facet, s, ios, fill, d, pattern, pat_end);
         }
       }
 
       template <typename Rep, typename Period>
-      iter_type put(duration_units<CharT, OutputIterator> const& units_facet, iter_type s, std::ios_base& ios, char_type fill,
+      iter_type put(duration_units<CharT> const& units_facet, iter_type s, std::ios_base& ios, char_type fill,
           duration<Rep, Period> const& d, const CharT* pattern, const CharT* pat_end) const
       {
 
@@ -129,16 +133,9 @@ namespace boost
             }
             case 'u':
             {
-              s = put_unit(units_facet, s, ios, d);
+              s = put_unit(units_facet, s, ios, fill, d);
               break;
             }
-              //                case 'x':
-              //                {
-              //                  std::basic_string<CharT> pat = units_facet.get_pattern();
-              //                  pattern = pat.data();
-              //                  pat_end = pattern + pat.size();
-              //                  break;
-              //                }
             default:
               BOOST_ASSERT(false && "Boost::Chrono internal error.");
               break;
@@ -165,16 +162,16 @@ namespace boost
       template <typename Rep, typename Period>
       iter_type put(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d) const
       {
-        if (std::has_facet<duration_units<CharT, OutputIterator> >(ios.getloc()))
+        if (std::has_facet<duration_units<CharT> >(ios.getloc()))
         {
-          duration_units<CharT, OutputIterator> const&facet = std::use_facet<duration_units<CharT, OutputIterator> >(
+          duration_units<CharT> const&facet = std::use_facet<duration_units<CharT> >(
               ios.getloc());
           std::basic_string<CharT> str = facet.get_pattern();
           return put(facet, s, ios, fill, d, str.data(), str.data() + str.size());
         }
         else
         {
-          duration_units_default<CharT, OutputIterator> facet;
+          duration_units_default<CharT> facet;
           std::basic_string<CharT> str = facet.get_pattern();
           return put(facet, s, ios, fill, d, str.data(), str.data() + str.size());
         }
@@ -206,26 +203,38 @@ namespace boost
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
-      iter_type put_unit(iter_type s, std::ios_base& ios, duration<Rep, Period> const& d) const
+      iter_type put_unit(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d) const
       {
-        if (std::has_facet<duration_units<CharT, OutputIterator> >(ios.getloc()))
+        if (std::has_facet<duration_units<CharT> >(ios.getloc()))
         {
-          duration_units<CharT, OutputIterator> const&facet = std::use_facet<duration_units<CharT, OutputIterator> >(
+          duration_units<CharT> const&facet = std::use_facet<duration_units<CharT> >(
               ios.getloc());
-          return put_unit(facet, s, ios, d);
+          return put_unit(facet, s, ios, fill, d);
         }
         else
         {
-          duration_units_default<CharT, OutputIterator> facet;
-          return put_unit(facet, s, ios, d);
+          duration_units_default<CharT> facet;
+          return put_unit(facet, s, ios, fill, d);
         }
       }
 
       template <typename Rep, typename Period>
-      iter_type put_unit(duration_units<CharT, OutputIterator> const& facet, iter_type s, std::ios_base& ios,
+      iter_type put_unit(duration_units<CharT> const& facet, iter_type s, std::ios_base& ios, char_type fill,
           duration<Rep, Period> const& d) const
       {
-        return facet.put_unit(s, ios, d);
+        if (facet.template is_named_unit<Period>()) {
+          string_type str = facet.get_unit(get_duration_style(ios), d);
+          std::copy(str.begin(), str.end(), s);
+        } else {
+          *s++ = CharT('[');
+          std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, fill, Period::num);
+          *s++ = CharT('/');
+          std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, fill, Period::den);
+          *s++ = CharT(']');
+          string_type str = facet.get_n_d_unit(get_duration_style(ios), d);
+          std::copy(str.begin(), str.end(), s);
+        }
+        return s;
       }
 
       /**
