@@ -1,17 +1,8 @@
-//
-//  Copyright (c) 2000-2010
-//  Joerg Walter, Mathias Koch, David Bellot
+//  Copyright (c) 2000-2011 Joerg Walter, Mathias Koch, David Bellot
 //
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
-//
-//  The authors gratefully acknowledge the support of
-//  GeNeSys mbH & Co. KG in producing this work.
-//
-//  And we acknowledge the support from all contributors.
-
-/// \file vector.hpp Definition for the class vector and its derivative
 
 #ifndef _BOOST_UBLAS_VECTOR_
 #define _BOOST_UBLAS_VECTOR_
@@ -46,7 +37,7 @@ namespace boost { namespace numeric { namespace ublas {
         using vector_container<self_type>::operator ();
 #endif
 
-	typedef typename A::size_type size_type;
+    typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef typename type_traits<T>::const_reference const_reference;
@@ -60,60 +51,60 @@ namespace boost { namespace numeric { namespace ublas {
         typedef dense_tag storage_category;
 
         // Construction and destruction
-	
-	/// \brief Constructor of a vector
-	/// By default it is empty, i.e. \c size()==0.
+    
+    /// \brief Constructor of a vector
+    /// By default it is empty, i.e. \c size()==0.
         BOOST_UBLAS_INLINE
         vector ():
             vector_container<self_type> (),
             data_ () {}
 
-	/// \brief Constructor of a vector with a predefined size
-	/// By default, its elements are initialized to 0.
-	/// \param size initial size of the vector
+    /// \brief Constructor of a vector with a predefined size
+    /// By default, its elements are initialized to 0.
+    /// \param size initial size of the vector
         explicit BOOST_UBLAS_INLINE
         vector (size_type size):
             vector_container<self_type> (),
             data_ (size) {
         }
 
-	/// \brief Constructor of a vector by copying from another container
-	/// This type has the generic name \c array_typ within the vector definition.
-	/// \param size initial size of the vector \bug this value is not used
-	/// \param data container of type \c A
-	/// \todo remove this definition because \c size is not used
+    /// \brief Constructor of a vector by copying from another container
+    /// This type has the generic name \c array_typ within the vector definition.
+    /// \param size initial size of the vector \bug this value is not used
+    /// \param data container of type \c A
+    /// \todo remove this definition because \c size is not used
         BOOST_UBLAS_INLINE
         vector (size_type size, const array_type &data):
             vector_container<self_type> (),
             data_ (data) {}
 
-	/// \brief Constructor of a vector by copying from another container
-	/// This type has the generic name \c array_typ within the vector definition.
-	/// \param data container of type \c A
+    /// \brief Constructor of a vector by copying from another container
+    /// This type has the generic name \c array_typ within the vector definition.
+    /// \param data container of type \c A
         BOOST_UBLAS_INLINE
         vector (const array_type &data):
             vector_container<self_type> (),
             data_ (data) {}
 
-	/// \brief Constructor of a vector with a predefined size and a unique initial value
-	/// \param size of the vector
-	/// \param init value to assign to each element of the vector
+    /// \brief Constructor of a vector with a predefined size and a unique initial value
+    /// \param size of the vector
+    /// \param init value to assign to each element of the vector
         BOOST_UBLAS_INLINE
         vector (size_type size, const value_type &init):
             vector_container<self_type> (),
             data_ (size, init) {}
 
-	/// \brief Copy-constructor of a vector
-	/// \param v is the vector to be duplicated
+    /// \brief Copy-constructor of a vector
+    /// \param v is the vector to be duplicated
         BOOST_UBLAS_INLINE
         vector (const vector &v):
             vector_container<self_type> (),
             data_ (v.data_) {}
 
-	/// \brief Copy-constructor of a vector from a vector_expression
-	/// Depending on the vector_expression, this constructor can have the cost of the computations 
-	/// of the expression (trivial to say it, but it is to take into account in your complexity calculations).
-	/// \param ae the vector_expression which values will be duplicated into the vector
+    /// \brief Copy-constructor of a vector from a vector_expression
+    /// Depending on the vector_expression, this constructor can have the cost of the computations 
+    /// of the expression (trivial to say it, but it is to take into account in your complexity calculations).
+    /// \param ae the vector_expression which values will be duplicated into the vector
         template<class AE>
         BOOST_UBLAS_INLINE
         vector (const vector_expression<AE> &ae):
@@ -122,58 +113,58 @@ namespace boost { namespace numeric { namespace ublas {
             vector_assign<scalar_assign> (*this, ae);
         }
 
-	// -----------------------
+    // -----------------------
         // Random Access Container
-	// -----------------------
-	
-	/// \brief Return the maximum size of the data container.
-	/// Return the upper bound (maximum size) on the data container. Depending on the container, it can be bigger than the current size of the vector.
+    // -----------------------
+    
+    /// \brief Return the maximum size of the data container.
+    /// Return the upper bound (maximum size) on the data container. Depending on the container, it can be bigger than the current size of the vector.
         BOOST_UBLAS_INLINE
         size_type max_size () const {
             return data_.max_size ();
         }
         
-	/// \brief Return true if the vector is empty (\c size==0)
-	/// \return \c true if empty, \c false otherwise
+    /// \brief Return true if the vector is empty (\c size==0)
+    /// \return \c true if empty, \c false otherwise
         BOOST_UBLAS_INLINE
         bool empty () const {
             return data_.size () == 0;
         }
 
-	// ---------
+    // ---------
         // Accessors
-	// ---------
-	
-	/// \brief Return the size of the vector
+    // ---------
+    
+    /// \brief Return the size of the vector
         BOOST_UBLAS_INLINE
         size_type size () const {
             return data_.size ();
         }
 
-	// -----------------
+    // -----------------
         // Storage accessors
-	// -----------------
-	
-	/// \brief Return a \c const reference to the container. Useful to access data directly for specific type of container.
+    // -----------------
+    
+    /// \brief Return a \c const reference to the container. Useful to access data directly for specific type of container.
         BOOST_UBLAS_INLINE
         const array_type &data () const {
             return data_;
         }
 
-	/// \brief Return a reference to the container. Useful to speed-up write operations to the data in very specific case.
+    /// \brief Return a reference to the container. Useful to speed-up write operations to the data in very specific case.
         BOOST_UBLAS_INLINE
         array_type &data () {
             return data_;
         }
 
-	// --------
+    // --------
         // Resizing
-	// --------
-	
-	/// \brief Resize the vector
-	/// Resize the vector to a new size. If \c preserve is true, data are copied otherwise data are lost. If the new size is bigger, the remaining values are filled in with the initial value (0 by default) in the case of \c unbounded_array, which is the container by default. If the new size is smaller, last values are lost. This behaviour can be different if you explicitely specify another type of container.
-	/// \param size new size of the vector
-	/// \param preserve if true, keep values
+    // --------
+    
+    /// \brief Resize the vector
+    /// Resize the vector to a new size. If \c preserve is true, data are copied otherwise data are lost. If the new size is bigger, the remaining values are filled in with the initial value (0 by default) in the case of \c unbounded_array, which is the container by default. If the new size is smaller, last values are lost. This behaviour can be different if you explicitely specify another type of container.
+    /// \param size new size of the vector
+    /// \param preserve if true, keep values
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (preserve)
@@ -182,85 +173,85 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().resize (size);
         }
 
-	// ---------------
+    // ---------------
         // Element support
-	// ---------------
-	
-	/// \brief Return a pointer to the element \f$i\f$
-	/// \param i index of the element
-	// XXX this semantic is not the one expected by the name of this method
+    // ---------------
+    
+    /// \brief Return a pointer to the element \f$i\f$
+    /// \param i index of the element
+    // XXX this semantic is not the one expected by the name of this method
         BOOST_UBLAS_INLINE
         pointer find_element (size_type i) {
             return const_cast<pointer> (const_cast<const self_type&>(*this).find_element (i));
         }
 
-	/// \brief Return a const pointer to the element \f$i\f$
-	/// \param i index of the element
-	// XXX  this semantic is not the one expected by the name of this method
+    /// \brief Return a const pointer to the element \f$i\f$
+    /// \param i index of the element
+    // XXX  this semantic is not the one expected by the name of this method
         BOOST_UBLAS_INLINE
         const_pointer find_element (size_type i) const {
             return & (data () [i]);
         }
 
-	// --------------
+    // --------------
         // Element access
-	// --------------
+    // --------------
 
-	/// \brief Return a const reference to the element \f$i\f$
-	/// Return a const reference to the element \f$i\f$. With some compilers, this notation will be faster than \c[i]
-	/// \param i index of the element
+    /// \brief Return a const reference to the element \f$i\f$
+    /// Return a const reference to the element \f$i\f$. With some compilers, this notation will be faster than \c[i]
+    /// \param i index of the element
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
             return data () [i];
         }
-	
-	/// \brief Return a reference to the element \f$i\f$
-	/// Return a reference to the element \f$i\f$. With some compilers, this notation will be faster than \c[i]
-	/// \param i index of the element
+    
+    /// \brief Return a reference to the element \f$i\f$
+    /// Return a reference to the element \f$i\f$. With some compilers, this notation will be faster than \c[i]
+    /// \param i index of the element
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
             return data () [i];
         }
 
-	/// \brief Return a const reference to the element \f$i\f$
-	/// \param i index of the element
+    /// \brief Return a const reference to the element \f$i\f$
+    /// \param i index of the element
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
             return (*this) (i);
         }
-	
-	/// \brief Return a reference to the element \f$i\f$
-	/// \param i index of the element
+    
+    /// \brief Return a reference to the element \f$i\f$
+    /// \param i index of the element
         BOOST_UBLAS_INLINE
         reference operator [] (size_type i) {
             return (*this) (i);
         }
 
-	// ------------------
+    // ------------------
         // Element assignment
-	// ------------------
-	
-	/// \brief Set element \f$i\f$ to the value \c t
-	/// \param i index of the element
-	/// \param t reference to the value to be set
-	// XXX semantic of this is to insert a new element and therefore size=size+1 ?
+    // ------------------
+    
+    /// \brief Set element \f$i\f$ to the value \c t
+    /// \param i index of the element
+    /// \param t reference to the value to be set
+    // XXX semantic of this is to insert a new element and therefore size=size+1 ?
         BOOST_UBLAS_INLINE
         reference insert_element (size_type i, const_reference t) {
             return (data () [i] = t);
         }
 
-	/// \brief Set element \f$i\f$ to the \e zero value
-	/// \param i index of the element
+    /// \brief Set element \f$i\f$ to the \e zero value
+    /// \param i index of the element
         BOOST_UBLAS_INLINE
         void erase_element (size_type i) {
             data () [i] = value_type/*zero*/();
         }
         
-	// -------
+    // -------
         // Zeroing
-	// -------
-	
-	/// \brief Clear the vector, i.e. set all values to the \c zero value.
+    // -------
+    
+    /// \brief Clear the vector, i.e. set all values to the \c zero value.
         BOOST_UBLAS_INLINE
         void clear () {
             std::fill (data ().begin (), data ().end (), value_type/*zero*/());
@@ -269,9 +260,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
 #ifdef BOOST_UBLAS_MOVE_SEMANTICS
 
-	/// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
-	/// \param v is the source vector
-	/// \return a reference to a vector (i.e. the destination vector)
+    /// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
+    /// \param v is the source vector
+    /// \return a reference to a vector (i.e. the destination vector)
         /*! @note "pass by value" the key idea to enable move semantics */
         BOOST_UBLAS_INLINE
         vector &operator = (vector v) {
@@ -279,9 +270,9 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 #else
-	/// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
-	/// \param v is the source vector
-	/// \return a reference to a vector (i.e. the destination vector)
+    /// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
+    /// \param v is the source vector
+    /// \return a reference to a vector (i.e. the destination vector)
         BOOST_UBLAS_INLINE
         vector &operator = (const vector &v) {
             data () = v.data ();
@@ -289,10 +280,10 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-	/// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
-	/// Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector). This method does not create any temporary.
-	/// \param v is the source vector container
-	/// \return a reference to a vector (i.e. the destination vector)
+    /// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
+    /// Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector). This method does not create any temporary.
+    /// \param v is the source vector container
+    /// \return a reference to a vector (i.e. the destination vector)
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         vector &operator = (const vector_container<C> &v) {
@@ -301,20 +292,20 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-	/// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
-	/// \param v is the source vector
-	/// \return a reference to a vector (i.e. the destination vector)
+    /// \brief Assign a full vector (\e RHS-vector) to the current vector (\e LHS-vector)
+    /// \param v is the source vector
+    /// \return a reference to a vector (i.e. the destination vector)
         BOOST_UBLAS_INLINE
         vector &assign_temporary (vector &v) {
             swap (v);
             return *this;
         }
 
-	/// \brief Assign the result of a vector_expression to the vector
-	/// Assign the result of a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
-	/// \return a reference to the resulting vector
+    /// \brief Assign the result of a vector_expression to the vector
+    /// Assign the result of a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
+    /// \return a reference to the resulting vector
         template<class AE>
         BOOST_UBLAS_INLINE
         vector &operator = (const vector_expression<AE> &ae) {
@@ -322,11 +313,11 @@ namespace boost { namespace numeric { namespace ublas {
             return assign_temporary (temporary);
         }
 
-	/// \brief Assign the result of a vector_expression to the vector
-	/// Assign the result of a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
-	/// \return a reference to the resulting vector
+    /// \brief Assign the result of a vector_expression to the vector
+    /// Assign the result of a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
+    /// \return a reference to the resulting vector
         template<class AE>
         BOOST_UBLAS_INLINE
         vector &assign (const vector_expression<AE> &ae) {
@@ -334,16 +325,16 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-	// -------------------
+    // -------------------
         // Computed assignment
-	// -------------------
-	
-	/// \brief Assign the sum of the vector and a vector_expression to the vector
-	/// Assign the sum of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// A temporary is created for the computations.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
-	/// \return a reference to the resulting vector
+    // -------------------
+    
+    /// \brief Assign the sum of the vector and a vector_expression to the vector
+    /// Assign the sum of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// A temporary is created for the computations.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
+    /// \return a reference to the resulting vector
         template<class AE>
         BOOST_UBLAS_INLINE
         vector &operator += (const vector_expression<AE> &ae) {
@@ -351,12 +342,12 @@ namespace boost { namespace numeric { namespace ublas {
             return assign_temporary (temporary);
         }
 
-	/// \brief Assign the sum of the vector and a vector_expression to the vector
-	/// Assign the sum of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// No temporary is created. Computations are done and stored directly into the resulting vector.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
-	/// \return a reference to the resulting vector
+    /// \brief Assign the sum of the vector and a vector_expression to the vector
+    /// Assign the sum of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// No temporary is created. Computations are done and stored directly into the resulting vector.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
+    /// \return a reference to the resulting vector
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         vector &operator += (const vector_container<C> &v) {
@@ -364,24 +355,24 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-	/// \brief Assign the sum of the vector and a vector_expression to the vector
-	/// Assign the sum of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// No temporary is created. Computations are done and stored directly into the resulting vector.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
-	/// \return a reference to the resulting vector
+    /// \brief Assign the sum of the vector and a vector_expression to the vector
+    /// Assign the sum of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// No temporary is created. Computations are done and stored directly into the resulting vector.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
+    /// \return a reference to the resulting vector
         template<class AE>
         BOOST_UBLAS_INLINE
         vector &plus_assign (const vector_expression<AE> &ae) {
             vector_assign<scalar_plus_assign> (*this, ae);
             return *this;
         }
-	
-	/// \brief Assign the difference of the vector and a vector_expression to the vector
-	/// Assign the difference of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// A temporary is created for the computations.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
+    
+    /// \brief Assign the difference of the vector and a vector_expression to the vector
+    /// Assign the difference of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// A temporary is created for the computations.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
         template<class AE>
         BOOST_UBLAS_INLINE
         vector &operator -= (const vector_expression<AE> &ae) {
@@ -389,12 +380,12 @@ namespace boost { namespace numeric { namespace ublas {
             return assign_temporary (temporary);
         }
 
-	/// \brief Assign the difference of the vector and a vector_expression to the vector
-	/// Assign the difference of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// No temporary is created. Computations are done and stored directly into the resulting vector.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
-	/// \return a reference to the resulting vector
+    /// \brief Assign the difference of the vector and a vector_expression to the vector
+    /// Assign the difference of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// No temporary is created. Computations are done and stored directly into the resulting vector.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
+    /// \return a reference to the resulting vector
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         vector &operator -= (const vector_container<C> &v) {
@@ -402,12 +393,12 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-	/// \brief Assign the difference of the vector and a vector_expression to the vector
-	/// Assign the difference of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// No temporary is created. Computations are done and stored directly into the resulting vector.
-	/// \tparam AE is the type of the vector_expression
-	/// \param ae is a const reference to the vector_expression
-	/// \return a reference to the resulting vector
+    /// \brief Assign the difference of the vector and a vector_expression to the vector
+    /// Assign the difference of the vector and a vector_expression to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// No temporary is created. Computations are done and stored directly into the resulting vector.
+    /// \tparam AE is the type of the vector_expression
+    /// \param ae is a const reference to the vector_expression
+    /// \return a reference to the resulting vector
         template<class AE>
         BOOST_UBLAS_INLINE
         vector &minus_assign (const vector_expression<AE> &ae) {
@@ -415,12 +406,12 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-	/// \brief Assign the product of the vector and a scalar to the vector
-	/// Assign the product of the vector and a scalar to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// No temporary is created. Computations are done and stored directly into the resulting vector.
-	/// \tparam AE is the type of the vector_expression
-	/// \param at is a const reference to the scalar
-	/// \return a reference to the resulting vector
+    /// \brief Assign the product of the vector and a scalar to the vector
+    /// Assign the product of the vector and a scalar to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// No temporary is created. Computations are done and stored directly into the resulting vector.
+    /// \tparam AE is the type of the vector_expression
+    /// \param at is a const reference to the scalar
+    /// \return a reference to the resulting vector
         template<class AT>
         BOOST_UBLAS_INLINE
         vector &operator *= (const AT &at) {
@@ -428,12 +419,12 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-	/// \brief Assign the division of the vector by a scalar to the vector
-	/// Assign the division of the vector by a scalar to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
-	/// No temporary is created. Computations are done and stored directly into the resulting vector.
-	/// \tparam AE is the type of the vector_expression
-	/// \param at is a const reference to the scalar
-	/// \return a reference to the resulting vector
+    /// \brief Assign the division of the vector by a scalar to the vector
+    /// Assign the division of the vector by a scalar to the vector. This is lazy-compiled and will be optimized out by the compiler on any type of expression.
+    /// No temporary is created. Computations are done and stored directly into the resulting vector.
+    /// \tparam AE is the type of the vector_expression
+    /// \param at is a const reference to the scalar
+    /// \return a reference to the resulting vector
         template<class AT>
         BOOST_UBLAS_INLINE
         vector &operator /= (const AT &at) {
@@ -441,12 +432,12 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-	// --------
+    // --------
         // Swapping
-	// --------
+    // --------
 
-	/// \brief Swap the content of the vector with another vector
-	/// \param v is the vector to be swapped with
+    /// \brief Swap the content of the vector with another vector
+    /// \param v is the vector to be swapped with
         BOOST_UBLAS_INLINE
         void swap (vector &v) {
             if (this != &v) {
@@ -454,9 +445,9 @@ namespace boost { namespace numeric { namespace ublas {
             }
         }
 
-	/// \brief Swap the content of two vectors
-	/// \param v1 is the first vector. It takes values from v2
-	/// \param v2 is the second vector It takes values from v1
+    /// \brief Swap the content of two vectors
+    /// \param v1 is the first vector. It takes values from v2
+    /// \param v2 is the second vector It takes values from v1
         BOOST_UBLAS_INLINE
         friend void swap (vector &v1, vector &v2) {
             v1.swap (v2);
@@ -477,12 +468,12 @@ namespace boost { namespace numeric { namespace ublas {
         class iterator;
 #endif
 
-	// --------------
+    // --------------
         // Element lookup
-	// --------------
-	
-	/// \brief Return a const iterator to the element \e i
-	/// \param i index of the element
+    // --------------
+    
+    /// \brief Return a const iterator to the element \e i
+    /// \param i index of the element
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -492,8 +483,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
 
-	/// \brief Return an iterator to the element \e i
-	/// \param i index of the element
+    /// \brief Return an iterator to the element \e i
+    /// \param i index of the element
         BOOST_UBLAS_INLINE
         iterator find (size_type i) {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -514,9 +505,9 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename vector::const_reference reference;
             typedef const typename vector::pointer pointer;
 
-	    // ----------------------------
+        // ----------------------------
             // Construction and destruction
-	    // ----------------------------
+        // ----------------------------
 
 
             BOOST_UBLAS_INLINE
@@ -529,43 +520,43 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator (const typename self_type::iterator &it):  // ISSUE vector:: stops VC8 using std::iterator here
                 container_const_reference<self_type> (it ()), it_ (it.it_) {}
 
-	    // ----------
+        // ----------
             // Arithmetic
-	    // ----------
+        // ----------
 
-	    /// \brief Increment by 1 the position of the iterator
-	    /// \return a reference to the const iterator
+        /// \brief Increment by 1 the position of the iterator
+        /// \return a reference to the const iterator
             BOOST_UBLAS_INLINE
             const_iterator &operator ++ () {
                 ++ it_;
                 return *this;
             }
 
-	    /// \brief Decrement by 1 the position of the iterator
-	    /// \return a reference to the const iterator
+        /// \brief Decrement by 1 the position of the iterator
+        /// \return a reference to the const iterator
             BOOST_UBLAS_INLINE
             const_iterator &operator -- () {
                 -- it_;
                 return *this;
             }
-	  
-	    /// \brief Increment by \e n the position of the iterator 
-	    /// \return a reference to the const iterator
+      
+        /// \brief Increment by \e n the position of the iterator 
+        /// \return a reference to the const iterator
             BOOST_UBLAS_INLINE
             const_iterator &operator += (difference_type n) {
                 it_ += n;
                 return *this;
             }
 
-	    /// \brief Decrement by \e n the position of the iterator 
-	    /// \return a reference to the const iterator
+        /// \brief Decrement by \e n the position of the iterator 
+        /// \return a reference to the const iterator
             BOOST_UBLAS_INLINE
             const_iterator &operator -= (difference_type n) {
                 it_ -= n;
                 return *this;
             }
 
-	    /// \brief Return the different in number of positions between 2 iterators
+        /// \brief Return the different in number of positions between 2 iterators
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
@@ -574,24 +565,24 @@ namespace boost { namespace numeric { namespace ublas {
 
             /// \brief Dereference an iterator
             /// Dereference an iterator: a bounds' check is done before returning the value. A bad_index() expection is returned if out of bounds.
-	    /// \return a const reference to the value pointed by the iterator
+        /// \return a const reference to the value pointed by the iterator
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
                 BOOST_UBLAS_CHECK (it_ >= (*this) ().begin ().it_ && it_ < (*this) ().end ().it_, bad_index ());
                 return *it_;
             }
 
-	    /// \brief Dereference an iterator at the n-th forward value
-	    /// Dereference an iterator at the n-th forward value, that is the value pointed by iterator+n.
+        /// \brief Dereference an iterator at the n-th forward value
+        /// Dereference an iterator at the n-th forward value, that is the value pointed by iterator+n.
             /// A bounds' check is done before returning the value. A bad_index() expection is returned if out of bounds.
-	    /// \return a const reference
+        /// \return a const reference
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
                 return *(it_ + n);
             }
 
             // Index
-	    /// \brief return the index of the element referenced by the iterator
+        /// \brief return the index of the element referenced by the iterator
             BOOST_UBLAS_INLINE
             size_type index () const {
                 BOOST_UBLAS_CHECK (it_ >= (*this) ().begin ().it_ && it_ < (*this) ().end ().it_, bad_index ());
@@ -600,7 +591,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Assignment
             BOOST_UBLAS_INLINE
-	    /// \brief assign the value of an iterator to the iterator	   
+        /// \brief assign the value of an iterator to the iterator       
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
                 it_ = it.it_;
@@ -608,17 +599,17 @@ namespace boost { namespace numeric { namespace ublas {
             }
 
             // Comparison
-	    /// \brief compare the value of two itetarors
-	    /// \return true if they reference the same element
+        /// \brief compare the value of two itetarors
+        /// \return true if they reference the same element
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
                 return it_ == it.it_;
             }
 
-	
-	    /// \brief compare the value of two iterators
-	    /// \return return true if the left-hand-side iterator refers to a value placed before the right-hand-side iterator
+    
+        /// \brief compare the value of two iterators
+        /// \return return true if the left-hand-side iterator refers to a value placed before the right-hand-side iterator
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
@@ -632,13 +623,13 @@ namespace boost { namespace numeric { namespace ublas {
         };
 #endif
 
-	/// \brief return an iterator on the first element of the vector
+    /// \brief return an iterator on the first element of the vector
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
             return find (0);
         }
 
-	/// \brief return an iterator after the last element of the vector
+    /// \brief return an iterator after the last element of the vector
         BOOST_UBLAS_INLINE
         const_iterator end () const {
             return find (data_.size ());
@@ -736,13 +727,13 @@ namespace boost { namespace numeric { namespace ublas {
         };
 #endif
 
-	/// \brief Return an iterator on the first element of the vector
+    /// \brief Return an iterator on the first element of the vector
         BOOST_UBLAS_INLINE
         iterator begin () {
             return find (0);
         }
 
-	/// \brief Return an iterator at the end of the vector
+    /// \brief Return an iterator at the end of the vector
         BOOST_UBLAS_INLINE
         iterator end () {
             return find (data_.size ());
@@ -752,37 +743,37 @@ namespace boost { namespace numeric { namespace ublas {
         typedef reverse_iterator_base<const_iterator> const_reverse_iterator;
         typedef reverse_iterator_base<iterator> reverse_iterator;
 
-	/// \brief Return a const reverse iterator before the first element of the reversed vector (i.e. end() of normal vector)
+    /// \brief Return a const reverse iterator before the first element of the reversed vector (i.e. end() of normal vector)
         BOOST_UBLAS_INLINE
         const_reverse_iterator rbegin () const {
             return const_reverse_iterator (end ());
         }
 
-	/// \brief Return a const reverse iterator on the end of the reverse vector (i.e. first element of the normal vector) 
+    /// \brief Return a const reverse iterator on the end of the reverse vector (i.e. first element of the normal vector) 
         BOOST_UBLAS_INLINE
         const_reverse_iterator rend () const {
             return const_reverse_iterator (begin ());
         }
 
-	/// \brief Return a const reverse iterator before the first element of the reversed vector (i.e. end() of normal vector)
+    /// \brief Return a const reverse iterator before the first element of the reversed vector (i.e. end() of normal vector)
         BOOST_UBLAS_INLINE
         reverse_iterator rbegin () {
             return reverse_iterator (end ());
         }
 
-	/// \brief Return a const reverse iterator on the end of the reverse vector (i.e. first element of the normal vector) 
+    /// \brief Return a const reverse iterator on the end of the reverse vector (i.e. first element of the normal vector) 
         BOOST_UBLAS_INLINE
         reverse_iterator rend () {
             return reverse_iterator (begin ());
         }
 
-	// -------------
+    // -------------
         // Serialization
-	// -------------
-	
-	/// Serialize a vector into and archive as defined in Boost
-	/// \param ar Archive object. Can be a flat file, an XML file or any other stream
-	/// \param file_version Optional file version (not yet used)
+    // -------------
+    
+    /// Serialize a vector into and archive as defined in Boost
+    /// \param ar Archive object. Can be a flat file, an XML file or any other stream
+    /// \param file_version Optional file version (not yet used)
         template<class Archive>
         void serialize(Archive & ar, const unsigned int /* file_version */){
             ar & serialization::make_nvp("data",data_);
@@ -1100,55 +1091,55 @@ namespace boost { namespace numeric { namespace ublas {
         typedef sparse_tag storage_category;
 
         // Construction and destruction
-	/// \brief Simple constructor with dimension and index 0
+    /// \brief Simple constructor with dimension and index 0
         BOOST_UBLAS_INLINE
         unit_vector ():
             vector_container<self_type> (),
             size_ (0), index_ (0) {}
 
-	/// \brief Constructor of unit_vector
-	/// \param size is the dimension of the vector
-	/// \param index is the order of the vector
+    /// \brief Constructor of unit_vector
+    /// \param size is the dimension of the vector
+    /// \param index is the order of the vector
         BOOST_UBLAS_INLINE
         explicit unit_vector (size_type size, size_type index = 0):
             vector_container<self_type> (),
             size_ (size), index_ (index) {}
 
-	/// \brief Copy-constructor
+    /// \brief Copy-constructor
         BOOST_UBLAS_INLINE
         unit_vector (const unit_vector &v):
             vector_container<self_type> (),
             size_ (v.size_), index_ (v.index_) {}
 
         // Accessors
-	//----------
-	
-	/// \brief Return the size (dimension) of the vector
+    //----------
+    
+    /// \brief Return the size (dimension) of the vector
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
         }
 
-	/// \brief Return the order of the unit vector
+    /// \brief Return the order of the unit vector
         BOOST_UBLAS_INLINE
         size_type index () const {
             return index_;
         }
 
         // Resizing
-	// --------
-	
-	/// \brief Resize the vector. The values are preserved by default (i.e. the index does not change)
-	/// \param size is the new size of the vector
+    // --------
+    
+    /// \brief Resize the vector. The values are preserved by default (i.e. the index does not change)
+    /// \param size is the new size of the vector
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool /*preserve*/ = true) {
             size_ = size;
         }
 
         // Element support
-	// ---------------
-	
-	/// \brief Return a const pointer to the element of index i
+    // ---------------
+    
+    /// \brief Return a const pointer to the element of index i
         BOOST_UBLAS_INLINE
         const_pointer find_element (size_type i) const {
             if (i == index_)
