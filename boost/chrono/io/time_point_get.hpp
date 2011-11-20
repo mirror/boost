@@ -190,20 +190,6 @@ namespace boost
               }
               break;
             }
-              //                case 'x':
-              //                {
-              //                  if (duration_found || epoch_found || loc_found) {
-              //                    err |= std::ios_base::failbit;
-              //                    return s;
-              //                  }
-              //                  loc_found=true;
-              //                  std::basic_string<CharT> pat = time_point_units<CharT>::imbue_if_has_not(ios).get_pattern();
-              //                  if (pattern+1 != pat_end)
-              //                  pat.append(pattern+1, pat_end);
-              //                  pattern = pat.data();
-              //                  pat_end = pattern + pat.size();
-              //                  break;
-              //                }
             default:
               BOOST_ASSERT(false && "Boost::Chrono internal error.");
               break;
