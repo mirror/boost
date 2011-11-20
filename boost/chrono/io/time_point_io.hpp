@@ -432,11 +432,17 @@ namespace boost
               {
                 std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 duration<double> d = tp - system_clock::from_time_t(t) + seconds(tm.tm_sec);
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 if (d.count() < 10) os << CharT('0');
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 std::ios::fmtflags flgs = os.flags();
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 os.setf(std::ios::fixed, std::ios::floatfield);
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 os << d.count();
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 os.flags(flgs);
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 if (tz == timezone::local)
                 {
                   std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
