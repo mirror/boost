@@ -148,42 +148,83 @@ namespace boost
        */
       typedef std::basic_string<CharT> string_type;
 
+      /**
+       * Unique identifier for this type of facet.
+       */
       static std::locale::id id;
 
+      /**
+       * Construct a @c duration_units facet.
+       * @param refs
+       * @Effects Construct a @c duration_units facet.
+       * If the @c refs argument is @c 0 then destruction of the object is
+       * delegated to the @c locale, or locales, containing it. This allows
+       * the user to ignore lifetime management issues. On the other had,
+       * if @c refs is @c 1 then the object must be explicitly deleted;
+       * the @c locale will not do so. In this case, the object can be
+       * maintained across the lifetime of multiple locales.
+       */
       explicit duration_units(size_t refs = 0) :
         std::locale::facet(refs)
       {
       }
 
-      const string_type* get_n_d_prefix_units_start() const
+      /**
+       * @effect calls the do_...
+       * @return pointer to the start of valid [N/D] units.
+       */
+      const string_type* get_n_d_valid_units_start() const
       {
-        return do_get_n_d_prefix_units_start();
+        return do_get_n_d_valid_units_start();
       }
-      const string_type* get_n_d_prefix_units_end() const
+      /**
+       * @effect calls the do_...
+       * @return pointer to the end of valid [N/D] units.
+       */
+      const string_type* get_n_d_valid_units_end() const
       {
-        return do_get_n_d_prefix_units_end();
-      }
-
-      const string_type* get_prefix_units_start() const
-      {
-        return do_get_prefix_units_start();
-      }
-      const string_type* get_prefix_units_end() const
-      {
-        return do_get_prefix_units_end();
-      }
-
-      bool match_n_d_prefix_unit(const string_type* k) const
-      {
-        return do_match_n_d_prefix_unit(k);
-      }
-      bool match_prefix_unit(const string_type* k, rt_ratio& rt) const
-      {
-        return do_match_prefix_unit(k, rt);
+        return do_get_n_d_valid_units_end();
       }
 
       /**
-       *
+       * @effect calls the do_...
+       * @return pointer to the start of valid units, symbol or prefix with its different plural forms.
+       */
+      const string_type* get_valid_units_start() const
+      {
+        return do_get_valid_units_start();
+      }
+      /**
+       * @effect calls the do_...
+       * @return pointer to the end of valid units.
+       */
+      const string_type* get_valid_units_end() const
+      {
+        return do_get_valid_units_end();
+      }
+
+      /**
+       * @effect calls the do_...
+       * @param k the found pointer to the [N/D] unit.
+       * @return true if @c k matches a valid unit.
+       */
+      bool match_n_d_valid_unit(const string_type* k) const
+      {
+        return do_match_n_d_valid_unit(k);
+      }
+      /**
+       * @param k the found pointer to the unit.
+       * @effect calls the do_...
+       * @Effects @c rt is set to the valid Period when the @c k matches a valid unit.
+       * @return true if @c k matches a valid unit.
+       */
+      bool match_valid_unit(const string_type* k, rt_ratio& rt) const
+      {
+        return do_match_valid_unit(k, rt);
+      }
+
+      /**
+       * @effect calls the do_...
        * @return the pattern to be used by default.
        */
       string_type get_pattern() const
@@ -191,24 +232,28 @@ namespace boost
         return do_get_pattern();
       }
       /**
-       *
+       * @effect calls the do_...
        * @return the unit associated to this duration.
        */
       template <typename Rep, typename Period>
       string_type get_unit(duration_style::type style, duration<Rep, Period> const& d) const
       {
-        return do_get_unit(style, rt_ratio(Period()), d.count());
+        return do_get_unit(style, rt_ratio(Period()), static_cast<intmax_t>(d.count()));
       }
       /**
-       *
-       * @return the unit associated to this duration.
+       * @effect calls the do_...
+       * @return the [N/D] suffix unit associated to this duration.
        */
       template <typename Rep, typename Period>
       string_type get_n_d_unit(duration_style::type style, duration<Rep, Period> const& d) const
       {
-        return do_get_n_d_unit(style, rt_ratio(Period()), d.count());
+        return do_get_n_d_unit(style, rt_ratio(Period()), static_cast<intmax_t>(d.count()));
       }
 
+      /**
+       * @effect calls the do_...
+       * @return true if the unit associated to the given Period is named, false otherwise.
+       */
       template <typename Period>
       bool is_named_unit() const
       {
@@ -218,18 +263,55 @@ namespace boost
 
     protected:
 
+      /**
+       * @Effects Destroys the facet
+       */
       virtual ~duration_units()
       {
       }
+      /**
+       * @return the pattern to be used by default.
+       */
       virtual string_type do_get_pattern() const=0;
-      virtual const string_type* do_get_n_d_prefix_units_start() const = 0;
-      virtual const string_type* do_get_n_d_prefix_units_end() const = 0;
-      virtual const string_type* do_get_prefix_units_start() const = 0;
-      virtual const string_type* do_get_prefix_units_end() const = 0;
-      virtual bool do_match_n_d_prefix_unit(const string_type* k) const = 0;
-      virtual bool do_match_prefix_unit(const string_type* k, rt_ratio& rt) const = 0;
+      /**
+       * @return pointer to the start of valid [N/D] units.
+       */
+      virtual const string_type* do_get_n_d_valid_units_start() const = 0;
+      /**
+       * @return pointer to the end of valid [N/D] units.
+       */
+      virtual const string_type* do_get_n_d_valid_units_end() const = 0;
+      /**
+       * @return pointer to the start of valid units, symbol or prefix with its different plural forms.
+       */
+      virtual const string_type* do_get_valid_units_start() const = 0;
+      /**
+       * @return pointer to the end of valid units.
+       */
+      virtual const string_type* do_get_valid_units_end() const = 0;
+      /**
+       * @param k the found pointer to the [N/D] unit.
+       * @return true if @c k matches a valid unit.
+       */
+      virtual bool do_match_n_d_valid_unit(const string_type* k) const = 0;
+      /**
+       * @param k the found pointer to the unit.
+       * @effect calls the do_...
+       * @Effects @c rt is set to the valid Period when the @c k matches a valid unit.
+       * @return true if @c k matches a valid unit.
+       */
+      virtual bool do_match_valid_unit(const string_type* k, rt_ratio& rt) const = 0;
+      /**
+       * @return the [N/D] suffix unit associated to this duration.
+       */
       virtual string_type do_get_n_d_unit(duration_style::type style, rt_ratio rt, intmax_t v) const = 0;
+      /**
+       * @return the unit associated to this duration.
+       */
       virtual string_type do_get_unit(duration_style::type style,rt_ratio rt, intmax_t v) const = 0;
+      /**
+       * @return true if the unit associated to the given Period is named, false otherwise.
+       */
       virtual bool do_is_named_unit(rt_ratio rt) const =0;
 
     };
@@ -237,22 +319,42 @@ namespace boost
     template <typename CharT>
     std::locale::id duration_units<CharT>::id;
 
-    // This class is used to define the strings for the default English
+    /**
+     * This class is used to define the strings for the default English
+     *
+     */
     template <typename CharT = char>
     class duration_units_default: public duration_units<CharT>
     {
       static const std::size_t pfs_ = 2;
 
     public:
+      /**
+       * Type of character the facet is instantiated on.
+       */
       typedef CharT char_type;
+      /**
+       * Type of character string passed to member functions.
+       */
       typedef std::basic_string<CharT> string_type;
 
+      /**
+       * Construct a @c duration_units_default facet.
+       * @param refs
+       * @Effects Construct a @c duration_units_default facet.
+       * If the @c refs argument is @c 0 then destruction of the object is
+       * delegated to the @c locale, or locales, containing it. This allows
+       * the user to ignore lifetime management issues. On the other had,
+       * if @c refs is @c 1 then the object must be explicitly deleted;
+       * the @c locale will not do so. In this case, the object can be
+       * maintained across the lifetime of multiple locales.
+       */
       explicit duration_units_default(size_t refs = 0) :
         duration_units<CharT> (refs)
       {
-        string_type* it = n_d_prefix_units_;
+        string_type* it = n_d_valid_units_;
         it = fill_units(it, ratio<1> ());
-        it = prefix_units_;
+        it = valid_units_;
         it = fill_units(it, atto());
         it = fill_units(it, femto());
         it = fill_units(it, pico());
@@ -273,15 +375,22 @@ namespace boost
         it = fill_units(it, ratio<60> ());
         it = fill_units(it, ratio<3600> ());
       }
+      /**
+       * Destroys the facet.
+       */
       ~duration_units_default()
       {
       }
 
     protected:
 
-      bool do_match_n_d_prefix_unit(const string_type* k) const
+      /**
+       * @param k the found pointer to the [N/D] unit.
+       * @return true if @c k matches a valid unit.
+       */
+      bool do_match_n_d_valid_unit(const string_type* k) const
       {
-        std::size_t index = (k - n_d_prefix_units_) / (pfs_ + 1);
+        std::size_t index = (k - n_d_valid_units_) / (pfs_ + 1);
         switch (index)
         {
         case 0:
@@ -291,9 +400,14 @@ namespace boost
         }
         return true;
       }
-      bool do_match_prefix_unit(const string_type* k, rt_ratio& rt) const
+      /**
+       * @param k the found pointer to the unit.
+       * @Effects @c rt is set to the valid Period when the @c k matches a valid unit.
+       * @return true if @c k matches a valid unit.
+       */
+      bool do_match_valid_unit(const string_type* k, rt_ratio& rt) const
       {
-        std::size_t index = (k - prefix_units_) / (pfs_ + 1);
+        std::size_t index = (k - valid_units_) / (pfs_ + 1);
         switch (index)
         {
         case 0:
@@ -359,24 +473,43 @@ namespace boost
         }
         return true;
       }
-      const string_type* do_get_n_d_prefix_units_start() const
+
+      /**
+       * @return pointer to the start of valid [N/D] units.
+       */
+      const string_type* do_get_n_d_valid_units_start() const
       {
-        return n_d_prefix_units_;
+        return n_d_valid_units_;
       }
-      const string_type* do_get_n_d_prefix_units_end() const
+      /**
+       * @return pointer to the end of valid [N/D] units.
+       */
+      const string_type* do_get_n_d_valid_units_end() const
       {
-        return n_d_prefix_units_ + (pfs_ + 1);
+        return n_d_valid_units_ + (pfs_ + 1);
       }
 
-      const string_type* do_get_prefix_units_start() const
+      /**
+       * @return pointer to the start of valid units.
+       */
+      const string_type* do_get_valid_units_start() const
       {
-        return prefix_units_;
+        return valid_units_;
       }
-      const string_type* do_get_prefix_units_end() const
+      /**
+       * @return pointer to the end of valid units.
+       */
+      const string_type* do_get_valid_units_end() const
       {
-        return prefix_units_ + 19 * (pfs_ + 1);
+        return valid_units_ + 19 * (pfs_ + 1);
       }
 
+      /**
+       *
+       * This facet names the units associated to the following periods:
+       * atto,femto,pico,nano,micro,milli,centi,deci,ratio<1>,deca,hecto,kilo,mega,giga,tera,peta,exa,ratio<60> and ratio<3600>.
+       * @return true if the unit associated to the given Period is named, false otherwise.
+       */
       bool do_is_named_unit(rt_ratio rt) const
       {
         if (rt.num==1) {
@@ -417,33 +550,41 @@ namespace boost
 
       }
 
+      /**
+       * In English the suffix used after [N/D] is the one associated to the period ratio<1>.
+       * @return the [N/D] suffix unit associated to this duration.
+       */
       std::string do_get_n_d_unit(duration_style::type style, rt_ratio, intmax_t ) const
       {
-        return do_get_plural_form(style, ratio<1>(), 1);
+        return do_get_unit(style, ratio<1>(), 1);
       }
+
+      /**
+       * @return the unit associated to this duration if it is named, "" otherwise.
+       */
       std::string do_get_unit(duration_style::type style, rt_ratio rt, intmax_t v) const
       {
         if (rt.num==1) {
           switch (rt.den)
           {
           case BOOST_RATIO_INTMAX_C(1):
-            return do_get_plural_form(style, ratio<1>(), do_get_plural_form(v));
+            return do_get_unit(style, ratio<1>(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(10):
-            return do_get_plural_form(style, deci(), do_get_plural_form(v));
+            return do_get_unit(style, deci(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(100):
-            return do_get_plural_form(style, centi(), do_get_plural_form(v));
+            return do_get_unit(style, centi(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(1000):
-            return do_get_plural_form(style, milli(), do_get_plural_form(v));
+            return do_get_unit(style, milli(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(1000000):
-            return do_get_plural_form(style, micro(), do_get_plural_form(v));
+            return do_get_unit(style, micro(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(1000000000):
-            return do_get_plural_form(style, nano(), do_get_plural_form(v));
+            return do_get_unit(style, nano(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(1000000000000):
-            return do_get_plural_form(style, pico(), do_get_plural_form(v));
+            return do_get_unit(style, pico(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(1000000000000000):
-            return do_get_plural_form(style, femto(), do_get_plural_form(v));
+            return do_get_unit(style, femto(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(1000000000000000000):
-            return do_get_plural_form(style, atto(), do_get_plural_form(v));
+            return do_get_unit(style, atto(), do_get_plural_form(v));
           default:
             ;
           }
@@ -451,25 +592,25 @@ namespace boost
           switch (rt.num)
           {
           case BOOST_RATIO_INTMAX_C(10):
-             return do_get_plural_form(style, deca(), do_get_plural_form(v));
+             return do_get_unit(style, deca(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(60):
-            return do_get_plural_form(style, ratio<60>(), do_get_plural_form(v));
+            return do_get_unit(style, ratio<60>(), do_get_plural_form(v));
           case BOOST_RATIO_INTMAX_C(100):
-             return do_get_plural_form(style, hecto(), do_get_plural_form(v));
+             return do_get_unit(style, hecto(), do_get_plural_form(v));
            case BOOST_RATIO_INTMAX_C(1000):
-             return do_get_plural_form(style, kilo(), do_get_plural_form(v));
+             return do_get_unit(style, kilo(), do_get_plural_form(v));
            case BOOST_RATIO_INTMAX_C(3600):
-             return do_get_plural_form(style, ratio<3600>(), do_get_plural_form(v));
+             return do_get_unit(style, ratio<3600>(), do_get_plural_form(v));
            case BOOST_RATIO_INTMAX_C(1000000):
-             return do_get_plural_form(style, mega(), do_get_plural_form(v));
+             return do_get_unit(style, mega(), do_get_plural_form(v));
            case BOOST_RATIO_INTMAX_C(1000000000):
-             return do_get_plural_form(style, giga(), do_get_plural_form(v));
+             return do_get_unit(style, giga(), do_get_plural_form(v));
            case BOOST_RATIO_INTMAX_C(1000000000000):
-             return do_get_plural_form(style, tera(), do_get_plural_form(v));
+             return do_get_unit(style, tera(), do_get_plural_form(v));
            case BOOST_RATIO_INTMAX_C(1000000000000000):
-             return do_get_plural_form(style, peta(), do_get_plural_form(v));
+             return do_get_unit(style, peta(), do_get_plural_form(v));
            case BOOST_RATIO_INTMAX_C(1000000000000000000):
-             return do_get_plural_form(style, exa(), do_get_plural_form(v));
+             return do_get_unit(style, exa(), do_get_plural_form(v));
            default:
              ;
            }
@@ -477,16 +618,6 @@ namespace boost
 
         return "";
 
-      }
-
-      virtual std::size_t do_get_plural_forms() const
-      {
-        return pfs_;
-      }
-
-      virtual std::size_t do_get_plural_form(int_least64_t value) const
-      {
-        return (value == -1 || value == 1) ? 0 : 1;
       }
 
       string_type do_get_pattern() const
@@ -498,7 +629,19 @@ namespace boost
         return pattern;
       }
 
-      string_type do_get_plural_form(duration_style_type style, ratio<1> , std::size_t pf) const
+    protected:
+      /**
+       *
+       * @param value
+       * @return
+       */
+      virtual std::size_t do_get_plural_form(int_least64_t value) const
+      {
+        return (value == -1 || value == 1) ? 0 : 1;
+      }
+
+
+      string_type do_get_unit(duration_style_type style, ratio<1> , std::size_t pf) const
       {
         static const CharT t[] =
         { 's' };
@@ -526,7 +669,7 @@ namespace boost
         throw "exception";
       }
 
-      virtual string_type do_get_plural_form(duration_style_type style, ratio<60> , std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, ratio<60> , std::size_t pf) const
       {
         static const CharT t[] =
         { 'm', 'i', 'n' };
@@ -546,7 +689,7 @@ namespace boost
         throw "exception";
       }
 
-      virtual string_type do_get_plural_form(duration_style_type style, ratio<3600> , std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, ratio<3600> , std::size_t pf) const
       {
         static const CharT t[] =
         { 'h' };
@@ -564,69 +707,69 @@ namespace boost
         // assert
         throw "exception";
       }
-      virtual string_type do_get_plural_form(duration_style_type style, atto u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, atto u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, femto u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, femto u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, pico u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, pico u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, nano u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, nano u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, micro u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, micro u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, milli u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, milli u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, centi u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, centi u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, deci u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, deci u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, deca u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, deca u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, hecto u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, hecto u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, kilo u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, kilo u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, mega u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, mega u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, giga u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, giga u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, tera u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, tera u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, peta u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, peta u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
-      virtual string_type do_get_plural_form(duration_style_type style, exa u, std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, exa u, std::size_t pf) const
       {
-        return do_get_ratio_prefix(style, u) + do_get_plural_form(style, ratio<1> (), pf);
+        return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
 
     protected:
@@ -719,10 +862,10 @@ namespace boost
        * @return the translation associated to the plural form given as parameter.
        */
       template <typename Period>
-      typename enable_if<detail::is_localizable<Period>, string_type>::type get_plural_form(duration_style_type style,
+      typename enable_if<detail::is_localizable<Period>, string_type>::type get_unit(duration_style_type style,
           std::size_t pf) const
       {
-        return do_get_plural_form(style, Period(), pf);
+        return do_get_unit(style, Period(), pf);
       }
 
     private:
@@ -731,14 +874,14 @@ namespace boost
       {
         for (std::size_t pf = 0; pf < pfs_; ++pf)
         {
-          *it++ = get_plural_form<Period> (duration_style::prefix, pf);
+          *it++ = get_unit<Period> (duration_style::prefix, pf);
         }
-        *it++ = get_plural_form<Period> (duration_style::symbol, 0);
+        *it++ = get_unit<Period> (duration_style::symbol, 0);
         return it;
       }
 
-      string_type n_d_prefix_units_[3];
-      string_type prefix_units_[19 * 3];
+      string_type n_d_valid_units_[3];
+      string_type valid_units_[19 * 3];
 
     };
 

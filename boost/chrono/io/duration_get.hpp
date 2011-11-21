@@ -294,9 +294,7 @@ namespace boost
         // num / den is now factor to multiply by r
         if (!detail::reduce(r, den, err)) return s;
 
-        //if (r > ( (duration_values<common_type_t>::max)() / num))
         if (chrono::detail::gt(r, ( (duration_values<common_type_t>::max)() / num)))
-        //if (common_type_t(r) > ( (duration_values<common_type_t>::max)() / num))
         {
           // Conversion to Period overflowed
           err |= std::ios_base::failbit;
@@ -447,11 +445,11 @@ namespace boost
             return i;
           }
           // parse s or second or seconds
-          return do_get_n_d_prefix_unit(facet, i, e, is, err);
+          return do_get_n_d_valid_unit(facet, i, e, is, err);
         }
         else
         {
-          return do_get_prefix_unit(facet, i, e, is, err, rt);
+          return do_get_valid_unit(facet, i, e, is, err, rt);
         }
       }
 
@@ -482,18 +480,18 @@ namespace boost
        * @param err the ios_base state.
        * @return @c s
        */
-      virtual iter_type do_get_n_d_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
+      virtual iter_type do_get_n_d_valid_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
           std::ios_base&, std::ios_base::iostate& err) const
       {
         // parse SI name, short or long
 
-        const string_type* units = facet.get_n_d_prefix_units_start();
-        const string_type* units_end = facet.get_n_d_prefix_units_end();
+        const string_type* units = facet.get_n_d_valid_units_start();
+        const string_type* units_end = facet.get_n_d_valid_units_end();
 
         const string_type* k = chrono_detail::scan_keyword(i, e, units, units_end,
         //~ std::use_facet<std::ctype<CharT> >(loc),
             err);
-        if (!facet.match_n_d_prefix_unit(k))
+        if (!facet.match_n_d_valid_unit(k))
         {
           err |= std::ios_base::failbit;
         }
@@ -516,20 +514,20 @@ namespace boost
        * @Effects
        * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name.
        */
-      virtual iter_type do_get_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
+      virtual iter_type do_get_valid_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
           std::ios_base&, std::ios_base::iostate& err, rt_ratio &rt) const
       {
         // parse SI name, short or long
 
-        const string_type* units = facet.get_prefix_units_start();
-        const string_type* units_end = facet.get_prefix_units_end();
+        const string_type* units = facet.get_valid_units_start();
+        const string_type* units_end = facet.get_valid_units_end();
 
         err = std::ios_base::goodbit;
         const string_type* k = chrono_detail::scan_keyword(i, e, units, units_end,
         //~ std::use_facet<std::ctype<CharT> >(loc),
             err);
 
-        if (!facet.match_prefix_unit(k, rt))
+        if (!facet.match_valid_unit(k, rt))
         {
           err |= std::ios_base::failbit;
         }

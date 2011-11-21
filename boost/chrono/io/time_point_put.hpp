@@ -30,9 +30,6 @@ namespace boost
      * The @c time_point_put facet provides facilities for formatted output of duration values.
      * The member function of @c time_point_put take a duration and translate this into character string representation.
      *
-     * FIXME As the facet doesn't have any data, I'm wondering if this should functions
-     * shouldn't be at the namespace level or static member functions.
-     * This will leverage the user to need to ensure that the facet is imbued on the ios_base.
      */
     template <class CharT, class OutputIterator = std::ostreambuf_iterator<CharT> >
     class time_point_put: public std::locale::facet
