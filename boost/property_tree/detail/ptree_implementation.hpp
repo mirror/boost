@@ -385,10 +385,21 @@ namespace boost { namespace property_tree
         subs::ch(this).reverse();
     }
 
+    namespace impl
+    {
+        struct by_first
+        {
+            template <typename P>
+            bool operator ()(const P& lhs, const P& rhs) const {
+              return lhs.first < rhs.first;
+            };
+        };
+    }
+
     template<class K, class D, class C> inline
     void basic_ptree<K, D, C>::sort()
     {
-        subs::ch(this).sort();
+        sort(impl::by_first());
     }
 
     template<class K, class D, class C>
