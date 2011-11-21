@@ -42,6 +42,10 @@
         || defined(_GLIBCXX_PARALLEL) \
         || defined(_GLIBCXX_PROFILE)
 #      define BOOST_DETAIL_NO_CONTAINER_FWD
+#    else
+#      if defined(__GLIBCXX__) && __GLIBCXX__ >= 20040530
+#        define BOOST_CONTAINER_FWD_COMPLEX_STRUCT
+#      endif
 #    endif
 #  elif defined(__STL_CONFIG_H)
      // generic SGI STL
@@ -63,7 +67,6 @@
 #  elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
      // Dinkumware Library (this has to appear after any possible replacement
      // libraries)
-#    define BOOST_CONTAINER_FWD_COMPLEX_STRUCT
 #  else
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  endif
