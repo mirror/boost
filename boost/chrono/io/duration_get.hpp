@@ -191,10 +191,9 @@ namespace boost
         intermediate_type r;
         rt_ratio rt;
         bool value_found = false, unit_found = false;
-        //bool loc_found=false;
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
-        err = std::ios_base::goodbit;
+        //err = std::ios_base::goodbit;
         while (pattern != pat_end && err == std::ios_base::goodbit)
         {
           if (s == end)
@@ -264,6 +263,7 @@ namespace boost
           else
           {
             err |= std::ios_base::failbit;
+            return s;
           }
 
         }
@@ -348,7 +348,6 @@ namespace boost
           std::basic_string<CharT> str = facet.get_pattern();
           return get(facet, s, end, ios, err, d, str.data(), str.data() + str.size());
         }
-
       }
 
       /**

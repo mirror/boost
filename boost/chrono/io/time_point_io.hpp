@@ -438,9 +438,9 @@ namespace boost
                 std::ios::fmtflags flgs = os.flags();
                 std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 os.setf(std::ios::fixed, std::ios::floatfield);
-                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< " " << d.count()  << std::endl;
                 os << d.count();
-                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< " " << d.count() << std::endl;
                 os.flags(flgs);
                 std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 if (tz == timezone::local)

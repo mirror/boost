@@ -136,7 +136,7 @@ namespace boost
       {
 
         Duration d;
-        bool duration_found = false, epoch_found = false, loc_found = false;
+        bool duration_found = false, epoch_found = false;
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         err = std::ios_base::goodbit;
@@ -160,7 +160,7 @@ namespace boost
             {
             case 'd':
             {
-              if (duration_found || loc_found)
+              if (duration_found)
               {
                 err |= std::ios_base::failbit;
                 return s;
@@ -176,7 +176,7 @@ namespace boost
             }
             case 'e':
             {
-              if (epoch_found || loc_found)
+              if (epoch_found)
               {
                 err |= std::ios_base::failbit;
                 return s;

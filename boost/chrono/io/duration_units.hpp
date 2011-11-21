@@ -13,11 +13,7 @@
 #include <boost/ratio/ratio_io.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/io/duration_style.hpp>
-#include <boost/chrono/process_cpu_clocks.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/scoped_array.hpp>
-#include <boost/chrono/detail/scan_keyword.hpp>
 #include <string>
 #include <ios>
 #include <locale>
@@ -27,91 +23,6 @@ namespace boost
 {
   namespace chrono
   {
-    namespace detail
-    {
-      template <typename Period>
-      struct is_localizable: false_type
-      {
-      };
-
-      template <>
-      struct is_localizable<atto> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<femto> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<pico> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<nano> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<micro> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<milli> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<centi> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<deci> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<ratio<1> > : true_type
-      {
-      };
-      template <>
-      struct is_localizable<deca> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<hecto> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<kilo> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<mega> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<giga> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<tera> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<peta> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<exa> : true_type
-      {
-      };
-      template <>
-      struct is_localizable<ratio<60> > : true_type
-      {
-      };
-      template <>
-      struct is_localizable<ratio<3600> > : true_type
-      {
-      };
-
-    }
     class rt_ratio
     {
     public:
@@ -326,6 +237,7 @@ namespace boost
     template <typename CharT = char>
     class duration_units_default: public duration_units<CharT>
     {
+    protected:
       static const std::size_t pfs_ = 2;
 
     public:
@@ -354,7 +266,28 @@ namespace boost
       {
         string_type* it = n_d_valid_units_;
         it = fill_units(it, ratio<1> ());
-        it = valid_units_;
+        it = init_valid_units(valid_units_);
+      }
+
+      /**
+       * Destroys the facet.
+       */
+      ~duration_units_default()
+      {
+      }
+
+    protected:
+
+      explicit duration_units_default(string_type*, size_t refs = 0) :
+        duration_units<CharT> (refs)
+      {
+        string_type* it = n_d_valid_units_;
+        it = fill_units(it, ratio<1> ());
+        //it = init_valid_units(valid_units);
+      }
+
+      string_type* init_valid_units(string_type* it)
+      {
         it = fill_units(it, atto());
         it = fill_units(it, femto());
         it = fill_units(it, pico());
@@ -374,15 +307,8 @@ namespace boost
         it = fill_units(it, ratio<1> ());
         it = fill_units(it, ratio<60> ());
         it = fill_units(it, ratio<3600> ());
+        return it;
       }
-      /**
-       * Destroys the facet.
-       */
-      ~duration_units_default()
-      {
-      }
-
-    protected:
 
       /**
        * @param k the found pointer to the [N/D] unit.
@@ -468,7 +394,6 @@ namespace boost
           rt = rt_ratio(ratio<3600> ());
           break;
         default:
-          std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
           return false;
         }
         return true;
@@ -554,9 +479,9 @@ namespace boost
        * In English the suffix used after [N/D] is the one associated to the period ratio<1>.
        * @return the [N/D] suffix unit associated to this duration.
        */
-      std::string do_get_n_d_unit(duration_style::type style, rt_ratio, intmax_t ) const
+      std::string do_get_n_d_unit(duration_style::type style, rt_ratio, intmax_t v) const
       {
-        return do_get_unit(style, ratio<1>(), 1);
+        return do_get_unit(style, ratio<1>(), do_get_plural_form(v));
       }
 
       /**
@@ -631,17 +556,31 @@ namespace boost
 
     protected:
       /**
-       *
-       * @param value
-       * @return
+       * @return the number of associated plural forms this facet manages.
+       */
+      virtual std::size_t do_get_plural_forms() const
+      {
+        return pfs_;
+      }
+      /**
+       * Gets the associated plural form.
+       * @param value the duration representation
+       * @return the plural form associated to the @c value parameter. In English there are 2 plural forms
+       * 0 singular (-1 or 1)
+       * 1 plural for all others
        */
       virtual std::size_t do_get_plural_form(int_least64_t value) const
       {
         return (value == -1 || value == 1) ? 0 : 1;
       }
 
-
-      string_type do_get_unit(duration_style_type style, ratio<1> , std::size_t pf) const
+      /**
+       * @param style the duration style.
+       * @param period the period associated to the duration seconds.
+       * @param pf the requested plural form.
+       * @return if style is symbol returns "s", otherwise if pf is 0 return "second", if pf is 1 "seconds"
+       */
+      virtual string_type do_get_unit(duration_style_type style, ratio<1> , std::size_t pf) const
       {
         static const CharT t[] =
         { 's' };
@@ -669,6 +608,12 @@ namespace boost
         throw "exception";
       }
 
+      /**
+       * @param style the duration style.
+       * @param period the period associated to the duration minutes.
+       * @param pf the requested plural form.
+       * @return if style is symbol returns "min", otherwise if pf is 0 return "minute", if pf is 1 "minutes"
+       */
       virtual string_type do_get_unit(duration_style_type style, ratio<60> , std::size_t pf) const
       {
         static const CharT t[] =
@@ -689,6 +634,12 @@ namespace boost
         throw "exception";
       }
 
+      /**
+       * @param style the duration style.
+       * @param period the period associated to the duration hours.
+       * @param pf the requested plural form.
+       * @return if style is symbol returns "h", otherwise if pf is 0 return "hour", if pf is 1 "hours"
+       */
       virtual string_type do_get_unit(duration_style_type style, ratio<3600> , std::size_t pf) const
       {
         static const CharT t[] =
@@ -707,14 +658,32 @@ namespace boost
         // assert
         throw "exception";
       }
+      /**
+       * @param style the duration style.
+       * @param u the period tag atto.
+       * @param pf the requested plural form.
+       * @return the concatenation of the prefix associated to @c period + the one associated to seconds.
+       */
       virtual string_type do_get_unit(duration_style_type style, atto u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      /**
+       * @param style the duration style.
+       * @param u the period tag femto.
+       * @param pf the requested plural form.
+       * @return the concatenation of the prefix associated to period @c u + the one associated to seconds.
+       */
       virtual string_type do_get_unit(duration_style_type style, femto u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      /**
+       * @param style the duration style.
+       * @param u the period tag femto.
+       * @param pf the requested plural form.
+       * @return the concatenation of the prefix associated to period @c u + the one associated to seconds.
+       */
       virtual string_type do_get_unit(duration_style_type style, pico u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
@@ -774,6 +743,11 @@ namespace boost
 
     protected:
 
+      /**
+       * @param style the duration style.
+       * @param u the period tag atto.
+       * @return depending on the value of @c style return the ratio_string symbol or prefix.
+       */
       virtual string_type do_get_ratio_prefix(duration_style_type style, atto) const
       {
         if (style == duration_style::symbol) return ratio_string<atto, CharT>::symbol();
@@ -855,28 +829,29 @@ namespace boost
         return ratio_string<exa, CharT>::prefix();
       }
 
-      /**
-       *
-       * @param style
-       * @param pf
-       * @return the translation associated to the plural form given as parameter.
-       */
-      template <typename Period>
-      typename enable_if<detail::is_localizable<Period>, string_type>::type get_unit(duration_style_type style,
-          std::size_t pf) const
-      {
-        return do_get_unit(style, Period(), pf);
-      }
+//      /**
+//       *
+//       * @param style
+//       * @param pf
+//       * @return the translation associated to the plural form given as parameter.
+//       */
+//      template <typename Period>
+//      typename enable_if<detail::is_localizable<Period>, string_type>::type get_unit(duration_style_type style,
+//          std::size_t pf) const
+//      {
+//        return do_get_unit(style, Period(), pf);
+//      }
 
-    private:
+    protected:
       template <typename Period>
       string_type* fill_units(string_type* it, Period) const
       {
-        for (std::size_t pf = 0; pf < pfs_; ++pf)
+        std::size_t pfs = do_get_plural_forms();
+        for (std::size_t pf = 0; pf < pfs; ++pf)
         {
-          *it++ = get_unit<Period> (duration_style::prefix, pf);
+          *it++ = do_get_unit(duration_style::prefix, Period(), pf);
         }
-        *it++ = get_unit<Period> (duration_style::symbol, 0);
+        *it++ = do_get_unit(duration_style::symbol, Period(), 0);
         return it;
       }
 

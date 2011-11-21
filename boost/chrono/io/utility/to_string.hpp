@@ -33,11 +33,11 @@ namespace boost
     }
 #if BOOST_CHRONO_HAS_UNICODE_SUPPORT
     template <typename T>
-    std::wstring to_u16string(T const&v) {
+    std::basic_string<char16_t> to_u16string(T const&v) {
       return to_basic_string<char16_t>(v);
     }
     template <typename T>
-    std::wstring to_u32string(T const&v) {
+    std::basic_string<char32_t> to_u32string(T const&v) {
       return to_basic_string<char32_t>(v);
     }
 #endif

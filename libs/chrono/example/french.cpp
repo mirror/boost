@@ -34,7 +34,7 @@
       }
     protected:
 
-      using duration_units_default<CharT>::do_get_plural_form;
+      using duration_units_default<CharT>::do_get_unit;
       std::size_t do_get_plural_form(boost::int_least64_t value) const
       {
         return (value == -1 || value == 0 || value == 1) ? 0 : 1;
