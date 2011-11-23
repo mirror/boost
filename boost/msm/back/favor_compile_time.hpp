@@ -93,7 +93,7 @@ struct dispatch_table < Fsm, Stt, Event, ::boost::msm::back::favor_compile_time>
         {
             HandledEnum res = HANDLED_FALSE;
             typename std::deque<cell>::const_iterator it = one_state.begin();
-            while (it != one_state.end() && res != HANDLED_TRUE)
+            while (it != one_state.end() && (res != HANDLED_TRUE && res != HANDLED_DEFERRED ))
             {
                 HandledEnum handled = (*it)(fsm,region,state,evt);
                 // reject is considered as erasing an error (HANDLED_FALSE)
