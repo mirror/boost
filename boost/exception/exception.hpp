@@ -421,6 +421,12 @@ boost
                 copy_boost_exception(this,&x);
                 }
 
+            clone_impl( clone_impl const & x ):
+                T(x)
+                {
+                copy_boost_exception(this,&x);
+                }
+
             ~clone_impl() throw()
                 {
                 }
