@@ -269,19 +269,24 @@ namespace boost
     std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, time_point<Clock, Duration>& tp)
     {
+      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       std::ios_base::iostate err = std::ios_base::goodbit;
 
       try
       {
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
         if (ipfx)
         {
+          std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           if (!std::has_facet<time_point_get<CharT> >(is.getloc()))
           {
+            std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
             time_point_get<CharT> () .get(is, std::istreambuf_iterator<CharT, Traits>(), is, err, tp);
           }
           else
           {
+            std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
             std::use_facet<time_point_get<CharT> >(is.getloc()) .get(is, std::istreambuf_iterator<CharT, Traits>(), is,
                 err, tp);
           }
@@ -289,18 +294,24 @@ namespace boost
       }
       catch (...)
       {
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         bool flag = false;
         try
         {
+          std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           is.setstate(std::ios_base::failbit);
         }
         catch (std::ios_base::failure )
         {
+          std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           flag = true;
         }
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         if (flag) throw;
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       }
       if (err) is.setstate(err);
+      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       return is;
     }
 

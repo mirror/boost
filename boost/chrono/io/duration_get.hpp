@@ -191,11 +191,14 @@ namespace boost
         intermediate_type r;
         rt_ratio rt;
         bool value_found = false, unit_found = false;
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
 
         const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(ios.getloc());
         //err = std::ios_base::goodbit;
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         while (pattern != pat_end && err == std::ios_base::goodbit)
         {
+          std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           if (s == end)
           {
             err |= std::ios_base::eofbit;
@@ -205,6 +208,7 @@ namespace boost
           {
             if (++pattern == pat_end)
             {
+              std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
               err |= std::ios_base::failbit;
               return s;
             }
@@ -215,6 +219,7 @@ namespace boost
             {
               if (value_found)
               {
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 err |= std::ios_base::failbit;
                 return s;
               }
@@ -222,6 +227,7 @@ namespace boost
               s = get_value(s, end, ios, err, r);
               if (err & (std::ios_base::badbit | std::ios_base::failbit))
               {
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 return s;
               }
               break;
@@ -230,6 +236,7 @@ namespace boost
             {
               if (unit_found)
               {
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 err |= std::ios_base::failbit;
                 return s;
               }
@@ -237,11 +244,13 @@ namespace boost
               s = get_unit(facet, s, end, ios, err, rt);
               if (err & (std::ios_base::badbit | std::ios_base::failbit))
               {
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 return s;
               }
               break;
             }
             default:
+              std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
               BOOST_ASSERT(false && "Boost::Chrono internal error.");
               break;
             }
@@ -268,6 +277,7 @@ namespace boost
 
         }
 
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         unsigned long long num = rt.num;
         unsigned long long den = rt.den;
 
@@ -283,6 +293,7 @@ namespace boost
             > (std::numeric_limits<unsigned long long>::max)() / n2)
         {
           // (num/den) / Period overflows
+          std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           err |= std::ios_base::failbit;
           return s;
         }
@@ -292,6 +303,7 @@ namespace boost
         typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
 
         // num / den is now factor to multiply by r
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         if (!detail::reduce(r, den, err)) return s;
 
         if (chrono::detail::gt(r, ( (duration_values<common_type_t>::max)() / num)))
@@ -300,6 +312,7 @@ namespace boost
           err |= std::ios_base::failbit;
           return s;
         }
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         common_type_t t = r * num;
         t /= den;
         if (t > 0)
@@ -307,6 +320,7 @@ namespace boost
           Rep pt = t;
           if ( (duration_values<Rep>::max)() < pt)
           {
+            std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
             // Conversion to Period overflowed
             err |= std::ios_base::failbit;
             return s;
@@ -316,6 +330,7 @@ namespace boost
         r = Rep(t);
         d = duration<Rep, Period> (r);
 
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         return s;
       }
 
