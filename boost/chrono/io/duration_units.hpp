@@ -81,67 +81,42 @@ namespace boost
       }
 
       /**
-       * @effect calls the do_...
        * @return pointer to the start of valid [N/D] units.
        */
-      const string_type* get_n_d_valid_units_start() const
-      {
-        return do_get_n_d_valid_units_start();
-      }
+      virtual const string_type* get_n_d_valid_units_start() const =0;
       /**
        * @effect calls the do_...
        * @return pointer to the end of valid [N/D] units.
        */
-      const string_type* get_n_d_valid_units_end() const
-      {
-        return do_get_n_d_valid_units_end();
-      }
+      virtual const string_type* get_n_d_valid_units_end() const=0;
 
       /**
-       * @effect calls the do_...
        * @return pointer to the start of valid units, symbol or prefix with its different plural forms.
        */
-      const string_type* get_valid_units_start() const
-      {
-        return do_get_valid_units_start();
-      }
+      virtual const string_type* get_valid_units_start() const=0;
       /**
-       * @effect calls the do_...
        * @return pointer to the end of valid units.
        */
-      const string_type* get_valid_units_end() const
-      {
-        return do_get_valid_units_end();
-      }
+      virtual const string_type* get_valid_units_end() const=0;
 
       /**
-       * @effect calls the do_...
        * @param k the found pointer to the [N/D] unit.
        * @return true if @c k matches a valid unit.
        */
-      bool match_n_d_valid_unit(const string_type* k) const
-      {
-        return do_match_n_d_valid_unit(k);
-      }
+      virtual bool match_n_d_valid_unit(const string_type* k) const = 0;
       /**
        * @param k the found pointer to the unit.
-       * @effect calls the do_...
        * @Effects @c rt is set to the valid Period when the @c k matches a valid unit.
        * @return true if @c k matches a valid unit.
        */
-      bool match_valid_unit(const string_type* k, rt_ratio& rt) const
-      {
-        return do_match_valid_unit(k, rt);
-      }
+      virtual bool match_valid_unit(const string_type* k, rt_ratio& rt) const = 0;
 
       /**
        * @effect calls the do_...
        * @return the pattern to be used by default.
        */
-      string_type get_pattern() const
-      {
-        return do_get_pattern();
-      }
+      virtual string_type get_pattern() const=0;
+
       /**
        * @effect calls the do_...
        * @return the unit associated to this duration.
@@ -180,38 +155,6 @@ namespace boost
       virtual ~duration_units()
       {
       }
-      /**
-       * @return the pattern to be used by default.
-       */
-      virtual string_type do_get_pattern() const=0;
-      /**
-       * @return pointer to the start of valid [N/D] units.
-       */
-      virtual const string_type* do_get_n_d_valid_units_start() const = 0;
-      /**
-       * @return pointer to the end of valid [N/D] units.
-       */
-      virtual const string_type* do_get_n_d_valid_units_end() const = 0;
-      /**
-       * @return pointer to the start of valid units, symbol or prefix with its different plural forms.
-       */
-      virtual const string_type* do_get_valid_units_start() const = 0;
-      /**
-       * @return pointer to the end of valid units.
-       */
-      virtual const string_type* do_get_valid_units_end() const = 0;
-      /**
-       * @param k the found pointer to the [N/D] unit.
-       * @return true if @c k matches a valid unit.
-       */
-      virtual bool do_match_n_d_valid_unit(const string_type* k) const = 0;
-      /**
-       * @param k the found pointer to the unit.
-       * @effect calls the do_...
-       * @Effects @c rt is set to the valid Period when the @c k matches a valid unit.
-       * @return true if @c k matches a valid unit.
-       */
-      virtual bool do_match_valid_unit(const string_type* k, rt_ratio& rt) const = 0;
       /**
        * @return the [N/D] suffix unit associated to this duration.
        */
@@ -286,6 +229,7 @@ namespace boost
         //it = init_valid_units(valid_units);
       }
 
+
       string_type* init_valid_units(string_type* it)
       {
         it = fill_units(it, atto());
@@ -309,12 +253,13 @@ namespace boost
         it = fill_units(it, ratio<3600> ());
         return it;
       }
+    public:
 
       /**
        * @param k the found pointer to the [N/D] unit.
        * @return true if @c k matches a valid unit.
        */
-      bool do_match_n_d_valid_unit(const string_type* k) const
+      bool match_n_d_valid_unit(const string_type* k) const
       {
         std::size_t index = (k - n_d_valid_units_) / (pfs_ + 1);
         switch (index)
@@ -331,7 +276,7 @@ namespace boost
        * @Effects @c rt is set to the valid Period when the @c k matches a valid unit.
        * @return true if @c k matches a valid unit.
        */
-      bool do_match_valid_unit(const string_type* k, rt_ratio& rt) const
+      bool match_valid_unit(const string_type* k, rt_ratio& rt) const
       {
         std::size_t index = (k - valid_units_) / (pfs_ + 1);
         switch (index)
@@ -402,14 +347,14 @@ namespace boost
       /**
        * @return pointer to the start of valid [N/D] units.
        */
-      const string_type* do_get_n_d_valid_units_start() const
+      const string_type* get_n_d_valid_units_start() const
       {
         return n_d_valid_units_;
       }
       /**
        * @return pointer to the end of valid [N/D] units.
        */
-      const string_type* do_get_n_d_valid_units_end() const
+      const string_type* get_n_d_valid_units_end() const
       {
         return n_d_valid_units_ + (pfs_ + 1);
       }
@@ -417,18 +362,28 @@ namespace boost
       /**
        * @return pointer to the start of valid units.
        */
-      const string_type* do_get_valid_units_start() const
+      const string_type* get_valid_units_start() const
       {
         return valid_units_;
       }
       /**
        * @return pointer to the end of valid units.
        */
-      const string_type* do_get_valid_units_end() const
+      const string_type* get_valid_units_end() const
       {
         return valid_units_ + 19 * (pfs_ + 1);
       }
 
+      string_type get_pattern() const
+      {
+        static const CharT t[] =
+        { '%', 'v', ' ', '%', 'u' };
+        static const string_type pattern(t, t + sizeof (t) / sizeof (t[0]));
+
+        return pattern;
+      }
+
+    protected:
       /**
        *
        * This facet names the units associated to the following periods:
@@ -540,18 +495,7 @@ namespace boost
              ;
            }
         }
-
         return "";
-
-      }
-
-      string_type do_get_pattern() const
-      {
-        static const CharT t[] =
-        { '%', 'v', ' ', '%', 'u' };
-        static const string_type pattern(t, t + sizeof (t) / sizeof (t[0]));
-
-        return pattern;
       }
 
     protected:
