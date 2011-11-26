@@ -41,7 +41,7 @@ namespace chrono_detail
   }
 }
 
-process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_NOEXCEPT
 {
     tms tm;
     clock_t c = ::times( &tm );
@@ -118,7 +118,7 @@ process_real_cpu_clock::time_point process_real_cpu_clock::now(
 }
 #endif
 
-process_user_cpu_clock::time_point process_user_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+process_user_cpu_clock::time_point process_user_cpu_clock::now() BOOST_NOEXCEPT
 {
     tms tm;
     clock_t c = ::times( &tm );
@@ -194,7 +194,7 @@ process_user_cpu_clock::time_point process_user_cpu_clock::now(
 }
 #endif
 
-process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_NOEXCEPT
 {
     tms tm;
     clock_t c = ::times( &tm );
@@ -270,7 +270,7 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now(
 }
 #endif
 
-process_cpu_clock::time_point process_cpu_clock::now() BOOST_CHRONO_NOEXCEPT
+process_cpu_clock::time_point process_cpu_clock::now() BOOST_NOEXCEPT
 {
     tms tm;
     clock_t c = ::times( &tm );

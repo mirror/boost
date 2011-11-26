@@ -97,30 +97,17 @@
 #define BOOST_CHRONO_HAS_UNICODE_SUPPORT 1
 #endif
 
-//  define constexpr related macros  ------------------------------//
-
-#if defined(BOOST_NO_CONSTEXPR)
-#define BOOST_CHRONO_CONSTEXPR
-#define BOOST_CHRONO_CONSTEXPR_OR_CONST const
-#define BOOST_CHRONO_CONST_REF const&
-#else
-#define BOOST_CHRONO_CONSTEXPR constexpr
-#define BOOST_CHRONO_CONSTEXPR_OR_CONST constexpr
-#define BOOST_CHRONO_CONST_REF
-#endif
-
+#if ! defined BOOST_NOEXCEPT
 #if defined(BOOST_NO_NOEXCEPT)
-#define BOOST_CHRONO_NOEXCEPT
+#define BOOST_NOEXCEPT
 #else
-#define BOOST_CHRONO_NOEXCEPT noexcept
+#define BOOST_NOEXCEPT noexcept
 #endif
-
-#define BOOST_CHRONO_STATIC_CONSTEXPR  static BOOST_CHRONO_CONSTEXPR_OR_CONST
-
+#endif
 
 #ifdef BOOST_CHRONO_HEADER_ONLY
 #define BOOST_CHRONO_INLINE inline
-#define BOOST_CHRONO_STATIC
+#define BOOST_CHRONO_STATIC inline
 #define BOOST_CHRONO_DECL
 
 #else
