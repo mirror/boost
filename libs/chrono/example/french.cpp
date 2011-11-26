@@ -16,7 +16,7 @@
 #include <locale>
 
 
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
 #include <boost/chrono/io/duration_units.hpp>
 
     using namespace boost;
@@ -107,7 +107,7 @@ int main()
     using namespace boost;
     using namespace boost::chrono;
 
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
     cout.imbue(locale(locale(), new duration_units_fr<>()));
 #else
     cout.imbue(locale(locale(), new duration_punct<char>

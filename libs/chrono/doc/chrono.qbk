@@ -53,6 +53,8 @@
 [def __pre_conditions [*PreConditions:]]
 [def __precondition [*PreConditions:]]
 [def __requires [*Requires:]]
+[def __params [*Parameters:]]
+[template param[p] [*[p]:]]
 
 [template mu[]'''&#x3BC;'''] [/ µ Greek small letter mu]
 [template plusminus[]'''&#x00B1;'''] [/  ? plus or minus sign]
@@ -246,18 +248,22 @@
 
 [/==================]
 
-[def __duration_punct [link chrono.reference.io.duration_io_hpp.duration_punct `duration_punct`]]
-[def __duration_punct__c1 [link chrono.reference.io.duration_io_hpp.duration_punct.c1 `duration_punct`]]
-[def __duration_punct__c2 [link chrono.reference.io.duration_io_hpp.duration_punct.c2 `duration_punct`]]
-[def __duration_punct__is_prefix_name [link chrono.reference.io.duration_io_hpp.duration_punct.is_prefix_name `is_prefix_name`]]
-[def __duration_punct__is_symbol_name [link chrono.reference.io.duration_io_hpp.duration_punct.is_symbol_name `is_symbol_name`]]
-[def __duration_punct__get_duration_style [link chrono.reference.io.duration_io_hpp.duration_punct.get_duration_style `get_duration_style`]]
+[def __duration_punct [link chrono.reference.io_v1.chrono_io_hpp.duration_punct `duration_punct`]]
+[def __duration_punct__c1 [link chrono.reference.io_v1.chrono_io_hpp.duration_punct.c1 `duration_punct`]]
+[def __duration_punct__c2 [link chrono.reference.io_v1.chrono_io_hpp.duration_punct.c2 `duration_punct`]]
+[def __duration_punct__is_prefix_name [link chrono.reference.io_v1.chrono_io_hpp.duration_punct.is_prefix_name `is_prefix_name`]]
+[def __duration_punct__is_symbol_name [link chrono.reference.io_v1.chrono_io_hpp.duration_punct.is_symbol_name `is_symbol_name`]]
+[def __duration_punct__get_duration_style [link chrono.reference.io_v1.chrono_io_hpp.duration_punct.get_duration_style `get_duration_style`]]
 
-[def __duration_style_ns [link chrono.reference.io.duration_io_hpp.duration_style `duration_style`]]
-[def __duration_style [link chrono.reference.io.duration_io_hpp.duration_style `duration_style_type`]]
-[def __duration_style_type [link chrono.reference.io.duration_io_hpp.duration_style `duration_style_type`]]
-[def __prefix [link chrono.reference.io.duration_io_hpp.duration_style `prefix`]]
-[def __symbol [link chrono.reference.io.duration_io_hpp.duration_style `symbol`]]
+[def __duration_short [link chrono.reference.io_v1.chrono_io_hpp.manipulators `duration_short`]]
+[def __duration_long [link chrono.reference.io_v1.chrono_io_hpp.manipulators `duration_long`]]
+
+
+[def __duration_style_ns [link chrono.reference.io.duration_style_hpp.duration_style `duration_style`]]
+[def __duration_style [link chrono.reference.io.duration_style_hpp.duration_style `duration_style_type`]]
+[def __duration_style_type [link chrono.reference.io.duration_style_hpp.duration_style `duration_style_type`]]
+[def __prefix [link chrono.reference.io.duration_style_hpp.duration_style `prefix`]]
+[def __symbol [link chrono.reference.io.duration_style_hpp.duration_style `symbol`]]
 
 [def __duration_fmt [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt `duration_fmt`]]
 [def __duration_fmt__c1 [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.c1 `duration_fmt`]]
@@ -266,14 +272,12 @@
 [def __duration_fmt__op_in [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.op_in `operator >>`]]
 [def __duration_fmt__op_out [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.op_out `operator <<`]]
 
-[def __duration_short [link chrono.reference.io.duration_io_hpp.manipulators `duration_short`]]
-[def __duration_long [link chrono.reference.io.duration_io_hpp.manipulators `duration_long`]]
 
-[def __duration_style_io_saver [link chrono.reference.io.duration_io_hpp.ioss.duration_style_io_saver `duration_style_io_saver`]]
-[def __duration_style_io_saver__c1 [link chrono.reference.io.duration_io_hpp.ioss.duration_style_io_saver.c1 `duration_style_io_saver`]]
-[def __duration_style_io_saver__c2 [link chrono.reference.io.duration_io_hpp.ioss.duration_style_io_saver.c2 `duration_style_io_saver`]]
-[def __duration_style_io_saver__d [link chrono.reference.io.duration_io_hpp.ioss.duration_style_io_saver.d `~duration_style_io_saver`]]
-[def __duration_style_io_saver__restore [link chrono.reference.io.duration_io_hpp.ioss.duration_style_io_saver.restore `restore`]]
+[def __duration_style_io_saver [link chrono.reference.io.ios_state_hpp.ioss.duration_style_io_saver `duration_style_io_saver`]]
+[def __duration_style_io_saver__c1 [link chrono.reference.io.ios_state_hpp.ioss.duration_style_io_saver.c1 `duration_style_io_saver`]]
+[def __duration_style_io_saver__c2 [link chrono.reference.io.ios_state_hpp.ioss.duration_style_io_saver.c2 `duration_style_io_saver`]]
+[def __duration_style_io_saver__d [link chrono.reference.io.ios_state_hpp.ioss.duration_style_io_saver.d `~duration_style_io_saver`]]
+[def __duration_style_io_saver__restore [link chrono.reference.io.ios_state_hpp.ioss.duration_style_io_saver.restore `restore`]]
 
 [def __duration__op_in [link chrono.reference.io.duration_io_hpp.streams.duration__op_in `operator >>`]]
 [def __duration__op_out [link chrono.reference.io.duration_io_hpp.streams.duration__op_out `operator <<`]]
@@ -281,14 +285,10 @@
 
 [/==================]
 
-[def __timezone_ns [link chrono.reference.io.time_point_io_hpp.timezone `timezone`]]
-[def __timezone [link chrono.reference.io.time_point_io_hpp.timezone `timezone_type`]]
-[def __udt [link chrono.reference.io.time_point_io_hpp.timezone `udt`]]
-[def __local [link chrono.reference.io.time_point_io_hpp.timezone `local`]]
-
-[def __time_punct [link chrono.reference.io.time_point_io_hpp.time_punct `time_punct`]]
-[def __time_punct__c1 [link chrono.reference.io.time_point_io_hpp.time_punct.c1 `time_punct`]]
-[def __time_punct__c2 [link chrono.reference.io.time_point_io_hpp.time_punct.c2 `time_punct`]]
+[def __timezone_ns [link chrono.reference.io.timezone_hpp.timezone `timezone`]]
+[def __timezone [link chrono.reference.io.timezone_hpp.timezone `timezone_type`]]
+[def __udt [link chrono.reference.io.timezone_hpp.timezone `udt`]]
+[def __local [link chrono.reference.io.timezone_hpp.timezone `local`]]
 
 
 [def __time_fmt1 [link chrono.reference.io.time_point_io_hpp.manip.time_fmt1 `time_fmt`]]
@@ -3945,137 +3945,82 @@ Register __duration`<>` and __time_point`<>` class templates to [*Boost.Typeof].
 [endsect]
 [endsect]
 
-[section:io Chrono I/O]
+[section:io_v1 Chrono I/O V1]
 [/==================================================================]
 [section:chrono_io_hpp Header `<boost/chrono/chrono_io.hpp>`]
 [/==================================================================]
 
-[section:v1 I/O V1]
+
 
     namespace boost {
-      namespace chrono {
-
-
-        // facets
+    namespace chrono {
 
         template <class CharT>
-        class __duration_punct; // DEPRECATED since V2
-
-        // manipulators
+        class duration_punct;
 
         template <class CharT, class Traits>
-        std::basic_ostream<CharT, Traits>&
-        __duration_short(std::basic_ostream<CharT, Traits>& os); // DEPRECATED since V2
+            std::basic_ostream<CharT, Traits>&
+            duration_short(std::basic_ostream<CharT, Traits>& os);
 
         template <class CharT, class Traits>
-        std::basic_ostream<CharT, Traits>&
-        __duration_long(std::basic_ostream<CharT, Traits>& os); // DEPRECATED since V2
-
-        // duration I/O
+            std::basic_ostream<CharT, Traits>&
+            duration_long(std::basic_ostream<CharT, Traits>& os);
 
         template <class CharT, class Traits, class Rep, class Period>
             std::basic_ostream<CharT, Traits>&
-            __v1_duration__op_out(std::basic_ostream<CharT, Traits>& os, const __duration<Rep, Period>& d);
+            operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d);
 
         template <class CharT, class Traits, class Rep, class Period>
             std::basic_istream<CharT, Traits>&
-            __v1_duration__op_in(std::basic_istream<CharT, Traits>& is, __duration<Rep, Period>& d)
+            operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
 
-      }
+        template <class CharT, class Traits, class Clock, class Duration>
+            std::basic_ostream<CharT, Traits>&
+            operator<<(std::basic_ostream<CharT, Traits>& os,
+                   const time_point<Clock, Duration>& tp);
+
+        template <class CharT, class Traits, class Clock, class Duration>
+            std::basic_istream<CharT, Traits>&
+            operator>>(std::basic_istream<CharT, Traits>& is,
+                   time_point<Clock, Duration>& tp);
+
+    }
     }
 
-[section:duration_punct Template Class `duration_punct<>` ]
+[section:duration_punct Template Class `duration_punct<>`]
 
-The __duration unit names can be customized through the facet: __duration_punct.
-
-The default constructed __duration_punct provides names in the prefix format. These names are English descriptions. Other languages are supported by constructing a __duration_punct with the proper spellings for `"hours"`, `"minutes"` and `"seconds"`, and their abbreviations (for the symbol format).
+The __duration unit names can be customized through the facet: __duration_punct. __duration unit names come in two varieties: long and short. The default constructed __duration_punct provides names in the long format. These names are English descriptions. Other languages are supported by constructing a __duration_punct with the proper spellings for "hours", "minutes" and "seconds", and their abbreviations (for the short format).
 
         template <class CharT>
         class duration_punct
             : public std::locale::facet
         {
         public:
+            typedef std::basic_string<CharT> string_type;
+            enum {use_long, use_short};
+
             static std::locale::id id;
 
-            explicit __duration_punct__c1(size_t refs = 0);
-            explicit __duration_punct__c2(duration_style::type style, size_t refs = 0);
-
-            bool __duration_punct__is_symbol_name() const noexcept;
-            bool __duration_punct__is_prefix_name() const noexcept;
-            __duration_style __duration_punct__get_duration_style() const noexept;
-
-            typedef std::basic_string<CharT> string_type;
-
-            enum
-            {
-               use_long = duration_style::prefix,
-               use_short = duration_style::symbol
-            }; // DEPRECATED
-
-            explicit duration_punct(int use = use_long); // DEPRECATED
+            explicit duration_punct(int use = use_long);
 
             duration_punct(int use,
                 const string_type& long_seconds, const string_type& long_minutes,
                 const string_type& long_hours, const string_type& short_seconds,
-                const string_type& short_minutes, const string_type& short_hours);  // DEPRECATED
+                const string_type& short_minutes, const string_type& short_hours);
 
-            duration_punct(int use, const duration_punct& d);  // DEPRECATED
+            duration_punct(int use, const duration_punct& d);
 
-            template <class Period> string_type short_name() const;  // DEPRECATED
-            template <class Period> string_type long_name() const;  // DEPRECATED
-            template <class Period> string_type name() const;  // DEPRECATED
+            template <class Period> string_type short_name() const;
+            template <class Period> string_type long_name() const;
+            template <class Period> string_type name() const;
 
-            bool is_short_name() const;  // DEPRECATED
-            bool is_long_name() const;  // DEPRECATED
+            bool is_short_name() const;
+            bool is_long_name() const;
         };
 
-[section:c1 Constructor `duration_punct(size_t)`]
-
-  explicit duration_punct(size_t refs = 0);
-
-__effects Constructs a __duration_punct by constructing the base class with `refs`.
-
-__postcondition `is_symbol_name() == false` and `is_prefix_name() == true`.
-
-[endsect]
-[section:c2 Constructor `duration_punct(duration_style,size_t)`]
-
-  explicit duration_punct(__duration_style fmt, size_t refs = 0);
-
-__requires `fmt` has a value of either __symbol or __prefix.
-
-__effects Constructs a __duration_punct by constructing the base class with `refs`.
-
-__postcondition `is_symbol_name() == (fmt == symbol)` and `is_prefix_name() == (fmt == prefix)`.
-
-[endsect]
-[section:is_symbol_name Member Function `is_symbol_name()`]
-
-  bool is_symbol_name() const noexcept;
-
-__returns `true` if the stored __duration_style is __symbol, otherwise `false`.
-
-[endsect]
-[section:is_prefix_name Member Function `is_prefix_name()`]
-
-  bool is_prefix_name() const noexcept;
-
-__returns `true` if the stored __duration_style is __prefix, otherwise `false`.
-
 [endsect]
 
-[section:get_duration_style Member Function `get_duration_style()`]
-
-  duration_style::type get_duration_style() const noexept;
-
-__returns `true` if the stored __duration_style is __prefix, otherwise `false`.
-
-[endsect]
-
-
-[endsect] [/section:duration_punct Template Class `duration_punct<>`]
-
-[section:duration_short Non Member Function `duration_short(basic_istream<>&`]
+[section:manipulators I/O Manipulators]
 
 The short or long format can be easily chosen by streaming a `duration_short` or `duration_long` manipulator respectively.
 
@@ -4085,10 +4030,7 @@ The short or long format can be easily chosen by streaming a `duration_short` or
 
 __effects Set the __duration_punct facet to stream __durations and __time_points as abbreviations.
 
-__returns os
-
-[endsect]
-[section:duration_long Non Member Function `duration_long(basic_istream<>&`]
+__returns the output stream
 
         template <class CharT, class Traits>
             std::basic_ostream<CharT, Traits>&
@@ -4102,10 +4044,59 @@ __returns the output stream
 
 [endsect]
 
+[section:streams I/O Streams Operations]
+
+Any __duration can be streamed out to a `basic_ostream`. The run-time value of the __duration is formatted according to the rules and current format settings for __duration`::rep`. This is followed by a single space and then the compile-time unit name of the __duration. This unit name is built on the string returned from `ratio_string<>` and the data used to construct the __duration_punct which was inserted into the stream's locale. If a __duration_punct has not been inserted into the stream's locale, a default constructed __duration_punct will be added to the stream's locale.
+
+A __time_point is formatted by outputting its internal __duration followed by a string that describes the __time_point`::clock` epoch. This string will vary for each distinct clock, and for each implementation of the supplied clocks.
+
+        template <class CharT, class Traits, class Rep, class Period>
+            std::basic_ostream<CharT, Traits>&
+            operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d);
+
+__effects outputs the __duration as an abrevieated or long text format depending on the state of the __duration_punct facet.
+
+__returns the output stream
+
+        template <class CharT, class Traits, class Rep, class Period>
+            std::basic_istream<CharT, Traits>&
+            operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
+
+__effects reads a __duration from the input stream. If a format error is found, the input stream state will be set to `failbit`.
+
+__returns the  input stream
+
+        template <class CharT, class Traits, class Clock, class Duration>
+            std::basic_ostream<CharT, Traits>&
+            operator<<(std::basic_ostream<CharT, Traits>& os,
+                   const time_point<Clock, Duration>& tp);
+
+__effects outputs the __time_point as an abrevieated or long text format depending on the state of the __duration_punct facet.
+
+__returns the output stream
+
+
+        template <class CharT, class Traits, class Clock, class Duration>
+            std::basic_istream<CharT, Traits>&
+            operator>>(std::basic_istream<CharT, Traits>& is,
+                   time_point<Clock, Duration>& tp);
+
+__effects reads a __time_point from the input stream. If a format error is found, the input stream state will be set to `failbit`.
+
+__returns the input stream
 
 [endsect]
 
-[section:v2 I/O V2]
+
+[endsect]
+[endsect]
+
+[section:io Chrono I/O V2]
+
+[/==================================================================]
+[section:chrono_io_hpp Header `<boost/chrono/chrono_io.hpp>`]
+[/==================================================================]
+
 
 This file includes the i/o of the two major components, duration and time_point.
 
@@ -4121,7 +4112,6 @@ This file includes the i/o of the two major components, duration and time_point.
         #include <boost/chrono/io/time_point_units.hpp>
         #include <boost/chrono/io/time_point_io.hpp>
 
-[endsect]
 
 [endsect] [/section:chrono_io_hpp Header `<boost/chrono/chrono_io.hpp>`]
 
@@ -4161,23 +4151,61 @@ __duration unit names come in two varieties: prefix and symbol.
 [endsect] [/section:duration_style_hpp Header `<boost/chrono/io/duration_style.hpp>`]
 
 [/==================================================================]
-[section:ios_state_hpp Header `<boost/chrono/io/ios_sate.hpp>`]
+[section:timezone_hpp Header `<boost/chrono/io/timezone.hpp>`]
 [/==================================================================]
 
     namespace boost {
       namespace chrono {
 
-        // i/o state savers
+        struct __timezone
+        {
+          enum type {
+            __utc, __local
+          };
+        };
+      }
+    }
+        
+[section:timezone Scoped enum `timezone`]
 
+        struct timezone
+        {
+          enum type {
+            utc, local
+          };
+        };
+        typedef timezone::type timezone_type;
+
+
+[endsect] [/section:timezone Scoped enum `timezone`]
+        
+        
+[endsect] [/section:timezone_hpp Header `<boost/chrono/io/timezone.hpp>`]
+
+
+[/==================================================================]
+[section:ios_state_hpp Header `<boost/chrono/io/ios_state.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+        // setters and getters
         duration_style::type __get_duration_style(std::ios_base & ios);
         void __set_duration_style(std::ios_base& ios, duration_style::type style);
 
-        template<typename CharT = char, typename Traits = std::char_traits<CharT> >
+        timezone::type __get_timezone(std::ios_base & ios);
+        void __set_timezone(std::ios_base& ios, timezone::type tz);
+        
+        // i/o state savers
         struct __duration_style_io_saver;
 
       }
     }
     
+[section:sag Setter and getters]
+
+[endsect]
 [section:ioss I/O State Savers]
 [section:duration_style_io_saver Template Class `duration_style_io_saver`]
 
@@ -4245,6 +4273,381 @@ __effects Restores the stream's __duration_style attribute to the saved value.
 [endsect]
 
 [endsect] [/section:ios_state_hpp Header `<boost/chrono/io/ios_sate.hpp>`]
+
+[/==================================================================]
+[section:duration_get_hpp Header `<boost/chrono/io/duration_get.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+        template <class CharT, class InputIterator = std::istreambuf_iterator<CharT> >
+        class duration_get;
+
+      }
+    }
+
+[section:duration_get Template Class `duration_get`]
+
+    template <class CharT, class InputIterator = std::istreambuf_iterator<CharT> >
+    class duration_get: public std::locale::facet
+    {
+    public:
+      typedef CharT char_type; // Type of character the facet is instantiated on
+      typedef std::basic_string<CharT> string_type; // Type of character string passed to member functions.
+      typedef InputIterator iter_type; // Type of iterator used to scan the character buffer.
+
+      explicit duration_get(size_t refs = 0);
+      
+      template <typename Rep, typename Period>
+      iter_type get(
+        iter_type s, 
+        iter_type end, 
+        std::ios_base& ios, 
+        std::ios_base::iostate& err,
+        duration<Rep, Period>& d, 
+        const char_type* pattern, 
+        const char_type* pat_end
+      ) const;
+          
+      template <typename Rep, typename Period>
+      iter_type get(
+        iter_type s, 
+        iter_type end, 
+        std::ios_base& ios, 
+        std::ios_base::iostate& err,
+        duration<Rep, Period>& d
+      ) const;
+          
+      template <typename Rep>
+      iter_type get_value(
+        iter_type s, 
+        iter_type end, 
+        std::ios_base& ios, 
+        std::ios_base::iostate& err, 
+        Rep& r
+      ) const;
+      
+      iter_type get_unit(
+        iter_type i, 
+        iter_type e, 
+        std::ios_base& is, 
+        std::ios_base::iostate& err, 
+        detail::rt_ratio &rt
+      ) const
+      
+      static std::locale::id id; // Unique identifier for this type of facet.
+
+      ~duration_get()
+      {
+      }
+
+    protected:
+
+      virtual iter_type do_get_n_d_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
+          std::ios_base&, std::ios_base::iostate& err) const;
+
+      virtual iter_type do_get_prefix_unit(duration_units<CharT> const &facet, iter_type i, iter_type e,
+          std::ios_base&, std::ios_base::iostate& err, detail::rt_ratio &rt) const;
+                    
+    };
+
+
+The __duration_get facet extracts duration from a character string and stores the resulting value in a class 
+duration d argument. The facet parses the string using a specific format as a guide. 
+If the string does not fit the format, then the facet will indicate an error by setting the err argument to 
+iosbase::failbit.
+In other words, user confirmation is required for reliable parsing of
+user-entered durations, but machine-generated formats can be parsed
+reliably. This allows parsers to be aggressive about interpreting user
+variations on standard formats.
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:c Constructor `duration_get(size_t)`]
+
+      explicit duration_get(size_t refs);
+
+Constructs a __duration_get facet.
+
+__params
+
+* [param refs] references
+
+__effects Constructs a __duration_get facet.
+If the `refs` argument is `0` then destruction of the object is
+delegated to the locale, or locales, containing it. This allows
+the user to ignore lifetime management issues. On the other had,
+if `refs` is `1` then the object must be explicitly deleted;
+`locale` will not do so. In this case, the object can be
+maintained across the lifetime of multiple locales.
+
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:d Destructor `~duration_get()`]
+
+      ~duration_get();
+
+Destructs a __duration_get facet.
+
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:g1 Template Member Function `get(iter_type,iter_type,std::ios_base&,std::ios_base::iostate&,duration<Rep,Period>&,const char_type*, const char_type*) const`]
+
+      template <typename Rep, typename Period>
+      iter_type get(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err,
+          duration<Rep, Period> &d, const char_type *pattern, const char_type *pat_end) const;
+      
+Extracts a duration from the range `[s,end)` following the pattern `[pattern,pat_end)`.
+       
+__params
+      
+* [param s] start input stream iterator
+* [param end] end input stream iterator
+* [param ios] a reference to a ios_base
+* [param err] the ios_base state
+* [param d] the duration
+* [param pattern] begin of the formatting pattern
+* [param pat_end] end of the formatting pattern
+
+__requires `[s, end) and [pattern, pat_end)` shall be valid ranges.
+
+__effects The function starts by evaluating `err = std::ios_base::goodbit`.
+
+Then it computes an intermediate representation based on `Rep` according to the following rules:
+
+* If `Rep` is a floating point type, the intermediate representation is `long double`.
+* Else if `Rep` is a signed integral type, the intermediate representation is `long long`.
+* Else if `Rep` is an unsigned integral type, the intermediate representation is unsigned long long.
+* Else intermediate representation is `Rep`.
+
+Next the following local variable `r` of type intermediate representation and `rt` of type `rt_ratio` are default constructed.
+
+It then enters a loop, reading zero or more characters from `s` at
+each iteration. Unless otherwise specified below, the loop
+terminates when the first of the following conditions holds:
+
+* The expression `pattern == pat_end` evaluates to `true`.
+* The expression `err == std::ios_base::goodbit` evaluates to false.
+* The expression `s == end` evaluates to `true`, in which case the
+function evaluates `err = std::ios_base::eofbit | std::ios_base::failbit`.
+* The next element of pattern is equal to `'%'`, followed by a conversion
+specifier character, format.
+If the number of elements in the range `[pattern,pat_end)` is not
+sufficient to unambiguously determine whether the conversion
+specification is complete and valid, the function evaluates
+`err = std::ios_base::failbit`. Otherwise, the function evaluates
+`s = get_value(s, end, ios, err, r)` when the conversion specification is 'v' and
+`s = get_value(s, end, ios, err, rt)` when the conversion specification is 'u'.
+If `err == std::ios_base::goodbit` holds after
+the evaluation of the expression, the function increments pattern to
+point just past the end of the conversion specification and continues
+looping.
+* The expression `isspace(*pattern, ios.getloc())` evaluates to `true`, in
+which case the function first increments pattern until
+`pattern == pat_end || !isspace(*pattern, ios.getloc())` evaluates to `true`,
+then advances `s` until `s == end || !isspace(*s, ios.getloc())` is `true`,
+and finally resumes looping.
+* The next character read from `s` matches the element pointed to by
+pattern in a case-insensitive comparison, in which case the function
+evaluates `++pattern, ++s` and continues looping. 
+Otherwise, the function evaluates `err = std::ios_base::failbit`.
+
+If a duration representation value and a unit specifier have successfully been parsed, compute 
+`(rt.num/rt.den)/(Period::num/Period::den)` reduced to lowest terms. 
+If this ratio can not be stored without overflow, evaluates `err = std::ios_base::failbit`. 
+Otherwise store the result of this division in `num` and `den`.
+
+If the division did not result in overflow, then compute `r * num / den` in such a way as to avoid intermediate overflow. 
+If `r` has integral type and this computation would not be exact, evaluates `err = std::ios_base::failbit`. 
+If the result of the computation would overflow `Rep`, evaluates `err = std::ios_base::failbit`. 
+Otherwise the result of `r * num / den` is used to construct a `duration<Rep, Period>` which is assigned to `d`.
+
+__returns `s`, an iterator pointing just beyond the last character that can be determined to be part of a valid duration.
+         
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:g2 Template Member Function `get(iter_type,iter_type,std::ios_base&,std::ios_base::iostate&,duration<Rep,Period>&) const`]
+
+      template <typename Rep, typename Period>
+      iter_type get(
+        iter_type s, 
+        iter_type end, 
+        std::ios_base& ios, 
+        std::ios_base::iostate& err,
+        duration<Rep, Period>& d
+      ) const;
+
+Extracts a duration from the range `[s,end)` following the default pattern.
+
+__params
+      
+* [param s] start input stream iterator
+* [param end] end input stream iterator
+* [param ios] a reference to a ios_base
+* [param err] the ios_base state
+* [param d] the duration
+
+
+__effects
+Stores the duration pattern from the __duration_unit facet associated to 'ios` in let say `str`. Last as if
+
+  return get(s, end, ios, err, ios, d, str.data(), str.data() + str.size());
+  
+__returns `s`, an iterator pointing just beyond the last character that can be determined to be part of a valid duration.
+       
+
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:get_value Template Member Function `get_value(iter_type,iter_type,std::ios_base&,std::ios_base::iostate&,Rep&) const`]
+
+      template <typename Rep>
+      iter_type get_value(iter_type s, iter_type end, std::ios_base& ios, std::ios_base::iostate& err, Rep& r) const;
+
+Extracts a duration representation from the range `[s,end)`.
+
+__params
+      
+* [param s] start input stream iterator
+* [param end] end input stream iterator
+* [param ios] a reference to a ios_base
+* [param err] the ios_base state
+* [param r] a reference to the duration representation
+
+__effects As if
+
+  return std::use_facet<std::num_get<char_type, iter_type>>(ios.getloc()).get(s, end, ios, err, r);
+
+__returns `s`, an iterator pointing just beyond the last character that can be determined to be part of a valid `Rep` value.
+
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:get_unit  Member Function `get_unit(iter_type,iter_type,std::ios_base&,std::ios_base::iostate&,rt_ratio&) const`]
+
+      iter_type get_unit(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err, detail::rt_ratio &rt) const;
+
+Extracts a duration unit from the range `[s,end)`.
+
+__params
+
+* [param s] start input stream iterator
+* [param end] end input stream iterator
+* [param ios] a reference to a ios_base
+* [param err] the ios_base state
+* [param rt] a reference to the duration run-time ratio.
+
+__effects 
+
+* If the first character is `'['`, an attempt is made to consume a pattern of the form 
+`"[N/D]"` where `N` and `D` have type `unsigned long long`. 
+  * If successful, rt records the values of `N` and `D`, otherwise evaluates `err = std::ios_base::failbit` and return `i`.
+  * Return the parse the longest string possible matching one of the durations units that can follow the pattern `"[N/D]"`, as if
+  
+   return do_get_n_d_prefix_unit(facet, i, e, is, err); 
+   
+* Otherwise the next character is not `'['`. Return the parse the longest string possible matching one of the 
+durations units, as if
+  
+   return do_get_prefix_unit(facet, i, e, is, err, rt);
+
+__returns `i`, an iterator pointing just beyond the last character that can be determined to be part of a valid duration unit.      
+      
+[endsect]
+
+
+
+
+[section:do_get_n_d_prefix_unit Protected Member Function `do_get_n_d_prefix_unit(duration_units<CharT> const&,iter_type,iter_type,std::ios_base&,std::ios_base::iostate&) const`]
+
+      virtual iter_type do_get_n_d_prefix_unit(
+        duration_units<CharT> const &facet, 
+        iter_type i, 
+        iter_type e,
+        std::ios_base&, 
+        std::ios_base::iostate& err 
+      ) const;
+
+Extracts the run-time ratio associated to the duration when it is given in [N/D] form.
+
+This is an extension point of this facet so that we can take in account other periods that can have a useful
+translation in other contexts, as e.g. days and weeks.
+
+__params
+
+* [param s] start input stream iterator
+* [param end] end input stream iterator
+* [param ios] a reference to a ios_base
+* [param err] the ios_base state
+* [param rt] a reference to the duration run-time ratio.
+
+
+__effects Scan `s` for the longest of all the plural forms associated with the duration units. 
+If sucessfull, sets the matched ratio in `rt`. Otherwise evaluates `err = std::ios_base::failbit`.
+
+__returns `s`, an iterator pointing just beyond the last character that can be determined to be part of a valid name.
+
+[endsect]
+
+[section:do_get_prefix_unit  Protected Member Function `do_get_prefix_unit(duration_units<CharT> const&,iter_type,iter_type,std::ios_base&,std::ios_base::iostate&,detail::rt_ratio&) const`]
+
+      virtual iter_type do_get_prefix_unit(
+        duration_units<CharT> const &facet, 
+        iter_type i, 
+        iter_type e,
+        std::ios_base&, 
+        std::ios_base::iostate& err, 
+        detail::rt_ratio &rt
+      ) const;
+
+Extracts the run-time ratio associated to the duration when it is given in prefix form.
+
+This is an extension point of this facet so that we can take in account other periods that can have a useful
+translation in other contexts, as e.g. days and weeks.
+
+__params
+
+* [param s] start input stream iterator
+* [param end] end input stream iterator
+* [param ios] a reference to a ios_base
+* [param err] the ios_base state
+* [param rt] a reference to the duration run-time ratio.
+
+
+__effects Scan `s` for the longest of all the plural forms associated with the duration units. 
+If sucessfull, sets the matched ratio in `rt`. Otherwise evaluates `err = std::ios_base::failbit`.
+
+__returns `s`, an iterator pointing just beyond the last character that can be determined to be part of a valid name.
+
+[endsect]
+
+[endsect]
+
+[endsect] [/section:duration_get_hpp]
+
+[/==================================================================]
+[section:duration_put_hpp Header `<boost/chrono/io/duration_put.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+
+      }
+    }
+
+[endsect] [/section:duration_put_hpp]
+
+[/==================================================================]
+[section:duration_units_hpp Header `<boost/chrono/io/duration_units.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+
+      }
+    }
+
+[endsect] [/section:duration_units_hpp]
 
 [/==================================================================]
 [section:duration_io_hpp Header `<boost/chrono/io/duration_io.hpp>`]
@@ -4401,7 +4804,8 @@ __returns `os`.
             std::basic_istream<CharT, Traits>&
             operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
 
-__effects Behaves as a formatted input function. After constructing a sentry object, if the sentry converts to true, computes an intermediate representation based on `Rep` according to the following rules:
+__effects Behaves as a formatted input function. After constructing a sentry object, if the sentry converts to true, 
+computes an intermediate representation based on `Rep` according to the following rules:
 
 * If `Rep` is a floating point type, the intermediate representation is `long double`.
 * Else if `Rep` is a signed integral type, the intermediate representation is `long long`.
@@ -4434,36 +4838,47 @@ __returns `is`
 [endsect] [/section:duration_io_hpp Header `<boost/chrono/io/duration_io.hpp>`]
 
 [/==================================================================]
-[section:timezone_hpp Header `<boost/chrono/io/timezone.hpp>`]
+[section:time_point_get_hpp Header `<boost/chrono/io/time_point_get.hpp>`]
 [/==================================================================]
 
     namespace boost {
       namespace chrono {
 
-        struct __timezone
-        {
-          enum type {
-            __utc, __local
-          };
-        };
+
       }
     }
-        
-[section:timezone Scoped enum `timezone`]
-
-        struct timezone
-        {
-          enum type {
-            utc, local
-          };
-        };
-        typedef timezone::type timezone_type;
 
 
-[endsect] [/section:timezone Scoped enum `timezone`]
-        
-        
-[endsect] [/section:timezone_hpp Header `<boost/chrono/io/timezone.hpp>`]
+[endsect] [/section:time_point_get_hpp]
+
+[/==================================================================]
+[section:time_point_put_hpp Header `<boost/chrono/io/time_point_put.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+
+      }
+    }
+
+
+[endsect] [/section:time_point_put_hpp]
+
+[/==================================================================]
+[section:time_point_units_hpp Header `<boost/chrono/io/time_point_units.hpp>`]
+[/==================================================================]
+
+    namespace boost {
+      namespace chrono {
+
+
+      }
+    }
+
+
+[endsect] [/section:time_point_units_hpp]
+
 
 [/==================================================================]
 [section:time_point_io_hpp Header `<boost/chrono/io/time_point_io.hpp>`]
@@ -4473,10 +4888,6 @@ __returns `is`
     namespace boost {
     namespace chrono {
 
-        // facets
-
-        template <class CharT>
-        class __time_punct;
 
         // manipulators
 
@@ -4538,60 +4949,6 @@ __returns `is`
     }
     }
 
-
-
-[section:time_punct Template Class `time_punct <>`]
-
-  template <class CharT>
-  class time_punct
-    : public std::locale::facet
-  {
-  public:
-    typedef std::basic_string<CharT> string_type;
-
-    static std::locale::id id;
-
-    explicit time_punct(size_t refs = 0);
-    time_punct(timezone tz, string_type fmt, size_t refs = 0);
-
-    const string_type& fmt() const noexcept;
-    chrono::timezone timezone() const noexcept;
-  };
-
-[section:c1 Constructor `time_punct(size_t)`]
-
-  explicit time_punct(size_t refs = 0);
-
-__effects: Constructs a timepunct by constructing the base class with refs.
-
-__postcondition: fmt() == string_type() and timezone() == utc.
-
-[endsect]
-[section:c2 Constructor `time_punct(timezone::type,string_type,size_t)`]
-
-  time_punct(timezone tz, string_type f, size_t refs = 0);
-
-__effects: Constructs a timepunct by constructing the base class with refs, and storing tz and fmt.
-
-__postcondition: fmt() == f and timezone() == tz.
-
-[endsect]
-[section:fmt Member Funtion `fmt()`]
-
-  const string_type& fmt() const noexcept;
-
-__returns: A reference to the stored format string_type.
-
-[endsect]
-[section:get_timezone Member Funtion `get_timezone()`]
-
-  timezone_type get_timezone() const noexcept;
-
-__returns: A copy of the stored timezone tz.
-
-[endsect]
-[endsect]
-
 [section:manip I/O Manipulators]
 [section:time_fmt1 Non Member Function `time_fmt(__timezone)` ]
 
@@ -4599,7 +4956,7 @@ __returns: A copy of the stored timezone tz.
 
 __returns: An unspecified object that when streamed to a `basic_ostream<CharT, Traits>` or `basic_istream<CharT, Traits>` `s` will have the effects of:
 
-        s.imbue(std::locale(s.getloc(), new __time_punct<CharT>(tz, basic_string<CharT>())));
+          set_timezone(s, tz);
 
 [endsect]
 
@@ -4612,7 +4969,8 @@ __returns: An unspecified object that when streamed to a `basic_ostream<CharT, T
 
 __returns: An unspecified object that when streamed to a `basic_ostream<CharT, Traits>` or `basic_istream<CharT, Traits>` `s` will have the effects of:
 
-        s.imbue(std::locale(s.getloc(), new __time_punct<CharT>(tz, f)));
+          set_timezone(s, tz);
+          set_time_fmt<CharT>(s, f);
 
 [endsect]
 [endsect]
@@ -4750,17 +5108,25 @@ __effects Restores the stream's time format attribute to the saved value.
             operator<<(std::basic_ostream<CharT, Traits>& os,
                    const time_point<system_clock, __Duration>& tp);
 
-__effects Behaves as a formatted output function. After constructing a `sentry` object, if the `sentry` converts to `true`, sets a local variable `tz` of type __timezone to __utc which serves as a default formatting style. If the stream's locale has a __time_punct facet, then sets `tz` to the value of the timezone stored within that facet. Additionally the format string stored within the __time_punct facet is recorded as a pair of `const CharT*`. If the stream has no time_punct facet, then this pair of `const CharT*` that represent an empty range.
+__effects Behaves as a formatted output function. After constructing a `sentry` object, if the `sentry` converts to 
+`true`, sets a local variable `tz` of type __timezone to `get_timezone(os)`. 
+Additionally the format string obtained with `get_time_fmt()` is recorded as a pair of `const CharT*`. 
+If the stream has no time_punct facet, then this pair of `const CharT*` that represent an empty range.
 
-Next `tp` is converted to a `time_t`, and this `time_t` is converted to a `tm`. The conversion to `tm` use `gmtime` (when available) if the timezone is __utc, else it use localtime (if available).
+Next `tp` is converted to a `time_t`, and this `time_t` is converted to a `tm`. 
+The conversion to `tm` use `gmtime` (when available) if the timezone is __utc, else it use localtime (if available).
 
-Using the `std::time_put` facet stored in `os`, this inserter writes characters to the stream using the `tm` and the formating string stored in the `time_punct` facet, unless that facet was missing, or unless it provided an empty string.
+Using the `std::time_put` facet stored in `os`, this inserter writes characters to the stream using the `tm` and the 
+formating string stored in the `time_punct` facet, unless that facet was missing, or unless it provided an empty string.
 
 If the formatting string is empty, then output as follows:
 
 First output `tm` using `"%F %H:%M:"`
 
-Next output a `double` representing the number of seconds stored in the `tm` plus the fractional seconds represented in `tp`. The format shall be `ios::fixed` and the precision shall be sufficient to represent `system_clock::duration` exactly (e.g. if `system_clock::period` is micro, the precision should be sufficient to output six digits following the decimal point). If the number of seconds is less than `10`, the output shall be prefixed by `'0'`.
+Next output a `double` representing the number of seconds stored in the `tm` plus the fractional seconds represented 
+in `tp`. The format shall be `ios::fixed` and the precision shall be sufficient to represent `system_clock::duration` 
+exactly (e.g. if `system_clock::period` is micro, the precision should be sufficient to output six digits following 
+the decimal point). If the number of seconds is less than `10`, the output shall be prefixed by `'0'`.
 
 Finally if `tz` is __local, output the `tm` using the pattern " %z". Else append the sequence " +0000" to the stream.
 
@@ -4776,9 +5142,15 @@ __returns `os`
             operator>>(std::basic_istream<CharT, Traits>& is,
                    time_point<__Clock, __Duration>& tp);
 
-__effects Behaves as a formatted input function. After constructing a sentry object, if the sentry converts to true, obtains a `std::time_get` facet from `is`, and obtains a formatting string in the same manner as described for insertion operator. Extract a `tm` using the supplied formatting string, or if empty, defaulted as described for the insertion operator. Note that extraction does not use the __timezone data stored in the time_punct facet for the defaulted string as the __timezone information is stored in the stream.
+__effects Behaves as a formatted input function. After constructing a sentry object, if the sentry converts to true, 
+obtains a `std::time_get` facet from `is`, and obtains a formatting string in the same manner as described for 
+insertion operator. Extract a `tm` using the supplied formatting string, or if empty, defaulted as described for the 
+insertion operator. Note that extraction does not use the __timezone data stored in the time_punct facet for the 
+defaulted string as the __timezone information is stored in the stream.
 
-Given any __time_punct imbued on a `basic_iostream`, or if the `basic_iostream` does not have an imbued __time_punct, any `time_point<system_clock, __Duration>` inserted, and then extracted should result in an equal `time_point<system_clock, __Duration>`, excepting any precision that did not get inserted.
+Given any __time_punct imbued on a `basic_iostream`, or if the `basic_iostream` does not have an imbued __time_punct, 
+any `time_point<system_clock, __Duration>` inserted, and then extracted should result in an equal 
+`time_point<system_clock, __Duration>`, excepting any precision that did not get inserted.
 
 __example
 
@@ -4809,9 +5181,15 @@ __returns is
 
 __effects Formats a `tp` to the stream `os`.
 
-A __time_point is formatted by outputting its internal __duration. Next follows the possible translation of string that describes the `__time_point::clock` epoch. This string will vary for each distinct clock, and for each implementation of the supplied clocks as described in __clock_string. The translation is done by the epoch_translate function allowing to adapt the English string to different locales.
+A __time_point is formatted by outputting its internal __duration. Next follows the possible translation of string that
+describes the `__time_point::clock` epoch. 
 
-The resulting string must be readable by the extraction operator and result in an equal value and should make the form interpretable by a human reader.
+This string will vary for each distinct clock, and for each implementation  
+of the supplied clocks as described in __clock_string. 
+The translation is done by the time_point_units facet allowing to adapt the English string to different locales.
+
+The resulting string must be readable by the extraction operator and result in an equal value and should make the form 
+interpretable by a human reader.
 
 Resuming as if
 
@@ -5922,7 +6300,7 @@ All the units are given using the suffix "s" following the System International 
 * chrono I/O: The manipulators __duration_short, __duration_long are depreceated. You should use the parameterized form __duration_fmt or the renamed manipulators __duration_symbol and __duration_prefix  instead.
 * chrono I/O: The duraction_punc<> facet is depreceated. You should use the __get_duration_style free function to get the informations and use the duration_units facet for localization purposes.
 
-When BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1 is defined the preceding deprecated functions are not available.
+When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not available.
 
 [*Fixes:]
 

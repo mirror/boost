@@ -71,7 +71,7 @@ void check_all()
   test_good<Clock> ("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
 
   test_good<Clock> ("5000 h", hours(5000));
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
   test_good<Clock>("5000 min", minutes(5000));
 #else
   test_good<Clock> ("5000 m", minutes(5000));

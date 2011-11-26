@@ -1,5 +1,5 @@
-//  Copyright 2011 Vicente J. Botet Escriba
 //  Distributed under the Boost Software License, Version 1.0.
+//  Copyright 2011 Vicente J. Botet Escriba
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/chrono/chrono_io.hpp>
@@ -52,7 +52,9 @@ int main()
 
   test_good("5000", 5000);
 
+  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
   test_good("5000 hours", hours(5000));
+  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
   test_good("5000 minutes", minutes(5000));
   test_good("5000 seconds", seconds(5000));
   test_fail("1.0 second", seconds(1));
@@ -90,7 +92,7 @@ io/duration_input.cpp:52:   instantiated from here
   test_good("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
   test_good("5000 [1/30]second", duration<boost::int_least64_t, ratio<1, 30> > (5000));
   test_good("5000 h", hours(5000));
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
   test_good("5000 min", minutes(5000));
 #else
   test_good("5000 m", minutes(5000));

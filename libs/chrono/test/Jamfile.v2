@@ -51,7 +51,7 @@ rule chrono-run ( sources )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -62,7 +62,7 @@ rule chrono-run ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -74,7 +74,7 @@ rule chrono-v1-v2-run ( sources )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_shared ]
     [ run $(sources) ../build//boost_chrono/<link>static
         : :
@@ -85,13 +85,13 @@ rule chrono-v1-v2-run ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_header ]
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   v1_$(sources[1]:B)_header ]
     ;
 }
@@ -103,7 +103,7 @@ rule chrono-run2 ( sources : name )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(name)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -114,7 +114,7 @@ rule chrono-run2 ( sources : name )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_header ]
     ;
 }
@@ -126,13 +126,13 @@ rule stopwatch-run ( sources + )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_shared ]
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_header ]
     ;
 }
@@ -144,13 +144,13 @@ rule stopwatch-run2 ( sources + : name )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(name)_shared ]
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_header ]
     ;
 }
@@ -162,7 +162,7 @@ rule date-run ( sources + )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_shared ]
     ;
 }
@@ -174,7 +174,7 @@ rule date-run-2 ( sources + : name )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(name)_shared ]
     ;
 }
@@ -187,7 +187,7 @@ rule chrono-run-mt ( sources )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -198,7 +198,7 @@ rule chrono-run-mt ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -209,7 +209,7 @@ rule chrono-run2-mt ( sources : name )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(name)_shared ]
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
@@ -220,7 +220,7 @@ rule chrono-run2-mt ( sources : name )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_header ]
     ;
 }
@@ -232,19 +232,19 @@ rule chrono-run-check ( sources )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_shared ]
     [ run $(sources) 
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_static ]
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -256,19 +256,19 @@ rule chrono-run-check2 ( sources : name )
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(name)_shared ]
     [ run $(sources) 
         : :
         :
             <library>/boost/system//boost_system
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_static ]
     [ run $(sources)
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_header ]
     ;
 }
@@ -280,7 +280,7 @@ rule chrono-run-header ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_header ]
     ;
 }
@@ -292,7 +292,7 @@ rule chrono-v1-v2-run-header ( sources )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_header ]
     [ run $(sources)
         : :
@@ -309,7 +309,7 @@ rule chrono-run-header2 ( sources : name )
         : :
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_header ]
     ;
 }
@@ -319,12 +319,12 @@ rule chrono-compile ( sources )
     return
     [ compile $(sources)
         :
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(sources[1]:B)_lib ]
     [ compile $(sources)
         :   <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(sources[1]:B)_header ]
     ;
 }
@@ -334,12 +334,12 @@ rule chrono-compile2 ( sources : name )
     return
     [ compile $(sources)
         :
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_lib ]
     [ compile $(sources)
         :  <define>BOOST_CHRONO_HEADER_ONLY
            <define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+            <define>BOOST_CHRONO_VERSION=2
         : $(name)_header ]
     ;
 }
