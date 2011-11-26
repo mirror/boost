@@ -24,6 +24,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/chrono/detail/scan_keyword.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/chrono/detail/no_warning/signed_unsigned_cmp.hpp>
 
 namespace boost
 {
@@ -87,10 +89,35 @@ public:
             {return long_name(typename Period::type());}
 
     template <class Period>
-        string_type name() const {
-            if (use_short_) return short_name<Period>();
-            else return long_name<Period>();
+        string_type plural() const
+            {return long_name(typename Period::type());}
+
+    template <class Period>
+        string_type singular() const
+    {
+      return string_type(long_name(typename Period::type()), 0, long_name(typename Period::type()).size()-1);
+    }
+
+    template <class Period>
+        string_type name() const
+    {
+      if (use_short_) return short_name<Period>();
+      else {
+        return long_name<Period>();
+      }
+    }
+    template <class Period, class D>
+      string_type name(D v) const
+      {
+        if (use_short_) return short_name<Period>();
+        else
+        {
+          if (v==-1 || v==1)
+            return singular<Period>();
+          else
+            return plural<Period>();
         }
+      }
 
     bool is_short_name() const {return use_short_;}
     bool is_long_name() const {return !use_short_;}
@@ -181,7 +208,7 @@ operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d
     if (!std::has_facet<Facet>(loc))
         os.imbue(std::locale(loc, new Facet));
     const Facet& f = std::use_facet<Facet>(os.getloc());
-    return os << d.count() << ' ' << f.template name<Period>();
+    return os << d.count() << ' ' << f.template name<Period>(d.count());
 }
 
 namespace chrono_detail {
@@ -207,123 +234,189 @@ struct duration_io_intermediate<Rep, true>
     >::type type;
 };
 
+template <typename intermediate_type>
+typename enable_if<is_integral<intermediate_type>, bool>::type
+reduce(intermediate_type& r, unsigned long long& den, std::ios_base::iostate& err)
+{
+  typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
+
+    // Reduce r * num / den
+  common_type_t t = math::gcd<common_type_t>(common_type_t(r), common_type_t(den));
+  r /= t;
+  den /= t;
+  if (den != 1)
+  {
+    // Conversion to Period is integral and not exact
+    err |= std::ios_base::failbit;
+    return false;
+  }
+  return true;
+}
+template <typename intermediate_type>
+typename disable_if<is_integral<intermediate_type>, bool>::type
+reduce(intermediate_type& , unsigned long long& , std::ios_base::iostate& )
+{
+  return true;
+}
+
 }
 
 template <class CharT, class Traits, class Rep, class Period>
 std::basic_istream<CharT, Traits>&
 operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
 {
+  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
     typedef duration_punct<CharT> Facet;
     std::locale loc = is.getloc();
-    if (!std::has_facet<Facet>(loc))
+    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+    if (!std::has_facet<Facet>(loc)) {
+      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         is.imbue(std::locale(loc, new Facet));
+    }
+    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
     loc = is.getloc();
     const Facet& f = std::use_facet<Facet>(loc);
     typedef typename chrono_detail::duration_io_intermediate<Rep>::type intermediate_type;
     intermediate_type r;
+    std::ios_base::iostate err = std::ios_base::goodbit;
     // read value into r
+    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
     is >> r;
+    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
     if (is.good())
     {
+      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         // now determine unit
         typedef std::istreambuf_iterator<CharT, Traits> in_iterator;
         in_iterator i(is);
         in_iterator e;
+        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         if (i != e && *i == ' ')  // mandatory ' ' after value
         {
+          std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
             ++i;
             if (i != e)
             {
+              std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 // unit is num / den (yet to be determined)
                 unsigned long long num = 0;
                 unsigned long long den = 0;
                 if (*i == '[')
                 {
+                  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                     // parse [N/D]s or [N/D]seconds format
                     ++i;
                     CharT x;
                     is >> num >> x >> den;
                     if (!is.good() || (x != '/'))
                     {
+                      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                         is.setstate(is.failbit);
                         return is;
                     }
                     i = in_iterator(is);
                     if (*i != ']')
                     {
+                      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                         is.setstate(is.failbit);
                         return is;
                     }
                     ++i;
                     const std::basic_string<CharT> units[] =
                     {
-                        f.template long_name<ratio<1> >(),
+                        f.template singular<ratio<1> >(),
+                        f.template plural<ratio<1> >(),
                         f.template short_name<ratio<1> >()
                     };
-                    std::ios_base::iostate err = std::ios_base::goodbit;
+                    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                     const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
                                   units, units + sizeof(units)/sizeof(units[0]),
                                   //~ std::use_facet<std::ctype<CharT> >(loc),
                                   err);
-                    switch ((k - units) / 2)
+                    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                    is.setstate(err);
+                    switch ((k - units) / 3)
                     {
                     case 0:
+                      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                         break;
                     default:
                         is.setstate(err);
+                        std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                         return is;
                     }
                 }
                 else
                 {
+                  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                     // parse SI name, short or long
                     const std::basic_string<CharT> units[] =
                     {
-                        f.template long_name<atto>(),
+                        f.template singular<atto>(),
+                        f.template plural<atto>(),
                         f.template short_name<atto>(),
-                        f.template long_name<femto>(),
+                        f.template singular<femto>(),
+                        f.template plural<femto>(),
                         f.template short_name<femto>(),
-                        f.template long_name<pico>(),
+                        f.template singular<pico>(),
+                        f.template plural<pico>(),
                         f.template short_name<pico>(),
-                        f.template long_name<nano>(),
+                        f.template singular<nano>(),
+                        f.template plural<nano>(),
                         f.template short_name<nano>(),
-                        f.template long_name<micro>(),
+                        f.template singular<micro>(),
+                        f.template plural<micro>(),
                         f.template short_name<micro>(),
-                        f.template long_name<milli>(),
+                        f.template singular<milli>(),
+                        f.template plural<milli>(),
                         f.template short_name<milli>(),
-                        f.template long_name<centi>(),
+                        f.template singular<centi>(),
+                        f.template plural<centi>(),
                         f.template short_name<centi>(),
-                        f.template long_name<deci>(),
+                        f.template singular<deci>(),
+                        f.template plural<deci>(),
                         f.template short_name<deci>(),
-                        f.template long_name<deca>(),
+                        f.template singular<deca>(),
+                        f.template plural<deca>(),
                         f.template short_name<deca>(),
-                        f.template long_name<hecto>(),
+                        f.template singular<hecto>(),
+                        f.template plural<hecto>(),
                         f.template short_name<hecto>(),
-                        f.template long_name<kilo>(),
+                        f.template singular<kilo>(),
+                        f.template plural<kilo>(),
                         f.template short_name<kilo>(),
-                        f.template long_name<mega>(),
+                        f.template singular<mega>(),
+                        f.template plural<mega>(),
                         f.template short_name<mega>(),
-                        f.template long_name<giga>(),
+                        f.template singular<giga>(),
+                        f.template plural<giga>(),
                         f.template short_name<giga>(),
-                        f.template long_name<tera>(),
+                        f.template singular<tera>(),
+                        f.template plural<tera>(),
                         f.template short_name<tera>(),
-                        f.template long_name<peta>(),
+                        f.template singular<peta>(),
+                        f.template plural<peta>(),
                         f.template short_name<peta>(),
-                        f.template long_name<exa>(),
+                        f.template singular<exa>(),
+                        f.template plural<exa>(),
                         f.template short_name<exa>(),
-                        f.template long_name<ratio<1> >(),
+                        f.template singular<ratio<1> >(),
+                        f.template plural<ratio<1> >(),
                         f.template short_name<ratio<1> >(),
-                        f.template long_name<ratio<60> >(),
+                        f.template singular<ratio<60> >(),
+                        f.template plural<ratio<60> >(),
                         f.template short_name<ratio<60> >(),
-                        f.template long_name<ratio<3600> >(),
+                        f.template singular<ratio<3600> >(),
+                        f.template plural<ratio<3600> >(),
                         f.template short_name<ratio<3600> >()
                     };
-                    std::ios_base::iostate err = std::ios_base::goodbit;
+                    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                     const std::basic_string<CharT>* k = chrono_detail::scan_keyword(i, e,
                                   units, units + sizeof(units)/sizeof(units[0]),
                                   //~ std::use_facet<std::ctype<CharT> >(loc),
                                   err);
-                    switch ((k - units) / 2)
+                    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                    switch ((k - units) / 3)
                     {
                     case 0:
                         num = 1ULL;
@@ -402,10 +495,12 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                         den = 1;
                         break;
                     default:
-                        is.setstate(err);
+                      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                        is.setstate(err|is.failbit);
                         return is;
                     }
                 }
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 // unit is num/den
                 // r should be multiplied by (num/den) / Period
                 // Reduce (num/den) / Period to lowest terms
@@ -418,58 +513,81 @@ operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
                 if (num > (std::numeric_limits<unsigned long long>::max)() / d2 ||
                     den > (std::numeric_limits<unsigned long long>::max)() / n2)
                 {
+                  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                     // (num/den) / Period overflows
-                    is.setstate(is.failbit);
+                    is.setstate(err|is.failbit);
                     return is;
                 }
                 num *= d2;
                 den *= n2;
-                // num / den is now factor to multiply by r
+
                 typedef typename common_type<intermediate_type, unsigned long long>::type common_type_t;
-                if (is_integral<intermediate_type>::value)
+
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                // num / den is now factor to multiply by r
+                if (!chrono_detail::reduce(r, den, err))
                 {
-                    // Reduce r * num / den
-                    common_type_t t = math::gcd<common_type_t>(r, den);
-                    r /= t;
-                    den /= t;
-                    if (den != 1)
-                    {
-                        // Conversion to Period is integral and not exact
-                        is.setstate(is.failbit);
-                        return is;
-                    }
+                  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                  is.setstate(err|is.failbit);
+                  return is;
                 }
-                if (r > ((duration_values<common_type_t>::max)() / num))
+
+                //if (r > ((duration_values<common_type_t>::max)() / num))
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                if (chrono::detail::gt(r,((duration_values<common_type_t>::max)() / num)))
                 {
                     // Conversion to Period overflowed
-                    is.setstate(is.failbit);
+                  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                    is.setstate(err|is.failbit);
                     return is;
                 }
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 common_type_t t = r * num;
                 t /= den;
-                if ((duration_values<Rep>::max)() < t)
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+
+                if (t > 0)
                 {
+                  std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                  Rep pt = t;
+                  if ( (duration_values<Rep>::max)() < pt)
+                  {
+                    std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                     // Conversion to Period overflowed
-                    is.setstate(is.failbit);
+                    is.setstate(err|is.failbit);
                     return is;
+                  }
                 }
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 // Success!  Store it.
                 r = Rep(t);
                 d = duration<Rep, Period>(r);
+                is.setstate(err);
+                std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+                return is;
             }
-            else
+            else {
+              std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
                 is.setstate(is.failbit | is.eofbit);
+                return is;
+            }
         }
         else
         {
+          std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
             if (i == e)
-                is.setstate(is.eofbit);
-            is.setstate(is.failbit);
+              is.setstate(is.failbit|is.eofbit);
+            else
+              is.setstate(is.failbit);
+            std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+            return is;
         }
     }
-    else
-        is.setstate(is.failbit);
-    return is;
+    else {
+      std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
+        //is.setstate(is.failbit);
+      return is;
+    }
 }
 
 
@@ -499,10 +617,11 @@ operator>>(std::basic_istream<CharT, Traits>& is,
                       &units, &units + 1,
                       //~ std::use_facet<std::ctype<CharT> >(is.getloc()),
                       err) - &units;
+        is.setstate(err);
         if (k == 1)
         {
+          is.setstate(err | is.failbit);
             // failed to read epoch string
-            is.setstate(err);
             return is;
         }
         tp = time_point<Clock, Duration>(d);
@@ -515,4 +634,4 @@ operator>>(std::basic_istream<CharT, Traits>& is,
 
 }
 
-#endif  // BOOST_CHRONO_IO_V1_CHRONO_IO_HPP
+#endif  // BOOST_CHRONO_CHRONO_IO_HPP
