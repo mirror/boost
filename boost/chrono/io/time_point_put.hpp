@@ -1,4 +1,3 @@
-//
 //  (C) Copyright Howard Hinnant
 //  (C) Copyright 2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,
@@ -253,4 +252,4 @@ namespace boost
   } // chrono
 } // boost
 
-#endif  // BOOST_CHRONO_CHRONO_IO_HPP
+#endif  // header

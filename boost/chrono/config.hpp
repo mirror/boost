@@ -13,6 +13,14 @@
 
 #include <boost/config.hpp>
 
+#if !defined BOOST_CHRONO_VERSION
+#define BOOST_CHRONO_VERSION 1
+#else
+#if BOOST_CHRONO_VERSION!=1  && BOOST_CHRONO_VERSION!=2
+#error "BOOST_CHRONO_VERSION must be 1 or 2"
+#endif
+#endif
+
 #if defined(BOOST_CHRONO_SOURCE) && !defined(BOOST_USE_WINDOWS_H)
 #define BOOST_USE_WINDOWS_H
 #endif
@@ -89,11 +97,6 @@
 #endif
 
 //#undef BOOST_CHRONO_HAS_PROCESS_CLOCKS
-// deprecated i/o
-//#define BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
-
-// this doesn't works yet in compilers other than clang-3.0
-//#define BOOST_CHRONO_USES_DURATION_UNITS_GLOBAL
 
 // unicode support  ------------------------------//
 

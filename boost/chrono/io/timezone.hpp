@@ -1,5 +1,3 @@
-//  chrono_io
-//
 //  (C) Copyright Howard Hinnant
 //  (C) Copyright 2010-2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,

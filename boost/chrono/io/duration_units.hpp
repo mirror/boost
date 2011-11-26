@@ -1,4 +1,3 @@
-//
 //  (C) Copyright Howard Hinnant
 //  (C) Copyright 2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,
@@ -173,9 +172,26 @@ namespace boost
     template <typename CharT>
     std::locale::id duration_units<CharT>::id;
 
+    namespace detail
+    {
+      template<typename CharT>
+      struct duration_units_default_holder
+      {
+        typedef std::basic_string<CharT> string_type;
+        static string_type* n_d_valid_units_;
+        static string_type* valid_units_;
+        static bool initialized_;
+      };
+      template <typename CharT>
+      typename duration_units_default_holder<CharT>::string_type* duration_units_default_holder<CharT>::n_d_valid_units_=0;
+      template <typename CharT>
+      typename duration_units_default_holder<CharT>::string_type* duration_units_default_holder<CharT>::valid_units_=0;
+      template<typename CharT>
+      bool duration_units_default_holder<CharT>::initialized_ = false;
+    }
+
     /**
      * This class is used to define the strings for the default English
-     *
      */
     template <typename CharT = char>
     class duration_units_default: public duration_units<CharT>
@@ -207,9 +223,6 @@ namespace boost
       explicit duration_units_default(size_t refs = 0) :
         duration_units<CharT> (refs)
       {
-        string_type* it = n_d_valid_units_;
-        it = fill_units(it, ratio<1> ());
-        it = init_valid_units(valid_units_);
       }
 
       /**
@@ -219,40 +232,6 @@ namespace boost
       {
       }
 
-    protected:
-
-      explicit duration_units_default(string_type*, size_t refs = 0) :
-        duration_units<CharT> (refs)
-      {
-        string_type* it = n_d_valid_units_;
-        it = fill_units(it, ratio<1> ());
-        //it = init_valid_units(valid_units);
-      }
-
-
-      string_type* init_valid_units(string_type* it)
-      {
-        it = fill_units(it, atto());
-        it = fill_units(it, femto());
-        it = fill_units(it, pico());
-        it = fill_units(it, nano());
-        it = fill_units(it, micro());
-        it = fill_units(it, milli());
-        it = fill_units(it, centi());
-        it = fill_units(it, deci());
-        it = fill_units(it, deca());
-        it = fill_units(it, hecto());
-        it = fill_units(it, kilo());
-        it = fill_units(it, mega());
-        it = fill_units(it, giga());
-        it = fill_units(it, tera());
-        it = fill_units(it, peta());
-        it = fill_units(it, exa());
-        it = fill_units(it, ratio<1> ());
-        it = fill_units(it, ratio<60> ());
-        it = fill_units(it, ratio<3600> ());
-        return it;
-      }
     public:
 
       /**
@@ -261,7 +240,7 @@ namespace boost
        */
       bool match_n_d_valid_unit(const string_type* k) const
       {
-        std::size_t index = (k - n_d_valid_units_) / (pfs_ + 1);
+        std::size_t index = (k - get_n_d_valid_units_start()) / (pfs_ + 1);
         switch (index)
         {
         case 0:
@@ -278,7 +257,7 @@ namespace boost
        */
       bool match_valid_unit(const string_type* k, rt_ratio& rt) const
       {
-        std::size_t index = (k - valid_units_) / (pfs_ + 1);
+        std::size_t index = (k - get_valid_units_start()) / (pfs_ + 1);
         switch (index)
         {
         case 0:
@@ -347,31 +326,31 @@ namespace boost
       /**
        * @return pointer to the start of valid [N/D] units.
        */
-      const string_type* get_n_d_valid_units_start() const
+      virtual const string_type* get_n_d_valid_units_start()const
       {
-        return n_d_valid_units_;
+        return  detail::duration_units_default_holder<CharT>::n_d_valid_units_;
       }
       /**
        * @return pointer to the end of valid [N/D] units.
        */
-      const string_type* get_n_d_valid_units_end() const
+      virtual const string_type* get_n_d_valid_units_end()const
       {
-        return n_d_valid_units_ + (pfs_ + 1);
+        return detail::duration_units_default_holder<CharT>::n_d_valid_units_ + (pfs_ + 1);
       }
 
       /**
        * @return pointer to the start of valid units.
        */
-      const string_type* get_valid_units_start() const
+      virtual string_type* get_valid_units_start() const
       {
-        return valid_units_;
+        return detail::duration_units_default_holder<CharT>::valid_units_;
       }
       /**
        * @return pointer to the end of valid units.
        */
-      const string_type* get_valid_units_end() const
+      virtual string_type* get_valid_units_end() const
       {
-        return valid_units_ + 19 * (pfs_ + 1);
+        return detail::duration_units_default_holder<CharT>::valid_units_ + 19 * (pfs_ + 1);
       }
 
       string_type get_pattern() const
@@ -434,7 +413,7 @@ namespace boost
        * In English the suffix used after [N/D] is the one associated to the period ratio<1>.
        * @return the [N/D] suffix unit associated to this duration.
        */
-      std::string do_get_n_d_unit(duration_style::type style, rt_ratio, intmax_t v) const
+      string_type do_get_n_d_unit(duration_style::type style, rt_ratio, intmax_t v) const
       {
         return do_get_unit(style, ratio<1>(), do_get_plural_form(v));
       }
@@ -442,7 +421,7 @@ namespace boost
       /**
        * @return the unit associated to this duration if it is named, "" otherwise.
        */
-      std::string do_get_unit(duration_style::type style, rt_ratio rt, intmax_t v) const
+      string_type do_get_unit(duration_style::type style, rt_ratio rt, intmax_t v) const
       {
         if (rt.num==1) {
           switch (rt.den)
@@ -504,6 +483,10 @@ namespace boost
        */
       virtual std::size_t do_get_plural_forms() const
       {
+        return static_get_plural_forms();
+      }
+      static std::size_t static_get_plural_forms()
+      {
         return pfs_;
       }
       /**
@@ -515,6 +498,10 @@ namespace boost
        */
       virtual std::size_t do_get_plural_form(int_least64_t value) const
       {
+        return static_get_plural_form(value);
+      }
+      static std::size_t static_get_plural_form(int_least64_t value)
+      {
         return (value == -1 || value == 1) ? 0 : 1;
       }
 
@@ -524,7 +511,11 @@ namespace boost
        * @param pf the requested plural form.
        * @return if style is symbol returns "s", otherwise if pf is 0 return "second", if pf is 1 "seconds"
        */
-      virtual string_type do_get_unit(duration_style_type style, ratio<1> , std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, ratio<1> u, std::size_t pf) const
+      {
+        return static_get_unit(style,u,pf);
+      }
+      static string_type static_get_unit(duration_style_type style, ratio<1> , std::size_t pf)
       {
         static const CharT t[] =
         { 's' };
@@ -558,7 +549,11 @@ namespace boost
        * @param pf the requested plural form.
        * @return if style is symbol returns "min", otherwise if pf is 0 return "minute", if pf is 1 "minutes"
        */
-      virtual string_type do_get_unit(duration_style_type style, ratio<60> , std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, ratio<60> u, std::size_t pf) const
+      {
+        return static_get_unit(style,u,pf);
+      }
+      static string_type static_get_unit(duration_style_type style, ratio<60> , std::size_t pf)
       {
         static const CharT t[] =
         { 'm', 'i', 'n' };
@@ -584,7 +579,11 @@ namespace boost
        * @param pf the requested plural form.
        * @return if style is symbol returns "h", otherwise if pf is 0 return "hour", if pf is 1 "hours"
        */
-      virtual string_type do_get_unit(duration_style_type style, ratio<3600> , std::size_t pf) const
+      virtual string_type do_get_unit(duration_style_type style, ratio<3600> u, std::size_t pf) const
+      {
+        return static_get_unit(style,u,pf);
+      }
+      static string_type static_get_unit(duration_style_type style, ratio<3600> , std::size_t pf)
       {
         static const CharT t[] =
         { 'h' };
@@ -612,6 +611,10 @@ namespace boost
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, atto u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       /**
        * @param style the duration style.
        * @param u the period tag femto.
@@ -621,6 +624,10 @@ namespace boost
       virtual string_type do_get_unit(duration_style_type style, femto u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, femto u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
       /**
        * @param style the duration style.
@@ -632,57 +639,113 @@ namespace boost
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, pico u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       virtual string_type do_get_unit(duration_style_type style, nano u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, nano u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
       virtual string_type do_get_unit(duration_style_type style, micro u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, micro u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       virtual string_type do_get_unit(duration_style_type style, milli u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, milli u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
       virtual string_type do_get_unit(duration_style_type style, centi u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, centi u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       virtual string_type do_get_unit(duration_style_type style, deci u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, deci u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
       virtual string_type do_get_unit(duration_style_type style, deca u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, deca u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       virtual string_type do_get_unit(duration_style_type style, hecto u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, hecto u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
       virtual string_type do_get_unit(duration_style_type style, kilo u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, kilo u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       virtual string_type do_get_unit(duration_style_type style, mega u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, mega u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
       virtual string_type do_get_unit(duration_style_type style, giga u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, giga u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       virtual string_type do_get_unit(duration_style_type style, tera u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, tera u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
       virtual string_type do_get_unit(duration_style_type style, peta u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
       }
+      static string_type static_get_unit(duration_style_type style, peta u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
+      }
       virtual string_type do_get_unit(duration_style_type style, exa u, std::size_t pf) const
       {
         return do_get_ratio_prefix(style, u) + do_get_unit(style, ratio<1> (), pf);
+      }
+      static string_type static_get_unit(duration_style_type style, exa u, std::size_t pf)
+      {
+        return static_get_ratio_prefix(style, u) + static_get_unit(style, ratio<1> (), pf);
       }
 
     protected:
@@ -692,99 +755,150 @@ namespace boost
        * @param u the period tag atto.
        * @return depending on the value of @c style return the ratio_string symbol or prefix.
        */
-      virtual string_type do_get_ratio_prefix(duration_style_type style, atto) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, atto u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, atto)
       {
         if (style == duration_style::symbol) return ratio_string<atto, CharT>::symbol();
         return ratio_string<atto, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, femto) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, femto u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, femto)
       {
         if (style == duration_style::symbol) return ratio_string<femto, CharT>::symbol();
         return ratio_string<femto, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, pico) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, pico u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, pico)
       {
         if (style == duration_style::symbol) return ratio_string<pico, CharT>::symbol();
         return ratio_string<pico, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, nano) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, nano u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, nano)
       {
         if (style == duration_style::symbol) return ratio_string<nano, CharT>::symbol();
         return ratio_string<nano, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, micro) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, micro u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, micro)
       {
         if (style == duration_style::symbol) return ratio_string<micro, CharT>::symbol();
         return ratio_string<micro, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, milli) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, milli u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, milli)
       {
         if (style == duration_style::symbol) return ratio_string<milli, CharT>::symbol();
         return ratio_string<milli, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, centi) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, centi u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, centi)
       {
         if (style == duration_style::symbol) return ratio_string<centi, CharT>::symbol();
         return ratio_string<centi, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, deci) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, deci u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, deci)
       {
         if (style == duration_style::symbol) return ratio_string<deci, CharT>::symbol();
         return ratio_string<deci, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, deca) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, deca u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, deca)
       {
         if (style == duration_style::symbol) return ratio_string<deca, CharT>::symbol();
         return ratio_string<deca, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, hecto) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, hecto u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, hecto)
       {
         if (style == duration_style::symbol) return ratio_string<hecto, CharT>::symbol();
         return ratio_string<hecto, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, kilo) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, kilo u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, kilo)
       {
         if (style == duration_style::symbol) return ratio_string<kilo, CharT>::symbol();
         return ratio_string<kilo, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, mega) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, mega u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, mega)
       {
         if (style == duration_style::symbol) return ratio_string<mega, CharT>::symbol();
         return ratio_string<mega, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, giga) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, giga u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, giga)
       {
         if (style == duration_style::symbol) return ratio_string<giga, CharT>::symbol();
         return ratio_string<giga, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, tera) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, tera u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, tera)
       {
         if (style == duration_style::symbol) return ratio_string<tera, CharT>::symbol();
         return ratio_string<tera, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, peta) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, peta u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, peta)
       {
         if (style == duration_style::symbol) return ratio_string<peta, CharT>::symbol();
         return ratio_string<peta, CharT>::prefix();
       }
-      virtual string_type do_get_ratio_prefix(duration_style_type style, exa) const
+      virtual string_type do_get_ratio_prefix(duration_style_type style, exa u) const
+      {
+        return static_get_ratio_prefix(style, u);
+      }
+      static string_type static_get_ratio_prefix(duration_style_type style, exa)
       {
         if (style == duration_style::symbol) return ratio_string<exa, CharT>::symbol();
         return ratio_string<exa, CharT>::prefix();
       }
-
-//      /**
-//       *
-//       * @param style
-//       * @param pf
-//       * @return the translation associated to the plural form given as parameter.
-//       */
-//      template <typename Period>
-//      typename enable_if<detail::is_localizable<Period>, string_type>::type get_unit(duration_style_type style,
-//          std::size_t pf) const
-//      {
-//        return do_get_unit(style, Period(), pf);
-//      }
 
     protected:
       template <typename Period>
@@ -798,12 +912,71 @@ namespace boost
         *it++ = do_get_unit(duration_style::symbol, Period(), 0);
         return it;
       }
-
-      string_type n_d_valid_units_[3];
-      string_type valid_units_[19 * 3];
-
+    public:
+      template <typename Period>
+      static string_type* static_fill_units(string_type* it, Period)
+      {
+        std::size_t pfs = static_get_plural_forms();
+        for (std::size_t pf = 0; pf < pfs; ++pf)
+        {
+          *it++ = static_get_unit(duration_style::prefix, Period(), pf);
+        }
+        *it++ = static_get_unit(duration_style::symbol, Period(), 0);
+        return it;
+      }
+      static string_type* static_init_valid_units(string_type* it)
+      {
+        it = static_fill_units(it, atto());
+        it = static_fill_units(it, femto());
+        it = static_fill_units(it, pico());
+        it = static_fill_units(it, nano());
+        it = static_fill_units(it, micro());
+        it = static_fill_units(it, milli());
+        it = static_fill_units(it, centi());
+        it = static_fill_units(it, deci());
+        it = static_fill_units(it, deca());
+        it = static_fill_units(it, hecto());
+        it = static_fill_units(it, kilo());
+        it = static_fill_units(it, mega());
+        it = static_fill_units(it, giga());
+        it = static_fill_units(it, tera());
+        it = static_fill_units(it, peta());
+        it = static_fill_units(it, exa());
+        it = static_fill_units(it, ratio<1> ());
+        it = static_fill_units(it, ratio<60> ());
+        it = static_fill_units(it, ratio<3600> ());
+        return it;
+      }
     };
 
+    namespace detail
+    {
+
+      template<typename CharT>
+      struct duration_units_default_initializer_t
+      {
+        duration_units_default_initializer_t()
+          {
+              if (!duration_units_default_holder<CharT>::initialized_)
+              {
+                typedef typename duration_units_default_holder<CharT>::string_type string_type;
+                duration_units_default_holder<CharT>::n_d_valid_units_ = new string_type[3];
+                duration_units_default_holder<CharT>::valid_units_ = new string_type[19 * 3];
+
+                string_type* it = duration_units_default_holder<CharT>::n_d_valid_units_;
+                it = duration_units_default<CharT>::static_fill_units(it, ratio<1> ());
+                it = duration_units_default<CharT>::static_init_valid_units(duration_units_default_holder<CharT>::valid_units_);
+
+                duration_units_default_holder<CharT>::initialized_ = true;
+              }
+          }
+      };
+      namespace /**/
+      {
+        duration_units_default_initializer_t<char> duration_units_default_initializer;
+        duration_units_default_initializer_t<wchar_t> wduration_units_default_initializer;
+      } // namespace
+    }
   } // chrono
 
 } // boost

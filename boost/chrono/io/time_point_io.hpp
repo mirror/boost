@@ -1,5 +1,3 @@
-//  boost/chrono/io/time_point_io.hpp
-//
 //  (C) Copyright Howard Hinnant
 //  (C) Copyright 2010-2011 Vicente J. Botet Escriba
 //  Use, modification and distribution are subject to the Boost Software License,
@@ -677,4 +675,4 @@ namespace boost
 
 }
 
-#endif  // BOOST_CHRONO_CHRONO_IO_HPP
+#endif  // header
