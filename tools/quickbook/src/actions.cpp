@@ -865,7 +865,9 @@ namespace quickbook
     {
         value_consumer values = macro_definition;
         std::string macro_id = values.consume().get_quickbook();
-        std::string phrase = values.consume().get_encoded();
+        value phrase_value = values.optional_consume();
+        std::string phrase;
+        if (phrase_value.check()) phrase = phrase_value.get_encoded();
         values.finish();
 
         std::string* existing_macro =

@@ -34,7 +34,8 @@ test-suite quickbook.test :
     [ quickbook-test code_snippet-1_1 ]
     [ quickbook-test code_teletype-1_5 ]
     [ quickbook-test command_line_macro-1_1 : : :
-        <quickbook-test-define>__macro__=*bold* ]
+        <quickbook-test-define>__macro__=*bold*
+        <quickbook-test-define>__empty__ ]
     [ quickbook-error-test command_line_macro-1_1-invalid :
         command_line_macro-1_1.quickbook :
         <testing.arg>'-Dsomething[]' ]
