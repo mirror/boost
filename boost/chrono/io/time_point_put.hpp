@@ -26,8 +26,8 @@ namespace boost
      * @tparam ChatT a character type
      * @tparam OutputIterator a model of @c OutputIterator
      *
-     * The @c time_point_put facet provides facilities for formatted output of duration values.
-     * The member function of @c time_point_put take a duration and translate this into character string representation.
+     * The @c time_point_put facet provides facilities for formatted output of @c time_point values.
+     * The member function of @c time_point_put take a @c time_point and format it into character string representation.
      *
      */
     template <class CharT, class OutputIterator = std::ostreambuf_iterator<CharT> >
@@ -64,10 +64,10 @@ namespace boost
       }
 
       /**
-       *
-       * @param s an output stream iterator
+       * @param i an output stream iterator
        * @param ios a reference to a ios_base
-       * @param d the duration
+       * @param fill the character used as filler
+       * @param tp the @c time_point
        * @param pattern begin of the formatting pattern
        * @param pat_end end of the formatting pattern
        *
@@ -75,16 +75,16 @@ namespace boost
        * identifying characters that are part of a pattern sequence. Each character
        * that is not part of a pattern sequence is written to @c s immediately, and
        * each pattern sequence, as it is identified, results in a call to
-       * @c put_value or @c put_unit;
+       * @c put_duration or @c put_epoch;
        * thus, pattern elements and other characters are interleaved in the output
        * in the order in which they appear in the pattern. Pattern sequences are
        * identified by converting each character @c c to a @c char value as if by
        * @c ct.narrow(c,0), where @c ct is a reference to @c ctype<charT> obtained from
        * @c ios.getloc(). The first character of each sequence is equal to @c '%',
-       * followed by a pattern specifier character @c spec, which can be @c 'v' for
-       * the duration value or @c 'u' for the duration unit. .
+       * followed by a pattern specifier character @c spec, which can be @c 'd' for
+       * the duration value or @c 'e' for the epoch.
        * For each valid pattern sequence identified, calls
-       * <c>put_value(s, ios, d)</c> or <c>put_unit(s, ios, d)</c>.
+       * <c>put_duration(s, ios, fill, tp.time_since_epoch())</c> or <c>put_epoch(s, ios)</c>.
        *
        * @Returns An iterator pointing immediately after the last character produced.
        */
@@ -146,15 +146,17 @@ namespace boost
       }
 
       /**
-       *
-       * @param s an output stream iterator
+       * @param i an output stream iterator
        * @param ios a reference to a ios_base
-       * @param d the duration
-       * @Effects imbue in @c ios the @c time_point_units_default facet if not already present.
-       * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
+       * @param fill the character used as filler
+       * @param tp the @c time_point
+       * @param pattern begin of the formatting pattern
+       * @param pat_end end of the formatting pattern
+       *
+       * @Effects Stores the time_point pattern from the @c time_point_unit facet in let say @c str. Last as if
        * @code
-       *   return put(s, ios, d, str.data(), str.data() + str.size());
-       * @codeend
+       *   return put(s, ios, dill, tp, str.data(), str.data() + str.size());
+       * @endcode
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <class Clock, class Duration>
@@ -176,11 +178,12 @@ namespace boost
       }
 
       /**
-       *
-       * @param s an output stream iterator
+       * @param i an output stream iterator
        * @param ios a reference to a ios_base
-       * @param d the duration
-       * @Effects As if std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, ' ', static_cast<long int> (d.count())).
+       * @param fill the character used as filler
+       * @param d the @c duration
+       * @Effects As if <c>facet.put(s, ios, fill, d)</c> where facet is the @c duration_put<CharT> facet associated
+       * to the @c ios or a new instance of @c duration_put<CharT>.
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
@@ -200,27 +203,30 @@ namespace boost
 
       /**
        *
-       * @param s an output stream iterator
+       * @param i an output stream iterator
        * @param ios a reference to a ios_base
-       * @param d the duration
-       * @param pattern
-       * @Effects imbue in @c ios the @c time_point_units_default facet if not already present.
-       * @Effects Calls std::use_facet<time_point_units<CharT> >(ios.getloc()).put(s, ios, d).
-       * @Returns An iterator pointing immediately after the last character produced.
+       * @Effects As if
+       * @code
+       * string_type str = facet.template get_epoch<Clock>();
+       * s=std::copy(str.begin(), str.end(), s);
+       * @endcode
+       * where facet is the @c time_point_units<CharT> facet associated
+       * to the @c ios or a new instance of @c time_point_units_default<CharT>.
+       * @Returns s, iterator pointing immediately after the last character produced.
        */
 
       template <typename Clock>
-      iter_type put_epoch(iter_type i, std::ios_base& is) const
+      iter_type put_epoch(iter_type i, std::ios_base& os) const
       {
-        if (std::has_facet<time_point_units<CharT> >(is.getloc()))
+        if (std::has_facet<time_point_units<CharT> >(os.getloc()))
         {
-          time_point_units<CharT> const &facet = std::use_facet<time_point_units<CharT> >(is.getloc());
-          return put_epoch<Clock> (facet, i, is);
+          time_point_units<CharT> const &facet = std::use_facet<time_point_units<CharT> >(os.getloc());
+          return put_epoch<Clock> (facet, i, os);
         }
         else
         {
           time_point_units_default<CharT> facet;
-          return put_epoch<Clock> (facet, i, is);
+          return put_epoch<Clock> (facet, i, os);
         }
       }
 
@@ -228,7 +234,7 @@ namespace boost
       iter_type put_epoch(time_point_units<CharT> const& facet, iter_type s, std::ios_base&) const
       {
         string_type str = facet.template get_epoch<Clock>();
-        std::copy(str.begin(), str.end(), s);
+        s= std::copy(str.begin(), str.end(), s);
         return s;
       }
 

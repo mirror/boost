@@ -26,7 +26,7 @@ namespace boost
      * @tparam OutputIterator a model of @c OutputIterator
      *
      * The @c duration_put facet provides facilities for formatted output of duration values.
-     * The member function of @c duration_put take a duration and translate this into character string representation.
+     * The member function of @c duration_put take a duration and format it into character string representation.
      *
      */
     template <class CharT, class OutputIterator = std::ostreambuf_iterator<CharT> >
@@ -66,6 +66,7 @@ namespace boost
        *
        * @param s an output stream iterator
        * @param ios a reference to a ios_base
+       * @param fill the character used as filler
        * @param d the duration
        * @param pattern begin of the formatting pattern
        * @param pat_end end of the formatting pattern
@@ -83,7 +84,7 @@ namespace boost
        * followed by a pattern specifier character @c spec, which can be @c 'v' for
        * the duration value or @c 'u' for the duration unit. .
        * For each valid pattern sequence identified, calls
-       * <c>put_value(s, ios, d)</c> or <c>put_unit(s, ios, d)</c>.
+       * <c>put_value(s, ios, fill, d)</c> or <c>put_unit(s, ios, fill, d)</c>.
        *
        * @Returns An iterator pointing immediately after the last character produced.
        */
@@ -147,12 +148,13 @@ namespace boost
        *
        * @param s an output stream iterator
        * @param ios a reference to a ios_base
+       * @param fill the character used as filler
        * @param d the duration
        * @Effects imbue in @c ios the @c duration_units_default facet if not already present.
        * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
        * @code
        *   return put(s, ios, d, str.data(), str.data() + str.size());
-       * @codeend
+       * @endcode
        * @Returns An iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
@@ -177,9 +179,10 @@ namespace boost
        *
        * @param s an output stream iterator
        * @param ios a reference to a ios_base
+       * @param fill the character used as filler
        * @param d the duration
-       * @Effects As if std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, ' ', static_cast<long int> (d.count())).
-       * @Returns An iterator pointing immediately after the last character produced.
+       * @Effects As if s=std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, fill, static_cast<long int> (d.count())).
+       * @Returns s, iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
       iter_type put_value(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d) const
@@ -192,11 +195,16 @@ namespace boost
        *
        * @param s an output stream iterator
        * @param ios a reference to a ios_base
+       * @param fill the character used as filler
        * @param d the duration
-       * @param pattern
-       * @Effects imbue in @c ios the @c duration_units_default facet if not already present.
-       * @Effects Calls std::use_facet<duration_units<CharT,OutputIterator> >(ios.getloc()).put(s, ios, d).
-       * @Returns An iterator pointing immediately after the last character produced.
+       * @Effects Let facet be the duration_units<CharT> facet associated to ios. If the associated unit is named,
+       * as if
+       * @code
+          string_type str = facet.get_unit(get_duration_style(ios), d);
+          s=std::copy(str.begin(), str.end(), s);
+       * @endcode
+       * Otherwise, format the unit as "[Period::num/Period::den]" followed by the unit associated to [N/D] obtained using facet.get_n_d_unit(get_duration_style(ios), d)
+       * @Returns s, iterator pointing immediately after the last character produced.
        */
       template <typename Rep, typename Period>
       iter_type put_unit(iter_type s, std::ios_base& ios, char_type fill, duration<Rep, Period> const& d) const
@@ -220,7 +228,7 @@ namespace boost
       {
         if (facet.template is_named_unit<Period>()) {
           string_type str = facet.get_unit(get_duration_style(ios), d);
-          std::copy(str.begin(), str.end(), s);
+          s=std::copy(str.begin(), str.end(), s);
         } else {
           *s++ = CharT('[');
           std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, fill, Period::num);
@@ -228,7 +236,7 @@ namespace boost
           std::use_facet<std::num_put<CharT, iter_type> >(ios.getloc()).put(s, ios, fill, Period::den);
           *s++ = CharT(']');
           string_type str = facet.get_n_d_unit(get_duration_style(ios), d);
-          std::copy(str.begin(), str.end(), s);
+          s=std::copy(str.begin(), str.end(), s);
         }
         return s;
       }

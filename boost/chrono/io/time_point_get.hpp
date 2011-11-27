@@ -24,22 +24,6 @@ namespace boost
   namespace chrono
   {
 
-    /**
-     * @c time_point_get is used to parse a character sequence, extracting
-     * components of a duration into a class duration.
-     * Each get member parses a format as produced by a corresponding format specifier to time_put<>::put.
-     * If the sequence being parsed matches the correct format, the
-     * corresponding member of the class duration argument are set to the
-     * value used to produce the sequence;
-     * otherwise either an error is reported or unspecified values are assigned.
-     * In other words, user confirmation is required for reliable parsing of
-     * user-entered durations, but machine-generated formats can be parsed
-     * reliably. This allows parsers to be aggressive about interpreting user
-     * variations on standard formats.
-     *
-     * If the end iterator is reached during parsing of the get() member
-     * function, the member sets std::ios_base::eofbit in err.
-     */
     template <class CharT, class InputIterator = std::istreambuf_iterator<CharT> >
     class time_point_get: public std::locale::facet
     {
@@ -89,8 +73,9 @@ namespace boost
        * - The expression err == std::ios_base::goodbit evaluates to false.
        * - The expression s == end evaluates to true, in which case the
        * function evaluates err = std::ios_base::eofbit | std::ios_base::failbit.
-       * - The next element of pattern is equal to Õ%Õ, followed by a conversion
-       * specifier character, format.
+       * - The next element of pattern is equal to '%', followed by a conversion
+       * specifier character, the functions @c get_duration or @c get_epoch are called depending on
+       * whether the format is @c 'd' or @c 'e'.
        * If the number of elements in the range [pattern,pat_end) is not
        * sufficient to unambiguously determine whether the conversion
        * specification is complete and valid, the function evaluates
@@ -216,8 +201,6 @@ namespace boost
 
         // Success!  Store it.
         tp = time_point<Clock, Duration> (d);
-        //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
-
         return s;
       }
 
@@ -226,8 +209,7 @@ namespace boost
        * @param s an input stream iterator
        * @param ios a reference to a ios_base
        * @param d the duration
-       * @Effects imbue in @c ios the @c time_point_units_default facet if not already present.
-       * Retrieves Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
+       * Stores the duration pattern from the @c duration_unit facet in let say @c str. Last as if
        * @code
        *   return get(s, end, ios, err, ios, d, str.data(), str.data() + str.size());
        * @codeend
@@ -252,11 +234,13 @@ namespace boost
       }
 
       /**
+       * As if
+       * @code
+       * return facet.get(s, end, ios, err, d);
+       * @endcode
+       * where @c facet is either the @c duration_get facet associated to the @c ios or an instance of the default @c duration_get facet.
        *
-       * @param s an input stream iterator
-       * @param ios a reference to a ios_base
-       * @param d the duration
-       * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
+       * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid duration.
        */
       template <typename Rep, typename Period>
       iter_type get_duration(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err,
@@ -283,12 +267,14 @@ namespace boost
 
       /**
        *
-       * @param s an output stream iterator
-       * @param ios a reference to a ios_base
-       * @param d the duration
-       * @param pattern
-       * @Effects Calls do_put_unit(s, ios, d).
-       * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid name
+       * @Effects Let @c facet be the @c time_point_units facet associated to @c is or a new instance of the default @c time_point_units_default facet.
+       * Let @c epoch be the epoch string associated to the Clock using this facet.
+       * Scans @c i to match @c epoch or @c e is reached.
+       *
+       * If not match before the @c e is reached @c std::ios_base::failbit is set in @c err.
+       * If @c e is reached @c std::ios_base::failbit is set in @c err.
+       *
+       * @Returns An iterator pointing just beyond the last character that can be determined to be part of a valid epoch.
        */
       template <class Clock>
       iter_type get_epoch(iter_type i, iter_type e, std::ios_base& is, std::ios_base::iostate& err) const
@@ -309,18 +295,15 @@ namespace boost
       iter_type get_epoch(time_point_units<CharT> const &facet, iter_type i, iter_type e, std::ios_base&,
           std::ios_base::iostate& err) const
       {
-        const std::basic_string<CharT> units = facet.template get_epoch<Clock> ();
-        err = std::ios_base::goodbit;
-        std::ptrdiff_t k = chrono_detail::scan_keyword(i, e, &units, &units + 1,
+        const std::basic_string<CharT> epoch = facet.template get_epoch<Clock> ();
+        std::ptrdiff_t k = chrono_detail::scan_keyword(i, e, &epoch, &epoch + 1,
         //~ std::use_facet<std::ctype<CharT> >(ios.getloc()),
-            err) - &units;
-        //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
+            err) - &epoch;
         if (k == 1)
         {
           err |= std::ios_base::failbit;
           return i;
         }
-        //std::cerr << __FILE__ << ":" << __LINE__ << " err " << err << std::endl;
         return i;
       }
 

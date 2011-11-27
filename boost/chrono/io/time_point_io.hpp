@@ -207,6 +207,15 @@ namespace boost
       aspect_type a_save_;
     };
 
+    /**
+     *
+     * @param os
+     * @param tp
+     * @Effects Behaves as a formatted output function. After constructing a @c sentry object, if the @ sentry
+     * converts to true, calls to @c facet.put(os,os,os.fill(),tp) where @c facet is the @c time_point_put<CharT>
+     * facet associated to @c os or a new created instance of the default @c time_point_put<CharT> facet.
+     * @return @c os.
+     */
     template <class CharT, class Traits, class Clock, class Duration>
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<Clock, Duration>& tp)
@@ -280,12 +289,12 @@ namespace boost
           if (!std::has_facet<time_point_get<CharT> >(is.getloc()))
           {
             std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
-            time_point_get<CharT> () .get(is, std::istreambuf_iterator<CharT, Traits>(), is, err, tp);
+            time_point_get<CharT> ().get(is, std::istreambuf_iterator<CharT, Traits>(), is, err, tp);
           }
           else
           {
             std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
-            std::use_facet<time_point_get<CharT> >(is.getloc()) .get(is, std::istreambuf_iterator<CharT, Traits>(), is,
+            std::use_facet<time_point_get<CharT> >(is.getloc()).get(is, std::istreambuf_iterator<CharT, Traits>(), is,
                 err, tp);
           }
         }

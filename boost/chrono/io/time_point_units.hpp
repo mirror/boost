@@ -36,6 +36,10 @@ namespace boost
        * Type of character the facet is instantiated on.
        */
       typedef CharT char_type;
+      /**
+       * Type of character string used by member functions.
+       */
+      typedef std::basic_string<char_type> string_type;
 
       /**
        * Unique identifier for this type of facet.
@@ -59,18 +63,15 @@ namespace boost
       }
 
       /**
-       * @return the pattern to be used by default calling @c do_get_pattern().
+       * @return the pattern to be used by default.
        */
-      std::basic_string<CharT> get_pattern() const
-      {
-        return do_get_pattern();
-      }
+      virtual string_type get_pattern() const =0;
 
       /**
        * @return the epoch associated to the clock @c Clock calling @c do_get_epoch(Clock())
        */
       template <typename Clock>
-      std::basic_string<CharT> get_epoch() const
+      string_type get_epoch() const
       {
         return do_get_epoch(Clock());
       }
@@ -81,23 +82,54 @@ namespace boost
        */
       virtual ~time_point_units() {};
 
+
       /**
-       *  customization point for getting the timepoint's pattern.
+       *
+       * @param c a dummy instance of @c system_clock.
+       * @return The epoch string associated to the @c system_clock.
        */
-      virtual std::basic_string<CharT> do_get_pattern() const=0;
+      virtual string_type do_get_epoch(system_clock) const=0;
 
-      virtual std::basic_string<CharT> do_get_epoch(system_clock) const=0;
-
-      virtual std::basic_string<CharT> do_get_epoch(steady_clock) const=0;
+      /**
+       *
+       * @param c a dummy instance of @c steady_clock.
+       * @return The epoch string associated to the @c steady_clock.
+       */
+      virtual string_type do_get_epoch(steady_clock) const=0;
 
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
-      virtual std::basic_string<CharT> do_get_epoch(process_real_cpu_clock) const=0;
-      virtual std::basic_string<CharT> do_get_epoch(process_user_cpu_clock) const=0;
-      virtual std::basic_string<CharT> do_get_epoch(process_system_cpu_clock) const=0;
-      virtual std::basic_string<CharT> do_get_epoch(process_cpu_clock) const=0;
+      /**
+       *
+       * @param c a dummy instance of @c process_real_cpu_clock.
+       * @return The epoch string associated to the @c process_real_cpu_clock.
+       */
+      virtual string_type do_get_epoch(process_real_cpu_clock) const=0;
+      /**
+       *
+       * @param c a dummy instance of @c process_user_cpu_clock.
+       * @return The epoch string associated to the @c process_user_cpu_clock.
+       */
+      virtual string_type do_get_epoch(process_user_cpu_clock) const=0;
+      /**
+       *
+       * @param c a dummy instance of @c process_system_cpu_clock.
+       * @return The epoch string associated to the @c process_system_cpu_clock.
+       */
+      virtual string_type do_get_epoch(process_system_cpu_clock) const=0;
+      /**
+       *
+       * @param c a dummy instance of @c process_cpu_clock.
+       * @return The epoch string associated to the @c process_cpu_clock.
+       */
+      virtual string_type do_get_epoch(process_cpu_clock) const=0;
 #endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
-      virtual std::basic_string<CharT> do_get_epoch(thread_clock) const=0;
+      /**
+       *
+       * @param c a dummy instance of @c thread_clock.
+       * @return The epoch string associated to the @c thread_clock.
+       */
+      virtual string_type do_get_epoch(thread_clock) const=0;
 #endif
 
     };
@@ -111,7 +143,14 @@ namespace boost
     class time_point_units_default: public time_point_units<CharT>
     {
     public:
+      /**
+       * Type of character the facet is instantiated on.
+       */
       typedef CharT char_type;
+      /**
+       * Type of character string returned by member functions.
+       */
+      typedef std::basic_string<char_type> string_type;
 
       explicit time_point_units_default(size_t refs = 0) :
         time_point_units<CharT> (refs)
@@ -119,56 +158,77 @@ namespace boost
       }
       ~time_point_units_default() {}
 
-
-    protected:
-      std::basic_string<CharT> do_get_pattern() const
+      /**
+       * @return the default pattern "%d%e".
+       */
+      string_type get_pattern() const
       {
         static const CharT t[] =
         { '%', 'd', '%', 'e' };
-        static const std::basic_string<CharT> pattern(t, t + sizeof (t) / sizeof (t[0]));
+        static const string_type pattern(t, t + sizeof (t) / sizeof (t[0]));
 
         return pattern;
       }
-//      std::basic_string<CharT> get_date_time_pattern() const
-//          {
-//            static const CharT t[] =
-//            { '%', 'd', '%', 'e' };
-//            static const std::basic_string<CharT> pattern(t, t + sizeof (t) / sizeof (t[0]));
-//
-//            return pattern;
-//          }
 
-
-      std::basic_string<CharT> do_get_epoch(system_clock ) const
+    protected:
+      /**
+       * @param c a dummy instance of @c system_clock.
+       * @return The epoch string returned by @c clock_string<system_clock,CharT>::since().
+       */
+      string_type do_get_epoch(system_clock ) const
       {
         return clock_string<system_clock,CharT>::since();
       }
-      std::basic_string<CharT> do_get_epoch(steady_clock ) const
+      /**
+       * @param c a dummy instance of @c steady_clock.
+       * @return The epoch string returned by @c clock_string<steady_clock,CharT>::since().
+       */
+      string_type do_get_epoch(steady_clock ) const
       {
         return clock_string<steady_clock,CharT>::since();
       }
 
 #if defined(BOOST_CHRONO_HAS_PROCESS_CLOCKS)
-      std::basic_string<CharT> do_get_epoch(process_real_cpu_clock ) const
+      /**
+       * @param c a dummy instance of @c process_real_cpu_clock.
+       * @return The epoch string returned by @c clock_string<process_real_cpu_clock,CharT>::since().
+       */
+      string_type do_get_epoch(process_real_cpu_clock ) const
       {
         return clock_string<process_real_cpu_clock,CharT>::since();
       }
-      std::basic_string<CharT> do_get_epoch(process_user_cpu_clock ) const
+      /**
+       * @param c a dummy instance of @c process_user_cpu_clock.
+       * @return The epoch string returned by @c clock_string<process_user_cpu_clock,CharT>::since().
+       */
+      string_type do_get_epoch(process_user_cpu_clock ) const
       {
         return clock_string<process_user_cpu_clock,CharT>::since();
       }
-      std::basic_string<CharT> do_get_epoch(process_system_cpu_clock ) const
+      /**
+       * @param c a dummy instance of @c process_system_cpu_clock.
+       * @return The epoch string returned by @c clock_string<process_system_cpu_clock,CharT>::since().
+       */
+      string_type do_get_epoch(process_system_cpu_clock ) const
       {
         return clock_string<process_system_cpu_clock,CharT>::since();
       }
-      std::basic_string<CharT> do_get_epoch(process_cpu_clock ) const
+      /**
+       * @param c a dummy instance of @c process_cpu_clock.
+       * @return The epoch string returned by @c clock_string<process_cpu_clock,CharT>::since().
+       */
+      string_type do_get_epoch(process_cpu_clock ) const
       {
         return clock_string<process_cpu_clock,CharT>::since();
       }
 
 #endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
-      std::basic_string<CharT> do_get_epoch(thread_clock ) const
+      /**
+       * @param c a dummy instance of @c thread_clock.
+       * @return The epoch string returned by @c clock_string<thread_clock,CharT>::since().
+       */
+      string_type do_get_epoch(thread_clock ) const
       {
         return clock_string<thread_clock,CharT>::since();
       }
