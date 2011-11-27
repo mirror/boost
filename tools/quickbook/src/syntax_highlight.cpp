@@ -15,10 +15,214 @@
 #include "grammar.hpp"
 #include "grammar_impl.hpp" // Just for context stuff. Should move?
 #include "actions_class.hpp"
+#include "files.hpp"
+#include "input_path.hpp"
 
 namespace quickbook
 {    
     namespace cl = boost::spirit::classic;
+
+    // quickbook::actions is used in a few places here, as 'escape_actions'.
+    // It's named differently to distinguish it from the syntax highlighting
+    // actions, declared below.
+
+    // Syntax Highlight Actions
+
+    struct span
+    {
+        // Decorates c++ code fragments
+
+        span(char const* name, collector& out)
+        : name(name), out(out) {}
+
+        void operator()(parse_iterator first, parse_iterator last) const;
+
+        char const* name;
+        collector& out;
+    };
+
+    struct span_start
+    {
+        span_start(char const* name, collector& out)
+        : name(name), out(out) {}
+
+        void operator()(parse_iterator first, parse_iterator last) const;
+
+        char const* name;
+        collector& out;
+    };
+
+    struct span_end
+    {
+        span_end(collector& out)
+        : out(out) {}
+
+        void operator()(parse_iterator first, parse_iterator last) const;
+
+        collector& out;
+    };
+
+    struct unexpected_char
+    {
+        // Handles unexpected chars in c++ syntax
+
+        unexpected_char(
+            collector& out
+          , quickbook::actions& escape_actions)
+        : out(out)
+        , escape_actions(escape_actions) {}
+
+        void operator()(parse_iterator first, parse_iterator last) const;
+
+        collector& out;
+        quickbook::actions& escape_actions;
+    };
+
+    struct plain_char
+    {
+        // Prints a single plain char.
+        // Converts '<' to "&lt;"... etc See utils.hpp
+
+        plain_char(collector& out)
+        : out(out) {}
+
+        void operator()(char ch) const;
+        void operator()(parse_iterator first, parse_iterator last) const;
+
+        collector& out;
+    };
+
+    struct pre_escape_back
+    {
+        // Escapes back from code to quickbook (Pre)
+
+        pre_escape_back(actions& escape_actions)
+            : escape_actions(escape_actions) {}
+
+        void operator()(parse_iterator first, parse_iterator last) const;
+
+        actions& escape_actions;
+    };
+
+    struct post_escape_back
+    {
+        // Escapes back from code to quickbook (Post)
+
+        post_escape_back(collector& out, actions& escape_actions)
+            : out(out), escape_actions(escape_actions) {}
+
+        void operator()(parse_iterator first, parse_iterator last) const;
+
+        collector& out;
+        actions& escape_actions;
+    };
+
+    void span::operator()(parse_iterator first, parse_iterator last) const
+    {
+        out << "<phrase role=\"" << name << "\">";
+        while (first != last)
+            detail::print_char(*first++, out.get());
+        out << "</phrase>";
+    }
+
+    void span_start::operator()(parse_iterator first, parse_iterator last) const
+    {
+        out << "<phrase role=\"" << name << "\">";
+        while (first != last)
+            detail::print_char(*first++, out.get());
+    }
+
+    void span_end::operator()(parse_iterator first, parse_iterator last) const
+    {
+        while (first != last)
+            detail::print_char(*first++, out.get());
+        out << "</phrase>";
+    }
+
+    void unexpected_char::operator()(parse_iterator first, parse_iterator last) const
+    {
+        file_position const pos = escape_actions.current_file->position_of(first.base());
+
+        detail::outwarn(escape_actions.current_file->path, pos.line)
+            << "in column:" << pos.column
+            << ", unexpected character: " << detail::utf8(first, last)
+            << "\n";
+
+        // print out an unexpected character
+        out << "<phrase role=\"error\">";
+        while (first != last)
+            detail::print_char(*first++, out.get());
+        out << "</phrase>";
+    }
+
+    void plain_char::operator()(char ch) const
+    {
+        detail::print_char(ch, out.get());
+    }
+
+    void plain_char::operator()(parse_iterator first, parse_iterator last) const
+    {
+        while (first != last)
+            detail::print_char(*first++, out.get());
+    }
+
+    void pre_escape_back::operator()(parse_iterator, parse_iterator) const
+    {
+        escape_actions.phrase.push(); // save the stream
+    }
+
+    void post_escape_back::operator()(parse_iterator, parse_iterator) const
+    {
+        out << escape_actions.phrase.str();
+        escape_actions.phrase.pop(); // restore the stream
+    }
+
+    // Syntax
+
+    struct keywords_holder
+    {
+        cl::symbols<> cpp, python;
+
+        keywords_holder()
+        {
+            cpp
+                    =   "and_eq", "and", "asm", "auto", "bitand", "bitor",
+                        "bool", "break", "case", "catch", "char", "class",
+                        "compl", "const_cast", "const", "continue", "default",
+                        "delete", "do", "double", "dynamic_cast",  "else",
+                        "enum", "explicit", "export", "extern", "false",
+                        "float", "for", "friend", "goto", "if", "inline",
+                        "int", "long", "mutable", "namespace", "new", "not_eq",
+                        "not", "operator", "or_eq", "or", "private",
+                        "protected", "public", "register", "reinterpret_cast",
+                        "return", "short", "signed", "sizeof", "static",
+                        "static_cast", "struct", "switch", "template", "this",
+                        "throw", "true", "try", "typedef", "typeid",
+                        "typename", "union", "unsigned", "using", "virtual",
+                        "void", "volatile", "wchar_t", "while", "xor_eq", "xor"
+                    ;
+
+            python
+                    =
+                    "and",       "del",       "for",       "is",        "raise",
+                    "assert",    "elif",      "from",      "lambda",    "return",
+                    "break",     "else",      "global",    "not",       "try",
+                    "class",     "except",    "if",        "or",        "while",
+                    "continue",  "exec",      "import",    "pass",      "yield",
+                    "def",       "finally",   "in",        "print",
+
+                    // Technically "as" and "None" are not yet keywords (at Python
+                    // 2.4). They are destined to become keywords, and we treat them
+                    // as such for syntax highlighting purposes.
+
+                    "as", "None"
+                    ;
+        }
+    };
+
+    namespace {
+        keywords_holder keywords;
+    }
 
     // Grammar for C++ highlighting
     struct cpp_highlight
@@ -35,7 +239,7 @@ namespace quickbook
             {
                 program
                     =
-                    *(  (+cl::space_p)  [space(self.out)]
+                    *(  (+cl::space_p)  [plain_char(self.out)]
                     |   macro
                     |   escape
                     |   preprocessor    [span("preprocessor", self.out)]
@@ -58,23 +262,14 @@ namespace quickbook
                     >> self.escape_actions.macro        [do_macro_action(self.out, self.escape_actions)]
                     ;
 
-                qbk_phrase =
-                    self.escape_actions.scoped_context(element_info::in_phrase)
-                    [  *(   g.common
-                        |   (cl::anychar_p - cl::str_p("``"))
-                                        [self.escape_actions.plain_char]
-                        )
-                    ]
-                    ;
-
                 escape =
-                    cl::str_p("``")     [pre_escape_back(self.escape_actions, save)]
+                    cl::str_p("``")     [pre_escape_back(self.escape_actions)]
                     >>
                     (
                         (
                             (
                                 (+(cl::anychar_p - "``") >> cl::eps_p("``"))
-                                & qbk_phrase
+                                & g.phrase
                             )
                             >>  cl::str_p("``")
                         )
@@ -83,7 +278,7 @@ namespace quickbook
                             cl::eps_p   [self.escape_actions.error]
                             >> *cl::anychar_p
                         )
-                    )                   [post_escape_back(self.out, self.escape_actions, save)]
+                    )                   [post_escape_back(self.out, self.escape_actions)]
                     ;
 
                 preprocessor
@@ -94,37 +289,20 @@ namespace quickbook
                     =   cl::str_p("//")         [span_start("comment", self.out)]
                     >>  *(  escape
                         |   (+(cl::anychar_p - (cl::eol_p | "``")))
-                                                [span(0, self.out)]
+                                                [plain_char(self.out)]
                         )
                     >>  cl::eps_p               [span_end(self.out)]
                     |   cl::str_p("/*")         [span_start("comment", self.out)]
                     >>  *(  escape
                         |   (+(cl::anychar_p - (cl::str_p("*/") | "``")))
-                                                [span(0, self.out)]
+                                                [plain_char(self.out)]
                         )
                     >>  (!cl::str_p("*/"))      [span_end(self.out)]
                     ;
 
                 keyword
-                    =   keyword_ >> (cl::eps_p - (cl::alnum_p | '_'))
+                    =   keywords.cpp >> (cl::eps_p - (cl::alnum_p | '_'))
                     ;   // make sure we recognize whole words only
-
-                keyword_
-                    =   "and_eq", "and", "asm", "auto", "bitand", "bitor",
-                        "bool", "break", "case", "catch", "char", "class",
-                        "compl", "const_cast", "const", "continue", "default",
-                        "delete", "do", "double", "dynamic_cast",  "else",
-                        "enum", "explicit", "export", "extern", "false",
-                        "float", "for", "friend", "goto", "if", "inline",
-                        "int", "long", "mutable", "namespace", "new", "not_eq",
-                        "not", "operator", "or_eq", "or", "private",
-                        "protected", "public", "register", "reinterpret_cast",
-                        "return", "short", "signed", "sizeof", "static",
-                        "static_cast", "struct", "switch", "template", "this",
-                        "throw", "true", "try", "typedef", "typeid",
-                        "typename", "union", "unsigned", "using", "virtual",
-                        "void", "volatile", "wchar_t", "while", "xor_eq", "xor"
-                    ;
 
                 special
                     =   +cl::chset_p("~!%^&*()+={[}]:;,<.>?/|\\-")
@@ -156,12 +334,10 @@ namespace quickbook
 
             cl::rule<Scanner>
                             program, macro, preprocessor, comment, special, string_, 
-                            char_, number, identifier, keyword, qbk_phrase, escape,
+                            char_, number, identifier, keyword, escape,
                             string_char;
 
-            cl::symbols<> keyword_;
             quickbook_grammar& g;
-            std::string save;
 
             cl::rule<Scanner> const&
             start() const { return program; }
@@ -188,7 +364,7 @@ namespace quickbook
             {
                 program
                     =
-                    *(  (+cl::space_p)  [space(self.out)]
+                    *(  (+cl::space_p)  [plain_char(self.out)]
                     |   macro
                     |   escape          
                     |   comment
@@ -209,24 +385,14 @@ namespace quickbook
                     >> self.escape_actions.macro        [do_macro_action(self.out, self.escape_actions)]
                     ;
 
-                qbk_phrase =
-                    self.escape_actions.scoped_context(element_info::in_phrase)
-                    [
-                       *(   g.common
-                        |   (cl::anychar_p - cl::str_p("``"))
-                                        [self.escape_actions.plain_char]
-                        )
-                    ]
-                    ;
-
                 escape =
-                    cl::str_p("``")     [pre_escape_back(self.escape_actions, save)]
+                    cl::str_p("``")     [pre_escape_back(self.escape_actions)]
                     >>
                     (
                         (
                             (
                                 (+(cl::anychar_p - "``") >> cl::eps_p("``"))
-                                & qbk_phrase
+                                & g.phrase
                             )
                             >>  cl::str_p("``")
                         )
@@ -235,37 +401,21 @@ namespace quickbook
                             cl::eps_p   [self.escape_actions.error]
                             >> *cl::anychar_p
                         )
-                    )                   [post_escape_back(self.out, self.escape_actions, save)]
+                    )                   [post_escape_back(self.out, self.escape_actions)]
                     ;
 
                 comment
                     =   cl::str_p("#")          [span_start("comment", self.out)]
                     >>  *(  escape
                         |   (+(cl::anychar_p - (cl::eol_p | "``")))
-                                                [span(0, self.out)]
+                                                [plain_char(self.out)]
                         )
                     >>  cl::eps_p               [span_end(self.out)]
                     ;
 
                 keyword
-                    =   keyword_ >> (cl::eps_p - (cl::alnum_p | '_'))
+                    =   keywords.python >> (cl::eps_p - (cl::alnum_p | '_'))
                     ;   // make sure we recognize whole words only
-
-                keyword_
-                    =
-                    "and",       "del",       "for",       "is",        "raise",    
-                    "assert",    "elif",      "from",      "lambda",    "return",   
-                    "break",     "else",      "global",    "not",       "try",  
-                    "class",     "except",    "if",        "or",        "while",    
-                    "continue",  "exec",      "import",    "pass",      "yield",   
-                    "def",       "finally",   "in",        "print",
-
-                    // Technically "as" and "None" are not yet keywords (at Python
-                    // 2.4). They are destined to become keywords, and we treat them 
-                    // as such for syntax highlighting purposes.
-                    
-                    "as", "None"
-                    ;
 
                 special
                     =   +cl::chset_p("~!%^&*()+={[}]:;,<.>/|\\-")
@@ -310,11 +460,9 @@ namespace quickbook
             cl::rule<Scanner>
                             program, macro, comment, special, string_, string_prefix, 
                             short_string, long_string, number, identifier, keyword, 
-                            qbk_phrase, escape, string_char;
+                            escape, string_char;
 
-            cl::symbols<> keyword_;
             quickbook_grammar& g;
-            std::string save;
 
             cl::rule<Scanner> const&
             start() const { return program; }
@@ -341,7 +489,7 @@ namespace quickbook
                     =
                     *(  macro
                     |   escape          
-                    |   cl::repeat_p(1)[cl::anychar_p]  [plain_char_action(self.out, self.escape_actions)]
+                    |   cl::repeat_p(1)[cl::anychar_p]  [plain_char(self.out)]
                     )
                     ;
 
@@ -352,24 +500,14 @@ namespace quickbook
                     >> self.escape_actions.macro        [do_macro_action(self.out, self.escape_actions)]
                     ;
 
-                qbk_phrase =
-                    self.escape_actions.scoped_context(element_info::in_phrase)
-                    [
-                       *(   g.common
-                        |   (cl::anychar_p - cl::str_p("``"))
-                                        [self.escape_actions.plain_char]
-                        )
-                    ]
-                    ;
-
                 escape =
-                    cl::str_p("``")     [pre_escape_back(self.escape_actions, save)]
+                    cl::str_p("``")     [pre_escape_back(self.escape_actions)]
                     >>
                     (
                         (
                             (
                                 (+(cl::anychar_p - "``") >> cl::eps_p("``"))
-                                & qbk_phrase
+                                & g.phrase
                             )
                             >>  cl::str_p("``")
                         )
@@ -378,14 +516,13 @@ namespace quickbook
                             cl::eps_p   [self.escape_actions.error]
                             >> *cl::anychar_p
                         )
-                    )                   [post_escape_back(self.out, self.escape_actions, save)]
+                    )                   [post_escape_back(self.out, self.escape_actions)]
                     ;
             }
 
-            cl::rule<Scanner> program, macro, qbk_phrase, escape;
+            cl::rule<Scanner> program, macro, escape;
 
             quickbook_grammar& g;
-            std::string save;
 
             cl::rule<Scanner> const&
             start() const { return program; }
@@ -396,7 +533,8 @@ namespace quickbook
     };
 
     std::string syntax_highlight(
-        iterator first, iterator last,
+        parse_iterator first,
+        parse_iterator last,
         actions& escape_actions,
         std::string const& source_mode)
     {

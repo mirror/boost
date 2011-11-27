@@ -12,8 +12,9 @@
 #include "actions_class.hpp"
 #include "post_process.hpp"
 #include "utils.hpp"
+#include "files.hpp"
 #include "input_path.hpp"
-#include "id_generator.hpp"
+#include "id_manager.hpp"
 #include <boost/program_options.hpp>
 #include <boost/filesystem/v3/path.hpp>
 #include <boost/filesystem/v3/operations.hpp>
@@ -35,7 +36,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.5.6"
+#define QUICKBOOK_VERSION "Quickbook Version 1.5.7 (dev)"
 
 namespace quickbook
 {
@@ -45,9 +46,11 @@ namespace quickbook
     tm* current_time; // the current time
     tm* current_gm_time; // the current UTC time
     bool debug_mode; // for quickbook developers only
+    bool self_linked_headers;
     bool ms_errors = false; // output errors/warnings as if for VS
     std::vector<fs::path> include_path;
     std::vector<std::string> preset_defines;
+    fs::path image_location;
 
     static void set_macros(actions& actor)
     {
@@ -56,12 +59,20 @@ namespace quickbook
                 end = preset_defines.end();
                 it != end; ++it)
         {
-            // TODO: Set filename in actor???
-            iterator first(it->begin());
-            iterator last(it->end());
+            parse_iterator first(it->begin());
+            parse_iterator last(it->end());
 
-            cl::parse(first, last, actor.grammar().command_line_macro);
-            // TODO: Check result?
+            cl::parse_info<parse_iterator> info =
+                cl::parse(first, last, actor.grammar().command_line_macro);
+
+            if (!info.full) {
+                detail::outerr()
+                    << "Error parsing command line definition: '"
+                    << *it
+                    << "'"
+                    << std::endl;
+                ++actor.error_count;
+            }
         }
     }
 
@@ -70,60 +81,31 @@ namespace quickbook
     //  Parse a file
     //
     ///////////////////////////////////////////////////////////////////////////
-    int
-    parse_file(fs::path const& filein_, actions& actor, bool ignore_docinfo)
+    void parse_file(actions& actor, value include_doc_id, bool nested_file)
     {
-        using std::vector;
-        using std::string;
+        parse_iterator first(actor.current_file->source.begin());
+        parse_iterator last(actor.current_file->source.end());
 
-        std::string storage;
-        int err = detail::load(filein_, storage);
-        if (err != 0) {
-            ++actor.error_count;
-            return err;
-        }
+        cl::parse_info<parse_iterator> info = cl::parse(first, last, actor.grammar().doc_info);
+        assert(info.hit);
 
-        iterator first(storage.begin());
-        iterator last(storage.end());
-
-        cl::parse_info<iterator> info = cl::parse(first, last, actor.grammar().doc_info);
-
-        if (info.hit || ignore_docinfo)
+        if (!actor.error_count)
         {
-            pre(actor.out, actor, ignore_docinfo);
+            parse_iterator pos = info.stop;
+            std::string doc_type = pre(actor, pos, include_doc_id, nested_file);
 
             info = cl::parse(info.hit ? info.stop : first, last, actor.grammar().block);
-            if (info.full)
+
+            post(actor, doc_type);
+
+            if (!info.full)
             {
-                post(actor.out, actor, ignore_docinfo);
+                file_position const& pos = actor.current_file->position_of(info.stop.base());
+                detail::outerr(actor.current_file->path, pos.line)
+                    << "Syntax Error near column " << pos.column << ".\n";
+                ++actor.error_count;
             }
         }
-
-        if (!info.full)
-        {
-            file_position const& pos = info.stop.get_position();
-            detail::outerr(actor.filename, pos.line)
-                << "Syntax Error near column " << pos.column << ".\n";
-            ++actor.error_count;
-        }
-
-        return actor.error_count ? 1 : 0;
-    }
-
-    static int
-    parse_document(
-        fs::path const& filein_,
-        actions& actor)
-    {        
-        bool r = parse_file(filein_, actor);
-
-        if(actor.error_count)
-        {
-            detail::outerr()
-                << "Error count: " << actor.error_count << ".\n";
-        }
-
-        return r;
     }
 
     static int
@@ -136,16 +118,36 @@ namespace quickbook
       , bool pretty_print)
     {
         string_stream buffer;
-        id_generator ids;
-        actions actor(filein_, xinclude_base_, buffer, ids);
-        set_macros(actor);
+        id_manager ids;
 
-        int result = parse_document(filein_, actor);
+        int result = 0;
 
-        std::string stage2 = ids.replace_placeholders(buffer.str());
+        try {
+            actions actor(filein_, xinclude_base_, buffer, ids);
+            set_macros(actor);
+
+            if (actor.error_count == 0) {
+                actor.current_file = load(filein_); // Throws load_error
+
+                parse_file(actor);
+
+                if(actor.error_count) {
+                    detail::outerr()
+                        << "Error count: " << actor.error_count << ".\n";
+                }
+            }
+
+            result = actor.error_count ? 1 : 0;
+        }
+        catch (load_error& e) {
+            detail::outerr(filein_) << detail::utf8(e.what()) << std::endl;
+            result = 1;
+        }
 
         if (result == 0)
         {
+            std::string stage2 = ids.replace_placeholders(buffer.str());
+
             fs::ofstream fileout(fileout_);
 
             if (pretty_print)
@@ -169,6 +171,7 @@ namespace quickbook
                 fileout << stage2;
             }
         }
+
         return result;
     }
 }
@@ -218,6 +221,7 @@ main(int argc, char* argv[])
             ("help", "produce help message")
             ("version", "print version string")
             ("no-pretty-print", "disable XML pretty printing")
+            ("no-self-linked-headers", "stop headers linking to themselves")
             ("indent", PO_VALUE<int>(), "indent spaces")
             ("linewidth", PO_VALUE<int>(), "line width")
             ("input-file", PO_VALUE<input_string>(), "input file")
@@ -226,6 +230,7 @@ main(int argc, char* argv[])
             ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
             ("include-path,I", PO_VALUE< std::vector<input_string> >(), "include path")
             ("define,D", PO_VALUE< std::vector<input_string> >(), "define macro")
+            ("image-location", PO_VALUE<input_string>(), "image location")
         ;
 
         hidden.add_options()
@@ -308,6 +313,8 @@ main(int argc, char* argv[])
         if (vm.count("no-pretty-print"))
             pretty_print = false;
 
+        quickbook::self_linked_headers = !vm.count("no-self-link-headers");
+
         if (vm.count("indent"))
             indent = vm["indent"].as<int>();
 
@@ -385,6 +392,16 @@ main(int argc, char* argv[])
                 xinclude_base = fileout.parent_path();
                 if (xinclude_base.empty())
                     xinclude_base = ".";
+            }
+
+            if (vm.count("image-location"))
+            {
+                quickbook::image_location = quickbook::detail::input_to_path(
+                    vm["image-location"].as<input_string>());
+            }
+            else
+            {
+                quickbook::image_location = filein.parent_path() / "html";
             }
 
             quickbook::detail::out() << "Generating Output File: "

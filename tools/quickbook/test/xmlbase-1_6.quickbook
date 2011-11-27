@@ -1,0 +1,6 @@
+[article XInclude with xmlbase
+[quickbook 1.6]
+[xmlbase .]
+]
+
+[xinclude stub.xml]

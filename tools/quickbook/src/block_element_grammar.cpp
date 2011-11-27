@@ -28,10 +28,10 @@ namespace quickbook
     {
         cl::rule<scanner>
                         heading, inner_block, inner_phrase, def_macro,
-                        table, table_row, variablelist,
+                        table, table_title, table_row, variablelist,
                         varlistentry, varlistterm, list, cell,
                         preformatted, begin_section, end_section,
-                        xinclude, include,
+                        xinclude, include, include_filename,
                         template_, template_id, template_formal_arg,
                         template_body, identifier, import,
                         element_id, element_id_1_5, element_id_1_6,
@@ -45,7 +45,7 @@ namespace quickbook
 
         local.element_id =
             !(  ':'
-            >>  (   !(cl::eps_p(qbk_since(105u)) >> space)
+            >>  (   !(qbk_since(105u) >> space)
                 >>  (+(cl::alnum_p | '_'))      [actions.values.entry(ph::arg1, ph::arg2, general_tags::element_id)]
                 |   cl::eps_p                   [actions.element_id_warning]
                 )
@@ -53,10 +53,10 @@ namespace quickbook
             ;
         
         local.element_id_1_5 =
-                !(cl::eps_p(qbk_since(105u)) >> local.element_id);
+                !(qbk_since(105u) >> local.element_id);
 
         local.element_id_1_6 =
-                !(cl::eps_p(qbk_since(106u)) >> local.element_id);
+                !(qbk_since(106u) >> local.element_id);
 
         elements.add
             ("section", element_info(element_info::block, &local.begin_section, block_tags::begin_section))
@@ -102,14 +102,20 @@ namespace quickbook
             ;
 
         elements.add
+            ("block", element_info(element_info::nested_block, &local.inner_phrase, block_tags::block, 106u))
+            ;
+
+        elements.add
             ("pre", element_info(element_info::nested_block, &local.preformatted, block_tags::preformatted))
             ;
 
         local.preformatted =
-                space
-            >>  !eol
-            >>  actions.scoped_no_eols()
-                [   local.inner_phrase
+                ( qbk_before(106) >> space
+                | qbk_since(106) >> blank >> !eol
+                )
+            >>  actions.to_value()
+                [
+                    inside_preformatted
                 ]
             ;
 
@@ -167,8 +173,7 @@ namespace quickbook
 
         local.variablelist =
                 (cl::eps_p(*cl::blank_p >> cl::eol_p) | space)
-            >>  (*(cl::anychar_p - eol))        [actions.values.entry(ph::arg1, ph::arg2, table_tags::title)]
-            >>  (+eol)
+            >>  local.table_title
             >>  *local.varlistentry
             ;
 
@@ -209,8 +214,7 @@ namespace quickbook
                 local.same_line
             >>  local.element_id_1_5
             >>  local.same_line
-            >>  (*(cl::anychar_p - eol))        [actions.values.entry(ph::arg1, ph::arg2, table_tags::title)]
-            >>  (+eol)
+            >>  local.table_title
             >>  *local.table_row
             ;
 
@@ -228,6 +232,18 @@ namespace quickbook
                 )
                 | cl::eps_p                     [actions.error]
             )
+            ;
+
+        local.table_title =
+                qbk_before(106)
+            >>  (*(cl::anychar_p - eol))        [actions.values.entry(ph::arg1, ph::arg2, table_tags::title)]
+            >>  (+eol)
+            |   qbk_since(106)
+            >>  actions.to_value(table_tags::title)
+                [
+                    table_title_phrase
+                ]
+            >>  space
             ;
 
         elements.add
@@ -255,12 +271,12 @@ namespace quickbook
 
         local.xinclude =
                space
-            >> (*(cl::anychar_p - phrase_end))  [actions.values.entry(ph::arg1, ph::arg2)]
+            >> local.include_filename
             ;
 
         local.import =
                space
-            >> (*(cl::anychar_p - phrase_end))  [actions.values.entry(ph::arg1, ph::arg2)]
+            >> local.include_filename
             ;
 
         local.include =
@@ -272,20 +288,32 @@ namespace quickbook
                                                 [actions.values.entry(ph::arg1, ph::arg2, general_tags::include_id)]
                 >> space
             )
-            >> (*(cl::anychar_p - phrase_end))  [actions.values.entry(ph::arg1, ph::arg2)]
+            >> local.include_filename
+            ;
+
+        local.include_filename =
+                qbk_before(106u)
+            >>  (*(cl::anychar_p - phrase_end)) [actions.values.entry(ph::arg1, ph::arg2)]
+            |   qbk_since(106u)
+            >>  actions.to_value()
+                [   *(  raw_escape
+                    |   (cl::anychar_p - phrase_end)
+                                                [actions.raw_char]
+                    )
+                ]
             ;
 
         local.inner_block =
-            actions.scoped_output()
+            actions.to_value()
             [
-                inside_paragraph                [actions.to_value]
+                inside_paragraph
             ]
             ;
 
         local.inner_phrase =
-            actions.scoped_output()
+            actions.to_value()
             [
-                phrase                          [actions.docinfo_value(ph::arg1, ph::arg2)]
+                paragraph_phrase
             ]
             ;
     }
