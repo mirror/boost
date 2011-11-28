@@ -7,6 +7,7 @@
 #ifndef BOOST_CHRONO_STOPWATCHES_FORMATTERS_BASE_FORMATTER_HPP
 #define BOOST_CHRONO_STOPWATCHES_FORMATTERS_BASE_FORMATTER_HPP
 
+#include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/chrono_io.hpp>
 #include <boost/cstdint.hpp>

@@ -474,7 +474,7 @@ namespace boost
              ;
            }
         }
-        return "";
+        throw "exception";
       }
 
     protected:
