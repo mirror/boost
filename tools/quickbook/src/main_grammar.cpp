@@ -351,7 +351,7 @@ namespace quickbook
         local.list =
                 *cl::blank_p
             >>  (cl::ch_p('*') | '#')
-            >>  *cl::blank_p                    [local.list.still_in_block = true]
+            >>  (*cl::blank_p)                  [local.list.still_in_block = true]
             >>  *(  cl::eps_p(local.list.still_in_block)
                 >>  local.list_item(element_info::only_block)
                 )
