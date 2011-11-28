@@ -2,13 +2,13 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
+#define BOOST_CHRONO_VERSION 2
+
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/chrono/stopwatches/reporters/laps_stopclock.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
-//#include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
-//#include <boost/chrono/stopwatches/reporters/laps_stopwatch_default_formatter.hpp>
 #include <boost/chrono/stopwatches/collectors/laps_accumulator_set.hpp>
 
 #include <boost/chrono/chrono_io.hpp>

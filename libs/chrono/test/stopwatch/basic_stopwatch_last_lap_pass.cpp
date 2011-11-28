@@ -2,6 +2,8 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
+#define BOOST_CHRONO_VERSION 2
+
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/chrono/stopwatches/laps_stopwatch.hpp>
