@@ -2241,7 +2241,7 @@ adjust them to match your system in case you are running an older version.
   your home directory (`%HOMEDRIVE%%HOMEPATH%`).  You must already have it
   somewhere or otherwise you could not be building Boost (i.e. missing
   tools configuration).
-
+ ```
  using xsltproc
      : "C:/Users/example/Documents/boost/xml/bin/xsltproc.exe"
      ;
@@ -2250,6 +2250,7 @@ adjust them to match your system in case you are running an older version.
      : "C:/Users/example/Documents/boost/xml/docbook-xsl"
      : "C:/Users/example/Documents/boost/xml/docbook-xml"
      ;
+ ```
 
 The above steps are enough to get a functional BoostBook setup.  Quickbook
 will be automatically built when needed.  If you want to avoid these
@@ -2319,10 +2320,11 @@ rebuilds:
 
 # Add the following to your `user-config.jam` file, using the full path of the
   quickbook executable:
-
+ ```
  using quickbook
      : /usr/local/bin/quickbook
      ;
+ ```
 
 [endsect] [/Linux]
 
