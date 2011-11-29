@@ -4,6 +4,7 @@
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Unbalanced snippet fail test 1</title>
   <para>
-<programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase></programlisting>
+<programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase>
+</programlisting>
   </para>
 </article>

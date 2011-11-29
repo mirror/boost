@@ -28,7 +28,8 @@
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
-<phrase role="special">}</phrase></programlisting>
+<phrase role="special">}</phrase>
+</programlisting>
   </para>
   <para>
     This is the Python <emphasis role="bold"><emphasis>foo</emphasis></emphasis>
@@ -55,7 +56,8 @@
   <para>
 <programlisting><phrase role="keyword">def</phrase> <phrase role="identifier">foo</phrase><phrase role="special">():</phrase>
     <phrase role="comment"># return 'em, foo man!</phrase>
-    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase></programlisting>
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase>
+</programlisting>
   </para>
   <para>
     This is the C <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
@@ -83,7 +85,8 @@
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
-<phrase role="special">}</phrase></programlisting>
+<phrase role="special">}</phrase>
+</programlisting>
   </para>
   <para>
 <programlisting><phrase role="keyword">class</phrase> <phrase role="identifier">x</phrase>
@@ -107,7 +110,8 @@
     <phrase role="special">{</phrase>
         <phrase role="identifier">n</phrase> <phrase role="special">=</phrase> <phrase role="identifier">n_</phrase><phrase role="special">;</phrase>
     <phrase role="special">}</phrase>
-<phrase role="special">};</phrase></programlisting>
+<phrase role="special">};</phrase>
+</programlisting>
   </para>
   <calloutlist>
     <callout arearefs="import.c0" id="import.c1">

@@ -733,7 +733,8 @@ And one for the little boy who lives down the lane.
 <phrase role="special">{</phrase>
     <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World!&quot;</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
     <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
-<phrase role="special">}</phrase></programlisting>
+<phrase role="special">}</phrase>
+</programlisting>
         </para>
       </section>
       <section id="quickbook.syntax.phrase.source_mode">
@@ -2464,7 +2465,8 @@ for the journey to old age.]]]
 <phrase role="special">{</phrase>
     <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World!&quot;</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
     <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
-<phrase role="special">}</phrase></programlisting>
+<phrase role="special">}</phrase>
+</programlisting>
                   </para>
                 </entry>
               </row>
@@ -2625,7 +2627,8 @@ for the journey to old age.]]]
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
-<phrase role="special">}</phrase></programlisting>
+<phrase role="special">}</phrase>
+</programlisting>
         </para>
         <para>
           This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis> function
@@ -2635,7 +2638,8 @@ for the journey to old age.]]]
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, bar man!</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;bar&quot;</phrase><phrase role="special">;</phrase>
-<phrase role="special">}</phrase></programlisting>
+<phrase role="special">}</phrase>
+</programlisting>
         </para>
         <para>
           Some trailing text here
@@ -2698,7 +2702,8 @@ for the journey to old age.]]]
 <programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <co id="quickbook.syntax.block.import.c0" linkends="quickbook.syntax.block.import.c1" />
 <phrase role="special">{</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <co id="quickbook.syntax.block.import.c2" linkends="quickbook.syntax.block.import.c3" />
-<phrase role="special">}</phrase></programlisting>
+<phrase role="special">}</phrase>
+</programlisting>
         </para>
         <calloutlist>
           <callout arearefs="quickbook.syntax.block.import.c0" id="quickbook.syntax.block.import.c1">

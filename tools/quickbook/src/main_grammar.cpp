@@ -560,6 +560,7 @@ namespace quickbook
                     "```" >> *(*cl::blank_p >> cl::eol_p) >>
                     (
                        *(cl::anychar_p - (*cl::space_p >> "```"))
+                            >> !(*cl::blank_p >> cl::eol_p)
                             >> cl::eps_p(*cl::space_p >> "```")
                     )                           [actions.code_block]
                     >> *cl::space_p >> "```"
@@ -568,6 +569,7 @@ namespace quickbook
                     "``" >> *(*cl::blank_p >> cl::eol_p) >>
                     (
                        *(cl::anychar_p - (*cl::space_p >> "``"))
+                            >> !(*cl::blank_p >> cl::eol_p)
                             >> cl::eps_p(*cl::space_p >> "``")
                     )                           [actions.code_block]
                     >> *cl::space_p >> "``"
