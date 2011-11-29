@@ -68,7 +68,7 @@ namespace quickbook
             if (!info.full) {
                 detail::outerr()
                     << "Error parsing command line definition: '"
-                    << *it
+                    << detail::utf8(*it)
                     << "'"
                     << std::endl;
                 ++actor.error_count;
