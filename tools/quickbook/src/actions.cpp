@@ -767,7 +767,11 @@ namespace quickbook
         // Extract the alt tag, to use as a text description.
         // Or if there isn't one, use the stem of the file name.
 
-        quickbook::value alt_text = attributes["alt"];
+        attribute_map::iterator alt_pos = attributes.find("alt");
+        quickbook::value alt_text =
+            alt_pos != attributes.end() ? alt_pos->second :
+            qbk_version_n < 106u ? encoded_value(stem) :
+            quickbook::value();
         attributes.erase("alt");
 
         if(extension == "svg")

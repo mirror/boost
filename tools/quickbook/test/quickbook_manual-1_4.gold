@@ -1762,7 +1762,11 @@ sf_logo
           Now everywhere the sf_logo is placed, the picture will be inlined.
         </para>
         <para>
-          <inlinemediaobject><imageobject><imagedata fileref="http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1"></imagedata></imageobject></inlinemediaobject>
+          <inlinemediaobject><imageobject><imagedata fileref="http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1"></imagedata></imageobject>
+          <textobject>
+            <phrase>sflogo</phrase>
+          </textobject>
+          </inlinemediaobject>
         </para>
         <tip>
           <para>
@@ -1799,7 +1803,11 @@ sf_logo
         </para>
         <para>
           Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink> <inlinemediaobject><imageobject><imagedata
-          fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>
+          fileref="images/smiley.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>smiley</phrase>
+          </textobject>
+          </inlinemediaobject>
         </para>
       </section>
       <section id="quickbook.syntax.block.predefined_macros">
@@ -2210,8 +2218,12 @@ for the journey to old age.]]]
         </para>
         <sidebar role="blurb">
         <para>
-          <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>
-          <emphasis role="bold">An eye catching advertisement or note...</emphasis>
+          <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>smiley</phrase>
+          </textobject>
+          </inlinemediaobject> <emphasis role="bold">An eye catching advertisement
+          or note...</emphasis>
         </para>
         <para>
           <ulink url="http://spirit.sourceforge.net">Spirit</ulink> is an object-oriented
@@ -2968,10 +2980,13 @@ for the journey to old age.]]]
     </para>
     <sidebar role="blurb">
     <para>
-      <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject></inlinemediaobject>
-      You may submit your settings, tips, and suggestions to the authors, or through
-      the <ulink url="https://lists.sourceforge.net/lists/listinfo/boost-">docs Boost
-      Docs mailing list</ulink>.
+      <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+      <textobject>
+        <phrase>note</phrase>
+      </textobject>
+      </inlinemediaobject> You may submit your settings, tips, and suggestions to
+      the authors, or through the <ulink url="https://lists.sourceforge.net/lists/listinfo/boost-">docs
+      Boost Docs mailing list</ulink>.
     </para>
     </sidebar>
     <section id="quickbook.editors.scite">
@@ -2987,8 +3002,11 @@ for the journey to old age.]]]
       </para>
       <sidebar role="blurb">
       <para>
-        <inlinemediaobject><imageobject><imagedata fileref="images/tip.png"></imagedata></imageobject></inlinemediaobject>
-        SciTE can be downloaded from <ulink url="http://www.scintilla.org/SciTE.html">http://www.scintilla.org/SciTE.html</ulink>
+        <inlinemediaobject><imageobject><imagedata fileref="images/tip.png"></imagedata></imageobject>
+        <textobject>
+          <phrase>tip</phrase>
+        </textobject>
+        </inlinemediaobject> SciTE can be downloaded from <ulink url="http://www.scintilla.org/SciTE.html">http://www.scintilla.org/SciTE.html</ulink>
       </para>
       </sidebar>
       <para>
@@ -3009,8 +3027,11 @@ comment.box.end.props=]
 <!--quickbook-escape-postfix--></programlisting>
       <sidebar role="blurb">
       <para>
-        <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject></inlinemediaobject>
-        Thanks to Rene Rivera for the above SciTE settings.
+        <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+        <textobject>
+          <phrase>note</phrase>
+        </textobject>
+        </inlinemediaobject> Thanks to Rene Rivera for the above SciTE settings.
       </para>
       </sidebar>
     </section>
