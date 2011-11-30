@@ -163,9 +163,9 @@ could cause odd problems, for example when nested in a table cell.
 
 [section:table Table Titles]
 
-Table titles are not parsed as phrases, so some markup is allowd:
+Table titles are now parsed as phrases, so some markup is allowd:
 
-[table [*bold title]]
+    [table [*bold title]]
 
 Which is an empty table with a bold title. The title is no longer ended
 by a newline, but by either a closing square bracket, or two opening
@@ -236,7 +236,8 @@ generates:
         Code block
   Para 3
 
-/TODO/: Improve code generation.
+The docbook markup that this generates is pretty bad, but seems to create okay
+html.
 
 [endsect]
 
