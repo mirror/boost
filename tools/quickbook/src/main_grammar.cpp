@@ -370,6 +370,7 @@ namespace quickbook
             >>  cl::eps_p
                 (   *cl::blank_p
                 >>  (   cl::eol_p
+                    |   cl::end_p
                     |   cl::eps_p(local.in_list) >> (cl::ch_p('*') | '#')
                     )
                 )

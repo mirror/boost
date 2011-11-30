@@ -36,4 +36,7 @@
   <para>
     Some *text* A <emphasis>paragraph</emphasis>.
   </para>
+  <para>
+    <index type="things"><title>Things</title></index>
+  </para>
 </article>

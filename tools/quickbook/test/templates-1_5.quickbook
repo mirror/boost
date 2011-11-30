@@ -62,3 +62,11 @@ A <emphasis>paragraph</emphasis>.
 [block]
 [`phrase]
 [`block]
+
+[/ Trailing newline shouldn't be included]
+
+[template named_index[type title]
+'''<index type="'''[type]'''"><title>'''[title]'''</title></index>'''
+]
+
+[named_index things Things]
