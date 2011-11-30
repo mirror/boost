@@ -379,7 +379,32 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
                 args.a));                                                   \
     }
 
-    BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+    template <typename T, typename A0>
+    inline void construct_impl(T* address, emplace_args1<A0> const& args)
+    {
+        new((void*) address) T(boost::forward<A0>(args.a0));
+    }
+
+    template <typename T, typename A0, typename A1>
+    inline void construct_impl(T* address, emplace_args2<A0, A1> const& args)
+    {
+        new((void*) address) T(
+            boost::forward<A0>(args.a0),
+            boost::forward<A1>(args.a1)
+        );
+    }
+
+    template <typename T, typename A0, typename A1, typename A2>
+    inline void construct_impl(T* address, emplace_args3<A0, A1, A2> const& args)
+    {
+        new((void*) address) T(
+            boost::forward<A0>(args.a0),
+            boost::forward<A1>(args.a1),
+            boost::forward<A2>(args.a2)
+        );
+    }
+
+    BOOST_PP_REPEAT_FROM_TO(4, BOOST_UNORDERED_EMPLACE_LIMIT,
         BOOST_UNORDERED_CONSTRUCT_IMPL, _)
 
 #undef BOOST_UNORDERED_CONSTRUCT_IMPL
