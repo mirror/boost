@@ -54,15 +54,9 @@ namespace unordered
 
     private:
 
-        typedef typename boost::unordered::detail::rebind_wrap<
-                allocator_type, value_type>::type
-            value_allocator;
-
-        typedef boost::unordered::detail::allocator_traits<value_allocator>
-            allocator_traits;
-
-        typedef boost::unordered::detail::map<value_allocator, K, H, P>
-            types;
+        typedef boost::unordered::detail::map<A, K, T, H, P> types;
+        typedef typename types::allocator value_allocator;
+        typedef typename types::traits allocator_traits;
         typedef typename types::table table;
 
     public:
@@ -446,15 +440,9 @@ namespace unordered
 
     private:
 
-        typedef typename boost::unordered::detail::rebind_wrap<
-                allocator_type, value_type>::type
-            value_allocator;
-
-        typedef boost::unordered::detail::allocator_traits<value_allocator>
-            allocator_traits;
-
-        typedef boost::unordered::detail::multimap<value_allocator, K, H, P>
-            types;
+        typedef boost::unordered::detail::multimap<A, K, T, H, P> types;
+        typedef typename types::allocator value_allocator;
+        typedef typename types::traits allocator_traits;
         typedef typename types::table table;
 
     public:
