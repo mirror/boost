@@ -453,22 +453,22 @@ namespace boost { namespace unordered { namespace detail {
         }
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
-        node_pointer emplace(boost::unordered::detail::emplace_args1<
+        iterator emplace(boost::unordered::detail::emplace_args1<
                 boost::unordered::detail::please_ignore_this_overload> const&)
         {
             BOOST_ASSERT(false);
-            return this->begin();
+            return iterator();
         }
 #endif
 
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        node_pointer emplace(BOOST_UNORDERED_EMPLACE_ARGS)
+        iterator emplace(BOOST_UNORDERED_EMPLACE_ARGS)
         {
             node_constructor a(this->node_alloc());
             a.construct_node();
             a.construct_value(BOOST_UNORDERED_EMPLACE_FORWARD);
 
-            return emplace_impl(a);
+            return iterator(emplace_impl(a));
         }
 
         ////////////////////////////////////////////////////////////////////////
