@@ -18,9 +18,9 @@ test-suite command-line.test :
     [ quickbook-error-test error2 ]
 
     [ quickbook-error-test
-        non_existant_output :
+        non_existent_output :
         basic-1_6.quickbook :
-        <testing.arg>--output-file=non-existant/basic.xml ]
+        <testing.arg>--output-file=non-existent/basic.xml ]
     [ quickbook-error-test
         output_nested_in_file :
         basic-1_6.quickbook :
