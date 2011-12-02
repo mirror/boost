@@ -120,6 +120,9 @@ namespace quickbook
                 std::istream_iterator<char>(),
                 std::back_inserter(source));
 
+            if (in.bad())
+                throw load_error("Error reading input file.");
+
             bool inserted;
 
             boost::tie(pos, inserted) = files.emplace(

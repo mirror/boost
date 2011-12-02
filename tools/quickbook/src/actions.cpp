@@ -1918,7 +1918,7 @@ namespace quickbook
             ++actions.error_count;
 
             detail::outerr(actions.current_file, first)
-                << "Loading file:"
+                << "Loading file "
                 << paths.filename
                 << ": "
                 << detail::utf8(e.what())

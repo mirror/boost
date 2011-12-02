@@ -150,6 +150,15 @@ namespace quickbook
 
             fs::ofstream fileout(fileout_);
 
+            if (fileout.fail()) {
+                ::quickbook::detail::outerr()
+                    << "Error opening output file "
+                    << fileout_
+                    << std::endl;
+
+                return 1;
+            }
+
             if (pretty_print)
             {
                 try
@@ -169,6 +178,15 @@ namespace quickbook
             else
             {
                 fileout << stage2;
+            }
+
+            if (fileout.fail()) {
+                ::quickbook::detail::outerr()
+                    << "Error writing to output file "
+                    << fileout_
+                    << std::endl;
+
+                return 1;
             }
         }
 
@@ -281,6 +299,7 @@ main(int argc, char* argv[])
         notify(vm);
 
         bool expect_errors = vm.count("expect-errors");
+        int error_count = 0;
 
         if (vm.count("help"))
         {
@@ -394,6 +413,15 @@ main(int argc, char* argv[])
                     xinclude_base = ".";
             }
 
+            if (!fs::is_directory(xinclude_base))
+            {
+                quickbook::detail::outerr()
+                    << (vm.count("xinclude-base") ?
+                        "xinclude-base is not a directory" :
+                        "parent directory not found for output file");
+                ++error_count;
+            }
+
             if (vm.count("image-location"))
             {
                 quickbook::image_location = quickbook::detail::input_to_path(
@@ -408,16 +436,17 @@ main(int argc, char* argv[])
                 << quickbook::detail::path_to_stream(fileout)
                 << std::endl;
 
-            int r = quickbook::parse_document(filein, fileout, xinclude_base, indent, linewidth, pretty_print);
+            if (!error_count)
+                error_count += quickbook::parse_document(filein, fileout, xinclude_base, indent, linewidth, pretty_print);
 
             if (expect_errors)
             {
-                if (!r) quickbook::detail::outerr() << "No errors detected for --expect-errors." << std::endl;
-                return !r;
+                if (!error_count) quickbook::detail::outerr() << "No errors detected for --expect-errors." << std::endl;
+                return !error_count;
             }
             else
             {
-                return r;
+                return error_count;
             }
         }
         else

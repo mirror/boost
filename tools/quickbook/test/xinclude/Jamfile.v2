@@ -23,4 +23,5 @@ test-suite quickbook.test :
     [ quickbook-test xinclude-1_1-alt : xinclude-1_1.quickbook : xinclude-1_1-alt.gold : <quickbook-xinclude-base>$(xinclude_base2) ]
     [ quickbook-test xmlbase1-1_6-alt : xmlbase1-1_6.quickbook : xmlbase1-1_6-alt.gold : <quickbook-xinclude-base>$(xinclude_base2) ]
     [ quickbook-test xmlbase2-1_6-alt : xmlbase2-1_6.quickbook : xmlbase2-1_6-alt.gold : <quickbook-xinclude-base>$(xinclude_base2) ]
+    [ quickbook-error-test xmlbase-1_6-fail ]
     ;

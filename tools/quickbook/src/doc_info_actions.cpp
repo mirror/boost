@@ -12,6 +12,7 @@
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/foreach.hpp>
+#include <boost/filesystem/v3/operations.hpp>
 #include "quickbook.hpp"
 #include "utils.hpp"
 #include "files.hpp"
@@ -259,8 +260,21 @@ namespace quickbook
         {
             xinclude_path x = calculate_xinclude_path(xmlbase, actions);
 
-            xmlbase_value = x.uri;
-            actions.xinclude_base = x.path;
+            if (!fs::is_directory(x.path))
+            {
+                detail::outerr(xmlbase.get_file(), xmlbase.get_position())
+                    << "xmlbase \""
+                    << detail::utf8(xmlbase.get_quickbook())
+                    << "\" isn't a directory."
+                    << std::endl;
+
+                ++actions.error_count;
+            }
+            else
+            {
+                xmlbase_value = x.uri;
+                actions.xinclude_base = x.path;
+            }
         }
 
         // Warn about invalid fields
