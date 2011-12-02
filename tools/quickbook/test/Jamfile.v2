@@ -17,6 +17,7 @@ build-project command-line ;
 build-project snippets ;
 build-project "include" ;
 build-project versions ;
+build-project xinclude ;
 
 import quickbook-testing : quickbook-test quickbook-error-test ;
 
@@ -107,8 +108,6 @@ test-suite quickbook.test :
     [ quickbook-error-test version-0_1-fail ]
     [ quickbook-error-test version-1_7-fail ]
     [ quickbook-error-test version-2_0-fail ]
-    [ quickbook-test xinclude-1_1 : : : <quickbook-xinclude-base>../src ]
-    [ quickbook-test xmlbase-1_6 : : : <quickbook-xinclude-base>../src ]
     [ quickbook-test xml_escape-1_2 ]
     [ quickbook-test xml_escape-1_5 ]
 

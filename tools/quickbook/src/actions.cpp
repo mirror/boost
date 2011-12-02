@@ -1708,18 +1708,19 @@ namespace quickbook
     xinclude_path calculate_xinclude_path(value const& p, quickbook::actions& actions)
     {
         fs::path path = check_path(p, actions);
+        fs::path full_path = path;
 
         // If the path is relative
         if (!path.has_root_directory())
         {
             // Resolve the path from the current file
-            path = actions.current_file->path.parent_path() / path;
+            full_path = actions.current_file->path.parent_path() / path;
 
             // Then calculate relative to the current xinclude_base.
-            path = path_difference(actions.xinclude_base, path);
+            path = path_difference(actions.xinclude_base, full_path);
         }
 
-        return xinclude_path(path, detail::escape_uri(detail::path_to_generic(path)));
+        return xinclude_path(full_path, detail::escape_uri(detail::path_to_generic(path)));
     }
 
     void xinclude_action(quickbook::actions& actions, value xinclude)
