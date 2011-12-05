@@ -25,19 +25,16 @@ NO define or ICL_USE_STD_IMPLEMENTATION: Choose std::set and std::map as
 ICL_USE_BOOST_INTERPROCESS_IMPLEMENTATION: Choose set and map implementations 
     from boost::interprocess.
 
-ICL_USE_BOOST_MOVE_IMPLEMENTATION: Move aware containers from boost::container
-    (NEW) are used. Currently (January 2010) this is only experimental. 
-    boost::move from the boost::sandbox has to be used. This is depreciated for 
-    production code, as long as move aware containers are not officially 
-    accepted into boost. 
+ICL_USE_BOOST_MOVE_IMPLEMENTATION: Move aware containers from boost::container.
 +-----------------------------------------------------------------------------*/
 
 #if defined(ICL_USE_BOOST_INTERPROCESS_IMPLEMENTATION)
-#define ICL_IMPL_SPACE boost::interprocess
+#   define ICL_IMPL_SPACE boost::interprocess
 #elif defined(ICL_USE_BOOST_MOVE_IMPLEMENTATION)
-#define ICL_IMPL_SPACE boost::container
+#   define ICL_IMPL_SPACE boost::container
+#   define BOOST_ICL_IS_MOVE_AWARE
 #else
-#define ICL_IMPL_SPACE std
+#   define ICL_IMPL_SPACE std
 #endif
 
 #endif // BOOST_ICL_IMPL_CONFIG_HPP_JOFA_091225

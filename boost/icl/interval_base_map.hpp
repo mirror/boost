@@ -192,7 +192,12 @@ public:
 
     BOOST_STATIC_CONSTANT(int, fineness = 0); 
 
+#   ifdef BOOST_ICL_IS_MOVE_AWARE
+    BOOST_COPYABLE_AND_MOVABLE(interval_base_map)
+#   endif
+
 public:
+
     //==========================================================================
     //= Construct, copy, destruct
     //==========================================================================
@@ -214,12 +219,40 @@ public:
         BOOST_CONCEPT_ASSERT((EqualComparableConcept<CodomainT>));
     }
 
-    /** Assignment operator */
+#   ifdef BOOST_ICL_IS_MOVE_AWARE
+    /** Move constructor */
+    interval_base_map(BOOST_RV_REF(interval_base_map) src): _map(boost::move(src._map))
+    {
+        std::cout << "."; //CL
+        BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
+        BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
+        BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<CodomainT>));
+        BOOST_CONCEPT_ASSERT((EqualComparableConcept<CodomainT>));
+    }
+
+    /** Copy assignment operator */
+    interval_base_map& operator = (BOOST_COPY_ASSIGN_REF(interval_base_map) src) 
+    { 
+        this->_map = src._map;
+        return *this; 
+    }
+
+    /** Move assignment operator */
+    interval_base_map& operator = (BOOST_RV_REF(interval_base_map) src) 
+    { 
+        std::cout << ":"; //CL
+        this->_map = boost::move(src._map);
+        return *this; 
+    }
+#   else //BOOST_ICL_IS_MOVE_AWARE
+
+    /** Copy assignment operator */
     interval_base_map& operator = (const interval_base_map& src) 
     { 
         this->_map = src._map;
         return *this; 
     }
+#   endif //BOOST_ICL_IS_MOVE_AWARE
 
     /** swap the content of containers */
     void swap(interval_base_map& object) { _map.swap(object._map); }

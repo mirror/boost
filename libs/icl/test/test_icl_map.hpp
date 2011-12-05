@@ -43,6 +43,21 @@ void itl_map_contains_4_bicremental_types()
 
     //BOOST_CHECK_EQUAL( found == map_a.end(), true );
     //BOOST_CHECK_EQUAL( map_a(MK_v(5)), MK_u(0) );
+
+#   ifdef BOOST_ICL_IS_MOVE_AWARE
+
+    cout << ">"; //JODO
+    MapT map_b(boost::move(MapT().add(key_value_pair)));
+    cout << "<\n";
+    cout << map_b << endl;
+
+    cout << ">"; 
+    MapT map_c;
+    map_c = boost::move(MapT().add(key_value_pair));
+    cout << "<\n";
+    cout << map_c << endl;
+
+#   endif //BOOST_ICL_IS_MOVE_AWARE
 }
 
 

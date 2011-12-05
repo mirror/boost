@@ -41,14 +41,14 @@ using namespace boost::icl;
 
 void pass_it(shared_ptr<int> pi)
 {
-	*pi = 41;
-	cout << "uses: " << pi.use_count() << " cont: " << *pi << endl;
+    *pi = 41;
+    cout << "uses: " << pi.use_count() << " cont: " << *pi << endl;
 }
 
 void pass_it_ref(shared_ptr<int>& pi)
 {
-	*pi = 43;
-	cout << "uses: " << pi.use_count() << " cont: " << *pi << endl;
+    *pi = 43;
+    cout << "uses: " << pi.use_count() << " cont: " << *pi << endl;
 }
 
 BOOST_AUTO_TEST_CASE(casual)
@@ -59,10 +59,10 @@ BOOST_AUTO_TEST_CASE(casual)
     typedef interval_set<T>                     IntervalSetT;
     typedef IntervalMapT::interval_type         IntervalT;
 
-	shared_ptr<int> pi(new int(42));
-	cout << "uses: " << pi.use_count() << " cont: " << *pi << endl;
-	pass_it(pi);
-	pass_it_ref(pi);
+    shared_ptr<int> pi(new int(42));
+    cout << "uses: " << pi.use_count() << " cont: " << *pi << endl;
+    pass_it(pi);
+    pass_it_ref(pi);
 
     BOOST_CHECK_EQUAL(true, true);
 }
@@ -76,9 +76,9 @@ BOOST_AUTO_TEST_CASE(isEmptyTest)
 
     Value const max(Limits::max());
 
-	Interval::interval_type piff = Interval::open(max,     max);
+    Interval::interval_type piff = Interval::open(max,     max);
 
-	BOOST_CHECK(!icl::is_empty(Interval::open(max - 2, max)));
+    BOOST_CHECK(!icl::is_empty(Interval::open(max - 2, max)));
     BOOST_CHECK( icl::is_empty(Interval::open(max - 1, max)));
     BOOST_CHECK( icl::is_empty(Interval::open(max,     max)));
 }

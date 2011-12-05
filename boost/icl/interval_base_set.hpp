@@ -15,6 +15,7 @@ Copyright (c) 1999-2006: Cortex Software GmbH, Kantstrasse 57, Berlin
 #include <boost/interprocess/containers/set.hpp>
 #elif defined(ICL_USE_BOOST_MOVE_IMPLEMENTATION)
 #include <boost/container/set.hpp>
+#include <boost/move/move.hpp> //MOV JODO URG
 #else 
 #include <set>
 #endif

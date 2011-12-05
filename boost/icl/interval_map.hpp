@@ -68,15 +68,26 @@ public:
 
     enum { fineness = 1 };
 
+#   ifdef BOOST_ICL_IS_MOVE_AWARE
+    BOOST_COPYABLE_AND_MOVABLE(interval_map)
+#   endif
+
 public:
     //==========================================================================
     //= Construct, copy, destruct
     //==========================================================================
+
     /// Default constructor for the empty object
     interval_map(): base_type() {}
+
     /// Copy constructor
     interval_map(const interval_map& src): base_type(src) {}
 
+#   ifdef BOOST_ICL_IS_MOVE_AWARE
+    /// Move constructor
+    interval_map(BOOST_RV_REF(interval_map) src)
+        : base_type(boost::move(static_cast<base_type&>(src))){}
+#   endif //BOOST_ICL_IS_MOVE_AWARE
 
     /// Copy constructor for base_type
     template<class SubType>
@@ -106,7 +117,6 @@ public:
         typedef interval_base_map<SubType,DomainT,CodomainT,
                                   Traits,Compare,Combine,Section,Interval,Alloc> base_map_type;
         this->clear();
-        // Can be implemented via _map.insert: Interval joining not necessary.
         iterator prior_ = this->_map.end();
         ICL_const_FORALL(typename base_map_type, it_, src) 
             prior_ = this->add(prior_, *it_); 
