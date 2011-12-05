@@ -17,7 +17,8 @@
 //        enhanced with contributions from Terje Slettebo,
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
-//        Alexander Nasonov, Antony Polukhin, Justin Viiret and other Boosters
+//        Alexander Nasonov, Antony Polukhin, Justin Viiret, Michael Hofmann
+//        and other Boosters
 // when:  November 2000, March 2003, June 2005, June 2006, March 2011
 
 #include <climits>
@@ -683,8 +684,8 @@ namespace boost
             , const CharT opening_brace, const CharT closing_brace)
         {
             using namespace std;
-            const wchar_t minus = lcast_char_constants<wchar_t>::minus;
-            const wchar_t plus = lcast_char_constants<wchar_t>::plus;
+            const CharT minus = lcast_char_constants<CharT>::minus;
+            const CharT plus = lcast_char_constants<CharT>::plus;
             const int inifinity_size = 8;
 
             bool has_minus = false;
