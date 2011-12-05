@@ -17,7 +17,7 @@
 //        enhanced with contributions from Terje Slettebo,
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
-//        Alexander Nasonov, Antony Polukhin and other Boosters
+//        Alexander Nasonov, Antony Polukhin, Justin Viiret and other Boosters
 // when:  November 2000, March 2003, June 2005, June 2006, March 2011
 
 #include <climits>
@@ -47,8 +47,9 @@
 #include <boost/detail/lcast_precision.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/container/container_fwd.hpp>
-#include <cwchar>
-
+#ifndef BOOST_NO_CWCHAR
+#   include <cwchar>
+#endif
 
 #ifndef BOOST_NO_STD_LOCALE
 #   include <locale>
