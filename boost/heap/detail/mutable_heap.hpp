@@ -214,15 +214,15 @@ public:
 
     public:
         ordered_iterator(void):
-            adaptor_type(0), q_(NULL), unvisited_nodes(indirect_cmp())
+            adaptor_type(0), unvisited_nodes(indirect_cmp()), q_(NULL)
         {}
 
         ordered_iterator(const priority_queue_mutable_wrapper * q, indirect_cmp const & cmp):
-            adaptor_type(0), q_(q), unvisited_nodes(cmp)
+            adaptor_type(0), unvisited_nodes(cmp), q_(q)
         {}
 
         ordered_iterator(const_list_iterator it, const priority_queue_mutable_wrapper * q, indirect_cmp const & cmp):
-            adaptor_type(it), q_(q), unvisited_nodes(cmp)
+            adaptor_type(it), unvisited_nodes(cmp), q_(q)
         {
             if (it != q->objects.end())
                 discover_nodes(it);

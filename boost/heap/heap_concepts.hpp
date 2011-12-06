@@ -46,18 +46,20 @@ struct PriorityQueue:
         v = c.top();
         c.pop();
 
-        value_compare cmp = c.value_comp();
+        cmp = c.value_comp();
 
         // verify tags
-        bool has_ordered_iterators = C::has_ordered_iterators;
-        bool is_mergable = C::is_mergable;
-        bool is_stable   = C::is_stable;
+        has_ordered_iterators = C::has_ordered_iterators;
+        is_mergable = C::is_mergable;
+        is_stable   = C::is_stable;
     }
 
 private:
     C c, c2;
     allocator_type a;
     typename C::value_type v;
+    value_compare cmp;
+    bool has_ordered_iterators, is_mergable, is_stable;
 };
 
 template <class C>

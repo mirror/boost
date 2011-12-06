@@ -619,7 +619,6 @@ private:
         BOOST_HEAP_ASSERT (!rhs.empty());
 
         node_list_iterator this_iterator = trees.begin();
-        node_list_iterator rhs_iterator = rhs.trees.begin();
         node_pointer carry_node = NULL;
 
         while (!rhs.trees.empty()) {
@@ -745,7 +744,6 @@ private:
     {
         while (n->parent) {
             node_pointer parent = n->parent;
-            int parent_children = parent->child_count();
             node_pointer grand_parent = parent->parent;
             if (cmp(n->value, parent->value))
                 return;
@@ -764,8 +762,7 @@ private:
                 trees.insert(it, *n);
             }
             n->add_child(parent);
-            int n_children = n->child_count();
-            BOOST_HEAP_ASSERT(parent_children == n_children);
+            BOOST_HEAP_ASSERT(parent->child_count() == n->child_count());
         }
     }
 
