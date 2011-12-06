@@ -10,7 +10,7 @@
 
 [/ TODO: The generated docs should contain boostinspect:nolicense ]
 
-[library Sample Proposal for the C++ Standard Library
+[article Sample Proposal for the C++ Standard Library Technical Report 2
     [quickbook 1.5]
     [purpose Sample library proposal for the C++ committee]
 ]
