@@ -8,7 +8,7 @@
 #include <boost/chrono/date/date.hpp>
 
 using namespace boost::chrono;
-const int times = 100;
+const int tms = 100;
 int main()
 {
   typedef boost::chrono::high_resolution_clock Clock;
@@ -17,7 +17,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         cnt += y+x;
@@ -30,7 +30,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y,no_check);
@@ -44,7 +44,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y);
@@ -59,7 +59,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         cnt += y+x;
@@ -72,7 +72,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y,no_check);
@@ -86,7 +86,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y);
@@ -101,7 +101,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         cnt += y+x;
@@ -114,7 +114,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y,no_check);
@@ -128,7 +128,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y);
@@ -143,7 +143,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         cnt += y+x;
@@ -158,7 +158,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y,no_check);
@@ -174,7 +174,7 @@ int main()
   {
     int cnt = 0;
     Clock::time_point t0 = Clock::now();
-    for (int x = 0; x < times; ++x)
+    for (int x = 0; x < tms; ++x)
       for (int y = -32768; y <= 32767; ++y)
       {
         //year aYear(y);
@@ -189,6 +189,6 @@ int main()
   std::cout << "   check-none: " << (check_d-none_d) <<  "\n";
   std::cout << "   no_check-none: " << (no_check_d-none_d)  << "\n";
 
-  return 1;
+  return 0;
 
 }

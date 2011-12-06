@@ -42,6 +42,7 @@ project
 # remark #383: value copied to temporary, reference to temporary used
 # remark #1418: external function definition with no prior declaration
         <toolset>intel:<cxxflags>-wd304,383,1418
+            <define>BOOST_CHRONO_VERSION=2
     ;
 
 rule chrono-run ( sources )
@@ -165,7 +166,7 @@ rule chrono-compile2 ( sources : name )
     test-suite "perf"
         :
         [ chrono-run store_now_in_vector.cpp  ]
-        [ chrono-run is_leap.cpp  ]
-        [ chrono-run no_check.cpp  ]
+        #[ chrono-run is_leap.cpp  ]
+        #[ chrono-run no_check.cpp  ]
         ;
 
