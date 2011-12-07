@@ -86,7 +86,7 @@ namespace quickbook
 
         code_action             code;
         code_action             code_block;
-        inline_code_action      inline_code;
+        code_action             inline_code;
         paragraph_action        paragraph;
         list_item_action        list_item;
         phrase_end_action       phrase_end;

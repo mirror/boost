@@ -244,39 +244,21 @@ namespace quickbook
 
     struct code_action
     {
+        enum code_type { block, inline_block, inline_ };
+    
         // Does the actual syntax highlighing of code
 
         code_action(
-            collector& out
-          , collector& phrase
+            code_type type
           , quickbook::actions& actions)
-        : out(out)
-        , phrase(phrase)
+        : type(type)
         , actions(actions)
         {
         }
 
         void operator()(parse_iterator first, parse_iterator last) const;
 
-        collector& out;
-        collector& phrase;
-        quickbook::actions& actions;
-    };
-
-    struct inline_code_action
-    {
-        // Does the actual syntax highlighing of code inlined in text
-
-        inline_code_action(
-            collector& out
-          , quickbook::actions& actions)
-        : out(out)
-        , actions(actions)
-        {}
-
-        void operator()(parse_iterator first, parse_iterator last) const;
-
-        collector& out;
+        code_type type;
         quickbook::actions& actions;
     };
 

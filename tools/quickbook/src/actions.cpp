@@ -586,53 +586,62 @@ namespace quickbook
 
     void code_action::operator()(parse_iterator first, parse_iterator last) const
     {
-        write_anchors(actions, out);
+        bool inline_code = type == inline_ ||
+            (type == inline_block && qbk_version_n < 106u);
+        bool block = type != inline_;
 
-        // preprocess the code section to remove the initial indentation
-        mapped_file_builder mapped;
-        mapped.start(actions.current_file);
-        mapped.unindent_and_add(first.base(), last.base());
+        if (inline_code) {
+            write_anchors(actions, actions.phrase);
+        }
+        else {
+            actions.paragraph();
+            write_anchors(actions, actions.out);
+        }
 
-        file_ptr f = mapped.release();
+        std::string str;
 
-        if (f->source.empty())
-            return; // Nothing left to do here. The program is empty.
+        if (block) {
+            // preprocess the code section to remove the initial indentation
+            mapped_file_builder mapped;
+            mapped.start(actions.current_file);
+            mapped.unindent_and_add(first.base(), last.base());
 
-        parse_iterator first_(f->source.begin());
-        parse_iterator last_(f->source.end());
+            file_ptr f = mapped.release();
 
-        file_ptr saved_file = f;
-        boost::swap(actions.current_file, saved_file);
+            if (f->source.empty())
+                return; // Nothing left to do here. The program is empty.
 
-        // print the code with syntax coloring
-        std::string str = syntax_highlight(first_, last_, actions, actions.source_mode);
+            parse_iterator first_(f->source.begin());
+            parse_iterator last_(f->source.end());
 
-        boost::swap(actions.current_file, saved_file);
+            file_ptr saved_file = f;
+            boost::swap(actions.current_file, saved_file);
 
-        //
-        // We must not place a \n after the <programlisting> tag
-        // otherwise PDF output starts code blocks with a blank line:
-        //
-        out << "<programlisting>";
-        out << str;
-        out << "</programlisting>\n";
-    }
+            // print the code with syntax coloring
+            str = syntax_highlight(first_, last_, actions, actions.source_mode);
 
-    void inline_code_action::operator()(parse_iterator first, parse_iterator last) const
-    {
-        write_anchors(actions, out);
+            boost::swap(actions.current_file, saved_file);
+        }
+        else {
+            parse_iterator first_(first);
+            str = syntax_highlight(first_, last, actions, actions.source_mode);
+        }
 
-        std::string save;
-        out.swap(save);
+        if (block) {
+            collector& output = inline_code ? actions.phrase : actions.out;
 
-        // print the code with syntax coloring
-        std::string str = syntax_highlight(first, last, actions, actions.source_mode);
-
-        out.swap(save);
-
-        out << "<code>";
-        out << str;
-        out << "</code>";
+            // We must not place a \n after the <programlisting> tag
+            // otherwise PDF output starts code blocks with a blank line:
+            //
+            output << "<programlisting>";
+            output << str;
+            output << "</programlisting>\n";
+        }
+        else {
+            actions.phrase << "<code>";
+            actions.phrase << str;
+            actions.phrase << "</code>";
+        }
     }
 
     void plain_char_action::operator()(char ch) const

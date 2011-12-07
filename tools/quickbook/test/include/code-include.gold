@@ -26,14 +26,12 @@
   <para>
     And any quickbook block markup.
   </para>
-  <para>
 <programlisting><phrase role="keyword">char</phrase><phrase role="special">*</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, foo man!</phrase>
     <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-  </para>
   <para>
     This should appear when <literal>stub.py</literal> is included.
   </para>
