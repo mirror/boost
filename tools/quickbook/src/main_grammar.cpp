@@ -565,23 +565,31 @@ namespace quickbook
             ;
 
         local.code_block =
-                (
-                    "```" >> *(*cl::blank_p >> cl::eol_p) >>
-                    (
-                       *(cl::anychar_p - (*cl::space_p >> "```"))
-                            >> !(*cl::blank_p >> cl::eol_p)
-                            >> cl::eps_p(*cl::space_p >> "```")
-                    )                           [actions.code_block]
-                    >> *cl::space_p >> "```"
+                "```"
+            >>  ~cl::eps_p("`")
+            >>  *(*cl::blank_p >> cl::eol_p)
+            >>  (   *(  "````" >> *cl::ch_p('`')
+                    |   (   cl::anychar_p
+                        -   (*cl::space_p >> "```" >> ~cl::eps_p("`"))
+                        )
+                    )
+                    >>  !(*cl::blank_p >> cl::eol_p)
+                )                           [actions.code_block]
+            >>  (   *cl::space_p >> "```"
+                |   cl::eps_p               [actions.error("Unfinished code block")]
                 )
-            |   (
-                    "``" >> *(*cl::blank_p >> cl::eol_p) >>
-                    (
-                       *(cl::anychar_p - (*cl::space_p >> "``"))
-                            >> !(*cl::blank_p >> cl::eol_p)
-                            >> cl::eps_p(*cl::space_p >> "``")
-                    )                           [actions.code_block]
-                    >> *cl::space_p >> "``"
+            |   "``"
+            >>  ~cl::eps_p("`")
+            >>  *(*cl::blank_p >> cl::eol_p)
+            >>  (   *(  "```" >> *cl::ch_p('`')
+                    |   (   cl::anychar_p
+                        -   (*cl::space_p >> "``" >> ~cl::eps_p("`"))
+                        )
+                    )
+                    >>  !(*cl::blank_p >> cl::eol_p)
+                )                           [actions.code_block]
+            >>  (   *cl::space_p >> "``"
+                |   cl::eps_p               [actions.error("Unfinished code block")]
                 )
             ;
 
