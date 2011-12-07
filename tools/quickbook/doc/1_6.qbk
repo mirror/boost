@@ -7,19 +7,42 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[chapter Quickbook 1.6
+[chapter Language Versions
     [quickbook 1.6]
     [compatibility-mode 1.5]
-    [id quickbook.1_6]
+    [id quickbook.versions]
     [source-mode teletype]
 ]
 
-New features and changes to the language are being introduced for quickbook 1.6. These
-can be used now by adding the `[quickbook 1.6]` tag to your document's docinfo:
+[section:stable Stable Versions]
 
-    [article Document
-    [quickbook 1.6]
-    ]
+Since quickbook 1.3 the `quickbook` attribute in the document block selects
+which version of the language to use. Not all changes to quickbook are
+implemented using a version switch, it's mainly just the changes that change
+the way a document is interpreted or would break existing documentation.
+
+[heading Quickbook 1.3 and later]
+
+* Introduced quickbook language versioning.
+* In the documentation info, allow phrase markup in license and purpose
+  attributes.
+* Fully qualified section and headers. Subsection names are concatenated to the
+  ID to avoid clashing. Example: `doc_name.sect_name.sub_sect_name.sub_sub_sect_name`.
+
+[heading Quickbook 1.5 and later]
+
+* Ignore template argument separators inside square brackets.
+* Don't separate the final template argument if the `..` separator was
+  used. i.e. never mix `..` and whitespace separators.
+* Statically scope templates and their arguments rather than dynamically
+  scope them.
+* Give table ids, and let you set them.
+* Allow spaces between the `:` character and ids in elements which can
+  have ids.
+
+[endsect]
+
+[section:1_6 Quickbook 1.6]
 
 Everything described in here may change depending on the feedback received.
 
@@ -254,3 +277,5 @@ The docbook markup that this generates is pretty bad, but seems to create okay
 html.
 
 [endsect]
+
+[endsect] [/ Quickbok 1.6]
