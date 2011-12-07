@@ -78,7 +78,7 @@ namespace unordered
     private:
 
         table table_;
-        
+
     public:
 
         // constructors
@@ -251,7 +251,8 @@ namespace unordered
         std::pair<iterator, bool> emplace(BOOST_FWD_REF(A0) a0)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0))
             );
         }
 
@@ -259,7 +260,8 @@ namespace unordered
         iterator emplace_hint(const_iterator, BOOST_FWD_REF(A0) a0)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0))
             ).first;
         }
 
@@ -269,7 +271,9 @@ namespace unordered
             BOOST_FWD_REF(A1) a1)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1))
             );
         }
 
@@ -279,7 +283,9 @@ namespace unordered
             BOOST_FWD_REF(A1) a1)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1))
             ).first;
         }
 
@@ -290,7 +296,10 @@ namespace unordered
             BOOST_FWD_REF(A2) a2)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1, a2)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1),
+                    boost::forward<A2>(a2))
             );
         }
 
@@ -301,7 +310,10 @@ namespace unordered
             BOOST_FWD_REF(A2) a2)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1, a2)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1),
+                    boost::forward<A2>(a2))
             ).first;
         }
 
@@ -700,7 +712,8 @@ namespace unordered
         iterator emplace(BOOST_FWD_REF(A0) a0)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0))
             );
         }
 
@@ -708,7 +721,8 @@ namespace unordered
         iterator emplace_hint(const_iterator, BOOST_FWD_REF(A0) a0)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0))
             );
         }
 
@@ -718,7 +732,9 @@ namespace unordered
             BOOST_FWD_REF(A1) a1)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1))
             );
         }
 
@@ -728,7 +744,9 @@ namespace unordered
             BOOST_FWD_REF(A1) a1)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1))
             );
         }
 
@@ -739,7 +757,10 @@ namespace unordered
             BOOST_FWD_REF(A2) a2)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1, a2)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1),
+                    boost::forward<A2>(a2))
             );
         }
 
@@ -750,7 +771,10 @@ namespace unordered
             BOOST_FWD_REF(A2) a2)
         {
             return table_.emplace(
-                boost::unordered::detail::create_emplace_args(a0, a1, a2)
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0),
+                    boost::forward<A1>(a1),
+                    boost::forward<A2>(a2))
             );
         }
 
