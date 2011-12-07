@@ -1,4 +1,18 @@
-[section:1_6 Quickbook 1.6]
+[/
+    Copyright 2002,2004,2006 Joel de Guzman, Eric Niebler
+    Copyright 2010-2011 Daniel James
+
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[chapter Quickbook 1.6
+    [quickbook 1.6]
+    [compatibility-mode 1.5]
+    [id quickbook.1_6]
+    [source-mode teletype]
+]
 
 New features and changes to the language are being introduced for quickbook 1.6. These
 can be used now by adding the `[quickbook 1.6]` tag to your document's docinfo:
@@ -240,5 +254,3 @@ The docbook markup that this generates is pretty bad, but seems to create okay
 html.
 
 [endsect]
-
-[endsect] [/1_6]
