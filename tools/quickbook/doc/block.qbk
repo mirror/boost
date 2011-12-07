@@ -256,7 +256,7 @@ allowed. Block level markups like lists, tables etc. are not allowed.
 
 [section Preformatted]
 
-Sometimes, you don't want some preformatted text to be parsed as C++. In such
+Sometimes, you don't want some preformatted text to be parsed as source code. In such
 cases, use the [^\[pre ... \]] markup block.
 
 ```

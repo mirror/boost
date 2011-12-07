@@ -190,11 +190,11 @@ etc. Inline code (see above) can. The problem is, inline code does not
 allow formatting with newlines, spaces, and tabs. These are lost.
 
 We provide a phrase level markup that is a mix between the two. By using the
-double-tick, instead of the single-tick, we are telling QuickBook to use
-preformatted blocks of code. Example:
+double-tick or triple-tick, instead of the single-tick, we are telling QuickBook
+to use preformatted blocks of code. Example:
 
-[pre
-\`\`
+```
+``\`\` ``
     #include <iostream>
 
     int main()
@@ -202,11 +202,27 @@ preformatted blocks of code. Example:
         std::cout << "Hello, World!" << std::endl;
         return 0;
     }
-\`\`
-]
+``\`\`\ ``
+```
+
+or:
+
+```
+``\`\`\` ``
+    #include <iostream>
+
+    int main()
+    {
+        std::cout << "Hello, World!" << std::endl;
+        return 0;
+    }
+``\`\`\` ``
+```
 
 will generate:
 
+[c++]
+
 ``
     #include <iostream>
 
@@ -216,6 +232,8 @@ will generate:
         return 0;
     }
 ``
+
+[teletype]
 
 [endsect] [/Code blocks]
 
@@ -254,16 +272,19 @@ C++ comment `// looks like this` whereas a Python comment [python]
 
 [endsect] [/Source Mode]
 
+[#ref-line-break]
 [section line-break]
 
 ```
 [br]
 ```
 
-[warning `[br]` is now deprecated. __blurbs__, __admonitions__ and
-table cells (see __tables__) may now contain paragraphs.]
+[warning `[br]` generates invalid docbook. It seems to mostly work okay but
+there might be problems, especially when using an alternative docbook
+processor.]
 
-[endsect]
+[endsect] [/Line break]
+
 [section Anchors]
 
 ```
@@ -278,7 +299,7 @@ These anchors are global and can be accessed from anywhere in the
 quickbook documentation. Be careful to avoid clashes with anchors in
 other sections.
 
-[endsect] [/Line break]
+[endsect] [/Anchors]
 
 [section Links]
 
@@ -418,8 +439,8 @@ For example, how do you escape the triple quote? Simple: [^\\'\\'\\']
 
 `\n` has a special meaning. It is used to generate line breaks.
 
-[warning `\n` and `[br]` are now deprecated. __blurbs__, __admonitions__
-and table cells (see __tables__) may now contain paragraphs.]
+[warning `\n` is now deprecated, use [link ref-line-break `[br]`]
+instead. Although, use it sparingly as it can generated invalid docbook]
 
 The escaped space: `\ ` also has a special meaning. The escaped space is removed
 from the output.
@@ -520,6 +541,6 @@ And try again:
 
 [? __to_be__ To be or not to be]
 
-Yes![footnote Conditional Generation makes quickbook turing complete.]
+Yes!
 
 [endsect] [/Condition Generation]
