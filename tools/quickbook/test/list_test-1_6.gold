@@ -426,30 +426,49 @@
     <itemizedlist>
       <listitem>
         <simpara>
-          One
+          A1
           <para>
-            Two
+            A2
           </para>
         </simpara>
       </listitem>
       <listitem>
         <simpara>
-          Three
+          B1
           <itemizedlist>
             <listitem>
               <simpara>
-                Four
+                C1
                 <para>
-                  Five
+                  C2
                 </para>
               </simpara>
             </listitem>
           </itemizedlist>
+          <para>
+            B2
+          </para>
         </simpara>
       </listitem>
       <listitem>
         <simpara>
-          Six
+          D1
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                E1
+                <para>
+                  E2
+                </para>
+                <para>
+                  E3
+                </para>
+              </simpara>
+            </listitem>
+          </itemizedlist>
+          <para>
+            D2
+          </para>
         </simpara>
       </listitem>
     </itemizedlist>

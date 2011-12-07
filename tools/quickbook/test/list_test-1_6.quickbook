@@ -105,14 +105,24 @@ Don't end list with comment 2:
 
 [section Paragraphs in list items]
 
-* One
+* A1
 
-  Two
+  A2
 
-* Three
-  * Four
+* B1
+  * C1
 
-    Five
-* Six
+   C2
+
+  B2
+
+* D1
+    * E1
+
+     E2
+
+    E3
+
+   D2
 
 [endsect]

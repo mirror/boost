@@ -34,10 +34,18 @@ namespace quickbook
     namespace cl = boost::spirit::classic;
 
     struct list_stack_item {
-        bool root;
-        unsigned int indent;
-        unsigned int indent2;
-        char mark;
+        bool root; // Is this the root of the context
+                   // (e.g. top, template, table cell etc.)
+        unsigned int indent;  // Indent of list marker
+                              // (or paragraph if not in a list)
+        unsigned int indent2; // Indent of paragraph
+        char mark;            // List mark, '\0' if not in a list.
+
+        // Example of inside a list:
+        //
+        //   |indent
+        //   * List item
+        //     |indent2 
 
         list_stack_item() :
             root(true), indent(0), indent2(0), mark('\0') {}
@@ -809,9 +817,32 @@ namespace quickbook
 
                 if (!list_stack.top().root && new_indent == list_stack.top().indent)
                 {
+                    // If the paragraph is aligned with the list item's marker,
+                    // then end the current list item if that's aligned (or to
+                    // the left of) the parent's paragraph.
+                    //
+                    // i.e.
+                    //
+                    // * Level 1
+                    //    * Level 2
+                    //
+                    //    Still Level 2
+                    //
+                    // vs.
+                    //
+                    // * Level 1
+                    //   * Level 2
+                    //
+                    //   Back to Level 1
+                
                     list_stack_item save = list_stack.top();
                     list_stack.pop();
-                    if (new_indent == list_stack.top().indent) {
+
+                    assert(list_stack.top().root ?
+                        new_indent >= list_stack.top().indent :
+                        new_indent > list_stack.top().indent);
+
+                    if (new_indent <= list_stack.top().indent2) {
                         actions_.end_list_item();
                         actions_.end_list(save.mark);
                         list_indent = list_stack.top().indent;
