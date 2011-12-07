@@ -34,7 +34,7 @@ It uses the SCIntilla source code editing component.
 You can use the following settings to highlight quickbook tags when
 editing quickbook files.
 
-[pre'''
+```
 qbk=*.qbk
 lexer.*.qbk=props
 use.tabs.$(qbk)=0
@@ -46,7 +46,7 @@ comment.stream.end.props=]
 comment.box.start.props=[/
 comment.box.middle.props=
 comment.box.end.props=]
-''']
+```
 
 [note Thanks to Rene Rivera for the above SciTE settings.]
 

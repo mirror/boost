@@ -32,21 +32,21 @@ a single block.
 
 Can be placed anywhere.
 
-[pre
-'''[/ comment (no output generated) ]'''
-]
+```
+[/ comment (no output generated) ]
+```
 
 [/ for testing only... ]
 
-[pre
-'''[/ comments can be nested [/ some more here] ]'''
-]
+```
+[/ comments can be nested [/ some more here] ]
+```
 
 [/ for testing [/ only ] ]
 
-[pre
-'''[/ Quickbook blocks can nest inside comments. [*Comment this out too!] ]'''
-]
+```
+[/ Quickbook blocks can nest inside comments. [*Comment this out too!] ]
+```
 
 [/ for testing [*only ] ]
 
