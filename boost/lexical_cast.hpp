@@ -1093,6 +1093,8 @@ namespace boost
 
     namespace detail // optimized stream wrapper
     {
+        struct type_used_as_workaround_for_typedefed_wchar_ts{};
+
         // String representation of Source has an upper limit.
         template< class CharT // a result of widest_char transformation
                 , class Traits // usually char_traits<CharT>
@@ -1354,6 +1356,8 @@ namespace boost
 
 /************************************ HELPER FUNCTIONS FOR OPERATORS >> ( ... ) ********************************/
         private:
+            bool shr_unsigned(type_used_as_workaround_for_typedefed_wchar_ts /*var*/) {return true;}
+
             template <typename Type>
             bool shr_unsigned(Type& output)
             {
@@ -1480,8 +1484,15 @@ namespace boost
             }
 
 /************************************ OPERATORS >> ( ... ) ********************************/
-        public:
-            bool operator>>(unsigned short& output)             { return shr_unsigned(output); }
+
+            typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
+                ::boost::is_same<CharT, unsigned short>::value
+                , type_used_as_workaround_for_typedefed_wchar_ts
+                , unsigned short
+            >::type ushort_ambiguity_workaround;
+
+            public:
+            bool operator>>(ushort_ambiguity_workaround& output){ return shr_unsigned(output); }
             bool operator>>(unsigned int& output)               { return shr_unsigned(output); }
             bool operator>>(unsigned long int& output)          { return shr_unsigned(output); }
             bool operator>>(short& output)                      { return shr_signed(output); }

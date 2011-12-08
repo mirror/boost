@@ -14,7 +14,12 @@
 
 # bring in rules for testing
 import testing ;
+import feature ;
 
+feature.feature nowchar : on :
+ composite optional propagated link-incompatible ;
+feature.compose <nowchar>on : <cxxflags>/Zc:wchar_t- ; 
+ 
 test-suite conversion
   : [ run implicit_cast.cpp ]
     [ compile-fail implicit_cast_fail.cpp ]
@@ -30,6 +35,6 @@ test-suite conversion
     [ run lexical_cast_inf_nan_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ run lexical_cast_containers_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ run lexical_cast_empty_input_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
+    [ run lexical_cast_typedefed_wchar_test.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <toolset>msvc:<nowchar>on : : ]
   ;
-
       
