@@ -27,10 +27,12 @@ namespace boost
     std::string to_string(T const&v) {
       return to_basic_string<char>(v);
     }
+#ifndef BOOST_NO_STD_WSTRING
     template <typename T>
     std::wstring to_wstring(T const&v) {
       return to_basic_string<wchar_t>(v);
     }
+#endif
 #if BOOST_CHRONO_HAS_UNICODE_SUPPORT
     template <typename T>
     std::basic_string<char16_t> to_u16string(T const&v) {
