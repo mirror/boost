@@ -170,4 +170,9 @@ C++11 support has resulted in some breaking changes:
   the variadic consturctors define
   `BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT`.
 
+[h2 Boost 1.49.0]
+
+* Fix warning due to accidental odd assignment.
+* Slightly better error messages.
+
 [endsect]
