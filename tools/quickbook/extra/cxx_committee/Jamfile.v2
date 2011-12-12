@@ -24,9 +24,9 @@ boostbook standalone
     
 		#<xsl:param>boost.libraries=$(BOOST_ROOT)/libs/libraries.htm
 		#<xsl:param>boost.root=../../../../
+		<boostbook-base-style>none
 		<xsl:param>html.stylesheet=proposal.css
 		<xsl:param>doc.standalone=1
-		<xsl:param>nav.layout=none
     <xsl:param>generate.toc="article toc"
     #<xsl:param>generate.toc="article toc section nop"
     #<xsl:param>generate.toc="article nop section nop"
