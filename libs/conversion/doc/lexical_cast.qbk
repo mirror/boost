@@ -159,9 +159,21 @@ Read a good C++ book, study `std::sentry` and [@boost:libs/io/doc/ios_state.html
 the rules of `scanf` for conversions. And in the C99 standard for unsigned input value minus sign is optional, so 
 if a negative number is read, no errors will arise and the result will be the two's complement.
 
+[pre
+]
+
+* [*Question:]    Why `boost::lexical_cast<int>(L'A');` outputs 65 and `boost::lexical_cast<wchar_t>(L"65");` does not throw?
+  * [*Answer:]      If you are using an old version of Visual Studio or compile code with /Zc:wchar_t- flag, 
+`boost::lexical_cast` sees single `wchar_t` character as `unsigned short`. It is not a `boost::lexical_cast` mistake, but a 
+limitation of compiler options that you use.
+
 [endsect]
 
 [section Changes]
+* [*boost 1.49.0 :]
+  
+    * Added code to work with typedefed wchar_t (compilation flag /Zc:wchar_t- for Visual Studio).    
+    
 * [*boost 1.48.0 :]
   
     * Added code to work with Inf and NaN on any platform.    

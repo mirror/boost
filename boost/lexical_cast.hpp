@@ -17,8 +17,8 @@
 //        enhanced with contributions from Terje Slettebo,
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
-//        Alexander Nasonov, Antony Polukhin, Justin Viiret, Michael Hofmann
-//        and other Boosters
+//        Alexander Nasonov, Antony Polukhin, Justin Viiret, Michael Hofmann,
+//        Cheng Yang and other Boosters
 // when:  November 2000, March 2003, June 2005, June 2006, March 2011
 
 #include <climits>
@@ -1093,8 +1093,6 @@ namespace boost
 
     namespace detail // optimized stream wrapper
     {
-        struct type_used_as_workaround_for_typedefed_wchar_ts{};
-
         // String representation of Source has an upper limit.
         template< class CharT // a result of widest_char transformation
                 , class Traits // usually char_traits<CharT>
@@ -1356,7 +1354,6 @@ namespace boost
 
 /************************************ HELPER FUNCTIONS FOR OPERATORS >> ( ... ) ********************************/
         private:
-            bool shr_unsigned(type_used_as_workaround_for_typedefed_wchar_ts /*var*/) {return true;}
 
             template <typename Type>
             bool shr_unsigned(Type& output)
@@ -1484,15 +1481,8 @@ namespace boost
             }
 
 /************************************ OPERATORS >> ( ... ) ********************************/
-
-            typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
-                ::boost::is_same<CharT, unsigned short>::value
-                , type_used_as_workaround_for_typedefed_wchar_ts
-                , unsigned short
-            >::type ushort_ambiguity_workaround;
-
             public:
-            bool operator>>(ushort_ambiguity_workaround& output){ return shr_unsigned(output); }
+            bool operator>>(unsigned short& output)             { return shr_unsigned(output); }
             bool operator>>(unsigned int& output)               { return shr_unsigned(output); }
             bool operator>>(unsigned long int& output)          { return shr_unsigned(output); }
             bool operator>>(short& output)                      { return shr_signed(output); }
@@ -1504,11 +1494,19 @@ namespace boost
 #elif defined(BOOST_HAS_MS_INT64)
             bool operator>>(unsigned __int64& output)           { return shr_unsigned(output); }
             bool operator>>(__int64& output)                    { return shr_signed(output); }
-
 #endif
-            bool operator>>(CharT& output)                      { return shr_xchar(output); }
+            bool operator>>(char& output)                       { return shr_xchar(output); }
             bool operator>>(unsigned char& output)              { return shr_xchar(output); }
             bool operator>>(signed char& output)                { return shr_xchar(output); }
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+            bool operator>>(wchar_t& output)                    { return shr_xchar(output); }
+#endif
+#ifndef BOOST_NO_CHAR16_T
+            bool operator>>(char16_t& output)                   { return shr_xchar(output); }
+#endif
+#ifndef BOOST_NO_CHAR32_T
+            bool operator>>(char32_t& output)                   { return shr_xchar(output); }
+#endif
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
             bool operator>>(std::string& str)                   { str.assign(start, finish); return true; }
 #   ifndef BOOST_LCAST_NO_WCHAR_T
