@@ -4,7 +4,5 @@
 
 import testing ;
 
-project : requirements <library>/boost/test//boost_test_exec_monitor/<link>static ;
-
-run crc_test.cpp ;
-run crc_test2.cpp ;
+run crc_test.cpp : : : <library>/boost/test//boost_test_exec_monitor/<link>static ;
+run crc_test2.cpp : : : <library>/boost/test//boost_unit_test_framework/<link>static ;
