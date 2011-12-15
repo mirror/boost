@@ -4,14 +4,7 @@
 
 import testing ;
 
-test-suite crc
-  :
-    [ run crc_test.cpp
-      :
-      :
-      : requirements <library>/boost/test//boost_test_exec_monitor/<link>static ]
-    [ unit-test crc_test2.cpp
-      :
-      :
-      : requirements <library>/boost/test//boost_unit_test_framework/<link>static ]
-  ;
+project : requirements <library>/boost/test//boost_test_exec_monitor/<link>static ;
+
+run crc_test.cpp ;
+run crc_test2.cpp ;
