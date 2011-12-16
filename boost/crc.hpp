@@ -9,6 +9,7 @@
 #ifndef BOOST_CRC_HPP
 #define BOOST_CRC_HPP
 
+#include <boost/array.hpp>           // for boost::array
 #include <boost/config.hpp>          // for BOOST_STATIC_CONSTANT, etc.
 #include <boost/cstdint.hpp>         // for UINTMAX_C
 #include <boost/integer.hpp>         // for boost::uint_t
@@ -253,38 +254,50 @@ namespace detail
            UINTMAX_C( 1 )) : 0u )>
     {};
 
-
-    // Reflection routine class wrapper
-    // (since MS VC++ 6 couldn't handle the unwrapped version)
-    template < std::size_t Bits >
-    struct reflector
+    // Bit-reflection functions (BitSize is the number of low bits to reflect.)
+    template < int BitSize, typename Unsigned >
+    Unsigned  reflect_unsigned_partially( Unsigned x )
     {
-        typedef typename boost::uint_t<Bits>::fast  value_type;
-
-        static  value_type  reflect( value_type x );
-
-    };  // boost::detail::reflector
-
-    // Function that reflects its argument
-    template < std::size_t Bits >
-    typename reflector<Bits>::value_type
-    reflector<Bits>::reflect
-    (
-        typename reflector<Bits>::value_type  x
-    )
-    {
-        value_type        reflection = 0;
-        value_type const  one = 1;
-
-        for ( std::size_t i = 0 ; i < Bits ; ++i, x >>= 1 )
+        for ( Unsigned  l = 1u, h = l << (BitSize - 1) ; h > l ; h >>= 1, l <<=
+         1 )
         {
-            if ( x & one )
-            {
-                reflection |= ( one << (Bits - 1u - i) );
-            }
+            Unsigned const  m = h | l, t = x & m;
+
+            if ( (t == h) || (t == l) )
+                x ^= m;
         }
 
-        return reflection;
+        return x;
+    }
+
+    template < typename Unsigned >
+    Unsigned  reflect_unsigned_fully( Unsigned x )
+    {
+        return reflect_unsigned_partially<
+         std::numeric_limits<Unsigned>::digits, Unsigned >( x );
+    }
+
+    unsigned char  reflect_byte_slowly( unsigned char x )
+    { return reflect_unsigned_fully( x ); }
+
+    boost::array< unsigned char, (UINTMAX_C( 1 ) << CHAR_BIT) >
+    make_byte_reflection_table()
+    {
+        boost::array<unsigned char, ( UINTMAX_C(1) << CHAR_BIT )>  result;
+
+        for ( boost::uint_t<CHAR_BIT + 1>::fast  i = 0u ; i <=
+         UCHAR_MAX ; ++i )
+            result[ i ] = reflect_byte_slowly( i );
+
+        return result;
+    }
+
+    unsigned char  reflect_byte( unsigned char x )
+    {
+        static  boost::array<unsigned char, ( UINTMAX_C(1) << CHAR_BIT )> const
+          table = make_byte_reflection_table();
+
+        return table[ x ];
     }
 
 
@@ -406,7 +419,7 @@ namespace detail
     #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         // Possibly reflect a remainder
         static  value_type  reflect( value_type x )
-            { return detail::reflector<Bits>::reflect( x ); }
+            { return reflect_unsigned_partially<Bits>(x); }
 
         // Compare a byte to the remainder's highest byte
         static  unsigned char  index( value_type rem, unsigned char x )
@@ -418,7 +431,7 @@ namespace detail
     #else
         // Possibly reflect a remainder
         static  value_type  reflect( value_type x )
-            { return DoReflect ? detail::reflector<Bits>::reflect( x ) : x; }
+            { return DoReflect ? reflect_unsigned_partially<Bits>(x) : x; }
 
         // Compare a byte to the remainder's highest byte
         static  unsigned char  index( value_type rem, unsigned char x )
@@ -612,8 +625,7 @@ crc_basic<Bits>::process_byte
     unsigned char  byte
 )
 {
-    process_bits( (rft_in_ ? detail::reflector<CHAR_BIT>::reflect(byte)
-     : byte), CHAR_BIT );
+    process_bits( (rft_in_ ? detail::reflect_byte( byte ) : byte), CHAR_BIT );
 }
 
 template < std::size_t Bits >
@@ -653,8 +665,8 @@ crc_basic<Bits>::checksum
 (
 ) const
 {
-    return ( (rft_out_ ? detail::reflector<Bits>::reflect( rem_ ) : rem_)
-     ^ final_ ) & detail::low_bits_mask_c<Bits>::value;
+    return ( (rft_out_ ? detail::reflect_unsigned_partially<Bits>( rem_ ) :
+     rem_) ^ final_ ) & detail::low_bits_mask_c<Bits>::value;
 }
 
 
