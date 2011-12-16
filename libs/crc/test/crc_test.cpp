@@ -185,7 +185,7 @@ PRIVATE_TESTER_NAME::error_test
     // to give the truncated polynominal, and it is always set.  This
     // means that the truncated polynominal needs at least one of its
     // bits set, which implies that it cannot be zero.
-    if ( !(TrPo & boost::detail::mask_uint_t<Bits>::sig_bits_fast) )
+    if ( !(TrPo & boost::detail::low_bits_mask_c<Bits>::value) )
     {
         BOOST_FAIL( "truncated CRC polymonial is zero" );
     }

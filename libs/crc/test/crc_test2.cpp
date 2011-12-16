@@ -192,14 +192,11 @@ typedef boost::mpl::list<my_crc_16_traits, my_crc_ccitt_traits,
 // Bit mask constants
 template < std::size_t BitIndex >
 struct high_bit_mask_c
-    : boost::mpl::integral_c<typename boost::uint_t< BitIndex + 1u >::fast,
-       ( UINTMAX_C(1) << BitIndex )>
+    : boost::detail::high_bit_mask_c<BitIndex>
 {};
 template < std::size_t BitCount >
 struct low_bits_mask_c
-    : boost::mpl::integral_c<typename boost::uint_t< BitCount >::fast,
-       ( BitCount ? (( (( UINTMAX_C(1) << (BitCount - 1u) ) - 1u) << 1 ) |
-       UINTMAX_C( 1 )) : 0u )>
+    : boost::detail::low_bits_mask_c<BitCount>
 {};
 
 }  // anonymous namespace

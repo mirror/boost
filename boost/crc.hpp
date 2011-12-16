@@ -9,8 +9,10 @@
 #ifndef BOOST_CRC_HPP
 #define BOOST_CRC_HPP
 
-#include <boost/config.hpp>   // for BOOST_STATIC_CONSTANT, etc.
-#include <boost/integer.hpp>  // for boost::uint_t
+#include <boost/config.hpp>          // for BOOST_STATIC_CONSTANT, etc.
+#include <boost/cstdint.hpp>         // for UINTMAX_C
+#include <boost/integer.hpp>         // for boost::uint_t
+#include <boost/mpl/integral_c.hpp>  // for boost::mpl::integral_c
 
 #include <climits>  // for CHAR_BIT, etc.
 #include <cstddef>  // for std::size_t
@@ -103,27 +105,6 @@ typedef crc_optimal<32, 0x04C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, true, true>
 
 namespace detail
 {
-    template < std::size_t Bits >
-        struct mask_uint_t;
-
-    template <  >
-        struct mask_uint_t< std::numeric_limits<unsigned char>::digits >;
-
-    #if USHRT_MAX > UCHAR_MAX
-    template <  >
-        struct mask_uint_t< std::numeric_limits<unsigned short>::digits >;
-    #endif
-
-    #if UINT_MAX > USHRT_MAX
-    template <  >
-        struct mask_uint_t< std::numeric_limits<unsigned int>::digits >;
-    #endif
-
-    #if ULONG_MAX > UINT_MAX
-    template <  >
-        struct mask_uint_t< std::numeric_limits<unsigned long>::digits >;
-    #endif
-
     template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly, bool Reflect >
         struct crc_table_t;
 
@@ -143,12 +124,9 @@ namespace detail
 template < std::size_t Bits >
 class crc_basic
 {
-    // Implementation type
-    typedef detail::mask_uint_t<Bits>  masking_type;
-
 public:
     // Type
-    typedef typename masking_type::least  value_type;
+    typedef typename boost::uint_t<Bits>::fast  value_type;
 
     // Constant for the template parameter
     BOOST_STATIC_CONSTANT( std::size_t, bit_count = Bits );
@@ -194,12 +172,9 @@ template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
            bool ReflectIn, bool ReflectRem >
 class crc_optimal
 {
-    // Implementation type
-    typedef detail::mask_uint_t<Bits>  masking_type;
-
 public:
     // Type
-    typedef typename masking_type::fast  value_type;
+    typedef typename boost::uint_t<Bits>::fast  value_type;
 
     // Constants for the template parameters
     BOOST_STATIC_CONSTANT( std::size_t, bit_count = Bits );
@@ -261,35 +236,22 @@ private:
 
 namespace detail
 {
-    // Forward declarations for more implementation details
-    template < std::size_t Bits >
-        struct high_uint_t;
+    // Single-bit mask constant, MPL-style
+    // (Template parameter is the 0-based index of the bit, i.e. 2**index.)
+    template < std::size_t BitIndex >
+    struct high_bit_mask_c
+        : boost::mpl::integral_c<typename boost::uint_t< BitIndex + 1u >::fast,
+           ( UINTMAX_C(1) << BitIndex )>
+    {};
 
-    template < std::size_t Bits >
-        struct reflector;
-
-
-    // Traits class for mask; given the bit number
-    // (1-based), get the mask for that bit by itself.
-    template < std::size_t Bits >
-    struct high_uint_t
-        : boost::uint_t< Bits >
-    {
-        typedef boost::uint_t<Bits>        base_type;
-        typedef typename base_type::least  least;
-        typedef typename base_type::fast   fast;
-
-#if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
-        static const least high_bit = 1ul << ( Bits - 1u );
-        static const fast high_bit_fast = 1ul << ( Bits - 1u );
-#else
-        BOOST_STATIC_CONSTANT( least, high_bit = (least( 1u ) << ( Bits
-         - 1u )) );
-        BOOST_STATIC_CONSTANT( fast, high_bit_fast = (fast( 1u ) << ( Bits
-         - 1u )) );
-#endif
-
-    };  // boost::detail::high_uint_t
+    // Lowest-bits mask constant, MPL-style
+    // (Template parameter is the number of low bits set, i.e. 2**count - 1.)
+    template < std::size_t BitCount >
+    struct low_bits_mask_c
+        : boost::mpl::integral_c<typename boost::uint_t< BitCount >::fast, (
+           BitCount ? (( (( UINTMAX_C(1) << (BitCount - 1u) ) - 1u) << 1 ) |
+           UINTMAX_C( 1 )) : 0u )>
+    {};
 
 
     // Reflection routine class wrapper
@@ -326,140 +288,13 @@ namespace detail
     }
 
 
-    // Traits class for masks; given the bit number (1-based),
-    // get the mask for that bit and its lower bits.
-    template < std::size_t Bits >
-    struct mask_uint_t
-        : high_uint_t< Bits >
-    {
-        typedef high_uint_t<Bits>          base_type;
-        typedef typename base_type::least  least;
-        typedef typename base_type::fast   fast;
-
-        #ifndef __BORLANDC__
-        using base_type::high_bit;
-        using base_type::high_bit_fast;
-        #else
-        BOOST_STATIC_CONSTANT( least, high_bit = base_type::high_bit );
-        BOOST_STATIC_CONSTANT( fast, high_bit_fast = base_type::high_bit_fast );
-        #endif
-
-#if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
-        static const least sig_bits = (~( ~( 0ul ) << Bits )) ;
-#else
-        BOOST_STATIC_CONSTANT( least, sig_bits = (~( ~(least( 0u )) << Bits )) );
-#endif
-#if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 0 && __GNUC_PATCHLEVEL__ == 2
-        // Work around a weird bug that ICEs the compiler in build_c_cast
-        BOOST_STATIC_CONSTANT( fast, sig_bits_fast = static_cast<fast>(sig_bits) );
-#else
-        BOOST_STATIC_CONSTANT( fast, sig_bits_fast = fast(sig_bits) );
-#endif
-    };  // boost::detail::mask_uint_t
-
-    template <  >
-    struct mask_uint_t< std::numeric_limits<unsigned char>::digits >
-        : high_uint_t< std::numeric_limits<unsigned char>::digits >
-    {
-        typedef high_uint_t<std::numeric_limits<unsigned char>::digits>
-          base_type;
-        typedef base_type::least  least;
-        typedef base_type::fast   fast;
-
-        #ifndef __BORLANDC__
-        using base_type::high_bit;
-        using base_type::high_bit_fast;
-        #else
-        BOOST_STATIC_CONSTANT( least, high_bit = base_type::high_bit );
-        BOOST_STATIC_CONSTANT( fast, high_bit_fast = base_type::high_bit_fast );
-        #endif
-
-        BOOST_STATIC_CONSTANT( least, sig_bits = (~( least(0u) )) );
-        BOOST_STATIC_CONSTANT( fast, sig_bits_fast = fast(sig_bits) );
-
-    };  // boost::detail::mask_uint_t
-
-    #if USHRT_MAX > UCHAR_MAX
-    template <  >
-    struct mask_uint_t< std::numeric_limits<unsigned short>::digits >
-        : high_uint_t< std::numeric_limits<unsigned short>::digits >
-    {
-        typedef high_uint_t<std::numeric_limits<unsigned short>::digits>
-          base_type;
-        typedef base_type::least  least;
-        typedef base_type::fast   fast;
-
-        #ifndef __BORLANDC__
-        using base_type::high_bit;
-        using base_type::high_bit_fast;
-        #else
-        BOOST_STATIC_CONSTANT( least, high_bit = base_type::high_bit );
-        BOOST_STATIC_CONSTANT( fast, high_bit_fast = base_type::high_bit_fast );
-        #endif
-
-        BOOST_STATIC_CONSTANT( least, sig_bits = (~( least(0u) )) );
-        BOOST_STATIC_CONSTANT( fast, sig_bits_fast = fast(sig_bits) );
-
-    };  // boost::detail::mask_uint_t
-    #endif
-
-    #if UINT_MAX > USHRT_MAX
-    template <  >
-    struct mask_uint_t< std::numeric_limits<unsigned int>::digits >
-        : high_uint_t< std::numeric_limits<unsigned int>::digits >
-    {
-        typedef high_uint_t<std::numeric_limits<unsigned int>::digits>
-          base_type;
-        typedef base_type::least  least;
-        typedef base_type::fast   fast;
-
-        #ifndef __BORLANDC__
-        using base_type::high_bit;
-        using base_type::high_bit_fast;
-        #else
-        BOOST_STATIC_CONSTANT( least, high_bit = base_type::high_bit );
-        BOOST_STATIC_CONSTANT( fast, high_bit_fast = base_type::high_bit_fast );
-        #endif
-
-        BOOST_STATIC_CONSTANT( least, sig_bits = (~( least(0u) )) );
-        BOOST_STATIC_CONSTANT( fast, sig_bits_fast = fast(sig_bits) );
-
-    };  // boost::detail::mask_uint_t
-    #endif
-
-    #if ULONG_MAX > UINT_MAX
-    template <  >
-    struct mask_uint_t< std::numeric_limits<unsigned long>::digits >
-        : high_uint_t< std::numeric_limits<unsigned long>::digits >
-    {
-        typedef high_uint_t<std::numeric_limits<unsigned long>::digits>
-          base_type;
-        typedef base_type::least  least;
-        typedef base_type::fast   fast;
-
-        #ifndef __BORLANDC__
-        using base_type::high_bit;
-        using base_type::high_bit_fast;
-        #else
-        BOOST_STATIC_CONSTANT( least, high_bit = base_type::high_bit );
-        BOOST_STATIC_CONSTANT( fast, high_bit_fast = base_type::high_bit_fast );
-        #endif
-
-        BOOST_STATIC_CONSTANT( least, sig_bits = (~( least(0u) )) );
-        BOOST_STATIC_CONSTANT( fast, sig_bits_fast = fast(sig_bits) );
-
-    };  // boost::detail::mask_uint_t
-    #endif
-
-
     // CRC table generator
     template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly, bool Reflect >
     struct crc_table_t
     {
         BOOST_STATIC_CONSTANT( std::size_t, byte_combos = (1ul << CHAR_BIT) );
 
-        typedef mask_uint_t<Bits>            masking_type;
-        typedef typename masking_type::fast  value_type;
+        typedef typename boost::uint_t<Bits>::fast  value_type;
 #if defined(__BORLANDC__) && defined(_M_IX86) && (__BORLANDC__ == 0x560)
         // for some reason Borland's command line compiler (version 0x560)
         // chokes over this unless we do the calculation for it:
@@ -497,7 +332,7 @@ namespace detail
         if ( did_init )  return;
 
         // factor-out constants to avoid recalculation
-        value_type const     fast_hi_bit = masking_type::high_bit_fast;
+        value_type const     fast_hi_bit = high_bit_mask_c<Bits - 1u>::value;
         unsigned char const  byte_hi_bit = 1u << (CHAR_BIT - 1u);
 
         // loop over every possible dividend value
@@ -700,7 +535,7 @@ crc_basic<Bits>::get_interim_remainder
 (
 ) const
 {
-    return rem_ & masking_type::sig_bits;
+    return rem_ & detail::low_bits_mask_c<Bits>::value;
 }
 
 template < std::size_t Bits >
@@ -732,7 +567,7 @@ crc_basic<Bits>::process_bit
     bool  bit
 )
 {
-    value_type const  high_bit_mask = masking_type::high_bit;
+    value_type const  high_bit_mask = detail::high_bit_mask_c<Bits - 1u>::value;
 
     // compare the new bit with the remainder's highest
     rem_ ^= ( bit ? high_bit_mask : 0u );
@@ -819,7 +654,7 @@ crc_basic<Bits>::checksum
 ) const
 {
     return ( (rft_out_ ? detail::reflector<Bits>::reflect( rem_ ) : rem_)
-     ^ final_ ) & masking_type::sig_bits;
+     ^ final_ ) & detail::low_bits_mask_c<Bits>::value;
 }
 
 
@@ -912,7 +747,7 @@ BOOST_CRC_OPTIMAL_NAME::get_interim_remainder
 ) const
 {
     // Interim remainder should be _un_-reflected, so we have to undo it.
-    return helper_type::reflect( rem_ ) & masking_type::sig_bits_fast;
+    return helper_type::reflect( rem_ ) & detail::low_bits_mask_c<Bits>::value;
 }
 
 template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
@@ -991,7 +826,7 @@ BOOST_CRC_OPTIMAL_NAME::checksum
 ) const
 {
     return ( reflect_out_type::reflect(rem_) ^ get_final_xor_value() )
-     & masking_type::sig_bits_fast;
+     & detail::low_bits_mask_c<Bits>::value;
 }
 
 template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
@@ -1053,10 +888,9 @@ augmented_crc
 )
 {
     typedef unsigned char                                byte_type;
-    typedef detail::mask_uint_t<Bits>                    masking_type;
     typedef detail::crc_table_t<Bits, TruncPoly, false>  crc_table_type;
 
-    typename masking_type::fast  rem = initial_remainder;
+    typename uint_t<Bits>::fast  rem = initial_remainder;
     byte_type const * const      b = static_cast<byte_type const *>( buffer );
     byte_type const * const      e = b + byte_count;
 
@@ -1072,7 +906,7 @@ augmented_crc
         rem ^= crc_table_type::table_[ byte_index ];
     }
 
-    return rem & masking_type::sig_bits_fast;
+    return rem & detail::low_bits_mask_c<Bits>::value;
 }
 
 template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly >
