@@ -564,3 +564,28 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( function_object_test, CRCPolicy,
     crc_c = std::for_each( std_data, std_data + std_data_len, crc_c );
     BOOST_CHECK_EQUAL( crc_c(), CRCPolicy::standard_test_data_CRC_c::value );
 }
+
+BOOST_AUTO_TEST_SUITE ( bug_fix_tests )
+
+// Ticket #2492: crc_optimal with reversed CRC16
+// <https://svn.boost.org/trac/boost/ticket/2492>
+BOOST_AUTO_TEST_CASE( issue_2492_test )
+{
+    // I'm trusting that the original bug reporter got his/her calculations
+    // correct.
+    boost::uint16_t const  expected_result = 0xF990u;
+
+    boost::crc_optimal<16, 0x100Bu, 0xFFFFu, 0x0000, true, false>  boost_crc_1;
+    boost::crc_basic<16>  boost_crc_2( 0x100Bu, 0xFFFFu, 0x0000, true, false );
+
+    // This should be right...
+    boost_crc_1.process_byte( 0u );
+    BOOST_CHECK_EQUAL( boost_crc_1.checksum(), expected_result );
+
+    // ...but the reporter said this didn't reflect, giving 0x099F as the
+    // (wrong) result.  However, I get the right answer!
+    boost_crc_2.process_byte( 0u );
+    BOOST_CHECK_EQUAL( boost_crc_2.checksum(), expected_result );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
