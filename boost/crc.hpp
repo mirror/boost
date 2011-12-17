@@ -1,8 +1,9 @@
 //  Boost CRC library crc.hpp header file  -----------------------------------//
 
-//  Copyright 2001, 2004 Daryle Walker.  Use, modification, and distribution are
-//  subject to the Boost Software License, Version 1.0.  (See accompanying file
-//  LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
+//  Copyright 2001, 2004, 2011 Daryle Walker.  Use, modification, and
+//  distribution are subject to the Boost Software License, Version 1.0.  (See
+//  accompanying file LICENSE_1_0.txt or a copy at
+//  <http://www.boost.org/LICENSE_1_0.txt>.)
 
 //  See <http://www.boost.org/libs/crc/> for the library's home page.
 
@@ -239,27 +240,28 @@ namespace detail
 {
     // Single-bit mask constant, MPL-style
     // (Template parameter is the 0-based index of the bit, i.e. 2**index.)
-    template < std::size_t BitIndex >
+    template < int BitIndex >
     struct high_bit_mask_c
-        : boost::mpl::integral_c<typename boost::uint_t< BitIndex + 1u >::fast,
+        : boost::mpl::integral_c<typename boost::uint_t< BitIndex + 1 >::fast,
            ( UINTMAX_C(1) << BitIndex )>
     {};
 
     // Lowest-bits mask constant, MPL-style
     // (Template parameter is the number of low bits set, i.e. 2**count - 1.)
-    template < std::size_t BitCount >
+    template < int BitCount >
     struct low_bits_mask_c
         : boost::mpl::integral_c<typename boost::uint_t< BitCount >::fast, (
-           BitCount ? (( (( UINTMAX_C(1) << (BitCount - 1u) ) - 1u) << 1 ) |
+           BitCount ? (( (( UINTMAX_C(1) << (BitCount - 1) ) - 1u) << 1 ) |
            UINTMAX_C( 1 )) : 0u )>
     {};
 
-    // Bit-reflection functions (BitSize is the number of low bits to reflect.)
-    template < int BitSize, typename Unsigned >
-    Unsigned  reflect_unsigned_partially( Unsigned x )
+    // Bit-reflection functions
+    template < typename Unsigned >
+    Unsigned  reflect_unsigned( Unsigned x, int word_length
+     = std::numeric_limits<Unsigned>::digits )
     {
-        for ( Unsigned  l = 1u, h = l << (BitSize - 1) ; h > l ; h >>= 1, l <<=
-         1 )
+        for ( Unsigned  l = 1u, h = l << (word_length - 1) ; h > l ; h >>= 1, l
+         <<= 1 )
         {
             Unsigned const  m = h | l, t = x & m;
 
@@ -270,23 +272,15 @@ namespace detail
         return x;
     }
 
-    template < typename Unsigned >
-    Unsigned  reflect_unsigned_fully( Unsigned x )
-    {
-        return reflect_unsigned_partially<
-         std::numeric_limits<Unsigned>::digits, Unsigned >( x );
-    }
-
     unsigned char  reflect_byte_slowly( unsigned char x )
-    { return reflect_unsigned_fully( x ); }
+    { return reflect_unsigned(x); }
 
     boost::array< unsigned char, (UINTMAX_C( 1 ) << CHAR_BIT) >
     make_byte_reflection_table()
     {
         boost::array<unsigned char, ( UINTMAX_C(1) << CHAR_BIT )>  result;
 
-        for ( boost::uint_t<CHAR_BIT + 1>::fast  i = 0u ; i <=
-         UCHAR_MAX ; ++i )
+        for ( boost::uint_t<CHAR_BIT + 1>::fast  i = 0u ; i <= UCHAR_MAX ; ++i )
             result[ i ] = reflect_byte_slowly( i );
 
         return result;
@@ -298,6 +292,51 @@ namespace detail
           table = make_byte_reflection_table();
 
         return table[ x ];
+    }
+
+    template < typename Unsigned >
+    Unsigned  reflect_optionally( Unsigned x, bool reflect, int word_length
+     = std::numeric_limits<Unsigned>::digits )
+    { return reflect ? reflect_unsigned(x, word_length) : x; }
+
+    unsigned char  reflect_byte_optionally( unsigned char x, bool reflect )
+    { return reflect ? reflect_byte(x) : x; }
+
+    // Encapsulate the core CRC computation routines
+    template < int Bits, typename Register >
+    bool  crc_modulo_update( Register &remainder, bool new_dividend_bit,
+     Register truncated_divisor )
+    {
+        // compare the new bit with the remainder's highest
+        remainder ^= new_dividend_bit ? high_bit_mask_c<Bits - 1>::value : 0u;
+
+        // perform modulo-2 division
+        bool const  quotient = remainder & high_bit_mask_c<Bits - 1>::value;
+
+        remainder <<= 1;
+        remainder ^= quotient ? truncated_divisor : 0u;
+        return quotient;
+    }
+
+    template < int Bits, typename Register, typename Word >
+    void  crc_modulo_word_update( Register &remainder, Word new_dividend_bits,
+     Register truncated_divisor, int word_length, bool reflect )
+    {
+        // The natural reading order for division is highest digit/bit first.
+        // The "reflect" parameter switches this.  However, building a bit mask
+        // for the lowest bit is the easiest....
+        new_dividend_bits = reflect_optionally( new_dividend_bits, not reflect,
+         word_length );
+
+        // Perform modulo-2 division
+        for ( int  i = word_length ; i ; --i, new_dividend_bits >>= 1 )
+            crc_modulo_update<Bits>( remainder, new_dividend_bits & 1u,
+             truncated_divisor );
+
+        // Note that the quotient isn't stored, since you usually won't need it,
+        // and calculating it slows you down.  If you want it, just do this loop
+        // manually.  Start with Word: Quotient := 0, then for each step do:
+        //   Quotient <- (Quotient << 1) | crc_modulo_update(...)
     }
 
 
@@ -344,41 +383,18 @@ namespace detail
         static  bool  did_init = false;
         if ( did_init )  return;
 
-        // factor-out constants to avoid recalculation
-        value_type const     fast_hi_bit = high_bit_mask_c<Bits - 1u>::value;
-        unsigned char const  byte_hi_bit = 1u << (CHAR_BIT - 1u);
-
-        // loop over every possible dividend value
-        unsigned char  dividend = 0;
-        do
+        // Loop over every possible dividend value
+        for ( boost::uint_t<CHAR_BIT + 1>::fast  dividend = 0u ; dividend <=
+         UCHAR_MAX ; ++dividend )
         {
-            value_type  remainder = 0;
+            value_type  remainder = 0u;
 
-            // go through all the dividend's bits
-            for ( unsigned char mask = byte_hi_bit ; mask ; mask >>= 1 )
-            {
-                // check if divisor fits
-                if ( dividend & mask )
-                {
-                    remainder ^= fast_hi_bit;
-                }
+            crc_modulo_word_update<Bits>( remainder, dividend, TruncPoly,
+             CHAR_BIT, false );
 
-                // do polynominal division
-                if ( remainder & fast_hi_bit )
-                {
-                    remainder <<= 1;
-                    remainder ^= TruncPoly;
-                }
-                else
-                {
-                    remainder <<= 1;
-                }
-            }
-
-            table_[ crc_helper<CHAR_BIT, Reflect>::reflect(dividend) ]
-             = crc_helper<Bits, Reflect>::reflect( remainder );
+            table_[ reflect_byte_optionally(dividend, Reflect) ]
+             = reflect_optionally( remainder, Reflect, Bits );
         }
-        while ( ++dividend );
 
         did_init = true;
     }
@@ -419,7 +435,7 @@ namespace detail
     #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         // Possibly reflect a remainder
         static  value_type  reflect( value_type x )
-            { return reflect_unsigned_partially<Bits>(x); }
+            { return reflect_unsigned(x, Bits); }
 
         // Compare a byte to the remainder's highest byte
         static  unsigned char  index( value_type rem, unsigned char x )
@@ -431,7 +447,7 @@ namespace detail
     #else
         // Possibly reflect a remainder
         static  value_type  reflect( value_type x )
-            { return DoReflect ? reflect_unsigned_partially<Bits>(x) : x; }
+            { return DoReflect ? reflect_unsigned(x, Bits) : x; }
 
         // Compare a byte to the remainder's highest byte
         static  unsigned char  index( value_type rem, unsigned char x )
@@ -580,22 +596,7 @@ crc_basic<Bits>::process_bit
     bool  bit
 )
 {
-    value_type const  high_bit_mask = detail::high_bit_mask_c<Bits - 1u>::value;
-
-    // compare the new bit with the remainder's highest
-    rem_ ^= ( bit ? high_bit_mask : 0u );
-
-    // a full polynominal division step is done when the highest bit is one
-    bool const  do_poly_div = static_cast<bool>( rem_ & high_bit_mask );
-
-    // shift out the highest bit
-    rem_ <<= 1;
-
-    // carry out the division, if needed
-    if ( do_poly_div )
-    {
-        rem_ ^= poly_;
-    }
+    detail::crc_modulo_update<Bits>( rem_, bit, poly_ );
 }
 
 template < std::size_t Bits >
@@ -665,7 +666,7 @@ crc_basic<Bits>::checksum
 (
 ) const
 {
-    return ( (rft_out_ ? detail::reflect_unsigned_partially<Bits>( rem_ ) :
+    return ( (rft_out_ ? detail::reflect_unsigned( rem_, Bits ) :
      rem_) ^ final_ ) & detail::low_bits_mask_c<Bits>::value;
 }
 
