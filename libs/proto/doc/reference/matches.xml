@@ -427,24 +427,24 @@ struct IsIntegral2 :
       <struct name="switch_">
         <template>
           <template-type-parameter name="Cases"/>
-	  <template-type-parameter name="Transform"/>
+          <template-type-parameter name="Transform"/>
         </template>
         <inherit><classname>proto::transform</classname>&lt;switch_&lt;Cases, Transform&gt; &gt;</inherit>
         <purpose>For matching one of a set of alternate grammars, which are looked up based on
           the result type of the transform passed in second template parameter. 
-          If no transform is passed, the default one is <computeroutput>proto::tag_of()</computeroutput>
+          If no transform is passed, the default one is <computeroutput><classname>proto::tag_of</classname>&lt;<classname>proto::_</classname>&gt;()</computeroutput>
           so the default matching is based on the expression's tag type. When used as a transform,
           <computeroutput>proto::switch_&lt;&gt;</computeroutput> applies the transform associated
           with the sub-grammar that matches the expression.</purpose>
         <description>
-	      <para>
-	        An expression type <computeroutput>E</computeroutput> matches
+        <para>
+          An expression type <computeroutput>E</computeroutput> matches
             <computeroutput>proto::switch_&lt;C,T&gt;</computeroutput> if
-	        <computeroutput>E</computeroutput> matches
+          <computeroutput>E</computeroutput> matches
             <computeroutput>C::case_&lt;boost::result_of&lt;T(E)&gt;::type&gt;</computeroutput>.
           </para>
-	      <para>
-	        When applying <computeroutput>proto::switch_&lt;C,T&gt;</computeroutput> as a
+        <para>
+          When applying <computeroutput>proto::switch_&lt;C,T&gt;</computeroutput> as a
             transform with an expression <computeroutput>e</computeroutput> of type
             <computeroutput>E</computeroutput>, state <computeroutput>s</computeroutput> of
             type <computeroutput>S</computeroutput> and data <computeroutput>d</computeroutput>
@@ -697,9 +697,10 @@ struct Function :
                 <para>
                   An expression <computeroutput>E</computeroutput> matches
                   <computeroutput>
-                    <classname>proto::switch_</classname>&lt;C&gt;
+                    <classname>proto::switch_</classname>&lt;C, T&gt;
                   </computeroutput> if
-                  <computeroutput>E</computeroutput> matches <computeroutput>C::case_&lt;E::proto_tag&gt;</computeroutput>.
+                  <computeroutput>E</computeroutput> matches <computeroutput>C::case_&lt;boost::result_of&lt;T(E)&gt;::type&gt;</computeroutput>.
+                  Note: <computeroutput>T</computeroutput> defaults to <computeroutput><classname>proto::tag_of</classname>&lt;<classname>proto::_</classname>&gt;()</computeroutput>
                 </para>
               </listitem>
             </itemizedlist>
