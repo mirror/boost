@@ -71,6 +71,14 @@ struct make_binomial_heap_base
         {
             base_type::operator=(std::move(static_cast<base_type&>(rhs)));
             allocator_type::operator=(std::move(static_cast<allocator_type&>(rhs)));
+            return *this;
+        }
+
+        type & operator=(type const & rhs)
+        {
+            base_type::operator=(static_cast<base_type const &>(rhs));
+            allocator_type::operator=(static_cast<allocator_type const &>(rhs));
+            return *this;
         }
 #endif
     };
@@ -215,6 +223,7 @@ public:
             return;
 
         clone_forest(rhs);
+        size_holder::set_size(rhs.get_size());
     }
 
     /// \copydoc boost::heap::priority_queue::operator=(priority_queue const &)
@@ -350,7 +359,7 @@ public:
     handle_type emplace(Args&&... args)
     {
         node_pointer n = allocator_type::allocate(1);
-        new(n) node(super_t::make_node(std::forward<Args>(args)...));
+        new(n) node_type(super_t::make_node(std::forward<Args>(args)...));
 
         insert_node(trees.begin(), n);
 
@@ -619,7 +628,6 @@ private:
         BOOST_HEAP_ASSERT (!rhs.empty());
 
         node_list_iterator this_iterator = trees.begin();
-        node_list_iterator rhs_iterator = rhs.trees.begin();
         node_pointer carry_node = NULL;
 
         while (!rhs.trees.empty()) {
@@ -745,7 +753,6 @@ private:
     {
         while (n->parent) {
             node_pointer parent = n->parent;
-            int parent_children = parent->child_count();
             node_pointer grand_parent = parent->parent;
             if (cmp(n->value, parent->value))
                 return;
@@ -764,8 +771,7 @@ private:
                 trees.insert(it, *n);
             }
             n->add_child(parent);
-            int n_children = n->child_count();
-            BOOST_HEAP_ASSERT(parent_children == n_children);
+            BOOST_HEAP_ASSERT(parent->child_count() == n->child_count());
         }
     }
 

@@ -152,7 +152,7 @@ protected:
         q_(std::move(rhs.q_)), objects(std::move(rhs.objects))
     {}
 
-    priority_queue_mutable_wrapper & operator=(priority_queue_mutabe_wrapper && rhs)
+    priority_queue_mutable_wrapper & operator=(priority_queue_mutable_wrapper && rhs)
     {
         q_ = std::move(rhs.q_);
         objects = std::move(rhs.objects);
@@ -214,15 +214,15 @@ public:
 
     public:
         ordered_iterator(void):
-            adaptor_type(0), q_(NULL), unvisited_nodes(indirect_cmp())
+            adaptor_type(0), unvisited_nodes(indirect_cmp()), q_(NULL)
         {}
 
         ordered_iterator(const priority_queue_mutable_wrapper * q, indirect_cmp const & cmp):
-            adaptor_type(0), q_(q), unvisited_nodes(cmp)
+            adaptor_type(0), unvisited_nodes(cmp), q_(q)
         {}
 
         ordered_iterator(const_list_iterator it, const priority_queue_mutable_wrapper * q, indirect_cmp const & cmp):
-            adaptor_type(it), q_(q), unvisited_nodes(cmp)
+            adaptor_type(it), unvisited_nodes(cmp), q_(q)
         {
             if (it != q->objects.end())
                 discover_nodes(it);

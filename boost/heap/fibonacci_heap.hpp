@@ -72,6 +72,14 @@ struct make_fibonacci_heap_base
         {
             base_type::operator=(std::move(static_cast<base_type&>(rhs)));
             allocator_type::operator=(std::move(static_cast<allocator_type&>(rhs)));
+            return *this;
+        }
+
+        type & operator=(type const & rhs)
+        {
+            base_type::operator=(static_cast<base_type const &>(rhs));
+            allocator_type::operator=(static_cast<allocator_type const &>(rhs));
+            return *this;
         }
 #endif
     };
@@ -212,6 +220,7 @@ public:
             return;
 
         clone_forest(rhs);
+        size_holder::set_size(rhs.size());
     }
 
 #ifdef BOOST_HAS_RVALUE_REFS

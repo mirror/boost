@@ -42,10 +42,21 @@ struct size_holder
         rhs.size_ = 0;
     }
 
+    size_holder(size_holder const & rhs):
+        size_(rhs.size_)
+    {}
+
     size_holder & operator=(size_holder && rhs)
     {
         size_ = rhs.size_;
         rhs.size_ = 0;
+        return *this;
+    }
+
+    size_holder & operator=(size_holder const & rhs)
+    {
+        size_ = rhs.size_;
+        return *this;
     }
 #endif
 
@@ -86,8 +97,18 @@ struct size_holder<false, SizeType>
     size_holder(size_holder && rhs)
     {}
 
-    size_holder & operator=(size_holder && rhs)
+    size_holder(size_holder const & rhs)
     {}
+
+    size_holder & operator=(size_holder && rhs)
+    {
+        return *this;
+    }
+
+    size_holder & operator=(size_holder const & rhs)
+    {
+        return *this;
+    }
 #endif
 
     size_type get_size() const
@@ -140,10 +161,23 @@ struct heap_base:
         size_holder_type(std::move(static_cast<size_holder_type&>(rhs)))
     {}
 
+    heap_base(heap_base const & rhs):
+        Cmp(static_cast<Cmp const &>(rhs)),
+        size_holder_type(static_cast<size_holder_type const &>(rhs))
+    {}
+
     heap_base & operator=(heap_base && rhs)
     {
         Cmp::operator=(std::move(static_cast<Cmp&>(rhs)));
         size_holder_type::operator=(std::move(static_cast<size_holder_type&>(rhs)));
+        return *this;
+    }
+
+    heap_base & operator=(heap_base const & rhs)
+    {
+        Cmp::operator=(static_cast<Cmp const &>(rhs));
+        size_holder_type::operator=(static_cast<size_holder_type const &>(rhs));
+        return *this;
     }
 #endif
 
@@ -236,7 +270,18 @@ struct heap_base<T, Cmp, constant_time_size, StabilityCounterType, true>:
 
         counter_ = rhs.counter_;
         rhs.counter_ = 0;
+        return *this;
     }
+
+    heap_base & operator=(heap_base const & rhs)
+    {
+        Cmp::operator=(static_cast<Cmp const &>(rhs));
+        size_holder_type::operator=(static_cast<size_holder_type const &>(rhs));
+
+        counter_ = rhs.counter_;
+        return *this;
+    }
+
 #endif
 
     bool operator()(internal_type const & lhs, internal_type const & rhs) const

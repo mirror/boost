@@ -13,7 +13,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/void.hpp>
-#include <../boost-trunk/boost/concept_check.hpp>
+#include <boost/concept_check.hpp>
 
 
 namespace boost {
