@@ -10,7 +10,7 @@
     Making Expression Templates Do Useful Work]
 [/================================================================================]
 
-Now that you've written the front end for your DSEL compiler, and you've learned a bit about the intermediate form it produces, it's time to think about what to /do/ with the intermediate form. This is where you put your domain-specific algorithms and optimizations. Proto gives you two ways to evaluate and manipulate expression templates: contexts and transforms.
+Now that you've written the front end for your EDSL compiler, and you've learned a bit about the intermediate form it produces, it's time to think about what to /do/ with the intermediate form. This is where you put your domain-specific algorithms and optimizations. Proto gives you two ways to evaluate and manipulate expression templates: contexts and transforms.
 
 * A /context/ is like a function object that you pass along with an expression to 
   the _eval_ function. It associates behaviors with node types. _eval_ walks the 
@@ -696,7 +696,7 @@ When the second template parameter to _when_ is a function type, _when_ interpre
 
 [note *Transforms are a Domain-Specific Language*
 
-`LeftmostLeaf( proto::_child0 )` /looks/ like an invocation of the `LeftmostLeaf` function object, but it's not, but then it actually is! Why this confusing subterfuge? Function types give us a natural and concise syntax for composing more complicated transforms from simpler ones. The fact that the syntax is suggestive of a function invocation is on purpose. It is a domain-specific embedded language for defining expression transformations. If the subterfuge worked, it may have fooled you into thinking the transform is doing exactly what it actually does! And that's the point.]
+`LeftmostLeaf( proto::_child0 )` /looks/ like an invocation of the `LeftmostLeaf` function object, but it's not, but then it actually is! Why this confusing subterfuge? Function types give us a natural and concise syntax for composing more complicated transforms from simpler ones. The fact that the syntax is suggestive of a function invocation is on purpose. It is a embedded domain-specific language for defining expression transformations. If the subterfuge worked, it may have fooled you into thinking the transform is doing exactly what it actually does! And that's the point.]
 
 The type `LeftmostLeaf( proto::_child0 )` is an example of a /callable transform/. It is a function type that represents a function object to call and its arguments. The types `proto::_child0` and `proto::_value` are /primitive transforms/. They are plain structs, not unlike function objects, from which callable transforms can be composed. There is one other type of transform, /object transforms/, that we'll encounter next.
 
@@ -745,7 +745,7 @@ Proto can't know in general which is which, so it uses a trait, `proto::is_calla
 [section Example: Calculator Arity]
 [/================================]
 
-Now that we have the basics of Proto transforms down, let's consider a slightly more realistic example. We can use transforms to improve the type-safety of the [link boost_proto.users_guide.getting_started.hello_calculator calculator DSEL]. If you recall, it lets you write infix arithmetic expressions involving argument placeholders like `_1` and `_2` and pass them to STL algorithms as function objects, as follows:
+Now that we have the basics of Proto transforms down, let's consider a slightly more realistic example. We can use transforms to improve the type-safety of the [link boost_proto.users_guide.getting_started.hello_calculator calculator EDSL]. If you recall, it lets you write infix arithmetic expressions involving argument placeholders like `_1` and `_2` and pass them to STL algorithms as function objects, as follows:
 
     double a1[4] = { 56, 84, 37, 69 };
     double a2[4] = { 65, 120, 60, 70 };
@@ -777,7 +777,7 @@ Although this works, it's not ideal because it doesn't warn users if they supply
 
 The expression `_1 * _1` defines a unary calculator expression; it takes one argument and squares it. If we pass more than one argument, the extra arguments will be silently ignored, which might be surprising to users. The next expression, `_2 * _2` defines a binary calculator expression; it takes two arguments, ignores the first and squares the second. If we only pass one argument, the code silently fills in `0.0` for the second argument, which is also probably not what users expect. What can be done?
 
-We can say that the /arity/ of a calculator expression is the number of arguments it expects, and it is equal to the largest placeholder in the expression. So, the arity of `_1 * _1` is one, and the arity of `_2 * _2` is two. We can increase the type-safety of our calculator DSEL by making sure the arity of an expression equals the actual number of arguments supplied. Computing the arity of an expression is simple with the help of Proto transforms.
+We can say that the /arity/ of a calculator expression is the number of arguments it expects, and it is equal to the largest placeholder in the expression. So, the arity of `_1 * _1` is one, and the arity of `_2 * _2` is two. We can increase the type-safety of our calculator EDSL by making sure the arity of an expression equals the actual number of arguments supplied. Computing the arity of an expression is simple with the help of Proto transforms.
 
 It's straightforward to describe in words how the arity of an expression should
 be calculated. Consider that calculator expressions can be made of `_1`, `_2`, literals, unary expressions and binary expressions. The following table shows the arities for each of these 5 constituents.

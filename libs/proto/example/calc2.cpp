@@ -60,7 +60,7 @@ struct calculator_expression
       : calculator_expression::proto_extends(expr)
     {}
 
-    BOOST_PROTO_EXTENDS_USING_ASSIGN(calculator_expression)
+    BOOST_PROTO_EXTENDS_USING_ASSIGN(Expr, calculator_expression<Expr>, calculator_domain)
 
     // Override operator () to evaluate the expression
     double operator ()() const
