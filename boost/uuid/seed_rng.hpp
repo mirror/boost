@@ -153,7 +153,8 @@ private:
 
             if(random_)
             {
-                std::fread( buffer, 1, 20, random_ );
+                // the cast to void is to suppress warnings
+                (void)std::fread( buffer, 1, 20, random_ );
             }
 
             // using an uninitialized buffer[] if fopen fails
