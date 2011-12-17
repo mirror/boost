@@ -71,6 +71,14 @@ struct make_binomial_heap_base
         {
             base_type::operator=(std::move(static_cast<base_type&>(rhs)));
             allocator_type::operator=(std::move(static_cast<allocator_type&>(rhs)));
+            return *this;
+        }
+
+        type & operator=(type const & rhs)
+        {
+            base_type::operator=(static_cast<base_type const &>(rhs));
+            allocator_type::operator=(static_cast<allocator_type const &>(rhs));
+            return *this;
         }
 #endif
     };
@@ -215,6 +223,7 @@ public:
             return;
 
         clone_forest(rhs);
+        size_holder::set_size(rhs.get_size());
     }
 
     /// \copydoc boost::heap::priority_queue::operator=(priority_queue const &)
@@ -350,7 +359,7 @@ public:
     handle_type emplace(Args&&... args)
     {
         node_pointer n = allocator_type::allocate(1);
-        new(n) node(super_t::make_node(std::forward<Args>(args)...));
+        new(n) node_type(super_t::make_node(std::forward<Args>(args)...));
 
         insert_node(trees.begin(), n);
 

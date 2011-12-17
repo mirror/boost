@@ -152,7 +152,7 @@ protected:
         q_(std::move(rhs.q_)), objects(std::move(rhs.objects))
     {}
 
-    priority_queue_mutable_wrapper & operator=(priority_queue_mutabe_wrapper && rhs)
+    priority_queue_mutable_wrapper & operator=(priority_queue_mutable_wrapper && rhs)
     {
         q_ = std::move(rhs.q_);
         objects = std::move(rhs.objects);
