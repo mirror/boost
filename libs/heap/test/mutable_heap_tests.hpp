@@ -1,4 +1,9 @@
+// random uses boost.fusion, which clashes with boost.test
+//#define USE_BOOST_RANDOM
+
+#ifdef USE_BOOST_RANDOM
 #include <boost/random.hpp>
+#endif
 
 #include "common_heap_tests.hpp"
 
@@ -207,7 +212,9 @@ void pri_queue_test_increase_function_identity(void)
 template <typename pri_queue>
 void pri_queue_test_erase(void)
 {
-    boost::mt19937 rng;
+#ifdef USE_BOOST_RANDOM
+	boost::mt19937 rng;
+#endif
 
     for (int i = 0; i != test_size; ++i)
     {
@@ -217,10 +224,14 @@ void pri_queue_test_erase(void)
 
         for (int j = 0; j != i; ++j)
         {
-            boost::uniform_int<> range(0, data.size() - 1);
-            boost::variate_generator<boost::mt19937&, boost::uniform_int<> > gen(rng, range);
+#ifdef USE_BOOST_RANDOM
+			boost::uniform_int<> range(0, data.size() - 1);
+			boost::variate_generator<boost::mt19937&, boost::uniform_int<> > gen(rng, range);
 
-            int index = gen();
+			int index = gen();
+#else
+            int index = random() % (data.size() - 1);
+#endif
             q.erase(handles[index]);
             handles.erase(handles.begin() + index);
             data.erase(data.begin() + index);

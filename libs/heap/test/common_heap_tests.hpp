@@ -237,7 +237,7 @@ void pri_queue_test_iterators(void)
         BOOST_REQUIRE(data == data_from_queue);
 
         for (unsigned long i = 0; i != data.size(); ++i) {
-            BOOST_REQUIRE_EQUAL(std::distance(q.begin(), q.end()), data.size() - i);
+            BOOST_REQUIRE_EQUAL((long)std::distance(q.begin(), q.end()), (long)(data.size() - i));
             q.pop();
         }
     }
@@ -265,7 +265,7 @@ void pri_queue_test_ordered_iterators(void)
             BOOST_REQUIRE(std::find(q.ordered_begin(), q.ordered_end(), data[i] + data.size()) == q.ordered_end());
 
         for (unsigned long i = 0; i != data.size(); ++i) {
-            BOOST_REQUIRE_EQUAL(std::distance(q.begin(), q.end()), data.size() - i);
+            BOOST_REQUIRE_EQUAL((long)std::distance(q.begin(), q.end()), (long)(data.size() - i));
             q.pop();
         }
     }

@@ -4,18 +4,16 @@
 
 import testing ;
 
-lib boost_unit_test_framework ;
-
 rule test_all
 {
    local all_rules = ;
 
    for local fileb in [ glob *.cpp ]
    {
-      all_rules += [ run $(fileb) boost_unit_test_framework
+       all_rules += [ run $(fileb) ../../test/build//boost_unit_test_framework/<link>static
       :  # additional args
       :  # test-files
-      :  # requirements
+      : <library>/boost/test//boost_unit_test_framework # requirements
       ] ;
    }
 
