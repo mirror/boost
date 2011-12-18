@@ -79,6 +79,10 @@
       [A type that defines a kind of polymorphic function object that takes three 
        arguments: expression, state, and data. Primitive transforms can be used to 
        compose callable transforms and object transforms.]]
+  [ [ [anchor subdomain] sub-domain]
+      [A sub-domain is a domain that declares another domain as its super-domain.
+      Expressions in sub-domains can be combined with expressions in the
+      super-domain, and the resulting expression is in the super-domain.]]
   [ [ [anchor transform] transform]
       [Transforms are used to manipulate expression trees. They come in three 
        flavors: primitive transforms, callable transforms, or object transforms. A 
