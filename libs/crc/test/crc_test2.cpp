@@ -31,6 +31,11 @@
 #error The expected results assume octet-sized bytes.
 #endif
 
+// Control tests at compile-time
+#ifndef CONTROL_SUB_BYTE_MISMATCHED_REFLECTION_TEST
+#define CONTROL_SUB_BYTE_MISMATCHED_REFLECTION_TEST  0
+#endif
+
 
 // Common definitions  -------------------------------------------------------//
 
@@ -189,6 +194,19 @@ typedef my_crc_test_traits<32u, 0x04C11DB7ul, 0xFFFFFFFFul, true, true,
 typedef boost::mpl::list<my_crc_16_traits, my_crc_ccitt_traits,
  my_crc_32_traits>  crc_test_policies;
 
+// Need to test when ReflectInputBytes and ReflectOutputRemainder differ
+// (Grabbed from table at <http://regregex.bbcmicro.net/crc-catalogue.htm>.)
+typedef my_crc_test_traits<6u, 0x19u, 0u, true, false, 0u, 0x19u>
+  my_crc_6_darc_traits;
+typedef my_crc_test_traits<12u, 0x80Fu, 0u, false, true, 0u, 0xDAFu>
+  my_crc_12_3gpp_traits;
+
+typedef boost::mpl::list<my_crc_16_traits, my_crc_ccitt_traits, my_crc_32_traits
+#if CONTROL_SUB_BYTE_MISMATCHED_REFLECTION_TEST
+ , my_crc_6_darc_traits
+#endif
+ , my_crc_12_3gpp_traits>  crc_extended_test_policies;
+
 // Bit mask constants
 template < std::size_t BitIndex >
 struct high_bit_mask_c
@@ -207,7 +225,7 @@ struct low_bits_mask_c
 BOOST_AUTO_TEST_SUITE( unaugmented_octet_crc_tests )
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( computation_comparison_test, CRCPolicy,
- crc_test_policies )
+ /*crc_test_policies*/crc_extended_test_policies )
 {
     BOOST_AUTO( crc_f, CRCPolicy::make_crc_optimal() );
     BOOST_AUTO( crc_s, CRCPolicy::make_crc_basic() );
