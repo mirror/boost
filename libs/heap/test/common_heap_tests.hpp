@@ -7,7 +7,7 @@
 #include <boost/concept/assert.hpp>
 #include <boost/concept_archetype.hpp>
 
-#include "../../../boost/heap/heap_concepts.hpp"
+#include <boost/heap/heap_concepts.hpp>
 
 
 typedef boost::default_constructible_archetype<
