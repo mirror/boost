@@ -86,12 +86,7 @@ template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
 
 template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly >
     typename uint_t<Bits>::fast  augmented_crc( void const *buffer,
-     std::size_t byte_count, typename uint_t<Bits>::fast initial_remainder
-     BOOST_ACRC_DUMMY_PARM_TYPE );
-
-template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly >
-    typename uint_t<Bits>::fast  augmented_crc( void const *buffer,
-     std::size_t byte_count
+     std::size_t byte_count, typename uint_t<Bits>::fast initial_remainder = 0u
      BOOST_ACRC_DUMMY_PARM_TYPE );
 
 typedef crc_optimal<16, 0x8005, 0, 0, true, true>         crc_16_type;
@@ -888,7 +883,7 @@ crc
 }
 
 
-//  Augmented-message CRC computation function definitions  ------------------//
+//  Augmented-message CRC computation function definition  -------------------//
 
 template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly >
 typename uint_t<Bits>::fast
@@ -896,7 +891,7 @@ augmented_crc
 (
     void const *                 buffer,
     std::size_t                  byte_count,
-    typename uint_t<Bits>::fast  initial_remainder
+    typename uint_t<Bits>::fast  initial_remainder  // = 0u
     BOOST_ACRC_DUMMY_INIT
 )
 {
@@ -920,24 +915,6 @@ augmented_crc
     }
 
     return rem & detail::low_bits_mask_c<Bits>::value;
-}
-
-template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly >
-inline
-typename uint_t<Bits>::fast
-augmented_crc
-(
-    void const *  buffer,
-    std::size_t   byte_count
-    BOOST_ACRC_DUMMY_INIT
-)
-{
-   // The last function argument has its type specified so the other version of
-   // augmented_crc will be called.  If the cast wasn't in place, and the
-   // BOOST_ACRC_DUMMY_INIT added a third argument (for a workaround), the "0"
-   // would match as that third argument, leading to infinite recursion.
-   return augmented_crc<Bits, TruncPoly>( buffer, byte_count,
-    static_cast<typename uint_t<Bits>::fast>(0) );
 }
 
 
