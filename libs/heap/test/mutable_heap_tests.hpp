@@ -3,6 +3,8 @@
 
 #ifdef USE_BOOST_RANDOM
 #include <boost/random.hpp>
+#else
+#include <cstdlib>
 #endif
 
 #include "common_heap_tests.hpp"
@@ -230,7 +232,7 @@ void pri_queue_test_erase(void)
 
 			int index = gen();
 #else
-            int index = random() % (data.size() - 1);
+            int index = rand() % (data.size() - 1);
 #endif
             q.erase(handles[index]);
             handles.erase(handles.begin() + index);
