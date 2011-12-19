@@ -10,7 +10,7 @@
     Making Expression Templates Do Useful Work]
 [/================================================================================]
 
-Now that you've written the front end for your DSEL compiler, and you've learned a bit about the intermediate form it produces, it's time to think about what to /do/ with the intermediate form. This is where you put your domain-specific algorithms and optimizations. Proto gives you two ways to evaluate and manipulate expression templates: contexts and transforms.
+Now that you've written the front end for your EDSL compiler, and you've learned a bit about the intermediate form it produces, it's time to think about what to /do/ with the intermediate form. This is where you put your domain-specific algorithms and optimizations. Proto gives you two ways to evaluate and manipulate expression templates: contexts and transforms.
 
 * A /context/ is like a function object that you pass along with an expression to 
   the _eval_ function. It associates behaviors with node types. _eval_ walks the 
@@ -696,7 +696,7 @@ When the second template parameter to _when_ is a function type, _when_ interpre
 
 [note *Transforms are a Domain-Specific Language*
 
-`LeftmostLeaf( proto::_child0 )` /looks/ like an invocation of the `LeftmostLeaf` function object, but it's not, but then it actually is! Why this confusing subterfuge? Function types give us a natural and concise syntax for composing more complicated transforms from simpler ones. The fact that the syntax is suggestive of a function invocation is on purpose. It is a domain-specific embedded language for defining expression transformations. If the subterfuge worked, it may have fooled you into thinking the transform is doing exactly what it actually does! And that's the point.]
+`LeftmostLeaf( proto::_child0 )` /looks/ like an invocation of the `LeftmostLeaf` function object, but it's not, but then it actually is! Why this confusing subterfuge? Function types give us a natural and concise syntax for composing more complicated transforms from simpler ones. The fact that the syntax is suggestive of a function invocation is on purpose. It is a embedded domain-specific language for defining expression transformations. If the subterfuge worked, it may have fooled you into thinking the transform is doing exactly what it actually does! And that's the point.]
 
 The type `LeftmostLeaf( proto::_child0 )` is an example of a /callable transform/. It is a function type that represents a function object to call and its arguments. The types `proto::_child0` and `proto::_value` are /primitive transforms/. They are plain structs, not unlike function objects, from which callable transforms can be composed. There is one other type of transform, /object transforms/, that we'll encounter next.
 
@@ -745,7 +745,7 @@ Proto can't know in general which is which, so it uses a trait, `proto::is_calla
 [section Example: Calculator Arity]
 [/================================]
 
-Now that we have the basics of Proto transforms down, let's consider a slightly more realistic example. We can use transforms to improve the type-safety of the [link boost_proto.users_guide.getting_started.hello_calculator calculator DSEL]. If you recall, it lets you write infix arithmetic expressions involving argument placeholders like `_1` and `_2` and pass them to STL algorithms as function objects, as follows:
+Now that we have the basics of Proto transforms down, let's consider a slightly more realistic example. We can use transforms to improve the type-safety of the [link boost_proto.users_guide.getting_started.hello_calculator calculator EDSL]. If you recall, it lets you write infix arithmetic expressions involving argument placeholders like `_1` and `_2` and pass them to STL algorithms as function objects, as follows:
 
     double a1[4] = { 56, 84, 37, 69 };
     double a2[4] = { 65, 120, 60, 70 };
@@ -777,7 +777,7 @@ Although this works, it's not ideal because it doesn't warn users if they supply
 
 The expression `_1 * _1` defines a unary calculator expression; it takes one argument and squares it. If we pass more than one argument, the extra arguments will be silently ignored, which might be surprising to users. The next expression, `_2 * _2` defines a binary calculator expression; it takes two arguments, ignores the first and squares the second. If we only pass one argument, the code silently fills in `0.0` for the second argument, which is also probably not what users expect. What can be done?
 
-We can say that the /arity/ of a calculator expression is the number of arguments it expects, and it is equal to the largest placeholder in the expression. So, the arity of `_1 * _1` is one, and the arity of `_2 * _2` is two. We can increase the type-safety of our calculator DSEL by making sure the arity of an expression equals the actual number of arguments supplied. Computing the arity of an expression is simple with the help of Proto transforms.
+We can say that the /arity/ of a calculator expression is the number of arguments it expects, and it is equal to the largest placeholder in the expression. So, the arity of `_1 * _1` is one, and the arity of `_2 * _2` is two. We can increase the type-safety of our calculator EDSL by making sure the arity of an expression equals the actual number of arguments supplied. Computing the arity of an expression is simple with the help of Proto transforms.
 
 It's straightforward to describe in words how the arity of an expression should
 be calculated. Consider that calculator expressions can be made of `_1`, `_2`, literals, unary expressions and binary expressions. The following table shows the arities for each of these 5 constituents.
@@ -1155,6 +1155,174 @@ Once you know that primitive transforms will always receive all three parameters
 )``
 ][``proto::fold<_, proto::_state, StringCopy>``]]
 ]
+
+[endsect]
+
+[/=============================================================]
+[section:external_transforms Separating Grammars And Transforms]
+[/=============================================================]
+
+[note This is an advanced topic that is only necessary for people defining large EDSLs. Feel free to skip this if you're just getting started with Proto.]
+
+So far, we've seen examples of grammars with embedded transforms. In practice, grammars can get pretty large, and you may want to use them to drive several different computations. For instance, you may have a grammar for a linear algebra domain, and you may want to use it to compute the shape of the result (vector or matrix?) and also to compute the result optimally. You don't want to have to copy and paste the whole shebang just to tweak one of the embedded transforms. What you want instead is to define the grammar once, and specify the transforms later when you're ready to evaluate an expression. For that, you use /external transforms/.
+
+Let's begin this exercise by revisiting our old friend the calculator EDSL. Here is a bare-bones front end that defines a domain, a grammar, an expression wrapper, and some placeholder terminals.
+
+    #include <boost/assert.hpp>
+    #include <boost/mpl/int.hpp>
+    #include <boost/fusion/container/vector.hpp>
+    #include <boost/fusion/container/generation/make_vector.hpp>
+    #include <boost/proto/proto.hpp>
+    namespace mpl = boost::mpl;
+    namespace proto = boost::proto;
+    namespace fusion = boost::fusion;
+
+    // The argument placeholder type
+    template<typename I> struct placeholder : I {};
+
+    // The grammar for valid calculator expressions
+    struct calc_grammar
+      : proto::or_<
+            proto::terminal<placeholder<proto::_> >
+          , proto::terminal<int>
+          , proto::plus<calc_grammar, calc_grammar>
+          , proto::minus<calc_grammar, calc_grammar>
+          , proto::multiplies<calc_grammar, calc_grammar>
+          , proto::divides<calc_grammar, calc_grammar>
+        >
+    {};
+
+    template<typename E> struct calc_expr;
+    struct calc_domain : proto::domain<proto::generator<calc_expr> > {};
+
+    template<typename E>
+    struct calc_expr
+      : proto::extends<E, calc_expr<E>, calc_domain>
+    {
+        calc_expr(E const &e = E()) : calc_expr::proto_extends(e) {}
+    };
+
+    calc_expr<proto::terminal<placeholder<mpl::int_<0> > >::type> _1;
+    calc_expr<proto::terminal<placeholder<mpl::int_<1> > >::type> _2;
+
+    int main()
+    {
+        // Build a calculator expression, and do nothing with it.
+        (_1 + _2);
+    }
+
+Now, let's embed transforms into `calc_grammar` so that we can use it to evaluate calculator expressions:
+
+    // The calculator grammar with embedded transforms for evaluating expression.
+    struct calc_grammar
+      : proto::or_<
+            proto::when<
+                proto::terminal<placeholder<proto::_> >
+              , proto::functional::at(proto::_state, proto::_value)
+            >
+          , proto::when<
+                proto::terminal<int>
+              , proto::_value
+            >
+          , proto::when<
+                proto::plus<calc_grammar, calc_grammar>
+              , proto::_default<calc_grammar>
+            >
+          , proto::when<
+                proto::minus<calc_grammar, calc_grammar>
+              , proto::_default<calc_grammar>
+            >
+          , proto::when<
+                proto::multiplies<calc_grammar, calc_grammar>
+              , proto::_default<calc_grammar>
+            >
+          , proto::when<
+                proto::divides<calc_grammar, calc_grammar>
+              , proto::_default<calc_grammar>
+            >
+        >
+    {};
+
+With this definition of `calc_grammar` we can evaluate expressions by passing along a Fusion vector containing the values to use for the `_1` and `_2` placeholders:
+
+    int result = calc_grammar()(_1 + _2, fusion::make_vector(3, 4));
+    BOOST_ASSERT(result == 7);
+
+Now, imagine we want an alternative evaluation strategy that checks for division by zero and throws an exception. Just how rediculous would it be to copy the entire `calc_grammar` just to change the one line that transforms division expressions?! There are a few ways to solve this problem. One would be to make `calc_grammar` a template parameterized on the division transform. Instead, let's use an external transform.
+
+First, we give the division rule in our grammar a "name"; that is, we make it a struct. We'll use this type later to dispatch to the right transforms.
+
+    struct calc_grammar;
+    struct divides_rule : proto::divides<calc_grammar, calc_grammar> {};
+
+Next, we change `calc_grammar` to make the handling of division expressions external.
+
+    // The calculator grammar with an external transform for evaluating
+    // division expressions.
+    struct calc_grammar
+      : proto::or_<
+            /* ... as before ... */
+          , proto::when<
+                divides_rule
+              , proto::external_transform
+            >
+        >
+    {};
+
+The use of `proto::external_transform` above makes the handling of division expressions externally parameterizeable.
+
+Next, we use `proto::external_transforms<>` (note the trailing 's') to capture our evaluation strategy in a bundle that we can pass along to the transform in the data parameter. Read on for the explanation.
+
+    // Evaluate division nodes as before
+    struct non_checked_division
+      : proto::external_transforms<
+            proto::when< divides_rule, proto::_default<calc_grammar> >
+        >
+    {};
+
+    /* ... */
+
+    non_checked_division non_checked;
+    int result2 = calc_grammar()(_1 / _2, fusion::make_vector(6, 2), non_checked);
+
+The struct `non_cecked_division` associates the transform `proto::_default<calc_grammar>` with the `divides_rule` grammar rule. An instance of that struct is passed along as the third parameter when invoking `calc_grammar`.
+
+Now, let's implement checked division. The rest should be unsurprising.
+
+    struct division_by_zero : std::exception {};
+
+    struct do_checked_divide : proto::callable
+    {
+        typedef int result_type;
+        int operator()(int left, int right) const
+        {
+            if (right == 0) throw division_by_zero();
+            return left / right;
+        }
+    };
+
+    struct checked_division
+      : proto::external_transforms<
+            proto::when<
+                divides_rule
+              , do_checked_divide(calc_grammar(proto::_left), calc_grammar(proto::_right))
+            >
+        >
+    {};
+
+    /* ... */
+
+    try
+    {
+        checked_division checked;
+        int result3 = calc_grammar_extern()(_1 / _2, fusion::make_vector(6, 0), checked);
+    }
+    catch(division_by_zero)
+    {
+        std::cout << "caught division by zero!\n";
+    }
+
+The above code demonstrates how a single grammar can be used with different transforms specified externally. This makes it possibly to reuse a grammar to drive several different computations.
 
 [endsect]
 

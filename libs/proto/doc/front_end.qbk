@@ -7,16 +7,16 @@
 
 [/================================================================================]
 [section:front_end Fronts Ends:
-    Defining Terminals and Non-Terminals of Your DSEL]
+    Defining Terminals and Non-Terminals of Your EDSL]
 [/================================================================================]
 
-Here is the fun part: designing your own mini-programming language. In this section we'll talk about the nuts and bolts of designing a DSEL interface using Proto. We'll cover the definition of terminals and lazy functions that the users of your DSEL will get to program with. We'll also talk about Proto's expression template-building operator overloads, and about ways to add additional members to expressions within your domain.
+Here is the fun part: designing your own mini-programming language. In this section we'll talk about the nuts and bolts of designing a EDSL interface using Proto. We'll cover the definition of terminals and lazy functions that the users of your EDSL will get to program with. We'll also talk about Proto's expression template-building operator overloads, and about ways to add additional members to expressions within your domain.
 
 [/=======================]
 [section Making Terminals]
 [/=======================]
 
-As we saw with the Calculator example from the Introduction, the simplest way to get a DSEL up and running is simply to define some terminals, as follows.
+As we saw with the Calculator example from the Introduction, the simplest way to get a EDSL up and running is simply to define some terminals, as follows.
 
     // Define a literal integer Proto expression.
     proto::terminal<int>::type i = {0};
@@ -107,13 +107,13 @@ It does /not/ return the address of the `_1` object. However, there is special c
 [section Making Lazy Functions]
 [/============================]
 
-If we limited ourselves to nothing but terminals and operator overloads, our domain-specific embedded languages wouldn't be very expressive. Imagine that we wanted to extend our calculator DSEL with a full suite of math functions like `sin()` and `pow()` that we could invoke lazily as follows.
+If we limited ourselves to nothing but terminals and operator overloads, our embedded domain-specific languages wouldn't be very expressive. Imagine that we wanted to extend our calculator EDSL with a full suite of math functions like `sin()` and `pow()` that we could invoke lazily as follows.
 
     // A calculator expression that takes one argument
     // and takes the sine of it.
     sin(_1);
 
-We would like the above to create an expression template representing a function invocation. When that expression is evaluated, it should cause the function to be invoked. (At least, that's the meaning of function invocation we'd like the calculator DSEL to have.) You can define `sin` quite simply as follows.
+We would like the above to create an expression template representing a function invocation. When that expression is evaluated, it should cause the function to be invoked. (At least, that's the meaning of function invocation we'd like the calculator EDSL to have.) You can define `sin` quite simply as follows.
 
     // "sin" is a Proto terminal containing a function pointer
     proto::terminal< double(*)(double) >::type const sin = {&std::sin};
@@ -140,7 +140,7 @@ That may look strange at first. It creates an integer terminal with _lit_, and t
 [heading Making Lazy Functions, Continued]
 [/=======================================]
 
-Now, what if we wanted to add a `pow()` function to our calculator DSEL that users could invoke as follows?
+Now, what if we wanted to add a `pow()` function to our calculator EDSL that users could invoke as follows?
 
     // A calculator expression that takes one argument
     // and raises it to the 2nd power
@@ -163,7 +163,7 @@ Before we can write the `pow()` function, we need a function object that wraps a
 
 Now, let's try to define a function template that returns an expression template. We'll use the _function_ metafunction to calculate the type of a Proto expression that represents a function call. It is analogous to _terminal_. (We'll see a couple of different ways to solve this problem, and each will demonstrate another utility for defining Proto front-ends.)
 
-    // Define a lazy pow() function for the calculator DSEL.
+    // Define a lazy pow() function for the calculator EDSL.
     // Can be used as: pow< 2 >(_1)
     template<int Exp, typename Arg>
     typename proto::function<
@@ -219,7 +219,7 @@ Proto expressions can only have other Proto expressions as children. But if we l
 
 What we want is a way to make `Arg` into a Proto terminal if it is not a Proto expression already, and leave it alone if it is. For that, we can use _as_child_. The following implementation of the `pow()` function handles all argument types, expression templates or otherwise.
 
-    // Define a lazy pow() function for the calculator DSEL. Use
+    // Define a lazy pow() function for the calculator EDSL. Use
     // proto::as_child() to Protofy the argument, but only if it
     // is not a Proto expression type to begin with!
     template<int Exp, typename Arg>
@@ -248,7 +248,7 @@ Notice how we use the `proto::result_of::as_child<>` metafunction to calculate t
 
 The versions of the `pow()` function we've seen above are rather verbose. In the return type calculation, you have to be very explicit about wrapping non-Proto types. Worse, you have to restate the return type calculation in the body of `pow()` itself. Proto provides a helper for building expression templates directly that handles these mundane details for you. It's called _make_expr_. We can redefine `pow()` with it as below.
 
-    // Define a lazy pow() function for the calculator DSEL.
+    // Define a lazy pow() function for the calculator EDSL.
     // Can be used as: pow< 2 >(_1)
     template<int Exp, typename Arg>
     typename proto::result_of::make_expr<
@@ -286,7 +286,7 @@ In the [link boost_proto.users_guide.getting_started.hello_calculator Hello Calc
 
     double data[] = {1., 2., 3., 4.};
 
-    // Use the calculator DSEL to square each element ... HOW?
+    // Use the calculator EDSL to square each element ... HOW?
     std::transform( data, data + 4, data, _1 * _1 );
 
 The difficulty, if you recall, was that by default Proto expressions don't have interesting behaviors of their own. They're just trees. In particular, the expression `_1 * _1` won't have an `operator()` that takes a double and returns a double like `std::transform()` expects -- unless we give it one. To make this work, we needed to define an expression wrapper type that defined the `operator()` member function, and we needed to associate the wrapper with the calculator /domain/.
@@ -536,7 +536,7 @@ Now we can use calculator expressions as function objects to STL algorithms, as 
 
     double data[] = {1., 2., 3., 4.};
 
-    // Use the calculator DSEL to square each element ... WORKS! :-)
+    // Use the calculator EDSL to square each element ... WORKS! :-)
     std::transform( data, data + 4, data, _1 * _1 );
 
 [endsect]
@@ -546,7 +546,7 @@ Now we can use calculator expressions as function objects to STL algorithms, as 
 [/==========================================================]
 
 By default, Proto defines every possible operator overload for Protofied
-expressions. This makes it simple to bang together a DSEL. In some cases, however, the presence of Proto's promiscuous overloads can lead to confusion or worse. When that happens, you'll have to disable some of Proto's overloaded operators. That is done by defining the grammar for your domain and specifying it as the second parameter of the _domain_ template.
+expressions. This makes it simple to bang together a EDSL. In some cases, however, the presence of Proto's promiscuous overloads can lead to confusion or worse. When that happens, you'll have to disable some of Proto's overloaded operators. That is done by defining the grammar for your domain and specifying it as the second parameter of the _domain_ template.
 
 In the [link boost_proto.users_guide.getting_started.hello_calculator Hello Calculator] section, we saw an example of a Proto grammar, which is repeated here:
 
@@ -574,7 +574,7 @@ We'll have much more to say about grammars in subsequent sections, but for now, 
 
 The only new addition is `calculator_grammar` as the second template parameter to the _domain_ template. That has the effect of disabling any of Proto's operator overloads that would create an invalid calculator expression.
 
-Another common use for this feature would be to disable Proto's unary `operator&` overload. It may be surprising for users of your DSEL that they cannot take the address of their expressions! You can very easily disable Proto's unary `operator&` overload for your domain with a very simple grammar, as below:
+Another common use for this feature would be to disable Proto's unary `operator&` overload. It may be surprising for users of your EDSL that they cannot take the address of their expressions! You can very easily disable Proto's unary `operator&` overload for your domain with a very simple grammar, as below:
 
     // For expressions in my_domain, disable Proto's
     // unary address-of operator.
@@ -658,9 +658,9 @@ The invocation of the _DEFINE_OPERATORS_ macro defines a complete set of operato
 [section:code_repetition Generating Repetitive Code with the Preprocessor]
 [/=======================================================================]
 
-Sometimes as a DSEL designer, to make the lives of your users easy, you have to make your own life hard. Giving your users natural and flexible syntax often involves writing large numbers of repetitive function overloads. It can be enough to give you repetitive stress injury! Before you hurt yourself, check out the macros Proto provides for automating many repetitive code-generation chores.
+Sometimes as a EDSL designer, to make the lives of your users easy, you have to make your own life hard. Giving your users natural and flexible syntax often involves writing large numbers of repetitive function overloads. It can be enough to give you repetitive stress injury! Before you hurt yourself, check out the macros Proto provides for automating many repetitive code-generation chores.
 
-Imagine that we are writing a lambda DSEL, and we would like to enable syntax for constructing temporary objects of any type using the following syntax:
+Imagine that we are writing a lambda EDSL, and we would like to enable syntax for constructing temporary objects of any type using the following syntax:
 
     // A lambda expression that takes two arguments and
     // uses them to construct a temporary std::complex<>
@@ -729,6 +729,107 @@ Now that we have turned our function into a macro, we can pass the macro to _REP
 As mentioned above, Proto passes as the last 4 arguments to your macro the names of other macros that generate various sequences. The macros _REPEAT_ and _REPEAT_FROM_TO_ select defaults for these parameters. If the defaults do not meet your needs, you can use _REPEAT_EX_ and _REPEAT_FROM_TO_EX_ and pass different macros that generate different sequences. Proto defines a number of such macros for use as parameters to _REPEAT_EX_ and _REPEAT_FROM_TO_EX_. Check the reference section for [headerref boost/proto/repeat.hpp] for all the details.
 
 Also, check out _LOCAL_ITERATE_. It works similarly to _REPEAT_ and friends, but it can be easier to use when you want to change one macro argument and accept defaults for the others.
+
+[endsect]
+
+[/======================================================]
+[section:subdomains EDSL Interoperatability: Sub-Domains]
+[/======================================================]
+
+The ability to /compose/ different EDSLs is one of their most exciting features. Consider how you build a parser using yacc. You write your grammar rules in yacc's domain-specific language. Then you embed semantic actions written in C within your grammar. Boost's Spirit parser generator gives you the same ability. You write grammar rules using Spirit and embed semantic actions using the Phoenix library. Phoenix and Spirit are both Proto-based domain-specific languages with their own distinct syntax and semantics. But you can freely embed Phoenix expressions within Spirit expressions. This section describes Proto's /sub-domain/ feature that lets you define famalies of interoperable domains.
+
+[/======================]
+[heading Dueling Domains]
+[/======================]
+
+Sub-domains solve a specific problem that only comes up when you try to create an expression from two sub-expressions in different domains: what is the domain of the resulting expression? Consider the following code:
+
+    #include <boost/proto/proto.hpp>
+    namespace proto = boost::proto;
+
+    // Forward-declare two expression wrappers
+    template<typename E> struct spirit_expr;
+    template<typename E> struct phoenix_expr;
+
+    // Define two domains
+    struct spirit_domain  : proto::domain<proto::generator<spirit_expr> > {};
+    struct phoenix_domain : proto::domain<proto::generator<phoenix_expr> > {};
+
+    // Implement the two expresison wrappers
+    template<typename E>
+    struct spirit_expr
+      : proto::extends<E, spirit_expr<E>, spirit_domain>
+    {
+        spirit_expr(E const &e = E()) : spirit_expr::proto_extends(e) {}
+    };
+
+    template<typename E>
+    struct phoenix_expr
+      : proto::extends<E, phoenix_expr<E>, phoenix_domain>
+    {
+        phoenix_expr(E const &e = E()) : phoenix_expr::proto_extends(e) {}
+    };
+
+    int main()
+    {
+        proto::literal<int, spirit_domain> sp(0);
+        proto::literal<int, phoenix_domain> phx(0);
+
+        // Whoops! What does it mean to add two expression in different domains?
+        sp + phx; // ERROR
+    }
+
+Above, we define two domains called `spirit_domain` and `phoenix_domain` and declare two int literals in each. Then we try to compose them into a larger expression using Proto's binary plus operator, and it fails. Proto can't figure out whether the resulting expression should be in the Spirit domain or the Phoenix domain, and thus whether it should be an instance of `spirit_expr<>` or `pheonix_expr<>`. We have to tell Proto how to resolve the conflict. We can do that by declaring that Phoenix is a sub-domain of Spirit as in the following definition of `phoenix_domain`:
+
+    // Declare that phoenix_domain is a sub-somain of spirit_domain
+    struct phoenix_domain
+      : proto::domain<proto::generator<phoenix_expr>, proto::_, spirit_domain>
+    {};
+
+The third template parameter to _domain_ is the super-domain. By defining `phoenix_domain` as above, we are saying that Phoenix expressions can be combined with Spirit expressions, and that when that happens, the resulting expression should be a Spirit expression.
+
+[note If you are wondering what the purpose of `proto::_` is in the definition of `phoenix_domain` above, recall that the second template parameter to _domain_ is the domain's grammar. ["`proto::_`] is the default and signifies that the domain places no restrictions on the expressions that are valid within it.]
+
+[/------------------------]
+[heading Domain Resolution]
+[/------------------------]
+
+When there are multiple domains in play within a given expression, Proto uses some rules to figure out which domain "wins". The rules are loosly modeled on the rules for C++ inheritance. `Phoenix_domain` is a sub-domain of `spirit_domain`. You can liken that to a derived/base relationship that gives Phoenix expressions a kind of implicit conversion to Spirit expressions. And since Phoenix expressions can be "converted" to Spirit expressions, they can be freely combined with Spirit expressions and the result is a Spirit expression.
+
+[note Super- and sub-domains are not actually implemented using inheritance. This is only a helpful mental model.]
+
+The analogy with inheritance holds even in the case of three domains when two are sub-domains of the third. Imagine another domain called `foobar_domain` that was also a sub-domain of `spirit_domain`. Expressions in the `foobar_domain` could be combined with expressions in the `phoenix_domain` and the resulting expression would be in the `spirit_domain`. That's because expressions in the two sub-domains both have "conversions" to the super-domain, so the operation is allowed and the super-domain wins.
+
+[/-------------------------]
+[heading The Default Domain]
+[/-------------------------]
+
+When you don't assign a Proto expression to a particular domain, Proto considers it a member of the so-called default domain, `proto::default_domain`. Even non-Proto objects are treated as terminals in the default domain. Consider:
+
+    int main()
+    {
+        proto::literal<int, spirit_domain> sp(0);
+
+        // Add 1 to a spirit expression. Result is a spirit expression.
+        sp + 1;
+    }
+
+In light of the above discussion about sub-domains, you might consider `proto::default_domain` as a sub-domain of every other domain. Expressions in the default domain have a kind of implicit conversion to every other domain type. That's exactly how Proto sees it! What's more, you can define your domain to be a sub-domain of the default domain. In so doing, you give expression in your domain conversions to expressions in /every other domain/. This is like a "free love" domain, because it will freely mix with all other domains.
+
+Let's think again about the Phoenix EDSL. Since it provides generally useful lambda functionionality, it's reasonable to assume that lots of other EDSLs besides Spirit might want the ability to embed Phoenix expressions. In other words, `phoenix_domain` should be a sub-domain of `proto::default_domain`, not `spirit_domain`:
+
+    // Declare that phoenix_domain is a sub-somain of proto::default_domain
+    struct phoenix_domain
+      : proto::domain<proto::generator<phoenix_expr>, proto::_, proto::default_domain>
+    {};
+
+That's much better. Phoenix expressions can now be put anywhere.
+
+[/-------------------------]
+[heading Sub-Domain Summary]
+[/-------------------------]
+
+Use Proto sub-domains to make it possible to mix expressions from multiple domains. And when you want expressions in your domain to freely combine with /all/ expressions, make it a sub-domain of `proto::default_domain`.
 
 [endsect]
 

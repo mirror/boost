@@ -10,7 +10,7 @@
     <description>
       <para>
         <computeroutput>BOOST_PROTO_REPEAT()</computeroutput> is used to generate the kind of repetitive
-        code that is typical of DSELs built with Proto.
+        code that is typical of EDSLs built with Proto.
         <computeroutput>BOOST_PROTO_REPEAT(<replaceable>MACRO</replaceable>)</computeroutput>
         is equivalent to:
       </para>
@@ -37,7 +37,7 @@
     <description>
       <para>
         <computeroutput>BOOST_PROTO_REPEAT_FROM_TO()</computeroutput> is used to generate the kind of repetitive
-        code that is typical of DSELs built with Proto.
+        code that is typical of EDSLs built with Proto.
         <computeroutput>BOOST_PROTO_REPEAT_FROM_TO(<replaceable>FROM</replaceable>, <replaceable>TO</replaceable>, <replaceable>MACRO</replaceable>)</computeroutput>
         is equivalent to:
       </para>
@@ -126,7 +126,7 @@ construct(A0 const &amp; a0, A1 const &amp; a1)
     <description>
       <para>
         <computeroutput>BOOST_PROTO_REPEAT_EX()</computeroutput> is used to generate the kind of repetitive
-        code that is typical of DSELs built with Proto.
+        code that is typical of EDSLs built with Proto.
         <computeroutput>BOOST_PROTO_REPEAT_EX(<replaceable>MACRO</replaceable>, <replaceable>typename_A</replaceable>, <replaceable>A</replaceable>, <replaceable>A_a</replaceable>, <replaceable>a</replaceable>)</computeroutput>
         is equivalent to:
       </para>
@@ -157,7 +157,7 @@ construct(A0 const &amp; a0, A1 const &amp; a1)
     <description>
       <para>
         <computeroutput>BOOST_PROTO_REPEAT_FROM_TO_EX()</computeroutput> is used to generate the kind of repetitive
-        code that is typical of DSELs built with Proto.
+        code that is typical of EDSLs built with Proto.
         <computeroutput>BOOST_PROTO_REPEAT_FROM_TO_EX(<replaceable>FROM</replaceable>, <replaceable>TO</replaceable>, <replaceable>MACRO</replaceable>, <replaceable>typename_A</replaceable>, <replaceable>A</replaceable>, <replaceable>A_a</replaceable>, <replaceable>a</replaceable>)</computeroutput>
         is equivalent to:
       </para>
@@ -181,7 +181,7 @@ construct(A0 const &amp; a0, A1 const &amp; a1)
     <description>
       <para>
         <computeroutput>BOOST_PROTO_LOCAL_ITERATE()</computeroutput> is used generate the kind of repetitive code that is typical
-        of DSELs built with Proto. This macro causes the user-defined macro <computeroutput>BOOST_PROTO_LOCAL_MACRO()</computeroutput> to
+        of EDSLs built with Proto. This macro causes the user-defined macro <computeroutput>BOOST_PROTO_LOCAL_MACRO()</computeroutput> to
         be expanded with values in the range specified by <computeroutput>BOOST_PROTO_LOCAL_LIMITS</computeroutput>.
       </para>
       <para>
