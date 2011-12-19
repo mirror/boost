@@ -18,6 +18,7 @@
 [import ../example/map_assign.cpp]
 [import ../example/futures.cpp]
 [import ../example/mini_lambda.cpp]
+[import ../example/external_transforms.cpp]
 
 [/===============]
 [section Examples]
@@ -155,6 +156,16 @@ An advanced example of a Proto transform that implements Howard Hinnant's design
 This is an advanced example that shows how to implement a simple lambda EDSL with Proto, like the Boost.Lambda_library. It uses contexts, transforms and expression extension.
 
 [Lambda]
+
+[endsect]
+
+[/===============================================================================]
+[section:checked_calc Checked Calculator: A Simple Example of External Transforms]
+[/===============================================================================]
+
+This is an advanced example that shows how to externally parameterize a grammar's transforms. It defines a calculator EDSL with a grammar that can perform either checked or unchecked arithmetic.
+
+[CheckedCalc]
 
 [endsect]
 
