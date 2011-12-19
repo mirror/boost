@@ -65,7 +65,7 @@ template <typename pri_queue, typename data_container>
 void fill_emplace_q(pri_queue & q, data_container const & data)
 {
     for (unsigned int i = 0; i != data.size(); ++i) {
-        auto value = data[i];
+        typename pri_queue::value_type value = data[i];
         q.emplace(std::move(value));
     }
 }
