@@ -132,7 +132,10 @@ private:
             unvisited_nodes.push(i);
     }
 
-    std::priority_queue<size_t, std::vector<size_t, Alloc>, compare_by_heap_value> unvisited_nodes;
+    std::priority_queue<size_t,
+                        std::vector<size_t, typename Alloc::template rebind<size_t>::other >,
+                        compare_by_heap_value
+                       > unvisited_nodes;
 };
 
 

@@ -96,7 +96,7 @@ struct unordered_tree_iterator_storage
         return data_.empty();
     }
 
-    std::vector<HandleType, Alloc> data_;
+    std::vector<HandleType, typename Alloc::template rebind<HandleType>::other > data_;
 };
 
 template <typename ValueType,
@@ -148,7 +148,9 @@ struct ordered_tree_iterator_storage:
         return data_.empty();
     }
 
-    std::priority_queue<HandleType, std::vector<HandleType, Alloc>, compare_values_by_handle> data_;
+    std::priority_queue<HandleType,
+                        std::vector<HandleType, typename Alloc::template rebind<HandleType>::other>,
+                        compare_values_by_handle> data_;
 };
 
 

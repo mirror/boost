@@ -178,7 +178,7 @@ public:
     {}
 #endif
 
-protected:
+/* protected:                      */
     heap_node(heap_node const & rhs):
         value(rhs.value)
     {

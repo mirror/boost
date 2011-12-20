@@ -65,7 +65,8 @@ class d_ary_heap:
     typedef typename heap_base_maker::type super_t;
     typedef typename super_t::internal_type internal_type;
 
-    typedef std::vector<internal_type, typename heap_base_maker::allocator_argument> container_type;
+    typedef typename heap_base_maker::allocator_argument::template rebind<internal_type>::other internal_type_allocator;
+    typedef std::vector<internal_type, internal_type_allocator> container_type;
     typedef typename container_type::const_iterator container_iterator;
 
     typedef typename IndexUpdater::template rebind<internal_type>::other index_updater;
