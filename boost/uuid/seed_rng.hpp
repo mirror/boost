@@ -153,8 +153,9 @@ private:
 
             if(random_)
             {
-                // the cast to void is to suppress warnings
-                (void)std::fread( buffer, 1, 20, random_ );
+                // the not_used variable is to suppress warnings
+                size_t not_used = 0;
+                not_used = std::fread( buffer, 1, 20, random_ );
             }
 
             // using an uninitialized buffer[] if fopen fails
