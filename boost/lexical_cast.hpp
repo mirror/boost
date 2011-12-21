@@ -586,7 +586,7 @@ namespace boost
             --end;
             value = 0;
 
-            if ( *end < czero || *end >= czero + 10 || begin > end)
+            if (begin > end || *end < czero || *end >= czero + 10)
                 return false;
             value = *end - czero;
             --end;
@@ -684,6 +684,7 @@ namespace boost
             , const CharT opening_brace, const CharT closing_brace)
         {
             using namespace std;
+            if (begin == end) return false;
             const CharT minus = lcast_char_constants<CharT>::minus;
             const CharT plus = lcast_char_constants<CharT>::plus;
             const int inifinity_size = 8;
@@ -1183,7 +1184,7 @@ namespace boost
                 bool const result = !(stream << input).fail();
                 start = stringbuffer.pbase();
                 finish = stringbuffer.pptr();
-                return result && (start != finish);
+                return result;
             }
 
             template <class T>
@@ -1358,6 +1359,7 @@ namespace boost
             template <typename Type>
             bool shr_unsigned(Type& output)
             {
+                if (start == finish) return false;
                 CharT const minus = lcast_char_constants<CharT>::minus;
                 CharT const plus = lcast_char_constants<CharT>::plus;
                 bool has_minus = false;
@@ -1392,6 +1394,7 @@ namespace boost
             template <typename Type>
             bool shr_signed(Type& output)
             {
+                if (start == finish) return false;
                 CharT const minus = lcast_char_constants<CharT>::minus;
                 CharT const plus = lcast_char_constants<CharT>::plus;
                 typedef BOOST_DEDUCED_TYPENAME make_unsigned<Type>::type utype;
