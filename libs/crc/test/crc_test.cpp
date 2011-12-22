@@ -456,12 +456,12 @@ timing_test
      quick_result, ran_data, sizeof(ran_data) );
 
     // Report results
-    cout << "\tThe optimal Boost version is " << (quick_rate - optimal_rate)
-     / quick_rate * 100.0 << "% slower than the reference version.\n";
-    cout << "\tThe basic Boost version is " << (quick_rate - basic_rate)
-     / quick_rate * 100.0 << "% slower than the reference version.\n";
-    cout << "\tThe basic Boost version is " << (optimal_rate - basic_rate)
-     / optimal_rate * 100.0 << "% slower than the optimal Boost version."
+    cout << "\tThe optimal Boost version has " << optimal_rate / quick_rate *
+     100.0 << "% the speed of the reference version.\n";
+    cout << "\tThe basic Boost version has " << basic_rate / quick_rate * 100.0
+     << "% the speed of the reference version.\n";
+    cout << "\tThe basic Boost version has " << basic_rate / optimal_rate *
+     100.0 << "% the speed of the optimal Boost version."
      << endl;
 }
 
