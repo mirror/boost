@@ -8,8 +8,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_CONTAINERS_CONTAINERS_FWD_HPP
-#define BOOST_CONTAINERS_CONTAINERS_FWD_HPP
+#ifndef BOOST_CONTAINER_CONTAINER_FWD_HPP
+#define BOOST_CONTAINER_CONTAINER_FWD_HPP
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -26,7 +26,7 @@ namespace intrusive{
    //Create namespace to avoid compilation errors
 }}
 
-namespace boost{ namespace container{ namespace containers_detail{
+namespace boost{ namespace container{ namespace container_detail{
 
 namespace bi = boost::intrusive;
 
@@ -195,4 +195,4 @@ struct dummy
 
 }}  //namespace boost { namespace container {
 
-#endif //#ifndef BOOST_CONTAINERS_CONTAINERS_FWD_HPP
+#endif //#ifndef BOOST_CONTAINER_CONTAINER_FWD_HPP

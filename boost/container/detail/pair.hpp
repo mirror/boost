@@ -10,8 +10,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_CONTAINERS_CONTAINERS_DETAIL_PAIR_HPP
-#define BOOST_CONTAINERS_CONTAINERS_DETAIL_PAIR_HPP
+#ifndef BOOST_CONTAINER_CONTAINER_DETAIL_PAIR_HPP
+#define BOOST_CONTAINER_CONTAINER_DETAIL_PAIR_HPP
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -28,13 +28,13 @@
 #include <boost/move/move.hpp>
 #include <boost/type_traits/is_class.hpp>
 
-#ifndef BOOST_CONTAINERS_PERFECT_FORWARDING
+#ifndef BOOST_CONTAINER_PERFECT_FORWARDING
 #include <boost/container/detail/preprocessor.hpp>
 #endif
 
 namespace boost {
 namespace container { 
-namespace containers_detail {
+namespace container_detail {
 
 template <class T1, class T2>
 struct pair;
@@ -143,13 +143,13 @@ struct pair
 /*
    //Variadic versions
    template<class U>
-   pair(BOOST_CONTAINERS_PARAM(U, u), typename containers_detail::disable_if
-         < containers_detail::is_pair< typename containers_detail::remove_ref_const<U>::type >, pair_nat>::type* = 0)
+   pair(BOOST_CONTAINER_PP_PARAM(U, u), typename container_detail::disable_if
+         < container_detail::is_pair< typename container_detail::remove_ref_const<U>::type >, pair_nat>::type* = 0)
       : first(::boost::forward<U>(u))
       , second()
    {}
 
-   #ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
+   #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    template<class U, class V, class ...Args>
    pair(U &&u, V &&v)
@@ -161,13 +161,13 @@ struct pair
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                            \
    template<class U, BOOST_PP_ENUM_PARAMS(n, class P)>                                        \
-   pair(BOOST_CONTAINERS_PARAM(U, u)                                                          \
-       ,BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))                                  \
+   pair(BOOST_CONTAINER_PP_PARAM(U, u)                                                          \
+       ,BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                                  \
       : first(::boost::forward<U>(u))                             \
-      , second(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _))                        \
+      , second(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))                        \
    {}                                                                                         \
    //!
-   #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINERS_MAX_CONSTRUCTOR_PARAMETERS)
+   #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
    #endif
 */
@@ -280,7 +280,7 @@ inline void swap(pair<T1, T2>& x, pair<T1, T2>& y)
    swap(x.second, y.second);
 }
 
-}  //namespace containers_detail { 
+}  //namespace container_detail { 
 }  //namespace container { 
 
 
@@ -291,7 +291,7 @@ template<class T>
 struct is_enum;
 
 template<class T, class U>
-struct is_enum< ::boost::container::containers_detail::pair<T, U> >
+struct is_enum< ::boost::container::container_detail::pair<T, U> >
 {
    static const bool value = false;
 };
@@ -299,14 +299,14 @@ struct is_enum< ::boost::container::containers_detail::pair<T, U> >
 //This specialization is needed to avoid instantiation of pair in
 //is_class, and allow recursive maps.
 template <class T1, class T2>
-struct is_class< ::boost::container::containers_detail::pair<T1, T2> >
+struct is_class< ::boost::container::container_detail::pair<T1, T2> >
    : public ::boost::true_type
 {};
 
 #ifdef BOOST_NO_RVALUE_REFERENCES
 
 template<class T1, class T2>
-struct has_move_emulation_enabled< ::boost::container::containers_detail::pair<T1, T2> >
+struct has_move_emulation_enabled< ::boost::container::container_detail::pair<T1, T2> >
    : ::boost::true_type
 {};
 
@@ -317,4 +317,4 @@ struct has_move_emulation_enabled< ::boost::container::containers_detail::pair<T
 
 #include <boost/container/detail/config_end.hpp>
 
-#endif   //#ifndef BOOST_CONTAINERS_DETAIL_PAIR_HPP
+#endif   //#ifndef BOOST_CONTAINER_DETAIL_PAIR_HPP

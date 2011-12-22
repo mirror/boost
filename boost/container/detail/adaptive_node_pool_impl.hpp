@@ -19,7 +19,7 @@
 #include <boost/container/container_fwd.hpp>
 #include <boost/container/detail/workaround.hpp>
 #include <boost/container/detail/utilities.hpp>
-#include <boost/pointer_to_other.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 #include <boost/intrusive/set.hpp>
 #include <boost/intrusive/slist.hpp>
 #include <boost/container/detail/type_traits.hpp>
@@ -31,7 +31,7 @@
 
 namespace boost {
 namespace container {
-namespace containers_detail {
+namespace container_detail {
 
 template<class size_type>
 struct hdr_offset_holder_t
@@ -221,7 +221,7 @@ class private_adaptive_node_pool_impl
 
    //!Returns the segment manager. Never throws
    segment_manager_base_type* get_segment_manager_base()const
-   {  return containers_detail::get_pointer(mp_segment_mngr_base);  }
+   {  return container_detail::to_raw_pointer(mp_segment_mngr_base);  }
 
    //!Allocates array of count elements. Can throw
    void *allocate_node()
@@ -348,7 +348,7 @@ class private_adaptive_node_pool_impl
    {
       block_iterator block_it(m_block_multiset.end());
       while(n--){
-         void *pElem = containers_detail::get_pointer(chain.front());
+         void *pElem = container_detail::to_raw_pointer(chain.front());
          chain.pop_front();
          priv_invariants();
          block_info_t *block_info = this->priv_block_from_node(pElem);
@@ -434,7 +434,7 @@ class private_adaptive_node_pool_impl
          (void)free_nodes;
          BOOST_ASSERT(free_nodes == mp_impl->m_real_num_node);
          BOOST_ASSERT(0 == to_deallocate->hdr_offset);
-         hdr_offset_holder *hdr_off_holder = mp_impl->priv_first_subblock_from_block(containers_detail::get_pointer(to_deallocate));
+         hdr_offset_holder *hdr_off_holder = mp_impl->priv_first_subblock_from_block(container_detail::to_raw_pointer(to_deallocate));
          mp_impl->mp_segment_mngr_base->deallocate(hdr_off_holder);
       }
 
@@ -557,7 +557,7 @@ class private_adaptive_node_pool_impl
             (mp_segment_mngr_base->allocate_aligned(real_block_size, m_real_block_alignment));
          if(!mem_address)   throw std::bad_alloc();
          ++m_totally_free_blocks;
-         block_info_t *c_info = new(mem_address)block_info_t;
+         block_info_t *c_info = new(mem_address)block_info_t();
          m_block_multiset.insert(m_block_multiset.end(), *c_info);
          
          mem_address += HdrSize;
@@ -587,7 +587,7 @@ class private_adaptive_node_pool_impl
 
          //First initialize header information on the last subblock
          char *hdr_addr = mem_address + m_real_block_alignment*(m_num_subblocks-1);
-         block_info_t *c_info = new(hdr_addr)block_info_t;
+         block_info_t *c_info = new(hdr_addr)block_info_t();
          //Some structural checks
          BOOST_ASSERT(static_cast<void*>(&static_cast<hdr_offset_holder*>(c_info)->hdr_offset) ==
                 static_cast<void*>(c_info));
@@ -622,8 +622,8 @@ class private_adaptive_node_pool_impl
    {  return priv_alloc_block(n, IsAlignOnly());   }
 
    private:
-   typedef typename boost::pointer_to_other
-      <void_pointer, segment_manager_base_type>::type   segment_mngr_base_ptr_t;
+   typedef typename boost::intrusive::pointer_traits
+      <void_pointer>::template rebind_pointer<segment_manager_base_type>::type   segment_mngr_base_ptr_t;
    const size_type m_max_free_blocks;
    const size_type m_real_node_size;
    //Round the size to a power of two value.
@@ -639,7 +639,7 @@ class private_adaptive_node_pool_impl
    size_type                            m_totally_free_blocks;  //Free blocks
 };
 
-}  //namespace containers_detail {
+}  //namespace container_detail {
 }  //namespace container {
 }  //namespace boost {
 

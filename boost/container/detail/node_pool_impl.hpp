@@ -19,7 +19,7 @@
 #include <boost/container/container_fwd.hpp>
 #include <boost/container/detail/workaround.hpp>
 #include <boost/container/detail/utilities.hpp>
-#include <boost/pointer_to_other.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 #include <boost/intrusive/set.hpp>
 #include <boost/intrusive/slist.hpp>
 #include <boost/container/detail/type_traits.hpp>
@@ -32,7 +32,7 @@
 
 namespace boost {
 namespace container {
-namespace containers_detail {
+namespace container_detail {
 
 template<class SegmentManagerBase>
 class private_node_pool_impl
@@ -82,7 +82,7 @@ class private_node_pool_impl
 
    //!Returns the segment manager. Never throws
    segment_manager_base_type* get_segment_manager_base()const
-   {  return containers_detail::get_pointer(mp_segment_mngr_base);  }
+   {  return container_detail::to_raw_pointer(mp_segment_mngr_base);  }
 
    void *allocate_node()
    {  return priv_alloc_node();  }
@@ -346,8 +346,8 @@ class private_node_pool_impl
    }
 
    private:
-   typedef typename boost::pointer_to_other
-      <void_pointer, segment_manager_base_type>::type   segment_mngr_base_ptr_t;
+   typedef typename boost::intrusive::pointer_traits
+      <void_pointer>::template rebind_pointer<segment_manager_base_type>::type   segment_mngr_base_ptr_t;
 
    const size_type m_nodes_per_block;
    const size_type m_real_node_size;
@@ -358,7 +358,7 @@ class private_node_pool_impl
 };
 
 
-}  //namespace containers_detail {
+}  //namespace container_detail {
 }  //namespace container {
 }  //namespace boost {
 
