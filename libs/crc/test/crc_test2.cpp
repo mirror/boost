@@ -47,7 +47,9 @@ unsigned char const  std_data[] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
 std::size_t const    std_data_len = sizeof( std_data ) / sizeof( std_data[0] );
 
 // Checksums of the standard test data for common configurations
-boost::uint16_t const  std_crc_ccitt_result = 0x29B1u;
+boost::uint16_t const  std_crc_ccitt_false_result = 0x29B1u;
+boost::uint16_t const  std_crc_ccitt_true_result = 0x2189u;
+boost::uint16_t const  std_crc_xmodem_result = 0x31C3u;
 boost::uint16_t const  std_crc_16_result = 0xBB3Du;
 boost::uint32_t const  std_crc_32_result = 0xCBF43926ul;
 
@@ -187,12 +189,17 @@ public:
 typedef my_crc_test_traits<16u, 0x8005u, 0u, true, true, 0u, std_crc_16_result>
   my_crc_16_traits;
 typedef my_crc_test_traits<16u, 0x1021u, 0xFFFFu, false, false, 0u,
- std_crc_ccitt_result>  my_crc_ccitt_traits;
+ std_crc_ccitt_false_result>  my_crc_ccitt_false_traits;
+typedef my_crc_test_traits<16u, 0x1021u, 0u, true, true, 0u,
+ std_crc_ccitt_true_result>  my_crc_ccitt_true_traits;
+typedef my_crc_test_traits<16u, 0x1021u, 0u, false, false, 0u,
+ std_crc_xmodem_result>  my_crc_xmodem_traits;
 typedef my_crc_test_traits<32u, 0x04C11DB7ul, 0xFFFFFFFFul, true, true,
  0xFFFFFFFFul, std_crc_32_result>  my_crc_32_traits;
 
-typedef boost::mpl::list<my_crc_16_traits, my_crc_ccitt_traits,
- my_crc_32_traits>  crc_test_policies;
+typedef boost::mpl::list<my_crc_16_traits, my_crc_ccitt_false_traits,
+ my_crc_ccitt_true_traits, my_crc_xmodem_traits, my_crc_32_traits>
+  crc_test_policies;
 
 // Need to test when ReflectInputBytes and ReflectOutputRemainder differ
 // (Grabbed from table at <http://regregex.bbcmicro.net/crc-catalogue.htm>.)
@@ -201,7 +208,8 @@ typedef my_crc_test_traits<6u, 0x19u, 0u, true, false, 0u, 0x19u>
 typedef my_crc_test_traits<12u, 0x80Fu, 0u, false, true, 0u, 0xDAFu>
   my_crc_12_3gpp_traits;
 
-typedef boost::mpl::list<my_crc_16_traits, my_crc_ccitt_traits, my_crc_32_traits
+typedef boost::mpl::list<my_crc_16_traits, my_crc_ccitt_false_traits
+ , my_crc_ccitt_true_traits, my_crc_xmodem_traits, my_crc_32_traits
 #if CONTROL_SUB_BYTE_MISMATCHED_REFLECTION_TEST
  , my_crc_6_darc_traits
 #endif

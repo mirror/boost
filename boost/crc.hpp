@@ -20,6 +20,11 @@
     Contains the declarations (and definitions) of various kinds of CRC
     computation functions, function object types, and encapsulated policy types.
 
+    \warning  The sample CRC-computer types were just checked against the
+      <a href="http://regregex.bbcmicro.net/crc-catalogue.htm">Catalogue of
+      parametrised CRC algorithms</a>.  New type aliases were added where I got
+      a standard wrong.  However, the mistaken <code>typedef</code>s are still
+      there for backwards compatibility.
     \note  There are references to the <i>Rocksoft&trade; Model CRC
       Algorithm</i>, as described within \"<cite>A Painless Guide to CRC Error
       Detection Algorithms</cite>,\" linked from \"<a
@@ -116,11 +121,18 @@ template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly >
 
 //! Computation type for ARC|CRC-16|CRC-IBM|CRC-16/ARC|CRC-16/LHA standard
 typedef crc_optimal<16, 0x8005, 0, 0, true, true>         crc_16_type;
-//! Computation type for an incorrectly marked standard(!!)
-typedef crc_optimal<16, 0x1021, 0xFFFF, 0, false, false>  crc_ccitt_type;
+//! Computation type for CRC-16/CCITT-FALSE standard
+typedef crc_optimal<16, 0x1021, 0xFFFF, 0, false, false>  crc_ccitt_false_t;
+//! Computation type for the CRC mistakenly called the CCITT standard
+typedef crc_ccitt_false_t                                 crc_ccitt_type;
+//! Computation type for the actual
+//! KERMIT|CRC-16/CCITT|CRC-16/CCITT-TRUE|CRC-CCITT standard
+typedef crc_optimal<16, 0x1021, 0, 0, true, true>         crc_ccitt_true_t;
 //! Computation type that I mistakenly called the XMODEM standard; it inverts
 //! both reflection parameters and reflects the truncated divisor (Don't use?!)
 typedef crc_optimal<16, 0x8408, 0, 0, true, true>         crc_xmodem_type;
+//! Computation type for the actual XMODEM|ZMODEM|CRC-16/ACORN standard
+typedef crc_optimal<16, 0x1021, 0, 0, false, false>       crc_xmodem_t;
 
 //! Computation type for CRC-32|CRC-32/ADCCP|PKZIP standard
 typedef crc_optimal<32, 0x04C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, true, true>
