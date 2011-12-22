@@ -1,7 +1,7 @@
 //  Boost CRC unit test program file  ----------------------------------------//
 
-//  Copyright 2011 Daryle Walker.  Use, modification, and
-//  distribution are subject to the Boost Software License, Version 1.0.  (See
+//  Copyright 2011 Daryle Walker.
+//  Distributed under the Boost Software License, Version 1.0.  (See the
 //  accompanying file LICENSE_1_0.txt or a copy at
 //  <http://www.boost.org/LICENSE_1_0.txt>.)
 
