@@ -192,7 +192,7 @@ public:
 
     // Constructor (use the automatic copy-ctr, move-ctr, and dtr)
     //! Create a computer, separately listing each needed parameter
-    explicit  crc_basic( value_type truncated_polynominal,
+    explicit  crc_basic( value_type truncated_polynomial,
                value_type initial_remainder = 0, value_type final_xor_value = 0,
                bool reflect_input = false, bool reflect_remainder = false );
 
@@ -218,8 +218,8 @@ public:
     // External Operations
     //! Submit a single bit for input processing
     void  process_bit( bool bit );
-    //! Submit the lowest \a bit_count bits of a byte for input processing
-    void  process_bits( unsigned char bits, std::size_t bit_count );
+    //! Submit the lowest \a bit_length bits of a byte for input processing
+    void  process_bits( unsigned char bits, std::size_t bit_length );
     //! Submit a single byte for input processing
     void  process_byte( unsigned char byte );
     //! Submit a memory block for input processing, iterator-pair style
@@ -296,7 +296,7 @@ public:
 
     // Constructor (use the automatic copy-ctr, move-ctr, and dtr)
     //! Create a computer, giving an initial remainder if desired
-    explicit  crc_optimal( value_type init_rem = InitRem );
+    explicit  crc_optimal( value_type init_rem = initial_remainder );
 
     // Internal Operations
     //! \copybrief  boost::crc_basic::get_truncated_polynominal
@@ -313,7 +313,7 @@ public:
     //! \copybrief  boost::crc_basic::get_interim_remainder
     value_type  get_interim_remainder() const;
     //! Change the interim remainder to either a given value or the initial one
-    void        reset( value_type new_rem = InitRem );
+    void        reset( value_type new_rem = initial_remainder );
 
     // External Operations
     //! \copybrief  boost::crc_basic::process_byte
@@ -395,17 +395,15 @@ namespace detail
         return x;
     }
 
-    unsigned char  reflect_byte_slowly( unsigned char x )
-    { return reflect_unsigned(x); }
-
     boost::array< unsigned char, (UINTMAX_C( 1 ) << CHAR_BIT) >
     make_byte_reflection_table()
     {
         boost::array<unsigned char, ( UINTMAX_C(1) << CHAR_BIT )>  result;
+        unsigned char                                              i = 0u;
 
-        for ( boost::uint_t<CHAR_BIT + 1>::fast  i = 0u ; i <= UCHAR_MAX ; ++i )
-            result[ i ] = reflect_byte_slowly( i );
-
+        do
+            result[ i ] = reflect_unsigned( i );
+        while ( ++i );
         return result;
     }
 
@@ -470,6 +468,8 @@ namespace detail
         BOOST_STATIC_CONSTANT( std::size_t, byte_combos = (1ul << CHAR_BIT) );
 
         typedef typename boost::uint_t<Bits>::fast  value_type;
+
+        BOOST_STATIC_CONSTANT( value_type, truncated_polynomial = TruncPoly );
 #if defined(__BORLANDC__) && defined(_M_IX86) && (__BORLANDC__ == 0x560)
         // for some reason Borland's command line compiler (version 0x560)
         // chokes over this unless we do the calculation for it:
@@ -512,8 +512,8 @@ namespace detail
         {
             value_type  remainder = 0u;
 
-            crc_modulo_word_update<Bits>( remainder, dividend, TruncPoly,
-             CHAR_BIT, false );
+            crc_modulo_word_update<Bits>( remainder, dividend,
+             truncated_polynomial, CHAR_BIT, false );
 
             table_[ reflect_byte_optionally(dividend, Reflect) ]
              = reflect_optionally( remainder, Reflect, Bits );
@@ -618,7 +618,7 @@ namespace detail
 /** Constructs a \c crc_basic object with at least the required parameters to a
     particular CRC formula to be processed upon receiving input.
 
-    \param[in] truncated_polynominal  The lowest coefficients of the divisor
+    \param[in] truncated_polynomial  The lowest coefficients of the divisor
       polynomial.  The highest-order coefficient is omitted and always assumed
       to be 1.  (\e Poly from the RMCA)
     \param[in] initial_remainder  The (unaugmented) initial state of the
@@ -634,7 +634,7 @@ namespace detail
       before the XOR-mask.  Defaults to \c false if omitted.  (\e RefOut from
       the RMCA)
 
-    \post  <code><var>truncated_polynominal</var> ==
+    \post  <code><var>truncated_polynomial</var> ==
       this-&gt;get_truncated_polynominal()</code>
     \post  <code><var>initial_remainder</var> ==
       this-&gt;get_initial_remainder()</code>
@@ -654,13 +654,13 @@ template < std::size_t Bits >
 inline
 crc_basic<Bits>::crc_basic
 (
-    typename crc_basic<Bits>::value_type  truncated_polynominal,
-    typename crc_basic<Bits>::value_type  initial_remainder,      // = 0
-    typename crc_basic<Bits>::value_type  final_xor_value,        // = 0
-    bool                                  reflect_input,          // = false
-    bool                                  reflect_remainder       // = false
+    value_type  truncated_polynomial,
+    value_type  initial_remainder,      // = 0
+    value_type  final_xor_value,        // = 0
+    bool        reflect_input,          // = false
+    bool        reflect_remainder       // = false
 )
-    : rem_( initial_remainder ), poly_( truncated_polynominal )
+    : rem_( initial_remainder ), poly_( truncated_polynomial )
     , init_( initial_remainder ), final_( final_xor_value )
     , rft_in_( reflect_input ), rft_out_( reflect_remainder )
 {
@@ -774,7 +774,7 @@ crc_basic<Bits>::get_interim_remainder
 (
 ) const
 {
-    return rem_ & detail::low_bits_mask_c<Bits>::value;
+    return rem_ & detail::low_bits_mask_c<bit_count>::value;
 }
 
 /** Changes the interim polynomial remainder to \a new_rem, purging any
@@ -795,7 +795,7 @@ inline
 void
 crc_basic<Bits>::reset
 (
-    typename crc_basic<Bits>::value_type  new_rem
+    value_type  new_rem
 )
 {
     rem_ = new_rem;
@@ -838,21 +838,21 @@ crc_basic<Bits>::process_bit
     bool  bit
 )
 {
-    detail::crc_modulo_update<Bits>( rem_, bit, poly_ );
+    detail::crc_modulo_update<bit_count>( rem_, bit, poly_ );
 }
 
 /** Updates the interim remainder with several altered-CRC-division steps.  Each
     bit is processed separately, starting from the one at the
-    2<sup><var>bit_count</var> - 1</sup> place, then proceeding down to the
+    2<sup><var>bit_length</var> - 1</sup> place, then proceeding down to the
     lowest-placed bit.  Any order imposed by
     <code>this-&gt;get_reflect_input()</code> is ignored.
 
-    \pre  0 \< \a bit_count \<= \c CHAR_BIT
+    \pre  0 \< \a bit_length \<= \c CHAR_BIT
 
     \param[in] bits  The byte containing the new input bits.
-    \param[in] bit_count  The number of bits in the byte to be read.
+    \param[in] bit_length  The number of bits in the byte to be read.
 
-    \post  The interim remainder is updated though \a bit_count modulo-2
+    \post  The interim remainder is updated though \a bit_length modulo-2
       polynomial divisions, where the division steps are altered for unaugmented
       CRCs.
  */
@@ -861,15 +861,15 @@ void
 crc_basic<Bits>::process_bits
 (
     unsigned char  bits,
-    std::size_t    bit_count
+    std::size_t    bit_length
 )
 {
     // ignore the bits above the ones we want
-    bits <<= CHAR_BIT - bit_count;
+    bits <<= CHAR_BIT - bit_length;
 
     // compute the CRC for each bit, starting with the upper ones
     unsigned char const  high_bit_mask = 1u << ( CHAR_BIT - 1u );
-    for ( std::size_t i = bit_count ; i > 0u ; --i, bits <<= 1u )
+    for ( std::size_t i = bit_length ; i > 0u ; --i, bits <<= 1u )
     {
         process_bit( static_cast<bool>(bits & high_bit_mask) );
     }
@@ -990,8 +990,8 @@ crc_basic<Bits>::checksum
 (
 ) const
 {
-    return ( (rft_out_ ? detail::reflect_unsigned( rem_, Bits ) :
-     rem_) ^ final_ ) & detail::low_bits_mask_c<Bits>::value;
+    return ( (rft_out_ ? detail::reflect_unsigned( rem_, bit_count ) :
+     rem_) ^ final_ ) & detail::low_bits_mask_c<bit_count>::value;
 }
 
 
@@ -1023,7 +1023,7 @@ template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
 inline
 BOOST_CRC_OPTIMAL_NAME::crc_optimal
 (
-    typename BOOST_CRC_OPTIMAL_NAME::value_type  init_rem  // = InitRem
+    value_type  init_rem  // = initial_remainder
 )
     : rem_( helper_type::reflect(init_rem) )
 {
@@ -1040,7 +1040,7 @@ BOOST_CRC_OPTIMAL_NAME::get_truncated_polynominal
 (
 ) const
 {
-    return TruncPoly;
+    return truncated_polynominal;
 }
 
 //! \copydetails  boost::crc_basic::get_initial_remainder
@@ -1053,7 +1053,7 @@ BOOST_CRC_OPTIMAL_NAME::get_initial_remainder
 (
 ) const
 {
-    return InitRem;
+    return initial_remainder;
 }
 
 //! \copydetails  boost::crc_basic::get_final_xor_value
@@ -1066,7 +1066,7 @@ BOOST_CRC_OPTIMAL_NAME::get_final_xor_value
 (
 ) const
 {
-    return FinalXor;
+    return final_xor_value;
 }
 
 //! \copydetails  boost::crc_basic::get_reflect_input
@@ -1079,7 +1079,7 @@ BOOST_CRC_OPTIMAL_NAME::get_reflect_input
 (
 ) const
 {
-    return ReflectIn;
+    return reflect_input;
 }
 
 //! \copydetails  boost::crc_basic::get_reflect_remainder
@@ -1092,7 +1092,7 @@ BOOST_CRC_OPTIMAL_NAME::get_reflect_remainder
 (
 ) const
 {
-    return ReflectRem;
+    return reflect_remainder;
 }
 
 //! \copydetails  boost::crc_basic::get_interim_remainder
@@ -1106,7 +1106,8 @@ BOOST_CRC_OPTIMAL_NAME::get_interim_remainder
 ) const
 {
     // Interim remainder should be _un_-reflected, so we have to undo it.
-    return helper_type::reflect( rem_ ) & detail::low_bits_mask_c<Bits>::value;
+    return helper_type::reflect( rem_ ) &
+     detail::low_bits_mask_c<bit_count>::value;
 }
 
 /** Changes the interim polynomial remainder to \a new_rem, purging any
@@ -1130,7 +1131,7 @@ inline
 void
 BOOST_CRC_OPTIMAL_NAME::reset
 (
-    typename BOOST_CRC_OPTIMAL_NAME::value_type  new_rem  // = InitRem
+    value_type  new_rem  // = initial_remainder
 )
 {
     rem_ = helper_type::reflect( new_rem );
@@ -1218,7 +1219,7 @@ BOOST_CRC_OPTIMAL_NAME::checksum
 ) const
 {
     return ( reflect_out_type::reflect(rem_) ^ get_final_xor_value() )
-     & detail::low_bits_mask_c<Bits>::value;
+     & detail::low_bits_mask_c<bit_count>::value;
 }
 
 /** Updates the interim remainder with a byte's worth of altered-CRC-division
