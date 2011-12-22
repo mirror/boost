@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="doc_contB"
-	ProjectGUID="{58CCE183-6092-48FE-A4F7-BA0D3A792651}"
+	Name="allocator_traits_test"
+	ProjectGUID="{5CE11C83-096A-84FE-4FA2-D3A6BA792002}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -13,7 +13,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="../../Bin/Win32/Debug"
-			IntermediateDirectory="Debug/doc_contB"
+			IntermediateDirectory="Debug/allocator_traits_test"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
@@ -21,6 +21,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_DATE_TIME_NO_LIB"
+				GeneratePreprocessedFile="0"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -35,11 +36,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib"
-				OutputFile="$(OutDir)/doc_contB_d.exe"
+				OutputFile="$(OutDir)/allocator_traits_test_d.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../../../../stage/lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/doc_contB.pdb"
+				ProgramDatabaseFile="$(OutDir)/allocator_traits_test.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 				FixedBaseAddress="1"/>
@@ -67,7 +68,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="../../Bin/Win32/Release"
-			IntermediateDirectory="Release/doc_contB"
+			IntermediateDirectory="Release/allocator_traits_test"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
@@ -86,7 +87,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib"
-				OutputFile="$(OutDir)/doc_contB.exe"
+				OutputFile="$(OutDir)/allocator_traits_test.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../../../../stage/lib"
 				GenerateDebugInformation="TRUE"
@@ -122,10 +123,15 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{41737BCF-4312-7AC5-A066-32D75A32A2AF}">
 			<File
-				RelativePath="..\..\example\comp_doc_contB.cpp">
+				RelativePath="..\..\test\allocator_traits_test.cpp">
 			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93815995-89BD-b043-5E8B-65FBE52E2AFB}">
 		</Filter>
 	</Files>
 	<Globals>

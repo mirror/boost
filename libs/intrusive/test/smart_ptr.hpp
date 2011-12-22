@@ -14,6 +14,7 @@
 #include <boost/iterator.hpp>
 #include <boost/intrusive/pointer_plus_bits.hpp>
 #include <boost/pointer_cast.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -108,6 +109,11 @@ class smart_ptr
 
    public:   //Public Functions
 
+   smart_ptr()
+      :  m_ptr(0)
+   {}
+
+/*
    //!Constructor from raw pointer (allows "0" pointer conversion). Never throws.
    explicit smart_ptr(pointer ptr = 0)
       :  m_ptr(ptr)
@@ -118,11 +124,14 @@ class smart_ptr
    smart_ptr(T *ptr) 
       :  m_ptr(ptr)
    {}
-
+*/
    //!Constructor from other smart_ptr 
    smart_ptr(const smart_ptr& ptr)
       :  m_ptr(ptr.m_ptr)
    {}
+
+   static smart_ptr pointer_to(reference r)
+   {  smart_ptr p; p.m_ptr = &r; return p;  }
 
    //!Constructor from other smart_ptr. If pointers of pointee types are 
    //!convertible, offset_ptrs will be convertibles. Never throws.
@@ -130,52 +139,52 @@ class smart_ptr
    smart_ptr(const smart_ptr<T2> &ptr) 
       :  m_ptr(ptr.m_ptr)
    {}
-
+/*
    //!Emulates static_cast operator. Never throws.
    template<class Y>
    smart_ptr(const smart_ptr<Y> & r, detail::static_cast_tag)
-      :  m_ptr(static_cast<PointedType*>(r.get()))
+      :  m_ptr(static_cast<PointedType*>(r.m_ptr))
    {}
 
    //!Emulates const_cast operator. Never throws.
    template<class Y>
    smart_ptr(const smart_ptr<Y> & r, detail::const_cast_tag)
-      :  m_ptr(const_cast<PointedType*>(r.get()))
+      :  m_ptr(const_cast<PointedType*>(r.m_ptr))
    {}
 
    //!Emulates dynamic_cast operator. Never throws.
    template<class Y>
    smart_ptr(const smart_ptr<Y> & r, detail::dynamic_cast_tag)
-      :  m_ptr(dynamic_cast<PointedType*>(r.get()))
+      :  m_ptr(dynamic_cast<PointedType*>(r.m_ptr))
    {}
 
    //!Emulates reinterpret_cast operator. Never throws.
    template<class Y>
    smart_ptr(const smart_ptr<Y> & r, detail::reinterpret_cast_tag)
-      :  m_ptr(reinterpret_cast<PointedType*>(r.get()))
+      :  m_ptr(reinterpret_cast<PointedType*>(r.m_ptr))
    {}
 
    //!Obtains raw pointer from offset. Never throws.
    pointer get() const
    {  return m_ptr;   }
-
+*/
    //!Pointer-like -> operator. It can return 0 pointer. Never throws.
    pointer operator->() const           
-   {  return this->get(); }
+   {  return m_ptr; }
 
    //!Dereferencing operator, if it is a null smart_ptr behavior 
    //!   is undefined. Never throws.
    reference operator* () const           
-   {  return *(this->get());   }
+   {  return *m_ptr;   }
 
    //!Indexing operator. Never throws.
    reference operator[](std::ptrdiff_t idx) const   
-   {  return this->get()[idx];  }
-
+   {  return m_ptr[idx];  }
+/*
    //!Assignment from pointer (saves extra conversion). Never throws.
    smart_ptr& operator= (pointer from)
    {  m_ptr = from;  return *this;  }
-
+*/
    //!Assignment from other smart_ptr. Never throws.
    smart_ptr& operator= (const smart_ptr & pt)
    {  m_ptr = pt.m_ptr;  return *this;  }
@@ -188,11 +197,11 @@ class smart_ptr
  
    //!smart_ptr + std::ptrdiff_t. Never throws.
    smart_ptr operator+ (std::ptrdiff_t offset) const   
-   {  return smart_ptr(this->get()+offset);   }
+   {  smart_ptr s; s.m_ptr = m_ptr + offset; return s;   }
 
    //!smart_ptr - std::ptrdiff_t. Never throws.
-   smart_ptr operator- (std::ptrdiff_t offset) const   
-   {  return smart_ptr(this->get()-offset);   }
+   smart_ptr operator- (std::ptrdiff_t offset) const
+   {  smart_ptr s; s.m_ptr = m_ptr - offset; return s;   }
 
    //!smart_ptr += std::ptrdiff_t. Never throws.
    smart_ptr &operator+= (std::ptrdiff_t offset)
@@ -220,12 +229,12 @@ class smart_ptr
 
    //!safe bool conversion operator. Never throws.
    operator unspecified_bool_type() const  
-   {  return this->get()? &self_t::unspecified_bool_type_func : 0;   }
+   {  return m_ptr? &self_t::unspecified_bool_type_func : 0;   }
 
    //!Not operator. Not needed in theory, but improves portability. 
    //!Never throws.
    bool operator! () const
-   {  return this->get() == 0;   }
+   {  return m_ptr == 0;   }
 /*
    friend void swap (smart_ptr &pt, smart_ptr &pt2)
    {  
@@ -240,43 +249,43 @@ class smart_ptr
 template<class T1, class T2>
 inline bool operator== (const smart_ptr<T1> &pt1, 
                         const smart_ptr<T2> &pt2)
-{  return pt1.get() == pt2.get();  }
+{  return pt1.operator->() == pt2.operator->();  }
 
 //!smart_ptr<T1> != smart_ptr<T2>. Never throws.
 template<class T1, class T2>
 inline bool operator!= (const smart_ptr<T1> &pt1, 
                         const smart_ptr<T2> &pt2)
-{  return pt1.get() != pt2.get();  }
+{  return pt1.operator->() != pt2.operator->();  }
 
 //!smart_ptr<T1> < smart_ptr<T2>. Never throws.
 template<class T1, class T2>
 inline bool operator< (const smart_ptr<T1> &pt1, 
                        const smart_ptr<T2> &pt2)
-{  return pt1.get() < pt2.get();  }
+{  return pt1.operator->() < pt2.operator->();  }
 
 //!smart_ptr<T1> <= smart_ptr<T2>. Never throws.
 template<class T1, class T2>
 inline bool operator<= (const smart_ptr<T1> &pt1, 
                         const smart_ptr<T2> &pt2)
-{  return pt1.get() <= pt2.get();  }
+{  return pt1.operator->() <= pt2.operator->();  }
 
 //!smart_ptr<T1> > smart_ptr<T2>. Never throws.
 template<class T1, class T2>
 inline bool operator> (const smart_ptr<T1> &pt1, 
                        const smart_ptr<T2> &pt2)
-{  return pt1.get() > pt2.get();  }
+{  return pt1.operator->() > pt2.operator->();  }
 
 //!smart_ptr<T1> >= smart_ptr<T2>. Never throws.
 template<class T1, class T2>
 inline bool operator>= (const smart_ptr<T1> &pt1, 
                         const smart_ptr<T2> &pt2)
-{  return pt1.get() >= pt2.get();  }
+{  return pt1.operator->() >= pt2.operator->();  }
 
 //!operator<< 
 template<class E, class T, class Y> 
 inline std::basic_ostream<E, T> & operator<< 
    (std::basic_ostream<E, T> & os, smart_ptr<Y> const & p)
-{  return os << p.get();   }
+{  return os << p.operator->();   }
 
 //!operator>> 
 template<class E, class T, class Y> 
@@ -292,23 +301,17 @@ inline smart_ptr<T> operator+(std::ptrdiff_t diff, const smart_ptr<T>& right)
 //!smart_ptr - smart_ptr  
 template<class T, class T2>
 inline std::ptrdiff_t operator- (const smart_ptr<T> &pt, const smart_ptr<T2> &pt2)
-{  return pt.get()- pt2.get();   }
+{  return pt.operator->()- pt2.operator->();   }
 
 //!swap specialization 
 template<class T>
 inline void swap (smart_ptr<T> &pt, 
                   smart_ptr<T> &pt2)
 {  
-   typename smart_ptr<T>::value_type *ptr = pt.get();
+   typename smart_ptr<T>::value_type *ptr = pt.operator->();
    pt = pt2;
    pt2 = ptr;
 }
-
-//!detail::boost_intrusive_get_pointer() enables boost::mem_fn to recognize smart_ptr.
-//!Never throws.
-template<class T>
-inline T* boost_intrusive_get_pointer(const smart_ptr<T>  & p)
-{  return p.get();   }
 
 //!Simulation of static_cast between pointers. Never throws.
 template<class T, class U> 
@@ -363,23 +366,26 @@ struct pointer_plus_bits<smart_ptr<T>, NumBits>
    typedef smart_ptr<T>         pointer;
 
    static pointer get_pointer(const pointer &n)
-   {  return pointer_plus_bits<T*, NumBits>::get_pointer(n.get());  }
+   {
+      return  pointer_traits<pointer>::pointer_to
+         (*pointer_plus_bits<T*, NumBits>::get_pointer(n.operator->()));
+   }
 
    static void set_pointer(pointer &n, pointer p)
    {
-      T *raw_n = n.get();
-      pointer_plus_bits<T*, NumBits>::set_pointer(raw_n, p.get());
-      n = raw_n;
+      T *raw_n = n.operator->();
+      pointer_plus_bits<T*, NumBits>::set_pointer(raw_n, p.operator->());
+      n = pointer_traits<pointer>::pointer_to(*raw_n);
    }
 
    static std::size_t get_bits(const pointer &n)
-   {  return pointer_plus_bits<T*, NumBits>::get_bits(n.get());  }
+   {  return pointer_plus_bits<T*, NumBits>::get_bits(n.operator->());  }
 
    static void set_bits(pointer &n, std::size_t c)
    {
-      T *raw_n = n.get();
+      T *raw_n = n.operator->();
       pointer_plus_bits<T*, NumBits>::set_bits(raw_n, c);
-      n = raw_n;
+      n = pointer_traits<pointer>::pointer_to(*raw_n);
    }
 };
 

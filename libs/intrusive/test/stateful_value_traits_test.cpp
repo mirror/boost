@@ -14,7 +14,7 @@
 #include <boost/intrusive/set.hpp>
 #include <boost/intrusive/unordered_set.hpp>
 #include <boost/functional/hash.hpp>
-#include <boost/pointer_to_other.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 #include <vector>
 
 using namespace boost::intrusive;
@@ -46,10 +46,11 @@ struct stateful_value_traits
    typedef typename node_traits::node_ptr                      node_ptr;
    typedef typename node_traits::const_node_ptr                const_node_ptr;
    typedef T                                                   value_type;
-   typedef typename boost::pointer_to_other
-      <node_ptr, T>::type                                      pointer; 
-   typedef typename boost::pointer_to_other
-      <node_ptr, const T>::type                                const_pointer;
+   typedef typename pointer_traits<node_ptr>::
+      template rebind_pointer<T>::type                         pointer;
+   typedef typename pointer_traits<node_ptr>::
+      template rebind_pointer<const T>::type                   const_pointer;
+
    static const link_mode_type link_mode = normal_link;
 
    stateful_value_traits(pointer values, node_ptr node_array)

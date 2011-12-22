@@ -18,7 +18,7 @@
 #include <boost/container/detail/config_begin.hpp>
 #include <boost/container/detail/workaround.hpp>
 
-#include <boost/pointer_to_other.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 
 #include <boost/container/container_fwd.hpp>
 #include <boost/container/detail/allocation_type.hpp>

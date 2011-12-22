@@ -56,14 +56,14 @@ class expand_bwd_test_allocator
    typedef T                                    value_type;
    typedef T *                                  pointer;
    typedef const T *                            const_pointer;
-   typedef typename containers_detail::add_reference
+   typedef typename container_detail::add_reference
                      <value_type>::type         reference;
-   typedef typename containers_detail::add_reference
+   typedef typename container_detail::add_reference
                      <const value_type>::type   const_reference;
    typedef std::size_t                          size_type;
    typedef std::ptrdiff_t                       difference_type;
 
-   typedef boost::container::containers_detail::version_type<expand_bwd_test_allocator, 2>   version;
+   typedef boost::container::container_detail::version_type<expand_bwd_test_allocator, 2>   version;
 
    template<class T2>
    struct rebind
@@ -109,9 +109,9 @@ class expand_bwd_test_allocator
 
    friend void swap(self_t &alloc1, self_t &alloc2)
    {  
-      containers_detail::do_swap(alloc1.mp_buffer, alloc2.mp_buffer);
-      containers_detail::do_swap(alloc1.m_size,    alloc2.m_size);
-      containers_detail::do_swap(alloc1.m_offset,  alloc2.m_offset);
+      container_detail::do_swap(alloc1.mp_buffer, alloc2.mp_buffer);
+      container_detail::do_swap(alloc1.m_size,    alloc2.m_size);
+      container_detail::do_swap(alloc1.m_offset,  alloc2.m_offset);
    }
 
    //Experimental version 2 expand_bwd_test_allocator functions

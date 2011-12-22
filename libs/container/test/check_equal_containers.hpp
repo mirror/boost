@@ -8,8 +8,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_CONTAINER_TEST_CHECK_EQUAL_CONTAINERS_HPP
-#define BOOST_CONTAINER_TEST_CHECK_EQUAL_CONTAINERS_HPP
+#ifndef BOOST_CONTAINER_TEST_CHECK_EQUAL_CONTAINER_HPP
+#define BOOST_CONTAINER_TEST_CHECK_EQUAL_CONTAINER_HPP
 
 #include <boost/container/detail/config_begin.hpp>
 #include <functional>
@@ -73,4 +73,4 @@ bool CheckEqualPairContainers(MyBoostCont *boostcont, MyStdCont *stdcont)
 
 #include <boost/container/detail/config_end.hpp>
 
-#endif //#ifndef BOOST_CONTAINER_TEST_CHECK_EQUAL_CONTAINERS_HPP
+#endif //#ifndef BOOST_CONTAINER_TEST_CHECK_EQUAL_CONTAINER_HPP

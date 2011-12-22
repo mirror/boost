@@ -145,6 +145,7 @@ int set_test ()
 
    typename MyBoostSet::iterator it;
    typename MyBoostSet::const_iterator cit = it;
+   (void)cit;
 
    boostset->erase(boostset->begin()++);
    stdset->erase(stdset->begin()++);

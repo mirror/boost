@@ -2321,16 +2321,8 @@ have the following features:
 *  It must have the same ownership semantics as a raw pointer. This means that
    resource management smart pointers (like `boost::shared_ptr`) can't be used.
 
-The conversion from the smart pointer to a raw pointer must be implemented following
-Boost smart pointer `detail::get_pointer()` function. This function will be found using
-ADL. For example, for `boost::interprocess::offset_ptr`, `detail::get_pointer` is defined
-as follows:
-
-[c++]
-
-   template<class T>
-   T * detail::get_pointer(boost::interprocess::offset_ptr<T> const & p)
-   {  return p.get();   }
+The conversion from the smart pointer to a raw pointer will be implemented as a recursive call to
+`operator->()` until the function returns a raw pointer.
 
 [endsect]
 
@@ -3072,7 +3064,7 @@ achieve this using [*Boost.Intrusive] predefined hooks. Now, instead of using
 
 [c++]
 
-   #include <boost/pointer_to_other.hpp>
+   #include <boost/intrusive/pointer_traits.hpp>
    #include <boost/intrusive/link_mode.hpp>
 
    struct my_value_traits
@@ -3081,8 +3073,10 @@ achieve this using [*Boost.Intrusive] predefined hooks. Now, instead of using
       typedef implementation_defined                                    value_type;
       typedef node_traits::node_ptr                                     node_ptr;
       typedef node_traits::const_node_ptr                               const_node_ptr;
-      typedef boost::pointer_to_other<node_ptr, value_type>::type       pointer;
-      typedef boost::pointer_to_other<node_ptr, const value_type>::type const_pointer;
+      typedef boost::intrusive::pointer_traits<node_ptr>::rebind_traits
+         <value_type>::type::pointer                                    pointer;
+      typedef boost::intrusive::pointer_traits<node_ptr>::rebind_traits
+         <const value_type>::type::pointer                              const_pointer;
 
       static const link_mode_type link_mode = some_linking_policy;
 
@@ -3126,14 +3120,13 @@ Let's explain each type and function:
 *  [*['pointer]]: The type of a pointer to a `value_type`. It must be the same pointer type
    as `node_ptr`: If `node_ptr` is `node*`, `pointer` must be `value_type*`. If
    `node_ptr` is `smart_ptr<node_traits::node>`, `pointer` must be `smart_ptr<value_type>`.
-   This can be generically achieved using `boost::pointer_to_other` utility from [*Boost SmartPointers]
+   This can be generically achieved using `boost::intrusive::pointer_traits` (portable implementation of C++11
+   `std::pointer_traits`) or `boost::pointer_to_other` utility from [*Boost SmartPointers]
    defined in `<boost/pointer_to_other.hpp>`.
    
 *  [*['const_pointer]]: The type of a pointer to a `const value_type`. It must be the same pointer type
    as `node_ptr`: If `node_ptr` is `node*`, `const_pointer` must be `const value_type*`. If
-   `node_ptr` is `smart_ptr<node_traits::node>`, `const_pointer` must be `smart_ptr<const value_type>`
-   This can be generically achieved using `boost::pointer_to_other` utility from [*Boost SmartPointers]
-   defined in `<boost/pointer_to_other.hpp>`.
+   `node_ptr` is `smart_ptr<node_traits::node>`, `const_pointer` must be `smart_ptr<const value_type>`.
      
 *  [*['link_mode]]: Indicates that `value_traits` needs some additional work or checks from the
    container. The types are enumerations defined in the `link_mode.hpp` header.
@@ -3568,7 +3561,7 @@ These are the times in microseconds for each case, and the normalized time:
     [[`normal_link` intrusive list]     [5000 / 22500]                        [1 / 1]]
     [[`safe_link` intrusive list]       [7812 / 32187]                        [1.56 / 1.43]]
     [[`auto_unlink` intrusive list]     [10156 / 41562]                       [2.03 / 1.84]]
-    [[Standard list]                    [76875 / 97500]                       [5.37 / 4.33]]
+    [[Standard list]                    [26875 / 97500]                       [5.37 / 4.33]]
     [[Standard compact pointer list]    [76406 / 86718]                      [15.28 / 3.85]]
     [[Standard disperse pointer list]  [146562 / 175625]                     [29.31 / 7.80]]
 ]

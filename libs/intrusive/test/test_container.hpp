@@ -91,7 +91,6 @@ void test_sequence_container(Container & c, Data & d)
       c.insert( c.begin(), *i );
       c.insert( c.end(), *(++i) );
       }
-
       BOOST_TEST( c.size() == 2 );
       BOOST_TEST( !c.empty() );
 
@@ -99,6 +98,17 @@ void test_sequence_container(Container & c, Data & d)
       i = c.erase( c.begin() );
 
       BOOST_TEST( c.size() == 1 );
+      BOOST_TEST( !c.empty() );
+
+      i = c.erase( c.begin() );
+
+      BOOST_TEST( c.size() == 0 );
+      BOOST_TEST( c.empty() );
+
+      c.insert( c.begin(), *d.begin() );
+
+      BOOST_TEST( c.size() == 1 );
+      BOOST_TEST( !c.empty() );
 
       {
       typename Data::iterator i = d.begin();
