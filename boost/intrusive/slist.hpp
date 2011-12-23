@@ -1109,7 +1109,8 @@ class slist_impl
       this->insert_after(this->cbefore_begin(), b, e, disposer);
    }
 
-   //! <b>Requires</b>: prev is an iterator to an element or x.end()/x.before_begin() in x.
+   //! <b>Requires</b>: prev must point to an element contained by this list or
+   //!   to the before_begin() element
    //! 
    //! <b>Effects</b>: Transfers all the elements of list x to this list, after the
    //! the element pointed by prev. No destructors or copy constructors are called.
