@@ -32,32 +32,10 @@ namespace bi = boost::intrusive;
 
 }}}
 
-#ifndef _LIBCPP_VERSION
-
-namespace std {
-
-template <class T>
-class allocator;
-
-template <class T>
-struct less;
-
-template <class T1, class T2>
-struct pair;
-
-template <class CharType> 
-struct char_traits;
-
-}  //namespace std {
-
-#else 
-
 #include <utility> 
 #include <memory> 
 #include <functional> 
 #include <iosfwd> 
- 
-#endif
 
 /// @endcond
 
