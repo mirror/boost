@@ -26,6 +26,39 @@
 namespace boost
 {
 
+inline void atomic_increment( int32_t* pw )
+{
+    // ++*pw;
+
+    fetch_and_add( pw, 1 );
+}
+
+inline int32_t atomic_decrement( int32_t * pw )
+{
+    // return --*pw;
+
+    int32_t originalValue;
+
+    __asm__ __volatile__( "sync" );
+    originalValue = fetch_and_add( pw, -1 );
+    __asm__ __volatile__( "isync" );
+
+    return (originalValue - 1);
+}
+
+inline int32_t atomic_conditional_increment( int32_t * pw )
+{
+    // if( *pw != 0 ) ++*pw;
+    // return *pw;
+
+    int32_t tmp = fetch_and_add( pw, 0 );
+    for( ;; )
+    {
+        if( tmp == 0 ) return 0;
+        if( compare_and_swap( pw, &tmp, tmp + 1 ) ) return (tmp + 1);
+    }
+}
+
 namespace detail
 {
 
@@ -65,22 +98,17 @@ public:
 
     void add_ref_copy()
     {
-        fetch_and_add( &use_count_, 1 );
+        atomic_increment( &use_count_ );
     }
 
     bool add_ref_lock() // true on success
     {
-        int32_t tmp = fetch_and_add( &use_count_, 0 );
-        for( ;; )
-        {
-            if( tmp == 0 ) return false;
-            if( compare_and_swap( &use_count_, &tmp, tmp + 1 ) ) return true;
-        }
+        return atomic_conditional_increment( &use_count_ ) != 0;
     }
 
     void release() // nothrow
     {
-        if( fetch_and_add( &use_count_, -1 ) == 1 )
+        if( atomic_decrement( &use_count_ ) == 0 )
         {
             dispose();
             weak_release();
@@ -89,12 +117,12 @@ public:
 
     void weak_add_ref() // nothrow
     {
-        fetch_and_add( &weak_count_, 1 );
+        atomic_increment( &weak_count_ );
     }
 
     void weak_release() // nothrow
     {
-        if( fetch_and_add( &weak_count_, -1 ) == 1 )
+        if( atomic_decrement( &weak_count_ ) == 0 )
         {
             destroy();
         }
