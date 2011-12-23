@@ -11,12 +11,15 @@
 
 namespace boost_no_noexcept {
 
+void quiet_warning(bool){}
+
 int f() noexcept ;
 int g() noexcept( noexcept( f() ) ) ;
 
 int test()
 {
   bool b = noexcept( g() );
+  quiet_warning(b);
   return 0;
 }
 

@@ -49,13 +49,15 @@
 
 namespace boost_no_variadic_macros {
 
+void quiet_warning(int){}
+
 template<TEST_VARIADIC_MACRO_STRIP_PARENS((typename T,int))> struct test_variadic_macro_class {};
 
 int test()
 {
 
   int x = TEST_VARIADIC_MACRO_STRIP_PARENS(3);
-  
+  quiet_warning(x);
   return 0;
 }
 

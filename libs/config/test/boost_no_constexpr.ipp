@@ -12,6 +12,8 @@
 
 namespace boost_no_constexpr {
 
+void quiet_warning(int){}
+
 constexpr int square(int x) { return x * x; }  // from N2235
 
 // from 5.19:
@@ -37,6 +39,7 @@ X<a> xx; // OK: unique conversion to int
 int test()
 {
   int i = square(5);
+  quiet_warning(i);
   return 0;
 }
 

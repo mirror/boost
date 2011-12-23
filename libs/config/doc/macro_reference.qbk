@@ -16,11 +16,11 @@
 
 [#config_defects]
 
-[section Macros that describe defects]
+[section Macros that describe C++03 defects]
 
-The following macros all describe features that are required by the C++ standard,
+The following macros all describe features that are required by the C++03 standard,
 if one of the following macros is defined, then it represents a defect in the
-compiler's conformance with the standard.
+compiler's conformance with the 2003 standard.
 
 
 [table
@@ -514,11 +514,10 @@ standard).
 
 [endsect]
 
-[section Macros that describe possible C++0x features]
+[section Macros that describe possible C++ future features]
 
-The following macros describe features that are likely to be included in the
-upcoming ISO C++ standard, C++0x, but have not yet been approved for inclusion
-in the language.
+The following macros describe features that may be included in some future
+ISO C++ standard, but have not yet been approved for inclusion in the language.
 
 
 [table
@@ -531,9 +530,9 @@ The compiler supports  concepts.
 
 [endsect]
 
-[section Macros that describe C++0x features not supported]
+[section Macros that describe C++11 features not supported]
 
-The following macros describe features in the upcoming ISO C++ standard, C++0x,
+The following macros describe features in the 2011 ISO C++ standard, formerly known as C++0x,
 that are not yet supported by a particular compiler or library.
 
 [table
@@ -636,6 +635,76 @@ variadic templates.
 ]]
 [[`BOOST_NO_VARIADIC_MACROS`][The compiler does not support
 variadic macros. 
+]]
+]
+
+[endsect]
+
+[#config_11_for_03]
+
+[section Macros that allow use of C++11 features with C++03 compilers]
+
+The following macros allow use of C++11 features even with compilers that do not yet
+provide compliant C++11 support.
+
+[table
+[[Macro        ][Section     ][ Description          ]]
+
+[[`BOOST_CONSTEXPR`][
+Some compilers don't support the use of `constexpr`. This macro expands to nothing on those compilers, and `constexpr`
+elsewhere. For example, when defining a constexpr function or constructor replace:
+``
+  constexpr tuple();
+``
+with:
+``
+  BOOST_CONSTEXPR tuple();
+``
+]]
+[[`BOOST_CONSTEXPR_OR_CONST`][
+Some compilers don't support the use of `constexpr`. This macro expands to `const` on those compilers, and `constexpr`
+elsewhere. For example, when defining const expr variables replace:
+``
+  static constexpr UIntType xor_mask = a;
+``
+with:
+``
+  static BOOST_CONSTEXPR_OR_CONST UIntType xor_mask = a;
+``
+]]
+[[`BOOST_STATIC_CONSTEXPR`][
+This is a shortcut for `static BOOST_CONSTEXPR_OR_CONST`For example, when defining const expr variables replace:
+``
+  static constexpr UIntType xor_mask = a;
+``
+with:
+``
+  BOOST_STATIC_CONSTEXPR UIntType xor_mask = a;
+``
+]]
+[[
+``
+  BOOST_NOEXCEPT
+  BOOST_NOEXCEPT_IF(Predicate)
+  BOOST_NOEXCEPT_EXPR(Expression)
+``
+][
+If `BOOST_NO_NOEXCEPT` is defined (i.e. C++03 compliant compilers) these macros are defined as:
+[:
+``
+  #define BOOST_NOEXCEPT
+  #define BOOST_NOEXCEPT_IF(Predicate)
+  #define BOOST_NOEXCEPT_EXPR(Expression) false
+``
+]
+If `BOOST_NO_NOEXCEPT` is not defined (i.e. C++11 compliant compilers) they are defined as:
+[:
+``
+  #define BOOST_NOEXCEPT noexcept
+  #define BOOST_NOEXCEPT_IF(Predicate) noexcept((Predicate))
+  #define BOOST_NOEXCEPT_EXPR(Expression) noexcept((Expression))
+``
+]
 ]]
 ]
 
@@ -820,37 +889,25 @@ the arguments is itself a macro (see 16.3.1 in C++ standard). This is normally
 used to create a mangled name in combination with a predefined macro such a
 \_\_LINE__.
 ]]
-[[`BOOST_CONSTEXPR`][
-Some compilers don't support the use of `constexpr`. This macro expands to nothing on those compilers, and `constexpr`
-elsewhere. For example, when defining a constexpr function or constructor replace:
+[[`BOOST_FORCEINLINE`][
+This macro can be used in place of the `inline` keyword to instruct the compiler
+that a function should always be inlined.
+Overuse of this macro can lead to significant bloat, while good use can increase
+performance in certain cases, such as computation-intensive code built through
+generative programming techniques.
+
+Usage example:
 ``
-  constexpr tuple();
+  template<class T>
+  BOOST_FORCEINLINE T& f(T& t)
+  {
+      return t;
+  }
 ``
-with:
-``
-  BOOST_CONSTEXPR tuple();
-``
-]]
-[[`BOOST_CONSTEXPR_OR_CONST`][
-Some compilers don't support the use of `constexpr`. This macro expands to `const` on those compilers, and `constexpr`
-elsewhere. For example, when defining const expr variables replace:
-``
-  static constexpr UIntType xor_mask = a;
-``
-with:
-``
-  static BOOST_CONSTEXPR_OR_CONST UIntType xor_mask = a;
-``
-]]
-[[`BOOST_STATIC_CONSTEXPR`][
-This is a shortcut for `static BOOST_CONSTEXPR_OR_CONST`For example, when defining const expr variables replace:
-``
-  static constexpr UIntType xor_mask = a;
-``
-with:
-``
-  BOOST_STATIC_CONSTEXPR UIntType xor_mask = a;
-``
+
+Note that use of this macro can lead to cryptic error messages with some compilers.
+Consider defining it to `inline` before including the Boost.Config header in order to be
+able to debug errors more easily.
 ]]
 ]
 

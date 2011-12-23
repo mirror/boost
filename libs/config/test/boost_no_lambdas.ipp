@@ -11,7 +11,7 @@
 //  DESCRIPTION:   The compiler does not support the C++0x lambda feature
 
 #if defined(__GNUC__) && !defined(__GXX_EXPERIMENTAL_CXX0X__) && !defined(BOOST_INTEL_STDCXX0X)
-#  error This feature isn't really available in non-C++0x mode
+#  error This feature is not available in non-C++0x mode
 #endif
 
 namespace boost_no_lambdas {

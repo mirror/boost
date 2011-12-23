@@ -27,14 +27,16 @@
 <a name="boost_config.boost_macro_reference"></a><a class="link" href="boost_macro_reference.html" title="Boost Macro Reference">Boost Macro Reference</a>
 </h2></div></div></div>
 <div class="toc"><dl>
-<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects">Macros
-      that describe defects</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__03_defects">Macros
+      that describe C++03 defects</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features">Macros
       that describe optional features</a></span></dt>
-<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features">Macros
-      that describe possible C++0x features</a></span></dt>
-<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported">Macros
-      that describe C++0x features not supported</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c___future_features">Macros
+      that describe possible C++ future features</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__11_features_not_supported">Macros
+      that describe C++11 features not supported</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_allow_use_of_c__11_features_with_c__03_compilers">Macros
+      that allow use of C++11 features with C++03 compilers</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros">Boost
       Helper Macros</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros">Boost
@@ -44,13 +46,13 @@
 </dl></div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_defects"></a><a name="config_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects" title="Macros that describe defects">Macros
-      that describe defects</a>
+<a name="boost_config.boost_macro_reference.macros_that_describe_c__03_defects"></a><a name="config_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__03_defects" title="Macros that describe C++03 defects">Macros
+      that describe C++03 defects</a>
 </h3></div></div></div>
 <p>
-        The following macros all describe features that are required by the C++ standard,
-        if one of the following macros is defined, then it represents a defect in
-        the compiler's conformance with the standard.
+        The following macros all describe features that are required by the C++03
+        standard, if one of the following macros is defined, then it represents a
+        defect in the compiler's conformance with the 2003 standard.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -2235,13 +2237,12 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features" title="Macros that describe possible C++0x features">Macros
-      that describe possible C++0x features</a>
+<a name="boost_config.boost_macro_reference.macros_that_describe_possible_c___future_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c___future_features" title="Macros that describe possible C++ future features">Macros
+      that describe possible C++ future features</a>
 </h3></div></div></div>
 <p>
-        The following macros describe features that are likely to be included in
-        the upcoming ISO C++ standard, C++0x, but have not yet been approved for
-        inclusion in the language.
+        The following macros describe features that may be included in some future
+        ISO C++ standard, but have not yet been approved for inclusion in the language.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -2276,12 +2277,12 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported" title="Macros that describe C++0x features not supported">Macros
-      that describe C++0x features not supported</a>
+<a name="boost_config.boost_macro_reference.macros_that_describe_c__11_features_not_supported"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__11_features_not_supported" title="Macros that describe C++11 features not supported">Macros
+      that describe C++11 features not supported</a>
 </h3></div></div></div>
 <p>
-        The following macros describe features in the upcoming ISO C++ standard,
-        C++0x, that are not yet supported by a particular compiler or library.
+        The following macros describe features in the 2011 ISO C++ standard, formerly
+        known as C++0x, that are not yet supported by a particular compiler or library.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -2877,6 +2878,159 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
+<a name="boost_config.boost_macro_reference.macros_that_allow_use_of_c__11_features_with_c__03_compilers"></a><a name="config_11_for_03"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_allow_use_of_c__11_features_with_c__03_compilers" title="Macros that allow use of C++11 features with C++03 compilers">Macros
+      that allow use of C++11 features with C++03 compilers</a>
+</h3></div></div></div>
+<p>
+        The following macros allow use of C++11 features even with compilers that
+        do not yet provide compliant C++11 support.
+      </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+                <p>
+                  Macro
+                </p>
+              </th>
+<th>
+                <p>
+                  Section
+                </p>
+              </th>
+<th>
+                <p>
+                  Description
+                </p>
+              </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_CONSTEXPR</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Some compilers don't support the use of <code class="computeroutput"><span class="identifier">constexpr</span></code>.
+                  This macro expands to nothing on those compilers, and <code class="computeroutput"><span class="identifier">constexpr</span></code> elsewhere. For example,
+                  when defining a constexpr function or constructor replace: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">constexpr</span> <span class="identifier">tuple</span><span class="special">();</span>
+</pre>
+<p>
+                  with: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_CONSTEXPR</span> <span class="identifier">tuple</span><span class="special">();</span>
+</pre>
+<p>
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_CONSTEXPR_OR_CONST</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Some compilers don't support the use of <code class="computeroutput"><span class="identifier">constexpr</span></code>.
+                  This macro expands to <code class="computeroutput"><span class="keyword">const</span></code>
+                  on those compilers, and <code class="computeroutput"><span class="identifier">constexpr</span></code>
+                  elsewhere. For example, when defining const expr variables replace:
+                  
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">constexpr</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
+</pre>
+<p>
+                  with: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">BOOST_CONSTEXPR_OR_CONST</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
+</pre>
+<p>
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_STATIC_CONSTEXPR</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  This is a shortcut for <code class="computeroutput"><span class="keyword">static</span>
+                  <span class="identifier">BOOST_CONSTEXPR_OR_CONST</span></code>For
+                  example, when defining const expr variables replace: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">constexpr</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
+</pre>
+<p>
+                  with: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_STATIC_CONSTEXPR</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
+</pre>
+<p>
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_NOEXCEPT</span>
+<span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
+<span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span>
+</pre>
+<p>
+                </p>
+              </td>
+<td>
+                <p>
+                  If <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                  is defined (i.e. C++03 compliant compilers) these macros are defined
+                  as:
+                </p>
+                <div class="blockquote"><blockquote class="blockquote">
+<p>
+                    
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span> <span class="keyword">false</span>
+</pre>
+<p>
+                  </p>
+</blockquote></div>
+                <p>
+                  If <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                  is not defined (i.e. C++11 compliant compilers) they are defined
+                  as:
+                </p>
+                <div class="blockquote"><blockquote class="blockquote">
+<p>
+                    
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span> <span class="identifier">noexcept</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span> <span class="identifier">noexcept</span><span class="special">((</span><span class="identifier">Predicate</span><span class="special">))</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span> <span class="identifier">noexcept</span><span class="special">((</span><span class="identifier">Expression</span><span class="special">))</span>
+</pre>
+<p>
+                  </p>
+</blockquote></div>
+              </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a name="config_helpers"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
       Helper Macros</a>
 </h3></div></div></div>
@@ -3237,71 +3391,34 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_CONSTEXPR</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_FORCEINLINE</span></code>
                 </p>
               </td>
 <td>
                 <p>
-                  Some compilers don't support the use of <code class="computeroutput"><span class="identifier">constexpr</span></code>.
-                  This macro expands to nothing on those compilers, and <code class="computeroutput"><span class="identifier">constexpr</span></code> elsewhere. For example,
-                  when defining a constexpr function or constructor replace: 
+                  This macro can be used in place of the <code class="computeroutput"><span class="keyword">inline</span></code>
+                  keyword to instruct the compiler that a function should always
+                  be inlined. Overuse of this macro can lead to significant bloat,
+                  while good use can increase performance in certain cases, such
+                  as computation-intensive code built through generative programming
+                  techniques.
+                </p>
+                <p>
+                  Usage example: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">constexpr</span> <span class="identifier">tuple</span><span class="special">();</span>
-</pre>
-<p>
-                  with: 
-</p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_CONSTEXPR</span> <span class="identifier">tuple</span><span class="special">();</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">BOOST_FORCEINLINE</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">t</span><span class="special">;</span>
+<span class="special">}</span>
 </pre>
 <p>
                 </p>
-              </td>
-</tr>
-<tr>
-<td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_CONSTEXPR_OR_CONST</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  Some compilers don't support the use of <code class="computeroutput"><span class="identifier">constexpr</span></code>.
-                  This macro expands to <code class="computeroutput"><span class="keyword">const</span></code>
-                  on those compilers, and <code class="computeroutput"><span class="identifier">constexpr</span></code>
-                  elsewhere. For example, when defining const expr variables replace:
-                  
-</p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">constexpr</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
-</pre>
-<p>
-                  with: 
-</p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">BOOST_CONSTEXPR_OR_CONST</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
-</pre>
-<p>
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_STATIC_CONSTEXPR</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  This is a shortcut for <code class="computeroutput"><span class="keyword">static</span>
-                  <span class="identifier">BOOST_CONSTEXPR_OR_CONST</span></code>For
-                  example, when defining const expr variables replace: 
-</p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">static</span> <span class="identifier">constexpr</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
-</pre>
-<p>
-                  with: 
-</p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_STATIC_CONSTEXPR</span> <span class="identifier">UIntType</span> <span class="identifier">xor_mask</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
-</pre>
-<p>
+                  Note that use of this macro can lead to cryptic error messages
+                  with some compilers. Consider defining it to <code class="computeroutput"><span class="keyword">inline</span></code>
+                  before including the Boost.Config header in order to be able to
+                  debug errors more easily.
                 </p>
               </td>
 </tr>

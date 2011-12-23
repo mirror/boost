@@ -12,9 +12,19 @@
 
 namespace boost_no_char32_t {
 
+//  Microsoft VC++ 2010, and possibly other compilers, provides
+//  a typedef for char32_t rather than a new type. We want that
+//  to be an error, so provide an overloaded function that will
+//  be ambiguous if char16_t is just a typedef.
+void f(const char32_t*){}
+void f(const unsigned short*){}
+void f(const unsigned int*){}
+void f(const unsigned long*){}
+
 int test()
 {
-  const char32_t* p = U"abc";
+  const char32_t* p;
+  f(p);
   return 0;
 }
 

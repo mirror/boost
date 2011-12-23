@@ -13,6 +13,8 @@
 
 namespace boost_no_decltype {
 
+void quiet_warning(int){}
+
 struct test_class
 {
    test_class() {}
@@ -39,6 +41,7 @@ int test()
 {
   int i;
   decltype(i) j;
+//  quiet_warning(j);
   decltype(get_test_class()) k;
   #ifndef _MSC_VER 
   // Although the VC++ decltype is buggy, we none the less enable support, 

@@ -11,7 +11,7 @@
 //  DESCRIPTION:   The compiler does not support C++0x defaulted functions
 
 #if defined(__GNUC__) && !defined(__GXX_EXPERIMENTAL_CXX0X__) && !defined(BOOST_INTEL_STDCXX0X)
-#  error Defaulted functions aren't really supported in non-C++0x mode
+#  error Defaulted functions are not supported in non-C++0x mode
 #endif
 
 namespace boost_no_defaulted_functions {

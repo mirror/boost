@@ -12,9 +12,12 @@
 
 namespace boost_no_nullptr {
 
+void quiet_warning(const int*){}
+
 int test()
 {
   int * p = nullptr;
+  quiet_warning(p);
   return 0;
 }
 
