@@ -21,9 +21,13 @@
 //
 
 #include <boost/detail/sp_typeinfo.hpp>
+#include <builtins.h>
 #include <sys/atomic_op.h>
 
 namespace boost
+{
+
+namespace detail
 {
 
 inline void atomic_increment( int32_t* pw )
@@ -39,9 +43,9 @@ inline int32_t atomic_decrement( int32_t * pw )
 
     int32_t originalValue;
 
-    __asm__ __volatile__( "sync" );
+    __lwsync();
     originalValue = fetch_and_add( pw, -1 );
-    __asm__ __volatile__( "isync" );
+    __isync();
 
     return (originalValue - 1);
 }
@@ -58,9 +62,6 @@ inline int32_t atomic_conditional_increment( int32_t * pw )
         if( compare_and_swap( pw, &tmp, tmp + 1 ) ) return (tmp + 1);
     }
 }
-
-namespace detail
-{
 
 class sp_counted_base
 {
