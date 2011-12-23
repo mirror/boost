@@ -49,7 +49,7 @@ proceed to overwrite the old copy. Consider:
 
 [c++]
 
-   template <class T> swap(T& a, T& b)
+   template <class T> void swap(T& a, T& b)
    {
       T tmp(a);   // now we have two copies of a
       a = b;      // now we have two copies of b
@@ -60,7 +60,7 @@ But, we didn't want to have any copies of a or b, we just wanted to swap them. L
 
 [c++]
 
-   template <class T> swap(T& a, T& b)
+   template <class T> void swap(T& a, T& b)
    {
       T tmp(::boost::move(a));
       a = ::boost::move(b);   
