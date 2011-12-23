@@ -376,7 +376,6 @@ class map
    }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!
@@ -1019,7 +1018,6 @@ class multimap
    { return m_tree.max_size(); }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!

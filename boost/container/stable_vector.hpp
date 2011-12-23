@@ -1226,8 +1226,6 @@ class stable_vector
    {   return priv_erase(first, last, alloc_version());  }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type()
-   //!   allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!

@@ -324,7 +324,6 @@ class flat_set
       { return m_flat_tree.max_size(); }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!
@@ -342,7 +341,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    std::pair<iterator, bool> insert(insert_const_ref_type x) 
    {  return priv_insert(x); }
 
@@ -365,7 +364,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    std::pair<iterator,bool> insert(BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_unique(boost::move(x));  }
 
@@ -379,7 +378,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator p, insert_const_ref_type x) 
    {  return priv_insert(p, x); }
 
@@ -400,7 +399,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_unique(position, boost::move(x)); }
 
@@ -412,7 +411,7 @@ class flat_set
    //! <b>Complexity</b>: At most N log(size()+N) (N is the distance from first to last)
    //!   search time plus N*size() insertion time.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class InputIterator>
    void insert(InputIterator first, InputIterator last) 
       {  m_flat_tree.insert_unique(first, last);  }
@@ -430,7 +429,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace(Args&&... args)
    {  return m_flat_tree.emplace_unique(boost::forward<Args>(args)...); }
@@ -446,7 +445,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace_hint(const_iterator hint, Args&&... args)
    {  return m_flat_tree.emplace_hint_unique(hint, boost::forward<Args>(args)...); }
@@ -929,7 +928,6 @@ class flat_multiset
       { return m_flat_tree.max_size(); }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!
@@ -943,7 +941,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(insert_const_ref_type x) 
    {  return priv_insert(x); }
 
@@ -962,7 +960,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_equal(boost::move(x));   }
 
@@ -975,7 +973,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator p, insert_const_ref_type x) 
    {  return priv_insert(p, x); }
 
@@ -997,7 +995,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_equal(position, boost::move(x));  }
 
@@ -1008,7 +1006,7 @@ class flat_multiset
    //! <b>Complexity</b>: At most N log(size()+N) (N is the distance from first to last)
    //!   search time plus N*size() insertion time.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class InputIterator>
    void insert(InputIterator first, InputIterator last) 
       {  m_flat_tree.insert_equal(first, last);  }
@@ -1022,7 +1020,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace(Args&&... args)
    {  return m_flat_tree.emplace_equal(boost::forward<Args>(args)...); }
@@ -1037,7 +1035,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace_hint(const_iterator hint, Args&&... args)
    {  return m_flat_tree.emplace_hint_equal(hint, boost::forward<Args>(args)...); }

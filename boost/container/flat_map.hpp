@@ -436,7 +436,6 @@ class flat_map
    }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!
@@ -454,7 +453,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    std::pair<iterator,bool> insert(const value_type& x) 
       { return container_detail::force<std::pair<iterator,bool> >(
          m_flat_tree.insert_unique(container_detail::force<impl_value_type>(x))); }
@@ -469,7 +468,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    std::pair<iterator,bool> insert(BOOST_RV_REF(value_type) x) 
    {  return container_detail::force<std::pair<iterator,bool> >(
       m_flat_tree.insert_unique(boost::move(container_detail::force<impl_value_type>(x)))); }
@@ -484,7 +483,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    std::pair<iterator,bool> insert(BOOST_RV_REF(impl_value_type) x) 
    {
       return container_detail::force<std::pair<iterator,bool> >
@@ -501,7 +500,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, const value_type& x)
       { return container_detail::force_copy<iterator>(
          m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), container_detail::force<impl_value_type>(x))); }
@@ -514,7 +513,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x)
       { return container_detail::force_copy<iterator>(
          m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), boost::move(container_detail::force<impl_value_type>(x)))); }
@@ -527,7 +526,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(impl_value_type) x)
    {
       return container_detail::force_copy<iterator>(
@@ -542,7 +541,7 @@ class flat_map
    //! <b>Complexity</b>: At most N log(size()+N) (N is the distance from first to last)
    //!   search time plus N*size() insertion time.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class InputIterator>
    void insert(InputIterator first, InputIterator last) 
    {  m_flat_tree.insert_unique(first, last);  }
@@ -560,7 +559,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace(Args&&... args)
    {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_unique(boost::forward<Args>(args)...)); }
@@ -576,7 +575,7 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace_hint(const_iterator hint, Args&&... args)
    {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_hint_unique(container_detail::force<impl_const_iterator>(hint), boost::forward<Args>(args)...)); }
@@ -1103,7 +1102,6 @@ class flat_multimap
       { return m_flat_tree.max_size(); }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!
@@ -1117,7 +1115,7 @@ class flat_multimap
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const value_type& x) 
       { return container_detail::force_copy<iterator>(m_flat_tree.insert_equal(container_detail::force<impl_value_type>(x))); }
 
@@ -1127,7 +1125,7 @@ class flat_multimap
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(BOOST_RV_REF(value_type) x) 
    { return container_detail::force_copy<iterator>(m_flat_tree.insert_equal(boost::move(x))); }
 
@@ -1137,7 +1135,7 @@ class flat_multimap
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(BOOST_RV_REF(impl_value_type) x) 
       { return container_detail::force_copy<iterator>(m_flat_tree.insert_equal(boost::move(x))); }
 
@@ -1151,7 +1149,7 @@ class flat_multimap
    //!   is to be inserted before p) plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, const value_type& x) 
       { return container_detail::force_copy<iterator>(m_flat_tree.insert_equal(container_detail::force<impl_const_iterator>(position), container_detail::force<impl_value_type>(x))); }
 
@@ -1165,7 +1163,7 @@ class flat_multimap
    //!   is to be inserted before p) plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x) 
    {
       return container_detail::force_copy<iterator>
@@ -1183,7 +1181,7 @@ class flat_multimap
    //!   is to be inserted before p) plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(impl_value_type) x) 
    {
       return container_detail::force_copy<iterator>(
@@ -1197,7 +1195,7 @@ class flat_multimap
    //! <b>Complexity</b>: At most N log(size()+N) (N is the distance from first to last)
    //!   search time plus N*size() insertion time.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class InputIterator>
    void insert(InputIterator first, InputIterator last) 
       {  m_flat_tree.insert_equal(first, last); }
@@ -1211,7 +1209,7 @@ class flat_multimap
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace(Args&&... args)
    {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_equal(boost::forward<Args>(args)...)); }
@@ -1227,7 +1225,7 @@ class flat_multimap
    //!   is to be inserted before p) plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace_hint(const_iterator hint, Args&&... args)
    {
