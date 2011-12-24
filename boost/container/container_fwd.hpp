@@ -35,7 +35,8 @@ namespace bi = boost::intrusive;
 #include <utility> 
 #include <memory> 
 #include <functional> 
-#include <iosfwd> 
+#include <iosfwd>
+#include <string>
 
 /// @endcond
 
