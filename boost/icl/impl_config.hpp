@@ -14,17 +14,18 @@ Copyright (c) 2009-2011: Joachim Faulhaber
 | Select at most ONE of the following defines to change the default            |
 +-----------------------------------------------------------------------------*/
 
-//#define ICL_USE_STD_IMPLEMENTATION           // Default
-//#define ICL_USE_BOOST_MOVE_IMPLEMENTATION    // Enables Move semantics for ICL
+//#define ICL_USE_STD_IMPLEMENTATION                // Default
+//#define ICL_USE_BOOST_MOVE_IMPLEMENTATION         // Boost.Container
 //        ICL_USE_BOOST_INTERPROCESS_IMPLEMENTATION // No longer available
 
 /*-----------------------------------------------------------------------------+
 | NO define or ICL_USE_STD_IMPLEMENTATION: Choose std::set and std::map from   |
-|     your local std implementation as basic containers of elements (DEFAULT). |
+|     your local std implementation as implementing containers (DEFAULT).      |
+|     Whether move semantics is available depends on the version of your local |
+|     STL.                                                                     |
 |                                                                              |
 | ICL_USE_BOOST_MOVE_IMPLEMENTATION:                                           |
-|     Move aware containers from boost::container. Choosing boost containers   |
-|     enables move semantics for ICL.                                          |
+|     Move aware containers from boost::container.                             |
 |                                                                              |
 | NOTE: ICL_USE_BOOST_INTERPROCESS_IMPLEMENTATION: This define has been        |
 |     available until boost version 1.48.0 and is no longer supported.         |
